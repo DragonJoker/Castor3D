@@ -50,7 +50,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_billboard	Le billboard cible
 		 */
-		BillboardTreeItemProperty( bool p_editable, Castor3D::BillboardList & p_billboard );
+		BillboardTreeItemProperty( bool p_editable, castor3d::BillboardList & p_billboard );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,27 +66,27 @@ namespace GuiCommon
 		 *\brief		Récupère le billboard
 		 *\return		La valeur
 		 */
-		inline Castor3D::BillboardList & GetBillboard()
+		inline castor3d::BillboardList & getBillboard()
 		{
 			return m_billboard;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnMaterialChange( Castor::String const & p_name );
-		void OnSizeChange( Castor::Size const & p_size );
+		void OnMaterialChange( castor::String const & p_name );
+		void OnSizeChange( castor::Size const & p_size );
 
 	private:
-		Castor3D::BillboardList & m_billboard;
+		castor3d::BillboardList & m_billboard;
 	};
 }
 

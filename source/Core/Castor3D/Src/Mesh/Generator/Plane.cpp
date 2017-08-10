@@ -4,8 +4,8 @@
 #include "Mesh/Vertex.hpp"
 #include "Miscellaneous/Parameter.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 Plane::Plane()
 	: MeshGenerator( cuT( "plane" ) )
@@ -20,33 +20,33 @@ Plane::~Plane()
 {
 }
 
-MeshGeneratorSPtr Plane::Create()
+MeshGeneratorSPtr Plane::create()
 {
 	return std::make_shared< Plane >();
 }
 
-void Plane::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+void Plane::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {
 	String param;
 
-	if ( p_parameters.Get( cuT( "width_subdiv" ), param ) )
+	if ( p_parameters.get( cuT( "width_subdiv" ), param ) )
 	{
-		m_subDivisionsW = string::to_uint( param );
+		m_subDivisionsW = string::toUInt( param );
 	}
 
-	if ( p_parameters.Get( cuT( "depth_subdiv" ), param ) )
+	if ( p_parameters.get( cuT( "depth_subdiv" ), param ) )
 	{
-		m_subDivisionsD = string::to_uint( param );
+		m_subDivisionsD = string::toUInt( param );
 	}
 
-	if ( p_parameters.Get( cuT( "width" ), param ) )
+	if ( p_parameters.get( cuT( "width" ), param ) )
 	{
-		m_width = string::to_float( param );
+		m_width = string::toFloat( param );
 	}
 
-	if ( p_parameters.Get( cuT( "depth" ), param ) )
+	if ( p_parameters.get( cuT( "depth" ), param ) )
 	{
-		m_depth = string::to_float( param );
+		m_depth = string::toFloat( param );
 	}
 
 	uint32_t nbVertexW = m_subDivisionsW + 2;
@@ -61,15 +61,15 @@ void Plane::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	Point3r ptNormal( 0.0, 1.0, 0.0 );
 	Point3r ptTangent;
 	Point2r ptUv;
-	SubmeshSPtr submesh = p_mesh.CreateSubmesh();
+	SubmeshSPtr submesh = p_mesh.createSubmesh();
 
 	for ( uint32_t i = 0; i < nbVertexW; i++ )
 	{
 		for ( uint32_t j = 0; j < nbVertexH; j++ )
 		{
-			vertex = submesh->AddPoint( offsetW + ( i * gapW ), offsetH + ( j * gapH ), 0.0 );
-			Vertex::SetTexCoord( vertex, ( i * gapW / m_width ), ( j * gapH / m_depth ) );
-			Vertex::SetNormal( vertex, 0.0, 0.0, 1.0 );
+			vertex = submesh->addPoint( offsetW + ( i * gapW ), offsetH + ( j * gapH ), 0.0 );
+			Vertex::setTexCoord( vertex, ( i * gapW / m_width ), ( j * gapH / m_depth ) );
+			Vertex::setNormal( vertex, 0.0, 0.0, 1.0 );
 		}
 	}
 
@@ -77,12 +77,12 @@ void Plane::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
 		for ( uint32_t j = i * ( m_subDivisionsD + 1 ); j < ( i + 1 ) * ( m_subDivisionsD + 1 ); j++ )
 		{
-			submesh->AddFace( j + i, j + m_subDivisionsW + 2 + i, j + m_subDivisionsW + 3 + i );
-			submesh->AddFace( j + m_subDivisionsW + 3 + i, j + i + 1, j + i );
+			submesh->addFace( j + i, j + m_subDivisionsW + 2 + i, j + m_subDivisionsW + 3 + i );
+			submesh->addFace( j + m_subDivisionsW + 3 + i, j + i + 1, j + i );
 		}
 	}
 
-	//ComputeNormals();
-	submesh->ComputeTangentsFromNormals();
-	p_mesh.ComputeContainers();
+	//computeNormals();
+	submesh->computeTangentsFromNormals();
+	p_mesh.computeContainers();
 }

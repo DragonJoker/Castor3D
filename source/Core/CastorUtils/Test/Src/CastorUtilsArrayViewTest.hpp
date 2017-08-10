@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsArrayViewTest();
 
 	private:
-		void DoRegisterTests()override;
+		void doRegisterTests()override;
 
 	private:
 		void BasicTest();

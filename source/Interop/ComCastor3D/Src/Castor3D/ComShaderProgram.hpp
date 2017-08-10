@@ -57,12 +57,12 @@ namespace CastorCom
 		 */
 		virtual ~CShaderProgram();
 
-		inline Castor3D::ShaderProgramSPtr GetInternal()const
+		inline castor3d::ShaderProgramSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::ShaderProgramSPtr pass )
+		inline void setInternal( castor3d::ShaderProgramSPtr pass )
 		{
 			m_internal = pass;
 		}
@@ -73,16 +73,16 @@ namespace CastorCom
 		STDMETHOD( put_Source )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [in] */ BSTR val );
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
-		STDMETHOD( CreateObject )( /* [in] */ eSHADER_TYPE val );
+		STDMETHOD( createObject )( /* [in] */ eSHADER_TYPE val );
 
 	private:
-		Castor3D::ShaderProgramSPtr m_internal;
+		castor3d::ShaderProgramSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( ShaderProgram ), CShaderProgram );
 
-	DECLARE_VARIABLE_PTR_GETTER( ShaderProgram, Castor3D, ShaderProgram );
-	DECLARE_VARIABLE_PTR_PUTTER( ShaderProgram, Castor3D, ShaderProgram );
+	DECLARE_VARIABLE_PTR_GETTER( ShaderProgram, castor3d, ShaderProgram );
+	DECLARE_VARIABLE_PTR_PUTTER( ShaderProgram, castor3d, ShaderProgram );
 }
 
 #endif

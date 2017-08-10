@@ -3,25 +3,25 @@
 #include "Common/OpenGl.hpp"
 #include "Shader/GlShaderProgram.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
 	namespace
 	{
-		UIntArray DoListIndices( OpenGl & p_gl, uint32_t p_program, UniformBuffer const & p_ubo )
+		UIntArray doListIndices( OpenGl & p_gl, uint32_t p_program, UniformBuffer const & p_ubo )
 		{
 			std::vector< const char * > names;
 
 			for ( auto variable : p_ubo )
 			{
-				char * szChar = new char[variable->GetName().size() + 1];
-				szChar[variable->GetName().size()] = 0;
+				char * szChar = new char[variable->getName().size() + 1];
+				szChar[variable->getName().size()] = 0;
 #if defined( CASTOR_COMPILER_MSVC )
-				strncpy_s( szChar, variable->GetName().size() + 1, string::string_cast< char >( variable->GetName() ).c_str(), variable->GetName().size() );
+				strncpy_s( szChar, variable->getName().size() + 1, string::stringCast< char >( variable->getName() ).c_str(), variable->getName().size() );
 #else
-				strncpy( szChar, string::string_cast< char >( variable->GetName() ).c_str(), variable->GetName().size() );
+				strncpy( szChar, string::stringCast< char >( variable->getName() ).c_str(), variable->getName().size() );
 #endif
 				names.push_back( szChar );
 			}
@@ -37,7 +37,7 @@ namespace GlRender
 			return result;
 		}
 
-		void DoAdjustOffset( int p_align, uint32_t & p_offset )
+		void doAdjustOffset( int p_align, uint32_t & p_offset )
 		{
 			if ( p_offset % p_align )
 			{
@@ -45,7 +45,7 @@ namespace GlRender
 			}
 		}
 
-		void DoRetrieveLayout( OpenGl & p_gl, uint32_t p_program, UniformBuffer const & p_ubo, UIntArray const & p_indices, UniformBufferBinding::UniformInfoArray & p_infos )
+		void doRetrieveLayout( OpenGl & p_gl, uint32_t p_program, UniformBuffer const & p_ubo, UIntArray const & p_indices, UniformBufferBinding::UniformInfoArray & p_infos )
 		{
 			uint32_t i = 0u;
 
@@ -59,7 +59,7 @@ namespace GlRender
 					p_gl.GetActiveUniformsiv( p_program, 1, &index, GlUniformValue::eOffset, &offset );
 					int stride = 0;
 					p_gl.GetActiveUniformsiv( p_program, 1, &index, GlUniformValue::eArrayStride, &stride );
-					p_infos.push_back( { variable->GetName(), uint32_t( offset ), uint32_t( stride ) } );
+					p_infos.push_back( { variable->getName(), uint32_t( offset ), uint32_t( stride ) } );
 				}
 			}
 		}
@@ -72,16 +72,16 @@ namespace GlRender
 		, Holder{ p_gl }
 		, m_blockIndex{ int( GlInvalidIndex ) }
 	{
-		m_blockIndex = GetOpenGl().GetUniformBlockIndex( p_program.GetGlName(), string::string_cast< char >( GetOwner()->GetName() ).c_str() );
+		m_blockIndex = getOpenGl().GetUniformBlockIndex( p_program.getGlName(), string::stringCast< char >( getOwner()->getName() ).c_str() );
 
 		if ( m_blockIndex != int( GlInvalidIndex ) )
 		{
-			auto indices = DoListIndices( GetOpenGl(), p_program.GetGlName(), *GetOwner() );
+			auto indices = doListIndices( getOpenGl(), p_program.getGlName(), *getOwner() );
 			
 			int size{ 0 };
-			GetOpenGl().GetActiveUniformBlockiv( p_program.GetGlName(), m_blockIndex, GlUniformBlockValue::eDataSize, &size );
+			getOpenGl().GetActiveUniformBlockiv( p_program.getGlName(), m_blockIndex, GlUniformBlockValue::eDataSize, &size );
 			m_size = uint32_t( size );
-			DoRetrieveLayout( GetOpenGl(), p_program.GetGlName(), *GetOwner(), indices, m_variables );
+			doRetrieveLayout( getOpenGl(), p_program.getGlName(), *getOwner(), indices, m_variables );
 		}
 	}
 
@@ -89,8 +89,8 @@ namespace GlRender
 	{
 	}
 
-	void GlUniformBufferBinding::DoBind( uint32_t p_index )const
+	void GlUniformBufferBinding::doBind( uint32_t p_index )const
 	{
-		GetOpenGl().UniformBlockBinding( static_cast< GlShaderProgram const & >( m_program ).GetGlName(), m_blockIndex, p_index );
+		getOpenGl().UniformBlockBinding( static_cast< GlShaderProgram const & >( m_program ).getGlName(), m_blockIndex, p_index );
 	}
 }

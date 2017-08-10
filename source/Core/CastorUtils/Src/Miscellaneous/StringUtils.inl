@@ -1,6 +1,6 @@
-﻿#include <locale>
+#include <locale>
 
-namespace Castor
+namespace castor
 {
 	namespace string
 	{
@@ -12,7 +12,7 @@ namespace Castor
 
 			template<> struct StringConverter< char, wchar_t >
 			{
-				static void Convert( std::basic_string< char > const & p_strIn, std::basic_string< wchar_t > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void convert( std::basic_string< char > const & p_strIn, std::basic_string< wchar_t > & p_strOut, std::locale const & p_locale = std::locale() )
 				{
 					if ( !p_strIn.empty() )
 					{
@@ -33,7 +33,7 @@ namespace Castor
 
 			template<> struct StringConverter< wchar_t, char >
 			{
-				static void Convert( std::basic_string< wchar_t > const & p_strIn, std::basic_string< char > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void convert( std::basic_string< wchar_t > const & p_strIn, std::basic_string< char > & p_strOut, std::locale const & p_locale = std::locale() )
 				{
 					if ( !p_strIn.empty() )
 					{
@@ -55,7 +55,7 @@ namespace Castor
 			template< typename InChar >
 			struct StringConverter< InChar, InChar >
 			{
-				static void Convert( std::basic_string< InChar > const & p_strIn, std::basic_string< InChar > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void convert( std::basic_string< InChar > const & p_strIn, std::basic_string< InChar > & p_strOut, std::locale const & p_locale = std::locale() )
 				{
 					p_strOut = p_strIn;
 				}
@@ -82,7 +82,7 @@ namespace Castor
 		}
 
 		template< typename T >
-		inline String to_string( T const & p_value, int p_base, std::locale const & p_locale )
+		inline String toString( T const & p_value, int p_base, std::locale const & p_locale )
 		{
 			StringStream result;
 			result.imbue( p_locale );
@@ -91,39 +91,39 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( std::basic_string< U > const & p_src )
+		std::basic_string< T > stringCast( std::basic_string< U > const & p_src )
 		{
 			std::basic_string< T > result;
-			StringConverter< U, T >::Convert( p_src, result );
+			StringConverter< U, T >::convert( p_src, result );
 			return result;
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( U const * p_src )
+		std::basic_string< T > stringCast( U const * p_src )
 		{
 			std::basic_string< T > result;
 
 			if ( p_src )
 			{
-				StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), result );
+				StringConverter< U, T >::convert( std::basic_string< U >( p_src ), result );
 			}
 
 			return result;
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( U const * p_begin, U const * p_end )
+		std::basic_string< T > stringCast( U const * p_begin, U const * p_end )
 		{
 			std::basic_string< T > result;
-			StringConverter< U, T >::Convert( std::basic_string< U >( p_begin, p_end ), result );
+			StringConverter< U, T >::convert( std::basic_string< U >( p_begin, p_end ), result );
 			return result;
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( std::initializer_list< U > const & p_src )
+		std::basic_string< T > stringCast( std::initializer_list< U > const & p_src )
 		{
 			std::basic_string< T > result;
-			StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), result );
+			StringConverter< U, T >::convert( std::basic_string< U >( p_src ), result );
 			return result;
 		}
 
@@ -132,7 +132,7 @@ namespace Castor
 			//*************************************************************************************************
 
 			template< typename IteratorType >
-			inline char32_t to_utf8( IteratorType p_value )
+			inline char32_t toUtf8( IteratorType p_value )
 			{
 				static const unsigned char FirstBitMask = 0x80; // 1000000
 				static const unsigned char SecondBitMask = 0x40; // 0100000
@@ -311,7 +311,7 @@ namespace Castor
 
 			char32_t iterator::operator*()const
 			{
-				DoCalculateCurrentCodePoint();
+				doCalculateCurrentCodePoint();
 				return m_lastCodePoint;
 			}
 
@@ -340,11 +340,11 @@ namespace Castor
 				return m_it;
 			}
 
-			void iterator::DoCalculateCurrentCodePoint()const
+			void iterator::doCalculateCurrentCodePoint()const
 			{
 				if ( m_dirty )
 				{
-					m_lastCodePoint = to_utf8( m_it );
+					m_lastCodePoint = toUtf8( m_it );
 					m_dirty = false;
 				}
 			}
@@ -496,7 +496,7 @@ namespace Castor
 
 			char32_t const_iterator::operator*()const
 			{
-				DoCalculateCurrentCodePoint();
+				doCalculateCurrentCodePoint();
 				return m_lastCodePoint;
 			}
 
@@ -525,11 +525,11 @@ namespace Castor
 				return m_it;
 			}
 
-			void const_iterator::DoCalculateCurrentCodePoint()const
+			void const_iterator::doCalculateCurrentCodePoint()const
 			{
 				if ( m_dirty )
 				{
-					m_lastCodePoint = to_utf8( m_it );
+					m_lastCodePoint = toUtf8( m_it );
 					m_dirty = false;
 				}
 			}

@@ -29,24 +29,24 @@ namespace Obj
 {
 	struct stNORMAL
 	{
-		Castor3D::real m_val[3];
+		castor3d::real m_val[3];
 	};
 	struct stVERTEX
 	{
-		Castor3D::real m_val[3];
+		castor3d::real m_val[3];
 	};
 	struct stUV
 	{
-		Castor3D::real m_val[2];
+		castor3d::real m_val[2];
 	};
 	struct stUVW
 	{
-		Castor3D::real m_val[3];
+		castor3d::real m_val[3];
 	};
 	struct stGROUP
 	{
-		Castor::String m_strName;
-		Castor3D::MaterialSPtr m_pMaterial;
+		castor::String m_strName;
+		castor3d::MaterialSPtr m_pMaterial;
 		UIntUIntMap m_mapVtxIndex;
 		VertexArray m_arrayVtx;
 		NormalArray m_arrayNml;

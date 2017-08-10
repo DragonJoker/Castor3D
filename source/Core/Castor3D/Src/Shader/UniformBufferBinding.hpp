@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		Représente la liaison entre un tampon d'uniformes et un programme.
 	*/
 	class UniformBufferBinding
-		: public Castor::OwnedBy< UniformBuffer >
+		: public castor::OwnedBy< UniformBuffer >
 	{
 	public:
 		/**
@@ -68,14 +68,14 @@ namespace Castor3D
 		 *\brief		Lie le tampon d'uniformes au programme.
 		 *\param[in]	p_index	Le point d'attache.
 		 */
-		C3D_API void Bind( uint32_t p_index )const;
+		C3D_API void bind( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The UBO size.
 		 *\~french
 		 *\return		La taille de l'UBO.
 		 */
-		inline uint32_t GetSize()const
+		inline uint32_t getSize()const
 		{
 			return m_size;
 		}
@@ -129,14 +129,14 @@ namespace Castor3D
 		 *\brief		Lie le tampon d'uniformes au programme.
 		 *\param[in]	p_index	Le point d'attache.
 		 */
-		C3D_API virtual void DoBind( uint32_t p_index )const = 0;
+		C3D_API virtual void doBind( uint32_t p_index )const = 0;
 
 	public:
 		struct UniformInfo
 		{
 			//!\~english	The variable name.
 			//!\~french		Le nom de la variable.
-			Castor::String m_name;
+			castor::String m_name;
 			//!\~english	The variable offset into the buffer.
 			//!\~french		L'offset de la variable dans le tampon.
 			uint32_t m_offset;

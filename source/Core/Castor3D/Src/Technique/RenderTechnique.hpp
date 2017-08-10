@@ -34,7 +34,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Rectangle.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	class RenderTechniquePass;
 	/*!
@@ -49,8 +49,8 @@ namespace Castor3D
 	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class RenderTechnique
-		: public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 		friend class RenderTechniquePass;
 
@@ -68,8 +68,8 @@ namespace Castor3D
 		{
 		public:
 			explicit TechniqueFbo( RenderTechnique & technique );
-			bool Initialise( Castor::Size size );
-			void Cleanup();
+			bool initialise( castor::Size size );
+			void cleanup();
 
 			//!\~english	The texture receiving the color render.
 			//!\~french		La texture recevant le rendu couleur.
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\param[in]	parameters		Les paramètres de la technique.
 		 *\param[in]	config			La configuration du SSAO.
 		 */
-		C3D_API RenderTechnique( Castor::String const & name
+		C3D_API RenderTechnique( castor::String const & name
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
@@ -130,14 +130,14 @@ namespace Castor3D
 		 *\param[in]	index		L'index de texture de base.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool Initialise( uint32_t & index );
+		C3D_API bool initialise( uint32_t & index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Update function.
@@ -148,7 +148,7 @@ namespace Castor3D
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( RenderQueueArray & queues );
+		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -157,7 +157,7 @@ namespace Castor3D
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void Render( RenderInfo & info );
+		C3D_API void render( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
@@ -166,30 +166,30 @@ namespace Castor3D
 		 *\brief		Ecrit la technique dans un fichier texte.
 		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API bool WriteInto( Castor::TextFile & file );
+		C3D_API bool writeInto( castor::TextFile & file );
 		/**
 		 *\~english
-		 *\brief		Adds a shadow producing light source.
+		 *\brief		adds a shadow producing light source.
 		 *\param[in]	light	The light source.
 		 *\~french
 		 *\brief		Ajoute une source lumineuse produisant des ombres.
 		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API void AddShadowProducer( Light & light );
+		C3D_API void addShadowProducer( Light & light );
 		/**
 		 *\~english
 		 *\brief		Displays debug dumps.
 		 *\~french
 		 *\brief		Affiche les dumps de debug.
 		 */
-		C3D_API void DisplayDebug( Castor::Size const & size )const;
+		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\return		The render area dimensions.
 		 *\~french
 		 *\return		Les dimensions de la zone de rendu.
 		 */
-		inline Castor::Size const & GetSize()const
+		inline castor::Size const & getSize()const
 		{
 			return m_size;
 		}
@@ -199,7 +199,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture de couleurs contenant le résultat du rendu.
 		 */
-		inline TextureLayout const & GetResult()const
+		inline TextureLayout const & getResult()const
 		{
 			REQUIRE( m_frameBuffer.m_colourTexture );
 			return *m_frameBuffer.m_colourTexture;
@@ -210,7 +210,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La passe de rendu des noeuds opaques.
 		 */
-		inline RenderTechniquePass const & GetOpaquePass()const
+		inline RenderTechniquePass const & getOpaquePass()const
 		{
 			REQUIRE( m_opaquePass );
 			return *m_opaquePass;
@@ -221,7 +221,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La passe de rendu des noeuds transparents.
 		 */
-		inline RenderTechniquePass const & GetTransparentPass()const
+		inline RenderTechniquePass const & getTransparentPass()const
 		{
 			REQUIRE( m_transparentPass );
 			return *m_transparentPass;
@@ -232,7 +232,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si le nombre d'échantillons est plus grand que 1.
 		 */
-		inline bool IsMultisampling()const
+		inline bool isMultisampling()const
 		{
 			return false;
 		}
@@ -249,7 +249,7 @@ namespace Castor3D
 		RenderSystem & m_renderSystem;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		TechniqueFbo m_frameBuffer;

@@ -28,10 +28,10 @@ SOFTWARE.
 #include <cstddef>
 #include <iterator>
 
-namespace Castor
+namespace castor
 {
 	template< PixelFormat PF >
-	struct pixel_iterator
+	struct PixelIterator
 		: public std::iterator< std::random_access_iterator_tag
 			, Pixel< PF >
 			, std::ptrdiff_t
@@ -43,21 +43,21 @@ namespace Castor
 		using internal_type = array_type::iterator;
 		using const_internal_type = array_type::const_iterator;
 
-		inline pixel_iterator( array_type const & p_array, internal_type const & p_iter )
+		inline PixelIterator( array_type const & p_array, internal_type const & p_iter )
 			: m_current{ p_iter }
 			, m_end{ p_array.end() }
 		{
 			doLink();
 		}
 
-		inline pixel_iterator( pixel_iterator const & p_iter )
+		inline PixelIterator( PixelIterator const & p_iter )
 			: m_current{ p_iter.m_current }
 			, m_end{ p_iter.m_end }
 		{
 			doLink();
 		}
 			
-		inline pixel_iterator( pixel_iterator && p_iter )
+		inline PixelIterator( PixelIterator && p_iter )
 			: m_current{ std::move( p_iter.m_current ) }
 			, m_end{ std::move( p_iter.m_end ) }
 		{
@@ -65,14 +65,14 @@ namespace Castor
 			p_iter.m_pixel.unlink();
 		}
 
-		inline pixel_iterator & operator=( pixel_iterator const & p_it )
+		inline PixelIterator & operator=( PixelIterator const & p_it )
 		{
 			m_current = p_it.m_current;
 			m_end = p_it.m_end;
 			doLink();
 		}
 
-		inline pixel_iterator & operator=( pixel_iterator && p_it )
+		inline PixelIterator & operator=( PixelIterator && p_it )
 		{
 			m_current = std::move( p_it.m_current );
 			m_end = std::move( p_it.m_end );
@@ -80,42 +80,42 @@ namespace Castor
 			p_it.m_pixel.unlink();
 		}
 
-		inline pixel_iterator & operator+=( size_t p_offset )
+		inline PixelIterator & operator+=( size_t p_offset )
 		{
-			m_current += p_offset * pixel_iterator::size;
+			m_current += p_offset * PixelIterator::size;
 			doLink();
 			return *this;
 		}
 
-		inline pixel_iterator & operator-=( size_t p_offset )
+		inline PixelIterator & operator-=( size_t p_offset )
 		{
-			m_current -= p_offset * pixel_iterator::size;
+			m_current -= p_offset * PixelIterator::size;
 			doLink();
 			return *this;
 		}
 
-		inline pixel_iterator & operator++()
+		inline PixelIterator & operator++()
 		{
 			operator+=( 1u );
 			return *this;
 		}
 
-		inline pixel_iterator operator++( int )
+		inline PixelIterator operator++( int )
 		{
-			pixel_iterator temp = *this;
+			PixelIterator temp = *this;
 			++( *this );
 			return temp;
 		}
 
-		inline pixel_iterator & operator--()
+		inline PixelIterator & operator--()
 		{
 			operator-=( 1u );
 			return *this;
 		}
 
-		inline pixel_iterator operator--( int )
+		inline PixelIterator operator--( int )
 		{
-			pixel_iterator temp = *this;
+			PixelIterator temp = *this;
 			++( *this );
 			return temp;
 		}
@@ -138,12 +138,12 @@ namespace Castor
 			return &m_pixel;
 		}
 
-		inline bool operator==( pixel_iterator const & p_it )const
+		inline bool operator==( PixelIterator const & p_it )const
 		{
 			return m_current == p_it.m_current;
 		}
 
-		inline bool operator!=( pixel_iterator const & p_it )const
+		inline bool operator!=( PixelIterator const & p_it )const
 		{
 			return !( *this == p_it );
 		}
@@ -158,30 +158,30 @@ namespace Castor
 		}
 
 	private:
-		static uint8_t const size = pixel_definitions< PF >::Size;
+		static uint8_t const size = PixelDefinitions< PF >::Size;
 		internal_type m_current;
 		const_internal_type m_end;
 		pixel_type m_pixel;
 	};
 
 	template< PixelFormat PF >
-	inline pixel_iterator< PF > operator+( pixel_iterator< PF > p_it, size_t p_offset )
+	inline PixelIterator< PF > operator+( PixelIterator< PF > p_it, size_t p_offset )
 	{
-		pixel_iterator< PF > result{ p_it };
+		PixelIterator< PF > result{ p_it };
 		result += p_offset;
 		return result;
 	}
 
 	template< PixelFormat PF >
-	inline pixel_iterator< PF > operator-( pixel_iterator< PF > p_it, size_t p_offset )
+	inline PixelIterator< PF > operator-( PixelIterator< PF > p_it, size_t p_offset )
 	{
-		pixel_iterator< PF > result{ p_it };
+		PixelIterator< PF > result{ p_it };
 		result -= p_offset;
 		return result;
 	}
 
 	template< PixelFormat PF >
-	struct const_pixel_iterator
+	struct ConstPixelIterator
 		: public std::iterator< std::random_access_iterator_tag
 			, Pixel< PF >
 			, std::ptrdiff_t
@@ -192,21 +192,21 @@ namespace Castor
 		using array_type = PxBufferBase::px_array;
 		using internal_type = array_type::const_iterator;
 		
-		inline const_pixel_iterator( array_type const & p_array, internal_type const & p_iter )
+		inline ConstPixelIterator( array_type const & p_array, internal_type const & p_iter )
 			: m_current{ p_iter }
 			, m_end{ p_array.end() }
 		{
 			doLink();
 		}
 
-		inline const_pixel_iterator( const_pixel_iterator const & p_iter )
+		inline ConstPixelIterator( ConstPixelIterator const & p_iter )
 			: m_current{ p_iter.m_current }
 			, m_end{ p_iter.m_end }
 		{
 			doLink();
 		}
 			
-		inline const_pixel_iterator( const_pixel_iterator && p_iter )
+		inline ConstPixelIterator( ConstPixelIterator && p_iter )
 			: m_current{ std::move( p_iter.m_current ) }
 			, m_end{ std::move( p_iter.m_end ) }
 		{
@@ -214,14 +214,14 @@ namespace Castor
 			p_iter.m_pixel.unlink();
 		}
 
-		inline const_pixel_iterator & operator=( const_pixel_iterator const & p_it )
+		inline ConstPixelIterator & operator=( ConstPixelIterator const & p_it )
 		{
 			m_current = p_it.m_current;
 			m_end = p_it.m_end;
 			doLink();
 		}
 
-		inline const_pixel_iterator & operator=( const_pixel_iterator && p_it )
+		inline ConstPixelIterator & operator=( ConstPixelIterator && p_it )
 		{
 			m_current = std::move( p_it.m_current );
 			m_end = std::move( p_it.m_end );
@@ -229,42 +229,42 @@ namespace Castor
 			p_it.m_pixel.unlink();
 		}
 
-		inline const_pixel_iterator & operator+=( size_t p_offset )
+		inline ConstPixelIterator & operator+=( size_t p_offset )
 		{
-			m_current += p_offset * const_pixel_iterator::size;
+			m_current += p_offset * ConstPixelIterator::size;
 			doLink();
 			return *this;
 		}
 
-		inline const_pixel_iterator & operator-=( size_t p_offset )
+		inline ConstPixelIterator & operator-=( size_t p_offset )
 		{
-			m_current -= p_offset * const_pixel_iterator::size;
+			m_current -= p_offset * ConstPixelIterator::size;
 			doLink();
 			return *this;
 		}
 
-		inline const_pixel_iterator & operator++()
+		inline ConstPixelIterator & operator++()
 		{
 			operator+=( 1u );
 			return *this;
 		}
 
-		inline const_pixel_iterator operator++( int )
+		inline ConstPixelIterator operator++( int )
 		{
-			const_pixel_iterator temp = *this;
+			ConstPixelIterator temp = *this;
 			++( *this );
 			return temp;
 		}
 
-		inline const_pixel_iterator & operator--()
+		inline ConstPixelIterator & operator--()
 		{
 			operator-=( 1u );
 			return *this;
 		}
 
-		inline const_pixel_iterator operator--( int )
+		inline ConstPixelIterator operator--( int )
 		{
-			const_pixel_iterator temp = *this;
+			ConstPixelIterator temp = *this;
 			++( *this );
 			return temp;
 		}
@@ -281,12 +281,12 @@ namespace Castor
 			return m_pixel;
 		}
 
-		inline bool operator==( const_pixel_iterator const & p_it )const
+		inline bool operator==( ConstPixelIterator const & p_it )const
 		{
 			return m_current == p_it.m_current;
 		}
 
-		inline bool operator!=( const_pixel_iterator const & p_it )const
+		inline bool operator!=( ConstPixelIterator const & p_it )const
 		{
 			return !( *this == p_it );
 		}
@@ -301,24 +301,24 @@ namespace Castor
 		}
 
 	private:
-		static uint8_t const size = pixel_definitions< PF >::Size;
+		static uint8_t const size = PixelDefinitions< PF >::Size;
 		internal_type m_current;
 		internal_type m_end;
 		pixel_type m_pixel;
 	};
 
 	template< PixelFormat PF >
-	inline const_pixel_iterator< PF > operator+( const_pixel_iterator< PF > p_it, size_t p_offset )
+	inline ConstPixelIterator< PF > operator+( ConstPixelIterator< PF > p_it, size_t p_offset )
 	{
-		const_pixel_iterator< PF > result{ p_it };
+		ConstPixelIterator< PF > result{ p_it };
 		result += p_offset;
 		return result;
 	}
 
 	template< PixelFormat PF >
-	inline const_pixel_iterator< PF > operator-( const_pixel_iterator< PF > p_it, size_t p_offset )
+	inline ConstPixelIterator< PF > operator-( ConstPixelIterator< PF > p_it, size_t p_offset )
 	{
-		const_pixel_iterator< PF > result{ p_it };
+		ConstPixelIterator< PF > result{ p_it };
 		result -= p_offset;
 		return result;
 	}
@@ -344,8 +344,8 @@ namespace Castor
 		//!\~french		Typedef sur un vector de pixel.
 		typedef std::vector< pixel > column;
 
-		using iterator = pixel_iterator< PF >;
-		using const_iterator = const_pixel_iterator< PF >;
+		using iterator = PixelIterator< PF >;
+		using const_iterator = ConstPixelIterator< PF >;
 
 	public:
 		/**
@@ -464,7 +464,7 @@ namespace Castor
 		 *\brief		Récupère le pointeur sur les données constantes
 		 *\return		Les données
 		 */
-		uint8_t const * const_ptr()const override;
+		uint8_t const * constPtr()const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on datas
@@ -477,10 +477,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the buffer
-		 *\return		count() * pixel_definitions< PF >::Size
+		 *\return		count() * PixelDefinitions< PF >::Size
 		 *\~french
 		 *\brief		Récupère la taille totale du buffer
-		 *\return		count() * pixel_definitions< PF >::Size
+		 *\return		count() * PixelDefinitions< PF >::Size
 		 */
 		uint32_t size()const override;
 		/**
@@ -491,7 +491,7 @@ namespace Castor
 		 *\brief		Crée un nouveau buffer avec les mêmes valeurs
 		 *\return		Le buffer créé
 		 */
-		std::shared_ptr< PxBufferBase >	clone()const override;
+		std::shared_ptr< PxBufferBase > clone()const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel data at given position
@@ -502,7 +502,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données du pixel
 		 */
-		PxBufferBase::pixel_data get_at( uint32_t x, uint32_t y )override;
+		PxBufferBase::pixel_data getAt( uint32_t x, uint32_t y )override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel data at given position
@@ -513,7 +513,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données constantes du pixel
 		 */
-		PxBufferBase::const_pixel_data get_at( uint32_t x, uint32_t y )const override;
+		PxBufferBase::const_pixel_data getAt( uint32_t x, uint32_t y )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel data at given position
@@ -585,9 +585,9 @@ namespace Castor
 		}
 
 	private:
-		uint32_t do_convert( uint32_t x, uint32_t y )const;
-		virtual void do_init_column( uint32_t p_column )const;
-		virtual void do_init_column( uint32_t p_column );
+		uint32_t doConvert( uint32_t x, uint32_t y )const;
+		virtual void doInitColumn( uint32_t p_column )const;
+		virtual void doInitColumn( uint32_t p_column );
 
 	private:
 		mutable column m_column;

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "MeshLightPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -78,9 +78,9 @@ namespace Castor3D
 
 		private:
 			/**
-			 *\copydoc		Castor3D::LightPass::Program::DoBind
+			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
-			void DoBind( Light const & light )override;
+			void doBind( Light const & light )override;
 
 		private:
 			//!\~english	The variable containing the light position.
@@ -135,22 +135,22 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\copydoc		Castor3D::LightPass::DoCreateProgram
+		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+		LightPass::ProgramPtr doCreateProgram( GLSL::Shader const & vtx
 			, GLSL::Shader const & pxl )const override;
 		/**
-		 *\copydoc		Castor3D::MeshLightPass::DoGenerateVertices
+		 *\copydoc		castor3d::MeshLightPass::doGenerateVertices
 		 */
-		Castor::Point3fArray DoGenerateVertices()const override;
+		castor::Point3fArray doGenerateVertices()const override;
 		/**
-		 *\copydoc		Castor3D::MeshLightPass::DoGenerateFaces
+		 *\copydoc		castor3d::MeshLightPass::doGenerateFaces
 		 */
-		UIntArray DoGenerateFaces()const override;
+		UIntArray doGenerateFaces()const override;
 		/**
-		 *\copydoc		Castor3D::MeshLightPass::DoComputeModelMatrix
+		 *\copydoc		castor3d::MeshLightPass::doComputeModelMatrix
 		 */
-		Castor::Matrix4x4r DoComputeModelMatrix( Light const & light
+		castor::Matrix4x4r doComputeModelMatrix( Light const & light
 			, Camera const & camera )const override;
 	};
 }

@@ -2,7 +2,7 @@
 
 #include "GlslBaseTypes.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GLSL
 {
@@ -66,7 +66,7 @@ namespace GLSL
 		return *this;
 	}
 
-	void Expr::UpdateWriter( Expr const & p_expr )
+	void Expr::updateWriter( Expr const & p_expr )
 	{
 		if ( !m_writer )
 		{
@@ -74,27 +74,27 @@ namespace GLSL
 		}
 	}
 
-	String ToString( Expr const & p_value )
+	String toString( Expr const & p_value )
 	{
 		return String( p_value.m_value.str() );
 	}
 
-	String ToString( int const & p_value )
+	String toString( int const & p_value )
 	{
 		return String( Int( p_value ) );
 	}
 
-	String ToString( uint32_t const & p_value )
+	String toString( uint32_t const & p_value )
 	{
 		return String( Int( int( p_value ) ) );
 	}
 
-	String ToString( double const & p_value )
+	String toString( double const & p_value )
 	{
 		return String( Float( p_value ) );
 	}
 
-	String ToString( float const & p_value )
+	String toString( float const & p_value )
 	{
 		return String( Float( p_value ) );
 	}

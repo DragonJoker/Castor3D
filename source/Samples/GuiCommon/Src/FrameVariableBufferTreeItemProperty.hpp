@@ -52,9 +52,9 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_buffer	Le tampon cible
 		 */
-		FrameVariableBufferTreeItemProperty( Castor3D::Engine * engine
+		FrameVariableBufferTreeItemProperty( castor3d::Engine * engine
 			, bool p_editable
-			, Castor3D::UniformBuffer & p_buffer );
+			, castor3d::UniformBuffer & p_buffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -70,23 +70,23 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::UniformBuffer const & GetBuffer()const
+		inline castor3d::UniformBuffer const & getBuffer()const
 		{
 			return m_buffer;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::UniformBuffer & m_buffer;
+		castor3d::UniformBuffer & m_buffer;
 	};
 }
 

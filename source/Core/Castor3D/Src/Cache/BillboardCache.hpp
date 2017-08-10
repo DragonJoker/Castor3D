@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,10 +41,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct ObjectCacheTraits< BillboardList, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< BillboardList >( KeyType const &, SceneNodeSPtr ) >;
 		using Merger = std::function< void( ObjectCacheBase< BillboardList, KeyType > const &
-											, Castor::Collection< BillboardList, KeyType > &
+											, castor::Collection< BillboardList, KeyType > &
 											, std::shared_ptr< BillboardList >
 											, SceneNodeSPtr
 											, SceneNodeSPtr ) >;

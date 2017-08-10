@@ -3,7 +3,7 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	SceneRenderNode::SceneRenderNode()
 	{

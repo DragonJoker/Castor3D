@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Technique/Transparent/FinalCombinePass.hpp"
 #include "Technique/Transparent/TransparentPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -49,7 +49,7 @@ namespace Castor3D
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & p_transparentPass
 			, FrameBuffer & p_frameBuffer
-			, Castor::Size const & p_size
+			, castor::Size const & p_size
 			, Scene const & p_scene );
 		/**
 		 *\~english
@@ -66,7 +66,7 @@ namespace Castor3D
 		 *\brief		Dessine les noeuds opaques.
 		 *\param[out]	p_info	Reçoit les informations de rendu.
 		 */
-		void Render( RenderInfo & p_info
+		void render( RenderInfo & p_info
 			, Scene const & p_scene
 			, Camera const & p_camera );
 		/**
@@ -75,14 +75,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dessine les données de débogage sur l'écran.
 		 */
-		void Debug();
+		void debugDisplay();
 		/**
 		 *\~english
 		 *\return		The intermediate framebuffer.
 		 *\~french
 		 *\return		Le tampon d'image intermédiaire.
 		 */
-		inline FrameBuffer & GetFbo()
+		inline FrameBuffer & getFbo()
 		{
 			return *m_weightedBlendPassFrameBuffer;
 		}
@@ -102,7 +102,7 @@ namespace Castor3D
 		FrameBuffer & m_frameBuffer;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The opaque and transparent passes combination pass.
 		//!\~french		La passe de combinaison des passes opaque et transparente.
 		std::unique_ptr< FinalCombinePass > m_finalCombinePass;

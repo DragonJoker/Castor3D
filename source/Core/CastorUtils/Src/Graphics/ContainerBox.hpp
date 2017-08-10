@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Math/Point.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -43,7 +43,7 @@ namespace Castor
 	class ContainerBox
 	{
 	protected:
-		typedef Castor::Policy< real > policy;
+		typedef castor::Policy< real > policy;
 
 	public:
 		/**
@@ -103,7 +103,7 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		ContainerBox & operator =( ContainerBox const & p_container )
+		ContainerBox & operator=( ContainerBox const & p_container )
 		{
 			m_ptCenter = p_container.m_ptCenter;
 			return * this;
@@ -118,7 +118,7 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		ContainerBox & operator =( ContainerBox && p_container )
+		ContainerBox & operator=( ContainerBox && p_container )
 		{
 			if ( this != &p_container )
 			{
@@ -137,7 +137,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est dans le container
 		 */
-		CU_API virtual bool IsWithin( Point< real, Dimension > const & p_v ) = 0;
+		CU_API virtual bool isWithin( Point< real, Dimension > const & p_v ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within
@@ -148,7 +148,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est sur la limite
 		 */
-		CU_API virtual bool IsOnLimits( Point< real, Dimension > const & p_v ) = 0;
+		CU_API virtual bool isOnLimits( Point< real, Dimension > const & p_v ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the center of this container
@@ -157,7 +157,7 @@ namespace Castor
 		 *\brief		Récupère le centre de ce conteneur
 		 *\return		Une référence constante sur le centre
 		 */
-		inline Point< real, Dimension > const &	GetCenter()const
+		inline Point< real, Dimension > const & getCenter()const
 		{
 			return m_ptCenter;
 		}
@@ -174,7 +174,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur une ContainerBox à 2 dimensions
 	*/
-	typedef ContainerBox< 2 >	ContainerBox2D;
+	using ContainerBox2D = ContainerBox< 2 >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		14/02/2010
@@ -183,7 +183,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur une ContainerBox à 3 dimensions
 	*/
-	typedef ContainerBox< 3 >	ContainerBox3D;
+	using ContainerBox3D = ContainerBox< 3 >;
 }
 
 #endif

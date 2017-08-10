@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "ObjectRenderNode.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS

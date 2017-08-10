@@ -2,9 +2,9 @@
 
 #include "Animation/Skeleton/SkeletonAnimationNode.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationNode & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
 		: SkeletonAnimationInstanceObject{ p_animationInstance, p_animationObject, p_allObjects }
@@ -15,8 +15,8 @@ namespace Castor3D
 	{
 	}
 
-	void SkeletonAnimationInstanceNode::DoApply()
+	void SkeletonAnimationInstanceNode::doApply()
 	{
-		m_finalTransform = m_animationObject.GetNodeTransform();
+		m_finalTransform = m_animationObject.getNodeTransform();
 	}
 }

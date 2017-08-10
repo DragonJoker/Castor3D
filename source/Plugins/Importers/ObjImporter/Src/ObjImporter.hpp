@@ -33,58 +33,58 @@ namespace Obj
 	\brief		OBJ file importer
 	*/
 	class ObjImporter
-		:	public Castor3D::Importer
-		,	private Castor::NonCopyable
+		:	public castor3d::Importer
+		,	private castor::NonCopyable
 	{
 	private:
-		DECLARE_MAP( Castor3D::PassRPtr, Castor::Point3f, FloatPass );
-		DECLARE_VECTOR( Castor3D::TextureLayoutSPtr, Texture );
+		DECLARE_MAP( castor3d::PassRPtr, castor::Point3f, FloatPass );
+		DECLARE_VECTOR( castor3d::TextureLayoutSPtr, Texture );
 		typedef std::shared_ptr< std::thread > ThreadSPtr;
 
 	public:
 		/**
 		 * Constructor
 		 */
-		ObjImporter( Castor3D::Engine & engine );
+		ObjImporter( castor3d::Engine & engine );
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & engine );
+		static castor3d::ImporterUPtr create( castor3d::Engine & engine );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & scene )override;
+		bool doImportScene( castor3d::Scene & scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & mesh )override;
+		bool doImportMesh( castor3d::Mesh & mesh )override;
 
-		void DoReadObjFile( Castor3D::Mesh & mesh );
-		void DoCreateSubmesh( Castor3D::Mesh & mesh
-			, Castor::String const & mtlName
+		void doReadObjFile( castor3d::Mesh & mesh );
+		void doCreateSubmesh( castor3d::Mesh & mesh
+			, castor::String const & mtlName
 			, bool normals
-			, std::vector< Castor3D::FaceIndices > && faces
-			, Castor3D::InterleavedVertexArray && vertex );
-		void DoParseTexParams( Castor::String & strValue
+			, std::vector< castor3d::FaceIndices > && faces
+			, castor3d::InterleavedVertexArray && vertex );
+		void doParseTexParams( castor::String & strValue
 			, float * offset
 			, float * scale
 			, float * turb );
-		void DoParseTexParam( Castor::String const & strParam
+		void doParseTexParam( castor::String const & strParam
 			, float * values );
-		bool DoIsValidValue( Castor::String const & strParam
-			, Castor::String const & strSrc
+		bool doIsValidValue( castor::String const & strParam
+			, castor::String const & strSrc
 			, uint32_t index );
-		void DoAddTexture( Castor::String const & strValue
-			, Castor3D::Pass & pass
-			, Castor3D::TextureChannel channel );
-		void DoReadMaterials( Castor3D::Mesh & mesh
-			, Castor::Path const & pathMatFile );
+		void doAddTexture( castor::String const & strValue
+			, castor3d::Pass & pass
+			, castor3d::TextureChannel channel );
+		void doReadMaterials( castor3d::Mesh & mesh
+			, castor::Path const & pathMatFile );
 
 	private:
-		Castor::ImageCache & m_collImages;
-		Castor3D::MaterialPtrArray m_arrayLoadedMaterials;
+		castor::ImageCache & m_collImages;
+		castor3d::MaterialPtrArray m_arrayLoadedMaterials;
 		TextureArray m_arrayTextures;
-		Castor::TextFile * m_pFile;
+		castor::TextFile * m_pFile;
 		FloatPassMap m_mapOffsets;
 		FloatPassMap m_mapScales;
 		FloatPassMap m_mapTurbulences;

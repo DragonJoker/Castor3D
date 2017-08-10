@@ -1,7 +1,7 @@
 #include "FrameBuffer/TestColourRenderBuffer.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -14,33 +14,33 @@ namespace TestRender
 	{
 	}
 
-	bool TestColourRenderBuffer::Create()
+	bool TestColourRenderBuffer::create()
 	{
 		return true;
 	}
 
-	void TestColourRenderBuffer::Destroy()
+	void TestColourRenderBuffer::destroy()
 	{
 	}
 
-	bool TestColourRenderBuffer::Initialise( Castor::Size const & p_size )
+	bool TestColourRenderBuffer::initialise( castor::Size const & p_size )
 	{
 		return true;
 	}
 
-	void TestColourRenderBuffer::Cleanup()
+	void TestColourRenderBuffer::cleanup()
 	{
 	}
 
-	void TestColourRenderBuffer::Bind()
+	void TestColourRenderBuffer::bind()
 	{
 	}
 
-	void TestColourRenderBuffer::Unbind()
+	void TestColourRenderBuffer::unbind()
 	{
 	}
 
-	bool TestColourRenderBuffer::Resize( Castor::Size const & p_size )
+	bool TestColourRenderBuffer::resize( castor::Size const & p_size )
 	{
 		return true;
 	}

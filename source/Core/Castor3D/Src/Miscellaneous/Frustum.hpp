@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Math/PlaneEquation.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -64,7 +64,7 @@ namespace Castor3D
 		 *\param[in]	p_y			Le vecteur Y.
 		 *\param[in]	p_z			Le vecteur Z.
 		 */
-		C3D_API void Update( Castor::Point3r const & p_position, Castor::Point3r const & p_x, Castor::Point3r const & p_y, Castor::Point3r const & p_z );
+		C3D_API void update( castor::Point3r const & p_position, castor::Point3r const & p_x, castor::Point3r const & p_y, castor::Point3r const & p_z );
 		/**
 		 *\~english
 		 *\brief		Checks if given CubeBox is in the view frustum.
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\param[in]	p_transformations	La matrice de transformations de la CubeBox.
 		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & p_transformations )const;
+		C3D_API bool isVisible( castor::CubeBox const & p_box, castor::Matrix4x4r const & p_transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given SphereBox is in the view frustum.
@@ -92,7 +92,7 @@ namespace Castor3D
 		 *\param[in]	p_transformations	La SphereBox de transformations de la CubeBox.
 		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & p_transformations )const;
+		C3D_API bool isVisible( castor::SphereBox const & p_box, castor::Matrix4x4r const & p_transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum.
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\param[in]	p_point	Le point.
 		 *\return		\p false si le point en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
+		C3D_API bool isVisible( castor::Point3r const & p_point )const;
 
 	private:
 		//!\~english	The viewport.
@@ -111,7 +111,7 @@ namespace Castor3D
 		Viewport & m_viewport;
 		//!\~english	The view frustum's planes.
 		//!\~french		Les plans du frustum de vue.
-		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::eCount ) > m_planes;
+		std::array< castor::PlaneEquation< real >, size_t( FrustumPlane::eCount ) > m_planes;
 	};
 }
 

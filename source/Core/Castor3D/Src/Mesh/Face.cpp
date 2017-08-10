@@ -1,8 +1,8 @@
 #include "Face.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Face::Face( uint32_t a, uint32_t b, uint32_t c )
 		: m_face{ { { a, b, c } } }

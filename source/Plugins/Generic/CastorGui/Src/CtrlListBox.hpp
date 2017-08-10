@@ -41,8 +41,8 @@ namespace CastorGui
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		ListBoxCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		ListBoxCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id );
 
@@ -57,14 +57,14 @@ namespace CastorGui
 		 *\param[in]	p_style			The style
 		 *\param[in]	p_visible		Initial visibility status
 		 */
-		ListBoxCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		ListBoxCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id
-			, Castor::StringArray const & p_values
+			, castor::StringArray const & p_values
 			, int p_selected
-			, Castor::Position const & p_position
-			, Castor::Size const & p_size
+			, castor::Position const & p_position
+			, castor::Size const & p_size
 			, uint32_t p_style = 0
 			, bool p_visible = true );
 
@@ -79,9 +79,9 @@ namespace CastorGui
 		 *\param[in]	p_visible		Initial visibility status
 		 */
 		template< size_t N >
-		ListBoxCtrl( ControlSPtr p_parent, Castor::String const( & p_values )[N], int p_selected, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true )
+		ListBoxCtrl( ControlSPtr p_parent, castor::String const( & p_values )[N], int p_selected, uint32_t p_id, castor::Position const & p_position, castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true )
 			: Control( ControlType::eListBox, p_parent, p_id, p_position, p_size, p_style, p_visible )
-			, m_values( Castor::StringArray( &p_values[0], &p_values[N] ) )
+			, m_values( castor::StringArray( &p_values[0], &p_values[N] ) )
 			, m_selected( p_selected )
 		{
 		}
@@ -90,56 +90,56 @@ namespace CastorGui
 		 */
 		virtual ~ListBoxCtrl();
 
-		/** Sets the background colour for selected item
+		/** sets the background colour for selected item
 		 *\param[in]	p_colour		The new value
 		 */
-		void SetSelectedItemBackgroundMaterial( Castor3D::MaterialSPtr p_colour );
+		void setSelectedItemBackgroundMaterial( castor3d::MaterialSPtr p_colour );
 
-		/** Sets the foreground colour for selected item
+		/** sets the foreground colour for selected item
 		 *\param[in]	p_colour		The new value
 		 */
-		void SetSelectedItemForegroundMaterial( Castor3D::MaterialSPtr p_colour );
+		void setSelectedItemForegroundMaterial( castor3d::MaterialSPtr p_colour );
 
 		/** Appends a new item
 		 *\param[in]	p_value		The item
 		 */
-		void AppendItem( Castor::String  const & p_value );
+		void appendItem( castor::String  const & p_value );
 
 		/** Removes an item
 		 *\param[in]	p_index		The item index
 		 */
-		void RemoveItem( int p_index );
+		void removeItem( int p_index );
 
-		/** Sets an item text
+		/** sets an item text
 		 *\param[in]	p_index		The item index
 		 *\param[in]	p_text		The item text
 		 */
-		void SetItemText( int p_index, Castor::String const & p_text );
+		void setItemText( int p_index, castor::String const & p_text );
 
 		/** Retrieves an item text
 		 *\param[in]	p_index		The item index
 		 *\return		The item text
 		 */
-		Castor::String GetItemText( int p_index );
+		castor::String getItemText( int p_index );
 
 		/** Clears the items
 		 */
-		void Clear();
+		void clear();
 
-		/** Sets the selected item
+		/** sets the selected item
 		 *\param[in]	p_index		The new value
 		 */
-		void SetSelected( int p_index );
+		void setSelected( int p_index );
 
-		/** Sets the caption font.
+		/** sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
-		void SetFont( Castor::String const & p_font );
+		void setFont( castor::String const & p_font );
 
 		/** Retrieves the items
 		 *\return		The value
 		 */
-		inline Castor::StringArray const & GetItems()const
+		inline castor::StringArray const & getItems()const
 		{
 			return m_values;
 		}
@@ -147,7 +147,7 @@ namespace CastorGui
 		/** Retrieves the items count
 		 *\return		The value
 		 */
-		inline uint32_t GetItemCount()const
+		inline uint32_t getItemCount()const
 		{
 			return uint32_t( m_values.size() );
 		}
@@ -155,7 +155,7 @@ namespace CastorGui
 		/** Retrieves the selected item index
 		 *\return		The value
 		 */
-		inline int GetSelected()const
+		inline int getSelected()const
 		{
 			return m_selected;
 		}
@@ -163,7 +163,7 @@ namespace CastorGui
 		/** Retrieves the background colour for selected item
 		 *\return		The value
 		 */
-		inline Castor3D::MaterialSPtr GetSelectedItemBackgroundMaterial()const
+		inline castor3d::MaterialSPtr getSelectedItemBackgroundMaterial()const
 		{
 			return m_selectedItemBackgroundMaterial.lock();
 		}
@@ -171,7 +171,7 @@ namespace CastorGui
 		/** Retrieves the foreground colour for selected item
 		 *\return		The value
 		 */
-		inline Castor3D::MaterialSPtr GetSelectedItemForegroundMaterial()const
+		inline castor3d::MaterialSPtr getSelectedItemForegroundMaterial()const
 		{
 			return m_selectedItemForegroundMaterial.lock();
 		}
@@ -179,7 +179,7 @@ namespace CastorGui
 		/** Retrieves the background colour for an highlighted item
 		 *\return		The value
 		 */
-		inline Castor3D::MaterialSPtr GetHighlightedItemBackgroundMaterial()const
+		inline castor3d::MaterialSPtr getHighlightedItemBackgroundMaterial()const
 		{
 			return m_highlightedItemBackgroundMaterial.lock();
 		}
@@ -187,23 +187,23 @@ namespace CastorGui
 		/** Retrieves the background colour for an unselected item
 		 *\return		The value
 		 */
-		inline Castor3D::MaterialSPtr GetItemBackgroundMaterial()const
+		inline castor3d::MaterialSPtr getItemBackgroundMaterial()const
 		{
 			return m_itemBackgroundMaterial.lock();
 		}
 
-		/** Sets the background colour for an highlighted item
+		/** sets the background colour for an highlighted item
 		 *\param[in]	p_material	The new value
 		 */
-		inline void SetHighlightedItemBackgroundMaterial( Castor3D::MaterialSPtr p_material )
+		inline void setHighlightedItemBackgroundMaterial( castor3d::MaterialSPtr p_material )
 		{
 			m_highlightedItemBackgroundMaterial = p_material;
 		}
 
-		/** Sets the background colour for an unselected item
+		/** sets the background colour for an unselected item
 		 *\param[in]	p_material	The new value
 		 */
-		inline void SetItemBackgroundMaterial( Castor3D::MaterialSPtr p_material )
+		inline void setItemBackgroundMaterial( castor3d::MaterialSPtr p_material )
 		{
 			m_itemBackgroundMaterial = p_material;
 		}
@@ -213,7 +213,7 @@ namespace CastorGui
 		 *\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnListEventConnection Connect( ListBoxEvent p_event, OnListEventFunction p_function )
+		inline OnListEventConnection connect( ListBoxEvent p_event, OnListEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}
@@ -223,82 +223,82 @@ namespace CastorGui
 		 *\param[in]	p_value		The control label
 		 *\return		The static control.
 		 */
-		StaticCtrlSPtr DoCreateItemCtrl( Castor::String const & p_value );
+		StaticCtrlSPtr doCreateItemCtrl( castor::String const & p_value );
 
 		/** Creates a sub-control, and it's Castor3D counterpart.
 		 *\param[in]	p_value		The control label
 		 */
-		void DoCreateItem( Castor::String const & p_value );
+		void doCreateItem( castor::String const & p_value );
 
 		/** Recomputes the items positions, according to their position in the items array
 		 */
-		void DoUpdateItems();
+		void doUpdateItems();
 
-		/** @copydoc CastorGui::Control::DoCreate
+		/** @copydoc CastorGui::Control::doCreate
 		 */
-		virtual void DoCreate();
+		virtual void doCreate();
 
-		/** @copydoc CastorGui::Control::DoDestroy
+		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		virtual void DoDestroy();
+		virtual void doDestroy();
 
-		/** @copydoc CastorGui::Control::DoSetPosition
+		/** @copydoc CastorGui::Control::doSetPosition
 		 */
-		virtual void DoSetPosition( Castor::Position const & p_value );
+		virtual void doSetPosition( castor::Position const & p_value );
 
-		/** @copydoc CastorGui::Control::DoSetSize
+		/** @copydoc CastorGui::Control::doSetSize
 		 */
-		virtual void DoSetSize( Castor::Size const & p_value );
+		virtual void doSetSize( castor::Size const & p_value );
 
-		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
+		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		 */
-		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
+		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		 */
-		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** @copydoc CastorGui::Control::DoSetVisible
+		/** @copydoc CastorGui::Control::doSetVisible
 		 */
-		virtual void DoSetVisible( bool p_visible );
+		virtual void doSetVisible( bool p_visible );
 
 		/** Event when mouse enters an item
 		 *\param[in]	p_control	The item
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnItemMouseEnter( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
+		void onItemMouseEnter( ControlSPtr p_control, castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse leaves an item
 		 *\param[in]	p_control	The item
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnItemMouseLeave( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
+		void onItemMouseLeave( ControlSPtr p_control, castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released on an item
 		 *\param[in]	p_control	The item
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnItemMouseLButtonUp( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
+		void onItemMouseLButtonUp( ControlSPtr p_control, castor3d::MouseEvent const & p_event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnItemKeyDown( ControlSPtr p_control, Castor3D::KeyboardEvent const & p_event );
+		void onItemKeyDown( ControlSPtr p_control, castor3d::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
+		void onKeyDown( castor3d::KeyboardEvent const & p_event );
 
 		/** Common construction method.
 		 */
-		void DoConstruct();
+		void doConstruct();
 
 	private:
 		//! The values given on construction.
-		Castor::StringArray m_initialValues;
+		castor::StringArray m_initialValues;
 		//! All the combo box values
-		Castor::StringArray m_values;
+		castor::StringArray m_values;
 		//! The selected value
 		int m_selected;
 		//! The selected item
@@ -306,17 +306,17 @@ namespace CastorGui
 		//! All the items.
 		std::vector< StaticCtrlSPtr > m_items;
 		//! The background colour, for normal item
-		Castor3D::MaterialWPtr m_itemBackgroundMaterial;
+		castor3d::MaterialWPtr m_itemBackgroundMaterial;
 		//! The background colour, for highlighted item
-		Castor3D::MaterialWPtr m_highlightedItemBackgroundMaterial;
+		castor3d::MaterialWPtr m_highlightedItemBackgroundMaterial;
 		//! The background colour
-		Castor3D::MaterialWPtr m_selectedItemBackgroundMaterial;
+		castor3d::MaterialWPtr m_selectedItemBackgroundMaterial;
 		//! The foreground colour
-		Castor3D::MaterialWPtr m_selectedItemForegroundMaterial;
+		castor3d::MaterialWPtr m_selectedItemForegroundMaterial;
 		//! The listbox events signals
 		OnListEvent m_signals[size_t( ListBoxEvent::eCount )];
 		//! The items font name.
-		Castor::String m_fontName;
+		castor::String m_fontName;
 	};
 }
 

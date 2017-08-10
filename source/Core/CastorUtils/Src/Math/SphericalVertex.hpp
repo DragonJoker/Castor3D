@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Point.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS

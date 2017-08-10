@@ -40,7 +40,7 @@ namespace CastorCom
 	*/
 	class ATL_NO_VTABLE CHdrColour
 		: COM_ATL_OBJECT( HdrColour )
-		, public Castor::HdrColour
+		, public castor::HdrColour
 	{
 	public:
 		/**
@@ -59,32 +59,32 @@ namespace CastorCom
 		virtual ~CHdrColour();
 		/**
 		*\~english
-		*\brief		Implicit conversion operator, to Castor::Point4f.
+		*\brief		Implicit conversion operator, to castor::Point4f.
 		*\~french
-		*\brief		Opérateur de conversion implicite vers Castor::Point4f.
+		*\brief		Opérateur de conversion implicite vers castor::Point4f.
 		*/
-		inline operator Castor::Point4f()const
+		inline operator castor::Point4f()const
 		{
-			return bgra_float( *this );
+			return toBGRAFloat( *this );
 		}
 
-		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eRed ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eRed ) );
-		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eGreen ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eGreen ) );
-		COM_PROPERTY( B, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eBlue ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eBlue ) );
-		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eAlpha ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eAlpha ) );
+		COM_PROPERTY( R, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eRed ), make_putter( this, &castor::HdrColour::get, castor::Component::eRed ) );
+		COM_PROPERTY( G, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eGreen ), make_putter( this, &castor::HdrColour::get, castor::Component::eGreen ) );
+		COM_PROPERTY( B, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eBlue ), make_putter( this, &castor::HdrColour::get, castor::Component::eBlue ) );
+		COM_PROPERTY( A, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eAlpha ), make_putter( this, &castor::HdrColour::get, castor::Component::eAlpha ) );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( HdrColour ), CHdrColour );
 
-	DECLARE_VARIABLE_REF_GETTER( HdrColour, Castor, HdrColour );
-	DECLARE_VARIABLE_REF_PUTTER( HdrColour, Castor, HdrColour );
+	DECLARE_VARIABLE_REF_GETTER( HdrColour, castor, HdrColour );
+	DECLARE_VARIABLE_REF_PUTTER( HdrColour, castor, HdrColour );
 /*
 	template< typename Class >
-	struct VariableRefGetter< Class, Castor::Point4f >
+	struct VariableRefgetter< Class, castor::Point4f >
 	{
-		typedef Castor::Point4f Value;
+		typedef castor::Point4f Value;
 		typedef Value const & ( Class::*Function )( )const;
-		VariableRefGetter( Class * instance, Function function )
+		VariableRefgetter( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
 		{
@@ -101,8 +101,8 @@ namespace CastorCom
 
 					if ( hr == S_OK )
 					{
-						Castor::Colour * l_colour = static_cast< Castor::HdrColour * >( static_cast< CHdrColour * >( *value ) );
-						l_colour->from_bgra( ( m_instance->*m_function )() );
+						castor::Colour * l_colour = static_cast< castor::HdrColour * >( static_cast< CHdrColour * >( *value ) );
+						l_colour->fromBGRA( ( m_instance->*m_function )() );
 					}
 				}
 			}
@@ -120,9 +120,9 @@ namespace CastorCom
 	};
 
 	template< typename Class >
-	struct VariablePutter< Class, Castor::Point4f const & >
+	struct VariablePutter< Class, castor::Point4f const & >
 	{
-		typedef void ( Class::*Function )( Castor::Point4f const & );
+		typedef void ( Class::*Function )( castor::Point4f const & );
 		VariablePutter( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )

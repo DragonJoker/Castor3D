@@ -18,71 +18,71 @@
 
 #define DISPLAY_DEBUG 1
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RenderTarget::TextWriter::TextWriter( String const & tabs )
-		: Castor::TextWriter< RenderTarget >{ tabs }
+		: castor::TextWriter< RenderTarget >{ tabs }
 	{
 	}
 
 	bool RenderTarget::TextWriter::operator()( RenderTarget const & target, TextFile & file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing RenderTarget" ) );
-		bool result = file.WriteText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget name" );
+		Logger::logInfo( m_tabs + cuT( "Writing RenderTarget" ) );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget name" );
 
-		if ( result && target.GetScene() )
+		if ( result && target.getScene() )
 		{
-			result = file.WriteText( m_tabs + cuT( "\tscene \"" ) + target.GetScene()->GetName() + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget scene" );
+			result = file.writeText( m_tabs + cuT( "\tscene \"" ) + target.getScene()->getName() + cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget scene" );
 		}
 
-		if ( result && target.GetCamera() )
+		if ( result && target.getCamera() )
 		{
-			result = file.WriteText( m_tabs + cuT( "\tcamera \"" ) + target.GetCamera()->GetName() + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget camera" );
-		}
-
-		if ( result )
-		{
-			result = file.Print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), target.GetSize().width(), target.GetSize().height() ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget size" );
+			result = file.writeText( m_tabs + cuT( "\tcamera \"" ) + target.getCamera()->getName() + cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget camera" );
 		}
 
 		if ( result )
 		{
-			result = file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget format" );
+			result = file.print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), target.getSize().getWidth(), target.getSize().getHeight() ) > 0;
+			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget size" );
 		}
 
 		if ( result )
 		{
-			result = file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + target.m_toneMapping->GetName() + cuT( "\"" ) )
-					   && target.m_toneMapping->WriteInto( file )
-					   && file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget tone mapping" );
+			result = file.writeText( m_tabs + cuT( "\tformat " ) + castor::PF::getFormatName( target.getPixelFormat() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget format" );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "\ttone_mapping \"" ) + target.m_toneMapping->getName() + cuT( "\"" ) )
+					   && target.m_toneMapping->writeInto( file )
+					   && file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget tone mapping" );
 		}
 
 		if ( result
 			&& target.m_renderTechnique
-			&& target.m_renderTechnique->IsMultisampling() )
+			&& target.m_renderTechnique->isMultisampling() )
 		{
-			result = file.WriteText( m_tabs + cuT( "\t" ) )
-				&& target.m_renderTechnique->WriteInto( file )
-				&& file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget technique" );
+			result = file.writeText( m_tabs + cuT( "\t" ) )
+				&& target.m_renderTechnique->writeInto( file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget technique" );
 		}
 
 		if ( result )
 		{
 			for ( auto const & effect : target.m_postEffects )
 			{
-				result = file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + effect->GetName() + cuT( "\"" ) )
-						   && effect->WriteInto( file )
-						   && file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< RenderTarget >::CheckError( result, "RenderTarget post effect" );
+				result = file.writeText( m_tabs + cuT( "\tpostfx \"" ) + effect->getName() + cuT( "\"" ) )
+						   && effect->writeInto( file )
+						   && file.writeText( cuT( "\n" ) ) > 0;
+				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
 			}
 		}
 
@@ -91,7 +91,7 @@ namespace Castor3D
 			result = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( target.m_ssaoConfig, file );
 		}
 
-		file.WriteText( m_tabs + cuT( "}\n" ) );
+		file.writeText( m_tabs + cuT( "}\n" ) );
 		return result;
 	}
 
@@ -99,54 +99,54 @@ namespace Castor3D
 
 	RenderTarget::TargetFbo::TargetFbo( RenderTarget & renderTarget )
 		: m_renderTarget{ renderTarget }
-		, m_colourTexture{ *renderTarget.GetEngine() }
+		, m_colourTexture{ *renderTarget.getEngine() }
 	{
 	}
 
-	bool RenderTarget::TargetFbo::Initialise( uint32_t index, Size const & size )
+	bool RenderTarget::TargetFbo::initialise( uint32_t index, Size const & size )
 	{
-		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		SamplerSPtr sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+		m_frameBuffer = m_renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
+		SamplerSPtr sampler = m_renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_renderTarget.m_index ) );
+		auto colourTexture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
-			, m_renderTarget.GetPixelFormat(), size );
-		m_colourAttach = m_frameBuffer->CreateAttachment( colourTexture );
-		m_colourTexture.SetTexture( colourTexture );
-		m_colourTexture.SetSampler( sampler );
-		m_colourTexture.SetIndex( index );
-		m_colourTexture.GetTexture()->GetImage().InitialiseSource();
-		Size dimensions = m_colourTexture.GetTexture()->GetDimensions();
-		m_frameBuffer->Create();
-		m_colourTexture.GetTexture()->Initialise();
-		m_frameBuffer->Initialise( dimensions );
+			, m_renderTarget.getPixelFormat(), size );
+		m_colourAttach = m_frameBuffer->createAttachment( colourTexture );
+		m_colourTexture.setTexture( colourTexture );
+		m_colourTexture.setSampler( sampler );
+		m_colourTexture.setIndex( index );
+		m_colourTexture.getTexture()->getImage().initialiseSource();
+		Size dimensions = m_colourTexture.getTexture()->getDimensions();
+		m_frameBuffer->create();
+		m_colourTexture.getTexture()->initialise();
+		m_frameBuffer->initialise( dimensions );
 
-		m_frameBuffer->Bind();
-		m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.GetTexture()->GetType() );
-		m_frameBuffer->SetDrawBuffer( m_colourAttach );
-		bool result = m_frameBuffer->IsComplete();
-		m_frameBuffer->Unbind();
+		m_frameBuffer->bind();
+		m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.getTexture()->getType() );
+		m_frameBuffer->setDrawBuffer( m_colourAttach );
+		bool result = m_frameBuffer->isComplete();
+		m_frameBuffer->unbind();
 
 		return result;
 	}
 
-	void RenderTarget::TargetFbo::Cleanup()
+	void RenderTarget::TargetFbo::cleanup()
 	{
-		m_frameBuffer->Bind();
-		m_frameBuffer->DetachAll();
-		m_frameBuffer->Unbind();
-		m_frameBuffer->Cleanup();
-		m_colourTexture.Cleanup();
-		m_frameBuffer->Destroy();
+		m_frameBuffer->bind();
+		m_frameBuffer->detachAll();
+		m_frameBuffer->unbind();
+		m_frameBuffer->cleanup();
+		m_colourTexture.cleanup();
+		m_frameBuffer->destroy();
 		m_colourAttach.reset();
-		m_colourTexture.SetTexture( nullptr );
+		m_colourTexture.setTexture( nullptr );
 		m_frameBuffer.reset();
 	}
 
 	//*************************************************************************************************
 
 	uint32_t RenderTarget::sm_uiCount = 0;
-	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
+	const castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
 	RenderTarget::RenderTarget( Engine & engine, TargetType type )
 		: OwnedBy< Engine >{ engine }
@@ -158,112 +158,112 @@ namespace Castor3D
 		, m_index{ ++sm_uiCount }
 		, m_frameBuffer{ *this }
 	{
-		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
-		SamplerSPtr sampler = GetEngine()->GetSamplerCache().Add( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
-		sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" ), *getEngine(), Parameters{} );
+		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
+		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 	}
 
 	RenderTarget::~RenderTarget()
 	{
 	}
 
-	void RenderTarget::Initialise( uint32_t index )
+	void RenderTarget::initialise( uint32_t index )
 	{
 		if ( !m_initialised )
 		{
-			m_frameBuffer.Initialise( index, m_size );
+			m_frameBuffer.initialise( index, m_size );
 
 			if ( !m_renderTechnique )
 			{
 				try
 				{
-					auto name = cuT( "RenderTargetTechnique_" ) + string::to_string( m_index );
-					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( name
+					auto name = cuT( "RenderTargetTechnique_" ) + string::toString( m_index );
+					m_renderTechnique = getEngine()->getRenderTechniqueCache().add( name
 						, std::make_shared< RenderTechnique >( name
 							, *this
-							, *GetEngine()->GetRenderSystem()
+							, *getEngine()->getRenderSystem()
 							, m_techniqueParameters
 							, m_ssaoConfig ) );
 				}
 				catch ( Exception & p_exc )
 				{
-					Logger::LogError( cuT( "Couldn't load render technique: " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+					Logger::logError( cuT( "Couldn't load render technique: " ) + string::stringCast< xchar >( p_exc.getFullDescription() ) );
 					throw;
 				}
 			}
 
-			m_size = m_frameBuffer.m_colourTexture.GetTexture()->GetDimensions();
-			m_renderTechnique->Initialise( index );
+			m_size = m_frameBuffer.m_colourTexture.getTexture()->getDimensions();
+			m_renderTechnique->initialise( index );
 
 			for ( auto effect : m_postEffects )
 			{
-				effect->Initialise();
+				effect->initialise();
 			}
 
-			m_initialised = m_toneMapping->Initialise();
+			m_initialised = m_toneMapping->initialise();
 		}
 	}
 
-	void RenderTarget::Cleanup()
+	void RenderTarget::cleanup()
 	{
 		if ( m_initialised )
 		{
-			m_toneMapping->Cleanup();
+			m_toneMapping->cleanup();
 			m_toneMapping.reset();
 
 			for ( auto effect : m_postEffects )
 			{
-				effect->Cleanup();
+				effect->cleanup();
 			}
 
 			m_postEffects.clear();
 			m_initialised = false;
-			GetEngine()->GetRenderTechniqueCache().Remove( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ) );
-			m_renderTechnique->Cleanup();
-			m_frameBuffer.Cleanup();
+			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
+			m_renderTechnique->cleanup();
+			m_frameBuffer.cleanup();
 			m_renderTechnique.reset();
 		}
 	}
 
-	void RenderTarget::Render( RenderInfo & info )
+	void RenderTarget::render( RenderInfo & info )
 	{
-		SceneSPtr scene = GetScene();
+		SceneSPtr scene = getScene();
 
 		if ( scene )
 		{
-			if ( m_initialised && scene->IsInitialised() )
+			if ( m_initialised && scene->isInitialised() )
 			{
-				CameraSPtr pCamera = GetCamera();
+				CameraSPtr pCamera = getCamera();
 
 				if ( pCamera )
 				{
-					scene->GetGeometryCache().FillInfo( info );
-					DoRender( info, m_frameBuffer, GetCamera() );
+					scene->getGeometryCache().fillInfo( info );
+					doRender( info, m_frameBuffer, getCamera() );
 				}
 			}
 		}
 	}
 
-	ViewportType RenderTarget::GetViewportType()const
+	ViewportType RenderTarget::getViewportType()const
 	{
-		return ( GetCamera() ? GetCamera()->GetViewportType() : ViewportType::eCount );
+		return ( getCamera() ? getCamera()->getViewportType() : ViewportType::eCount );
 	}
 
-	void RenderTarget::SetViewportType( ViewportType value )
+	void RenderTarget::setViewportType( ViewportType value )
 	{
-		if ( GetCamera() )
+		if ( getCamera() )
 		{
-			GetCamera()->SetViewportType( value );
+			getCamera()->setViewportType( value );
 		}
 	}
 
-	void RenderTarget::SetCamera( CameraSPtr camera )
+	void RenderTarget::setCamera( CameraSPtr camera )
 	{
 		m_camera = camera;
 	}
 
-	void RenderTarget::SetToneMappingType( String const & name
+	void RenderTarget::setToneMappingType( String const & name
 		, Parameters const & parameters )
 	{
 		if ( m_toneMapping )
@@ -271,60 +271,60 @@ namespace Castor3D
 			ToneMappingSPtr toneMapping;
 			std::swap( m_toneMapping, toneMapping );
 			// Give ownership of the tone mapping to the event (capture by value in the lambda).
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [toneMapping]()
+			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender, [toneMapping]()
 			{
-				toneMapping->Cleanup();
+				toneMapping->cleanup();
 			} ) );
 		}
 
-		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( name, *GetEngine(), parameters );
+		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name, *getEngine(), parameters );
 	}
 
-	void RenderTarget::SetSize( Size const & size )
+	void RenderTarget::setSize( Size const & size )
 	{
 		m_size = size;
 	}
 
-	void RenderTarget::AddTechniqueParameters( Parameters const & parameters )
+	void RenderTarget::addTechniqueParameters( Parameters const & parameters )
 	{
-		m_techniqueParameters.Add( parameters );
+		m_techniqueParameters.add( parameters );
 	}
 
-	void RenderTarget::AddShadowProducer( Light & light )
+	void RenderTarget::addShadowProducer( Light & light )
 	{
 		if ( m_renderTechnique )
 		{
-			m_renderTechnique->AddShadowProducer( light );
+			m_renderTechnique->addShadowProducer( light );
 		}
 	}
 
-	void RenderTarget::DoRender( RenderInfo & info
+	void RenderTarget::doRender( RenderInfo & info
 		, RenderTarget::TargetFbo & fbo
 		, CameraSPtr camera )
 	{
-		SceneSPtr scene = GetScene();
-		fbo.m_frameBuffer->SetClearColour( scene->GetBackgroundColour() );
+		SceneSPtr scene = getScene();
+		fbo.m_frameBuffer->setClearColour( scene->getBackgroundColour() );
 
 		// Render the scene through the RenderTechnique.
-		m_renderTechnique->Render( info );
+		m_renderTechnique->render( info );
 
 		// Then draw the render's result to the RenderTarget's frame buffer.
-		fbo.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		fbo.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_toneMapping->SetConfig( scene->GetHdrConfig() );
-		m_toneMapping->Apply( GetSize(), m_renderTechnique->GetResult(), info );
+		fbo.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		fbo.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+		m_toneMapping->setConfig( scene->getHdrConfig() );
+		m_toneMapping->apply( getSize(), m_renderTechnique->getResult(), info );
 
 		// We also render overlays.
-		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
-		GetEngine()->GetOverlayCache().Render( *scene, m_size );
+		getEngine()->getMaterialCache().getPassBuffer().bind();
+		getEngine()->getOverlayCache().render( *scene, m_size );
 
 #if defined( DISPLAY_DEBUG ) && !defined( NDEBUG )
 
-		camera->Apply();
-		m_renderTechnique->DisplayDebug( Size{ camera->GetWidth(), camera->GetHeight() } );
+		camera->apply();
+		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
 
 #endif
 
-		fbo.m_frameBuffer->Unbind();
+		fbo.m_frameBuffer->unbind();
 	}
 }

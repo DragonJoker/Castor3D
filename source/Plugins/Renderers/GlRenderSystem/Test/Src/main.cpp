@@ -27,14 +27,14 @@
 
 #undef CreateWindow
 
-using namespace Castor;
+using namespace castor;
 
 namespace
 {
-	void DoLoadPlugins( Castor3D::Engine & engine )
+	void doloadPlugins( castor3d::Engine & engine )
 	{
 		PathArray arrayFiles;
-		File::ListDirectoryFiles( Castor3D::Engine::GetPluginsDirectory(), arrayFiles );
+		File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );
 		PathArray arrayKept;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
@@ -60,12 +60,12 @@ namespace
 
 			for ( auto file : arrayKept )
 			{
-				if ( file.GetExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CASTOR_DLL_EXT )
 				{
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !engine.GetPluginCache().LoadPlugin( file ) )
+						if ( !engine.getPluginCache().loadPlugin( file ) )
 						{
 							arrayFailed.push_back( file );
 						}
@@ -80,7 +80,7 @@ namespace
 			// Then we load other plug-ins
 			for ( auto file : otherPlugins )
 			{
-				if ( !engine.GetPluginCache().LoadPlugin( file ) )
+				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
 					arrayFailed.push_back( file );
 				}
@@ -88,50 +88,50 @@ namespace
 
 			if ( !arrayFailed.empty() )
 			{
-				Logger::LogWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto file : arrayFailed )
 				{
-					Logger::LogWarning( Path( file ).GetFileName() );
+					Logger::logWarning( Path( file ).getFileName() );
 				}
 
 				arrayFailed.clear();
 			}
 		}
 
-		Logger::LogInfo( cuT( "Plugins loaded" ) );
+		Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	std::unique_ptr< Castor3D::Engine > DoInitialiseCastor( Castor3D::IWindowHandleSPtr p_handle )
+	std::unique_ptr< castor3d::Engine > doInitialiseCastor( castor3d::IWindowHandleSPtr p_handle )
 	{
-		if ( !File::DirectoryExists( Castor3D::Engine::GetEngineDirectory() ) )
+		if ( !File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
 		{
-			File::DirectoryCreate( Castor3D::Engine::GetEngineDirectory() );
+			File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 		}
 
-		auto result = std::make_unique< Castor3D::Engine >();
-		DoLoadPlugins( *result );
+		auto result = std::make_unique< castor3d::Engine >();
+		doloadPlugins( *result );
 
-		auto renderers = result->GetPluginCache().GetPlugins( Castor3D::PluginType::eRenderer );
+		auto renderers = result->getPluginCache().getPlugins( castor3d::PluginType::eRenderer );
 
 		if ( renderers.empty() )
 		{
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( result->LoadRenderer( GlRender::GlRenderSystem::Type ) )
+		if ( result->loadRenderer( GlRender::GlRenderSystem::Type ) )
 		{
-			result->Initialise( 1, false );
-			auto context = result->GetRenderSystem()->CreateContext();
-			auto scene = result->GetSceneCache().Add( cuT( "Test" ) );
-			auto window = result->GetRenderWindowCache().Add( cuT( "Window" ) );
-			auto target = result->GetRenderTargetCache().Add( Castor3D::TargetType::eWindow );
-			result->SetMaterialsType( Castor3D::MaterialType::eLegacy );
-			target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
-			target->SetSize( Size{ 1024, 1024 } );
-			target->SetScene( scene );
-			window->SetRenderTarget( target );
-			window->Initialise( Size{ 1024, 1024 }, Castor3D::WindowHandle{ p_handle } );
+			result->initialise( 1, false );
+			auto context = result->getRenderSystem()->createContext();
+			auto scene = result->getSceneCache().add( cuT( "Test" ) );
+			auto window = result->getRenderWindowCache().add( cuT( "Window" ) );
+			auto target = result->getRenderTargetCache().add( castor3d::TargetType::eWindow );
+			result->setMaterialsType( castor3d::MaterialType::eLegacy );
+			target->setPixelFormat( PixelFormat::eA8R8G8B8 );
+			target->setSize( Size{ 1024, 1024 } );
+			target->setScene( scene );
+			window->setRenderTarget( target );
+			window->initialise( Size{ 1024, 1024 }, castor3d::WindowHandle{ p_handle } );
 		}
 		else
 		{
@@ -174,13 +174,13 @@ namespace
 			::DestroyWindow( m_hWnd );
 		}
 
-		Castor3D::IWindowHandleSPtr CreateWindowHandle()
+		castor3d::IWindowHandleSPtr CreateWindowHandle()
 		{
-			Castor3D::IWindowHandleSPtr handle;
+			castor3d::IWindowHandleSPtr handle;
 
 			if ( m_hWnd )
 			{
-				handle = std::make_shared< Castor3D::IMswWindowHandle >( m_hWnd );
+				handle = std::make_shared< castor3d::IMswWindowHandle >( m_hWnd );
 			}
 
 			return handle;
@@ -240,7 +240,7 @@ namespace
 				int worstFbcIndex = -1;
 				int bestNumSamp = -1;
 				int worstNumSamp = 999;
-				Logger::LogDebug( StringStream() << cuT( "Configs count: " ) << fbcount );
+				Logger::logDebug( StringStream() << cuT( "Configs count: " ) << fbcount );
 
 				for ( int i = 0; i < fbcount; ++i )
 				{
@@ -307,7 +307,7 @@ namespace
 				XMapWindow( m_display, m_xWindow );
   				XSync( m_display, False );
 			}
-			catch( Castor::Exception & p_exc )
+			catch( castor::Exception & p_exc )
 			{
 				if ( m_xWindow )
 				{
@@ -346,11 +346,11 @@ namespace
 			}
 		}
 
-		Castor3D::IWindowHandleSPtr CreateWindowHandle()
+		castor3d::IWindowHandleSPtr CreateWindowHandle()
 		{
 			REQUIRE( m_xWindow );
 			REQUIRE( m_display );
-			Castor3D::IWindowHandleSPtr handle= std::make_shared< Castor3D::IXWindowHandle >( (GLXDrawable)m_xWindow, m_display );
+			castor3d::IWindowHandleSPtr handle= std::make_shared< castor3d::IXWindowHandle >( (GLXDrawable)m_xWindow, m_display );
 			return handle;
 		}
 
@@ -376,8 +376,8 @@ int main( int argc, char const * argv[] )
 		count = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
-	Castor::Logger::Initialise( Castor::LogType::eDebug );
-	Castor::Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "GlRenderSystemTests.log" ) );
+	castor::Logger::initialise( castor::LogType::eDebug );
+	castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "GlRenderSystemTests.log" ) );
 	{
 		try
 		{
@@ -386,45 +386,45 @@ int main( int argc, char const * argv[] )
 
 			if ( handle )
 			{
-				auto engine = DoInitialiseCastor( handle );
+				auto engine = doInitialiseCastor( handle );
 
 				if ( engine )
 				{
 					// Test cases.
-					if ( engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eShaderStorageBuffers ) )
+					if ( engine->getRenderSystem()->getGpuInformations().hasFeature( castor3d::GpuFeature::eShaderStorageBuffers ) )
 					{
-						Testing::Register( std::make_unique< Testing::GlPassBufferTest >( *engine ) );
+						Testing::registerType( std::make_unique< Testing::GlPassBufferTest >( *engine ) );
 					}
 
-					Testing::Register( std::make_unique< Testing::GlTextureTest >( *engine ) );
+					Testing::registerType( std::make_unique< Testing::GlTextureTest >( *engine ) );
 
-					if ( engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eTransformFeedback ) )
+					if ( engine->getRenderSystem()->getGpuInformations().hasFeature( castor3d::GpuFeature::eTransformFeedback ) )
 					{
-						//Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *engine ) );
+						//Testing::registerType( std::make_unique< Testing::GlTransformFeedbackTest >( *engine ) );
 					}
 
-					if ( engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eAtomicCounterBuffers ) )
+					if ( engine->getRenderSystem()->getGpuInformations().hasFeature( castor3d::GpuFeature::eAtomicCounterBuffers ) )
 					{
-						Testing::Register( std::make_unique< Testing::GlAtomicCounterBufferTest >( *engine ) );
+						Testing::registerType( std::make_unique< Testing::GlAtomicCounterBufferTest >( *engine ) );
 					}
 
-					if ( engine->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel() >= Castor3D::ShaderModel::eModel5 )
+					if ( engine->getRenderSystem()->getGpuInformations().getMaxShaderModel() >= castor3d::ShaderModel::eModel5 )
 					{
-						Testing::Register( std::make_unique< Testing::GlComputeShaderTest >( *engine ) );
+						Testing::registerType( std::make_unique< Testing::GlComputeShaderTest >( *engine ) );
 					}
 
 					// Tests loop.
 					BENCHLOOP( count, result );
 
-					engine->Cleanup();
+					engine->cleanup();
 				}
 			}
 		}
-		catch( Castor::Exception & p_exc )
+		catch( castor::Exception & p_exc )
 		{
-			Logger::LogError( p_exc.what() );
+			Logger::logError( p_exc.what() );
 		}
 	}
-	Castor::Logger::Cleanup();
+	castor::Logger::cleanup();
 	return result;
 }

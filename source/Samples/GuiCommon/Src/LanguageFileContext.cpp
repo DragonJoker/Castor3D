@@ -3,7 +3,7 @@
 #include "StyleInfo.hpp"
 #include "LanguageInfo.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -113,7 +113,7 @@ namespace GuiCommon
 		mapLexers[cuT( "Flagship" )] =	eSTC_LEX_FLAGSHIP	;
 		mapLexers[cuT( "CSound" )] =	eSTC_LEX_CSOUND		;
 		mapLexers[cuT( "FreeBasic" )] =	eSTC_LEX_FREEBASIC	;
-		mapLexers[cuT( "InnoSetup" )] =	eSTC_LEX_INNOSETUP	;
+		mapLexers[cuT( "Innosetup" )] =	eSTC_LEX_INNOSETUP	;
 		mapLexers[cuT( "Opal" )] =	eSTC_LEX_OPAL		;
 		mapLexers[cuT( "Spice" )] =	eSTC_LEX_SPICE		;
 #if wxVERSION_NUMBER >= 2900

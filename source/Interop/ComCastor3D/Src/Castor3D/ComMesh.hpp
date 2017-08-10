@@ -57,31 +57,31 @@ namespace CastorCom
 		 */
 		virtual ~CMesh();
 
-		inline Castor3D::MeshSPtr GetInternal()const
+		inline castor3d::MeshSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::MeshSPtr internal )
+		inline void setInternal( castor3d::MeshSPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY_GET( SubmeshCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Mesh::GetSubmeshCount ) );
-		COM_PROPERTY_GET( FaceCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Mesh::GetFaceCount ) );
-		COM_PROPERTY_GET( VertexCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Mesh::GetVertexCount ) );
+		COM_PROPERTY_GET( SubmeshCount, unsigned int, make_getter( m_internal.get(), &castor3d::Mesh::getSubmeshCount ) );
+		COM_PROPERTY_GET( FaceCount, unsigned int, make_getter( m_internal.get(), &castor3d::Mesh::getFaceCount ) );
+		COM_PROPERTY_GET( VertexCount, unsigned int, make_getter( m_internal.get(), &castor3d::Mesh::getVertexCount ) );
 
-		STDMETHOD( GetSubmesh )( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal );
-		STDMETHOD( CreateSubmesh )( /* [out, retval] */ ISubmesh ** pVal );
-		STDMETHOD( DeleteSubmesh )( /* [in] */ ISubmesh * val );
+		STDMETHOD( getSubmesh )( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal );
+		STDMETHOD( createSubmesh )( /* [out, retval] */ ISubmesh ** pVal );
+		STDMETHOD( deleteSubmesh )( /* [in] */ ISubmesh * val );
 	private:
-		Castor3D::MeshSPtr m_internal;
+		castor3d::MeshSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Mesh ), CMesh );
 
-	DECLARE_VARIABLE_PTR_GETTER( Mesh, Castor3D, Mesh );
-	DECLARE_VARIABLE_PTR_PUTTER( Mesh, Castor3D, Mesh );
+	DECLARE_VARIABLE_PTR_GETTER( Mesh, castor3d, Mesh );
+	DECLARE_VARIABLE_PTR_PUTTER( Mesh, castor3d, Mesh );
 }
 
 #endif

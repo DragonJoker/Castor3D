@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -48,7 +48,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_meshType	Le type de maillage
 		 */
-		C3D_API explicit MeshGenerator( Castor::String const & p_meshType );
+		C3D_API explicit MeshGenerator( castor::String const & p_meshType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -64,7 +64,7 @@ namespace Castor3D
 		 *\brief		Fonction de création, utilisée par la Factory
 		 *\return		Un cylindre
 		 */
-		static MeshGeneratorSPtr Create();
+		static MeshGeneratorSPtr create();
 		/**
 		 *\~english
 		 *\brief		Generates the mesh.
@@ -75,7 +75,7 @@ namespace Castor3D
 		 *\param[in]	p_mesh			Le maillage.
 		 *\param[in]	p_parameters	Les paramètres du générateur.
 		 */
-		C3D_API virtual void Generate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void generate( Mesh & p_mesh, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents.
@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\param[in]	p_mesh		Le maillage.
 		 *\param[in]	p_reverted	Dit si l'espace tangent généré doit être inversé.
 		 */
-		C3D_API virtual void ComputeNormals( Mesh & p_mesh, bool p_reverted = false );
+		C3D_API virtual void computeNormals( Mesh & p_mesh, bool p_reverted = false );
 
 	private:
 		/**
@@ -99,12 +99,12 @@ namespace Castor3D
 		 *\param[in]	p_mesh			Le maillage.
 		 *\param[in]	p_parameters	Les paramètres du générateur.
 		 */
-		virtual void DoGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
 		//!\~english	The mesh type.
 		//!\~french		Le type de mesh.
-		Castor::String m_meshType;
+		castor::String m_meshType;
 	};
 }
 

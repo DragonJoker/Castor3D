@@ -2,9 +2,9 @@
 
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	TextureAttachment::TextureAttachment( TextureLayoutSPtr p_texture )
 		: FrameBufferAttachment( AttachmentType::eTexture )
@@ -18,8 +18,8 @@ namespace Castor3D
 	{
 	}
 
-	PxBufferBaseSPtr TextureAttachment::GetBuffer()const
+	PxBufferBaseSPtr TextureAttachment::getBuffer()const
 	{
-		return GetTexture()->GetImage().GetBuffer();
+		return getTexture()->getImage().getBuffer();
 	}
 }

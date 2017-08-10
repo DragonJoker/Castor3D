@@ -23,11 +23,11 @@
 	{\
 		if ( error == EINVAL )\
 		{\
-			Logger::LogError( StringStream() << cuT( "Aligned allocation failed, alignment of " ) << a << cuT( " is not a power of two times sizeof( void * )" ) );\
+			Logger::logError( StringStream() << cuT( "Aligned allocation failed, alignment of " ) << a << cuT( " is not a power of two times sizeof( void * )" ) );\
 		}\
 		else if ( error == ENOMEM )\
 		{\
-			Logger::LogError( StringStream() << cuT( "Aligned allocation failed, no memory available" ) );\
+			Logger::logError( StringStream() << cuT( "Aligned allocation failed, no memory available" ) );\
 		}\
 		m = nullptr;\
 	}
@@ -35,16 +35,16 @@
 #	define CU_ALIGNED_FREE( m )\
 	free( m )
 
-namespace Castor
+namespace castor
 {
-	void * AlignedAlloc( size_t p_alignment, size_t p_size )
+	void * alignedAlloc( size_t p_alignment, size_t p_size )
 	{
 		void * mem = nullptr;
 		CU_ALIGNED_ALLOC( mem, p_alignment, p_size );
 		return mem;
 	}
 
-	void AlignedFree( void * p_memory )
+	void alignedFree( void * p_memory )
 	{
 		CU_ALIGNED_FREE( p_memory );
 	}

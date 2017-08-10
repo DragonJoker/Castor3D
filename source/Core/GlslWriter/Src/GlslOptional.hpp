@@ -31,12 +31,12 @@ namespace GLSL
 	struct Optional
 		: public TypeT
 	{
-		Optional( GlslWriter * p_writer, Castor::String const & p_name, bool p_enabled );
+		Optional( GlslWriter * p_writer, castor::String const & p_name, bool p_enabled );
 		Optional( TypeT const & p_other, bool p_enabled );
-		template< typename T > Optional( Castor::String const & p_name, T const & p_rhs, bool p_enabled );
+		template< typename T > Optional( castor::String const & p_name, T const & p_rhs, bool p_enabled );
 		inline Optional< TypeT > operator=( Optional< TypeT > const & p_rhs );
 		template< typename T > inline Optional< TypeT > operator=( T const & p_rhs );
-		inline bool IsEnabled()const;
+		inline bool isEnabled()const;
 
 		inline operator Optional< Type >()const;
 
@@ -45,7 +45,7 @@ namespace GLSL
 	};
 
 	template< typename TypeT >
-	inline Castor::String ParamToString( Castor::String & p_sep, Optional< TypeT > const & p_value );
+	inline castor::String paramToString( castor::String & p_sep, Optional< TypeT > const & p_value );
 
 	template< typename T >
 	struct is_optional

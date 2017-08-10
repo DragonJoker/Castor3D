@@ -39,7 +39,7 @@ namespace TestRender
 	\brief		Implémentation du Transform feedback.
 	*/
 	class TestTransformFeedback
-		: public Castor3D::TransformFeedback
+		: public castor3d::TransformFeedback
 	{
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace TestRender
 		 *\param[in]	m_declaration	La déclaration des éléments du tampon.
 		 *\param[in]	m_program		Le programm shader.
 		 */
-		TestTransformFeedback( TestRenderSystem & p_renderSystem, Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program );
+		TestTransformFeedback( TestRenderSystem & p_renderSystem, castor3d::BufferDeclaration const & p_computed, castor3d::Topology p_topology, castor3d::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -65,29 +65,29 @@ namespace TestRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Initialise
+		 *\copydoc		castor3d::TransformFeedback::Initialise
 		 */
-		bool DoInitialise()override;
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Cleanup
+		 *\copydoc		castor3d::TransformFeedback::Cleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Bind
+		 *\copydoc		castor3d::TransformFeedback::Bind
 		 */
-		void DoBind()const override;
+		void doBind()const override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Unbind
+		 *\copydoc		castor3d::TransformFeedback::Unbind
 		 */
-		void DoUnbind()const override;
+		void doUnbind()const override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::DoBegin
+		 *\copydoc		castor3d::TransformFeedback::doBegin
 		 */
-		void DoBegin()const override;
+		void doBegin()const override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::DoEnd
+		 *\copydoc		castor3d::TransformFeedback::doEnd
 		 */
-		void DoEnd()const override;
+		void doEnd()const override;
 	};
 }
 

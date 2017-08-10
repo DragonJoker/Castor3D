@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include "RequiredVersion.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -69,7 +69,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le numéro majeur de version.
 		 */
-		inline uint16_t GetMajor()const
+		inline uint16_t getMajor()const
 		{
 			return m_major;
 		}
@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le numéro mineur de version.
 		 */
-		inline uint16_t GetMinor()const
+		inline uint16_t getMinor()const
 		{
 			return m_minor;
 		}
@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le numéro build de version.
 		 */
-		inline uint16_t GetBuild()const
+		inline uint16_t getBuild()const
 		{
 			return m_build;
 		}
@@ -115,7 +115,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		false si un numéro de version est différent entre p_a et p_b.
 	 */
-	C3D_API bool operator==( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator==( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator.
@@ -126,7 +126,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		true si un numéro de version est différent entre p_a et p_b.
 	 */
-	C3D_API bool operator!=( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator!=( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -137,7 +137,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		true si p_a.major est inférieur à p_b.major ou s'ils sont égaux et p_a.minor est inférieur à p_b.minor ou si majors et minors sont égaux et p_a.build est inférieur à p_b.build.
 	 */
-	C3D_API bool operator<( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator<( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -148,7 +148,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		true si p_a.major est supérieur à p_b.major ou s'ils sont égaux et p_a.minor est supérieur à p_b.minor ou si majors et minors sont égaux et p_a.build est supérieur à p_b.build.
 	 */
-	C3D_API bool operator>( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator>( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -159,7 +159,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		false si p_a.major est supérieur à p_b.major ou s'ils sont égaux et p_a.minor est supérieur à p_b.minor ou si majors et minors sont égaux et p_a.build est supérieur à p_b.build.
 	 */
-	C3D_API bool operator<=( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator<=( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -170,11 +170,11 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		false si p_a.major est inférieur à p_b.major ou s'ils sont égaux et p_a.minor est inférieur à p_b.minor ou si majors et minors sont égaux et p_a.build est inférieur à p_b.build.
 	 */
-	C3D_API bool operator>=( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator>=( castor3d::Version const & p_a, castor3d::Version const & p_b );
 
-	C3D_API std::ostream & operator<<( std::ostream & p_stream, Castor3D::Version const & p_version );
-	C3D_API std::wostream & operator<<( std::wostream & p_stream, Castor3D::Version const & p_version );
-	C3D_API Castor::String & operator<<( Castor::String & p_stream, Castor3D::Version const & p_version );
+	C3D_API std::ostream & operator<<( std::ostream & p_stream, castor3d::Version const & p_version );
+	C3D_API std::wostream & operator<<( std::wostream & p_stream, castor3d::Version const & p_version );
+	C3D_API castor::String & operator<<( castor::String & p_stream, castor3d::Version const & p_version );
 }
 
 #endif

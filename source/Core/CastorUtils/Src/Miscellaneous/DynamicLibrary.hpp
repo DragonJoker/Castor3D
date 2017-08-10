@@ -26,7 +26,7 @@ SOFTWARE.
 #include "CastorUtils.hpp"
 #include "Data/Path.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -106,7 +106,7 @@ namespace Castor
 		 *\param[in]	p_szPath	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
-		CU_API bool Open( xchar const * p_szPath )throw();
+		CU_API bool open( xchar const * p_szPath )throw();
 		/**
 		 *\~english
 		 *\brief		Opens a library from a path
@@ -117,7 +117,7 @@ namespace Castor
 		 *\param[in]	p_strPath	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
-		CU_API bool Open( String const & p_strPath )throw();
+		CU_API bool open( String const & p_strPath )throw();
 		/**
 		 *\~english
 		 *\brief		Opens a library from a path
@@ -128,7 +128,7 @@ namespace Castor
 		 *\param[in]	p_pathFile	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
-		CU_API bool Open( Path const & p_pathFile )throw();
+		CU_API bool open( Path const & p_pathFile )throw();
 		/**
 		 *\~english
 		 *\brief		Retrieves a function
@@ -142,9 +142,9 @@ namespace Castor
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool GetFunction( FuncType & p_pfnFunction, char const * p_szName )throw()
+		bool getFunction( FuncType & p_pfnFunction, char const * p_szName )throw()
 		{
-			return GetFunction( p_pfnFunction, string::string_cast< xchar >( p_szName ) );
+			return getFunction( p_pfnFunction, string::stringCast< xchar >( p_szName ) );
 		}
 		/**
 		 *\~english
@@ -159,9 +159,9 @@ namespace Castor
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool GetFunction( FuncType & p_pfnFunction, wchar_t const * p_wszName )throw()
+		bool getFunction( FuncType & p_pfnFunction, wchar_t const * p_wszName )throw()
 		{
-			return GetFunction( p_pfnFunction, string::string_cast< xchar >( p_wszName ) );
+			return getFunction( p_pfnFunction, string::stringCast< xchar >( p_wszName ) );
 		}
 		/**
 		 *\~english
@@ -176,9 +176,9 @@ namespace Castor
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool GetFunction( FuncType & p_pfnFunction, String const & p_name )throw()
+		bool getFunction( FuncType & p_pfnFunction, String const & p_name )throw()
 		{
-			p_pfnFunction = reinterpret_cast< FuncType >( DoGetFunction( p_name ) );
+			p_pfnFunction = reinterpret_cast< FuncType >( doGetFunction( p_name ) );
 			return p_pfnFunction != nullptr;
 		}
 		/**
@@ -189,7 +189,7 @@ namespace Castor
 		 *\brief		Dit si la DynamicLibrary est ouverte (chargée)
 		 *\return		\p true si elle est ouverte, \p false sinon
 		 */
-		inline bool IsOpen()const
+		inline bool isOpen()const
 		{
 			return m_pLibrary != nullptr;
 		}
@@ -201,14 +201,14 @@ namespace Castor
 		 *\brief		Récupère le chemin vers le fichier
 		 *\return		Le chemin
 		 */
-		inline Path const & GetPath()const
+		inline Path const & getPath()const
 		{
 			return m_pathLibrary;
 		}
 
 	private:
-		CU_API void DoClose()throw();
-		CU_API void * DoGetFunction( String const & p_name )throw();
+		CU_API void doClose()throw();
+		CU_API void * doGetFunction( String const & p_name )throw();
 
 	private:
 		void * m_pLibrary;

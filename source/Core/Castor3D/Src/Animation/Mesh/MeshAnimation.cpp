@@ -4,20 +4,20 @@
 
 #include "Mesh/Submesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< MeshAnimation >::DoWrite( MeshAnimation const & p_obj )
+	bool BinaryWriter< MeshAnimation >::doWrite( MeshAnimation const & p_obj )
 	{
 		bool result = true;
 
 		for ( auto const & submesh : p_obj.m_submeshes )
 		{
-			result &= DoWriteChunk( submesh.GetSubmesh().GetId(), ChunkType::eMeshAnimationSubmeshID, m_chunk );
-			result &= BinaryWriter< MeshAnimationSubmesh >{}.Write( submesh, m_chunk );
+			result &= doWriteChunk( submesh.getSubmesh().getId(), ChunkType::eMeshAnimationSubmeshID, m_chunk );
+			result &= BinaryWriter< MeshAnimationSubmesh >{}.write( submesh, m_chunk );
 		}
 
 		return result;
@@ -25,7 +25,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< MeshAnimation >::DoParse( MeshAnimation & p_obj )
+	bool BinaryParser< MeshAnimation >::doParse( MeshAnimation & p_obj )
 	{
 		bool result = true;
 		MeshAnimationSubmeshUPtr submeshAnim;
@@ -33,16 +33,16 @@ namespace Castor3D
 		BinaryChunk chunk;
 		uint32_t id{ 0u };
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eMeshAnimationSubmeshID:
-				result = DoParseChunk( id, chunk );
+				result = doParseChunk( id, chunk );
 
 				if ( result )
 				{
-					submesh = static_cast< Mesh & >( *p_obj.GetOwner() ).GetSubmesh( id );
+					submesh = static_cast< Mesh & >( *p_obj.getOwner() ).getSubmesh( id );
 				}
 
 				break;
@@ -51,11 +51,11 @@ namespace Castor3D
 				if ( submesh )
 				{
 					MeshAnimationSubmesh submeshAnim{ p_obj, *submesh };
-					result = BinaryParser< MeshAnimationSubmesh >{}.Parse( submeshAnim, chunk );
+					result = BinaryParser< MeshAnimationSubmesh >{}.parse( submeshAnim, chunk );
 
 					if ( result )
 					{
-						p_obj.AddChild( std::move( submeshAnim ) );
+						p_obj.addChild( std::move( submeshAnim ) );
 					}
 				}
 
@@ -77,16 +77,16 @@ namespace Castor3D
 	{
 	}
 
-	void MeshAnimation::AddChild( MeshAnimationSubmesh && p_object )
+	void MeshAnimation::addChild( MeshAnimationSubmesh && p_object )
 	{
 		m_submeshes.push_back( std::move( p_object ) );
 	}
 
-	void MeshAnimation::DoUpdateLength()
+	void MeshAnimation::doUpdateLength()
 	{
 		for ( auto const & submesh : m_submeshes )
 		{
-			m_length = std::max( m_length, submesh.GetLength() );
+			m_length = std::max( m_length, submesh.getLength() );
 		}
 	}
 

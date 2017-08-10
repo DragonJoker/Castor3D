@@ -21,8 +21,8 @@
 
 #include <Texture/TextureStorage.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace TestRender
 {
@@ -32,32 +32,32 @@ namespace TestRender
 	TestRenderSystem::TestRenderSystem( Engine & engine )
 		: RenderSystem{ engine, Name }
 	{
-		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eNonPowerOfTwoTextures );
-		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eTextureBuffers );
-		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eConstantsBuffers );
-		RenderSystem::m_gpuInformations.SetShaderLanguageVersion( 450 );
+		RenderSystem::m_gpuInformations.addFeature( GpuFeature::eNonPowerOfTwoTextures );
+		RenderSystem::m_gpuInformations.addFeature( GpuFeature::eTextureBuffers );
+		RenderSystem::m_gpuInformations.addFeature( GpuFeature::eConstantsBuffers );
+		RenderSystem::m_gpuInformations.setShaderLanguageVersion( 450 );
 	}
 
 	TestRenderSystem::~TestRenderSystem()
 	{
 	}
 
-	RenderSystemUPtr TestRenderSystem::Create( Engine & engine )
+	RenderSystemUPtr TestRenderSystem::create( Engine & engine )
 	{
 		return std::make_unique< TestRenderSystem >( engine );
 	}
 
-	ContextSPtr TestRenderSystem::CreateContext()
+	ContextSPtr TestRenderSystem::createContext()
 	{
 		return std::make_shared< TestContext >( *this );
 	}
 
-	GeometryBuffersSPtr TestRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
+	GeometryBuffersSPtr TestRenderSystem::createGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 	{
 		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
 	}
 
-	RenderPipelineUPtr TestRenderSystem::CreateRenderPipeline(
+	RenderPipelineUPtr TestRenderSystem::createRenderPipeline(
 		DepthStencilState && p_dsState,
 		RasteriserState && p_rsState,
 		BlendState && p_bdState,
@@ -68,82 +68,82 @@ namespace TestRender
 		return std::make_unique< TestRenderPipeline >( *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
 	}
 
-	ComputePipelineUPtr TestRenderSystem::CreateComputePipeline( ShaderProgram & p_program )
+	ComputePipelineUPtr TestRenderSystem::createComputePipeline( ShaderProgram & p_program )
 	{
 		return std::make_unique< TestComputePipeline >( *this, p_program );
 	}
 
-	SamplerSPtr TestRenderSystem::CreateSampler( Castor::String const & p_name )
+	SamplerSPtr TestRenderSystem::createSampler( castor::String const & p_name )
 	{
 		return std::make_shared< TestSampler >( this, p_name );
 	}
 
-	ShaderProgramSPtr TestRenderSystem::CreateShaderProgram()
+	ShaderProgramSPtr TestRenderSystem::createShaderProgram()
 	{
 		return std::make_shared< TestShaderProgram >( *this );
 	}
 
-	UniformBufferBindingUPtr TestRenderSystem::CreateUniformBufferBinding( UniformBuffer & p_ubo
-		, Castor3D::ShaderProgram const & p_program )
+	UniformBufferBindingUPtr TestRenderSystem::createUniformBufferBinding( UniformBuffer & p_ubo
+		, castor3d::ShaderProgram const & p_program )
 	{
 		return std::make_unique< TestUniformBufferBinding >( p_ubo, p_program );
 	}
 
-	TransformFeedbackUPtr TestRenderSystem::CreateTransformFeedback( Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program )
+	TransformFeedbackUPtr TestRenderSystem::createTransformFeedback( castor3d::BufferDeclaration const & p_computed, castor3d::Topology p_topology, castor3d::ShaderProgram & p_program )
 	{
 		return std::make_unique< TestTransformFeedback >( *this, p_computed, p_topology, p_program );
 	}
 
-	GpuBufferUPtr TestRenderSystem::CreateBuffer( BufferType p_type )
+	GpuBufferUPtr TestRenderSystem::createBuffer( BufferType p_type )
 	{
 		return std::make_unique< TestBuffer >( *this, p_type );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )
+	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess, PixelFormat p_format, Size const & p_size )
+	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess, PixelFormat p_format, Size const & p_size )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
 	}
 
-	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )
+	TextureStorageUPtr TestRenderSystem::createTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )
 	{
 		return std::make_unique< TestTextureStorage >( *this, p_type, p_layout, p_cpuAccess, p_gpuAccess );
 	}
 
-	FrameBufferSPtr TestRenderSystem::CreateFrameBuffer()
+	FrameBufferSPtr TestRenderSystem::createFrameBuffer()
 	{
-		return std::make_shared< TestFrameBuffer >( *GetEngine() );
+		return std::make_shared< TestFrameBuffer >( *getEngine() );
 	}
 
-	BackBuffersSPtr TestRenderSystem::CreateBackBuffers()
+	BackBuffersSPtr TestRenderSystem::createBackBuffers()
 	{
-		return std::make_shared< TestBackBuffers >( *GetEngine() );
+		return std::make_shared< TestBackBuffers >( *getEngine() );
 	}
 
-	GpuQueryUPtr TestRenderSystem::CreateQuery( QueryType p_type )
+	GpuQueryUPtr TestRenderSystem::createQuery( QueryType p_type )
 	{
 		return std::make_unique< TestQuery >( *this, p_type );
 	}
 
-	IViewportImplUPtr TestRenderSystem::CreateViewport( Viewport & p_viewport )
+	IViewportImplUPtr TestRenderSystem::createViewport( Viewport & p_viewport )
 	{
 		return std::make_unique< TestViewport >( *this, p_viewport );
 	}
 
-	void TestRenderSystem::DoInitialise()
+	void TestRenderSystem::doInitialise()
 	{
 	}
 
-	void TestRenderSystem::DoCleanup()
+	void TestRenderSystem::doCleanup()
 	{
 	}
 }

@@ -8,9 +8,9 @@
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 #include "Shader/Uniform.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	AnimatedSkeleton::AnimatedSkeleton( String const & p_name, Skeleton & p_skeleton )
 		: AnimatedObject{ p_name }
@@ -22,15 +22,15 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedSkeleton::Update( Milliseconds const & p_tslf )
+	void AnimatedSkeleton::update( Milliseconds const & p_tslf )
 	{
 		for ( auto & animation : m_playingAnimations )
 		{
-			animation.get().Update( p_tslf );
+			animation.get().update( p_tslf );
 		}
 	}
 
-	void AnimatedSkeleton::FillShader( Uniform4x4r & p_variable )const
+	void AnimatedSkeleton::fillShader( Uniform4x4r & p_variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
@@ -39,7 +39,7 @@ namespace Castor3D
 		{
 			for ( auto bone : skeleton )
 			{
-				p_variable.SetValue( skeleton.GetGlobalInverseTransform(), i++ );
+				p_variable.setValue( skeleton.getGlobalInverseTransform(), i++ );
 			}
 		}
 		else
@@ -50,20 +50,20 @@ namespace Castor3D
 
 				for ( auto & animation : m_playingAnimations )
 				{
-					auto object = animation.get().GetObject( *bone );
+					auto object = animation.get().getObject( *bone );
 
 					if ( object )
 					{
-						final *= object->GetFinalTransform();
+						final *= object->getFinalTransform();
 					}
 				}
 
-				p_variable.SetValue( final, i++ );
+				p_variable.setValue( final, i++ );
 			}
 		}
 	}
 
-	void AnimatedSkeleton::FillBuffer( uint8_t * p_buffer )const
+	void AnimatedSkeleton::fillBuffer( uint8_t * p_buffer )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
@@ -74,7 +74,7 @@ namespace Castor3D
 		{
 			for ( auto bone : skeleton )
 			{
-				std::memcpy( buffer, skeleton.GetGlobalInverseTransform().const_ptr(), stride );
+				std::memcpy( buffer, skeleton.getGlobalInverseTransform().constPtr(), stride );
 				buffer += stride;
 			}
 		}
@@ -86,38 +86,38 @@ namespace Castor3D
 
 				for ( auto & animation : m_playingAnimations )
 				{
-					auto object = animation.get().GetObject( *bone );
+					auto object = animation.get().getObject( *bone );
 
 					if ( object )
 					{
-						final *= object->GetFinalTransform();
+						final *= object->getFinalTransform();
 					}
 				}
 
-				std::memcpy( buffer, final.const_ptr (), stride );
+				std::memcpy( buffer, final.constPtr (), stride );
 				buffer += stride;
 			}
 		}
 	}
 
-	void AnimatedSkeleton::DoAddAnimation( String const & p_name )
+	void AnimatedSkeleton::doAddAnimation( String const & p_name )
 	{
 		auto it = m_animations.find( p_name );
 
 		if ( it == m_animations.end() )
 		{
-			auto & animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
+			auto & animation = static_cast< SkeletonAnimation const & >( m_skeleton.getAnimation( p_name ) );
 			auto instance = std::make_unique< SkeletonAnimationInstance >( *this, animation );
 			m_animations.emplace( p_name, std::move( instance ) );
 		}
 	}
 
-	void AnimatedSkeleton::DoStartAnimation( AnimationInstance & p_animation )
+	void AnimatedSkeleton::doStartAnimation( AnimationInstance & p_animation )
 	{
 		m_playingAnimations.push_back( static_cast< SkeletonAnimationInstance & >( p_animation ) );
 	}
 
-	void AnimatedSkeleton::DoStopAnimation( AnimationInstance & p_animation )
+	void AnimatedSkeleton::doStopAnimation( AnimationInstance & p_animation )
 	{
 		m_playingAnimations.erase( std::find_if( m_playingAnimations.begin()
 			, m_playingAnimations.end()
@@ -127,7 +127,7 @@ namespace Castor3D
 			} ) );
 	}
 
-	void AnimatedSkeleton::DoClearAnimations()
+	void AnimatedSkeleton::doClearAnimations()
 	{
 		m_playingAnimations.clear();
 	}

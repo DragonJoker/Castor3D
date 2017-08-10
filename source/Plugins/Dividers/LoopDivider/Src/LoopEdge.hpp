@@ -38,8 +38,8 @@ namespace Loop
 	private:
 		VertexWPtr m_firstVertex;
 		VertexWPtr m_secondVertex;
-		Castor3D::Face const * m_firstFace;
-		Castor3D::Face const * m_secondFace;
+		castor3d::Face const * m_firstFace;
+		castor3d::Face const * m_secondFace;
 		VertexSPtr m_createdVertex;
 		bool m_divided;
 		bool m_toDivide;
@@ -53,56 +53,56 @@ namespace Loop
 		 *\param[in]	p_f1	The 1st face of the edge
 		 *\param[in]	p_toDivide	Tells if the edge has to be divided
 		 */
-		Edge( VertexSPtr p_v1, VertexSPtr p_v2, Castor3D::Face const & p_f1, bool p_toDivide );
+		Edge( VertexSPtr p_v1, VertexSPtr p_v2, castor3d::Face const & p_f1, bool p_toDivide );
 		/**
 		 * Destructor
 		 */
 		~Edge();
 		/**
-		 * Adds a face to the edge (max 2 faces, 1 at each side of the edge)
+		 * adds a face to the edge (max 2 faces, 1 at each side of the edge)
 		 *\param[in]	p_face	Pointer to the face to add
 		 */
-		void AddFace( Castor3D::Face const & p_face );
+		void addFace( castor3d::Face const & p_face );
 		/**
 		 * Divides the edge id est adds a vertex in a portion of the edge determined by p_value (0.5 = middle).
-		 * Doesn't divide the faces
+		 * doesn't divide the faces
 		 *\param[in]	p_submesh	The submesh to which the newly created point is added
 		 *\param[in]	p_value	Percentage of the segment [m_firstVertex,m_secondVertex]
 		 *\return	The created point
 		 */
-		VertexSPtr Divide( Subdivider * p_pDivider, Castor::real p_value );
+		VertexSPtr divide( Subdivider * p_pDivider, castor::real p_value );
 
 	public:
 		/**@name Accessors */
 		//@{
-		inline bool IsDivided()const
+		inline bool isDivided()const
 		{
 			return m_divided;
 		}
-		inline VertexSPtr GetVertex1()const
+		inline VertexSPtr getVertex1()const
 		{
 			return m_firstVertex.lock();
 		}
-		inline VertexSPtr GetVertex2()const
+		inline VertexSPtr getVertex2()const
 		{
 			return m_secondVertex.lock();
 		}
-		inline Castor3D::Face const * GetFace1()const
+		inline castor3d::Face const * getFace1()const
 		{
 			return m_firstFace;
 		}
-		inline Castor3D::Face const * GetFace2()const
+		inline castor3d::Face const * getFace2()const
 		{
 			return m_secondFace;
 		}
 
-		inline void SetToDivide()
+		inline void setToDivide()
 		{
 			m_toDivide = true;
 			m_divided = false;
 			m_createdVertex.reset();
 		}
-		inline void SetToDelete()
+		inline void setToDelete()
 		{
 			m_toDelete = true;
 		}

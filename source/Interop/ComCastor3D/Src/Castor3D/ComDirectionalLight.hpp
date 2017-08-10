@@ -57,29 +57,29 @@ namespace CastorCom
 		 */
 		virtual ~CDirectionalLight();
 
-		inline Castor3D::DirectionalLightSPtr GetInternal()const
+		inline castor3d::DirectionalLightSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::DirectionalLightSPtr internal )
+		inline void setInternal( castor3d::DirectionalLightSPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &Castor3D::LightCategory::GetColour ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetColour ) );
-		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetAmbientIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetAmbientIntensity ) );
-		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetDiffuseIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetDiffuseIntensity ) );
-		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetSpecularIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetSpecularIntensity ) );
+		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &castor3d::LightCategory::getColour ), make_putter( m_internal.get(), &castor3d::LightCategory::setColour ) );
+		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getAmbientIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setAmbientIntensity ) );
+		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getDiffuseIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setDiffuseIntensity ) );
+		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getSpecularIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setSpecularIntensity ) );
 
 	private:
-		Castor3D::DirectionalLightSPtr m_internal;
+		castor3d::DirectionalLightSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( DirectionalLight ), CDirectionalLight );
 
-	DECLARE_VARIABLE_PTR_GETTER( DirectionalLight, Castor3D, DirectionalLight );
-	DECLARE_VARIABLE_PTR_PUTTER( DirectionalLight, Castor3D, DirectionalLight );
+	DECLARE_VARIABLE_PTR_GETTER( DirectionalLight, castor3d, DirectionalLight );
+	DECLARE_VARIABLE_PTR_PUTTER( DirectionalLight, castor3d, DirectionalLight );
 }
 
 #endif

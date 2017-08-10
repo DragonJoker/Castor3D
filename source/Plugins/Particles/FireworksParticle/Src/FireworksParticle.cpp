@@ -8,8 +8,8 @@
 
 #include <random>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace Fireworks
 {
@@ -23,19 +23,19 @@ namespace Fireworks
 		constexpr Milliseconds g_shellLifetime = 10000_ms;
 		constexpr Milliseconds g_secondaryShellLifetime = 2500_ms;
 
-		inline float GetRandomFloat()
+		inline float getRandomFloat()
 		{
 			static std::minstd_rand device;
 			std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 			return distribution( device );
 		}
 
-		inline Point3f DoGetRandomDirection()
+		inline Point3f doGetRandomDirection()
 		{
-			return Point3f{ GetRandomFloat(), GetRandomFloat(), GetRandomFloat() };
+			return Point3f{ getRandomFloat(), getRandomFloat(), getRandomFloat() };
 		}
 
-		inline void DoUpdateLauncher( ParticleSystem & p_system
+		inline void doUpdateLauncher( ParticleSystem & p_system
 			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
@@ -44,19 +44,19 @@ namespace Fireworks
 		{
 			if ( p_age >= g_launcherCooldown.count() )
 			{
-				Point3f velocity{ DoGetRandomDirection() * 5.0f };
+				Point3f velocity{ doGetRandomDirection() * 5.0f };
 				velocity[1] = std::max( velocity[1] * 7.0f, 10.0f );
-				p_system.EmitParticle( g_shell, p_position, velocity, 0.0f );
+				p_system.emitParticle( g_shell, p_position, velocity, 0.0f );
 				p_age = 0.0f;
 			}
 
-			auto position = p_system.GetParent().GetParent()->GetDerivedPosition();
+			auto position = p_system.getParent().getParent()->getDerivedPosition();
 			p_position[0] = float( position[0] );
 			p_position[1] = float( position[1] );
 			p_position[2] = float( position[2] );
 		}
 
-		inline void DoUpdateShell( ParticleSystem & p_system
+		inline void doUpdateShell( ParticleSystem & p_system
 			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
@@ -76,17 +76,17 @@ namespace Fireworks
 			{
 				for ( int i = 1; i < 10; ++i )
 				{
-					p_system.EmitParticle( g_secondaryShell, p_position, ( DoGetRandomDirection() * 5.0f ) + p_velocity / 2.0f, 0.0f );
+					p_system.emitParticle( g_secondaryShell, p_position, ( doGetRandomDirection() * 5.0f ) + p_velocity / 2.0f, 0.0f );
 				}
 
 				// Turn this shell to a secondary shell, to decrease the holes in buffer
 				p_type = g_secondaryShell;
-				p_velocity = ( DoGetRandomDirection() * 5.0f ) + p_velocity / 2.0f;
+				p_velocity = ( doGetRandomDirection() * 5.0f ) + p_velocity / 2.0f;
 				p_age = 0.0f;
 			}
 		}
 
-		inline void DoUpdateSecondaryShell( ParticleSystem & p_system
+		inline void doUpdateSecondaryShell( ParticleSystem & p_system
 			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
@@ -107,7 +107,7 @@ namespace Fireworks
 			}
 		}
 
-		inline void DoUpdateParticle( ParticleSystem & p_system
+		inline void doUpdateParticle( ParticleSystem & p_system
 			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
@@ -118,25 +118,25 @@ namespace Fireworks
 
 			if ( p_type == g_launcher )
 			{
-				DoUpdateLauncher( p_system, p_time, p_type, p_position, p_velocity, p_age );
+				doUpdateLauncher( p_system, p_time, p_type, p_position, p_velocity, p_age );
 			}
 			else if ( p_type == g_shell )
 			{
-				DoUpdateShell( p_system, p_time, p_type, p_position, p_velocity, p_age );
+				doUpdateShell( p_system, p_time, p_type, p_position, p_velocity, p_age );
 			}
 			else
 			{
-				DoUpdateSecondaryShell( p_system, p_time, p_type, p_position, p_velocity, p_age );
+				doUpdateSecondaryShell( p_system, p_time, p_type, p_position, p_velocity, p_age );
 			}
 		}
 
-		inline void DoPackParticles( ParticleArray & p_particles, uint32_t & p_firstUnused )
+		inline void doPackParticles( ParticleArray & p_particles, uint32_t & p_firstUnused )
 		{
 			for ( auto i = 1u; i < p_firstUnused && p_firstUnused > 1u; ++i )
 			{
 				auto & particle = p_particles[i];
 
-				if ( particle.GetValue< ElementType::eFloat >( 0u ) == 0.0f )
+				if ( particle.getValue< ElementType::eFloat >( 0u ) == 0.0f )
 				{
 					particle = std::move( p_particles[p_firstUnused - 1] );
 					--p_firstUnused;
@@ -148,7 +148,7 @@ namespace Fireworks
 	String const ParticleSystem::Type = cuT( "fireworks" );
 	String const ParticleSystem::Name = cuT( "Fireworks Particle" );
 
-	ParticleSystem::ParticleSystem( Castor3D::ParticleSystem & p_parent )
+	ParticleSystem::ParticleSystem( castor3d::ParticleSystem & p_parent )
 		: CpuParticleSystem( p_parent )
 	{
 	}
@@ -157,22 +157,22 @@ namespace Fireworks
 	{
 	}
 
-	CpuParticleSystemUPtr ParticleSystem::Create( Castor3D::ParticleSystem & p_parent )
+	CpuParticleSystemUPtr ParticleSystem::create( castor3d::ParticleSystem & p_parent )
 	{
 		return std::make_unique< ParticleSystem >( p_parent );
 	}
 
-	void ParticleSystem::EmitParticle( float p_type, Castor::Point3f const & p_position, Castor::Point3f const & p_velocity, float p_age )
+	void ParticleSystem::emitParticle( float p_type, castor::Point3f const & p_position, castor::Point3f const & p_velocity, float p_age )
 	{
 		Particle particle{ m_inputs };
-		particle.SetValue< ElementType::eFloat >( 0u, p_type );
-		particle.SetValue< ElementType::eVec3 >( 1u, p_position );
-		particle.SetValue< ElementType::eVec3 >( 2u, p_velocity );
-		particle.SetValue< ElementType::eFloat >( 3u, p_age );
+		particle.setValue< ElementType::eFloat >( 0u, p_type );
+		particle.setValue< ElementType::eVec3 >( 1u, p_position );
+		particle.setValue< ElementType::eVec3 >( 2u, p_velocity );
+		particle.setValue< ElementType::eFloat >( 3u, p_age );
 		m_particles[m_firstUnused++] = particle;
 	}
 
-	uint32_t ParticleSystem::Update( Milliseconds const & p_time
+	uint32_t ParticleSystem::update( Milliseconds const & p_time
 		, Milliseconds const & p_total )
 	{
 		auto const type = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
@@ -201,46 +201,46 @@ namespace Fireworks
 		for ( auto i = 0u; i < firstUnused; ++i )
 		{
 			auto & particle = m_particles[i];
-			Coords3f pos{ reinterpret_cast< float * >( particle.GetData() + position->m_offset ) };
-			Coords3f vel{ reinterpret_cast< float * >( particle.GetData() + velocity->m_offset ) };
-			DoUpdateParticle(
+			Coords3f pos{ reinterpret_cast< float * >( particle.getData() + position->m_offset ) };
+			Coords3f vel{ reinterpret_cast< float * >( particle.getData() + velocity->m_offset ) };
+			doUpdateParticle(
 				*this,
 				p_time,
-				*reinterpret_cast< float * >( particle.GetData() + type->m_offset ),
+				*reinterpret_cast< float * >( particle.getData() + type->m_offset ),
 				pos,
 				vel,
-				*reinterpret_cast< float * >( particle.GetData() + age->m_offset ) );
+				*reinterpret_cast< float * >( particle.getData() + age->m_offset ) );
 		}
 
-		DoPackParticles( m_particles, m_firstUnused );
-		auto & vbo = m_parent.GetBillboards()->GetVertexBuffer();
+		doPackParticles( m_particles, m_firstUnused );
+		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 
-		vbo.Bind();
+		vbo.bind();
 		auto stride = m_inputs.stride();
-		auto dst = m_parent.GetBillboards()->GetVertexBuffer().Lock( 0, m_firstUnused * stride, AccessType::eWrite );
+		auto dst = m_parent.getBillboards()->getVertexBuffer().lock( 0, m_firstUnused * stride, AccessType::eWrite );
 
 		if ( dst )
 		{
 			for ( auto i = 0u; i < m_firstUnused; ++i )
 			{
-				std::memcpy( dst, m_particles[i].GetData(), stride );
+				std::memcpy( dst, m_particles[i].getData(), stride );
 				dst += stride;
 			}
 
-			vbo.Unlock();
+			vbo.unlock();
 		}
 
-		vbo.Unbind();
+		vbo.unbind();
 
 		return m_firstUnused;
 	}
 
-	bool ParticleSystem::DoInitialise()
+	bool ParticleSystem::doInitialise()
 	{
-		return m_inputs.stride() == m_parent.GetBillboards()->GetVertexBuffer().GetDeclaration().stride();
+		return m_inputs.stride() == m_parent.getBillboards()->getVertexBuffer().getDeclaration().stride();
 	}
 
-	void ParticleSystem::DoCleanup()
+	void ParticleSystem::doCleanup()
 	{
 		m_firstUnused = 1u;
 	}

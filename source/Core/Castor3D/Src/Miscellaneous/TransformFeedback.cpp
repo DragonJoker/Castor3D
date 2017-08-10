@@ -4,12 +4,12 @@
 
 #include "Render/RenderSystem.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	TransformFeedback::TransformFeedback( RenderSystem & renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
-		: Castor::OwnedBy< RenderSystem >( renderSystem )
+		: castor::OwnedBy< RenderSystem >( renderSystem )
 		, m_program{ p_program }
-		, m_query{ renderSystem.CreateQuery( QueryType::eTransformFeedbackPrimitivesWritten ) }
+		, m_query{ renderSystem.createQuery( QueryType::eTransformFeedbackPrimitivesWritten ) }
 		, m_computed{ p_computed }
 	{
 	}
@@ -18,38 +18,38 @@ namespace Castor3D
 	{
 	}
 
-	bool TransformFeedback::Initialise( VertexBufferArray const & p_buffers )
+	bool TransformFeedback::initialise( VertexBufferArray const & p_buffers )
 	{
 		m_buffers = p_buffers;
-		bool result = m_query->Initialise();
+		bool result = m_query->initialise();
 
 		if ( result )
 		{
-			result = DoInitialise();
+			result = doInitialise();
 		}
 
 		return result;
 	}
 
-	void TransformFeedback::Cleanup()
+	void TransformFeedback::cleanup()
 	{
-		DoCleanup();
-		m_query->Cleanup();
+		doCleanup();
+		m_query->cleanup();
 		m_query.reset();
 	}
 
-	void TransformFeedback::Bind()const
+	void TransformFeedback::bind()const
 	{
-		DoBind();
-		m_query->Begin();
-		DoBegin();
+		doBind();
+		m_query->begin();
+		doBegin();
 	}
 
-	void TransformFeedback::Unbind()const
+	void TransformFeedback::unbind()const
 	{
-		DoEnd();
-		m_query->End();
-		DoUnbind();
-		m_query->GetInfos( QueryInfo::eResult, m_writtenPrimitives );
+		doEnd();
+		m_query->end();
+		doUnbind();
+		m_query->getInfos( QueryInfo::eResult, m_writtenPrimitives );
 	}
 }

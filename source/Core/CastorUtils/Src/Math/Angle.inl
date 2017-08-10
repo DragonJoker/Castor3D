@@ -1,6 +1,6 @@
 #include <cmath>
 
-namespace Castor
+namespace castor
 {
 	template< typename Type >
 	AngleT< Type >::AngleT()noexcept

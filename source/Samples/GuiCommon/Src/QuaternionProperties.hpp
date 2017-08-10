@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Math/Quaternion.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Quaternion );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Quaternion );
 
 namespace GuiCommon
 {
@@ -37,22 +37,22 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( QuaternionProperty )
 	public:
 
-		QuaternionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Quaternion const & value = Castor::Quaternion() );
+		QuaternionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Quaternion const & value = castor::Quaternion() );
 		virtual ~QuaternionProperty();
 
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
+		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void refreshChildren();
 
 	protected:
 		// I stands for internal
-		inline void SetValueI( Castor::Quaternion const & value )
+		inline void setValueI( castor::Quaternion const & value )
 		{
 			m_value = WXVARIANT( value );
 		}
 
 	private:
-		Castor::Point3r m_axis;
-		Castor::Angle m_angle;
+		castor::Point3r m_axis;
+		castor::Angle m_angle;
 	};
 }
 

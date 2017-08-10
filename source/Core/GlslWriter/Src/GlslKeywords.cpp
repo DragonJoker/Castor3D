@@ -2,11 +2,11 @@
 
 #include "GlslWriter.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GLSL
 {
-	std::unique_ptr< KeywordsBase > KeywordsBase::Get( GlslWriterConfig const & p_rs )
+	std::unique_ptr< KeywordsBase > KeywordsBase::get( GlslWriterConfig const & p_rs )
 	{
 		std::unique_ptr< KeywordsBase > result;
 
@@ -82,12 +82,12 @@ namespace GLSL
 		return result;
 	}
 
-	String KeywordsBase::GetAttribute( uint32_t p_index )const
+	String KeywordsBase::getAttribute( uint32_t p_index )const
 	{
-		return GetLayout( p_index ) + m_strAttribute;
+		return getLayout( p_index ) + m_strAttribute;
 	}
 
-	String KeywordsBase::GetLayout( Ubo::Layout p_layout, uint32_t p_index )const
+	String KeywordsBase::getLayout( Ubo::Layout p_layout, uint32_t p_index )const
 	{
 		static std::map< Ubo::Layout, String > LayoutName
 		{
@@ -104,7 +104,7 @@ namespace GLSL
 
 			if ( !m_strUboBinding.empty() )
 			{
-				result += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + string::to_string( p_index );
+				result += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + string::toString( p_index );
 			}
 
 			result += cuT( " ) " );
@@ -113,7 +113,7 @@ namespace GLSL
 		return result;
 	}
 
-	String KeywordsBase::GetLayout( Ssbo::Layout p_layout, uint32_t p_index )const
+	String KeywordsBase::getLayout( Ssbo::Layout p_layout, uint32_t p_index )const
 	{
 		static std::map< Ssbo::Layout, String > LayoutName
 		{
@@ -131,7 +131,7 @@ namespace GLSL
 
 			if ( !m_strSsboBinding.empty() )
 			{
-				result += cuT( ", " ) + m_strSsboBinding + cuT( " = " ) + string::to_string( p_index );
+				result += cuT( ", " ) + m_strSsboBinding + cuT( " = " ) + string::toString( p_index );
 			}
 
 			result += cuT( " ) " );

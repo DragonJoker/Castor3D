@@ -1,4 +1,4 @@
-﻿#include "IblTextures.hpp"
+#include "IblTextures.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Camera.hpp"
@@ -9,16 +9,16 @@
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
 
-using namespace Castor;
+using namespace castor;
 using namespace GLSL;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
-		TextureUnit DoCreateRadianceTexture( Engine & engine )
+		TextureUnit doCreateRadianceTexture( Engine & engine )
 		{
-			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eCube
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGB32F
@@ -26,31 +26,31 @@ namespace Castor3D
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesRadiance" );
 
-			if ( engine.GetSamplerCache().Has( name ) )
+			if ( engine.getSamplerCache().has( name ) )
 			{
-				sampler = engine.GetSamplerCache().Find( name );
+				sampler = engine.getSamplerCache().find( name );
 			}
 			else
 			{
-				sampler = engine.GetSamplerCache().Create( name );
-				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				engine.GetSamplerCache().Add( name, sampler );
+				sampler = engine.getSamplerCache().create( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				engine.getSamplerCache().add( name, sampler );
 			}
 
 			TextureUnit result{ engine };
-			result.SetTexture( texture );
-			result.SetSampler( sampler );
-			result.SetIndex( 7u );
+			result.setTexture( texture );
+			result.setSampler( sampler );
+			result.setIndex( 7u );
 			return result;
 		}
 
-		TextureUnit DoCreatePrefilteredTexture( Engine & engine )
+		TextureUnit doCreatePrefilteredTexture( Engine & engine )
 		{
-			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eCube
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGB32F
@@ -58,32 +58,32 @@ namespace Castor3D
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesPrefiltered" );
 
-			if ( engine.GetSamplerCache().Has( name ) )
+			if ( engine.getSamplerCache().has( name ) )
 			{
-				sampler = engine.GetSamplerCache().Find( name );
+				sampler = engine.getSamplerCache().find( name );
 			}
 			else
 			{
-				sampler = engine.GetSamplerCache().Create( name );
-				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->SetInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
-				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				engine.GetSamplerCache().Add( name, sampler );
+				sampler = engine.getSamplerCache().create( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				engine.getSamplerCache().add( name, sampler );
 			}
 
 			TextureUnit result{ engine };
-			result.SetTexture( texture );
-			result.SetSampler( sampler );
-			result.SetIndex( 8u );
+			result.setTexture( texture );
+			result.setSampler( sampler );
+			result.setIndex( 8u );
 			return result;
 		}
 
-		TextureUnit DoCreatePrefilteredBrdf( Engine & engine )
+		TextureUnit doCreatePrefilteredBrdf( Engine & engine )
 		{
-			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eAL16F32F
@@ -91,25 +91,25 @@ namespace Castor3D
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesBRDF" );
 
-			if ( engine.GetSamplerCache().Has( name ) )
+			if ( engine.getSamplerCache().has( name ) )
 			{
-				sampler = engine.GetSamplerCache().Find( name );
+				sampler = engine.getSamplerCache().find( name );
 			}
 			else
 			{
-				sampler = engine.GetSamplerCache().Create( name );
-				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				engine.GetSamplerCache().Add( name, sampler );
+				sampler = engine.getSamplerCache().create( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				engine.getSamplerCache().add( name, sampler );
 			}
 
 			TextureUnit result{ engine };
-			result.SetTexture( texture );
-			result.SetSampler( sampler );
-			result.SetIndex( 9u );
+			result.setTexture( texture );
+			result.setSampler( sampler );
+			result.setIndex( 9u );
 			return result;
 		}
 	}
@@ -118,75 +118,75 @@ namespace Castor3D
 
 	IblTextures::IblTextures( Scene & p_scene )
 		: OwnedBy< Scene >{ p_scene }
-		, m_radianceTexture{ DoCreateRadianceTexture( *p_scene.GetEngine() ) }
-		, m_prefilteredEnvironment{ DoCreatePrefilteredTexture( *p_scene.GetEngine() ) }
-		, m_prefilteredBrdf{ DoCreatePrefilteredBrdf( *p_scene.GetEngine() ) }
-		, m_radianceComputer{ *p_scene.GetEngine(), m_radianceTexture.GetTexture()->GetDimensions() }
-		, m_environmentPrefilter{ *p_scene.GetEngine(), m_prefilteredEnvironment.GetTexture()->GetDimensions() }
+		, m_radianceTexture{ doCreateRadianceTexture( *p_scene.getEngine() ) }
+		, m_prefilteredEnvironment{ doCreatePrefilteredTexture( *p_scene.getEngine() ) }
+		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *p_scene.getEngine() ) }
+		, m_radianceComputer{ *p_scene.getEngine(), m_radianceTexture.getTexture()->getDimensions() }
+		, m_environmentPrefilter{ *p_scene.getEngine(), m_prefilteredEnvironment.getTexture()->getDimensions() }
 	{
-		auto texture = m_radianceTexture.GetTexture();
-		texture->GetImage( uint32_t( CubeMapFace::ePositiveX ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::eNegativeX ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::ePositiveY ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::eNegativeY ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::ePositiveZ ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::eNegativeZ ) ).InitialiseSource();
-		m_radianceTexture.Initialise();
-		m_radianceTexture.GetSampler()->Initialise();
+		auto texture = m_radianceTexture.getTexture();
+		texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+		m_radianceTexture.initialise();
+		m_radianceTexture.getSampler()->initialise();
 
-		texture = m_prefilteredEnvironment.GetTexture();
-		texture->GetImage( uint32_t( CubeMapFace::ePositiveX ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::eNegativeX ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::ePositiveY ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::eNegativeY ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::ePositiveZ ) ).InitialiseSource();
-		texture->GetImage( uint32_t( CubeMapFace::eNegativeZ ) ).InitialiseSource();
-		m_prefilteredEnvironment.Initialise();
-		m_prefilteredEnvironment.GetSampler()->Initialise();
-		texture->Bind( 0u );
-		texture->GenerateMipmaps();
-		texture->Unbind( 0u );
+		texture = m_prefilteredEnvironment.getTexture();
+		texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
+		texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+		m_prefilteredEnvironment.initialise();
+		m_prefilteredEnvironment.getSampler()->initialise();
+		texture->bind( 0u );
+		texture->generateMipmaps();
+		texture->unbind( 0u );
 
-		texture = m_prefilteredBrdf.GetTexture();
-		texture->GetImage().InitialiseSource();
-		m_prefilteredBrdf.Initialise();
-		m_prefilteredBrdf.GetSampler()->Initialise();
+		texture = m_prefilteredBrdf.getTexture();
+		texture->getImage().initialiseSource();
+		m_prefilteredBrdf.initialise();
+		m_prefilteredBrdf.getSampler()->initialise();
 
-		BrdfPrefilter filter{ *p_scene.GetEngine(), m_prefilteredBrdf.GetTexture()->GetDimensions() };
-		filter.Render( m_prefilteredBrdf.GetTexture() );
+		BrdfPrefilter filter{ *p_scene.getEngine(), m_prefilteredBrdf.getTexture()->getDimensions() };
+		filter.render( m_prefilteredBrdf.getTexture() );
 	}
 
 	IblTextures::~IblTextures()
 	{
-		m_radianceTexture.Cleanup();
-		m_prefilteredEnvironment.Cleanup();
-		m_prefilteredBrdf.Cleanup();
+		m_radianceTexture.cleanup();
+		m_prefilteredEnvironment.cleanup();
+		m_prefilteredBrdf.cleanup();
 	}
 
-	void IblTextures::Update( TextureLayout const & p_source )
+	void IblTextures::update( TextureLayout const & p_source )
 	{
-		m_radianceComputer.Render( p_source, m_radianceTexture.GetTexture() );
-		m_environmentPrefilter.Render( p_source, m_prefilteredEnvironment.GetTexture() );
+		m_radianceComputer.render( p_source, m_radianceTexture.getTexture() );
+		m_environmentPrefilter.render( p_source, m_prefilteredEnvironment.getTexture() );
 	}
 
-	void IblTextures::Debug( Size const & renderSize )const
+	void IblTextures::debugDisplay( Size const & renderSize )const
 	{
-		int width = int( m_prefilteredBrdf.GetTexture()->GetWidth() );
-		int height = int( m_prefilteredBrdf.GetTexture()->GetHeight() );
+		int width = int( m_prefilteredBrdf.getTexture()->getWidth() );
+		int height = int( m_prefilteredBrdf.getTexture()->getHeight() );
 		int left = 0u;
-		int top = renderSize.height() - height;
+		int top = renderSize.getHeight() - height;
 		auto size = Size( width, height );
-		auto & context = *GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext();
-		context.RenderTexture( Position{ left, top }
+		auto & context = *getScene()->getEngine()->getRenderSystem()->getCurrentContext();
+		context.renderTexture( Position{ left, top }
 			, size
-			, *m_prefilteredBrdf.GetTexture() );
+			, *m_prefilteredBrdf.getTexture() );
 		left += 512;
-		context.RenderTextureCube( Position{ left, top }
+		context.renderTextureCube( Position{ left, top }
 			, Size( width / 4, height / 4u )
-			, *m_prefilteredEnvironment.GetTexture() );
+			, *m_prefilteredEnvironment.getTexture() );
 		left += 512;
-		context.RenderTextureCube( Position{ left, top }
+		context.renderTextureCube( Position{ left, top }
 			, Size( width / 4, height / 4u )
-			, *m_radianceTexture.GetTexture() );
+			, *m_radianceTexture.getTexture() );
 	}
 }

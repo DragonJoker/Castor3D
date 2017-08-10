@@ -20,8 +20,8 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace CastorViewer
 {
@@ -68,34 +68,34 @@ namespace CastorViewer
 			return result;
 		}
 
-		TextureUnitSPtr DoCloneUnit( PassSPtr p_clone, TextureUnit const & p_source )
+		TextureUnitSPtr doCloneUnit( PassSPtr p_clone, TextureUnit const & p_source )
 		{
-			TextureUnitSPtr clone = std::make_shared< TextureUnit >( *p_clone->GetOwner()->GetEngine() );
+			TextureUnitSPtr clone = std::make_shared< TextureUnit >( *p_clone->getOwner()->getEngine() );
 
-			clone->SetAutoMipmaps( p_source.GetAutoMipmaps() );
-			clone->SetChannel( p_source.GetChannel() );
-			clone->SetIndex( p_source.GetIndex() );
-			clone->SetRenderTarget( p_source.GetRenderTarget() );
-			clone->SetSampler( p_source.GetSampler() );
-			clone->SetTexture( p_source.GetTexture() );
+			clone->setAutoMipmaps( p_source.getAutoMipmaps() );
+			clone->setChannel( p_source.getChannel() );
+			clone->setIndex( p_source.getIndex() );
+			clone->setRenderTarget( p_source.getRenderTarget() );
+			clone->setSampler( p_source.getSampler() );
+			clone->setTexture( p_source.getTexture() );
 
 			return clone;
 		}
 
-		void DoClonePass( MaterialSPtr p_clone, Pass const & p_source )
+		void doClonePass( MaterialSPtr p_clone, Pass const & p_source )
 		{
-			PassSPtr clone = p_clone->CreatePass();
+			PassSPtr clone = p_clone->createPass();
 
-			switch ( p_clone->GetType() )
+			switch ( p_clone->getType() )
 			{
 			case MaterialType::eLegacy:
 				{
 					auto & source = static_cast< LegacyPass const & >( p_source );
 					auto pass = std::static_pointer_cast< LegacyPass >( clone );
-					pass->SetDiffuse( source.GetDiffuse() );
-					pass->SetSpecular( source.GetSpecular() );
-					pass->SetEmissive( source.GetEmissive() );
-					pass->SetShininess( source.GetShininess() );
+					pass->setDiffuse( source.getDiffuse() );
+					pass->setSpecular( source.getSpecular() );
+					pass->setEmissive( source.getEmissive() );
+					pass->setShininess( source.getShininess() );
 				}
 				break;
 
@@ -103,9 +103,9 @@ namespace CastorViewer
 				{
 					auto & source = static_cast< MetallicRoughnessPbrPass const & >( p_source );
 					auto pass = std::static_pointer_cast< MetallicRoughnessPbrPass >( clone );
-					pass->SetAlbedo( source.GetAlbedo() );
-					pass->SetRoughness( source.GetRoughness() );
-					pass->SetMetallic( source.GetMetallic() );
+					pass->setAlbedo( source.getAlbedo() );
+					pass->setRoughness( source.getRoughness() );
+					pass->setMetallic( source.getMetallic() );
 				}
 				break;
 
@@ -113,34 +113,34 @@ namespace CastorViewer
 				{
 					auto & source = static_cast< SpecularGlossinessPbrPass const & >( p_source );
 					auto pass = std::static_pointer_cast< SpecularGlossinessPbrPass >( clone );
-					pass->SetDiffuse( source.GetDiffuse() );
-					pass->SetGlossiness( source.GetGlossiness() );
-					pass->SetSpecular( source.GetSpecular() );
+					pass->setDiffuse( source.getDiffuse() );
+					pass->setGlossiness( source.getGlossiness() );
+					pass->setSpecular( source.getSpecular() );
 				}
 				break;
 			}
 			
-			clone->SetOpacity( p_source.GetOpacity() );
-			clone->SetRefractionRatio( p_source.GetRefractionRatio() );
-			clone->SetTwoSided( p_source.IsTwoSided() );
-			clone->SetAlphaBlendMode( p_source.GetAlphaBlendMode() );
-			clone->SetColourBlendMode( p_source.GetColourBlendMode() );
-			clone->SetAlphaFunc( p_source.GetAlphaFunc() );
-			clone->SetAlphaValue( p_source.GetAlphaValue() );
+			clone->setOpacity( p_source.getOpacity() );
+			clone->setRefractionRatio( p_source.getRefractionRatio() );
+			clone->setTwoSided( p_source.IsTwoSided() );
+			clone->setAlphaBlendMode( p_source.getAlphaBlendMode() );
+			clone->setColourBlendMode( p_source.getColourBlendMode() );
+			clone->setAlphaFunc( p_source.getAlphaFunc() );
+			clone->setAlphaValue( p_source.getAlphaValue() );
 
 			for ( auto const & unit : p_source )
 			{
-				clone->AddTextureUnit( DoCloneUnit( clone, *unit ) );
+				clone->addTextureUnit( doCloneUnit( clone, *unit ) );
 			}
 		}
 
-		MaterialSPtr DoCloneMaterial( Material const & p_source )
+		MaterialSPtr doCloneMaterial( Material const & p_source )
 		{
-			MaterialSPtr clone = std::make_shared< Material >( p_source.GetName() + cuT( "_Clone" ), *p_source.GetEngine(), p_source.GetType() );
+			MaterialSPtr clone = std::make_shared< Material >( p_source.getName() + cuT( "_Clone" ), *p_source.getEngine(), p_source.getType() );
 
 			for ( auto const & pass : p_source )
 			{
-				DoClonePass( clone, *pass );
+				doClonePass( clone, *pass );
 			}
 
 			return clone;
@@ -149,10 +149,10 @@ namespace CastorViewer
 		void Restore( RenderPanel::SelectedSubmesh & p_selected
 			, GeometrySPtr p_geometry )
 		{
-			p_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender
+			p_geometry->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePostRender
 				, [p_selected, p_geometry]()
 				{
-					p_geometry->SetMaterial( *p_selected.m_submesh, p_selected.m_originalMaterial );
+					p_geometry->setMaterial( *p_selected.m_submesh, p_selected.m_originalMaterial );
 				} ) );
 		}
 
@@ -173,11 +173,11 @@ namespace CastorViewer
 			, GeometrySPtr p_geometry )
 		{
 			auto geometry = p_selected.m_geometry;
-			p_selected.m_submeshes.reserve(( p_geometry->GetMesh()->GetSubmeshCount() ) );
+			p_selected.m_submeshes.reserve(( p_geometry->getMesh()->getSubmeshCount() ) );
 
-			for ( auto & submesh : *p_geometry->GetMesh() )
+			for ( auto & submesh : *p_geometry->getMesh() )
 			{
-				p_selected.m_submeshes.emplace_back( submesh, p_geometry->GetMaterial( *submesh ) );
+				p_selected.m_submeshes.emplace_back( submesh, p_geometry->getMaterial( *submesh ) );
 			}
 
 			p_selected.m_geometry = p_geometry;
@@ -186,44 +186,44 @@ namespace CastorViewer
 		void Select( RenderPanel::SelectedSubmesh & p_selected
 			, GeometrySPtr p_geometry )
 		{
-			p_selected.m_selectedMaterial = DoCloneMaterial( *p_selected.m_originalMaterial );
+			p_selected.m_selectedMaterial = doCloneMaterial( *p_selected.m_originalMaterial );
 
-			switch ( p_selected.m_selectedMaterial->GetType() )
+			switch ( p_selected.m_selectedMaterial->getType() )
 			{
 			case MaterialType::eLegacy:
 				{
-					auto pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
-					pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
-					pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+					auto pass = p_selected.m_selectedMaterial->getTypedPass< MaterialType::eLegacy >( 0u );
+					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setSpecular( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
 				}
 				break;
 
 			case MaterialType::ePbrMetallicRoughness:
 				{
-					auto pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbrMetallicRoughness >( 0u );
-					pass->SetAlbedo( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+					auto pass = p_selected.m_selectedMaterial->getTypedPass< MaterialType::ePbrMetallicRoughness >( 0u );
+					pass->setAlbedo( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
 				}
 				break;
 
 			case MaterialType::ePbrSpecularGlossiness:
 				{
-					auto pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbrSpecularGlossiness >( 0u );
-					pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+					auto pass = p_selected.m_selectedMaterial->getTypedPass< MaterialType::ePbrSpecularGlossiness >( 0u );
+					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
 				}
 				break;
 			}
 
-			p_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender
+			p_geometry->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePostRender
 				, [p_selected, p_geometry]()
 				{
-					p_geometry->SetMaterial( *p_selected.m_submesh, p_selected.m_selectedMaterial );
+					p_geometry->setMaterial( *p_selected.m_submesh, p_selected.m_selectedMaterial );
 				} ) );
 		}
 	}
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 		: wxPanel( parent, p_id, pos, size, style )
-		, m_camSpeed( DEF_CAM_SPEED )
+		, m_camSpeed( DEF_CAM_SPEED, Range< real >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
 	{
 		m_pTimer[0] = nullptr;
 
@@ -263,55 +263,55 @@ namespace CastorViewer
 		wxClientDC dc( this );
 	}
 
-	void RenderPanel::SetRenderWindow( RenderWindowSPtr p_window )
+	void RenderPanel::setRenderWindow( RenderWindowSPtr p_window )
 	{
 		m_renderWindow.reset();
-		DoStopMovement();
-		Castor::Size sizeWnd = GuiCommon::make_Size( GetClientSize() );
+		doStopMovement();
+		castor::Size sizeWnd = GuiCommon::make_Size( GetClientSize() );
 
-		if ( p_window && p_window->Initialise( sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
+		if ( p_window && p_window->initialise( sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 		{
-			Castor::Size sizeScreen;
-			Castor::System::GetScreenSize( 0, sizeScreen );
-			GetParent()->SetClientSize( sizeWnd.width(), sizeWnd.height() );
+			castor::Size sizeScreen;
+			castor::System::getScreenSize( 0, sizeScreen );
+			GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
 			sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
-			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.width() ) - int( sizeWnd.width() ) ) / 2, std::abs( int( sizeScreen.height() ) - int( sizeWnd.height() ) ) / 2 ) );
-			m_listener = p_window->GetListener();
-			SceneSPtr scene = p_window->GetScene();
+			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
+			m_listener = p_window->getListener();
+			SceneSPtr scene = p_window->getScene();
 
 			if ( scene )
 			{
-				auto camera = p_window->GetCamera();
+				auto camera = p_window->getCamera();
 
 				if ( camera )
 				{
-					if ( scene->GetSceneNodeCache().Has( cuT( "PointLightsNode" ) ) )
+					if ( scene->getSceneNodeCache().has( cuT( "PointLightsNode" ) ) )
 					{
-						m_lightsNode = scene->GetSceneNodeCache().Find( cuT( "PointLightsNode" ) );
+						m_lightsNode = scene->getSceneNodeCache().find( cuT( "PointLightsNode" ) );
 					}
-					else if ( scene->GetSceneNodeCache().Has( cuT( "LightNode" ) ) )
+					else if ( scene->getSceneNodeCache().has( cuT( "LightNode" ) ) )
 					{
-						m_lightsNode = scene->GetSceneNodeCache().Find( cuT( "LightNode" ) );
+						m_lightsNode = scene->getSceneNodeCache().find( cuT( "LightNode" ) );
 					}
 
-					auto cameraNode = camera->GetParent();
+					auto cameraNode = camera->getParent();
 
 					if ( cameraNode )
 					{
 						m_currentNode = cameraNode;
-						m_currentState = &DoAddNodeState( m_currentNode );
+						m_currentState = &doAddNodeState( m_currentNode );
 					}
 
 					m_renderWindow = p_window;
 					m_keyboardEvent = std::make_unique< KeyboardEvent >( p_window );
 
 					{
-						auto lock = make_unique_lock( scene->GetCameraCache() );
-						p_window->GetPickingPass().AddScene( *scene, *( scene->GetCameraCache().begin()->second ) );
+						auto lock = makeUniqueLock( scene->getCameraCache() );
+						p_window->getPickingPass().addScene( *scene, *( scene->getCameraCache().begin()->second ) );
 					}
 
 					m_camera = camera;
-					DoStartMovement();
+					doStartMovement();
 				}
 
 				m_scene = scene;
@@ -323,9 +323,9 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::DoResetTimers()
+	void RenderPanel::doResetTimers()
 	{
-		DoStopTimer( eTIMER_ID_COUNT );
+		doStopTimer( eTIMER_ID_COUNT );
 		m_camSpeed = DEF_CAM_SPEED;
 		m_x = 0.0_r;
 		m_y = 0.0_r;
@@ -333,7 +333,7 @@ namespace CastorViewer
 		m_oldY = 0.0_r;
 	}
 
-	void RenderPanel::DoStartMovement()
+	void RenderPanel::doStartMovement()
 	{
 		if ( !m_movementStarted )
 		{
@@ -342,7 +342,7 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::DoStopMovement()
+	void RenderPanel::doStopMovement()
 	{
 		if ( m_movementStarted )
 		{
@@ -351,12 +351,12 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::DoStartTimer( int p_id )
+	void RenderPanel::doStartTimer( int p_id )
 	{
 		m_pTimer[p_id]->Start( 10 );
 	}
 
-	void RenderPanel::DoStopTimer( int p_id )
+	void RenderPanel::doStopTimer( int p_id )
 	{
 		if ( p_id != eTIMER_ID_COUNT )
 		{
@@ -371,47 +371,47 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::DoResetNode()
+	void RenderPanel::doResetNode()
 	{
-		DoResetTimers();
+		doResetTimers();
 		m_currentState->Reset( DEF_CAM_SPEED );
 	}
 
-	void RenderPanel::DoTurnCameraHoriz()
+	void RenderPanel::doTurnCameraHoriz()
 	{
-		DoResetTimers();
+		doResetTimers();
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			auto cameraNode = camera->GetParent();
-			camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
+			auto cameraNode = camera->getParent();
+			camera->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
 			{
-				Quaternion orientation{ cameraNode->GetOrientation() };
-				orientation *= Quaternion::from_axis_angle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) );
-				cameraNode->SetOrientation( orientation );
+				Quaternion orientation{ cameraNode->getOrientation() };
+				orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
+				cameraNode->setOrientation( orientation );
 			} ) );
 		}
 	}
 
-	void RenderPanel::DoTurnCameraVertic()
+	void RenderPanel::doTurnCameraVertic()
 	{
-		DoResetTimers();
+		doResetTimers();
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			auto cameraNode = camera->GetParent();
-			camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
+			auto cameraNode = camera->getParent();
+			camera->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
 			{
-				Quaternion orientation{ cameraNode->GetOrientation() };
-				orientation *= Quaternion::from_axis_angle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) );
-				cameraNode->SetOrientation( orientation );
+				Quaternion orientation{ cameraNode->getOrientation() };
+				orientation *= Quaternion::fromAxisAngle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
+				cameraNode->setOrientation( orientation );
 			} ) );
 		}
 	}
 
-	void RenderPanel::DoChangeCamera()
+	void RenderPanel::doChangeCamera()
 	{
 		auto camera = m_camera.lock();
 		auto window = m_renderWindow.lock();
@@ -419,82 +419,82 @@ namespace CastorViewer
 
 		if ( camera && window && scene )
 		{
-			//auto & shadowMaps = window->GetRenderTarget()->GetTechnique()->GetShadowMaps();
+			//auto & shadowMaps = window->getRenderTarget()->getTechnique()->getShadowMaps();
 
 			//if ( !shadowMaps.empty() )
 			//{
 			//	auto it = shadowMaps.begin();
-			//	m_currentNode = it->first->GetParent();
+			//	m_currentNode = it->first->getParent();
 			//}
 		}
 	}
 
-	void RenderPanel::DoReloadScene()
+	void RenderPanel::doReloadScene()
 	{
-		DoResetTimers();
-		wxGetApp().GetMainFrame()->LoadScene();
+		doResetTimers();
+		wxGetApp().getMainFrame()->LoadScene();
 	}
 
-	real RenderPanel::DoTransformX( int x )
+	real RenderPanel::doTransformX( int x )
 	{
 		real result = real( x );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result *= real( camera->GetWidth() ) / GetClientSize().x;
+			result *= real( camera->getWidth() ) / GetClientSize().x;
 		}
 
 		return result;
 	}
 
-	real RenderPanel::DoTransformY( int y )
+	real RenderPanel::doTransformY( int y )
 	{
 		real result = real( y );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result *= real( camera->GetHeight() ) / GetClientSize().y;
+			result *= real( camera->getHeight() ) / GetClientSize().y;
 		}
 
 		return result;
 	}
 
-	int RenderPanel::DoTransformX( real x )
+	int RenderPanel::doTransformX( real x )
 	{
 		int result = int( x );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result = int( x * GetClientSize().x / real( camera->GetWidth() ) );
+			result = int( x * GetClientSize().x / real( camera->getWidth() ) );
 		}
 
 		return result;
 	}
 
-	int RenderPanel::DoTransformY( real y )
+	int RenderPanel::doTransformY( real y )
 	{
 		int result = int( y );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result = int( y * GetClientSize().y / real( camera->GetHeight() ) );
+			result = int( y * GetClientSize().y / real( camera->getHeight() ) );
 		}
 
 		return result;
 	}
 
-	void RenderPanel::DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry
-		, Castor3D::SubmeshSPtr p_submesh )
+	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr p_geometry
+		, castor3d::SubmeshSPtr p_submesh )
 	{
 		SelectedGeometry selected;
 		auto submesh = m_selectedSubmesh ? m_selectedSubmesh->m_submesh : nullptr;
 		auto oldGeometry = m_selectedGeometry.m_geometry;
 		bool changed = false;
-		SceneRPtr scene = p_geometry ? p_geometry->GetScene() : nullptr;
+		SceneRPtr scene = p_geometry ? p_geometry->getScene() : nullptr;
 
 		if ( oldGeometry != p_geometry )
 		{
@@ -503,7 +503,7 @@ namespace CastorViewer
 
 			if ( oldGeometry )
 			{
-				scene = oldGeometry->GetScene();
+				scene = oldGeometry->getScene();
 				Restore( m_selectedGeometry );
 			}
 
@@ -538,38 +538,38 @@ namespace CastorViewer
 
 		if ( changed )
 		{
-			scene->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender
+			scene->getListener().postEvent( MakeFunctorEvent( EventType::ePostRender
 				, [scene]()
 				{
-					scene->SetChanged();
+					scene->setChanged();
 				} ) );
 		}
 
 		{
 			if ( p_geometry )
 			{
-				m_currentNode = m_selectedGeometry.m_geometry->GetParent();
+				m_currentNode = m_selectedGeometry.m_geometry->getParent();
 			}
 			else
 			{
-				m_currentNode = m_camera.lock()->GetParent();
+				m_currentNode = m_camera.lock()->getParent();
 			}
 
-			m_currentState = &DoAddNodeState( m_currentNode );
+			m_currentState = &doAddNodeState( m_currentNode );
 		}
 	}
 
-	GuiCommon::NodeState & RenderPanel::DoAddNodeState( SceneNodeSPtr p_node )
+	GuiCommon::NodeState & RenderPanel::doAddNodeState( SceneNodeSPtr p_node )
 	{
-		auto it = m_nodesStates.find( p_node->GetName() );
+		auto it = m_nodesStates.find( p_node->getName() );
 
 		if ( it == m_nodesStates.end() )
 		{
-			it = m_nodesStates.emplace( p_node->GetName()
+			it = m_nodesStates.emplace( p_node->getName()
 				, std::make_unique< GuiCommon::NodeState >( *m_listener, p_node ) ).first;
 		}
 
-		it->second->SetMaxSpeed( m_camSpeed );
+		it->second->setMaxSpeed( m_camSpeed.value() );
 		return *it->second;
 	}
 
@@ -588,17 +588,17 @@ namespace CastorViewer
 		EVT_ENTER_WINDOW( RenderPanel::OnEnterWindow )
 		EVT_LEAVE_WINDOW( RenderPanel::OnLeaveWindow )
 		EVT_ERASE_BACKGROUND( RenderPanel::OnEraseBackground )
-		EVT_SET_FOCUS( RenderPanel::OnSetFocus )
+		EVT_SET_FOCUS( RenderPanel::OnsetFocus )
 		EVT_KILL_FOCUS( RenderPanel::OnKillFocus )
-		EVT_KEY_DOWN( RenderPanel::OnKeyDown )
+		EVT_KEY_DOWN( RenderPanel::onKeydown )
 		EVT_KEY_UP( RenderPanel::OnKeyUp )
 		EVT_CHAR( RenderPanel::OnChar )
 		EVT_LEFT_DCLICK( RenderPanel::OnMouseLDClick )
-		EVT_LEFT_DOWN( RenderPanel::OnMouseLDown )
+		EVT_LEFT_DOWN( RenderPanel::OnMouseLdown )
 		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
-		EVT_MIDDLE_DOWN( RenderPanel::OnMouseMDown )
+		EVT_MIDDLE_DOWN( RenderPanel::OnMouseMdown )
 		EVT_MIDDLE_UP( RenderPanel::OnMouseMUp )
-		EVT_RIGHT_DOWN( RenderPanel::OnMouseRDown )
+		EVT_RIGHT_DOWN( RenderPanel::OnMouseRdown )
 		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
 		EVT_MOTION( RenderPanel::OnMouseMove )
 		EVT_MOUSEWHEEL( RenderPanel::OnMouseWheel )
@@ -607,37 +607,37 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed } );
+		m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed.value() } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed } );
+		m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed.value() } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_currentState->AddScalarVelocity( Point3r{ m_camSpeed, 0.0_r, 0.0_r } );
+		m_currentState->addScalarVelocity( Point3r{ m_camSpeed.value(), 0.0_r, 0.0_r } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_currentState->AddScalarVelocity( Point3r{ -m_camSpeed, 0.0_r, 0.0_r } );
+		m_currentState->addScalarVelocity( Point3r{ -m_camSpeed.value(), 0.0_r, 0.0_r } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, m_camSpeed, 0.0_r } );
+		m_currentState->addScalarVelocity( Point3r{ 0.0_r, m_camSpeed.value(), 0.0_r } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, -m_camSpeed, 0.0_r } );
+		m_currentState->addScalarVelocity( Point3r{ 0.0_r, -m_camSpeed.value(), 0.0_r } );
 		p_event.Skip();
 	}
 
@@ -650,7 +650,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->Update();
+			m_currentState->update();
 		}
 
 		p_event.Skip();
@@ -662,7 +662,7 @@ namespace CastorViewer
 
 		if ( window )
 		{
-			window->Resize( p_event.GetSize().x, p_event.GetSize().y );
+			window->resize( p_event.GetSize().x, p_event.GetSize().y );
 		}
 		else
 		{
@@ -720,60 +720,60 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnSetFocus( wxFocusEvent & p_event )
+	void RenderPanel::OnsetFocus( wxFocusEvent & p_event )
 	{
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnKillFocus( wxFocusEvent & p_event )
 	{
-		DoStopTimer( eTIMER_ID_COUNT );
+		doStopTimer( eTIMER_ID_COUNT );
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnKeyDown( wxKeyEvent & p_event )
+	void RenderPanel::onKeydown( wxKeyEvent & p_event )
 	{
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->FireKeyDown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeydown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
 			case WXK_LEFT:
 			case 'Q':
-				DoStartTimer( eTIMER_ID_LEFT );
+				doStartTimer( eTIMER_ID_LEFT );
 				break;
 
 			case WXK_RIGHT:
 			case 'D':
-				DoStartTimer( eTIMER_ID_RIGHT );
+				doStartTimer( eTIMER_ID_RIGHT );
 				break;
 
 			case WXK_UP:
 			case 'Z':
-				DoStartTimer( eTIMER_ID_FORWARD );
+				doStartTimer( eTIMER_ID_FORWARD );
 				break;
 
 			case WXK_DOWN:
 			case 'S':
-				DoStartTimer( eTIMER_ID_BACK );
+				doStartTimer( eTIMER_ID_BACK );
 				break;
 
 			case WXK_PAGEUP:
-				DoStartTimer( eTIMER_ID_UP );
+				doStartTimer( eTIMER_ID_UP );
 				break;
 
 			case WXK_PAGEDOWN:
-				DoStartTimer( eTIMER_ID_DOWN );
+				doStartTimer( eTIMER_ID_DOWN );
 				break;
 
 			case WXK_ALT:
-				m_altDown = true;
+				m_altdown = true;
 				break;
 
 			case 'L':
 				m_currentNode = m_lightsNode;
-				m_currentState = &DoAddNodeState( m_currentNode );
+				m_currentState = &doAddNodeState( m_currentNode );
 				break;
 			}
 		}
@@ -783,71 +783,71 @@ namespace CastorViewer
 
 	void RenderPanel::OnKeyUp( wxKeyEvent & p_event )
 	{
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->FireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
 			case 'R':
-				DoResetNode();
+				doResetNode();
 				break;
 
 			case 'T':
-				DoTurnCameraHoriz();
+				doTurnCameraHoriz();
 				break;
 
 			case 'Y':
-				DoTurnCameraVertic();
+				doTurnCameraVertic();
 				break;
 
 			case 'C':
-				DoChangeCamera();
+				doChangeCamera();
 				break;
 
 			case WXK_F5:
-				DoReloadScene();
+				doReloadScene();
 				break;
 
 			case WXK_LEFT:
 			case 'Q':
-				DoStopTimer( eTIMER_ID_LEFT );
+				doStopTimer( eTIMER_ID_LEFT );
 				break;
 
 			case WXK_RIGHT:
 			case 'D':
-				DoStopTimer( eTIMER_ID_RIGHT );
+				doStopTimer( eTIMER_ID_RIGHT );
 				break;
 
 			case WXK_UP:
 			case 'Z':
-				DoStopTimer( eTIMER_ID_FORWARD );
+				doStopTimer( eTIMER_ID_FORWARD );
 				break;
 
 			case WXK_DOWN:
 			case 'S':
-				DoStopTimer( eTIMER_ID_BACK );
+				doStopTimer( eTIMER_ID_BACK );
 				break;
 
 			case WXK_PAGEUP:
-				DoStopTimer( eTIMER_ID_UP );
+				doStopTimer( eTIMER_ID_UP );
 				break;
 
 			case WXK_PAGEDOWN:
-				DoStopTimer( eTIMER_ID_DOWN );
+				doStopTimer( eTIMER_ID_DOWN );
 				break;
 
 			case WXK_ALT:
-				m_altDown = false;
+				m_altdown = false;
 				break;
 
 			case WXK_ESCAPE:
-				DoUpdateSelectedGeometry( nullptr, nullptr );
+				doUpdateSelectedGeometry( nullptr, nullptr );
 				break;
 
 			case 'L':
-				m_currentNode = m_camera.lock()->GetParent();
-				m_currentState = &DoAddNodeState( m_currentNode );
+				m_currentNode = m_camera.lock()->getParent();
+				m_currentState = &doAddNodeState( m_currentNode );
 				break;
 			}
 		}
@@ -857,14 +857,14 @@ namespace CastorViewer
 
 	void RenderPanel::OnChar( wxKeyEvent & p_event )
 	{
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
 		if ( inputListener )
 		{
 			wxChar key = p_event.GetUnicodeKey();
 			wxString tmp;
 			tmp << key;
-			inputListener->FireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( tmp.mb_str( wxConvUTF8 ) ) );
+			inputListener->fireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( tmp.mb_str( wxConvUTF8 ) ) );
 		}
 
 		p_event.Skip();
@@ -872,65 +872,65 @@ namespace CastorViewer
 
 	void RenderPanel::OnMouseLDClick( wxMouseEvent & p_event )
 	{
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 		m_oldX = m_x;
 		m_oldY = m_y;
 
 		if ( m_listener )
 		{
-			m_listener->PostEvent( std::make_unique< KeyboardEvent >( *m_keyboardEvent ) );
+			m_listener->postEvent( std::make_unique< KeyboardEvent >( *m_keyboardEvent ) );
 			auto window = m_renderWindow.lock();
 
 			if ( window )
 			{
-				wxGetApp().GetMainFrame()->ToggleFullScreen( !window->IsFullscreen() );
+				wxGetApp().getMainFrame()->ToggleFullScreen( !window->isFullscreen() );
 			}
 		}
 
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseLDown( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseLdown( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = true;
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->FireMouseButtonPushed( MouseButton::eLeft ) )
+		if ( !inputListener || !inputListener->fireMouseButtonPushed( MouseButton::eLeft ) )
 		{
-			auto window = GetRenderWindow();
+			auto window = getRenderWindow();
 
 			if ( window )
 			{
-				if ( m_altDown )
+				if ( m_altdown )
 				{
 					auto x = m_oldX;
 					auto y = m_oldY;
-					m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
+					m_listener->postEvent( MakeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
 					{
-						Camera & camera = *window->GetCamera();
-						camera.Update();
-						auto type = window->GetPickingPass().Pick( Position{ int( x ), int( y ) }, camera );
+						Camera & camera = *window->getCamera();
+						camera.update();
+						auto type = window->getPickingPass().pick( Position{ int( x ), int( y ) }, camera );
 
 						if ( type != PickingPass::NodeType::eNone
 							&& type != PickingPass::NodeType::eBillboard )
 						{
-							DoUpdateSelectedGeometry( window->GetPickingPass().GetPickedGeometry(), window->GetPickingPass().GetPickedSubmesh() );
+							doUpdateSelectedGeometry( window->getPickingPass().getPickedGeometry(), window->getPickingPass().getPickedSubmesh() );
 						}
 						else
 						{
-							DoUpdateSelectedGeometry( nullptr, nullptr );
+							doUpdateSelectedGeometry( nullptr, nullptr );
 						}
 					} ) );
 				}
 				else if ( m_currentState )
 				{
-					DoStartTimer( eTIMER_ID_MOUSE );
+					doStartTimer( eTIMER_ID_MOUSE );
 				}
 			}
 		}
@@ -941,53 +941,53 @@ namespace CastorViewer
 	void RenderPanel::OnMouseLUp( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = false;
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->FireMouseButtonReleased( MouseButton::eLeft ) )
+		if ( !inputListener || !inputListener->fireMouseButtonReleased( MouseButton::eLeft ) )
 		{
-			DoStopTimer( eTIMER_ID_MOUSE );
+			doStopTimer( eTIMER_ID_MOUSE );
 		}
 
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseMDown( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseMdown( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = true;
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->FireMouseButtonPushed( MouseButton::eMiddle ) )
+		if ( !inputListener || !inputListener->fireMouseButtonPushed( MouseButton::eMiddle ) )
 		{
-			auto window = GetRenderWindow();
+			auto window = getRenderWindow();
 
 			if ( window )
 			{
 				auto x = m_oldX;
 				auto y = m_oldY;
-				m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
+				m_listener->postEvent( MakeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
 				{
-					Camera & camera = *window->GetCamera();
-					camera.Update();
-					auto type = window->GetPickingPass().Pick( Position{ int( x ), int( y ) }, camera );
+					Camera & camera = *window->getCamera();
+					camera.update();
+					auto type = window->getPickingPass().pick( Position{ int( x ), int( y ) }, camera );
 
 					if ( type != PickingPass::NodeType::eNone
 						&& type != PickingPass::NodeType::eBillboard )
 					{
-						DoUpdateSelectedGeometry( window->GetPickingPass().GetPickedGeometry(), window->GetPickingPass().GetPickedSubmesh() );
+						doUpdateSelectedGeometry( window->getPickingPass().getPickedGeometry(), window->getPickingPass().getPickedSubmesh() );
 					}
 					else
 					{
-						DoUpdateSelectedGeometry( nullptr, nullptr );
+						doUpdateSelectedGeometry( nullptr, nullptr );
 					}
 				} ) );
 			}
@@ -999,34 +999,34 @@ namespace CastorViewer
 	void RenderPanel::OnMouseMUp( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = false;
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
 		if ( inputListener  )
 		{
-			inputListener->FireMouseButtonReleased( MouseButton::eMiddle );
+			inputListener->fireMouseButtonReleased( MouseButton::eMiddle );
 		}
 
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseRDown( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseRdown( wxMouseEvent & p_event )
 	{
 		m_mouseRightDown = true;
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
 		if ( inputListener  )
 		{
-			inputListener->FireMouseButtonPushed( MouseButton::eRight );
+			inputListener->fireMouseButtonPushed( MouseButton::eRight );
 		}
 
 		p_event.Skip();
@@ -1035,16 +1035,16 @@ namespace CastorViewer
 	void RenderPanel::OnMouseRUp( wxMouseEvent & p_event )
 	{
 		m_mouseRightDown = false;
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
 		if ( inputListener  )
 		{
-			inputListener->FireMouseButtonReleased( MouseButton::eRight );
+			inputListener->fireMouseButtonReleased( MouseButton::eRight );
 		}
 
 		p_event.Skip();
@@ -1052,12 +1052,12 @@ namespace CastorViewer
 
 	void RenderPanel::OnMouseMove( wxMouseEvent & p_event )
 	{
-		m_x = DoTransformX( p_event.GetX() );
-		m_y = DoTransformY( p_event.GetY() );
+		m_x = doTransformX( p_event.GetX() );
+		m_y = doTransformY( p_event.GetY() );
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
+		if ( !inputListener || !inputListener->fireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
 			if ( m_currentState )
 			{
@@ -1076,11 +1076,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_currentState->AddAngularVelocity( Point2r{ -deltaY, deltaX } );
+					m_currentState->addAngularVelocity( Point2r{ -deltaY, deltaX } );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_currentState->AddScalarVelocity( Point3r{ deltaX, deltaY, 0.0_r } );
+					m_currentState->addScalarVelocity( Point3r{ deltaX, deltaY, 0.0_r } );
 				}
 			}
 		}
@@ -1094,9 +1094,9 @@ namespace CastorViewer
 	{
 		int wheelRotation = p_event.GetWheelRotation();
 
-		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->FireMouseWheel( Position( 0, wheelRotation ) ) )
+		if ( !inputListener || !inputListener->fireMouseWheel( Position( 0, wheelRotation ) ) )
 		{
 			if ( wheelRotation < 0 )
 			{
@@ -1107,8 +1107,7 @@ namespace CastorViewer
 				m_camSpeed /= CAM_SPEED_INC;
 			}
 
-			clamp( m_camSpeed, MIN_CAM_SPEED, MAX_CAM_SPEED );
-			m_currentState->SetMaxSpeed( m_camSpeed );
+			m_currentState->setMaxSpeed( m_camSpeed.value() );
 		}
 
 		p_event.Skip();

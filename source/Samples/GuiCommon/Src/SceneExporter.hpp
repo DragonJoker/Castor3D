@@ -51,7 +51,7 @@ namespace GuiCommon
 		 *\param[in]	p_scene		La scène à exporter.
 		 *\param[in]	p_fileName	Le nom du fichier exportà.
 		 */
-		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName ) = 0;
+		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName ) = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -65,14 +65,14 @@ namespace GuiCommon
 	class ObjSceneExporter
 	{
 	public:
-		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName );
+		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
 
 	private:
-		void DoExportMaterials( Castor3D::Scene const & p_scene, Castor::Path const & p_path )const;
-		void DoExportMeshes( Castor3D::Scene const & p_scene, Castor::Path const & p_mtlpath, Castor::Path const & p_path )const;
-		Castor::String DoExportMaterial( Castor::Path const & p_pathMtlFolder, Castor3D::Material const & p_material )const;
-		Castor::String DoExportTexture( Castor::Path const & p_pathMtlFolder, Castor::String p_section, Castor3D::TextureUnitSPtr p_unit )const;
-		Castor::String DoExportMesh( Castor3D::Mesh const & p_mesh, uint32_t & p_offset, uint32_t & p_count )const;
+		void doExportMaterials( castor3d::Scene const & p_scene, castor::Path const & p_path )const;
+		void doExportMeshes( castor3d::Scene const & p_scene, castor::Path const & p_mtlpath, castor::Path const & p_path )const;
+		castor::String doExportMaterial( castor::Path const & p_pathMtlFolder, castor3d::Material const & p_material )const;
+		castor::String doExportTexture( castor::Path const & p_pathMtlFolder, castor::String p_section, castor3d::TextureUnitSPtr p_unit )const;
+		castor::String doExportMesh( castor3d::Mesh const & p_mesh, uint32_t & p_offset, uint32_t & p_count )const;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -86,7 +86,7 @@ namespace GuiCommon
 	class CscnSceneExporter
 	{
 	public:
-		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName );
+		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
 	};
 }
 

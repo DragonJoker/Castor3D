@@ -29,7 +29,7 @@ SOFTWARE.
 #include "ShadowMap/ShadowMapPoint.hpp"
 #include "ShadowMap/ShadowMapSpot.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -62,7 +62,7 @@ namespace Castor3D
 		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	p_config		La configuration du SSAO.
 		 */
-		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
+		C3D_API ForwardRenderTechniquePass( castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera
 			, bool p_environment
@@ -88,7 +88,7 @@ namespace Castor3D
 		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	p_config		La configuration du SSAO.
 		 */
-		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
+		C3D_API ForwardRenderTechniquePass( castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera
 			, bool p_oit
@@ -112,58 +112,58 @@ namespace Castor3D
 		 *\param[out]	p_info		Reçoit les informations de rendu.
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		C3D_API void Render( RenderInfo & p_info, bool p_shadows )override;
+		C3D_API void render( RenderInfo & p_info, bool p_shadows )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::InitialiseShadowMaps
+		 *\copydoc		castor3d::RenderTechniquePass::initialiseShadowMaps
 		 */
-		C3D_API bool InitialiseShadowMaps()override;
+		C3D_API bool initialiseShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::CleanupShadowMaps
+		 *\copydoc		castor3d::RenderTechniquePass::cleanupShadowMaps
 		 */
-		C3D_API void CleanupShadowMaps()override;
+		C3D_API void cleanupShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::UpdateShadowMaps
+		 *\copydoc		castor3d::RenderTechniquePass::updateShadowMaps
 		 */
-		C3D_API void UpdateShadowMaps( RenderQueueArray & p_queues )override;
+		C3D_API void updateShadowMaps( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::RenderShadowMaps
+		 *\copydoc		castor3d::RenderTechniquePass::renderShadowMaps
 		 */
-		C3D_API void RenderShadowMaps()override;
+		C3D_API void renderShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::AddShadowProducer
+		 *\copydoc		castor3d::RenderTechniquePass::addShadowProducer
 		 */
-		C3D_API void AddShadowProducer( Light & p_light )override;
+		C3D_API void addShadowProducer( Light & p_light )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::DoGetDepthMaps
+		 *\copydoc		castor3d::RenderTechniquePass::doGetDepthMaps
 		 */
-		C3D_API void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
+		C3D_API void doGetDepthMaps( DepthMapArray & p_depthMaps )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;

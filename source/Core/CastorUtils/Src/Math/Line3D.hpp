@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -47,7 +47,7 @@ namespace Castor
 	class Line3D
 	{
 	private:
-		typedef Castor::Policy< T > policy;
+		typedef castor::Policy< T > policy;
 
 	private:
 		/**
@@ -77,7 +77,7 @@ namespace Castor
 		 *\param[in]	p_point	Un point de la droite
 		 *\param[in]	p_ptSlope	La pente de la droite
 		 */
-		static Line3D< T > FromPointAndSlope( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
+		static Line3D< T > fromPointAndSlope( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
 		{
 			return Line3D< T >( p_point, p_ptSlope );
 		}
@@ -89,7 +89,7 @@ namespace Castor
 		 *\brief		Constructeur à partir de 2 points
 		 *\param[in]	p_ptA, p_ptB	Deux points de la droite
 		 */
-		static Line3D< T > FromPoints( Point< T, 3 > const & p_ptA, Point< T, 3 > const & p_ptB )
+		static Line3D< T > fromPoints( Point< T, 3 > const & p_ptA, Point< T, 3 > const & p_ptB )
 		{
 			return Line3D< T >( p_ptA, p_ptB - p_ptA );
 		}
@@ -131,7 +131,7 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line3D à copier
 		 *\return		Une référence sur cet objet Line3D
 		 */
-		Line3D & operator =( Line3D const & p_line )
+		Line3D & operator=( Line3D const & p_line )
 		{
 			m_origin	= p_line.m_origin;
 			m_slope		= p_line.m_slope;
@@ -147,7 +147,7 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line3D à déplacer
 		 *\return		Une référence sur cet objet Line3D
 		 */
-		Line3D & operator =( Line3D && p_line )
+		Line3D & operator=( Line3D && p_line )
 		{
 			if ( this != &p_line )
 			{
@@ -171,7 +171,7 @@ namespace Castor
 		 *\param[out]	p_point	Reçoit le point d'intersection
 		 *\return		\p true si une intersection existe
 		 */
-		bool Intersects( Line3D const & p_line, Point< T, 3 > & p_point )
+		bool intersects( Line3D const & p_line, Point< T, 3 > & p_point )
 		{
 			bool result;
 			double a = m_origin[0];
@@ -243,11 +243,11 @@ namespace Castor
 		 *\param[in]	p_point	Le point à tester
 		 *\return		\p true si le point appartient à la ligne
 		 */
-		bool IsIn( Point< T, 3 > const & p_point )
+		bool isIn( Point< T, 3 > const & p_point )
 		{
-			return policy::is_null( ( p_point[0] - m_origin[0] ) / m_slope[0] )
-				   && policy::is_null( ( p_point[1] - m_origin[1] ) / m_slope[1] )
-				   && policy::is_null( ( p_point[2] - m_origin[2] ) / m_slope[2] );
+			return policy::isNull( ( p_point[0] - m_origin[0] ) / m_slope[0] )
+				   && policy::isNull( ( p_point[1] - m_origin[1] ) / m_slope[1] )
+				   && policy::isNull( ( p_point[2] - m_origin[2] ) / m_slope[2] );
 		}
 
 	public:

@@ -1,4 +1,4 @@
-#include <cstring>
+﻿#include <cstring>
 #include "UnsupportedFormatException.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 #include "Exception/Assertion.hpp"
@@ -15,9 +15,9 @@
 #	undef min
 #endif
 
-namespace Castor
+namespace castor
 {
-	static inline void HalfToFloat( float & target, uint16_t const * source )
+	static inline void halfToFloat( float & target, uint16_t const * source )
 	{
 		uint32_t * xp = ( uint32_t * )&target; // Type pun output as an unsigned 32-bit int
 		uint16_t h = *source;
@@ -77,7 +77,7 @@ namespace Castor
 		}
 	}
 
-	static inline void FloatToHalf( uint16_t * target, float source )
+	static inline void floatToHalf( uint16_t * target, float source )
 	{
 		uint16_t * hp = target; // Type pun output as an unsigned 16-bit int
 		uint32_t x = *reinterpret_cast< uint32_t * >( &source ); // Type pun input as an unsigned 32-bit int
@@ -130,11 +130,11 @@ namespace Castor
 					if ( ( 14 - hes ) > 24 )
 					{
 						// Mantissa shifted all the way off & no rounding possibility
-						hm = 0u;  // Set mantissa to zero
+						hm = 0u;  // set mantissa to zero
 					}
 					else
 					{
-						xm |= 0x00800000u;  // Add the hidden leading bit
+						xm |= 0x00800000u;  // add the hidden leading bit
 						hm = uint16_t( xm >> ( 14 - hes ) ); // Mantissa
 
 						if ( ( xm >> ( 13 - hes ) ) & 0x00000001u ) // Check for rounding
@@ -166,7 +166,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eL8
 	//!\~french		Spécialisation pour PixelFormat::eL8
 	template<>
-	struct component< PixelFormat::eL8 >
+	struct PixelComponents< PixelFormat::eL8 >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -250,7 +250,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eL16F32F
 	//!\~french		Spécialisation pour PixelFormat::eL16F32F
 	template<>
-	struct component< PixelFormat::eL16F32F >
+	struct PixelComponents< PixelFormat::eL16F32F >
 	{
 #define src ( *reinterpret_cast< float const * >( p_pSrc ) )
 #define dst ( *reinterpret_cast< float * >( p_pSrc ) )
@@ -340,7 +340,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eL32F
 	//!\~french		Spécialisation pour PixelFormat::eL32F
 	template<>
-	struct component< PixelFormat::eL32F >
+	struct PixelComponents< PixelFormat::eL32F >
 	{
 #define src ( *reinterpret_cast< float const * >( p_pSrc ) )
 #define dst ( *reinterpret_cast< float * >( p_pSrc ) )
@@ -430,7 +430,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA8L8
 	//!\~french		Spécialisation pour PixelFormat::eA8L8
 	template<>
-	struct component< PixelFormat::eA8L8 >
+	struct PixelComponents< PixelFormat::eA8L8 >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -516,7 +516,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eAL16F32F
 	//!\~french		Spécialisation pour PixelFormat::eAL16F32F
 	template<>
-	struct component< PixelFormat::eAL16F32F >
+	struct PixelComponents< PixelFormat::eAL16F32F >
 	{
 #define src reinterpret_cast< float const * >( p_pSrc )
 #define dst reinterpret_cast< float * >( p_pSrc )
@@ -608,7 +608,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eAL32F
 	//!\~french		Spécialisation pour PixelFormat::eAL32F
 	template<>
-	struct component< PixelFormat::eAL32F >
+	struct PixelComponents< PixelFormat::eAL32F >
 	{
 #define src reinterpret_cast< float const * >( p_pSrc )
 #define dst reinterpret_cast< float * >( p_pSrc )
@@ -700,7 +700,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA1R5G5B5
 	//!\~french		Spécialisation pour PixelFormat::eA1R5G5B5
 	template<>
-	struct component< PixelFormat::eA1R5G5B5 >
+	struct PixelComponents< PixelFormat::eA1R5G5B5 >
 	{
 #define src ( *reinterpret_cast< uint16_t const * >( p_pSrc ) )
 #define dst ( *reinterpret_cast< uint16_t * >( p_pSrc ) )
@@ -794,7 +794,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA4R4G4B4
 	//!\~french		Spécialisation pour PixelFormat::eA4R4G4B4
 	template<>
-	struct component< PixelFormat::eA4R4G4B4 >
+	struct PixelComponents< PixelFormat::eA4R4G4B4 >
 	{
 #define src ( *reinterpret_cast< uint16_t const * >( p_pSrc ) )
 #define dst ( *reinterpret_cast< uint16_t * >( p_pSrc ) )
@@ -888,7 +888,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eR5G6B5
 	//!\~french		Spécialisation pour PixelFormat::eR5G6B5
 	template<>
-	struct component< PixelFormat::eR5G6B5 >
+	struct PixelComponents< PixelFormat::eR5G6B5 >
 	{
 #define src	( *reinterpret_cast< uint16_t const * >( p_pSrc ) )
 #define dst	( *reinterpret_cast< uint16_t * >( p_pSrc ) )
@@ -980,7 +980,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eR8G8B8
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8
 	template<>
-	struct component< PixelFormat::eR8G8B8 >
+	struct PixelComponents< PixelFormat::eR8G8B8 >
 	{
 		struct pixel
 		{
@@ -1079,7 +1079,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eB8G8R8
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8
 	template<>
-	struct component< PixelFormat::eB8G8R8 >
+	struct PixelComponents< PixelFormat::eB8G8R8 >
 	{
 		struct pixel
 		{
@@ -1178,7 +1178,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA8R8G8B8
 	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8
 	template<>
-	struct component< PixelFormat::eA8R8G8B8 >
+	struct PixelComponents< PixelFormat::eA8R8G8B8 >
 	{
 		struct pixel
 		{
@@ -1280,7 +1280,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8
 	template<>
-	struct component< PixelFormat::eA8B8G8R8 >
+	struct PixelComponents< PixelFormat::eA8B8G8R8 >
 	{
 		struct pixel
 		{
@@ -1382,7 +1382,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGB16F
 	//!\~french		Spécialisation pour PixelFormat::eRGB16F
 	template<>
-	struct component< PixelFormat::eRGB16F >
+	struct PixelComponents< PixelFormat::eRGB16F >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1411,19 +1411,19 @@ namespace Castor
 		static inline float R32F( uint8_t const * p_pSrc )
 		{
 			float result{};
-			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
 			return result;
 		}
 		static inline float G32F( uint8_t const * p_pSrc )
 		{
 			float result{};
-			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
 			return result;
 		}
 		static inline float B32F( uint8_t const * p_pSrc )
 		{
 			float result{};
-			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
 			return result;
 		}
 		static inline float A32F( uint8_t const * )
@@ -1457,15 +1457,15 @@ namespace Castor
 		}
 		static inline void R32F( uint8_t * p_pSrc, float p_val )
 		{
-			FloatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 0, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 0, p_val );
 		}
 		static inline void G32F( uint8_t * p_pSrc, float p_val )
 		{
-			FloatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 1, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 1, p_val );
 		}
 		static inline void B32F( uint8_t * p_pSrc, float p_val )
 		{
-			FloatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 2, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 2, p_val );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
@@ -1474,7 +1474,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGB16F32F
 	//!\~french		Spécialisation pour PixelFormat::eRGB16F32F
 	template<>
-	struct component< PixelFormat::eRGB16F32F >
+	struct PixelComponents< PixelFormat::eRGB16F32F >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1560,7 +1560,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGB32F
 	//!\~french		Spécialisation pour PixelFormat::eRGB32F
 	template<>
-	struct component< PixelFormat::eRGB32F >
+	struct PixelComponents< PixelFormat::eRGB32F >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1646,7 +1646,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGBA16F
 	//!\~french		Spécialisation pour PixelFormat::eRGBA16F
 	template<>
-	struct component< PixelFormat::eRGBA16F >
+	struct PixelComponents< PixelFormat::eRGBA16F >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1675,25 +1675,25 @@ namespace Castor
 		static inline float R32F( uint8_t const * p_pSrc )
 		{
 			float result{};
-			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
 			return result;
 		}
 		static inline float G32F( uint8_t const * p_pSrc )
 		{
 			float result{};
-			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
 			return result;
 		}
 		static inline float B32F( uint8_t const * p_pSrc )
 		{
 			float result{};
-			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
 			return result;
 		}
 		static inline float A32F( uint8_t const * p_pSrc )
 		{
 			float result{};
-			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 3 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 3 );
 			return result;
 		}
 		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
@@ -1724,25 +1724,25 @@ namespace Castor
 		}
 		static inline void R32F( uint8_t * p_pSrc, float p_val )
 		{
-			FloatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 0, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 0, p_val );
 		}
 		static inline void G32F( uint8_t * p_pSrc, float p_val )
 		{
-			FloatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 1, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 1, p_val );
 		}
 		static inline void B32F( uint8_t * p_pSrc, float p_val )
 		{
-			FloatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 2, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 2, p_val );
 		}
 		static inline void A32F( uint8_t * p_pSrc, float p_val )
 		{
-			FloatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 3, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 3, p_val );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eRGBA16F32F
 	//!\~french		Spécialisation pour PixelFormat::eRGBA16F32F
 	template<>
-	struct component< PixelFormat::eRGBA16F32F >
+	struct PixelComponents< PixelFormat::eRGBA16F32F >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1830,7 +1830,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGBA32F
 	//!\~french		Spécialisation pour PixelFormat::eRGBA32F
 	template<>
-	struct component< PixelFormat::eRGBA32F >
+	struct PixelComponents< PixelFormat::eRGBA32F >
 	{
 #define src	( reinterpret_cast< float const * >( p_pSrc ) )
 #define dst	( reinterpret_cast< float * >( p_pSrc ) )
@@ -1924,7 +1924,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eYUY2
 	//!\~french		Spécialisation pour PixelFormat::eYUY2
 	template<>
-	struct component< PixelFormat::eYUY2 >
+	struct PixelComponents< PixelFormat::eYUY2 >
 	{
 #	define YUV_Y(x)		(((x)[0] & 0xF0) & (((x)[1] & 0xF0) >> 2))
 #	define YUV_U(x)		((x)[0] & 0x0F)
@@ -1984,7 +1984,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD16
 	//!\~french		Spécialisation pour PixelFormat::eD16
 	template<>
-	struct component< PixelFormat::eD16 >
+	struct PixelComponents< PixelFormat::eD16 >
 	{
 #define src	( *reinterpret_cast< uint16_t const * >( p_pSrc ) )
 #define dst	( *reinterpret_cast< uint16_t * >( p_pSrc ) )
@@ -2136,7 +2136,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD24
 	//!\~french		Spécialisation pour PixelFormat::eD24
 	template<>
-	struct component< PixelFormat::eD24 >
+	struct PixelComponents< PixelFormat::eD24 >
 	{
 #define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
 #define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
@@ -2281,7 +2281,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD24S8
 	//!\~french		Spécialisation pour PixelFormat::eD24S8
 	template<>
-	struct component< PixelFormat::eD24S8 >
+	struct PixelComponents< PixelFormat::eD24S8 >
 	{
 #define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
 #define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
@@ -2440,7 +2440,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD32
 	//!\~french		Spécialisation pour PixelFormat::eD32
 	template<>
-	struct component< PixelFormat::eD32 >
+	struct PixelComponents< PixelFormat::eD32 >
 	{
 #define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
 #define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
@@ -2592,7 +2592,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD32F
 	//!\~french		Spécialisation pour PixelFormat::eD32F
 	template<>
-	struct component< PixelFormat::eD32F >
+	struct PixelComponents< PixelFormat::eD32F >
 	{
 #define src	( *reinterpret_cast< float const * >( p_pSrc ) )
 #define dst	( *reinterpret_cast< float * >( p_pSrc ) )
@@ -2744,7 +2744,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD32FS8
 	//!\~french		Spécialisation pour PixelFormat::eD32FS8
 	template<>
-	struct component< PixelFormat::eD32FS8 >
+	struct PixelComponents< PixelFormat::eD32FS8 >
 	{
 #define src	( *reinterpret_cast< float const * >( p_pSrc ) )
 #define dst	( *reinterpret_cast< float * >( p_pSrc ) )
@@ -2896,7 +2896,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eS8
 	//!\~french		Spécialisation pour PixelFormat::eS8
 	template<>
-	struct component< PixelFormat::eS8 >
+	struct PixelComponents< PixelFormat::eS8 >
 	{
 		static inline uint8_t	BIT( uint8_t const  p_bySrc )
 		{
@@ -3043,398 +3043,399 @@ namespace Castor
 		\~french
 		\brief		Structure utilisée pour convertir un pixel d'un format vers un autre
 		*/
-		template< PixelFormat PFSrc, PixelFormat PFDst, typename Enable = void > struct pixel_converter;
+		template< PixelFormat PFSrc, PixelFormat PFDst, typename Enable = void >
+		struct PixelConverter;
 		//!\~english	Specialisation when source and destination formats are the same
 		//!\~french		Spécialisation quand les formats source et destination sont identiques
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter< PFSrc, PFDst, typename std::enable_if< PFSrc == PFDst >::type >
+		struct PixelConverter< PFSrc, PFDst, typename std::enable_if< PFSrc == PFDst >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				std::memcpy( p_pDst, p_pSrc, pixel_definitions< PFSrc >::Size );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				std::memcpy( p_pDst, p_pSrc, PixelDefinitions< PFSrc >::Size );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eL8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eL8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::L8( p_pDst, component< PFSrc >::L8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::L8( p_pDst, PixelComponents< PFSrc >::L8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eL16F32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eL16F32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL16F32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL16F32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::L32F( p_pDst, component< PFSrc >::L32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::L32F( p_pDst, PixelComponents< PFSrc >::L32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eL32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eL32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::L32F( p_pDst, component< PFSrc >::L32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::L32F( p_pDst, PixelComponents< PFSrc >::L32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eA8L8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8L8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8L8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8L8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::L8( p_pDst, component< PFSrc >::L8( p_pSrc ) );
-				component< PFDst >::A8( p_pDst, component< PFSrc >::A8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::L8( p_pDst, PixelComponents< PFSrc >::L8( p_pSrc ) );
+				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eAL16F32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eAL16F32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eAL16F32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eAL16F32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::L32F( p_pDst, component< PFSrc >::L32F( p_pSrc ) );
-				component< PFDst >::A32F( p_pDst, component< PFSrc >::A32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::L32F( p_pDst, PixelComponents< PFSrc >::L32F( p_pSrc ) );
+				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eAL32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eAL32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eAL32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eAL32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::L32F( p_pDst, component< PFSrc >::L32F( p_pSrc ) );
-				component< PFDst >::A32F( p_pDst, component< PFSrc >::A32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::L32F( p_pDst, PixelComponents< PFSrc >::L32F( p_pSrc ) );
+				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eA1R5G5B5
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eA1R5G5B5
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA1R5G5B5 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA1R5G5B5 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::A8( p_pDst, component< PFSrc >::A8( p_pSrc ) );
-				component< PFDst >::R8( p_pDst, component< PFSrc >::R8( p_pSrc ) );
-				component< PFDst >::G8( p_pDst, component< PFSrc >::G8( p_pSrc ) );
-				component< PFDst >::B8( p_pDst, component< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eA4R4G4B4
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eA4R4G4B4
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA4R4G4B4 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA4R4G4B4 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::A8( p_pDst, component< PFSrc >::A8( p_pSrc ) );
-				component< PFDst >::R8( p_pDst, component< PFSrc >::R8( p_pSrc ) );
-				component< PFDst >::G8( p_pDst, component< PFSrc >::G8( p_pSrc ) );
-				component< PFDst >::B8( p_pDst, component< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eR5G6B5
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eR5G6B5
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR5G6B5 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR5G6B5 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::R8( p_pDst, component< PFSrc >::R8( p_pSrc ) );
-				component< PFDst >::G8( p_pDst, component< PFSrc >::G8( p_pSrc ) );
-				component< PFDst >::B8( p_pDst, component< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::R8( p_pDst, component< PFSrc >::R8( p_pSrc ) );
-				component< PFDst >::G8( p_pDst, component< PFSrc >::G8( p_pSrc ) );
-				component< PFDst >::B8( p_pDst, component< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eB8G8R8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::B8( p_pDst, component< PFSrc >::B8( p_pSrc ) );
-				component< PFDst >::G8( p_pDst, component< PFSrc >::G8( p_pSrc ) );
-				component< PFDst >::R8( p_pDst, component< PFSrc >::R8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8R8G8B8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8R8G8B8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::A8( p_pDst, component< PFSrc >::A8( p_pSrc ) );
-				component< PFDst >::R8( p_pDst, component< PFSrc >::R8( p_pSrc ) );
-				component< PFDst >::G8( p_pDst, component< PFSrc >::G8( p_pSrc ) );
-				component< PFDst >::B8( p_pDst, component< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::A8( p_pDst, component< PFSrc >::A8( p_pSrc ) );
-				component< PFDst >::B8( p_pDst, component< PFSrc >::B8( p_pSrc ) );
-				component< PFDst >::G8( p_pDst, component< PFSrc >::G8( p_pSrc ) );
-				component< PFDst >::R8( p_pDst, component< PFSrc >::R8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eRGB16F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGB16F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB16F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB16F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::R32F( p_pDst, component< PFSrc >::R32F( p_pSrc ) );
-				component< PFDst >::G32F( p_pDst, component< PFSrc >::G32F( p_pSrc ) );
-				component< PFDst >::B32F( p_pDst, component< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
+				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
+				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eRGB16F32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGB16F32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB16F32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB16F32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::R32F( p_pDst, component< PFSrc >::R32F( p_pSrc ) );
-				component< PFDst >::G32F( p_pDst, component< PFSrc >::G32F( p_pSrc ) );
-				component< PFDst >::B32F( p_pDst, component< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
+				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
+				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eRGB32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGB32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::R32F( p_pDst, component< PFSrc >::R32F( p_pSrc ) );
-				component< PFDst >::G32F( p_pDst, component< PFSrc >::G32F( p_pSrc ) );
-				component< PFDst >::B32F( p_pDst, component< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
+				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
+				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eRGBA16F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGBA16F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA16F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA16F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::A32F( p_pDst, component< PFSrc >::A32F( p_pSrc ) );
-				component< PFDst >::R32F( p_pDst, component< PFSrc >::R32F( p_pSrc ) );
-				component< PFDst >::G32F( p_pDst, component< PFSrc >::G32F( p_pSrc ) );
-				component< PFDst >::B32F( p_pDst, component< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
+				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
+				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
+				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eRGBA16F32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGBA16F32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA16F32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA16F32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::A32F( p_pDst, component< PFSrc >::A32F( p_pSrc ) );
-				component< PFDst >::R32F( p_pDst, component< PFSrc >::R32F( p_pSrc ) );
-				component< PFDst >::G32F( p_pDst, component< PFSrc >::G32F( p_pSrc ) );
-				component< PFDst >::B32F( p_pDst, component< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
+				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
+				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
+				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eRGBA32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGBA32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::A32F( p_pDst, component< PFSrc >::A32F( p_pSrc ) );
-				component< PFDst >::R32F( p_pDst, component< PFSrc >::R32F( p_pSrc ) );
-				component< PFDst >::G32F( p_pDst, component< PFSrc >::G32F( p_pSrc ) );
-				component< PFDst >::B32F( p_pDst, component< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
+				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
+				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
+				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eYUY2
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eYUY2
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eYUY2 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eYUY2 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				p_pDst[0] = ( ( ( ( ( 66 * component< PFSrc >::R8( p_pSrc ) + 129 * component< PFSrc >::G8( p_pSrc ) +  25 * component< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) +  16 ) & 0x0F ) << 4 ) | ( ( ( ( -38 * component< PFSrc >::R8( p_pSrc ) - 74 * component< PFSrc >::G8( p_pSrc ) + 112 * component< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) + 128 ) & 0x0F );
-				p_pDst[1] = ( ( ( ( ( 66 * component< PFSrc >::R8( p_pSrc ) + 129 * component< PFSrc >::G8( p_pSrc ) +  25 * component< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) +  16 ) & 0x0F ) << 4 ) | ( ( ( ( 112 * component< PFSrc >::R8( p_pSrc ) - 94 * component< PFSrc >::G8( p_pSrc ) -  18 * component< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) + 128 ) & 0x0F );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				p_pDst[0] = ( ( ( ( ( 66 * PixelComponents< PFSrc >::R8( p_pSrc ) + 129 * PixelComponents< PFSrc >::G8( p_pSrc ) +  25 * PixelComponents< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) +  16 ) & 0x0F ) << 4 ) | ( ( ( ( -38 * PixelComponents< PFSrc >::R8( p_pSrc ) - 74 * PixelComponents< PFSrc >::G8( p_pSrc ) + 112 * PixelComponents< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) + 128 ) & 0x0F );
+				p_pDst[1] = ( ( ( ( ( 66 * PixelComponents< PFSrc >::R8( p_pSrc ) + 129 * PixelComponents< PFSrc >::G8( p_pSrc ) +  25 * PixelComponents< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) +  16 ) & 0x0F ) << 4 ) | ( ( ( ( 112 * PixelComponents< PFSrc >::R8( p_pSrc ) - 94 * PixelComponents< PFSrc >::G8( p_pSrc ) -  18 * PixelComponents< PFSrc >::B8( p_pSrc ) + 128 ) >> 8 ) + 128 ) & 0x0F );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eD16
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eD16
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD16 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD16 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::D16( p_pDst, component< PFSrc >::D16( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::D16( p_pDst, PixelComponents< PFSrc >::D16( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eD24
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eD24
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD24 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD24 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::D24( p_pDst, component< PFSrc >::D24( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::D24( p_pDst, PixelComponents< PFSrc >::D24( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eD24S8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eD24S8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc != PixelFormat::eS1 && PFDst == PixelFormat::eD24S8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc != PixelFormat::eS1 && PFDst == PixelFormat::eD24S8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::D24( p_pDst, component< PFSrc >::D24( p_pSrc ) );
-				component< PFDst >::S8( p_pDst, component< PFSrc >::S8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::D24( p_pDst, PixelComponents< PFSrc >::D24( p_pSrc ) );
+				PixelComponents< PFDst >::S8( p_pDst, PixelComponents< PFSrc >::S8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eD32
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::D32( p_pDst, component< PFSrc >::D32( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::D32( p_pDst, PixelComponents< PFSrc >::D32( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eD32F
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32F
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32F >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::D32F( p_pDst, component< PFSrc >::D32F( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::D32F( p_pDst, PixelComponents< PFSrc >::D32F( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eD32FS8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32FS8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32FS8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32FS8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::D32F( p_pDst, component< PFSrc >::D32F( p_pSrc ) );
-				component< PFDst >::S8( p_pDst, component< PFSrc >::S8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::D32F( p_pDst, PixelComponents< PFSrc >::D32F( p_pSrc ) );
+				PixelComponents< PFDst >::S8( p_pDst, PixelComponents< PFSrc >::S8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eS1
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eS1
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eS1 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eS1 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				*p_pDst = component< PFSrc >::S1( p_pSrc );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				*p_pDst = PixelComponents< PFSrc >::S1( p_pSrc );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eS8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eS8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc != PixelFormat::eS1 && PFDst == PixelFormat::eS8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc != PixelFormat::eS1 && PFDst == PixelFormat::eS8 >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				component< PFDst >::S8( p_pDst, component< PFSrc >::S8( p_pSrc ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				PixelComponents< PFDst >::S8( p_pDst, PixelComponents< PFSrc >::S8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for convertions from PixelFormat::eS1 to PixelFormat::eS8
 		//!\~french		Spécialisation pour convertir de PixelFormat::eS1 vers PixelFormat::eS8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc == PixelFormat::eS1 && PFDst == PixelFormat::eS8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc == PixelFormat::eS1 && PFDst == PixelFormat::eS8 >::type >
 		{
 			inline uint8_t BIT( uint8_t const src, uint8_t uiIndex )
 			{
@@ -3451,14 +3452,14 @@ namespace Castor
 				p_pDst[5] = ( BIT( *p_pSrc, 5 ) << 0 ) | ( BIT( *p_pSrc, 5 ) << 1 ) | ( BIT( *p_pSrc, 5 ) << 2 ) | ( BIT( *p_pSrc, 5 ) << 3 ) | ( BIT( *p_pSrc, 5 ) << 4 ) | ( BIT( *p_pSrc, 5 ) << 5 ) | ( BIT( *p_pSrc, 5 ) << 6 ) | ( BIT( *p_pSrc, 5 ) << 7 );
 				p_pDst[6] = ( BIT( *p_pSrc, 6 ) << 0 ) | ( BIT( *p_pSrc, 6 ) << 1 ) | ( BIT( *p_pSrc, 6 ) << 2 ) | ( BIT( *p_pSrc, 6 ) << 3 ) | ( BIT( *p_pSrc, 6 ) << 4 ) | ( BIT( *p_pSrc, 6 ) << 5 ) | ( BIT( *p_pSrc, 6 ) << 6 ) | ( BIT( *p_pSrc, 6 ) << 7 );
 				p_pDst[7] = ( BIT( *p_pSrc, 7 ) << 0 ) | ( BIT( *p_pSrc, 7 ) << 1 ) | ( BIT( *p_pSrc, 7 ) << 2 ) | ( BIT( *p_pSrc, 7 ) << 3 ) | ( BIT( *p_pSrc, 7 ) << 4 ) | ( BIT( *p_pSrc, 7 ) << 5 ) | ( BIT( *p_pSrc, 7 ) << 6 ) | ( BIT( *p_pSrc, 7 ) << 7 );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for convertions from PixelFormat::eS1 to PixelFormat::eD24S8
 		//!\~french		Spécialisation pour convertir de PixelFormat::eS1 vers PixelFormat::eD24S8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct pixel_converter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc == PixelFormat::eS1 && PFDst == PixelFormat::eD24S8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFSrc == PixelFormat::eS1 && PFDst == PixelFormat::eD24S8 >::type >
 		{
 			inline uint8_t BIT( uint8_t const src, uint8_t uiIndex )
 			{
@@ -3476,8 +3477,8 @@ namespace Castor
 				pDst[5] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 5 ) << 0 ) | ( BIT( *p_pSrc, 5 ) << 1 ) | ( BIT( *p_pSrc, 5 ) << 2 ) | ( BIT( *p_pSrc, 5 ) << 3 ) | ( BIT( *p_pSrc, 5 ) << 4 ) | ( BIT( *p_pSrc, 5 ) << 5 ) | ( BIT( *p_pSrc, 5 ) << 6 ) | ( BIT( *p_pSrc, 5 ) << 7 ) );
 				pDst[6] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 6 ) << 0 ) | ( BIT( *p_pSrc, 6 ) << 1 ) | ( BIT( *p_pSrc, 6 ) << 2 ) | ( BIT( *p_pSrc, 6 ) << 3 ) | ( BIT( *p_pSrc, 6 ) << 4 ) | ( BIT( *p_pSrc, 6 ) << 5 ) | ( BIT( *p_pSrc, 6 ) << 6 ) | ( BIT( *p_pSrc, 6 ) << 7 ) );
 				pDst[7] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 7 ) << 0 ) | ( BIT( *p_pSrc, 7 ) << 1 ) | ( BIT( *p_pSrc, 7 ) << 2 ) | ( BIT( *p_pSrc, 7 ) << 3 ) | ( BIT( *p_pSrc, 7 ) << 4 ) | ( BIT( *p_pSrc, 7 ) << 5 ) | ( BIT( *p_pSrc, 7 ) << 6 ) | ( BIT( *p_pSrc, 7 ) << 7 ) );
-				p_pSrc += pixel_definitions< PFSrc >::Size;
-				p_pDst += pixel_definitions< PFDst >::Size;
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		/*!
@@ -3489,16 +3490,16 @@ namespace Castor
 		\brief		Structure utilisée pour convertir un buffer d'un format de pixels vers un autre
 		*/
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct buffer_converter
+		struct BufferConverter
 		{
 			inline void operator()( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
 			{
 				uint8_t const * pSrc = &p_pSrcBuffer[0];
 				uint8_t * pDst = &p_pDstBuffer[0];
 				uint32_t uiSrcCount = 0;
-				uint32_t count = p_uiSrcSize / pixel_definitions< PFSrc >::Size;
-				REQUIRE( p_uiSrcSize / pixel_definitions< PFSrc >::Size == p_uiDstSize / pixel_definitions< PFDst >::Size );
-				pixel_converter< PFSrc, PFDst > converter;
+				uint32_t count = p_uiSrcSize / PixelDefinitions< PFSrc >::Size;
+				REQUIRE( p_uiSrcSize / PixelDefinitions< PFSrc >::Size == p_uiDstSize / PixelDefinitions< PFDst >::Size );
+				PixelConverter< PFSrc, PFDst > converter;
 
 				for ( uint32_t i = 0; i < count; i++ )
 				{
@@ -3518,7 +3519,7 @@ namespace Castor
 		\brief		Spécialisation pour la conversion YUY2 vers A8R8G8B8
 		*/
 		template<>
-		struct buffer_converter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >
+		struct BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >
 		{
 			static const __m128i amask;
 			static const __m128i umask;
@@ -3610,7 +3611,7 @@ namespace Castor
 		\brief		Spécialisation pour la conversion YUY2 vers R8G8B8
 		*/
 		template<>
-		struct buffer_converter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >
+		struct BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >
 		{
 			static const __m128i umask;
 			static const __m128i vmask;
@@ -3728,88 +3729,88 @@ namespace Castor
 		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
 		 */
 		template< PixelFormat PF >
-		void DynamicColourConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		void dynamicColourConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
 			switch ( p_ePixelFmtDst )
 			{
 			case PixelFormat::eL8:
-				pixel_converter< PF, PixelFormat::eL8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eL8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eL16F32F:
-				pixel_converter< PF, PixelFormat::eL16F32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eL16F32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eL32F:
-				pixel_converter< PF, PixelFormat::eL32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eL32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eA8L8:
-				pixel_converter< PF, PixelFormat::eA8L8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eA8L8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eAL16F32F:
-				pixel_converter< PF, PixelFormat::eAL16F32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eAL16F32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eAL32F:
-				pixel_converter< PF, PixelFormat::eAL32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eAL32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eA1R5G5B5:
-				pixel_converter< PF, PixelFormat::eA1R5G5B5 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eA1R5G5B5 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eA4R4G4B4:
-				pixel_converter< PF, PixelFormat::eA4R4G4B4 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eA4R4G4B4 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eR5G6B5:
-				pixel_converter< PF, PixelFormat::eR5G6B5 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eR5G6B5 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eR8G8B8:
-				pixel_converter< PF, PixelFormat::eR8G8B8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eR8G8B8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eB8G8R8:
-				pixel_converter< PF, PixelFormat::eB8G8R8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eB8G8R8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eA8R8G8B8:
-				pixel_converter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eA8B8G8R8:
-				pixel_converter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eRGB16F:
-				pixel_converter< PF, PixelFormat::eRGB16F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eRGB16F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eRGBA16F:
-				pixel_converter< PF, PixelFormat::eRGBA16F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eRGBA16F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eRGB16F32F:
-				pixel_converter< PF, PixelFormat::eRGB16F32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eRGB16F32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eRGBA16F32F:
-				pixel_converter< PF, PixelFormat::eRGBA16F32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eRGBA16F32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eRGB32F:
-				pixel_converter< PF, PixelFormat::eRGB32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eRGB32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eRGBA32F:
-				pixel_converter< PF, PixelFormat::eRGBA32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eRGBA32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eYUY2:
-				pixel_converter< PF, PixelFormat::eYUY2 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eYUY2 >()( p_pSrc, p_pDst );
 				break;
 
 			default:
@@ -3832,32 +3833,32 @@ namespace Castor
 		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
 		 */
 		template< PixelFormat PF >
-		void DynamicDepthConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		void dynamicDepthConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
 			switch ( p_ePixelFmtDst )
 			{
 			case PixelFormat::eD16:
-				pixel_converter< PF, PixelFormat::eD16 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eD16 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eD24:
-				pixel_converter< PF, PixelFormat::eD24 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eD24 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eD24S8:
-				pixel_converter< PF, PixelFormat::eD24S8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eD24S8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eD32:
-				pixel_converter< PF, PixelFormat::eD32 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eD32 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eD32F:
-				pixel_converter< PF, PixelFormat::eD32F >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eD32F >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eD32FS8:
-				pixel_converter< PF, PixelFormat::eD32FS8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eD32FS8 >()( p_pSrc, p_pDst );
 				break;
 
 			default:
@@ -3880,20 +3881,20 @@ namespace Castor
 		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
 		 */
 		template< PixelFormat PF >
-		void DynamicStencilConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		void dynamicStencilConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
 			switch ( p_ePixelFmtDst )
 			{
 			case PixelFormat::eD24S8:
-				pixel_converter< PF, PixelFormat::eD24S8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eD24S8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eS1:
-				pixel_converter< PF, PixelFormat::eS1 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eS1 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eS8:
-				pixel_converter< PF, PixelFormat::eS8 >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eS8 >()( p_pSrc, p_pDst );
 				break;
 
 			default:
@@ -3918,88 +3919,88 @@ namespace Castor
 		 *\param[in]	p_uiDstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void DynamicColourBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
+		void dynamicColourBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
 		{
 			switch ( p_eDstFormat )
 			{
 			case PixelFormat::eL8:
-				buffer_converter< PF, PixelFormat::eL8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eL8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eL16F32F:
-				buffer_converter< PF, PixelFormat::eL16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eL16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eL32F:
-				buffer_converter< PF, PixelFormat::eL32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eL32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA8L8:
-				buffer_converter< PF, PixelFormat::eA8L8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eA8L8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eAL16F32F:
-				buffer_converter< PF, PixelFormat::eAL16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eAL16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eAL32F:
-				buffer_converter< PF, PixelFormat::eAL32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eAL32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA1R5G5B5:
-				buffer_converter< PF, PixelFormat::eA1R5G5B5 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eA1R5G5B5 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA4R4G4B4:
-				buffer_converter< PF, PixelFormat::eA4R4G4B4 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eA4R4G4B4 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eR5G6B5:
-				buffer_converter< PF, PixelFormat::eR5G6B5 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eR5G6B5 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eR8G8B8:
-				buffer_converter< PF, PixelFormat::eR8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eR8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eB8G8R8:
-				buffer_converter< PF, PixelFormat::eB8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eB8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA8R8G8B8:
-				buffer_converter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA8B8G8R8:
-				buffer_converter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGB16F:
-				buffer_converter< PF, PixelFormat::eRGB16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eRGB16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGBA16F:
-				buffer_converter< PF, PixelFormat::eRGBA16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eRGBA16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGB16F32F:
-				buffer_converter< PF, PixelFormat::eRGB16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eRGB16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGBA16F32F:
-				buffer_converter< PF, PixelFormat::eRGBA16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eRGBA16F32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGB32F:
-				buffer_converter< PF, PixelFormat::eRGB32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eRGB32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGBA32F:
-				buffer_converter< PF, PixelFormat::eRGBA32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eRGBA32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eYUY2:
-				buffer_converter< PF, PixelFormat::eYUY2 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eYUY2 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			default:
@@ -4024,44 +4025,44 @@ namespace Castor
 		 *\param[in]	p_uiDstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void DynamicDepthBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
+		void dynamicDepthBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
 		{
 			switch ( p_eDstFormat )
 			{
 			case PixelFormat::eD16:
-				buffer_converter< PF, PixelFormat::eD16 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eD16 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eD24:
-				buffer_converter< PF, PixelFormat::eD24 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eD24 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eD24S8:
-				buffer_converter< PF, PixelFormat::eD24S8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eD24S8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eD32:
-				buffer_converter< PF, PixelFormat::eD32 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eD32 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eD32F:
-				buffer_converter< PF, PixelFormat::eD32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eD32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eD32FS8:
-				buffer_converter< PF, PixelFormat::eD32FS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eD32FS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA8R8G8B8:
-				buffer_converter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGB32F:
-				buffer_converter< PF, PixelFormat::eRGB32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eRGB32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eL8:
-				buffer_converter< PF, PixelFormat::eL8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eL8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			default:
@@ -4086,20 +4087,20 @@ namespace Castor
 		 *\param[in]	p_uiDstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void DynamicStencilBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
+		void dynamicStencilBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
 		{
 			switch ( p_eDstFormat )
 			{
 			case PixelFormat::eD24S8:
-				buffer_converter< PF, PixelFormat::eD24S8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eD24S8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eS1:
-				buffer_converter< PF, PixelFormat::eS1 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eS1 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eS8:
-				buffer_converter< PF, PixelFormat::eS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			default:
@@ -4115,35 +4116,35 @@ namespace Castor
 	{
 		namespace
 		{
-			template< PixelFormat PF, typename Enable = void > struct PixelComponents;
+			template< PixelFormat PF, typename Enable = void > struct PixelComponentTraits;
 
 			template< PixelFormat PF >
-			struct PixelComponents< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
+			struct PixelComponentTraits< PF, typename std::enable_if< IsColourFormat< PF >::value >::type >
 			{
-				static float GetFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static float getFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
 					float result = 0.0f;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eRed:
-						result = component< PF >::R32F( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::R32F( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eGreen:
-						result = component< PF >::G32F( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::G32F( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eBlue:
-						result = component< PF >::B32F( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::B32F( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eAlpha:
-						result = component< PF >::A32F( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::A32F( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eLuminance:
-						result = component< PF >::L32F( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::L32F( p_pixel.constPtr() );
 						break;
 
 					default:
@@ -4154,28 +4155,28 @@ namespace Castor
 					return result;
 				}
 
-				static void SetFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
+				static void setFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
 				{
 					switch ( p_component )
 					{
 					case PixelComponent::eRed:
-						component< PF >::R8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::R8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eGreen:
-						component< PF >::G8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::G8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eBlue:
-						component< PF >::B8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::B8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eAlpha:
-						component< PF >::A8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::A8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eLuminance:
-						component< PF >::L8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::L8( p_pixel.ptr(), p_value );
 						break;
 
 					default:
@@ -4183,30 +4184,30 @@ namespace Castor
 					}
 				}
 
-				static uint8_t GetByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint8_t getByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
 					uint8_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eRed:
-						result = component< PF >::R8( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::R8( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eGreen:
-						result = component< PF >::G8( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::G8( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eBlue:
-						result = component< PF >::B8( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::B8( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eAlpha:
-						result = component< PF >::A8( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::A8( p_pixel.constPtr() );
 						break;
 
 					case PixelComponent::eLuminance:
-						result = component< PF >::L8( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::L8( p_pixel.constPtr() );
 						break;
 
 					default:
@@ -4217,28 +4218,28 @@ namespace Castor
 					return result;
 				}
 
-				static void SetByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
+				static void setByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
 				{
 					switch ( p_component )
 					{
 					case PixelComponent::eRed:
-						component< PF >::R8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::R8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eGreen:
-						component< PF >::G8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::G8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eBlue:
-						component< PF >::B8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::B8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eAlpha:
-						component< PF >::A8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::A8( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eLuminance:
-						component< PF >::L8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::L8( p_pixel.ptr(), p_value );
 						break;
 
 					default:
@@ -4248,20 +4249,20 @@ namespace Castor
 			};
 
 			template< PixelFormat PF >
-			struct PixelComponents< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
+			struct PixelComponentTraits< PF, typename std::enable_if< IsDepthStencilFormat< PF >::value >::type >
 			{
-				static float GetFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static float getFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
 					float result = 0.0f;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						result = float( component< PF >::D32F( p_pixel.const_ptr() ) );
+						result = float( PixelComponents< PF >::D32F( p_pixel.constPtr() ) );
 						break;
 
 					case PixelComponent::eStencil:
-						result = float( component< PF >::S32F( p_pixel.const_ptr() ) );
+						result = float( PixelComponents< PF >::S32F( p_pixel.constPtr() ) );
 						break;
 
 					default:
@@ -4272,16 +4273,16 @@ namespace Castor
 					return result;
 				}
 
-				static void SetFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
+				static void setFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
 				{
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						component< PF >::D32F( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D32F( p_pixel.ptr(), p_value );
 						break;
 
 					case PixelComponent::eStencil:
-						component< PF >::S32F( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::S32F( p_pixel.ptr(), p_value );
 						break;
 
 					default:
@@ -4289,18 +4290,18 @@ namespace Castor
 					}
 				}
 
-				static uint8_t GetByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint8_t getByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
 					uint8_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						result = uint8_t( component< PF >::D32( p_pixel.const_ptr() ) >> 24 );
+						result = uint8_t( PixelComponents< PF >::D32( p_pixel.constPtr() ) >> 24 );
 						break;
 
 					case PixelComponent::eStencil:
-						result = uint8_t( component< PF >::S8( p_pixel.const_ptr() ) );
+						result = uint8_t( PixelComponents< PF >::S8( p_pixel.constPtr() ) );
 						break;
 
 					default:
@@ -4311,16 +4312,16 @@ namespace Castor
 					return result;
 				}
 
-				static void SetByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
+				static void setByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
 				{
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						component< PF >::D32( p_pixel.ptr(), uint32_t( p_value ) << 24 );
+						PixelComponents< PF >::D32( p_pixel.ptr(), uint32_t( p_value ) << 24 );
 						break;
 
 					case PixelComponent::eStencil:
-						component< PF >::S8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::S8( p_pixel.ptr(), p_value );
 						break;
 
 					default:
@@ -4328,14 +4329,14 @@ namespace Castor
 					}
 				}
 
-				static uint16_t GetUInt16( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint16_t getUInt16( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
 					uint32_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						result = component< PF >::D16( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::D16( p_pixel.constPtr() );
 						break;
 
 					default:
@@ -4346,12 +4347,12 @@ namespace Castor
 					return result;
 				}
 
-				static void SetUInt16( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value )
+				static void setUInt16( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value )
 				{
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						component< PF >::D16( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D16( p_pixel.ptr(), p_value );
 						break;
 
 					default:
@@ -4359,14 +4360,14 @@ namespace Castor
 					}
 				}
 
-				static uint32_t GetUInt24( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint32_t getUInt24( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
 					uint32_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						result = component< PF >::D24( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::D24( p_pixel.constPtr() );
 						break;
 
 					default:
@@ -4377,12 +4378,12 @@ namespace Castor
 					return result;
 				}
 
-				static void SetUInt24( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+				static void setUInt24( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
 				{
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						component< PF >::D24( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D24( p_pixel.ptr(), p_value );
 						break;
 
 					default:
@@ -4390,14 +4391,14 @@ namespace Castor
 					}
 				}
 
-				static uint32_t GetUInt32( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint32_t getUInt32( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
 					uint32_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						result = component< PF >::D32( p_pixel.const_ptr() );
+						result = PixelComponents< PF >::D32( p_pixel.constPtr() );
 						break;
 
 					default:
@@ -4408,12 +4409,12 @@ namespace Castor
 					return result;
 				}
 
-				static void SetUInt32( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+				static void setUInt32( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
 				{
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						component< PF >::D32( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D32( p_pixel.ptr(), p_value );
 						break;
 
 					default:
@@ -4424,63 +4425,63 @@ namespace Castor
 		}
 
 		template< PixelFormat PF >
-		float GetFloatComponent( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		float getFloatComponent( Pixel< PF > const & p_pixel, PixelComponent p_component )
 		{
-			return PixelComponents< PF >::GetFloat( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getFloat( p_pixel, p_component );
 		}
 
 		template< PixelFormat PF >
-		void SetFloatComponent( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
+		void setFloatComponent( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
 		{
-			return PixelComponents< PF >::SetFloat( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setFloat( p_pixel, p_component, p_value );
 		}
 
 		template< PixelFormat PF >
-		uint8_t GetByteComponent( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint8_t getByteComponent( Pixel< PF > const & p_pixel, PixelComponent p_component )
 		{
-			return PixelComponents< PF >::GetByte( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getByte( p_pixel, p_component );
 		}
 
 		template< PixelFormat PF >
-		void SetByteComponent( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
+		void setByteComponent( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
 		{
-			return PixelComponents< PF >::SetByte( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setByte( p_pixel, p_component, p_value );
 		}
 
 		template< PixelFormat PF >
-		uint16_t GetUInt16Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint16_t getUInt16Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
 		{
-			return PixelComponents< PF >::GetUInt16( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getUInt16( p_pixel, p_component );
 		}
 
 		template< PixelFormat PF >
-		void SetUInt16Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value )
+		void setUInt16Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value )
 		{
-			return PixelComponents< PF >::SetUInt16( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setUInt16( p_pixel, p_component, p_value );
 		}
 
 		template< PixelFormat PF >
-		uint32_t GetUInt24Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint32_t getUInt24Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
 		{
-			return PixelComponents< PF >::GetUInt24( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getUInt24( p_pixel, p_component );
 		}
 
 		template< PixelFormat PF >
-		void SetUInt24Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+		void setUInt24Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
 		{
-			return PixelComponents< PF >::SetUInt24( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setUInt24( p_pixel, p_component, p_value );
 		}
 
 		template< PixelFormat PF >
-		uint32_t GetUInt32Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint32_t getUInt32Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
 		{
-			return PixelComponents< PF >::GetUInt32( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getUInt32( p_pixel, p_component );
 		}
 
 		template< PixelFormat PF >
-		void SetUInt32Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+		void setUInt32Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
 		{
-			return PixelComponents< PF >::SetUInt32( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setUInt32( p_pixel, p_component, p_value );
 		}
 	}
 
@@ -4489,7 +4490,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eL8
 	//!\~french		Spécialisation pour PixelFormat::eL8
 	template<>
-	struct pixel_definitions< PixelFormat::eL8 >
+	struct PixelDefinitions< PixelFormat::eL8 >
 	{
 		static const uint8_t Size = 1;
 		static const uint8_t Count = 1;
@@ -4498,25 +4499,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "8 bits luminosity" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "l8" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eL8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eL8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eL8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eL8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eL8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eL8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4525,7 +4526,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eL16F32F
 	//!\~french		Spécialisation pour PixelFormat::eL16F32F
 	template<>
-	struct pixel_definitions< PixelFormat::eL16F32F >
+	struct PixelDefinitions< PixelFormat::eL16F32F >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 2;
@@ -4534,25 +4535,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Half floats luminosity" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "l16f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eL16F32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eL16F32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eL16F32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eL16F32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eL16F32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eL16F32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4561,7 +4562,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eL32F
 	//!\~french		Spécialisation pour PixelFormat::eL32F
 	template<>
-	struct pixel_definitions< PixelFormat::eL32F >
+	struct PixelDefinitions< PixelFormat::eL32F >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 1;
@@ -4570,25 +4571,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Floats luminosity" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "l32f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eL32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eL32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eL32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eL32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eL32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eL32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4597,7 +4598,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA8L8
 	//!\~french		Spécialisation pour PixelFormat::eA8L8
 	template<>
-	struct pixel_definitions< PixelFormat::eA8L8 >
+	struct PixelDefinitions< PixelFormat::eA8L8 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 2;
@@ -4607,25 +4608,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eL8;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "16 bits luminosity and alpha" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "al16" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eA8L8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eA8L8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eA8L8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eA8L8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eA8L8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eA8L8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4634,7 +4635,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eAL32F
 	//!\~french		Spécialisation pour PixelFormat::eAL32F
 	template<>
-	struct pixel_definitions< PixelFormat::eAL32F >
+	struct PixelDefinitions< PixelFormat::eAL32F >
 	{
 		static const uint8_t Size = 8;
 		static const uint8_t Count = 2;
@@ -4644,25 +4645,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eL32F;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Floats luminosity and alpha" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "al32f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eAL32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eAL32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eAL32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eAL32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eAL32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eAL32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4671,7 +4672,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eAL16F32F
 	//!\~french		Spécialisation pour PixelFormat::eAL16F32F
 	template<>
-	struct pixel_definitions< PixelFormat::eAL16F32F >
+	struct PixelDefinitions< PixelFormat::eAL16F32F >
 	{
 		static const uint8_t Size = 8;
 		static const uint8_t Count = 2;
@@ -4681,25 +4682,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eL16F32F;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Half floats luminosity and alpha" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "al16f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eAL16F32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eAL16F32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eAL16F32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eAL16F32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eAL16F32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eAL16F32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4708,7 +4709,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA1R5G5B5
 	//!\~french		Spécialisation pour PixelFormat::eA1R5G5B5
 	template<>
-	struct pixel_definitions< PixelFormat::eA1R5G5B5 >
+	struct PixelDefinitions< PixelFormat::eA1R5G5B5 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 4;
@@ -4718,25 +4719,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eR5G6B5;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "16 bits 5551 ARGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "argb1555" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eA1R5G5B5 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eA1R5G5B5 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eA1R5G5B5 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eA1R5G5B5 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eA1R5G5B5, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eA1R5G5B5, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4745,7 +4746,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eR5G6B5
 	//!\~french		Spécialisation pour PixelFormat::eR5G6B5
 	template<>
-	struct pixel_definitions< PixelFormat::eR5G6B5 >
+	struct PixelDefinitions< PixelFormat::eR5G6B5 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 3;
@@ -4754,25 +4755,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "16 bits 565 RGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "rgb565" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eR5G6B5 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR5G6B5 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eR5G6B5 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR5G6B5 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eR5G6B5, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR5G6B5, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4781,7 +4782,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA4R4G4B4
 	//!\~french		Spécialisation pour PixelFormat::eA4R4G4B4
 	template<>
-	struct pixel_definitions< PixelFormat::eA4R4G4B4 >
+	struct PixelDefinitions< PixelFormat::eA4R4G4B4 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 4;
@@ -4791,25 +4792,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eR5G6B5;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "16 bits 4444 ARGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "argb16" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eA4R4G4B4 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eA4R4G4B4 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eA4R4G4B4 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eA4R4G4B4 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eA4R4G4B4, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eA4R4G4B4, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4818,7 +4819,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eR8G8B8
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8
 	template<>
-	struct pixel_definitions< PixelFormat::eR8G8B8 >
+	struct PixelDefinitions< PixelFormat::eR8G8B8 >
 	{
 		static const uint8_t Size = 3;
 		static const uint8_t Count = 3;
@@ -4827,25 +4828,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "24 bits 888 RGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "rgb24" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eR8G8B8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR8G8B8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eR8G8B8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eR8G8B8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR8G8B8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4854,7 +4855,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eB8G8R8
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8
 	template<>
-	struct pixel_definitions< PixelFormat::eB8G8R8 >
+	struct PixelDefinitions< PixelFormat::eB8G8R8 >
 	{
 		static const uint8_t Size = 3;
 		static const uint8_t Count = 3;
@@ -4863,25 +4864,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "24 bits 888 BGR" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "bgr24" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eB8G8R8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eB8G8R8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eB8G8R8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eB8G8R8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eB8G8R8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eB8G8R8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4890,7 +4891,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA8R8G8B8
 	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8
 	template<>
-	struct pixel_definitions< PixelFormat::eA8R8G8B8 >
+	struct PixelDefinitions< PixelFormat::eA8R8G8B8 >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 4;
@@ -4900,25 +4901,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eR8G8B8;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "32 bits 8888 ARGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "argb32" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eA8R8G8B8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eA8R8G8B8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eA8R8G8B8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eA8R8G8B8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eA8R8G8B8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eA8R8G8B8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4927,7 +4928,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8
 	template<>
-	struct pixel_definitions< PixelFormat::eA8B8G8R8 >
+	struct PixelDefinitions< PixelFormat::eA8B8G8R8 >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 4;
@@ -4937,25 +4938,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eB8G8R8;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "32 bits 8888 ABGR" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "abgr32" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eA8B8G8R8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eA8B8G8R8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eA8B8G8R8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eA8B8G8R8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eA8B8G8R8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -4964,7 +4965,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGB16F
 	//!\~french		Spécialisation pour PixelFormat::eRGB16F
 	template<>
-	struct pixel_definitions< PixelFormat::eRGB16F >
+	struct PixelDefinitions< PixelFormat::eRGB16F >
 	{
 		static const uint8_t Size = 6;
 		static const uint8_t Count = 3;
@@ -4973,25 +4974,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Half floating point RGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "rgb16f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eRGB16F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eRGB16F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eRGB16F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eRGB16F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eRGB16F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eRGB16F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5000,7 +5001,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGBA16F
 	//!\~french		Spécialisation pour PixelFormat::eRGBA16F
 	template<>
-	struct pixel_definitions< PixelFormat::eRGBA16F >
+	struct PixelDefinitions< PixelFormat::eRGBA16F >
 	{
 		static const uint8_t Size = 8;
 		static const uint8_t Count = 4;
@@ -5010,25 +5011,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eRGB16F;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Half floating point ARGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "argb16f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eRGBA16F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eRGBA16F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eRGBA16F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eRGBA16F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eRGBA16F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eRGBA16F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5037,7 +5038,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGB16F32F
 	//!\~french		Spécialisation pour PixelFormat::eRGB16F32F
 	template<>
-	struct pixel_definitions< PixelFormat::eRGB16F32F >
+	struct PixelDefinitions< PixelFormat::eRGB16F32F >
 	{
 		static const uint8_t Size = 12;
 		static const uint8_t Count = 3;
@@ -5046,25 +5047,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "GPU half floating point RGB, CPU floating point RGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "rgb16f32f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eRGB32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eRGB32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eRGB32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eRGB32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eRGB32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eRGB32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5073,7 +5074,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGBA16F32F
 	//!\~french		Spécialisation pour PixelFormat::eRGBA16F32F
 	template<>
-	struct pixel_definitions< PixelFormat::eRGBA16F32F >
+	struct PixelDefinitions< PixelFormat::eRGBA16F32F >
 	{
 		static const uint8_t Size = 16;
 		static const uint8_t Count = 4;
@@ -5083,25 +5084,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eRGB16F32F;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "GPU half floating point ARGB, CPU floating point ARGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "argb16f32f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eRGBA32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eRGBA32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eRGBA32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eRGBA32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eRGBA32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eRGBA32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5110,7 +5111,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGB32F
 	//!\~french		Spécialisation pour PixelFormat::eRGB32F
 	template<>
-	struct pixel_definitions< PixelFormat::eRGB32F >
+	struct PixelDefinitions< PixelFormat::eRGB32F >
 	{
 		static const uint8_t Size = 12;
 		static const uint8_t Count = 3;
@@ -5119,25 +5120,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Floating point RGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "rgb32f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eRGB32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eRGB32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eRGB32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eRGB32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eRGB32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eRGB32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5146,7 +5147,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eRGBA32F
 	//!\~french		Spécialisation pour PixelFormat::eRGBA32F
 	template<>
-	struct pixel_definitions< PixelFormat::eRGBA32F >
+	struct PixelDefinitions< PixelFormat::eRGBA32F >
 	{
 		static const uint8_t Size = 16;
 		static const uint8_t Count = 4;
@@ -5156,25 +5157,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = false;
 		static const PixelFormat NoAlphaPF = PixelFormat::eRGB32F;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "Floating point ARGB" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "argb32f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eRGBA32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eRGBA32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eRGBA32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eRGBA32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eRGBA32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eRGBA32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5183,7 +5184,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eDXTC1
 	//!\~french		Spécialisation pour PixelFormat::eDXTC1
 	template<>
-	struct pixel_definitions< PixelFormat::eDXTC1 >
+	struct PixelDefinitions< PixelFormat::eDXTC1 >
 	{
 		static const uint8_t Size = 1;
 		static const uint8_t Count = 3;
@@ -5192,25 +5193,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = true;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "DXT1 8 bits compressed format" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "dxtc1" );
 		}
 		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eDXTC1, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eDXTC1, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5219,7 +5220,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eDXTC3
 	//!\~french		Spécialisation pour PixelFormat::eDXTC3
 	template<>
-	struct pixel_definitions< PixelFormat::eDXTC3 >
+	struct PixelDefinitions< PixelFormat::eDXTC3 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 4;
@@ -5229,25 +5230,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = true;
 		static const PixelFormat NoAlphaPF = PixelFormat::eDXTC3;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "DXT3 16 bits compressed format" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "dxtc3" );
 		}
 		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eDXTC3, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eDXTC3, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5256,7 +5257,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eDXTC5
 	//!\~french		Spécialisation pour PixelFormat::eDXTC5
 	template<>
-	struct pixel_definitions< PixelFormat::eDXTC5 >
+	struct PixelDefinitions< PixelFormat::eDXTC5 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 4;
@@ -5266,25 +5267,25 @@ namespace Castor
 		static const bool Stencil = false;
 		static const bool Compressed = true;
 		static const PixelFormat NoAlphaPF = PixelFormat::eDXTC5;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "DXT5 16 bits compressed format" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "dxtc5" );
 		}
 		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eDXTC5, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eDXTC5, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5293,7 +5294,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eYUY2
 	//!\~french		Spécialisation pour PixelFormat::eYUY2
 	template<>
-	struct pixel_definitions< PixelFormat::eYUY2 >
+	struct PixelDefinitions< PixelFormat::eYUY2 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 3;
@@ -5302,25 +5303,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = true;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "YUY2(4:2:2) 16 bits compressed format" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "yuy2" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicColourConversion< PixelFormat::eYUY2 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eYUY2 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicColourBufferConversion< PixelFormat::eYUY2 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eYUY2 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eYUY2, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eYUY2, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5329,7 +5330,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD16
 	//!\~french		Spécialisation pour PixelFormat::eD16
 	template<>
-	struct pixel_definitions< PixelFormat::eD16 >
+	struct PixelDefinitions< PixelFormat::eD16 >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 1;
@@ -5338,25 +5339,25 @@ namespace Castor
 		static const bool Depth = true;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "16 bits depth" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "depth16" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicDepthConversion< PixelFormat::eD16 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD16 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicDepthBufferConversion< PixelFormat::eD16 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD16 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eD16, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD16, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5365,7 +5366,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD24
 	//!\~french		Spécialisation pour PixelFormat::eD24
 	template<>
-	struct pixel_definitions< PixelFormat::eD24 >
+	struct PixelDefinitions< PixelFormat::eD24 >
 	{
 		static const uint8_t Size = 3;
 		static const uint8_t Count = 1;
@@ -5374,25 +5375,25 @@ namespace Castor
 		static const bool Depth = true;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "24 bits depth" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "depth24" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicDepthConversion< PixelFormat::eD24 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD24 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicDepthBufferConversion< PixelFormat::eD24 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD24 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eD24, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD24, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5401,7 +5402,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD24S8
 	//!\~french		Spécialisation pour PixelFormat::eD24S8
 	template<>
-	struct pixel_definitions< PixelFormat::eD24S8 >
+	struct PixelDefinitions< PixelFormat::eD24S8 >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 2;
@@ -5410,32 +5411,32 @@ namespace Castor
 		static const bool Depth = true;
 		static const bool Stencil = true;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "24 bits depth, 8 bits stencil" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "depth24s8" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicDepthConversion< PixelFormat::eD24S8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD24S8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
 			if ( p_eDstFormat == PixelFormat::eS8 || p_eDstFormat == PixelFormat::eS1 )
 			{
-				detail::DynamicStencilBufferConversion< PixelFormat::eD24S8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				detail::dynamicStencilBufferConversion< PixelFormat::eD24S8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 			}
 			else
 			{
-				detail::DynamicDepthBufferConversion< PixelFormat::eD24S8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				detail::dynamicDepthBufferConversion< PixelFormat::eD24S8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 			}
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter<PixelFormat::eD24S8, PF>()( p_pSrc, p_pDst );
+			detail::PixelConverter<PixelFormat::eD24S8, PF>()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5444,7 +5445,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD32
 	//!\~french		Spécialisation pour PixelFormat::eD32
 	template<>
-	struct pixel_definitions< PixelFormat::eD32 >
+	struct PixelDefinitions< PixelFormat::eD32 >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 1;
@@ -5453,25 +5454,25 @@ namespace Castor
 		static const bool Depth = true;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "32 bits depth" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "depth32" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicDepthConversion< PixelFormat::eD32 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD32 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicDepthBufferConversion< PixelFormat::eD32 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD32 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eD32, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD32, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5480,7 +5481,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD32F
 	//!\~french		Spécialisation pour PixelFormat::eD32F
 	template<>
-	struct pixel_definitions< PixelFormat::eD32F >
+	struct PixelDefinitions< PixelFormat::eD32F >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 1;
@@ -5489,25 +5490,25 @@ namespace Castor
 		static const bool Depth = true;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "32 bits floating point depth" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "depth32f" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicDepthConversion< PixelFormat::eD32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicDepthBufferConversion< PixelFormat::eD32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eD32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD32F, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5516,7 +5517,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eD32FS8
 	//!\~french		Spécialisation pour PixelFormat::eD32FS8
 	template<>
-	struct pixel_definitions< PixelFormat::eD32FS8 >
+	struct PixelDefinitions< PixelFormat::eD32FS8 >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 2;
@@ -5525,25 +5526,25 @@ namespace Castor
 		static const bool Depth = true;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "32 bits floating point depth, 8 bits stencil" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "depth32fs8" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicDepthConversion< PixelFormat::eD32FS8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD32FS8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicDepthBufferConversion< PixelFormat::eD32FS8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD32FS8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eD32FS8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD32FS8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5552,7 +5553,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eS1
 	//!\~french		Spécialisation pour PixelFormat::eS1
 	template<>
-	struct pixel_definitions< PixelFormat::eS1 >
+	struct PixelDefinitions< PixelFormat::eS1 >
 	{
 		static const uint8_t Size = 1;
 		static const uint8_t Count = 1;
@@ -5561,25 +5562,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = true;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "1 bit stencil" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "stencil1" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicStencilConversion< PixelFormat::eS1 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicStencilConversion< PixelFormat::eS1 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicStencilBufferConversion< PixelFormat::eS1 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicStencilBufferConversion< PixelFormat::eS1 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eS1, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eS1, PF >()( p_pSrc, p_pDst );
 		}
 	};
 
@@ -5588,7 +5589,7 @@ namespace Castor
 	//!\~english	Specialisation for PixelFormat::eS8
 	//!\~french		Spécialisation pour PixelFormat::eS8
 	template<>
-	struct pixel_definitions< PixelFormat::eS8 >
+	struct PixelDefinitions< PixelFormat::eS8 >
 	{
 		static const uint8_t Size = 1;
 		static const uint8_t Count = 1;
@@ -5597,25 +5598,25 @@ namespace Castor
 		static const bool Depth = false;
 		static const bool Stencil = true;
 		static const bool Compressed = false;
-		static inline String to_string()
+		static inline String toString()
 		{
 			return cuT( "8 bits stencil" );
 		}
-		static inline String to_str()
+		static inline String toStr()
 		{
 			return cuT( "stencil8" );
 		}
 		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
 		{
-			detail::DynamicStencilConversion< PixelFormat::eS8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicStencilConversion< PixelFormat::eS8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			detail::DynamicStencilBufferConversion< PixelFormat::eS8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicStencilBufferConversion< PixelFormat::eS8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
-			detail::pixel_converter< PixelFormat::eS8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eS8, PF >()( p_pSrc, p_pDst );
 		}
 	};
 }

@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Graphics/PixelBufferBase.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -66,23 +66,23 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
-		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const = 0;
+		C3D_API virtual castor::PxBufferBaseSPtr getBuffer()const = 0;
 		/**
 		 *\~english
-		 *\brief		Sets the texture buffer.
+		 *\brief		sets the texture buffer.
 		 *\param[in]	p_buffer	The texture buffer.
 		 *\~french
 		 *\brief		Définit le tampon de la texture.
 		 *\param[in]	p_buffer	Le tampon de la texture.
 		 */
-		C3D_API virtual void SetBuffer( Castor::PxBufferBaseSPtr p_buffer ) = 0;
+		C3D_API virtual void setBuffer( castor::PxBufferBaseSPtr p_buffer ) = 0;
 		/**
 		 *\~english
 		 *\return		The static source status.
 		 *\~french
 		 *\return		Le statut de source statique.
 		 */
-		C3D_API virtual bool IsStatic()const = 0;
+		C3D_API virtual bool isStatic()const = 0;
 		/**
 		 *\~english
 		 *\brief		Resizes the source.
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\param[in]	p_depth	La nouvelle profondeur.
 		 *\return		\p true si la source a été redimensionnée.
 		 */
-		C3D_API virtual bool Resize( Castor::Size const & p_size, uint32_t p_depth ) = 0;
+		C3D_API virtual bool resize( castor::Size const & p_size, uint32_t p_depth ) = 0;
 
 		/**
 		 *\~english
@@ -103,14 +103,14 @@ namespace Castor3D
 		 *\~french
 		 *\return		La source en chaîne de caractères.
 		 */
-		C3D_API virtual Castor::String ToString()const = 0;
+		C3D_API virtual castor::String toString()const = 0;
 		/**
 		 *\~english
 		 *\return		The source's dimensions.
 		 *\~french
 		 *\return		Les dimensions de la source.
 		 */
-		inline Castor::Size GetDimensions()const
+		inline castor::Size getDimensions()const
 		{
 			return m_size;
 		}
@@ -120,7 +120,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le format des pixels de la source.
 		 */
-		inline Castor::PixelFormat GetPixelFormat()const
+		inline castor::PixelFormat getPixelFormat()const
 		{
 			return m_format;
 		}
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\param[in,out]	p_depth	La profondeur.
 		 *\return			\p true si les dimensions ont changé.
 		 */
-		bool DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth );
+		bool doAdjustDimensions( castor::Size & p_size, uint32_t & p_depth );
 
 	protected:
 		//!\~english	The engine.
@@ -146,10 +146,10 @@ namespace Castor3D
 		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
-		Castor::PixelFormat m_format;
+		castor::PixelFormat m_format;
 		//!\~english	The source's dimensions.
 		//!\~french		Les dimensions de la source.
-		Castor::Size m_size;
+		castor::Size m_size;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -163,7 +163,7 @@ namespace Castor3D
 	\remarks	Contient le stockage de la texture au niveau GPU.
 	*/
 	class TextureImage
-		: public Castor::OwnedBy< TextureLayout >
+		: public castor::OwnedBy< TextureLayout >
 	{
 	public:
 		/*!
@@ -175,7 +175,7 @@ namespace Castor3D
 		\brief		Loader de TextureImage
 		*/
 		class TextWriter
-			: public Castor::TextWriter< TextureImage >
+			: public castor::TextWriter< TextureImage >
 		{
 		public:
 			/**
@@ -184,7 +184,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureImage into a text file
@@ -195,7 +195,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_obj	La TextureImage
 			 */
-			C3D_API bool operator()( TextureImage const & p_obj, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( TextureImage const & p_obj, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -220,7 +220,7 @@ namespace Castor3D
 		 *\param[in]	p_folder	Le dossier contenant l'image.
 		 *\param[in]	p_relative	Le chemin d'accès à l'image, relatif à p_folder.
 		 */
-		C3D_API void InitialiseSource( Castor::Path const & p_folder, Castor::Path const & p_relative );
+		C3D_API void initialiseSource( castor::Path const & p_folder, castor::Path const & p_relative );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
@@ -229,14 +229,14 @@ namespace Castor3D
 		 *\brief		Initialise le tampon de la texture.
 		 *\param[in]	p_buffer	Le tampon.
 		 */
-		C3D_API void InitialiseSource( Castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void initialiseSource( castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
 		 *\~french
 		 *\brief		Initialise le tampon de la texture.
 		 */
-		C3D_API void InitialiseSource();
+		C3D_API void initialiseSource();
 		/**
 		 *\~english
 		 *\brief		Resizes the texture buffer
@@ -245,7 +245,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		C3D_API void Resize( Castor::Size const & p_size );
+		C3D_API void resize( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Resizes the 3D texture buffer
@@ -254,23 +254,23 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture 3D
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		C3D_API void Resize( Castor::Point3ui const & p_size );
+		C3D_API void resize( castor::Point3ui const & p_size );
 		/**
 		 *\~english
-		 *\brief		Sets the texture buffer.
+		 *\brief		sets the texture buffer.
 		 *\param[in]	p_buffer	The texture buffer.
 		 *\~french
 		 *\brief		Définit le tampon de la texture.
 		 *\param[in]	p_buffer	Le tampon de la texture.
 		 */
-		C3D_API void SetBuffer( Castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void setBuffer( castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
 		 *\return		\p true if the texture's source has already been defined.
 		 *\~french
 		 *\return		\p true si la source de la texture a déjà été définie.
 		 */
-		inline bool HasSource()const
+		inline bool hasSource()const
 		{
 			return m_source != nullptr;
 		}
@@ -280,9 +280,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
-		inline Castor::PxBufferBaseSPtr GetBuffer()const
+		inline castor::PxBufferBaseSPtr getBuffer()const
 		{
-			return m_source->GetBuffer();
+			return m_source->getBuffer();
 		}
 		/**
 		 *\~english
@@ -290,9 +290,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de source statique.
 		 */
-		inline bool IsStaticSource()const
+		inline bool isStaticSource()const
 		{
-			return m_source->IsStatic();
+			return m_source->isStatic();
 		}
 		/**
 		 *\~english
@@ -300,9 +300,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de source statique.
 		 */
-		inline Castor::String ToString()const
+		inline castor::String toString()const
 		{
-			return m_source->ToString();
+			return m_source->toString();
 		}
 		/**
 		 *\~english
@@ -310,7 +310,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'index de l'image dans son layout.
 		 */
-		inline uint32_t GetIndex()const
+		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}

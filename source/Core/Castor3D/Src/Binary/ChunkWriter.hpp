@@ -26,7 +26,7 @@ SOFTWARE.
 #include "BinaryChunk.hpp"
 #include "ChunkData.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -56,7 +56,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( uint8_t const * p_begin
+		static inline bool write( uint8_t const * p_begin
 			, uint8_t const * p_end
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
@@ -66,8 +66,8 @@ namespace Castor3D
 			try
 			{
 				BinaryChunk chunk{ p_type };
-				chunk.SetData( p_begin, p_end );
-				result = p_chunk.AddSubChunk( chunk );
+				chunk.setData( p_begin, p_end );
+				result = p_chunk.addSubChunk( chunk );
 			}
 			catch ( ... )
 			{
@@ -107,7 +107,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( T const * p_begin
+		static inline bool write( T const * p_begin
 			, T const * p_end
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
@@ -116,10 +116,10 @@ namespace Castor3D
 
 			for ( auto & value : values )
 			{
-				PrepareChunkData( value );
+				prepareChunkData( value );
 			}
 
-			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( values.data() )
+			return ChunkWriterBase::write( reinterpret_cast< uint8_t const * >( values.data() )
 				, reinterpret_cast< uint8_t const * >( values.data() + values.size() )
 				, p_type
 				, p_chunk );
@@ -138,15 +138,15 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( T const & p_value
+		static inline bool write( T const & p_value
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
 			auto value = p_value;
-			PrepareChunkData( value );
-			auto begin = GetBuffer( value );
-			auto end = begin + GetDataSize( value );
-			return ChunkWriterBase::Write( begin, end, p_type, p_chunk );
+			prepareChunkData( value );
+			auto begin = getBuffer( value );
+			auto end = begin + getDataSize( value );
+			return ChunkWriterBase::write( begin, end, p_type, p_chunk );
 		}
 	};
 	/*!
@@ -154,12 +154,12 @@ namespace Castor3D
 	\version	0.9.0
 	\date 		30/05/2016
 	\~english
-	\brief		ChunkWriter specialisation for Castor::String.
+	\brief		ChunkWriter specialisation for castor::String.
 	\~french
-	\brief		Spécialisation de ChunkWriter pour Castor::String.
+	\brief		Spécialisation de ChunkWriter pour castor::String.
 	*/
 	template<>
-	class ChunkWriter< Castor::String >
+	class ChunkWriter< castor::String >
 		: public ChunkWriterBase
 	{
 	public:
@@ -177,7 +177,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( Castor::String const & p_value
+		static inline bool write( castor::String const & p_value
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
@@ -185,9 +185,9 @@ namespace Castor3D
 
 			try
 			{
-				auto value = Castor::string::string_cast< char >( p_value );
+				auto value = castor::string::stringCast< char >( p_value );
 				auto buffer = reinterpret_cast< uint8_t const * >( value.data() );
-				ChunkWriterBase::Write( buffer, buffer + value.size(), p_type, p_chunk );
+				ChunkWriterBase::write( buffer, buffer + value.size(), p_type, p_chunk );
 			}
 			catch ( ... )
 			{
@@ -202,12 +202,12 @@ namespace Castor3D
 	\version	0.9.0
 	\date 		30/05/2016
 	\~english
-	\brief		ChunkWriter specialisation for Castor::Path.
+	\brief		ChunkWriter specialisation for castor::Path.
 	\~french
-	\brief		Spécialisation de ChunkWriter pour Castor::Path.
+	\brief		Spécialisation de ChunkWriter pour castor::Path.
 	*/
 	template<>
-	class ChunkWriter< Castor::Path >
+	class ChunkWriter< castor::Path >
 		: public ChunkWriterBase
 	{
 	public:
@@ -225,7 +225,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( Castor::Path const & p_value
+		static inline bool write( castor::Path const & p_value
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
@@ -233,9 +233,9 @@ namespace Castor3D
 
 			try
 			{
-				auto value = Castor::string::string_cast< char >( p_value );
+				auto value = castor::string::stringCast< char >( p_value );
 				auto buffer = reinterpret_cast< uint8_t const * >( value.data() );
-				ChunkWriterBase::Write( buffer, buffer + value.size(), p_type, p_chunk );
+				ChunkWriterBase::write( buffer, buffer + value.size(), p_type, p_chunk );
 			}
 			catch ( ... )
 			{

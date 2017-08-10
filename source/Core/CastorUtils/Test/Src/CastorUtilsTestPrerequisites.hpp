@@ -42,7 +42,7 @@ namespace Testing
 	//*********************************************************************************************
 
 	template< typename StreamT, typename T, uint32_t Columns, uint32_t Rows >
-	inline StreamT & operator<<( StreamT & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
+	inline StreamT & operator<<( StreamT & p_streamOut, castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
 		auto precision = p_streamOut.precision( 10 );
 
@@ -50,7 +50,7 @@ namespace Testing
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				p_streamOut.width( 15 );
+				p_streamOut.getWidth( 15 );
 				p_streamOut << std::right << p_matrix[i][j];
 			}
 
@@ -62,9 +62,9 @@ namespace Testing
 	}
 
 	template< typename T, size_t Rows >
-	Castor::String PrintMatrix( Castor::SquareMatrix< T, Rows > const & p_matrix )
+	castor::String PrintMatrix( castor::SquareMatrix< T, Rows > const & p_matrix )
 	{
-		Castor::StringStream stream;
+		castor::StringStream stream;
 		stream << p_matrix;
 		return stream.str();
 	}
@@ -94,7 +94,7 @@ namespace Testing
 		}
 	}
 
-	inline bool compare( Castor::SquareMatrix< float, 4 > const & a, Castor::SquareMatrix< float, 4 > const & b )
+	inline bool compare( castor::SquareMatrix< float, 4 > const & a, castor::SquareMatrix< float, 4 > const & b )
 	{
 		float epsilon = 0.001f;
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -115,7 +115,7 @@ namespace Testing
 			&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 	}
 
-	inline bool compare( Castor::SquareMatrix< double, 4 > const & a, Castor::SquareMatrix< double, 4 > const & b )
+	inline bool compare( castor::SquareMatrix< double, 4 > const & a, castor::SquareMatrix< double, 4 > const & b )
 	{
 		double epsilon = 0.001;
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -139,7 +139,7 @@ namespace Testing
 #if defined( CASTOR_USE_GLM )
 
 	template< typename T >
-	inline bool operator==( Castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
+	inline bool operator==( castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
 	{
 		T epsilon = T( 0.001 );
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -200,16 +200,16 @@ namespace Testing
 		return p_stream;
 	}
 
-	inline Castor::String PrintMatrix( glm::mat4 const & p_matrix )
+	inline castor::String PrintMatrix( glm::mat4 const & p_matrix )
 	{
-		Castor::StringStream stream;
+		castor::StringStream stream;
 		stream << p_matrix;
 		return stream.str();
 	}
 
-	inline Castor::String PrintMatrix( glm::mat3 const & p_matrix )
+	inline castor::String PrintMatrix( glm::mat3 const & p_matrix )
 	{
-		Castor::StringStream stream;
+		castor::StringStream stream;
 		stream << p_matrix;
 		return stream.str();
 	}
@@ -219,45 +219,45 @@ namespace Testing
 	//*********************************************************************************************
 
 	template<>
-	inline std::string to_string< Castor::Matrix4x4f >( Castor::Matrix4x4f const & p_value )
+	inline std::string toString< castor::Matrix4x4f >( castor::Matrix4x4f const & p_value )
 	{
 		std::stringstream stream;
 		stream << std::endl;
-		Castor::operator<<( stream, p_value );
+		castor::operator<<( stream, p_value );
 		return stream.str();
 	}
 
 	template<>
-	inline std::string to_string< Castor::Matrix4x4d >( Castor::Matrix4x4d const & p_value )
+	inline std::string toString< castor::Matrix4x4d >( castor::Matrix4x4d const & p_value )
 	{
 		std::stringstream stream;
 		stream << std::endl;
-		Castor::operator<<( stream, p_value );
+		castor::operator<<( stream, p_value );
 		return stream.str();
 	}
 
 	template<>
-	inline std::string to_string< Castor::Matrix3x3f >( Castor::Matrix3x3f const & p_value )
+	inline std::string toString< castor::Matrix3x3f >( castor::Matrix3x3f const & p_value )
 	{
 		std::stringstream stream;
 		stream << std::endl;
-		Castor::operator<<( stream, p_value );
+		castor::operator<<( stream, p_value );
 		return stream.str();
 	}
 
 	template<>
-	inline std::string to_string< Castor::Matrix3x3d >( Castor::Matrix3x3d const & p_value )
+	inline std::string toString< castor::Matrix3x3d >( castor::Matrix3x3d const & p_value )
 	{
 		std::stringstream stream;
 		stream << std::endl;
-		Castor::operator<<( stream, p_value );
+		castor::operator<<( stream, p_value );
 		return stream.str();
 	}
 
 #if defined( CASTOR_USE_GLM )
 
 	template<>
-	inline std::string to_string< glm::mat4x4 >( glm::mat4x4 const & p_value )
+	inline std::string toString< glm::mat4x4 >( glm::mat4x4 const & p_value )
 	{
 		std::stringstream stream;
 		stream << std::endl;
@@ -266,7 +266,7 @@ namespace Testing
 	}
 
 	template<>
-	inline std::string to_string< glm::mat3x3 >( glm::mat3x3 const & p_value )
+	inline std::string toString< glm::mat3x3 >( glm::mat3x3 const & p_value )
 	{
 		std::stringstream stream;
 		stream << std::endl;

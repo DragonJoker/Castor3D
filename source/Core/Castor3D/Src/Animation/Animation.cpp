@@ -2,32 +2,32 @@
 
 #include "Skeleton/SkeletonAnimation.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< Animation >::DoWrite( Animation const & p_obj )
+	bool BinaryWriter< Animation >::doWrite( Animation const & p_obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = DoWriteChunk( real( p_obj.GetLength().count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
+			result = doWriteChunk( real( p_obj.getLength().count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( result )
 		{
-			switch ( p_obj.GetType() )
+			switch ( p_obj.getType() )
 			{
 			case AnimationType::eSkeleton:
-				BinaryWriter< SkeletonAnimation >{}.Write( static_cast< SkeletonAnimation const & >( p_obj ), m_chunk );
+				BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( p_obj ), m_chunk );
 				break;
 
 			default:
@@ -40,19 +40,19 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< Animation >::DoParse( Animation & p_obj )
+	bool BinaryParser< Animation >::doParse( Animation & p_obj )
 	{
 		bool result = true;
 		String name;
 		BinaryChunk chunk;
 		real length{ 0.0_r };
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				result = DoParseChunk( name, chunk );
+				result = doParseChunk( name, chunk );
 
 				if ( result )
 				{
@@ -62,12 +62,12 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eAnimLength:
-				result = DoParseChunk( length, chunk );
+				result = doParseChunk( length, chunk );
 				p_obj.m_length = Milliseconds( uint64_t( length * 1000 ) );
 				break;
 
 			case ChunkType::eSkeletonAnimation:
-				BinaryParser< SkeletonAnimation >{}.Parse( static_cast< SkeletonAnimation & >( p_obj ), chunk );
+				BinaryParser< SkeletonAnimation >{}.parse( static_cast< SkeletonAnimation & >( p_obj ), chunk );
 				break;
 			}
 		}
@@ -88,9 +88,9 @@ namespace Castor3D
 	{
 	}
 
-	void Animation::UpdateLength()
+	void Animation::updateLength()
 	{
-		DoUpdateLength();
+		doUpdateLength();
 	}
 
 	//*************************************************************************************************

@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <cstddef>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor3D
 	\remark
 	*/
 	class GpuBuffer
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 */
 		explicit inline GpuBuffer( RenderSystem & renderSystem )
-			: Castor::OwnedBy< RenderSystem >( renderSystem )
+			: castor::OwnedBy< RenderSystem >( renderSystem )
 		{
 		}
 		/**
@@ -72,14 +72,14 @@ namespace Castor3D
 		 *\brief		Fonction de création.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Create() = 0;
+		C3D_API virtual bool create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function.
 		 *\~french
 		 *\brief		Fonction de destruction.
 		 */
-		C3D_API virtual void Destroy() = 0;
+		C3D_API virtual void destroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer storage.
@@ -92,25 +92,25 @@ namespace Castor3D
 		 *\param[in]	p_type		Type d'accès du tampon.
 		 *\param[in]	p_nature	Nature d'accès du tampon.
 		 */
-		C3D_API virtual void InitialiseStorage( uint32_t p_count
+		C3D_API virtual void initialiseStorage( uint32_t p_count
 			, BufferAccessType p_type
 			, BufferAccessNature p_nature )const = 0;
 		/**
 		 *\~english
-		 *\brief		Sets the buffer's binding point.
+		 *\brief		sets the buffer's binding point.
 		 *\param[in]	p_index	The binding point.
 		 *\~french
 		 *\brief		Définit le point d'attache du tampon.
 		 *\param[in]	p_index	Le point d'attache.
 		 */
-		C3D_API virtual void SetBindingPoint( uint32_t p_index )const = 0;
+		C3D_API virtual void setBindingPoint( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\return		The buffer's binding point.
 		 *\~french
 		 *\return		Le point d'attache du tampon.
 		 */
-		C3D_API virtual uint32_t GetBindingPoint()const = 0;
+		C3D_API virtual uint32_t getBindingPoint()const = 0;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API virtual uint8_t * Lock( uint32_t p_offset
+		C3D_API virtual uint8_t * lock( uint32_t p_offset
 			, uint32_t p_count
 			, AccessTypes const & p_flags )const = 0;
 		/**
@@ -138,14 +138,14 @@ namespace Castor3D
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus.
 		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU.
 		 */
-		C3D_API virtual void Unlock()const = 0;
+		C3D_API virtual void unlock()const = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 */
-		C3D_API virtual void Bind()const = 0;
+		C3D_API virtual void bind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\remarks		Utilisé pour l'instanciation.
 		 *\param[in]	p_instantiated	Dit si le tampon est instantié.
 		 */
-		C3D_API virtual void Bind( bool p_instantiated )const
+		C3D_API virtual void bind( bool p_instantiated )const
 		{
 		}
 		/**
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 */
-		C3D_API virtual void Unbind()const = 0;
+		C3D_API virtual void unbind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
@@ -176,7 +176,7 @@ namespace Castor3D
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
 		 */
-		C3D_API virtual void Copy( GpuBuffer const & p_src
+		C3D_API virtual void copy( GpuBuffer const & p_src
 			, uint32_t p_size )const = 0;
 		/**
 		 *\~english
@@ -192,7 +192,7 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
 		 */
-		C3D_API virtual void Upload( uint32_t p_offset
+		C3D_API virtual void upload( uint32_t p_offset
 			, uint32_t p_count
 			, uint8_t const * p_buffer )const = 0;
 		/**
@@ -209,7 +209,7 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[out]	p_buffer	Les données.
 		 */
-		C3D_API virtual void Download( uint32_t p_offset
+		C3D_API virtual void download( uint32_t p_offset
 			, uint32_t p_count
 			, uint8_t * p_buffer )const = 0;
 	};

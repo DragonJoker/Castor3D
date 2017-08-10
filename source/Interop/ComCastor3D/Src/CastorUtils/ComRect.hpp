@@ -41,7 +41,7 @@ namespace CastorCom
 	*/
 	class ATL_NO_VTABLE CRect
 		:	COM_ATL_OBJECT( Rect )
-		,	public Castor::Rectangle
+		,	public castor::Rectangle
 	{
 	public:
 		/**
@@ -59,23 +59,23 @@ namespace CastorCom
 		 */
 		virtual ~CRect();
 
-		COM_PROPERTY( Left, INT, make_getter( this, &Castor::Rectangle::left ), make_putter( this, &Castor::Rectangle::left ) );
-		COM_PROPERTY( Right, INT, make_getter( this, &Castor::Rectangle::right ), make_putter( this, &Castor::Rectangle::right ) );
-		COM_PROPERTY( Top, INT, make_getter( this, &Castor::Rectangle::top ), make_putter( this, &Castor::Rectangle::top ) );
-		COM_PROPERTY( Bottom, INT, make_getter( this, &Castor::Rectangle::bottom ), make_putter( this, &Castor::Rectangle::bottom ) );
+		COM_PROPERTY( Left, INT, make_getter( this, &castor::Rectangle::left ), make_putter( this, &castor::Rectangle::left ) );
+		COM_PROPERTY( Right, INT, make_getter( this, &castor::Rectangle::right ), make_putter( this, &castor::Rectangle::right ) );
+		COM_PROPERTY( Top, INT, make_getter( this, &castor::Rectangle::top ), make_putter( this, &castor::Rectangle::top ) );
+		COM_PROPERTY( Bottom, INT, make_getter( this, &castor::Rectangle::bottom ), make_putter( this, &castor::Rectangle::bottom ) );
 
-		COM_PROPERTY_GET( Width, INT, make_getter( this, &Castor::Rectangle::width ) );
-		COM_PROPERTY_GET( Height, INT, make_getter( this, &Castor::Rectangle::width ) );
+		COM_PROPERTY_GET( Width, INT, make_getter( this, &castor::Rectangle::width ) );
+		COM_PROPERTY_GET( Height, INT, make_getter( this, &castor::Rectangle::width ) );
 
-		STDMETHOD( Set )( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom );
+		STDMETHOD( set )( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom );
 		STDMETHOD( IntersectsPosition )( /* [in] */ IPosition * pos, /* [retval][out] */ eINTERSECTION * pVal );
 		STDMETHOD( IntersectsRectangle )( /* [in] */ IRect * pos, /* [retval][out] */ eINTERSECTION * pVal );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Rect ), CRect );
 
-	DECLARE_VARIABLE_REF_GETTER( Rect, Castor, Rectangle );
-	DECLARE_VARIABLE_REF_PUTTER( Rect, Castor, Rectangle );
+	DECLARE_VARIABLE_REF_GETTER( Rect, castor, Rectangle );
+	DECLARE_VARIABLE_REF_PUTTER( Rect, castor, Rectangle );
 }
 
 #endif

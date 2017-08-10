@@ -63,21 +63,21 @@ namespace CastorViewer
 	public:
 		struct SelectedSubmesh
 		{
-			SelectedSubmesh( Castor3D::SubmeshSPtr p_submesh
-				, Castor3D::MaterialSPtr p_originalMaterial )
+			SelectedSubmesh( castor3d::SubmeshSPtr p_submesh
+				, castor3d::MaterialSPtr p_originalMaterial )
 				: m_submesh{ p_submesh }
 				, m_originalMaterial{ p_originalMaterial }
 			{
 			}
-			Castor3D::SubmeshSPtr m_submesh;
-			Castor3D::MaterialSPtr m_originalMaterial;
-			Castor3D::MaterialSPtr m_selectedMaterial;
+			castor3d::SubmeshSPtr m_submesh;
+			castor3d::MaterialSPtr m_originalMaterial;
+			castor3d::MaterialSPtr m_selectedMaterial;
 		};
 
 		struct SelectedGeometry
 		{
 			std::vector< SelectedSubmesh > m_submeshes;
-			Castor3D::GeometrySPtr m_geometry;
+			castor3d::GeometrySPtr m_geometry;
 		};
 
 
@@ -89,30 +89,30 @@ namespace CastorViewer
 		virtual void UnFocus();
 
 		virtual void DrawOneFrame();
-		void SetRenderWindow( Castor3D::RenderWindowSPtr p_window );
+		void setRenderWindow( castor3d::RenderWindowSPtr p_window );
 
-		inline Castor3D::RenderWindowSPtr GetRenderWindow()const
+		inline castor3d::RenderWindowSPtr getRenderWindow()const
 		{
 			return m_renderWindow.lock();
 		}
 
 	private:
-		void DoResetTimers();
-		void DoStartMovement();
-		void DoStartTimer( int p_iId );
-		void DoStopMovement();
-		void DoStopTimer( int p_iId );
-		void DoResetNode();
-		void DoTurnCameraHoriz();
-		void DoTurnCameraVertic();
-		void DoChangeCamera();
-		void DoReloadScene();
-		Castor::real DoTransformX( int x );
-		Castor::real DoTransformY( int y );
-		int DoTransformX( Castor::real x );
-		int DoTransformY( Castor::real y );
-		void DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry, Castor3D::SubmeshSPtr p_submesh );
-		GuiCommon::NodeState & DoAddNodeState( Castor3D::SceneNodeSPtr p_node );
+		void doResetTimers();
+		void doStartMovement();
+		void doStartTimer( int p_iId );
+		void doStopMovement();
+		void doStopTimer( int p_iId );
+		void doResetNode();
+		void doTurnCameraHoriz();
+		void doTurnCameraVertic();
+		void doChangeCamera();
+		void doReloadScene();
+		castor::real doTransformX( int x );
+		castor::real doTransformY( int y );
+		int doTransformX( castor::real x );
+		int doTransformY( castor::real y );
+		void doUpdateSelectedGeometry( castor3d::GeometrySPtr p_geometry, castor3d::SubmeshSPtr p_submesh );
+		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeSPtr p_node );
 
 		DECLARE_EVENT_TABLE()
 		void OnTimerFwd( wxTimerEvent & p_event );
@@ -129,47 +129,47 @@ namespace CastorViewer
 		void OnEnterWindow( wxMouseEvent & p_event );
 		void OnLeaveWindow( wxMouseEvent & p_event );
 		void OnEraseBackground( wxEraseEvent & p_event );
-		void OnSetFocus( wxFocusEvent & p_event );
+		void OnsetFocus( wxFocusEvent & p_event );
 		void OnKillFocus( wxFocusEvent & p_event );
-		void OnKeyDown( wxKeyEvent & p_event );
+		void onKeydown( wxKeyEvent & p_event );
 		void OnKeyUp( wxKeyEvent & p_event );
 		void OnChar( wxKeyEvent & p_event );
 		void OnMouseLDClick( wxMouseEvent & p_event );
-		void OnMouseLDown( wxMouseEvent & p_event );
+		void OnMouseLdown( wxMouseEvent & p_event );
 		void OnMouseLUp( wxMouseEvent & p_event );
-		void OnMouseMDown( wxMouseEvent & p_event );
+		void OnMouseMdown( wxMouseEvent & p_event );
 		void OnMouseMUp( wxMouseEvent & p_event );
-		void OnMouseRDown( wxMouseEvent & p_event );
+		void OnMouseRdown( wxMouseEvent & p_event );
 		void OnMouseRUp( wxMouseEvent & p_event );
 		void OnMouseMove( wxMouseEvent & p_event );
 		void OnMouseWheel( wxMouseEvent & p_event );
 		void OnMenuClose( wxCommandEvent & p_event );
 
 	public:
-		Castor::real m_x{ 0.0_r };
-		Castor::real m_y{ 0.0_r };
-		Castor::real m_oldX{ 0.0_r };
-		Castor::real m_oldY{ 0.0_r };
-		bool m_altDown{ false };
+		castor::real m_x{ 0.0_r };
+		castor::real m_y{ 0.0_r };
+		castor::real m_oldX{ 0.0_r };
+		castor::real m_oldY{ 0.0_r };
+		bool m_altdown{ false };
 		bool m_mouseLeftDown{ false };
 		bool m_mouseRightDown{ false };
 		bool m_mouseMiddleDown{ false };
 		std::atomic_bool m_movementStarted{ false };
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
-		Castor3D::RenderWindowWPtr m_renderWindow;
-		Castor3D::CameraWPtr m_camera;
-		Castor3D::SceneWPtr m_scene;
-		Castor3D::FrameListenerSPtr m_listener;
+		castor3d::RenderWindowWPtr m_renderWindow;
+		castor3d::CameraWPtr m_camera;
+		castor3d::SceneWPtr m_scene;
+		castor3d::FrameListenerSPtr m_listener;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;
 
-		Castor3D::SceneNodeSPtr m_lightsNode;
-		Castor3D::SceneNodeSPtr m_currentNode;
+		castor3d::SceneNodeSPtr m_lightsNode;
+		castor3d::SceneNodeSPtr m_currentNode;
 		KeyboardEventUPtr m_keyboardEvent;
-		Castor::real m_camSpeed;
+		castor::RangedValue< castor::real > m_camSpeed;
 
-		std::map< Castor::String, GuiCommon::NodeStatePtr > m_nodesStates;
+		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates;
 		GuiCommon::NodeState * m_currentState{ nullptr };
 		SelectedGeometry m_selectedGeometry;
 		SelectedSubmesh * m_selectedSubmesh{ nullptr };

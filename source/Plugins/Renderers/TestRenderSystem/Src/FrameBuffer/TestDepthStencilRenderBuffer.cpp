@@ -1,7 +1,7 @@
 #include "FrameBuffer/TestDepthStencilRenderBuffer.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -14,34 +14,34 @@ namespace TestRender
 	{
 	}
 
-	bool TestDepthStencilRenderBuffer::Create()
+	bool TestDepthStencilRenderBuffer::create()
 	{
 		return true;
 	}
 
-	void TestDepthStencilRenderBuffer::Destroy()
+	void TestDepthStencilRenderBuffer::destroy()
 	{
 	}
 
-	bool TestDepthStencilRenderBuffer::Initialise( Castor::Size const & p_size )
+	bool TestDepthStencilRenderBuffer::initialise( castor::Size const & p_size )
 	{
 		m_size = p_size;
 		return true;
 	}
 
-	void TestDepthStencilRenderBuffer::Cleanup()
+	void TestDepthStencilRenderBuffer::cleanup()
 	{
 	}
 
-	void TestDepthStencilRenderBuffer::Bind()
+	void TestDepthStencilRenderBuffer::bind()
 	{
 	}
 
-	void TestDepthStencilRenderBuffer::Unbind()
+	void TestDepthStencilRenderBuffer::unbind()
 	{
 	}
 
-	bool TestDepthStencilRenderBuffer::Resize( Castor::Size const & p_size )
+	bool TestDepthStencilRenderBuffer::resize( castor::Size const & p_size )
 	{
 		m_size = p_size;
 		return true;

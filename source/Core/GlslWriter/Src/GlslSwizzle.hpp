@@ -37,7 +37,7 @@ namespace GLSL
 	struct Swizzle
 		: public Expr
 	{
-		inline Swizzle( Castor::String const & p_name, Input * p_input );
+		inline Swizzle( castor::String const & p_name, Input * p_input );
 		inline Swizzle & operator=( Swizzle const & p_rhs );
 		template< typename T > inline Swizzle & operator=( T const & p_rhs );
 		inline operator Output()const;
@@ -84,10 +84,10 @@ namespace GLSL
 	Swizzle< Input, Output > Name;
 
 #	define GLSL_FIRST_SWIZZLE( Input, Output, Name )\
-	Swizzle< Input, Output > Name = Swizzle< Input, Output >( Castor::string::string_cast< xchar >( #Name ), this )
+	Swizzle< Input, Output > Name = Swizzle< Input, Output >( castor::string::stringCast< xchar >( #Name ), this )
 
 #	define GLSL_LAST_SWIZZLE( Input, Output, Name )\
-	Swizzle< Input, Output > Name = Swizzle< Input, Output >( Castor::string::string_cast< xchar >( #Name ), this )
+	Swizzle< Input, Output > Name = Swizzle< Input, Output >( castor::string::stringCast< xchar >( #Name ), this )
 
 #	define SWIZZLE_X x
 #	define SWIZZLE_Y y
@@ -224,7 +224,7 @@ namespace GLSL
 #	define GLSL_SWIZZLE( Input, Output, Name )\
 	inline Output Name()const\
 	{\
-		Castor::String me( *this );\
+		castor::String me( *this );\
 		Output result( m_writer, me );\
 		result.m_value << me << cuT( "."#Name );\
 		return result;\

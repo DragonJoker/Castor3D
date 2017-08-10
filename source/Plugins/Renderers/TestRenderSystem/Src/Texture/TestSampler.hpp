@@ -30,16 +30,16 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestSampler
-		: public Castor3D::Sampler
+		: public castor3d::Sampler
 	{
 	public:
-		TestSampler( TestRenderSystem * p_renderSystem, Castor::String const & p_name );
+		TestSampler( TestRenderSystem * p_renderSystem, castor::String const & p_name );
 		virtual ~TestSampler();
 
-		virtual bool Initialise();
-		virtual void Cleanup();
-		virtual void Bind( uint32_t p_index )const;
-		virtual void Unbind( uint32_t p_index )const;
+		virtual bool initialise();
+		virtual void cleanup();
+		virtual void bind( uint32_t p_index )const;
+		virtual void unbind( uint32_t p_index )const;
 	};
 }
 

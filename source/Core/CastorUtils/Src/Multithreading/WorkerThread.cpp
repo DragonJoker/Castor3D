@@ -2,13 +2,13 @@
 
 #include "Config/MultiThreadConfig.hpp"
 
-namespace Castor
+namespace castor
 {
 	WorkerThread::WorkerThread()
 		: m_start{ false }
 		, m_terminate{ false }
 	{
-		m_thread = std::make_unique< std::thread >( std::bind( &WorkerThread::DoRun, this ) );
+		m_thread = std::make_unique< std::thread >( std::bind( &WorkerThread::doRun, this ) );
 	}
 
 	WorkerThread::~WorkerThread()noexcept
@@ -18,7 +18,7 @@ namespace Castor
 		m_thread.reset();
 	}
 
-	void WorkerThread::Feed( Job p_job )
+	void WorkerThread::feed( Job p_job )
 	{
 		REQUIRE( m_start == false );
 		{
@@ -27,14 +27,14 @@ namespace Castor
 		m_start = true;
 	}
 
-	bool WorkerThread::IsEnded()const
+	bool WorkerThread::isEnded()const
 	{
 		return !m_start;
 	}
 
-	bool WorkerThread::Wait( Milliseconds const & p_timeout )const
+	bool WorkerThread::wait( Milliseconds const & p_timeout )const
 	{
-		bool result = IsEnded() && !m_terminate;
+		bool result = isEnded() && !m_terminate;
 
 		if ( !result )
 		{
@@ -44,7 +44,7 @@ namespace Castor
 			do
 			{
 				std::this_thread::sleep_for( Milliseconds( 1 ) );
-				result = IsEnded();
+				result = isEnded();
 				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
 			while ( wait < p_timeout && !result && !m_terminate );
@@ -53,7 +53,7 @@ namespace Castor
 		return result;
 	}
 
-	void WorkerThread::DoRun()
+	void WorkerThread::doRun()
 	{
 		while ( !m_terminate )
 		{

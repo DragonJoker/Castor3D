@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PREREQUISITES_CAMERA_H___
 #define ___C3D_PREREQUISITES_CAMERA_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Camera */
 	//@{
@@ -39,7 +39,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Ray );
 
 	//! Camera pointer map, sorted by name
-	DECLARE_MAP( Castor::String, CameraSPtr, CameraPtrStr );
+	DECLARE_MAP( castor::String, CameraSPtr, CameraPtrStr );
 	//! Camera pointer array
 	DECLARE_VECTOR( CameraSPtr, CameraPtr );
 

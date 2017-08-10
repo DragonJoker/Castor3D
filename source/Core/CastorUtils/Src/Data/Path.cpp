@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace Castor
+namespace castor
 {
 #if defined( CASTOR_PLATFORM_WINDOWS )
 	const xchar Path::Separator = cuT( '\\' );
@@ -15,27 +15,27 @@ namespace Castor
 	}
 
 	Path::Path( char const * p_data )
-		:	String( string::string_cast< xchar >( p_data ) )
+		:	String( string::stringCast< xchar >( p_data ) )
 	{
-		DoNormalise();
+		doNormalise();
 	}
 
 	Path::Path( wchar_t const * p_data )
-		:	String( string::string_cast< xchar >( p_data ) )
+		:	String( string::stringCast< xchar >( p_data ) )
 	{
-		DoNormalise();
+		doNormalise();
 	}
 
 	Path::Path( String const & p_data )
 		:	String( p_data )
 	{
-		DoNormalise();
+		doNormalise();
 	}
 
 	Path::Path( Path const & p_data )
 		:	String( p_data )
 	{
-		DoNormalise();
+		doNormalise();
 	}
 
 	Path::Path( Path && p_data )
@@ -60,7 +60,7 @@ namespace Castor
 	{
 		push_back( Separator );
 		append( p_path );
-		DoNormalise();
+		doNormalise();
 		return *this;
 	}
 
@@ -68,23 +68,23 @@ namespace Castor
 	{
 		push_back( Separator );
 		append( p_string );
-		DoNormalise();
+		doNormalise();
 		return *this;
 	}
 
 	Path & Path::operator/=( char const * p_buffer )
 	{
 		push_back( Separator );
-		String::operator+=( string::string_cast< xchar >( p_buffer ) );
-		DoNormalise();
+		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		doNormalise();
 		return *this;
 	}
 
 	Path & Path::operator/=( wchar_t const * p_buffer )
 	{
 		push_back( Separator );
-		String::operator+=( string::string_cast< xchar >( p_buffer ) );
-		DoNormalise();
+		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		doNormalise();
 		return *this;
 	}
 
@@ -97,25 +97,25 @@ namespace Castor
 	Path & Path::operator+=( String const & p_string )
 	{
 		String::operator+=( p_string );
-		DoNormalise();
+		doNormalise();
 		return *this;
 	}
 
 	Path & Path::operator+=( char const * p_buffer )
 	{
-		String::operator+=( string::string_cast< xchar >( p_buffer ) );
-		DoNormalise();
+		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		doNormalise();
 		return *this;
 	}
 
 	Path & Path::operator+=( wchar_t const * p_buffer )
 	{
-		String::operator+=( string::string_cast< xchar >( p_buffer ) );
-		DoNormalise();
+		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		doNormalise();
 		return *this;
 	}
 
-	Path Path::GetPath()const
+	Path Path::getPath()const
 	{
 		Path result;
 		std::size_t index = find_last_of( Separator );
@@ -128,7 +128,7 @@ namespace Castor
 		return result;
 	}
 
-	Path Path::GetFileName( bool p_withExtension )const
+	Path Path::getFileName( bool p_withExtension )const
 	{
 		Path result = ( * this );
 		std::size_t index = find_last_of( Separator );
@@ -151,7 +151,7 @@ namespace Castor
 		return result;
 	}
 
-	Path Path::GetFullFileName()const
+	Path Path::getFullFileName()const
 	{
 		Path result = ( * this );
 		std::size_t index = find_last_of( Separator );
@@ -164,7 +164,7 @@ namespace Castor
 		return result;
 	}
 
-	String Path::GetExtension()const
+	String Path::getExtension()const
 	{
 		String result = ( * this );
 		std::size_t index = find_last_of( cuT( "." ) );
@@ -177,7 +177,7 @@ namespace Castor
 		return result;
 	}
 
-	void Path::DoNormalise()
+	void Path::doNormalise()
 	{
 		if ( !empty() )
 		{

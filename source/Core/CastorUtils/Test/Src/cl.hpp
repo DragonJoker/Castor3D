@@ -130,7 +130,7 @@
  *  - Defines the target OpenCL runtime version to build the header against.
  *    Defaults to 200, representing OpenCL 2.0.
  * CL_HPP_NO_STD_STRING
- *  - Do not use the standard library string class.
+ *  - do not use the standard library string class.
  *    cl::string is not defined and may be defined by the user before 
  *    cl2.hpp is included.
  * CL_HPP_NO_STD_VECTOR
@@ -237,7 +237,7 @@
             vectorAddProgram.build("-cl-std=CL2.0");
         }
         catch (...) {
-            // Print build info for all devices
+            // print build info for all devices
             cl_int buildErr = CL_SUCCESS;
             auto buildInfo = vectorAddProgram.getBuildInfo<CL_PROGRAM_BUILD_LOG>(&buildErr);
             for (auto &pair : buildInfo) {
@@ -249,7 +249,7 @@
 
         typedef struct { int *bar; } Foo;
 
-        // Get and run kernel that initializes the program-scope global
+        // get and run kernel that initializes the program-scope global
         // A test for kernels that take no arguments
         auto program2Kernel =
             cl::KernelFunctor<>(vectorAddProgram, "updateGlobal");
@@ -502,8 +502,8 @@ namespace cl {
 #if !defined(CL_HPP_NO_STD_VECTOR)
 #include <vector>
 namespace cl {
-    template < class T, class Alloc = std::allocator<T> >
-    using vector = std::vector<T, Alloc>;
+    template < class T, class allocate = std::allocator<T> >
+    using vector = std::vector<T, allocate>;
 } // namespace cl
 #endif // #if !defined(CL_HPP_NO_STD_VECTOR)
 
@@ -524,8 +524,8 @@ namespace cl {
     template<class T>
     using pointer = std::shared_ptr<T>;
 
-    template <class T, class Alloc, class... Args>
-    auto allocate_pointer(const Alloc &alloc, Args&&... args) -> 
+    template <class T, class allocate, class... Args>
+    auto allocate_pointer(const allocate &alloc, Args&&... args) -> 
         decltype(std::allocate_shared<T>(
             alloc, std::forward<Args>(args)...))
     {
@@ -626,7 +626,7 @@ namespace cl {
 #define CL_HPP_INIT_CL_EXT_FCN_PTR_(name) \
     if (!pfn_##name) {    \
     pfn_##name = (PFN_##name) \
-    clGetExtensionFunctionAddress(#name); \
+    clgetExtensionFunctionAddress(#name); \
     if (!pfn_##name) {    \
     } \
     }
@@ -634,7 +634,7 @@ namespace cl {
 #define CL_HPP_INIT_CL_EXT_FCN_PTR_PLATFORM_(platform, name) \
     if (!pfn_##name) {    \
     pfn_##name = (PFN_##name) \
-    clGetExtensionFunctionAddressForPlatform(platform, #name); \
+    clgetExtensionFunctionAddressForPlatform(platform, #name); \
     if (!pfn_##name) {    \
     } \
     }
@@ -659,7 +659,7 @@ namespace cl {
         cl_int err_;
         const char * errStr_;
     public:
-        /*! \brief Create a new CL error exception for a given error code
+        /*! \brief create a new CL error exception for a given error code
          *  and corresponding message.
          * 
          *  \param err error code value.
@@ -673,7 +673,7 @@ namespace cl {
 
         ~Error() throw() {}
 
-        /*! \brief Get error string associated with exception
+        /*! \brief get error string associated with exception
          *
          * \return A memory pointer to the error message string.
          */
@@ -687,7 +687,7 @@ namespace cl {
             }
         }
 
-        /*! \brief Get error code associated with exception
+        /*! \brief get error code associated with exception
          *
          *  \return The error code.
          */
@@ -724,49 +724,49 @@ static inline cl_int errHandler (cl_int err, const char * errStr = NULL)
 
 //! \cond DOXYGEN_DETAIL
 #if !defined(CL_HPP_USER_OVERRIDE_ERROR_STRINGS)
-#define __GET_DEVICE_INFO_ERR               CL_HPP_ERR_STR_(clGetDeviceInfo)
-#define __GET_PLATFORM_INFO_ERR             CL_HPP_ERR_STR_(clGetPlatformInfo)
-#define __GET_DEVICE_IDS_ERR                CL_HPP_ERR_STR_(clGetDeviceIDs)
-#define __GET_PLATFORM_IDS_ERR              CL_HPP_ERR_STR_(clGetPlatformIDs)
-#define __GET_CONTEXT_INFO_ERR              CL_HPP_ERR_STR_(clGetContextInfo)
-#define __GET_EVENT_INFO_ERR                CL_HPP_ERR_STR_(clGetEventInfo)
-#define __GET_EVENT_PROFILE_INFO_ERR        CL_HPP_ERR_STR_(clGetEventProfileInfo)
-#define __GET_MEM_OBJECT_INFO_ERR           CL_HPP_ERR_STR_(clGetMemObjectInfo)
-#define __GET_IMAGE_INFO_ERR                CL_HPP_ERR_STR_(clGetImageInfo)
-#define __GET_SAMPLER_INFO_ERR              CL_HPP_ERR_STR_(clGetSamplerInfo)
-#define __GET_KERNEL_INFO_ERR               CL_HPP_ERR_STR_(clGetKernelInfo)
+#define __GET_DEVICE_INFO_ERR               CL_HPP_ERR_STR_(clgetDeviceInfo)
+#define __GET_PLATFORM_INFO_ERR             CL_HPP_ERR_STR_(clgetPlatformInfo)
+#define __GET_DEVICE_IDS_ERR                CL_HPP_ERR_STR_(clgetDeviceIDs)
+#define __GET_PLATFORM_IDS_ERR              CL_HPP_ERR_STR_(clgetPlatformIDs)
+#define __GET_CONTEXT_INFO_ERR              CL_HPP_ERR_STR_(clgetContextInfo)
+#define __GET_EVENT_INFO_ERR                CL_HPP_ERR_STR_(clgetEventInfo)
+#define __GET_EVENT_PROFILE_INFO_ERR        CL_HPP_ERR_STR_(clgetEventProfileInfo)
+#define __GET_MEM_OBJECT_INFO_ERR           CL_HPP_ERR_STR_(clgetMemObjectInfo)
+#define __GET_IMAGE_INFO_ERR                CL_HPP_ERR_STR_(clgetImageInfo)
+#define __GET_SAMPLER_INFO_ERR              CL_HPP_ERR_STR_(clgetSamplerInfo)
+#define __GET_KERNEL_INFO_ERR               CL_HPP_ERR_STR_(clgetKernelInfo)
 #if CL_HPP_TARGET_OPENCL_VERSION >= 120
-#define __GET_KERNEL_ARG_INFO_ERR           CL_HPP_ERR_STR_(clGetKernelArgInfo)
+#define __GET_KERNEL_ARG_INFO_ERR           CL_HPP_ERR_STR_(clgetKernelArgInfo)
 #endif // CL_HPP_TARGET_OPENCL_VERSION >= 120
-#define __GET_KERNEL_WORK_GROUP_INFO_ERR    CL_HPP_ERR_STR_(clGetKernelWorkGroupInfo)
-#define __GET_PROGRAM_INFO_ERR              CL_HPP_ERR_STR_(clGetProgramInfo)
-#define __GET_PROGRAM_BUILD_INFO_ERR        CL_HPP_ERR_STR_(clGetProgramBuildInfo)
-#define __GET_COMMAND_QUEUE_INFO_ERR        CL_HPP_ERR_STR_(clGetCommandQueueInfo)
+#define __GET_KERNEL_WORK_GROUP_INFO_ERR    CL_HPP_ERR_STR_(clgetKernelWorkGroupInfo)
+#define __GET_PROGRAM_INFO_ERR              CL_HPP_ERR_STR_(clgetProgramInfo)
+#define __GET_PROGRAM_BUILD_INFO_ERR        CL_HPP_ERR_STR_(clgetProgramBuildInfo)
+#define __GET_COMMAND_QUEUE_INFO_ERR        CL_HPP_ERR_STR_(clgetCommandQueueInfo)
 
 #define __CREATE_CONTEXT_ERR                CL_HPP_ERR_STR_(clCreateContext)
 #define __CREATE_CONTEXT_FROM_TYPE_ERR      CL_HPP_ERR_STR_(clCreateContextFromType)
-#define __GET_SUPPORTED_IMAGE_FORMATS_ERR   CL_HPP_ERR_STR_(clGetSupportedImageFormats)
+#define __GET_SUPPORTED_IMAGE_FORMATS_ERR   CL_HPP_ERR_STR_(clgetSupportedImageFormats)
 
 #define __CREATE_BUFFER_ERR                 CL_HPP_ERR_STR_(clCreateBuffer)
 #define __COPY_ERR                          CL_HPP_ERR_STR_(cl::copy)
 #define __CREATE_SUBBUFFER_ERR              CL_HPP_ERR_STR_(clCreateSubBuffer)
 #define __CREATE_GL_BUFFER_ERR              CL_HPP_ERR_STR_(clCreateFromGLBuffer)
 #define __CREATE_GL_RENDER_BUFFER_ERR       CL_HPP_ERR_STR_(clCreateFromGLBuffer)
-#define __GET_GL_OBJECT_INFO_ERR            CL_HPP_ERR_STR_(clGetGLObjectInfo)
+#define __GET_GL_OBJECT_INFO_ERR            CL_HPP_ERR_STR_(clgetGLObjectInfo)
 #if CL_HPP_TARGET_OPENCL_VERSION >= 120
 #define __CREATE_IMAGE_ERR                  CL_HPP_ERR_STR_(clCreateImage)
 #define __CREATE_GL_TEXTURE_ERR             CL_HPP_ERR_STR_(clCreateFromGLTexture)
 #define __IMAGE_DIMENSION_ERR               CL_HPP_ERR_STR_(Incorrect image dimensions)
 #endif // CL_HPP_TARGET_OPENCL_VERSION >= 120
-#define __SET_MEM_OBJECT_DESTRUCTOR_CALLBACK_ERR CL_HPP_ERR_STR_(clSetMemObjectDestructorCallback)
+#define __SET_MEM_OBJECT_DESTRUCTOR_CALLBACK_ERR CL_HPP_ERR_STR_(clsetMemObjectDestructorCallback)
 
 #define __CREATE_USER_EVENT_ERR             CL_HPP_ERR_STR_(clCreateUserEvent)
-#define __SET_USER_EVENT_STATUS_ERR         CL_HPP_ERR_STR_(clSetUserEventStatus)
-#define __SET_EVENT_CALLBACK_ERR            CL_HPP_ERR_STR_(clSetEventCallback)
+#define __SET_USER_EVENT_STATUS_ERR         CL_HPP_ERR_STR_(clsetUserEventStatus)
+#define __SET_EVENT_CALLBACK_ERR            CL_HPP_ERR_STR_(clsetEventCallback)
 #define __WAIT_FOR_EVENTS_ERR               CL_HPP_ERR_STR_(clWaitForEvents)
 
 #define __CREATE_KERNEL_ERR                 CL_HPP_ERR_STR_(clCreateKernel)
-#define __SET_KERNEL_ARGS_ERR               CL_HPP_ERR_STR_(clSetKernelArg)
+#define __SET_KERNEL_ARGS_ERR               CL_HPP_ERR_STR_(clsetKernelArg)
 #define __CREATE_PROGRAM_WITH_SOURCE_ERR    CL_HPP_ERR_STR_(clCreateProgramWithSource)
 #define __CREATE_PROGRAM_WITH_BINARY_ERR    CL_HPP_ERR_STR_(clCreateProgramWithBinary)
 #if CL_HPP_TARGET_OPENCL_VERSION >= 120
@@ -783,7 +783,7 @@ static inline cl_int errHandler (cl_int err, const char * errStr = NULL)
 #define __CREATE_COMMAND_QUEUE_WITH_PROPERTIES_ERR          CL_HPP_ERR_STR_(clCreateCommandQueueWithProperties)
 #define __CREATE_SAMPLER_WITH_PROPERTIES_ERR                CL_HPP_ERR_STR_(clCreateSamplerWithProperties)
 #endif // CL_HPP_TARGET_OPENCL_VERSION >= 200
-#define __SET_COMMAND_QUEUE_PROPERTY_ERR    CL_HPP_ERR_STR_(clSetCommandQueueProperty)
+#define __SET_COMMAND_QUEUE_PROPERTY_ERR    CL_HPP_ERR_STR_(clsetCommandQueueProperty)
 #define __ENQUEUE_READ_BUFFER_ERR           CL_HPP_ERR_STR_(clEnqueueReadBuffer)
 #define __ENQUEUE_READ_BUFFER_RECT_ERR      CL_HPP_ERR_STR_(clEnqueueReadBufferRect)
 #define __ENQUEUE_WRITE_BUFFER_ERR          CL_HPP_ERR_STR_(clEnqueueWriteBuffer)
@@ -809,7 +809,7 @@ static inline cl_int errHandler (cl_int err, const char * errStr = NULL)
 #define __ENQUEUE_ACQUIRE_GL_ERR            CL_HPP_ERR_STR_(clEnqueueAcquireGLObjects)
 #define __ENQUEUE_RELEASE_GL_ERR            CL_HPP_ERR_STR_(clEnqueueReleaseGLObjects)
 
-#define __GET_PIPE_INFO_ERR           CL_HPP_ERR_STR_(clGetPipeInfo)
+#define __GET_PIPE_INFO_ERR           CL_HPP_ERR_STR_(clgetPipeInfo)
 
 
 #define __RETAIN_ERR                        CL_HPP_ERR_STR_(Retain Object)
@@ -883,7 +883,7 @@ inline cl_int getInfoHelper(Func f, cl_uint name, vector<vector<unsigned char>>*
         return CL_INVALID_VALUE;
     }
     if (param) {
-        // Create array of pointers, calculate total size and pass pointer array in
+        // create array of pointers, calculate total size and pass pointer array in
         size_type numBinaries = param->size();
         vector<unsigned char*> binariesPointers(numBinaries);
 
@@ -966,7 +966,7 @@ inline cl_int getInfoHelper(
     return CL_SUCCESS;
 }
 
-// Specialized GetInfoHelper for string params
+// Specialized getInfoHelper for string params
 template <typename Func>
 inline cl_int getInfoHelper(Func f, cl_uint name, string* param, long)
 {
@@ -989,7 +989,7 @@ inline cl_int getInfoHelper(Func f, cl_uint name, string* param, long)
     return CL_SUCCESS;
 }
 
-// Specialized GetInfoHelper for clsize_t params
+// Specialized getInfoHelper for clsize_t params
 template <typename Func, size_type N>
 inline cl_int getInfoHelper(Func f, cl_uint name, array<size_type, N>* param, long)
 {
@@ -1355,7 +1355,7 @@ getInfo(Func f, cl_uint name, T* param)
 }
 
 template <typename Func, typename Arg0>
-struct GetInfoFunctor0
+struct getInfoFunctor0
 {
     Func f_; const Arg0& arg0_;
     cl_int operator ()(
@@ -1364,7 +1364,7 @@ struct GetInfoFunctor0
 };
 
 template <typename Func, typename Arg0, typename Arg1>
-struct GetInfoFunctor1
+struct getInfoFunctor1
 {
     Func f_; const Arg0& arg0_; const Arg1& arg1_;
     cl_int operator ()(
@@ -1376,7 +1376,7 @@ template <typename Func, typename Arg0, typename T>
 inline cl_int
 getInfo(Func f, const Arg0& arg0, cl_uint name, T* param)
 {
-    GetInfoFunctor0<Func, Arg0> f0 = { f, arg0 };
+    getInfoFunctor0<Func, Arg0> f0 = { f, arg0 };
     return getInfoHelper(f0, name, param, 0);
 }
 
@@ -1384,7 +1384,7 @@ template <typename Func, typename Arg0, typename Arg1, typename T>
 inline cl_int
 getInfo(Func f, const Arg0& arg0, const Arg1& arg1, cl_uint name, T* param)
 {
-    GetInfoFunctor1<Func, Arg0, Arg1> f0 = { f, arg0, arg1 };
+    getInfoFunctor1<Func, Arg0, Arg1> f0 = { f, arg0, arg1 };
     return getInfoHelper(f0, name, param, 0);
 }
 
@@ -1538,17 +1538,17 @@ static cl_uint getVersion(const vector<char> &versionInfo)
 static cl_uint getPlatformVersion(cl_platform_id platform)
 {
     size_type size = 0;
-    clGetPlatformInfo(platform, CL_PLATFORM_VERSION, 0, NULL, &size);
+    clgetPlatformInfo(platform, CL_PLATFORM_VERSION, 0, NULL, &size);
     
     vector<char> versionInfo(size);
-    clGetPlatformInfo(platform, CL_PLATFORM_VERSION, size, versionInfo.data(), &size);
+    clgetPlatformInfo(platform, CL_PLATFORM_VERSION, size, versionInfo.data(), &size);
     return getVersion(versionInfo);
 }
 
 static cl_uint getDevicePlatformVersion(cl_device_id device)
 {
     cl_platform_id platform;
-    clGetDeviceInfo(device, CL_DEVICE_PLATFORM, sizeof(platform), &platform, NULL);
+    clgetDeviceInfo(device, CL_DEVICE_PLATFORM, sizeof(platform), &platform, NULL);
     return getPlatformVersion(platform);
 }
 
@@ -1557,11 +1557,11 @@ static cl_uint getContextPlatformVersion(cl_context context)
     // The platform cannot be queried directly, so we first have to grab a
     // device and obtain its context
     size_type size = 0;
-    clGetContextInfo(context, CL_CONTEXT_DEVICES, 0, NULL, &size);
+    clgetContextInfo(context, CL_CONTEXT_DEVICES, 0, NULL, &size);
     if (size == 0)
         return 0;
     vector<cl_device_id> devices(size/sizeof(cl_device_id));
-    clGetContextInfo(context, CL_CONTEXT_DEVICES, size, devices.data(), NULL);
+    clgetContextInfo(context, CL_CONTEXT_DEVICES, size, devices.data(), NULL);
     return getDevicePlatformVersion(devices[0]);
 }
 #endif // CL_HPP_TARGET_OPENCL_VERSION >= 120 && CL_HPP_MINIMUM_OPENCL_VERSION < 120
@@ -1849,7 +1849,7 @@ namespace detail {
 
 
 /*! \stuct ImageFormat
- *  \brief Adds constructors and member functions for cl_image_format.
+ *  \brief adds constructors and member functions for cl_image_format.
  *
  *  \see cl_image_format
  */
@@ -1890,14 +1890,14 @@ private:
     static Device default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default context.
+    /*! \brief create the default context.
     *
     * This sets @c default_ and @c default_error_. It does not throw
     * @c cl::Error.
     */
     static void makeDefault();
 
-    /*! \brief Create the default platform from a provided platform.
+    /*! \brief create the default platform from a provided platform.
     *
     * This sets @c default_. It does not throw
     * @c cl::Error.
@@ -1996,12 +1996,12 @@ public:
         return *this;
     }
 
-    //! \brief Wrapper for clGetDeviceInfo().
+    //! \brief Wrapper for clgetDeviceInfo().
     template< typename T >
     cl_int getInfo(cl_device_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetDeviceInfo, object_, name, param),
+            detail::getInfo(&::clgetDeviceInfo, object_, name, param),
             __GET_DEVICE_INFO_ERR);
     }
 
@@ -2123,7 +2123,7 @@ private:
     static Platform default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default context.
+    /*! \brief create the default context.
     *
     * This sets @c default_ and @c default_error_. It does not throw
     * @c cl::Error.
@@ -2140,7 +2140,7 @@ private:
             // Otherwise set it
             cl_uint n = 0;
 
-            cl_int err = ::clGetPlatformIDs(0, NULL, &n);
+            cl_int err = ::clgetPlatformIDs(0, NULL, &n);
             if (err != CL_SUCCESS) {
                 default_error_ = err;
                 return;
@@ -2151,7 +2151,7 @@ private:
             }
 
             vector<cl_platform_id> ids(n);
-            err = ::clGetPlatformIDs(n, ids.data(), NULL);
+            err = ::clgetPlatformIDs(n, ids.data(), NULL);
             if (err != CL_SUCCESS) {
                 default_error_ = err;
                 return;
@@ -2166,7 +2166,7 @@ private:
 #endif
     }
 
-    /*! \brief Create the default platform from a provided platform.
+    /*! \brief create the default platform from a provided platform.
      *
      * This sets @c default_. It does not throw
      * @c cl::Error.
@@ -2236,11 +2236,11 @@ public:
         return default_;
     }
 
-    //! \brief Wrapper for clGetPlatformInfo().
+    //! \brief Wrapper for clgetPlatformInfo().
     cl_int getInfo(cl_platform_info name, string* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetPlatformInfo, object_, name, param),
+            detail::getInfo(&::clgetPlatformInfo, object_, name, param),
             __GET_PLATFORM_INFO_ERR);
     }
 
@@ -2258,7 +2258,7 @@ public:
         return param;
     }
 
-    /*! \brief Gets a list of devices for this platform.
+    /*! \brief gets a list of devices for this platform.
      * 
      *  Wraps clGetDeviceIDs().
      */
@@ -2270,13 +2270,13 @@ public:
         if( devices == NULL ) {
             return detail::errHandler(CL_INVALID_ARG_VALUE, __GET_DEVICE_IDS_ERR);
         }
-        cl_int err = ::clGetDeviceIDs(object_, type, 0, NULL, &n);
+        cl_int err = ::clgetDeviceIDs(object_, type, 0, NULL, &n);
         if (err != CL_SUCCESS) {
             return detail::errHandler(err, __GET_DEVICE_IDS_ERR);
         }
 
         vector<cl_device_id> ids(n);
-        err = ::clGetDeviceIDs(object_, type, n, ids.data(), NULL);
+        err = ::clgetDeviceIDs(object_, type, n, ids.data(), NULL);
         if (err != CL_SUCCESS) {
             return detail::errHandler(err, __GET_DEVICE_IDS_ERR);
         }
@@ -2298,7 +2298,7 @@ public:
     }
 
 #if defined(CL_HPP_USE_DX_INTEROP)
-   /*! \brief Get the list of available D3D10 devices.
+   /*! \brief get the list of available D3D10 devices.
      *
      *  \param d3d_device_source.
      *
@@ -2327,7 +2327,7 @@ public:
         cl_d3d10_device_set_khr    d3d_device_set,
         vector<Device>* devices) const
     {
-        typedef CL_API_ENTRY cl_int (CL_API_CALL *PFN_clGetDeviceIDsFromD3D10KHR)(
+        typedef CL_API_ENTRY cl_int (CL_API_CALL *PFN_clgetDeviceIDsFromD3D10KHR)(
             cl_platform_id platform, 
             cl_d3d10_device_source_khr d3d_device_source, 
             void * d3d_object,
@@ -2340,8 +2340,8 @@ public:
             return detail::errHandler(CL_INVALID_ARG_VALUE, __GET_DEVICE_IDS_ERR);
         }
 
-        static PFN_clGetDeviceIDsFromD3D10KHR pfn_clGetDeviceIDsFromD3D10KHR = NULL;
-        CL_HPP_INIT_CL_EXT_FCN_PTR_PLATFORM_(object_, clGetDeviceIDsFromD3D10KHR);
+        static PFN_clgetDeviceIDsFromD3D10KHR pfn_clGetDeviceIDsFromD3D10KHR = NULL;
+        CL_HPP_INIT_CL_EXT_FCN_PTR_PLATFORM_(object_, clgetDeviceIDsFromD3D10KHR);
 
         cl_uint n = 0;
         cl_int err = pfn_clGetDeviceIDsFromD3D10KHR(
@@ -2357,7 +2357,7 @@ public:
         }
 
         vector<cl_device_id> ids(n);
-        err = pfn_clGetDeviceIDsFromD3D10KHR(
+        err = pfn_clgetDeviceIDsFromD3D10KHR(
             object_, 
             d3d_device_source, 
             d3d_object,
@@ -2386,7 +2386,7 @@ public:
     }
 #endif
 
-    /*! \brief Gets a list of available platforms.
+    /*! \brief gets a list of available platforms.
      * 
      *  Wraps clGetPlatformIDs().
      */
@@ -2399,13 +2399,13 @@ public:
             return detail::errHandler(CL_INVALID_ARG_VALUE, __GET_PLATFORM_IDS_ERR);
         }
 
-        cl_int err = ::clGetPlatformIDs(0, NULL, &n);
+        cl_int err = ::clgetPlatformIDs(0, NULL, &n);
         if (err != CL_SUCCESS) {
             return detail::errHandler(err, __GET_PLATFORM_IDS_ERR);
         }
 
         vector<cl_platform_id> ids(n);
-        err = ::clGetPlatformIDs(n, ids.data(), NULL);
+        err = ::clgetPlatformIDs(n, ids.data(), NULL);
         if (err != CL_SUCCESS) {
             return detail::errHandler(err, __GET_PLATFORM_IDS_ERR);
         }
@@ -2421,7 +2421,7 @@ public:
         return CL_SUCCESS;
     }
 
-    /*! \brief Gets the first available platform.
+    /*! \brief gets the first available platform.
      * 
      *  Wraps clGetPlatformIDs(), returning the first result.
      */
@@ -2436,7 +2436,7 @@ public:
         return err;
     }
 
-    /*! \brief Gets the first available platform, returning it by value.
+    /*! \brief gets the first available platform, returning it by value.
      *
      * \return Returns a valid platform if one is available.
      *         If no platform is available will return a null platform.
@@ -2503,7 +2503,7 @@ private:
     static Context default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default context from the default device type in the default platform.
+    /*! \brief create the default context from the default device type in the default platform.
      *
      * This sets @c default_ and @c default_error_. It does not throw
      * @c cl::Error.
@@ -2541,7 +2541,7 @@ private:
     }
 
 
-    /*! \brief Create the default context from a provided Context.
+    /*! \brief create the default context from a provided Context.
      *
      * This sets @c default_. It does not throw
      * @c cl::Error.
@@ -2645,7 +2645,7 @@ public:
         cl_context_properties prop[4] = {CL_CONTEXT_PLATFORM, 0, 0, 0 };
 
         if (properties == NULL) {
-            // Get a valid platform ID as we cannot send in a blank one
+            // get a valid platform ID as we cannot send in a blank one
             vector<Platform> platforms;
             error = Platform::get(&platforms);
             if (error != CL_SUCCESS) {
@@ -2788,12 +2788,12 @@ public:
         return *this;
     }
 
-    //! \brief Wrapper for clGetContextInfo().
+    //! \brief Wrapper for clgetContextInfo().
     template< typename T >
     cl_int getInfo(cl_context_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetContextInfo, object_, name, param),
+            detail::getInfo(&::clgetContextInfo, object_, name, param),
             __GET_CONTEXT_INFO_ERR);
     }
 
@@ -2811,7 +2811,7 @@ public:
         return param;
     }
 
-    /*! \brief Gets a list of supported image formats.
+    /*! \brief gets a list of supported image formats.
      *  
      *  Wraps clGetSupportedImageFormats().
      */
@@ -2826,7 +2826,7 @@ public:
             return CL_SUCCESS;
         }
 
-        cl_int err = ::clGetSupportedImageFormats(
+        cl_int err = ::clgetSupportedImageFormats(
            object_, 
            flags,
            type, 
@@ -2839,7 +2839,7 @@ public:
 
         if (numEntries > 0) {
             vector<ImageFormat> value(numEntries);
-            err = ::clGetSupportedImageFormats(
+            err = ::clgetSupportedImageFormats(
                 object_,
                 flags,
                 type,
@@ -2930,12 +2930,12 @@ public:
         return *this;
     }
 
-    //! \brief Wrapper for clGetEventInfo().
+    //! \brief Wrapper for clgetEventInfo().
     template< typename T >
     cl_int getInfo(cl_event_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetEventInfo, object_, name, param),
+            detail::getInfo(&::clgetEventInfo, object_, name, param),
             __GET_EVENT_INFO_ERR);
     }
 
@@ -2953,12 +2953,12 @@ public:
         return param;
     }
 
-    //! \brief Wrapper for clGetEventProfilingInfo().
+    //! \brief Wrapper for clgetEventProfilingInfo().
     template< typename T >
     cl_int getProfilingInfo(cl_profiling_info name, T* param) const
     {
         return detail::errHandler(detail::getInfo(
-            &::clGetEventProfilingInfo, object_, name, param),
+            &::clgetEventProfilingInfo, object_, name, param),
             __GET_EVENT_PROFILE_INFO_ERR);
     }
 
@@ -2990,7 +2990,7 @@ public:
 #if CL_HPP_TARGET_OPENCL_VERSION >= 110
     /*! \brief Registers a user callback function for a specific command execution status.
      *
-     *  Wraps clSetEventCallback().
+     *  Wraps clsetEventCallback().
      */
     cl_int setCallback(
         cl_int type,
@@ -2998,7 +2998,7 @@ public:
         void * user_data = NULL)
     {
         return detail::errHandler(
-            ::clSetEventCallback(
+            ::clsetEventCallback(
                 object_,
                 type,
                 pfn_notify,
@@ -3051,14 +3051,14 @@ public:
     //! \brief Default constructor - initializes to NULL.
     UserEvent() : Event() { }
 
-    /*! \brief Sets the execution status of a user event object.
+    /*! \brief sets the execution status of a user event object.
      *
      *  Wraps clSetUserEventStatus().
      */
     cl_int setStatus(cl_int status)
     {
         return detail::errHandler(
-            ::clSetUserEventStatus(object_,status), 
+            ::clsetUserEventStatus(object_,status), 
             __SET_USER_EVENT_STATUS_ERR);
     }
 };
@@ -3145,12 +3145,12 @@ public:
     }
 
 
-    //! \brief Wrapper for clGetMemObjectInfo().
+    //! \brief Wrapper for clgetMemObjectInfo().
     template< typename T >
     cl_int getInfo(cl_mem_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetMemObjectInfo, object_, name, param),
+            detail::getInfo(&::clgetMemObjectInfo, object_, name, param),
             __GET_MEM_OBJECT_INFO_ERR);
     }
 
@@ -3172,7 +3172,7 @@ public:
     /*! \brief Registers a callback function to be called when the memory object
      *         is no longer needed.
      *
-     *  Wraps clSetMemObjectDestructorCallback().
+     *  Wraps clsetMemObjectDestructorCallback().
      *
      *  Repeated calls to this function, for a given cl_mem value, will append
      *  to the list of functions called (in reverse order) when memory object's
@@ -3187,7 +3187,7 @@ public:
         void * user_data = NULL)
     {
         return detail::errHandler(
-            ::clSetMemObjectDestructorCallback(
+            ::clsetMemObjectDestructorCallback(
                 object_,
                 pfn_notify,
                 user_data), 
@@ -3349,7 +3349,7 @@ public:
     }
 
     /**
-     * Allocate an SVM pointer.
+     * allocate an SVM pointer.
      *
      */
     pointer allocate(
@@ -3880,13 +3880,13 @@ public:
         return *this;
     }
 
-    //! \brief Wrapper for clGetGLObjectInfo().
+    //! \brief Wrapper for clgetGLObjectInfo().
     cl_int getObjectInfo(
         cl_gl_object_type *type,
         cl_GLuint * gl_object_name)
     {
         return detail::errHandler(
-            ::clGetGLObjectInfo(object_,type,gl_object_name),
+            ::clgetGLObjectInfo(object_,type,gl_object_name),
             __GET_GL_OBJECT_INFO_ERR);
     }
 };
@@ -3977,13 +3977,13 @@ public:
         return *this;
     }
 
-    //! \brief Wrapper for clGetGLObjectInfo().
+    //! \brief Wrapper for clgetGLObjectInfo().
     cl_int getObjectInfo(
         cl_gl_object_type *type,
         cl_GLuint * gl_object_name)
     {
         return detail::errHandler(
-            ::clGetGLObjectInfo(object_,type,gl_object_name),
+            ::clgetGLObjectInfo(object_,type,gl_object_name),
             __GET_GL_OBJECT_INFO_ERR);
     }
 };
@@ -4050,12 +4050,12 @@ protected:
 
 
 public:
-    //! \brief Wrapper for clGetImageInfo().
+    //! \brief Wrapper for clgetImageInfo().
     template< typename T >
     cl_int getImageInfo(cl_image_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetImageInfo, object_, name, param),
+            detail::getInfo(&::clgetImageInfo, object_, name, param),
             __GET_IMAGE_INFO_ERR);
     }
     
@@ -5199,12 +5199,12 @@ public:
         return *this;
     }
 
-    //! \brief Wrapper for clGetMemObjectInfo().
+    //! \brief Wrapper for clgetMemObjectInfo().
     template< typename T >
     cl_int getInfo(cl_pipe_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetPipeInfo, object_, name, param),
+            detail::getInfo(&::clgetPipeInfo, object_, name, param),
             __GET_MEM_OBJECT_INFO_ERR);
     }
 
@@ -5332,12 +5332,12 @@ public:
         return *this;
     }
 
-    //! \brief Wrapper for clGetSamplerInfo().
+    //! \brief Wrapper for clgetSamplerInfo().
     template< typename T >
     cl_int getInfo(cl_sampler_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetSamplerInfo, object_, name, param),
+            detail::getInfo(&::clgetSamplerInfo, object_, name, param),
             __GET_SAMPLER_INFO_ERR);
     }
 
@@ -5561,7 +5561,7 @@ public:
     cl_int getInfo(cl_kernel_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetKernelInfo, object_, name, param),
+            detail::getInfo(&::clgetKernelInfo, object_, name, param),
             __GET_KERNEL_INFO_ERR);
     }
 
@@ -5583,7 +5583,7 @@ public:
     cl_int getArgInfo(cl_uint argIndex, cl_kernel_arg_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetKernelArgInfo, object_, argIndex, name, param),
+            detail::getInfo(&::clgetKernelArgInfo, object_, argIndex, name, param),
             __GET_KERNEL_ARG_INFO_ERR);
     }
 
@@ -5607,7 +5607,7 @@ public:
     {
         return detail::errHandler(
             detail::getInfo(
-                &::clGetKernelWorkGroupInfo, object_, device(), name, param),
+                &::clgetKernelWorkGroupInfo, object_, device(), name, param),
                 __GET_KERNEL_WORK_GROUP_INFO_ERR);
     }
 
@@ -5628,12 +5628,12 @@ public:
 #if defined(CL_HPP_USE_CL_SUB_GROUPS_KHR)
     cl_int getSubGroupInfo(const cl::Device &dev, cl_kernel_sub_group_info name, const cl::NDRange &range, size_type* param) const
     {
-        typedef clGetKernelSubGroupInfoKHR_fn PFN_clGetKernelSubGroupInfoKHR;
+        typedef clgetKernelSubGroupInfoKHR_fn PFN_clGetKernelSubGroupInfoKHR;
         static PFN_clGetKernelSubGroupInfoKHR pfn_clGetKernelSubGroupInfoKHR = NULL;
-        CL_HPP_INIT_CL_EXT_FCN_PTR_(clGetKernelSubGroupInfoKHR);
+        CL_HPP_INIT_CL_EXT_FCN_PTR_(clgetKernelSubGroupInfoKHR);
 
         return detail::errHandler(
-            pfn_clGetKernelSubGroupInfoKHR(object_, dev(), name, range.size(), range.get(), sizeof(size_type), param, nullptr),
+            pfn_clgetKernelSubGroupInfoKHR(object_, dev(), name, range.size(), range.get(), sizeof(size_type), param, nullptr),
             __GET_KERNEL_ARG_INFO_ERR);
     }
 
@@ -5657,17 +5657,17 @@ public:
     cl_int setArg(cl_uint index, const cl::pointer<T> argPtr)
     {
         return detail::errHandler(
-            ::clSetKernelArgSVMPointer(object_, index, argPtr.get()),
+            ::clsetKernelArgSVMPointer(object_, index, argPtr.get()),
             __SET_KERNEL_ARGS_ERR);
     }
 
     /*! \brief setArg overload taking a vector type.
      */
-    template<typename T, class Alloc>
-    cl_int setArg(cl_uint index, const cl::vector<T, Alloc> &argPtr)
+    template<typename T, class allocate>
+    cl_int setArg(cl_uint index, const cl::vector<T, allocate> &argPtr)
     {
         return detail::errHandler(
-            ::clSetKernelArgSVMPointer(object_, index, argPtr.data()),
+            ::clsetKernelArgSVMPointer(object_, index, argPtr.data()),
             __SET_KERNEL_ARGS_ERR);
     }
 #endif // #if CL_HPP_TARGET_OPENCL_VERSION >= 200
@@ -5680,7 +5680,7 @@ public:
         setArg(cl_uint index, const T argPtr)
     {
         return detail::errHandler(
-            ::clSetKernelArgSVMPointer(object_, index, argPtr),
+            ::clsetKernelArgSVMPointer(object_, index, argPtr),
             __SET_KERNEL_ARGS_ERR);
     }
 #endif // #if CL_HPP_TARGET_OPENCL_VERSION >= 200
@@ -5692,7 +5692,7 @@ public:
         setArg(cl_uint index, const T &value)
     {
         return detail::errHandler(
-            ::clSetKernelArg(
+            ::clsetKernelArg(
                 object_,
                 index,
                 detail::KernelArgumentHandler<T>::size(value),
@@ -5703,7 +5703,7 @@ public:
     cl_int setArg(cl_uint index, size_type size, const void* argPtr)
     {
         return detail::errHandler(
-            ::clSetKernelArg(object_, index, size, argPtr),
+            ::clsetKernelArg(object_, index, size, argPtr),
             __SET_KERNEL_ARGS_ERR);
     }
 
@@ -5715,7 +5715,7 @@ public:
     cl_int setSVMPointers(const vector<void*> &pointerList)
     {
         return detail::errHandler(
-            ::clSetKernelExecInfo(
+            ::clsetKernelExecInfo(
                 object_,
                 CL_KERNEL_EXEC_INFO_SVM_PTRS,
                 sizeof(void*)*pointerList.size(),
@@ -5730,7 +5730,7 @@ public:
     cl_int setSVMPointers(const std::array<void*, ArrayLength> &pointerList)
     {
         return detail::errHandler(
-            ::clSetKernelExecInfo(
+            ::clsetKernelExecInfo(
                 object_,
                 CL_KERNEL_EXEC_INFO_SVM_PTRS,
                 sizeof(void*)*pointerList.size(),
@@ -5746,13 +5746,13 @@ public:
      * \return CL_SUCCESS if the function was executed succesfully. CL_INVALID_OPERATION
      *         if no devices in the context support fine-grained system SVM.
      *
-     * \see clSetKernelExecInfo
+     * \see clsetKernelExecInfo
      */
     cl_int enableFineGrainedSystemSVM(bool svmEnabled)
     {
         cl_bool svmEnabled_ = svmEnabled ? CL_TRUE : CL_FALSE;
         return detail::errHandler(
-            ::clSetKernelExecInfo(
+            ::clsetKernelExecInfo(
                 object_,
                 CL_KERNEL_EXEC_INFO_SVM_FINE_GRAIN_SYSTEM,
                 sizeof(cl_bool),
@@ -5796,7 +5796,7 @@ public:
 
         setSVMPointersHelper<0, 1 + sizeof...(Ts)>(pointerList, t0, ts...);
         return detail::errHandler(
-            ::clSetKernelExecInfo(
+            ::clsetKernelExecInfo(
             object_,
             CL_KERNEL_EXEC_INFO_SVM_PTRS,
             sizeof(void*)*(1 + sizeof...(Ts)),
@@ -5896,8 +5896,8 @@ public:
     }
 
     /**
-     * Create a program from a vector of source strings and the default context.
-     * Does not compile or link the program.
+     * create a program from a vector of source strings and the default context.
+     * does not compile or link the program.
      */
     Program(
         const Sources& sources,
@@ -5931,8 +5931,8 @@ public:
     }
 
     /**
-     * Create a program from a vector of source strings and a provided context.
-     * Does not compile or link the program.
+     * create a program from a vector of source strings and a provided context.
+     * does not compile or link the program.
      */
     Program(
         const Context& context,
@@ -5973,8 +5973,8 @@ public:
      * \param binaryStatus An optional vector that on completion will be resized to
      *   match the size of binaries and filled with values to specify if each binary
      *   was successfully loaded.
-     *   Set to CL_SUCCESS if the binary was successfully loaded.
-     *   Set to CL_INVALID_VALUE if the length is 0 or the binary pointer is NULL.
+     *   set to CL_SUCCESS if the binary was successfully loaded.
+     *   set to CL_INVALID_VALUE if the length is 0 or the binary pointer is NULL.
      *   Set to CL_INVALID_BINARY if the binary provided is not valid for the matching device.
      * \param err if non-NULL will be set to CL_SUCCESS on successful operation or one of the following errors:
      *   CL_INVALID_CONTEXT if context is not a valid context.
@@ -6045,7 +6045,7 @@ public:
     
 #if CL_HPP_TARGET_OPENCL_VERSION >= 120
     /**
-     * Create program using builtin kernels.
+     * create program using builtin kernels.
      * \param kernelNames Semi-colon separated list of builtin kernel names
      */
     Program(
@@ -6189,7 +6189,7 @@ public:
     cl_int getInfo(cl_program_info name, T* param) const
     {
         return detail::errHandler(
-            detail::getInfo(&::clGetProgramInfo, object_, name, param),
+            detail::getInfo(&::clgetProgramInfo, object_, name, param),
             __GET_PROGRAM_INFO_ERR);
     }
 
@@ -6212,7 +6212,7 @@ public:
     {
         return detail::errHandler(
             detail::getInfo(
-                &::clGetProgramBuildInfo, object_, device(), name, param),
+                &::clgetProgramBuildInfo, object_, device(), name, param),
                 __GET_PROGRAM_BUILD_INFO_ERR);
     }
 
@@ -6404,7 +6404,7 @@ inline cl_int cl::Program::getInfo(cl_program_info name, vector<vector<unsigned 
         }
 
         return detail::errHandler(
-            detail::getInfo(&::clGetProgramInfo, object_, name, param),
+            detail::getInfo(&::clgetProgramInfo, object_, name, param),
             __GET_PROGRAM_INFO_ERR);
     }
 
@@ -6446,7 +6446,7 @@ private:
     static CommandQueue default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default command queue returned by @ref getDefault.
+    /*! \brief create the default command queue returned by @ref getDefault.
      *
      * It sets default_error_ to indicate success or failure. It does not throw
      * @c cl::Error.
@@ -6478,7 +6478,7 @@ private:
 #endif
     }
 
-    /*! \brief Create the default command queue.
+    /*! \brief create the default command queue.
      *
      * This sets @c default_. It does not throw
      * @c cl::Error.
@@ -6715,7 +6715,7 @@ public:
     {
         return detail::errHandler(
             detail::getInfo(
-                &::clGetCommandQueueInfo, object_, name, param),
+                &::clgetCommandQueueInfo, object_, name, param),
                 __GET_COMMAND_QUEUE_INFO_ERR);
     }
 
@@ -7062,7 +7062,7 @@ public:
     /**
      * Enqueue a command to fill an image object with a specified color.
      * \param fillColor is the color to use to fill the image.
-     *     This is a four component RGBA floating-point color value if
+     *     This is a four PixelComponents RGBA floating-point color value if
      *     the image channel data type is not an unnormalized signed or
      *     unsigned data type.
      */
@@ -7096,7 +7096,7 @@ public:
     /**
      * Enqueue a command to fill an image object with a specified color.
      * \param fillColor is the color to use to fill the image.
-     *     This is a four component RGBA signed integer color value if
+     *     This is a four PixelComponents RGBA signed integer color value if
      *     the image channel data type is an unnormalized signed integer
      *     type.
      */
@@ -7130,7 +7130,7 @@ public:
     /**
      * Enqueue a command to fill an image object with a specified color.
      * \param fillColor is the color to use to fill the image.
-     *     This is a four component RGBA unsigned integer color value if
+     *     This is a four PixelComponents RGBA unsigned integer color value if
      *     the image channel data type is an unnormalized unsigned integer
      *     type.
      */
@@ -7697,7 +7697,7 @@ public:
     }
 
     /*!
-     * Create a device command queue for a specified device in the passed context.
+     * create a device command queue for a specified device in the passed context.
      */
     DeviceCommandQueue(
         const Context& context,
@@ -7720,7 +7720,7 @@ public:
     }
 
     /*!
-     * Create a device command queue for a specified device in the passed context.
+     * create a device command queue for a specified device in the passed context.
      */
     DeviceCommandQueue(
         const Context& context,
@@ -7793,7 +7793,7 @@ public:
     {
         return detail::errHandler(
             detail::getInfo(
-            &::clGetCommandQueueInfo, object_, name, param),
+            &::clgetCommandQueueInfo, object_, name, param),
             __GET_COMMAND_QUEUE_INFO_ERR);
     }
 
@@ -7811,7 +7811,7 @@ public:
     }
 
     /*!
-    * Create a new default device command queue for the default device,
+    * create a new default device command queue for the default device,
     * in the default context and of the default size.
     * If there is already a default queue for the specified device this
     * function will return the pre-existing queue.
@@ -7841,7 +7841,7 @@ public:
     }
 
     /*!
-    * Create a new default device command queue for the specified device
+    * create a new default device command queue for the specified device
     * and of the default size.
     * If there is already a default queue for the specified device this
     * function will return the pre-existing queue.
@@ -7869,7 +7869,7 @@ public:
     }
 
     /*!
-     * Create a new default device command queue for the specified device 
+     * create a new default device command queue for the specified device 
      * and of the requested size in bytes.
      * If there is already a default queue for the specified device this
      * function will return the pre-existing queue.

@@ -3,18 +3,18 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Geometry.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace details
 	{
-		SceneNode & GetParentNode( Geometry & p_instance )
+		SceneNode & getParentNode( Geometry & p_instance )
 		{
-			return *p_instance.GetParent();
+			return *p_instance.getParent();
 		}
 
-		SceneNode & GetParentNode( BillboardBase & p_instance )
+		SceneNode & getParentNode( BillboardBase & p_instance )
 		{
-			return *p_instance.GetNode();
+			return *p_instance.getNode();
 		}
 	}
 }

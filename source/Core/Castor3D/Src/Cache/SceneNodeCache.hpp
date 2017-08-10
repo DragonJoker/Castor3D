@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Scene/SceneNode.hpp"
 #include "Cache/ObjectCache.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,10 +42,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct ObjectCacheTraits< SceneNode, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< SceneNode >( KeyType const & ) >;
 		using Merger = std::function< void( ObjectCacheBase< SceneNode, KeyType > const &
-											, Castor::Collection< SceneNode, KeyType > &
+											, castor::Collection< SceneNode, KeyType > &
 											, std::shared_ptr< SceneNode >
 											, SceneNodeSPtr
 											, SceneNodeSPtr ) >;
@@ -60,11 +60,11 @@ namespace Castor3D
 	\brief		Cache de SceneNode.
 	*/
 	template<>
-	class ObjectCache< SceneNode, Castor::String >
-		: public ObjectCacheBase< SceneNode, Castor::String >
+	class ObjectCache< SceneNode, castor::String >
+		: public ObjectCacheBase< SceneNode, castor::String >
 	{
 	public:
-		using MyObjectCacheType = ObjectCacheBase< SceneNode, Castor::String >;
+		using MyObjectCacheType = ObjectCacheBase< SceneNode, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
@@ -150,9 +150,9 @@ namespace Castor3D
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent = nullptr )
+		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent = nullptr )
 		{
-			auto lock = Castor::make_unique_lock( this->m_elements );
+			auto lock = castor::makeUniqueLock( this->m_elements );
 			ElementPtr result;
 
 			if ( !this->m_elements.has( p_name ) )
@@ -161,19 +161,19 @@ namespace Castor3D
 				this->m_initialise( result );
 				this->m_elements.insert( p_name, result );
 				m_attach( result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				castor::Logger::logInfo( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
 				this->onChanged();
 			}
 			else
 			{
 				result = this->m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return result;
 		}
 	};
-	using SceneNodeCache = ObjectCache< SceneNode, Castor::String >;
+	using SceneNodeCache = ObjectCache< SceneNode, castor::String >;
 	DECLARE_SMART_PTR( SceneNodeCache );
 }
 

@@ -2,8 +2,8 @@
 
 #include "Render/TestRenderSystem.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -16,36 +16,36 @@ namespace TestRender
 	{
 	}
 
-	bool TestQuery::DoInitialise()
+	bool TestQuery::doInitialise()
 	{
 		return true;
 	}
 
-	void TestQuery::DoCleanup()
+	void TestQuery::doCleanup()
 	{
 	}
 
-	void TestQuery::DoBegin()const
+	void TestQuery::doBegin()const
 	{
 	}
 
-	void TestQuery::DoEnd()const
+	void TestQuery::doEnd()const
 	{
 	}
 
-	void TestQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const
+	void TestQuery::doGetInfos( castor3d::QueryInfo p_infos, int32_t & p_param )const
 	{
 	}
 
-	void TestQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const
+	void TestQuery::doGetInfos( castor3d::QueryInfo p_infos, uint32_t & p_param )const
 	{
 	}
 
-	void TestQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const
+	void TestQuery::doGetInfos( castor3d::QueryInfo p_infos, int64_t & p_param )const
 	{
 	}
 
-	void TestQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const
+	void TestQuery::doGetInfos( castor3d::QueryInfo p_infos, uint64_t & p_param )const
 	{
 	}
 }

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -67,7 +67,7 @@ namespace Castor
 		 *\~french
 		 *\brief		L'objet propriétaire.
 		 */
-		inline Owner * GetOwner()const
+		inline Owner * getOwner()const
 		{
 			return &m_owner;
 		}
@@ -82,10 +82,10 @@ namespace Castor
 	 *\remarks		Must be used in global namespace.
 	 *\~french
 	 *\brief		Macro pour déclarer une spécialisation exportée de OwnedBy.
-	 *\remarks		Doit être utilisée dans le namespace global.
+	 *\remarks		doit être utilisée dans le namespace global.
 	 */
 #	define DECLARED_EXPORTED_OWNED_BY( exp, owner, name )\
-	namespace Castor\
+	namespace castor\
 	{\
 		template<>\
 		class exp OwnedBy< owner >\
@@ -98,7 +98,7 @@ namespace Castor
 			OwnedBy( OwnedBy< owner > && p_rhs ) = default;\
 			OwnedBy & operator=( OwnedBy< owner > && p_rhs ) = default;\
 			~OwnedBy() = default;\
-			owner * Get##name()const;\
+			owner * get##name()const;\
 		private:\
 			owner & m_owner;\
 		};\
@@ -110,16 +110,16 @@ namespace Castor
 	 *\remarks		Must be used in global namespace.
 	 *\~french
 	 *\brief		Macro pour implémenter une spécialisation de OwnedBy.
-	 *\remarks		Doit être utilisée dans le namespace global.
+	 *\remarks		doit être utilisée dans le namespace global.
 	 */
 #	define IMPLEMENT_EXPORTED_OWNED_BY( owner, name )\
-	namespace Castor\
+	namespace castor\
 	{\
 		OwnedBy< owner >::OwnedBy( owner & p_owner )\
 			: m_owner( p_owner )\
 		{\
 		}\
-		owner * OwnedBy< owner >::Get##name()const\
+		owner * OwnedBy< owner >::get##name()const\
 		{\
 			return &m_owner;\
 		}\

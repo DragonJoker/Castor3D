@@ -4,18 +4,18 @@
 
 namespace GLSL
 {
-	void WriteLine( GlslWriter & p_writer, Castor::String const & p_line )
+	void writeLine( GlslWriter & p_writer, castor::String const & p_line )
 	{
 		p_writer << p_line << Endl{};
 	}
 
-	void RegisterName( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type )
+	void registerName( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type )
 	{
-		p_writer.RegisterName( p_name, p_type );
+		p_writer.registerName( p_name, p_type );
 	}
 
-	void CheckNameExists( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type )
+	void checkNameExists( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type )
 	{
-		p_writer.CheckNameExists( p_name, p_type );
+		p_writer.checkNameExists( p_name, p_type );
 	}
 }

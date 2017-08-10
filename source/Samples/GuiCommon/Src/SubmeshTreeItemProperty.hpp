@@ -52,7 +52,7 @@ namespace GuiCommon
 		 *\param[in]	p_geometry	La géométrie parente
 		 *\param[in]	p_submesh	Le maillage cible
 		 */
-		SubmeshTreeItemProperty( bool p_editable, Castor3D::Geometry & p_geometry, Castor3D::Submesh & p_submesh );
+		SubmeshTreeItemProperty( bool p_editable, castor3d::Geometry & p_geometry, castor3d::Submesh & p_submesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -68,7 +68,7 @@ namespace GuiCommon
 		 *\brief		Récupère le maillage
 		 *\return		La valeur
 		 */
-		inline Castor3D::Submesh & GetSubmesh()
+		inline castor3d::Submesh & getSubmesh()
 		{
 			return m_submesh;
 		}
@@ -80,28 +80,28 @@ namespace GuiCommon
 		 *\brief		Récupère la géométrie
 		 *\return		La valeur
 		 */
-		inline Castor3D::Geometry & GetGeometry()
+		inline castor3d::Geometry & getGeometry()
 		{
 			return m_geometry;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnMaterialChange( Castor::String const & p_name );
-		void OnTopologyChange( Castor3D::Topology p_value );
+		void OnMaterialChange( castor::String const & p_name );
+		void OnTopologyChange( castor3d::Topology p_value );
 
 	private:
-		Castor3D::Geometry & m_geometry;
-		Castor3D::Submesh & m_submesh;
+		castor3d::Geometry & m_geometry;
+		castor3d::Submesh & m_submesh;
 	};
 }
 

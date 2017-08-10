@@ -2,8 +2,8 @@
 
 #include "Common/OpenGl.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -20,9 +20,9 @@ namespace GlRender
 	{
 	}
 
-	bool GlGpuIoBuffer::Initialise()
+	bool GlGpuIoBuffer::initialise()
 	{
-		InitialiseStorage( m_pixelsSize, m_accessType, m_accessNature );
-		return DoInitialise();
+		initialiseStorage( m_pixelsSize, m_accessType, m_accessNature );
+		return doInitialise();
 	}
 }

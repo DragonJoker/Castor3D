@@ -5,9 +5,9 @@
 #include "Mesh/Mesh.hpp"
 #include "Scene/Scene.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	String const CmshImporter::Type = cuT( "cmsh" );
 
@@ -16,19 +16,19 @@ namespace Castor3D
 	{
 	}
 
-	ImporterUPtr CmshImporter::Create( Engine & engine )
+	ImporterUPtr CmshImporter::create( Engine & engine )
 	{
 		return std::make_unique< CmshImporter >( engine );
 	}
 
-	bool CmshImporter::DoImportScene( Scene & p_scene )
+	bool CmshImporter::doImportScene( Scene & p_scene )
 	{
 		CASTOR_EXCEPTION( "WTF are you trying to do? There is no scene, in a cmsh file." );
 	}
 
-	bool CmshImporter::DoImportMesh( Mesh & p_mesh )
+	bool CmshImporter::doImportMesh( Mesh & p_mesh )
 	{
 		BinaryFile file{ m_fileName, File::OpenMode::eRead };
-		return BinaryParser< Mesh >{}.Parse( p_mesh, file );
+		return BinaryParser< Mesh >{}.parse( p_mesh, file );
 	}
 }

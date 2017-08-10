@@ -29,9 +29,9 @@ SOFTWARE.
 
 namespace TestRender
 {
-	template< Castor3D::UniformType Type >
+	template< castor3d::UniformType Type >
 	class TestPushUniform
-		: public Castor3D::TPushUniform< Type >
+		: public castor3d::TPushUniform< Type >
 	{
 	public:
 		TestPushUniform( TestShaderProgram & p_program, uint32_t p_occurences );
@@ -39,8 +39,8 @@ namespace TestRender
 		virtual ~TestPushUniform();
 
 	private:
-		virtual bool DoInitialise();
-		virtual void DoUpdate()const;
+		virtual bool doInitialise();
+		virtual void doUpdate()const;
 	};
 }
 

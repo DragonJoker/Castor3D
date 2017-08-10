@@ -26,7 +26,7 @@ SOFTWARE.
 #include "PreciseTimer.hpp"
 #include "CastorUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -71,6 +71,6 @@ namespace Castor
 	};
 }
 
-#	define CASTOR_TIME() Castor::BlockTimer timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#	define CASTOR_TIME() castor::BlockTimer timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
 
 #endif

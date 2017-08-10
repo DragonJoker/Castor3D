@@ -6,7 +6,7 @@
 
 #include "Miscellaneous/StringUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	class LogcatConsole
 		: public ConsoleImpl
@@ -16,7 +16,7 @@ namespace Castor
 		{
 		}
 
-		void BeginLog( LogType logLevel )
+		void beginLog( LogType logLevel )
 		{
 			switch ( logLevel )
 			{
@@ -42,12 +42,12 @@ namespace Castor
 			}
 		}
 
-		void Print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )
 		{
 			__android_log_print( m_logLevel
 				, "Castor3D"
 				, "%s"
-				, string::string_cast< char >( toLog ).c_str() );
+				, string::stringCast< char >( toLog ).c_str() );
 		}
 
 	private:
@@ -63,14 +63,14 @@ namespace Castor
 	{
 	}
 
-	void ProgramConsole::BeginLog( LogType logLevel )
+	void ProgramConsole::beginLog( LogType logLevel )
 	{
-		m_console->BeginLog( logLevel );
+		m_console->beginLog( logLevel );
 	}
 
-	void ProgramConsole::Print( String const & toLog, bool newLine )
+	void ProgramConsole::print( String const & toLog, bool newLine )
 	{
-		m_console->Print( toLog, newLine );
+		m_console->print( toLog, newLine );
 	}
 
 	//************************************************************************************************

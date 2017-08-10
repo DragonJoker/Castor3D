@@ -53,8 +53,8 @@ namespace GuiCommon
 		 *\param[in]	p_buffer	Le tampon de variables contenant celle donnàe
 		 */
 		FrameVariableTreeItemProperty( bool p_editable
-			, Castor3D::UniformSPtr p_variable
-			, Castor3D::UniformBuffer & p_buffer );
+			, castor3d::UniformSPtr p_variable
+			, castor3d::UniformBuffer & p_buffer );
 		/**
 		 *\~english
 		 *\brief		Constructor, allows creation of sampler frame variables only
@@ -68,8 +68,8 @@ namespace GuiCommon
 		 *\param[in]	p_type		Le tampon de variables contenant celle donnàe
 		 */
 		FrameVariableTreeItemProperty( bool p_editable
-			, Castor3D::PushUniformSPtr p_variable
-			, Castor3D::ShaderType p_type );
+			, castor3d::PushUniformSPtr p_variable
+			, castor3d::ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -85,7 +85,7 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::UniformSPtr GetVariable()
+		inline castor3d::UniformSPtr getVariable()
 		{
 			return m_variable.lock();
 		}
@@ -97,31 +97,31 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::UniformBufferRPtr GetBuffer()
+		inline castor3d::UniformBufferRPtr getBuffer()
 		{
 			return m_buffer;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTypeChange( Castor3D::UniformType p_value );
-		void OnNameChange( Castor::String const & p_value );
+		void OnTypeChange( castor3d::UniformType p_value );
+		void OnNameChange( castor::String const & p_value );
 		void OnValueChange( wxVariant const & p_value );
 
 	private:
-		Castor3D::UniformWPtr m_variable;
-		Castor3D::PushUniformWPtr m_pushVariable;
-		Castor3D::UniformBufferRPtr m_buffer{ nullptr };
-		Castor3D::ShaderType m_type;
+		castor3d::UniformWPtr m_variable;
+		castor3d::PushUniformWPtr m_pushVariable;
+		castor3d::UniformBufferRPtr m_buffer{ nullptr };
+		castor3d::ShaderType m_type;
 	};
 }
 

@@ -33,11 +33,11 @@ namespace Testing
 		: public GlTestCase
 	{
 	public:
-		explicit GlAtomicCounterBufferTest( Castor3D::Engine & engine );
+		explicit GlAtomicCounterBufferTest( castor3d::Engine & engine );
 		virtual ~GlAtomicCounterBufferTest();
 
 	private:
-		void DoRegisterTests()override;
+		void doRegisterTests()override;
 
 	private:
 		void Creation();

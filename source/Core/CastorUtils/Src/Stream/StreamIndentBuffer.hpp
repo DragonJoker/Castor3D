@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <streambuf>
 
-namespace Castor
+namespace castor
 {
 	namespace format
 	{
@@ -41,7 +41,7 @@ namespace Castor
 		\brief		Tampon de flux utilisé pour indenter les lignes
 		*/
 		template < typename char_type, char_type fill_char = ' ', typename traits = std::char_traits< char_type > >
-		struct basic_indent_buffer
+		struct BasicIndentBuffer
 			: public std::basic_streambuf< char_type, traits >
 		{
 		public:
@@ -58,7 +58,7 @@ namespace Castor
 			 *\brief		Constructeur par copie
 			 *\remarks		Non implémenté afin de le désactiver
 			 */
-			basic_indent_buffer( const basic_indent_buffer< char_type, fill_char, traits > & ) = delete;
+			BasicIndentBuffer( const BasicIndentBuffer< char_type, fill_char, traits > & ) = delete;
 
 			/**
 			 *\~english
@@ -68,7 +68,7 @@ namespace Castor
 			 *\brief		Opérateur d'affectation par copie
 			 *\remarks		Non implémenté afin de le désactiver
 			 */
-			basic_indent_buffer< char_type, fill_char, traits > & operator =( const basic_indent_buffer< char_type, fill_char, traits > & ) = delete;
+			BasicIndentBuffer< char_type, fill_char, traits > & operator =( const BasicIndentBuffer< char_type, fill_char, traits > & ) = delete;
 
 		public:
 			/**
@@ -77,7 +77,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			basic_indent_buffer( std::basic_streambuf< char_type, traits > * sbuf )
+			BasicIndentBuffer( std::basic_streambuf< char_type, traits > * sbuf )
 				: m_sbuf( sbuf )
 				, m_count( 0 )
 				, m_set( true )
@@ -90,7 +90,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Destructeur
 			 */
-			~basic_indent_buffer()
+			~BasicIndentBuffer()
 			{
 			}
 
@@ -169,11 +169,11 @@ namespace Castor
 			bool m_set;
 		};
 
-		typedef basic_indent_buffer< char > spc_indent_buffer;
-		typedef basic_indent_buffer< wchar_t > wspc_indent_buffer;
+		typedef BasicIndentBuffer< char > SpaceIndentBuffer;
+		typedef BasicIndentBuffer< wchar_t > WSpaceIndentBuffer;
 
-		typedef basic_indent_buffer< char, '\t' > tab_indent_buffer;
-		typedef basic_indent_buffer< wchar_t, L'\t' > wtab_indent_buffer;
+		typedef BasicIndentBuffer< char, '\t' > TabIndentBuffer;
+		typedef BasicIndentBuffer< wchar_t, L'\t' > WTabIndentBuffer;
 	}
 }
 

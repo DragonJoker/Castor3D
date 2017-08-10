@@ -31,17 +31,17 @@ SOFTWARE.
 namespace GlRender
 {
 	class GlUniformBufferBinding
-		: public Castor3D::UniformBufferBinding
+		: public castor3d::UniformBufferBinding
 		, public Holder
 	{
 	public:
 		GlUniformBufferBinding( OpenGl & p_gl
-			, Castor3D::UniformBuffer & p_ubo
+			, castor3d::UniformBuffer & p_ubo
 			, GlShaderProgram const & p_program );
 		virtual ~GlUniformBufferBinding();
 
 	private:
-		void DoBind( uint32_t p_index )const override;
+		void doBind( uint32_t p_index )const override;
 
 	private:
 		int m_blockIndex;

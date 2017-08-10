@@ -9,8 +9,8 @@
 #include "SizeProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -22,7 +22,7 @@ namespace GuiCommon
 	}
 
 	BillboardTreeItemProperty::BillboardTreeItemProperty( bool p_editable, BillboardList & p_billboard )
-		: TreeItemProperty( p_billboard.GetParentScene().GetEngine(), p_editable, ePROPERTY_DATA_TYPE_BILLBOARD )
+		: TreeItemProperty( p_billboard.getParentScene().getEngine(), p_editable, ePROPERTY_DATA_TYPE_BILLBOARD )
 		, m_billboard( p_billboard )
 	{
 		PROPERTY_CATEGORY_BILLBOARD = _( "Billboard: " );
@@ -36,14 +36,14 @@ namespace GuiCommon
 	{
 	}
 
-	void BillboardTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void BillboardTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_BILLBOARD + wxString( m_billboard.GetName() ) ) );
-		p_grid->Append( new SizeProperty( PROPERTY_BILLBOARD_SIZE ) )->SetValue( WXVARIANT( m_billboard.GetDimensions() ) );
-		p_grid->Append( DoCreateMaterialProperty( PROPERTY_BILLBOARD_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_billboard.GetMaterial()->GetName() ) ) );
+		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_BILLBOARD + wxString( m_billboard.getName() ) ) );
+		p_grid->Append( new SizeProperty( PROPERTY_BILLBOARD_SIZE ) )->SetValue( WXVARIANT( m_billboard.getDimensions() ) );
+		p_grid->Append( doCreateMaterialProperty( PROPERTY_BILLBOARD_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_billboard.getMaterial()->getName() ) ) );
 	}
 
-	void BillboardTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void BillboardTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * property = p_event.GetProperty();
 
@@ -61,26 +61,26 @@ namespace GuiCommon
 		}
 	}
 
-	void BillboardTreeItemProperty::OnMaterialChange( Castor::String const & p_name )
+	void BillboardTreeItemProperty::OnMaterialChange( castor::String const & p_name )
 	{
-		DoApplyChange( [p_name, this]()
+		doApplyChange( [p_name, this]()
 		{
-			auto & cache = m_billboard.GetParentScene().GetEngine()->GetMaterialCache();
-			MaterialSPtr material = cache.Find( p_name );
+			auto & cache = m_billboard.getParentScene().getEngine()->getMaterialCache();
+			MaterialSPtr material = cache.find( p_name );
 
 			if ( material )
 			{
-				m_billboard.SetMaterial( material );
-				m_billboard.GetParentScene().SetChanged();
+				m_billboard.setMaterial( material );
+				m_billboard.getParentScene().setChanged();
 			}
 		} );
 	}
 
-	void BillboardTreeItemProperty::OnSizeChange( Castor::Size const & p_size )
+	void BillboardTreeItemProperty::OnSizeChange( castor::Size const & p_size )
 	{
-		DoApplyChange( [p_size, this]()
+		doApplyChange( [p_size, this]()
 		{
-			m_billboard.SetDimensions( p_size );
+			m_billboard.setDimensions( p_size );
 		} );
 	}
 }

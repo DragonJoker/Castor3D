@@ -26,7 +26,7 @@ SOFTWARE.
 #include "ShadowMapPass.hpp"
 #include "Render/Viewport.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -65,29 +65,29 @@ namespace Castor3D
 		C3D_API ~ShadowMapPassPoint();
 
 	protected:
-		void DoRenderNodes( SceneRenderNodes & p_nodes );
+		void doRenderNodes( SceneRenderNodes & p_nodes );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
+		 *\copydoc		castor3d::ShadowMapPass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void DoUpdate( RenderQueueArray & p_queues )override;
+		void doUpdate( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
+		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void DoRender( uint32_t p_face )override;
+		void doRender( uint32_t p_face )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void DoPrepareBackPipeline( ShaderProgram & p_program
+		void doPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 
 	private:
@@ -96,7 +96,7 @@ namespace Castor3D
 		SceneNode::OnChanged::connection m_onNodeChanged;
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
-		Castor::Matrix4x4r m_projection;
+		castor::Matrix4x4r m_projection;
 		//!\~english	The shadow map configuration data UBO.
 		//!\~french		L'UBO de données de configuration de shadow map.
 		UniformBuffer m_shadowConfig;
@@ -105,7 +105,7 @@ namespace Castor3D
 		Viewport m_viewport;
 		//!\~english	The view matrices for the render of each cube face.
 		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
-		std::array< Castor::Matrix4x4r, size_t( CubeMapFace::eCount ) > m_matrices;
+		std::array< castor::Matrix4x4r, size_t( CubeMapFace::eCount ) > m_matrices;
 	};
 }
 

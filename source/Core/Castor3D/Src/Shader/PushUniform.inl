@@ -1,4 +1,4 @@
-namespace Castor3D
+namespace castor3d
 {
 	template< UniformType Type  >
 	TPushUniform< Type >::TPushUniform( ShaderProgram & p_program, uint32_t p_occurences )
@@ -13,65 +13,65 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline typename TPushUniform< Type >::return_type & TPushUniform< Type >::GetValue()
+	inline typename TPushUniform< Type >::return_type & TPushUniform< Type >::getValue()
 	{
-		return m_uniform.GetValue();
+		return m_uniform.getValue();
 	}
 
 	template< UniformType Type >
-	inline typename TPushUniform< Type >::return_const_type const & TPushUniform< Type >::GetValue()const
+	inline typename TPushUniform< Type >::return_const_type const & TPushUniform< Type >::getValue()const
 	{
-		return m_uniform.GetValue();
+		return m_uniform.getValue();
 	}
 
 	template< UniformType Type >
-	inline typename TPushUniform< Type >::return_type & TPushUniform< Type >::GetValue( uint32_t p_index )
+	inline typename TPushUniform< Type >::return_type & TPushUniform< Type >::getValue( uint32_t p_index )
 	{
-		return m_uniform.GetValue( p_index );
+		return m_uniform.getValue( p_index );
 	}
 
 	template< UniformType Type >
-	inline typename TPushUniform< Type >::return_const_type const & TPushUniform< Type >::GetValue( uint32_t p_index )const
+	inline typename TPushUniform< Type >::return_const_type const & TPushUniform< Type >::getValue( uint32_t p_index )const
 	{
-		return m_uniform.GetValue( p_index );
+		return m_uniform.getValue( p_index );
 	}
 
 	template< UniformType Type >
-	inline void TPushUniform< Type >::SetValue( param_type const & p_value )
+	inline void TPushUniform< Type >::setValue( param_type const & p_value )
 	{
-		m_uniform.SetValue( p_value );
+		m_uniform.setValue( p_value );
 	}
 
 	template< UniformType Type >
-	inline void TPushUniform< Type >::SetValue( param_type const & p_value, uint32_t p_index )
+	inline void TPushUniform< Type >::setValue( param_type const & p_value, uint32_t p_index )
 	{
-		m_uniform.SetValue( p_value, p_index );
-	}
-
-	template< UniformType Type >
-	template< size_t N >
-	inline void TPushUniform< Type >::SetValues( param_type const( &p_values )[N] )
-	{
-		SetValues( p_values, N );
+		m_uniform.setValue( p_value, p_index );
 	}
 
 	template< UniformType Type >
 	template< size_t N >
-	inline void TPushUniform< Type >::SetValues( std::array< param_type, N > const & p_values )
+	inline void TPushUniform< Type >::setValues( param_type const( &p_values )[N] )
 	{
-		SetValues( p_values.data(), N );
+		setValues( p_values, N );
 	}
 
 	template< UniformType Type >
-	inline void TPushUniform< Type >::SetValues( std::vector< param_type > const & p_values )
+	template< size_t N >
+	inline void TPushUniform< Type >::setValues( std::array< param_type, N > const & p_values )
 	{
-		SetValues( p_values.data(), p_values.size() );
+		setValues( p_values.data(), N );
 	}
 
 	template< UniformType Type >
-	inline void TPushUniform< Type >::SetValues( param_type const * p_values, size_t p_size )
+	inline void TPushUniform< Type >::setValues( std::vector< param_type > const & p_values )
 	{
-		m_uniform.SetValues( p_values, p_size );
+		setValues( p_values.data(), p_values.size() );
+	}
+
+	template< UniformType Type >
+	inline void TPushUniform< Type >::setValues( param_type const * p_values, size_t p_size )
+	{
+		m_uniform.setValues( p_values, p_size );
 	}
 
 	template< UniformType Type >

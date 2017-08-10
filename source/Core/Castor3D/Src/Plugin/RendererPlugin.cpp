@@ -4,16 +4,16 @@
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * engine )
 		: Plugin( PluginType::eRenderer, p_library, *engine )
 	{
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( GetEngine(), this );
+			m_pfnOnLoad( getEngine(), this );
 		}
 	}
 
@@ -21,16 +21,16 @@ namespace Castor3D
 	{
 		if ( m_pfnOnUnload )
 		{
-			m_pfnOnUnload( GetEngine() );
+			m_pfnOnUnload( getEngine() );
 		}
 	}
 
-	String const & RendererPlugin::GetRendererType()
+	String const & RendererPlugin::getRendererType()
 	{
 		return m_type;
 	}
 
-	void RendererPlugin::SetRendererType( String const & p_type )
+	void RendererPlugin::setRendererType( String const & p_type )
 	{
 		m_type = p_type;
 	}

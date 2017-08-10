@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Cache/ObjectCache.hpp"
 #include "Render/RenderInfo.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,10 +42,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct ObjectCacheTraits< Geometry, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< Geometry >( KeyType const &, SceneNodeSPtr, MeshSPtr ) >;
 		using Merger = std::function< void( ObjectCacheBase< Geometry, KeyType > const &
-			, Castor::Collection< Geometry, KeyType > &
+			, castor::Collection< Geometry, KeyType > &
 			, std::shared_ptr< Geometry >
 			, SceneNodeSPtr
 			, SceneNodeSPtr ) >;
@@ -60,11 +60,11 @@ namespace Castor3D
 	\brief		Cache de Geometry.
 	*/
 	template<>
-	class ObjectCache< Geometry, Castor::String >
-		: public ObjectCacheBase< Geometry, Castor::String >
+	class ObjectCache< Geometry, castor::String >
+		: public ObjectCacheBase< Geometry, castor::String >
 	{
 	public:
-		using MyObjectCache = ObjectCacheBase< Geometry, Castor::String >;
+		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
@@ -128,7 +128,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'objets
 		 */
-		C3D_API void FillInfo( RenderInfo & p_info )const;
+		C3D_API void fillInfo( RenderInfo & p_info )const;
 		/**
 		 *\~english
 		 *\brief		Creates an object.
@@ -143,9 +143,9 @@ namespace Castor3D
 		 *\param[in]	p_mesh		Le maillage.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
+		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
 		{
-			return MyObjectCache::Add( p_name, p_parent, p_mesh );
+			return MyObjectCache::add( p_name, p_parent, p_mesh );
 		}
 
 	private:
@@ -156,7 +156,7 @@ namespace Castor3D
 		//!\~french		Le nombre total de sommets.
 		uint32_t m_vertexCount{ 0 };
 	};
-	using GeometryCache = ObjectCache< Geometry, Castor::String >;
+	using GeometryCache = ObjectCache< Geometry, castor::String >;
 	DECLARE_SMART_PTR( GeometryCache );
 }
 

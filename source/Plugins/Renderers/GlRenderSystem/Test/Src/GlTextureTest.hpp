@@ -35,15 +35,15 @@ namespace Testing
 		: public GlTestCase
 	{
 	public:
-		explicit GlTextureTest( Castor3D::Engine & engine );
+		explicit GlTextureTest( castor3d::Engine & engine );
 		virtual ~GlTextureTest();
 
-		void Upload( Castor3D::TextureLayout & p_storage, Castor::ArrayView< uint8_t > const & p_view );
-		void Download( Castor3D::TextureLayout & p_storage, std::vector< uint8_t > & p_dst );
+		void upload( castor3d::TextureLayout & p_storage, castor::ArrayView< uint8_t > const & p_view );
+		void download( castor3d::TextureLayout & p_storage, std::vector< uint8_t > & p_dst );
 		void Compare( std::array< uint8_t, 8 * 8 * 3 > const & p_src, std::vector< uint8_t > const & p_dst );
 
 	private:
-		void DoRegisterTests()override;
+		void doRegisterTests()override;
 
 	private:
 		void ImmutableStorage();

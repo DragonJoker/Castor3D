@@ -37,27 +37,27 @@ namespace TestRender
 	\remark		Holds the vertex buffer declaration, initialised by the shader program when compiled.
 	*/
 	class TestProgramInputLayout
-		: public Castor3D::ProgramInputLayout
+		: public castor3d::ProgramInputLayout
 	{
 	public:
 		/**
 		 *\brief		Constructor
 		 *\param[in]	p_gl	The OpenGL APIs.
 		 */
-		TestProgramInputLayout( Castor3D::RenderSystem & p_renderSystem );
+		TestProgramInputLayout( castor3d::RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 */
 		~TestProgramInputLayout();
 		/**
-		 *\copydoc		Castor3D::ProgramInputLayout::Initialise
+		 *\copydoc		castor3d::ProgramInputLayout::Initialise
 		 */
-		virtual bool Initialise( Castor3D::ShaderProgram const & p_program );
+		virtual bool initialise( castor3d::ShaderProgram const & p_program );
 		/**
-		 *\copydoc		Castor3D::ProgramInputLayout::Cleanup
+		 *\copydoc		castor3d::ProgramInputLayout::Cleanup
 		 */
-		virtual void Cleanup();
+		virtual void cleanup();
 	};
 }
 

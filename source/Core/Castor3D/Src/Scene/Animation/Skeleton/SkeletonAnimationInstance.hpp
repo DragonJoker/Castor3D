@@ -25,13 +25,13 @@ SOFTWARE.
 
 #include "Scene/Animation/AnimationInstance.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
-	\todo		Write and Read functions.
+	\todo		write and read functions.
 	\~english
 	\brief		Skeleton animation instance.
 	\~french
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( Bone const & p_bone )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( Bone const & p_bone )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated node.
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\brief		Récupère un noeud animé.
 		 *\param[in]	p_name	Le nom du noeud.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( Castor::String const & p_name )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
@@ -115,14 +115,14 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de l'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( SkeletonAnimationObjectType p_type, castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The objects count.
 		 *\~french
 		 *\return		Le nombre d'objets.
 		 */
-		inline auto GetObjectsCount()const
+		inline auto getObjectsCount()const
 		{
 			return m_toMove.size();
 		}
@@ -132,7 +132,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'objets racines.
 		 */
-		inline auto GetRootObjectsCount()const
+		inline auto getRootObjectsCount()const
 		{
 			return m_arrayMoving.size();
 		}
@@ -179,9 +179,9 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\copydoc		Casto3D::AnimationInstance::DoUpdate
+		 *\copydoc		Casto3D::AnimationInstance::doUpdate
 		 */
-		void DoUpdate()override;
+		void doUpdate()override;
 
 	protected:
 		//!\~english	The root moving objects.

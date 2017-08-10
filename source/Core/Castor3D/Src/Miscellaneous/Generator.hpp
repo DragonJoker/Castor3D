@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Graphics/Pixel.hpp>
 #include <Graphics/PixelBuffer.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	class Generator
 	{
@@ -46,28 +46,28 @@ namespace Castor3D
 			int m_iTop{ 0 };
 			int m_iBottom{ 0 };
 			int m_iHeight{ 0 };
-			Castor::UbPixel m_pxColour;
+			castor::UbPixel m_pxColour;
 			uint32_t m_index{ 0u };
 			std::shared_ptr< std::thread > m_pThread;
 			mutable std::recursive_mutex m_mutex;
 
 		public:
-			C3D_API Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour );
+			C3D_API Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, castor::UbPixel const & p_pxColour );
 			C3D_API virtual ~Thread();
 
-			C3D_API void Run();
-			C3D_API void Wait();
+			C3D_API void run();
+			C3D_API void wait();
 			C3D_API virtual int Entry();
 
 			C3D_API virtual void Step() = 0;
 
-			inline bool	IsEnded()const
+			inline bool	isEnded()const
 			{
 				return m_bEnded;
 			}
 			inline bool IsStopped()const
 			{
-				auto lock = Castor::make_unique_lock( m_mutex );
+				auto lock = castor::makeUniqueLock( m_mutex );
 				return m_bStopped;
 			}
 
@@ -75,20 +75,20 @@ namespace Castor3D
 			{
 				m_bLaunched = true;
 			}
-			inline void Stop()
+			inline void stop()
 			{
-				auto lock = Castor::make_unique_lock( m_mutex );
+				auto lock = castor::makeUniqueLock( m_mutex );
 				m_bStopped = true;
 			}
-			inline void SetRed( uint8_t val )
+			inline void setRed( uint8_t val )
 			{
 				m_pxColour[0] = val;
 			}
-			inline void SetGreen( uint8_t val )
+			inline void setGreen( uint8_t val )
 			{
 				m_pxColour[1] = val;
 			}
-			inline void SetBlue( uint8_t val )
+			inline void setBlue( uint8_t val )
 			{
 				m_pxColour[2] = val;
 			}
@@ -101,9 +101,9 @@ namespace Castor3D
 		int m_iWidth{ 0 };
 		int m_iHeight{ 0 };
 		unsigned long long m_ullStep{ 0u };
-		Castor::PixelBuffer m_frontBuffer;
-		Castor::PixelBuffer m_backBuffer;
-		Castor::UbPixel m_pxColour;
+		castor::PixelBuffer m_frontBuffer;
+		castor::PixelBuffer m_backBuffer;
+		castor::UbPixel m_pxColour;
 		uint32_t m_uiThreadCount{ 0u };
 		bool m_bEnded{ true };
 		std::vector <Thread *> m_arraySlaveThreads;
@@ -116,72 +116,72 @@ namespace Castor3D
 		C3D_API virtual ~Generator();
 
 		C3D_API virtual bool Step();
-		C3D_API virtual void SetRed( uint8_t val );
-		C3D_API virtual void SetGreen( uint8_t val );
-		C3D_API virtual void SetBlue( uint8_t val );
-		C3D_API virtual void SwapBuffers();
+		C3D_API virtual void setRed( uint8_t val );
+		C3D_API virtual void setGreen( uint8_t val );
+		C3D_API virtual void setBlue( uint8_t val );
+		C3D_API virtual void swapBuffers();
 		C3D_API virtual void InitialiseStep();
 		C3D_API virtual void ClearAllThreads();
 
 		C3D_API bool AllEnded();
 		C3D_API void Suspend();
-		C3D_API void SetSize( int p_iWidth, int p_iHeight );
-		C3D_API void SetSize( Castor::Point2i const & p_size );
-		C3D_API void SaveFrame();
+		C3D_API void setSize( int p_iWidth, int p_iHeight );
+		C3D_API void setSize( castor::Point2i const & p_size );
+		C3D_API void saveFrame();
 
 		template <class ThreadClass>
-		ThreadClass * CreateThread( int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour )
+		ThreadClass * CreateThread( int iWidth, int iTop, int iBottom, int iTotalHeight, castor::UbPixel const & p_pxColour )
 		{
 			ThreadClass * pThread = new ThreadClass( this, m_arraySlaveThreads.size(), m_iWidth, iTop, iBottom, iTotalHeight, p_pxColour );
 			m_arraySlaveThreads.push_back( pThread );
 			return pThread;
 		}
 
-		inline uint8_t GetRed()const
+		inline uint8_t getRed()const
 		{
 			return m_pxColour[0];
 		}
-		inline uint8_t GetGreen()const
+		inline uint8_t getGreen()const
 		{
 			return m_pxColour[1];
 		}
-		inline uint8_t GetBlue()const
+		inline uint8_t getBlue()const
 		{
 			return m_pxColour[2];
 		}
-		inline bool IsInitialised()const
+		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		inline Castor::PixelBuffer const * GetPixelsBuffer()const
+		inline castor::PixelBuffer const * getPixelsBuffer()const
 		{
 			return & m_frontBuffer;
 		}
-		inline Castor::PixelBuffer * GetPixelsBuffer()
+		inline castor::PixelBuffer * getPixelsBuffer()
 		{
 			return & m_frontBuffer;
 		}
-		inline int GetWidth()const
+		inline int getWidth()const
 		{
 			return m_iWidth;
 		}
-		inline int GetHeight()const
+		inline int getHeight()const
 		{
 			return m_iHeight;
 		}
 
 	protected:
-		C3D_API void DoCleanup();
-		uint32_t DoGetThreadsCount()
+		C3D_API void doCleanup();
+		uint32_t doGetThreadsCount()
 		{
 			return uint32_t( m_arraySlaveThreads.size() );
 		}
-		C3D_API Castor::Point2i _loadImage( Castor::String const & p_strImagePath, Castor::Image & p_pImage );
-		C3D_API void _subRender();
+		C3D_API castor::Point2i _loadImage( castor::String const & p_strImagePath, castor::Image & p_pImage );
+		C3D_API void _subrender();
 		C3D_API void _saveFrame();
 	};
 
-	extern int GetCPUCount();
+	extern int getCPUCount();
 }
 
 #endif

@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		La fabrique de maillages
 	*/
 	class MeshFactory
-		: public Castor::Factory< MeshGenerator, Castor::String >
+		: public castor::Factory< MeshGenerator, castor::String >
 	{
 	public:
 		/**

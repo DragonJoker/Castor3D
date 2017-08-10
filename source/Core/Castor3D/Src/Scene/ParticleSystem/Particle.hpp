@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	template< ElementType Type >
 	struct ElementTyper;
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\param[in]	p_description	La description des éléments de la particule.
 		 *\param[in]	p_defaultValues	Les valeurs par défaut des éléments de la particule.
 		 */
-		C3D_API Particle( BufferDeclaration const & p_description, Castor::StrStrMap const & p_defaultValues );
+		C3D_API Particle( BufferDeclaration const & p_description, castor::StrStrMap const & p_defaultValues );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -99,7 +99,7 @@ namespace Castor3D
 		C3D_API Particle & operator=( Particle && p_rhs );
 		/**
 		 *\~english
-		 *\brief		Sets the particle variable's value at given index.
+		 *\brief		sets the particle variable's value at given index.
 		 *\param[in]	p_index	The variable index.
 		 *\param[in]	p_value	The variable value.
 		 *\~french
@@ -108,10 +108,10 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur de la variable.
 		 */
 		template< ElementType Type >
-		inline void SetValue( uint32_t p_index, typename ElementTyper< Type >::Type const & p_value );
+		inline void setValue( uint32_t p_index, typename ElementTyper< Type >::Type const & p_value );
 		/**
 		 *\~english
-		 *\brief		Sets the particle variable's value at given index.
+		 *\brief		sets the particle variable's value at given index.
 		 *\param[in]	p_index	The variable index.
 		 *\return		The variable value.
 		 *\~french
@@ -120,14 +120,14 @@ namespace Castor3D
 		 *\return		La valeur de la variable.
 		 */
 		template< ElementType Type >
-		inline typename ElementTyper< Type >::Type GetValue( uint32_t p_index )const;
+		inline typename ElementTyper< Type >::Type getValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The particle data.
 		 *\~french
 		 *\return		Les données de la particule.
 		 */
-		inline uint8_t const * GetData()const
+		inline uint8_t const * getData()const
 		{
 			return m_data.data();
 		}
@@ -137,7 +137,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les données de la particule.
 		 */
-		inline uint8_t * GetData()
+		inline uint8_t * getData()
 		{
 			return m_data.data();
 		}

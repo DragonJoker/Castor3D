@@ -57,23 +57,23 @@ namespace CastorViewer
 		MainFrame( GuiCommon::SplashScreen * p_splashScreen, wxString const & title );
 		~MainFrame();
 
-		bool Initialise();
+		bool initialise();
 		void LoadScene( wxString const & p_strFileName = wxEmptyString );
 		void ToggleFullScreen( bool p_fullscreen );
 
 	private:
-		void DoInitialiseGUI();
-		bool DoInitialise3D();
-		bool DoInitialiseImages();
-		void DoPopulateStatusBar();
-		void DoPopulateToolBar();
-		void DoInitialisePerspectives();
-		void DoLogCallback( Castor::String const & p_strLog, Castor::LogType p_eLogType, bool p_newLine );
-		void DoCleanupScene();
-		void DoSaveFrame();
-		bool DoStartRecord();
-		void DoRecordFrame();
-		void DoStopRecord();
+		void doInitialiseGUI();
+		bool doInitialise3D();
+		bool doInitialiseImages();
+		void doPopulateStatusBar();
+		void doPopulateToolBar();
+		void doInitialisePerspectives();
+		void doLogCallback( castor::String const & p_strLog, castor::LogType p_eLogType, bool p_newLine );
+		void doCleanupScene();
+		void doSaveFrame();
+		bool doStartRecord();
+		void doRecordFrame();
+		void doStopRecord();
 
 	private:
 		DECLARE_EVENT_TABLE()
@@ -111,10 +111,10 @@ namespace CastorViewer
 		GuiCommon::SplashScreen * m_splashScreen;
 		GuiCommon::SceneObjectsList * m_sceneObjectsList;
 		GuiCommon::MaterialsList * m_materialsList;
-		Castor3D::SceneWPtr m_pMainScene;
-		Castor3D::CameraWPtr m_pMainCamera;
-		Castor3D::SceneNodeWPtr m_sceneNode;
-		Castor::Path m_strFilePath;
+		castor3d::SceneWPtr m_pMainScene;
+		castor3d::CameraWPtr m_pMainCamera;
+		castor3d::SceneNodeWPtr m_sceneNode;
+		castor::Path m_strFilePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
 		wxTimer * m_timerErr;

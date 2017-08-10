@@ -29,7 +29,7 @@ SOFTWARE.
 #include "Shader/MatrixUbo.hpp"
 #include "Shader/SceneUbo.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -87,7 +87,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique le programme.
 		 */
-		void Render()const;
+		void render()const;
 
 	private:
 		//!\~english	The shader program.
@@ -132,7 +132,7 @@ namespace Castor3D
 		 *\param[in]	config		La configuration du SSAO.
 		 */
 		CombinePass( Engine & engine
-			, Castor::Size const & size
+			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
 			, SsaoConfig const & config );
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\param[in]	fog			Le brouillard.
 		 *\param[in]	frameBuffer	Le tampon d'image cible.
 		 */
-		void Render( GeometryPassResult const & gp
+		void render( GeometryPassResult const & gp
 			, TextureUnit const & light
 			, TextureUnit const & reflection
 			, TextureUnit const & refraction
@@ -194,7 +194,7 @@ namespace Castor3D
 		 *\param[in]	fog			Le brouillard.
 		 *\param[in]	frameBuffer	Le tampon d'image cible.
 		 */
-		void Render( GeometryPassResult const & gp
+		void render( GeometryPassResult const & gp
 			, TextureUnit const & light
 			, TextureUnit const & reflection
 			, TextureUnit const & refraction
@@ -208,15 +208,15 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture SSAO.
 		 */
-		inline TextureLayout const & GetSsao()const
+		inline TextureLayout const & getSsao()const
 		{
-			return *m_ssao.GetResult().GetTexture();
+			return *m_ssao.getResult().getTexture();
 		}
 
 	private:
 		//!\~english	The render size.
 		//!\~french		La taille du rendu.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The render viewport.
 		//!\~french		La viewport du rendu.
 		Viewport m_viewport;

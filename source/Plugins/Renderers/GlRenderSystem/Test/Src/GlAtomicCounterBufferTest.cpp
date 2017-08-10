@@ -9,8 +9,8 @@
 
 #include <Buffer/GlBuffer.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 #ifdef max
 #	undef max
@@ -22,7 +22,7 @@ namespace Testing
 {
 	namespace
 	{
-		ShaderProgramSPtr DoCreateNoopProgram( Engine & engine )
+		ShaderProgramSPtr doCreateNoopProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				layout( binding = 0, offset = 0 ) uniform atomic_uint counter;\n
@@ -31,13 +31,13 @@ namespace Testing
 				{\n
 				}\n
 			);
-			auto program = engine.GetRenderSystem()->CreateShaderProgram();
-			program->CreateObject( ShaderType::eCompute );
-			program->SetSource( ShaderType::eCompute, vtx );
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eCompute );
+			program->setSource( ShaderType::eCompute, vtx );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateInOutProgram( Engine & engine )
+		ShaderProgramSPtr doCreateInOutProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				layout( binding=0, offset=0 ) uniform atomic_uint counter;\n
@@ -47,9 +47,9 @@ namespace Testing
 					atomicCounterIncrement( counter );\n
 				}\n
 			);
-			auto program = engine.GetRenderSystem()->CreateShaderProgram();
-			program->CreateObject( ShaderType::eCompute );
-			program->SetSource( ShaderType::eCompute, vtx );
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eCompute );
+			program->setSource( ShaderType::eCompute, vtx );
 			return program;
 		}
 	}
@@ -63,39 +63,39 @@ namespace Testing
 	{
 	}
 
-	void GlAtomicCounterBufferTest::DoRegisterTests()
+	void GlAtomicCounterBufferTest::doRegisterTests()
 	{
-		DoRegisterTest( "GlAtomicCounterBufferTest::Creation", std::bind( &GlAtomicCounterBufferTest::Creation, this ) );
-		DoRegisterTest( "GlAtomicCounterBufferTest::InOut", std::bind( &GlAtomicCounterBufferTest::InOut, this ) );
+		doRegisterTest( "GlAtomicCounterBufferTest::Creation", std::bind( &GlAtomicCounterBufferTest::Creation, this ) );
+		doRegisterTest( "GlAtomicCounterBufferTest::InOut", std::bind( &GlAtomicCounterBufferTest::InOut, this ) );
 	}
 
 	void GlAtomicCounterBufferTest::Creation()
 	{
-		auto program = DoCreateNoopProgram( m_engine );
-		auto & atomicCounterBuffer = program->CreateAtomicCounterBuffer( cuT( "Dummy" ), ShaderTypeFlag::eCompute );
+		auto program = doCreateNoopProgram( m_engine );
+		auto & atomicCounterBuffer = program->createAtomicCounterBuffer( cuT( "Dummy" ), ShaderTypeFlag::eCompute );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( atomicCounterBuffer.Initialise( 1u, 0u ) );
-		atomicCounterBuffer.Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( atomicCounterBuffer.initialise( 1u, 0u ) );
+		atomicCounterBuffer.cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlAtomicCounterBufferTest::InOut()
 	{
-		auto program = DoCreateInOutProgram( m_engine );
-		auto & atomicCounterBuffer = program->CreateAtomicCounterBuffer( cuT( "Dummy" ), ShaderTypeFlag::eCompute );
-		auto pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *program );
+		auto program = doCreateInOutProgram( m_engine );
+		auto & atomicCounterBuffer = program->createAtomicCounterBuffer( cuT( "Dummy" ), ShaderTypeFlag::eCompute );
+		auto pipeline = m_engine.getRenderSystem()->createComputePipeline( *program );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( atomicCounterBuffer.Initialise( 1u, 0u ) );
-		CT_CHECK( program->Initialise() );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( atomicCounterBuffer.initialise( 1u, 0u ) );
+		CT_CHECK( program->initialise() );
 		uint32_t count{ 0u };
-		atomicCounterBuffer.Upload( 0u, 1u, &count );
-		pipeline->Run( Point3ui{ 1u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eAtomicCounterBuffer );
-		atomicCounterBuffer.Download( 0u, 1u, &count );
+		atomicCounterBuffer.upload( 0u, 1u, &count );
+		pipeline->run( Point3ui{ 1u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eAtomicCounterBuffer );
+		atomicCounterBuffer.download( 0u, 1u, &count );
 		CT_EQUAL( count, 1u );
-		atomicCounterBuffer.Cleanup();
-		program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		atomicCounterBuffer.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 }

@@ -1,41 +1,41 @@
-﻿#include "GlslIndentBlock.hpp"
+#include "GlslIndentBlock.hpp"
 
 #include "GlslWriter.hpp"
 
 #include <Stream/StreamIndentManipulators.hpp>
 
-using namespace Castor;
+using namespace castor;
 
 namespace GLSL
 {
-	using Castor::operator<<;
+	using castor::operator<<;
 
 	//*****************************************************************************************
 
 	IndentBlock::IndentBlock( GlslWriter & p_writter )
 		: m_stream( p_writter.m_stream )
 	{
-		using namespace Castor;
+		using namespace castor;
 		m_stream << cuT( "{" );
-		m_indent = format::get_indent( m_stream );
-		m_stream << format::indent( m_indent + 4 );
+		m_indent = format::getIndent( m_stream );
+		m_stream << format::Indent( m_indent + 4 );
 		m_stream << std::endl;
 	}
 
-	IndentBlock::IndentBlock( Castor::StringStream & p_stream )
+	IndentBlock::IndentBlock( castor::StringStream & p_stream )
 		: m_stream( p_stream )
 	{
-		using namespace Castor;
+		using namespace castor;
 		m_stream << cuT( "{" );
-		m_indent = format::get_indent( m_stream );
-		m_stream << format::indent( m_indent + 4 );
+		m_indent = format::getIndent( m_stream );
+		m_stream << format::Indent( m_indent + 4 );
 		m_stream << std::endl;
 	}
 
 	IndentBlock::~IndentBlock()
 	{
-		using namespace Castor;
-		m_stream << format::indent( m_indent );
+		using namespace castor;
+		m_stream << format::Indent( m_indent );
 		m_stream << cuT( "}" );
 	}
 }

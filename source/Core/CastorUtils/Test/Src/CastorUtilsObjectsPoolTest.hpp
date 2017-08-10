@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsObjectsPoolTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void ObjectPoolTest();

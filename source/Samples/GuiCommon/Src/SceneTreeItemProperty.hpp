@@ -50,7 +50,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_scene		L'objet cible
 		 */
-		SceneTreeItemProperty( bool p_editable, Castor3D::SceneSPtr p_scene );
+		SceneTreeItemProperty( bool p_editable, castor3d::SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,26 +66,26 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline Castor3D::SceneSPtr GetScene()
+		inline castor3d::SceneSPtr getScene()
 		{
 			return m_scene.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		wxPGProperty * DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureLayoutSPtr p_texture );
+		wxPGProperty * doCreateTextureImageProperty( wxString const & p_name, castor3d::TextureLayoutSPtr p_texture );
 
 	private:
-		Castor3D::SceneWPtr m_scene;
+		castor3d::SceneWPtr m_scene;
 	};
 }
 

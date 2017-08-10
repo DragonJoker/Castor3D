@@ -5,8 +5,8 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -28,18 +28,18 @@ namespace GuiCommon
 	{
 	}
 
-	void AnimatedObjectTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void AnimatedObjectTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		auto object = GetObject();
+		auto object = getObject();
 
 		if ( object )
 		{
 		}
 	}
 
-	void AnimatedObjectTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void AnimatedObjectTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		auto object = GetObject();
+		auto object = getObject();
 		wxPGProperty * property = p_event.GetProperty();
 
 		if ( property && object )

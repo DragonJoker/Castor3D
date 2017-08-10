@@ -58,32 +58,32 @@ namespace CastorCom
 		 */
 		virtual ~CSpotLight();
 
-		inline Castor3D::SpotLightSPtr GetInternal()const
+		inline castor3d::SpotLightSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::SpotLightSPtr internal )
+		inline void setInternal( castor3d::SpotLightSPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &Castor3D::LightCategory::GetColour ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetColour ) );
-		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetAmbientIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetAmbientIntensity ) );
-		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetDiffuseIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetDiffuseIntensity ) );
-		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetSpecularIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetSpecularIntensity ) );
-		COM_PROPERTY( Attenuation, IVector3D *, make_getter( m_internal.get(), &Castor3D::SpotLight::GetAttenuation ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetAttenuation ) );
-		COM_PROPERTY( Exponent, float, make_getter( m_internal.get(), &Castor3D::SpotLight::GetExponent ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetExponent ) );
-		COM_PROPERTY( CutOff, IAngle *, make_getter( m_internal.get(), &Castor3D::SpotLight::GetCutOff ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetCutOff ) );
+		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &castor3d::LightCategory::getColour ), make_putter( m_internal.get(), &castor3d::LightCategory::setColour ) );
+		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getAmbientIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setAmbientIntensity ) );
+		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getDiffuseIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setDiffuseIntensity ) );
+		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getSpecularIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setSpecularIntensity ) );
+		COM_PROPERTY( Attenuation, IVector3D *, make_getter( m_internal.get(), &castor3d::SpotLight::getAttenuation ), make_putter( m_internal.get(), &castor3d::SpotLight::setAttenuation ) );
+		COM_PROPERTY( Exponent, float, make_getter( m_internal.get(), &castor3d::SpotLight::getExponent ), make_putter( m_internal.get(), &castor3d::SpotLight::setExponent ) );
+		COM_PROPERTY( CutOff, IAngle *, make_getter( m_internal.get(), &castor3d::SpotLight::getCutOff ), make_putter( m_internal.get(), &castor3d::SpotLight::setCutOff ) );
 
 	private:
-		Castor3D::SpotLightSPtr m_internal;
+		castor3d::SpotLightSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( SpotLight ), CSpotLight );
 
-	DECLARE_VARIABLE_PTR_GETTER( SpotLight, Castor3D, SpotLight );
-	DECLARE_VARIABLE_PTR_PUTTER( SpotLight, Castor3D, SpotLight );
+	DECLARE_VARIABLE_PTR_GETTER( SpotLight, castor3d, SpotLight );
+	DECLARE_VARIABLE_PTR_PUTTER( SpotLight, castor3d, SpotLight );
 }
 
 #endif

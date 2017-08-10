@@ -10,16 +10,16 @@ namespace castortd
 		: CastorApplication{ cuT( "CastorDvpTD" )
 							 , cuT( "Castor Tower Defense" )
 							 , 7
-							 , Castor3D::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
+							 , castor3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
 							 , cuT( "opengl" ) }
 	{
 	}
 
-	void CastorDvpTD::DoLoadAppImages()
+	void CastorDvpTD::doLoadAppImages()
 	{
 	}
 
-	wxWindow * CastorDvpTD::DoInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )
+	wxWindow * CastorDvpTD::doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )
 	{
 		wxAppConsole::SetAppName( wxT( "CastorDvpTD" ) );
 		wxAppConsole::SetVendorName( wxT( "dragonjoker" ) );

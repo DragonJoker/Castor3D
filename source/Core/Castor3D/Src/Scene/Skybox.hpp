@@ -30,7 +30,7 @@ SOFTWARE.
 #include "PBR/IblTextures.hpp"
 #include "Texture/TextureUnit.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor3D
 	\brief		Implémentation de Skybox.
 	*/
 	class Skybox
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -54,7 +54,7 @@ namespace Castor3D
 		\brief		Loader de Skybox.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Skybox >
+			: public castor::TextWriter< Skybox >
 		{
 		public:
 			/**
@@ -63,7 +63,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Skybox into a text file.
@@ -74,7 +74,7 @@ namespace Castor3D
 			 *\param[in]	obj		La Skybox.
 			 *\param[in]	file	Le fichier.
 			 */
-			C3D_API bool operator()( Skybox const & obj, Castor::TextFile & file )override;
+			C3D_API bool operator()( Skybox const & obj, castor::TextFile & file )override;
 		};
 
 	public:
@@ -102,14 +102,14 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the skybox.
@@ -118,22 +118,22 @@ namespace Castor3D
 		 *\brief		Dessine la skybox.
 		 *\param[in]	camera	La caméra de la scène.
 		 */
-		C3D_API void Render( Camera const & camera );
+		C3D_API void render( Camera const & camera );
 		/**
 		*\~english
-		*\return		Sets the skybox's equirectangular texture.
+		*\return		sets the skybox's equirectangular texture.
 		*\~french
 		*\return		Définit la texture équirectangulaire de la skybox.
 		*/
-		C3D_API void SetEquiTexture( TextureLayoutSPtr texture
-			, Castor::Size const & size );
+		C3D_API void setEquiTexture( TextureLayoutSPtr texture
+			, castor::Size const & size );
 		/**
 		 *\~english
 		 *\return		The skybox's equirectangular texture path.
 		 *\~french
 		 *\return		Le chemin de l'image équirectangulaire de la skybox.
 		 */
-		inline Castor::Path const & GetEquiTexturePath()const
+		inline castor::Path const & getEquiTexturePath()const
 		{
 			return m_equiTexturePath;
 		}
@@ -143,7 +143,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture de la skybox.
 		 */
-		inline TextureLayout & GetTexture()
+		inline TextureLayout & getTexture()
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture de la skybox.
 		 */
-		inline TextureLayoutSPtr GetTexture()const
+		inline TextureLayoutSPtr getTexture()const
 		{
 			return m_texture;
 		}
@@ -164,38 +164,38 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les texture d'IBL de la skybox.
 		 */
-		inline IblTextures const & GetIbl()const
+		inline IblTextures const & getIbl()const
 		{
 			REQUIRE( m_ibl );
 			return *m_ibl;
 		}
 		/**
 		 *\~english
-		 *\return		Sets the skybox's texture.
+		 *\return		sets the skybox's texture.
 		 *\~french
 		 *\return		Définit la texture de la skybox.
 		 */
-		inline void SetTexture( TextureLayoutSPtr texture )
+		inline void setTexture( TextureLayoutSPtr texture )
 		{
 			m_texture = texture;
 		}
 		/**
 		 *\~english
-		 *\return		Sets the skybox's scene.
+		 *\return		sets the skybox's scene.
 		 *\~french
 		 *\return		Définit la scène de la skybox.
 		 */
-		inline void SetScene( Scene & scene )
+		inline void setScene( Scene & scene )
 		{
 			m_scene = &scene;
 		}
 
 	private:
-		ShaderProgram & DoInitialiseShader();
-		bool DoInitialiseTexture();
-		void DoInitialiseEquiTexture();
-		bool DoInitialiseVertexBuffer();
-		bool DoInitialisePipeline( ShaderProgram & program );
+		ShaderProgram & doInitialiseShader();
+		bool doInitialiseTexture();
+		void doInitialiseEquiTexture();
+		bool doInitialiseVertexBuffer();
+		bool doInitialisePipeline( ShaderProgram & program );
 
 	private:
 		//!\~english	The skybox's scene.
@@ -209,10 +209,10 @@ namespace Castor3D
 		TextureLayoutSPtr m_equiTexture;
 		//!\~english	The skybox equirectangular image path.
 		//!\~french		Le chemin de l'image équirectangulaire de la skybox.
-		Castor::Path m_equiTexturePath;
+		castor::Path m_equiTexturePath;
 		//!\~english	The skybox equirectangular map texture wanted face size.
 		//!\~french		La taille voulue pour les faces de la texture équirectangulaire de la skybox.
-		Castor::Size m_equiSize;
+		castor::Size m_equiSize;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;
@@ -236,15 +236,15 @@ namespace Castor3D
 		GeometryBuffersSPtr m_geometryBuffers{ nullptr };
 		//!\~english	Vertex elements declaration.
 		//!\~french		Déclaration des éléments d'un sommet.
-		Castor3D::BufferDeclaration m_declaration;
+		castor3d::BufferDeclaration m_declaration;
 		//!\~english	Vertex array (cube definition).
 		//!\~french		Tableau de vertex (définition du cube).
-		std::array< Castor3D::BufferElementGroupSPtr, 36 > m_arrayVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
 		//! 6 * 6 * [3(vertex position)].
-		std::array< Castor::real, 108 > m_bufferVertex;
+		std::array< castor::real, 108 > m_bufferVertex;
 		//!\~english	The model matrix.
 		//!\~french		La matrice modèle.
-		Castor::Matrix4x4r m_mtxModel;
+		castor::Matrix4x4r m_mtxModel;
 		//!\~english	The IBL textures.
 		//!\~french		Les textures l'IBL.
 		std::unique_ptr< IblTextures > m_ibl;

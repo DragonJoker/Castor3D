@@ -50,7 +50,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_group		L"AnimatedObjectGroup cible
 		 */
-		AnimatedObjectGroupTreeItemProperty( bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group );
+		AnimatedObjectGroupTreeItemProperty( bool p_editable, castor3d::AnimatedObjectGroupSPtr p_group );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,23 +66,23 @@ namespace GuiCommon
 		 *\brief		Récupère l'AnimatedObjectGroup
 		 *\return		La valeur
 		 */
-		inline Castor3D::AnimatedObjectGroupSPtr GetGroup()
+		inline castor3d::AnimatedObjectGroupSPtr getGroup()
 		{
 			return m_group.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::AnimatedObjectGroupWPtr m_group;
+		castor3d::AnimatedObjectGroupWPtr m_group;
 	};
 }
 

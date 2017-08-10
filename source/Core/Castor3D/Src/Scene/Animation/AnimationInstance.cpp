@@ -1,8 +1,8 @@
 #include "AnimationInstance.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	AnimationInstance::AnimationInstance( AnimatedObject & p_object, Animation const & p_animation )
 		: OwnedBy< AnimatedObject >{ p_object }
@@ -14,9 +14,9 @@ namespace Castor3D
 	{
 	}
 
-	void AnimationInstance::Update( Milliseconds const & p_tslf )
+	void AnimationInstance::update( Milliseconds const & p_tslf )
 	{
-		auto length = m_animation.GetLength();
+		auto length = m_animation.getLength();
 		auto scale = m_scale;
 		auto looped = m_looped;
 
@@ -53,23 +53,23 @@ namespace Castor3D
 					{
 						do
 						{
-							m_currentTime += m_animation.GetLength();
+							m_currentTime += m_animation.getLength();
 						}
 						while ( m_currentTime < 0_ms );
 					}
 				}
 			}
 
-			DoUpdate();
+			doUpdate();
 		}
 	}
 
-	void AnimationInstance::Play()
+	void AnimationInstance::play()
 	{
 		m_state = AnimationState::ePlaying;
 	}
 
-	void AnimationInstance::Pause()
+	void AnimationInstance::pause()
 	{
 		if ( m_state == AnimationState::ePlaying )
 		{
@@ -77,7 +77,7 @@ namespace Castor3D
 		}
 	}
 
-	void AnimationInstance::Stop()
+	void AnimationInstance::stop()
 	{
 		if ( m_state != AnimationState::eStopped )
 		{

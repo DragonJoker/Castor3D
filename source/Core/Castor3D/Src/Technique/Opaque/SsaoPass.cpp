@@ -28,19 +28,19 @@
 
 #include <random>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
-		float DoLerp( float a, float b, float f )
+		float doLerp( float a, float b, float f )
 		{
 			return a + f * ( b - a );
 		}
 
-		Point3fArray DoGetKernel()
+		Point3fArray doGetKernel()
 		{
 			constexpr uint32_t size = 64;
 			std::uniform_real_distribution< float > distribution( 0.0f, 1.0f );
@@ -50,12 +50,12 @@ namespace Castor3D
 
 			for ( auto i = 0u; i < size; ++i )
 			{
-				auto sample = point::get_normalised( Point3f{ distribution( generator ) * 2.0f - 1.0f
+				auto sample = point::getNormalised( Point3f{ distribution( generator ) * 2.0f - 1.0f
 					, distribution( generator ) * 2.0f - 1.0f
 					, distribution( generator ) } );
 				sample *= distribution( generator );
 				auto scale = i / float( size );
-				scale = DoLerp( 0.1f, 1.0f, scale * scale );
+				scale = doLerp( 0.1f, 1.0f, scale * scale );
 				sample *= scale;
 				result.push_back( sample );
 			}
@@ -63,7 +63,7 @@ namespace Castor3D
 			return result;
 		}
 
-		VertexBufferSPtr DoCreateVbo( Engine & engine )
+		VertexBufferSPtr doCreateVbo( Engine & engine )
 		{
 			auto declaration = BufferDeclaration(
 			{
@@ -81,18 +81,18 @@ namespace Castor3D
 				1, 1, 1, 1
 			};
 
-			auto & renderSystem = *engine.GetRenderSystem();
+			auto & renderSystem = *engine.getRenderSystem();
 			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
 			uint32_t stride = declaration.stride();
-			vertexBuffer->Resize( uint32_t( sizeof( data ) ) );
-			uint8_t * buffer = vertexBuffer->GetData();
+			vertexBuffer->resize( uint32_t( sizeof( data ) ) );
+			uint8_t * buffer = vertexBuffer->getData();
 			std::memcpy( buffer, data, sizeof( data ) );
-			vertexBuffer->Initialise( BufferAccessType::eStatic
+			vertexBuffer->initialise( BufferAccessType::eStatic
 				, BufferAccessNature::eDraw );
 			return vertexBuffer;
 		}
 
-		TextureUnit DoGetNoise( Engine & engine )
+		TextureUnit doGetNoise( Engine & engine )
 		{
 			constexpr uint32_t size = 16;
 			std::uniform_real_distribution< float > distribution( 0.0f, 1.0f );
@@ -109,236 +109,236 @@ namespace Castor3D
 
 			auto buffer = PxBufferBase::create( Size{ 4, 4 }
 				, PixelFormat::eRGB32F
-				, reinterpret_cast< uint8_t const * >( noise[0].const_ptr() )
+				, reinterpret_cast< uint8_t const * >( noise[0].constPtr() )
 				, PixelFormat::eRGB32F );
 
-			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead );
-			texture->SetSource( buffer );
+			texture->setSource( buffer );
 
 			SamplerSPtr sampler;
 
-			if ( engine.GetSamplerCache().Has( cuT( "SSAO_Noise" ) ) )
+			if ( engine.getSamplerCache().has( cuT( "SSAO_Noise" ) ) )
 			{
-				sampler = engine.GetSamplerCache().Find( cuT( "SSAO_Noise" ) );
+				sampler = engine.getSamplerCache().find( cuT( "SSAO_Noise" ) );
 			}
 			else
 			{
-				sampler = engine.GetSamplerCache().Add( cuT( "SSAO_Noise" ) );
-				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
-				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eRepeat );
+				sampler = engine.getSamplerCache().add( cuT( "SSAO_Noise" ) );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eRepeat );
 			}
 
 			TextureUnit result{ engine };
-			result.SetSampler( sampler );
-			result.SetTexture( texture );
-			result.Initialise();
-			result.SetIndex( 2u );
+			result.setSampler( sampler );
+			result.setTexture( texture );
+			result.initialise();
+			result.setIndex( 2u );
 			return result;
 		}
 
-		GLSL::Shader DoGetSsaoVertexProgram( Engine & engine )
+		GLSL::Shader doGetSsaoVertexProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
+			auto & renderSystem = *engine.getRenderSystem();
 			using namespace GLSL;
-			auto writer = renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( writer );
 			UBO_GPINFO( writer );
-			auto position = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
-			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			writer.ImplementFunction< void >( cuT( "main" )
+			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
 				} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 		
-		GLSL::Shader DoGetSsaoPixelProgram( Engine & engine )
+		GLSL::Shader doGetSsaoPixelProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
+			auto & renderSystem = *engine.getRenderSystem();
 			using namespace GLSL;
-			auto writer = renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapDepth = writer.DeclUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
-			auto c3d_mapNormal = writer.DeclUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
-			auto c3d_mapNoise = writer.DeclUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
+			auto c3d_mapDepth = writer.declUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
+			auto c3d_mapNormal = writer.declUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
+			auto c3d_mapNoise = writer.declUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
 
 			Ubo ssaoConfig{ writer, cuT( "SsaoConfig" ), 8u };
-			auto c3d_kernel = ssaoConfig.DeclMember< Vec3 >( cuT( "c3d_kernel" ), 64u );
-			auto c3d_kernelSize = ssaoConfig.DeclMember< Int >( cuT( "c3d_kernelSize" ) );
-			auto c3d_radius = ssaoConfig.DeclMember< Float >( cuT( "c3d_radius" ) );
-			auto c3d_bias = ssaoConfig.DeclMember< Float >( cuT( "c3d_bias" ) );
-			auto c3d_noiseScale = ssaoConfig.DeclMember< Vec2 >( cuT( "c3d_noiseScale" ) );
-			ssaoConfig.End();
+			auto c3d_kernel = ssaoConfig.declMember< Vec3 >( cuT( "c3d_kernel" ), 64u );
+			auto c3d_kernelSize = ssaoConfig.declMember< Int >( cuT( "c3d_kernelSize" ) );
+			auto c3d_radius = ssaoConfig.declMember< Float >( cuT( "c3d_radius" ) );
+			auto c3d_bias = ssaoConfig.declMember< Float >( cuT( "c3d_bias" ) );
+			auto c3d_noiseScale = ssaoConfig.declMember< Vec2 >( cuT( "c3d_noiseScale" ) );
+			ssaoConfig.end();
 
 			GLSL::Utils utils{ writer };
-			utils.DeclareCalcTexCoord();
-			utils.DeclareCalcVSPosition();
-			utils.DeclareCalcVSDepth();
+			utils.declareCalcTexCoord();
+			utils.declareCalcVSPosition();
+			utils.declareCalcVSDepth();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.DeclOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
 
-			writer.ImplementFunction< Void >( cuT( "main" )
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto texCoord = writer.DeclLocale( cuT( "texCoord" ), utils.CalcTexCoord() );
+					auto texCoord = writer.declLocale( cuT( "texCoord" ), utils.calcTexCoord() );
 
-					auto vsPosition = writer.DeclLocale( cuT( "vsPosition" )
-						, utils.CalcVSPosition( texCoord, c3d_mtxInvProj ) );
-					auto vsNormal = writer.DeclLocale( cuT( "vsNormal" )
-						, normalize( writer.Paren( c3d_mtxInvView * vec4( texture( c3d_mapNormal, texCoord ).xyz(), 1.0_f ) ).xyz() ) );
+					auto vsPosition = writer.declLocale( cuT( "vsPosition" )
+						, utils.calcVSPosition( texCoord, c3d_mtxInvProj ) );
+					auto vsNormal = writer.declLocale( cuT( "vsNormal" )
+						, normalize( writer.paren( c3d_mtxInvView * vec4( texture( c3d_mapNormal, texCoord ).xyz(), 1.0_f ) ).xyz() ) );
 
-					auto randomVec = writer.DeclLocale( cuT( "randomVec" )
+					auto randomVec = writer.declLocale( cuT( "randomVec" )
 						, normalize( texture( c3d_mapNoise, texCoord * c3d_noiseScale ).xyz() ) );
-					auto tangent = writer.DeclLocale( cuT( "tangent" )
+					auto tangent = writer.declLocale( cuT( "tangent" )
 						, normalize( randomVec - vsNormal * dot( randomVec, vsNormal ) ) );
-					auto bitangent = writer.DeclLocale( cuT( "bitangent" )
+					auto bitangent = writer.declLocale( cuT( "bitangent" )
 						, cross( vsNormal, tangent ) );
-					auto tbn = writer.DeclLocale( cuT( "tbn" )
+					auto tbn = writer.declLocale( cuT( "tbn" )
 						, mat3( tangent, bitangent, vsNormal ) );
-					auto occlusion = writer.DeclLocale( cuT( "occlusion" ), 0.0_f );
+					auto occlusion = writer.declLocale( cuT( "occlusion" ), 0.0_f );
 
 					FOR( writer, Int, i, 0, cuT( "i < c3d_kernelSize" ), cuT( "++i" ) )
 					{
 						// get sample position
-						auto samplePos = writer.DeclLocale( cuT( "samplePos" )
+						auto samplePos = writer.declLocale( cuT( "samplePos" )
 							, tbn * c3d_kernel[i] );                       // From tangent to view-space
 						samplePos = vsPosition + samplePos * c3d_radius;
-						auto offset = writer.DeclLocale( cuT( "offset" )
+						auto offset = writer.declLocale( cuT( "offset" )
 							, vec4( samplePos, 1.0 ) );
 						offset = c3d_mtxGProj * offset;                  // from view to clip-space
 						offset.xyz() = offset.xyz() / offset.w();      // perspective divide
 						offset.xyz() = offset.xyz() * 0.5 + 0.5;         // transform to range 0.0 - 1.0 
-						auto sampleDepth = writer.DeclLocale( cuT( "sampleDepth" )
-							, utils.CalcVSPosition( offset.xy(), c3d_mtxInvProj ).z() );
-						auto rangeCheck = writer.DeclLocale( cuT( "rangeCheck" )
+						auto sampleDepth = writer.declLocale( cuT( "sampleDepth" )
+							, utils.calcVSPosition( offset.xy(), c3d_mtxInvProj ).z() );
+						auto rangeCheck = writer.declLocale( cuT( "rangeCheck" )
 							, smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( vsPosition.z() - sampleDepth ) ) );
-						occlusion += writer.Ternary( sampleDepth >= samplePos.z() + c3d_bias, 1.0_f, 0.0_f ) * rangeCheck;
+						occlusion += writer.ternary( sampleDepth >= samplePos.z() + c3d_bias, 1.0_f, 0.0_f ) * rangeCheck;
 					}
 					ROF;
 
-					occlusion = 1.0_f - writer.Paren( occlusion / c3d_kernelSize );
+					occlusion = 1.0_f - writer.paren( occlusion / c3d_kernelSize );
 					pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
 			} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 		
-		GLSL::Shader DoGetBlurVertexProgram( Engine & engine )
+		GLSL::Shader doGetBlurVertexProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
+			auto & renderSystem = *engine.getRenderSystem();
 			using namespace GLSL;
-			auto writer = renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.createGlslWriter();
 
 			UBO_MATRIX( writer );
 
 			// Shader inputs
-			auto position = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
-			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			writer.ImplementFunction< void >( cuT( "main" )
+			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					vtx_texture = texture;
 					gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
-		GLSL::Shader DoGetBlurPixelProgram( Engine & engine )
+		GLSL::Shader doGetBlurPixelProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
+			auto & renderSystem = *engine.getRenderSystem();
 			using namespace GLSL;
-			auto writer = renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto c3d_mapColour = writer.DeclUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapColour = writer.declUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.DeclOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
 
-			writer.ImplementFunction< Void >( cuT( "main" )
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto texelSize = writer.DeclLocale( cuT( "texelSize" ), vec2( 1.0_f, 1.0_f ) / vec2( textureSize( c3d_mapColour, 0 ) ) );
-					auto result = writer.DeclLocale( cuT( "result" ), 0.0_f );
+					auto texelSize = writer.declLocale( cuT( "texelSize" ), vec2( 1.0_f, 1.0_f ) / vec2( textureSize( c3d_mapColour, 0 ) ) );
+					auto result = writer.declLocale( cuT( "result" ), 0.0_f );
 
 					FOR( writer, Int, x, -2, cuT( "x < 2" ), cuT( "++x" ) )
 					{
 						FOR( writer, Int, y, -2, cuT( "y < 2" ), cuT( "++y" ) )
 						{
-							auto offset = writer.DeclLocale( cuT( "offset" ), vec2( writer.Cast< Float >( x ), writer.Cast< Float >( y ) ) * texelSize );
+							auto offset = writer.declLocale( cuT( "offset" ), vec2( writer.cast< Float >( x ), writer.cast< Float >( y ) ) * texelSize );
 							result += texture( c3d_mapColour, vtx_texture + offset ).r();
 						}
 						ROF;
 					}
 					ROF;
 
-					result /= writer.Paren( 4.0_f * 4.0_f );
+					result /= writer.paren( 4.0_f * 4.0_f );
 					pxl_fragColor = vec4( vec3( result ), 1.0 );
 				} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
-		ShaderProgramSPtr DoGetSsaoProgram( Engine & engine )
+		ShaderProgramSPtr doGetSsaoProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
-			auto vtx = DoGetSsaoVertexProgram( engine );
-			auto pxl = DoGetSsaoPixelProgram( engine );
-			ShaderProgramSPtr program = engine.GetShaderProgramCache().GetNewProgram( false );
-			program->CreateObject( ShaderType::eVertex );
-			program->CreateObject( ShaderType::ePixel );
-			program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->SetValue( 0 );
-			program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->SetValue( 1 );
-			program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->SetValue( 2 );
-			program->SetSource( ShaderType::eVertex, vtx );
-			program->SetSource( ShaderType::ePixel, pxl );
-			program->Initialise();
+			auto & renderSystem = *engine.getRenderSystem();
+			auto vtx = doGetSsaoVertexProgram( engine );
+			auto pxl = doGetSsaoPixelProgram( engine );
+			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
+			program->createObject( ShaderType::eVertex );
+			program->createObject( ShaderType::ePixel );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->setValue( 0 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->setValue( 1 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->setValue( 2 );
+			program->setSource( ShaderType::eVertex, vtx );
+			program->setSource( ShaderType::ePixel, pxl );
+			program->initialise();
 			return program;
 		}
 
-		ShaderProgramSPtr DoGetBlurProgram( Engine & engine )
+		ShaderProgramSPtr doGetBlurProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
-			auto vtx = DoGetBlurVertexProgram( engine );
-			auto pxl = DoGetBlurPixelProgram( engine );
-			ShaderProgramSPtr program = engine.GetShaderProgramCache().GetNewProgram( false );
-			program->CreateObject( ShaderType::eVertex );
-			program->CreateObject( ShaderType::ePixel );
-			program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->SetValue( 0 );
-			program->SetSource( ShaderType::eVertex, vtx );
-			program->SetSource( ShaderType::ePixel, pxl );
-			program->Initialise();
+			auto & renderSystem = *engine.getRenderSystem();
+			auto vtx = doGetBlurVertexProgram( engine );
+			auto pxl = doGetBlurPixelProgram( engine );
+			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
+			program->createObject( ShaderType::eVertex );
+			program->createObject( ShaderType::ePixel );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->setValue( 0 );
+			program->setSource( ShaderType::eVertex, vtx );
+			program->setSource( ShaderType::ePixel, pxl );
+			program->initialise();
 			return program;
 		}
 
-		RenderPipelineUPtr DoCreatePipeline( Engine & engine
+		RenderPipelineUPtr doCreatePipeline( Engine & engine
 			, ShaderProgram & program )
 		{
 			DepthStencilState dsstate;
-			dsstate.SetDepthTest( false );
-			dsstate.SetDepthMask( WritingMask::eZero );
+			dsstate.setDepthTest( false );
+			dsstate.setDepthMask( WritingMask::eZero );
 			RasteriserState rsstate;
-			rsstate.SetCulledFaces( Culling::eNone );
-			return engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+			rsstate.setCulledFaces( Culling::eNone );
+			return engine.getRenderSystem()->createRenderPipeline( std::move( dsstate )
 				, std::move( rsstate )
 				, BlendState{}
 				, MultisampleState{}
@@ -346,66 +346,66 @@ namespace Castor3D
 				, PipelineFlags{} );
 		}
 
-		SamplerSPtr DoCreateSampler( Engine & engine
+		SamplerSPtr doCreateSampler( Engine & engine
 			, String const & name
 			, WrapMode mode )
 		{
 			SamplerSPtr sampler;
 
-			if ( engine.GetSamplerCache().Has( name ) )
+			if ( engine.getSamplerCache().has( name ) )
 			{
-				sampler = engine.GetSamplerCache().Find( name );
+				sampler = engine.getSamplerCache().find( name );
 			}
 			else
 			{
-				sampler = engine.GetSamplerCache().Add( name );
-				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-				sampler->SetWrappingMode( TextureUVW::eU, mode );
-				sampler->SetWrappingMode( TextureUVW::eV, mode );
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+				sampler->setWrappingMode( TextureUVW::eU, mode );
+				sampler->setWrappingMode( TextureUVW::eV, mode );
 			}
 
 			return sampler;
 		}
 
-		TextureUnit DoCreateTexture( Engine & engine
+		TextureUnit doCreateTexture( Engine & engine
 			, Size const & size
 			, String const & name )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
-			auto sampler = DoCreateSampler( engine, name, WrapMode::eClampToEdge );
-			auto ssaoResult = renderSystem.CreateTexture( TextureType::eTwoDimensions
+			auto & renderSystem = *engine.getRenderSystem();
+			auto sampler = doCreateSampler( engine, name, WrapMode::eClampToEdge );
+			auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite );
-			ssaoResult->SetSource( PxBufferBase::create( size
+			ssaoResult->setSource( PxBufferBase::create( size
 				, PixelFormat::eL32F ) );
 			TextureUnit unit{ engine };
-			unit.SetTexture( ssaoResult );
-			unit.SetSampler( sampler );
-			unit.SetIndex( 0u );
-			unit.Initialise();
+			unit.setTexture( ssaoResult );
+			unit.setSampler( sampler );
+			unit.setIndex( 0u );
+			unit.initialise();
 			return unit;
 		}
 
-		FrameBufferSPtr DoCreateFbo( Engine & engine
+		FrameBufferSPtr doCreateFbo( Engine & engine
 			, Size const & size )
 		{
-			auto & renderSystem = *engine.GetRenderSystem();
-			auto fbo = renderSystem.CreateFrameBuffer();
-			fbo->Create();
-			fbo->Initialise( size );
+			auto & renderSystem = *engine.getRenderSystem();
+			auto fbo = renderSystem.createFrameBuffer();
+			fbo->create();
+			fbo->initialise( size );
 			return fbo;
 		}
 
-		TextureAttachmentSPtr DoCreateAttach( FrameBuffer & p_fbo
+		TextureAttachmentSPtr doCreateAttach( FrameBuffer & p_fbo
 			, TextureUnit const & unit )
 		{
-			auto attach = p_fbo.CreateAttachment( unit.GetTexture() );
-			p_fbo.Bind();
-			p_fbo.Attach( AttachmentPoint::eColour, 0u, attach, unit.GetTexture()->GetType() );
-			p_fbo.SetDrawBuffer( attach );
-			ENSURE( p_fbo.IsComplete() );
-			p_fbo.Unbind();
+			auto attach = p_fbo.createAttachment( unit.getTexture() );
+			p_fbo.bind();
+			p_fbo.attach( AttachmentPoint::eColour, 0u, attach, unit.getTexture()->getType() );
+			p_fbo.setDrawBuffer( attach );
+			ENSURE( p_fbo.isComplete() );
+			p_fbo.unbind();
 			return attach;
 		}
 	}
@@ -419,14 +419,14 @@ namespace Castor3D
 		: m_engine{ engine }
 		, m_size{ size }
 		, m_matrixUbo{ engine }
-		, m_ssaoKernel{ DoGetKernel() }
-		, m_ssaoNoise{ DoGetNoise( engine ) }
+		, m_ssaoKernel{ doGetKernel() }
+		, m_ssaoNoise{ doGetNoise( engine ) }
 		, m_ssaoResult{ engine }
-		, m_ssaoProgram{ DoGetSsaoProgram( engine ) }
+		, m_ssaoProgram{ doGetSsaoProgram( engine ) }
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, 8u }
-		, m_blurProgram{ DoGetBlurProgram( engine ) }
+		, m_blurProgram{ doGetBlurProgram( engine ) }
 		, m_blurResult{ engine }
 		, m_viewport{ engine }
 		, m_config{ config }
@@ -434,193 +434,193 @@ namespace Castor3D
 		, m_blurTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao blur" ) ) }
 		, m_gpInfoUbo{ gpInfoUbo }
 	{
-		DoInitialiseQuadRendering();
-		DoInitialiseSsaoPass();
-		DoInitialiseBlurPass();
+		doInitialiseQuadRendering();
+		doInitialiseSsaoPass();
+		doInitialiseBlurPass();
 	}
 
 	SsaoPass::~SsaoPass()
 	{
-		DoCleanupBlurPass();
-		DoCleanupSsaoPass();
-		DoCleanupQuadRendering();
+		doCleanupBlurPass();
+		doCleanupSsaoPass();
+		doCleanupQuadRendering();
 	}
 
-	void SsaoPass::Render( GeometryPassResult const & gp
+	void SsaoPass::render( GeometryPassResult const & gp
 		, RenderInfo & info )
 	{
-		DoRenderSsao( gp );
-		DoRenderBlur();
+		doRenderSsao( gp );
+		doRenderBlur();
 	}
 
-	void SsaoPass::DoInitialiseQuadRendering()
+	void SsaoPass::doInitialiseQuadRendering()
 	{
-		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
-		m_viewport.Initialise();
-		m_viewport.Resize( m_size );
-		m_viewport.Update();
+		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
+		m_viewport.initialise();
+		m_viewport.resize( m_size );
+		m_viewport.update();
 	}
 
-	void SsaoPass::DoInitialiseSsaoPass()
+	void SsaoPass::doInitialiseSsaoPass()
 	{
-		auto & renderSystem = *m_engine.GetRenderSystem();
-		float const wScale = m_size.width() / 4.0f;
-		float const hScale = m_size.height() / 4.0f;
-		m_kernelUniform = m_ssaoConfig.CreateUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), 64u );
-		m_ssaoConfig.CreateUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->SetValue( 64 );
-		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( m_config.m_radius );
-		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( m_config.m_bias );
-		m_ssaoConfig.CreateUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->SetValue( Point2f( wScale, hScale ) );
-		m_kernelUniform->SetValues( m_ssaoKernel );
+		auto & renderSystem = *m_engine.getRenderSystem();
+		float const wScale = m_size.getWidth() / 4.0f;
+		float const hScale = m_size.getHeight() / 4.0f;
+		m_kernelUniform = m_ssaoConfig.createUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), 64u );
+		m_ssaoConfig.createUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->setValue( 64 );
+		m_ssaoConfig.createUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->setValue( m_config.m_radius );
+		m_ssaoConfig.createUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->setValue( m_config.m_bias );
+		m_ssaoConfig.createUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->setValue( Point2f( wScale, hScale ) );
+		m_kernelUniform->setValues( m_ssaoKernel );
 
-		auto sampler = DoCreateSampler( m_engine, cuT( "SSAO_Result" ), WrapMode::eClampToEdge );
-		auto ssaoResult = renderSystem.CreateTexture( TextureType::eTwoDimensions
+		auto sampler = doCreateSampler( m_engine, cuT( "SSAO_Result" ), WrapMode::eClampToEdge );
+		auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite );
-		ssaoResult->SetSource( PxBufferBase::create( m_size
+		ssaoResult->setSource( PxBufferBase::create( m_size
 			, PixelFormat::eA8R8G8B8 ) );
-		m_ssaoResult.SetTexture( ssaoResult );
-		m_ssaoResult.SetSampler( sampler );
-		m_ssaoResult.SetIndex( 0u );
-		m_ssaoResult.Initialise();
+		m_ssaoResult.setTexture( ssaoResult );
+		m_ssaoResult.setSampler( sampler );
+		m_ssaoResult.setIndex( 0u );
+		m_ssaoResult.initialise();
 
-		m_ssaoFbo = renderSystem.CreateFrameBuffer();
-		m_ssaoFbo->Create();
-		m_ssaoFbo->Initialise( m_size );
+		m_ssaoFbo = renderSystem.createFrameBuffer();
+		m_ssaoFbo->create();
+		m_ssaoFbo->initialise( m_size );
 
-		m_ssaoResultAttach = m_ssaoFbo->CreateAttachment( ssaoResult );
-		m_ssaoFbo->Bind();
-		m_ssaoFbo->Attach( AttachmentPoint::eColour, 0u, m_ssaoResultAttach, ssaoResult->GetType() );
-		m_ssaoFbo->SetDrawBuffer( m_ssaoResultAttach );
-		ENSURE( m_ssaoFbo->IsComplete() );
-		m_ssaoFbo->Unbind();
+		m_ssaoResultAttach = m_ssaoFbo->createAttachment( ssaoResult );
+		m_ssaoFbo->bind();
+		m_ssaoFbo->attach( AttachmentPoint::eColour, 0u, m_ssaoResultAttach, ssaoResult->getType() );
+		m_ssaoFbo->setDrawBuffer( m_ssaoResultAttach );
+		ENSURE( m_ssaoFbo->isComplete() );
+		m_ssaoFbo->unbind();
 
-		m_ssaoPipeline = DoCreatePipeline( m_engine, *m_ssaoProgram );
-		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
-		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
-		m_ssaoPipeline->AddUniformBuffer( m_gpInfoUbo.GetUbo() );
+		m_ssaoPipeline = doCreatePipeline( m_engine, *m_ssaoProgram );
+		m_ssaoPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		m_ssaoPipeline->addUniformBuffer( m_ssaoConfig );
+		m_ssaoPipeline->addUniformBuffer( m_gpInfoUbo.getUbo() );
 
-		m_ssaoVertexBuffer = DoCreateVbo( m_engine );
-		m_ssaoGeometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
+		m_ssaoVertexBuffer = doCreateVbo( m_engine );
+		m_ssaoGeometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
 			, *m_ssaoProgram );
-		m_ssaoGeometryBuffers->Initialise( { *m_ssaoVertexBuffer }
+		m_ssaoGeometryBuffers->initialise( { *m_ssaoVertexBuffer }
 			, nullptr );
-		m_matrixUbo.Update( m_viewport.GetProjection() );
+		m_matrixUbo.update( m_viewport.getProjection() );
 	}
 
-	void SsaoPass::DoInitialiseBlurPass()
+	void SsaoPass::doInitialiseBlurPass()
 	{
-		auto & renderSystem = *m_engine.GetRenderSystem();
-		auto sampler = DoCreateSampler( m_engine, cuT( "SSAO_Blurred" ), WrapMode::eClampToEdge );
-		auto blurResult = renderSystem.CreateTexture( TextureType::eTwoDimensions
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto sampler = doCreateSampler( m_engine, cuT( "SSAO_Blurred" ), WrapMode::eClampToEdge );
+		auto blurResult = renderSystem.createTexture( TextureType::eTwoDimensions
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite );
-		blurResult->SetSource( PxBufferBase::create( m_size
+		blurResult->setSource( PxBufferBase::create( m_size
 			, PixelFormat::eA8R8G8B8 ) );
-		m_blurResult.SetTexture( blurResult );
-		m_blurResult.SetSampler( sampler );
-		m_blurResult.Initialise();
+		m_blurResult.setTexture( blurResult );
+		m_blurResult.setSampler( sampler );
+		m_blurResult.initialise();
 
-		m_blurFbo = renderSystem.CreateFrameBuffer();
-		m_blurFbo->Create();
-		m_blurFbo->Initialise( m_size );
+		m_blurFbo = renderSystem.createFrameBuffer();
+		m_blurFbo->create();
+		m_blurFbo->initialise( m_size );
 
-		m_blurResultAttach = m_blurFbo->CreateAttachment( blurResult );
-		m_blurFbo->Bind();
-		m_blurFbo->Attach( AttachmentPoint::eColour, 0u, m_blurResultAttach, blurResult->GetType() );
-		m_blurFbo->SetDrawBuffer( m_blurResultAttach );
-		ENSURE( m_blurFbo->IsComplete() );
-		m_blurFbo->Unbind();
+		m_blurResultAttach = m_blurFbo->createAttachment( blurResult );
+		m_blurFbo->bind();
+		m_blurFbo->attach( AttachmentPoint::eColour, 0u, m_blurResultAttach, blurResult->getType() );
+		m_blurFbo->setDrawBuffer( m_blurResultAttach );
+		ENSURE( m_blurFbo->isComplete() );
+		m_blurFbo->unbind();
 
-		m_blurPipeline = DoCreatePipeline( m_engine, *m_blurProgram );
-		m_blurPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
+		m_blurPipeline = doCreatePipeline( m_engine, *m_blurProgram );
+		m_blurPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		m_blurVertexBuffer = DoCreateVbo( m_engine );
-		m_blurGeometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
+		m_blurVertexBuffer = doCreateVbo( m_engine );
+		m_blurGeometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
 			, *m_blurProgram );
-		m_blurGeometryBuffers->Initialise( { *m_blurVertexBuffer }
+		m_blurGeometryBuffers->initialise( { *m_blurVertexBuffer }
 			, nullptr );
 	}
 
-	void SsaoPass::DoCleanupQuadRendering()
+	void SsaoPass::doCleanupQuadRendering()
 	{
-		m_viewport.Cleanup();
-		m_matrixUbo.GetUbo().Cleanup();
+		m_viewport.cleanup();
+		m_matrixUbo.getUbo().cleanup();
 	}
 
-	void SsaoPass::DoCleanupSsaoPass()
+	void SsaoPass::doCleanupSsaoPass()
 	{
-		m_ssaoGeometryBuffers->Cleanup();
+		m_ssaoGeometryBuffers->cleanup();
 		m_ssaoGeometryBuffers.reset();
-		m_ssaoVertexBuffer->Cleanup();
+		m_ssaoVertexBuffer->cleanup();
 		m_ssaoVertexBuffer.reset();
-		m_ssaoPipeline->Cleanup();
+		m_ssaoPipeline->cleanup();
 		m_ssaoPipeline.reset();
-		m_ssaoConfig.Cleanup();
+		m_ssaoConfig.cleanup();
 		m_ssaoProgram.reset();
-		m_ssaoNoise.Cleanup();
-		m_ssaoFbo->Bind();
-		m_ssaoFbo->DetachAll();
-		m_ssaoFbo->Unbind();
-		m_ssaoFbo->Cleanup();
-		m_ssaoFbo->Destroy();
+		m_ssaoNoise.cleanup();
+		m_ssaoFbo->bind();
+		m_ssaoFbo->detachAll();
+		m_ssaoFbo->unbind();
+		m_ssaoFbo->cleanup();
+		m_ssaoFbo->destroy();
 		m_ssaoFbo.reset();
 		m_ssaoResultAttach.reset();
-		m_ssaoResult.Cleanup();
+		m_ssaoResult.cleanup();
 	}
 
-	void SsaoPass::DoCleanupBlurPass()
+	void SsaoPass::doCleanupBlurPass()
 	{
-		m_blurGeometryBuffers->Cleanup();
+		m_blurGeometryBuffers->cleanup();
 		m_blurGeometryBuffers.reset();
-		m_blurVertexBuffer->Cleanup();
+		m_blurVertexBuffer->cleanup();
 		m_blurVertexBuffer.reset();
-		m_blurPipeline->Cleanup();
+		m_blurPipeline->cleanup();
 		m_blurPipeline.reset();
 		m_blurProgram.reset();
-		m_blurFbo->Bind();
-		m_blurFbo->DetachAll();
-		m_blurFbo->Unbind();
-		m_blurFbo->Cleanup();
-		m_blurFbo->Destroy();
+		m_blurFbo->bind();
+		m_blurFbo->detachAll();
+		m_blurFbo->unbind();
+		m_blurFbo->cleanup();
+		m_blurFbo->destroy();
 		m_blurFbo.reset();
 		m_blurResultAttach.reset();
-		m_blurResult.Cleanup();
+		m_blurResult.cleanup();
 	}
 
-	void SsaoPass::DoRenderSsao( GeometryPassResult const & gp )
+	void SsaoPass::doRenderSsao( GeometryPassResult const & gp )
 	{
-		m_ssaoTimer->Start();
-		m_ssaoConfig.BindTo( 8u );
-		m_ssaoFbo->Bind( FrameBufferTarget::eDraw );
-		m_ssaoFbo->Clear( BufferComponent::eColour );
-		gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
-		gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
-		gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 1u );
-		gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 1u );
-		m_ssaoNoise.Bind();
-		m_ssaoPipeline->Apply();
-		m_ssaoGeometryBuffers->Draw( 6u, 0 );
-		m_ssaoNoise.Unbind();
-		gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 1u );
-		gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 1u );
-		gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
-		gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
-		m_ssaoFbo->Unbind();
-		m_ssaoTimer->Stop();
+		m_ssaoTimer->start();
+		m_ssaoConfig.bindTo( 8u );
+		m_ssaoFbo->bind( FrameBufferTarget::eDraw );
+		m_ssaoFbo->clear( BufferComponent::eColour );
+		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( 0u );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( 0u );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( 1u );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( 1u );
+		m_ssaoNoise.bind();
+		m_ssaoPipeline->apply();
+		m_ssaoGeometryBuffers->draw( 6u, 0 );
+		m_ssaoNoise.unbind();
+		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( 1u );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( 1u );
+		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( 0u );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( 0u );
+		m_ssaoFbo->unbind();
+		m_ssaoTimer->stop();
 	}
 
-	void SsaoPass::DoRenderBlur()
+	void SsaoPass::doRenderBlur()
 	{
-		m_blurTimer->Start();
-		m_viewport.Apply();
-		m_blurFbo->Bind( FrameBufferTarget::eDraw );
-		m_blurFbo->Clear( BufferComponent::eColour );
-		m_ssaoResult.Bind();
-		m_blurPipeline->Apply();
-		m_blurGeometryBuffers->Draw( 6u, 0 );
-		m_ssaoResult.Unbind();
-		m_blurFbo->Unbind();
-		m_blurTimer->Stop();
+		m_blurTimer->start();
+		m_viewport.apply();
+		m_blurFbo->bind( FrameBufferTarget::eDraw );
+		m_blurFbo->clear( BufferComponent::eColour );
+		m_ssaoResult.bind();
+		m_blurPipeline->apply();
+		m_blurGeometryBuffers->draw( 6u, 0 );
+		m_ssaoResult.unbind();
+		m_blurFbo->unbind();
+		m_blurTimer->stop();
 	}
 }

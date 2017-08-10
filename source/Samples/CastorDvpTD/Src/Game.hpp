@@ -10,25 +10,25 @@ namespace castortd
 	class Game
 	{
 	public:
-		Game( Castor3D::Scene & p_scene );
+		Game( castor3d::Scene & p_scene );
 		~Game();
 
 		void Reset();
-		void Start();
-		void Pause();
-		void Resume();
+		void start();
+		void pause();
+		void resume();
 		void Help();
-		void Update();
-		Cell & GetCell( Castor::Point3r const & p_position );
-		Cell & GetCell( Castor::Point2i const & p_position );
-		Cell & GetCell( int p_x, int p_y );
-		Cell const & GetCell( Castor::Point3r const & p_position )const;
-		Cell const & GetCell( Castor::Point2i const & p_position )const;
-		Cell const & GetCell( int p_x, int p_y )const;
-		Castor::Point3r Convert( Castor::Point2i const & p_position )const;
-		Castor::Point2i Convert( Castor::Point3r const & p_position )const;
-		void EmitBullet( float p_speed, uint32_t p_damage, Castor::Point3r const & p_origin, Enemy & p_target );
-		bool BuildTower( Castor::Point3r const & p_position, Tower::CategoryPtr && p_category );
+		void update();
+		Cell & getCell( castor::Point3r const & p_position );
+		Cell & getCell( castor::Point2i const & p_position );
+		Cell & getCell( int p_x, int p_y );
+		Cell const & getCell( castor::Point3r const & p_position )const;
+		Cell const & getCell( castor::Point2i const & p_position )const;
+		Cell const & getCell( int p_x, int p_y )const;
+		castor::Point3r convert( castor::Point2i const & p_position )const;
+		castor::Point2i convert( castor::Point3r const & p_position )const;
+		void EmitBullet( float p_speed, uint32_t p_damage, castor::Point3r const & p_origin, Enemy & p_target );
+		bool BuildTower( castor::Point3r const & p_position, Tower::CategoryPtr && p_category );
 		void Spend( uint32_t p_value );
 		void Gain( uint32_t p_value );
 		void LoseLife( uint32_t p_value );
@@ -39,32 +39,32 @@ namespace castortd
 		void UpgradeTowerDamage( Tower & p_tower );
 		bool CanAfford( uint32_t p_price );
 
-		inline TowerPtr GetSelectedTower()const
+		inline TowerPtr getSelectedTower()const
 		{
 			return m_selectedTower.lock();
 		}
 
-		inline float GetCellHeight()const
+		inline float getCellHeight()const
 		{
 			return m_cellDimensions[2];
 		}
 
-		inline uint32_t GetLives()const
+		inline uint32_t getLives()const
 		{
 			return m_lives;
 		}
 
-		inline uint32_t GetOre()const
+		inline uint32_t getOre()const
 		{
 			return m_ore;
 		}
 
-		inline uint32_t GetWave()const
+		inline uint32_t getWave()const
 		{
-			return m_spawner.GetWave();
+			return m_spawner.getWave();
 		}
 
-		inline uint32_t GetKills()const
+		inline uint32_t getKills()const
 		{
 			return m_kills;
 		}
@@ -79,91 +79,91 @@ namespace castortd
 			return m_started && !m_paused;
 		}
 
-		inline bool IsEnded()const
+		inline bool isEnded()const
 		{
 			return m_ended;
 		}
 
-		inline bool IsPaused()const
+		inline bool isPaused()const
 		{
 			return m_paused;
 		}
 
-		inline Castor3D::Scene & GetScene()const
+		inline castor3d::Scene & getScene()const
 		{
 			return m_scene;
 		}
 
-		inline Castor3D::SceneNodeSPtr GetMapNode()const
+		inline castor3d::SceneNodeSPtr getMapNode()const
 		{
 			return m_mapNode;
 		}
 
-		inline Castor3D::MaterialSPtr GetEnemyMaterial()const
+		inline castor3d::MaterialSPtr getEnemyMaterial()const
 		{
 			return m_enemyCubeMaterial;
 		}
 
-		inline Castor3D::MeshSPtr GetEnemyMesh()const
+		inline castor3d::MeshSPtr getEnemyMesh()const
 		{
 			return m_enemyCubeMesh;
 		}
 
-		inline uint32_t GetEnemiesLife()const
+		inline uint32_t getEnemiesLife()const
 		{
-			return m_spawner.GetEnemiesLife();
+			return m_spawner.getEnemiesLife();
 		}
 
-		inline uint32_t GetEnemiesBounty()const
+		inline uint32_t getEnemiesBounty()const
 		{
-			return m_spawner.GetEnemiesBounty();
+			return m_spawner.getEnemiesBounty();
 		}
 
-		inline Castor::Milliseconds GetElapsed()const
+		inline castor::Milliseconds getElapsed()const
 		{
 			return m_elapsed;
 		}
 
-		inline EnemyArray & GetEnemies()
+		inline EnemyArray & getEnemies()
 		{
 			return m_enemies;
 		}
 
-		inline EnemyArray const & GetEnemies()const
+		inline EnemyArray const & getEnemies()const
 		{
 			return m_enemies;
 		}
 
 	private:
-		void DoPrepareGrid();
-		void DoAddMapCube( Cell & p_cell );
-		void DoAddTarget( Cell & p_cell );
-		Castor3D::MeshSPtr DoSelectMesh( Tower::Category & p_category );
-		void DoAddTower( Cell & p_cell, Tower::CategoryPtr && p_category );
-		void DoUpdateTowers();
-		void DoUpdateEnemies();
-		void DoUpdateBullets();
-		void DoGameOver();
+		void doPrepareGrid();
+		void doAddMapCube( Cell & p_cell );
+		void doAddTarget( Cell & p_cell );
+		castor3d::MeshSPtr doSelectMesh( Tower::Category & p_category );
+		void doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category );
+		void doUpdateTowers();
+		void doUpdateEnemies();
+		void doUpdateBullets();
+		void doGameOver();
 
 	private:
 		// Persistent data
-		Castor3D::Scene & m_scene;
+		castor3d::Scene & m_scene;
 		Hud m_hud;
 		Path m_path;
-		Castor::Point3r m_cellDimensions;
-		Castor3D::SceneNodeSPtr m_mapNode;
-		Castor3D::SceneNodeSPtr m_targetNode;
-		Castor3D::MeshSPtr m_mapCubeMesh;
-		Castor3D::MaterialSPtr m_mapCubeMaterial;
-		Castor3D::MeshSPtr m_shortRangeTowerMesh;
-		Castor3D::MeshSPtr m_longRangeTowerMesh;
-		Castor3D::MeshSPtr m_enemyCubeMesh;
-		Castor3D::MaterialSPtr m_enemyCubeMaterial;
-		Castor3D::MeshSPtr m_bulletMesh;
-		Castor3D::MaterialSPtr m_bulletMaterial;
+		castor::Point3r m_cellDimensions;
+		castor3d::SceneNodeSPtr m_mapNode;
+		castor3d::SceneNodeSPtr m_targetNode;
+		castor3d::MeshSPtr m_mapCubeMesh;
+		castor3d::MaterialSPtr m_mapCubeMaterial;
+		castor3d::MeshSPtr m_shortRangeTowerMesh;
+		castor3d::MeshSPtr m_longRangeTowerMesh;
+		castor3d::MeshSPtr m_enemyCubeMesh;
+		castor3d::MaterialSPtr m_enemyCubeMaterial;
+		castor3d::MeshSPtr m_bulletMesh;
+		castor3d::MaterialSPtr m_bulletMaterial;
 		// Varying data
 		Clock::time_point m_saved;
-		Castor::Milliseconds m_elapsed;
+		castor::Milliseconds m_elapsed;
 		EnemySpawner m_spawner;
 		Grid m_grid;
 		TowerArray m_towers;
@@ -178,6 +178,6 @@ namespace castortd
 		bool m_paused{ false };
 		bool m_ended{ false };
 		TowerWPtr m_selectedTower;
-		Castor3D::GeometrySPtr m_lastMapCube;
+		castor3d::GeometrySPtr m_lastMapCube;
 	};
 }

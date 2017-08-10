@@ -42,7 +42,7 @@ namespace C3DMd2
 	\date 25/08/2010
 	*/
 	class Md2Importer
-		: public Castor3D::Importer
+		: public castor3d::Importer
 	{
 	private:
 		struct Md2Header
@@ -74,8 +74,8 @@ namespace C3DMd2
 
 		struct Md2Vertex
 		{
-			Castor3D::real m_coords[3];
-			Castor3D::real m_normal[3];
+			castor3d::real m_coords[3];
+			castor3d::real m_normal[3];
 		};
 
 		struct Md2Face
@@ -91,8 +91,8 @@ namespace C3DMd2
 
 		struct Md2AliasFrame
 		{
-			Castor3D::real m_scale[3];
-			Castor3D::real m_translate[3];
+			castor3d::real m_scale[3];
+			castor3d::real m_translate[3];
 			char m_name[16];
 			Md2AliasTriangle m_aliasVertices[1];
 		};
@@ -106,23 +106,23 @@ namespace C3DMd2
 		typedef char Md2Skin[64];
 
 	public:
-		Md2Importer( Castor3D::Engine & p_engine, Castor::String const & p_textureName = Castor::cuEmptyString );
+		Md2Importer( castor3d::Engine & p_engine, castor::String const & p_textureName = castor::cuEmptyString );
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		bool doImportScene( castor3d::Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 
-		void DoReadMD2Data( Castor3D::Pass & p_pass );
-		void DoConvertDataStructures( Castor3D::Mesh & p_mesh );
-		void DoCleanUp();
+		void doReadMD2Data( castor3d::Pass & p_pass );
+		void doConvertDataStructures( castor3d::Mesh & p_mesh );
+		void doCleanUp();
 
 	private:
 		Md2Header m_header;
@@ -130,8 +130,8 @@ namespace C3DMd2
 		Md2TexCoord * m_texCoords;
 		Md2Face * m_triangles;
 		Md2Frame * m_frames;
-		Castor::String m_textureName;
-		Castor::BinaryFile * m_pFile;
+		castor::String m_textureName;
+		castor::BinaryFile * m_pFile;
 	};
 }
 

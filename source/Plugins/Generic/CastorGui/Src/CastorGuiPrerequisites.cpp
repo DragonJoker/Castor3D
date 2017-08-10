@@ -13,59 +13,59 @@
 
 #include <Graphics/Font.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace CastorGui
 {
 	MaterialSPtr CreateMaterial( Engine & engine, String const & p_name, Colour const & p_colour )
 	{
-		auto & cache = engine.GetMaterialCache();
+		auto & cache = engine.getMaterialCache();
 		MaterialSPtr result;
 
-		if ( cache.Has( p_name ) )
+		if ( cache.has( p_name ) )
 		{
-			result = cache.Find( p_name );
+			result = cache.find( p_name );
 		}
 
 		if ( !result )
 		{
-			result = cache.Add( p_name, MaterialType::eLegacy );
-			result->CreatePass();
+			result = cache.add( p_name, MaterialType::eLegacy );
+			result->createPass();
 		}
 
-		result->GetTypedPass< MaterialType::eLegacy >( 0u )->SetDiffuse( p_colour );
+		result->getTypedPass< MaterialType::eLegacy >( 0u )->setDiffuse( p_colour );
 		return result;
 	}
 
 	MaterialSPtr CreateMaterial( Engine & engine, String const & p_name, TextureLayoutSPtr p_texture )
 	{
-		auto & cache = engine.GetMaterialCache();
+		auto & cache = engine.getMaterialCache();
 		MaterialSPtr result;
 
-		if ( cache.Has( p_name ) )
+		if ( cache.has( p_name ) )
 		{
-			result = cache.Find( p_name );
+			result = cache.find( p_name );
 		}
 
 		if ( !result )
 		{
-			result = cache.Add( p_name, MaterialType::eLegacy );
-			result->CreatePass();
+			result = cache.add( p_name, MaterialType::eLegacy );
+			result->createPass();
 		}
 
-		REQUIRE( result->GetType() == MaterialType::eLegacy );
-		auto pass = result->GetTypedPass< MaterialType::eLegacy >( 0u );
+		REQUIRE( result->getType() == MaterialType::eLegacy );
+		auto pass = result->getTypedPass< MaterialType::eLegacy >( 0u );
 
-		if ( pass->GetTextureUnitsCount() == 0 )
+		if ( pass->getTextureUnitsCount() == 0 )
 		{
 			auto unit = std::make_shared< TextureUnit >( engine );
-			unit->SetChannel( TextureChannel::eDiffuse );
-			pass->AddTextureUnit( unit );
+			unit->setChannel( TextureChannel::eDiffuse );
+			pass->addTextureUnit( unit );
 		}
 
-		TextureUnitSPtr unit = pass->GetTextureUnit( 0 );
-		unit->SetTexture( p_texture );
+		TextureUnitSPtr unit = pass->getTextureUnit( 0 );
+		unit->setTexture( p_texture );
 		return result;
 	}
 }

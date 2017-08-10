@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\param[in]	p_offset	Offset dans le tampon.
 		 *\param[in]	p_divisor	Incrément d'attribut d'instanciation.
 		 */
-		BufferElementDeclaration( Castor::String const & p_name, Castor::FlagCombination< ElementUsage > const & p_usages, ElementType p_type, uint32_t p_offset = 0u, uint32_t p_divisor = 0u )
+		BufferElementDeclaration( castor::String const & p_name, castor::FlagCombination< ElementUsage > const & p_usages, ElementType p_type, uint32_t p_offset = 0u, uint32_t p_divisor = 0u )
 			: m_dataType( p_type )
 			, m_offset( p_offset )
 			, m_name( p_name )
@@ -81,10 +81,10 @@ namespace Castor3D
 
 		//!\~english	The associated variable name.
 		//!\~french		Le nom de la variable associée.
-		Castor::String m_name;
+		castor::String m_name;
 		//!\~english	Element usage.
 		//!\~french		Utilisation de l'élément.
-		Castor::FlagCombination< ElementUsage > m_usages;
+		castor::FlagCombination< ElementUsage > m_usages;
 		//!\~english	Element type.
 		//!\~french		Type de l'élément.
 		ElementType m_dataType;

@@ -1,12 +1,12 @@
-﻿#include "FrameVariableBufferTreeItemProperty.hpp"
+#include "FrameVariableBufferTreeItemProperty.hpp"
 
 #include <Shader/UniformBuffer.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -32,14 +32,14 @@ namespace GuiCommon
 	{
 	}
 
-	void FrameVariableBufferTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor
+	void FrameVariableBufferTreeItemProperty::doCreateProperties( wxPGEditor * p_editor
 		, wxPropertyGrid * p_grid )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER + m_buffer.GetName() ) );
-		p_grid->Append( new wxStringProperty( PROPERTY_NAME ) )->SetValue( m_buffer.GetName() );
+		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER + m_buffer.getName() ) );
+		p_grid->Append( new wxStringProperty( PROPERTY_NAME ) )->SetValue( m_buffer.getName() );
 	}
 
-	void FrameVariableBufferTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void FrameVariableBufferTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * property = p_event.GetProperty();
 

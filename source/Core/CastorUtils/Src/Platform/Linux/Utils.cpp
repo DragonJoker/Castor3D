@@ -14,20 +14,20 @@
 	__asm__ __volatile__ ( "cpuid":\
 	"=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
 
-namespace Castor
+namespace castor
 {
 	namespace System
 	{
 #	if CASTOR_HAS_XINERAMA
 
-		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
 			bool result = false;
 			auto display = XOpenDisplay( nullptr );
 
 			if ( !display )
 			{
-				Logger::LogError( "Failed to open default display." );
+				Logger::logError( "Failed to open default display." );
 			}
 			else
 			{
@@ -69,7 +69,7 @@ namespace Castor
 
 					if ( !screen )
 					{
-						Logger::LogError( "Failed to obtain the default screen of given display." );
+						Logger::logError( "Failed to obtain the default screen of given display." );
 					}
 					else
 					{
@@ -86,14 +86,14 @@ namespace Castor
 
 #	else
 
-		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
 			bool result = false;
 			auto display = XOpenDisplay( nullptr );
 
 			if ( !display )
 			{
-				Logger::LogError( "Failed to open default display." );
+				Logger::logError( "Failed to open default display." );
 			}
 			else
 			{
@@ -102,7 +102,7 @@ namespace Castor
 
 				if ( !screen )
 				{
-					Logger::LogError( "Failed to obtain the default screen of given display." );
+					Logger::logError( "Failed to obtain the default screen of given display." );
 				}
 				else
 				{
@@ -117,7 +117,7 @@ namespace Castor
 
 #	endif
 
-		String GetLastErrorText()
+		String getLastErrorText()
 		{
 			String strReturn;
 			int error = errno;
@@ -125,38 +125,15 @@ namespace Castor
 
 			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				strReturn = string::to_string( error ) + cuT( " (" ) + string::string_cast< xchar >( szError ) + cuT( ")" );
+				strReturn = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
 				string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 
 			return strReturn;
 		}
-
-		uint8_t GetCPUCount()
-		{
-			struct ProcessFile
-			{
-				~ProcessFile()
-				{
-					pclose( m_file );
-				}
-				operator FILE * ()const
-				{
-					return m_file;
-				}
-				FILE * m_file;
-			};
-
-			char res[128];
-			{
-				ProcessFile file{ popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" ) };
-				ENSURE( fread( res, 1, sizeof( res ) - 1, file ) < sizeof( res ) );
-			}
-			return res[0];
-		}
 	}
 
-	void Localtime( std::tm * p_tm, time_t const * p_pTime )
+	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
 	{
 		p_tm = localtime( p_pTime );
 	}

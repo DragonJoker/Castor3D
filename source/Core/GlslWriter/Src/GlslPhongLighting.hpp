@@ -32,43 +32,43 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API PhongLightingModel( ShadowType shadows, GlslWriter & writer );
-		GlslWriter_API static std::shared_ptr< LightingModel > Create( ShadowType shadows, GlslWriter & writer );
-		GlslWriter_API void ComputeCombinedLighting( Vec3 const & worldEye
+		GlslWriter_API static std::shared_ptr< LightingModel > create( ShadowType shadows, GlslWriter & writer );
+		GlslWriter_API void computeCombinedLighting( Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output );
-		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & light
+		GlslWriter_API void computeDirectionalLight( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output );
-		GlslWriter_API void ComputePointLight( PointLight const & light
+		GlslWriter_API void computePointLight( PointLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output );
-		GlslWriter_API void ComputeSpotLight( SpotLight const & light
+		GlslWriter_API void computeSpotLight( SpotLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output );
-		GlslWriter_API void ComputeOneDirectionalLight( DirectionalLight const & light
+		GlslWriter_API void computeOneDirectionalLight( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output );
-		GlslWriter_API void ComputeOnePointLight( PointLight const & light
+		GlslWriter_API void computeOnePointLight( PointLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output );
-		GlslWriter_API void ComputeOneSpotLight( SpotLight const & light
+		GlslWriter_API void computeOneSpotLight( SpotLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
@@ -76,25 +76,25 @@ namespace GLSL
 			, OutputComponents & output );
 
 	protected:
-		void DoDeclareModel();
-		void Declare_ComputeDirectionalLight()override;
-		void Declare_ComputePointLight()override;
-		void Declare_ComputeSpotLight()override;
-		void Declare_ComputeOneDirectionalLight()override;
-		void Declare_ComputeOnePointLight()override;
-		void Declare_ComputeOneSpotLight()override;
+		void doDeclareModel();
+		void doDeclareComputeDirectionalLight()override;
+		void doDeclareComputePointLight()override;
+		void doDeclareComputeSpotLight()override;
+		void doDeclareComputeOneDirectionalLight()override;
+		void doDeclareComputeOnePointLight()override;
+		void doDeclareComputeOneSpotLight()override;
 
-		void DoComputeLight( Light const & light
+		void doComputeLight( Light const & light
 			, Vec3 const & worldEye
 			, Vec3 const & lightDirection
 			, Float const & shininess
 			, Float const & shadowFactor
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output );
-		void DoDeclare_ComputeLight();
+		void doDeclareComputeLight();
 
 	public:
-		GlslWriter_API static const Castor::String Name;
+		GlslWriter_API static const castor::String Name;
 		Function< Void, InLight, InVec3, InVec3, InFloat, InFloat, FragmentInput, OutputComponents & > m_computeLight;
 		Function< Void, DirectionalLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeDirectional;
 		Function< Void, PointLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computePoint;

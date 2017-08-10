@@ -2,9 +2,9 @@
 
 #include "MeshAnimation.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
@@ -12,7 +12,7 @@ namespace Castor3D
 		using SubmeshAnimationBufferd = SubmeshAnimationBufferT< double >;
 
 		template< typename T, typename U >
-		void DoConvert( std::vector< InterleavedVertexT< T > > const & p_in, std::vector< InterleavedVertexT< U > > & p_out )
+		void doConvert( std::vector< InterleavedVertexT< T > > const & p_in, std::vector< InterleavedVertexT< U > > & p_out )
 		{
 			p_out.resize( p_in.size() );
 			auto it = p_out.begin();
@@ -39,7 +39,7 @@ namespace Castor3D
 			}
 		}
 
-		void DoConvert( std::vector< SubmeshAnimationBufferd > const & p_in, std::vector< SubmeshAnimationBuffer > & p_out )
+		void doConvert( std::vector< SubmeshAnimationBufferd > const & p_in, std::vector< SubmeshAnimationBuffer > & p_out )
 		{
 			p_out.resize( p_in.size() );
 			auto it = p_out.begin();
@@ -47,12 +47,12 @@ namespace Castor3D
 			for ( auto const & in : p_in )
 			{
 				it->m_timeIndex = float( in.m_timeIndex );
-				DoConvert( in.m_buffer, it->m_buffer );
+				doConvert( in.m_buffer, it->m_buffer );
 				++it;
 			}
 		}
 
-		void DoConvert( std::vector< SubmeshAnimationBuffer > const & p_in, std::vector< SubmeshAnimationBufferd > & p_out )
+		void doConvert( std::vector< SubmeshAnimationBuffer > const & p_in, std::vector< SubmeshAnimationBufferd > & p_out )
 		{
 			p_out.resize( p_in.size() );
 			auto it = p_out.begin();
@@ -60,7 +60,7 @@ namespace Castor3D
 			for ( auto const & in : p_in )
 			{
 				it->m_timeIndex = float( in.m_timeIndex );
-				DoConvert( in.m_buffer, it->m_buffer );
+				doConvert( in.m_buffer, it->m_buffer );
 				++it;
 			}
 		}
@@ -68,32 +68,32 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryWriter< MeshAnimationSubmesh >::DoWrite( MeshAnimationSubmesh const & p_obj )
+	bool BinaryWriter< MeshAnimationSubmesh >::doWrite( MeshAnimationSubmesh const & p_obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = DoWriteChunk( real( p_obj.m_length.count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
+			result = doWriteChunk( real( p_obj.m_length.count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( !p_obj.m_buffers.empty() )
 		{
 			if ( result )
 			{
-				result = DoWriteChunk( uint32_t( p_obj.m_buffers.begin()->m_buffer.size() ), ChunkType::eSubmeshAnimationBufferSize, m_chunk );
+				result = doWriteChunk( uint32_t( p_obj.m_buffers.begin()->m_buffer.size() ), ChunkType::eSubmeshAnimationBufferSize, m_chunk );
 			}
 
 			if ( result )
 			{
-				result = DoWriteChunk( uint32_t( p_obj.m_buffers.size() ), ChunkType::eSubmeshAnimationBuffersCount, m_chunk );
+				result = doWriteChunk( uint32_t( p_obj.m_buffers.size() ), ChunkType::eSubmeshAnimationBuffersCount, m_chunk );
 			}
 
 			if ( result )
 			{
 				std::vector< SubmeshAnimationBufferd > buffers;
-				DoConvert( p_obj.m_buffers, buffers );
-				result = DoWriteChunk( buffers, ChunkType::eSubmeshAnimationBuffers, m_chunk );
+				doConvert( p_obj.m_buffers, buffers );
+				result = doWriteChunk( buffers, ChunkType::eSubmeshAnimationBuffers, m_chunk );
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< MeshAnimationSubmesh >::DoParse( MeshAnimationSubmesh & p_obj )
+	bool BinaryParser< MeshAnimationSubmesh >::doParse( MeshAnimationSubmesh & p_obj )
 	{
 		bool result = true;
 		Matrix4x4r transform;
@@ -112,12 +112,12 @@ namespace Castor3D
 		uint32_t count{ 0 };
 		real length{ 0.0_r };
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eSubmeshAnimationBufferSize:
-				result = DoParseChunk( size, chunk );
+				result = doParseChunk( size, chunk );
 
 				if ( result )
 				{
@@ -127,7 +127,7 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshAnimationBuffersCount:
-				result = DoParseChunk( count, chunk );
+				result = doParseChunk( count, chunk );
 
 				if ( result )
 				{
@@ -140,17 +140,17 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshAnimationBuffers:
-				result = DoParseChunk( buffers, chunk );
+				result = doParseChunk( buffers, chunk );
 
 				if ( result )
 				{
-					DoConvert( buffers, p_obj.m_buffers );
+					doConvert( buffers, p_obj.m_buffers );
 				}
 
 				break;
 
 			case ChunkType::eAnimLength:
-				result = DoParseChunk( length, chunk );
+				result = doParseChunk( length, chunk );
 				p_obj.m_length = Milliseconds{ int64_t( length * 1000 ) };
 				break;
 			}
@@ -171,7 +171,7 @@ namespace Castor3D
 	{
 	}
 
-	bool MeshAnimationSubmesh::AddBuffer( Milliseconds const & p_from
+	bool MeshAnimationSubmesh::addBuffer( Milliseconds const & p_from
 		, InterleavedVertexArray && p_buffer )
 	{
 		auto it = std::find_if( m_buffers.begin(), m_buffers.end(), [&p_from]( SubmeshAnimationBuffer const & p_keyframe )

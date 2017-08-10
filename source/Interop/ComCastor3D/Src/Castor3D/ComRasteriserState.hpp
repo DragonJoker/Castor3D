@@ -57,33 +57,33 @@ namespace CastorCom
 		 */
 		virtual ~CRasteriserState();
 
-		inline Castor3D::RasteriserStateSPtr GetInternal()const
+		inline castor3d::RasteriserStateSPtr getInternal()const
 		{
 			return m_state;
 		}
 
-		inline void SetInternal( Castor3D::RasteriserStateSPtr state )
+		inline void setInternal( castor3d::RasteriserStateSPtr state )
 		{
 			m_state = state;
 		}
 
-		COM_PROPERTY( FillMode, eFILL_MODE, make_getter( m_state.get(), &Castor3D::RasteriserState::GetFillMode ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetFillMode ) );
-		COM_PROPERTY( CulledFaces, eFACE, make_getter( m_state.get(), &Castor3D::RasteriserState::GetCulledFaces ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetCulledFaces ) );
-		COM_PROPERTY( FrontCCW, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetFrontCCW ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetFrontCCW ) );
-		COM_PROPERTY( AntialiasedLines, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetAntialiasedLines ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetAntialiasedLines ) );
-		COM_PROPERTY( DepthBiasUnits, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBiasUnits ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBiasUnits ) );
-		COM_PROPERTY( DepthBiasFactor, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBiasFactor ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBiasFactor ) );
-		COM_PROPERTY( DepthClipping, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthClipping ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthClipping ) );
-		COM_PROPERTY( Scissor, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetScissor ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetScissor ) );
+		COM_PROPERTY( FillMode, eFILL_MODE, make_getter( m_state.get(), &castor3d::RasteriserState::getFillMode ), make_putter( m_state.get(), &castor3d::RasteriserState::setFillMode ) );
+		COM_PROPERTY( CulledFaces, eFACE, make_getter( m_state.get(), &castor3d::RasteriserState::getCulledFaces ), make_putter( m_state.get(), &castor3d::RasteriserState::setCulledFaces ) );
+		COM_PROPERTY( FrontCCW, boolean, make_getter( m_state.get(), &castor3d::RasteriserState::getFrontCCW ), make_putter( m_state.get(), &castor3d::RasteriserState::setFrontCCW ) );
+		COM_PROPERTY( AntialiasedLines, boolean, make_getter( m_state.get(), &castor3d::RasteriserState::getAntialiasedLines ), make_putter( m_state.get(), &castor3d::RasteriserState::setAntialiasedLines ) );
+		COM_PROPERTY( DepthBiasUnits, float, make_getter( m_state.get(), &castor3d::RasteriserState::getDepthBiasUnits ), make_putter( m_state.get(), &castor3d::RasteriserState::setDepthBiasUnits ) );
+		COM_PROPERTY( DepthBiasFactor, float, make_getter( m_state.get(), &castor3d::RasteriserState::getDepthBiasFactor ), make_putter( m_state.get(), &castor3d::RasteriserState::setDepthBiasFactor ) );
+		COM_PROPERTY( DepthClipping, boolean, make_getter( m_state.get(), &castor3d::RasteriserState::getDepthClipping ), make_putter( m_state.get(), &castor3d::RasteriserState::setDepthClipping ) );
+		COM_PROPERTY( Scissor, boolean, make_getter( m_state.get(), &castor3d::RasteriserState::getScissor ), make_putter( m_state.get(), &castor3d::RasteriserState::setScissor ) );
 
 	private:
-		Castor3D::RasteriserStateSPtr m_state;
+		castor3d::RasteriserStateSPtr m_state;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( RasteriserState ), CRasteriserState );
 
-	DECLARE_VARIABLE_PTR_GETTER( RasteriserState, Castor3D, RasteriserState );
-	DECLARE_VARIABLE_PTR_PUTTER( RasteriserState, Castor3D, RasteriserState );
+	DECLARE_VARIABLE_PTR_GETTER( RasteriserState, castor3d, RasteriserState );
+	DECLARE_VARIABLE_PTR_PUTTER( RasteriserState, castor3d, RasteriserState );
 }
 
 #endif

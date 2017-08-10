@@ -4,7 +4,7 @@
 
 #include <atomic>
 
-using namespace Castor;
+using namespace castor;
 
 namespace Testing
 {
@@ -17,11 +17,11 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsThreadPoolTest::DoRegisterTests()
+	void CastorUtilsThreadPoolTest::doRegisterTests()
 	{
-		DoRegisterTest( "CastorUtilsWorkerThreadTest::Underload", std::bind( &CastorUtilsThreadPoolTest::Underload, this ) );
-		DoRegisterTest( "CastorUtilsWorkerThreadTest::Exactload", std::bind( &CastorUtilsThreadPoolTest::Exactload, this ) );
-		DoRegisterTest( "CastorUtilsWorkerThreadTest::Overload", std::bind( &CastorUtilsThreadPoolTest::Overload, this ) );
+		doRegisterTest( "CastorUtilsWorkerThreadTest::Underload", std::bind( &CastorUtilsThreadPoolTest::Underload, this ) );
+		doRegisterTest( "CastorUtilsWorkerThreadTest::Exactload", std::bind( &CastorUtilsThreadPoolTest::Exactload, this ) );
+		doRegisterTest( "CastorUtilsWorkerThreadTest::Overload", std::bind( &CastorUtilsThreadPoolTest::Overload, this ) );
 	}
 
 	void CastorUtilsThreadPoolTest::Underload()
@@ -29,7 +29,7 @@ namespace Testing
 		constexpr size_t count = 1000000u;
 		ThreadPool pool( 5u );
 		std::vector< size_t > data;
-		pool.PushJob( [&data, count]()
+		pool.pushJob( [&data, count]()
 		{
 			while ( data.size() < count )
 			{
@@ -37,9 +37,9 @@ namespace Testing
 			}
 		} );
 
-		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
-		CT_CHECK( !pool.IsEmpty() );
-		CT_CHECK( pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( !pool.waitAll( std::chrono::milliseconds( 1 ) ) );
+		CT_CHECK( !pool.isEmpty() );
+		CT_CHECK( pool.waitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
 		CT_CHECK( data.size() == count );
 	}
 
@@ -59,16 +59,16 @@ namespace Testing
 			}
 		};
 
-		pool.PushJob( job );
-		pool.PushJob( job );
-		pool.PushJob( job );
-		pool.PushJob( job );
-		pool.PushJob( job );
+		pool.pushJob( job );
+		pool.pushJob( job );
+		pool.pushJob( job );
+		pool.pushJob( job );
+		pool.pushJob( job );
 
-		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
-		CT_CHECK( pool.IsEmpty() );
-		CT_CHECK( pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( !pool.IsEmpty() );
+		CT_CHECK( !pool.waitAll( std::chrono::milliseconds( 1 ) ) );
+		CT_CHECK( pool.isEmpty() );
+		CT_CHECK( pool.waitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( !pool.isEmpty() );
 		CT_CHECK( value == count * 5u );
 	}
 
@@ -88,20 +88,20 @@ namespace Testing
 			}
 		};
 
-		pool.PushJob( job );
-		pool.PushJob( job );
-		pool.PushJob( job );
-		pool.PushJob( job );
-		pool.PushJob( job );
-		CT_CHECK( pool.IsEmpty() );
-		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
+		pool.pushJob( job );
+		pool.pushJob( job );
+		pool.pushJob( job );
+		pool.pushJob( job );
+		pool.pushJob( job );
+		CT_CHECK( pool.isEmpty() );
+		CT_CHECK( !pool.waitAll( std::chrono::milliseconds( 1 ) ) );
 
-		pool.PushJob( job );
-		//CT_CHECK( pool.IsEmpty() );
-		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
+		pool.pushJob( job );
+		//CT_CHECK( pool.isEmpty() );
+		CT_CHECK( !pool.waitAll( std::chrono::milliseconds( 1 ) ) );
 
-		CT_CHECK( pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( !pool.IsEmpty() );
+		CT_CHECK( pool.waitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( !pool.isEmpty() );
 		CT_CHECK( value == count * 6u );
 	}
 }

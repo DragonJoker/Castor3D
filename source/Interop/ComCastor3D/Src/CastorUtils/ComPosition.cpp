@@ -11,7 +11,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CPosition::Set( /* [in] */ INT x, /* [in] */ INT y )
+	STDMETHODIMP CPosition::set( /* [in] */ INT x, /* [in] */ INT y )
 	{
 		this->set( x, y );
 		return S_OK;

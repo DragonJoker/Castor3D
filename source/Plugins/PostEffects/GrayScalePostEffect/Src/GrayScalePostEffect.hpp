@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -35,40 +35,40 @@ namespace GrayScale
 	static const uint32_t KERNEL_SIZE = 3;
 
 	class GrayScalePostEffect
-		: public Castor3D::PostEffect
+		: public castor3d::PostEffect
 	{
 	public:
-		GrayScalePostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & renderSystem, Castor3D::Parameters const & p_param );
+		GrayScalePostEffect( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
 		~GrayScalePostEffect();
-		static Castor3D::PostEffectSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & renderSystem, Castor3D::Parameters const & p_param );
+		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
 		/**
-		 *\copydoc		Castor3D::PostEffect::Initialise
+		 *\copydoc		castor3d::PostEffect::Initialise
 		 */
-		bool Initialise() override;
+		bool initialise() override;
 		/**
-		 *\copydoc		Castor3D::PostEffect::Cleanup
+		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
-		void Cleanup() override;
+		void cleanup() override;
 		/**
-		 *\copydoc		Castor3D::PostEffect::Apply
+		 *\copydoc		castor3d::PostEffect::Apply
 		 */
-		bool Apply( Castor3D::FrameBuffer & p_framebuffer ) override;
+		bool apply( castor3d::FrameBuffer & p_framebuffer ) override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::PostEffect::DoWriteInto
+		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		bool DoWriteInto( Castor::TextFile & p_file ) override;
+		bool doWriteInto( castor::TextFile & p_file ) override;
 
 	public:
-		static Castor::String Type;
-		static Castor::String Name;
+		static castor::String Type;
+		static castor::String Name;
 
 	private:
-		Castor3D::PushUniform1sSPtr m_mapDiffuse;
-		Castor3D::SamplerSPtr m_sampler;
-		Castor3D::RenderPipelineSPtr m_pipeline;
-		Castor3D::MatrixUbo m_matrixUbo;
+		castor3d::PushUniform1sSPtr m_mapDiffuse;
+		castor3d::SamplerSPtr m_sampler;
+		castor3d::RenderPipelineSPtr m_pipeline;
+		castor3d::MatrixUbo m_matrixUbo;
 		PostEffectSurface m_surface;
 	};
 }

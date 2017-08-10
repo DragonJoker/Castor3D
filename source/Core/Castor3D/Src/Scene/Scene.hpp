@@ -47,7 +47,7 @@ SOFTWARE.
 #include <Design/Signal.hpp>
 #include <Multithreading/ThreadPool.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -64,12 +64,12 @@ namespace Castor3D
 	*/
 	class Scene
 		: public std::enable_shared_from_this< Scene >
-		, public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		, public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 	public:
 		using OnChangedFunction = std::function< void( Scene const & ) >;
-		using OnChanged = Castor::Signal< OnChangedFunction >;
+		using OnChanged = castor::Signal< OnChangedFunction >;
 
 	public:
 		/*!
@@ -81,7 +81,7 @@ namespace Castor3D
 		\brief		Loader de scène
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Scene >
+			: public castor::TextWriter< Scene >
 		{
 		public:
 			/**
@@ -90,7 +90,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -101,7 +101,7 @@ namespace Castor3D
 			 *\param[in]	scene	La scène
 			 *\param[in]	file	Le fichier
 			 */
-			C3D_API bool operator()( Scene const & scene, Castor::TextFile & file )override;
+			C3D_API bool operator()( Scene const & scene, castor::TextFile & file )override;
 		};
 
 	public:
@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\param[in]	name		Le nom de la scène
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Scene( Castor::String const & name, Engine & engine );
+		C3D_API Scene( castor::String const & name, Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -129,14 +129,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la scène
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Clears the maps, leaves the root nodes
 		 *\~french
 		 *\brief		Vide les maps, laisse les noeuds pères
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the scene background (skybox or image).
@@ -147,17 +147,17 @@ namespace Castor3D
 		 *\param[in]	size		Les dimensions de la cible.
 		 *\param[in]	camera	La caméra courante.
 		 */
-		C3D_API void RenderBackground( Castor::Size const & size, Camera const & camera );
+		C3D_API void renderBackground( castor::Size const & size, Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Updates the scene before render.
 		 *\~french
 		 *\brief		Met à jour la scène avant le rendu.
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Sets the background image for the scene
+		 *\brief		sets the background image for the scene
 		 *\param[in]	folder	The folder containing the image.
 		 *\param[in]	relative	The image file path, relative to \p folder.
 		 *\~french
@@ -165,16 +165,16 @@ namespace Castor3D
 		 *\param[in]	folder	Le dossier contenant l'image.
 		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à \p folder.
 		 */
-		C3D_API bool SetBackground( Castor::Path const & folder, Castor::Path const & relative );
+		C3D_API bool setBackground( castor::Path const & folder, castor::Path const & relative );
 		/**
 		 *\~english
-		 *\brief		Sets the skybox for the scene.
+		 *\brief		sets the skybox for the scene.
 		 *\param[in]	skybox	The skybox.
 		 *\~french
 		 *\brief		Définit la skybox de la scène.
 		 *\param[in]	skybox	La skybox.
 		 */
-		C3D_API bool SetForeground( SkyboxUPtr && skybox );
+		C3D_API bool setForeground( SkyboxUPtr && skybox );
 		/**
 		 *\~english
 		 *\brief		Imports a scene from an foreign file
@@ -187,7 +187,7 @@ namespace Castor3D
 		 *\param[in]	importer	L'importeur chargé de la récupération des données
 		 *\return		\p false si un problème quelconque a été rencontré
 		 */
-		C3D_API bool ImportExternal( Castor::Path const & fileName, Importer & importer );
+		C3D_API bool importExternal( castor::Path const & fileName, Importer & importer );
 		/**
 		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
@@ -196,7 +196,7 @@ namespace Castor3D
 		 *\brief		Intègre à cette scène le contenu de celle donnée
 		 *\param[in]	scene	La scène à intégrer
 		 */
-		C3D_API void Merge( SceneSPtr scene );
+		C3D_API void merge( SceneSPtr scene );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertices count
@@ -205,7 +205,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre de sommets
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t GetVertexCount()const;
+		C3D_API uint32_t getVertexCount()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the faces count
@@ -214,21 +214,21 @@ namespace Castor3D
 		 *\brief		Récupère le nombre de faces
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t GetFaceCount()const;
+		C3D_API uint32_t getFaceCount()const;
 		/**
 		 *\~english
 		 *\return		The scene flags.
 		 *\~french
 		 *\return		Les indicateurs de la scène.
 		 */
-		C3D_API SceneFlags GetFlags()const;
+		C3D_API SceneFlags getFlags()const;
 		/**
 		 *\~english
 		 *\return		Tells if the scene has a shadow projecting light.
 		 *\~french
 		 *\return		Dit si la scène a au moins une source lumineuse projetant des ombres.
 		 */
-		C3D_API bool HasShadows()const;
+		C3D_API bool hasShadows()const;
 		/**
 		 *\~english
 		 *\return		Creates a reflection map for given node.
@@ -237,7 +237,7 @@ namespace Castor3D
 		 *\return		Crée une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
 		 */
-		C3D_API void CreateEnvironmentMap( SceneNode & node );
+		C3D_API void createEnvironmentMap( SceneNode & node );
 		/**
 		 *\~english
 		 *\return		Tells if there is a reflection map for given node.
@@ -246,18 +246,18 @@ namespace Castor3D
 		 *\return		Dit s'il y a une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API bool HasEnvironmentMap( SceneNode const & node )const;
+		C3D_API bool hasEnvironmentMap( SceneNode const & node )const;
 		/**
 		 *\~english
-		 *\remarks		Call HasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
+		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
 		 *\return		Retrieves the reflection map for given node.
 		 *\param[in]	node	The scene node.
 		 *\~french
-		 *\remarks		Appelez HasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
+		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
 		 *\return		Récupère la reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API EnvironmentMap & GetEnvironmentMap( SceneNode const & node );
+		C3D_API EnvironmentMap & getEnvironmentMap( SceneNode const & node );
 		/**
 		 *\~english
 		 *\return		the IBL textures for given node, the skybox's one if no environment map exists for this SceneNode.
@@ -266,14 +266,14 @@ namespace Castor3D
 		 *\return		Les textures d'IBL pour le noeud donné, celles de la skybox si aucune EnvironmentMap n'existe pour ce noeud.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API IblTextures const & GetIbl( SceneNode const & node )const;
+		C3D_API IblTextures const & getIbl( SceneNode const & node )const;
 		/**
 		 *\~english
 		 *\return		The reflection maps list.
 		 *\~french
 		 *\return		La liste des reflection maps.
 		 */
-		inline std::vector< std::reference_wrapper< EnvironmentMap > > & GetEnvironmentMaps()
+		inline std::vector< std::reference_wrapper< EnvironmentMap > > & getEnvironmentMaps()
 		{
 			return m_reflectionMapsArray;
 		}
@@ -283,19 +283,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La liste des reflection maps.
 		 */
-		inline std::vector< std::reference_wrapper< EnvironmentMap > > const & GetEnvironmentMaps()const
+		inline std::vector< std::reference_wrapper< EnvironmentMap > > const & getEnvironmentMaps()const
 		{
 			return m_reflectionMapsArray;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the background colour
+		 *\brief		sets the background colour
 		 *\param[in]	value	The new colour
 		 *\~french
 		 *\brief		Définit la couleur du fond
 		 *\param[in]	value	La nouvelle couleur
 		 */
-		inline void SetBackgroundColour( Castor::Colour const & value )
+		inline void setBackgroundColour( castor::Colour const & value )
 		{
 			m_backgroundColour = value;
 		}
@@ -307,7 +307,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur du fond
 		 *\return		La couleur
 		 */
-		inline Castor::Colour const & GetBackgroundColour()const
+		inline castor::Colour const & getBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}
@@ -319,7 +319,7 @@ namespace Castor3D
 		 *\brief		Récupère le node racine
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr GetRootNode()const
+		inline SceneNodeSPtr getRootNode()const
 		{
 			return m_rootNode;
 		}
@@ -331,7 +331,7 @@ namespace Castor3D
 		 *\brief		Récupère le node racine des caméras
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr GetCameraRootNode()const
+		inline SceneNodeSPtr getCameraRootNode()const
 		{
 			return m_rootCameraNode;
 		}
@@ -343,7 +343,7 @@ namespace Castor3D
 		 *\brief		Récupère le node racine des objets
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr GetObjectRootNode()const
+		inline SceneNodeSPtr getObjectRootNode()const
 		{
 			return m_rootObjectNode;
 		}
@@ -355,7 +355,7 @@ namespace Castor3D
 		 *\brief		Récupère l'image de fond de la scène
 		 *\return		La valeur
 		 */
-		inline TextureLayoutSPtr GetBackgroundImage()const
+		inline TextureLayoutSPtr getBackgroundImage()const
 		{
 			return m_backgroundImage;
 		}
@@ -367,17 +367,17 @@ namespace Castor3D
 		 *\brief		Récupère le statut de changement de la scène
 		 *\return		La valeur
 		 */
-		inline bool HasChanged()const
+		inline bool hasChanged()const
 		{
 			return m_changed;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the scene changed status to \p true.
+		 *\brief		sets the scene changed status to \p true.
 		 *\~french
 		 *\brief		Définit le statut de changement de la scène to \p true.
 		 */
-		inline void SetChanged()
+		inline void setChanged()
 		{
 			m_changed = true;
 			onChanged( *this );
@@ -388,19 +388,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur de la lumière ambiante
 		 */
-		inline Castor::Colour const & GetAmbientLight()const
+		inline castor::Colour const & getAmbientLight()const
 		{
 			return m_ambientLight;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the ambient light colour.
+		 *\brief		sets the ambient light colour.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur de la lumière ambiante.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetAmbientLight( Castor::Colour const & value )
+		inline void setAmbientLight( castor::Colour const & value )
 		{
 			m_ambientLight = value;
 		}
@@ -410,7 +410,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si la skybox est définie.
 		 */
-		inline bool HasSkybox()const
+		inline bool hasSkybox()const
 		{
 			return m_skybox != nullptr;
 		}
@@ -420,7 +420,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La skybox.
 		 */
-		inline Skybox const & GetSkybox()const
+		inline Skybox const & getSkybox()const
 		{
 			REQUIRE( m_skybox );
 			return *m_skybox;
@@ -431,7 +431,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les paramètres du brouillard.
 		 */
-		inline Fog const & GetFog()const
+		inline Fog const & getFog()const
 		{
 			return m_fog;
 		}
@@ -441,7 +441,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les paramètres du brouillard.
 		 */
-		inline Fog & GetFog()
+		inline Fog & getFog()
 		{
 			return m_fog;
 		}
@@ -451,7 +451,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les paramètres des ombres.
 		 */
-		inline Shadow const & GetShadow()const
+		inline Shadow const & getShadow()const
 		{
 			return m_shadow;
 		}
@@ -461,7 +461,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les paramètres des ombres.
 		 */
-		inline Shadow & GetShadow()
+		inline Shadow & getShadow()
 		{
 			return m_shadow;
 		}
@@ -471,21 +471,21 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type des matériaux.
 		 */
-		inline MaterialType GetMaterialsType()const
+		inline MaterialType getMaterialsType()const
 		{
-			return GetEngine()->GetMaterialsType();
+			return getEngine()->getMaterialsType();
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the materials type.
+		 *\brief		sets the materials type.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le type des matériaux.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetMaterialsType( MaterialType value )
+		inline void setMaterialsType( MaterialType value )
 		{
-			GetEngine()->SetMaterialsType( value );
+			getEngine()->setMaterialsType( value );
 		}
 		/**
 		 *\~english
@@ -493,7 +493,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le frame listener de la scène.
 		 */
-		inline FrameListener const & GetListener()const
+		inline FrameListener const & getListener()const
 		{
 			REQUIRE( !m_listener.expired() );
 			return *m_listener.lock();
@@ -504,7 +504,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le frame listener de la scène.
 		 */
-		inline FrameListener & GetListener()
+		inline FrameListener & getListener()
 		{
 			REQUIRE( !m_listener.expired() );
 			return *m_listener.lock();
@@ -515,33 +515,33 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si la scène est initialisée.
 		 */
-		inline bool IsInitialised()const
+		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the exposure value.
+		 *\brief		sets the exposure value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'exposition.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetExposure( float value )
+		inline void setExposure( float value )
 		{
-			m_config.SetExposure( value );
+			m_config.setExposure( value );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the gamma correction value.
+		 *\brief		sets the gamma correction value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de la correction gamma.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetGamma( float value )
+		inline void setGamma( float value )
 		{
-			m_config.SetGamma( value );
+			m_config.setGamma( value );
 		}
 		/**
 		 *\~english
@@ -549,7 +549,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La configuration HDR.
 		 */
-		inline HdrConfig const & GetHdrConfig()const
+		inline HdrConfig const & getHdrConfig()const
 		{
 			return m_config;
 		}
@@ -613,10 +613,10 @@ namespace Castor3D
 		bool m_changed{ false };
 		//!\~english	Ambient light color
 		//!\~french		Couleur de la lumière ambiante
-		Castor::Colour m_ambientLight;
+		castor::Colour m_ambientLight;
 		//!\~english	The scene background colour
 		//!\~french		La couleur de fond de la scène
-		Castor::Colour m_backgroundColour;
+		castor::Colour m_backgroundColour;
 		//!\~english	The background image
 		//!\~french		L'image de fond
 		TextureLayoutSPtr m_backgroundImage;
@@ -649,18 +649,18 @@ namespace Castor3D
 		HdrConfig m_config;
 		//!\~english	The pool used to update the animations.
 		//!\~french		Le pool de mise à jour des animations.
-		Castor::ThreadPool m_animationUpdater;
+		castor::ThreadPool m_animationUpdater;
 
 	public:
 		//!\~english	The cameras root node name.
 		//!\~french		Le nom du noeud de scène racine des caméras.
-		static Castor::String CameraRootNode;
+		static castor::String CameraRootNode;
 		//!\~english	The objects root node name.
 		//!\~french		Le nom du noeud de scène racine des objets.
-		static Castor::String ObjectRootNode;
+		static castor::String ObjectRootNode;
 		//!\~english	The root node name.
 		//!\~french		Le nom du noeud de scène racine.
-		static Castor::String RootNode;
+		static castor::String RootNode;
 	};
 }
 

@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The submesh must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The submesh must be initialised" );
 
 	CSubmesh::CSubmesh()
 	{
@@ -13,21 +13,21 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CSubmesh::AddPoint( /* [in] */ IVector3D * val )
+	STDMETHODIMP CSubmesh::addPoint( /* [in] */ IVector3D * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->AddPoint( *static_cast< CVector3D * >( val ) );
+			m_internal->addPoint( *static_cast< CVector3D * >( val ) );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_ISubmesh,					// This is the GUID of component throwing error
-					 cuT( "AddPoint" ),				// This is generally displayed as the title
+					 IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
+					 cuT( "addPoint" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 NULL );
@@ -36,21 +36,21 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSubmesh::AddFace( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z )
+	STDMETHODIMP CSubmesh::addFace( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->AddFace( x, y, z );
+			m_internal->addFace( x, y, z );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_ISubmesh,					// This is the GUID of component throwing error
-					 cuT( "AddFace" ),				// This is generally displayed as the title
+					 IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
+					 cuT( "addFace" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 NULL );

@@ -11,8 +11,8 @@
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -30,7 +30,7 @@ namespace GlRender
 					}
 		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess }
 		, m_glRenderSystem{ &renderSystem }
-		, m_glDimension{ p_gl.Get( p_type ) }
+		, m_glDimension{ p_gl.get( p_type ) }
 	{
 	}
 
@@ -50,7 +50,7 @@ namespace GlRender
 					}
 		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
 		, m_glRenderSystem{ &renderSystem }
-		, m_glDimension{ p_gl.Get( p_type ) }
+		, m_glDimension{ p_gl.get( p_type ) }
 	{
 	}
 
@@ -70,7 +70,7 @@ namespace GlRender
 					}
 		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
 		, m_glRenderSystem{ &renderSystem }
-		, m_glDimension{ p_gl.Get( p_type ) }
+		, m_glDimension{ p_gl.get( p_type ) }
 	{
 	}
 
@@ -78,35 +78,35 @@ namespace GlRender
 	{
 	}
 
-	void GlTexture::GenerateMipmaps()const
+	void GlTexture::generateMipmaps()const
 	{
-		if ( GetGlName() != GlInvalidIndex && m_type != TextureType::eTwoDimensionsMS && m_type != TextureType::eBuffer )
+		if ( getGlName() != GlInvalidIndex && m_type != TextureType::eTwoDimensionsMS && m_type != TextureType::eBuffer )
 		{
-			GetOpenGl().GenerateMipmap( m_glDimension );
+			getOpenGl().GenerateMipmap( m_glDimension );
 		}
 	}
 
-	bool GlTexture::DoInitialise()
+	bool GlTexture::doInitialise()
 	{
-		return ObjectType::Create();
+		return ObjectType::create();
 	}
 
-	void GlTexture::DoCleanup()
+	void GlTexture::doCleanup()
 	{
-		ObjectType::Destroy();
+		ObjectType::destroy();
 	}
 
-	void GlTexture::DoBind( uint32_t p_index )const
+	void GlTexture::doBind( uint32_t p_index )const
 	{
-		GetOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::eIndex0 ) + p_index ) );
-		GetOpenGl().BindTexture( m_glDimension, GetGlName() );
-		glTrackTexture( GetGlName(), p_index );
+		getOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::eIndex0 ) + p_index ) );
+		getOpenGl().BindTexture( m_glDimension, getGlName() );
+		glTrackTexture( getGlName(), p_index );
 	}
 
-	void GlTexture::DoUnbind( uint32_t p_index )const
+	void GlTexture::doUnbind( uint32_t p_index )const
 	{
 		glTrackTexture( 0u, p_index );
-		GetOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::eIndex0 ) + p_index ) );
-		GetOpenGl().BindTexture( m_glDimension, 0 );
+		getOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::eIndex0 ) + p_index ) );
+		getOpenGl().BindTexture( m_glDimension, 0 );
 	}
 }

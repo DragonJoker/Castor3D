@@ -26,16 +26,16 @@ SOFTWARE.
 #include "Loader.hpp"
 #include "TextFile.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		19/10/2011
 	\~english
-	\brief		Partial Castor::Loader specialisation for text files
+	\brief		Partial castor::Loader specialisation for text files
 	\~french
-	\brief		Spécialisation partielle de Castor::Loader, pour les fichiers texte
+	\brief		Spécialisation partielle de castor::Loader, pour les fichiers texte
 	*/
 	template< class T >
 	class TextLoader

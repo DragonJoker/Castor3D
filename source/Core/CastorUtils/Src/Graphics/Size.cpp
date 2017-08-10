@@ -1,6 +1,6 @@
 #include "Size.hpp"
 
-namespace Castor
+namespace castor
 {
 	Size::Size( uint32_t p_width, uint32_t p_height )
 		:	BaseType( m_data.buffer )
@@ -86,11 +86,11 @@ namespace Castor
 
 	bool operator ==( Size const & p_a, Size const & p_b )
 	{
-		return p_a.width() == p_b.width() && p_a.height() == p_b.height();
+		return p_a.getWidth() == p_b.getWidth() && p_a.getHeight() == p_b.getHeight();
 	}
 
 	bool operator !=( Size const & p_a, Size const & p_b )
 	{
-		return p_a.width() != p_b.width() || p_a.height() != p_b.height();
+		return p_a.getWidth() != p_b.getWidth() || p_a.getHeight() != p_b.getHeight();
 	}
 }

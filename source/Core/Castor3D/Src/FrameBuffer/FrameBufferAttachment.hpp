@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 #include <Graphics/Rectangle.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -61,7 +61,7 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
- 		 *\brief			Downloads the attach content in the given buffer.
+ 		 *\brief			downloads the attach content in the given buffer.
 		 *\param[in]		p_offset	The offset position.
 		 *\param[in,out]	p_buffer	Receives the data, and describes the area dimensions and its pixel format.
 		 *\~french
@@ -69,8 +69,8 @@ namespace Castor3D
 		 *\param[in]		p_offset	La position de décalage.
 		 *\param[in,out]	p_buffer	Reçoit les données, et décrit les dimensions à copier, ainsi que le format voulu pour les pixels.
 		 */
-		C3D_API void Download( Castor::Position const & p_offset
-			, Castor::PxBufferBase & p_buffer )const;
+		C3D_API void download( castor::Position const & p_offset
+			, castor::PxBufferBase & p_buffer )const;
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the currently bound frame buffer, at given attachment point.
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\param[in]	p_attachment	Le point d'attache.
 		 *\param[in]	p_index			L'index d'attache.
 		 */
-		C3D_API void Attach( AttachmentPoint p_attachment
+		C3D_API void attach( AttachmentPoint p_attachment
 			, uint8_t p_index );
 		/**
 		 *\~english
@@ -91,14 +91,14 @@ namespace Castor3D
 		 *\brief		Attache le tampon de rendu au tampon d'image actuellement actif, au point d'attache voulu.
 		 *\param[in]	p_attachment	Le point d'attache.
 		 */
-		C3D_API void Attach( AttachmentPoint p_attachment );
+		C3D_API void attach( AttachmentPoint p_attachment );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
-		C3D_API void Detach();
+		C3D_API void detach();
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -107,7 +107,7 @@ namespace Castor3D
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_colour	La couleur de vidage.
 		 */
-		C3D_API void Clear( Castor::Colour const & p_colour )const;
+		C3D_API void clear( castor::Colour const & p_colour )const;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
 		 */
-		C3D_API void Clear( float p_depth )const;
+		C3D_API void clear( float p_depth )const;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
 		 */
-		C3D_API void Clear( int p_stencil )const;
+		C3D_API void clear( int p_stencil )const;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -136,21 +136,21 @@ namespace Castor3D
 		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
 		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
 		 */
-		C3D_API void Clear( float p_depth, int p_stencil )const;
+		C3D_API void clear( float p_depth, int p_stencil )const;
 		/**
 		*\~english
 		*\return		The data buffer.
 		*\~french
 		*\return		Le tampon de pixels.
 		*/
-		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const = 0;
+		C3D_API virtual castor::PxBufferBaseSPtr getBuffer()const = 0;
 		/**
 		 *\~english
 		 *\return		The attachment point
 		 *\~french
 		 *\return		Le point d'attache
 		 */
-		inline AttachmentPoint GetAttachmentPoint()const
+		inline AttachmentPoint getAttachmentPoint()const
 		{
 			return m_point;
 		}
@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'attache.
 		 */
-		inline AttachmentType GetAttachmentType()const
+		inline AttachmentType getAttachmentType()const
 		{
 			return m_type;
 		}
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'index d'attache.
 		 */
-		inline uint8_t GetAttachmentIndex()const
+		inline uint8_t getAttachmentIndex()const
 		{
 			return m_index;
 		}
@@ -178,7 +178,7 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief			Downloads the attach content in the given buffer.
+		 *\brief			downloads the attach content in the given buffer.
 		 *\param[in]		p_offset	The offset position.
 		 *\param[in,out]	p_buffer	Receives the data, and describes the area dimensions and its pixel format.
 		 *\~french
@@ -186,22 +186,22 @@ namespace Castor3D
 		 *\param[in]		p_offset	La position de décalage.
 		 *\param[in,out]	p_buffer	Reçoit les données, et décrit les dimensions à copier, ainsi que le format voulu pour les pixels.
 		 */
-		C3D_API virtual void DoDownload( Castor::Position const & p_offset
-			, Castor::PxBufferBase & p_buffer )const = 0;
+		C3D_API virtual void doDownload( castor::Position const & p_offset
+			, castor::PxBufferBase & p_buffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the frame buffer, at given attachment point
 		 *\~french
 		 *\brief		Attache le tampon de rendu au tampon d'image, au point d'attache voulu
 		 */
-		C3D_API virtual void DoAttach() = 0;
+		C3D_API virtual void doAttach() = 0;
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
-		C3D_API virtual void DoDetach() = 0;
+		C3D_API virtual void doDetach() = 0;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -210,7 +210,7 @@ namespace Castor3D
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_colour	La couleur de vidage.
 		 */
-		C3D_API virtual void DoClear( Castor::Colour const & p_colour )const = 0;
+		C3D_API virtual void doClear( castor::Colour const & p_colour )const = 0;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -219,7 +219,7 @@ namespace Castor3D
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
 		 */
-		C3D_API virtual void DoClear( float p_depth )const = 0;
+		C3D_API virtual void doClear( float p_depth )const = 0;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
 		 */
-		C3D_API virtual void DoClear( int p_stencil )const = 0;
+		C3D_API virtual void doClear( int p_stencil )const = 0;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -239,7 +239,7 @@ namespace Castor3D
 		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
 		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
 		 */
-		C3D_API virtual void DoClear( float p_depth, int p_stencil )const = 0;
+		C3D_API virtual void doClear( float p_depth, int p_stencil )const = 0;
 
 	private:
 		//!\~english	The attachment type.

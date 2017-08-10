@@ -10,9 +10,9 @@
 
 #include <Design/ArrayView.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
@@ -21,11 +21,11 @@ namespace Castor3D
 	{
 	}
 
-	bool BillboardList::TextWriter::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
+	bool BillboardList::TextWriter::operator()( BillboardList const & p_obj, castor::TextFile & p_file )
 	{
-		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		MovableObject::TextWriter::CheckError( result, "BillboardList name" );
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.getName() + cuT( "\"\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		MovableObject::TextWriter::checkError( result, "BillboardList name" );
 
 		if ( result )
 		{
@@ -34,34 +34,34 @@ namespace Castor3D
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
-			MovableObject::TextWriter::CheckError( result, "BillboardList material" );
+			result = p_file.writeText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+			MovableObject::TextWriter::checkError( result, "BillboardList material" );
 		}
 
 		if ( result )
 		{
-			result = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
-			MovableObject::TextWriter::CheckError( result, "BillboardList dimensions" );
+			result = p_file.print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.getDimensions().getWidth(), p_obj.getDimensions().getHeight() ) > 0;
+			MovableObject::TextWriter::checkError( result, "BillboardList dimensions" );
 		}
 
-		if ( result && p_obj.GetCount() )
+		if ( result && p_obj.getCount() )
 		{
-			result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
-					   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
-			MovableObject::TextWriter::CheckError( result, "BillboardList positions" );
+			result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
+					   && p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
+			MovableObject::TextWriter::checkError( result, "BillboardList positions" );
 
 			for ( auto const & point : p_obj )
 			{
-				result &= p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), point[0], point[1], point[2] ) > 0;
-				MovableObject::TextWriter::CheckError( result, "BillboardList position" );
+				result &= p_file.print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), point[0], point[1], point[2] ) > 0;
+				MovableObject::TextWriter::checkError( result, "BillboardList position" );
 			}
 
-			result &= p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+			result &= p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 		}
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
@@ -75,7 +75,7 @@ namespace Castor3D
 		: m_vertexBuffer{ p_vertexBuffer }
 		, m_scene{ p_scene }
 		, m_node{ p_node }
-		, m_quad( std::make_unique< VertexBuffer >( *p_scene.GetEngine(), BufferDeclaration
+		, m_quad( std::make_unique< VertexBuffer >( *p_scene.getEngine(), BufferDeclaration
 		{
 			{
 				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
@@ -89,19 +89,19 @@ namespace Castor3D
 	{
 	}
 
-	bool BillboardBase::Initialise( uint32_t p_count )
+	bool BillboardBase::initialise( uint32_t p_count )
 	{
 		if ( !m_initialised )
 		{
 			m_count = p_count;
-			uint32_t stride = m_vertexBuffer->GetDeclaration().stride();
+			uint32_t stride = m_vertexBuffer->getDeclaration().stride();
 
-			if ( m_vertexBuffer->GetSize() < uint32_t( p_count * stride ) )
+			if ( m_vertexBuffer->getSize() < uint32_t( p_count * stride ) )
 			{
-				m_vertexBuffer->Resize( uint32_t( p_count * stride ) );
+				m_vertexBuffer->resize( uint32_t( p_count * stride ) );
 			}
 
-			m_initialised = m_vertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_initialised = m_vertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
 			if ( m_initialised )
 			{
@@ -115,9 +115,9 @@ namespace Castor3D
 					}
 				};
 
-				stride = m_quad->GetDeclaration().stride();
-				m_quad->Resize( 4 * stride );
-				auto buffer = m_quad->GetData();
+				stride = m_quad->getDeclaration().stride();
+				m_quad->resize( 4 * stride );
+				auto buffer = m_quad->getData();
 
 				for ( auto & vertex : vertices )
 				{
@@ -125,14 +125,14 @@ namespace Castor3D
 					buffer += stride;
 				}
 
-				m_initialised = m_quad->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+				m_initialised = m_quad->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 			}
 		}
 
 		return m_initialised;
 	}
 
-	void BillboardBase::Cleanup()
+	void BillboardBase::cleanup()
 	{
 		if ( m_initialised )
 		{
@@ -140,41 +140,41 @@ namespace Castor3D
 
 			for ( auto buffers : m_geometryBuffers )
 			{
-				buffers->Cleanup();
+				buffers->cleanup();
 			}
 
 			m_geometryBuffers.clear();
-			m_quad->Cleanup();
-			m_vertexBuffer->Cleanup();
+			m_quad->cleanup();
+			m_vertexBuffer->cleanup();
 		}
 	}
 
-	void BillboardBase::Draw( GeometryBuffers const & p_geometryBuffers )
+	void BillboardBase::draw( GeometryBuffers const & p_geometryBuffers )
 	{
 		if ( m_needUpdate )
 		{
-			Update();
+			update();
 			m_needUpdate = false;
 		}
 
-		p_geometryBuffers.DrawInstanced( 4, 0u, m_count );
+		p_geometryBuffers.drawInstanced( 4, 0u, m_count );
 	}
 
-	GeometryBuffersSPtr BillboardBase::GetGeometryBuffers( ShaderProgram const & p_program )
+	GeometryBuffersSPtr BillboardBase::getGeometryBuffers( ShaderProgram const & p_program )
 	{
 		GeometryBuffersSPtr buffers;
 		auto it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
 		{
-			return &p_buffers->GetProgram() == &p_program;
+			return &p_buffers->getProgram() == &p_program;
 		} );
 
 		if ( it == m_geometryBuffers.end() )
 		{
-			buffers = GetParentScene().GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangleFan, p_program );
+			buffers = getParentScene().getEngine()->getRenderSystem()->createGeometryBuffers( Topology::eTriangleFan, p_program );
 
-			GetParentScene().GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, buffers]()
+			getParentScene().getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, buffers]()
 			{
-				buffers->Initialise( { *m_quad, *m_vertexBuffer }, nullptr );
+				buffers->initialise( { *m_quad, *m_vertexBuffer }, nullptr );
 			} ) );
 			m_geometryBuffers.push_back( buffers );
 		}
@@ -186,19 +186,19 @@ namespace Castor3D
 		return buffers;
 	}
 
-	void BillboardBase::SortByDistance( Point3r const & p_cameraPosition )
+	void BillboardBase::sortByDistance( Point3r const & p_cameraPosition )
 	{
 		m_needUpdate = m_cameraPosition != p_cameraPosition;
 		m_cameraPosition = p_cameraPosition;
 	}
 
-	void BillboardBase::Update()
+	void BillboardBase::update()
 	{
 		if ( m_count )
 		{
-			m_vertexBuffer->Bind();
-			uint32_t stride = m_vertexBuffer->GetDeclaration().stride();
-			auto gpuBuffer = m_vertexBuffer->Lock( 0, m_count * stride, AccessType::eRead | AccessType::eWrite );
+			m_vertexBuffer->bind();
+			uint32_t stride = m_vertexBuffer->getDeclaration().stride();
+			auto gpuBuffer = m_vertexBuffer->lock( 0, m_count * stride, AccessType::eRead | AccessType::eWrite );
 
 			if ( gpuBuffer )
 			{
@@ -266,8 +266,8 @@ namespace Castor3D
 					std::sort( elements.begin(), elements.end(), [this]( Element const & p_a
 						, Element const & p_b )
 						{
-							return point::length_squared( p_a.m_position - m_cameraPosition )
-								   > point::length_squared( p_b.m_position - m_cameraPosition );
+							return point::lengthSquared( p_a.m_position - m_cameraPosition )
+								   > point::lengthSquared( p_b.m_position - m_cameraPosition );
 						} );
 
 					for ( auto & element : elements )
@@ -278,28 +278,28 @@ namespace Castor3D
 				}
 				catch ( Exception const & p_exc )
 				{
-					Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what());
+					Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what());
 				}
 
-				m_vertexBuffer->Unlock();
+				m_vertexBuffer->unlock();
 			}
 
-			m_vertexBuffer->Unbind();
+			m_vertexBuffer->unbind();
 		}
 	}
 
-	ProgramFlags BillboardBase::GetProgramFlags()const
+	ProgramFlags BillboardBase::getProgramFlags()const
 	{
 		ProgramFlags result = uint32_t( ProgramFlag::eBillboards );
 
 		if ( m_billboardType == BillboardType::eSpherical )
 		{
-			AddFlag( result, ProgramFlag::eSpherical );
+			addFlag( result, ProgramFlag::eSpherical );
 		}
 
 		if ( m_billboardSize == BillboardSize::eFixed )
 		{
-			AddFlag( result, ProgramFlag::eFixedSize );
+			addFlag( result, ProgramFlag::eFixedSize );
 		}
 
 		return result;
@@ -319,7 +319,7 @@ namespace Castor3D
 			p_scene,
 			p_parent,
 			std::make_shared< VertexBuffer >(
-				*p_scene.GetEngine(),
+				*p_scene.getEngine(),
 				BufferDeclaration(
 					{ BufferElementDeclaration( cuT( "center" ), uint32_t( 0u ), ElementType::eVec3, 0u, 1u ) }
 				) ) )
@@ -330,19 +330,19 @@ namespace Castor3D
 	{
 	}
 
-	bool BillboardList::Initialise()
+	bool BillboardList::initialise()
 	{
-		uint32_t stride = m_vertexBuffer->GetDeclaration().stride();
-		m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * stride ) );
-		uint8_t * buffer = m_vertexBuffer->GetData();
+		uint32_t stride = m_vertexBuffer->getDeclaration().stride();
+		m_vertexBuffer->resize( uint32_t( m_arrayPositions.size() * stride ) );
+		uint8_t * buffer = m_vertexBuffer->getData();
 
 		for ( auto & pos : m_arrayPositions )
 		{
-			std::memcpy( buffer, pos.const_ptr(), stride );
+			std::memcpy( buffer, pos.constPtr(), stride );
 			buffer += stride;
 		}
 
-		return BillboardBase::Initialise( uint32_t( m_arrayPositions.size() ) );
+		return BillboardBase::initialise( uint32_t( m_arrayPositions.size() ) );
 	}
 
 	void BillboardList::RemovePoint( uint32_t p_index )
@@ -354,22 +354,22 @@ namespace Castor3D
 		}
 	}
 
-	void BillboardList::AddPoint( Castor::Point3r const & p_position )
+	void BillboardList::addPoint( castor::Point3r const & p_position )
 	{
 		m_arrayPositions.push_back( p_position );
 		m_needUpdate = true;
 	}
 
-	void BillboardList::AddPoints( Castor::Point3rArray const & p_ptPositions )
+	void BillboardList::addPoints( castor::Point3rArray const & p_ptPositions )
 	{
 		m_arrayPositions.insert( m_arrayPositions.end(), p_ptPositions.begin(), p_ptPositions.end() );
 		m_needUpdate = true;
 	}
 
-	void BillboardList::AttachTo( SceneNodeSPtr p_node )
+	void BillboardList::attachTo( SceneNodeSPtr p_node )
 	{
-		MovableObject::AttachTo( p_node );
-		SetNode( p_node );
+		MovableObject::attachTo( p_node );
+		setNode( p_node );
 	}
 
 	//*************************************************************************************************

@@ -154,13 +154,13 @@
  *</ul>
  *\subsubsection feat_0_7_0_cu CastorUtils
  *<ul>
- *<li>Modified DynamicLibrary::GetFunction, added a template parameter that is the function type, and a method parameter that is the pointer to the function to retrieve so no more casts when using DynamicLibrary::GetFunction.</li>
+ *<li>Modified DynamicLibrary::getFunction, added a template parameter that is the function type, and a method parameter that is the pointer to the function to retrieve so no more casts when using DynamicLibrary::getFunction.</li>
  *<li>Added log level support for Logger.</li>
  *<li>Implemented intersection function in Line3D.</li>
- *<li>That class now has to named constructors : FromPointAndSlope and FromPoints, to avoid confusion between them.</li>
+ *<li>That class now has to named constructors : fromPointAndSlope and fromPoints, to avoid confusion between them.</li>
  *<li>Created two classes Size and Position instead of just having a typedef for these.</li>
  *<li>Improved FileParser, now functions have parameters and not only parameters types, and parameters parse themselves.</li>
- *<li>Castor::Point now holds a static array as it's members instead of a dynamic one.</li>
+ *<li>castor::Point now holds a static array as it's members instead of a dynamic one.</li>
  *<li>Removed Unicode file encoding.</li>
  *<li>Added stream indentation support.</li>
  *</ul>
@@ -170,7 +170,7 @@
  *<li>Improved memory occupation, limited overhead of Vertex (152 to 24 bytes) and Face (140 to 16 bytes).</li>
  *<li>Modified Subdivision, now only in Subdivider, no more in Geometry, mesh or Submesh.</li>
  *<li>Implemented Implemented Lights in texture.</li>
- *<li>Added HasParameter and SetParameter functions in ShaderObject, to apply matrices from RenderPipeline.</li>
+ *<li>Added hasParameter and setParameter functions in ShaderObject, to apply matrices from RenderPipeline.</li>
  *<li>Removed ApplyXXXMatrix from IPipelineImpl, now the RenderPipeline applies matrices itself.</li>
  *<li>Added channel for textures (colour, ambient, diffuse, specular, normal, height).</li>
  *<li>Implemented MSAA.</li>
@@ -178,11 +178,11 @@
  *<li>Modified default sources in GlShaderProgram and Dx9ShaderProgram, they are now computed and no more external shader file is needed.</li>
  *<li>Implemented Frame buffers.</li>
  *<li>Submeshes are sorted by Material's alpha in order to render submeshes without alpha before others.</li>
- *<li>Added functions Begin and End in Mesh class to be able to iterate through submeshes without using GetSubmesh and GetSubmeshCount.</li>
+ *<li>Added functions Begin and End in Mesh class to be able to iterate through submeshes without using getSubmesh and getSubmeshCount.</li>
  *<li>Added Material functions Begin and End to retrieve passes in standard way.</li>
  *<li>Added possibility to activate or deactivate deferred rendering, this is also possible from cscn files.</li>
  *<li>Created TechniqueParameters class to be able to pass generic parameters instead of, for example, the samples count.</li>
- *<li>Introducing SamplerState class to group calls to SetSamplerState and all relative stuff.</li>
+ *<li>Introducing SamplerState class to group calls to setSamplerState and all relative stuff.</li>
  *<li>Reviewed sizes a bit : Viewport holds the internal size, RenderTarget and RenderWindow hold external size. Modified  SceneFileParser, added &lt;size&gt; directive for viewport.</li>
  *<li>Splitted eBUFFER_MODE in BufferAccessType and BufferAccessNature.</li>
  *<li>Modified a bit Uniform in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</li>
@@ -195,7 +195,7 @@
  *<li>Added blend state, implemented raster state.</li>
  *<li>Put a BlendState instance in Pass and removed rgb/alpha blending from the pass.</li>
  *<li>Removed Context::Enable and Context::Disable, removed RenderState class.</li>
- *<li>Removed SetPolygonMode from Context.</li>
+ *<li>Removed setPolygonMode from Context.</li>
  *<li>Moved Render to buffer common code (from FrameBuffer and RenderWindow) into Context::BtoBRender.</li>
  *<li>Implemented mesh instantiation on hardware.</li>
  *<li>Modified Submesh normals generation.</li>
@@ -251,12 +251,12 @@
  *<li>Removed all static members and globals.</li>
  *<li>Removed String class, added string.</li>
  *<li>Removed all dependencies to boost, except for thread, for non C++11 compilers.</li>
- *<li>Modified Point, moved functions that shouldn't be in that class in a small helper class : point. It holds normalise, get_normalised, dot, all distance functions, cos_theta, negate.</li>
+ *<li>Modified Point, moved functions that shouldn't be in that class in a small helper class : point. It holds normalise, getNormalised, dot, all distance functions, cosTheta, negate.</li>
  *<li>Modified FileParser in order to be able to ignore complete sections without commenting it (such as HLSL shader blocks in GlRenderSystem...).</li>
  *<li>Modified FileParser to take care of parsers parameters.</li>
  *<li>Reduced images memory occupation.</li>
  *<li>Removed Point::link, Point::copy/clopy/clone functions.</li>
- *<li>Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek and cftell by functions in namespace Castor.</li>
+ *<li>Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek and cftell by functions in namespace castor.</li>
  *<li>Modified Colour class, it doesn't extend Point4f anymore.</li>
  *<li>Removed macro DECLARE_SHARED_PTR, now using  DECLARE_SMART_PTR, so I replaced each XXxPtr by it's equivalent XxxSPtr.</li>
  *</ul>
@@ -264,7 +264,7 @@
  *<ul>
  *<li>Merged Submesh and SmoothingGroup classes.</li>
  *<li>Reduced memory size of vertex buffers.</li>
- *<li>Modified Submesh::ComputeTangents to take care of each vertex normal.</li>
+ *<li>Modified Submesh::computeTangents to take care of each vertex normal.</li>
  *<li>Modified BufferElementGroup so it can't hold anymore its buffer.</li>
  *<li>When initialising Pass, the texture units are re-ordered so the ones with a defined channel come first.</li>
  *<li>Passes now initialise their shaders in Pass::Initialiser instead of trying to do it at each frame.</li>
@@ -289,8 +289,8 @@
  *\subsection bugs_0_7_0 Fixed bugs
  *\subsubsection bugs_0_7_0_gen General
  *<ul>
- *<li>Added Destroy functions for each Create function in plug-ins, so creation and deletion is made in DLL memory space (for Windows).</li>
- *<li>Added ASSIMP importer plug-in to import actually unsupported file types, modified ImporterPlugin::GetExtensions to be able to retrieve an array of pairs &lt;extension, file="" type=""&gt;.</li>
+ *<li>Added Destroy functions for each create function in plug-ins, so creation and deletion is made in DLL memory space (for Windows).</li>
+ *<li>Added ASSIMP importer plug-in to import actually unsupported file types, modified ImporterPlugin::getExtensions to be able to retrieve an array of pairs &lt;extension, file="" type=""&gt;.</li>
  *<li>Modified Importers so no more memory leaks are detected with Visual Studio.</li>
  *</ul>
  *\subsubsection bugs_0_7_0_cmk CMake
@@ -315,7 +315,7 @@
  *</ul>
  *\subsubsection bugs_0_7_0_gl GlRenderSystem
  *<ul>
- *<li>Corrected a bug in DoGetDeferredShaderSource.</li>
+ *<li>Corrected a bug in doGetDeferredShaderSource.</li>
  *<li>Corrected mipmaps generation in GlStaticTexture and GlDynamicTexture.</li>
  *<li>Corrected the gloss map in GLSL computed programs.</li>
  *</ul>
@@ -327,7 +327,7 @@
  *
  *\section version_0_6_1_2 Version 0.6.1.2
  *
- *\subsection adds_0_6_1_2 Adds
+ *\subsection adds_0_6_1_2 adds
  *<ul>
  *<li>Created Dx9Renderer to render with Direct3D 9. Stills things to correct, in shaders and matrices, but it's almost done.</li>
  *<li>Created different files for OpenGL contexts (X11, Gtk, Msw), X11 and Gtk still untested.</li>
@@ -354,7 +354,7 @@
  *
  *\section version_0_6_1_1 Version 0.6.1.1
  *
- *\subsection adds_0_6_1_1 Adds
+ *\subsection adds_0_6_1_1 adds
  *<ul>
  *<li>Created a CMakeLists file to generate the solution from CMake.</li>
  *<li>Reorganised folders to make them more compliant with CMake.</li>
@@ -370,7 +370,7 @@
  *<li>Vertex, Attribute and Index buffers are now created by RenderSystem so they can be created out of the renderers.</li>
  *<li>Suppressed Singletons for the Managers (Image, Font, Scene, Material, Animation and Mesh).</li>
  *<li>Remerged SceneNode classes.</li>
- *<li>Created IdPoint class, it is a point with just an index. Submes::AddPoint creates now IdPoints and Submesh::AddFace uses them to create the vertex.</li>
+ *<li>Created IdPoint class, it is a point with just an index. Submes::addPoint creates now IdPoints and Submesh::addFace uses them to create the vertex.</li>
  *<li>Subdividers can  subdivide in a thread in order not to freeze the main thread. It is possible to define a function to use at the end of the subdivision (cf. CastorShape).</li>
  *</ul>
  *
@@ -381,7 +381,7 @@
  *
  *\section version_0_6_1_0 Version 0.6.1.0
  *
- *\subsection adds_0_6_1_0 Adds
+ *\subsection adds_0_6_1_0 adds
  *<ul>
  *<li>Using std or tr1 or boost smart pointers.</li>
  *<li>Created OpenGlCommon for common treatments between GL2RenderSystem and GL3RenderSystem</li>
@@ -407,7 +407,7 @@
  *
  *\section version_0_6_0_0 Version 0.6.0.0
  *
- *\subsection adds_0_6_0_0 Adds
+ *\subsection adds_0_6_0_0 adds
  *<ul>
  *<li>Added a projection/normal and view matrices management class, in order to suppress the fixed pipeline support in OpenGl renderers.</li>
  *<li>Added personnal smart pointers.</li>
@@ -441,7 +441,7 @@
  *
  *\section version_0_5_0_1 Version 0.5.0.1
  *
- *\subsection adds_0_5_0_1 Adds
+ *\subsection adds_0_5_0_1 adds
  *<ul>
  *<li>Tangent space is computed and available in GLSL shaders.</li>
  *<li>Only tangent is computed, bitangent can be in the shader with a cross product.</li>
@@ -624,8 +624,8 @@
  *<li>Découpe des fichiers afin de n'avoir plus qu'une classe par fichier.</li>
  *<li>Support de la compilation x64.</li>
  *<li>Compabilité avec wxWidgets 2.8 et Linux améliorée.</li>
- *<li>Ajout de fonctions Destroy pour chaque fonction Create dans les plug-ins, afin que la création et la destruction de ceux-ci se fassent dans l'espace mémoire des DLL (pour Windows).</li>
- *<li>Ajout du plug-in d'import ASSIMP, permettant d'élargir le nombre de formats supportés. La fonction ImporterPlugin::GetExtensions permet maintenant de récupérer un tableau de paires &lt;extension, file type&gt;.</li>
+ *<li>Ajout de fonctions Destroy pour chaque fonction create dans les plug-ins, afin que la création et la destruction de ceux-ci se fassent dans l'espace mémoire des DLL (pour Windows).</li>
+ *<li>Ajout du plug-in d'import ASSIMP, permettant d'élargir le nombre de formats supportés. La fonction ImporterPlugin::getExtensions permet maintenant de récupérer un tableau de paires &lt;extension, file type&gt;.</li>
  *</ul>
  *
  *\subsubsection mods_0_7_0_cu CastorUtils
@@ -637,7 +637,7 @@
  *<li>Suppression de la macro DECLARE_SHARED_PTR, remplacée par DECLARE_SMART_PTR, et les typedefs XxxPtr ont été remplacés par leurs équivalents XxxSPtr.</li>
  *<li>Suppression de l'encodage Unicode pour les fichiers.</li>
  *<li>Ajout du support de l'indentation de flux.</li>
- *<li>Améliorations de Castor::FileParser :
+ *<li>Améliorations de castor::FileParser :
  *<ul>
  *<li>Il peut ignorer des sections de code sans avoir à les commenter (tels que les blocs de shader HLSL alors que le RenderSystem chargé est GlRenderSystem, etc.).</li>
  *<li>Il prend en compte les paramètres des fonctions d'analyse.</li>
@@ -645,30 +645,30 @@
  *</ul>
  *</li>
  *<li>Réduction de l'occupation mémoire des images.</li>
- *<li>Modification de Castor::Point :
+ *<li>Modification de castor::Point :
  *<ul>
- *<li>les fonctions non dépendantes ont été déplacées dans une classe d'aide : Castor::point. Cette classe contient donc les fonctions normalise, get_normalised, dot, cos_theta, negate et toutes les fonctions de calcul de distance.</li>
+ *<li>les fonctions non dépendantes ont été déplacées dans une classe d'aide : castor::point. Cette classe contient donc les fonctions normalise, getNormalised, dot, cosTheta, negate et toutes les fonctions de calcul de distance.</li>
  *<li>Suppression des méthodes link, copy/clopy/clone.</li>
  *<li>Il contient maintenant un tableau statique au lieu d'un tableau dynamique.</li>
  *</ul>
  *</li>
- *<li>La classe Castor::Colour ne dérive plus de Point4f.</li>
- *<li>La fonction DynamicLibrary::GetFunction a été modifiée, ajout d'un paramètre template, le type de fonction, afin de ne plus avoir de conversions lors de l'utilisation de DynamicLibrary::GetFunction.</li>
- *<li>Ajout du support des niveaux de log pour Castor::Logger.</li>
- *<li>Modifications de Castor::Line3D :
+ *<li>La classe castor::Colour ne dérive plus de Point4f.</li>
+ *<li>La fonction DynamicLibrary::getFunction a été modifiée, ajout d'un paramètre template, le type de fonction, afin de ne plus avoir de conversions lors de l'utilisation de DynamicLibrary::getFunction.</li>
+ *<li>Ajout du support des niveaux de log pour castor::Logger.</li>
+ *<li>Modifications de castor::Line3D :
  *<ul>
  *<li>Implémentation de la méthode de calcul d'intersection</li>
- *<li>Cette classe a maintenant deux constructeurs nommés : FromPointAndSlope et FromUniforms, pour éviter les confusions.</li>
+ *<li>Cette classe a maintenant deux constructeurs nommés : fromPointAndSlope et FromUniforms, pour éviter les confusions.</li>
  *</ul>
  *</li>
  *<li>Création de deux nouvelles classes : Size et Positionau lieu d'un typedef pour chacune.</li>
- *<li>Création de la classe Castor::Coord pour récupérer les fonctionnalités dynamiques de l'ancien Castor::Point.</li>
+ *<li>Création de la classe castor::Coord pour récupérer les fonctionnalités dynamiques de l'ancien castor::Point.</li>
  *</ul>
  *
  *\subsubsection mods_0_7_0_c3d Castor3D
  *<ul>
- *<li>Ajout des méthodes HasParameter et SetParameter dans la classe ShaderObject, pour appliquer les matrices de la classe RenderPipeline.</li>
- *<li>Ajout de fonctions Begin et End dans la classe Mesh afin de pouvoir itérer sur les submeshes sans passer par les fonctions GetSubmesh et GetSubmeshCount.</li>
+ *<li>Ajout des méthodes hasParameter et setParameter dans la classe ShaderObject, pour appliquer les matrices de la classe RenderPipeline.</li>
+ *<li>Ajout de fonctions Begin et End dans la classe Mesh afin de pouvoir itérer sur les submeshes sans passer par les fonctions getSubmesh et getSubmeshCount.</li>
  *<li>Ajout de fonctions Begin et End dans la classe Material functions Begin and End.</li>
  *<li>Ajout de la classe Buffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
  *<li>Ajout de la classe DepthStencilState pour gérer ces états à la mode Direct3D 11 (qui fait ça bien).</li>
@@ -676,7 +676,7 @@
  *<li>Création des classes Texture, StaticTexture et TextureLayout pour faciliter l'implémentation des cibles de rendu.</li>
  *<li>Ajout de canaux pour les textures (couleur, ambiante, diffusion, speculaire, normale, hauteur, brillance).</li>
  *<li>Création de la classe TechniqueParameters pour passer des paramètres spécifiques aux techniques comme, par exemple, le nombre d'échantillons (pour le MSAA).</li>
- *<li>Introduction de la classe SamplerState pour grouper les appels à SetSamplerState et autres.</li>
+ *<li>Introduction de la classe SamplerState pour grouper les appels à setSamplerState et autres.</li>
  *<li>Implémentation des Frame Buffers.</li>
  *<li>Réduction de l'occupation mémoire des tampons de sommets.</li>
  *<li>Modification de BufferElementGroup afin qu'il ne puisse plus contenir son tampon.</li>
@@ -690,40 +690,40 @@
  *<li>Revue des tailles : Viewport contient la taille interne, RenderTarget et RenderWindow contiennent la taille externe.</li>
  *<li>Découpe de eBUFFER_MODE en BufferAccessType et BufferAccessNature.</li>
  *<li>L'initialisation des objets GPU se passe maintenant avec l'utilisation de deux évènements : InitialiseEvent et CleanupEvent.</li>
- *<li>Fusion de GpuBuffer::Initialise et GpuBuffer::SetShaderProgram afin d'en simplifier l'utilisation.</li>
+ *<li>Fusion de GpuBuffer::Initialise et GpuBuffer::setShaderProgram afin d'en simplifier l'utilisation.</li>
  *<li>Suppression de la génération automatique des mipmaps. Maintenant, si l'utilisateur vuet les générer, il utilise la fonction TextureLayout::GenerateMipmaps.</li>
  *<li>Implémentation de l'instanciation hardware des maillages.</li>
- *<li>Modifications de Castor3D::Submesh :
+ *<li>Modifications de castor3d::Submesh :
  *<ul>
  *<li>Les classes Submesh et SmoothingGroup ont été fusionnées.</li>
- *<li>Modification de la méthode ComputeTangents pour prendre en compte les normales des sommets.</li>
- *<li>Ajout d'un overload pour la méthode AddUniforms afin de pouvoir lui donner un stVERTEX_GROUP en paramètre.</li>
+ *<li>Modification de la méthode computeTangents pour prendre en compte les normales des sommets.</li>
+ *<li>Ajout d'un overload pour la méthode addUniforms afin de pouvoir lui donner un stVERTEX_GROUP en paramètre.</li>
  *<li>Modification de la génération des normales.</li>
  *<li>Déplacement des matériaux, de Submesh à Geometry.</li>
  *<li>Modification du compte des instances, pour le rendre spécifique aux matériaux utilisés par les instances du Submesh.</li>
  *</ul>
  *</li>
- *<li>Modifications de Castor3D::Pass :
+ *<li>Modifications de castor3d::Pass :
  *<ul>
  *<li>Création d'une fonction Pass::Initialise afin que les shaders ne soient initialisés qu'une fois, et pas à chaque frame.</li>
  *<li>Réorganisation des unités de texture des passes, afin que celles associées à un canal arrivent premières.</li>
  *</ul>
  *</li>
  *<li>Ajout d'une instance de BlendState dans la classe Pass et suppression de la gestion du mélange RGB/Alpha de la classe Pass.</li>
- *<li>Modifications de Castor3D::Scene :
+ *<li>Modifications de castor3d::Scene :
  *<ul>
  *<li>Ajout de la possibilité d'activer ou désactiver le deferred rendering, option disponible dans les fichier cscn.</li>
  *<li>Ajout de fonctions templates pour ajouter, supprimer ou récupérer un objet quel que soit son type (Light, Geometry, Camera, SceneNode).</li>
  *<li>Les Submesh sont maintenant triés en fonction du matériau appliqué afin de pouvoir, entre autres, rendre les sous-maillages avec transparence après les autres.</li>
  *</ul>
  *</li>
- *<li>Modifications de Castor3D::RenderTarget :
+ *<li>Modifications de castor3d::RenderTarget :
  *<ul>
  *<li>Modifié RenderTarget : elle contient maintenant son frame buffer et ce qui s'y rattache. C'est maintenant un Renderable et un TargetRenderer a donc été créé.</li>
  *<li>RenderTarget utilise maintenant RenderTechnique pour effectuer son rendu.</li>
  *</ul>
  *</li>
- *<li>Modifications de Castor3D::RenderWindow :
+ *<li>Modifications de castor3d::RenderWindow :
  *<ul>
  *<li>RenderWindow n'étend plus RenderTarget, mais en a un en membre privé.</li>
  *<li>Création d'une méthode WindowRenderer::EndScene pour préparer le rendu du frame buffer de la RenderTarget dans la fenêtre.</li>
@@ -737,10 +737,10 @@
  *<li>Modification de  afin de prendre en compte eFRAME_VARIABLE_TYPE.</li>
  *</ul>
  *</li>
- *<li>Modifications de Castor3D::Context
+ *<li>Modifications de castor3d::Context
  *<ul>
  *<li>Suppression des méthodes Context::Enable et Context::Disable, suppression de la classe RenderState.</li>
- *<li>Suppression de la méthode Context::SetPolygonMode.</li>
+ *<li>Suppression de la méthode Context::setPolygonMode.</li>
  *</ul>
  *</li>
  *</ul>
@@ -794,7 +794,7 @@
  *
  *\subsubsection bugs_0_7_0_cu CastorUtils
  *<ul>
- *<li>Castor::Image a été modifiée, j'ai retiré la possibilité de charger les images par handle, car cela provoquait des problèmes avec FreeImage sur certains formats.</li>
+ *<li>castor::Image a été modifiée, j'ai retiré la possibilité de charger les images par handle, car cela provoquait des problèmes avec FreeImage sur certains formats.</li>
  *<li>Réparation d'un problème de matrices lors du rendu des incrustations.</li>
  *<li>Correction des transformations récursives.</li>
  *</ul>
@@ -812,7 +812,7 @@
  *
  *\subsubsection bugs_0_7_0_gl GlRenderSystem
  *<ul>
- *<li>Correction d'un bug dans DoGetDeferredShaderSource.</li>
+ *<li>Correction d'un bug dans doGetDeferredShaderSource.</li>
  *<li>Correction de la génération des mipmaps dans les classes GlStaticTexture et GlDynamicTexture.</li>
  *<li>Correction du traitement des textures de brillance dans les programmes GLSL auto générés.</li>
  *</ul>
@@ -867,7 +867,7 @@
  *<li>La création des tampons utilisés pour le rendu (Vertex, Attribute, Texture, Normals, ...) se fait maintenant par le RenderSystem => on peut donc les créer dans Castor3D et pas seulement dans les renderer (GL2, GL3 et dans le futur D3D).</li>
  *<li>Suppression des Singletons pour les différents Managers (Image, Font, Scene, Material, Animation et Mesh).</li>
  *<li>J'ai retouché les SceneNodes, j'ai refusionné les 3 classes différentes en une seule pour des commodités d'utilisation.</li>
- *<li>Création d'une classe IdPoint, qui étend Point et y ajoute un Index qui correspond à son index dans le submesh. La fonction AddPoint de Submesh crée maintenant des IdPoint et la fonction AddFace se sert d'eux pour générer les Vertex.</li>
+ *<li>Création d'une classe IdPoint, qui étend Point et y ajoute un Index qui correspond à son index dans le submesh. La fonction addPoint de Submesh crée maintenant des IdPoint et la fonction addFace se sert d'eux pour générer les Vertex.</li>
  *<li>Les subdiviseurs peuvent subdiviser dans un thread à part, permettant de ne pas figer une application pendant la subdivision (cf. CastorShape). Il est possible d'assigner une fonction qui sera lancée à la fin de la subdivision (cf. CastorShape).</li>
  *</ul>
  *

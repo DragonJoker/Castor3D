@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -49,7 +49,7 @@ namespace Castor
 		 *\brief		Alloue de la mémoire.
 		 *\return		L'adresse mémoire de l'espace alloué.
 		 */
-		static uint8_t * Allocate( size_t p_size )
+		static uint8_t * allocate( size_t p_size )
 		{
 			return new uint8_t[p_size];;
 		}
@@ -61,7 +61,7 @@ namespace Castor
 		 *\brief		Libère la mémoire donnée.
 		 *\param[in]	p_space	La mémoire à libérer.
 		 */
-		static void Deallocate( uint8_t * p_space )noexcept
+		static void deallocate( uint8_t * p_space )noexcept
 		{
 			delete [] p_space;
 		}

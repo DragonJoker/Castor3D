@@ -35,9 +35,11 @@ namespace GuiCommon
 	public:
 		AuiTabArt();
 
-		virtual wxAuiTabArt * Clone();
+		virtual wxAuiTabArt * Clone()override;
 
-		virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect );
+		void DrawBackground( wxDC & dc
+			, wxWindow * window
+			, wxRect const & rect )override;
 		// DrawTab() draws an individual tab.
 		//
 		// dc       - output dc
@@ -46,7 +48,14 @@ namespace GuiCommon
 		// active   - whether or not the tab is active
 		// out_rect - actual output rectangle
 		// x_extent - the advance x; where the next tab should start
-		void DrawTab( wxDC & dc, wxWindow * wnd, const wxAuiNotebookPage & page, const wxRect & in_rect, int close_button_state, wxRect * out_tab_rect, wxRect * out_button_rect, int * x_extent );
+		void DrawTab( wxDC & dc
+			, wxWindow * wnd
+			, const wxAuiNotebookPage & pane
+			, const wxRect & inRect
+			, int closeButtonState
+			, wxRect * outTabRect
+			, wxRect * outButtonRect
+			, int * xExtent )override;
 	};
 }
 

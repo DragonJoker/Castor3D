@@ -8,9 +8,9 @@
 #include <GlslSource.hpp>
 #include <GlslShadow.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
@@ -58,20 +58,20 @@ namespace Castor3D
 			textures >>= 1;
 		}
 
-		if ( m_program.HasObject( ShaderType::ePixel ) )
+		if ( m_program.hasObject( ShaderType::ePixel ) )
 		{
-			m_directionalShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-			m_spotShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-			m_pointShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
-			m_environmentMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+			m_directionalShadowMaps = m_program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
+			m_spotShadowMaps = m_program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
+			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+			m_environmentMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 
-			if ( ( CheckFlag( m_flags.m_programFlags, ProgramFlag::ePbrMetallicRoughness )
-					|| CheckFlag( m_flags.m_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
-				&& CheckFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
+			if ( ( checkFlag( m_flags.m_programFlags, ProgramFlag::ePbrMetallicRoughness )
+					|| checkFlag( m_flags.m_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+				&& checkFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
 			{
-				m_irradianceMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );
-				m_prefilteredMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel );
-				m_brdfMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel );
+				m_irradianceMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );
+				m_prefilteredMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel );
+				m_brdfMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel );
 			}
 		}
 	}
@@ -80,14 +80,14 @@ namespace Castor3D
 	{
 	}
 
-	void RenderPipeline::Cleanup()
+	void RenderPipeline::cleanup()
 	{
-		m_program.Cleanup();
+		m_program.cleanup();
 	}
 
-	void RenderPipeline::AddUniformBuffer( UniformBuffer & p_ubo )
+	void RenderPipeline::addUniformBuffer( UniformBuffer & p_ubo )
 	{
-		m_bindings.push_back( std::ref( p_ubo.CreateBinding( m_program ) ) );
+		m_bindings.push_back( std::ref( p_ubo.createBinding( m_program ) ) );
 	}
 
 	//*************************************************************************************************

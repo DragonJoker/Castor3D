@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CpuBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -70,14 +70,14 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature );
+		C3D_API bool initialise( BufferAccessType p_type, BufferAccessNature p_nature );
 		/**
 		 *\~english
 		 *\brief		Clean up the GPU buffer.
 		 *\~french
 		 *\brief		Nettoie le tampon GPU.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 	};
 }
 

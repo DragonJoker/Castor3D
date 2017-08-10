@@ -38,9 +38,9 @@ namespace GlRender
 		: public GlAttributeBase
 	{
 	public:
-		GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_divisor );
+		GlVecAttribute( OpenGl & p_gl, castor3d::ShaderProgram const & p_program, uint32_t p_stride, castor::String const & p_attributeName, uint32_t p_divisor );
 		virtual ~GlVecAttribute();
-		void Bind( bool p_bNormalised = false )override;
+		void bind( bool p_bNormalised = false )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -53,9 +53,9 @@ namespace GlRender
 		: public GlAttributeBase
 	{
 	public:
-		GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName );
+		GlMatAttribute( OpenGl & p_gl, castor3d::ShaderProgram const & p_program, uint32_t p_stride, castor::String const & p_attributeName );
 		virtual ~GlMatAttribute();
-		void Bind( bool p_bNormalised = false )override;
+		void bind( bool p_bNormalised = false )override;
 	};
 }
 

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -75,20 +75,20 @@ namespace Castor3D
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	p_config	La configuration HDR.
 		 */
-		C3D_API void Update( HdrConfig const & p_config )const;
+		C3D_API void update( HdrConfig const & p_config )const;
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
 		/**@{*/
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -111,9 +111,9 @@ namespace Castor3D
 }
 
 #define UBO_HDR_CONFIG( Writer )\
-	Ubo hdrConfig{ writer, Castor3D::ShaderProgram::BufferHdrConfig, Castor3D::HdrConfigUbo::BindingPoint };\
-	auto c3d_exposure = hdrConfig.DeclMember< Float >( Castor3D::ShaderProgram::Exposure );\
-	auto c3d_gamma = hdrConfig.DeclMember< Float >( Castor3D::ShaderProgram::Gamma );\
-	hdrConfig.End()
+	Ubo hdrConfig{ writer, castor3d::ShaderProgram::BufferHdrConfig, castor3d::HdrConfigUbo::BindingPoint };\
+	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Exposure );\
+	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Gamma );\
+	hdrConfig.end()
 
 #endif

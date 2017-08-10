@@ -8,8 +8,8 @@
 
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
-namespace Castor3D
+using namespace castor;
+namespace castor3d
 {
 	//*********************************************************************************************
 
@@ -18,46 +18,46 @@ namespace Castor3D
 	{
 	}
 
-	bool PostEffect::PostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
+	bool PostEffect::PostEffectSurface::initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
 	{
 		m_size = p_size;
-		m_colourTexture.SetIndex( p_index );
+		m_colourTexture.setIndex( p_index );
 
-		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+		m_fbo = p_renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
+		auto colourTexture = p_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
 			, PixelFormat::eRGBA32F
 			, p_size );
 
-		m_colourTexture.SetSampler( p_sampler );
-		colourTexture->GetImage().InitialiseSource();
-		m_colourAttach = m_fbo->CreateAttachment( colourTexture );
+		m_colourTexture.setSampler( p_sampler );
+		colourTexture->getImage().initialiseSource();
+		m_colourAttach = m_fbo->createAttachment( colourTexture );
 
-		m_fbo->Create();
-		m_colourTexture.SetTexture( colourTexture );
-		m_colourTexture.Initialise();
-		m_fbo->Initialise( p_size );
-		m_fbo->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
+		m_fbo->create();
+		m_colourTexture.setTexture( colourTexture );
+		m_colourTexture.initialise();
+		m_fbo->initialise( p_size );
+		m_fbo->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
 
-		m_fbo->Bind();
-		m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->GetType() );
-		m_fbo->SetDrawBuffer( m_colourAttach );
-		bool result = m_fbo->IsComplete();
-		m_fbo->Unbind();
+		m_fbo->bind();
+		m_fbo->attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->getType() );
+		m_fbo->setDrawBuffer( m_colourAttach );
+		bool result = m_fbo->isComplete();
+		m_fbo->unbind();
 
 		return result;
 	}
 
-	void PostEffect::PostEffectSurface::Cleanup()
+	void PostEffect::PostEffectSurface::cleanup()
 	{
-		m_fbo->Bind();
-		m_fbo->DetachAll();
-		m_fbo->Unbind();
-		m_fbo->Cleanup();
+		m_fbo->bind();
+		m_fbo->detachAll();
+		m_fbo->unbind();
+		m_fbo->cleanup();
 
-		m_colourTexture.Cleanup();
-		m_fbo->Destroy();
+		m_colourTexture.cleanup();
+		m_fbo->destroy();
 
 		m_fbo.reset();
 		m_colourAttach.reset();
@@ -76,9 +76,9 @@ namespace Castor3D
 	{
 	}
 
-	bool PostEffect::WriteInto( Castor::TextFile & p_file )
+	bool PostEffect::writeInto( castor::TextFile & p_file )
 	{
-		return DoWriteInto( p_file );
+		return doWriteInto( p_file );
 	}
 
 	//*********************************************************************************************

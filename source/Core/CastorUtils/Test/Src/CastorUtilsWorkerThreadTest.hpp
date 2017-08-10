@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsWorkerThreadTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void SingleThread();

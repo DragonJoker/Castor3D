@@ -56,13 +56,13 @@ namespace GlRender
 			Binding( uint32_t p_name )
 				: m_name{ p_name }
 			{
-				Castor::StringStream stream;
-				stream << Castor::Debug::Backtrace{};
+				castor::StringStream stream;
+				stream << castor::Debug::Backtrace{};
 				m_stack = stream.str();
 			}
 
 			uint32_t m_name;
-			Castor::String m_stack;
+			castor::String m_stack;
 		};
 
 		struct TextureUnitState
@@ -74,24 +74,24 @@ namespace GlRender
 	public:
 		GlDebug( GlRenderSystem & renderSystem );
 		~GlDebug();
-		void Initialise();
-		void Cleanup();
-		bool GlCheckError( std::string const & p_strText )const;
-		bool GlCheckError( std::wstring const & p_strText )const;
-		void FilterMessage( uint32_t p_id );
-		bool IsFiltered( uint32_t p_id )const;
+		void initialise();
+		void cleanup();
+		bool checkError( std::string const & p_strText )const;
+		bool checkError( std::wstring const & p_strText )const;
+		void filterMessage( uint32_t p_id );
+		bool isFiltered( uint32_t p_id )const;
 		void BindTexture( uint32_t p_name, uint32_t p_index )const;
-		void BindSampler( uint32_t p_name, uint32_t p_index )const;
-		void CheckTextureUnits()const;
+		void bindSampler( uint32_t p_name, uint32_t p_index )const;
+		void checkTextureUnits()const;
 
-		static void CALLBACK StDebugLog( GlDebugSource source
+		static void CALLBACK debugLog( GlDebugSource source
 			, GlDebugType type
 			, uint32_t id
 			, GlDebugSeverity severity
 			, int length
 			, const char * message
 			, void * userParam );
-		static void CALLBACK StDebugLogAMD( uint32_t id
+		static void CALLBACK debugLogAMD( uint32_t id
 			, GlDebugCategory category
 			, GlDebugSeverity severity
 			, int length
@@ -100,20 +100,20 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-		C3D_Gl_API bool Track( void * p_object
+		C3D_Gl_API bool track( void * p_object
 			, std::string const & p_name
 			, std::string const & p_file
 			, int line )const;
-		C3D_Gl_API bool UnTrack( void * p_object )const;
+		C3D_Gl_API bool untrack( void * p_object )const;
 
 		template< typename CreationFunction, typename DestructionFunction >
-		inline bool Track( Object< CreationFunction, DestructionFunction > * p_object
+		inline bool track( Object< CreationFunction, DestructionFunction > * p_object
 			, std::string const & p_name
 			, std::string const & p_file
 			, int p_line )const
 		{
-			return Track( reinterpret_cast< void * >( p_object )
-				, p_name + cuT( " (OpenGL Name: " ) + Castor::string::to_string( p_object->GetGlName() ) + cuT( ")" )
+			return track( reinterpret_cast< void * >( p_object )
+				, p_name + cuT( " (OpenGL Name: " ) + castor::string::toString( p_object->getGlName() ) + cuT( ")" )
 				, p_file
 				, p_line );
 		}
@@ -122,13 +122,13 @@ namespace GlRender
 			, typename DestroyFunction
 			, typename BindFunction
 			, typename UnbindFunction >
-		inline bool Track( Bindable< CreateFunction, DestroyFunction, BindFunction, UnbindFunction > * p_object
+		inline bool track( Bindable< CreateFunction, DestroyFunction, BindFunction, UnbindFunction > * p_object
 			, std::string const & p_name
 			, std::string const & p_file
 			, int p_line )const
 		{
-			return Track( reinterpret_cast< void * >( p_object )
-				, p_name + cuT( " (OpenGL Name: " ) + Castor::string::to_string( p_object->GetGlName() ) + cuT( ")" )
+			return track( reinterpret_cast< void * >( p_object )
+				, p_name + cuT( " (OpenGL Name: " ) + castor::string::toString( p_object->getGlName() ) + cuT( ")" )
 				, p_file
 				, p_line );
 		}
@@ -136,19 +136,19 @@ namespace GlRender
 #endif
 
 	private:
-		bool DoGlCheckError( Castor::String const & p_strText )const;
-		void DebugLog( GlDebugSource source
+		bool doGlCheckError( castor::String const & p_strText )const;
+		void doDebugLog( GlDebugSource source
 			, GlDebugType type
 			, uint32_t id
 			, GlDebugSeverity severity
 			, int length
 			, const char * message )const;
-		void DebugLogAMD( uint32_t id
+		void doDebugLogAMD( uint32_t id
 			, GlDebugCategory category
 			, GlDebugSeverity severity
 			, int length
 			, const char * message )const;
-		void DoUpdateTextureUnits()const;
+		void doUpdateTextureUnits()const;
 
 	private:
 		GlRenderSystem & m_renderSystem;

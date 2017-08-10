@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,26 +31,69 @@ namespace GLSL
 	struct InParam
 		: public TypeT
 	{
-		InParam( GlslWriter * p_writer, Castor::String const & p_name );
-		InParam( TypeT const & p_other );
+		InParam( GlslWriter * writer
+			, castor::String const & name );
+		InParam( TypeT const & other );
+		template< typename T >
+		inline InParam< TypeT > operator=( T const & rhs );
 	};
 
 	template< typename TypeT >
 	struct OutParam
 		: public TypeT
 	{
-		OutParam( GlslWriter * p_writer, Castor::String const & p_name );
-		OutParam( TypeT const & p_other );
-		template< typename T > inline OutParam< TypeT > operator=( T const & p_rhs );
+		OutParam( GlslWriter * writer
+			, castor::String const & name );
+		OutParam( TypeT const & other );
+		template< typename T >
+		inline OutParam< TypeT > operator=( T const & rhs );
 	};
 
 	template< typename TypeT >
 	struct InOutParam
 		: public TypeT
 	{
-		InOutParam( GlslWriter * p_writer, Castor::String const & p_name );
-		InOutParam( TypeT const & p_other );
-		template< typename T > inline InOutParam< TypeT > operator=( T const & p_rhs );
+		InOutParam( GlslWriter * writer
+			, castor::String const & name );
+		InOutParam( TypeT const & other );
+		template< typename T >
+		inline InOutParam< TypeT > operator=( T const & rhs );
+	};
+
+	template< typename TypeT >
+	struct InArrayParam
+		: public Array< TypeT >
+	{
+		InArrayParam( GlslWriter * writer
+			, castor::String const & name
+			, uint32_t count );
+		InArrayParam( Array< TypeT > const & other );
+		template< typename T >
+		inline InArrayParam< TypeT > operator=( T const & rhs );
+	};
+
+	template< typename TypeT >
+	struct OutArrayParam
+		: public Array< TypeT >
+	{
+		OutArrayParam( GlslWriter * writer
+			, castor::String const & name
+			, uint32_t count );
+		OutArrayParam( Array< TypeT > const & other );
+		template< typename T >
+		inline OutArrayParam< TypeT > operator=( T const & rhs );
+	};
+
+	template< typename TypeT >
+	struct InOutArrayParam
+		: public Array< TypeT >
+	{
+		InOutArrayParam( GlslWriter * writer
+			, castor::String const & name
+			, uint32_t count );
+		InOutArrayParam( Array< TypeT > const & other );
+		template< typename T >
+		inline InOutArrayParam< TypeT > operator=( T const & rhs );
 	};
 }
 

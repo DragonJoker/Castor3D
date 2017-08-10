@@ -29,7 +29,7 @@ SOFTWARE.
 #include <type_traits>
 #include <functional>
 
-namespace Castor
+namespace castor
 {
 	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
 	/*!
@@ -39,11 +39,11 @@ namespace Castor
 	\~english
 	\brief		Factory concept implementation
 	\remark		The classes that can be registered must implement a function of the following form :
-				<br />static std::shared_ptr< Obj > Create();
+				<br />static std::shared_ptr< Obj > create();
 	\~french
 	\brief		Implémentation du concept de fabrique
 	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
-				<br />static std::shared_ptr< Obj > Create();
+				<br />static std::shared_ptr< Obj > create();
 	*/
 	template< class Obj, class Key, class PtrType, typename Creator, class Predicate >
 	class Factory
@@ -77,7 +77,7 @@ namespace Castor
 		 *\param[in]	p_key		Le type d'objet
 		 *\param[in]	p_creator	La fonction de création d'objet
 		 */
-		void Register( Key const & p_key, Creator p_creator )
+		void registerType( Key const & p_key, Creator p_creator )
 		{
 			m_registered[p_key] = p_creator;
 		}
@@ -89,7 +89,7 @@ namespace Castor
 		 *\brief		Désenregistre un type d'objet
 		 *\param[in]	p_key		Le type d'objet
 		 */
-		void Unregister( Key const & p_key )
+		void unregisterType( Key const & p_key )
 		{
 			auto it = m_registered.find( p_key );
 
@@ -108,7 +108,7 @@ namespace Castor
 		 *\param[in]	p_key	Le type d'objet.
 		 *\return		\p true si enregistré.
 		 */
-		bool IsRegistered( Key const & p_key )
+		bool isTypeRegistered( Key const & p_key )
 		{
 			return m_registered.find( p_key ) != m_registered.end();
 		}
@@ -118,7 +118,7 @@ namespace Castor
 		 *\~french
 		 *\return		La liste des types enregistrés.
 		 */
-		std::vector< Key > ListRegisteredTypes()
+		std::vector< Key > listRegisteredTypes()
 		{
 			std::vector< Key > result;
 			result.reserve( m_registered.size() );
@@ -143,7 +143,7 @@ namespace Castor
 		 *\return		L'objet créé
 		 */
 		template< typename ... Parameters >
-		ObjPtr Create( Key const & p_key, Parameters && ... p_params )const
+		ObjPtr create( Key const & p_key, Parameters && ... p_params )const
 		{
 			ObjPtr result;
 			auto it = m_registered.find( p_key );

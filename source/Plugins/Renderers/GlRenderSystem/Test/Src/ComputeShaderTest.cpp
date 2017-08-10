@@ -10,8 +10,8 @@
 
 #include <Buffer/GlBuffer.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 #ifdef max
 #	undef max
@@ -39,7 +39,7 @@ namespace Testing
 {
 	namespace
 	{
-		ShaderProgramSPtr DoCreateSimpleComputeProgram( Engine & engine )
+		ShaderProgramSPtr doCreateSimpleComputeProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( std430, binding = 0 ) buffer Storage\n
@@ -56,13 +56,13 @@ namespace Testing
 					ids[gid].w = int( gid * 4 );\n
 				}\n
 			);
-			auto program = engine.GetRenderSystem()->CreateShaderProgram();
-			program->CreateObject( ShaderType::eCompute );
-			program->SetSource( ShaderType::eCompute, code );
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eCompute );
+			program->setSource( ShaderType::eCompute, code );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateTwoStoragesProgram( Engine & engine )
+		ShaderProgramSPtr doCreateTwoStoragesProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( std430, binding = 1 ) buffer Storage1\n
@@ -83,13 +83,13 @@ namespace Testing
 					ids2[gid].w = ids1[gid].w + int( gid * 4 );\n
 				}\n
 			);
-			auto program = engine.GetRenderSystem()->CreateShaderProgram();
-			program->CreateObject( ShaderType::eCompute );
-			program->SetSource( ShaderType::eCompute, code );
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eCompute );
+			program->setSource( ShaderType::eCompute, code );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateAtomicCounterProgram( Engine & engine )
+		ShaderProgramSPtr doCreateAtomicCounterProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
@@ -107,13 +107,13 @@ namespace Testing
 					ids[gid].w = int( gid * 4 );\n
 				}\n
 			);
-			auto program = engine.GetRenderSystem()->CreateShaderProgram();
-			program->CreateObject( ShaderType::eCompute );
-			program->SetSource( ShaderType::eCompute, code );
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eCompute );
+			program->setSource( ShaderType::eCompute, code );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateTwoStoragesAndAtomicCounterProgram( Engine & engine )
+		ShaderProgramSPtr doCreateTwoStoragesAndAtomicCounterProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
@@ -135,9 +135,9 @@ namespace Testing
 					ids2[gid].w = ids1[gid].w + int( gid * 4 );\n
 				}\n
 			);
-			auto program = engine.GetRenderSystem()->CreateShaderProgram();
-			program->CreateObject( ShaderType::eCompute );
-			program->SetSource( ShaderType::eCompute, code );
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eCompute );
+			program->setSource( ShaderType::eCompute, code );
 			return program;
 		}
 	}
@@ -151,27 +151,27 @@ namespace Testing
 	{
 	}
 
-	void GlComputeShaderTest::DoRegisterTests()
+	void GlComputeShaderTest::doRegisterTests()
 	{
-		DoRegisterTest( "GlComputeShaderTest::SimpleCompute", std::bind( &GlComputeShaderTest::SimpleCompute, this ) );
-		DoRegisterTest( "GlComputeShaderTest::TwoStorages", std::bind( &GlComputeShaderTest::TwoStorages, this ) );
-		DoRegisterTest( "GlComputeShaderTest::AtomicCounter", std::bind( &GlComputeShaderTest::AtomicCounter, this ) );
-		DoRegisterTest( "GlComputeShaderTest::TwoStoragesAndAtomicCounter", std::bind( &GlComputeShaderTest::TwoStoragesAndAtomicCounter, this ) );
+		doRegisterTest( "GlComputeShaderTest::SimpleCompute", std::bind( &GlComputeShaderTest::SimpleCompute, this ) );
+		doRegisterTest( "GlComputeShaderTest::TwoStorages", std::bind( &GlComputeShaderTest::TwoStorages, this ) );
+		doRegisterTest( "GlComputeShaderTest::AtomicCounter", std::bind( &GlComputeShaderTest::AtomicCounter, this ) );
+		doRegisterTest( "GlComputeShaderTest::TwoStoragesAndAtomicCounter", std::bind( &GlComputeShaderTest::TwoStoragesAndAtomicCounter, this ) );
 	}
 
 	void GlComputeShaderTest::SimpleCompute()
 	{
-		auto program = DoCreateSimpleComputeProgram( m_engine );
+		auto program = doCreateSimpleComputeProgram( m_engine );
 		ShaderStorageBuffer storageBuffer( m_engine );
-		auto pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *program );
+		auto pipeline = m_engine.getRenderSystem()->createComputePipeline( *program );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		storageBuffer.Resize( 5u * sizeof( Point4ui ) );
-		CT_CHECK( storageBuffer.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		CT_CHECK( program->Initialise() );
-		pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		storageBuffer.resize( 5u * sizeof( Point4ui ) );
+		CT_CHECK( storageBuffer.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( program->initialise() );
+		pipeline->run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > results;
-		storageBuffer.Download( 0u, uint32_t( results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( results.data() ) );
+		storageBuffer.download( 0u, uint32_t( results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( results.data() ) );
 		std::array< uint32_t, 5 * 4 > expect{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -180,33 +180,33 @@ namespace Testing
 			4, 8, 12, 16,
 		};
 		CT_EQUAL( results, expect );
-		storageBuffer.Cleanup();
-		program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		storageBuffer.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlComputeShaderTest::TwoStorages()
 	{
-		auto program = DoCreateTwoStoragesProgram( m_engine );
+		auto program = doCreateTwoStoragesProgram( m_engine );
 		ShaderStorageBuffer storage1( m_engine );
 		ShaderStorageBuffer storage2( m_engine );
-		auto pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *program );
+		auto pipeline = m_engine.getRenderSystem()->createComputePipeline( *program );
 		std::array< uint32_t, 5 * 4 > init{ 0 };
 		auto size = uint32_t( sizeof( uint32_t ) * init.size() );
-		storage1.Resize( size );
-		storage2.Resize( size );
+		storage1.resize( size );
+		storage2.resize( size );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( storage1.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		storage1.Upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
-		CT_CHECK( storage2.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		storage2.Upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
-		CT_CHECK( program->Initialise() );
-		storage1.BindTo( 1u );
-		storage2.BindTo( 2u );
-		pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( storage1.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		storage1.upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
+		CT_CHECK( storage2.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		storage2.upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
+		CT_CHECK( program->initialise() );
+		storage1.bindTo( 1u );
+		storage2.bindTo( 2u );
+		pipeline->run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > results1{ 0 };
-		storage2.Download( 0u, size, reinterpret_cast< uint8_t * >( results1.data() ) );
+		storage2.download( 0u, size, reinterpret_cast< uint8_t * >( results1.data() ) );
 		std::array< uint32_t, 5 * 4 > expect1{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -215,11 +215,11 @@ namespace Testing
 			4, 8, 12, 16,
 		};
 		CT_EQUAL( results1, expect1 );
-		storage1.BindTo( 2u );
-		storage2.BindTo( 1u );
-		pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
+		storage1.bindTo( 2u );
+		storage2.bindTo( 1u );
+		pipeline->run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > results2{ 0 };
-		storage1.Download( 0u, size, reinterpret_cast< uint8_t * >( results2.data() ) );
+		storage1.download( 0u, size, reinterpret_cast< uint8_t * >( results2.data() ) );
 		std::array< uint32_t, 5 * 4 > expect2{
 			0, 0, 0, 0,
 			2, 4, 6, 8,
@@ -228,30 +228,30 @@ namespace Testing
 			8, 16, 24, 32,
 		};
 		CT_EQUAL( results2, expect2 );
-		storage1.Cleanup();
-		storage2.Cleanup();
-		program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		storage1.cleanup();
+		storage2.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlComputeShaderTest::AtomicCounter()
 	{
-		auto program = DoCreateAtomicCounterProgram( m_engine );
-		auto & atomicCounterBuffer = program->CreateAtomicCounterBuffer( cuT( "Counter" ), ShaderTypeFlag::eCompute );
+		auto program = doCreateAtomicCounterProgram( m_engine );
+		auto & atomicCounterBuffer = program->createAtomicCounterBuffer( cuT( "Counter" ), ShaderTypeFlag::eCompute );
 		ShaderStorageBuffer storageBuffer( m_engine );
-		auto pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *program );
+		auto pipeline = m_engine.getRenderSystem()->createComputePipeline( *program );
 		uint32_t count = 0u;
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( atomicCounterBuffer.Initialise( 1u, 0u ) );
-		atomicCounterBuffer.Upload( 0u, 1u, &count );
-		storageBuffer.Resize( 5u * sizeof( Point4ui ) );
-		CT_CHECK( storageBuffer.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		CT_CHECK( program->Initialise() );
-		storageBuffer.BindTo( 1u );
-		pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( atomicCounterBuffer.initialise( 1u, 0u ) );
+		atomicCounterBuffer.upload( 0u, 1u, &count );
+		storageBuffer.resize( 5u * sizeof( Point4ui ) );
+		CT_CHECK( storageBuffer.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( program->initialise() );
+		storageBuffer.bindTo( 1u );
+		pipeline->run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > results;
-		storageBuffer.Download( 0u, uint32_t( results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( results.data() ) );
+		storageBuffer.download( 0u, uint32_t( results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( results.data() ) );
 		std::array< uint32_t, 5 * 4 > expect{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -260,38 +260,38 @@ namespace Testing
 			4, 8, 12, 16,
 		};
 		CT_EQUAL( results, expect );
-		storageBuffer.Cleanup();
-		atomicCounterBuffer.Cleanup();
-		program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		storageBuffer.cleanup();
+		atomicCounterBuffer.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlComputeShaderTest::TwoStoragesAndAtomicCounter()
 	{
-		auto program = DoCreateTwoStoragesAndAtomicCounterProgram( m_engine );
-		auto & atomicCounterBuffer = program->CreateAtomicCounterBuffer( cuT( "Counter" ), ShaderTypeFlag::eCompute );
+		auto program = doCreateTwoStoragesAndAtomicCounterProgram( m_engine );
+		auto & atomicCounterBuffer = program->createAtomicCounterBuffer( cuT( "Counter" ), ShaderTypeFlag::eCompute );
 		ShaderStorageBuffer storage1( m_engine );
 		ShaderStorageBuffer storage2( m_engine );
-		auto pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *program );
+		auto pipeline = m_engine.getRenderSystem()->createComputePipeline( *program );
 		uint32_t count = 0u;
 		std::array< uint32_t, 5 * 4 > init{ 0 };
 		auto size = uint32_t( sizeof( uint32_t ) * init.size() );
-		storage1.Resize( size );
-		storage2.Resize( size );
+		storage1.resize( size );
+		storage2.resize( size );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( atomicCounterBuffer.Initialise( 1u, 0u ) );
-		atomicCounterBuffer.Upload( 0u, 1u, &count );
-		CT_CHECK( storage1.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		storage1.Upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
-		CT_CHECK( storage2.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		storage2.Upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
-		CT_CHECK( program->Initialise() );
-		storage1.BindTo( 1u );
-		storage2.BindTo( 2u );
-		pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( atomicCounterBuffer.initialise( 1u, 0u ) );
+		atomicCounterBuffer.upload( 0u, 1u, &count );
+		CT_CHECK( storage1.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		storage1.upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
+		CT_CHECK( storage2.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		storage2.upload( 0u, size, reinterpret_cast< uint8_t * >( init.data() ) );
+		CT_CHECK( program->initialise() );
+		storage1.bindTo( 1u );
+		storage2.bindTo( 2u );
+		pipeline->run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > results1{ 0 };
-		storage2.Download( 0u, size, reinterpret_cast< uint8_t * >( results1.data() ) );
+		storage2.download( 0u, size, reinterpret_cast< uint8_t * >( results1.data() ) );
 		std::array< uint32_t, 5 * 4 > expect1{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -300,12 +300,12 @@ namespace Testing
 			4, 8, 12, 16,
 		};
 		CT_EQUAL( results1, expect1 );
-		atomicCounterBuffer.Upload( 0u, 1u, &count );
-		storage1.BindTo( 2u );
-		storage2.BindTo( 1u );
-		pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
+		atomicCounterBuffer.upload( 0u, 1u, &count );
+		storage1.bindTo( 2u );
+		storage2.bindTo( 1u );
+		pipeline->run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > results2{ 0 };
-		storage1.Download( 0u, size, reinterpret_cast< uint8_t * >( results2.data() ) );
+		storage1.download( 0u, size, reinterpret_cast< uint8_t * >( results2.data() ) );
 		std::array< uint32_t, 5 * 4 > expect2{
 			0, 0, 0, 0,
 			2, 4, 6, 8,
@@ -314,10 +314,10 @@ namespace Testing
 			8, 16, 24, 32,
 		};
 		CT_EQUAL( results2, expect2 );
-		storage1.Cleanup();
-		storage2.Cleanup();
-		atomicCounterBuffer.Cleanup();
-		program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		storage1.cleanup();
+		storage2.cleanup();
+		atomicCounterBuffer.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 }

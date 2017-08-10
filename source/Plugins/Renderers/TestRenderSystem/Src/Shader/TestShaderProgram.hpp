@@ -30,7 +30,7 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestShaderProgram
-		: public Castor3D::ShaderProgram
+		: public castor3d::ShaderProgram
 	{
 	public:
 		/**
@@ -43,49 +43,49 @@ namespace TestRender
 		 */
 		virtual ~TestShaderProgram();
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::Initialise
+		 *\copydoc		castor3d::ShaderProgram::Initialise
 		 */
-		bool Initialise()override;
+		bool initialise()override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::Cleanup
+		 *\copydoc		castor3d::ShaderProgram::Cleanup
 		 */
-		void Cleanup()override;
+		void cleanup()override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::Bind
+		 *\copydoc		castor3d::ShaderProgram::Bind
 		 */
-		void Bind()const override;
+		void bind()const override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::Unbind
+		 *\copydoc		castor3d::ShaderProgram::Unbind
 		 */
-		void Unbind()const override;
+		void unbind()const override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::Link
+		 *\copydoc		castor3d::ShaderProgram::Link
 		 */
 		bool Link()override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::GetLayout
+		 *\copydoc		castor3d::ShaderProgram::getLayout
 		 */
-		Castor3D::ProgramInputLayout const & GetLayout()const override
+		castor3d::ProgramInputLayout const & getLayout()const override
 		{
 			return m_layout;
 		}
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::GetLayout
+		 *\copydoc		castor3d::ShaderProgram::getLayout
 		 */
-		Castor3D::ProgramInputLayout & GetLayout()override
+		castor3d::ProgramInputLayout & getLayout()override
 		{
 			return m_layout;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::DoCreateObject
+		 *\copydoc		castor3d::ShaderProgram::doCreateObject
 		 */
-		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::ShaderType p_type )override;
+		castor3d::ShaderObjectSPtr doCreateObject( castor3d::ShaderType p_type )override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniform
+		 *\copydoc		castor3d::ShaderProgram::doCreateUniform
 		 */
-		std::shared_ptr< Castor3D::PushUniform > DoCreateUniform( Castor3D::UniformType p_type, int p_occurences )override;
+		std::shared_ptr< castor3d::PushUniform > doCreateUniform( castor3d::UniformType p_type, int p_occurences )override;
 
 	private:
 		TestProgramInputLayout m_layout;

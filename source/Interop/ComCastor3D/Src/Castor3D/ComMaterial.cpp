@@ -3,8 +3,8 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The material must be initialised" );
-	static const Castor::String ERROR_OUT_OF_BOUND_INDEX = cuT( "The given index was out of bounds" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The material must be initialised" );
+	static const castor::String ERROR_OUT_OF_BOUND_INDEX = cuT( "The given index was out of bounds" );
 
 	CMaterial::CMaterial()
 	{
@@ -14,20 +14,20 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CMaterial::Initialise()
+	STDMETHODIMP CMaterial::initialise()
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
 			hr = S_OK;
-			m_internal->Initialise();
+			m_internal->initialise();
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of component throwing error
+					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 cuT( "Initialise" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
@@ -37,20 +37,20 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::Cleanup()
+	STDMETHODIMP CMaterial::cleanup()
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Cleanup();
+			m_internal->cleanup();
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of component throwing error
+					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 cuT( "Cleanup" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
@@ -60,7 +60,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::CreatePass( /* [out, retval] */ IPass ** pVal )
+	STDMETHODIMP CMaterial::createPass( /* [out, retval] */ IPass ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -72,7 +72,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CPass * >( *pVal )->SetInternal( m_internal->CreatePass() );
+					static_cast< CPass * >( *pVal )->setInternal( m_internal->createPass() );
 				}
 			}
 		}
@@ -80,8 +80,8 @@ namespace CastorCom
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of component throwing error
-					 cuT( "CreatePass" ),			// This is generally displayed as the title
+					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
+					 cuT( "createPass" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 NULL );
@@ -90,7 +90,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::GetPass( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal )
+	STDMETHODIMP CMaterial::getPass( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -104,14 +104,14 @@ namespace CastorCom
 				{
 					try
 					{
-						static_cast< CPass * >( *pVal )->SetInternal( m_internal->GetPass( val ) );
+						static_cast< CPass * >( *pVal )->setInternal( m_internal->getPass( val ) );
 					}
 					catch ( std::exception & )
 					{
 						hr = CComError::DispatchError(
 								 E_FAIL,							// This represents the error
-								 IID_IMaterial,						// This is the GUID of component throwing error
-								 cuT( "GetPass" ),					// This is generally displayed as the title
+								 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
+								 cuT( "getPass" ),					// This is generally displayed as the title
 								 ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
 								 0,									// This is the context in the help file
 								 NULL );
@@ -123,8 +123,8 @@ namespace CastorCom
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of component throwing error
-					 cuT( "GetPass" ),				// This is generally displayed as the title
+					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
+					 cuT( "getPass" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 NULL );
@@ -133,7 +133,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::DestroyPass( /* [in] */ unsigned int val )
+	STDMETHODIMP CMaterial::destroyPass( /* [in] */ unsigned int val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -141,15 +141,15 @@ namespace CastorCom
 		{
 			try
 			{
-				m_internal->DestroyPass( val );
+				m_internal->destroyPass( val );
 				hr = S_OK;
 			}
 			catch ( std::exception & )
 			{
 				hr = CComError::DispatchError(
 						 E_FAIL,							// This represents the error
-						 IID_IMaterial,						// This is the GUID of component throwing error
-						 cuT( "DestroyPass" ),				// This is generally displayed as the title
+						 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
+						 cuT( "destroyPass" ),				// This is generally displayed as the title
 						 ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
 						 0,									// This is the context in the help file
 						 NULL );
@@ -159,8 +159,8 @@ namespace CastorCom
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of component throwing error
-					 cuT( "DestroyPass" ),			// This is generally displayed as the title
+					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
+					 cuT( "destroyPass" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 NULL );

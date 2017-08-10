@@ -30,14 +30,14 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestUniformBufferBinding
-		: public Castor3D::UniformBufferBinding
+		: public castor3d::UniformBufferBinding
 	{
 	public:
-		TestUniformBufferBinding( Castor3D::UniformBuffer & p_ubo, Castor3D::ShaderProgram const & p_program );
+		TestUniformBufferBinding( castor3d::UniformBuffer & p_ubo, castor3d::ShaderProgram const & p_program );
 		virtual ~TestUniformBufferBinding();
 
 	private:
-		void DoBind( uint32_t p_index )const override;
+		void doBind( uint32_t p_index )const override;
 	};
 }
 

@@ -2,8 +2,8 @@
 
 #include "Render/TestRenderSystem.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -16,7 +16,7 @@ namespace TestRender
 	{
 	}
 
-	void TestViewport::Apply()const
+	void TestViewport::apply()const
 	{
 	}
 }

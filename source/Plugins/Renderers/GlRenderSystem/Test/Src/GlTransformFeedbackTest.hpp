@@ -33,11 +33,11 @@ namespace Testing
 		: public GlTestCase
 	{
 	public:
-		explicit GlTransformFeedbackTest( Castor3D::Engine & engine );
+		explicit GlTransformFeedbackTest( castor3d::Engine & engine );
 		virtual ~GlTransformFeedbackTest();
 
 	private:
-		void DoRegisterTests()override;
+		void doRegisterTests()override;
 
 	private:
 		void Creation();

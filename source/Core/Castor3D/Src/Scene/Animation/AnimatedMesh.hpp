@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "AnimatedObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'objet.
 		 *\param[in]	p_mesh	Le maillage.
 		 */
-		C3D_API AnimatedMesh( Castor::String const & p_name, Mesh & p_mesh );
+		C3D_API AnimatedMesh( castor::String const & p_name, Mesh & p_mesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -87,13 +87,13 @@ namespace Castor3D
 		 */
 		C3D_API AnimatedMesh & operator=( AnimatedMesh const & p_rhs ) = delete;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::Update
+		 *\copydoc		castor3d::AnimatedObject::Update
 		 */
-		C3D_API void Update( Castor::Milliseconds const & p_tslf )override;
+		C3D_API void update( castor::Milliseconds const & p_tslf )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::IsPlayingAnimation
+		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
 		 */
-		C3D_API bool IsPlayingAnimation()const override
+		C3D_API bool isPlayingAnimation()const override
 		{
 			return m_playingAnimation != nullptr;
 		}
@@ -105,7 +105,7 @@ namespace Castor3D
 		 *\brief		Récupère le squelette
 		 *\return		Le squelette
 		 */
-		inline Mesh const & GetMesh()const
+		inline Mesh const & getMesh()const
 		{
 			return m_mesh;
 		}
@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\brief		Récupère le squelette
 		 *\return		Le squelette
 		 */
-		inline Mesh & GetMesh()
+		inline Mesh & getMesh()
 		{
 			return m_mesh;
 		}
@@ -127,28 +127,28 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'animation en cours de lecture sur cet objet.
 		 */
-		inline MeshAnimationInstance const & GetPlayingAnimation()const
+		inline MeshAnimationInstance const & getPlayingAnimation()const
 		{
 			return *m_playingAnimation;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoAddAnimation( Castor::String const & p_name )override;
+		void doAddAnimation( castor::String const & p_name )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoStartAnimation
+		 *\copydoc		castor3d::AnimatedObject::doStartAnimation
 		 */
-		void DoStartAnimation( AnimationInstance & p_animation )override;
+		void doStartAnimation( AnimationInstance & p_animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoStopAnimation
+		 *\copydoc		castor3d::AnimatedObject::doStopAnimation
 		 */
-		void DoStopAnimation( AnimationInstance & p_animation )override;
+		void doStopAnimation( AnimationInstance & p_animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoClearAnimations
+		 *\copydoc		castor3d::AnimatedObject::doClearAnimations
 		 */
-		void DoClearAnimations()override;
+		void doClearAnimations()override;
 
 	protected:
 		//!\~english	The submesh affected by the animations.

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Miscellaneous/StringUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -113,7 +113,7 @@ namespace Castor
 	 *\return		Le ScopeGuard.
 	 */
 	template< typename ScopeExitFuncType >
-	ScopeGuard< ScopeExitFuncType > make_scope_guard( ScopeExitFuncType const & p_function )
+	ScopeGuard< ScopeExitFuncType > makeScopeGuard( ScopeExitFuncType const & p_function )
 	{
 		return ScopeGuard< ScopeExitFuncType >( p_function );
 	}

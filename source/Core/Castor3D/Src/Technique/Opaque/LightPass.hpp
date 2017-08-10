@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,7 +31,7 @@ SOFTWARE.
 
 #include <Miscellaneous/BlockTracker.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -62,7 +62,7 @@ namespace Castor3D
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	Castor::String GetTextureName( DsTexture texture );
+	castor::String getTextureName( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the pixel format for given texture enum value.
@@ -73,7 +73,7 @@ namespace Castor3D
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	Castor::PixelFormat GetTextureFormat( DsTexture texture );
+	castor::PixelFormat getTextureFormat( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment point for given texture enum value.
@@ -84,7 +84,7 @@ namespace Castor3D
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	AttachmentPoint GetTextureAttachmentPoint( DsTexture texture );
+	AttachmentPoint getTextureAttachmentPoint( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -95,7 +95,7 @@ namespace Castor3D
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	uint32_t GetTextureAttachmentIndex( DsTexture texture );
+	uint32_t getTextureAttachmentIndex( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the maximum litten distance for given light and attenuation.
@@ -110,8 +110,8 @@ namespace Castor3D
 	 *\param[in]	max			La valeur maximale de l'observateur.
 	 *\return		La valeur.
 	 */
-	float GetMaxDistance( LightCategory const & light
-		, Castor::Point3f const & attenuation
+	float getMaxDistance( LightCategory const & light
+		, castor::Point3f const & attenuation
 		, float max );
 	/**
 	 *\~english
@@ -121,7 +121,7 @@ namespace Castor3D
 	 *\brief		Déclare la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
 	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void Declare_EncodeMaterial( GLSL::GlslWriter & writer );
+	void declareEncodeMaterial( GLSL::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Declares the GLSL function used to decode the material specifics from a vec4.
@@ -130,7 +130,7 @@ namespace Castor3D
 	 *\brief		Déclare la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
 	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void Declare_DecodeMaterial( GLSL::GlslWriter & writer );
+	void declareDecodeMaterial( GLSL::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Declares the GLSL function used to decode the shadow receiver status from a vec4.
@@ -139,7 +139,7 @@ namespace Castor3D
 	 *\brief		Déclare la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
 	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void Declare_DecodeReceiver( GLSL::GlslWriter & writer );
+	void declareDecodeReceiver( GLSL::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
@@ -158,7 +158,7 @@ namespace Castor3D
 	 *\param[in]	envMapIndex	L'indice de la texture environnementale.
 	 *\param[in]	encoded		La variable qui recevra la valeur encodée.
 	 */
-	void EncodeMaterial( GLSL::GlslWriter & writer
+	void encodeMaterial( GLSL::GlslWriter & writer
 		, GLSL::Int const & receiver
 		, GLSL::Int const & reflection
 		, GLSL::Int const & refraction
@@ -182,7 +182,7 @@ namespace Castor3D
 	 *\param[in]	refraction	La variable qui recevra le statut de réfraction.
 	 *\param[in]	envMapIndex	La variable qui recevra l'indice de la texture environnementale.
 	 */
-	void DecodeMaterial( GLSL::GlslWriter & writer
+	void decodeMaterial( GLSL::GlslWriter & writer
 		, GLSL::Float const & encoded
 		, GLSL::Int const & receiver
 		, GLSL::Int const & reflection
@@ -200,7 +200,7 @@ namespace Castor3D
 	 *\param[in]	encoded		La valeur encodée.
 	 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
 	 */
-	void DecodeReceiver( GLSL::GlslWriter & writer
+	void decodeReceiver( GLSL::GlslWriter & writer
 		, GLSL::Int & encoded
 		, GLSL::Int const & receiver );
 	//!\~english	The geometry pass result.
@@ -272,7 +272,7 @@ namespace Castor3D
 			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
-			void Initialise( VertexBuffer & vbo
+			void initialise( VertexBuffer & vbo
 				, IndexBufferSPtr ibo
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
@@ -284,7 +284,7 @@ namespace Castor3D
 			*\~french
 			*\brief		Nettoie le programme et son pipeline.
 			*/
-			void Cleanup();
+			void cleanup();
 			/**
 			 *\~english
 			 *\brief		Binds a light.
@@ -293,7 +293,7 @@ namespace Castor3D
 			 *\brief		Active une source lumineuse.
 			 *\param[in]	light	La lumière.
 			 */
-			void Bind( Light const & light );
+			void bind( Light const & light );
 			/**
 			 *\~english
 			 *\brief		Renders the light pass.
@@ -308,8 +308,8 @@ namespace Castor3D
 			 *\param[in]	count	Le nombre de primitives à dessiner.
 			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 			 */
-			void Render( Castor::Size const & size
-				, Castor::Point3f const & colour
+			void render( castor::Size const & size
+				, castor::Point3f const & colour
 				, uint32_t count
 				, bool first )const;
 
@@ -324,7 +324,7 @@ namespace Castor3D
 			 *\param[in]	blend	Dit si le pipeline doit activer le blending.
 			 *\return		Le pipeline créé.
 			 */
-			virtual RenderPipelineUPtr DoCreatePipeline( bool blend ) = 0;
+			virtual RenderPipelineUPtr doCreatePipeline( bool blend ) = 0;
 			/**
 			 *\~english
 			 *\brief		Binds a light.
@@ -333,7 +333,7 @@ namespace Castor3D
 			 *\brief		Active une source lumineuse.
 			 *\param[in]	light	La lumière.
 			 */
-			virtual void DoBind( Light const & light ) = 0;
+			virtual void doBind( Light const & light ) = 0;
 
 		public:
 			//!\~english	The shader program used to render lights.
@@ -372,7 +372,7 @@ namespace Castor3D
 		 *\param[in]	scene		La scène.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 */
-		virtual void Initialise( Scene const & scene
+		virtual void initialise( Scene const & scene
 			, SceneUbo & sceneUbo ) = 0;
 		/**
 		 *\~english
@@ -380,7 +380,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie la passe d'éclairage.
 		 */
-		virtual void Cleanup() = 0;
+		virtual void cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the light pass on currently bound framebuffer.
@@ -397,7 +397,7 @@ namespace Castor3D
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
-		virtual void Render( Castor::Size const & size
+		virtual void render( castor::Size const & size
 			, GeometryPassResult const & gp
 			, Light const & light
 			, Camera const & camera
@@ -408,7 +408,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Affiche la texture d'ombre sur l'écran.
 		 */
-		virtual void Debug( Castor::Position const & position )const
+		virtual void debugDisplay( castor::Position const & position )const
 		{
 		}
 		/**
@@ -417,7 +417,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre de primitives à dessiner.
 		 */
-		virtual uint32_t GetCount()const = 0;
+		virtual uint32_t getCount()const = 0;
 
 	protected:
 		/**
@@ -459,7 +459,7 @@ namespace Castor3D
 		 *\param[in]	sceneUbo		L'UBO de scène.
 		 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 		 */
-		void DoInitialise( Scene const & scene
+		void doInitialise( Scene const & scene
 			, LightType type
 			, VertexBuffer & vbo
 			, IndexBufferSPtr ibo
@@ -471,7 +471,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie la passe d'éclairage.
 		 */
-		void DoCleanup();
+		void doCleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
@@ -484,7 +484,7 @@ namespace Castor3D
 		 *\param[in]	light	La source lumineuse.
 		 *\param[in]	camera	La caméra.
 		 */
-		virtual void DoUpdate( Castor::Size const & size
+		virtual void doUpdate( castor::Size const & size
 			, Light const & light
 			, Camera const & camera ) = 0;
 		/**
@@ -501,9 +501,9 @@ namespace Castor3D
 		 *\param[in]	colour	La couleur de la souce lumineuse.
 		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
-		void DoRender( Castor::Size const & size
+		void doRender( castor::Size const & size
 			, GeometryPassResult const & gp
-			, Castor::Point3f const & colour
+			, castor::Point3f const & colour
 			, bool first );
 		/**
 		 *\~english
@@ -517,7 +517,7 @@ namespace Castor3D
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+		virtual GLSL::Shader doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType type )const;
 		/**
 		 *\~english
@@ -531,7 +531,7 @@ namespace Castor3D
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+		virtual GLSL::Shader doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType type )const;
 		/**
 		 *\~english
@@ -545,7 +545,7 @@ namespace Castor3D
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+		virtual GLSL::Shader doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType type )const;
 		/**
 		 *\~english
@@ -557,7 +557,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
+		virtual GLSL::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a light pass program.
@@ -570,7 +570,7 @@ namespace Castor3D
 		 *\param[in]	pxl		Le source du fagment shader.
 		 *\return		Le programme créé.
 		 */
-		virtual ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+		virtual ProgramPtr doCreateProgram( GLSL::Shader const & vtx
 			, GLSL::Shader const & pxl )const = 0;
 
 	protected:

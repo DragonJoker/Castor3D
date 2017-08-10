@@ -6,7 +6,7 @@
 namespace GLSL
 {
 	Ubo::Ubo( GlslWriter & p_writer
-		, Castor::String const & p_name
+		, castor::String const & p_name
 		, uint32_t p_bind
 		, Ubo::Layout p_layout )
 		: m_writer( p_writer )
@@ -15,11 +15,11 @@ namespace GLSL
 		, m_info{ p_layout, p_bind }
 	{
 		m_stream << std::endl;
-		m_stream << m_writer.m_keywords->GetLayout( p_layout, p_bind ) << cuT( "uniform " ) << p_name << std::endl;
+		m_stream << m_writer.m_keywords->getLayout( p_layout, p_bind ) << cuT( "uniform " ) << p_name << std::endl;
 		m_block = std::make_unique< IndentBlock >( m_stream );
 	}
 
-	void Ubo::End()
+	void Ubo::end()
 	{
 		m_block.reset();
 		m_stream << cuT( ";" ) << std::endl;
@@ -29,6 +29,6 @@ namespace GLSL
 			m_writer.m_stream << m_stream.rdbuf();
 		}
 
-		m_writer.RegisterUbo( m_name, m_info );
+		m_writer.registerUbo( m_name, m_info );
 	}
 }

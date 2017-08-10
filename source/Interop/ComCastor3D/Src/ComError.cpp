@@ -26,7 +26,7 @@ namespace CastorCom
 		DWORD dwHelpContext,
 		LPCTSTR szHelpFileName )
 	{
-		Castor::Logger::LogError( std::string( szSource ) + " - " + std::string( szDescription ) );
+		castor::Logger::logError( std::string( szSource ) + " - " + std::string( szDescription ) );
 		// This function uses ATL conversion macros
 		// (Hence we must use this MACRO provided by ATL)
 		USES_CONVERSION;
@@ -43,7 +43,7 @@ namespace CastorCom
 			// If the code is a Win32 error code
 			if ( HRESULT_FACILITY( hError ) == FACILITY_WIN32 )
 			{
-				// Get the error from the system
+				// get the error from the system
 				LPTSTR szError = NULL;
 
 				if ( !::FormatMessage(
@@ -55,7 +55,7 @@ namespace CastorCom
 							0,
 							NULL ) )
 				{
-					return HRESULT_FROM_WIN32( GetLastError() );
+					return HRESULT_FROM_WIN32( getLastError() );
 				}
 
 				// Convert the Error multibyte string to OLE string
@@ -63,7 +63,7 @@ namespace CastorCom
 				{
 					// Convert to wide char
 					wszError = T2OLE( szError );
-					// Free the multibyte string
+					// deallocate the multibyte string
 					LocalFree( szError );
 				}
 			}
@@ -85,30 +85,30 @@ namespace CastorCom
 			wszHelpFile = T2OLE( ( LPTSTR )szHelpFileName );
 		}
 
-		// Get the ICreateErrorInfo Interface
+		// get the ICreateErrorInfo Interface
 		ICreateErrorInfo * pCreateErrorInfo = NULL;
 		HRESULT hSuccess = CreateErrorInfo( &pCreateErrorInfo );
 		ATLASSERT( SUCCEEDED( hSuccess ) );
 		// Fill the error information into it
-		pCreateErrorInfo->SetGUID( clsid );
+		pCreateErrorInfo->setGUID( clsid );
 
 		if ( wszError != NULL )
 		{
-			pCreateErrorInfo->SetDescription( wszError );
+			pCreateErrorInfo->setDescription( wszError );
 		}
 
 		if ( wszSource != NULL )
 		{
-			pCreateErrorInfo->SetSource( wszSource );
+			pCreateErrorInfo->setSource( wszSource );
 		}
 
 		if ( wszHelpFile != NULL )
 		{
-			pCreateErrorInfo->SetHelpFile( wszHelpFile );
+			pCreateErrorInfo->setHelpFile( wszHelpFile );
 		}
 
-		pCreateErrorInfo->SetHelpContext( dwHelpContext );
-		// Get the IErrorInfo interface
+		pCreateErrorInfo->setHelpContext( dwHelpContext );
+		// get the IErrorInfo interface
 		IErrorInfo * pErrorInfo = NULL;
 		hSuccess = pCreateErrorInfo->QueryInterface( IID_IErrorInfo, ( LPVOID * )&pErrorInfo );
 
@@ -118,8 +118,8 @@ namespace CastorCom
 			return hSuccess;
 		}
 
-		// Set this error information in the current thread
-		hSuccess = SetErrorInfo( 0, pErrorInfo );
+		// set this error information in the current thread
+		hSuccess = setErrorInfo( 0, pErrorInfo );
 
 		if ( FAILED( hSuccess ) )
 		{

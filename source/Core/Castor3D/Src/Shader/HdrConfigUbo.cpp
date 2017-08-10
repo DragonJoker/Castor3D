@@ -3,16 +3,16 @@
 #include "Engine.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	HdrConfigUbo::HdrConfigUbo( Engine & engine )
 		: m_ubo{ ShaderProgram::BufferHdrConfig
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, HdrConfigUbo::BindingPoint }
-		, m_exposure{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
-		, m_gamma{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
+		, m_exposure{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
+		, m_gamma{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
 	{
 	}
 
@@ -20,11 +20,11 @@ namespace Castor3D
 	{
 	}
 
-	void HdrConfigUbo::Update( HdrConfig const & p_config )const
+	void HdrConfigUbo::update( HdrConfig const & p_config )const
 	{
-		m_exposure.SetValue( p_config.GetExposure() );
-		m_gamma.SetValue( p_config.GetGamma() );
-		m_ubo.Update();
-		m_ubo.BindTo( HdrConfigUbo::BindingPoint );
+		m_exposure.setValue( p_config.getExposure() );
+		m_gamma.setValue( p_config.getGamma() );
+		m_ubo.update();
+		m_ubo.bindTo( HdrConfigUbo::BindingPoint );
 	}
 }

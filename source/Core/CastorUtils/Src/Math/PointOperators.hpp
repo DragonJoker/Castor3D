@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS

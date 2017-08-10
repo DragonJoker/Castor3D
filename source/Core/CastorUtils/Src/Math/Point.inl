@@ -1,7 +1,7 @@
 #include "PointOperators.hpp"
 #include <cstring>
 
-namespace Castor
+namespace castor
 {
 	//*************************************************************************************************
 
@@ -39,7 +39,7 @@ namespace Castor
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::TextLoader::TextLoader()
-		: Castor::TextLoader< Point< T, Count > >()
+		: castor::TextLoader< Point< T, Count > >()
 	{
 	}
 
@@ -50,14 +50,14 @@ namespace Castor
 
 		for ( uint32_t i = 0; i < Count; ++i )
 		{
-			if ( p_file.ReadLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
+			if ( p_file.readLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
 			{
 				StringStream streamWord( strWord );
 				streamWord >> p_object[i];
 			}
 
 			xchar cDump;
-			p_file.ReadChar( cDump );
+			p_file.readChar( cDump );
 		}
 
 		return true;
@@ -67,7 +67,7 @@ namespace Castor
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Point< T, Count > >( p_tabs )
+		: castor::TextWriter< Point< T, Count > >( p_tabs )
 	{
 	}
 
@@ -86,8 +86,8 @@ namespace Castor
 			streamWord << p_object[i];
 		}
 
-		bool result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< Point< T, Count > >::CheckError( result, "Point value" );
+		bool result = p_file.print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
+		castor::TextWriter< Point< T, Count > >::checkError( result, "Point value" );
 		return result;
 	}
 
@@ -170,7 +170,7 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( Coords< T, Count > const & p_pt )
 	{
-		std::memcpy( this->m_coords, p_pt.const_ptr(), binary_size );
+		std::memcpy( this->m_coords, p_pt.constPtr(), binary_size );
 	}
 
 	template< typename T, uint32_t Count >
@@ -312,7 +312,7 @@ namespace Castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline void Point< T, Count >::to_values( T * p_pResult )const
+	inline void Point< T, Count >::toValues( T * p_pResult )const
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
@@ -537,14 +537,14 @@ namespace Castor
 		{
 			T tLength = T( length( p_point ) );
 
-			if ( !Policy< T >::is_null( tLength ) )
+			if ( !Policy< T >::isNull( tLength ) )
 			{
 				p_point /= tLength;
 			}
 		}
 
 		template< typename T, uint32_t Count >
-		Point< T, Count > get_normalised( Point< T, Count > const & p_point )
+		Point< T, Count > getNormalised( Point< T, Count > const & p_point )
 		{
 			Point< T, Count > result( p_point );
 			normalise( result );
@@ -555,7 +555,7 @@ namespace Castor
 		T dot( Point< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
 			T result;
-			Policy< T >::init( result );
+			Policy< T >::initialise( result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
@@ -566,7 +566,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double cos_theta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		double cosTheta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
 			double result = double( length( p_ptA ) * length( p_ptB ) );
 
@@ -583,7 +583,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double length_squared( Point< T, Count > const & p_point )
+		double lengthSquared( Point< T, Count > const & p_point )
 		{
 			double result = 0.0;
 
@@ -598,11 +598,11 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		double length( Point< T, Count > const & p_point )
 		{
-			return sqrt( length_squared( p_point ) );
+			return sqrt( lengthSquared( p_point ) );
 		}
 
 		template< typename T, uint32_t Count >
-		inline double length_manhattan( Point< T, Count > const & p_point )
+		inline double lengthManhattan( Point< T, Count > const & p_point )
 		{
 			double result = 0.0;
 
@@ -615,7 +615,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double length_minkowski( Point< T, Count > const & p_point, double p_order )
+		double lengthMinkowski( Point< T, Count > const & p_point, double p_order )
 		{
 			double result = 0.0;
 
@@ -629,7 +629,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double length_chebychev( Point< T, Count > const & p_point )
+		double lengthChebychev( Point< T, Count > const & p_point )
 		{
 			double result = 0.0;
 
@@ -642,9 +642,9 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_squared( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
+		double distanceSquared( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
 		{
-			return length_squared( p_rhs - p_lhs );
+			return lengthSquared( p_rhs - p_lhs );
 		}
 
 		template< typename T, uint32_t Count >
@@ -654,21 +654,21 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		inline double distance_manhattan( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
+		inline double distanceManhattan( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
 		{
-			return length_manhattan( p_rhs - p_lhs );
+			return lengthManhattan( p_rhs - p_lhs );
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_minkowski( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs, double p_order )
+		double distanceMinkowski( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs, double p_order )
 		{
-			return length_minkowski( p_rhs - p_lhs, p_order );
+			return lengthMinkowski( p_rhs - p_lhs, p_order );
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_chebychev( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
+		double distanceChebychev( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
 		{
-			return length_chebychev( p_rhs - p_lhs );
+			return lengthChebychev( p_rhs - p_lhs );
 		}
 
 		template< typename T, typename U, uint32_t Count >
@@ -685,7 +685,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double cos_theta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+		double cosTheta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
 		{
 			double result = double( length( p_ptA ) * length( p_ptB ) );
 
@@ -705,7 +705,7 @@ namespace Castor
 		T dot( Coords< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
 			T result;
-			Policy< T >::init( result );
+			Policy< T >::initialise( result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
@@ -716,7 +716,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double cos_theta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		double cosTheta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
 			double result = double( length( p_ptA ) * length( p_ptB ) );
 
@@ -746,7 +746,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double cos_theta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB )
+		double cosTheta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB )
 		{
 			double result = double( length( p_ptA ) * length( p_ptB ) );
 
@@ -766,7 +766,7 @@ namespace Castor
 		T dot( Coords< T const, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
 			T result;
-			Policy< T >::init( result );
+			Policy< T >::initialise( result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
@@ -777,7 +777,7 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double cos_theta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		double cosTheta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
 			double result = double( length( p_ptA ) * length( p_ptB ) );
 
@@ -798,9 +798,9 @@ namespace Castor
 //*************************************************************************************************
 
 template< typename T, uint32_t Count >
-inline Castor::String & operator<<( Castor::String & p_strOut, Castor::Point< T, Count > const & p_pt )
+inline castor::String & operator<<( castor::String & p_strOut, castor::Point< T, Count > const & p_pt )
 {
-	Castor::StringStream streamOut;
+	castor::StringStream streamOut;
 
 	if ( Count )
 	{
@@ -817,9 +817,9 @@ inline Castor::String & operator<<( Castor::String & p_strOut, Castor::Point< T,
 }
 
 template< typename T, uint32_t Count >
-inline Castor::String & operator>>( Castor::String & p_strIn, Castor::Point< T, Count > & p_pt )
+inline castor::String & operator>>( castor::String & p_strIn, castor::Point< T, Count > & p_pt )
 {
-	Castor::StringStream streamIn( p_strIn );
+	castor::StringStream streamIn( p_strIn );
 
 	for ( uint32_t i = 0; i < Count; i++ )
 	{
@@ -831,7 +831,7 @@ inline Castor::String & operator>>( Castor::String & p_strIn, Castor::Point< T, 
 }
 
 template< typename T, uint32_t Count, typename CharType >
-inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_streamOut, Castor::Point< T, Count > const & p_pt )
+inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_streamOut, castor::Point< T, Count > const & p_pt )
 {
 	if ( Count )
 	{
@@ -846,7 +846,7 @@ inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType
 	return p_streamOut;
 }
 template< typename T, uint32_t Count, typename CharType >
-inline std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & p_streamIn, Castor::Point< T, Count > & p_pt )
+inline std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & p_streamIn, castor::Point< T, Count > & p_pt )
 {
 	for ( uint32_t i = 0; i < Count; i++ )
 	{

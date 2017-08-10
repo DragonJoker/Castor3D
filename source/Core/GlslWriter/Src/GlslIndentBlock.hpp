@@ -30,11 +30,11 @@ namespace GLSL
 	struct IndentBlock
 	{
 		GlslWriter_API IndentBlock( GlslWriter & p_writter );
-		GlslWriter_API IndentBlock( Castor::StringStream & p_stream );
+		GlslWriter_API IndentBlock( castor::StringStream & p_stream );
 		GlslWriter_API ~IndentBlock();
 
 	private:
-		Castor::StringStream & m_stream;
+		castor::StringStream & m_stream;
 		int m_indent;
 	};
 }

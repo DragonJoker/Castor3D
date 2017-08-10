@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <xmmintrin.h>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -68,10 +68,10 @@ namespace Castor
 		 *\brief		Met les valeurs dans un pointeur.
 		 *\param[out]	p_values	Un pointeur sur 4 flottants alignés sur 16 bits.
 		 */
-		inline void to_ptr( float * p_values );
+		inline void toPtr( float * p_values );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator.
+		 *\brief		addition assignment operator.
 		 *\param[in]	p_rhs	The right hand side operand.
 		 *\return		A reference to this object.
 		 *\~french
@@ -119,7 +119,7 @@ namespace Castor
 	};
 	/**
 	 *\~english
-	 *\brief		Addition operator.
+	 *\brief		addition operator.
 	 *\param[in]	p_lhs, p_rhs	The operands.
 	 *\return		The addition result.
 	 *\~french

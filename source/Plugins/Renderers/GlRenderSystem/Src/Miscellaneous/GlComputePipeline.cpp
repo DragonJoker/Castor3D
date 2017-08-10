@@ -6,8 +6,8 @@
 #include <Log/Logger.hpp>
 #include <Shader/ShaderProgram.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 #ifdef MemoryBarrier
 #	undef MemoryBarrier
@@ -25,23 +25,23 @@ namespace GlRender
 	{
 	}
 
-	void GlComputePipeline::Run( Point3ui const & p_workgroups
+	void GlComputePipeline::run( Point3ui const & p_workgroups
 		, Point3ui const & p_workgroupSize
 		, MemoryBarriers const & p_barriers )const
 	{
-		m_program.Bind();
+		m_program.bind();
 
-		if ( GetOpenGl().HasComputeVariableGroupSize() )
+		if ( getOpenGl().hasComputeVariableGroupSize() )
 		{
-			GetOpenGl().DispatchComputeGroupSize(
+			getOpenGl().DispatchComputeGroupSize(
 				p_workgroups[0], p_workgroups[1], p_workgroups[2],
 				p_workgroupSize[0], p_workgroupSize[1], p_workgroupSize[2] );
 		}
 		else
 		{
-			GetOpenGl().DispatchCompute( p_workgroups[0], p_workgroups[1], p_workgroups[2] );
+			getOpenGl().DispatchCompute( p_workgroups[0], p_workgroups[1], p_workgroups[2] );
 		}
 
-		GetOpenGl().MemoryBarrier( GetOpenGl().Get( p_barriers ) );
+		getOpenGl().MemoryBarrier( getOpenGl().get( p_barriers ) );
 	}
 }

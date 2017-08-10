@@ -1,4 +1,4 @@
-﻿#include "MeshAnimationInstanceSubmesh.hpp"
+#include "MeshAnimationInstanceSubmesh.hpp"
 
 #include "Animation/Mesh/MeshAnimation.hpp"
 #include "MeshAnimationInstance.hpp"
@@ -6,15 +6,15 @@
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Shader/Uniform.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
 	namespace
 	{
-		inline void DoFind( real p_time,
+		inline void doFind( real p_time,
 							typename SubmeshAnimationBufferArray::const_iterator const & p_first,
 							typename SubmeshAnimationBufferArray::const_iterator const & p_last,
 							typename SubmeshAnimationBufferArray::const_iterator & p_prv,
@@ -43,12 +43,12 @@ namespace Castor3D
 	MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh & p_animationObject )
 		: OwnedBy< MeshAnimationInstance >{ p_animationInstance }
 		, m_animationObject{ p_animationObject }
-		, m_first{ p_animationObject.GetBuffers().begin() }
-		, m_last{ p_animationObject.GetBuffers().end() }
-		, m_prev{ p_animationObject.GetBuffers().empty() ? p_animationObject.GetBuffers().end() : p_animationObject.GetBuffers().begin() }
-		, m_curr{ p_animationObject.GetBuffers().empty() ? p_animationObject.GetBuffers().end() : p_animationObject.GetBuffers().begin() }
+		, m_first{ p_animationObject.getBuffers().begin() }
+		, m_last{ p_animationObject.getBuffers().end() }
+		, m_prev{ p_animationObject.getBuffers().empty() ? p_animationObject.getBuffers().end() : p_animationObject.getBuffers().begin() }
+		, m_curr{ p_animationObject.getBuffers().empty() ? p_animationObject.getBuffers().end() : p_animationObject.getBuffers().begin() }
 	{
-		if ( !p_animationObject.GetBuffers().empty() )
+		if ( !p_animationObject.getBuffers().empty() )
 		{
 			++m_curr;
 			--m_last;
@@ -59,26 +59,26 @@ namespace Castor3D
 	{
 	}
 
-	void MeshAnimationInstanceSubmesh::Update( Milliseconds const & p_time )
+	void MeshAnimationInstanceSubmesh::update( Milliseconds const & p_time )
 	{
 		m_currentFactor = 0.0f;
 
 		if ( m_first != m_last
-			 && m_animationObject.GetSubmesh().HasAnimationBuffer() )
+			 && m_animationObject.getSubmesh().hasAnimationBuffer() )
 		{
 			auto curr = m_curr;
 			real time = real( p_time.count() );
-			DoFind( time, m_first, m_last, m_prev, m_curr );
+			doFind( time, m_first, m_last, m_prev, m_curr );
 			m_currentFactor = float( ( time - m_prev->m_timeIndex ) / ( m_curr->m_timeIndex - m_prev->m_timeIndex ) );
 
 			if ( curr != m_curr )
 			{
 				uint32_t const size = uint32_t( m_curr->m_buffer.size() * sizeof( InterleavedVertex ) );
-				auto & vertexBuffer = m_animationObject.GetSubmesh().GetVertexBuffer();
-				auto & animBuffer = m_animationObject.GetSubmesh().GetAnimationBuffer();
-				std::memcpy( vertexBuffer.GetData(), m_prev->m_buffer.data(), vertexBuffer.GetSize() );
-				std::memcpy( animBuffer.GetData(), m_curr->m_buffer.data(), animBuffer.GetSize() );
-				m_animationObject.GetSubmesh().NeedUpdate();
+				auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
+				auto & animBuffer = m_animationObject.getSubmesh().getAnimationBuffer();
+				std::memcpy( vertexBuffer.getData(), m_prev->m_buffer.data(), vertexBuffer.getSize() );
+				std::memcpy( animBuffer.getData(), m_curr->m_buffer.data(), animBuffer.getSize() );
+				m_animationObject.getSubmesh().needsUpdate();
 			}
 		}
 	}

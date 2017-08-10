@@ -1,8 +1,8 @@
 ﻿#include "ColourRenderBuffer.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ColourRenderBuffer::ColourRenderBuffer( PixelFormat p_format )
 		:	RenderBuffer( BufferComponent::eColour, p_format )

@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		Class de base du stockage GPU d'une texture.
 	*/
 	class TextureStorage
-		: public Castor::OwnedBy< TextureLayout >
+		: public castor::OwnedBy< TextureLayout >
 	{
 	public:
 		/**
@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		C3D_API virtual void Bind( uint32_t p_index )const = 0;
+		C3D_API virtual void bind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -85,7 +85,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		C3D_API virtual void Unbind( uint32_t p_index )const = 0;
+		C3D_API virtual void unbind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it.
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API virtual uint8_t * Lock( AccessTypes const & p_lock ) = 0;
+		C3D_API virtual uint8_t * lock( AccessTypes const & p_lock ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -109,7 +109,7 @@ namespace Castor3D
 		 *\remarks		La texture parente doit être activée.
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 */
-		C3D_API virtual void Unlock( bool p_modified ) = 0;
+		C3D_API virtual void unlock( bool p_modified ) = 0;
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it.
@@ -124,7 +124,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice du stockage de l'image.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API virtual uint8_t * Lock( AccessTypes const & p_lock, uint32_t p_index ) = 0;
+		C3D_API virtual uint8_t * lock( AccessTypes const & p_lock, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -137,14 +137,14 @@ namespace Castor3D
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 *\param[in]	p_index		L'indice du stockage de l'image.
 		 */
-		C3D_API virtual void Unlock( bool p_modified, uint32_t p_index ) = 0;
+		C3D_API virtual void unlock( bool p_modified, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\return		The CPU access rights.
 		 *\~french
 		 *\return		Les droits d'accès du CPU.
 		 */
-		inline auto GetCPUAccess()const
+		inline auto getCPUAccess()const
 		{
 			return m_cpuAccess;
 		}
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les droits d'accès du GPU.
 		 */
-		inline auto GetGPUAccess()const
+		inline auto getGPUAccess()const
 		{
 			return m_gpuAccess;
 		}
@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type de texture du stockage.
 		 */
-		inline auto GetType()const
+		inline auto getType()const
 		{
 			return m_type;
 		}

@@ -14,10 +14,10 @@
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*********************************************************************************************
 
@@ -25,7 +25,7 @@ namespace Castor3D
 		, GLSL::Shader const & vtx
 		, GLSL::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
-		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
+		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 	{
 	}
 
@@ -33,29 +33,29 @@ namespace Castor3D
 	{
 	}
 
-	RenderPipelineUPtr MeshLightPass::Program::DoCreatePipeline( bool blend )
+	RenderPipelineUPtr MeshLightPass::Program::doCreatePipeline( bool blend )
 	{
 		RasteriserState rsstate;
-		rsstate.SetCulledFaces( Culling::eFront );
+		rsstate.setCulledFaces( Culling::eFront );
 
 		DepthStencilState dsstate;
-		dsstate.SetDepthTest( false );
-		dsstate.SetDepthMask( WritingMask::eZero );
-		dsstate.SetStencilTest( true );
-		dsstate.SetStencilFunc( StencilFunc::eNEqual );
-		dsstate.SetStencilRef( 0u );
+		dsstate.setDepthTest( false );
+		dsstate.setDepthMask( WritingMask::eZero );
+		dsstate.setStencilTest( true );
+		dsstate.setStencilFunc( StencilFunc::eNEqual );
+		dsstate.setStencilRef( 0u );
 
 		BlendState blstate;
 
 		if ( blend )
 		{
-			blstate.EnableBlend( true );
-			blstate.SetRgbBlendOp( BlendOperation::eAdd );
-			blstate.SetRgbSrcBlend( BlendOperand::eOne );
-			blstate.SetRgbDstBlend( BlendOperand::eOne );
+			blstate.enableBlend( true );
+			blstate.setRgbBlendOp( BlendOperation::eAdd );
+			blstate.setRgbSrcBlend( BlendOperand::eOne );
+			blstate.setRgbDstBlend( BlendOperand::eOne );
 		}
 
-		return m_program->GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+		return m_program->getRenderSystem()->createRenderPipeline( std::move( dsstate )
 			, std::move( rsstate )
 			, std::move( blstate )
 			, MultisampleState{}
@@ -80,16 +80,16 @@ namespace Castor3D
 
 	MeshLightPass::~MeshLightPass()
 	{
-		m_stencilPass.Cleanup();
-		m_indexBuffer->Cleanup();
-		m_vertexBuffer->Cleanup();
-		m_modelMatrixUbo.GetUbo().Cleanup();
-		m_matrixUbo.GetUbo().Cleanup();
+		m_stencilPass.cleanup();
+		m_indexBuffer->cleanup();
+		m_vertexBuffer->cleanup();
+		m_modelMatrixUbo.getUbo().cleanup();
+		m_matrixUbo.getUbo().cleanup();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
 	}
 
-	void MeshLightPass::Initialise( Scene const & scene
+	void MeshLightPass::initialise( Scene const & scene
 		, SceneUbo & sceneUbo )
 	{
 		auto declaration = BufferDeclaration(
@@ -97,27 +97,27 @@ namespace Castor3D
 			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
 		} );
 
-		auto data = DoGenerateVertices();
+		auto data = doGenerateVertices();
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, declaration );
 		auto size = data.size() * sizeof( *data.data() );
-		m_vertexBuffer->Resize( uint32_t( size ) );
-		std::memcpy( m_vertexBuffer->GetData()
-			, data.data()->const_ptr()
+		m_vertexBuffer->resize( uint32_t( size ) );
+		std::memcpy( m_vertexBuffer->getData()
+			, data.data()->constPtr()
 			, size );
-		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 
-		auto faces = DoGenerateFaces();
+		auto faces = doGenerateFaces();
 		m_indexBuffer = std::make_shared< IndexBuffer >( m_engine );
-		m_indexBuffer->Resize( uint32_t( faces.size() ) );
-		std::memcpy( m_indexBuffer->GetData()
+		m_indexBuffer->resize( uint32_t( faces.size() ) );
+		std::memcpy( m_indexBuffer->getData()
 			, faces.data()
 			, faces.size() * sizeof( *faces.data() ) );
-		m_indexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_indexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 
-		m_stencilPass.Initialise( *m_vertexBuffer
+		m_stencilPass.initialise( *m_vertexBuffer
 			, m_indexBuffer );
 
-		DoInitialise( scene
+		doInitialise( scene
 			, m_type
 			, *m_vertexBuffer
 			, m_indexBuffer
@@ -125,47 +125,47 @@ namespace Castor3D
 			, &m_modelMatrixUbo );
 	}
 
-	void MeshLightPass::Cleanup()
+	void MeshLightPass::cleanup()
 	{
-		DoCleanup();
+		doCleanup();
 	}
 
-	uint32_t MeshLightPass::GetCount()const
+	uint32_t MeshLightPass::getCount()const
 	{
-		return m_indexBuffer->GetSize();
+		return m_indexBuffer->getSize();
 	}
 
-	void MeshLightPass::DoUpdate( Size const & size
+	void MeshLightPass::doUpdate( Size const & size
 		, Light const & light
 		, Camera const & camera )
 	{
-		auto model = DoComputeModelMatrix( light, camera );
-		m_matrixUbo.Update( camera.GetView(), camera.GetViewport().GetProjection() );
-		m_modelMatrixUbo.Update( model );
-		camera.Apply();
-		m_stencilPass.Render( m_indexBuffer->GetSize() );
+		auto model = doComputeModelMatrix( light, camera );
+		m_matrixUbo.update( camera.getView(), camera.getViewport().getProjection() );
+		m_modelMatrixUbo.update( model );
+		camera.apply();
+		m_stencilPass.render( m_indexBuffer->getSize() );
 	}
 	
-	GLSL::Shader MeshLightPass::DoGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	GLSL::Shader MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
 		using namespace GLSL;
-		GlslWriter writer = m_engine.GetRenderSystem()->CreateGlslWriter();
+		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
 		UBO_MATRIX( writer );
 		UBO_MODEL_MATRIX( writer );
 		UBO_GPINFO( writer );
-		auto vertex = writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
+		auto vertex = writer.declAttribute< Vec3 >( ShaderProgram::Position );
 
 		// Shader outputs
-		auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
 			gl_Position = c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( vertex, 1.0_f );
 		} );
 
-		return writer.Finalise();
+		return writer.finalise();
 	}
 
 	//*********************************************************************************************

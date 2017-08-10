@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -61,7 +61,7 @@ namespace Castor
 		 *\brief		Configure la console pour le niveau de log demandé.
 		 *\param[in]	p_logLevel	Le niveau de log.
 		 */
-		virtual void BeginLog( LogType p_logLevel ) = 0;
+		virtual void beginLog( LogType p_logLevel ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked.
@@ -72,7 +72,7 @@ namespace Castor
 		 *\param[in]	p_toLog		Le texte à logger.
 		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté.
 		 */
-		virtual void Print( String const & p_toLog, bool p_newLine ) = 0;
+		virtual void print( String const & p_toLog, bool p_newLine ) = 0;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -108,7 +108,7 @@ namespace Castor
 		 *\brief		Configure la console pour le niveau de log demandé.
 		 *\param[in]	p_logLevel	Le niveau de log.
 		 */
-		void BeginLog( LogType p_logLevel );
+		void beginLog( LogType p_logLevel );
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked.
@@ -119,7 +119,7 @@ namespace Castor
 		 *\param[in]	p_toLog		Le texte à logger.
 		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté.
 		 */
-		void Print( String const & p_toLog, bool p_newLine );
+		void print( String const & p_toLog, bool p_newLine );
 
 	protected:
 		//!\~english	The platform specific console.

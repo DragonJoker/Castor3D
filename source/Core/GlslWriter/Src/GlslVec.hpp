@@ -35,7 +35,7 @@ namespace GLSL
 		using my_vec2 = Vec2T< ValueT >;
 
 		inline Vec2T();
-		inline Vec2T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Vec2T( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline my_vec2 & operator=( my_vec2 const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
@@ -66,7 +66,7 @@ namespace GLSL
 		using my_vec3 = Vec3T< ValueT >;
 
 		inline Vec3T();
-		inline Vec3T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Vec3T( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline my_vec3 & operator=( my_vec3 const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
@@ -131,7 +131,7 @@ namespace GLSL
 		using my_vec4 = Vec4T< ValueT >;
 
 		inline Vec4T();
-		inline Vec4T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Vec4T( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline my_vec4 & operator=( my_vec4 const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;

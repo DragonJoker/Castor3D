@@ -1,9 +1,9 @@
 ﻿#include "Shadow.hpp"
 
-using namespace Castor;
+using namespace castor;
 using namespace GLSL;
 
-namespace Castor3D
+namespace castor3d
 {
 	Shadow::Shadow()
 	{

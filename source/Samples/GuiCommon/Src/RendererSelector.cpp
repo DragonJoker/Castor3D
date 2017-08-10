@@ -7,13 +7,13 @@
 #include <Cache/PluginCache.hpp>
 #include <Plugin/RendererPlugin.hpp>
 
-using namespace Castor3D;
+using namespace castor3d;
 
 namespace GuiCommon
 {
 	RendererSelector::RendererSelector( Engine * engine, wxWindow * p_parent, wxString const & p_strTitle )
 		: wxDialog( p_parent, wxID_ANY, p_strTitle + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 500 ), wxDEFAULT_DIALOG_STYLE )
-		, m_pImgCastor( ImagesLoader::GetBitmap( CV_IMG_CASTOR ) )
+		, m_pImgCastor( ImagesLoader::getBitmap( CV_IMG_CASTOR ) )
 		, m_engine( engine )
 	{
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -43,11 +43,11 @@ namespace GuiCommon
 		GradientButton * cancel = new GradientButton( this, wxID_CANCEL, strCancel );
 		pTitle->SetFont( font );
 
-		for ( auto it : m_engine->GetPluginCache().GetPlugins( PluginType::eRenderer ) )
+		for ( auto it : m_engine->getPluginCache().getPlugins( PluginType::eRenderer ) )
 		{
 			if ( it.second )
 			{
-				m_pListRenderers->Insert( it.second->GetName(), iCount++, it.second.get() );
+				m_pListRenderers->Insert( it.second->getName(), iCount++, it.second.get() );
 			}
 		}
 
@@ -75,32 +75,32 @@ namespace GuiCommon
 		SetSizer( pSizer );
 		pSizer->SetSizeHints( this );
 		wxClientDC clientDC( this );
-		DoDraw( & clientDC );
+		doDraw( & clientDC );
 	}
 
 	RendererSelector::~RendererSelector()
 	{
 	}
 
-	Castor::String RendererSelector::GetSelectedRenderer()const
+	castor::String RendererSelector::getSelectedRenderer()const
 	{
-		Castor::String result = RENDERER_TYPE_UNDEFINED;
+		castor::String result = RENDERER_TYPE_UNDEFINED;
 		uint32_t selected = m_pListRenderers->GetSelection();
 
 		if ( selected >= 0 && selected < m_pListRenderers->GetCount() )
 		{
-			result = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( selected ) )->GetRendererType();
+			result = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( selected ) )->getRendererType();
 		}
 
 		return result;
 	}
 
-	void RendererSelector::DoDraw( wxDC * p_pDC )
+	void RendererSelector::doDraw( wxDC * p_pDC )
 	{
 		p_pDC->DrawBitmap( *m_pImgCastor, wxPoint( 0, 0 ), true );
 	}
 
-	void RendererSelector::DoSelect()
+	void RendererSelector::doSelect()
 	{
 		if ( m_pListRenderers->GetCount() > 0 )
 		{
@@ -123,7 +123,7 @@ namespace GuiCommon
 	void RendererSelector::OnPaint( wxPaintEvent & p_event )
 	{
 		wxPaintDC paintDC( this );
-		DoDraw( & paintDC );
+		doDraw( & paintDC );
 		p_event.Skip();
 	}
 
@@ -132,7 +132,7 @@ namespace GuiCommon
 		switch ( p_event.GetKeyCode() )
 		{
 		case WXK_RETURN:
-			DoSelect();
+			doSelect();
 			break;
 		}
 
@@ -141,7 +141,7 @@ namespace GuiCommon
 
 	void RendererSelector::OnButtonOk( wxCommandEvent & p_event )
 	{
-		DoSelect();
+		doSelect();
 		p_event.Skip();
 	}
 

@@ -35,7 +35,7 @@ namespace GuiCommon
 	public:
 		AuiToolBarArt();
 
-		virtual wxAuiToolBarArt * Clone();
+		wxAuiToolBarArt * Clone()override;
 
 		virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect );
 		virtual void DrawPlainBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect );

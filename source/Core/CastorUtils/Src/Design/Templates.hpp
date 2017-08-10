@@ -29,7 +29,7 @@ SOFTWARE.
 #include "Miscellaneous/StringUtils.hpp"
 #include "Math/Math.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace detail
 	{
@@ -44,7 +44,7 @@ namespace Castor
 		 *\param[in]	p_object	Un objet bidon
 		 */
 		template< typename CtnrType, typename ObjType >
-		void clear_content( CtnrType & p_container, ObjType p_object )
+		void clearContent( CtnrType & p_container, ObjType p_object )
 		{
 		}
 		/**
@@ -58,7 +58,7 @@ namespace Castor
 		 *\param[in]	p_object	Un objet bidon
 		 */
 		template< typename CtnrType, typename ObjType >
-		void clear_content( CtnrType & p_container, ObjType * p_object )
+		void clearContent( CtnrType & p_container, ObjType * p_object )
 		{
 			std::for_each( p_container.begin(), p_container.end(), []( ObjType * p_pointer )
 			{
@@ -76,7 +76,7 @@ namespace Castor
 		 *\param[in]	p_object	Une paire bidon
 		 */
 		template< class CtnrType, typename KeyType, typename ObjType >
-		void clear_pair_content( CtnrType & p_container, std::pair< KeyType, ObjType > p_object )
+		void clearPairContent( CtnrType & p_container, std::pair< KeyType, ObjType > p_object )
 		{
 		}
 		/**
@@ -90,7 +90,7 @@ namespace Castor
 		 *\param[in]	p_object	Une paire bidon
 		 */
 		template< class CtnrType, typename KeyType, typename ObjType >
-		void clear_pair_content( CtnrType & p_container, std::pair< KeyType, ObjType * > p_object )
+		void clearPairContent( CtnrType & p_container, std::pair< KeyType, ObjType * > p_object )
 		{
 			std::for_each( p_container.begin(), p_container.end(), []( std::pair< KeyType, ObjType * > & p_pair )
 			{
@@ -109,10 +109,10 @@ namespace Castor
 	 *\param[in]	p_container	Le contenur à vider
 	 */
 	template< class CtnrType >
-	void clear_container( CtnrType & p_container )
+	void clearContainer( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		detail::clear_content( p_container, value_type() );
+		detail::clearContent( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/**
@@ -126,10 +126,10 @@ namespace Castor
 	 *\param[in]	p_container	Le contenur à vider
 	 */
 	template< class CtnrType >
-	void clear_pair_container( CtnrType & p_container )
+	void clearPairContainer( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		detail::clear_pair_content( p_container, value_type() );
+		detail::clearPairContent( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/*!
@@ -142,18 +142,18 @@ namespace Castor
 	\brief		Structure utilisée pour récupéerer la meilleure façon de passer T en paramètre : valeur ou référence constante
 	*/
 	template< typename T >
-	struct call_traits
+	struct CallTraits
 	{
 	private:
-		template< typename U, bool Big > struct call_traits_helper;
+		template< typename U, bool Big > struct CallTraitsHelper;
 		template< typename U >
-		struct call_traits_helper< U, true >
+		struct CallTraitsHelper< U, true >
 		{
 			typedef U const & const_param_type;
 			typedef U & param_type;
 		};
 		template< typename U >
-		struct call_traits_helper< U, false >
+		struct CallTraitsHelper< U, false >
 		{
 			typedef U const const_param_type;
 			typedef U param_type;
@@ -169,8 +169,8 @@ namespace Castor
 		\~french
 		\brief		Typedef sur la meilleure façon de passer T en paramètre : valeur ou référence constante
 		*/
-		typedef typename call_traits_helper < T, ( sizeof( T ) > sizeof( void * ) ) >::const_param_type const_param_type;
-		typedef typename call_traits_helper < T, ( sizeof( T ) > sizeof( void * ) ) >::param_type param_type;
+		typedef typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::const_param_type const_param_type;
+		typedef typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::param_type param_type;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -189,7 +189,7 @@ namespace Castor
 	{
 	private:
 		typedef T value_type;
-		typedef typename call_traits< value_type >::const_param_type param_type;
+		typedef typename CallTraits< value_type >::const_param_type param_type;
 
 	public:
 		/**
@@ -220,7 +220,7 @@ namespace Castor
 		 *\brief		Initialise La variable donnée à la valeur neutre
 		 *\param[in]	p_a	La variable à initialiser
 		 */
-		static void init( value_type & p_a )
+		static void initialise( value_type & p_a )
 		{
 			p_a = zero();
 		}
@@ -234,7 +234,7 @@ namespace Castor
 		 *\param[in]	p_a	La valeur à tester
 		 *\return		Le résultat du test
 		 */
-		static bool is_null( param_type p_a )
+		static bool isNull( param_type p_a )
 		{
 			return equals<T>( p_a, zero() );
 		}
@@ -258,7 +258,7 @@ namespace Castor
 		 *\param[in,out]	p_a	La valeur à négativer, reçoit la valeur négativée
 		 *\return			Référence sur le paramètre
 		 */
-		static value_type & ass_negate( value_type & p_a )
+		static value_type & assignNegate( value_type & p_a )
 		{
 			return assign<T>( p_a, negate( p_a ) );
 		}
@@ -290,9 +290,9 @@ namespace Castor
 		{
 			if ( std::is_floating_point< value_type >::value )
 			{
-				if ( is_null( p_a ) )
+				if ( isNull( p_a ) )
 				{
-					init( p_a );
+					initialise( p_a );
 				}
 				else if ( p_a > 0 )
 				{
@@ -342,7 +342,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Adds two params of different type, gives the result
+		 *\brief		adds two params of different type, gives the result
 		 *\param[in]	p_a	The first param
 		 *\param[in]	p_b	The second param, converted into \p p_a 's type before adding
 		 *\return		The addition result
@@ -368,7 +368,7 @@ namespace Castor
 		 *\param[in]	p_b	Le second param, converti dans le type de \p p_a avant la soustraction
 		 *\return		Le résultat de la soustraction
 		 */
-		template< typename Ty > static value_type substract( param_type p_a, Ty const & p_b )
+		template< typename Ty > static value_type subtract( param_type p_a, Ty const & p_b )
 		{
 			return p_a - convert< Ty >( p_b );
 		}
@@ -406,7 +406,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief			Adds two params of different type, gives the result
+		 *\brief			adds two params of different type, gives the result
 		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before adding
@@ -418,7 +418,7 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant l'addition
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_add( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignAdd( value_type & p_a, Ty const & p_b )
 		{
 			return assign( p_a, add< Ty >( p_a, p_b ) );
 		}
@@ -436,9 +436,9 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la soustraction
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_substract( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignSubtract( value_type & p_a, Ty const & p_b )
 		{
-			return assign( p_a, substract< Ty >( p_a, p_b ) );
+			return assign( p_a, subtract< Ty >( p_a, p_b ) );
 		}
 		/**
 		 *\~english
@@ -454,7 +454,7 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la multiplication
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_multiply( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignMultiply( value_type & p_a, Ty const & p_b )
 		{
 			return assign( p_a, multiply< Ty >( p_a, p_b ) );
 		}
@@ -472,7 +472,7 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la division
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_divide( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignDivide( value_type & p_a, Ty const & p_b )
 		{
 			return assign( p_a, divide< Ty >( p_a, p_b ) );
 		}
@@ -506,7 +506,7 @@ namespace Castor
 	{
 	private:
 		typedef bool value_type;
-		typedef call_traits<value_type>::const_param_type param_type;
+		typedef CallTraits<value_type>::const_param_type param_type;
 
 	public:
 		/**
@@ -537,7 +537,7 @@ namespace Castor
 		 *\brief		Initialise La variable donnée à la valeur neutre
 		 *\param[in]	p_a	La variable à initialiser
 		 */
-		static void init( value_type & p_a )
+		static void initialise( value_type & p_a )
 		{
 			p_a = zero();
 		}
@@ -551,7 +551,7 @@ namespace Castor
 		 *\param[in]	p_a	La valeur à tester
 		 *\return		Le résultat du test
 		 */
-		static bool is_null( value_type p_a )
+		static bool isNull( value_type p_a )
 		{
 			return !p_a;
 		}
@@ -575,7 +575,7 @@ namespace Castor
 		 *\param[in,out]	p_a	La valeur à négativer, reçoit la valeur négativée
 		 *\return			Référence sur le paramètre
 		 */
-		static value_type & ass_negate( value_type & p_a )
+		static value_type & assignNegate( value_type & p_a )
 		{
 			return assign< value_type >( p_a, negate( p_a ) );
 		}
@@ -591,7 +591,7 @@ namespace Castor
 		 */
 		static value_type parse( String const & p_strVal )
 		{
-			return p_strVal == cuT( "true" ) || p_strVal == cuT( "TRUE" ) || p_strVal == cuT( "1" ) || string::to_int( p_strVal ) != 0;
+			return p_strVal == cuT( "true" ) || p_strVal == cuT( "TRUE" ) || p_strVal == cuT( "1" ) || string::toInt( p_strVal ) != 0;
 		}
 		/**
 		 *\~english
@@ -616,7 +616,7 @@ namespace Castor
 		 */
 		template< typename Ty > static value_type convert( Ty const & p_value )
 		{
-			return !Policy< Ty >::is_null( p_value );
+			return !Policy< Ty >::isNull( p_value );
 		}
 		/**
 		 *\~english
@@ -636,7 +636,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Adds two params of different type, gives the result
+		 *\brief		adds two params of different type, gives the result
 		 *\param[in]	p_a	The first param
 		 *\param[in]	p_b	The second param, converted into \p p_a 's type before adding
 		 *\return		The addition result
@@ -662,7 +662,7 @@ namespace Castor
 		 *\param[in]	p_b	Le second param, converti dans le type de \p p_a avant la soustraction
 		 *\return		Le résultat de la soustraction
 		 */
-		template< typename Ty > static value_type substract( param_type p_a, Ty const & p_b )
+		template< typename Ty > static value_type subtract( param_type p_a, Ty const & p_b )
 		{
 			return p_a || convert< Ty >( p_b );
 		}
@@ -700,7 +700,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief			Adds two params of different type, gives the result
+		 *\brief			adds two params of different type, gives the result
 		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before adding
@@ -712,7 +712,7 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant l'addition
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_add( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignAdd( value_type & p_a, Ty const & p_b )
 		{
 			return assign( p_a, add< Ty >( p_a, p_b ) );
 		}
@@ -730,9 +730,9 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la soustraction
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_substract( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignSubtract( value_type & p_a, Ty const & p_b )
 		{
-			return assign( p_a, substract< Ty >( p_a, p_b ) );
+			return assign( p_a, subtract< Ty >( p_a, p_b ) );
 		}
 		/**
 		 *\~english
@@ -748,7 +748,7 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la multiplication
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_multiply( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignMultiply( value_type & p_a, Ty const & p_b )
 		{
 			return assign( p_a, multiply< Ty >( p_a, p_b ) );
 		}
@@ -766,7 +766,7 @@ namespace Castor
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la division
 		 *\return			La référence sur le premier param
 		 */
-		template< typename Ty > static value_type & ass_divide( value_type & p_a, Ty const & p_b )
+		template< typename Ty > static value_type & assignDivide( value_type & p_a, Ty const & p_b )
 		{
 			return assign( p_a, divide< Ty >( p_a, p_b ) );
 		}
@@ -796,20 +796,21 @@ namespace Castor
 	\~french
 	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
 	*/
-	template< uint32_t A, uint32_t B, typename Enable = void > struct min_value;
+	template< uint32_t A, uint32_t B, typename Enable = void >
+	struct MinValue;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015
 	\~english
 	\brief		Used to have the minimum value of two, at compile time.
-	\remarks	min_value specialisation for A <= B.
+	\remarks	MinValue specialisation for A <= B.
 	\~french
 	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
-	\remarks	spécialisation de min_value pour A <= B.
+	\remarks	spécialisation de MinValue pour A <= B.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct min_value < A, B, typename std::enable_if< ( A <= B ) >::type >
+	struct MinValue < A, B, typename std::enable_if< ( A <= B ) >::type >
 	{
 		static const uint32_t value = A;
 	};
@@ -819,13 +820,13 @@ namespace Castor
 	\date		17/09/2015
 	\~english
 	\brief		Used to have the minimum value of two, at compile time.
-	\remarks	min_value specialisation for B < A.
+	\remarks	MinValue specialisation for B < A.
 	\~french
 	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
-	\remarks	spécialisation de min_value pour B < A.
+	\remarks	spécialisation de MinValue pour B < A.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct min_value < A, B, typename std::enable_if< ( B < A ) >::type >
+	struct MinValue < A, B, typename std::enable_if< ( B < A ) >::type >
 	{
 		static const uint32_t value = A;
 	};
@@ -838,20 +839,21 @@ namespace Castor
 	\~french
 	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
 	*/
-	template< uint32_t A, uint32_t B, typename Enable = void > struct max_value;
+	template< uint32_t A, uint32_t B, typename Enable = void >
+	struct MaxValue;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015
 	\~english
 	\brief		Used to have the maximum value of two, at compile time.
-	\remarks	max_value specialisation for A >= B.
+	\remarks	MaxValue specialisation for A >= B.
 	\~french
 	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
-	\remarks	spécialisation de max_value pour A <= B.
+	\remarks	spécialisation de MaxValue pour A <= B.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct max_value< A, B, typename std::enable_if< ( A >= B ) >::type >
+	struct MaxValue< A, B, typename std::enable_if< ( A >= B ) >::type >
 	{
 		static const uint32_t value = A;
 	};
@@ -861,13 +863,13 @@ namespace Castor
 	\date		17/09/2015
 	\~english
 	\brief		Used to have the maximum value of two, at compile time.
-	\remarks	max_value specialisation for B > A.
+	\remarks	MaxValue specialisation for B > A.
 	\~french
 	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
-	\remarks	spécialisation de max_value pour B > A.
+	\remarks	spécialisation de MaxValue pour B > A.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct max_value< A, B, typename std::enable_if< ( B > A ) >::type >
+	struct MaxValue< A, B, typename std::enable_if< ( B > A ) >::type >
 	{
 		static const uint32_t value = A;
 	};

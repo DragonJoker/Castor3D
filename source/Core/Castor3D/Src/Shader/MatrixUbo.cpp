@@ -5,17 +5,17 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	MatrixUbo::MatrixUbo( Engine & engine )
 		: m_ubo{ ShaderProgram::BufferMatrix
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, MatrixUbo ::BindingPoint }
-		, m_view{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxView ) }
-		, m_projection{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxProjection ) }
-		, m_invProjection{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxInvProjection ) }
+		, m_view{ *m_ubo.createUniform< UniformType::eMat4x4r >( RenderPipeline::MtxView ) }
+		, m_projection{ *m_ubo.createUniform< UniformType::eMat4x4r >( RenderPipeline::MtxProjection ) }
+		, m_invProjection{ *m_ubo.createUniform< UniformType::eMat4x4r >( RenderPipeline::MtxInvProjection ) }
 	{
 	}
 
@@ -23,21 +23,21 @@ namespace Castor3D
 	{
 	}
 
-	void MatrixUbo::Update( Matrix4x4r const & p_view
+	void MatrixUbo::update( Matrix4x4r const & p_view
 		, Matrix4x4r const & p_projection )const
 	{
-		m_view.SetValue( p_view );
-		m_projection.SetValue( p_projection );
-		m_invProjection.SetValue( p_projection.get_inverse() );
-		m_ubo.Update();
-		m_ubo.BindTo( MatrixUbo::BindingPoint );
+		m_view.setValue( p_view );
+		m_projection.setValue( p_projection );
+		m_invProjection.setValue( p_projection.getInverse() );
+		m_ubo.update();
+		m_ubo.bindTo( MatrixUbo::BindingPoint );
 	}
 
-	void MatrixUbo::Update( Matrix4x4r const & p_projection )const
+	void MatrixUbo::update( Matrix4x4r const & p_projection )const
 	{
-		m_projection.SetValue( p_projection );
-		m_invProjection.SetValue( p_projection.get_inverse() );
-		m_ubo.Update();
-		m_ubo.BindTo( MatrixUbo::BindingPoint );
+		m_projection.setValue( p_projection );
+		m_invProjection.setValue( p_projection.getInverse() );
+		m_ubo.update();
+		m_ubo.bindTo( MatrixUbo::BindingPoint );
 	}
 }

@@ -39,20 +39,20 @@ namespace GuiCommon
 			, wxSize const & p_size = wxDefaultSize );
 		~FrameVariablesList();
 
-		void LoadVariables( Castor3D::ShaderType p_type
-			, Castor3D::ShaderProgramSPtr p_program
-			, Castor3D::RenderPipeline & p_pipeline );
+		void LoadVariables( castor3d::ShaderType p_type
+			, castor3d::ShaderProgramSPtr p_program
+			, castor3d::RenderPipeline & p_pipeline );
 		void UnloadVariables();
 
 	private:
-		void DoAddBuffer( wxTreeItemId p_id
-			, Castor3D::UniformBuffer & p_buffer );
-		void DoAddVariable( wxTreeItemId p_id
-			, Castor3D::UniformSPtr p_variable
-			, Castor3D::UniformBuffer & p_buffer );
-		void DoAddVariable( wxTreeItemId p_id
-			, Castor3D::PushUniformSPtr p_variable
-			, Castor3D::ShaderType p_type );
+		void doAddBuffer( wxTreeItemId p_id
+			, castor3d::UniformBuffer & p_buffer );
+		void doAddVariable( wxTreeItemId p_id
+			, castor3d::UniformSPtr p_variable
+			, castor3d::UniformBuffer & p_buffer );
+		void doAddVariable( wxTreeItemId p_id
+			, castor3d::PushUniformSPtr p_variable
+			, castor3d::ShaderType p_type );
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
@@ -60,7 +60,7 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::ShaderProgramWPtr m_program;
+		castor3d::ShaderProgramWPtr m_program;
 		PropertiesHolder * m_propertiesHolder;
 	};
 }

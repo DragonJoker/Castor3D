@@ -25,14 +25,14 @@ SOFTWARE.
 
 #include "Line3D.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
 	\brief		Plane equation
-	\remark		Do you remember ax + by + cz + d = 0 ?
+	\remark		do you remember ax + by + cz + d = 0 ?
 	\~french
 	\brief		Equation de plan
 	\remark		Vous connaissez ax + by + cz + d = 0 ?
@@ -41,8 +41,8 @@ namespace Castor
 	class PlaneEquation
 	{
 	private:
-		using policy = Castor::Policy< T >;
-		using point = Castor::Point3< T >;
+		using policy = castor::Policy< T >;
+		using point = castor::Point3< T >;
 
 	public:
 		/**
@@ -95,7 +95,7 @@ namespace Castor
 		 *\param[in]	p_p2	Le second point appartenant au plan
 		 *\param[in]	p_p3	Le troisième point appartenant au plan
 		 */
-		void Set( point const & p_p1, point const & p_p2, point const & p_p3 );
+		void set( point const & p_p1, point const & p_p2, point const & p_p3 );
 		/**
 		 *\~english
 		 *\brief		Defines plane's equation
@@ -106,7 +106,7 @@ namespace Castor
 		 *\param[in]	p_normal	La normale du plan
 		 *\param[in]	p_point	Un point appartenant au plan
 		 */
-		void Set( point const & p_normal, point const & p_point );
+		void set( point const & p_normal, point const & p_point );
 		/**
 		 *\~english
 		 *\brief		Checks if this plane is parallel to another one, id est if their normals are parallel
@@ -115,7 +115,7 @@ namespace Castor
 		 *\brief		Vérifie si ce plan est parallèle à un autre, id est leurs normales sont parallèles
 		 *\param[in]	p_plane	Le plan a tester
 		 */
-		bool IsParallel( PlaneEquation const & p_plane )const;
+		bool isParallel( PlaneEquation const & p_plane )const;
 		/**
 		 *\~english
 		 *\brief		Computes distance of a point from this plane
@@ -126,7 +126,7 @@ namespace Castor
 		 *\param[in]	p_point	Le point
 		 *\return		La distance, positive si le point est du même côté que la normale du plan
 		 */
-		T Distance( point const & p_point )const;
+		T distance( point const & p_point )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the projection of a point on this plane
@@ -137,7 +137,7 @@ namespace Castor
 		 *\param[in]	p_point	Le point à projeter
 		 *\return		Le résultat de la projection
 		 */
-		point Project( point const & p_point )const;
+		point project( point const & p_point )const;
 		/**
 		 *\todo			Find origin point
 		 *\~english
@@ -151,7 +151,7 @@ namespace Castor
 		 *\param[out]	p_line	La ligne d'intersection
 		 *\return		\p true s'il y a une intersection
 		 */
-		bool Intersects( PlaneEquation const & p_plane, Line3D< T > & p_line )const;
+		bool intersects( PlaneEquation const & p_plane, Line3D< T > & p_line )const;
 		/**
 		 *\~english
 		 *\brief		Checks the intersection of this plane with 2 other ones, gives the intersection point
@@ -166,7 +166,7 @@ namespace Castor
 		 *\param[out]	p_intersection	Le point d'intersection
 		 *\return		\p true s'il y a un point d'intersection entre les 3 plans
 		 */
-		bool Intersects( PlaneEquation const & p_plane1, PlaneEquation const & p_plane2, point & p_intersection )const;
+		bool intersects( PlaneEquation const & p_plane1, PlaneEquation const & p_plane2, point & p_intersection )const;
 		/**
 		 *\~english
 		 *\brief		Checks if the given line belongs to the plane
@@ -177,14 +177,14 @@ namespace Castor
 		 *\param[out]	p_line	La ligne
 		 *\return		\p true s'il la ligne appartient au plan
 		 */
-		bool LineOn( Line3D< T > const & p_line )const;
+		bool isLineOn( Line3D< T > const & p_line )const;
 		/**
 		 *\~english
 		 *\return		The plane's normal.
 		 *\~french
 		 *\return		La normale du plan.
 		 */
-		inline point const & GetNormal()const
+		inline point const & getNormal()const
 		{
 			return m_normal;
 		}
@@ -194,7 +194,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le point de référence du plan.
 		 */
-		inline point const & GetPoint()const
+		inline point const & getPoint()const
 		{
 			return m_point;
 		}

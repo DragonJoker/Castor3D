@@ -39,7 +39,7 @@ namespace GlRender
 		virtual ~GlUploadPixelBuffer();
 
 	private:
-		bool DoInitialise()override;
+		bool doInitialise()override;
 	};
 }
 

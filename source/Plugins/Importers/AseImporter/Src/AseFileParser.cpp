@@ -27,8 +27,8 @@
 
 #include <Graphics/Image.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 #if defined( _MSC_VER )
 #	pragma warning( push )
@@ -48,7 +48,7 @@ namespace Ase
 		void RetrieveFace( int * p_indices, String p_strLine )
 		{
 			int index = 0;
-			sscanf( string::string_cast< char >( p_strLine ).c_str(), "%d:\tA:\t%d B:\t%d C:\t%d", &index, &p_indices[0], &p_indices[1], &p_indices[2] );
+			sscanf( string::stringCast< char >( p_strLine ).c_str(), "%d:\tA:\t%d B:\t%d C:\t%d", &index, &p_indices[0], &p_indices[1], &p_indices[2] );
 		}
 
 		template< size_t Count, typename Type >
@@ -103,149 +103,149 @@ namespace Ase
 	{
 	}
 
-	void AseFileParser::DoInitialiseParser( TextFile & p_file )
+	void AseFileParser::doInitialiseParser( TextFile & p_file )
 	{
-		AddParser( uint32_t( ASESection::eRoot ), cuT( "*3DSMAX_ASCIIEXPORT" ), AseParser_RootFormat );
-		AddParser( uint32_t( ASESection::eRoot ), cuT( "*COMMENT" ), AseParser_RootComment );
-		AddParser( uint32_t( ASESection::eRoot ), cuT( "*SCENE" ), AseParser_RootScene );
-		AddParser( uint32_t( ASESection::eRoot ), cuT( "*MATERIAL_LIST" ), AseParser_RootMaterials );
-		AddParser( uint32_t( ASESection::eRoot ), cuT( "*GEOMOBJECT" ), AseParser_RootGeometry );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_FILENAME" ), AseParser_SceneFileName );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_FIRSTFRAME" ), AseParser_SceneFirstFrame );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_LASTFRAME" ), AseParser_SceneLastFrame );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_FRAMESPEED" ), AseParser_SceneFrameSpeed );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_TICKSPERFRAME" ), AseParser_SceneTicksPerFrame );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_BACKGROUND_STATIC" ), AseParser_SceneBgColour );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_AMBIENT_STATIC" ), AseParser_SceneAmbientLight );
-		AddParser( uint32_t( ASESection::eScene ), cuT( "}" ), AseParser_SceneEnd );
-		AddParser( uint32_t( ASESection::eMaterials ), cuT( "*MATERIAL_COUNT" ), AseParser_MaterialsCount );
-		AddParser( uint32_t( ASESection::eMaterials ), cuT( "*MATERIAL" ), AseParser_MaterialsMat );
-		AddParser( uint32_t( ASESection::eMaterials ), cuT( "}" ), AseParser_MaterialsEnd );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_NAME" ), AseParser_MaterialName );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_CLASS" ), AseParser_MaterialClass );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_DIFFUSE" ), AseParser_MaterialDiffuse );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SPECULAR" ), AseParser_MaterialSpecular );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SHINE" ), AseParser_MaterialShine );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SHINESTRENGTH" ), AseParser_MaterialShineStrength );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_TRANSPARENCY" ), AseParser_MaterialTransparency );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_WIRESIZE" ), AseParser_MaterialWiresize );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SHADING" ), AseParser_MaterialShading );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_XP_FALLOFF" ), AseParser_MaterialXPFalloff );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SELFILLUM" ), AseParser_MaterialSelfillum );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_FALLOFF" ), AseParser_MaterialFalloff );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_XP_TYPE" ), AseParser_MaterialXPType );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*SUBMATERIAL" ), AseParser_MaterialSubmat );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MAP_DIFFUSE" ), AseParser_MaterialMapDiffuse );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "}" ), AseParser_MaterialEnd );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_NAME" ), AseParser_SubMaterialName );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_CLASS" ), AseParser_MaterialClass );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_DIFFUSE" ), AseParser_MaterialDiffuse );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SPECULAR" ), AseParser_MaterialSpecular );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SHINE" ), AseParser_MaterialShine );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SHINESTRENGTH" ), AseParser_MaterialShineStrength );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_TRANSPARENCY" ), AseParser_MaterialTransparency );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_WIRESIZE" ), AseParser_MaterialWiresize );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SHADING" ), AseParser_MaterialShading );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_XP_FALLOFF" ), AseParser_MaterialXPFalloff );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SELFILLUM" ), AseParser_MaterialSelfillum );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_FALLOFF" ), AseParser_MaterialFalloff );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_XP_TYPE" ), AseParser_MaterialXPType );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MAP_DIFFUSE" ), AseParser_MaterialMapDiffuse );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "}" ), AseParser_SubMaterialEnd );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_NAME" ), AseParser_MapDiffuseName );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_CLASS" ), AseParser_MapDiffuseClass );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_SUBNO" ), AseParser_MapDiffuseSubno );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_AMOUNT" ), AseParser_MapDiffuseAmount );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*BITMAP" ), AseParser_MapDiffuseBitmap );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_TYPE" ), AseParser_MapDiffuseType );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_U_OFFSET" ), AseParser_MapDiffuseUOffset );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_V_OFFSET" ), AseParser_MapDiffuseVOffset );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_U_TILING" ), AseParser_MapDiffuseUTiling );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_V_TILING" ), AseParser_MapDiffuseVTiling );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_ANGLE" ), AseParser_MapDiffuseAngle );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_BLUR" ), AseParser_MapDiffuseBlur );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_BLUR_OFFSET" ), AseParser_MapDiffuseBlurOffset );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOUSE_AMT" ), AseParser_MapDiffuseNouseAMT );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOISE_SIZE" ), AseParser_MapDiffuseNoiseSize );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOISE_LEVEL" ), AseParser_MapDiffuseNoiseLevel );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOISE_PHASE" ), AseParser_MapDiffuseNoisePhase );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*BITMAP_FILTER" ), AseParser_MapDiffuseFilter );
-		AddParser( uint32_t( ASESection::eMapDiffuse ), cuT( "}" ), AseParser_MapDiffuseEnd );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "*NODE_NAME" ), AseParser_GeometryNodeName );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "*NODE_TM" ), AseParser_GeometryNodeTM );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "*MESH" ), AseParser_GeometryMesh );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "*PROP_MOTIONBLUR" ), AseParser_GeometryMotionBlur );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "*PROP_CASTSHADOW" ), AseParser_GeometryCastShadow );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "*PROP_RECVSHADOW" ), AseParser_GeometryRecvShadow );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "*MATERIAL_REF" ), AseParser_GeometryMaterialRef );
-		AddParser( uint32_t( ASESection::eGeometry ), cuT( "}" ), AseParser_GeometryEnd );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*NODE_NAME" ), AseParser_GeoNodeName );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*INHERIT_POS" ), AseParser_GeoNodeInheritPos );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*INHERIT_ROT" ), AseParser_GeoNodeInheritRot );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*INHERIT_SCL" ), AseParser_GeoNodeInheritScl );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW0" ), AseParser_GeoNodeRow0 );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW1" ), AseParser_GeoNodeRow1 );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW2" ), AseParser_GeoNodeRow2 );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW3" ), AseParser_GeoNodeRow3 );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_POS" ), AseParser_GeoNodePos );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROTAXIS" ), AseParser_GeoNodeRotAxis );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROTANGLE" ), AseParser_GeoNodeRotAngle );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_SCALE" ), AseParser_GeoNodeScale );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_SCALEAXIS" ), AseParser_GeoNodeScaleAxis );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_SCALEAXISANG" ), AseParser_GeoNodeScaleAngle );
-		AddParser( uint32_t( ASESection::eGeoNode ), cuT( "}" ), AseParser_GeoNodeEnd );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*TIMEVALUE" ), AseParser_GeoMeshTimeValue );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMVERTEX" ), AseParser_GeoMeshNumVertex );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_VERTEX_LIST" ), AseParser_GeoMeshVertexList );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMFACES" ), AseParser_GeoMeshNumFaces );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_FACE_LIST" ), AseParser_GeoMeshFaceList );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMTVERTEX" ), AseParser_GeoMeshNumTVertex );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_TVERTLIST" ), AseParser_GeoMeshTVertexList );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMTVFACES" ), AseParser_GeoMeshNumTFaces );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_TFACELIST" ), AseParser_GeoMeshTFaceList );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMCVERTEX" ), AseParser_GeoMeshNumCVertex );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_CVERTLIST" ), AseParser_GeoMeshCVertexList );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMCVFACES" ), AseParser_GeoMeshNumCFaces );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_CFACELIST" ), AseParser_GeoMeshCFaceList );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NORMALS" ), AseParser_GeoMeshNormals );
-		AddParser( uint32_t( ASESection::eGeoMesh ), cuT( "}" ), AseParser_GeoMeshEnd );
-		AddParser( uint32_t( ASESection::eVertexList ), cuT( "*MESH_VERTEX" ), AseParser_VertexListVertex );
-		AddParser( uint32_t( ASESection::eVertexList ), cuT( "}" ), AseParser_VertexListEnd );
-		AddParser( uint32_t( ASESection::eFaceList ), cuT( "*MESH_FACE" ), AseParser_FaceListFace );
-		AddParser( uint32_t( ASESection::eFaceList ), cuT( "}" ), AseParser_FaceListEnd );
-		AddParser( uint32_t( ASESection::eTVertexList ), cuT( "*MESH_TVERT" ), AseParser_TVertexListVertex );
-		AddParser( uint32_t( ASESection::eTVertexList ), cuT( "}" ), AseParser_TVertexListEnd );
-		AddParser( uint32_t( ASESection::eTFaceList ), cuT( "*MESH_TFACE" ), AseParser_TFaceListFace );
-		AddParser( uint32_t( ASESection::eTFaceList ), cuT( "}" ), AseParser_TFaceListEnd );
-		AddParser( uint32_t( ASESection::eCVertexList ), cuT( "*MESH_CVERT" ), AseParser_CVertexListVertex );
-		AddParser( uint32_t( ASESection::eCVertexList ), cuT( "}" ), AseParser_CVertexListEnd );
-		AddParser( uint32_t( ASESection::eCFaceList ), cuT( "*MESH_CFACE" ), AseParser_CFaceListFace );
-		AddParser( uint32_t( ASESection::eCFaceList ), cuT( "}" ), AseParser_CFaceListEnd );
-		AddParser( uint32_t( ASESection::eNormalsList ), cuT( "*MESH_FACENORMAL" ), AseParser_NormalsListFaceNormal );
-		AddParser( uint32_t( ASESection::eNormalsList ), cuT( "*MESH_VERTEXNORMAL" ), AseParser_NormalsListVertexNormal );
-		AddParser( uint32_t( ASESection::eNormalsList ), cuT( "}" ), AseParser_NormalsListEnd );
+		addParser( uint32_t( ASESection::eRoot ), cuT( "*3DSMAX_ASCIIEXPORT" ), AseparserRootFormat );
+		addParser( uint32_t( ASESection::eRoot ), cuT( "*COMMENT" ), AseparserRootComment );
+		addParser( uint32_t( ASESection::eRoot ), cuT( "*SCENE" ), AseparserRootScene );
+		addParser( uint32_t( ASESection::eRoot ), cuT( "*MATERIAL_LIST" ), AseparserRootMaterials );
+		addParser( uint32_t( ASESection::eRoot ), cuT( "*GEOMOBJECT" ), AseparserRootGeometry );
+		addParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_FILENAME" ), AseparserSceneFileName );
+		addParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_FIRSTFRAME" ), AseparserSceneFirstFrame );
+		addParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_LASTFRAME" ), AseparserSceneLastFrame );
+		addParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_FRAMESPEED" ), AseparserSceneFrameSpeed );
+		addParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_TICKSPERFRAME" ), AseparserSceneTicksPerFrame );
+		addParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_BACKGROUND_STATIC" ), AseparserSceneBgColour );
+		addParser( uint32_t( ASESection::eScene ), cuT( "*SCENE_AMBIENT_STATIC" ), AseparserSceneAmbientLight );
+		addParser( uint32_t( ASESection::eScene ), cuT( "}" ), AseparserSceneEnd );
+		addParser( uint32_t( ASESection::eMaterials ), cuT( "*MATERIAL_COUNT" ), AseparserMaterialsCount );
+		addParser( uint32_t( ASESection::eMaterials ), cuT( "*MATERIAL" ), AseparserMaterialsMat );
+		addParser( uint32_t( ASESection::eMaterials ), cuT( "}" ), AseparserMaterialsEnd );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_NAME" ), AseparserMaterialName );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_CLASS" ), AseparserMaterialClass );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_DIFFUSE" ), AseparserMaterialDiffuse );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SPECULAR" ), AseparserMaterialSpecular );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SHINE" ), AseparserMaterialShine );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SHINESTRENGTH" ), AseparserMaterialShineStrength );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_TRANSPARENCY" ), AseparserMaterialTransparency );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_WIRESIZE" ), AseparserMaterialWiresize );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SHADING" ), AseparserMaterialShading );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_XP_FALLOFF" ), AseparserMaterialXPFalloff );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SELFILLUM" ), AseparserMaterialSelfillum );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_FALLOFF" ), AseparserMaterialFalloff );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_XP_TYPE" ), AseparserMaterialXPType );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*SUBMATERIAL" ), AseparserMaterialSubmat );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "*MAP_DIFFUSE" ), AseparserMaterialMapDiffuse );
+		addParser( uint32_t( ASESection::eMaterial ), cuT( "}" ), AseparserMaterialEnd );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_NAME" ), AseparserSubMaterialName );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_CLASS" ), AseparserMaterialClass );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_DIFFUSE" ), AseparserMaterialDiffuse );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SPECULAR" ), AseparserMaterialSpecular );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SHINE" ), AseparserMaterialShine );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SHINESTRENGTH" ), AseparserMaterialShineStrength );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_TRANSPARENCY" ), AseparserMaterialTransparency );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_WIRESIZE" ), AseparserMaterialWiresize );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SHADING" ), AseparserMaterialShading );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_XP_FALLOFF" ), AseparserMaterialXPFalloff );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SELFILLUM" ), AseparserMaterialSelfillum );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_FALLOFF" ), AseparserMaterialFalloff );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_XP_TYPE" ), AseparserMaterialXPType );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "*MAP_DIFFUSE" ), AseparserMaterialMapDiffuse );
+		addParser( uint32_t( ASESection::eSubmat ), cuT( "}" ), AseparserSubMaterialEnd );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_NAME" ), AseparserMapDiffuseName );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_CLASS" ), AseparserMapDiffuseClass );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_SUBNO" ), AseparserMapDiffuseSubno );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_AMOUNT" ), AseparserMapDiffuseAmount );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*BITMAP" ), AseparserMapDiffuseBitmap );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*MAP_TYPE" ), AseparserMapDiffuseType );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_U_OFFSET" ), AseparserMapDiffuseUOffset );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_V_OFFSET" ), AseparserMapDiffuseVOffset );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_U_TILING" ), AseparserMapDiffuseUTiling );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_V_TILING" ), AseparserMapDiffuseVTiling );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_ANGLE" ), AseparserMapDiffuseAngle );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_BLUR" ), AseparserMapDiffuseBlur );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_BLUR_OFFSET" ), AseparserMapDiffuseBlurOffset );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOUSE_AMT" ), AseparserMapDiffuseNouseAMT );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOISE_SIZE" ), AseparserMapDiffuseNoiseSize );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOISE_LEVEL" ), AseparserMapDiffuseNoiseLevel );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*UVW_NOISE_PHASE" ), AseparserMapDiffuseNoisePhase );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "*BITMAP_FILTER" ), AseparserMapDiffuseFilter );
+		addParser( uint32_t( ASESection::eMapDiffuse ), cuT( "}" ), AseparserMapDiffuseEnd );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "*NODE_NAME" ), AseparserGeometryNodeName );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "*NODE_TM" ), AseparserGeometryNodeTM );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "*MESH" ), AseparserGeometryMesh );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "*PROP_MOTIONBLUR" ), AseparserGeometryMotionBlur );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "*PROP_CASTSHADOW" ), AseparserGeometryCastShadow );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "*PROP_RECVSHADOW" ), AseparserGeometryRecvShadow );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "*MATERIAL_REF" ), AseparserGeometryMaterialRef );
+		addParser( uint32_t( ASESection::eGeometry ), cuT( "}" ), AseparserGeometryEnd );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*NODE_NAME" ), AseparserGeoNodeName );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*INHERIT_POS" ), AseparserGeoNodeInheritPos );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*INHERIT_ROT" ), AseparserGeoNodeInheritRot );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*INHERIT_SCL" ), AseparserGeoNodeInheritScl );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW0" ), AseparserGeoNodeRow0 );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW1" ), AseparserGeoNodeRow1 );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW2" ), AseparserGeoNodeRow2 );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROW3" ), AseparserGeoNodeRow3 );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_POS" ), AseparserGeoNodePos );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROTAXIS" ), AseparserGeoNodeRotAxis );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_ROTANGLE" ), AseparserGeoNodeRotAngle );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_SCALE" ), AseparserGeoNodeScale );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_SCALEAXIS" ), AseparserGeoNodeScaleAxis );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "*TM_SCALEAXISANG" ), AseparserGeoNodeScaleAngle );
+		addParser( uint32_t( ASESection::eGeoNode ), cuT( "}" ), AseparserGeoNodeEnd );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*TIMEVALUE" ), AseparserGeoMeshTimeValue );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMVERTEX" ), AseparserGeoMeshNumVertex );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_VERTEX_LIST" ), AseparserGeoMeshVertexList );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMFACES" ), AseparserGeoMeshNumFaces );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_FACE_LIST" ), AseparserGeoMeshFaceList );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMTVERTEX" ), AseparserGeoMeshNumTVertex );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_TVERTLIST" ), AseparserGeoMeshTVertexList );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMTVFACES" ), AseparserGeoMeshNumTFaces );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_TFACELIST" ), AseparserGeoMeshTFaceList );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMCVERTEX" ), AseparserGeoMeshNumCVertex );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_CVERTLIST" ), AseparserGeoMeshCVertexList );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NUMCVFACES" ), AseparserGeoMeshNumCFaces );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_CFACELIST" ), AseparserGeoMeshCFaceList );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "*MESH_NORMALS" ), AseparserGeoMeshNormals );
+		addParser( uint32_t( ASESection::eGeoMesh ), cuT( "}" ), AseparserGeoMeshEnd );
+		addParser( uint32_t( ASESection::eVertexList ), cuT( "*MESH_VERTEX" ), AseparserVertexListVertex );
+		addParser( uint32_t( ASESection::eVertexList ), cuT( "}" ), AseparserVertexListEnd );
+		addParser( uint32_t( ASESection::eFaceList ), cuT( "*MESH_FACE" ), AseparserFaceListFace );
+		addParser( uint32_t( ASESection::eFaceList ), cuT( "}" ), AseparserFaceListEnd );
+		addParser( uint32_t( ASESection::eTVertexList ), cuT( "*MESH_TVERT" ), AseparserTVertexListVertex );
+		addParser( uint32_t( ASESection::eTVertexList ), cuT( "}" ), AseparserTVertexListEnd );
+		addParser( uint32_t( ASESection::eTFaceList ), cuT( "*MESH_TFACE" ), AseparserTFaceListFace );
+		addParser( uint32_t( ASESection::eTFaceList ), cuT( "}" ), AseparserTFaceListEnd );
+		addParser( uint32_t( ASESection::eCVertexList ), cuT( "*MESH_CVERT" ), AseparserCVertexListVertex );
+		addParser( uint32_t( ASESection::eCVertexList ), cuT( "}" ), AseparserCVertexListEnd );
+		addParser( uint32_t( ASESection::eCFaceList ), cuT( "*MESH_CFACE" ), AseparserCFaceListFace );
+		addParser( uint32_t( ASESection::eCFaceList ), cuT( "}" ), AseparserCFaceListEnd );
+		addParser( uint32_t( ASESection::eNormalsList ), cuT( "*MESH_FACENORMAL" ), AseparserNormalsListFaceNormal );
+		addParser( uint32_t( ASESection::eNormalsList ), cuT( "*MESH_VERTEXNORMAL" ), AseparserNormalsListVertexNormal );
+		addParser( uint32_t( ASESection::eNormalsList ), cuT( "}" ), AseparserNormalsListEnd );
 		std::shared_ptr< AseFileContext > pContext = std::make_shared< AseFileContext >( this, m_importer, &p_file, m_scene, m_mesh );
 		m_context = std::static_pointer_cast< FileParserContext >( pContext );
-		pContext->Initialise();
+		pContext->initialise();
 		pContext->strName.clear();
 	}
 
-	void AseFileParser::DoCleanupParser()
+	void AseFileParser::doCleanupParser()
 	{
 	}
 
-	bool AseFileParser::DoDiscardParser( String const & p_strLine )
+	bool AseFileParser::doDiscardParser( String const & p_strLine )
 	{
 		StringStream strToLog( cuT( "Parser not found @ line #" ) );
-		Logger::LogWarning( strToLog << m_context->m_line << cuT( " : " ) << p_strLine );
+		Logger::logWarning( strToLog << m_context->m_line << cuT( " : " ) << p_strLine );
 		return false;
 	}
 
-	void AseFileParser::DoValidate()
+	void AseFileParser::doValidate()
 	{
 	}
 
-	String AseFileParser::DoGetSectionName( uint32_t p_section )
+	String AseFileParser::doGetSectionName( uint32_t p_section )
 	{
 		String result;
 
@@ -322,218 +322,218 @@ namespace Ase
 		return result;
 	}
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_RootFormat )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserRootFormat )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_RootComment )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserRootComment )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_RootScene )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserRootScene )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eScene )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_RootMaterials )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserRootMaterials )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eMaterials )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_RootGeometry )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserRootGeometry )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 
 		if ( pContext->pMesh )
 		{
-			p_parser->Ignore();
+			p_parser->ignore();
 			PARSING_WARNING( cuT( "No scene initialised." ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eGeometry )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneFileName )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneFileName )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneFirstFrame )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneFirstFrame )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneLastFrame )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneLastFrame )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneFrameSpeed )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneFrameSpeed )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneTicksPerFrame )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneTicksPerFrame )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneBgColour )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneBgColour )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneAmbientLight )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneAmbientLight )
 	{
 		Colour colour;
 		Point3f ptColour;
-		p_params[0]->Get( ptColour );
-		colour.from_rgb( ptColour );
-		std::static_pointer_cast< AseFileContext >( p_context )->scene.SetAmbientLight( colour );
+		p_params[0]->get( ptColour );
+		colour.fromRGB( ptColour );
+		std::static_pointer_cast< AseFileContext >( p_context )->scene.setAmbientLight( colour );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SceneEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSceneEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialsCount )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialsCount )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialsMat )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialsMat )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		p_params[0]->Get( pContext->uiUInt32 );
+		p_params[0]->get( pContext->uiUInt32 );
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eMaterial )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialsEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialsEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialSubmat )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialSubmat )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		pContext->pMaterial->CreatePass();
-		pContext->pPass = pContext->pMaterial->GetTypedPass< MaterialType::eLegacy >( pContext->pMaterial->GetPassCount() - 1 );
+		pContext->pMaterial->createPass();
+		pContext->pPass = pContext->pMaterial->getTypedPass< MaterialType::eLegacy >( pContext->pMaterial->getPassCount() - 1 );
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eSubmat )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialName )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialName )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		Engine * pEngine = pContext->scene.GetEngine();
-		auto & cache = pContext->scene.GetMaterialView();
+		Engine * pEngine = pContext->scene.getEngine();
+		auto & cache = pContext->scene.getMaterialView();
 		String strName;
-		p_params[0]->Get( strName );
+		p_params[0]->get( strName );
 		string::replace( strName, cuT( "\"" ), cuT( "" ) );
-		MaterialSPtr pMaterial = cache.Find( strName );
+		MaterialSPtr pMaterial = cache.find( strName );
 
 		if ( !pMaterial )
 		{
-			pMaterial = cache.Add( strName, MaterialType::eLegacy );
-			pMaterial->CreatePass();
+			pMaterial = cache.add( strName, MaterialType::eLegacy );
+			pMaterial->createPass();
 		}
 		
-		REQUIRE( pMaterial->GetType() == MaterialType::eLegacy );
+		REQUIRE( pMaterial->getType() == MaterialType::eLegacy );
 		pContext->pMaterial = pMaterial;
-		pContext->pPass = pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
-		pContext->pPass->SetTwoSided( true );
+		pContext->pPass = pMaterial->getTypedPass< MaterialType::eLegacy >( 0u );
+		pContext->pPass->setTwoSided( true );
 		pContext->m_mapMaterials.insert( std::make_pair( pContext->uiUInt32, pMaterial ) );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialClass )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialClass )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialDiffuse )
-	{
-		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		Colour colour;
-		Point3f ptColour;
-		p_params[0]->Get( ptColour );
-		colour.from_rgb( ptColour );
-		pContext->pPass->SetDiffuse( colour );
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialSpecular )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialDiffuse )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		Colour colour;
 		Point3f ptColour;
-		p_params[0]->Get( ptColour );
-		colour.from_rgb( ptColour );
-		pContext->pPass->SetSpecular( colour );
+		p_params[0]->get( ptColour );
+		colour.fromRGB( ptColour );
+		pContext->pPass->setDiffuse( colour );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialShine )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialSpecular )
+	{
+		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
+		Colour colour;
+		Point3f ptColour;
+		p_params[0]->get( ptColour );
+		colour.fromRGB( ptColour );
+		pContext->pPass->setSpecular( colour );
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialShine )
 	{
 		float fValue;
-		p_params[0]->Get( fValue );
+		p_params[0]->get( fValue );
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		pContext->pPass->SetShininess( fValue * 128.0f );
+		pContext->pPass->setShininess( fValue * 128.0f );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialShineStrength )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialShineStrength )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialTransparency )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialTransparency )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		float value;
-		p_params[0]->Get( value );
-		pContext->pPass->SetOpacity( value );
+		p_params[0]->get( value );
+		pContext->pPass->setOpacity( value );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialWiresize )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialWiresize )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialShading )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialShading )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialXPFalloff )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialXPFalloff )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialSelfillum )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialSelfillum )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialFalloff )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialFalloff )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialXPType )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialXPType )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialMapDiffuse )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialMapDiffuse )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eMapDiffuse )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialEnd )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		pContext->pMaterial.reset();
@@ -541,122 +541,122 @@ namespace Ase
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SubMaterialName )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSubMaterialName )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SubMaterialEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserSubMaterialEnd )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		pContext->pPass = pContext->pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
+		pContext->pPass = pContext->pMaterial->getTypedPass< MaterialType::eLegacy >( 0u );
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseName )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseName )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseClass )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseClass )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseSubno )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseSubno )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseAmount )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseAmount )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseBitmap )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseBitmap )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		Path path;
-		p_params[0]->Get( path );
-		pContext->m_importer.LoadTexture( path, *pContext->pPass, TextureChannel::eDiffuse );
+		p_params[0]->get( path );
+		pContext->m_importer.loadTexture( path, *pContext->pPass, TextureChannel::eDiffuse );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseType )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseType )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseUOffset )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseUOffset )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseVOffset )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseVOffset )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseUTiling )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseUTiling )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseVTiling )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseVTiling )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseAngle )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseAngle )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseBlur )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseBlur )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseBlurOffset )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseBlurOffset )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseNouseAMT )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseNouseAMT )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseNoiseSize )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseNoiseSize )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseNoiseLevel )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseNoiseLevel )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseNoisePhase )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseNoisePhase )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseFilter )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseFilter )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MapDiffuseEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMapDiffuseEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryNodeName )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryNodeName )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		Engine * pEngine = pContext->scene.GetEngine();
-		p_params[0]->Get( pContext->strName );
+		Engine * pEngine = pContext->scene.getEngine();
+		p_params[0]->get( pContext->strName );
 
 		if ( pContext->mesh )
 		{
@@ -664,42 +664,42 @@ namespace Ase
 		}
 		else
 		{
-			pContext->pMesh = pContext->scene.GetMeshCache().Add( pContext->strName ).get();
+			pContext->pMesh = pContext->scene.getMeshCache().add( pContext->strName ).get();
 		}
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryNodeTM )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryNodeTM )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eGeoNode )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryMesh )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryMesh )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		pContext->pSubmesh = pContext->pMesh->CreateSubmesh();
+		pContext->pSubmesh = pContext->pMesh->createSubmesh();
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eGeoMesh )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryMotionBlur )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryMotionBlur )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryCastShadow )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryCastShadow )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryRecvShadow )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryRecvShadow )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryMaterialRef )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryMaterialRef )
 	{
 		uint32_t uiMaterialId;
-		p_params[0]->Get( uiMaterialId );
+		p_params[0]->get( uiMaterialId );
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		MaterialPtrUIntMap::const_iterator it = pContext->m_mapMaterials.find( uiMaterialId );
 
@@ -707,319 +707,319 @@ namespace Ase
 		{
 			for ( auto submesh : *pContext->pMesh )
 			{
-				submesh->SetDefaultMaterial( it->second );
+				submesh->setDefaultMaterial( it->second );
 			}
 		}
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeometryEnd )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 
 		for ( auto submesh : *pContext->pMesh )
 		{
-			submesh->ComputeNormals();
-			pContext->pMesh->GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *submesh ) );
+			submesh->computeNormals();
+			pContext->pMesh->getScene()->getListener().postEvent( MakeInitialiseEvent( *submesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeName )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeName )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		String strValue;
-		p_params[0]->Get( strValue );
-		pContext->pSceneNode = pContext->scene.GetSceneNodeCache().Add( strValue, SceneNodeSPtr{} );
+		p_params[0]->get( strValue );
+		pContext->pSceneNode = pContext->scene.getSceneNodeCache().add( strValue, SceneNodeSPtr{} );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeInheritPos )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeInheritPos )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeInheritRot )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeInheritRot )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeInheritScl )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeInheritScl )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeRow0 )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeRow0 )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeRow1 )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeRow1 )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeRow2 )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeRow2 )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeRow3 )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeRow3 )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodePos )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodePos )
 	{
 		Point3f position;
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		p_params[0]->Get( position );
-		pContext->pSceneNode->SetPosition( position );
+		p_params[0]->get( position );
+		pContext->pSceneNode->setPosition( position );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeRotAxis )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeRotAxis )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		Point3f value;
-		p_params[0]->Get( value );
-		std::memcpy( pContext->fAxis, value.const_ptr(), sizeof( float ) * 3 );
+		p_params[0]->get( value );
+		std::memcpy( pContext->fAxis, value.constPtr(), sizeof( float ) * 3 );
 		pContext->bBool1 = true;
 
 		if ( pContext->bBool2 )
 		{
 			Quaternion quat;
-			quat.from_axis_angle( Point3r( pContext->fAxis[0], pContext->fAxis[1], pContext->fAxis[2] ), Angle::from_radians( pContext->fAngle ) );
-			pContext->pSceneNode->SetOrientation( quat );
+			quat.fromAxisAngle( Point3r( pContext->fAxis[0], pContext->fAxis[1], pContext->fAxis[2] ), Angle::fromRadians( pContext->fAngle ) );
+			pContext->pSceneNode->setOrientation( quat );
 		}
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeRotAngle )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeRotAngle )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		p_params[0]->Get( pContext->fAngle );
+		p_params[0]->get( pContext->fAngle );
 		pContext->bBool2 = true;
 
 		if ( pContext->bBool1 )
 		{
 			Quaternion quat;
-			quat.from_axis_angle( Point3r( pContext->fAxis[0], pContext->fAxis[1], pContext->fAxis[2] ), Angle::from_radians( pContext->fAngle ) );
-			pContext->pSceneNode->SetOrientation( quat );
+			quat.fromAxisAngle( Point3r( pContext->fAxis[0], pContext->fAxis[1], pContext->fAxis[2] ), Angle::fromRadians( pContext->fAngle ) );
+			pContext->pSceneNode->setOrientation( quat );
 		}
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeScale )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeScale )
 	{
 		Point3f scale;
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		p_params[0]->Get( scale );
-		pContext->pSceneNode->SetScale( scale );
+		p_params[0]->get( scale );
+		pContext->pSceneNode->setScale( scale );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeScaleAxis )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeScaleAxis )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeScaleAngle )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeScaleAngle )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoNodeEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoNodeEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshTimeValue )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshTimeValue )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshNumVertex )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshNumVertex )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshVertexList )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshVertexList )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eVertexList )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshNumFaces )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshNumFaces )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshFaceList )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshFaceList )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eFaceList )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshNumTVertex )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshNumTVertex )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshTVertexList )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshTVertexList )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eTVertexList )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshNumTFaces )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshNumTFaces )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshTFaceList )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshTFaceList )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eTFaceList )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshNumCVertex )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshNumCVertex )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshCVertexList )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshCVertexList )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshNumCFaces )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshNumCFaces )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshCFaceList )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshCFaceList )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eCFaceList )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshNormals )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshNormals )
 	{
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eNormalsList )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeoMeshEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserGeoMeshEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_VertexListVertex )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserVertexListVertex )
 	{
 		uint32_t uiIndex;
 		float vertex[3];
 		String strParams;
-		p_params[0]->Get( strParams );
+		p_params[0]->get( strParams );
 		RetrieveVertex( uiIndex, vertex, strParams );
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		pContext->pSubmesh->AddPoint( vertex );
+		pContext->pSubmesh->addPoint( vertex );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_VertexListEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserVertexListEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_FaceListFace )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserFaceListFace )
 	{
 		int index[3];
 		String strParams;
-		p_params[0]->Get( strParams );
+		p_params[0]->get( strParams );
 		RetrieveFace( index, strParams );
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		pContext->pSubmesh->AddFace( index[0], index[1], index[2] );
+		pContext->pSubmesh->addFace( index[0], index[1], index[2] );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_FaceListEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserFaceListEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_TVertexListVertex )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserTVertexListVertex )
 	{
 		uint32_t uiIndex;
 		float vertex[3];
 		String strParams;
-		p_params[0]->Get( strParams );
+		p_params[0]->get( strParams );
 		RetrieveVertex( uiIndex, vertex, strParams );
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		pContext->m_arrayTexCoords.push_back( std::make_shared< Point3r >( vertex[0], vertex[1], vertex[2] ) );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_TVertexListEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserTVertexListEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_TFaceListFace )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserTFaceListFace )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		int index[4];
 		String strParams;
-		p_params[0]->Get( strParams );
+		p_params[0]->get( strParams );
 		Read4Ints( index, strParams );
-		Face face = pContext->pSubmesh->GetFace( index[0] );
-		Vertex::SetTexCoord( pContext->pSubmesh->GetPoint( face[0] ), pContext->m_arrayTexCoords[ index[1] ]->at( 0 ), pContext->m_arrayTexCoords[ index[1] ]->at( 1 ) );
-		Vertex::SetTexCoord( pContext->pSubmesh->GetPoint( face[1] ), pContext->m_arrayTexCoords[ index[2] ]->at( 0 ), pContext->m_arrayTexCoords[ index[2] ]->at( 1 ) );
-		Vertex::SetTexCoord( pContext->pSubmesh->GetPoint( face[2] ), pContext->m_arrayTexCoords[ index[3] ]->at( 0 ), pContext->m_arrayTexCoords[ index[3] ]->at( 1 ) );
+		Face face = pContext->pSubmesh->getFace( index[0] );
+		Vertex::setTexCoord( pContext->pSubmesh->getPoint( face[0] ), pContext->m_arrayTexCoords[ index[1] ]->at( 0 ), pContext->m_arrayTexCoords[ index[1] ]->at( 1 ) );
+		Vertex::setTexCoord( pContext->pSubmesh->getPoint( face[1] ), pContext->m_arrayTexCoords[ index[2] ]->at( 0 ), pContext->m_arrayTexCoords[ index[2] ]->at( 1 ) );
+		Vertex::setTexCoord( pContext->pSubmesh->getPoint( face[2] ), pContext->m_arrayTexCoords[ index[3] ]->at( 0 ), pContext->m_arrayTexCoords[ index[3] ]->at( 1 ) );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_TFaceListEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserTFaceListEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_CVertexListVertex )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserCVertexListVertex )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_CVertexListEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserCVertexListEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_CFaceListFace )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserCFaceListFace )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_CFaceListEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserCFaceListEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_NormalsListFaceNormal )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserNormalsListFaceNormal )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		uint32_t uiIndex;
 		float vertex[3];
 		String strParams;
-		p_params[0]->Get( strParams );
+		p_params[0]->get( strParams );
 		RetrieveVertex( uiIndex, vertex, strParams );
-		Face  face = pContext->pSubmesh->GetFace( uiIndex );
-		Vertex::SetNormal( pContext->pSubmesh->GetPoint( face[0] ), vertex[0], vertex[1], vertex[2] );
-		Vertex::SetNormal( pContext->pSubmesh->GetPoint( face[1] ), vertex[0], vertex[1], vertex[2] );
-		Vertex::SetNormal( pContext->pSubmesh->GetPoint( face[2] ), vertex[0], vertex[1], vertex[2] );
+		Face  face = pContext->pSubmesh->getFace( uiIndex );
+		Vertex::setNormal( pContext->pSubmesh->getPoint( face[0] ), vertex[0], vertex[1], vertex[2] );
+		Vertex::setNormal( pContext->pSubmesh->getPoint( face[1] ), vertex[0], vertex[1], vertex[2] );
+		Vertex::setNormal( pContext->pSubmesh->getPoint( face[2] ), vertex[0], vertex[1], vertex[2] );
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_NormalsListVertexNormal )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserNormalsListVertexNormal )
 	{
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_NormalsListEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( AseparserNormalsListEnd )
 	{
 	}
 	END_ATTRIBUTE_POP()

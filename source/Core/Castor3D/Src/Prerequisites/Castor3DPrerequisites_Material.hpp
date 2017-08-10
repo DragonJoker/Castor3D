@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PREREQUISITES_MATERIAL_H___
 #define ___C3D_PREREQUISITES_MATERIAL_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Material */
 	//@{
@@ -522,7 +522,7 @@ namespace Castor3D
 	//! uint32_t array
 	DECLARE_VECTOR( uint32_t, UInt );
 	//! Material pointer map, sorted by name
-	DECLARE_MAP( Castor::String, MaterialSPtr, MaterialPtrStr );
+	DECLARE_MAP( castor::String, MaterialSPtr, MaterialPtrStr );
 	//! Material pointer map
 	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
 	//! TextureUnit reference array

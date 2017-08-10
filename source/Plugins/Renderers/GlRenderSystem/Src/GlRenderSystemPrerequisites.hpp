@@ -57,11 +57,11 @@ SOFTWARE.
 
 #define BUFFER_OFFSET( n ) ( ( uint8_t * )nullptr + ( n ) )
 
-using Castor::real;
+using castor::real;
 
 namespace GlRender
 {
-	using Castor::real;
+	using castor::real;
 
 	enum class GlProvider
 	{
@@ -366,7 +366,7 @@ namespace GlRender
 		eSubtract = 0x84E7,
 		eAddSigned = 0x8574,
 		eInterpolate = 0x8575,
-		eDot3RGB = 0x86AE,
+		edot3RGB = 0x86AE,
 		eDot3RGBA = 0x86AF,
 	};
 
@@ -1210,14 +1210,14 @@ namespace GlRender
 	class GlProgramInputLayout;
 	class GlUniformBase;
 	class GlUniformBuffer;
-	template< Castor3D::UniformType Type >
+	template< castor3d::UniformType Type >
 	class GlPushUniform;
 	DECLARE_SMART_PTR( GlUniformBase );
 	DECLARE_SMART_PTR( GlShaderObject );
 	DECLARE_SMART_PTR( GlShaderProgram );
 	DECLARE_VECTOR( GlShaderProgramSPtr, GlShaderProgramPtr );
 	DECLARE_VECTOR( GlShaderObjectSPtr, GlShaderObjectPtr );
-	DECLARE_MAP( Castor::String, GlUniformBaseSPtr, GlUniformPtrStr );
+	DECLARE_MAP( castor::String, GlUniformBaseSPtr, GlUniformPtrStr );
 
 	class GlRenderBuffer;
 	class GlColourRenderBuffer;
@@ -1263,27 +1263,27 @@ namespace GlRender
 }
 
 #	if C3DGL_DEBUG_FUNCTION_CALLS
-#		define glCheckError( gl, txt ) ( gl ).GlCheckError( txt )
+#		define glCheckError( gl, txt ) ( gl ).glCheckError( txt )
 #	else
 #		define glCheckError( gl, txt ) true
 #	endif
 
 #	if C3D_TRACE_OBJECTS
-#		define glTrack( gl, type, object ) ( gl ).Track( object, type, __FILE__, __LINE__ )
-#		define glUntrack( gl, object ) ( gl ).UnTrack( object )
+#		define glTrack( gl, type, object ) ( gl ).track( object, type, __FILE__, __LINE__ )
+#		define glUntrack( gl, object ) ( gl ).untrack( object )
 #	else
 #		define glTrack( gl, type, object )
 #		define glUntrack( gl, object )
 #	endif
 
 #	if C3DGL_CHECK_TEXTURE_UNIT
-#		define glTrackTexture( name, index ) GetOpenGl().TrackTexture( name, index )
-#		define glTrackSampler( name, index ) GetOpenGl().TrackSampler( name, index )
-#		define glCheckTextureUnits() GetOpenGl().CheckTextureUnits()
+#		define glTrackTexture( name, index ) getOpenGl().TrackTexture( name, index )
+#		define glTrackSampler( name, index ) getOpenGl().TrackSampler( name, index )
+#		define glcheckTextureUnits() getOpenGl().checkTextureUnits()
 #	else
 #		define glTrackTexture( name, index )
 #		define glTrackSampler( name, index )
-#		define glCheckTextureUnits()
+#		define glcheckTextureUnits()
 #	endif
 
 //#include "Common/OpenGl.hpp"

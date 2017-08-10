@@ -30,47 +30,47 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestShaderObject
-		: public Castor3D::ShaderObject
+		: public castor3d::ShaderObject
 	{
 		friend class TestShaderProgram;
 
-		using UIntStrMap = std::map< Castor::String, uint32_t >;
+		using UIntStrMap = std::map< castor::String, uint32_t >;
 
 	public:
 		/**
 		 * Constructor
 		 */
-		TestShaderObject( TestShaderProgram * p_parent, Castor3D::ShaderType p_type );
+		TestShaderObject( TestShaderProgram * p_parent, castor3d::ShaderType p_type );
 		/**
 		 * Destructor
 		 */
-		virtual ~TestShaderObject();
+		~TestShaderObject();
 		/**
-		 *\copydoc		Castor3D::ShaderObject::Create
+		 *\copydoc		castor3d::ShaderObject::create
 		 */
-		virtual bool Create();
+		bool create()override;
 		/**
-		 *\copydoc		Castor3D::ShaderObject::Destroy
+		 *\copydoc		castor3d::ShaderObject::Destroy
 		 */
-		virtual void Destroy();
+		void destroy()override;
 		/**
-		 *\copydoc		Castor3D::ShaderObject::Compile
+		 *\copydoc		castor3d::ShaderObject::Compile
 		 */
-		virtual bool Compile();
+		bool compile()override;
 		/**
-		 *\copydoc		Castor3D::ShaderObject::Detach
+		 *\copydoc		castor3d::ShaderObject::Detach
 		 */
-		virtual void Detach();
+		void detach()override;
 		/**
-		 *\copydoc		Castor3D::ShaderObject::AttachTo
+		 *\copydoc		castor3d::ShaderObject::attachTo
 		 */
-		virtual void AttachTo( Castor3D::ShaderProgram & p_program );
+		void attachTo( castor3d::ShaderProgram & p_program )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShaderObject::DoRetrieveCompilerLog
+		 *\copydoc		castor3d::ShaderObject::doRetrieveCompilerLog
 		 */
-		virtual Castor::String DoRetrieveCompilerLog();
+		castor::String doRetrieveCompilerLog()override;
 	};
 }
 

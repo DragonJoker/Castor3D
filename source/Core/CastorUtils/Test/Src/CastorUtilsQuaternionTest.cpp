@@ -13,24 +13,24 @@ namespace Testing
 {
 	//*********************************************************************************************
 
-	namespace matrix = Castor::matrix;
-	using Castor::real;
-	using Castor::Angle;
-	using Castor::Logger;
-	using Castor::Matrix4x4f;
-	using Castor::Matrix4x4r;
-	using Castor::Matrix4x4d;
-	using Castor::Matrix3x3f;
-	using Castor::Matrix3x3r;
-	using Castor::Matrix3x3d;
-	using Castor::Point3f;
-	using Castor::Point3r;
-	using Castor::Point3d;
-	using Castor::Point4f;
-	using Castor::Point4r;
-	using Castor::Point4d;
-	using Quaternion = Castor::QuaternionT< float >;
-	using Castor::StringStream;
+	namespace matrix = castor::matrix;
+	using castor::real;
+	using castor::Angle;
+	using castor::Logger;
+	using castor::Matrix4x4f;
+	using castor::Matrix4x4r;
+	using castor::Matrix4x4d;
+	using castor::Matrix3x3f;
+	using castor::Matrix3x3r;
+	using castor::Matrix3x3d;
+	using castor::Point3f;
+	using castor::Point3r;
+	using castor::Point3d;
+	using castor::Point4f;
+	using castor::Point4r;
+	using castor::Point4d;
+	using Quaternion = castor::QuaternionT< float >;
+	using castor::StringStream;
 
 	//*********************************************************************************************
 
@@ -43,11 +43,11 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsQuaternionTest::DoRegisterTests()
+	void CastorUtilsQuaternionTest::doRegisterTests()
 	{
 #if defined( CASTOR_USE_GLM )
 
-		DoRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsQuaternionTest::TransformationMatrixComparison, this ) );
+		doRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsQuaternionTest::TransformationMatrixComparison, this ) );
 
 #endif
 	}
@@ -56,45 +56,45 @@ namespace Testing
 
 	void CastorUtilsQuaternionTest::TransformationMatrixComparison()
 	{
-		Logger::LogInfo( cuT( "	Rotate on X" ) );
+		Logger::logInfo( cuT( "	Rotate on X" ) );
 
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r mtx( 1 );
-			matrix::rotate( mtx, Quaternion::from_axis_angle( Point3r( 1, 0, 0 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3r( 1, 0, 0 ), Angle::fromDegrees( r ) ) );
 			glm::mat4 mat;
 			mat = glm::rotate( mat, glm::radians( r ), glm::vec3( 1, 0, 0 ) );
 			CT_EQUAL( mtx, mat );
 		}
 
-		Logger::LogInfo( cuT( "	Rotate on Y" ) );
+		Logger::logInfo( cuT( "	Rotate on Y" ) );
 
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r mtx( 1 );
-			matrix::rotate( mtx, Quaternion::from_axis_angle( Point3r( 0, 1, 0 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3r( 0, 1, 0 ), Angle::fromDegrees( r ) ) );
 			glm::mat4 mat;
 			mat = glm::rotate( mat, glm::radians( r ), glm::vec3( 0, 1, 0 ) );
 			CT_EQUAL( mtx, mat );
 		}
 
-		Logger::LogInfo( cuT( "	Rotate on Z" ) );
+		Logger::logInfo( cuT( "	Rotate on Z" ) );
 
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r mtx( 1 );
-			matrix::rotate( mtx, Quaternion::from_axis_angle( Point3r( 0, 0, 1 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3r( 0, 0, 1 ), Angle::fromDegrees( r ) ) );
 			glm::mat4 mat;
 			mat = glm::rotate( mat, glm::radians( r ), glm::vec3( 0, 0, 1 ) );
 			CT_EQUAL( mtx, mat );
 		}
 
-		Logger::LogInfo( cuT( "	Rotate on All" ) );
+		Logger::logInfo( cuT( "	Rotate on All" ) );
 
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r mtx( 1 );
-			matrix::rotate( mtx, Quaternion::from_axis_angle( Point3r( 1, 1, 1 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3r( 1, 1, 1 ), Angle::fromDegrees( r ) ) );
 			glm::mat4 mat;
 			mat = glm::rotate( mat, glm::radians( r ), glm::vec3( 1, 1, 1 ) );
 			CT_EQUAL( mtx, mat );
@@ -102,24 +102,24 @@ namespace Testing
 
 #	if GLM_VERSION >= 95
 
-		Logger::LogInfo( cuT( "	Rotation" ) );
+		Logger::logInfo( cuT( "	Rotation" ) );
 
 		for ( real r = 0; r < 360; r += 1 )
 		{
-			Angle angle( Angle::from_degrees( r ) );
+			Angle angle( Angle::fromDegrees( r ) );
 			glm::mat4 glm = glm::mat4_cast( glm::normalize( glm::angleAxis( float( angle.radians() ), glm::normalize( glm::vec3( 1.0f, 1.0f, 1.0f ) ) ) ) );
 			Matrix4x4r mtx;
-			Quaternion::from_axis_angle( Point3r( 1.0_r, 1.0_r, 1.0_r ), angle ).to_matrix( mtx );
+			Quaternion::fromAxisAngle( Point3r( 1.0_r, 1.0_r, 1.0_r ), angle ).toMatrix( mtx );
 			CT_EQUAL( mtx, glm );
 		}
 
-		Logger::LogInfo( cuT( "	Transform" ) );
+		Logger::logInfo( cuT( "	Transform" ) );
 
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r mtx( 1 );
-			Angle angle( Angle::from_degrees( r ) );
-			matrix::set_transform( mtx, Point3r( r, r, -r ), Point3r( 0.3_r, 0.6_r, 1.0_r ), Quaternion::from_axis_angle( Point3r( 1.0_r, 1.0_r, 1.0_r ), angle ) );
+			Angle angle( Angle::fromDegrees( r ) );
+			matrix::setTransform( mtx, Point3r( r, r, -r ), Point3r( 0.3_r, 0.6_r, 1.0_r ), Quaternion::fromAxisAngle( Point3r( 1.0_r, 1.0_r, 1.0_r ), angle ) );
 			glm::mat4 mat( 1 );
 			{
 				// Compute transformation matrix with glm

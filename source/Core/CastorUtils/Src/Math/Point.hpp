@@ -30,7 +30,7 @@ SOFTWARE.
 #include <cmath>
 #include <iostream>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -89,7 +89,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 */
 		PointDataHolder()
-			: m_coords( AlignedAlloc< float >( 16, 16 ) )
+			: m_coords( alignedAlloc< float >( 16, 16 ) )
 		{
 		}
 		/**
@@ -100,7 +100,7 @@ namespace Castor
 		 */
 		~PointDataHolder()
 		{
-			AlignedFree( m_coords );
+			alignedFree( m_coords );
 		}
 
 	protected:
@@ -135,7 +135,7 @@ namespace Castor
 		\brief Loader de Coords< T, Count >
 		*/
 		class TextLoader
-			: public Castor::TextLoader< Point< T, Count > >
+			: public castor::TextLoader< Point< T, Count > >
 		{
 		public:
 			/**
@@ -169,7 +169,7 @@ namespace Castor
 		\brief Writer de Coords< T, Count >
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Point< T, Count > >
+			: public castor::TextWriter< Point< T, Count > >
 		{
 		public:
 			/**
@@ -317,7 +317,7 @@ namespace Castor
 		Point< T, Count > & operator=( Point< T, Count > && p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_pt	The Point object to add
 		 *\return		A reference to this Point object
 		 *\~french
@@ -329,7 +329,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pt	The Point object to substract
+		 *\param[in]	p_pt	The Point object to subtract
 		 *\return		A reference to this Point object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -361,7 +361,7 @@ namespace Castor
 		template< typename U, uint32_t _Count > Point< T, Count > & operator/=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_pt	The Point object to add
 		 *\return		A reference to this Point object
 		 *\~french
@@ -373,7 +373,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pt	The Point object to substract
+		 *\param[in]	p_pt	The Point object to subtract
 		 *\return		A reference to this Point object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -405,7 +405,7 @@ namespace Castor
 		template< typename U, uint32_t _Count > Point< T, Count > & operator/=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_coords	The values to add
 		 *\return		A reference to this Point object
 		 *\~french
@@ -417,7 +417,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_coords	The values to substract
+		 *\param[in]	p_coords	The values to subtract
 		 *\return		A reference to this Point object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -495,7 +495,7 @@ namespace Castor
 		 *\brief			Récupère les données et les place dans un tableau
 		 *\param[in,out]	p_pResult	Reçoit les données, doit être alloué par l'appelant
 		 */
-		void to_values( T * p_pResult )const;
+		void toValues( T * p_pResult )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the number of coordinates
@@ -516,17 +516,17 @@ namespace Castor
 		 *\brief		Récupère la taille du type données
 		 *\return		La taille du type de données
 		 */
-		inline std::size_t elem_size()const
+		inline std::size_t elemSize()const
 		{
 			return sizeof( T );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the point
-		 *\return		count() * elem_size()
+		 *\return		count() * elemSize()
 		 *\~french
 		 *\brief		Récupère la taille totale du point
-		 *\return		count() * elem_size()
+		 *\return		count() * elemSize()
 		 */
 		inline	std::size_t	size()const
 		{
@@ -602,7 +602,7 @@ namespace Castor
 		 *\brief		Récupère un pointeur constant sur les données
 		 *\return		Le pointeur
 		 */
-		inline T const * const_ptr()const
+		inline T const * constPtr()const
 		{
 			return &this->m_coords[0];
 		}
@@ -679,7 +679,7 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator!=( Point< T, Count > const & p_ptA, Point< U, _Count >	const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_ptA, p_ptB	The points to add
 	 *\return		The addition result
 	 *\~french
@@ -691,7 +691,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\param[in]	p_ptA, p_ptB	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -734,7 +734,7 @@ namespace Castor
 	template< typename T, typename U > Point< T, 3 > operator^( Point< T, 3 > const & p_ptA,  Point< U, 3 > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_pt		The point
 	 *\param[in]	p_coords	The values to add
 	 *\return		The addition result
@@ -749,7 +749,7 @@ namespace Castor
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_pt		The point
-	 *\param[in]	p_coords	The values to substract
+	 *\param[in]	p_coords	The values to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -834,7 +834,7 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator!=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_ptA, p_ptB	The points to add
 	 *\return		The addition result
 	 *\~french
@@ -846,7 +846,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\param[in]	p_ptA, p_ptB	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -911,7 +911,7 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator!=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_ptA, p_ptB	The points to add
 	 *\return		The addition result
 	 *\~french
@@ -923,7 +923,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\param[in]	p_ptA, p_ptB	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -1014,7 +1014,7 @@ namespace Castor
 		 *\brief		Retourne la forme normalisée d'un point
 		 *\param[in]	p_point	Le point
 		 */
-		template< typename T, uint32_t Count > static Point< T, Count > get_normalised( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static Point< T, Count > getNormalised( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1036,7 +1036,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian length of the vector
@@ -1047,7 +1047,7 @@ namespace Castor
 		 *\param[in]	p_point	Le point
 		 *\return		Le carré de la norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double length_squared( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double lengthSquared( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian length of the vector
@@ -1069,7 +1069,7 @@ namespace Castor
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Manhattan
 		 */
-		template< typename T, uint32_t Count > static double length_manhattan( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double lengthManhattan( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski length of the vector
@@ -1082,7 +1082,7 @@ namespace Castor
 		 *\param[in]	p_dOrder	L'ordre Minkownski
 		 *\return		La distance de Minkowski
 		 */
-		template< typename T, uint32_t Count > static double length_minkowski( Point< T, Count > const & p_point, double p_dOrder );
+		template< typename T, uint32_t Count > static double lengthMinkowski( Point< T, Count > const & p_point, double p_dOrder );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev length of the vector
@@ -1093,7 +1093,7 @@ namespace Castor
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Chebychev
 		 */
-		template< typename T, uint32_t Count > static double length_chebychev( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double lengthChebychev( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian distance between two points.
@@ -1104,7 +1104,7 @@ namespace Castor
 		 *\param[in]	p_lhs, p_rhs	Les points.
 		 *\return		Le carré de la norme Euclidienne.
 		 */
-		template< typename T, uint32_t Count > static double distance_squared( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs );
+		template< typename T, uint32_t Count > static double distanceSquared( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian distance between two points.
@@ -1126,7 +1126,7 @@ namespace Castor
 		 *\param[in]	p_lhs, p_rhs	Les points.
 		 *\return		La distance de Manhattan.
 		 */
-		template< typename T, uint32_t Count > static double distance_manhattan( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs );
+		template< typename T, uint32_t Count > static double distanceManhattan( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski distance between two points.
@@ -1139,7 +1139,7 @@ namespace Castor
 		 *\param[in]	p_dOrder	L'ordre Minkownski.
 		 *\return		La distance de Minkowski.
 		 */
-		template< typename T, uint32_t Count > static double distance_minkowski( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs, double p_dOrder );
+		template< typename T, uint32_t Count > static double distanceMinkowski( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs, double p_dOrder );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev distance between two points.
@@ -1150,7 +1150,7 @@ namespace Castor
 		 *\param[in]	p_lhs, p_rhs	Les points.
 		 *\return		La distance de Chebychev.
 		 */
-		template< typename T, uint32_t Count > static double distance_chebychev( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs );
+		template< typename T, uint32_t Count > static double distanceChebychev( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1172,7 +1172,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1194,7 +1194,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1216,7 +1216,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1238,7 +1238,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB );
 	}
 }
 /**
@@ -1253,7 +1253,7 @@ namespace Castor
  *\param[in]		p_pt		Le point entré
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count > Castor::String & operator<<( Castor::String & p_streamOut, Castor::Point< T, Count > const & p_pt );
+template< typename T, uint32_t Count > castor::String & operator<<( castor::String & p_streamOut, castor::Point< T, Count > const & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -1266,7 +1266,7 @@ template< typename T, uint32_t Count > Castor::String & operator<<( Castor::Stri
  *\param[in,out]	p_pt		Le point sortie
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count > Castor::String & operator>>( Castor::String & p_streamIn, Castor::Point< T, Count > & p_pt );
+template< typename T, uint32_t Count > castor::String & operator>>( castor::String & p_streamIn, castor::Point< T, Count > & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -1279,7 +1279,7 @@ template< typename T, uint32_t Count > Castor::String & operator>>( Castor::Stri
  *\param[in]		p_pt		Le point entré
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count, typename CharType > std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_streamOut, Castor::Point< T, Count > const & p_pt );
+template< typename T, uint32_t Count, typename CharType > std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_streamOut, castor::Point< T, Count > const & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -1292,7 +1292,7 @@ template< typename T, uint32_t Count, typename CharType > std::basic_ostream< Ch
  *\param[in,out]	p_pt		Le point sortie
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count, typename CharType > std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & p_streamIn, Castor::Point< T, Count > & p_pt );
+template< typename T, uint32_t Count, typename CharType > std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & p_streamIn, castor::Point< T, Count > & p_pt );
 
 #include "Point.inl"
 

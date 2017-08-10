@@ -1,7 +1,7 @@
 #include "FrameBuffer/TestTextureAttachment.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -14,32 +14,32 @@ namespace TestRender
 	{
 	}
 
-	void TestTextureAttachment::DoDownload( Castor::Position const & p_offset
-		, Castor::PxBufferBase & p_buffer )const
+	void TestTextureAttachment::doDownload( castor::Position const & p_offset
+		, castor::PxBufferBase & p_buffer )const
 	{
 	}
 
-	void TestTextureAttachment::DoAttach()
+	void TestTextureAttachment::doAttach()
 	{
 	}
 
-	void TestTextureAttachment::DoDetach()
+	void TestTextureAttachment::doDetach()
 	{
 	}
 
-	void TestTextureAttachment::DoClear( Colour const & p_colour )const
+	void TestTextureAttachment::doClear( Colour const & p_colour )const
 	{
 	}
 
-	void TestTextureAttachment::DoClear( float p_depth )const
+	void TestTextureAttachment::doClear( float p_depth )const
 	{
 	}
 
-	void TestTextureAttachment::DoClear( int p_stencil )const
+	void TestTextureAttachment::doClear( int p_stencil )const
 	{
 	}
 
-	void TestTextureAttachment::DoClear( float p_depth, int p_stencil )const
+	void TestTextureAttachment::doClear( float p_depth, int p_stencil )const
 	{
 	}
 }

@@ -11,45 +11,45 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CLogger::Initialise( /* [in] */ eLOG_TYPE level )
+	STDMETHODIMP CLogger::initialise( /* [in] */ eLOG_TYPE level )
 	{
-		Castor::Logger::Initialise( Castor::LogType( level ) );
+		castor::Logger::initialise( castor::LogType( level ) );
 		return S_OK;
 	}
 
-	STDMETHODIMP CLogger::SetFileName( /* [in] */ BSTR name, eLOG_TYPE target )
+	STDMETHODIMP CLogger::setFileName( /* [in] */ BSTR name, eLOG_TYPE target )
 	{
-		Castor::Logger::SetFileName( FromBstr( name ), Castor::LogType( target ) );
+		castor::Logger::setFileName( FromBstr( name ), castor::LogType( target ) );
 		return S_OK;
 	}
 
-	STDMETHODIMP CLogger::Cleanup()
+	STDMETHODIMP CLogger::cleanup()
 	{
-		Castor::Logger::Cleanup();
+		castor::Logger::cleanup();
 		return S_OK;
 	}
 
-	STDMETHODIMP CLogger::LogDebug( /* [in] */ BSTR msg )
+	STDMETHODIMP CLogger::logDebug( /* [in] */ BSTR msg )
 	{
-		Castor::Logger::LogDebug( FromBstr( msg ) );
+		castor::Logger::logDebug( FromBstr( msg ) );
 		return S_OK;
 	}
 
-	STDMETHODIMP CLogger::LogInfo( /* [in] */ BSTR msg )
+	STDMETHODIMP CLogger::logInfo( /* [in] */ BSTR msg )
 	{
-		Castor::Logger::LogInfo( FromBstr( msg ) );
+		castor::Logger::logInfo( FromBstr( msg ) );
 		return S_OK;
 	}
 
-	STDMETHODIMP CLogger::LogWarning( /* [in] */ BSTR msg )
+	STDMETHODIMP CLogger::logWarning( /* [in] */ BSTR msg )
 	{
-		Castor::Logger::LogWarning( FromBstr( msg ) );
+		castor::Logger::logWarning( FromBstr( msg ) );
 		return S_OK;
 	}
 
-	STDMETHODIMP CLogger::LogError( /* [in] */ BSTR msg )
+	STDMETHODIMP CLogger::logError( /* [in] */ BSTR msg )
 	{
-		Castor::Logger::LogError( FromBstr( msg ) );
+		castor::Logger::logError( FromBstr( msg ) );
 		return S_OK;
 	}
 

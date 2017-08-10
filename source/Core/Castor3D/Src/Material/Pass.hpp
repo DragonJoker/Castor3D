@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Design/Signal.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -40,11 +40,11 @@ namespace Castor3D
 	\brief		Classe de base d'une passe d'un matériau.
 	*/
 	class Pass
-		: public Castor::OwnedBy< Material >
+		: public castor::OwnedBy< Material >
 	{
 	public:
 		using Changed = std::function< void( Pass const & ) >;
-		using OnChanged = Castor::Signal< Changed >;
+		using OnChanged = castor::Signal< Changed >;
 		using OnChangedConnection = OnChanged::connection;
 
 	public:
@@ -58,7 +58,7 @@ namespace Castor3D
 		\brief Loader de Pass.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Pass >
+			: public castor::TextWriter< Pass >
 		{
 		public:
 			/**
@@ -67,7 +67,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a Pass into a text file.
@@ -78,7 +78,7 @@ namespace Castor3D
 			 *\param[in]		pass	La Pass à écrire.
 			 *\param[in,out]	file	Le file où écrire la Pass.
 			 */
-			C3D_API bool operator()( Pass const & pass, Castor::TextFile & file )override;
+			C3D_API bool operator()( Pass const & pass, castor::TextFile & file )override;
 		};
 
 	protected:
@@ -106,37 +106,37 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la passe et toutes ses dépendances.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass and all it's dependencies.
 		 *\~french
 		 *\brief		Nettoie la passe et toutes ses dépendances.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Binds the pass' textures.
 		 *\~french
 		 *\brief		Active les textures de la passe.
 		 */
-		C3D_API void BindTextures();
+		C3D_API void bindTextures();
 		/**
 		 *\~english
 		 *\brief		Unbinds the pass' textures.
 		 *\~french
 		 *\brief		Désactive les textures de la passe.
 		 */
-		C3D_API void UnbindTextures();
+		C3D_API void unbindTextures();
 		/**
 		 *\~english
-		 *\brief		Adds a texture unit.
+		 *\brief		adds a texture unit.
 		 *\param[in]	p_unit	The texture unit.
 		 *\~french
 		 *\brief		Ajoute une unité de texture.
 		 *\param[in]	p_unit	L'unité de texture.
 		 */
-		C3D_API void AddTextureUnit( TextureUnitSPtr p_unit );
+		C3D_API void addTextureUnit( TextureUnitSPtr p_unit );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at wanted channel.
@@ -149,7 +149,7 @@ namespace Castor3D
 		 *\param[in]	channel	Le canal.
 		 *\return		\p nullptr si pas de TextureUnit au canal voulu.
 		 */
-		C3D_API TextureUnitSPtr GetTextureUnit( TextureChannel channel )const;
+		C3D_API TextureUnitSPtr getTextureUnit( TextureChannel channel )const;
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index.
@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\brief		Détruit la TextureUnit à l'index donné.
 		 *\param[in]	index	L'index de la TextureUnit à détruire.
 		 */
-		C3D_API void DestroyTextureUnit( uint32_t index );
+		C3D_API void destroyTextureUnit( uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at the given index.
@@ -169,7 +169,7 @@ namespace Castor3D
 		 *\param[in]	index	L'index voulu.
 		 *\return		La TextureUnit récupérée, nullptr si index était hors bornes.
 		 */
-		C3D_API TextureUnitSPtr GetTextureUnit( uint32_t index )const;
+		C3D_API TextureUnitSPtr getTextureUnit( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the pass needs alpha blending.
@@ -178,37 +178,37 @@ namespace Castor3D
 		 *\brief		Dit si la passe a besoin de mélange d'alpha.
 		 *\return		\p true si au moins une unité de texture a un canal alpha.
 		 */
-		C3D_API bool HasAlphaBlending()const;
+		C3D_API bool hasAlphaBlending()const;
 		/**
 		 *\~english
 		 *\brief		Reduces the textures.
 		 *\~french
 		 *\brief		Réduit les textures.
 		 */
-		C3D_API void PrepareTextures();
+		C3D_API void prepareTextures();
 		/**
 		 *\~english
 		 *\return		The material type.
 		 *\~french
 		 *\return		Le type de matériau.
 		 */
-		C3D_API MaterialType GetType()const;
+		C3D_API MaterialType getType()const;
 		/**
 		 *\~english
-		 *\brief		Sets the global alpha value.
+		 *\brief		sets the global alpha value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur alpha globale.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void SetOpacity( float value );
+		C3D_API void setOpacity( float value );
 		/**
 		 *\~english
 		 *\return		The program flags combination.
 		 *\~french
 		 *\return		La combinaison d'indicateurs de programme.
 		 */
-		C3D_API ProgramFlags GetProgramFlags()const;
+		C3D_API ProgramFlags getProgramFlags()const;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -217,21 +217,21 @@ namespace Castor3D
 		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
 		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
 		 */
-		C3D_API virtual uint32_t GetPassSize()const = 0;
+		C3D_API virtual uint32_t getPassSize()const = 0;
 		/**
 		 *\~english
 		 *\brief		Fills shader variables of given render node.
 		 *\~french
 		 *\brief		Remplit les variables de shader du noeud de rendu donné.
 		 */
-		C3D_API virtual void Accept( PassBuffer & buffer )const = 0;
+		C3D_API virtual void accept( PassBuffer & buffer )const = 0;
 		/**
 		 *\~english
 		 *\return		The texture channels flags combination.
 		 *\~french
 		 *\return		La combinaison d'indicateurs de canal de texture.
 		 */
-		inline TextureChannels const & GetTextureFlags()const
+		inline TextureChannels const & getTextureFlags()const
 		{
 			return m_textureFlags;
 		}
@@ -241,71 +241,71 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si le shader de la passe est généré automatiquement.
 		 */
-		inline bool HasAutomaticShader()const
+		inline bool hasAutomaticShader()const
 		{
 			return m_automaticShader;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the two sided status.
+		 *\brief		sets the two sided status.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'application aux deux faces.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetTwoSided( bool value )
+		inline void setTwoSided( bool value )
 		{
 			m_twoSided = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the emissive factor.
+		 *\brief		sets the emissive factor.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le facteur d'émission.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetEmissive( float const & value )
+		inline void setEmissive( float const & value )
 		{
 			m_emissive = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the refraction ratio.
+		 *\brief		sets the refraction ratio.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le ratio de réfraction.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetRefractionRatio( float value )
+		inline void setRefractionRatio( float value )
 		{
 			m_refractionRatio = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the alpha blend mode.
+		 *\brief		sets the alpha blend mode.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le mode de mélange alpha.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetAlphaBlendMode( BlendMode value )
+		inline void setAlphaBlendMode( BlendMode value )
 		{
 			m_alphaBlendMode = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the colour blend mode.
+		 *\brief		sets the colour blend mode.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le mode de mélange couleur.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetColourBlendMode( BlendMode value )
+		inline void setColourBlendMode( BlendMode value )
 		{
 			m_colourBlendMode = value;
 			onChanged( *this );
@@ -316,7 +316,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'unités de texture.
 		 */
-		inline uint32_t GetTextureUnitsCount()const
+		inline uint32_t getTextureUnitsCount()const
 		{
 			return uint32_t( m_textureUnits.size() );
 		}
@@ -337,10 +337,10 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si l'environment mapping est activé sur cette passe.
 		 */
-		inline bool HasEnvironmentMapping()const
+		inline bool hasEnvironmentMapping()const
 		{
-			return CheckFlag( GetTextureFlags(), TextureChannel::eReflection )
-				|| CheckFlag( GetTextureFlags(), TextureChannel::eRefraction );
+			return checkFlag( getTextureFlags(), TextureChannel::eReflection )
+				|| checkFlag( getTextureFlags(), TextureChannel::eRefraction );
 		}
 		/**
 		 *\~english
@@ -348,7 +348,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La valeur globale d'opacité.
 		 */
-		inline float GetOpacity()const
+		inline float getOpacity()const
 		{
 			return m_opacity;
 		}
@@ -358,7 +358,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le facteur émission.
 		 */
-		inline float GetEmissive()const
+		inline float getEmissive()const
 		{
 			return m_emissive;
 		}
@@ -368,7 +368,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le ration de réfraction.
 		 */
-		inline float GetRefractionRatio()const
+		inline float getRefractionRatio()const
 		{
 			return m_refractionRatio;
 		}
@@ -378,7 +378,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode de mélange alpha.
 		 */
-		inline BlendMode GetAlphaBlendMode()const
+		inline BlendMode getAlphaBlendMode()const
 		{
 			return m_alphaBlendMode;
 		}
@@ -388,7 +388,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode de mélange couleur.
 		 */
-		inline BlendMode GetColourBlendMode()const
+		inline BlendMode getColourBlendMode()const
 		{
 			return m_colourBlendMode;
 		}
@@ -438,7 +438,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\pt true si la correction gamma doit être appliquée à cette passe.
 		 */
-		inline bool NeedsGammaCorrection()const
+		inline bool needsGammaCorrection()const
 		{
 			return m_needsGammaCorrection;
 		}
@@ -449,20 +449,20 @@ namespace Castor3D
 		 *\brief
 		 *\return		L'ID de la passe
 		 */
-		inline uint32_t GetId()const
+		inline uint32_t getId()const
 		{
 			return m_id;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the pass ID.
+		 *\brief		sets the pass ID.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief
 		 *\brief		Définit l'ID de la passe
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetId( uint32_t value )
+		inline void setId( uint32_t value )
 		{
 			m_id = value;
 		}
@@ -472,19 +472,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fonction d'alpha.
 		 */
-		inline Castor3D::ComparisonFunc GetAlphaFunc()const
+		inline castor3d::ComparisonFunc getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the alpha function.
+		 *\brief		sets the alpha function.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la fonction d'alpha.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetAlphaFunc( Castor3D::ComparisonFunc value )
+		inline void setAlphaFunc( castor3d::ComparisonFunc value )
 		{
 			m_alphaFunc = value;
 		}
@@ -494,19 +494,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La valeur de référence pour l'alpha.
 		 */
-		inline float GetAlphaValue()const
+		inline float getAlphaValue()const
 		{
 			return m_alphaValue;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the alpha reference value.
+		 *\brief		sets the alpha reference value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de référence pour l'alpha.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetAlphaValue( float value )
+		inline void setAlphaValue( float value )
 		{
 			m_alphaValue = value;
 		}
@@ -530,10 +530,10 @@ namespace Castor3D
 		 *\param[in,out]	opacity			Reçoit le canal alpha de la texture.
 		 *\return			\p true Si la texture possédait un canal alpha.
 		 */
-		C3D_API bool DoPrepareTexture( TextureChannel channel
+		C3D_API bool doPrepareTexture( TextureChannel channel
 			, uint32_t & index
 			, TextureUnitSPtr & opacitySource
-			, Castor::PxBufferBaseSPtr & opacity );
+			, castor::PxBufferBaseSPtr & opacity );
 		/**
 		 *\~english
 		 *\brief			Prepares a texture to be integrated to the pass.
@@ -548,7 +548,7 @@ namespace Castor3D
 		 *\param[in,out]	index	L'index de la texture.
 		 *\return			Le canal alpha de la texture originale.
 		 */
-		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( TextureChannel channel
+		C3D_API castor::PxBufferBaseSPtr doPrepareTexture( TextureChannel channel
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -562,8 +562,8 @@ namespace Castor3D
 		 *\param[in]		opacityImage	Le canal alpha de opacitySource.
 		 *\param[in,out]	index			L'index de la texture.
 		 */
-		C3D_API void DoPrepareOpacity( TextureUnitSPtr opacitySource
-			, Castor::PxBufferBaseSPtr opacityImage
+		C3D_API void doPrepareOpacity( TextureUnitSPtr opacitySource
+			, castor::PxBufferBaseSPtr opacityImage
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -571,7 +571,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour les indicateurs de texture en fonction des unités de texture.
 		 */
-		C3D_API void DoUpdateFlags();
+		C3D_API void doUpdateFlags();
 
 	private:
 		/**
@@ -580,23 +580,23 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la passe et toutes ses dépendances.
 		 */
-		virtual void DoInitialise() = 0;
+		virtual void doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass and all it's dependencies.
 		 *\~french
 		 *\brief		Nettoie la passe et toutes ses dépendances.
 		 */
-		virtual void DoCleanup() = 0;
+		virtual void doCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Sets the global alpha value.
+		 *\brief		sets the global alpha value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur alpha globale.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		virtual void DoSetOpacity( float value ) = 0;
+		virtual void doSetOpacity( float value ) = 0;
 
 	public:
 		static uint32_t constexpr PassBufferIndex = 0u;

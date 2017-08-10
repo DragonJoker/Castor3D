@@ -36,7 +36,7 @@ Resource< T >::~Resource()
 }
 
 template< class T >
-void Resource< T >::ChangeName( String const & p_name )
+void Resource< T >::changeName( String const & p_name )
 {
 	collection collection;
 

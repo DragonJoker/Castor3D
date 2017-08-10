@@ -44,8 +44,8 @@ namespace CastorGui
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		SliderCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		SliderCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id );
 
@@ -59,13 +59,13 @@ namespace CastorGui
 		 *\param[in]	p_style		The style
 		 *\param[in]	p_visible	Initial visibility status
 		 */
-		SliderCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		SliderCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id
-			, Castor::RangedValue< int32_t > const & p_value
-			, Castor::Position const & p_position
-			, Castor::Size const & p_size
+			, castor::RangedValue< int32_t > const & p_value
+			, castor::Position const & p_position
+			, castor::Size const & p_size
 			, uint32_t p_style = 0
 			, bool p_visible = true );
 
@@ -73,20 +73,20 @@ namespace CastorGui
 		*/
 		virtual ~SliderCtrl();
 
-		/** Sets the range
+		/** sets the range
 		*\param[in]	p_value		The new value
 		*/
-		void SetRange( Castor::Range< int32_t > const & p_value );
+		void setRange( castor::Range< int32_t > const & p_value );
 
-		/** Sets the caption
+		/** sets the caption
 		*\param[in]	p_value		The new value
 		*/
-		void SetValue( int32_t p_value );
+		void setValue( int32_t p_value );
 
 		/** Retrieves the range
 		 *\return		The value
 		*/
-		inline Castor::Range< int32_t > const & GetRange()const
+		inline castor::Range< int32_t > const & getRange()const
 		{
 			return m_value.range();
 		}
@@ -94,7 +94,7 @@ namespace CastorGui
 		/** Retrieves the caption
 		 *\return		The valu
 		*/
-		inline int32_t GetValue()const
+		inline int32_t getValue()const
 		{
 			return m_value.value();
 		}
@@ -104,7 +104,7 @@ namespace CastorGui
 		*\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		*/
-		inline OnSliderEventConnection Connect( SliderEvent p_event, OnSliderEventFunction p_function )
+		inline OnSliderEventConnection connect( SliderEvent p_event, OnSliderEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}
@@ -112,102 +112,102 @@ namespace CastorGui
 	private:
 		/** Updates the line and tick position and size
 		*/
-		void DoUpdateLineAndTick();
+		void doUpdateLineAndTick();
 
-		/** @copydoc CastorGui::Control::DoCreate
+		/** @copydoc CastorGui::Control::doCreate
 		*/
-		virtual void DoCreate();
+		virtual void doCreate();
 
-		/** @copydoc CastorGui::Control::DoDestroy
+		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		virtual void DoDestroy();
+		virtual void doDestroy();
 
-		/** @copydoc CastorGui::Control::DoSetPosition
+		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		virtual void DoSetPosition( Castor::Position const & p_value );
+		virtual void doSetPosition( castor::Position const & p_value );
 
-		/** @copydoc CastorGui::Control::DoSetSize
+		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		virtual void DoSetSize( Castor::Size const & p_value );
+		virtual void doSetSize( castor::Size const & p_value );
 
-		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
+		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
+		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the visibility
+		/** sets the visibility
 		 *\remarks		Used for derived control specific behaviou
 		 *\param[in]	p_value		The new value
 		 */
-		virtual void DoSetVisible( bool p_visible );
+		virtual void doSetVisible( bool p_visible );
 
-		/** @copydoc CastorGui::Control::DoUpdateStyle
+		/** @copydoc CastorGui::Control::doUpdateStyle
 		*/
-		virtual void DoUpdateStyle();
+		virtual void doUpdateStyle();
 
 		/** Event when mouse moves over the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseMove( Castor3D::MouseEvent const & p_event );
+		void onMouseMove( castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse leaves the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLeave( Castor3D::MouseEvent const & p_event );
+		void onMouseLeave( castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLButtonUp( Castor3D::MouseEvent const & p_event );
+		void onMouseLButtonUp( castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse moves over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseMove( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
+		void onTickMouseMove( ControlSPtr p_control, castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseLButtonDown( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
+		void onTickMouseLButtonDown( ControlSPtr p_control, castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseLButtonUp( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
+		void onTickMouseLButtonUp( ControlSPtr p_control, castor3d::MouseEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
+		void onKeyDown( castor3d::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnNcKeyDown( ControlSPtr p_control, Castor3D::KeyboardEvent const & p_event );
+		void onNcKeyDown( ControlSPtr p_control, castor3d::KeyboardEvent const & p_event );
 
 		/** Updates the tick position
 		 *\param[in]	p_delta		The position delta
 		 */
-		void DoUpdateTick( Castor::Position const & p_delta );
+		void doUpdateTick( castor::Position const & p_delta );
 
 		/** Updates the mouse position
 		 *\param[in]	p_mouse		The new mouse position
 		 */
-		void DoMoveMouse( Castor::Position const & p_mouse );
+		void doMoveMouse( castor::Position const & p_mouse );
 
 	private:
 		//! The slider range
-		Castor::RangedValue< int32_t > m_value;
+		castor::RangedValue< int32_t > m_value;
 		//! Tells the tick is moving
 		bool m_scrolling;
 		//! The previous mouse position
-		Castor::Position m_mouse;
+		castor::Position m_mouse;
 		//! The panel overlay used to display the line
 		StaticCtrlWPtr m_line;
 		//! The static used to display the line

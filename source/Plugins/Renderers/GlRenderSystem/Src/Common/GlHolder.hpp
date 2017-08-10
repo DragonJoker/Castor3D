@@ -60,7 +60,7 @@ namespace GlRender
 		@return
 			The instance
 		*/
-		inline OpenGl const & GetOpenGl()const
+		inline OpenGl const & getOpenGl()const
 		{
 			return m_openGl;
 		}
@@ -69,7 +69,7 @@ namespace GlRender
 		@return
 			The instance
 		*/
-		inline OpenGl & GetOpenGl()
+		inline OpenGl & getOpenGl()
 		{
 			return m_openGl;
 		}

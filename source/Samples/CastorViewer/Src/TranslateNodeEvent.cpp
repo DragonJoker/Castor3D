@@ -2,8 +2,8 @@
 
 #include <Scene/SceneNode.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace CastorViewer
 {
@@ -16,20 +16,20 @@ namespace CastorViewer
 	{
 	}
 
-	bool TranslateNodeEvent::Apply()
+	bool TranslateNodeEvent::apply()
 	{
 		SceneNodeSPtr node = m_node.lock();
 
 		if ( node )
 		{
-			Quaternion orientation = node->GetOrientation();
+			Quaternion orientation = node->getOrientation();
 			Point3r right{ 1.0_r, 0.0_r, 0.0_r };
 			Point3r up{ 0.0_r, 1.0_r, 0.0_r };
 			Point3r front{ 0.0_r, 0.0_r, 1.0_r };
 			orientation.transform( right, right );
 			orientation.transform( up, up );
 			orientation.transform( front, front );
-			node->Translate( ( right * m_dx ) + ( up * m_dy ) + ( front * m_dz ) );
+			node->translate( ( right * m_dx ) + ( up * m_dy ) + ( front * m_dz ) );
 		}
 
 		m_dx = 0;

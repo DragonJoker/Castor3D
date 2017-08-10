@@ -1,8 +1,8 @@
 ﻿#include "BufferDeclaration.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	BufferDeclaration::BufferDeclaration()
 		: BufferDeclaration( nullptr, 0 )
@@ -18,7 +18,7 @@ namespace Castor3D
 			{
 				m_arrayElements.push_back( p_elements[i] );
 				m_arrayElements[i].m_offset = m_stride;
-				m_stride += Castor3D::GetSize( m_arrayElements[i].m_dataType );
+				m_stride += castor3d::getSize( m_arrayElements[i].m_dataType );
 			}
 		}
 	}

@@ -50,7 +50,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_target	L'objet cible
 		 */
-		RenderTargetTreeItemProperty( bool p_editable, Castor3D::RenderTargetSPtr p_target );
+		RenderTargetTreeItemProperty( bool p_editable, castor3d::RenderTargetSPtr p_target );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,23 +66,23 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline Castor3D::RenderTargetSPtr GetRenderTarget()
+		inline castor3d::RenderTargetSPtr getRenderTarget()
 		{
 			return m_target.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::RenderTargetWPtr m_target;
+		castor3d::RenderTargetWPtr m_target;
 	};
 }
 

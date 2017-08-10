@@ -41,7 +41,7 @@ SOFTWARE.
 #	error "Yet unsupported OS"
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
@@ -64,7 +64,7 @@ namespace Castor3D
 			return m_hWnd != nullptr;
 		}
 
-		inline HWND GetHwnd()const
+		inline HWND getHwnd()const
 		{
 			return m_hWnd;
 		}
@@ -94,11 +94,11 @@ namespace Castor3D
 			return m_drawable != 0 && m_display != nullptr;
 		}
 
-		inline GLXDrawable GetDrawable()const
+		inline GLXDrawable getDrawable()const
 		{
 			return m_drawable;
 		}
-		inline Display * GetDisplay()const
+		inline Display * getDisplay()const
 		{
 			return m_display;
 		}
@@ -129,12 +129,12 @@ namespace Castor3D
 			return m_window != 0 && m_display != 0;
 		}
 
-		inline EGLNativeWindowType GetWindow()const
+		inline EGLNativeWindowType getWindow()const
 		{
 			return m_window;
 		}
 
-		inline EGLDisplay GetDisplay()const
+		inline EGLDisplay getDisplay()const
 		{
 			return m_display;
 		}

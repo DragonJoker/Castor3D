@@ -30,7 +30,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Position.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor3D
 	\brief		Classe utilisée pour rendre une couche d'un tableau de textures couleur.
 	*/
 	class RenderColourLayerToTexture
-		: public Castor::OwnedBy< Context >
+		: public castor::OwnedBy< Context >
 	{
 	public:
 		/**
@@ -70,14 +70,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le rendu en texture.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the render to texture.
 		 *\~french
 		 *\brief		Nettoie le rendu en texture.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given texture array to the currently draw-bound frame buffer.
@@ -96,8 +96,8 @@ namespace Castor3D
 		 *\param[in]	p_matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_layer		L'index de la couche.
 		 */
-		C3D_API void Render( Castor::Position const & p_position
-			, Castor::Size const & p_size
+		C3D_API void render( castor::Position const & p_position
+			, castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, MatrixUbo & p_matrixUbo
 			, RenderPipeline & p_pipeline
@@ -116,8 +116,8 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_layer		L'index de la couche.
 		 */
-		C3D_API void Render( Castor::Position const & p_position
-			, Castor::Size const & p_size
+		C3D_API void render( castor::Position const & p_position
+			, castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, uint32_t p_layer );
 
@@ -142,8 +142,8 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_layer				L'index de la couche.
 		 */
-		C3D_API void DoRender( Castor::Position const & p_position
-			, Castor::Size const & p_size
+		C3D_API void doRender( castor::Position const & p_position
+			, castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, RenderPipeline & p_pipeline
 			, MatrixUbo & p_matrixUbo
@@ -157,7 +157,7 @@ namespace Castor3D
 		 *\brief		Crée le programme shader de dessin de texture 2D.
 		 *\return		Le programme.
 		 */
-		ShaderProgramSPtr DoCreateProgram();
+		ShaderProgramSPtr doCreateProgram();
 
 	private:
 		//!\~english	The uniform buffer containing matrices data.
@@ -167,7 +167,7 @@ namespace Castor3D
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
 		//!	6 * [2(vertex position) + 2(texture coordinates)]
-		std::array< Castor::real, 6 * ( 2 + 2 ) > m_bufferVertex;
+		std::array< castor::real, 6 * ( 2 + 2 ) > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		BufferDeclaration m_declaration;

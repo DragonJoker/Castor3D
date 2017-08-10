@@ -39,7 +39,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -64,10 +64,10 @@ namespace Castor3D
 		};
 
 	public:
-		C3D_API bool Track( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		C3D_API bool Track( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		C3D_API bool Untrack( void * p_object, ObjectDeclaration & p_declaration );
-		C3D_API void ReportTracked();
+		C3D_API bool track( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		C3D_API bool track( castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		C3D_API bool untrack( void * p_object, ObjectDeclaration & p_declaration );
+		C3D_API void reportTracked();
 
 	private:
 		uint32_t m_id = 0;

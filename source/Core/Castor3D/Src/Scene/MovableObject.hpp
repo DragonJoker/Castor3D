@@ -30,7 +30,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -43,7 +43,7 @@ namespace Castor3D
 	*/
 	class MovableObject
 		: public Animable
-		, public Castor::Named
+		, public castor::Named
 	{
 	public:
 		/*!
@@ -55,7 +55,7 @@ namespace Castor3D
 		\brief		Loader de MovableObject
 		*/
 		class TextWriter
-			: public Castor::TextWriter< MovableObject >
+			: public castor::TextWriter< MovableObject >
 		{
 		public:
 			/**
@@ -64,7 +64,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a movable object into a text file
@@ -75,7 +75,7 @@ namespace Castor3D
 			 *\param[in]	p_object	Le MovableObject
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API bool operator()( MovableObject const & p_object, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( MovableObject const & p_object, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\param[in]	p_sn	Noeud parent
 		 *\param[in]	p_type	Le type de MovableObject
 		 */
-		C3D_API MovableObject( Castor::String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn );
+		C3D_API MovableObject( castor::String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -107,14 +107,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Détache l'objet de son parent
 		 */
-		C3D_API void Detach();
+		C3D_API void detach();
 		/**
 		 *\~english
 		 *\brief		Attaches the movable object to a node
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API virtual void AttachTo( SceneNodeSPtr p_node );
+		C3D_API virtual void attachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the parent node
@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr GetParent()const
+		inline SceneNodeSPtr getParent()const
 		{
 			return m_sceneNode.lock();
 		}
@@ -135,7 +135,7 @@ namespace Castor3D
 		 *\brief		Récupère le type d'objet
 		 *\return		La valeur
 		 */
-		inline MovableType GetType()const
+		inline MovableType getType()const
 		{
 			return m_type;
 		}
@@ -146,7 +146,7 @@ namespace Castor3D
 		MovableType m_type;
 		//!\~english	The parent node name.
 		//!\~french		Le nom du noeud parent.
-		Castor::String m_strNodeName;
+		castor::String m_strNodeName;
 		//!\~english	The parent scene node.
 		//!\~french		Le noeud parent.
 		SceneNodeWPtr m_sceneNode;

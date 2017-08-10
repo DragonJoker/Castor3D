@@ -27,12 +27,12 @@ SOFTWARE.
 
 #include <Math/SquareMatrix.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2d );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3d );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4d );
 
 namespace GuiCommon
 {
@@ -43,21 +43,21 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( MatrixProperty )
 
 	public:
-		MatrixProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
-		MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
+		MatrixProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
+		MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
 		virtual ~MatrixProperty();
 
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
+		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void refreshChildren();
 
 	protected:
 		// I stands for internal
-		inline void SetValueI( Castor::SquareMatrix< T, Count > const & value );
+		inline void setValueI( castor::SquareMatrix< T, Count > const & value );
 	};
 
-	template< typename Type, size_t Count > Castor::SquareMatrix< Type, Count > const & MatrixRefFromVariant( wxVariant const & p_variant );
-	template< typename Type, size_t Count > Castor::SquareMatrix< Type, Count > & MatrixRefFromVariant( wxVariant & p_variant );
-	template< typename Type, size_t Count > void SetVariantFromMatrix( wxVariant & p_variant, Castor::SquareMatrix< Type, Count > const & p_value );
+	template< typename Type, size_t Count > castor::SquareMatrix< Type, Count > const & matrixRefFromVariant( wxVariant const & p_variant );
+	template< typename Type, size_t Count > castor::SquareMatrix< Type, Count > & matrixRefFromVariant( wxVariant & p_variant );
+	template< typename Type, size_t Count > void setVariantFromMatrix( wxVariant & p_variant, castor::SquareMatrix< Type, Count > const & p_value );
 
 	template< size_t Count > using FloatMatrixProperty = MatrixProperty< float, Count >;
 	template< size_t Count > using DoubleMatrixProperty = MatrixProperty< double, Count >;

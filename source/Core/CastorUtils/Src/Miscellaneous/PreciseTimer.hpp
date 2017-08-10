@@ -27,7 +27,7 @@ SOFTWARE.
 #include <cstdint>
 #include <chrono>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -63,10 +63,10 @@ namespace Castor
 		 *\~french
 		 *\return		Le temps écoulé depuis le dernier appel.
 		 */
-		CU_API Nanoseconds Time();
+		CU_API Nanoseconds getElapsed();
 
 	private:
-		clock::time_point DoGetTime()const;
+		clock::time_point doGetElapsed()const;
 
 	private:
 		clock::time_point m_savedTime;

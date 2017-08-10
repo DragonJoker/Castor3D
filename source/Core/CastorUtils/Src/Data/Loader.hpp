@@ -27,7 +27,7 @@ SOFTWARE.
 #include "LoaderException.hpp"
 #include "Design/NonCopyable.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor
 	*/
 	template< class T, FileType FT >
 	class Loader
-		: public Castor::NonCopyable
+		: public castor::NonCopyable
 	{
 	protected:
 		using Type = typename FileTyper< FT >::Type;

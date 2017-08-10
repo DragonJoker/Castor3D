@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Graphics/Colour.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -50,19 +50,19 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'activation du multisample
 		 *\return		La valeur
 		 */
-		inline bool GetMultisample()const
+		inline bool getMultisample()const
 		{
 			return m_bMultisampled;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the multisample activation status
+		 *\brief		sets the multisample activation status
 		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation du multisample
 		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void SetMultisample( bool p_enable )
+		inline void setMultisample( bool p_enable )
 		{
 			m_bMultisampled = p_enable;
 		}
@@ -74,19 +74,19 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'activation de l'alpha to coverage
 		 *\return		La valeur
 		 */
-		inline bool IsAlphaToCoverageEnabled()const
+		inline bool isAlphaToCoverageEnabled()const
 		{
 			return m_bEnableAlphaToCoverage;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the alpha to coverage activation status
+		 *\brief		sets the alpha to coverage activation status
 		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de l'alpha to coverage
 		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void EnableAlphaToCoverage( bool p_enable )
+		inline void enableAlphaToCoverage( bool p_enable )
 		{
 			m_bEnableAlphaToCoverage = p_enable;
 		}
@@ -98,19 +98,19 @@ namespace Castor3D
 		 *\brief		Récupère le masque de couverture de samples
 		 *\return		La valeur
 		 */
-		inline uint32_t GetSampleCoverageMask()const
+		inline uint32_t getSampleCoverageMask()const
 		{
 			return m_uiSampleMask;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the sample coverage mask
+		 *\brief		sets the sample coverage mask
 		 *\param[in]	p_uiMask	The new value
 		 *\~french
 		 *\brief		Définit le masque de couverture de samples
 		 *\param[in]	p_uiMask	La nouvelle valeur
 		 */
-		inline void SetSampleCoverageMask( uint32_t p_uiMask )
+		inline void setSampleCoverageMask( uint32_t p_uiMask )
 		{
 			m_uiSampleMask = p_uiMask;
 		}

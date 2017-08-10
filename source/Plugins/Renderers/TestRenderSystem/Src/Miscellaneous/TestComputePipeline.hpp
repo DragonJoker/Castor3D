@@ -39,7 +39,7 @@ namespace TestRender
 	\brief		Implàmentation du pipeline de rendu.
 	*/
 	class TestComputePipeline
-		: public Castor3D::ComputePipeline
+		: public castor3d::ComputePipeline
 	{
 	public:
 		/**
@@ -62,7 +62,7 @@ namespace TestRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		TestComputePipeline( TestRenderSystem & p_renderSystem, Castor3D::ShaderProgram & p_program );
+		TestComputePipeline( TestRenderSystem & p_renderSystem, castor3d::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -76,7 +76,7 @@ namespace TestRender
 		 *\~french
 		 *\brief		Applique le pipeline.
 		 */
-		void Run( Castor::Point3ui const & p_count, Castor::Point3ui const & p_size, Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const override;
+		void run( castor::Point3ui const & p_count, castor::Point3ui const & p_size, castor::FlagCombination< castor3d::MemoryBarrier > const & p_barriers )const override;
 	};
 }
 

@@ -6,7 +6,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The scene node must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The scene node must be initialised" );
 
 	CSceneNode::CSceneNode()
 	{
@@ -16,64 +16,64 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CSceneNode::AttachObject( /* [in] */ IMovableObject * val )
+	STDMETHODIMP CSceneNode::attachObject( /* [in] */ IMovableObject * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->AttachObject( *static_cast< CMovableObject * >( val )->GetInternal() );
+			m_internal->attachObject( *static_cast< CMovableObject * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "AttachObject" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "attachObject" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::DetachObject( /* [in] */ IMovableObject * val )
+	STDMETHODIMP CSceneNode::detachObject( /* [in] */ IMovableObject * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->DetachObject( *static_cast< CMovableObject * >( val )->GetInternal() );
+			m_internal->detachObject( *static_cast< CMovableObject * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "DetachObject" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "detachObject" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::AttachTo( /* [in] */ ISceneNode * val )
+	STDMETHODIMP CSceneNode::attachTo( /* [in] */ ISceneNode * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->AttachTo( static_cast< CSceneNode * >( val )->GetInternal() );
+			m_internal->attachTo( static_cast< CSceneNode * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "AttachTo" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "attachTo" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::Detach()
+	STDMETHODIMP CSceneNode::detach()
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Detach();
+			m_internal->detach();
 			hr = S_OK;
 		}
 		else
@@ -84,13 +84,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::Yaw( /* [in] */ IAngle * val )
+	STDMETHODIMP CSceneNode::yaw( /* [in] */ IAngle * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Yaw( *static_cast< CAngle * >( val ) );
+			m_internal->yaw( *static_cast< CAngle * >( val ) );
 			hr = S_OK;
 		}
 		else
@@ -101,13 +101,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::Pitch( /* [in] */ IAngle * val )
+	STDMETHODIMP CSceneNode::pitch( /* [in] */ IAngle * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Pitch( *static_cast< CAngle * >( val ) );
+			m_internal->pitch( *static_cast< CAngle * >( val ) );
 			hr = S_OK;
 		}
 		else
@@ -118,13 +118,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::Roll( /* [in] */ IAngle * val )
+	STDMETHODIMP CSceneNode::roll( /* [in] */ IAngle * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Roll( *static_cast< CAngle * >( val ) );
+			m_internal->roll( *static_cast< CAngle * >( val ) );
 			hr = S_OK;
 		}
 		else
@@ -135,13 +135,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::Rotate( /* [in] */ IQuaternion * val )
+	STDMETHODIMP CSceneNode::rotate( /* [in] */ IQuaternion * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Rotate( *static_cast< CQuaternion * >( val ) );
+			m_internal->rotate( *static_cast< CQuaternion * >( val ) );
 			hr = S_OK;
 		}
 		else
@@ -152,13 +152,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::Translate( /* [in] */ IVector3D * val )
+	STDMETHODIMP CSceneNode::translate( /* [in] */ IVector3D * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Translate( *static_cast< CVector3D * >( val ) );
+			m_internal->translate( *static_cast< CVector3D * >( val ) );
 			hr = S_OK;
 		}
 		else
@@ -169,13 +169,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSceneNode::Scale( /* [in] */ IVector3D * val )
+	STDMETHODIMP CSceneNode::scale( /* [in] */ IVector3D * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->Scale( *static_cast< CVector3D * >( val ) );
+			m_internal->scale( *static_cast< CVector3D * >( val ) );
 			hr = S_OK;
 		}
 		else

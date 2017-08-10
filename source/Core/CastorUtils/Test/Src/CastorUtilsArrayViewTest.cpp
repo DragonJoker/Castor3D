@@ -4,7 +4,7 @@
 
 #include <numeric>
 
-using namespace Castor;
+using namespace castor;
 
 namespace Testing
 {
@@ -17,9 +17,9 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsArrayViewTest::DoRegisterTests()
+	void CastorUtilsArrayViewTest::doRegisterTests()
 	{
-		DoRegisterTest( "BasicArrayViewTest", std::bind( &CastorUtilsArrayViewTest::BasicTest, this ) );
+		doRegisterTest( "BasicArrayViewTest", std::bind( &CastorUtilsArrayViewTest::BasicTest, this ) );
 	}
 
 	void CastorUtilsArrayViewTest::BasicTest()

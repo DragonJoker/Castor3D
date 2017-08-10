@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor3D
 	\brief		Passe flou gaussien.
 	*/
 	class GaussianBlur
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -59,8 +59,8 @@ namespace Castor3D
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
-			, Castor::Size const & textureSize
-			, Castor::PixelFormat format
+			, castor::Size const & textureSize
+			, castor::PixelFormat format
 			, uint32_t kernelSize );
 		/**
 		 *\~english
@@ -77,7 +77,7 @@ namespace Castor3D
 		 *\brief		Applique le flou sur la texture donnée.
 		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void Blur( TextureLayoutSPtr texture );
+		C3D_API void blur( TextureLayoutSPtr texture );
 		/**
 		 *\~english
 		 *\brief		Blurs given texture using given intermediate texture.
@@ -88,25 +88,25 @@ namespace Castor3D
 		 *\param[in]	texture			La texture à flouter.
 		 *\param[in]	intermediate	La texture indtermédiaire.
 		 */
-		C3D_API void Blur( TextureLayoutSPtr texture
+		C3D_API void blur( TextureLayoutSPtr texture
 			, TextureLayoutSPtr intermediate );
 
 	private:
-		void DoBlur( TextureLayoutSPtr & source
+		void doBlur( TextureLayoutSPtr & source
 			, TextureLayoutSPtr & destination
 			, RenderPipeline & pipeline
 			, UniformBuffer & ubo );
-		bool DoInitialiseBlurXProgram( Engine & engine );
-		bool DoInitialiseBlurYProgram( Engine & engine );
+		bool doInitialiseBlurXProgram( Engine & engine );
+		bool doInitialiseBlurYProgram( Engine & engine );
 
 	public:
-		static Castor::String const Config;
-		static Castor::String const Coefficients;
-		static Castor::String const CoefficientsCount;
+		static castor::String const Config;
+		static castor::String const Coefficients;
+		static castor::String const CoefficientsCount;
 		static constexpr uint32_t MaxCoefficients{ 64u };
 
 	private:
-		Castor::Size m_size;
+		castor::Size m_size;
 		MatrixUbo m_matrixUbo;
 		AttachmentPoint m_point;
 		TextureUnit m_colour;
@@ -114,17 +114,17 @@ namespace Castor3D
 		TextureAttachmentSPtr m_colourAttach;
 		std::vector< float > m_kernel;
 
-		Castor3D::RenderPipelineUPtr m_blurXPipeline;
-		Castor3D::PushUniform1sSPtr m_blurXMapDiffuse;
-		Castor3D::UniformBuffer m_blurXUbo;
-		Castor3D::Uniform1uiSPtr m_blurXCoeffCount;
-		Castor3D::Uniform1fSPtr m_blurXCoeffs;
+		castor3d::RenderPipelineUPtr m_blurXPipeline;
+		castor3d::PushUniform1sSPtr m_blurXMapDiffuse;
+		castor3d::UniformBuffer m_blurXUbo;
+		castor3d::Uniform1uiSPtr m_blurXCoeffCount;
+		castor3d::Uniform1fSPtr m_blurXCoeffs;
 
-		Castor3D::RenderPipelineUPtr m_blurYPipeline;
-		Castor3D::PushUniform1sSPtr m_blurYMapDiffuse;
-		Castor3D::UniformBuffer m_blurYUbo;
-		Castor3D::Uniform1uiSPtr m_blurYCoeffCount;
-		Castor3D::Uniform1fSPtr m_blurYCoeffs;
+		castor3d::RenderPipelineUPtr m_blurYPipeline;
+		castor3d::PushUniform1sSPtr m_blurYMapDiffuse;
+		castor3d::UniformBuffer m_blurYUbo;
+		castor3d::Uniform1uiSPtr m_blurYCoeffCount;
+		castor3d::Uniform1fSPtr m_blurYCoeffs;
 
 
 	};

@@ -26,7 +26,7 @@ SOFTWARE.
 
 #include "Range.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -79,7 +79,7 @@ namespace Castor
 		 *\brief		Redéfinit l'intervalle.
 		 *\param[in]	p_range	Le nouvel intervalle.
 		 */
-		void update_range( Range< T > const & p_range )noexcept
+		void updateRange( Range< T > const & p_range )noexcept
 		{
 			m_range = p_range;
 			m_range.clamp( m_value );
@@ -201,7 +201,7 @@ namespace Castor
 		, T const & p_min
 		, T const & p_max )noexcept
 	{
-		return RangedValue< T >{ p_value, make_range( p_min, p_max ) };
+		return RangedValue< T >{ p_value, makeRange( p_min, p_max ) };
 	}
 	/**
 	 *\~english

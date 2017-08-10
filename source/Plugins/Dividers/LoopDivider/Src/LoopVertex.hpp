@@ -37,27 +37,27 @@ namespace Loop
 	class Vertex
 	{
 	private:
-		Castor3D::BufferElementGroupSPtr m_ptPoint;
+		castor3d::BufferElementGroupSPtr m_ptPoint;
 		EdgePtrUIntMap m_mapEdges;
 
 	public:
-		Vertex( Castor3D::BufferElementGroupSPtr p_point );
+		Vertex( castor3d::BufferElementGroupSPtr p_point );
 		~Vertex();
 
-		bool HasEdge( uint32_t p_index );
-		EdgeSPtr GetEdge( uint32_t p_index );
-		void AddEdge( EdgeSPtr p_pEdge, uint32_t p_index );
-		void RemoveEdge( uint32_t p_index );
+		bool hasEdge( uint32_t p_index );
+		EdgeSPtr getEdge( uint32_t p_index );
+		void addEdge( EdgeSPtr p_pEdge, uint32_t p_index );
+		void removeEdge( uint32_t p_index );
 
 		/**@name Accessors */
 		//@{
-		inline Castor3D::BufferElementGroupSPtr GetPoint()const
+		inline castor3d::BufferElementGroupSPtr getPoint()const
 		{
 			return m_ptPoint;
 		}
-		inline uint32_t GetIndex()const
+		inline uint32_t getIndex()const
 		{
-			return m_ptPoint->GetIndex();
+			return m_ptPoint->getIndex();
 		}
 		inline uint32_t size()const
 		{
@@ -91,6 +91,6 @@ namespace Loop
 	};
 }
 
-Castor::String & operator << ( Castor::String & p_stream, Loop::Vertex const & p_vertex );
+castor::String & operator << ( castor::String & p_stream, Loop::Vertex const & p_vertex );
 
 #endif

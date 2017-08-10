@@ -18,8 +18,8 @@
 #include <Render/RenderWindow.hpp>
 #include <Shader/ShaderProgram.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GlRender
 {
@@ -27,7 +27,7 @@ namespace GlRender
 		: Context{ renderSystem }
 		, Holder{ p_gl }
 		, m_glRenderSystem{ &renderSystem }
-		, m_implementation{ std::make_unique< GlContextImpl >( GetOpenGl(), this ) }
+		, m_implementation{ std::make_unique< GlContextImpl >( getOpenGl(), this ) }
 	{
 	}
 
@@ -36,91 +36,91 @@ namespace GlRender
 		m_implementation.reset();
 	}
 
-	GlContextImpl & GlContext::GetImpl()
+	GlContextImpl & GlContext::getImpl()
 	{
 		return *m_implementation;
 	}
 
-	bool GlContext::DoInitialise()
+	bool GlContext::doInitialise()
 	{
-		auto engine = m_window->GetEngine();
-		auto renderSystem = static_cast< GlRenderSystem * >( engine->GetRenderSystem() );
-		auto mainContext = renderSystem->GetMainContext();
+		auto engine = m_window->getEngine();
+		auto renderSystem = static_cast< GlRenderSystem * >( engine->getRenderSystem() );
+		auto mainContext = renderSystem->getMainContext();
 
 		if ( !mainContext )
 		{
-			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
-			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
+			Logger::logInfo( cuT( "***********************************************************************************************************************" ) );
+			Logger::logInfo( cuT( "Initialising OpenGL" ) );
 		}
 
-		m_initialised = GetImpl().Initialise( m_window );
+		m_initialised = getImpl().initialise( m_window );
 
 		if ( m_initialised )
 		{
 			if ( !mainContext )
 			{
-				GetImpl().SetCurrent();
-				renderSystem->Initialise( std::move( GetImpl().GetGpuInformations() ) );
-				engine->GetMaterialCache().Initialise( m_window->GetScene()->GetMaterialsType() );
+				getImpl().setCurrent();
+				renderSystem->initialise( std::move( getImpl().getGpuInformations() ) );
+				engine->getMaterialCache().initialise( m_window->getScene()->getMaterialsType() );
 
 #if !defined( NDEBUG )
 
-				GetOpenGl().InitialiseDebug();
+				getOpenGl().initialiseDebug();
 
 #endif
 
-				GetImpl().EndCurrent();
-				Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
-				Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+				getImpl().endCurrent();
+				Logger::logInfo( cuT( "OpenGL Initialisation Ended" ) );
+				Logger::logInfo( cuT( "***********************************************************************************************************************" ) );
 			}
 
-			GetImpl().UpdateVSync( m_window->GetVSync() );
-			engine->GetRenderLoop().UpdateVSync( m_window->GetVSync() );
+			getImpl().updateVSync( m_window->getVSync() );
+			engine->getRenderLoop().updateVSync( m_window->getVSync() );
 
-			if ( m_glRenderSystem->GetOpenGlMajor() < 4 )
+			if ( m_glRenderSystem->getOpenGlMajor() < 4 )
 			{
 				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D (OpenGL 4.2 is needed, at least)" ) );
 			}
 
-			GetImpl().SetCurrent();
-			renderSystem->GetOpenGl().Enable( GlTweak::eSeamlessCubeMaps );
-			GetImpl().EndCurrent();
+			getImpl().setCurrent();
+			renderSystem->getOpenGl().Enable( GlTweak::eSeamlessCubeMaps );
+			getImpl().endCurrent();
 		}
 		else if ( !mainContext )
 		{
-			Logger::LogError( cuT( "OpenGL Initialisation Failed" ) );
-			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+			Logger::logError( cuT( "OpenGL Initialisation Failed" ) );
+			Logger::logInfo( cuT( "***********************************************************************************************************************" ) );
 		}
 
 		return m_initialised;
 	}
 
-	void GlContext::DoCleanup()
+	void GlContext::doCleanup()
 	{
 	}
 
-	void GlContext::DoDestroy()
+	void GlContext::doDestroy()
 	{
-		GetImpl().Cleanup();
+		getImpl().cleanup();
 	}
 
-	void GlContext::DoSetCurrent()
+	void GlContext::doSetCurrent()
 	{
-		GetImpl().SetCurrent();
+		getImpl().setCurrent();
 	}
 
-	void GlContext::DoEndCurrent()
+	void GlContext::doEndCurrent()
 	{
-		GetImpl().EndCurrent();
+		getImpl().endCurrent();
 	}
 
-	void GlContext::DoSwapBuffers()
+	void GlContext::doSwapBuffers()
 	{
-		GetImpl().SwapBuffers();
+		getImpl().swapBuffers();
 	}
 
-	void GlContext::DoBarrier( MemoryBarriers const & p_barriers )
+	void GlContext::doMemoryBarrier( MemoryBarriers const & p_barriers )
 	{
-		GetOpenGl().MemoryBarrier( GetOpenGl().Get( p_barriers ) );
+		getOpenGl().MemoryBarrier( getOpenGl().get( p_barriers ) );
 	}
 }

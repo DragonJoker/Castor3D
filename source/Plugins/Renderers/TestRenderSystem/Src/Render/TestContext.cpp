@@ -4,8 +4,8 @@
 
 #include <Engine.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace TestRender
 {
@@ -18,34 +18,34 @@ namespace TestRender
 	{
 	}
 
-	bool TestContext::DoInitialise()
+	bool TestContext::doInitialise()
 	{
 		m_initialised = true;
-		GetRenderSystem()->GetEngine()->GetMaterialCache().Initialise( GetRenderSystem()->GetEngine()->GetMaterialsType() );
+		getRenderSystem()->getEngine()->getMaterialCache().initialise( getRenderSystem()->getEngine()->getMaterialsType() );
 		return m_initialised;
 	}
 
-	void TestContext::DoCleanup()
+	void TestContext::doCleanup()
 	{
 	}
 
-	void TestContext::DoDestroy()
+	void TestContext::doDestroy()
 	{
 	}
 
-	void TestContext::DoSetCurrent()
+	void TestContext::doSetCurrent()
 	{
 	}
 
-	void TestContext::DoEndCurrent()
+	void TestContext::doEndCurrent()
 	{
 	}
 
-	void TestContext::DoSwapBuffers()
+	void TestContext::doSwapBuffers()
 	{
 	}
 
-	void TestContext::DoBarrier( MemoryBarriers const & p_barriers )
+	void TestContext::doMemoryBarrier( MemoryBarriers const & p_barriers )
 	{
 	}
 }

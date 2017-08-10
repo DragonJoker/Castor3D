@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Miscellaneous/SsaoConfig.hpp"
 #include "Render/RenderPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -59,7 +59,7 @@ namespace Castor3D
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API RenderTechniquePass( Castor::String const & name
+		C3D_API RenderTechniquePass( castor::String const & name
 			, Scene & scene
 			, Camera * camera
 			, bool environment
@@ -85,7 +85,7 @@ namespace Castor3D
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API RenderTechniquePass( Castor::String const & name
+		C3D_API RenderTechniquePass( castor::String const & name
 			, Scene & scene
 			, Camera * camera
 			, bool oit
@@ -111,21 +111,21 @@ namespace Castor3D
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 *\param[out]	shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		C3D_API virtual void Render( RenderInfo & info, bool shadows ) = 0;
+		C3D_API virtual void render( RenderInfo & info, bool shadows ) = 0;
 		/**
 		 *\~english
 		 *\return		Initialises the shadow maps.
 		 *\~french
 		 *\return		Initialise les maps de'ombres.
 		 */
-		C3D_API virtual bool InitialiseShadowMaps() = 0;
+		C3D_API virtual bool initialiseShadowMaps() = 0;
 		/**
 		 *\~english
 		 *\return		Cleans up the shadow maps.
 		 *\~french
 		 *\return		Nettoie les maps de'ombres.
 		 */
-		C3D_API virtual void CleanupShadowMaps() = 0;
+		C3D_API virtual void cleanupShadowMaps() = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the shadow maps.
@@ -136,23 +136,23 @@ namespace Castor3D
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API virtual void UpdateShadowMaps( RenderQueueArray & queues ) = 0;
+		C3D_API virtual void updateShadowMaps( RenderQueueArray & queues ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the shadow maps.
 		 *\~french
 		 *\brief		Dessine les maps d'ombres.
 		 */
-		C3D_API virtual void RenderShadowMaps() = 0;
+		C3D_API virtual void renderShadowMaps() = 0;
 		/**
 		 *\~english
-		 *\brief		Adds a shadow producing light source.
+		 *\brief		adds a shadow producing light source.
 		 *\param[in]	light	The light source.
 		 *\~french
 		 *\brief		Ajoute une source lumineuse produisant des ombres.
 		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API virtual void AddShadowProducer( Light & light ) = 0;
+		C3D_API virtual void addShadowProducer( Light & light ) = 0;
 
 	protected:
 		/**
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 *\param[out]	shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		C3D_API void DoRender( RenderInfo & info, bool shadows );
+		C3D_API void doRender( RenderInfo & info, bool shadows );
 		/**
 		 *\~english
 		 *\brief			Renders render nodes.
@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void DoRenderNodes( SceneRenderNodes & p_nodes
+		C3D_API void doRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps
 			, RenderInfo & info )const;
@@ -192,44 +192,44 @@ namespace Castor3D
 		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
 		 *\param[out]	depthMaps	Reçoit les textures.
 		 */
-		C3D_API virtual void DoGetDepthMaps( DepthMapArray & depthMaps ) = 0;
+		C3D_API virtual void doGetDepthMaps( DepthMapArray & depthMaps ) = 0;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		C3D_API bool DoInitialise( Castor::Size const & size )override;
+		C3D_API bool doInitialise( castor::Size const & size )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCleanup
+		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
-		C3D_API void DoCleanup()override;
+		C3D_API void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		C3D_API void DoUpdate( RenderQueueArray & queues )override;
+		C3D_API void doUpdate( RenderQueueArray & queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		C3D_API void DoUpdateFlags( TextureChannels & textureFlags
+		C3D_API void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
+		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		C3D_API void DoUpdatePipeline( RenderPipeline & pipeline )const override;
+		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		C3D_API void DoPrepareFrontPipeline( ShaderProgram & program
+		C3D_API void doPrepareFrontPipeline( ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		C3D_API void DoPrepareBackPipeline( ShaderProgram & program
+		C3D_API void doPrepareBackPipeline( ShaderProgram & program
 			, PipelineFlags const & flags )override;
 
 	protected:

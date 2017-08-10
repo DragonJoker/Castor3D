@@ -27,7 +27,7 @@ SOFTWARE.
 #include <sstream>
 #include <cstdint>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor
 	\remark		Gives File, Function, Line in addition to usual description
 	\~french
 	\brief		Classe d'exceptions plus verbeuse que celles de std
-	\remark		Donne aussi le fichier, la fonction et la ligne en plus des informations usuelles
+	\remark		donne aussi le fichier, la fonction et la ligne en plus des informations usuelles
 	*/
 	class Exception
 		: public std::exception
@@ -58,7 +58,10 @@ namespace Castor
 		 *\param[in]	p_function		Le nom de la fonction
 		 *\param[in]	p_line			Le numéro de ligne
 		 */
-		Exception( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+		Exception( std::string const & p_description
+			, char const * p_file
+			, char const * p_function
+			, uint32_t p_line )
 			: m_line( p_line )
 			, m_description( p_description )
 			, m_filename( p_file ? p_file : "" )
@@ -94,7 +97,7 @@ namespace Castor
 		 *\brief		Récupère le nom du fichier
 		 *\return		Le nom du fichier
 		 */
-		inline std::string const & GetFilename()const throw()
+		inline std::string const & getFileName()const throw()
 		{
 			return m_filename;
 		}
@@ -106,7 +109,7 @@ namespace Castor
 		 *\brief		Récupère le nom de la fonction
 		 *\return		Le nom de la fonction
 		 */
-		inline std::string const & GetFunction()const throw()
+		inline std::string const & getFunction()const throw()
 		{
 			return m_functionName;
 		}
@@ -118,7 +121,7 @@ namespace Castor
 		 *\brief		Récupère le numéro de ligne
 		 *\return		Le numéro de ligne
 		 */
-		inline uint32_t GetLine()const throw()
+		inline uint32_t getLine()const throw()
 		{
 			return m_line;
 		}
@@ -130,7 +133,7 @@ namespace Castor
 		 *\brief		Récupère la description de l'exception
 		 *\return		La description de l'exception
 		 */
-		inline std::string const & GetDescription()const throw()
+		inline std::string const & getDescription()const throw()
 		{
 			return m_description;
 		}
@@ -142,7 +145,7 @@ namespace Castor
 		 *\brief		Récupère le texte complet de l'exception (description, ligne, fichier et fonction)
 		 *\return		La texte complet de l'exception
 		 */
-		inline std::string GetFullDescription()const throw()
+		inline std::string getFullDescription()const throw()
 		{
 			std::string strReturn;
 			std::string strSep;
@@ -203,10 +206,10 @@ namespace Castor
 \author 	Sylvain DOREMUS
 \date 		03/01/2011
 \~english
-\brief		Macro to ease the use of Castor::Exception
+\brief		Macro to ease the use of castor::Exception
 \~french
-\brief		Macro définie pour faciliter l'utilisation de Castor::Exception
+\brief		Macro définie pour faciliter l'utilisation de castor::Exception
 */
-#define CASTOR_EXCEPTION( p_text ) throw Castor::Exception( (p_text), __FILE__, __FUNCTION__, __LINE__ )
+#define CASTOR_EXCEPTION( p_text ) throw castor::Exception( (p_text), __FILE__, __FUNCTION__, __LINE__ )
 
 #endif

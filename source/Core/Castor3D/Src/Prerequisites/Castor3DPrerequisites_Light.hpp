@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PREREQUISITES_LIGHT_H___
 #define ___C3D_PREREQUISITES_LIGHT_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Light */
 	//@{
@@ -65,7 +65,7 @@ namespace Castor3D
 	//! Array of lights
 	DECLARE_VECTOR( LightSPtr, LightPtr );
 	//! Map of lights, sorted by name
-	DECLARE_MAP( Castor::String, LightSPtr, LightPtrStr );
+	DECLARE_MAP( castor::String, LightSPtr, LightPtrStr );
 	//! Map of lights, sorted by index
 	DECLARE_MAP( int, LightSPtr, LightPtrInt );
 

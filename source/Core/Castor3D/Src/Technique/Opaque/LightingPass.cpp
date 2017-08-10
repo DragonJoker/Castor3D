@@ -28,10 +28,10 @@
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
-namespace Castor3D
+namespace castor3d
 {
 	LightingPass::LightingPass( Engine & engine
 		, Size const & size
@@ -42,40 +42,40 @@ namespace Castor3D
 		, GpInfoUbo & gpInfoUbo )
 		: m_size{ size }
 		, m_result{ engine }
-		, m_frameBuffer{ engine.GetRenderSystem()->CreateFrameBuffer() }
+		, m_frameBuffer{ engine.getRenderSystem()->createFrameBuffer() }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ) ) }
 	{
-		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
-		bool result = m_frameBuffer->Create();
+		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eTransparentBlack ) );
+		bool result = m_frameBuffer->create();
 
 		if ( result )
 		{
-			result = m_frameBuffer->Initialise( size );
+			result = m_frameBuffer->initialise( size );
 		}
 
 		if ( result )
 		{
-			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGBA16F32F
 				, size );
-			texture->GetImage().InitialiseSource();
+			texture->getImage().initialiseSource();
 
-			m_result.SetIndex( 0u );
-			m_result.SetTexture( texture );
-			m_result.SetSampler( engine.GetLightsSampler() );
-			m_result.Initialise();
+			m_result.setIndex( 0u );
+			m_result.setTexture( texture );
+			m_result.setSampler( engine.getLightsSampler() );
+			m_result.initialise();
 
-			m_resultAttach = m_frameBuffer->CreateAttachment( texture );
+			m_resultAttach = m_frameBuffer->createAttachment( texture );
 
-			m_frameBuffer->Bind();
-			m_frameBuffer->Attach( AttachmentPoint::eColour
+			m_frameBuffer->bind();
+			m_frameBuffer->attach( AttachmentPoint::eColour
 				, m_resultAttach
-				, texture->GetType() );
-			ENSURE( m_frameBuffer->IsComplete() );
-			m_frameBuffer->SetDrawBuffers();
-			m_frameBuffer->Unbind();
+				, texture->getType() );
+			ENSURE( m_frameBuffer->isComplete() );
+			m_frameBuffer->setDrawBuffers();
+			m_frameBuffer->unbind();
 
 			m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
 				, *m_frameBuffer
@@ -96,115 +96,115 @@ namespace Castor3D
 				, *m_frameBuffer
 				, depthAttach
 				, gpInfoUbo
-				, opaque.GetDirectionalShadowMap() );
+				, opaque.getDirectionalShadowMap() );
 			m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
 				, gpInfoUbo
-				, opaque.GetPointShadowMaps() );
+				, opaque.getPointShadowMaps() );
 			m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
 				, gpInfoUbo
-				, opaque.GetSpotShadowMap() );
+				, opaque.getSpotShadowMap() );
 
 			for ( auto & lightPass : m_lightPass )
 			{
-				lightPass->Initialise( scene, sceneUbo );
+				lightPass->initialise( scene, sceneUbo );
 			}
 
 			for ( auto & lightPass : m_lightPassShadow )
 			{
-				lightPass->Initialise( scene, sceneUbo );
+				lightPass->initialise( scene, sceneUbo );
 			}
 		}
 	}
 
 	LightingPass::~LightingPass()
 	{
-		m_frameBuffer->Bind();
-		m_frameBuffer->DetachAll();
-		m_frameBuffer->Unbind();
-		m_frameBuffer->Cleanup();
-		m_frameBuffer->Destroy();
+		m_frameBuffer->bind();
+		m_frameBuffer->detachAll();
+		m_frameBuffer->unbind();
+		m_frameBuffer->cleanup();
+		m_frameBuffer->destroy();
 		m_resultAttach.reset();
-		m_result.Cleanup();
+		m_result.cleanup();
 
 		for ( auto & lightPass : m_lightPass )
 		{
-			lightPass->Cleanup();
+			lightPass->cleanup();
 			lightPass.reset();
 		}
 
 		for ( auto & lightPass : m_lightPassShadow )
 		{
-			lightPass->Cleanup();
+			lightPass->cleanup();
 			lightPass.reset();
 		}
 	}
 
-	bool LightingPass::Render( Scene const & scene
+	bool LightingPass::render( Scene const & scene
 		, Camera const & camera
 		, GeometryPassResult const & gp
 		, RenderInfo & info )
 	{
-		auto & cache = scene.GetLightCache();
-		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer->Clear( BufferComponent::eColour );
+		auto & cache = scene.getLightCache();
+		m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->clear( BufferComponent::eColour );
 
 		bool first{ true };
 
-		if ( !cache.IsEmpty() )
+		if ( !cache.isEmpty() )
 		{
-			m_timer->Start();
-			auto lock = make_unique_lock( cache );
-			DoRenderLights( scene
+			m_timer->start();
+			auto lock = makeUniqueLock( cache );
+			doRenderLights( scene
 				, camera
 				, LightType::eDirectional
 				, gp
 				, first );
-			DoRenderLights( scene
+			doRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
 				, first );
-			DoRenderLights( scene
+			doRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
 				, first );
 			first = false;
-			m_timer->Stop();
+			m_timer->stop();
 		}
 
 		return first;
 	}
 
-	void LightingPass::Debug( Size const & size )const
+	void LightingPass::debugDisplay( Size const & size )const
 	{
-		m_lightPassShadow[0]->Debug( Position{ 0, 256 } );
-		m_lightPassShadow[2]->Debug( Position{ 256, 256 } );
-		m_lightPassShadow[1]->Debug( Position{ 512, 256 } );
+		m_lightPassShadow[0]->debugDisplay( Position{ 0, 256 } );
+		m_lightPassShadow[2]->debugDisplay( Position{ 256, 256 } );
+		m_lightPassShadow[1]->debugDisplay( Position{ 512, 256 } );
 	}
 
-	void LightingPass::DoRenderLights( Scene const & scene
+	void LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType p_type
 		, GeometryPassResult const & gp
 		, bool & p_first )
 	{
-		auto & cache = scene.GetLightCache();
+		auto & cache = scene.getLightCache();
 
-		if ( cache.GetLightsCount( p_type ) )
+		if ( cache.getLightsCount( p_type ) )
 		{
 			auto & lightPass = *m_lightPass[size_t( p_type )];
 			auto & lightPassShadow = *m_lightPassShadow[size_t( p_type )];
 
-			for ( auto & light : cache.GetLights( p_type ) )
+			for ( auto & light : cache.getLights( p_type ) )
 			{
-				if ( light->IsShadowProducer() )
+				if ( light->isShadowProducer() )
 				{
-					lightPassShadow.Render( m_size
+					lightPassShadow.render( m_size
 						, gp
 						, *light
 						, camera
@@ -212,7 +212,7 @@ namespace Castor3D
 				}
 				else
 				{
-					lightPass.Render( m_size
+					lightPass.render( m_size
 						, gp
 						, *light
 						, camera

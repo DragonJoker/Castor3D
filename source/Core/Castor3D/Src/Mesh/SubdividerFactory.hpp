@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique de subdiviseurs.
 	*/
-	using SubdividerFactory = Castor::Factory< Subdivider, Castor::String, SubdividerUPtr >;
+	using SubdividerFactory = castor::Factory< Subdivider, castor::String, SubdividerUPtr >;
 }
 
 #endif

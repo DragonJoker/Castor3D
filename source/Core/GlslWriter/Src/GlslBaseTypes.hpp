@@ -38,7 +38,7 @@ namespace GLSL
 		inline Int( float p_value );
 		inline Int( GlslWriter * p_writer, int p_value );
 		inline Int( GlslWriter * p_writer, float p_value );
-		inline Int( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Int( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline Int & operator=( Int const & p_rhs );
 		template< typename T > inline Int & operator=( T const & p_rhs );
 		template< typename T > inline Int & operator=( int p_rhs );
@@ -88,7 +88,7 @@ namespace GLSL
 		inline UInt( float p_value );
 		inline UInt( GlslWriter * p_writer, unsigned int p_value );
 		inline UInt( GlslWriter * p_writer, float p_value );
-		inline UInt( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline UInt( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline UInt & operator=( UInt const & p_rhs );
 		template< typename T > inline UInt & operator=( T const & p_rhs );
 		template< typename T > inline UInt & operator=( unsigned int p_rhs );
@@ -140,7 +140,7 @@ namespace GLSL
 		inline Float( GlslWriter * p_writer, int p_value );
 		inline Float( GlslWriter * p_writer, float p_value );
 		inline Float( GlslWriter * p_writer, double p_value );
-		inline Float( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Float( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline Float & operator=( Float const & p_rhs );
 		template< typename T > inline Float & operator=( T const & p_rhs );
 		template< typename T > inline Float & operator=( float p_rhs );

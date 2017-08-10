@@ -643,7 +643,7 @@ namespace C3dSMax
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class SMaxImporter : public Castor3D::Importer
+	class SMaxImporter : public castor3d::Importer
 	{
 	private:
 		struct SMaxChunk
@@ -657,36 +657,36 @@ namespace C3dSMax
 		/**
 		 * Constructor
 		 */
-		SMaxImporter( Castor3D::Engine & p_engine );
+		SMaxImporter( castor3d::Engine & p_engine );
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		bool doImportScene( castor3d::Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 
-		int DoGetString( Castor::String & p_strString );
-		void DoReadChunk( SMaxChunk * p_chunk );
-		void DoProcessNextChunk( Castor3D::Scene & p_scene, SMaxChunk * p_chunk, Castor3D::Mesh & p_mesh );
-		void DoProcessNextObjectChunk( Castor3D::Scene & p_scene, SMaxChunk * p_chunk, Castor3D::Mesh & p_mesh );
-		void DoProcessNextMaterialChunk( Castor3D::Scene & p_scene, SMaxChunk * p_chunk );
-		void DoProcessMaterialMapChunk( SMaxChunk * p_chunk, Castor::String & p_strName );
-		void DoReadColorChunk( SMaxChunk * p_chunk, Castor::Colour & p_clrColour );
-		void DoReadVertices( SMaxChunk * p_chunk, Castor3D::Submesh & p_submesh );
-		void DoReadVertexIndices( Castor3D::Scene & p_scene, SMaxChunk * p_chunk, Castor3D::Submesh & p_submesh );
-		void DoReadUVCoordinates( SMaxChunk * p_chunk, Castor3D::Submesh & p_submesh );
-		void DoReadObjectMaterial( Castor3D::Scene & p_scene, SMaxChunk * p_chunk, Castor3D::Submesh & p_submesh );
-		void DoDiscardChunk( SMaxChunk * p_chunk );
-		bool DoIsValidChunk( SMaxChunk * p_chunk, SMaxChunk * p_pParent );
+		int doGetString( castor::String & p_strString );
+		void doReadChunk( SMaxChunk * p_chunk );
+		void doProcessNextChunk( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Mesh & p_mesh );
+		void doProcessNextObjectChunk( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Mesh & p_mesh );
+		void doProcessNextMaterialChunk( castor3d::Scene & p_scene, SMaxChunk * p_chunk );
+		void doProcessMaterialMapChunk( SMaxChunk * p_chunk, castor::String & p_strName );
+		void doReadColorChunk( SMaxChunk * p_chunk, castor::Colour & p_clrColour );
+		void doReadVertices( SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
+		void doReadVertexIndices( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
+		void doReadUVCoordinates( SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
+		void doReadObjectMaterial( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
+		void doDiscardChunk( SMaxChunk * p_chunk );
+		bool doIsValidChunk( SMaxChunk * p_chunk, SMaxChunk * p_pParent );
 
 	private:
-		Castor::BinaryFile * m_pFile;
+		castor::BinaryFile * m_pFile;
 		std::vector< float > m_arrayTexVerts;
 		int m_iNumOfMaterials;
 		std::size_t m_uiNbVertex;

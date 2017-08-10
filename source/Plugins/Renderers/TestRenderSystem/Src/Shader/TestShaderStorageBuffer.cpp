@@ -2,8 +2,8 @@
 
 #include "Render/TestRenderSystem.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -16,56 +16,56 @@ namespace TestRender
 	{
 	}
 
-	bool TestShaderStorageBuffer::Create()
+	bool TestShaderStorageBuffer::create()
 	{
 		return true;
 	}
 
-	void TestShaderStorageBuffer::Destroy()
+	void TestShaderStorageBuffer::destroy()
 	{
 	}
 
-	void TestShaderStorageBuffer::InitialiseStorage( uint32_t p_count
+	void TestShaderStorageBuffer::initialiseStorage( uint32_t p_count
 		, BufferAccessType p_type
 		, BufferAccessNature p_nature )const
 	{
 	}
 
-	void TestShaderStorageBuffer::SetBindingPoint( uint32_t p_point )const
+	void TestShaderStorageBuffer::setBindingPoint( uint32_t p_point )const
 	{
 	}
 
-	void TestShaderStorageBuffer::Bind()const
+	void TestShaderStorageBuffer::bind()const
 	{
 	}
 
-	void TestShaderStorageBuffer::Unbind()const
+	void TestShaderStorageBuffer::unbind()const
 	{
 	}
 
-	uint8_t * TestShaderStorageBuffer::Lock( uint32_t p_offset
+	uint8_t * TestShaderStorageBuffer::lock( uint32_t p_offset
 		, uint32_t p_count
 		, AccessTypes const & p_flags )const
 	{
 		return nullptr;
 	}
 
-	void TestShaderStorageBuffer::Unlock()const
+	void TestShaderStorageBuffer::unlock()const
 	{
 	}
 
-	void TestShaderStorageBuffer::Copy( GpuBuffer const & p_src
+	void TestShaderStorageBuffer::copy( GpuBuffer const & p_src
 		, uint32_t p_size )const
 	{
 	}
 
-	void TestShaderStorageBuffer::Upload( uint32_t p_offset
+	void TestShaderStorageBuffer::upload( uint32_t p_offset
 		, uint32_t p_size
 		, uint8_t const * p_buffer )const
 	{
 	}
 
-	void TestShaderStorageBuffer::Download( uint32_t p_offset
+	void TestShaderStorageBuffer::download( uint32_t p_offset
 		, uint32_t p_size
 		, uint8_t * p_buffer )const
 	{

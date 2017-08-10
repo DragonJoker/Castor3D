@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -35,7 +35,7 @@ namespace Castor3D
 	\~french
 	\brief		Contient des informations sur une face.
 	*/
-	struct stFACE_INFOS
+	struct FaceInfos
 	{
 		/*!
 		\author 	Sylvain DOREMUS
@@ -46,7 +46,7 @@ namespace Castor3D
 		\brief		Contient les informations d'un sommet.
 		\remark
 		*/
-		struct stVERTEX
+		struct Vertex
 		{
 			//!\~english	Vertex index.
 			//!\~french		Indice du sommet.
@@ -66,7 +66,7 @@ namespace Castor3D
 		};
 		//!\~english	The 3 vertex informations.
 		//!\~french		Les informations des 3 sommets.
-		std::array< stVERTEX, 3 > m_vertex;
+		std::array< Vertex, 3 > m_vertex;
 	};
 }
 

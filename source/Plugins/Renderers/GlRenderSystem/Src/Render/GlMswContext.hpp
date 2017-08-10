@@ -49,34 +49,34 @@ namespace GlRender
 		GlContextImpl( OpenGl & p_gl, GlContext * p_context );
 		~GlContextImpl();
 
-		bool Initialise( Castor3D::RenderWindow * p_window );
-		void Cleanup();
-		void SetCurrent();
-		void EndCurrent();
-		void SwapBuffers();
-		void UpdateVSync( bool p_enable );
+		bool initialise( castor3d::RenderWindow * p_window );
+		void cleanup();
+		void setCurrent();
+		void endCurrent();
+		void swapBuffers();
+		void updateVSync( bool p_enable );
 
-		inline HDC GetHDC()const
+		inline HDC getHDC()const
 		{
 			return m_hDC;
 		}
 
-		inline HGLRC GetContext()const
+		inline HGLRC getContext()const
 		{
 			return m_hContext;
 		}
 
-		inline Castor3D::GpuInformations && GetGpuInformations()
+		inline castor3d::GpuInformations && getGpuInformations()
 		{
 			return std::move( m_gpuInformations );
 		}
 
 	protected:
-		void DoInitialiseOpenGL( Castor::PixelFormat p_colour, bool p_stereo );
-		HGLRC DoCreateDummyContext( Castor::PixelFormat p_colour, bool p_stereo );
-		bool DoSelectPixelFormat( Castor::PixelFormat p_colour, bool p_stereo );
-		bool DoSelectStereoPixelFormat( Castor::PixelFormat p_colour );
-		bool DoCreateGl3Context();
+		void doInitialiseOpenGL( castor::PixelFormat p_colour, bool p_stereo );
+		HGLRC doCreateDummyContext( castor::PixelFormat p_colour, bool p_stereo );
+		bool doSelectPixelFormat( castor::PixelFormat p_colour, bool p_stereo );
+		bool doSelectStereoPixelFormat( castor::PixelFormat p_colour );
+		bool doCreateGl3Context();
 
 	protected:
 		HDC m_hDC;
@@ -84,7 +84,7 @@ namespace GlRender
 		HWND m_hWnd;
 		GlContext * m_context;
 		bool m_initialised;
-		Castor3D::GpuInformations m_gpuInformations;
+		castor3d::GpuInformations m_gpuInformations;
 	};
 }
 

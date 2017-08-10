@@ -27,17 +27,17 @@ SOFTWARE.
 #include "Exception/Assertion.hpp"
 #include "Point.hpp"
 
-namespace Castor
+namespace castor
 {
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	struct MatrixDataAllocator
 	{
-		static T * Alloc( uint32_t p_count = 1 )
+		static T * allocate( uint32_t p_count = 1 )
 		{
 			return new T[Columns * Rows * p_count];
 		}
 
-		static void Free( T * p_data )
+		static void deallocate( T * p_data )
 		{
 			delete[] p_data;
 		}
@@ -48,14 +48,14 @@ namespace Castor
 	template<>
 	struct MatrixDataAllocator< float, 4, 4 >
 	{
-		static float * Alloc( uint32_t p_count = 1 )
+		static float * allocate( uint32_t p_count = 1 )
 		{
-			return AlignedAlloc< float >( 16, 64 * p_count );
+			return alignedAlloc< float >( 16, 64 * p_count );
 		}
 
-		static void Free( float * p_data )
+		static void deallocate( float * p_data )
 		{
-			AlignedFree( p_data );
+			alignedFree( p_data );
 		}
 	};
 
@@ -70,14 +70,14 @@ namespace Castor
 	\remark		Can hold any type which has a defined Policy.
 	\~french
 	\brief		Représentation d'une matrice column major, le type des éléments et les dimensions de la matrice sont en template.
-	\remark		Peut contenir n'importe quel élément qui a une Castor::Policy.
+	\remark		Peut contenir n'importe quel élément qui a une castor::Policy.
 	*/
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class Matrix
 	{
 	protected:
 		typedef T __value_type;
-		typedef Castor::Policy< __value_type > __policy;
+		typedef castor::Policy< __value_type > __policy;
 		typedef Matrix< __value_type, Columns, Rows > __type;
 		typedef Matrix< __value_type, Rows, Columns > __transpose;
 		typedef Point< __value_type, Columns > __row;
@@ -189,7 +189,7 @@ namespace Castor
 		virtual ~Matrix();
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given row.
+		 *\brief		sets the values for the given row.
 		 *\param[in]	p_index	The row to affect.
 		 *\param[in]	p_row	The values.
 		 *\~french
@@ -197,10 +197,10 @@ namespace Castor
 		 *\param[in]	p_index	La ligne à affecter.
 		 *\param[in]	p_row	Les valeurs.
 		 */
-		void set_row( uint32_t p_index, value_type const * p_row );
+		void setRow( uint32_t p_index, value_type const * p_row );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given row.
+		 *\brief		sets the values for the given row.
 		 *\param[in]	p_index	The row to affect.
 		 *\param[in]	p_row	The values.
 		 *\~french
@@ -208,10 +208,10 @@ namespace Castor
 		 *\param[in]	p_index	La ligne à affecter.
 		 *\param[in]	p_row	Les valeurs.
 		 */
-		void set_row( uint32_t p_index, Point< value_type, Columns > const & p_row );
+		void setRow( uint32_t p_index, Point< value_type, Columns > const & p_row );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given row.
+		 *\brief		sets the values for the given row.
 		 *\param[in]	p_index	The row to affect.
 		 *\param[in]	p_row	The values.
 		 *\~french
@@ -219,7 +219,7 @@ namespace Castor
 		 *\param[in]	p_index	La ligne à affecter.
 		 *\param[in]	p_row	Les valeurs.
 		 */
-		void set_row( uint32_t p_index, Coords< value_type, Columns > const & p_row );
+		void setRow( uint32_t p_index, Coords< value_type, Columns > const & p_row );
 		/**
 		 *\~english
 		 *\brief		Retrieves a row.
@@ -230,7 +230,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index de la ligne.
 		 *\return		La ligne.
 		 */
-		row_type get_row( uint32_t p_index )const;
+		row_type getRow( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a row.
@@ -241,10 +241,10 @@ namespace Castor
 		 *\param[in]	p_index		L'index de la ligne.
 		 *\param[out]	p_result	Reçoit les valeurs de la ligne.
 		 */
-		void get_row( uint32_t p_index, row_type & p_result )const;
+		void getRow( uint32_t p_index, row_type & p_result )const;
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given column.
+		 *\brief		sets the values for the given column.
 		 *\param[in]	p_index	The column to affect.
 		 *\param[in]	p_col	The values.
 		 *\~french
@@ -252,10 +252,10 @@ namespace Castor
 		 *\param[in]	p_index	La colonne à affecter.
 		 *\param[in]	p_col	Les valeurs.
 		 */
-		void set_column( uint32_t p_index, value_type const * p_col );
+		void setColumn( uint32_t p_index, value_type const * p_col );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given column.
+		 *\brief		sets the values for the given column.
 		 *\param[in]	p_index	The column to affect.
 		 *\param[in]	p_col	The values.
 		 *\~french
@@ -263,10 +263,10 @@ namespace Castor
 		 *\param[in]	p_index	La colonne à affecter.
 		 *\param[in]	p_col	Les valeurs.
 		 */
-		void set_column( uint32_t p_index, Point< value_type, Rows > const & p_col );
+		void setColumn( uint32_t p_index, Point< value_type, Rows > const & p_col );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given column.
+		 *\brief		sets the values for the given column.
 		 *\param[in]	p_index	The column to affect.
 		 *\param[in]	p_col	The values.
 		 *\~french
@@ -274,10 +274,10 @@ namespace Castor
 		 *\param[in]	p_index	La colonne à affecter.
 		 *\param[in]	p_col	Les valeurs.
 		 */
-		void set_column( uint32_t p_index, Coords< value_type const, Rows > const & p_col );
+		void setColumn( uint32_t p_index, Coords< value_type const, Rows > const & p_col );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given column.
+		 *\brief		sets the values for the given column.
 		 *\param[in]	p_index	The column to affect.
 		 *\param[in]	p_col	The values.
 		 *\~french
@@ -285,7 +285,7 @@ namespace Castor
 		 *\param[in]	p_index	La colonne à affecter.
 		 *\param[in]	p_col	Les valeurs.
 		 */
-		void set_column( uint32_t p_index, Coords< value_type, Rows > const & p_col );
+		void setColumn( uint32_t p_index, Coords< value_type, Rows > const & p_col );
 		/**
 		 *\~english
 		 *\brief		Retrieves a column.
@@ -296,7 +296,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index de la colonne.
 		 *\return		La colonne.
 		 */
-		const_col_type get_column( uint32_t p_index )const;
+		const_col_type getColumn( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a column.
@@ -307,7 +307,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index de la colonne.
 		 *\return		La colonne.
 		 */
-		col_type get_column( uint32_t p_index );
+		col_type getColumn( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves a column.
@@ -318,7 +318,7 @@ namespace Castor
 		 *\param[in]	p_index		L'index de la colonne.
 		 *\param[out]	p_result	Reçoit les valeurs de la colonne.
 		 */
-		void get_column( uint32_t p_index, const_col_type & p_result )const;
+		void getColumn( uint32_t p_index, const_col_type & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a column.
@@ -329,7 +329,7 @@ namespace Castor
 		 *\param[in]	p_index		L'index de la colonne.
 		 *\param[out]	p_result	Reçoit les valeurs de la colonne.
 		 */
-		void get_column( uint32_t p_index, col_type & p_result );
+		void getColumn( uint32_t p_index, col_type & p_result );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at the given position.
@@ -340,7 +340,7 @@ namespace Castor
 		 *\param[in]	p_row, p_column	La position.
 		 *\return		La valeur.
 		 */
-		value_type value_at( uint32_t p_column, uint32_t p_row );
+		value_type valueAt( uint32_t p_column, uint32_t p_row );
 		/**
 		 *\~english
 		 *\brief		Retrieves the column at given index.
@@ -376,7 +376,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le pointeur sur les données constantes.
 		 */
-		inline value_type const * const_ptr()const;
+		inline value_type const * constPtr()const;
 		/**
 		 *\~english
 		 *\brief		Links the data pointer to the one given in parameter.
@@ -401,7 +401,7 @@ namespace Castor
 		 *\~french
 		 *\return		La transposée de cette matrice.
 		 */
-		transpose_type get_transposed()const;
+		transpose_type getTransposed()const;
 		/**
 		 *\~english
 		 *\brief		Computes the transposed of this matrix.
@@ -410,28 +410,28 @@ namespace Castor
 		 *\brief		Calcule la transposée de cette matrice.
 		 *\param[in]	p_result	Reçoit la transposée.
 		 */
-		void get_transposed( transpose_type & p_result )const;
+		void getTransposed( transpose_type & p_result )const;
 		/**
 		 *\~english
 		 *\return		The identity matrix.
 		 *\~french
 		 *\return		La matrice identité.
 		 */
-		my_type get_identity()const;
+		my_type getIdentity()const;
 		/**
 		 *\~english
 		 *\return		The trace or this matrix.
 		 *\~french
 		 *\return		La trace de cette matrice.
 		 */
-		value_type get_trace()const;
+		value_type getTrace()const;
 		/**
 		 *\~english
-		 *\brief		Sets this matrix to identity
+		 *\brief		sets this matrix to identity
 		 *\~french
 		 *\brief		Définit cette matrice à l'identité
 		 */
-		void set_identity();
+		void setIdentity();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
@@ -478,7 +478,7 @@ namespace Castor
 		template< typename Type > Matrix< T, Columns, Rows > & operator=( Type const * p_matrix );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator.
+		 *\brief		addition assignment operator.
 		 *\param[in]	p_matrix	The Matrix object to add.
 		 *\return		A reference to this Matrix object.
 		 *\~french
@@ -490,7 +490,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator.
-		 *\param[in]	p_matrix	The Matrix object to substract.
+		 *\param[in]	p_matrix	The Matrix object to subtract.
 		 *\return		A reference to this Matrix object.
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction.
@@ -500,7 +500,7 @@ namespace Castor
 		template< typename Type > Matrix< T, Columns, Rows > & operator-=( Matrix< Type, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator.
+		 *\brief		addition assignment operator.
 		 *\param[in]	p_value	The value to add.
 		 *\return		A reference to this Matrix object.
 		 *\~french
@@ -512,7 +512,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator.
-		 *\param[in]	p_value	The value to substract.
+		 *\param[in]	p_value	The value to subtract.
 		 *\return		A reference to this Matrix object.
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction.
@@ -570,8 +570,8 @@ namespace Castor
 		T const & operator()( uint32_t p_col, uint32_t p_row )const;
 
 	protected:
-		my_type rec_get_minor( uint32_t x, uint32_t y, uint32_t p_rows, uint32_t p_cols )const;
-		void do_update_columns()const;
+		my_type recGetMinor( uint32_t x, uint32_t y, uint32_t p_rows, uint32_t p_cols )const;
+		void doUpdateColumns()const;
 		
 	protected:
 		//!\~english	The matrix data.
@@ -610,7 +610,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows > bool operator!=( Matrix< T, Columns, Rows > const & p_mtxA, Matrix< T, Columns, Rows > const & p_mtxB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_mtxA, p_mtxB	The matrices to add
 	 *\return		The addition result
 	 *\~french
@@ -622,7 +622,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_mtxA, p_mtxB	The matrices to substract
+	 *\param[in]	p_mtxA, p_mtxB	The matrices to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -669,7 +669,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U > Point< T, Columns > operator*( Point< T, Rows > const & p_vector, Matrix< U, Columns, Rows > const & p_mtxA );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_mtxA, p_mtxB	The matrices to add
 	 *\return		The addition result
 	 *\~french
@@ -681,7 +681,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_mtxA, p_mtxB	The matrices to substract
+	 *\param[in]	p_mtxA, p_mtxB	The matrices to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -691,7 +691,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U > Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & p_mtxA, U const * p_mtxB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_mtxA		The matrix
 	 *\param[in]	p_value	The value to add
 	 *\return		The addition result
@@ -706,7 +706,7 @@ namespace Castor
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_mtxA		The matrix
-	 *\param[in]	p_value	The value to substract
+	 *\param[in]	p_value	The value to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -743,7 +743,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U > Matrix< T, Columns, Rows > operator/( Matrix< T, Columns, Rows > const & p_mtxA, T const & p_value );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_matrix	The matrix
 	 *\param[in]	p_value	The value to add
 	 *\return		The addition result
@@ -758,7 +758,7 @@ namespace Castor
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_matrix	The matrix
-	 *\param[in]	p_value	The value to substract
+	 *\param[in]	p_value	The value to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -803,7 +803,7 @@ namespace Castor
 	 *\param[in]		p_matrix	La matrice entré
 	 *\return			Une référence sur le flux
 	 */
-	template< typename T, uint32_t Columns, uint32_t Rows > Castor::String & operator<<( Castor::String & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix );
+	template< typename T, uint32_t Columns, uint32_t Rows > castor::String & operator<<( castor::String & p_streamOut, castor::Matrix< T, Columns, Rows > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief			Stream operator
@@ -816,7 +816,7 @@ namespace Castor
 	 *\param[in,out]	p_matrix	La matrice sortie
 	 *\return			Une référence sur le flux
 	 */
-	template< typename T, uint32_t Columns, uint32_t Rows > Castor::String & operator>>( Castor::String & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix );
+	template< typename T, uint32_t Columns, uint32_t Rows > castor::String & operator>>( castor::String & p_streamIn, castor::Matrix< T, Columns, Rows > & p_matrix );
 	/**
 	 *\~english
 	 *\brief			Stream operator
@@ -829,7 +829,7 @@ namespace Castor
 	 *\param[in]		p_matrix	La matrice entré
 	 *\return			Une référence sur le flux
 	 */
-	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix );
+	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, castor::Matrix< T, Columns, Rows > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief			Stream operator
@@ -842,7 +842,7 @@ namespace Castor
 	 *\param[in,out]	p_matrix	La matrice sortie
 	 *\return			Une référence sur le flux
 	 */
-	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix );
+	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, castor::Matrix< T, Columns, Rows > & p_matrix );
 }
 
 #include "Matrix.inl"

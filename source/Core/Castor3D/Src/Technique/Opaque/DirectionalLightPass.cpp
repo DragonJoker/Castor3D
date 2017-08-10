@@ -14,10 +14,10 @@
 #include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*********************************************************************************************
 
@@ -32,9 +32,9 @@ namespace Castor3D
 		, GLSL::Shader const & vtx
 		, GLSL::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
-		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
-		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
-		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
+		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
+		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
+		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
 	{
 	}
 
@@ -42,22 +42,22 @@ namespace Castor3D
 	{
 	}
 
-	RenderPipelineUPtr DirectionalLightPass::Program::DoCreatePipeline( bool blend )
+	RenderPipelineUPtr DirectionalLightPass::Program::doCreatePipeline( bool blend )
 	{
 		DepthStencilState dsstate;
-		dsstate.SetDepthTest( false );
-		dsstate.SetDepthMask( WritingMask::eZero );
+		dsstate.setDepthTest( false );
+		dsstate.setDepthMask( WritingMask::eZero );
 		BlendState blstate;
 
 		if ( blend )
 		{
-			blstate.EnableBlend( true );
-			blstate.SetBlendOp( BlendOperation::eAdd );
-			blstate.SetSrcBlend( BlendOperand::eOne );
-			blstate.SetDstBlend( BlendOperand::eOne );
+			blstate.enableBlend( true );
+			blstate.setBlendOp( BlendOperation::eAdd );
+			blstate.setSrcBlend( BlendOperand::eOne );
+			blstate.setDstBlend( BlendOperand::eOne );
 		}
 
-		return m_program->GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+		return m_program->getRenderSystem()->createRenderPipeline( std::move( dsstate )
 			, RasteriserState{}
 			, std::move( blstate )
 			, MultisampleState{}
@@ -65,12 +65,12 @@ namespace Castor3D
 			, PipelineFlags{} );
 	}
 
-	void DirectionalLightPass::Program::DoBind( Light const & light )
+	void DirectionalLightPass::Program::doBind( Light const & light )
 	{
-		auto & directionalLight = *light.GetDirectionalLight();
-		m_lightIntensity->SetValue( directionalLight.GetIntensity() );
-		m_lightDirection->SetValue( directionalLight.GetDirection() );
-		m_lightTransform->SetValue( directionalLight.GetLightSpaceTransform() );
+		auto & directionalLight = *light.getDirectionalLight();
+		m_lightIntensity->setValue( directionalLight.getIntensity() );
+		m_lightDirection->setValue( directionalLight.getDirection() );
+		m_lightTransform->setValue( directionalLight.getLightSpaceTransform() );
 	}
 
 	//*********************************************************************************************
@@ -100,74 +100,74 @@ namespace Castor3D
 
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, declaration );
 		uint32_t stride = declaration.stride();
-		m_vertexBuffer->Resize( sizeof( data ) );
-		uint8_t * buffer = m_vertexBuffer->GetData();
+		m_vertexBuffer->resize( sizeof( data ) );
+		uint8_t * buffer = m_vertexBuffer->getData();
 		std::memcpy( buffer, data, sizeof( data ) );
-		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
-		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-		m_viewport.Initialise();
+		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
+		m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_viewport.initialise();
 	}
 
 	DirectionalLightPass::~DirectionalLightPass()
 	{
-		m_vertexBuffer->Cleanup();
+		m_vertexBuffer->cleanup();
 		m_vertexBuffer.reset();
-		m_viewport.Cleanup();
-		m_matrixUbo.GetUbo().Cleanup();
+		m_viewport.cleanup();
+		m_matrixUbo.getUbo().cleanup();
 	}
 
-	void DirectionalLightPass::Initialise( Scene const & scene
+	void DirectionalLightPass::initialise( Scene const & scene
 		, SceneUbo & sceneUbo )
 	{
-		DoInitialise( scene
+		doInitialise( scene
 			, LightType::eDirectional
 			, *m_vertexBuffer
 			, nullptr
 			, sceneUbo
 			, nullptr );
-		m_viewport.Update();
+		m_viewport.update();
 	}
 
-	void DirectionalLightPass::Cleanup()
+	void DirectionalLightPass::cleanup()
 	{
-		DoCleanup();
+		doCleanup();
 	}
 
-	uint32_t DirectionalLightPass::GetCount()const
+	uint32_t DirectionalLightPass::getCount()const
 	{
 		return VertexCount;
 	}
 
-	void DirectionalLightPass::DoUpdate( Size const & size
+	void DirectionalLightPass::doUpdate( Size const & size
 		, Light const & light
 		, Camera const & camera )
 	{
-		m_viewport.Resize( size );
-		m_matrixUbo.Update( camera.GetView(), m_viewport.GetProjection() );
+		m_viewport.resize( size );
+		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );
 	}
 
-	GLSL::Shader DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	GLSL::Shader DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
 		using namespace GLSL;
-		GlslWriter writer = m_engine.GetRenderSystem()->CreateGlslWriter();
+		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
 		UBO_MATRIX( writer );
 		UBO_GPINFO( writer );
-		auto vertex = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+		auto vertex = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 
 		// Shader outputs
-		auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
 			gl_Position = c3d_mtxProjection * vec4( vertex, 0.0, 1.0 );
 		} );
 
-		return writer.Finalise();
+		return writer.finalise();
 	}
 
-	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( GLSL::Shader const & vtx
+	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram( GLSL::Shader const & vtx
 		, GLSL::Shader const & pxl )const
 	{
 		return std::make_unique< Program >( m_engine, vtx, pxl );

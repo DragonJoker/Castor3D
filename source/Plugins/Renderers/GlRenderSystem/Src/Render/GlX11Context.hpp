@@ -40,27 +40,27 @@ namespace GlRender
 		GlContextImpl( OpenGl & p_gl, GlContext * p_context );
 		~GlContextImpl();
 
-		bool Initialise( Castor3D::RenderWindow * p_window );
-		void Cleanup();
-		void SetCurrent();
-		void EndCurrent();
-		void SwapBuffers();
-		void UpdateVSync( bool p_enable );
+		bool initialise( castor3d::RenderWindow * p_window );
+		void cleanup();
+		void setCurrent();
+		void endCurrent();
+		void swapBuffers();
+		void updateVSync( bool p_enable );
 
-		inline GLXContext GetContext()
+		inline GLXContext getContext()
 		{
 			return m_glxContext;
 		}
 
-		inline Castor3D::GpuInformations && GetGpuInformations()
+		inline castor3d::GpuInformations && getGpuInformations()
 		{
 			return std::move( m_gpuInformations );
 		}
 
 	private:
-		XVisualInfo * DoCreateVisualInfoWithFBConfig( Castor3D::RenderWindow * p_window, Castor::IntArray p_arrayAttribs, int p_screen );
-		XVisualInfo * DoCreateVisualInfoWithoutFBConfig( Castor::IntArray p_arrayAttribs, int p_screen );
-		bool DoCreateGl3Context( Castor3D::RenderWindow * p_window );
+		XVisualInfo * doCreateVisualInfoWithFBConfig( castor3d::RenderWindow * p_window, castor::IntArray p_arrayAttribs, int p_screen );
+		XVisualInfo * doCreateVisualInfoWithoutFBConfig( castor::IntArray p_arrayAttribs, int p_screen );
+		bool doCreateGl3Context( castor3d::RenderWindow * p_window );
 
 	protected:
 		GLXContext m_glxContext;
@@ -70,7 +70,7 @@ namespace GlRender
 		GLXFBConfig * m_fbConfig;
 		GlContext * m_context;
 		bool m_initialised;
-		Castor3D::GpuInformations m_gpuInformations;
+		castor3d::GpuInformations m_gpuInformations;
 	};
 }
 #endif

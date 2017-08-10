@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "TextureImage.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -36,7 +36,7 @@ namespace Castor3D
 	\brief		Class de base d'une texture
 	*/
 	class TextureLayout
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 		friend class TextureImage;
 
@@ -83,8 +83,8 @@ namespace Castor3D
 			TextureType p_type,
 			AccessTypes const & p_cpuAccess,
 			AccessTypes const & p_gpuAccess,
-			Castor::PixelFormat p_format,
-			Castor::Size const & p_size );
+			castor::PixelFormat p_format,
+			castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -108,8 +108,8 @@ namespace Castor3D
 			TextureType p_type,
 			AccessTypes const & p_cpuAccess,
 			AccessTypes const & p_gpuAccess,
-			Castor::PixelFormat p_format,
-			Castor::Point3ui const & p_size );
+			castor::PixelFormat p_format,
+			castor::Point3ui const & p_size );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		C3D_API void Bind( uint32_t p_index )const;
+		C3D_API void bind( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -134,7 +134,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		C3D_API void Unbind( uint32_t p_index )const;
+		C3D_API void unbind( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Resizes the texture buffer
@@ -143,7 +143,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		C3D_API void Resize( Castor::Size const & p_size );
+		C3D_API void resize( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Resizes the 3D texture buffer
@@ -152,7 +152,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture 3D
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		C3D_API void Resize( Castor::Point3ui const & p_size );
+		C3D_API void resize( castor::Point3ui const & p_size );
 		/**
 		 *\~english
 		 *\brief		Locks layout buffer from GPU, allowing modifications into it.
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * Lock( AccessTypes const & p_lock );
+		C3D_API uint8_t * lock( AccessTypes const & p_lock );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -176,7 +176,7 @@ namespace Castor3D
 		 *\remarks		Désactive la texture.
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 */
-		C3D_API void Unlock( bool p_modified );
+		C3D_API void unlock( bool p_modified );
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it.
@@ -191,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de l'image.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * Lock( AccessTypes const & p_lock, uint32_t p_index );
+		C3D_API uint8_t * lock( AccessTypes const & p_lock, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 *\param[in]	p_index		L'index de l'image.
 		 */
-		C3D_API void Unlock( bool p_modified, uint32_t p_index );
+		C3D_API void unlock( bool p_modified, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
@@ -215,7 +215,7 @@ namespace Castor3D
 		 *\param[in]	p_folder	Le dossier contenant l'image.
 		 *\param[in]	p_relative	Le chemin d'accès à l'image, relatif à p_folder.
 		 */
-		C3D_API void SetSource( Castor::Path const & p_folder, Castor::Path const & p_relative );
+		C3D_API void setSource( castor::Path const & p_folder, castor::Path const & p_relative );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
@@ -224,7 +224,7 @@ namespace Castor3D
 		 *\brief		Initialise le tampon de la texture.
 		 *\param[in]	p_buffer	Le tampon.
 		 */
-		C3D_API void SetSource( Castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void setSource( castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -233,21 +233,21 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
 		 */
-		C3D_API virtual void GenerateMipmaps()const = 0;
+		C3D_API virtual void generateMipmaps()const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the initialisation status
@@ -256,7 +256,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'initialisation
 		 *\return		Le statut d'initialisation
 		 */
-		inline bool IsInitialised()const
+		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
@@ -268,7 +268,7 @@ namespace Castor3D
 		 *\brief		Récupère la dimension de la texture
 		 *\return		La dimension de la texture
 		 */
-		inline TextureType GetType()const
+		inline TextureType getType()const
 		{
 			return m_type;
 		}
@@ -280,7 +280,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de l'image.
 		 *\return		L'image de la texture.
 		 */
-		inline TextureImage const & GetImage( size_t p_index = 0 )const
+		inline TextureImage const & getImage( size_t p_index = 0 )const
 		{
 			REQUIRE( p_index < m_images.size() && m_images[p_index] );
 			return *m_images[p_index];
@@ -293,7 +293,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de l'image.
 		 *\return		L'image de la texture.
 		 */
-		inline TextureImage & GetImage( size_t p_index = 0 )
+		inline TextureImage & getImage( size_t p_index = 0 )
 		{
 			REQUIRE( p_index < m_images.size() && m_images[p_index] );
 			return *m_images[p_index];
@@ -306,9 +306,9 @@ namespace Castor3D
 		 *\brief		Récupère la largeur de l'image de la texture
 		 *\return		La largeur
 		 */
-		inline uint32_t GetWidth()const
+		inline uint32_t getWidth()const
 		{
-			return m_size.width();
+			return m_size.getWidth();
 		}
 		/**
 		 *\~english
@@ -318,9 +318,9 @@ namespace Castor3D
 		 *\brief		Récupère la hauteur de l'image de la texture
 		 *\return		La hauteur
 		 */
-		inline uint32_t GetHeight()const
+		inline uint32_t getHeight()const
 		{
-			return m_size.height() / GetDepth();
+			return m_size.getHeight() / getDepth();
 		}
 		/**
 		 *\~english
@@ -330,9 +330,9 @@ namespace Castor3D
 		 *\brief		Récupère les dimensions de l'image de la texture
 		 *\return		Les dimensions de l'image
 		 */
-		inline Castor::Size GetDimensions()const
+		inline castor::Size getDimensions()const
 		{
-			return Castor::Size{ GetWidth(), GetHeight() };
+			return castor::Size{ getWidth(), getHeight() };
 		}
 		/**
 		 *\~english
@@ -342,7 +342,7 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels de la texture
 		 *\return		Le format des pixels
 		 */
-		inline Castor::PixelFormat GetPixelFormat()const
+		inline castor::PixelFormat getPixelFormat()const
 		{
 			return m_format;
 		}
@@ -354,7 +354,7 @@ namespace Castor3D
 		 *\brief		Récupère la profondeur de la texture
 		 *\return		La profondeur, 1 si pas 3D
 		 */
-		inline uint32_t GetDepth()const
+		inline uint32_t getDepth()const
 		{
 			return m_type == TextureType::eThreeDimensions ? m_depth : 1;
 		}
@@ -366,7 +366,7 @@ namespace Castor3D
 		 *\brief		Récupère la profondeur de la texture
 		 *\return		La profondeur, 1 si pas tableau
 		 */
-		inline uint32_t GetLayersCount()const
+		inline uint32_t getLayersCount()const
 		{
 			return ( m_type == TextureType::eTwoDimensionsArray
 					|| m_type == TextureType::eOneDimensionArray
@@ -426,7 +426,7 @@ namespace Castor3D
 		 *\param[in]	p_size		Les dimensions de l'image.
 		 *\param[in]	p_format	Le format des pixels de l'image.
 		 */
-		void DoUpdateFromFirstImage( Castor::Size const & p_size, Castor::PixelFormat p_format );
+		void doUpdateFromFirstImage( castor::Size const & p_size, castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Reinitialises the storage.
@@ -435,7 +435,7 @@ namespace Castor3D
 		 *\brief		Réinitialise le stockage.
 		 *\remarks		Ne fait rien si le stockage n'avait pas été créé.
 		 */
-		bool DoResetStorage();
+		bool doResetStorage();
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU storage.
@@ -446,7 +446,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Le type de stockage.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool DoCreateStorage( TextureStorageType p_type );
+		bool doCreateStorage( TextureStorageType p_type );
 
 	private:
 		/**
@@ -457,28 +457,28 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoInitialise() = 0;
+		C3D_API virtual bool doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		API specific binding function
 		 *\~french
 		 *\brief		Activation spécifique selon l'API
 		 */
-		C3D_API virtual void DoBind( uint32_t p_index )const = 0;
+		C3D_API virtual void doBind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		API specific unbinding function
 		 *\~french
 		 *\brief		Désactivation spécifique selon l'API
 		 */
-		C3D_API virtual void DoUnbind( uint32_t p_index )const = 0;
+		C3D_API virtual void doUnbind( uint32_t p_index )const = 0;
 
 	protected:
 		//!\~english	Initialisation status
@@ -501,10 +501,10 @@ namespace Castor3D
 		AccessTypes m_gpuAccess;
 		//!\~english	The teture dimensions.
 		//!\~french		Les dimensions de la texture.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The texture pixels' format.
 		//!\~french		Le format des pixels de la texture.
-		Castor::PixelFormat m_format;
+		castor::PixelFormat m_format;
 		//!\~english	The texture's depth or layers count.
 		//!\~french		La profondeur ou nombre de couches de la texture.
 		uint32_t m_depth;

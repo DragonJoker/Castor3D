@@ -32,7 +32,7 @@ SOFTWARE.
 #include "SkinningRenderNode.hpp"
 #include "StaticRenderNode.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	template< typename T >
 	struct TypeRenderNodesByPassMap

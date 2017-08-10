@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Plugin.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API RendererPlugin( Castor::DynamicLibrarySPtr p_library, Engine * engine );
+		C3D_API RendererPlugin( castor::DynamicLibrarySPtr p_library, Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de renderer
 		 *\return		Le type
 		 */
-		C3D_API Castor::String const & GetRendererType();
+		C3D_API castor::String const & getRendererType();
 		/**
 		 *\~english
 		 *\brief		Defines the renderer type.
@@ -79,10 +79,10 @@ namespace Castor3D
 		 *\brief		Définit le type de renderer.
 		 *\param[in]	p_type	Le type.
 		 */
-		C3D_API void SetRendererType( Castor::String const & p_type );
+		C3D_API void setRendererType( castor::String const & p_type );
 
 	private:
-		Castor::String m_type;
+		castor::String m_type;
 	};
 }
 

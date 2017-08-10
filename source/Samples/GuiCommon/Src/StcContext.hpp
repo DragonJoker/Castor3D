@@ -58,138 +58,138 @@ namespace GuiCommon
 		StcContext();
 		virtual ~StcContext();
 
-		void ParseFile( wxString const & p_strFileName );
+		void parseFile( wxString const & p_strFileName );
 
-		inline uint32_t GetNbLanguages()const
+		inline uint32_t getNbLanguages()const
 		{
 			return uint32_t( m_arrayLanguages.size() );
 		}
 
-		inline LanguageInfoPtrArrayIt Begin()
+		inline LanguageInfoPtrArrayIt begin()
 		{
 			return m_arrayLanguages.begin();
 		}
 
-		inline LanguageInfoPtrArrayConstIt Begin()const
+		inline LanguageInfoPtrArrayConstIt begin()const
 		{
 			return m_arrayLanguages.begin();
 		}
 
-		inline LanguageInfoPtrArrayConstIt End()const
+		inline LanguageInfoPtrArrayConstIt end()const
 		{
 			return m_arrayLanguages.end();
 		}
 
-		inline bool GetWhiteSpaceEnable()const
+		inline bool getWhiteSpaceEnable()const
 		{
 			return m_bWhiteSpaceEnable;
 		}
 
-		inline bool GetLongLineOnEnable()const
+		inline bool getLongLineOnEnable()const
 		{
 			return m_bLongLineOnEnable;
 		}
 
-		inline bool GetLineNumberEnable()const
+		inline bool getLineNumberEnable()const
 		{
 			return m_bLineNumberEnable;
 		}
 
-		inline bool GetIndentGuideEnable()const
+		inline bool getIndentGuideEnable()const
 		{
 			return m_bIndentGuideEnable;
 		}
 
-		inline bool GetDisplayEOLEnable()const
+		inline bool getDisplayEOLEnable()const
 		{
 			return m_bDisplayEOLEnable;
 		}
 
-		inline bool GetWrapModeInitial()const
+		inline bool getWrapModeInitial()const
 		{
 			return m_bWrapModeInitial;
 		}
 
-		inline bool GetOverTypeInitial()const
+		inline bool getOverTypeInitial()const
 		{
 			return m_bOverTypeInitial;
 		}
 
-		inline bool GetReadOnlyInitial()const
+		inline bool getReadOnlyInitial()const
 		{
 			return m_bReadOnlyInitial;
 		}
 
-		inline bool GetIndentEnable()const
+		inline bool getIndentEnable()const
 		{
 			return m_bIndentEnable;
 		}
 
-		inline bool GetFoldEnable()const
+		inline bool getFoldEnable()const
 		{
 			return m_bFoldEnable;
 		}
-		inline bool GetSyntaxEnable()const
+		inline bool getSyntaxEnable()const
 		{
 			return m_bSyntaxEnable;
 		}
 
-		inline void AddLanguage( LanguageInfoPtr p_pLanguage )
+		inline void addLanguage( LanguageInfoPtr p_pLanguage )
 		{
 			m_arrayLanguages.push_back( p_pLanguage );
 		}
 
-		inline void SetSyntaxEnable( bool val )
+		inline void setSyntaxEnable( bool val )
 		{
 			m_bSyntaxEnable = val;
 		}
 
-		inline void SetFoldEnable( bool val )
+		inline void setFoldEnable( bool val )
 		{
 			m_bFoldEnable = val;
 		}
 
-		inline void SetIndentEnable( bool val )
+		inline void setIndentEnable( bool val )
 		{
 			m_bIndentEnable = val;
 		}
 
-		inline void SetReadOnlyInitial( bool val )
+		inline void setReadOnlyInitial( bool val )
 		{
 			m_bReadOnlyInitial = val;
 		}
 
-		inline void SetOverTypeInitial( bool val )
+		inline void setOverTypeInitial( bool val )
 		{
 			m_bOverTypeInitial = val;
 		}
 
-		inline void SetWrapModeInitial( bool val )
+		inline void setWrapModeInitial( bool val )
 		{
 			m_bWrapModeInitial = val;
 		}
 
-		inline void SetDisplayEOLEnable( bool val )
+		inline void setDisplayEOLEnable( bool val )
 		{
 			m_bDisplayEOLEnable = val;
 		}
 
-		inline void SetIndentGuideEnable( bool val )
+		inline void setIndentGuideEnable( bool val )
 		{
 			m_bIndentGuideEnable = val;
 		}
 
-		inline void SetLineNumberEnable( bool val )
+		inline void setLineNumberEnable( bool val )
 		{
 			m_bLineNumberEnable = val;
 		}
 
-		inline void SetLongLineOnEnable( bool val )
+		inline void setLongLineOnEnable( bool val )
 		{
 			m_bLongLineOnEnable = val;
 		}
 
-		inline void SetWhiteSpaceEnable( bool val )
+		inline void setWhiteSpaceEnable( bool val )
 		{
 			m_bWhiteSpaceEnable = val;
 		}

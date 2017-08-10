@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		C3D_API virtual Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const = 0;
+		C3D_API virtual Type interpolate( Type const & p_src, Type const & p_dst, real p_percent )const = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -122,7 +122,7 @@ namespace Castor3D
 		 *\brief		Fonction d'interpolation.
 		 *\param[in]	p_src		Le départ.
 		 */
-		inline Type Interpolate( Type const & p_src, Type const &, real )const
+		inline Type interpolate( Type const & p_src, Type const &, real )const
 		{
 			return p_src;
 		}
@@ -171,7 +171,7 @@ namespace Castor3D
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const
+		inline Type interpolate( Type const & p_src, Type const & p_dst, real p_percent )const
 		{
 			Type result;
 
@@ -201,8 +201,8 @@ namespace Castor3D
 	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
 	*/
 	template<>
-	class InterpolatorT< Castor::Quaternion, InterpolatorType::eLinear >
-		: public Interpolator< Castor::Quaternion >
+	class InterpolatorT< castor::Quaternion, InterpolatorType::eLinear >
+		: public Interpolator< castor::Quaternion >
 	{
 	public:
 		/**
@@ -235,9 +235,9 @@ namespace Castor3D
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline Castor::Quaternion Interpolate( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst, real p_percent )const
+		inline castor::Quaternion interpolate( castor::Quaternion const & p_src, castor::Quaternion const & p_dst, real p_percent )const
 		{
-			Castor::Quaternion result;
+			castor::Quaternion result;
 
 			if ( p_percent <= 0.0 )
 			{

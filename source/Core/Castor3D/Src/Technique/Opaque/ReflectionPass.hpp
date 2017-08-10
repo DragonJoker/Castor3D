@@ -30,7 +30,7 @@ SOFTWARE.
 #include "Shader/GpInfoUbo.hpp"
 #include "Shader/HdrConfigUbo.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor3D
 	\brief		La passe de réflexion post éclairage.
 	*/
 	class ReflectionPass
-		: Castor::OwnedBy< Engine >
+		: castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	engine	Le moteur.
 		 */
 		ReflectionPass( Engine & engine
-			, Castor::Size const & size
+			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo );
 		/**
@@ -70,22 +70,22 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dessine le mapping de réflexion.
 		 */
-		void Render( GeometryPassResult & gp
+		void render( GeometryPassResult & gp
 			, TextureUnit const & lp
 			, Scene const & scene
 			, RenderInfo & info );
 
-		inline TextureUnit const & GetResult()const
+		inline TextureUnit const & getResult()const
 		{
 			return m_reflection;
 		}
 
-		inline TextureUnit const & GetReflection()const
+		inline TextureUnit const & getReflection()const
 		{
 			return m_reflection;
 		}
 
-		inline TextureUnit const & GetRefraction()const
+		inline TextureUnit const & getRefraction()const
 		{
 			return m_refraction;
 		}
@@ -106,7 +106,7 @@ namespace Castor3D
 				, bool p_pbr
 				, bool p_isMR );
 			~ProgramPipeline();
-			void Render();
+			void render();
 			//!\~english	The shader program.
 			//!\~french		Le shader program.
 			ShaderProgramSPtr m_program;
@@ -119,7 +119,7 @@ namespace Castor3D
 		};
 		//!\~english	The render size.
 		//!\~french		La taille du rendu.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The light pass output.
 		//!\~french		La sortie de la passe de lumières.
 		TextureUnit m_reflection;

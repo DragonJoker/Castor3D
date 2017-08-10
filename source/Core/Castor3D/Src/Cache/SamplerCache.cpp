@@ -1,8 +1,8 @@
 #include "SamplerCache.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String CacheTraits< Sampler, String >::Name = cuT( "Sampler" );
 }

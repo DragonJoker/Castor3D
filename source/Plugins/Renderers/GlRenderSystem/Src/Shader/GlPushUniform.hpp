@@ -29,29 +29,29 @@ SOFTWARE.
 
 namespace GlRender
 {
-	template< Castor3D::UniformType Type >
+	template< castor3d::UniformType Type >
 	class GlPushUniform
-		: public Castor3D::TPushUniform< Type >
+		: public castor3d::TPushUniform< Type >
 		, public Holder
 	{
 	public:
 		GlPushUniform( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences );
 		virtual ~GlPushUniform();
 
-		inline uint32_t GetGlName() const
+		inline uint32_t getGlName() const
 		{
 			return m_glName;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Uniform::DoInitialise
+		 *\copydoc		castor3d::Uniform::doInitialise
 		 */
-		bool DoInitialise()override;
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::Uniform::DoUpdate
+		 *\copydoc		castor3d::Uniform::doUpdate
 		 */
-		void DoUpdate()const override;
+		void doUpdate()const override;
 
 	private:
 		uint32_t m_glName{ GlInvalidIndex };

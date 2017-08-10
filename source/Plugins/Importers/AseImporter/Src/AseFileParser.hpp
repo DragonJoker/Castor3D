@@ -65,7 +65,7 @@ namespace Ase
 	\brief		Analyseur de fichiers ASE
 	*/
 	class AseFileParser
-		:	public Castor::FileParser
+		:	public castor::FileParser
 	{
 	public:
 		/**
@@ -78,7 +78,7 @@ namespace Ase
 		 *\param[in]	p_importer	L'importeur.
 		 *\param[out]	p_scene		La scène recevant les données.
 		 */
-		AseFileParser( AseImporter & p_importer, Castor3D::Scene & p_scene );
+		AseFileParser( AseImporter & p_importer, castor3d::Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -91,7 +91,7 @@ namespace Ase
 		 *\param[out]	p_scene		La scène recevant les données de scène.
 		 *\param[out]	p_mesh		Le maillage recevant les données.
 		 */
-		AseFileParser( AseImporter & p_importer, Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh );
+		AseFileParser( AseImporter & p_importer, castor3d::Scene & p_scene, castor3d::Mesh & p_mesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -101,144 +101,144 @@ namespace Ase
 		~AseFileParser();
 
 	private:
-		void DoInitialiseParser( Castor::TextFile & p_file )override;
-		void DoCleanupParser()override;
-		bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )override
+		void doInitialiseParser( castor::TextFile & p_file )override;
+		void doCleanupParser()override;
+		bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( p_strLine ) )override
 		{
 			return false;
 		}
-		bool DoDiscardParser( Castor::String const & p_strLine )override;
-		void DoValidate()override;
-		Castor::String DoGetSectionName( uint32_t p_section )override;
+		bool doDiscardParser( castor::String const & p_strLine )override;
+		void doValidate()override;
+		castor::String doGetSectionName( uint32_t p_section )override;
 
 	private:
 		AseImporter & m_importer;
-		Castor3D::Scene & m_scene;
-		Castor3D::Mesh * m_mesh;
+		castor3d::Scene & m_scene;
+		castor3d::Mesh * m_mesh;
 	};
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_RootFormat )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_RootComment )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_RootScene )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_RootMaterials )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_RootGeometry )
+	DECLARE_ATTRIBUTE_PARSER( AseparserRootFormat )
+	DECLARE_ATTRIBUTE_PARSER( AseparserRootComment )
+	DECLARE_ATTRIBUTE_PARSER( AseparserRootScene )
+	DECLARE_ATTRIBUTE_PARSER( AseparserRootMaterials )
+	DECLARE_ATTRIBUTE_PARSER( AseparserRootGeometry )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneFileName )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneFirstFrame )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneLastFrame )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneFrameSpeed )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneTicksPerFrame )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneBgColour )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneAmbientLight )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SceneEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneFileName )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneFirstFrame )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneLastFrame )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneFrameSpeed )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneTicksPerFrame )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneBgColour )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneAmbientLight )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSceneEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialsCount )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialsMat )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialsEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialsCount )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialsMat )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialsEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialName )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialClass )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialAmbient )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialDiffuse )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialSpecular )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialShine )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialShineStrength )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialTransparency )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialWiresize )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialShading )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialXPFalloff )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialSelfillum )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialFalloff )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialXPType )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialMapDiffuse )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialSubmat )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MaterialEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialName )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialClass )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialAmbient )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialDiffuse )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialSpecular )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialShine )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialShineStrength )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialTransparency )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialWiresize )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialShading )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialXPFalloff )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialSelfillum )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialFalloff )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialXPType )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialMapDiffuse )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialSubmat )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMaterialEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SubMaterialName )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_SubMaterialEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSubMaterialName )
+	DECLARE_ATTRIBUTE_PARSER( AseparserSubMaterialEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseName )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseClass )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseSubno )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseAmount )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseBitmap )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseType )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseUOffset )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseVOffset )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseUTiling )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseVTiling )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseAngle )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseBlur )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseBlurOffset )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseNouseAMT )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseNoiseSize )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseNoiseLevel )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseNoisePhase )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseFilter )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_MapDiffuseEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseName )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseClass )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseSubno )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseAmount )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseBitmap )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseType )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseUOffset )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseVOffset )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseUTiling )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseVTiling )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseAngle )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseBlur )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseBlurOffset )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseNouseAMT )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseNoiseSize )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseNoiseLevel )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseNoisePhase )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseFilter )
+	DECLARE_ATTRIBUTE_PARSER( AseparserMapDiffuseEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryNodeName )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryNodeTM )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryMesh )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryMotionBlur )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryCastShadow )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryRecvShadow )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryMaterialRef )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeometryEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryNodeName )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryNodeTM )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryMesh )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryMotionBlur )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryCastShadow )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryRecvShadow )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryMaterialRef )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeometryEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeName )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeInheritPos )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeInheritRot )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeInheritScl )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeRow0 )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeRow1 )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeRow2 )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeRow3 )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodePos )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeRotAxis )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeRotAngle )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeScale )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeScaleAxis )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeScaleAngle )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoNodeEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeName )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeInheritPos )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeInheritRot )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeInheritScl )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeRow0 )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeRow1 )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeRow2 )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeRow3 )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodePos )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeRotAxis )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeRotAngle )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeScale )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeScaleAxis )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeScaleAngle )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoNodeEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshTimeValue )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshNumVertex )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshVertexList )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshNumFaces )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshFaceList )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshNumTVertex )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshTVertexList )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshNumTFaces )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshTFaceList )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshNumCVertex )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshCVertexList )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshNumCFaces )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshCFaceList )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshNormals )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_GeoMeshEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshTimeValue )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshNumVertex )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshVertexList )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshNumFaces )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshFaceList )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshNumTVertex )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshTVertexList )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshNumTFaces )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshTFaceList )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshNumCVertex )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshCVertexList )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshNumCFaces )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshCFaceList )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshNormals )
+	DECLARE_ATTRIBUTE_PARSER( AseparserGeoMeshEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_VertexListVertex )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_VertexListEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserVertexListVertex )
+	DECLARE_ATTRIBUTE_PARSER( AseparserVertexListEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_FaceListFace )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_FaceListEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserFaceListFace )
+	DECLARE_ATTRIBUTE_PARSER( AseparserFaceListEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_TVertexListVertex )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_TVertexListEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserTVertexListVertex )
+	DECLARE_ATTRIBUTE_PARSER( AseparserTVertexListEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_TFaceListFace )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_TFaceListEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserTFaceListFace )
+	DECLARE_ATTRIBUTE_PARSER( AseparserTFaceListEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_CVertexListVertex )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_CVertexListEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserCVertexListVertex )
+	DECLARE_ATTRIBUTE_PARSER( AseparserCVertexListEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_CFaceListFace )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_CFaceListEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserCFaceListFace )
+	DECLARE_ATTRIBUTE_PARSER( AseparserCFaceListEnd )
 
-	DECLARE_ATTRIBUTE_PARSER( AseParser_NormalsListFaceNormal )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_NormalsListVertexNormal )
-	DECLARE_ATTRIBUTE_PARSER( AseParser_NormalsListEnd )
+	DECLARE_ATTRIBUTE_PARSER( AseparserNormalsListFaceNormal )
+	DECLARE_ATTRIBUTE_PARSER( AseparserNormalsListVertexNormal )
+	DECLARE_ATTRIBUTE_PARSER( AseparserNormalsListEnd )
 }
 
 #endif

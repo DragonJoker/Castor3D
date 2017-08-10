@@ -35,7 +35,7 @@ SOFTWARE.
 
 #include <stack>
 
-namespace Castor3D
+namespace castor3d
 {
 	static const uint32_t C3D_MAX_TEXTURE_MATRICES = 4;
 	/*!
@@ -50,11 +50,11 @@ namespace Castor3D
 	\remark		Définit les diverses matrices, applique les transformations supportées.
 	*/
 	class RenderPipeline
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	private:
-		using MatrixStack = std::stack< Castor::Matrix4x4r >;
-		using ShaderObjectSet = std::set< ShaderObjectSPtr >;
+		using MatrixStack = std::stack< castor::Matrix4x4r >;
+		using ShaderObjectset = std::set< ShaderObjectSPtr >;
 		using BindingArray = std::vector< std::reference_wrapper< UniformBufferBinding > >;
 
 	public:
@@ -98,30 +98,30 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie le pipeline.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Applies the pipeline.
 		 *\~french
 		 *\brief		Applique le pipeline.
 		 */
-		C3D_API virtual void Apply()const = 0;
+		C3D_API virtual void apply()const = 0;
 		/**
 		 *\~english
-		 *\brief		Adds a uniform buffer to the pipeline.
+		 *\brief		adds a uniform buffer to the pipeline.
 		 *\remarks		Creates the binding for this uniform buffer, using the pipeline's program.
 		 *\~french
 		 *\brief		Ajoute un tampon d'uniformes à ce pipeline.
 		 *\remarks		Crée le binding pour ce tampon, en utilisant le programme de ce pipeline.
 		 */
-		C3D_API void AddUniformBuffer( UniformBuffer & p_ubo );
+		C3D_API void addUniformBuffer( UniformBuffer & p_ubo );
 		/**
 		 *\~english
 		 *\return		The shader program.
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline ShaderProgram const & GetProgram()const
+		inline ShaderProgram const & getProgram()const
 		{
 			return m_program;
 		}
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline ShaderProgram & GetProgram()
+		inline ShaderProgram & getProgram()
 		{
 			return m_program;
 		}
@@ -141,7 +141,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les bindings des tampons de variables uniformes.
 		 */
-		inline BindingArray const & GetBindings()const
+		inline BindingArray const & getBindings()const
 		{
 			return m_bindings;
 		}
@@ -151,7 +151,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de création.
 		 */
-		inline PipelineFlags const & GetFlags()const
+		inline PipelineFlags const & getFlags()const
 		{
 			return m_flags;
 		}
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre de textures utilisées par le programme.
 		 */
-		inline uint32_t GetTexturesCount()
+		inline uint32_t getTexturesCount()
 		{
 			return m_textureCount;
 		}
@@ -171,7 +171,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières directionnelles.
 		 */
-		inline PushUniform1s & GetDirectionalShadowMapsVariable()
+		inline PushUniform1s & getDirectionalShadowMapsVariable()
 		{
 			REQUIRE( m_directionalShadowMaps );
 			return *m_directionalShadowMaps;
@@ -182,7 +182,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières spots.
 		 */
-		inline PushUniform1s & GetSpotShadowMapsVariable()
+		inline PushUniform1s & getSpotShadowMapsVariable()
 		{
 			REQUIRE( m_spotShadowMaps );
 			return *m_spotShadowMaps;
@@ -193,7 +193,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières ponctuelles.
 		 */
-		inline PushUniform1s & GetPointShadowMapsVariable()
+		inline PushUniform1s & getPointShadowMapsVariable()
 		{
 			REQUIRE( m_pointShadowMaps );
 			return *m_pointShadowMaps;
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader de la reflection map.
 		 */
-		inline PushUniform1s & GetEnvironmentMapVariable()
+		inline PushUniform1s & getEnvironmentMapVariable()
 		{
 			REQUIRE( m_environmentMap );
 			return *m_environmentMap;
@@ -215,7 +215,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader de la texture d'irradiance.
 		 */
-		inline PushUniform1s & GetIrradianceMapVariable()
+		inline PushUniform1s & getIrradianceMapVariable()
 		{
 			REQUIRE( m_irradianceMap );
 			return *m_irradianceMap;
@@ -226,7 +226,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader de la texture d'irradiance.
 		 */
-		inline PushUniform1s & GetPrefilteredMapVariable()
+		inline PushUniform1s & getPrefilteredMapVariable()
 		{
 			REQUIRE( m_prefilteredMap );
 			return *m_prefilteredMap;
@@ -237,19 +237,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader de la texture de BRDF.
 		 */
-		inline PushUniform1s & GetBrdfMapVariable()
+		inline PushUniform1s & getBrdfMapVariable()
 		{
 			REQUIRE( m_brdfMap );
 			return *m_brdfMap;
 		}
 
 	public:
-		C3D_API static const Castor::String MtxProjection;
-		C3D_API static const Castor::String MtxModel;
-		C3D_API static const Castor::String MtxView;
-		C3D_API static const Castor::String MtxInvProjection;
-		C3D_API static const Castor::String MtxNormal;
-		C3D_API static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
+		C3D_API static const castor::String MtxProjection;
+		C3D_API static const castor::String MtxModel;
+		C3D_API static const castor::String MtxView;
+		C3D_API static const castor::String MtxInvProjection;
+		C3D_API static const castor::String MtxNormal;
+		C3D_API static const castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 
 	protected:
 		//!\~english	The depth stencil state.

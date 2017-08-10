@@ -1,13 +1,13 @@
 #include "ColourComponent.hpp"
 
-namespace Castor
+namespace castor
 {
 	bool operator ==( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB )
 	{
 		uint8_t uiA;
 		uint8_t uiB;
-		p_cpnA.convert_to( uiA );
-		p_cpnB.convert_to( uiB );
+		p_cpnA.convertTo( uiA );
+		p_cpnB.convertTo( uiB );
 		return uiA == uiB;
 	}
 
@@ -19,7 +19,7 @@ namespace Castor
 	float operator -( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		ColourComponent cpnt( &fValue );
 		cpnt -= p_scalar;
 		return fValue;
@@ -28,7 +28,7 @@ namespace Castor
 	float operator +( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		ColourComponent cpnt( &fValue );
 		cpnt += p_scalar;
 		return fValue;
@@ -37,7 +37,7 @@ namespace Castor
 	float operator *( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		ColourComponent cpnt( &fValue );
 		cpnt *= p_scalar;
 		return fValue;
@@ -46,7 +46,7 @@ namespace Castor
 	float operator /( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		ColourComponent cpnt( &fValue );
 		cpnt /= p_scalar;
 		return fValue;

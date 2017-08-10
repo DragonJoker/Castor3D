@@ -30,7 +30,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -42,10 +42,10 @@ namespace Castor3D
 	\brief		Implémentation du reflection mapping.
 	*/
 	class EnvironmentMap
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
-		using CubeMatrices = std::array< Castor::Matrix4x4r, size_t (CubeMapFace::eCount) >;
+		using CubeMatrices = std::array< castor::Matrix4x4r, size_t (CubeMapFace::eCount) >;
 		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t (CubeMapFace::eCount) >;
 		using CubeCameras = std::array< CameraSPtr, size_t (CubeMapFace::eCount) >;
 		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
@@ -77,14 +77,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le frame buffer.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer.
 		 *\~french
 		 *\brief		Nettoie le frame buffer.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the passes.
@@ -95,21 +95,21 @@ namespace Castor3D
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( RenderQueueArray & p_queues );
+		C3D_API void update( RenderQueueArray & p_queues );
 		/**
 		 *\~english
 		 *\brief		Renders the environment map.
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.
 		 */
-		C3D_API void Render();
+		C3D_API void render();
 		/**
 		 *\~english
 		 *\return		The reflection map.
 		 *\~english
 		 *\return		La texture d'environnement.
 		 */
-		inline TextureUnit & GetTexture()
+		inline TextureUnit & getTexture()
 		{
 			return m_environmentMap;
 		}
@@ -119,7 +119,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		Les textures d'IBL.
 		 */
-		inline IblTextures const & GetIbl()const
+		inline IblTextures const & getIbl()const
 		{
 			REQUIRE( m_ibl );
 			return *m_ibl;
@@ -130,7 +130,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		La texture d'environnement.
 		 */
-		inline TextureUnit const & GetTexture()const
+		inline TextureUnit const & getTexture()const
 		{
 			return m_environmentMap;
 		}
@@ -140,9 +140,9 @@ namespace Castor3D
 		 *\~english
 		 *\return		Les dimensions de la texture d'environnement.
 		 */
-		inline Castor::Size GetSize()const
+		inline castor::Size getSize()const
 		{
-			return m_environmentMap.GetTexture()->GetDimensions();
+			return m_environmentMap.getTexture()->getDimensions();
 		}
 		/**
 		 *\~english
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		L'indice de la texture d'environnement.
 		 */
-		inline uint32_t GetIndex()const
+		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
@@ -185,7 +185,7 @@ namespace Castor3D
 		CubeMatrices m_matrices;
 		//!\~english	The target size.
 		//!\~french		Les dimensions de la cible.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The target size.
 		//!\~french		Les dimensions de la cible.
 		uint32_t m_index{ 0u };

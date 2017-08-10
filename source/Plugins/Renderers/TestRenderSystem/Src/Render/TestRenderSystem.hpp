@@ -30,117 +30,117 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestRenderSystem
-		: public Castor3D::RenderSystem
+		: public castor3d::RenderSystem
 	{
 	public:
-		TestRenderSystem( Castor3D::Engine & engine );
+		TestRenderSystem( castor3d::Engine & engine );
 		virtual ~TestRenderSystem();
 
-		static Castor3D::RenderSystemUPtr Create( Castor3D::Engine & engine );
+		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateContext
+		 *\copydoc		castor3d::RenderSystem::createContext
 		 */
-		Castor3D::ContextSPtr CreateContext()override;
+		castor3d::ContextSPtr createContext()override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
+		 *\copydoc		castor3d::RenderSystem::createGeometryBuffers
 		 */
-		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::Topology p_topology
-			, Castor3D::ShaderProgram const & p_program )override;
+		castor3d::GeometryBuffersSPtr createGeometryBuffers( castor3d::Topology p_topology
+			, castor3d::ShaderProgram const & p_program )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
+		 *\copydoc		castor3d::RenderSystem::CreatePipeline
 		 */
-		Castor3D::RenderPipelineUPtr CreateRenderPipeline( Castor3D::DepthStencilState && p_dsState
-			, Castor3D::RasteriserState && p_rsState
-			, Castor3D::BlendState && p_bdState
-			, Castor3D::MultisampleState && p_msState
-			, Castor3D::ShaderProgram & p_program
-			, Castor3D::PipelineFlags const & p_flags )override;
+		castor3d::RenderPipelineUPtr createRenderPipeline( castor3d::DepthStencilState && p_dsState
+			, castor3d::RasteriserState && p_rsState
+			, castor3d::BlendState && p_bdState
+			, castor3d::MultisampleState && p_msState
+			, castor3d::ShaderProgram & p_program
+			, castor3d::PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
+		 *\copydoc		castor3d::RenderSystem::CreatePipeline
 		 */
-		Castor3D::ComputePipelineUPtr CreateComputePipeline( Castor3D::ShaderProgram & p_program )override;
+		castor3d::ComputePipelineUPtr createComputePipeline( castor3d::ShaderProgram & p_program )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateSampler
+		 *\copydoc		castor3d::RenderSystem::createSampler
 		 */
-		Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name )override;
+		castor3d::SamplerSPtr createSampler( castor::String const & p_name )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateShaderProgram
+		 *\copydoc		castor3d::RenderSystem::createShaderProgram
 		 */
-		Castor3D::ShaderProgramSPtr CreateShaderProgram()override;
+		castor3d::ShaderProgramSPtr createShaderProgram()override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateUniformBufferBinding
+		 *\copydoc		castor3d::RenderSystem::createUniformBufferBinding
 		 */
-		Castor3D::UniformBufferBindingUPtr CreateUniformBufferBinding( Castor3D::UniformBuffer & p_ubo
-			, Castor3D::ShaderProgram const & p_program )override;
+		castor3d::UniformBufferBindingUPtr createUniformBufferBinding( castor3d::UniformBuffer & p_ubo
+			, castor3d::ShaderProgram const & p_program )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateShaderProgram
+		 *\copydoc		castor3d::RenderSystem::createShaderProgram
 		 */
-		Castor3D::TransformFeedbackUPtr CreateTransformFeedback( Castor3D::BufferDeclaration const & p_computed
-			, Castor3D::Topology p_topology
-			, Castor3D::ShaderProgram & p_program )override;
+		castor3d::TransformFeedbackUPtr createTransformFeedback( castor3d::BufferDeclaration const & p_computed
+			, castor3d::Topology p_topology
+			, castor3d::ShaderProgram & p_program )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateUInt8Buffer
+		 *\copydoc		castor3d::RenderSystem::CreateUInt8Buffer
 		 */
-		Castor3D::GpuBufferUPtr CreateBuffer( Castor3D::BufferType p_type )override;
+		castor3d::GpuBufferUPtr createBuffer( castor3d::BufferType p_type )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateTexture
+		 *\copydoc		castor3d::RenderSystem::createTexture
 		 */
-		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type
-			, Castor3D::AccessTypes const & p_cpuAccess
-			, Castor3D::AccessTypes const & p_gpuAccess )override;
+		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType p_type
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateTexture
+		 *\copydoc		castor3d::RenderSystem::createTexture
 		 */
-		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type
-			, Castor3D::AccessTypes const & p_cpuAccess
-			, Castor3D::AccessTypes const & p_gpuAccess
-			, Castor::PixelFormat p_format
-			, Castor::Size const & p_size )override;
+		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType p_type
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess
+			, castor::PixelFormat p_format
+			, castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateTexture
+		 *\copydoc		castor3d::RenderSystem::createTexture
 		 */
-		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type
-			, Castor3D::AccessTypes const & p_cpuAccess
-			, Castor3D::AccessTypes const & p_gpuAccess
-			, Castor::PixelFormat p_format
-			, Castor::Point3ui const & p_size )override;
+		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType p_type
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess
+			, castor::PixelFormat p_format
+			, castor::Point3ui const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
+		 *\copydoc		castor3d::RenderSystem::createTextureStorage
 		 */
-		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type
-			, Castor3D::TextureLayout & p_layout
-			, Castor3D::AccessTypes const & p_cpuAccess
-			, Castor3D::AccessTypes const & p_gpuAccess )override;
+		castor3d::TextureStorageUPtr createTextureStorage( castor3d::TextureStorageType p_type
+			, castor3d::TextureLayout & p_layout
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateFrameBuffer
+		 *\copydoc		castor3d::RenderSystem::createFrameBuffer
 		 */
-		Castor3D::FrameBufferSPtr CreateFrameBuffer()override;
+		castor3d::FrameBufferSPtr createFrameBuffer()override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateBackBuffers
+		 *\copydoc		castor3d::RenderSystem::createBackBuffers
 		 */
-		Castor3D::BackBuffersSPtr CreateBackBuffers()override;
+		castor3d::BackBuffersSPtr createBackBuffers()override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateQuery
+		 *\copydoc		castor3d::RenderSystem::createQuery
 		 */
-		Castor3D::GpuQueryUPtr CreateQuery( Castor3D::QueryType p_type )override;
+		castor3d::GpuQueryUPtr createQuery( castor3d::QueryType p_type )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateViewport
+		 *\copydoc		castor3d::RenderSystem::createViewport
 		 */
-		Castor3D::IViewportImplUPtr CreateViewport( Castor3D::Viewport & p_viewport )override;
+		castor3d::IViewportImplUPtr createViewport( castor3d::Viewport & p_viewport )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderSystem::DoInitialise
+		 *\copydoc		castor3d::RenderSystem::doInitialise
 		 */
-		void DoInitialise()override;
+		void doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::DoCleanup
+		 *\copydoc		castor3d::RenderSystem::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 
 	public:
-		C3D_Test_API static Castor::String Name;
-		C3D_Test_API static Castor::String Type;
+		C3D_Test_API static castor::String Name;
+		C3D_Test_API static castor::String Type;
 	};
 }
 

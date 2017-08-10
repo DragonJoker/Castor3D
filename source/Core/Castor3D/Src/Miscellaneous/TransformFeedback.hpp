@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <cstddef>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor3D
 	\brief		Implémentation du Transform feedback.
 	*/
 	class TransformFeedback
-		: Castor::OwnedBy< RenderSystem >
+		: castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -76,35 +76,35 @@ namespace Castor3D
 		 *\param[in]	p_buffers	Les tampons de sommets.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( VertexBufferArray const & p_buffers );
+		C3D_API bool initialise( VertexBufferArray const & p_buffers );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 */
-		C3D_API void Bind()const;
+		C3D_API void bind()const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 */
-		C3D_API void Unbind()const;
+		C3D_API void unbind()const;
 		/**
 		 *\~english
 		 *\return		The primitives written at last call.
 		 *\~french
 		 *\brief		Les primitives écrites au dernier appel.
 		 */
-		inline uint32_t GetWrittenPrimitives()const
+		inline uint32_t getWrittenPrimitives()const
 		{
 			return m_writtenPrimitives;
 		}
@@ -118,42 +118,42 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoInitialise() = 0;
+		C3D_API virtual bool doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 */
-		C3D_API virtual void DoBind()const = 0;
+		C3D_API virtual void doBind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 */
-		C3D_API virtual void DoUnbind()const = 0;
+		C3D_API virtual void doUnbind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Begins transform feedback.
 		 *\~french
 		 *\brief		Démarre le transform feedback.
 		 */
-		C3D_API virtual void DoBegin()const = 0;
+		C3D_API virtual void doBegin()const = 0;
 		/**
 		 *\~english
 		 *\brief		Ends transform feedback.
 		 *\~french
 		 *\brief		Termine le transform feedback.
 		 */
-		C3D_API virtual void DoEnd()const = 0;
+		C3D_API virtual void doEnd()const = 0;
 
 	protected:
 		//!\~english	The shader program.

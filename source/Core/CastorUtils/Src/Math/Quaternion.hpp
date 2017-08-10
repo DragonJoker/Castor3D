@@ -27,7 +27,7 @@ SOFTWARE.
 #include "Point.hpp"
 #include "SquareMatrix.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -55,7 +55,7 @@ namespace Castor
 		\brief Loader de QuaternionT< T >
 		*/
 		class TextLoader
-			: public Castor::TextLoader< QuaternionT< T > >
+			: public castor::TextLoader< QuaternionT< T > >
 		{
 		public:
 			/**
@@ -89,7 +89,7 @@ namespace Castor
 		\brief Writer de QuaternionT< T >
 		*/
 		class TextWriter
-			: public Castor::TextWriter< QuaternionT< T > >
+			: public castor::TextWriter< QuaternionT< T > >
 		{
 		public:
 			/**
@@ -214,7 +214,7 @@ namespace Castor
 		inline QuaternionT< T > & operator=( QuaternionT< T > && p_rhs );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_rhs	The Quaternion object to add
 		 *\return		A reference to this Quaternion object
 		 *\~french
@@ -226,7 +226,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_rhs	The Quaternion object to substract
+		 *\param[in]	p_rhs	The Quaternion object to subtract
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -275,7 +275,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	p_matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > from_matrix( Matrix4x4f const & p_matrix );
+		static inline QuaternionT< T > fromMatrix( Matrix4x4f const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -284,7 +284,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	p_matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > from_matrix( Matrix4x4d const & p_matrix );
+		static inline QuaternionT< T > fromMatrix( Matrix4x4d const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -293,7 +293,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	p_matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > from_matrix( float const * p_matrix );
+		static inline QuaternionT< T > fromMatrix( float const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -302,7 +302,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	p_matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > from_matrix( double const * p_matrix );
+		static inline QuaternionT< T > fromMatrix( double const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from an axis and an angle
@@ -313,7 +313,7 @@ namespace Castor
 		 *\param[in]	p_vector	L'axe
 		 *\param[in]	p_angle		L'angle
 		 */
-		static inline QuaternionT< T > from_axis_angle( Point3f const & p_vector, Angle const & p_angle );
+		static inline QuaternionT< T > fromAxisAngle( Point3f const & p_vector, Angle const & p_angle );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from an axis and an angle
@@ -324,7 +324,7 @@ namespace Castor
 		 *\param[in]	p_vector	L'axe
 		 *\param[in]	p_angle		L'angle
 		 */
-		static inline QuaternionT< T > from_axis_angle( Point3d const & p_vector, Angle const & p_angle );
+		static inline QuaternionT< T > fromAxisAngle( Point3d const & p_vector, Angle const & p_angle );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 3 axes
@@ -333,7 +333,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
 		 *\param[in]	p_x, p_y, p_z	Les axes
 		 */
-		static inline QuaternionT< T > from_axes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z );
+		static inline QuaternionT< T > fromAxes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 3 axes
@@ -342,7 +342,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
 		 *\param[in]	p_x, p_y, p_z	Les axes
 		 */
-		static inline QuaternionT< T > from_axes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z );
+		static inline QuaternionT< T > fromAxes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z );
 		/**
 		 *\~english
 		 *\brief		Transforms a vector and gives the result
@@ -377,7 +377,7 @@ namespace Castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	p_matrix	La matrice à remplir
 		 */
-		inline void to_matrix( float * p_matrix )const;
+		inline void toMatrix( float * p_matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -386,7 +386,7 @@ namespace Castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	p_matrix	La matrice à remplir
 		 */
-		inline void to_matrix( double * p_matrix )const;
+		inline void toMatrix( double * p_matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -395,7 +395,7 @@ namespace Castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	p_matrix	La matrice à remplir
 		 */
-		inline void to_matrix( Matrix4x4f & p_matrix )const;
+		inline void toMatrix( Matrix4x4f & p_matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -404,7 +404,7 @@ namespace Castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	p_matrix	La matrice à remplir
 		 */
-		inline void to_matrix( Matrix4x4d & p_matrix )const;
+		inline void toMatrix( Matrix4x4d & p_matrix )const;
 		/**
 		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
@@ -415,7 +415,7 @@ namespace Castor
 		 *\param[out]	p_vector	Reçoit l'axe
 		 *\param[out]	p_angle		Reçoit l'angle
 		 */
-		inline void to_axis_angle( Point3f & p_vector, Angle & p_angle )const;
+		inline void toAxisAngle( Point3f & p_vector, Angle & p_angle )const;
 		/**
 		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
@@ -426,7 +426,7 @@ namespace Castor
 		 *\param[out]	p_vector	Reçoit l'axe
 		 *\param[out]	p_angle		Reçoit l'angle
 		 */
-		inline void to_axis_angle( Point3d & p_vector, Angle & p_angle )const;
+		inline void toAxisAngle( Point3d & p_vector, Angle & p_angle )const;
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion
@@ -435,7 +435,7 @@ namespace Castor
 		 *\brief		Calcule 3 axes à partir de ce quaternion
 		 *\param[out]	p_x, p_y, p_z	Les axes
 		 */
-		inline void to_axes( Point3f & p_x, Point3f & p_y, Point3f & p_z )const;
+		inline void toAxes( Point3f & p_x, Point3f & p_y, Point3f & p_z )const;
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion
@@ -444,10 +444,10 @@ namespace Castor
 		 *\brief		Calcule 3 axes à partir de ce quaternion
 		 *\param[out]	p_x, p_y, p_z	Les axes
 		 */
-		inline void to_axes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const;
+		inline void toAxes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const;
 		/**
 		 *\~english
-		 *\brief		Sets this Quaternion to its conjugate
+		 *\brief		sets this Quaternion to its conjugate
 		 *\~french
 		 *\brief		Définit ce Quaternion à son conjugué
 		 */
@@ -460,7 +460,7 @@ namespace Castor
 		 *\brief		Récupère le conjugué de ce Quaternion
 		 *\return		Le conjugué
 		 */
-		inline QuaternionT< T > get_conjugate()const;
+		inline QuaternionT< T > getConjugate()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the magnitude of this Quaternion
@@ -469,7 +469,7 @@ namespace Castor
 		 *\brief		Récupère la magnitude de ce Quaternion
 		 *\return		La magnitude
 		 */
-		inline double get_magnitude()const;
+		inline double getMagnitude()const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation another quaternions.
@@ -586,7 +586,7 @@ namespace Castor
 	};
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_lhs	The first Quaternion object to add
 	 *\param[in]	p_rhs	The second Quaternion object to add
 	 *\return		The addition result
@@ -601,8 +601,8 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_lhs	The first Quaternion object to substract
-	 *\param[in]	p_rhs	The second Quaternion object to substract
+	 *\param[in]	p_lhs	The first Quaternion object to subtract
+	 *\param[in]	p_rhs	The second Quaternion object to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction

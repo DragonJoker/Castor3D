@@ -26,7 +26,7 @@ SOFTWARE.
 #include "BinaryChunk.hpp"
 #include "ChunkData.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,13 +54,13 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( uint8_t * p_values, size_t p_size, BinaryChunk & p_chunk )
+		static inline bool parse( uint8_t * p_values, size_t p_size, BinaryChunk & p_chunk )
 		{
-			bool result = p_chunk.CheckAvailable( uint32_t( p_size ) );
+			bool result = p_chunk.checkAvailable( uint32_t( p_size ) );
 
 			if ( result )
 			{
-				p_chunk.Get( p_values, uint32_t( p_size ) );
+				p_chunk.get( p_values, uint32_t( p_size ) );
 			}
 
 			return result;
@@ -94,15 +94,15 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
+		static inline bool parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
 		{
-			bool result{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values )
+			bool result{ ChunkParserBase::parse( reinterpret_cast< uint8_t * >( p_values )
 				, p_count * sizeof( T )
 				, p_chunk ) };
 
 			for ( uint32_t i = 0; i < p_count; ++i )
 			{
-				PrepareChunkData( *p_values++ );
+				prepareChunkData( *p_values++ );
 			}
 
 			return result;
@@ -119,12 +119,12 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( T & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( T & p_value, BinaryChunk & p_chunk )
 		{
-			bool result{ ChunkParserBase::Parse( GetBuffer( p_value )
-				, uint32_t( GetDataSize( p_value ) )
+			bool result{ ChunkParserBase::parse( getBuffer( p_value )
+				, uint32_t( getDataSize( p_value ) )
 				, p_chunk ) };
-			PrepareChunkData( p_value );
+			prepareChunkData( p_value );
 			return result;
 		}
 	};
@@ -133,12 +133,12 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date 		08/04/2014
 	\~english
-	\brief		ChunkParser specialisation for Castor::String
+	\brief		ChunkParser specialisation for castor::String
 	\~french
-	\brief		Spécialisation de ChunkParser pour Castor::String
+	\brief		Spécialisation de ChunkParser pour castor::String
 	*/
 	template<>
-	class ChunkParser< Castor::String >
+	class ChunkParser< castor::String >
 		: public ChunkParserBase
 	{
 	public:
@@ -154,21 +154,21 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( Castor::String & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( castor::String & p_value, BinaryChunk & p_chunk )
 		{
-			bool result = p_chunk.CheckAvailable( 1 );
-			uint32_t size = p_chunk.GetRemaining();
+			bool result = p_chunk.checkAvailable( 1 );
+			uint32_t size = p_chunk.getRemaining();
 
 			if ( result )
 			{
 				std::vector< char > buffer( size + 1, 0 );
-				result = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( buffer.data() )
+				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
 					, size
 					, p_chunk );
 
 				if ( result )
 				{
-					p_value = Castor::string::string_cast< xchar >( buffer.data() );
+					p_value = castor::string::stringCast< xchar >( buffer.data() );
 				}
 			}
 
@@ -180,12 +180,12 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date 		08/04/2014
 	\~english
-	\brief		ChunkParser specialisation for Castor::Path
+	\brief		ChunkParser specialisation for castor::Path
 	\~french
-	\brief		Spécialisation de ChunkParser pour Castor::Path
+	\brief		Spécialisation de ChunkParser pour castor::Path
 	*/
 	template<>
-	class ChunkParser< Castor::Path >
+	class ChunkParser< castor::Path >
 		: public ChunkParserBase
 	{
 	public:
@@ -201,21 +201,21 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( Castor::Path & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( castor::Path & p_value, BinaryChunk & p_chunk )
 		{
-			bool result = p_chunk.CheckAvailable( 1 );
-			uint32_t size = p_chunk.GetRemaining();
+			bool result = p_chunk.checkAvailable( 1 );
+			uint32_t size = p_chunk.getRemaining();
 
 			if ( result )
 			{
 				std::vector< char > buffer( size + 1, 0 );
-				result = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( buffer.data() )
+				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
 					, size
 					, p_chunk );
 
 				if ( result )
 				{
-					p_value = Castor::Path{ Castor::string::string_cast< xchar >( buffer.data() ) };
+					p_value = castor::Path{ castor::string::stringCast< xchar >( buffer.data() ) };
 				}
 			}
 

@@ -53,7 +53,7 @@
  *<li>DynamicLibrary</li>
  *</ul>
  *\section Installation
- *\subsection step1 Step 1 : Downloading the source
+ *\subsection step1 Step 1 : downloading the source
  *The project sources are available <a href="http://projets.developpez.com/attachments/download/736/Castor.zip">here</a> or on SourceForge GIT server : http://subversion.developpez.com/projets/Castor3D<br>
  *\subsection step2 Step 2 : Compilation
  *When sources are downloaded, you must use CMake (available <a href="http://www.cmake.org/cmake/resources/software.html">here</a>) to generate the project file most suitable to your system (Makefile, Code::Blocks, Visual Studio, ...)<br>
@@ -70,7 +70,7 @@
  *\section intro_sec Introduction
  *Cette bibliothèque contient des classes générales aidant au développement du moteur Castor3D<br>
  *\section summ Résumé
- *\subsection data Données
+ *\subsection data données
  *<ul>
  *<li>Gestion de fichiers, binaires ou texte (BinaryFile et TextFile)</li>
  *<li>FileParser, un analayseur de brace file, avec son FileParserContext</li>

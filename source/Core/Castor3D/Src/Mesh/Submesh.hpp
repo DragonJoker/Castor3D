@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -37,7 +37,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -50,11 +50,11 @@ namespace Castor3D
 	\remark		Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
 	*/
 	class Submesh
-		: public Castor::OwnedBy< Scene >
+		: public castor::OwnedBy< Scene >
 		, public std::enable_shared_from_this< Submesh >
 	{
 	private:
-		DECLARE_LIST( Castor::ByteArray, BytePtr );
+		DECLARE_LIST( castor::ByteArray, BytePtr );
 
 	public:
 		/**
@@ -83,35 +83,35 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le sous-maillage
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans the submesh
 		 *\~french
 		 *\brief		Nettoie le sous-maillage
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Computes the containers (cube and sphere)
 		 *\~french
 		 *\brief		Calcule les conteneurs (cube et sphère)
 		 */
-		C3D_API void ComputeContainers();
+		C3D_API void computeContainers();
 		/**
 		 *\~english
 		 *\return		The faces number
 		 *\~french
 		 *\return		Le nombre de faces de ce submesh
 		 */
-		C3D_API uint32_t GetFaceCount()const;
+		C3D_API uint32_t getFaceCount()const;
 		/**
 		 *\~english
 		 *\return		The points count
 		 *\~french
 		 *\return		Le nombre de vertices de ce sous-maillage
 		 */
-		C3D_API uint32_t GetPointsCount()const;
+		C3D_API uint32_t getPointsCount()const;
 		/**
 		 *\~english
 		 *\brief		Tests if the given Point3r is in mine
@@ -124,7 +124,7 @@ namespace Castor3D
 		 *\param[in]	p_precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		C3D_API int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
+		C3D_API int isInMyPoints( castor::Point3r const & p_vertex, double p_precision );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -139,10 +139,10 @@ namespace Castor3D
 		 *\param[in]	z	Coordonnée Y
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr AddPoint( real x, real y, real z );
+		C3D_API BufferElementGroupSPtr addPoint( real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		Adds a vertex to my list
+		 *\brief		adds a vertex to my list
 		 *\param[in]	p_v	The vertex to add
 		 *\return		The vertex
 		 *\~french
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\param[in]	p_v	Le point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
+		C3D_API BufferElementGroupSPtr addPoint( castor::Point3r const & p_v );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\param[in]	p_v	Les coordonnées du point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr AddPoint( real * p_v );
+		C3D_API BufferElementGroupSPtr addPoint( real * p_v );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list.
@@ -172,10 +172,10 @@ namespace Castor3D
 		 *\param[in]	p_v	Le sommet.
 		 *\return		Le vertex créé.
 		 */
-		C3D_API BufferElementGroupSPtr AddPoint( InterleavedVertex const & p_v );
+		C3D_API BufferElementGroupSPtr addPoint( InterleavedVertex const & p_v );
 		/**
 		 *\~english
-		 *\brief		Adds a points list to my list.
+		 *\brief		adds a points list to my list.
 		 *\param[in]	p_begin	The vertices data begin.
 		 *\param[in]	p_end	The vertices data end.
 		 *\~french
@@ -183,10 +183,10 @@ namespace Castor3D
 		 *\param[in]	p_begin	Le début des données de sommets.
 		 *\param[in]	p_end	La fin des données de sommets.
 		 */
-		C3D_API void AddPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end );
+		C3D_API void addPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end );
 		/**
 		 *\~english
-		 *\brief		Adds bone datas.
+		 *\brief		adds bone datas.
 		 *\param[in]	p_begin	The bones data begin.
 		 *\param[in]	p_end	The bones data end.
 		 *\~french
@@ -194,14 +194,14 @@ namespace Castor3D
 		 *\param[in]	p_begin	Le début des données de bones.
 		 *\param[in]	p_end	La fin des données de bones.
 		 */
-		C3D_API void AddBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
+		C3D_API void addBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
 		/**
 		 *\~english
 		 *\brief		Clears this submesh's face array
 		 *\~french
 		 *\brief		Vide le tableau de faces
 		 */
-		C3D_API void ClearFaces();
+		C3D_API void clearFaces();
 		/**
 		 *\~english
 		 *\brief		Creates and adds a face to the submesh
@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\param[in]	c			L'index du troisième vertex
 		 *\return		La face créée
 		 */
-		C3D_API Face AddFace( uint32_t a, uint32_t b, uint32_t c );
+		C3D_API Face addFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
@@ -227,7 +227,7 @@ namespace Castor3D
 		 *\param[in]	p_begin	Le début des données de faces.
 		 *\param[in]	p_end	La fin des données de faces.
 		 */
-		C3D_API void AddFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end );
+		C3D_API void addFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a quad face to the submesh
@@ -248,21 +248,21 @@ namespace Castor3D
 		 *\param[in]	p_maxUV	L'UV du coin haut droit
 		 *\return		La face créée
 		 */
-		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_minUV = Castor::Point3r(), Castor::Point3r const & p_maxUV = Castor::Point3r( 1, 1, 1 ) );
+		C3D_API void addQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, castor::Point3r const & p_minUV = castor::Point3r(), castor::Point3r const & p_maxUV = castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
 		 *\brief		Recreates the buffers.
 		 *\~french
 		 *\brief		Recrée les tampons.
 		 */
-		C3D_API void ResetGpuBuffers();
+		C3D_API void resetGpuBuffers();
 		/**
 		 *\~english
 		 *\brief		Recreates the Matrix buffers.
 		 *\~french
 		 *\brief		Recrée le tampon de matrices.
 		 */
-		C3D_API void ResetMatrixBuffers();
+		C3D_API void resetMatrixBuffers();
 		/**
 		 *\~english
 		 *\brief		Draws the submesh.
@@ -271,7 +271,7 @@ namespace Castor3D
 		 *\brief		Dessine le sous-maillage.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
 		 */
-		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
+		C3D_API void draw( GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Draws the submesh.
@@ -282,7 +282,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
 		 *\param[in]	p_count				Le nombre d'instances.
 		 */
-		C3D_API void DrawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
+		C3D_API void drawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points
@@ -291,14 +291,14 @@ namespace Castor3D
 		 *\brief		Crée les faces à partir des points
 		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan
 		 */
-		C3D_API void ComputeFacesFromPolygonVertex();
+		C3D_API void computeFacesFromPolygonVertex();
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void ComputeNormals( bool p_reverted = false );
+		C3D_API void computeNormals( bool p_reverted = false );
 		/**
 		 *\~english
 		 *\brief		Computes normal and tangent for each vertex of the given face
@@ -307,7 +307,7 @@ namespace Castor3D
 		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_face	La face
 		 */
-		C3D_API void ComputeNormals( Face const & p_face );
+		C3D_API void computeNormals( Face const & p_face );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the given face
@@ -316,7 +316,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_face	La face
 		 */
-		C3D_API void ComputeTangents( Face const & p_face );
+		C3D_API void computeTangents( Face const & p_face );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
@@ -325,7 +325,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
 		 *\remarks		Cette fonction suppose que les normales sont définies
 		 */
-		C3D_API void ComputeTangentsFromNormals();
+		C3D_API void computeTangentsFromNormals();
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
@@ -334,7 +334,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
 		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies
 		 */
-		C3D_API void ComputeTangentsFromBitangents();
+		C3D_API void computeTangentsFromBitangents();
 		/**
 		 *\~english
 		 *\brief		Computes bitangent for each vertex of the submesh
@@ -343,7 +343,7 @@ namespace Castor3D
 		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage
 		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies
 		 */
-		C3D_API void ComputeBitangents();
+		C3D_API void computeBitangents();
 		/**
 		 *\~english
 		 *\brief		Sorts the face from farthest to nearest from the camera
@@ -352,7 +352,7 @@ namespace Castor3D
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
 		 *\param[in]	p_cameraPosition	La position de la caméra, relative au sous-maillage
 		 */
-		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
+		C3D_API void sortByDistance( castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Increments instance count.
@@ -363,7 +363,7 @@ namespace Castor3D
 		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté.
 		 *\return		Le compte précédent.
 		 */
-		C3D_API uint32_t Ref( MaterialSPtr p_material );
+		C3D_API uint32_t ref( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Decrements instance count.
@@ -374,7 +374,7 @@ namespace Castor3D
 		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté.
 		 *\return		Le compte précédent.
 		 */
-		C3D_API uint32_t UnRef( MaterialSPtr p_material );
+		C3D_API uint32_t unref( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the instances count
@@ -385,30 +385,30 @@ namespace Castor3D
 		 *\param[in]	p_material	Le matériau pour lequel le compte est récupéré
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t GetRefCount( MaterialSPtr p_material )const;
+		C3D_API uint32_t getRefCount( MaterialSPtr p_material )const;
 		/**
 		 *\~english
 		 *\return		The maximum instances count, amongst all materials.
 		 *\~french
 		 *\return		Le nombre moximum d'instances, tous matériaux confondus,
 		 */
-		C3D_API uint32_t GetMaxRefCount()const;
+		C3D_API uint32_t getMaxRefCount()const;
 		/**
 		 *\~english
 		 *\return		The topology.
 		 *\~french
 		 *\return		La topologie.
 		 */
-		C3D_API Topology GetTopology()const;
+		C3D_API Topology getTopology()const;
 		/**
 		 *\~english
-		 *\brief		Sets the topology.
+		 *\brief		sets the topology.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la topologie.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		C3D_API void SetTopology( Topology p_value );
+		C3D_API void setTopology( Topology p_value );
 		/**
 		 *\~english
 		 *\brief		Retrieves a GeometryBuffers for given program.
@@ -417,63 +417,63 @@ namespace Castor3D
 		 *\brief		Récupère un GeometryBuffers pour le programme donné.
 		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
+		C3D_API GeometryBuffersSPtr getGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\return		The animated status.
 		 *\~french
 		 *\return		Le statut de sous-maillage animé.
 		 */
-		C3D_API void SetAnimated( bool p_animated );
+		C3D_API void setAnimated( bool p_animated );
 		/**
 		 *\~english
-		 *\brief		Adds a points list to my list
+		 *\brief		adds a points list to my list
 		 *\param[in]	p_vertices	The vertices
 		 *\~french
 		 *\brief		Ajoute des points à la liste
 		 *\param[in]	p_vertices	Les vertices
 		 */
-		inline void AddPoints( std::vector< InterleavedVertex > const & p_vertices )
+		inline void addPoints( std::vector< InterleavedVertex > const & p_vertices )
 		{
-			AddPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+			addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a points list to my list
+		 *\brief		adds a points list to my list
 		 *\param[in]	p_vertices	The vertices
 		 *\~french
 		 *\brief		Ajoute des points à la liste
 		 *\param[in]	p_vertices	Les vertices
 		 */
 		template< size_t Count >
-		inline void AddPoints( std::array< InterleavedVertex, Count > const & p_vertices )
+		inline void addPoints( std::array< InterleavedVertex, Count > const & p_vertices )
 		{
-			AddPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+			addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
 		}
 		/**
 		 *\~english
-		 *\brief		Adds bone datas.
+		 *\brief		adds bone datas.
 		 *\param[in]	p_boneData	The bone datas.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
 		 *\param[in]	p_boneData	Les données de bones.
 		 */
-		inline void AddBoneDatas( std::vector< VertexBoneData > const & p_boneData )
+		inline void addBoneDatas( std::vector< VertexBoneData > const & p_boneData )
 		{
-			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
 		}
 		/**
 		 *\~english
-		 *\brief		Adds bone datas.
+		 *\brief		adds bone datas.
 		 *\param[in]	p_boneData	The bone datas.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
 		 *\param[in]	p_boneData	Les données de bones.
 		 */
 		template< size_t Count >
-		inline void AddBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
+		inline void addBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
 		{
-			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
 		}
 		/**
 		 *\~english
@@ -483,9 +483,9 @@ namespace Castor3D
 		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_faces	Les faces
 		 */
-		inline void AddFaceGroup( std::vector< FaceIndices > const & p_faces )
+		inline void addFaceGroup( std::vector< FaceIndices > const & p_faces )
 		{
-			AddFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
+			addFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
 		}
 		/**
 		 *\~english
@@ -496,9 +496,9 @@ namespace Castor3D
 		 *\param[in]	p_faces	Les faces
 		 */
 		template< size_t Count >
-		inline void AddFaceGroup( std::array< FaceIndices, Count > const & p_faces )
+		inline void addFaceGroup( std::array< FaceIndices, Count > const & p_faces )
 		{
-			AddFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
+			addFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
 		}
 		/**
 		 *\~english
@@ -506,19 +506,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le squelette.
 		 */
-		inline SkeletonSPtr GetSkeleton()const
+		inline SkeletonSPtr getSkeleton()const
 		{
-			return GetParent().GetSkeleton();
+			return getParent().getSkeleton();
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the material
+		 *\brief		sets the material
 		 *\param[in]	p_mat	The new value
 		 *\~french
 		 *\brief		Définit le material
 		 *\param[in]	p_mat	La nouvelle valeur
 		 */
-		inline void SetDefaultMaterial( MaterialSPtr p_mat )
+		inline void setDefaultMaterial( MaterialSPtr p_mat )
 		{
 			m_defaultMaterial = p_mat;
 		}
@@ -547,7 +547,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr GetPoint( uint32_t p_index )const
+		inline BufferElementGroupSPtr getPoint( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_points.size() );
 			return m_points[p_index];
@@ -558,7 +558,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le matériau.
 		 */
-		inline MaterialSPtr GetDefaultMaterial()const
+		inline MaterialSPtr getDefaultMaterial()const
 		{
 			return m_defaultMaterial.lock();
 		}
@@ -568,7 +568,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline Castor::CubeBox const & GetCollisionBox()const
+		inline castor::CubeBox const & getCollisionBox()const
 		{
 			return m_box;
 		}
@@ -578,7 +578,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline Castor::CubeBox & GetCollisionBox()
+		inline castor::CubeBox & getCollisionBox()
 		{
 			return m_box;
 		}
@@ -588,7 +588,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline Castor::SphereBox const & GetCollisionSphere()const
+		inline castor::SphereBox const & getCollisionSphere()const
 		{
 			return m_sphere;
 		}
@@ -598,7 +598,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline Castor::SphereBox & GetCollisionSphere()
+		inline castor::SphereBox & getCollisionSphere()
 		{
 			return m_sphere;
 		}
@@ -608,7 +608,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau de points.
 		 */
-		inline VertexPtrArray const & GetPoints()const
+		inline VertexPtrArray const & getPoints()const
 		{
 			return m_points;
 		}
@@ -618,7 +618,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau de points.
 		 */
-		inline VertexPtrArray & GetPoints()
+		inline VertexPtrArray & getPoints()
 		{
 			return m_points;
 		}
@@ -632,7 +632,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline Face const & GetFace( uint32_t p_index )const
+		inline Face const & getFace( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_faces.size() );
 			return m_faces[p_index];
@@ -643,7 +643,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau de faces.
 		 */
-		inline FaceArray const & GetFaces()const
+		inline FaceArray const & getFaces()const
 		{
 			return m_faces;
 		}
@@ -653,7 +653,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau de faces.
 		 */
-		inline FaceArray & GetFaces()
+		inline FaceArray & getFaces()
 		{
 			return m_faces;
 		}
@@ -663,7 +663,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
-		inline bool HasAnimationBuffer()const
+		inline bool hasAnimationBuffer()const
 		{
 			return bool( m_animBuffer );
 		}
@@ -673,7 +673,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline bool HasBonesBuffer()const
+		inline bool hasBonesBuffer()const
 		{
 			return bool( m_bonesBuffer );
 		}
@@ -683,7 +683,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si le sous-maillage a des données d'os.
 		 */
-		inline bool HasBoneData()const
+		inline bool hasBoneData()const
 		{
 			return !m_bonesData.empty();
 		}
@@ -693,7 +693,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer d'instanciation.
 		 */
-		inline bool HasMatrixBuffer()const
+		inline bool hasMatrixBuffer()const
 		{
 			return bool( m_matrixBuffer );
 		}
@@ -703,7 +703,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Dit si le tampon d'instanciation des os existe.
 		 */
-		inline bool HasInstancedBonesBuffer()const
+		inline bool hasInstancedBonesBuffer()const
 		{
 			return bool( m_instancedBonesBuffer );
 		}
@@ -713,7 +713,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer const & GetVertexBuffer()const
+		inline VertexBuffer const & getVertexBuffer()const
 		{
 			return m_vertexBuffer;
 		}
@@ -723,7 +723,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer & GetVertexBuffer()
+		inline VertexBuffer & getVertexBuffer()
 		{
 			return m_vertexBuffer;
 		}
@@ -733,7 +733,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer const & GetAnimationBuffer()const
+		inline VertexBuffer const & getAnimationBuffer()const
 		{
 			return *m_animBuffer;
 		}
@@ -743,7 +743,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer & GetAnimationBuffer()
+		inline VertexBuffer & getAnimationBuffer()
 		{
 			return *m_animBuffer;
 		}
@@ -753,7 +753,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
-		inline IndexBuffer const & GetIndexBuffer()const
+		inline IndexBuffer const & getIndexBuffer()const
 		{
 			return m_indexBuffer;
 		}
@@ -763,7 +763,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
-		inline IndexBuffer & GetIndexBuffer()
+		inline IndexBuffer & getIndexBuffer()
 		{
 			return m_indexBuffer;
 		}
@@ -773,7 +773,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline VertexBuffer const & GetBonesBuffer()const
+		inline VertexBuffer const & getBonesBuffer()const
 		{
 			return *m_bonesBuffer;
 		}
@@ -783,7 +783,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline VertexBuffer & GetBonesBuffer()
+		inline VertexBuffer & getBonesBuffer()
 		{
 			return *m_bonesBuffer;
 		}
@@ -793,7 +793,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer d'instanciation.
 		 */
-		inline VertexBuffer const & GetMatrixBuffer()const
+		inline VertexBuffer const & getMatrixBuffer()const
 		{
 			return *m_matrixBuffer;
 		}
@@ -803,7 +803,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le VertexBuffer d'instanciation.
 		 */
-		inline VertexBuffer & GetMatrixBuffer()
+		inline VertexBuffer & getMatrixBuffer()
 		{
 			return *m_matrixBuffer;
 		}
@@ -813,7 +813,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline ShaderStorageBuffer const & GetInstancedBonesBuffer()const
+		inline ShaderStorageBuffer const & getInstancedBonesBuffer()const
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -823,7 +823,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline ShaderStorageBuffer & GetInstancedBonesBuffer()
+		inline ShaderStorageBuffer & getInstancedBonesBuffer()
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -833,7 +833,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut d'initialisation.
 		 */
-		inline bool	IsInitialised()const
+		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
@@ -843,7 +843,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le maillage parent.
 		 */
-		inline Mesh const & GetParent()const
+		inline Mesh const & getParent()const
 		{
 			return m_parentMesh;
 		}
@@ -853,7 +853,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le maillage parent.
 		 */
-		inline Mesh & GetParent()
+		inline Mesh & getParent()
 		{
 			return m_parentMesh;
 		}
@@ -863,7 +863,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		inline ProgramFlags const & GetProgramFlags()const
+		inline ProgramFlags const & getProgramFlags()const
 		{
 			return m_programFlags;
 		}
@@ -873,17 +873,17 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'ID du sous-maillage.
 		 */
-		inline uint32_t GetId()const
+		inline uint32_t getId()const
 		{
 			return m_id;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the submesh to be updated.
+		 *\brief		sets the submesh to be updated.
 		 *\~french
 		 *\return		Dit que le sous-maillage doit être mis à jour.
 		 */
-		inline void NeedUpdate()
+		inline void needsUpdate()
 		{
 			m_dirty = true;
 		}
@@ -895,23 +895,23 @@ namespace Castor3D
 		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_faces	Les faces
 		 */
-		template< uint32_t Count > void AddFaceGroup( FaceIndices( & p_faces )[Count] )
+		template< uint32_t Count > void addFaceGroup( FaceIndices( & p_faces )[Count] )
 		{
-			AddFaceGroup( p_faces, Count );
+			addFaceGroup( p_faces, Count );
 		}
 
 	private:
-		Face & DoAddFace( const Face & p_face );
-		void DoCreateBuffers();
-		void DoDestroyBuffers();
-		void DoGenerateBuffers();
-		void DoGenerateVertexBuffer();
-		void DoGenerateAnimBuffer();
-		void DoGenerateIndexBuffer();
-		void DoGenerateBonesBuffer();
-		void DoGenerateMatrixBuffer( uint32_t p_count );
-		void DoGenerateInstantiatedBonesBuffer( uint32_t p_count );
-		void DoInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers );
+		Face & doAddFace( const Face & p_face );
+		void doCreateBuffers();
+		void doDestroyBuffers();
+		void doGenerateBuffers();
+		void doGenerateVertexBuffer();
+		void doGenerateAnimBuffer();
+		void doGenerateIndexBuffer();
+		void doGenerateBonesBuffer();
+		void doGenerateMatrixBuffer( uint32_t p_count );
+		void doGenerateInstantiatedBonesBuffer( uint32_t p_count );
+		void doInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers );
 
 	private:
 		//!\~english	The submesh ID.
@@ -961,10 +961,10 @@ namespace Castor3D
 		MaterialWPtr m_defaultMaterial;
 		//!\~english	The combo box container.
 		//!\~french		Le conteneur boîte.
-		Castor::CubeBox m_box;
+		castor::CubeBox m_box;
 		//!\~english	The spheric container.
 		//!\~french		Le conteneur sphère.
-		Castor::SphereBox m_sphere;
+		castor::SphereBox m_sphere;
 		//!\~english	The vertex data array.
 		//!\~french		Le tableau de données des sommets.
 		BytePtrList m_pointsData;
@@ -979,7 +979,7 @@ namespace Castor3D
 		VertexPtrArray m_bones;
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
-		Castor::Point3r m_cameraPosition;
+		castor::Point3r m_cameraPosition;
 		//!\~english	The parent mesh.
 		//!\~french		Le maillage parent.
 		Mesh & m_parentMesh;
@@ -1030,7 +1030,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( Submesh const & p_obj )override;
+		C3D_API bool doWrite( Submesh const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1057,7 +1057,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool DoParse( Submesh & p_obj )override;
+		C3D_API bool doParse( Submesh & p_obj )override;
 	};
 }
 

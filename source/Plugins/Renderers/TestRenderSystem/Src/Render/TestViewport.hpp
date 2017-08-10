@@ -39,7 +39,7 @@ namespace TestRender
 	\brief		Implàmentation de viewport spàcifique à l'API de rendu.
 	*/
 	class TestViewport
-		: public Castor3D::IViewportImpl
+		: public castor3d::IViewportImpl
 	{
 	public:
 		/**
@@ -52,7 +52,7 @@ namespace TestRender
 		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 *\param[in]	p_viewport		Le viewport parent.
 		 */
-		TestViewport( TestRenderSystem & p_renderSystem, Castor3D::Viewport & p_viewport );
+		TestViewport( TestRenderSystem & p_renderSystem, castor3d::Viewport & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,9 +61,9 @@ namespace TestRender
 		 */
 		virtual ~TestViewport();
 		/**
-		 *\copydoc		Castor3D::IViewportImpl::Apply
+		 *\copydoc		castor3d::IViewportImpl::Apply
 		 */
-		void Apply()const override;
+		void apply()const override;
 	};
 }
 

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace format
 	{
@@ -39,7 +39,7 @@ namespace Castor
 		\brief		Garde les associations flux/tampon de flux
 		*/
 		template< typename char_type, typename traits = std::char_traits< char_type > >
-		class basic_indent_buffer_manager
+		class BasicIndentBufferManager
 		{
 		private:
 			typedef std::ios_base bos;
@@ -57,7 +57,7 @@ namespace Castor
 			 */
 			/** Default constructor
 			*/
-			basic_indent_buffer_manager()
+			BasicIndentBufferManager()
 			{
 				++sm_instances;
 			}
@@ -70,7 +70,7 @@ namespace Castor
 			 *\brief		Constructeur par copie
 			 *\remarks		Non implémenté afin de le désactiver
 			 */
-			basic_indent_buffer_manager( basic_indent_buffer_manager< char_type, traits > & obj );
+			BasicIndentBufferManager( BasicIndentBufferManager< char_type, traits > & obj );
 
 		public:
 			/**
@@ -79,7 +79,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Destructeur
 			 */
-			~basic_indent_buffer_manager()
+			~BasicIndentBufferManager()
 			{
 				--sm_instances;
 
@@ -127,7 +127,7 @@ namespace Castor
 			 *\brief		Récupère le tampon associé au flux donné
 			 *\param[in]	io_s	Le flux
 			 */
-			bsb * get_buffer( std::ios_base & io_s )
+			bsb * getBuffer( std::ios_base & io_s )
 			{
 				const_iterator cb_iter( m_list.find( &io_s ) );
 
@@ -151,7 +151,7 @@ namespace Castor
 			 */
 			bool erase( std::ios_base & io_s )
 			{
-				delete get_buffer( io_s );
+				delete getBuffer( io_s );
 				return ( m_list.erase( &io_s ) == 1 );
 			}
 
@@ -170,13 +170,13 @@ namespace Castor
 
 			/**
 			 *\~english
-			 *\brief		Retrieves an instance of the basic_indent_buffer_manager
+			 *\brief		Retrieves an instance of the BasicIndentBufferManager
 			 *\~french
-			 *\brief		Récupère une instance du basic_indent_buffer_manager
+			 *\brief		Récupère une instance du BasicIndentBufferManager
 			 */
-			static basic_indent_buffer_manager< char_type, traits > * instance()
+			static BasicIndentBufferManager< char_type, traits > * instance()
 			{
-				static basic_indent_buffer_manager< char_type, traits > ibm;
+				static BasicIndentBufferManager< char_type, traits > ibm;
 				return &ibm;
 			}
 
@@ -188,10 +188,10 @@ namespace Castor
 		};
 
 		template< typename char_type, typename traits >
-		int basic_indent_buffer_manager< char_type, traits >::sm_instances = 0;
+		int BasicIndentBufferManager< char_type, traits >::sm_instances = 0;
 
-		typedef basic_indent_buffer_manager< char, std::char_traits< char > > indent_buffer_manager;
-		typedef basic_indent_buffer_manager< wchar_t, std::char_traits< wchar_t > > windent_buffer_manager;
+		typedef BasicIndentBufferManager< char, std::char_traits< char > > IndentBufferManager;
+		typedef BasicIndentBufferManager< wchar_t, std::char_traits< wchar_t > > WIndentBufferManager;
 	}
 }
 

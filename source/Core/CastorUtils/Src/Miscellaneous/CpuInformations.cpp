@@ -2,12 +2,12 @@
 
 #include "Exception/Assertion.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace Platform
 	{
-		void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data );
-		uint32_t get_core_count();
+		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data );
+		uint32_t getCoreCount();
 	}
 
 	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
@@ -24,12 +24,12 @@ namespace Castor
 
 		std::vector< std::array< int, 4 > > datas{};
 		std::array< int32_t, 4 > data;
-		Platform::call_cpuid( 0u, data );
+		Platform::callCpuid( 0u, data );
 		auto ids = data[0];
 
 		for ( int32_t i = 0; i < ids; ++i )
 		{
-			Platform::call_cpuid( i, data );
+			Platform::callCpuid( i, data );
 			datas.push_back( data );
 		}
 
@@ -60,7 +60,7 @@ namespace Castor
 			m_f_7_ECX = datas[7][2];
 		}
 
-		m_coreCount = Platform::get_core_count();
+		m_coreCount = Platform::getCoreCount();
 	}
 
 	CpuInformations::CpuInformationsInternal const CpuInformations::m_internal;
@@ -81,8 +81,8 @@ namespace Castor
 		};
 
 		p_stream << "CPU informations:" << std::endl;
-		p_stream << "    Vendor: " << p_object.Vendor() << std::endl;
-		p_stream << "    Core count: " << p_object.CoreCount() << std::endl;
+		p_stream << "    Vendor: " << p_object.getVendor() << std::endl;
+		p_stream << "    Core count: " << p_object.getCoreCount() << std::endl;
 		p_stream << "    ADX: " << support( p_object.ADX() ) << std::endl;
 		p_stream << "    AES: " << support( p_object.AES() ) << std::endl;
 		p_stream << "    AVX: " << support( p_object.AVX() ) << std::endl;

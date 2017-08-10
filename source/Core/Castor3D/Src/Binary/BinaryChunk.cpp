@@ -4,9 +4,9 @@
 
 #include <Data/BinaryFile.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	BinaryChunk::BinaryChunk()
 		: m_type{ ChunkType::eUnknown }
@@ -20,7 +20,7 @@ namespace Castor3D
 	{
 	}
 
-	void BinaryChunk::Finalise()
+	void BinaryChunk::finalise()
 	{
 		uint32_t size = std::accumulate( m_addedData.begin(), m_addedData.end(), 0, [&]( uint32_t p_value, ByteArray const & p_array )
 		{
@@ -36,39 +36,39 @@ namespace Castor3D
 		}
 	}
 
-	void BinaryChunk::Add( uint8_t * p_data, uint32_t p_size )
+	void BinaryChunk::add( uint8_t * p_data, uint32_t p_size )
 	{
 		ByteArray buffer( p_data, p_data + p_size );
 		m_addedData.push_back( buffer );
 	}
 
-	void BinaryChunk::Get( uint8_t * p_data, uint32_t p_size )
+	void BinaryChunk::get( uint8_t * p_data, uint32_t p_size )
 	{
 		std::memcpy( p_data, &m_data[m_index], p_size );
 		m_index += p_size;
 	}
 
-	bool BinaryChunk::CheckAvailable( uint32_t p_size )const
+	bool BinaryChunk::checkAvailable( uint32_t p_size )const
 	{
 		return m_index + p_size <= m_data.size();
 	}
 
-	uint32_t BinaryChunk::GetRemaining()const
+	uint32_t BinaryChunk::getRemaining()const
 	{
 		return uint32_t( m_data.size() - m_index );
 	}
 
-	bool BinaryChunk::GetSubChunk( BinaryChunk & p_chunkDst )
+	bool BinaryChunk::getSubChunk( BinaryChunk & p_chunkDst )
 	{
 		// First we retrieve the chunk type
 		BinaryChunk subchunk;
-		bool result = DoRead( &subchunk.m_type, 1 );
+		bool result = doRead( &subchunk.m_type, 1 );
 		uint32_t size = 0;
 
 		if ( result )
 		{
 			// Then the chunk data size
-			result = DoRead( &size, 1 );
+			result = doRead( &size, 1 );
 		}
 
 		if ( result )
@@ -88,67 +88,67 @@ namespace Castor3D
 		return result;
 	}
 
-	bool BinaryChunk::AddSubChunk( BinaryChunk const & p_subchunk )
+	bool BinaryChunk::addSubChunk( BinaryChunk const & p_subchunk )
 	{
 		uint32_t size = uint32_t( p_subchunk.m_data.size() );
 		ByteArray buffer;
 		buffer.reserve( sizeof( uint32_t ) + sizeof( ChunkType ) + size );
-		// Write subchunk type
-		auto type = SystemEndianToBigEndian( p_subchunk.m_type );
+		// write subchunk type
+		auto type = systemEndianToBigEndian( p_subchunk.m_type );
 		auto data = reinterpret_cast< uint8_t const * >( &type );
 		buffer.insert( buffer.end(), data, data + sizeof( ChunkType ) );
 		// The its size
-		SystemEndianToBigEndian( size );
+		systemEndianToBigEndian( size );
 		data = reinterpret_cast< uint8_t * >( &size );
 		buffer.insert( buffer.end(), data, data + sizeof( uint32_t ) );
 		// And eventually its data
 		buffer.insert( buffer.end(), p_subchunk.m_data.begin(), p_subchunk.m_data.end() );
 		// And add it to this chunk
-		Add( buffer.data(), uint32_t( buffer.size() ) );
+		add( buffer.data(), uint32_t( buffer.size() ) );
 		return true;
 	}
 
-	bool BinaryChunk::Write( Castor::BinaryFile & p_file )
+	bool BinaryChunk::write( castor::BinaryFile & p_file )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			auto type = SystemEndianToBigEndian( GetChunkType() );
-			result = p_file.Write( type ) == sizeof( ChunkType );
+			auto type = systemEndianToBigEndian( getChunkType() );
+			result = p_file.write( type ) == sizeof( ChunkType );
 		}
 
 		if ( result )
 		{
-			Finalise();
-			auto size = SystemEndianToBigEndian( GetDataSize() );
-			result = p_file.Write( size ) == sizeof( uint32_t );
+			finalise();
+			auto size = systemEndianToBigEndian( getDataSize() );
+			result = p_file.write( size ) == sizeof( uint32_t );
 		}
 
 		if ( result )
 		{
-			result = p_file.WriteArray( m_data.data(), m_data.size() ) == m_data.size();
+			result = p_file.writeArray( m_data.data(), m_data.size() ) == m_data.size();
 		}
 
 		return result;
 	}
 
-	bool BinaryChunk::Read( Castor::BinaryFile & p_file )
+	bool BinaryChunk::read( castor::BinaryFile & p_file )
 	{
 		uint32_t size = 0;
-		bool result = p_file.Read( m_type ) == sizeof( ChunkType );
-		BigEndianToSystemEndian( m_type );
+		bool result = p_file.read( m_type ) == sizeof( ChunkType );
+		bigEndianToSystemEndian( m_type );
 
 		if ( result )
 		{
-			result = p_file.Read( size ) == sizeof( uint32_t );
-			BigEndianToSystemEndian( size );
+			result = p_file.read( size ) == sizeof( uint32_t );
+			bigEndianToSystemEndian( size );
 		}
 
 		if ( result )
 		{
 			m_data.resize( size );
-			result = p_file.ReadArray( m_data.data(), m_data.size() ) == m_data.size();
+			result = p_file.readArray( m_data.data(), m_data.size() ) == m_data.size();
 		}
 
 		return result;

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -47,7 +47,7 @@ namespace Castor3D
 		\brief		Loader de RenderTarget
 		*/
 		class TextWriter
-			: public Castor::TextWriter< SsaoConfig >
+			: public castor::TextWriter< SsaoConfig >
 		{
 		public:
 			/**
@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a SSAO configuration into a text file
@@ -69,7 +69,7 @@ namespace Castor3D
 			 *\param[in]	p_target	La cible de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API bool operator()( Castor3D::SsaoConfig const & p_target, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( castor3d::SsaoConfig const & p_target, castor::TextFile & p_file )override;
 		};
 
 		//!\~english	The effect activation status.

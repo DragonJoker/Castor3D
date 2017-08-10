@@ -24,12 +24,12 @@ HRESULT STDAPICALLTYPE DllCanUnloadNow()
 }
 
 // Returns a class factory to create an object of the requested type.
-HRESULT STDAPICALLTYPE DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID * ppv )
+HRESULT STDAPICALLTYPE DllgetClassObject( REFCLSID rclsid, REFIID riid, LPVOID * ppv )
 {
-	return CastorCom::g_module.DllGetClassObject( rclsid, riid, ppv );
+	return CastorCom::g_module.DllgetClassObject( rclsid, riid, ppv );
 }
 
-// DllRegisterServer - Adds entries to the system registry.
+// DllRegisterServer - adds entries to the system registry.
 HRESULT STDAPICALLTYPE DllRegisterServer()
 {
 	// registers object, typelib and all interfaces in typelib
@@ -44,7 +44,7 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 	return hr;
 }
 
-// DllInstall - Adds/Removes entries to the system registry per user per machine.
+// DllInstall - adds/Removes entries to the system registry per user per machine.
 HRESULT STDAPICALLTYPE DllInstall( BOOL bInstall, LPCWSTR pszCmdLine )
 {
 	HRESULT hr = E_FAIL;
@@ -54,7 +54,7 @@ HRESULT STDAPICALLTYPE DllInstall( BOOL bInstall, LPCWSTR pszCmdLine )
 	{
 		if ( _wcsnicmp( pszCmdLine, szUserSwitch, _countof( szUserSwitch ) ) == 0 )
 		{
-			ATL::AtlSetPerUserRegistration( true );
+			ATL::AtlsetPerUserRegistration( true );
 		}
 	}
 

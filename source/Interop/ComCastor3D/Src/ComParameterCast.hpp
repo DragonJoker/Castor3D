@@ -46,32 +46,32 @@ namespace CastorCom
 		return value ? 1 : 0;
 	}
 	template<>
-	inline BSTR parameter_cast< BSTR, Castor::String >( Castor::String const & value )
+	inline BSTR parameter_cast< BSTR, castor::String >( castor::String const & value )
 	{
 		return ToBstr( value );
 	}
 	template<>
-	inline Castor::String parameter_cast< Castor::String, BSTR >( BSTR const & value )
+	inline castor::String parameter_cast< castor::String, BSTR >( BSTR const & value )
 	{
 		return FromBstr( value );
 	}
 	template<>
-	inline BSTR parameter_cast< BSTR, Castor::Path >( Castor::Path const & value )
+	inline BSTR parameter_cast< BSTR, castor::Path >( castor::Path const & value )
 	{
 		return ToBstr( value );
 	}
 	template<>
-	inline Castor::Path parameter_cast< Castor::Path, BSTR >( BSTR const & value )
+	inline castor::Path parameter_cast< castor::Path, BSTR >( BSTR const & value )
 	{
-		return Castor::Path{ FromBstr( value ) };
+		return castor::Path{ FromBstr( value ) };
 	}
 	template<>
-	inline FLOAT parameter_cast< FLOAT, Castor::ColourComponent >( Castor::ColourComponent const & value )
+	inline FLOAT parameter_cast< FLOAT, castor::ColourComponent >( castor::ColourComponent const & value )
 	{
 		return ( FLOAT )value;
 	}
 	template<>
-	inline IScene * parameter_cast< IScene *, Castor3D::SceneSPtr >( Castor3D::SceneSPtr const & value )
+	inline IScene * parameter_cast< IScene *, castor3d::SceneSPtr >( castor3d::SceneSPtr const & value )
 	{
 		return reinterpret_cast< IScene *>( value.get() );
 	}

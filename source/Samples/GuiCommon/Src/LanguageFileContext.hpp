@@ -40,21 +40,21 @@ namespace GuiCommon
 	\brief Contexte d'analyse pour les fichiers de langage
 	*/
 	class LanguageFileContext
-		: public Castor::FileParserContext
+		: public castor::FileParserContext
 	{
 	public:
 		LanguageInfoPtr pCurrentLanguage;
 		StyleInfoPtr pCurrentStyle;
-		Castor::UIntStrMap mapFoldFlags;
-		Castor::UIntStrMap mapTypes;
-		Castor::UIntStrMap mapLexers;
-		Castor::String strName;
+		castor::UIntStrMap mapFoldFlags;
+		castor::UIntStrMap mapTypes;
+		castor::UIntStrMap mapLexers;
+		castor::String strName;
 		eSTC_TYPE eStyle;
 		eSTC_TYPE eType;
-		Castor::StringArray arrayWords;
+		castor::StringArray arrayWords;
 
 	public:
-		LanguageFileContext( Castor::TextFile * p_pFile );
+		LanguageFileContext( castor::TextFile * p_pFile );
 	};
 }
 

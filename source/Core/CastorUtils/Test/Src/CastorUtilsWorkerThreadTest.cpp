@@ -4,7 +4,7 @@
 
 #include <atomic>
 
-using namespace Castor;
+using namespace castor;
 
 namespace Testing
 {
@@ -17,21 +17,21 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsWorkerThreadTest::DoRegisterTests()
+	void CastorUtilsWorkerThreadTest::doRegisterTests()
 	{
-		DoRegisterTest( "CastorUtilsWorkerThreadTest::SingleThread", std::bind( &CastorUtilsWorkerThreadTest::SingleThread, this ) );
-		DoRegisterTest( "CastorUtilsWorkerThreadTest::ProducerConsumer", std::bind( &CastorUtilsWorkerThreadTest::ProducerConsumer, this ) );
-		DoRegisterTest( "CastorUtilsWorkerThreadTest::MultipleSameTask", std::bind( &CastorUtilsWorkerThreadTest::MultipleSameTask, this ) );
+		doRegisterTest( "CastorUtilsWorkerThreadTest::SingleThread", std::bind( &CastorUtilsWorkerThreadTest::SingleThread, this ) );
+		doRegisterTest( "CastorUtilsWorkerThreadTest::ProducerConsumer", std::bind( &CastorUtilsWorkerThreadTest::ProducerConsumer, this ) );
+		doRegisterTest( "CastorUtilsWorkerThreadTest::MultipleSameTask", std::bind( &CastorUtilsWorkerThreadTest::MultipleSameTask, this ) );
 	}
 
 	void CastorUtilsWorkerThreadTest::SingleThread()
 	{
 		constexpr size_t count = 1000000u;
 		WorkerThread worker;
-		CT_CHECK( worker.IsEnded() );
+		CT_CHECK( worker.isEnded() );
 		std::vector< size_t > data;
 
-		worker.Feed( [&data, count]()
+		worker.feed( [&data, count]()
 		{
 			while ( data.size() < count )
 			{
@@ -39,10 +39,10 @@ namespace Testing
 			}
 		} );
 
-		CT_CHECK( !worker.Wait( std::chrono::milliseconds( 1 ) ) );
-		CT_CHECK( !worker.IsEnded() );
-		CT_CHECK( worker.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( worker.IsEnded() );
+		CT_CHECK( !worker.wait( std::chrono::milliseconds( 1 ) ) );
+		CT_CHECK( !worker.isEnded() );
+		CT_CHECK( worker.wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( worker.isEnded() );
 		CT_CHECK( data.size() == count );
 	}
 
@@ -53,7 +53,7 @@ namespace Testing
 		WorkerThread consumer;
 		std::atomic_int value{ 0 };
 
-		producer.Feed( [&value, &count]()
+		producer.feed( [&value, &count]()
 		{
 			size_t i = 0;
 
@@ -63,7 +63,7 @@ namespace Testing
 			}
 		} );
 
-		consumer.Feed( [&value, &count]()
+		consumer.feed( [&value, &count]()
 		{
 			size_t i = 0;
 
@@ -73,12 +73,12 @@ namespace Testing
 			}
 		} );
 
-		CT_CHECK( !producer.IsEnded() );
-		CT_CHECK( !consumer.IsEnded() );
-		CT_CHECK( producer.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( consumer.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( producer.IsEnded() );
-		CT_CHECK( consumer.IsEnded() );
+		CT_CHECK( !producer.isEnded() );
+		CT_CHECK( !consumer.isEnded() );
+		CT_CHECK( producer.wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( consumer.wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( producer.isEnded() );
+		CT_CHECK( consumer.isEnded() );
 		CT_CHECK( value == 0 );
 	}
 
@@ -99,15 +99,15 @@ namespace Testing
 			}
 		};
 
-		worker1.Feed( job );
-		worker2.Feed( job );
+		worker1.feed( job );
+		worker2.feed( job );
 
-		CT_CHECK( !worker1.IsEnded() );
-		CT_CHECK( !worker2.IsEnded() );
-		CT_CHECK( worker1.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( worker2.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( worker1.IsEnded() );
-		CT_CHECK( worker2.IsEnded() );
+		CT_CHECK( !worker1.isEnded() );
+		CT_CHECK( !worker2.isEnded() );
+		CT_CHECK( worker1.wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( worker2.wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( worker1.isEnded() );
+		CT_CHECK( worker2.isEnded() );
 		CT_CHECK( value == count * 2 );
 	}
 }

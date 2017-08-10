@@ -29,7 +29,7 @@ SOFTWARE.
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -45,7 +45,7 @@ namespace Castor3D
 				<br />Si non affichés, toutes les méthodes seront désactivées.
 	*/
 	class DebugOverlays
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -72,21 +72,21 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation, récupère les incrustations à partir du cache d'incrustations donné.
 		 *\param[in]	cache	Le cache d'incrustations.
 		 */
-		void Initialise( OverlayCache & cache );
+		void initialise( OverlayCache & cache );
 		/**
 		 *\~english
 		 *\brief		Clean up function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		void Cleanup();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Resets all frame counters.
 		 *\~french
 		 *\brief		Réinitialise tous les compteurs d'image.
 		 */
-		void StartFrame();
+		void beginFrame();
 		/**
 		 *\~english
 		 *\brief		Updates the overlays texts.
@@ -95,21 +95,21 @@ namespace Castor3D
 		 *\brief		Met à jour les textes des incrustations de débogage.
 		 *\param[in]	info	Les informations de rendu.
 		 */
-		void EndFrame( RenderInfo const & info );
+		void endFrame( RenderInfo const & info );
 		/**
 		 *\~english
-		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask
+		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
 		 *\~french
-		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de EndGpuTask ou EndCpuTask
+		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de endGpuTask ou endCpuTask
 		 */
-		void EndGpuTask();
+		void endGpuTask();
 		/**
 		 *\~english
-		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask
+		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
 		 *\~french
-		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de EndGpuTask ou EndCpuTask
+		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de endGpuTask ou endCpuTask
 		 */
-		void EndCpuTask();
+		void endCpuTask();
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays.
@@ -118,7 +118,7 @@ namespace Castor3D
 		 *\brief		Affiche ou cache les incrustations de débogage.
 		 *\param[in]	show	Le statut.
 		 */
-		void Show( bool show );
+		void show( bool show );
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à enregistrer.
 		 */
-		void RegisterTimer( RenderPassTimer const & timer );
+		void registerTimer( RenderPassTimer const & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
@@ -136,7 +136,7 @@ namespace Castor3D
 		 *\brief		Désenregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
-		void UnregisterTimer( RenderPassTimer const & timer );
+		void unregisterTimer( RenderPassTimer const & timer );
 
 	private:
 		struct RenderPassOverlays
@@ -159,13 +159,13 @@ namespace Castor3D
 #endif
 		//!\~english	The tasks (CPU or GPU) timer.
 		//!\~french		Le timer pour les tâches (CPU ou GPU).
-		Castor::PreciseTimer m_taskTimer;
+		castor::PreciseTimer m_taskTimer;
 		//!\~english	The frame timer.
 		//!\~french		Le timer de frame.
-		Castor::PreciseTimer m_frameTimer;
+		castor::PreciseTimer m_frameTimer;
 		//!\~english	The debug timer.
 		//!\~french		Le timer de debug.
-		Castor::PreciseTimer m_debugTimer;
+		castor::PreciseTimer m_debugTimer;
 		//!\~english	The base debug panel overlay.
 		//!\~french		Le panneau d'incrustations de débogage.
 		OverlayWPtr m_debugPanel;
@@ -213,7 +213,7 @@ namespace Castor3D
 		RenderPassOverlaysArray m_renderPasses;
 		//!\~english	The times of the 100 last frames.
 		//!\~french		Les temps des 100 dernières frames.
-		std::array< Castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;
+		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;
 		//!\~english	The current frame index in m_framesTimes.
 		//!\~french		L'index de la frame courante, dans m_framesTimes.
 		uint32_t m_frameIndex{ 0 };
@@ -225,13 +225,13 @@ namespace Castor3D
 		bool m_visible{ false };
 		//!\~english	The CPU time.
 		//!\~french		Le temps CPU.
-		Castor::Nanoseconds m_cpuTime{ 0 };
+		castor::Nanoseconds m_cpuTime{ 0 };
 		//!\~english	The GPU time.
 		//!\~french		Le temps GPU.
-		Castor::Nanoseconds m_gpuTime{ 0 };
+		castor::Nanoseconds m_gpuTime{ 0 };
 		//!\~english	The time spent out of the render loop.
 		//!\~french		Le temps passé hors de la boucle de rendu.
-		Castor::Nanoseconds m_externalTime{ 0 };
+		castor::Nanoseconds m_externalTime{ 0 };
 		//!\~english	The locale used to display times.
 		//!\~french		La locale utilisée pour afficher les temps.
 		std::locale m_timesLocale;

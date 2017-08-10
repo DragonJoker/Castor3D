@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Plugin.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -40,7 +40,7 @@ namespace Castor3D
 		: public Plugin
 	{
 	public:
-		typedef std::pair< Castor::String, Castor::String > Extension;
+		typedef std::pair< castor::String, castor::String > Extension;
 		DECLARE_VECTOR( Extension, Extension );
 
 	private:
@@ -58,7 +58,7 @@ namespace Castor3D
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API ImporterPlugin( Castor::DynamicLibrarySPtr p_library, Engine * engine );
+		C3D_API ImporterPlugin( castor::DynamicLibrarySPtr p_library, Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -74,16 +74,16 @@ namespace Castor3D
 		 *\brief		Récupère le tableau des extensions supportées
 		 *\return		Le tableau d'extensions supportées
 		 */
-		C3D_API ExtensionArray const & GetExtensions();
+		C3D_API ExtensionArray const & getExtensions();
 		/**
 		 *\~english
-		 *\brief		Adds a supported extension.
+		 *\brief		adds a supported extension.
 		 *\param[in]	p_extension	The extension.
 		 *\~french
 		 *\brief		Ajoute une extension supportée.
 		 *\param[in]	p_extension	L'extension.
 		 */
-		C3D_API void AddExtension( Extension const & p_extension );
+		C3D_API void addExtension( Extension const & p_extension );
 
 	private:
 		ExtensionArray m_extensions;

@@ -19,29 +19,29 @@
 
 extern "C"
 {
-	C3D_Fireworks_API void GetRequiredVersion( Castor3D::Version * p_version )
+	C3D_Fireworks_API void getRequiredVersion( castor3d::Version * p_version )
 	{
-		*p_version = Castor3D::Version();
+		*p_version = castor3d::Version();
 	}
 
-	C3D_Fireworks_API void GetType( Castor3D::PluginType * p_type )
+	C3D_Fireworks_API void getType( castor3d::PluginType * p_type )
 	{
-		*p_type = Castor3D::PluginType::ePostEffect;
+		*p_type = castor3d::PluginType::ePostEffect;
 	}
 
-	C3D_Fireworks_API void GetName( char const ** p_name )
+	C3D_Fireworks_API void getName( char const ** p_name )
 	{
 		*p_name = Fireworks::ParticleSystem::Name.c_str();
 	}
 
-	C3D_Fireworks_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
+	C3D_Fireworks_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->GetParticleFactory().Register( Fireworks::ParticleSystem::Type
-			, &Fireworks::ParticleSystem::Create );
+		engine->getParticleFactory().registerType( Fireworks::ParticleSystem::Type
+			, &Fireworks::ParticleSystem::create );
 	}
 
-	C3D_Fireworks_API void OnUnload( Castor3D::Engine * engine )
+	C3D_Fireworks_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->GetParticleFactory().Unregister( Fireworks::ParticleSystem::Type );
+		engine->getParticleFactory().unregisterType( Fireworks::ParticleSystem::Type );
 	}
 }

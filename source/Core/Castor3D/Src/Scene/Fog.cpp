@@ -1,9 +1,9 @@
 #include "Fog.hpp"
 
-using namespace Castor;
+using namespace castor;
 using namespace GLSL;
 
-namespace Castor3D
+namespace castor3d
 {
 	Fog::Fog()
 	{

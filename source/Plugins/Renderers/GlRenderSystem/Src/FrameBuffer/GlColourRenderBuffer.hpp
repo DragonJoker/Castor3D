@@ -34,12 +34,12 @@ namespace GlRender
 	\version	0.7.0.0
 	\date		12/11/2012
 	\~english
-	\brief		Render buffer receiving colour component.
+	\brief		Render buffer receiving colour PixelComponents.
 	\~french
 	\brief		Tampon de rendu recevant une composante de couleur.
 	*/
 	class GlColourRenderBuffer
-		: public Castor3D::ColourRenderBuffer
+		: public castor3d::ColourRenderBuffer
 	{
 	public:
 		/**
@@ -52,7 +52,7 @@ namespace GlRender
 		 *\param[in]	p_gl		L'api OpenGL.
 		 *\param[in]	p_format	Le format des pixels.
 		 */
-		GlColourRenderBuffer( OpenGl & p_gl, Castor::PixelFormat p_format );
+		GlColourRenderBuffer( OpenGl & p_gl, castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,42 +61,42 @@ namespace GlRender
 		 */
 		virtual ~GlColourRenderBuffer();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Create
+		 *\copydoc		castor3d::ColourRenderBuffer::create
 		 */
-		virtual bool Create();
+		virtual bool create();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Destroy
+		 *\copydoc		castor3d::ColourRenderBuffer::Destroy
 		 */
-		virtual void Destroy();
+		virtual void destroy();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Initialise
+		 *\copydoc		castor3d::ColourRenderBuffer::Initialise
 		 */
-		virtual bool Initialise( Castor::Size const & p_size );
+		virtual bool initialise( castor::Size const & p_size );
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Cleanup
+		 *\copydoc		castor3d::ColourRenderBuffer::Cleanup
 		 */
-		virtual void Cleanup();
+		virtual void cleanup();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Bind
+		 *\copydoc		castor3d::ColourRenderBuffer::Bind
 		 */
-		virtual void Bind();
+		virtual void bind();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Unbind
+		 *\copydoc		castor3d::ColourRenderBuffer::Unbind
 		 */
-		virtual void Unbind();
+		virtual void unbind();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Resize
+		 *\copydoc		castor3d::ColourRenderBuffer::Resize
 		 */
-		virtual bool Resize( Castor::Size const & p_size );
+		virtual bool resize( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\return		The OpenGL buffer name.
 		 *\~french
 		 *\return		Le nom OpenGL du tampon.
 		 */
-		inline uint32_t	GetGlName()const
+		inline uint32_t	getGlName()const
 		{
-			return m_glRenderBuffer.GetGlName();
+			return m_glRenderBuffer.getGlName();
 		}
 
 	private:

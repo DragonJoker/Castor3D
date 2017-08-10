@@ -33,11 +33,11 @@ namespace Testing
 		: public GlTestCase
 	{
 	public:
-		explicit GlComputeShaderTest( Castor3D::Engine & engine );
+		explicit GlComputeShaderTest( castor3d::Engine & engine );
 		virtual ~GlComputeShaderTest();
 
 	private:
-		void DoRegisterTests()override;
+		void doRegisterTests()override;
 
 	private:
 		void SimpleCompute();

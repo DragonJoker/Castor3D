@@ -57,31 +57,31 @@ namespace CastorCom
 		 */
 		virtual ~CMovableObject();
 
-		inline Castor3D::MovableObjectSPtr GetInternal()const
+		inline castor3d::MovableObjectSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::MovableObjectSPtr internal )
+		inline void setInternal( castor3d::MovableObjectSPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &Castor3D::MovableObject::GetName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &Castor3D::MovableObject::GetType ) );
-		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &Castor3D::MovableObject::GetScene ) );
+		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &castor3d::MovableObject::getName ) );
+		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &castor3d::MovableObject::getType ) );
+		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &castor3d::MovableObject::getScene ) );
 
-		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
+		STDMETHOD( attachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();
 
 	private:
-		Castor3D::MovableObjectSPtr m_internal;
+		castor3d::MovableObjectSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( MovableObject ), CMovableObject );
 
-	//DECLARE_VARIABLE_PTR_GETTER( MovableObject, Castor3D, MovableObject );
-	//DECLARE_VARIABLE_PTR_PUTTER( MovableObject, Castor3D, MovableObject );
+	//DECLARE_VARIABLE_PTR_GETTER( MovableObject, castor3d, MovableObject );
+	//DECLARE_VARIABLE_PTR_PUTTER( MovableObject, castor3d, MovableObject );
 }
 
 #endif

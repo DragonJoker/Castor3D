@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PREREQUISITES_SHADER_H___
 #define ___C3D_PREREQUISITES_SHADER_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Shader */
 	//@{
@@ -68,11 +68,11 @@ namespace Castor3D
 	enum class ShaderStatus
 		: uint8_t
 	{
-		eDontExist,
+		edontExist,
 		eNotCompiled,
 		eError,
 		eCompiled,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDontExist )
+		CASTOR_SCOPED_ENUM_BOUNDS( edontExist )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -200,7 +200,7 @@ namespace Castor3D
 	 *\param[in]	p_flags	Les indicateurs à vérifier.
 	 *\return		\p true si p_flags contient l'un de ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, ou ProgramFlag::eShadowMapPoint.
 	 */
-	bool IsShadowMapProgram( ProgramFlags const & p_flags );
+	bool isShadowMapProgram( ProgramFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -724,12 +724,12 @@ namespace Castor3D
 	DECLARE_LIST( UniformBufferSPtr, UniformBufferPtr );
 	DECLARE_LIST( ShaderStorageBufferSPtr, ShaderStorageBufferPtr );
 	DECLARE_LIST( AtomicCounterBufferSPtr, AtomicCounterBufferPtr );
-	DECLARE_MAP( Castor::String, PushUniformWPtr, PushUniform );
-	DECLARE_MAP( Castor::String, UniformWPtr, Uniform );
+	DECLARE_MAP( castor::String, PushUniformWPtr, PushUniform );
+	DECLARE_MAP( castor::String, UniformWPtr, Uniform );
 	DECLARE_MAP( ShaderProgramRPtr, UniformBufferBindingUPtr, UniformBufferBinding );
-	DECLARE_MAP( Castor::String, UniformBufferWPtr, UniformBufferPtrStr );
-	DECLARE_MAP( Castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
-	DECLARE_MAP( Castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );
+	DECLARE_MAP( castor::String, UniformBufferWPtr, UniformBufferPtrStr );
+	DECLARE_MAP( castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
+	DECLARE_MAP( castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );
 	DECLARE_MAP( ShaderType, UniformBufferWPtr, UniformBufferPtrShader );
 	DECLARE_MAP( ShaderType, ShaderStorageBufferWPtr, ShaderStorageBufferPtrShader );
 	DECLARE_MAP( ShaderType, AtomicCounterBufferWPtr, AtomicCounterBufferPtrShader );

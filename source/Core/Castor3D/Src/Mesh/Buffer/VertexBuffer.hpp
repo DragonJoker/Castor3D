@@ -27,7 +27,7 @@ SOFTWARE.
 #include "BufferElementDeclaration.hpp"
 #include "BufferDeclaration.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -74,23 +74,23 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature );
+		C3D_API bool initialise( BufferAccessType p_type, BufferAccessNature p_nature );
 		/**
 		 *\~english
 		 *\brief		Clean up the GPU buffer.
 		 *\~french
 		 *\brief		Nettoie le tampon GPU.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Gets buffer declaration
+		 *\brief		gets buffer declaration
 		 *\return		The buffer declaration
 		 *\~french
 		 *\brief		Récupère la déclaration du tampon
 		 *\return		La déclaration du tampon
 		 */
-		inline BufferDeclaration const & GetDeclaration()const
+		inline BufferDeclaration const & getDeclaration()const
 		{
 			return m_bufferDeclaration;
 		}
@@ -103,14 +103,14 @@ namespace Castor3D
 		 *\param[in]	p_begin, p_end	Les itérateurs du tableau d'éléments
 		 */
 		template< typename ItType >
-		inline void LinkCoords( ItType p_begin, ItType p_end )
+		inline void linkCoords( ItType p_begin, ItType p_end )
 		{
 			uint32_t stride = m_bufferDeclaration.stride();
-			uint8_t * buffer = CpuBuffer< uint8_t >::GetData();
+			uint8_t * buffer = CpuBuffer< uint8_t >::getData();
 
 			for ( auto it = p_begin; it != p_end; ++it )
 			{
-				( *it )->LinkCoords( buffer, stride );
+				( *it )->linkCoords( buffer, stride );
 				buffer += stride;
 			}
 		}

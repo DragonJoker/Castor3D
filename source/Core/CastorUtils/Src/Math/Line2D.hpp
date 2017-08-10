@@ -25,14 +25,14 @@ SOFTWARE.
 
 #include "CastorUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\date		14/08/2010
 	\~english
 	\brief		2D line equation
-	\remark		Do you remember y = ax + b ?
+	\remark		do you remember y = ax + b ?
 	\~french
 	\brief		Equation d'une ligne 2D
 	\remark		Vous connaissez y = ax + b ?
@@ -41,7 +41,7 @@ namespace Castor
 	class Line2D
 	{
 	private:
-		typedef Castor::Policy< T > policy;
+		typedef castor::Policy< T > policy;
 
 	public:
 		/**
@@ -97,7 +97,7 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line2D à copier
 		 *\return		Une référence sur cet objet Line2D
 		 */
-		Line2D & operator =( Line2D const & p_line )
+		Line2D & operator=( Line2D const & p_line )
 		{
 			a = p_line.a;
 			b = p_line.b;
@@ -113,7 +113,7 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line2D à déplacer
 		 *\return		Une référence sur cet objet Line2D
 		 */
-		Line2D operator =( Line2D && p_line )
+		Line2D operator=( Line2D && p_line )
 		{
 			if ( this != &p_line )
 			{
@@ -137,7 +137,7 @@ namespace Castor
 		 *\param[out]	x, y	Reçoivent les coordonnées du point d'intersection
 		 *\return		\p true si une intersection existe
 		 */
-		bool Intersects( Line2D const & p_line, T & x, T & y )
+		bool intersects( Line2D const & p_line, T & x, T & y )
 		{
 			bool result = false;
 

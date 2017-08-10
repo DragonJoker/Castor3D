@@ -12,11 +12,11 @@ namespace castortd
 
 		void Reset();
 		void StartWave( uint32_t m_count );
-		bool CanSpawn( Castor::Milliseconds const & p_elapsed );
+		bool CanSpawn( castor::Milliseconds const & p_elapsed );
 		EnemyPtr Spawn( Game const & p_game, Path const & p_path );
 		void KillEnemy( Game & p_game, EnemyPtr && p_enemy );
 
-		inline uint32_t GetWave()const
+		inline uint32_t getWave()const
 		{
 			return m_totalsWaves;
 		}
@@ -26,21 +26,21 @@ namespace castortd
 			return m_count == 0;
 		}
 
-		inline uint32_t GetEnemiesLife()const
+		inline uint32_t getEnemiesLife()const
 		{
-			return m_category.m_life.GetValue();
+			return m_category.m_life.getValue();
 		}
 
-		inline uint32_t GetEnemiesBounty()const
+		inline uint32_t getEnemiesBounty()const
 		{
-			return m_category.m_bounty.GetValue();
+			return m_category.m_bounty.getValue();
 		}
 
 	private:
 		BaseEnemy m_category;
 		uint32_t m_count{ 0 };
-		Castor::Milliseconds m_timeBetweenTwoSpawns{ 0u };
-		Castor::Milliseconds m_timeSinceLastSpawn{ 0u };
+		castor::Milliseconds m_timeBetweenTwoSpawns{ 0u };
+		castor::Milliseconds m_timeSinceLastSpawn{ 0u };
 		uint32_t m_totalsWaves{ 0ull };
 		uint32_t m_totalSpawned{ 0ull };
 		EnemyArray m_enemiesCache;

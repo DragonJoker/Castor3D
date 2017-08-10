@@ -6,15 +6,15 @@
 #	include "Exception/Assertion.hpp"
 #	include <cstdlib>
 
-namespace Castor
+namespace castor
 {
-	void * AlignedAlloc( size_t p_alignment, size_t p_size )
+	void * alignedAlloc( size_t p_alignment, size_t p_size )
 	{
 		REQUIRE( ( p_size % p_alignment ) == 0 && cuT( "size is not an integral multiple of alignment" ) );
 		return malloc( p_size );
 	}
 
-	void AlignedFree( void * p_memory )
+	void alignedFree( void * p_memory )
 	{
 		free( p_memory );
 	}

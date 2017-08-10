@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,19 +27,10 @@ SOFTWARE.
 
 #include <ctime>
 
-namespace Castor
+namespace castor
 {
 	namespace System
 	{
-		/**
-		 *\~english
-		 *\brief		Retrieves the CPU count (physical + cores)
-		 *\return		The count
-		 *\~french
-		 *\brief		Récupère le nombre de CPU (physiques + coeurs)
-		 *\return		Le compte
-		 */
-		CU_API uint8_t GetCPUCount();
 		/**
 		 *\~english
 		 *\brief		Suspends the execution of the calling thread for a given time
@@ -48,7 +39,7 @@ namespace Castor
 		 *\brief		Suspend l'exécution du thread courant pour un temps donné
 		 *\param[in]	p_uiTime	Le temps de suspension en millisecondes
 		 */
-		CU_API void Sleep( uint32_t p_uiTime );
+		CU_API void sleep( uint32_t p_uiTime );
 		/**
 		 *\~english
 		 *\brief		Retrieves the given screen size
@@ -61,7 +52,7 @@ namespace Castor
 		 *\param[out]	p_size		Reçoit la taille
 		 *\return		\p true si la taille a été récupérée
 		 */
-		CU_API bool GetScreenSize( uint32_t p_screen, Size & p_size );
+		CU_API bool getScreenSize( uint32_t p_screen, Size & p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves the last system error text
@@ -70,12 +61,12 @@ namespace Castor
 		 *\brief		Récupère le texte de la dernière erreur système
 		 *\return		Le texte
 		 */
-		CU_API String GetLastErrorText();
+		CU_API String getLastErrorText();
 	}
 	/**
 	 *\see			localtime
 	 */
-	void Localtime( std::tm * p_tm, time_t const * p_pTime );
+	void getLocaltime( std::tm * p_tm, time_t const * p_pTime );
 }
 
 #endif

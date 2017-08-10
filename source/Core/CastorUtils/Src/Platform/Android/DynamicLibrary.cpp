@@ -8,13 +8,13 @@
 #include "Log/Logger.hpp"
 #include "Miscellaneous/Utils.hpp"
 
-namespace Castor
+namespace castor
 {
-	bool DynamicLibrary::Open( Path const & p_name )throw()
+	bool DynamicLibrary::open( Path const & p_name )throw()
 	{
 		if ( !m_pLibrary )
 		{
-			std::string name( string::string_cast< char >( p_name ) );
+			std::string name( string::stringCast< char >( p_name ) );
 
 			try
 			{
@@ -23,7 +23,7 @@ namespace Castor
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't load dynamic library at [" ) + name + std::string( "]" ) );
+				Logger::logError( std::string( "Can't load dynamic library at [" ) + name + std::string( "]" ) );
 				m_pLibrary = nullptr;
 			}
 		}
@@ -31,13 +31,13 @@ namespace Castor
 		return m_pLibrary != nullptr;
 	}
 
-	void * DynamicLibrary::DoGetFunction( String const & p_name )throw()
+	void * DynamicLibrary::doGetFunction( String const & p_name )throw()
 	{
 		void * result = nullptr;
 
 		if ( m_pLibrary )
 		{
-			std::string name( string::string_cast< char >( p_name ) );
+			std::string name( string::stringCast< char >( p_name ) );
 
 			try
 			{
@@ -53,23 +53,23 @@ namespace Castor
 			catch ( std::exception & exc )
 			{
 				result = nullptr;
-				Logger::LogError( std::string( "Can't load function [" ) + name + std::string( "]: " ) + exc.what() );
+				Logger::logError( std::string( "Can't load function [" ) + name + std::string( "]: " ) + exc.what() );
 			}
 			catch ( ... )
 			{
 				result = nullptr;
-				Logger::LogError( std::string( "Can't load function [" ) + name + std::string( "]: Unknown error." ) );
+				Logger::logError( std::string( "Can't load function [" ) + name + std::string( "]: Unknown error." ) );
 			}
 		}
 		else
 		{
-			Logger::LogError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
+			Logger::logError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
 		return result;
 	}
 
-	void DynamicLibrary::DoClose()throw()
+	void DynamicLibrary::doClose()throw()
 	{
 		if ( m_pLibrary )
 		{
@@ -79,7 +79,7 @@ namespace Castor
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't unload dynamic library" ) );
+				Logger::logError( std::string( "Can't unload dynamic library" ) );
 			}
 
 			m_pLibrary = nullptr;

@@ -1,8 +1,8 @@
 ﻿#include "VertexBoneData.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	VertexBoneData::VertexBoneData()
 		: m_ids{}
@@ -10,7 +10,7 @@ namespace Castor3D
 	{
 	}
 
-	void VertexBoneData::AddBoneData( uint32_t p_boneId, real p_weight )
+	void VertexBoneData::addBoneData( uint32_t p_boneId, real p_weight )
 	{
 		bool done = false;
 

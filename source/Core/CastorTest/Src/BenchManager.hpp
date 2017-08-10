@@ -32,8 +32,8 @@ namespace Testing
 	public:
 		BenchManager();
 		~BenchManager();
-		static void Register( BenchCaseUPtr p_bench );
-		static void Register( TestCaseUPtr p_case );
+		static void registerType( BenchCaseUPtr p_bench );
+		static void registerType( TestCaseUPtr p_case );
 		static void ExecuteBenchs();
 		static void BenchsSummary();
 		static uint32_t ExecuteTests();
@@ -43,8 +43,8 @@ namespace Testing
 		static std::vector< TestCaseUPtr > m_cases;
 	};
 
-	bool Register( BenchCaseUPtr p_bench );
-	bool Register( TestCaseUPtr p_case );
+	bool registerType( BenchCaseUPtr p_bench );
+	bool registerType( TestCaseUPtr p_case );
 
 #define BENCHLOOP( p_iMax, p_return )\
 		p_return = ::Testing::BenchManager::ExecuteTests();\

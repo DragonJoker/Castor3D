@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Miscellaneous/StringUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -33,10 +33,10 @@ namespace Castor
 	\date		19/10/2011
 	\~english
 	\brief		Class for named elements
-	\remark		The name type is a template argument so anything can be a name for this class (default is Castor::String)
+	\remark		The name type is a template argument so anything can be a name for this class (default is castor::String)
 	\~french
 	\brief		Classe de base pour les éléments nommés
-	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est Castor::String par défaut)
+	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est castor::String par défaut)
 	*/
 	template< typename T = String >
 	class NamedBase
@@ -105,19 +105,19 @@ namespace Castor
 		 *\brief		Récupère le nom
 		 *\return		Le nom
 		 */
-		inline T const & GetName()const
+		inline T const & getName()const
 		{
 			return m_name;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the name
+		 *\brief		sets the name
 		 *\param[in]	p_name	The name
 		 *\~french
 		 *\brief		Définit le nom
 		 *\param[in]	p_name	Le nom
 		 */
-		inline void SetName( T const & p_name )
+		inline void setName( T const & p_name )
 		{
 			m_name = p_name;
 		}

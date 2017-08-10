@@ -50,7 +50,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_material	Le matàriau cible
 		 */
-		MaterialTreeItemProperty( bool p_editable, Castor3D::MaterialSPtr p_material );
+		MaterialTreeItemProperty( bool p_editable, castor3d::MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,23 +66,23 @@ namespace GuiCommon
 		 *\brief		Récupère le matàriau
 		 *\return		La valeur
 		 */
-		inline Castor3D::MaterialSPtr GetMaterial()
+		inline castor3d::MaterialSPtr getMaterial()
 		{
 			return m_material.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::MaterialWPtr m_material;
+		castor3d::MaterialWPtr m_material;
 	};
 }
 

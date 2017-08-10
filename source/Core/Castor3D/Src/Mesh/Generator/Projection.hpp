@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Math/Point.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -58,9 +58,9 @@ namespace Castor3D
 		 */
 		C3D_API ~Projection();
 		/**
-		 *\copydoc		Castor3D::MeshGenerator::Create
+		 *\copydoc		castor3d::MeshGenerator::create
 		 */
-		C3D_API static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr create();
 		/**
 		 *\~english
 		 *\brief		Defines the pattern used to build the projection
@@ -73,27 +73,17 @@ namespace Castor3D
 		 *\param[in]	p_vAxis		L'axe de projection
 		 *\param[in]	p_bClosed	Dit si on doit fermer la projection
 		 */
-		C3D_API void SetPoints( Point3rPatternSPtr p_pPattern, Castor::Point3r const & p_vAxis, bool p_bClosed );
-		/**
-		 *\~english
-		 *\brief		Retrieves number of faces
-		 *\~french
-		 *\brief		Récupère le nombre de faces
-		 */
-		inline uint32_t	GetFaceCount()const
-		{
-			return m_uiNbFaces;
-		}
+		C3D_API void setPoints( Point3rPatternSPtr p_pPattern, castor::Point3r const & p_vAxis, bool p_bClosed );
 
 	private:
 		/**
-		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void DoGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
 		Point3rPatternSPtr m_pPattern;
-		Castor::Point3r m_vAxis;
+		castor::Point3r m_vAxis;
 		real m_fDepth;
 		bool m_bClosed;
 		uint32_t m_uiNbFaces;

@@ -25,13 +25,13 @@ SOFTWARE.
 
 #include "Scene/Animation/AnimationInstance.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
-	\todo		Write and Read functions.
+	\todo		write and read functions.
 	\~english
 	\brief		Mesh animation instance.
 	\~french
@@ -93,23 +93,23 @@ namespace Castor3D
 		*\~french
 		*\return		Le sous-maillage d'animation, à l'ID donné, nullptr si non trouvé.
 		*/
-		C3D_API MeshAnimationInstanceSubmesh const * GetAnimationSubmesh( uint32_t p_index )const;
+		C3D_API MeshAnimationInstanceSubmesh const * getAnimationSubmesh( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The animation.
 		 *\~french
 		 *\return		L'animation.
 		 */
-		inline MeshAnimation const & GetMeshAnimation()const
+		inline MeshAnimation const & getMeshAnimation()const
 		{
 			return m_meshAnimation;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::AnimationInstance::DoUpdate
+		 *\copydoc		castor3d::AnimationInstance::doUpdate
 		 */
-		void DoUpdate()override;
+		void doUpdate()override;
 
 	protected:
 		//!\~english	The animated mesh.

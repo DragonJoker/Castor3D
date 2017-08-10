@@ -30,7 +30,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor3D
 	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
 	*/
 	class BrdfPrefilter
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	p_context	Le Context.
 		 */
 		C3D_API explicit BrdfPrefilter( Engine & engine
-			, Castor::Size const & p_size );
+			, castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\brief		Calcule le BRDF circonvolu.
 		 *\param[in]	p_dstTexture	La texture cube destination.
 		 */
-		C3D_API void Render( TextureLayoutSPtr p_dstTexture );
+		C3D_API void render( TextureLayoutSPtr p_dstTexture );
 
 	private:
 		/**
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\brief		Crée le programme shader de dessin de texture 2D.
 		 *\return		Le programme.
 		 */
-		ShaderProgramSPtr DoCreateProgram();
+		ShaderProgramSPtr doCreateProgram();
 
 	private:
 		//!\~english	The uniform buffer containing matrices data.
@@ -89,18 +89,18 @@ namespace Castor3D
 		MatrixUbo m_matrixUbo;
 		//!\~english	The resulting dimensions.
 		//!\~french		Les dimensions du résultat.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
 		//!	6 * 2(vertex position)
-		std::array< Castor::real, 6 * 2 > m_bufferVertex;
+		std::array< castor::real, 6 * 2 > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
-		Castor3D::BufferDeclaration m_declaration;
+		castor3d::BufferDeclaration m_declaration;
 		//!\~english	Vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad).
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;

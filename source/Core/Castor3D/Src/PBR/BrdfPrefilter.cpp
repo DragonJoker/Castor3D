@@ -18,12 +18,12 @@
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
-		, Castor::Size const & p_size )
+		, castor::Size const & p_size )
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }
 		, m_viewport{ engine }
@@ -53,71 +53,71 @@ namespace Castor3D
 			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
 		}
 
-		m_viewport.Initialise();
-		m_viewport.Resize( m_size );
-		m_viewport.Update();
-		auto & program = *DoCreateProgram();
-		auto & renderSystem = *engine.GetRenderSystem();
-		program.Initialise();
+		m_viewport.initialise();
+		m_viewport.resize( m_size );
+		m_viewport.update();
+		auto & program = *doCreateProgram();
+		auto & renderSystem = *engine.getRenderSystem();
+		program.initialise();
 		m_vertexBuffer = std::make_shared< VertexBuffer >( engine
 			, m_declaration );
-		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size()
+		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size()
 			* m_declaration.stride() ) );
-		m_vertexBuffer->LinkCoords( m_arrayVertex.begin()
+		m_vertexBuffer->linkCoords( m_arrayVertex.begin()
 			, m_arrayVertex.end() );
-		m_vertexBuffer->Initialise( BufferAccessType::eStatic
+		m_vertexBuffer->initialise( BufferAccessType::eStatic
 			, BufferAccessNature::eDraw );
-		m_geometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
+		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
 			, program );
-		m_geometryBuffers->Initialise( { *m_vertexBuffer }
+		m_geometryBuffers->initialise( { *m_vertexBuffer }
 		, nullptr );
 
 		DepthStencilState dsState;
-		dsState.SetDepthTest( false );
-		dsState.SetDepthMask( WritingMask::eZero );
-		m_pipeline = renderSystem.CreateRenderPipeline( std::move( dsState )
+		dsState.setDepthTest( false );
+		dsState.setDepthMask( WritingMask::eZero );
+		m_pipeline = renderSystem.createRenderPipeline( std::move( dsState )
 			, RasteriserState{}
 			, BlendState{}
 			, MultisampleState{}
 			, program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
+		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		m_frameBuffer = renderSystem.CreateFrameBuffer();
+		m_frameBuffer = renderSystem.createFrameBuffer();
 
-		m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24 );
-		m_depthBuffer->Create();
-		m_depthBuffer->Initialise( m_size );
-		m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
+		m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD24 );
+		m_depthBuffer->create();
+		m_depthBuffer->initialise( m_size );
+		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
 
-		m_frameBuffer->Create();
-		m_frameBuffer->Initialise( m_size );
-		m_frameBuffer->Bind();
-		m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
-		REQUIRE( m_frameBuffer->IsComplete() );
-		m_frameBuffer->Unbind();
+		m_frameBuffer->create();
+		m_frameBuffer->initialise( m_size );
+		m_frameBuffer->bind();
+		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
+		REQUIRE( m_frameBuffer->isComplete() );
+		m_frameBuffer->unbind();
 	}
 
 	BrdfPrefilter::~BrdfPrefilter()
 	{
-		m_frameBuffer->Bind();
-		m_frameBuffer->DetachAll();
-		m_frameBuffer->Unbind();
-		m_frameBuffer->Cleanup();
-		m_frameBuffer->Destroy();
+		m_frameBuffer->bind();
+		m_frameBuffer->detachAll();
+		m_frameBuffer->unbind();
+		m_frameBuffer->cleanup();
+		m_frameBuffer->destroy();
 		m_frameBuffer.reset();
 		m_depthAttach.reset();
-		m_depthBuffer->Cleanup();
-		m_depthBuffer->Destroy();
+		m_depthBuffer->cleanup();
+		m_depthBuffer->destroy();
 		m_depthBuffer.reset();
-		m_pipeline->Cleanup();
+		m_pipeline->cleanup();
 		m_pipeline.reset();
-		m_vertexBuffer->Cleanup();
+		m_vertexBuffer->cleanup();
 		m_vertexBuffer.reset();
-		m_geometryBuffers->Cleanup();
+		m_geometryBuffers->cleanup();
 		m_geometryBuffers.reset();
-		m_viewport.Cleanup();
-		m_matrixUbo.GetUbo().Cleanup();
+		m_viewport.cleanup();
+		m_matrixUbo.getUbo().cleanup();
 
 		for ( auto & vertex : m_arrayVertex )
 		{
@@ -125,38 +125,38 @@ namespace Castor3D
 		}
 	}
 
-	void BrdfPrefilter::Render( TextureLayoutSPtr p_dstTexture )
+	void BrdfPrefilter::render( TextureLayoutSPtr p_dstTexture )
 	{
-		m_viewport.Apply();
-		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		auto attach = m_frameBuffer->CreateAttachment( p_dstTexture );
-		attach->SetLayer( 0 );
-		attach->SetTarget( TextureType::eTwoDimensions );
-		attach->Attach( AttachmentPoint::eColour, 0u );
-		m_frameBuffer->SetDrawBuffer( attach );
-		REQUIRE( m_frameBuffer->IsComplete() );
-		m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
-		m_matrixUbo.Update( m_viewport.GetProjection() );
-		m_pipeline->Apply();
-		m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
-		m_frameBuffer->Unbind();
+		m_viewport.apply();
+		m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		auto attach = m_frameBuffer->createAttachment( p_dstTexture );
+		attach->setLayer( 0 );
+		attach->setTarget( TextureType::eTwoDimensions );
+		attach->attach( AttachmentPoint::eColour, 0u );
+		m_frameBuffer->setDrawBuffer( attach );
+		REQUIRE( m_frameBuffer->isComplete() );
+		m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
+		m_matrixUbo.update( m_viewport.getProjection() );
+		m_pipeline->apply();
+		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0 );
+		m_frameBuffer->unbind();
 	}
 
-	ShaderProgramSPtr BrdfPrefilter::DoCreateProgram()
+	ShaderProgramSPtr BrdfPrefilter::doCreateProgram()
 	{
-		auto & renderSystem = *GetEngine()->GetRenderSystem();
+		auto & renderSystem = *getEngine()->getRenderSystem();
 		GLSL::Shader vtx;
 		{
 			using namespace GLSL;
-			GlslWriter writer{ renderSystem.CreateGlslWriter() };
+			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto position = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 			UBO_MATRIX( writer );
 
 			// Outputs
-			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			std::function< void() > main = [&]()
 			{
@@ -164,195 +164,195 @@ namespace Castor3D
 				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			};
 
-			writer.ImplementFunction< void >( cuT( "main" ), main );
-			vtx = writer.Finalise();
+			writer.implementFunction< void >( cuT( "main" ), main );
+			vtx = writer.finalise();
 		}
 
 		GLSL::Shader pxl;
 		{
 			using namespace GLSL;
-			GlslWriter writer{ renderSystem.CreateGlslWriter() };
+			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Outputs
-			auto plx_v4FragColor = writer.DeclOutput< Vec2 >( cuT( "pxl_FragColor" ) );
+			auto plx_v4FragColor = writer.declOutput< Vec2 >( cuT( "pxl_FragColor" ) );
 
-			auto radicalInverse = writer.ImplementFunction< Float >( cuT( "RadicalInverse_VdC" )
+			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
 				, [&]( UInt const & p_bits )
 				{
-					auto bits = writer.DeclLocale( cuT( "bits" )
+					auto bits = writer.declLocale( cuT( "bits" )
 						, p_bits );
-					bits = writer.Paren( bits << 16u ) | writer.Paren( bits >> 16u );
-					bits = writer.Paren( writer.Paren( bits & 0x55555555_ui ) << 1u ) | writer.Paren( writer.Paren( bits & 0xAAAAAAAA_ui ) >> 1u );
-					bits = writer.Paren( writer.Paren( bits & 0x33333333_ui ) << 2u ) | writer.Paren( writer.Paren( bits & 0xCCCCCCCC_ui ) >> 2u );
-					bits = writer.Paren( writer.Paren( bits & 0x0F0F0F0F_ui ) << 4u ) | writer.Paren( writer.Paren( bits & 0xF0F0F0F0_ui ) >> 4u );
-					bits = writer.Paren( writer.Paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.Paren( writer.Paren( bits & 0xFF00FF00_ui ) >> 8u );
-					writer.Return( writer.Cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
+					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
+					bits = writer.paren( writer.paren( bits & 0x55555555_ui ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_ui ) >> 1u );
+					bits = writer.paren( writer.paren( bits & 0x33333333_ui ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_ui ) >> 2u );
+					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_ui ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_ui ) >> 4u );
+					bits = writer.paren( writer.paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_ui ) >> 8u );
+					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
 				}
 				, InUInt{ &writer, cuT( "p_bits" ) } );
 
-			auto hammersley = writer.ImplementFunction< Vec2 >( cuT( "Hammersley" )
+			auto hammersley = writer.implementFunction< Vec2 >( cuT( "Hammersley" )
 				, [&]( UInt const & p_i
 					, UInt const & p_n )
 				{
-					writer.Return( vec2( writer.Cast< Float >( p_i ) / writer.Cast< Float >( p_n ), radicalInverse( p_i ) ) );
+					writer.returnStmt( vec2( writer.cast< Float >( p_i ) / writer.cast< Float >( p_n ), radicalInverse( p_i ) ) );
 				}
 				, InUInt{ &writer, cuT( "p_i" ) }
 				, InUInt{ &writer, cuT( "p_n" ) } );
 
-			auto importanceSample = writer.ImplementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
+			auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
 				, [&]( Vec2 const & p_xi
 					, Vec3 const & p_n
 					, Float const & p_roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto a = writer.DeclLocale( cuT( "a" )
+					auto a = writer.declLocale( cuT( "a" )
 						, p_roughness * p_roughness );
 
-					auto phi = writer.DeclLocale( cuT( "phi" )
+					auto phi = writer.declLocale( cuT( "phi" )
 						, 2.0_f * PI * p_xi.x() );
-					auto cosTheta = writer.DeclLocale( cuT( "cosTheta" )
-						, sqrt( writer.Paren( 1.0 - p_xi.y() ) / writer.Paren( 1.0 + writer.Paren( a * a - 1.0 ) * p_xi.y() ) ) );
-					auto sinTheta = writer.DeclLocale( cuT( "sinTheta" )
+					auto cosTheta = writer.declLocale( cuT( "cosTheta" )
+						, sqrt( writer.paren( 1.0 - p_xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * p_xi.y() ) ) );
+					auto sinTheta = writer.declLocale( cuT( "sinTheta" )
 						, sqrt( 1.0 - cosTheta * cosTheta ) );
 
 					// from spherical coordinates to cartesian coordinates
-					auto H = writer.DeclLocale< Vec3 >( cuT( "H" ) );
+					auto H = writer.declLocale< Vec3 >( cuT( "H" ) );
 					H.x() = cos( phi ) * sinTheta;
 					H.y() = sin( phi ) * sinTheta;
 					H.z() = cosTheta;
 
 					// from tangent-space vector to world-space sample vector
-					auto up = writer.DeclLocale( cuT( "up" )
-						, writer.Ternary( GLSL::abs( p_n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
-					auto tangent = writer.DeclLocale( cuT( "tangent" )
+					auto up = writer.declLocale( cuT( "up" )
+						, writer.ternary( GLSL::abs( p_n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
+					auto tangent = writer.declLocale( cuT( "tangent" )
 						, normalize( cross( up, p_n ) ) );
-					auto bitangent = writer.DeclLocale( cuT( "bitangent" )
+					auto bitangent = writer.declLocale( cuT( "bitangent" )
 						, cross( p_n, tangent ) );
 
-					auto sampleVec = writer.DeclLocale( cuT( "sampleVec" )
+					auto sampleVec = writer.declLocale( cuT( "sampleVec" )
 						, tangent * H.x() + bitangent * H.y() + p_n * H.z() );
-					writer.Return( normalize( sampleVec ) );
+					writer.returnStmt( normalize( sampleVec ) );
 				}
 				, InVec2{ &writer, cuT( "p_xi" ) }
 				, InVec3{ &writer, cuT( "p_n" ) }
 				, InFloat{ &writer, cuT( "p_roughness" ) } );
 
-			auto geometrySchlickGGX = writer.ImplementFunction< Float >( cuT( "GeometrySchlickGGX" )
+			auto geometrySchlickGGX = writer.implementFunction< Float >( cuT( "GeometrySchlickGGX" )
 				, [&]( Float const & p_product
 					, Float const & p_roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto r = writer.DeclLocale( cuT( "r" )
+					auto r = writer.declLocale( cuT( "r" )
 						, p_roughness );
-					auto k = writer.DeclLocale( cuT( "k" )
-						, writer.Paren( r * r ) / 2.0_f );
+					auto k = writer.declLocale( cuT( "k" )
+						, writer.paren( r * r ) / 2.0_f );
 
-					auto nominator = writer.DeclLocale( cuT( "num" )
+					auto nominator = writer.declLocale( cuT( "num" )
 						, p_product );
-					auto denominator = writer.DeclLocale( cuT( "denom" )
-						, p_product * writer.Paren( 1.0_f - k ) + k );
+					auto denominator = writer.declLocale( cuT( "denom" )
+						, p_product * writer.paren( 1.0_f - k ) + k );
 
-					writer.Return( nominator / denominator );
+					writer.returnStmt( nominator / denominator );
 				}
 				, InFloat( &writer, cuT( "p_product" ) )
 				, InFloat( &writer, cuT( "p_roughness" ) ) );
 
-			auto geometrySmith = writer.ImplementFunction< Float >( cuT( "GeometrySmith" )
+			auto geometrySmith = writer.implementFunction< Float >( cuT( "GeometrySmith" )
 				, [&]( Float const & p_NdotV
 					, Float const & p_NdotL
 					, Float const & p_roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto ggx2 = writer.DeclLocale( cuT( "ggx2" )
+					auto ggx2 = writer.declLocale( cuT( "ggx2" )
 						, geometrySchlickGGX( p_NdotV, p_roughness ) );
-					auto ggx1 = writer.DeclLocale( cuT( "ggx1" )
+					auto ggx1 = writer.declLocale( cuT( "ggx1" )
 						, geometrySchlickGGX( p_NdotL, p_roughness ) );
 
-					writer.Return( ggx1 * ggx2 );
+					writer.returnStmt( ggx1 * ggx2 );
 				}
 				, InFloat( &writer, cuT( "p_NdotV" ) )
 				, InFloat( &writer, cuT( "p_NdotL" ) )
 				, InFloat( &writer, cuT( "p_roughness" ) ) );
 
-			auto integrateBRDF = writer.ImplementFunction< Vec2 >( cuT( "IntegrateBRDF" )
+			auto integrateBRDF = writer.implementFunction< Vec2 >( cuT( "IntegrateBRDF" )
 				, [&]( Float const & p_NdotV
 					, Float const & p_roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto V = writer.DeclLocale< Vec3 >( cuT( "V" ) );
+					auto V = writer.declLocale< Vec3 >( cuT( "V" ) );
 					V.x() = sqrt( 1.0 - p_NdotV * p_NdotV );
 					V.y() = 0.0_f;
 					V.z() = p_NdotV;
-					auto N = writer.DeclLocale( cuT( "N" )
+					auto N = writer.declLocale( cuT( "N" )
 						, vec3( 0.0_f, 0.0, 1.0 ) );
 
-					auto A = writer.DeclLocale( cuT( "A" )
+					auto A = writer.declLocale( cuT( "A" )
 						, 0.0_f );
-					auto B = writer.DeclLocale( cuT( "B" )
+					auto B = writer.declLocale( cuT( "B" )
 						, 0.0_f );
 
-					auto sampleCount = writer.DeclLocale( cuT( "sampleCount" )
+					auto sampleCount = writer.declLocale( cuT( "sampleCount" )
 						, 1024_ui );
 
 					FOR( writer, UInt, i, 0, "i < sampleCount", "++i" )
 					{
-						auto xi = writer.DeclLocale( cuT( "xi" )
+						auto xi = writer.declLocale( cuT( "xi" )
 							, hammersley( i, sampleCount ) );
-						auto H = writer.DeclLocale( cuT( "H" )
+						auto H = writer.declLocale( cuT( "H" )
 							, importanceSample( xi, N, p_roughness ) );
-						auto L = writer.DeclLocale( cuT( "L" )
+						auto L = writer.declLocale( cuT( "L" )
 							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
 
-						auto NdotL = writer.DeclLocale( cuT( "NdotL" )
+						auto NdotL = writer.declLocale( cuT( "NdotL" )
 							, max( L.z(), 0.0 ) );
-						auto NdotH = writer.DeclLocale( cuT( "NdotH" )
+						auto NdotH = writer.declLocale( cuT( "NdotH" )
 							, max( H.z(), 0.0 ) );
-						auto VdotH = writer.DeclLocale( cuT( "VdotH" )
+						auto VdotH = writer.declLocale( cuT( "VdotH" )
 							, max( dot( V, H ), 0.0 ) );
 
 						IF( writer, "NdotL > 0.0" )
 						{
-							auto G = writer.DeclLocale( cuT( "G" )
+							auto G = writer.declLocale( cuT( "G" )
 								, geometrySmith( p_NdotV, max( dot( N, L ), 0.0 ), p_roughness ) );
-							auto G_Vis = writer.DeclLocale( cuT( "G_Vis" )
-								, writer.Paren( G * VdotH ) / writer.Paren( NdotH * p_NdotV ) );
-							auto Fc = writer.DeclLocale( cuT( "Fc" )
+							auto G_Vis = writer.declLocale( cuT( "G_Vis" )
+								, writer.paren( G * VdotH ) / writer.paren( NdotH * p_NdotV ) );
+							auto Fc = writer.declLocale( cuT( "Fc" )
 								, pow( 1.0 - VdotH, 5.0 ) );
 
-							A += writer.Paren( 1.0_f - Fc ) * G_Vis;
+							A += writer.paren( 1.0_f - Fc ) * G_Vis;
 							B += Fc * G_Vis;
 						}
 						FI;
 					}
 					ROF;
 
-					A /= writer.Cast< Float >( sampleCount );
-					B /= writer.Cast< Float >( sampleCount );
-					writer.Return( vec2( A, B ) );
+					A /= writer.cast< Float >( sampleCount );
+					B /= writer.cast< Float >( sampleCount );
+					writer.returnStmt( vec2( A, B ) );
 				}
 				, InFloat( &writer, cuT( "p_NdotV" ) )
 				, InFloat( &writer, cuT( "p_roughness" ) ) );
 
-			writer.ImplementFunction< void >( cuT( "main" )
+			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					plx_v4FragColor.xy() = integrateBRDF( vtx_texture.x(), vtx_texture.y() );
 				} );
 
-			pxl = writer.Finalise();
+			pxl = writer.finalise();
 		}
 
-		auto & cache = GetEngine()->GetShaderProgramCache();
-		auto program = cache.GetNewProgram( false );
-		program->CreateObject( ShaderType::eVertex );
-		program->CreateObject( ShaderType::ePixel );
-		program->SetSource( ShaderType::eVertex, vtx );
-		program->SetSource( ShaderType::ePixel, pxl );
-		program->Initialise();
+		auto & cache = getEngine()->getShaderProgramCache();
+		auto program = cache.getNewProgram( false );
+		program->createObject( ShaderType::eVertex );
+		program->createObject( ShaderType::ePixel );
+		program->setSource( ShaderType::eVertex, vtx );
+		program->setSource( ShaderType::ePixel, pxl );
+		program->initialise();
 		return program;
 	}
 }

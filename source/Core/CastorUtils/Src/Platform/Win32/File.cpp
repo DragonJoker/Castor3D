@@ -16,11 +16,11 @@
 #include <direct.h>
 #include <Shlobj.h>
 #include <windows.h>
-#define GetCurrentDir _getcwd
-#undef CopyFile
-#undef DeleteFile
+#define getCurrentDir _getcwd
+#undef copyFile
+#undef deleteFile
 
-namespace Castor
+namespace castor
 {
 	namespace
 	{
@@ -83,7 +83,7 @@ namespace Castor
 
 #else
 
-			bool result = rmdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+			bool result = rmdir( string::stringCast< char >( p_path ).c_str() ) == 0;
 
 #endif
 
@@ -94,19 +94,19 @@ namespace Castor
 				switch ( error )
 				{
 				case ENOTEMPTY:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
 					break;
 
 				case ENOENT:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
 					break;
 
 				case EACCES:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
 					break;
 
 				default:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << error << cuT( ")." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << error << cuT( ")." ) );
 					break;
 				}
 			}
@@ -118,82 +118,82 @@ namespace Castor
 
 #if defined( CASTOR_COMPILER_MSVC )
 
-	bool FOpen( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
 		errno_t err = fopen_s( &p_file, p_path, p_mode );
 
 		if ( err && !p_file )
 		{
-			Logger::LogError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::GetLastErrorText() );
+			Logger::logError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::getLastErrorText() );
 		}
 
 		return err == 0;
 	}
 
-	bool FOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
 		errno_t err = fopen_s( &p_file, p_path, p_mode );
 
 		if ( err && !p_file )
 		{
-			Logger::LogError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::GetLastErrorText() );
+			Logger::logError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::getLastErrorText() );
 		}
 
 		return err == 0;
 	}
 
-	bool FSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
+	bool fileSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
 		return _fseeki64( p_file, p_offset, p_iOrigin ) == 0;
 	}
 
-	int64_t FTell( FILE * p_file )
+	int64_t fileTell( FILE * p_file )
 	{
 		return _ftelli64( p_file );
 	}
 
 #else
 
-	bool FOpen( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
 		p_file = fopen( p_path, p_mode );
 		return p_file != nullptr;
 	}
 
-	bool FOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
 		p_file = fopen( p_path, p_mode );
 		return p_file != nullptr;
 	}
 
-	bool FSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
+	bool fileSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
 		return fseek( p_file, p_offset, p_iOrigin ) == 0;
 	}
 
-	int64_t FTell( FILE * p_file )
+	int64_t fileTell( FILE * p_file )
 	{
 		return ftell( p_file );
 	}
 
 #endif
 
-	Path File::GetExecutableDirectory()
+	Path File::getExecutableDirectory()
 	{
 		Path pathReturn;
 		xchar path[FILENAME_MAX];
-		DWORD result = GetModuleFileName( nullptr, path, _countof( path ) );
+		DWORD result = ::GetModuleFileName( nullptr, path, _countof( path ) );
 
 		if ( result != 0 )
 		{
 			pathReturn = Path{ path };
 		}
 
-		pathReturn = pathReturn.GetPath();
+		pathReturn = pathReturn.getPath();
 		return pathReturn;
 	}
 
-	Path File::GetUserDirectory()
+	Path File::getUserDirectory()
 	{
 		Path pathReturn;
 		xchar path[FILENAME_MAX];
@@ -207,20 +207,20 @@ namespace Castor
 		return pathReturn;
 	}
 
-	bool File::DirectoryExists( Path const & p_path )
+	bool File::directoryExists( Path const & p_path )
 	{
 		struct _stat status = { 0 };
-		_stat( string::string_cast< char >( p_path ).c_str(), &status );
+		_stat( string::stringCast< char >( p_path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
-	bool File::DirectoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags )
+	bool File::directoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags )
 	{
-		Path path = p_path.GetPath();
+		Path path = p_path.getPath();
 
-		if ( !path.empty() && !DirectoryExists( path ) )
+		if ( !path.empty() && !directoryExists( path ) )
 		{
-			DirectoryCreate( path, p_flags );
+			directoryCreate( path, p_flags );
 		}
 
 #if defined( CASTOR_COMPILER_MSVC )
@@ -229,12 +229,12 @@ namespace Castor
 
 #else
 
-		return mkdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+		return mkdir( string::stringCast< char >( p_path ).c_str() ) == 0;
 
 #endif
 	}
 
-	bool File::ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive )
+	bool File::listDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive )
 	{
 		struct FileFunction
 		{
@@ -283,13 +283,13 @@ namespace Castor
 		}
 	}
 
-	bool File::DirectoryDelete( Path const & p_path )
+	bool File::directoryDelete( Path const & p_path )
 	{
 		struct FileFunction
 		{
 			void operator()( Path const & p_path )
 			{
-				File::DeleteFile( p_path );
+				File::deleteFile( p_path );
 			}
 		};
 

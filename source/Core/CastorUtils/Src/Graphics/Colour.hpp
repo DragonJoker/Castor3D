@@ -31,7 +31,7 @@ SOFTWARE.
 
 #undef RGB
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -113,13 +113,13 @@ namespace Castor
 	enum class Component
 		: uint8_t
 	{
-		//!\~english Red component	\~french Composante rouge
+		//!\~english Red PixelComponents	\~french Composante rouge
 		eRed,
-		//!\~english Green component	\~french Composante verte
+		//!\~english Green PixelComponents	\~french Composante verte
 		eGreen,
-		//!\~english Blue component	\~french Composante bleue
+		//!\~english Blue PixelComponents	\~french Composante bleue
 		eBlue,
-		//!\~english Alpha component	\~french Composante alpha
+		//!\~english Alpha PixelComponents	\~french Composante alpha
 		eAlpha,
 		CASTOR_SCOPED_ENUM_BOUNDS( eRed )
 	};
@@ -133,7 +133,7 @@ namespace Castor
 	 *\param[in]	p_predefined	La couleur prédéfinie
 	 *\return		Le nom de la couleur
 	 */
-	inline static String get_predefined_name( PredefinedColour p_predefined );
+	inline static String getPredefinedName( PredefinedColour p_predefined );
 	/**
 	 *\~english
 	 *\brief		Retrieves predefined colour from a name
@@ -144,7 +144,7 @@ namespace Castor
 	 *\param[in]	p_name	Le nom de la couleur prédéfinie
 	 *\return		La couleur prédéfinie
 	 */
-	inline static PredefinedColour get_predefined( String const & p_name );
+	inline static PredefinedColour getPredefined( String const & p_name );
 	/*!
 	\author		Sylvain DOREMUS
 	\date		14/08/2010
@@ -170,7 +170,7 @@ namespace Castor
 		\brief		Loader de ColourT à partir d'un texte
 		*/
 		class TextLoader
-			: public Castor::TextLoader< ColourT< ComponentType > >
+			: public castor::TextLoader< ColourT< ComponentType > >
 		{
 		public:
 			/**
@@ -201,7 +201,7 @@ namespace Castor
 		\brief		Writer de ColourT à partir d'un texte
 		*/
 		class TextWriter
-			: public Castor::TextWriter< ColourT< ComponentType > >
+			: public castor::TextWriter< ColourT< ComponentType > >
 		{
 		public:
 			/**
@@ -291,7 +291,7 @@ namespace Castor
 		 *\return		La ColourT construite
 		 */
 		template< typename T1, typename T2, typename T3, typename T4 >
-		static ColourT< ComponentType > from_components( T1 const & p_r, T2 const & p_g, T3 const & p_b, T4 const & p_a )
+		static ColourT< ComponentType > fromComponents( T1 const & p_r, T2 const & p_g, T3 const & p_b, T4 const & p_a )
 		{
 			ColourT clrReturn;
 			clrReturn.m_arrayComponents[size_t( Component::eRed )] = p_r;
@@ -310,9 +310,9 @@ namespace Castor
 		 *\param[in]	p_ePredef
 		 *\return		La ColourT construite
 		 */
-		static ColourT< ComponentType > from_predef( PredefinedColour p_ePredef )
+		static ColourT< ComponentType > fromPredefined( PredefinedColour p_ePredef )
 		{
-			return from_rgba( ( uint32_t )p_ePredef );
+			return fromRGBA( ( uint32_t )p_ePredef );
 		}
 		/**
 		 *\~english
@@ -324,7 +324,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgb( Point3ub const & p_ptColour );
+		inline static ColourT< ComponentType > fromRGB( Point3ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -335,7 +335,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgr( Point3ub const & p_ptColour );
+		inline static ColourT< ComponentType > fromBGR( Point3ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -346,7 +346,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgba( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > fromRGBA( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -357,7 +357,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgra( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > fromBGRA( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -368,7 +368,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_argb( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > fromARGB( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -379,7 +379,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_abgr( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > fromABGR( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
@@ -390,7 +390,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgb( Point3f const & p_ptColour );
+		inline static ColourT< ComponentType > fromRGB( Point3f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -401,7 +401,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgr( Point3f const & p_ptColour );
+		inline static ColourT< ComponentType > fromBGR( Point3f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -412,7 +412,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgba( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > fromRGBA( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -423,7 +423,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_argb( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > fromARGB( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -434,7 +434,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_abgr( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > fromABGR( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -445,7 +445,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgra( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > fromBGRA( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
@@ -456,7 +456,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgb( uint8_t const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > fromRGB( uint8_t const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -467,7 +467,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgr( uint8_t const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > fromBGR( uint8_t const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -478,7 +478,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgba( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromRGBA( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -489,7 +489,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgra( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromBGRA( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -500,7 +500,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_argb( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromARGB( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -511,7 +511,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_abgr( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromABGR( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
@@ -522,7 +522,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgb( float const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > fromRGB( float const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -533,7 +533,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgr( float const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > fromBGR( float const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -544,7 +544,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgba( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromRGBA( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -555,7 +555,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_argb( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromARGB( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -566,7 +566,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_abgr( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromABGR( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -577,7 +577,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgra( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > fromBGRA( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGB components
@@ -588,7 +588,7 @@ namespace Castor
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0x00RRGGBB)
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgb( uint32_t p_colour );
+		inline static ColourT< ComponentType > fromRGB( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing BGR components
@@ -599,7 +599,7 @@ namespace Castor
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0x00BBGGRR)
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgr( uint32_t p_colour );
+		inline static ColourT< ComponentType > fromBGR( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing ARGB components
@@ -610,7 +610,7 @@ namespace Castor
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xAARRGGBB)
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_argb( uint32_t p_colour );
+		inline static ColourT< ComponentType > fromARGB( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGBA components
@@ -621,7 +621,7 @@ namespace Castor
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xRRGGBBAA)
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_rgba( uint32_t p_colour );
+		inline static ColourT< ComponentType > fromRGBA( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing ABGR components
@@ -632,7 +632,7 @@ namespace Castor
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xAABBGGRR)
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_abgr( uint32_t p_colour );
+		inline static ColourT< ComponentType > fromABGR( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing BGRA components
@@ -643,7 +643,7 @@ namespace Castor
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xBBGGRRAA)
 		 *\return		La ColourT construite
 		 */
-		inline static ColourT< ComponentType > from_bgra( uint32_t p_colour );
+		inline static ColourT< ComponentType > fromBGRA( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first ColourComponent
@@ -700,7 +700,7 @@ namespace Castor
 		 *\brief		Récupère un pointeur constant sur les valeurs de la couleur
 		 *\return		Le pointeur
 		 */
-		inline float const * const_ptr()const
+		inline float const * constPtr()const
 		{
 			return &m_arrayValues[0];
 		}
@@ -718,9 +718,9 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked component value
-		 *\param[in]	p_eComponent	The asked component
-		 *\return		The component value
+		 *\brief		Retrieves the asked PixelComponents value
+		 *\param[in]	p_eComponent	The asked PixelComponents
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	p_eComponent	La composante demandée
@@ -732,9 +732,9 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked component value
-		 *\param[in]	p_eComponent	The asked component
-		 *\return		The component value
+		 *\brief		Retrieves the asked PixelComponents value
+		 *\param[in]	p_eComponent	The asked PixelComponents
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	p_eComponent	La composante demandée
@@ -746,9 +746,9 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked component value
-		 *\param[in]	p_eComponent	The asked component
-		 *\return		The component value
+		 *\brief		Retrieves the asked PixelComponents value
+		 *\param[in]	p_eComponent	The asked PixelComponents
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	p_eComponent	La composante demandée
@@ -760,9 +760,9 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked component value
-		 *\param[in]	p_eComponent	The asked component
-		 *\return		The component value
+		 *\brief		Retrieves the asked PixelComponents value
+		 *\param[in]	p_eComponent	The asked PixelComponents
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	p_eComponent	La composante demandée
@@ -774,8 +774,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the red component value
-		 *\return		The component value
+		 *\brief		Retrieves the red PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
@@ -786,8 +786,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the red component value
-		 *\return		The component value
+		 *\brief		Retrieves the red PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
@@ -798,8 +798,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the green component value
-		 *\return		The component value
+		 *\brief		Retrieves the green PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
@@ -810,8 +810,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the green component value
-		 *\return		The component value
+		 *\brief		Retrieves the green PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
@@ -822,8 +822,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the blue component value
-		 *\return		The component value
+		 *\brief		Retrieves the blue PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante
@@ -834,8 +834,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the blue component value
-		 *\return		The component value
+		 *\brief		Retrieves the blue PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante
@@ -846,8 +846,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the alpha component value
-		 *\return		The component value
+		 *\brief		Retrieves the alpha PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante alpha
 		 *\return		La valeur de la composante
@@ -858,8 +858,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the alpha component value
-		 *\return		The component value
+		 *\brief		Retrieves the alpha PixelComponents value
+		 *\return		The PixelComponents value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante alpha
 		 *\return		La valeur de la composante
@@ -870,7 +870,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_clrB	The colours to add
 		 *\return		Result of this + p_clrB
 		 *\~french
@@ -882,7 +882,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_clrB	The colours to substract
+		 *\param[in]	p_clrB	The colours to subtract
 		 *\return		Result of this - p_clrB
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -892,7 +892,7 @@ namespace Castor
 		inline ColourT< ComponentType > & operator-=( ColourT const & p_clrB );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_scalar	The value to add
 		 *\return		Result of this + p_scalar
 		 *\~french
@@ -913,7 +913,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_scalar	The value to substract
+		 *\param[in]	p_scalar	The value to subtract
 		 *\return		Result of this - p_scalar
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -972,7 +972,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_component	The value to add
 		 *\return		Result of this + p_component
 		 *\~french
@@ -984,7 +984,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_component	The value to substract
+		 *\param[in]	p_component	The value to subtract
 		 *\return		Result of this - p_component
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -1041,7 +1041,7 @@ namespace Castor
 	inline bool operator!=( ColourT< ComponentType > const & p_lhs, ColourT< ComponentType > const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_lhs, p_rhs	The colours to add
 	 *\return		Result of p_lhs + p_rhs
 	 *\~french
@@ -1054,7 +1054,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_lhs, p_rhs	The colours to substract
+	 *\param[in]	p_lhs, p_rhs	The colours to subtract
 	 *\return		Result of p_lhs - p_rhs
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -1065,7 +1065,7 @@ namespace Castor
 	inline ColourT< ComponentType > operator-( ColourT< ComponentType > const & p_lhs, ColourT< ComponentType > const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_lhs, p_rhs	The values to add
 	 *\return		Result of p_lhs + p_rhs
 	 *\~french
@@ -1143,7 +1143,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point3ub rgb_byte( ColourT< ColourComponent > const & p_colour );
+	inline Point3ub toRGBByte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGR format.
@@ -1154,7 +1154,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point3ub bgr_byte( ColourT< ColourComponent > const & p_colour );
+	inline Point3ub toBGRByte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGBA format.
@@ -1165,7 +1165,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub rgba_byte( ColourT< ColourComponent > const & p_colour );
+	inline Point4ub toRGBAByte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGRA format.
@@ -1176,7 +1176,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub bgra_byte( ColourT< ColourComponent > const & p_colour );
+	inline Point4ub toBGRAByte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ARGB format.
@@ -1187,7 +1187,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub argb_byte( ColourT< ColourComponent > const & p_colour );
+	inline Point4ub toARGBByte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ABGR format.
@@ -1198,7 +1198,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub abgr_byte( ColourT< ColourComponent > const & p_colour );
+	inline Point4ub toABGRByte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGB format.
@@ -1210,7 +1210,7 @@ namespace Castor
 	 *\return		Les composantes de la couleur.
 	 */
 	template< typename ComponentType >
-	inline Point3f rgb_float( ColourT< ComponentType > const & p_colour );
+	inline Point3f toRGBFloat( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGR format.
@@ -1222,7 +1222,7 @@ namespace Castor
 	 *\return		Les composantes de la couleur.
 	 */
 	template< typename ComponentType >
-	inline Point3f bgr_float( ColourT< ComponentType > const & p_colour );
+	inline Point3f toBGRFloat( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGBA format.
@@ -1234,7 +1234,7 @@ namespace Castor
 	 *\return		Les composantes de la couleur.
 	 */
 	template< typename ComponentType >
-	inline Point4f rgba_float( ColourT< ComponentType > const & p_colour );
+	inline Point4f toRGBAFloat( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ARGB format.
@@ -1246,7 +1246,7 @@ namespace Castor
 	 *\return		Les composantes de la couleur.
 	 */
 	template< typename ComponentType >
-	inline Point4f argb_float( ColourT< ComponentType > const & p_colour );
+	inline Point4f toARGBFloat( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ABGR format.
@@ -1258,7 +1258,7 @@ namespace Castor
 	 *\return		Les composantes de la couleur.
 	 */
 	template< typename ComponentType >
-	inline Point4f abgr_float( ColourT< ComponentType > const & p_colour );
+	inline Point4f toABGRFloat( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGRA format.
@@ -1270,7 +1270,7 @@ namespace Castor
 	 *\return		Les composantes de la couleur.
 	 */
 	template< typename ComponentType >
-	inline Point4f bgra_float( ColourT< ComponentType > const & p_colour );
+	inline Point4f toBGRAFloat( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the RGB format (0x00RRGGBB).
@@ -1280,7 +1280,7 @@ namespace Castor
 	 *\brief		Compile les composantes de la couleur dans un uint32_t, au format RGB (0x00RRGGBB).
 	 *\param[in]	p_colour	La couleur.
 	 */
-	inline uint32_t rgb_packed( ColourT< ColourComponent > const & p_colour );
+	inline uint32_t toRGBPacked( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the BGR format (0x00BBGGRR).
@@ -1291,7 +1291,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t bgr_packed( ColourT< ColourComponent > const & p_colour );
+	inline uint32_t toBGRPacked( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the ARGB format (0xAARRGGBB).
@@ -1302,7 +1302,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t argb_packed( ColourT< ColourComponent > const & p_colour );
+	inline uint32_t toARGBPacked( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the RGBA format (0xRRGGBBAA).
@@ -1313,7 +1313,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t rgba_packed( ColourT< ColourComponent > const & p_colour );
+	inline uint32_t toRGBAPacked( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the ABGR format (0xAABBGGRR).
@@ -1324,7 +1324,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t abgr_packed( ColourT< ColourComponent > const & p_colour );
+	inline uint32_t toABGRPacked( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the BGRA format (0xBBGGRRAA).
@@ -1335,7 +1335,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t bgra_packed( ColourT< ColourComponent > const & p_colour );
+	inline uint32_t toBGRAPacked( ColourT< ColourComponent > const & p_colour );
 }
 
 #include "Colour.inl"

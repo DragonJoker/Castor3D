@@ -30,7 +30,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -42,8 +42,8 @@ namespace Castor3D
 	\brief		Classe de base de mappage de ton.
 	*/
 	class ToneMapping
-		: public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 	public:
 		/**
@@ -58,7 +58,7 @@ namespace Castor3D
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		C3D_API ToneMapping( Castor::String const & name
+		C3D_API ToneMapping( castor::String const & name
 			, Engine & engine
 			, Parameters const & parameters );
 		/**
@@ -74,14 +74,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le shader de mappage de tons.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Applies the tone mapping for given HDR texture.
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\param[in]	texture	La texture HDR.
 		 *\param[in]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void Apply( Castor::Size const & size
+		C3D_API void apply( castor::Size const & size
 			, TextureLayout const & texture
 			, RenderInfo & info );
 		/**
@@ -105,23 +105,23 @@ namespace Castor3D
 		 *\brief		Ecrit le mappage de tons dans un fichier texte.
 		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API bool WriteInto( Castor::TextFile & file );
+		C3D_API bool writeInto( castor::TextFile & file );
 		/**
 		 *\~english
-		 *\brief		Sets the HDR config for the tone mapping.
+		 *\brief		sets the HDR config for the tone mapping.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la configuration HDR pour le mappage de tons.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		C3D_API void SetConfig( HdrConfig const & config );
+		C3D_API void setConfig( HdrConfig const & config );
 		/**
 		 *\~english
 		 *\return		The HDR configuration.
 		 *\~french
 		 *\return		La configuration HDR.
 		 */
-		inline HdrConfig const & GetConfig()const
+		inline HdrConfig const & getConfig()const
 		{
 			return m_config;
 		}
@@ -137,21 +137,21 @@ namespace Castor3D
 		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual GLSL::Shader DoCreate() = 0;
+		C3D_API virtual GLSL::Shader doCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.
 		 *\~french
 		 *\brief		Nettoie les variables shader de mappage de tons.
 		 */
-		C3D_API virtual void DoDestroy() = 0;
+		C3D_API virtual void doDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the tone mapping shader variables.
 		 *\~english
 		 *\brief		Met à jour les variables shader du mappage de tons.
 		 */
-		C3D_API virtual void DoUpdate() = 0;
+		C3D_API virtual void doUpdate() = 0;
 		/**
 		 *\~english
 		 *\brief		Writes the tone mapping into a text file.
@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\brief		Ecrit le mappage de tons dans un fichier texte.
 		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API virtual bool DoWriteInto( Castor::TextFile & file ) = 0;
+		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
 
 	protected:
 		//!\~english	The HDR configuration.
@@ -186,7 +186,7 @@ namespace Castor3D
 		RenderColourToTextureUPtr m_colour;
 		//!\~english	The configuration constants buffer name.
 		//!\~french		Le nom du tampon de constantes de configuration.
-		C3D_API static Castor::String const HdrConfigUbo;
+		C3D_API static castor::String const HdrConfigUbo;
 		//!\~english	The render pass timer.
 		//!\~french		Le timer de passe de rendu.
 		RenderPassTimerSPtr m_timer;

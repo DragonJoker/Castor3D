@@ -25,106 +25,11 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Render */
 	//@{
 
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Matrix modes enumeration
-	\~french
-	\brief		Enumération des types de matrices
-	*/
-	enum class MatrixMode
-		: uint8_t
-	{
-		//!\~english	Eye to Clip transform.
-		//!\~french		Transformations de Vue vers Clip.
-		eProjection,
-		//!\~english	Object to World transform.
-		//!\~french		Transformations de Objet vers Monde.
-		eModel,
-		//!\~english	World to Eye transform.
-		//!\~french Transformations de Monde vers Vue.
-		eView,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture0,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture1,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture2,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture3,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture4,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture5,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture6,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture7,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture8,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture9,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture10,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture11,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture12,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture13,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture14,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture15,
-		CASTOR_SCOPED_ENUM_BOUNDS( eProjection )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Matrix modes masks
-	\~french
-	\brief		Masques pour les types de matrices
-	*/
-	static const uint64_t MASK_MTXMODE_PROJECTION = uint64_t( 0x1 ) << int( MatrixMode::eProjection );
-	static const uint64_t MASK_MTXMODE_MODEL = uint64_t( 0x1 ) << int( MatrixMode::eModel );
-	static const uint64_t MASK_MTXMODE_VIEW = uint64_t( 0x1 ) << int( MatrixMode::eView );
-	static const uint64_t MASK_MTXMODE_TEXTURE0 = uint64_t( 0x1 ) << int( MatrixMode::eTexture0 );
-	static const uint64_t MASK_MTXMODE_TEXTURE1 = uint64_t( 0x1 ) << int( MatrixMode::eTexture1 );
-	static const uint64_t MASK_MTXMODE_TEXTURE2 = uint64_t( 0x1 ) << int( MatrixMode::eTexture2 );
-	static const uint64_t MASK_MTXMODE_TEXTURE3 = uint64_t( 0x1 ) << int( MatrixMode::eTexture3 );
-	static const uint64_t MASK_MTXMODE_TEXTURE4 = uint64_t( 0x1 ) << int( MatrixMode::eTexture4 );
-	static const uint64_t MASK_MTXMODE_TEXTURE5 = uint64_t( 0x1 ) << int( MatrixMode::eTexture5 );
-	static const uint64_t MASK_MTXMODE_TEXTURE6 = uint64_t( 0x1 ) << int( MatrixMode::eTexture6 );
-	static const uint64_t MASK_MTXMODE_TEXTURE7 = uint64_t( 0x1 ) << int( MatrixMode::eTexture7 );
-	static const uint64_t MASK_MTXMODE_TEXTURE8 = uint64_t( 0x1 ) << int( MatrixMode::eTexture8 );
-	static const uint64_t MASK_MTXMODE_TEXTURE9 = uint64_t( 0x1 ) << int( MatrixMode::eTexture9 );
-	static const uint64_t MASK_MTXMODE_TEXTURE10 = uint64_t( 0x1 ) << int( MatrixMode::eTexture10 );
-	static const uint64_t MASK_MTXMODE_TEXTURE11 = uint64_t( 0x1 ) << int( MatrixMode::eTexture11 );
-	static const uint64_t MASK_MTXMODE_TEXTURE12 = uint64_t( 0x1 ) << int( MatrixMode::eTexture12 );
-	static const uint64_t MASK_MTXMODE_TEXTURE13 = uint64_t( 0x1 ) << int( MatrixMode::eTexture13 );
-	static const uint64_t MASK_MTXMODE_TEXTURE14 = uint64_t( 0x1 ) << int( MatrixMode::eTexture14 );
-	static const uint64_t MASK_MTXMODE_TEXTURE15 = uint64_t( 0x1 ) << int( MatrixMode::eTexture15 );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -140,10 +45,10 @@ namespace Castor3D
 		//!\~english	No access.
 		//!\~french		Aucun accès.
 		eNone = 0,
-		//!\~english	Read only access type.
+		//!\~english	read only access type.
 		//!\~french		Accès lecture seule.
 		eRead = 1 << 0,
-		//!\~english	Write only access type.
+		//!\~english	write only access type.
 		//!\~french		Accèes écriture seule.
 		eWrite = 1 << 1
 	};
@@ -230,11 +135,11 @@ namespace Castor3D
 	template< Topology Topo >
 	struct TopologyNamer
 	{
-		static Castor::String const Name;
+		static castor::String const Name;
 	};
 	/**
 	 *\~english
-	 *\brief		Gets the name of the given topology.
+	 *\brief		gets the name of the given topology.
 	 *\param[in]	p_topology	The topology.
 	 *\return		The name.
 	 *\~french
@@ -242,7 +147,7 @@ namespace Castor3D
 	 *\param[in]	p_topology	La topologie.
 	 *\return		Le nom.
 	 */
-	static inline Castor::String const GetTopologyName( Topology p_topology )
+	static inline castor::String const getTopologyName( Topology p_topology )
 	{
 		switch ( p_topology )
 		{
@@ -374,9 +279,9 @@ namespace Castor3D
 	{
 		//! Keeps the current value.
 		eKeep,
-		//! Sets the stencil buffer value to 0.
+		//! sets the stencil buffer value to 0.
 		eZero,
-		//! Sets the stencil buffer value by the one given
+		//! sets the stencil buffer value by the one given
 		eReplace,
 		//! Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.
 		eIncrement,
@@ -478,7 +383,7 @@ namespace Castor3D
 	};
 	/**
 	 *\~english
-	 *\brief		Gets the byte size of the given element type.
+	 *\brief		gets the byte size of the given element type.
 	 *\param[in]	p_type	The element type.
 	 *\return		The size.
 	 *\~french
@@ -486,7 +391,7 @@ namespace Castor3D
 	 *\param[in]	p_type	Le type d'élément.
 	 *\return		La taille.
 	 */
-	inline uint32_t GetSize( ElementType p_type )
+	inline uint32_t getSize( ElementType p_type )
 	{
 		switch ( p_type )
 		{
@@ -591,7 +496,7 @@ namespace Castor3D
 	};
 	/**
 	 *\~english
-	 *\brief		Gets the name of the given element type.
+	 *\brief		gets the name of the given element type.
 	 *\param[in]	p_type	The element type.
 	 *\return		The name.
 	 *\~french
@@ -599,7 +504,7 @@ namespace Castor3D
 	 *\param[in]	p_type	Le type d'élément.
 	 *\return		Le nom.
 	 */
-	C3D_API Castor::String GetName( ElementType p_type );
+	C3D_API castor::String getName( ElementType p_type );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -631,25 +536,25 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Sets the exposure value.
+		 *\brief		sets the exposure value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'exposition.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetExposure( float p_value )
+		inline void setExposure( float p_value )
 		{
 			m_exposure = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the gamma correction value.
+		 *\brief		sets the gamma correction value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de la correction gamma.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetGamma( float p_value )
+		inline void setGamma( float p_value )
 		{
 			m_gamma = p_value;
 		}
@@ -659,7 +564,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La valeur de l'exposition.
 		 */
-		inline float GetExposure()const
+		inline float getExposure()const
 		{
 			return m_exposure;
 		}
@@ -669,7 +574,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La valeur de la correction gamma.
 		 */
-		inline float GetGamma()const
+		inline float getGamma()const
 		{
 			return m_gamma;
 		}

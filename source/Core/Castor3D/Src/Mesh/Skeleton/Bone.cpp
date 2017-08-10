@@ -2,29 +2,29 @@
 
 #include "Skeleton.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< Bone >::DoWrite( Bone const & p_obj )
+	bool BinaryWriter< Bone >::doWrite( Bone const & p_obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = DoWriteChunk( p_obj.GetOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
+			result = doWriteChunk( p_obj.getOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
 		}
 
-		if ( p_obj.GetParent() )
+		if ( p_obj.getParent() )
 		{
-			result = DoWriteChunk( p_obj.GetParent()->GetName(), ChunkType::eBoneParentName, m_chunk );
+			result = doWriteChunk( p_obj.getParent()->getName(), ChunkType::eBoneParentName, m_chunk );
 		}
 
 		return result;
@@ -32,7 +32,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< Bone >::DoParse( Bone & p_obj )
+	bool BinaryParser< Bone >::doParse( Bone & p_obj )
 	{
 		bool result = true;
 		BoneSPtr bone;
@@ -40,35 +40,35 @@ namespace Castor3D
 		BinaryChunk chunk;
 		auto & skeleton = p_obj.m_skeleton;
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				result = DoParseChunk( name, chunk );
+				result = doParseChunk( name, chunk );
 
 				if ( result )
 				{
-					p_obj.SetName( name );
+					p_obj.setName( name );
 				}
 
 				break;
 
 			case ChunkType::eBoneOffsetMatrix:
-				result = DoParseChunk( p_obj.m_offset, chunk );
+				result = doParseChunk( p_obj.m_offset, chunk );
 				break;
 
 			case ChunkType::eBoneParentName:
-				result = DoParseChunk( name, chunk );
+				result = doParseChunk( name, chunk );
 
 				if ( result )
 				{
-					auto parent = skeleton.FindBone( name );
+					auto parent = skeleton.findBone( name );
 
 					if ( parent )
 					{
-						parent->AddChild( p_obj.shared_from_this() );
-						p_obj.SetParent( parent );
+						parent->addChild( p_obj.shared_from_this() );
+						p_obj.setParent( parent );
 					}
 					else
 					{
@@ -86,7 +86,8 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Bone::Bone( Skeleton & p_skeleton )
-		: m_skeleton( p_skeleton )
+		: Named( cuEmptyString )
+		, m_skeleton( p_skeleton )
 	{
 	}
 
@@ -94,11 +95,11 @@ namespace Castor3D
 	{
 	}
 
-	void Bone::AddChild( BoneSPtr p_bone )
+	void Bone::addChild( BoneSPtr p_bone )
 	{
-		if ( m_children.end() == m_children.find( p_bone->GetName() ) )
+		if ( m_children.end() == m_children.find( p_bone->getName() ) )
 		{
-			m_children.insert( { p_bone->GetName(), p_bone } );
+			m_children.insert( { p_bone->getName(), p_bone } );
 		}
 	}
 }

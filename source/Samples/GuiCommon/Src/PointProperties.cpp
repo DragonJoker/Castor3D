@@ -3,7 +3,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
+using namespace castor;
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Point2b )
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Point3b )

@@ -109,28 +109,28 @@ namespace GuiCommon
 		bool LoadFile( wxString const & p_strFilename );
 		bool SaveFile();
 		bool SaveFile( wxString const & p_strFilename );
-		void SetText( wxString const & p_strSource );
-		bool IsModified();
+		void setText( wxString const & p_strSource );
+		bool isModified();
 		wxString DeterminePrefs( wxString const & p_strFilename );
 		bool InitializePrefs( wxString const & p_strFilename );
 
-		inline wxString GetFilename()
+		inline wxString getFileName()
 		{
 			return m_strFilename;
 		}
 
-		inline void SetFilename( wxString const & p_strFilename )
+		inline void setFilename( wxString const & p_strFilename )
 		{
 			m_strFilename = p_strFilename;
 		}
 
-		inline LanguageInfoPtr GetLanguageInfo()
+		inline LanguageInfoPtr getLanguageInfo()
 		{
 			return m_pLanguage;
 		}
 
 	private:
-		bool UserSettings( wxString const & p_strFilename );
+		bool Usersettings( wxString const & p_strFilename );
 
 	private:
 		DECLARE_EVENT_TABLE()
@@ -158,8 +158,8 @@ namespace GuiCommon
 		void OnLongLineOn( wxCommandEvent & p_event );
 		void OnWhiteSpace( wxCommandEvent & p_event );
 		void OnFoldToggle( wxCommandEvent & p_event );
-		void OnSetOverType( wxCommandEvent & p_event );
-		void OnSetReadOnly( wxCommandEvent & p_event );
+		void OnsetOverType( wxCommandEvent & p_event );
+		void OnsetReadOnly( wxCommandEvent & p_event );
 		void OnWrapmodeOn( wxCommandEvent & p_event );
 		void OnUseCharset( wxCommandEvent & p_event );
 		void OnChangeCase( wxCommandEvent & p_event );

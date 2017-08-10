@@ -6,9 +6,9 @@
 
 #include "Material/Material.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	BorderPanelOverlay::TextWriter::TextWriter( String const & p_tabs, BorderPanelOverlay const * p_category )
 		: OverlayCategory::TextWriter{ p_tabs }
@@ -18,23 +18,23 @@ namespace Castor3D
 
 	bool BorderPanelOverlay::TextWriter::operator()( BorderPanelOverlay const & p_overlay, TextFile & p_file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing BorderPanelOverlay " ) + p_overlay.GetOverlayName() );
-		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		OverlayCategory::TextWriter::CheckError( result, "BorderPanelOverlay name" );
+		Logger::logInfo( m_tabs + cuT( "Writing BorderPanelOverlay " ) + p_overlay.getOverlayName() );
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + p_overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay name" );
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "\tborder_size " ) ) > 0
-					   && Point4d::TextWriter{ String{} }( p_overlay.GetBorderSize(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( result, "BorderPanelOverlay borders size" );
+			result = p_file.writeText( m_tabs + cuT( "\tborder_size " ) ) > 0
+					   && Point4d::TextWriter{ String{} }( p_overlay.getBorderSize(), p_file )
+					   && p_file.writeText( cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay borders size" );
 		}
 
-		if ( result && p_overlay.GetBorderMaterial() )
+		if ( result && p_overlay.getBorderMaterial() )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "\tborder_material \"" ) + p_overlay.GetBorderMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( result, "BorderPanelOverlay borders material" );
+			result = p_file.writeText( m_tabs + cuT( "\tborder_material \"" ) + p_overlay.getBorderMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+			OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay borders material" );
 		}
 
 		if ( result )
@@ -44,13 +44,13 @@ namespace Castor3D
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
 	}
 
-	bool BorderPanelOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
+	bool BorderPanelOverlay::TextWriter::writeInto( castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}
@@ -71,18 +71,18 @@ namespace Castor3D
 	{
 	}
 
-	OverlayCategorySPtr BorderPanelOverlay::Create()
+	OverlayCategorySPtr BorderPanelOverlay::create()
 	{
 		return std::make_shared< BorderPanelOverlay >();
 	}
 
-	void BorderPanelOverlay::SetBorderMaterial( MaterialSPtr p_material )
+	void BorderPanelOverlay::setBorderMaterial( MaterialSPtr p_material )
 	{
 		m_pBorderMaterial = p_material;
 
 		if ( p_material )
 		{
-			m_strBorderMatName = p_material->GetName();
+			m_strBorderMatName = p_material->getName();
 		}
 		else
 		{
@@ -90,82 +90,82 @@ namespace Castor3D
 		}
 	}
 
-	void BorderPanelOverlay::DoUpdateSize()
+	void BorderPanelOverlay::doUpdateSize()
 	{
-		OverlayCategory::DoUpdateSize();
-		OverlayRendererSPtr renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
+		OverlayCategory::doUpdateSize();
+		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
 		if ( renderer )
 		{
-			if ( IsSizeChanged() || IsChanged() || renderer->IsSizeChanged() )
+			if ( isSizeChanged() || isChanged() || renderer->isSizeChanged() )
 			{
-				OverlaySPtr parent = GetOverlay().GetParent();
-				Size sz = renderer->GetSize();
-				Point2d totalSize( sz.width(), sz.height() );
+				OverlaySPtr parent = getOverlay().getParent();
+				Size sz = renderer->getSize();
+				Point2d totalSize( sz.getWidth(), sz.getHeight() );
 
 				if ( parent )
 				{
-					Point2d parentSize = parent->GetAbsoluteSize();
+					Point2d parentSize = parent->getAbsoluteSize();
 					totalSize[0] = parentSize[0] * totalSize[0];
 					totalSize[1] = parentSize[1] * totalSize[1];
 				}
 
-				Rectangle sizes = GetBorderPixelSize();
-				Point4d ptSizes = GetBorderSize();
+				Rectangle sizes = getBorderPixelSize();
+				Point4d ptSizes = getBorderSize();
 				bool changed = m_borderChanged;
 
 				if ( sizes.left() )
 				{
-					changed = !Castor::Policy< double >::equals( ptSizes[0], sizes.left() / totalSize[0] );
+					changed = !castor::Policy< double >::equals( ptSizes[0], sizes.left() / totalSize[0] );
 					ptSizes[0] = sizes.left() / totalSize[0];
 				}
 
 				if ( sizes.top() )
 				{
-					changed = !Castor::Policy< double >::equals( ptSizes[1], sizes.top() / totalSize[1] );
+					changed = !castor::Policy< double >::equals( ptSizes[1], sizes.top() / totalSize[1] );
 					ptSizes[1] = sizes.top() / totalSize[1];
 				}
 
 				if ( sizes.right() )
 				{
-					changed = !Castor::Policy< double >::equals( ptSizes[2], sizes.right() / totalSize[0] );
+					changed = !castor::Policy< double >::equals( ptSizes[2], sizes.right() / totalSize[0] );
 					ptSizes[2] = sizes.right() / totalSize[0];
 				}
 
 				if ( sizes.bottom() )
 				{
-					changed = !Castor::Policy< double >::equals( ptSizes[3], sizes.bottom() / totalSize[1] );
+					changed = !castor::Policy< double >::equals( ptSizes[3], sizes.bottom() / totalSize[1] );
 					ptSizes[3] = sizes.bottom() / totalSize[1];
 				}
 
 				if ( changed )
 				{
-					SetBorderSize( ptSizes );
+					setBorderSize( ptSizes );
 				}
 			}
 		}
 	}
 
-	Rectangle BorderPanelOverlay::GetAbsoluteBorderSize( Castor::Size const & p_size )const
+	Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & p_size )const
 	{
-		Point4d size = GetAbsoluteBorderSize();
+		Point4d size = getAbsoluteBorderSize();
 
 		return Rectangle(
-				   int32_t( size[0] * p_size.width() ),
-				   int32_t( size[1] * p_size.height() ),
-				   int32_t( size[2] * p_size.width() ),
-				   int32_t( size[3] * p_size.height() )
+				   int32_t( size[0] * p_size.getWidth() ),
+				   int32_t( size[1] * p_size.getHeight() ),
+				   int32_t( size[2] * p_size.getWidth() ),
+				   int32_t( size[3] * p_size.getHeight() )
 			   );
 	}
 
-	Point4d BorderPanelOverlay::GetAbsoluteBorderSize()const
+	Point4d BorderPanelOverlay::getAbsoluteBorderSize()const
 	{
-		Point4d size = GetBorderSize();
-		OverlaySPtr parent = GetOverlay().GetParent();
+		Point4d size = getBorderSize();
+		OverlaySPtr parent = getOverlay().getParent();
 
 		if ( parent )
 		{
-			Point2d parentSize = parent->GetAbsoluteSize();
+			Point2d parentSize = parent->getAbsoluteSize();
 			size[0] *= parentSize[0];
 			size[1] *= parentSize[1];
 			size[2] *= parentSize[0];
@@ -175,21 +175,21 @@ namespace Castor3D
 		return size;
 	}
 
-	void BorderPanelOverlay::DoRender( OverlayRendererSPtr p_renderer )
+	void BorderPanelOverlay::doRender( OverlayRendererSPtr p_renderer )
 	{
-		p_renderer->DrawBorderPanel( *this );
+		p_renderer->drawBorderPanel( *this );
 	}
 
-	void BorderPanelOverlay::DoUpdateBuffer( Size const & p_size )
+	void BorderPanelOverlay::doUpdateBuffer( Size const & p_size )
 	{
-		Position pos = GetAbsolutePosition( p_size );
-		Size size = GetAbsoluteSize( p_size );
-		Rectangle sizes = GetAbsoluteBorderSize( p_size );
+		Position pos = getAbsolutePosition( p_size );
+		Size size = getAbsoluteSize( p_size );
+		Rectangle sizes = getAbsoluteBorderSize( p_size );
 
 		int32_t centerL = 0;
 		int32_t centerT = 0;
-		int32_t centerR = size.width();
-		int32_t centerB = size.height();
+		int32_t centerR = size.getWidth();
+		int32_t centerB = size.getHeight();
 
 		if ( m_borderPosition == BorderPosition::eInternal )
 		{

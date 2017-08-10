@@ -5,7 +5,7 @@
 
 #include <cstring>
 
-namespace Castor
+namespace castor
 {
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
@@ -13,7 +13,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value += p_rhs;
 		} );
@@ -26,7 +26,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value -= p_rhs;
 		} );
@@ -39,7 +39,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value *= p_rhs;
 		} );
@@ -52,7 +52,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value /= p_rhs;
 		} );
@@ -65,7 +65,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer += p_pVal;
 			pBuffer++;
@@ -79,7 +79,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer -= p_pVal;
 			pBuffer++;
@@ -93,7 +93,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer *= p_pVal;
 			pBuffer++;
@@ -107,7 +107,7 @@ namespace Castor
 	{
 		Point< T1, C1 > result( p_lhs );
 		T1 * pBuffer = result.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer /= p_pVal;
 			pBuffer++;
@@ -119,28 +119,28 @@ namespace Castor
 	template< typename PtType1, typename PtType2 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & p_lhs, PtType2 const & p_rhs )
 	{
-		return add( p_lhs, p_rhs.const_ptr() );
+		return add( p_lhs, p_rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & p_lhs, PtType2 const & p_rhs )
 	{
-		return sub( p_lhs, p_rhs.const_ptr() );
+		return sub( p_lhs, p_rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & p_lhs, PtType2 const & p_rhs )
 	{
-		return mul( p_lhs, p_rhs.const_ptr() );
+		return mul( p_lhs, p_rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & p_lhs, PtType2 const & p_rhs )
 	{
-		return div( p_lhs, p_rhs.const_ptr() );
+		return div( p_lhs, p_rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
@@ -148,7 +148,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::add( PtType1 & p_lhs, T2 const & p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value += p_rhs;
 		} );
@@ -160,7 +160,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::sub( PtType1 & p_lhs, T2 const & p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value -= p_rhs;
 		} );
@@ -172,7 +172,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::mul( PtType1 & p_lhs, T2 const & p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value *= p_rhs;
 		} );
@@ -184,7 +184,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::div( PtType1 & p_lhs, T2 const & p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		std::for_each( pBuffer, pBuffer + MinValue< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value /= p_rhs;
 		} );
@@ -196,7 +196,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::add( PtType1 & p_lhs, T2 const * p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer = T1( *pBuffer + p_pVal );
 			pBuffer++;
@@ -209,7 +209,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::sub( PtType1 & p_lhs, T2 const * p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer = T1( *pBuffer - p_pVal );
 			pBuffer++;
@@ -222,7 +222,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::mul( PtType1 & p_lhs, T2 const * p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer = T1( *pBuffer * p_pVal );
 			pBuffer++;
@@ -235,7 +235,7 @@ namespace Castor
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::div( PtType1 & p_lhs, T2 const * p_rhs )
 	{
 		T1 * pBuffer = p_lhs.ptr();
-		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
+		std::for_each( p_rhs, p_rhs + MinValue< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*pBuffer = T1( *pBuffer / p_pVal );
 			pBuffer++;
@@ -247,28 +247,28 @@ namespace Castor
 	template< typename PtType1, typename PtType2 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::add( PtType1 & p_lhs, PtType2 const & p_rhs )
 	{
-		return add( p_lhs, p_rhs.const_ptr() );
+		return add( p_lhs, p_rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::sub( PtType1 & p_lhs, PtType2 const & p_rhs )
 	{
-		return sub( p_lhs, p_rhs.const_ptr() );
+		return sub( p_lhs, p_rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::mul( PtType1 & p_lhs, PtType2 const & p_rhs )
 	{
-		return mul( p_lhs, p_rhs.const_ptr() );
+		return mul( p_lhs, p_rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::div( PtType1 & p_lhs, PtType2 const & p_rhs )
 	{
-		return div( p_lhs, p_rhs.const_ptr() );
+		return div( p_lhs, p_rhs.constPtr() );
 	}
 
 	template<>
@@ -276,123 +276,123 @@ namespace Castor
 	{
 #if CASTOR_USE_SSE2
 
-		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > add( castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
 			lhs += rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > sub( castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
 			lhs -= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > mul( castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
 			lhs *= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > div( castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
 			lhs /= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > add( castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
 			lhs += rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > sub( castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
 			lhs -= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > mul( castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
 			lhs *= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > div( castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
 			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
 			lhs /= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
+		static inline castor::Point< float, 4 > add( castor::Point< float, 4 > const & p_lhs, castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
-			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.constPtr() };	// rhs = p_rhs
 			lhs += rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
+		static inline castor::Point< float, 4 > sub( castor::Point< float, 4 > const & p_lhs, castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
-			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.constPtr() };	// rhs = p_rhs
 			lhs -= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
+		static inline castor::Point< float, 4 > mul( castor::Point< float, 4 > const & p_lhs, castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
-			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.constPtr() };	// rhs = p_rhs
 			lhs *= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
-		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
+		static inline castor::Point< float, 4 > div( castor::Point< float, 4 > const & p_lhs, castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
-			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			Float4 lhs{ p_lhs.constPtr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.constPtr() };	// rhs = p_rhs
 			lhs /= rhs;						// lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > res;
-			lhs.to_ptr( res.ptr() );
+			castor::Point< float, 4 > res;
+			lhs.toPtr( res.ptr() );
 			return res;
 		}
 
@@ -521,75 +521,75 @@ namespace Castor
 #endif
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > add( PtType1 const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > add( PtType1 const & p_lhs, float const & p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] + p_rhs, p_lhs[1] + p_rhs, p_lhs[2] + p_rhs, p_lhs[3] + p_rhs );
+			return castor::Point< float, 4 >( p_lhs[0] + p_rhs, p_lhs[1] + p_rhs, p_lhs[2] + p_rhs, p_lhs[3] + p_rhs );
 		}
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > sub( PtType1 const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > sub( PtType1 const & p_lhs, float const & p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] - p_rhs, p_lhs[1] - p_rhs, p_lhs[2] - p_rhs, p_lhs[3] - p_rhs );
+			return castor::Point< float, 4 >( p_lhs[0] - p_rhs, p_lhs[1] - p_rhs, p_lhs[2] - p_rhs, p_lhs[3] - p_rhs );
 		}
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > mul( PtType1 const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > mul( PtType1 const & p_lhs, float const & p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] * p_rhs, p_lhs[1] * p_rhs, p_lhs[2] * p_rhs, p_lhs[3] * p_rhs );
+			return castor::Point< float, 4 >( p_lhs[0] * p_rhs, p_lhs[1] * p_rhs, p_lhs[2] * p_rhs, p_lhs[3] * p_rhs );
 		}
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > div( PtType1 const & p_lhs, float const & p_rhs )
+		static inline castor::Point< float, 4 > div( PtType1 const & p_lhs, float const & p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] / p_rhs, p_lhs[1] / p_rhs, p_lhs[2] / p_rhs, p_lhs[3] / p_rhs );
+			return castor::Point< float, 4 >( p_lhs[0] / p_rhs, p_lhs[1] / p_rhs, p_lhs[2] / p_rhs, p_lhs[3] / p_rhs );
 		}
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > add( PtType1 const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > add( PtType1 const & p_lhs, float const * p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] + p_rhs[0], p_lhs[1] + p_rhs[1], p_lhs[2] + p_rhs[2], p_lhs[3] + p_rhs[3] );
+			return castor::Point< float, 4 >( p_lhs[0] + p_rhs[0], p_lhs[1] + p_rhs[1], p_lhs[2] + p_rhs[2], p_lhs[3] + p_rhs[3] );
 		}
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > sub( PtType1 const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > sub( PtType1 const & p_lhs, float const * p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] - p_rhs[0], p_lhs[1] - p_rhs[1], p_lhs[2] - p_rhs[2], p_lhs[3] - p_rhs[3] );
+			return castor::Point< float, 4 >( p_lhs[0] - p_rhs[0], p_lhs[1] - p_rhs[1], p_lhs[2] - p_rhs[2], p_lhs[3] - p_rhs[3] );
 		}
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > mul( PtType1 const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > mul( PtType1 const & p_lhs, float const * p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] * p_rhs[0], p_lhs[1] * p_rhs[1], p_lhs[2] * p_rhs[2], p_lhs[3] * p_rhs[3] );
+			return castor::Point< float, 4 >( p_lhs[0] * p_rhs[0], p_lhs[1] * p_rhs[1], p_lhs[2] * p_rhs[2], p_lhs[3] * p_rhs[3] );
 		}
 
 		template< typename PtType1 >
-		static inline Castor::Point< float, 4 > div( PtType1 const & p_lhs, float const * p_rhs )
+		static inline castor::Point< float, 4 > div( PtType1 const & p_lhs, float const * p_rhs )
 		{
-			return Castor::Point< float, 4 >( p_lhs[0] / p_rhs[0], p_lhs[1] / p_rhs[1], p_lhs[2] / p_rhs[2], p_lhs[3] / p_rhs[3] );
+			return castor::Point< float, 4 >( p_lhs[0] / p_rhs[0], p_lhs[1] / p_rhs[1], p_lhs[2] / p_rhs[2], p_lhs[3] / p_rhs[3] );
 		}
 
 		template< typename PtType1, typename PtType2 >
-		static inline Castor::Point< float, 4 > add( PtType1 const & p_lhs, PtType2 const & p_rhs )
+		static inline castor::Point< float, 4 > add( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return add( p_lhs, p_rhs.const_ptr() );
+			return add( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
-		static inline Castor::Point< float, 4 > sub( PtType1 const & p_lhs, PtType2 const & p_rhs )
+		static inline castor::Point< float, 4 > sub( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return sub( p_lhs, p_rhs.const_ptr() );
+			return sub( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
-		static inline Castor::Point< float, 4 > mul( PtType1 const & p_lhs, PtType2 const & p_rhs )
+		static inline castor::Point< float, 4 > mul( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return mul( p_lhs, p_rhs.const_ptr() );
+			return mul( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
-		static inline Castor::Point< float, 4 > div( PtType1 const & p_lhs, PtType2 const & p_rhs )
+		static inline castor::Point< float, 4 > div( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return div( p_lhs, p_rhs.const_ptr() );
+			return div( p_lhs, p_rhs.constPtr() );
 		}
 	};
 
@@ -648,25 +648,25 @@ namespace Castor
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 4 > add( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return add( p_lhs, p_rhs.const_ptr() );
+			return add( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 4 > sub( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return sub( p_lhs, p_rhs.const_ptr() );
+			return sub( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 4 > mul( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return mul( p_lhs, p_rhs.const_ptr() );
+			return mul( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 4 > div( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return div( p_lhs, p_rhs.const_ptr() );
+			return div( p_lhs, p_rhs.constPtr() );
 		}
 	};
 
@@ -724,25 +724,25 @@ namespace Castor
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 3 > add( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return add( p_lhs, p_rhs.const_ptr() );
+			return add( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 3 > sub( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return sub( p_lhs, p_rhs.const_ptr() );
+			return sub( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 3 > mul( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return mul( p_lhs, p_rhs.const_ptr() );
+			return mul( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 3 > div( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return div( p_lhs, p_rhs.const_ptr() );
+			return div( p_lhs, p_rhs.constPtr() );
 		}
 	};
 
@@ -800,25 +800,25 @@ namespace Castor
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 2 > add( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return add( p_lhs, p_rhs.const_ptr() );
+			return add( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 2 > sub( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return sub( p_lhs, p_rhs.const_ptr() );
+			return sub( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 2 > mul( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return mul( p_lhs, p_rhs.const_ptr() );
+			return mul( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, 2 > div( PtType1 const & p_lhs, PtType2 const & p_rhs )
 		{
-			return div( p_lhs, p_rhs.const_ptr() );
+			return div( p_lhs, p_rhs.constPtr() );
 		}
 	};
 
@@ -908,25 +908,25 @@ namespace Castor
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & add( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return add( p_lhs, p_rhs.const_ptr() );
+			return add( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & sub( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return sub( p_lhs, p_rhs.const_ptr() );
+			return sub( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & mul( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return mul( p_lhs, p_rhs.const_ptr() );
+			return mul( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & div( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return div( p_lhs, p_rhs.const_ptr() );
+			return div( p_lhs, p_rhs.constPtr() );
 		}
 	};
 
@@ -1008,25 +1008,25 @@ namespace Castor
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & add( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return add( p_lhs, p_rhs.const_ptr() );
+			return add( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & sub( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return sub( p_lhs, p_rhs.const_ptr() );
+			return sub( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & mul( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return mul( p_lhs, p_rhs.const_ptr() );
+			return mul( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & div( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return div( p_lhs, p_rhs.const_ptr() );
+			return div( p_lhs, p_rhs.constPtr() );
 		}
 	};
 
@@ -1100,25 +1100,25 @@ namespace Castor
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & add( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return add( p_lhs, p_rhs.const_ptr() );
+			return add( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & sub( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return sub( p_lhs, p_rhs.const_ptr() );
+			return sub( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & mul( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return mul( p_lhs, p_rhs.const_ptr() );
+			return mul( p_lhs, p_rhs.constPtr() );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & div( PtType1 & p_lhs, PtType2 const & p_rhs )
 		{
-			return div( p_lhs, p_rhs.const_ptr() );
+			return div( p_lhs, p_rhs.constPtr() );
 		}
 	};
 }

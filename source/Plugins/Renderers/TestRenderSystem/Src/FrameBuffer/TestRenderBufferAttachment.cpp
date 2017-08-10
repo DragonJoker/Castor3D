@@ -1,7 +1,7 @@
 #include "FrameBuffer/TestRenderBufferAttachment.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -10,8 +10,8 @@ namespace TestRender
 	{
 	}
 
-	void TestRenderBufferAttachment::DoDownload( Castor::Position const & p_offset
-		, Castor::PxBufferBase & p_buffer )const
+	void TestRenderBufferAttachment::doDownload( castor::Position const & p_offset
+		, castor::PxBufferBase & p_buffer )const
 	{
 	}
 
@@ -19,27 +19,27 @@ namespace TestRender
 	{
 	}
 
-	void TestRenderBufferAttachment::DoAttach()
+	void TestRenderBufferAttachment::doAttach()
 	{
 	}
 
-	void TestRenderBufferAttachment::DoDetach()
+	void TestRenderBufferAttachment::doDetach()
 	{
 	}
 
-	void TestRenderBufferAttachment::DoClear( Colour const & p_colour )const
+	void TestRenderBufferAttachment::doClear( Colour const & p_colour )const
 	{
 	}
 
-	void TestRenderBufferAttachment::DoClear( float p_depth )const
+	void TestRenderBufferAttachment::doClear( float p_depth )const
 	{
 	}
 
-	void TestRenderBufferAttachment::DoClear( int p_stencil )const
+	void TestRenderBufferAttachment::doClear( int p_stencil )const
 	{
 	}
 
-	void TestRenderBufferAttachment::DoClear( float p_depth, int p_stencil )const
+	void TestRenderBufferAttachment::doClear( float p_depth, int p_stencil )const
 	{
 	}
 }

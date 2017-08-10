@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor3D
 	\brief		Classe de représentation de sous-maillages d'animations de maillage.
 	*/
 	class MeshAnimationSubmesh
-		: public Castor::OwnedBy< MeshAnimation >
+		: public castor::OwnedBy< MeshAnimation >
 		, public std::enable_shared_from_this< MeshAnimationSubmesh >
 	{
 	public:
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\param[in]	p_timeIndex		L'index de temps.
 		 *\param[in]	p_buffer		Le tampon du sous-maillage.
 		 */
-		C3D_API bool AddBuffer( Castor::Milliseconds const & p_timeIndex
+		C3D_API bool addBuffer( castor::Milliseconds const & p_timeIndex
 			, InterleavedVertexArray && p_buffer );
 		/**
 		 *\~english
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les tampons de sommets.
 		 */
-		inline SubmeshAnimationBufferArray const & GetBuffers()const
+		inline SubmeshAnimationBufferArray const & getBuffers()const
 		{
 			return m_buffers;
 		}
@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le sous-maillage.
 		 */
-		inline Submesh & GetSubmesh()
+		inline Submesh & getSubmesh()
 		{
 			return m_submesh;
 		}
@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le sous-maillage.
 		 */
-		inline Submesh const & GetSubmesh()const
+		inline Submesh const & getSubmesh()const
 		{
 			return m_submesh;
 		}
@@ -136,19 +136,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La durée de l'animation.
 		 */
-		inline Castor::Milliseconds GetLength()const
+		inline castor::Milliseconds getLength()const
 		{
 			return m_length;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation length.
+		 *\brief		sets the animation length.
 		 *\param[in]	p_length	The new value.
 		 *\~french
 		 *\brief		Définit la durée de l'animation.
 		 *\param[in]	p_length	La nouvelle valeur.
 		 */
-		inline void	SetLength( Castor::Milliseconds const & p_length )
+		inline void setLength( castor::Milliseconds const & p_length )
 		{
 			m_length = p_length;
 		}
@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\brief		Dit si l'objet a des keyframes.
 		 *\return		\p false si pas de keyframes.
 		 */
-		inline bool HasBuffers()const
+		inline bool hasBuffers()const
 		{
 			return !m_buffers.empty();
 		}
@@ -168,7 +168,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		Castor::Milliseconds m_length{ 0 };
+		castor::Milliseconds m_length{ 0 };
 		//!\~english	The buffers.
 		//!\~french		Les tampons.
 		SubmeshAnimationBufferArray m_buffers;
@@ -220,7 +220,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( MeshAnimationSubmesh const & p_obj )override;
+		C3D_API bool doWrite( MeshAnimationSubmesh const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -248,7 +248,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( MeshAnimationSubmesh & p_obj )override;
+		C3D_API bool doParse( MeshAnimationSubmesh & p_obj )override;
 	};
 }
 

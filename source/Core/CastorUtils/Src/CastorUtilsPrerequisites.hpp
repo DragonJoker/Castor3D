@@ -52,16 +52,16 @@ SOFTWARE.
 #	undef abs
 #endif
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011
 	\~english
-	\brief Castor::Loader supported file types enumeration
+	\brief castor::Loader supported file types enumeration
 	\~french
-	\brief Enumération des types de fichier supportés par Castor::Loader
+	\brief Enumération des types de fichier supportés par castor::Loader
 	*/
 	enum class FileType
 		: uint8_t
@@ -584,9 +584,9 @@ namespace Castor
 	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
 }
 
-constexpr Castor::real operator "" _r( long double p_value )
+constexpr castor::real operator "" _r( long double p_value )
 {
-	return Castor::real( p_value );
+	return castor::real( p_value );
 }
 
 constexpr std::chrono::seconds operator "" _s( unsigned long long p_value )
@@ -594,9 +594,9 @@ constexpr std::chrono::seconds operator "" _s( unsigned long long p_value )
 	return std::chrono::seconds( int64_t( p_value ) );
 }
 
-constexpr Castor::Milliseconds operator "" _ms( unsigned long long p_value )
+constexpr castor::Milliseconds operator "" _ms( unsigned long long p_value )
 {
-	return Castor::Milliseconds( int64_t( p_value ) );
+	return castor::Milliseconds( int64_t( p_value ) );
 }
 
 constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value )
@@ -604,9 +604,9 @@ constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value 
 	return std::chrono::microseconds( int64_t( p_value ) );
 }
 
-constexpr Castor::Nanoseconds operator "" _ns( unsigned long long p_value )
+constexpr castor::Nanoseconds operator "" _ns( unsigned long long p_value )
 {
-	return Castor::Nanoseconds( int64_t( p_value ) );
+	return castor::Nanoseconds( int64_t( p_value ) );
 }
 
 #include "Miscellaneous/Debug.hpp"

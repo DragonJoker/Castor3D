@@ -3,9 +3,9 @@
 #include <Engine.hpp>
 #include <Scene/Camera.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	const String GpInfoUbo::GPInfo = cuT( "GPInfo" );
 	const String GpInfoUbo::InvViewProj = cuT( "c3d_mtxInvViewProj" );
@@ -17,36 +17,36 @@ namespace Castor3D
 
 	GpInfoUbo::GpInfoUbo( Engine & engine )
 		: m_ubo{ GpInfoUbo::GPInfo
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, GpInfoUbo::BindingPoint }
-		, m_invViewProjUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvViewProj ) }
-		, m_invViewUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvView ) }
-		, m_invProjUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvProj ) }
-		, m_gViewUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::View ) }
-		, m_gProjUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::Proj ) }
-		, m_renderSize{ m_ubo.CreateUniform< UniformType::eVec2f >( GpInfoUbo::RenderSize ) }
+		, m_invViewProjUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::InvViewProj ) }
+		, m_invViewUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::InvView ) }
+		, m_invProjUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::InvProj ) }
+		, m_gViewUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::View ) }
+		, m_gProjUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::Proj ) }
+		, m_renderSize{ m_ubo.createUniform< UniformType::eVec2f >( GpInfoUbo::RenderSize ) }
 	{
 	}
 
 	GpInfoUbo::~GpInfoUbo()
 	{
-		m_ubo.Cleanup();
+		m_ubo.cleanup();
 	}
 
-	void GpInfoUbo::Update( Size const & p_size
+	void GpInfoUbo::update( Size const & p_size
 		, Camera const & p_camera
 		, Matrix4x4r const & p_invViewProj
 		, Matrix4x4r const & p_invView
 		, Matrix4x4r const & p_invProj )
 	{
-		m_invViewProjUniform->SetValue( p_invViewProj );
-		m_invViewUniform->SetValue( p_invView );
-		m_invProjUniform->SetValue( p_invProj );
-		m_gViewUniform->SetValue( p_camera.GetView() );
-		m_gProjUniform->SetValue( p_camera.GetViewport().GetProjection() );
-		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
-		m_ubo.Update();
-		m_ubo.BindTo( GpInfoUbo::BindingPoint );
+		m_invViewProjUniform->setValue( p_invViewProj );
+		m_invViewUniform->setValue( p_invView );
+		m_invProjUniform->setValue( p_invProj );
+		m_gViewUniform->setValue( p_camera.getView() );
+		m_gProjUniform->setValue( p_camera.getViewport().getProjection() );
+		m_renderSize->setValue( Point2f( p_size.getWidth(), p_size.getHeight() ) );
+		m_ubo.update();
+		m_ubo.bindTo( GpInfoUbo::BindingPoint );
 	}
 
 	//************************************************************************************************

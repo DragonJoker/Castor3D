@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <functional>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor
 	@code
 		char * buffer = nullptr;
 		{
-			auto guard = make_block_guard( [&buffer, &size]()
+			auto guard = makeBlockGuard( [&buffer, &size]()
 			{
 				buffer = new char[size + 1];
 			},
@@ -62,7 +62,7 @@ namespace Castor
 	@code
 		char * buffer = nullptr;
 		{
-			auto guard = make_block_guard( [&buffer, &size]()
+			auto guard = makeBlockGuard( [&buffer, &size]()
 			{
 				buffer = new char[size + 1];
 			},
@@ -128,7 +128,7 @@ namespace Castor
 	 *\return		La garde.
 	*/
 	template< typename InitFunc, typename CleanFunc >
-	BlockGuard< CleanFunc > make_block_guard( InitFunc p_init, CleanFunc p_clean )
+	BlockGuard< CleanFunc > makeBlockGuard( InitFunc p_init, CleanFunc p_clean )
 	{
 		return BlockGuard< CleanFunc >( p_init, p_clean );
 	}

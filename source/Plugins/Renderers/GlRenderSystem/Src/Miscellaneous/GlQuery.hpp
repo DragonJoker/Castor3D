@@ -35,7 +35,7 @@ namespace GlRender
 	\brief		glQuery implementation
 	*/
 	class GlQuery
-		: public Castor3D::GpuQuery
+		: public castor3d::GpuQuery
 		, public Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >
 	{
 		using ObjectType = Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >;
@@ -51,7 +51,7 @@ namespace GlRender
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_invertFinal	Dit si on inverse l'image du rendu final.
 		 */
-		GlQuery( GlRenderSystem & renderSystem, Castor3D::QueryType p_query );
+		GlQuery( GlRenderSystem & renderSystem, castor3d::QueryType p_query );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -62,37 +62,37 @@ namespace GlRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::GpuQuery::DoInitialise
+		 *\copydoc		castor3d::GpuQuery::doInitialise
 		 */
-		virtual bool DoInitialise();
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::DoCleanup
+		 *\copydoc		castor3d::GpuQuery::doCleanup
 		 */
-		virtual void DoCleanup();
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::Begin
+		 *\copydoc		castor3d::GpuQuery::Begin
 		 */
-		virtual void DoBegin()const;
+		void doBegin()const override;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::End
+		 *\copydoc		castor3d::GpuQuery::End
 		 */
-		virtual void DoEnd()const;
+		void doEnd()const override;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
+		 *\copydoc		castor3d::GpuQuery::doGetInfos
 		 */
-		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const;
+		void doGetInfos( castor3d::QueryInfo p_infos, int32_t & p_param )const override;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
+		 *\copydoc		castor3d::GpuQuery::doGetInfos
 		 */
-		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const;
+		void doGetInfos( castor3d::QueryInfo p_infos, uint32_t & p_param )const override;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
+		 *\copydoc		castor3d::GpuQuery::doGetInfos
 		 */
-		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const;
+		void doGetInfos( castor3d::QueryInfo p_infos, int64_t & p_param )const override;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
+		 *\copydoc		castor3d::GpuQuery::doGetInfos
 		 */
-		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const;
+		void doGetInfos( castor3d::QueryInfo p_infos, uint64_t & p_param )const override;
 	};
 }
 

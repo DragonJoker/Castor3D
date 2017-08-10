@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Graphics/Size.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Size );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Size );
 
 namespace GuiCommon
 {
@@ -37,15 +37,15 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( SizeProperty )
 
 	public:
-		SizeProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Size const & value = Castor::Size() );
+		SizeProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Size const & value = castor::Size() );
 		virtual ~SizeProperty();
 
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
+		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void refreshChildren();
 
 	protected:
 		// I stands for internal
-		inline void SetValueI( Castor::Size const & value )
+		inline void setValueI( castor::Size const & value )
 		{
 			m_value = WXVARIANT( value );
 		}

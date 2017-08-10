@@ -36,7 +36,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Design/Resource.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -49,7 +49,7 @@ namespace Castor3D
 	\remark		Un maillage est une collectionde sous maillages.
 	*/
 	class Mesh
-		: public Castor::Resource< Mesh >
+		: public castor::Resource< Mesh >
 		, public Animable
 	{
 	public:
@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du maillage.
 		 *\param[in]	p_scene	La scèene parente.
 		 */
-		C3D_API Mesh( Castor::String const & p_name, Scene & p_scene );
+		C3D_API Mesh( castor::String const & p_name, Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -105,14 +105,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Supprime les sous maillages
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Computes the collision box and sphere.
 		 *\~french
 		 *\brief		Calcule la boîte et la sphère de collision.
 		 */
-		C3D_API void ComputeContainers();
+		C3D_API void computeContainers();
 		/**
 		 *\~english
 		 *\brief		Returns the total faces count
@@ -121,7 +121,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre total de faces
 		 *\return		Le compte
 		 */
-		C3D_API uint32_t GetFaceCount()const;
+		C3D_API uint32_t getFaceCount()const;
 		/**
 		 *\~english
 		 *\brief		Returns the total vertex count
@@ -130,7 +130,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre total de sommets
 		 *\return		Le compte
 		 */
-		C3D_API uint32_t GetVertexCount()const;
+		C3D_API uint32_t getVertexCount()const;
 		/**
 		 *\~english
 		 *\brief		Tries to retrieve the submesh at the given index
@@ -141,7 +141,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice du sous maillage voulu
 		 *\return		Le sous maillage trouvé, nullptr si non trouvé
 		 */
-		C3D_API SubmeshSPtr GetSubmesh( uint32_t p_index )const;
+		C3D_API SubmeshSPtr getSubmesh( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Creates a submesh
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\brief		Crée un sous maillage
 		 *\return		Le sous maillage créé
 		 */
-		C3D_API SubmeshSPtr CreateSubmesh();
+		C3D_API SubmeshSPtr createSubmesh();
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
@@ -159,14 +159,14 @@ namespace Castor3D
 		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
 		 *\param[in]	p_submesh	Le submesh à supprimer
 		 */
-		C3D_API void DeleteSubmesh( SubmeshSPtr & p_submesh );
+		C3D_API void deleteSubmesh( SubmeshSPtr & p_submesh );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void ComputeNormals( bool p_reverted = false );
+		C3D_API void computeNormals( bool p_reverted = false );
 		/**
 		*\~english
 		*\brief		Increments submeshes' instance count
@@ -175,7 +175,7 @@ namespace Castor3D
 		*\brief		Incrémente le compte d'instances des sous maillages
 		*\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
 		*/
-		C3D_API void Ref( MaterialSPtr p_material );
+		C3D_API void ref( MaterialSPtr p_material );
 		/**
 		*\~english
 		*\brief		Decrements submeshes' instance count
@@ -184,16 +184,16 @@ namespace Castor3D
 		*\brief		Décrémente le compte d'instances des sous maillages
 		*\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
 		*/
-		C3D_API void UnRef( MaterialSPtr p_material );
+		C3D_API void unref( MaterialSPtr p_material );
 		/**
 		 *\~english
-		 *\brief		Sets the skeleton
+		 *\brief		sets the skeleton
 		 *\param[in]	p_skeleton	The new value
 		 *\~french
 		 *\brief		Définit le squelette
 		 *\param[in]	p_skeleton	La nouvelle valeur
 		 */
-		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
+		C3D_API void setSkeleton( SkeletonSPtr p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Creates an animation
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API MeshAnimation & CreateAnimation( Castor::String const & p_name );
+		C3D_API MeshAnimation & createAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes
@@ -253,7 +253,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de modification
 		 *\return		La valeur
 		 */
-		inline bool IsModified()const
+		inline bool isModified()const
 		{
 			return m_modified;
 		}
@@ -265,7 +265,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre de sous maillages
 		 *\return		La valeur
 		 */
-		inline uint32_t GetSubmeshCount()const
+		inline uint32_t getSubmeshCount()const
 		{
 			return uint32_t( m_submeshes.size() );
 		}
@@ -277,7 +277,7 @@ namespace Castor3D
 		 *\brief		Récupère la boîte de collision
 		 *\return		La valeur
 		 */
-		inline Castor::CubeBox const & GetCollisionBox()const
+		inline castor::CubeBox const & getCollisionBox()const
 		{
 			return m_box;
 		}
@@ -289,7 +289,7 @@ namespace Castor3D
 		 *\brief		Récupère la sphère de collision
 		 *\return		La valeur
 		 */
-		inline Castor::SphereBox const & GetCollisionSphere()const
+		inline castor::SphereBox const & getCollisionSphere()const
 		{
 			return m_sphere;
 		}
@@ -301,7 +301,7 @@ namespace Castor3D
 		 *\brief		Récupère le squelette
 		 *\return		La valeur
 		 */
-		inline SkeletonSPtr GetSkeleton()const
+		inline SkeletonSPtr getSkeleton()const
 		{
 			return m_skeleton;
 		}
@@ -314,10 +314,10 @@ namespace Castor3D
 		bool m_modified;
 		//!\~english	The collision box.
 		//!\~french		La boîte de collision.
-		Castor::CubeBox m_box;
+		castor::CubeBox m_box;
 		//!\~english	The collision sphere.
 		//!\~french		La sphere de collision.
-		Castor::SphereBox m_sphere;
+		castor::SphereBox m_sphere;
 		//!\~english	The submeshes array.
 		//!\~french		Le tableau de sous maillages.
 		SubmeshPtrArray m_submeshes;
@@ -367,7 +367,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( Mesh const & p_obj )override;
+		C3D_API bool doWrite( Mesh const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -394,7 +394,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool DoParse( Mesh & p_obj )override;
+		C3D_API bool doParse( Mesh & p_obj )override;
 	};
 }
 

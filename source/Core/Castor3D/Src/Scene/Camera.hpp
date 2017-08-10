@@ -30,7 +30,7 @@ SOFTWARE.
 #include <Math/PlaneEquation.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,14 +41,14 @@ namespace Castor3D
 	\remark		Gives its position, orientation, viewport ...
 	\~french
 	\brief		Classe de représentation de Camera
-	\remark		Donne la position, orientation, viewport ...
+	\remark		donne la position, orientation, viewport ...
 	*/
 	class Camera
 		: public MovableObject
 	{
 	public:
 		using OnChangedFunction = std::function< void( Camera const & ) >;
-		using OnChanged = Castor::Signal< OnChangedFunction >;
+		using OnChanged = castor::Signal< OnChangedFunction >;
 
 	public:
 		/*!
@@ -61,7 +61,7 @@ namespace Castor3D
 		\brief		Loader de Camera
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Camera >
+			: public castor::TextWriter< Camera >
 		{
 		public:
 			/**
@@ -70,7 +70,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a camera into a text file
@@ -81,7 +81,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_camera	La camera
 			 */
-			C3D_API bool operator()( Camera const & p_camera, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Camera const & p_camera, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -101,7 +101,7 @@ namespace Castor3D
 		 *\param[in]	p_node		Le noeud de scène parent
 		 *\param[in]	p_viewport	Viewport à copier
 		 */
-		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport && p_viewport );
+		C3D_API Camera( castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport && p_viewport );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène parente
 		 *\param[in]	p_node	SceneNode parent
 		 */
-		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node );
+		C3D_API Camera( castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -132,35 +132,21 @@ namespace Castor3D
 		 *\brief		Attache cette lumière au node donné
 		 *\param[in]	p_node	Le nouveau node parent de cette lumière
 		 */
-		C3D_API void AttachTo( SceneNodeSPtr p_node )override;
-		/**
-		 *\~english
-		 *\brief		Sets the orientation to identity
-		 *\~french
-		 *\brief		Met l'orientation à l'identité
-		 */
-		C3D_API void ResetOrientation();
-		/**
-		 *\~english
-		 *\brief		Sets the position to 0
-		 *\~french
-		 *\brief		Réinitialise la position
-		 */
-		C3D_API void ResetPosition();
+		C3D_API void attachTo( SceneNodeSPtr p_node )override;
 		/**
 		 *\~english
 		 *\brief		Updates the viewport, the frustum...
 		 *\~french
 		 *\brief		Met à jour le viewport, frustum...
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Applies the viewport.
 		 *\~french
 		 *\brief		Applique le viewport.
 		 */
-		C3D_API void Apply()const;
+		C3D_API void apply()const;
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -169,7 +155,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le viewport
 		 *\param[in]	p_width, p_height	Dimensions de la fenêtre d'affichage
 		 */
-		C3D_API void Resize( uint32_t p_width, uint32_t p_height );
+		C3D_API void resize( uint32_t p_width, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -178,7 +164,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le viewport
 		 *\param[in]	p_size	Dimensions de la fenêtre d'affichage
 		 */
-		C3D_API void Resize( Castor::Size const & p_size );
+		C3D_API void resize( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport type
@@ -187,16 +173,16 @@ namespace Castor3D
 		 *\brief		Récupère le type de viewport
 		 *\return		Le type de viewport
 		 */
-		C3D_API ViewportType GetViewportType()const;
+		C3D_API ViewportType getViewportType()const;
 		/**
 		 *\~english
-		 *\brief		Sets the viewport type
+		 *\brief		sets the viewport type
 		 *\param[in]	val	The viewport type
 		 *\~french
 		 *\brief		Définit le type de viewport
 		 *\param[in]	val	Le type de viewport
 		 */
-		C3D_API void SetViewportType( ViewportType val );
+		C3D_API void setViewportType( ViewportType val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport width
@@ -205,7 +191,7 @@ namespace Castor3D
 		 *\brief		Récupère la largeur du viewport
 		 *\return		La largeur
 		 */
-		C3D_API uint32_t GetWidth()const;
+		C3D_API uint32_t getWidth()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport height
@@ -214,7 +200,7 @@ namespace Castor3D
 		 *\brief		Récupère la hauteur du viewport
 		 *\return		La hauteur
 		 */
-		C3D_API uint32_t GetHeight()const;
+		C3D_API uint32_t getHeight()const;
 		/**
 		 *\~english
 		 *\brief		Checks if given CubeBox is in the view frustum
@@ -228,7 +214,7 @@ namespace Castor3D
 		 *\param[in]	m_transformations	La matrice de transformations de la CubeBox
 		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue
 		 */
-		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
+		C3D_API bool isVisible( castor::CubeBox const & p_box, castor::Matrix4x4r const & m_transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given SphereBox is in the view frustum
@@ -242,7 +228,7 @@ namespace Castor3D
 		 *\param[in]	m_transformations	La SphereBox de transformations de la CubeBox
 		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue
 		 */
-		C3D_API bool IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
+		C3D_API bool isVisible( castor::SphereBox const & p_box, castor::Matrix4x4r const & m_transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum
@@ -254,7 +240,7 @@ namespace Castor3D
 		 *\param[in]	p_point	Le point
 		 *\return		\p false si le point en dehors du frustum de vue
 		 */
-		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
+		C3D_API bool isVisible( castor::Point3r const & p_point )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Viewport
@@ -263,7 +249,7 @@ namespace Castor3D
 		 *\brief		Récupère le Viewport
 		 *\return		Le Viewport
 		 */
-		inline Viewport const & GetViewport()const
+		inline Viewport const & getViewport()const
 		{
 			return m_viewport;
 		}
@@ -275,7 +261,7 @@ namespace Castor3D
 		 *\brief		Récupère le Viewport
 		 *\return		Le Viewport
 		 */
-		inline Viewport & GetViewport()
+		inline Viewport & getViewport()
 		{
 			return m_viewport;
 		}
@@ -285,25 +271,25 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère la matrice de vue
 		 */
-		inline Castor::Matrix4x4r const & GetView()const
+		inline castor::Matrix4x4r const & getView()const
 		{
 			return m_view;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the view matrix.
+		 *\brief		sets the view matrix.
 		 *\param[in]	p_view	The new value.
 		 *\~french
 		 *\brief		Définit la matrice de vue.
 		 *\param[in]	p_view	La nouvelle valeur.
 		 */
-		inline void SetView( Castor::Matrix4x4r const & p_view )
+		inline void setView( castor::Matrix4x4r const & p_view )
 		{
 			m_view = p_view;
 		}
 
 	private:
-		void OnNodeChanged( SceneNode const & p_node );
+		void onNodeChanged( SceneNode const & p_node );
 
 	public:
 		//!\~english	The signal raised when the camera has changed.
@@ -320,7 +306,7 @@ namespace Castor3D
 		Frustum m_frustum;
 		//!\~english	The view matrix.
 		//!\~french		La matrice vue.
-		Castor::Matrix4x4r m_view;
+		castor::Matrix4x4r m_view;
 		//!\~english	Tells if the parent node has changed.
 		//!\~french		Dit si le noeud parent a changé.
 		bool m_nodeChanged{ true };

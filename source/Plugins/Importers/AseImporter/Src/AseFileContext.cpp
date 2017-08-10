@@ -1,7 +1,7 @@
 #include "AseFileContext.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace Ase
 {
@@ -12,10 +12,10 @@ namespace Ase
 		, scene{ p_scene }
 		, mesh{ p_mesh }
 	{
-		Initialise();
+		initialise();
 	}
 
-	void AseFileContext::Initialise()
+	void AseFileContext::initialise()
 	{
 		uiUInt16 = 0;
 		uiUInt32 = 0;
@@ -35,7 +35,7 @@ namespace Ase
 		strName.clear();
 		strName2.clear();
 		m_mapMaterials.clear();
-		clear_container( m_arrayTexCoords );
+		clearContainer( m_arrayTexCoords );
 		m_arrayTexCoords.clear();
 	}
 }

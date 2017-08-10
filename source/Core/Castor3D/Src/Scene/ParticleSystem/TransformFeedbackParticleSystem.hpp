@@ -29,7 +29,7 @@ SOFTWARE.
 #include "Shader/UniformBuffer.hpp"
 #include "Texture/TextureUnit.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -61,22 +61,22 @@ namespace Castor3D
 		 */
 		C3D_API ~TransformFeedbackParticleSystem();
 		/**
-		 *\copydoc		Castor3D::ParticleSystemImpl::Initialise
+		 *\copydoc		castor3d::ParticleSystemImpl::Initialise
 		 */
-		C3D_API bool Initialise()override;
+		C3D_API bool initialise()override;
 		/**
-		 *\copydoc		Castor3D::ParticleSystemImpl::Cleanup
+		 *\copydoc		castor3d::ParticleSystemImpl::Cleanup
 		 */
-		C3D_API void Cleanup()override;
+		C3D_API void cleanup()override;
 		/**
-		 *\copydoc		Castor3D::ParticleSystemImpl::Update
+		 *\copydoc		castor3d::ParticleSystemImpl::Update
 		 */
-		C3D_API uint32_t Update( Castor::Milliseconds const & p_time
-			, Castor::Milliseconds const & p_total )override;
+		C3D_API uint32_t update( castor::Milliseconds const & p_time
+			, castor::Milliseconds const & p_total )override;
 		/**
-		 *\copydoc		Castor3D::ParticleSystemImpl::AddParticleVariable
+		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
-		C3D_API void AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )override;
+		C3D_API void addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )override;
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles.
@@ -85,14 +85,14 @@ namespace Castor3D
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules.
 		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API void SetUpdateProgram( ShaderProgramSPtr p_program );
+		C3D_API void setUpdateProgram( ShaderProgramSPtr p_program );
 		/**
 		 *\~english
 		 *\return		\p false if the update program has not been set.
 		 *\~french
 		 *\return		\p false si le programme de mise à jour n'a pas été défini.
 		 */
-		inline bool HasUpdateProgram()const
+		inline bool hasUpdateProgram()const
 		{
 			return m_updateProgram != nullptr;
 		}
@@ -102,7 +102,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p false si le programme de mise à jour n'a pas été défini.
 		 */
-		inline ShaderProgram const & GetUpdateProgram()const
+		inline ShaderProgram const & getUpdateProgram()const
 		{
 			REQUIRE( m_updateProgram );
 			return *m_updateProgram;
@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\brief		Crée le pipeline utilisé pour mettre à jour les particules.
 		 *\return		\p false en cas d'échec.
 		 */
-		bool DoCreateUpdatePipeline();
+		bool doCreateUpdatePipeline();
 		/**
 		 *\~english
 		 *\brief		Creates the texture containing random values.
@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\brief		Crée la texture contenant des valeurs aléatoires.
 		 *\return		\p false en cas d'échec.
 		 */
-		bool DoCreateRandomTexture();
+		bool doCreateRandomTexture();
 
 	private:
 		//!\~english	The computed elements description.

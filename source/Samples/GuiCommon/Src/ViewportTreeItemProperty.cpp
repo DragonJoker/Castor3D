@@ -7,8 +7,8 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -30,7 +30,7 @@ namespace GuiCommon
 		static wxString PROPERTY_VIEWPORT_RATIO = _( "Ratio" );
 	}
 
-	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, Castor3D::Engine & engine, Castor3D::Viewport & p_viewport )
+	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, castor3d::Engine & engine, castor3d::Viewport & p_viewport )
 		: TreeItemProperty( &engine, p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
 		, m_viewport( p_viewport )
 	{
@@ -56,7 +56,7 @@ namespace GuiCommon
 	{
 	}
 
-	void ViewportTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void ViewportTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		wxString selected;
 		wxPGChoices choices;
@@ -64,7 +64,7 @@ namespace GuiCommon
 		choices.Add( PROPERTY_VIEWPORT_TYPE_FRUSTUM );
 		choices.Add( PROPERTY_VIEWPORT_TYPE_ORTHO );
 
-		switch ( m_viewport.GetType() )
+		switch ( m_viewport.getType() )
 		{
 		case ViewportType::ePerspective:
 			selected = PROPERTY_VIEWPORT_TYPE_PERSPECTIVE;
@@ -81,18 +81,18 @@ namespace GuiCommon
 
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_VIEWPORT ) );
 		p_grid->Append( new wxEnumProperty( PROPERTY_VIEWPORT_TYPE, PROPERTY_VIEWPORT_TYPE, choices ) )->SetValue( selected );
-		p_grid->Append( new SizeProperty( PROPERTY_VIEWPORT_SIZE ) )->SetValue( WXVARIANT( m_viewport.GetSize() ) );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_TOP ) )->SetValue( m_viewport.GetTop() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_BOTTOM ) )->SetValue( m_viewport.GetBottom() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_LEFT ) )->SetValue( m_viewport.GetLeft() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_RIGHT ) )->SetValue( m_viewport.GetRight() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_NEAR ) )->SetValue( m_viewport.GetNear() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_FAR ) )->SetValue( m_viewport.GetFar() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_FOVY ) )->SetValue( m_viewport.GetFovY().degrees() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_RATIO ) )->SetValue( m_viewport.GetRatio() );
+		p_grid->Append( new SizeProperty( PROPERTY_VIEWPORT_SIZE ) )->SetValue( WXVARIANT( m_viewport.getSize() ) );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_TOP ) )->SetValue( m_viewport.getTop() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_BOTTOM ) )->SetValue( m_viewport.getBottom() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_LEFT ) )->SetValue( m_viewport.getLeft() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_RIGHT ) )->SetValue( m_viewport.getRight() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_NEAR ) )->SetValue( m_viewport.getNear() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_FAR ) )->SetValue( m_viewport.getFar() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_FOVY ) )->SetValue( m_viewport.getFovY().degrees() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_RATIO ) )->SetValue( m_viewport.getRatio() );
 	}
 
-	void ViewportTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void ViewportTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * property = p_event.GetProperty();
 
@@ -154,81 +154,81 @@ namespace GuiCommon
 
 	void ViewportTreeItemProperty::OnTypeChange( ViewportType p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateType( p_value );
+			m_viewport.updateType( p_value );
 		} );
 	}
 
-	void ViewportTreeItemProperty::OnSizeChange( Castor::Size const & p_value )
+	void ViewportTreeItemProperty::OnSizeChange( castor::Size const & p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.Resize( p_value );
+			m_viewport.resize( p_value );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnTopChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateTop( float( p_value ) );
+			m_viewport.updateTop( float( p_value ) );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnBottomChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateBottom( float( p_value ) );
+			m_viewport.updateBottom( float( p_value ) );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnLeftChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateLeft( float( p_value ) );
+			m_viewport.updateLeft( float( p_value ) );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnRightChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateRight( float( p_value ) );
+			m_viewport.updateRight( float( p_value ) );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnNearChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateNear( float( p_value ) );
+			m_viewport.updateNear( float( p_value ) );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnFarChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateFar( float( p_value ) );
+			m_viewport.updateFar( float( p_value ) );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnFovYChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateFovY( Angle::from_degrees( p_value ) );
+			m_viewport.updateFovY( Angle::fromDegrees( p_value ) );
 		} );
 	}
 
 	void ViewportTreeItemProperty::OnRatioChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_viewport.UpdateRatio( float( p_value ) );
+			m_viewport.updateRatio( float( p_value ) );
 		} );
 	}
 }

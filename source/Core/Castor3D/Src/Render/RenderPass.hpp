@@ -38,7 +38,7 @@ SOFTWARE.
 
 #include <unordered_map>
 
-namespace Castor3D
+namespace castor3d
 {
 	inline bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
@@ -62,8 +62,8 @@ namespace Castor3D
 	\brief		Classe de base d'une passe de rendu.
 	*/
 	class RenderPass
-		: public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 	public:
 		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderPass( Castor::String const & name
+		C3D_API RenderPass( castor::String const & name
 			, Engine & engine
 			, SceneNode const * ignored );
 		/**
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\param[in]	oit		Le statut de rendu indépendant de l'ordre des objets.
 		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderPass( Castor::String const & name
+		C3D_API RenderPass( castor::String const & name
 			, Engine & engine
 			, bool oit
 			, SceneNode const * ignored );
@@ -121,14 +121,14 @@ namespace Castor3D
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( Castor::Size const & size );
+		C3D_API bool initialise( castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( RenderQueueArray & queues );
+		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API GLSL::Shader GetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader getVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -172,7 +172,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API GLSL::Shader GetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader getPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
@@ -188,7 +188,7 @@ namespace Castor3D
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader GetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader getGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
@@ -211,7 +211,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	twoSided		Dit si la passe est sur les deux faces.
 		 */
-		C3D_API void PreparePipeline( BlendMode colourBlendMode
+		C3D_API void preparePipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, ComparisonFunc alphaFunc
 			, TextureChannels & textureFlags
@@ -238,7 +238,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API RenderPipeline * GetPipelineFront( BlendMode colourBlendMode
+		C3D_API RenderPipeline * getPipelineFront( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, ComparisonFunc alphaFunc
 			, TextureChannels const & textureFlags
@@ -264,7 +264,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API RenderPipeline * GetPipelineBack( BlendMode colourBlendMode
+		C3D_API RenderPipeline * getPipelineBack( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, ComparisonFunc alphaFunc
 			, TextureChannels const & textureFlags
@@ -288,7 +288,7 @@ namespace Castor3D
 		 *\param[in]	skeleton	Le squelette animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API SkinningRenderNode CreateSkinningNode( Pass & pass
+		C3D_API SkinningRenderNode createSkinningNode( Pass & pass
 			, RenderPipeline & pipeline
 			, Submesh & submesh
 			, Geometry & primitive
@@ -311,7 +311,7 @@ namespace Castor3D
 		 *\param[in]	mesh		Le maillage animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API MorphingRenderNode CreateMorphingNode( Pass & pass
+		C3D_API MorphingRenderNode createMorphingNode( Pass & pass
 			, RenderPipeline & pipeline
 			, Submesh & submesh
 			, Geometry & primitive
@@ -332,7 +332,7 @@ namespace Castor3D
 		 *\param[in]	primitive	La géométrie.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API StaticRenderNode CreateStaticNode( Pass & pass
+		C3D_API StaticRenderNode createStaticNode( Pass & pass
 			, RenderPipeline & pipeline
 			, Submesh & submesh
 			, Geometry & primitive );
@@ -350,7 +350,7 @@ namespace Castor3D
 		 *\param[in]	billboard	Le billboard.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API BillboardRenderNode CreateBillboardNode( Pass & pass
+		C3D_API BillboardRenderNode createBillboardNode( Pass & pass
 			, RenderPipeline & pipeline
 			, BillboardBase & billboard );
 		/**
@@ -361,7 +361,7 @@ namespace Castor3D
 		 *\brief		Met à jour lee pipeline opaque.
 		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdatePipeline( RenderPipeline & pipeline )const;
+		C3D_API void updatePipeline( RenderPipeline & pipeline )const;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -374,7 +374,7 @@ namespace Castor3D
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
 		 */
-		C3D_API void UpdateFlags( TextureChannels & textureFlags
+		C3D_API void updateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const;
 		/**
@@ -383,7 +383,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut d'échantillonnage.
 		 */
-		inline bool IsOrderIndependent()const
+		inline bool isOrderIndependent()const
 		{
 			return m_oit;
 		}
@@ -401,7 +401,7 @@ namespace Castor3D
 		 *\param[in]	pipeline	Le pipeline.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API PassRenderNode DoCreatePassRenderNode( Pass & pass
+		C3D_API PassRenderNode doCreatePassRenderNode( Pass & pass
 			, RenderPipeline & pipeline );
 		/**
 		 *\~english
@@ -415,7 +415,7 @@ namespace Castor3D
 		 *\param[in]	pipeline	Le pipeline.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API SceneRenderNode DoCreateSceneRenderNode( Scene & scene
+		C3D_API SceneRenderNode doCreateSceneRenderNode( Scene & scene
 			, RenderPipeline & pipeline );
 		/**
 		 *\~english
@@ -433,7 +433,7 @@ namespace Castor3D
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( TextureChannels const & textureFlags
+		C3D_API ShaderProgramSPtr doGetProgram( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc
@@ -448,7 +448,7 @@ namespace Castor3D
 		 *\param[in]	renderNodes		Les noeuds instanciés.
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
 			, VertexBuffer & matrixBuffer )const;
 		/**
 		 *\~english
@@ -464,7 +464,7 @@ namespace Castor3D
 		 *\param[in]		matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
 			, VertexBuffer & matrixBuffer
 			, RenderInfo & info )const;
 		/**
@@ -477,7 +477,7 @@ namespace Castor3D
 		 *\param[in]	renderNodes		Les noeuds instanciés.
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
 			, VertexBuffer & matrixBuffer )const;
 		/**
 		 *\~english
@@ -493,7 +493,7 @@ namespace Castor3D
 		 *\param[in]		matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
 			, VertexBuffer & matrixBuffer
 			, RenderInfo & info )const;
 		/**
@@ -506,7 +506,7 @@ namespace Castor3D
 		 *\param[in]	renderNodes	Les noeuds instanciés.
 		 *\param[in]	bonesBuffer	Le tampon de matrices des os.
 		 */
-		C3D_API uint32_t DoCopyNodesBones( SkinningRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
 			, ShaderStorageBuffer & bonesBuffer )const;
 		/**
 		 *\~english
@@ -522,7 +522,7 @@ namespace Castor3D
 		 *\param[in]		bonesBuffer	Le tampon de matrices des os.
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t DoCopyNodesBones( SkinningRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
 			, ShaderStorageBuffer & bonesBuffer
 			, RenderInfo & info )const;
 		/**
@@ -533,7 +533,7 @@ namespace Castor3D
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void DoRender( SubmeshStaticRenderNodesByPipelineMap & nodes )const;
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -544,7 +544,7 @@ namespace Castor3D
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 			, DepthMapArray & depthMaps )const;
 		/**
 		 *\~english
@@ -556,7 +556,7 @@ namespace Castor3D
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -570,7 +570,7 @@ namespace Castor3D
 		 *\param		camera		La caméra regardant la scène.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps )const;
 		/**
@@ -587,7 +587,7 @@ namespace Castor3D
 		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps
 			, RenderInfo & info )const;
@@ -599,7 +599,7 @@ namespace Castor3D
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRender( StaticRenderNodesByPipelineMap & nodes )const;
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -610,7 +610,7 @@ namespace Castor3D
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( StaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
 			, DepthMapArray & depthMaps )const;
 		/**
 		 *\~english
@@ -622,7 +622,7 @@ namespace Castor3D
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRender( StaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -636,7 +636,7 @@ namespace Castor3D
 		 *\param		camera		La caméra regardant la scène.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( StaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps )const;
 		/**
@@ -653,7 +653,7 @@ namespace Castor3D
 		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRender( StaticRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps
 			, RenderInfo & info )const;
@@ -665,7 +665,7 @@ namespace Castor3D
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRender( SkinningRenderNodesByPipelineMap & nodes )const;
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -676,7 +676,7 @@ namespace Castor3D
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( SkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
 			, DepthMapArray & depthMaps )const;
 		/**
 		 *\~english
@@ -688,7 +688,7 @@ namespace Castor3D
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRender( SkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -702,7 +702,7 @@ namespace Castor3D
 		 *\param		camera		La caméra regardant la scène.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( SkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps )const;
 		/**
@@ -719,7 +719,7 @@ namespace Castor3D
 		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRender( SkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps
 			, RenderInfo & info )const;
@@ -731,7 +731,7 @@ namespace Castor3D
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void DoRender( SubmeshSkinningRenderNodesByPipelineMap & nodes )const;
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -742,7 +742,7 @@ namespace Castor3D
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 			, DepthMapArray & depthMaps )const;
 		/**
 		 *\~english
@@ -754,7 +754,7 @@ namespace Castor3D
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -768,7 +768,7 @@ namespace Castor3D
 		 *\param		camera		La caméra regardant la scène.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps )const;
 		/**
@@ -785,7 +785,7 @@ namespace Castor3D
 		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps
 			, RenderInfo & info )const;
@@ -797,7 +797,7 @@ namespace Castor3D
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRender( MorphingRenderNodesByPipelineMap & nodes )const;
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -808,7 +808,7 @@ namespace Castor3D
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( MorphingRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
 			, DepthMapArray & depthMaps )const;
 		/**
 		 *\~english
@@ -820,7 +820,7 @@ namespace Castor3D
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRender( MorphingRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -834,7 +834,7 @@ namespace Castor3D
 		 *\param		camera		La caméra regardant la scène.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( MorphingRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps )const;
 		/**
@@ -851,7 +851,7 @@ namespace Castor3D
 		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRender( MorphingRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps
 			, RenderInfo & info )const;
@@ -863,7 +863,7 @@ namespace Castor3D
 		 *\brief		Dessine des billboards.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRender( BillboardRenderNodesByPipelineMap & nodes )const;
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
@@ -874,7 +874,7 @@ namespace Castor3D
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( BillboardRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
 			, DepthMapArray & depthMaps )const;
 		/**
 		 *\~english
@@ -886,7 +886,7 @@ namespace Castor3D
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRender( BillboardRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -900,7 +900,7 @@ namespace Castor3D
 		 *\param		camera		La caméra regardant la scène.
 		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRender( BillboardRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps )const;
 		/**
@@ -917,7 +917,7 @@ namespace Castor3D
 		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRender( BillboardRenderNodesByPipelineMap & nodes
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
 			, Camera const & camera
 			, DepthMapArray & depthMaps
 			, RenderInfo & info )const;
@@ -933,14 +933,14 @@ namespace Castor3D
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoInitialise( Castor::Size const & size ) = 0;
+		C3D_API virtual bool doInitialise( castor::Size const & size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the specific data.
@@ -951,7 +951,7 @@ namespace Castor3D
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API virtual void DoUpdate( RenderQueueArray & queues ) = 0;
+		C3D_API virtual void doUpdate( RenderQueueArray & queues ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -966,7 +966,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API virtual GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -982,7 +982,7 @@ namespace Castor3D
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const = 0;
 		/**
@@ -999,7 +999,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1017,7 +1017,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1035,7 +1035,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1051,7 +1051,7 @@ namespace Castor3D
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
 		 */
-		C3D_API virtual void DoUpdateFlags( TextureChannels & textureFlags
+		C3D_API virtual void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const = 0;
 		/**
@@ -1062,14 +1062,14 @@ namespace Castor3D
 		 *\brief		Met à jour le pipeline.
 		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdatePipeline( RenderPipeline & pipeline  )const = 0;
+		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline  )const = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline, culling front faces.
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu, en supprimant les faces avant.
 		 */
-		C3D_API virtual void DoPrepareFrontPipeline( ShaderProgram & program
+		C3D_API virtual void doPrepareFrontPipeline( ShaderProgram & program
 			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\~english
@@ -1077,7 +1077,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
 		 */
-		C3D_API virtual void DoPrepareBackPipeline( ShaderProgram & program
+		C3D_API virtual void doPrepareBackPipeline( ShaderProgram & program
 			, PipelineFlags const & flags ) = 0;
 
 	protected:

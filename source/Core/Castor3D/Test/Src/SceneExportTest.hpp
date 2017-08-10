@@ -33,11 +33,11 @@ namespace Testing
 		: public C3DTestCase
 	{
 	public:
-		explicit SceneExportTest( Castor3D::Engine & engine );
+		explicit SceneExportTest( castor3d::Engine & engine );
 		virtual ~SceneExportTest();
 
 	private:
-		void DoRegisterTests()override;
+		void doRegisterTests()override;
 
 	private:
 		void SimpleScene();
@@ -46,8 +46,8 @@ namespace Testing
 		void AnimatedScene();
 
 	private:
-		Castor3D::SceneSPtr DoParseScene( Castor::Path const & p_path );
-		void DoTestScene( Castor::String const & p_name );
+		castor3d::SceneSPtr doParseScene( castor::Path const & p_path );
+		void doTestScene( castor::String const & p_name );
 	};
 }
 

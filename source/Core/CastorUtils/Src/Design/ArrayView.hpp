@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <vector>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -164,19 +164,19 @@ namespace Castor
 	};
 
 	template< typename T >
-	ArrayView< T > make_array_view( T * p_begin, size_t p_size )
+	ArrayView< T > makeArrayView( T * p_begin, size_t p_size )
 	{
 		return ArrayView< T >( p_begin, p_begin + p_size );
 	}
 
 	template< typename T >
-	ArrayView< T > make_array_view( T * p_begin, T * p_end )
+	ArrayView< T > makeArrayView( T * p_begin, T * p_end )
 	{
 		return ArrayView< T >( p_begin, p_end );
 	}
 
 	template< typename T, size_t N >
-	ArrayView< T > make_array_view( T ( & p_buffer )[N] )
+	ArrayView< T > makeArrayView( T ( & p_buffer )[N] )
 	{
 		return ArrayView< T >( p_buffer );
 	}

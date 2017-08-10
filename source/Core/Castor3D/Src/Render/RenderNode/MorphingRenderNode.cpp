@@ -7,9 +7,9 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	MorphingRenderNode::MorphingRenderNode( RenderPipeline & p_pipeline
 		, PassRenderNode && p_passNode

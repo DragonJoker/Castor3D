@@ -8,7 +8,7 @@
 #include <Windows.h>
 #include <codecvt>
 
-namespace Castor
+namespace castor
 {
 	namespace System
 	{
@@ -18,7 +18,7 @@ namespace Castor
 			{
 				uint32_t m_wanted;
 				uint32_t m_current;
-				Castor::Size & m_size;
+				castor::Size & m_size;
 			};
 
 			BOOL CALLBACK MonitorEnum( HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData )
@@ -34,17 +34,17 @@ namespace Castor
 			}
 		}
 
-		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
 			stSCREEN screen = { p_screen, 0, p_size };
 			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &screen ) );
 			return true;
 		}
 
-		Castor::String GetLastErrorText()
+		castor::String getLastErrorText()
 		{
 			DWORD dwError = ::GetLastError();
-			String strReturn = string::to_string( dwError );;
+			String strReturn = string::toString( dwError );;
 
 			if ( dwError != ERROR_SUCCESS )
 			{
@@ -71,16 +71,9 @@ namespace Castor
 
 			return strReturn;
 		}
-
-		uint8_t GetCPUCount()
-		{
-			SYSTEM_INFO sysinfo = { 0 };
-			::GetSystemInfo( &sysinfo );
-			return uint8_t( sysinfo.dwNumberOfProcessors );
-		}
 	}
 
-	void Localtime( std::tm * p_tm, time_t const * p_pTime )
+	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
 	{
 #	if defined( CASTOR_COMPILER_MSVC )
 

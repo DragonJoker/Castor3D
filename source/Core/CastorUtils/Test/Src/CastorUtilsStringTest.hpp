@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsStringTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void StringConversions();

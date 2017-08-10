@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "FrameBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\param[in]	p_format	Le format des pixels du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( Castor::Size const & p_size, Castor::PixelFormat p_format );
+		C3D_API bool initialise( castor::Size const & p_size, castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon d'image à activer.
 		 *\param[in]	p_target	La cible d'activation du tampon d'image.
 		 */
-		C3D_API virtual void Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const = 0;
+		C3D_API virtual void bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
@@ -92,7 +92,7 @@ namespace Castor3D
 		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 *\return		L'attache créée
 		 */
-		C3D_API RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer )override
+		C3D_API RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr p_renderBuffer )override
 		{
 			return nullptr;
 		}
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr p_texture )override
 		{
 			return nullptr;
 		}
@@ -122,7 +122,7 @@ namespace Castor3D
 		 *\param[in]	p_face		La face.
 		 *\return		L'attache créée.
 		 */
-		C3D_API TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )override
 		{
 			return nullptr;
 		}
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\param[in]	p_face		La face.
 		 *\return		L'attache créée.
 		 */
-		C3D_API TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )override
 		{
 			return nullptr;
 		}
@@ -150,38 +150,38 @@ namespace Castor3D
 		 *\brief		Vérifie si le FBO est complet
 		 *\return		\p false si le tampon est en erreur ou s'il manque une attache.
 		 */
-		C3D_API virtual bool IsComplete()const
+		C3D_API virtual bool isComplete()const
 		{
 			return true;
 		}
 
 	private:
-		using FrameBuffer::Initialise;
-		using FrameBuffer::Bind;
-		using FrameBuffer::BlitInto;
-		using FrameBuffer::SetDrawBuffers;
-		using FrameBuffer::SetDrawBuffer;
-		using FrameBuffer::Attach;
-		using FrameBuffer::DetachAll;
-		using FrameBuffer::Create;
-		using FrameBuffer::SetReadBuffer;
-		using FrameBuffer::CreateColourRenderBuffer;
-		using FrameBuffer::CreateDepthStencilRenderBuffer;
-		using FrameBuffer::IsComplete;
-		using FrameBuffer::DownloadBuffer;
+		using FrameBuffer::initialise;
+		using FrameBuffer::bind;
+		using FrameBuffer::blitInto;
+		using FrameBuffer::setDrawBuffers;
+		using FrameBuffer::setDrawBuffer;
+		using FrameBuffer::attach;
+		using FrameBuffer::detachAll;
+		using FrameBuffer::create;
+		using FrameBuffer::setReadBuffer;
+		using FrameBuffer::createColourRenderBuffer;
+		using FrameBuffer::createDepthStencilRenderBuffer;
+		using FrameBuffer::isComplete;
+		using FrameBuffer::downloadBuffer;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoBind
+		 *\copydoc		castor3d::FrameBuffer::doBind
 		 */
-		C3D_API void DoBind( Castor3D::FrameBufferTarget p_target )const override;
+		C3D_API void doBind( castor3d::FrameBufferTarget p_target )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
+		 *\copydoc		castor3d::FrameBuffer::doUnbind
 		 */
-		C3D_API void DoUnbind()const override;
+		C3D_API void doUnbind()const override;
 
 	private:
-		Castor::PxBufferBaseSPtr m_buffer;
+		castor::PxBufferBaseSPtr m_buffer;
 	};
 }
 

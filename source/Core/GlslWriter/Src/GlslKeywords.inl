@@ -2,301 +2,301 @@
 
 namespace GLSL
 {
-	inline Castor::String const & KeywordsBase::GetVersion()const
+	inline castor::String const & KeywordsBase::getVersion()const
 	{
 		return m_version;
 	}
-	inline Castor::String const & KeywordsBase::GetIn()const
+	inline castor::String const & KeywordsBase::getIn()const
 	{
 		REQUIRE( !m_strIn.empty() );
 		return m_strIn;
 	}
-	inline Castor::String const & KeywordsBase::GetOut()const
+	inline castor::String const & KeywordsBase::getOut()const
 	{
 		REQUIRE( !m_strOut.empty() );
 		return m_strOut;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1D()const
+	inline castor::String const & KeywordsBase::getTexture1D()const
 	{
 		REQUIRE( !m_strTexture1D.empty() );
 		return m_strTexture1D;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DLod()const
+	inline castor::String const & KeywordsBase::getTexture1DLod()const
 	{
 		REQUIRE( !m_strTexture1DLod.empty() );
 		return m_strTexture1DLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DOffset()const
 	{
 		REQUIRE( !m_strTexture1DOffset.empty() );
 		return m_strTexture1DOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture1DOffsetLod()const
 	{
 		REQUIRE( !m_strTexture1DOffsetLod.empty() );
 		return m_strTexture1DOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DLodOffset()const
 	{
 		REQUIRE( !m_strTexture1DLodOffset.empty() );
 		return m_strTexture1DLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2D()const
+	inline castor::String const & KeywordsBase::getTexture2D()const
 	{
 		REQUIRE( !m_strTexture2D.empty() );
 		return m_strTexture2D;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DLod()const
+	inline castor::String const & KeywordsBase::getTexture2DLod()const
 	{
 		REQUIRE( !m_strTexture2DLod.empty() );
 		return m_strTexture2DLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DOffset()const
 	{
 		REQUIRE( !m_strTexture2DOffset.empty() );
 		return m_strTexture2DOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture2DOffsetLod()const
 	{
 		REQUIRE( !m_strTexture2DOffsetLod.empty() );
 		return m_strTexture2DOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DLodOffset()const
 	{
 		REQUIRE( !m_strTexture2DLodOffset.empty() );
 		return m_strTexture2DLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture3D()const
+	inline castor::String const & KeywordsBase::getTexture3D()const
 	{
 		REQUIRE( !m_strTexture3D.empty() );
 		return m_strTexture3D;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture3DLod()const
+	inline castor::String const & KeywordsBase::getTexture3DLod()const
 	{
 		REQUIRE( !m_strTexture3DLod.empty() );
 		return m_strTexture3DLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture3DOffset()const
+	inline castor::String const & KeywordsBase::getTexture3DOffset()const
 	{
 		REQUIRE( !m_strTexture3DOffset.empty() );
 		return m_strTexture3DOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture3DOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture3DOffsetLod()const
 	{
 		REQUIRE( !m_strTexture3DOffsetLod.empty() );
 		return m_strTexture3DOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture3DLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture3DLodOffset()const
 	{
 		REQUIRE( !m_strTexture3DLodOffset.empty() );
 		return m_strTexture3DLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCube()const
+	inline castor::String const & KeywordsBase::getTextureCube()const
 	{
 		REQUIRE( !m_strTextureCube.empty() );
 		return m_strTextureCube;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCubeLod()const
+	inline castor::String const & KeywordsBase::getTextureCubeLod()const
 	{
 		REQUIRE( !m_strTextureCubeLod.empty() );
 		return m_strTextureCubeLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArray()const
+	inline castor::String const & KeywordsBase::getTexture1DArray()const
 	{
 		REQUIRE( !m_strTexture1DArray.empty() );
 		return m_strTexture1DArray;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayLod()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayLod()const
 	{
 		REQUIRE( !m_strTexture1DArrayLod.empty() );
 		return m_strTexture1DArrayLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayOffset()const
 	{
 		REQUIRE( !m_strTexture1DArrayOffset.empty() );
 		return m_strTexture1DArrayOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayOffsetLod()const
 	{
 		REQUIRE( !m_strTexture1DArrayOffsetLod.empty() );
 		return m_strTexture1DArrayOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayLodOffset()const
 	{
 		REQUIRE( !m_strTexture1DArrayLodOffset.empty() );
 		return m_strTexture1DArrayLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArray()const
+	inline castor::String const & KeywordsBase::getTexture2DArray()const
 	{
 		REQUIRE( !m_strTexture2DArray.empty() );
 		return m_strTexture2DArray;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayLod()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayLod()const
 	{
 		REQUIRE( !m_strTexture2DArrayLod.empty() );
 		return m_strTexture2DArrayLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayOffset()const
 	{
 		REQUIRE( !m_strTexture2DArrayOffset.empty() );
 		return m_strTexture2DArrayOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayOffsetLod()const
 	{
 		REQUIRE( !m_strTexture2DArrayOffsetLod.empty() );
 		return m_strTexture2DArrayOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayLodOffset()const
 	{
 		REQUIRE( !m_strTexture2DArrayLodOffset.empty() );
 		return m_strTexture2DArrayLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCubeArray()const
+	inline castor::String const & KeywordsBase::getTextureCubeArray()const
 	{
 		REQUIRE( !m_strTextureCubeArray.empty() );
 		return m_strTextureCubeArray;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCubeArrayLod()const
+	inline castor::String const & KeywordsBase::getTextureCubeArrayLod()const
 	{
 		REQUIRE( !m_strTextureCubeShadowLod.empty() );
 		return m_strTextureCubeShadowLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DShadow()const
+	inline castor::String const & KeywordsBase::getTexture1DShadow()const
 	{
 		REQUIRE( !m_strTexture1DShadow.empty() );
 		return m_strTexture1DShadow;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DShadowLod()const
+	inline castor::String const & KeywordsBase::getTexture1DShadowLod()const
 	{
 		REQUIRE( !m_strTexture1DShadowLod.empty() );
 		return m_strTexture1DShadowLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DShadowOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DShadowOffset()const
 	{
 		REQUIRE( !m_strTexture1DShadowOffset.empty() );
 		return m_strTexture1DShadowOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DShadowOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture1DShadowOffsetLod()const
 	{
 		REQUIRE( !m_strTexture1DShadowOffsetLod.empty() );
 		return m_strTexture1DShadowOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DShadowLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DShadowLodOffset()const
 	{
 		REQUIRE( !m_strTexture1DShadowLodOffset.empty() );
 		return m_strTexture1DShadowLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DShadow()const
+	inline castor::String const & KeywordsBase::getTexture2DShadow()const
 	{
 		REQUIRE( !m_strTexture2DShadow.empty() );
 		return m_strTexture2DShadow;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DShadowLod()const
+	inline castor::String const & KeywordsBase::getTexture2DShadowLod()const
 	{
 		REQUIRE( !m_strTexture2DShadowLod.empty() );
 		return m_strTexture2DShadowLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DShadowOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DShadowOffset()const
 	{
 		REQUIRE( !m_strTexture2DShadowOffset.empty() );
 		return m_strTexture2DShadowOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DShadowOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture2DShadowOffsetLod()const
 	{
 		REQUIRE( !m_strTexture2DShadowOffsetLod.empty() );
 		return m_strTexture2DShadowOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DShadowLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DShadowLodOffset()const
 	{
 		REQUIRE( !m_strTexture2DShadowLodOffset.empty() );
 		return m_strTexture2DShadowLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCubeShadow()const
+	inline castor::String const & KeywordsBase::getTextureCubeShadow()const
 	{
 		REQUIRE( !m_strTextureCubeShadow.empty() );
 		return m_strTextureCubeShadow;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCubeShadowLod()const
+	inline castor::String const & KeywordsBase::getTextureCubeShadowLod()const
 	{
 		REQUIRE( !m_strTextureCubeShadowLod.empty() );
 		return m_strTextureCubeShadowLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayShadow()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayShadow()const
 	{
 		REQUIRE( !m_strTexture1DArrayShadow.empty() );
 		return m_strTexture1DArrayShadow;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayShadowLod()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayShadowLod()const
 	{
 		REQUIRE( !m_strTexture1DArrayShadowLod.empty() );
 		return m_strTexture1DArrayShadowLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayShadowOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayShadowOffset()const
 	{
 		REQUIRE( !m_strTexture1DArrayShadowOffset.empty() );
 		return m_strTexture1DArrayShadowOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayShadowOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayShadowOffsetLod()const
 	{
 		REQUIRE( !m_strTexture1DArrayShadowOffsetLod.empty() );
 		return m_strTexture1DArrayShadowOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture1DArrayShadowLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture1DArrayShadowLodOffset()const
 	{
 		REQUIRE( !m_strTexture1DArrayShadowLodOffset.empty() );
 		return m_strTexture1DArrayShadowLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayShadow()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayShadow()const
 	{
 		REQUIRE( !m_strTexture2DArrayShadow.empty() );
 		return m_strTexture2DArrayShadow;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayShadowLod()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayShadowLod()const
 	{
 		REQUIRE( !m_strTexture2DArrayShadowLod.empty() );
 		return m_strTexture2DArrayShadowLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayShadowOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayShadowOffset()const
 	{
 		REQUIRE( !m_strTexture2DArrayShadowOffset.empty() );
 		return m_strTexture2DArrayShadowOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayShadowOffsetLod()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayShadowOffsetLod()const
 	{
 		REQUIRE( !m_strTexture2DArrayShadowOffsetLod.empty() );
 		return m_strTexture2DArrayShadowOffsetLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexture2DArrayShadowLodOffset()const
+	inline castor::String const & KeywordsBase::getTexture2DArrayShadowLodOffset()const
 	{
 		REQUIRE( !m_strTexture2DArrayShadowLodOffset.empty() );
 		return m_strTexture2DArrayShadowLodOffset;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCubeArrayShadow()const
+	inline castor::String const & KeywordsBase::getTextureCubeArrayShadow()const
 	{
 		REQUIRE( !m_strTextureCubeArrayShadow.empty() );
 		return m_strTextureCubeArrayShadow;
 	}
-	inline Castor::String const & KeywordsBase::GetTextureCubeArrayShadowLod()const
+	inline castor::String const & KeywordsBase::getTextureCubeArrayShadowLod()const
 	{
 		REQUIRE( !m_strTextureCubeArrayShadowLod.empty() );
 		return m_strTextureCubeArrayShadowLod;
 	}
-	inline Castor::String const & KeywordsBase::GetTexelFetchBuffer()const
+	inline castor::String const & KeywordsBase::getTexelFetchBuffer()const
 	{
 		REQUIRE( !m_strTexelFetchBuffer.empty() );
 		return m_strTexelFetchBuffer;
 	}
-	inline Castor::String const & KeywordsBase::GetTexelFetch1D()const
+	inline castor::String const & KeywordsBase::getTexelFetch1D()const
 	{
 		REQUIRE( !m_strTexelFetch1D.empty() );
 		return m_strTexelFetch1D;
 	}
-	inline Castor::String const & KeywordsBase::GetTexelFetch2D()const
+	inline castor::String const & KeywordsBase::getTexelFetch2D()const
 	{
 		REQUIRE( !m_strTexelFetch2D.empty() );
 		return m_strTexelFetch2D;
 	}
-	inline Castor::String const & KeywordsBase::GetTexelFetch3D()const
+	inline castor::String const & KeywordsBase::getTexelFetch3D()const
 	{
 		REQUIRE( !m_strTexelFetch3D.empty() );
 		return m_strTexelFetch3D;
@@ -332,19 +332,19 @@ namespace GLSL
 			m_strTexelFetch3D = cuT( "texture3D" );
 		}
 
-		virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
+		virtual castor::String getLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
 		{
 			return cuT( "" );
 		}
 
-		virtual Castor::String GetFragData( uint32_t p_index )const
+		virtual castor::String getFragData( uint32_t p_index )const
 		{
-			Castor::StringStream stream;
+			castor::StringStream stream;
 			stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
 			return stream.str();
 		}
 
-		virtual bool HasNamedFragData()const
+		virtual bool hasNamedFragData()const
 		{
 			return false;
 		}
@@ -357,7 +357,7 @@ namespace GLSL
 	public:
 		Keywords()
 		{
-			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version );
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );
 			m_strOut = cuT( "out" );
@@ -422,19 +422,19 @@ namespace GLSL
 			m_strTexelFetch3D = cuT( "texelFetch" );
 		}
 
-		virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
+		virtual castor::String getLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
 		{
 			return cuT( "" );
 		}
 
-		virtual Castor::String GetFragData( uint32_t p_index )const
+		virtual castor::String getFragData( uint32_t p_index )const
 		{
-			Castor::StringStream stream;
+			castor::StringStream stream;
 			stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
 			return stream.str();
 		}
 
-		virtual bool HasNamedFragData()const
+		virtual bool hasNamedFragData()const
 		{
 			return false;
 		}
@@ -448,7 +448,7 @@ namespace GLSL
 		Keywords()
 		{
 			m_strUboLayout = cuT( "layout" );
-			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version );
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );
 			m_strOut = cuT( "out" );
@@ -511,17 +511,17 @@ namespace GLSL
 			m_strTexelFetch3D = cuT( "texelFetch" );
 		}
 
-		virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
+		virtual castor::String getLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
 		{
 			return cuT( "" );
 		}
 
-		virtual Castor::String GetFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
+		virtual castor::String getFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
 		{
 			return cuT( "" );
 		}
 
-		virtual bool HasNamedFragData()const
+		virtual bool hasNamedFragData()const
 		{
 			return true;
 		}
@@ -536,7 +536,7 @@ namespace GLSL
 		{
 			m_strUboLayout = cuT( "layout" );
 			m_strSsboLayout = cuT( "layout" );
-			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version );
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );
 			m_strOut = cuT( "out" );
@@ -599,17 +599,17 @@ namespace GLSL
 			m_strTexelFetch3D = cuT( "texelFetch" );
 		}
 
-		virtual Castor::String GetLayout( uint32_t p_index )const
+		virtual castor::String getLayout( uint32_t p_index )const
 		{
-			return cuT( "layout( location=" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
+			return cuT( "layout( location=" ) + castor::string::toString( p_index ) + cuT( " ) " );
 		}
 
-		virtual Castor::String GetFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
+		virtual castor::String getFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
 		{
 			return cuT( "" );
 		}
 
-		virtual bool HasNamedFragData()const
+		virtual bool hasNamedFragData()const
 		{
 			return true;
 		}
@@ -626,7 +626,7 @@ namespace GLSL
 			m_strUboBinding = cuT( "binding" );
 			m_strSsboLayout = cuT( "layout" );
 			m_strSsboBinding = cuT( "binding" );
-			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version );
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );
 			m_strOut = cuT( "out" );
@@ -689,17 +689,17 @@ namespace GLSL
 			m_strTexelFetch3D = cuT( "texelFetch" );
 		}
 
-		virtual Castor::String GetLayout( uint32_t p_index )const
+		virtual castor::String getLayout( uint32_t p_index )const
 		{
-			return cuT( "layout( location=" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
+			return cuT( "layout( location=" ) + castor::string::toString( p_index ) + cuT( " ) " );
 		}
 
-		virtual Castor::String GetFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
+		virtual castor::String getFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
 		{
 			return cuT( "" );
 		}
 
-		virtual bool HasNamedFragData()const
+		virtual bool hasNamedFragData()const
 		{
 			return true;
 		}

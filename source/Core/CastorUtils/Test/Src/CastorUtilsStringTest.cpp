@@ -1,6 +1,6 @@
 #include "CastorUtilsStringTest.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace Testing
 {
@@ -68,9 +68,9 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsStringTest::DoRegisterTests()
+	void CastorUtilsStringTest::doRegisterTests()
 	{
-		DoRegisterTest( "StringConversions", std::bind( &CastorUtilsStringTest::StringConversions, this ) );
+		doRegisterTest( "StringConversions", std::bind( &CastorUtilsStringTest::StringConversions, this ) );
 	}
 
 	void CastorUtilsStringTest::StringConversions()
@@ -81,25 +81,25 @@ namespace Testing
 		std::wstring wstrIn = L"STR : Bonjoir éêèàÉÊÈÀ";
 		std::wstring wstrOut;
 		std::string strOut;
-		tstrOut = string::string_cast< xchar >( strIn );
+		tstrOut = string::stringCast< xchar >( strIn );
 		std::cout << "	Conversion from std::string to String" << std::endl;
 		std::cout << "		Entry  : " << strIn << std::endl;
 		std::cout << "		Result : " << tstrOut << std::endl;
 		std::cout << std::endl;
 		CT_EQUAL( tstrOut, tstrIn );
-		tstrOut = string::string_cast< xchar >( wstrIn );
+		tstrOut = string::stringCast< xchar >( wstrIn );
 		std::cout << "	Conversion from std::wstring to String" << std::endl;
 		std::wcout << L"		Entry  : " << wstrIn << std::endl;
 		std::cout << "		Result : " << tstrOut << std::endl;
 		std::cout << std::endl;
 		CT_EQUAL( tstrOut, tstrIn );
-		strOut = string::string_cast< char >( tstrIn );
+		strOut = string::stringCast< char >( tstrIn );
 		std::cout << "	Conversion from String to std::string" << std::endl;
 		std::cout << "		Entry  : " << tstrIn << std::endl;
 		std::cout << "		Result : " << strOut << std::endl;
 		std::cout << std::endl;
 		CT_EQUAL( strOut, strIn );
-		wstrOut = string::string_cast< wchar_t >( tstrIn );
+		wstrOut = string::stringCast< wchar_t >( tstrIn );
 		std::cout << "	Conversion from String to std::wstring" << std::endl;
 		std::cout << "		Entry  : " << tstrIn << std::endl;
 		std::wcout << L"		Result : " << wstrOut << std::endl;

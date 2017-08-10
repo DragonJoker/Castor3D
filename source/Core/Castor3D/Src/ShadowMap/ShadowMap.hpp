@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -40,7 +40,7 @@ namespace Castor3D
 	\brief		Implémentation du mappage d'ombres.
 	*/
 	class ShadowMap
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	protected:
 		using ShadowMapLightMap = std::map< Light const *, ShadowMapPassSPtr >;
@@ -69,23 +69,23 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer and light type specific data.
 		 *\~french
 		 *\brief		Nettoie le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Adds a light source, creating a shadow map pass for it.
+		 *\brief		adds a light source, creating a shadow map pass for it.
 		 *\param[in]	light	The light source.
 		 *\~french
 		 *\brief		Ajoute une source lumineuse, créant une passe de shadow mapping pour elle.
 		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API void AddLight( Light & light );
+		C3D_API void addLight( Light & light );
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
 		 */
-		C3D_API void UpdateFlags( TextureChannels & textureFlags
+		C3D_API void updateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const;
 		/**
@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API GLSL::Shader GetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader getVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader GetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader getGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
@@ -146,7 +146,7 @@ namespace Castor3D
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader GetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader getPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		Les passes de shadow mapping triées.
 		 */
-		inline SortedPasses & GetPasses()
+		inline SortedPasses & getPasses()
 		{
 			return m_sorted;
 		}
@@ -166,7 +166,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		Les passes de shadow mapping triées.
 		 */
-		inline SortedPasses const & GetPasses()const
+		inline SortedPasses const & getPasses()const
 		{
 			return m_sorted;
 		}
@@ -178,14 +178,14 @@ namespace Castor3D
 		 *\~english
 		 *\return		Le nombre maximum de passes de shadow maps pour le type de source lumineuse.
 		 */
-		C3D_API virtual int32_t DoGetMaxPasses()const = 0;
+		C3D_API virtual int32_t doGetMaxPasses()const = 0;
 		/**
 		 *\~english
 		 *\return		The shadow map texture dimensions.
 		 *\~english
 		 *\return		Les dimensions de la texture de map d'ombres.
 		 */
-		C3D_API virtual Castor::Size DoGetSize()const = 0;
+		C3D_API virtual castor::Size doGetSize()const = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the light type specific data.
@@ -194,14 +194,14 @@ namespace Castor3D
 		 *\brief		Initialise les données spécifiques au type de source lumineuse.
 		 *\param[in]	p_size	Les dimensions voulues pour le frame buffer.
 		 */
-		C3D_API virtual void DoInitialise() = 0;
+		C3D_API virtual void doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light type specific data.
 		 *\~french
 		 *\brief		Nettoie les données spécifiques au type de source lumineuse.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a light type specific shadow map pass.
@@ -212,35 +212,35 @@ namespace Castor3D
 		 *\param[in]	light	La source lumineuse.
 		 *\return		La passe de shadow mapping.
 		 */
-		C3D_API virtual ShadowMapPassSPtr DoCreatePass( Light & light )const = 0;
+		C3D_API virtual ShadowMapPassSPtr doCreatePass( Light & light )const = 0;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::UpdateFlags
+		 *\copydoc		castor3d::ShadowMap::updateFlags
 		 */
-		C3D_API virtual void DoUpdateFlags( TextureChannels & textureFlags
+		C3D_API virtual void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const = 0;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::GetVertexShaderSource
+		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
 		 */
-		C3D_API virtual GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::GetGeometryShaderSource
+		 *\copydoc		castor3d::ShadowMap::getGeometryShaderSource
 		 */
-		C3D_API virtual GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::GetPixelShaderSource
+		 *\copydoc		castor3d::ShadowMap::getPixelShaderSource
 		 */
-		C3D_API virtual GLSL::Shader DoGetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
 
-		void DoApplyAlphaFunc( GLSL::GlslWriter & writer
+		void doApplyAlphaFunc( GLSL::GlslWriter & writer
 			, ComparisonFunc alphaFunc
 			, GLSL::Float const & alpha
 			, GLSL::Int const & material

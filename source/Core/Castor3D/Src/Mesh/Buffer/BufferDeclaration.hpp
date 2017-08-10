@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 #include "BufferElementDeclaration.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -161,7 +161,7 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Adds an element to the end of the list.
+		 *\brief		adds an element to the end of the list.
 		 *\param[in]	p_element	The element.
 		 *\~french
 		 *\brief		Ajoute un élément à la fin de la liste.
@@ -170,11 +170,11 @@ namespace Castor3D
 		inline void push_back( BufferElementDeclaration const & p_element )
 		{
 			m_arrayElements.push_back( p_element );
-			m_stride += Castor3D::GetSize( p_element.m_dataType );
+			m_stride += castor3d::getSize( p_element.m_dataType );
 		}
 
 	private:
-		C3D_API void DoInitialise( BufferElementDeclaration const * p_elements, uint32_t p_count );
+		C3D_API void doInitialise( BufferElementDeclaration const * p_elements, uint32_t p_count );
 
 	protected:
 		//!\~english Element description array	\~french Tableau de descriptions d'éléments

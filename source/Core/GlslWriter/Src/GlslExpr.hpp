@@ -34,22 +34,22 @@ namespace GLSL
 		GlslWriter_API Expr( float p_value );
 		GlslWriter_API Expr( double p_value );
 		GlslWriter_API Expr( GlslWriter * p_writer );
-		GlslWriter_API Expr( GlslWriter * p_writer, Castor::String const & p_init );
+		GlslWriter_API Expr( GlslWriter * p_writer, castor::String const & p_init );
 		GlslWriter_API Expr( Expr const & p_rhs );
 		GlslWriter_API Expr( Expr && p_rhs );
 		GlslWriter_API virtual ~Expr();
 		GlslWriter_API Expr & operator=( Expr const & p_rhs );
-		GlslWriter_API void UpdateWriter( Expr const & p_expr );
+		GlslWriter_API void updateWriter( Expr const & p_expr );
 
 		GlslWriter * m_writer;
-		mutable Castor::StringStream m_value;
+		mutable castor::StringStream m_value;
 	};
 
-	GlslWriter_API Castor::String ToString( Expr const & p_value );
-	GlslWriter_API Castor::String ToString( int const & p_value );
-	GlslWriter_API Castor::String ToString( uint32_t const & p_value );
-	GlslWriter_API Castor::String ToString( double const & p_value );
-	GlslWriter_API Castor::String ToString( float const & p_value );
+	GlslWriter_API castor::String toString( Expr const & p_value );
+	GlslWriter_API castor::String toString( int const & p_value );
+	GlslWriter_API castor::String toString( uint32_t const & p_value );
+	GlslWriter_API castor::String toString( double const & p_value );
+	GlslWriter_API castor::String toString( float const & p_value );
 }
 
 #endif

@@ -6,9 +6,9 @@
 
 #include <Graphics/Image.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
 		, Light & p_light
@@ -21,86 +21,86 @@ namespace Castor3D
 	{
 	}
 
-	bool ShadowMapPassDirectional::DoInitialise( Size const & p_size )
+	bool ShadowMapPassDirectional::doInitialise( Size const & p_size )
 	{
-		Viewport viewport{ *GetEngine() };
-		real w = real( p_size.width() );
-		real h = real( p_size.height() );
-		viewport.SetOrtho( -w / 2, w / 2, h / 2, -h / 2, -5120.0_r, 5120.0_r );
-		viewport.Update();
-		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
-			, *m_light.GetScene()
-			, m_light.GetParent()
+		Viewport viewport{ *getEngine() };
+		real w = real( p_size.getWidth() );
+		real h = real( p_size.getHeight() );
+		viewport.setOrtho( -w / 2, w / 2, h / 2, -h / 2, -5120.0_r, 5120.0_r );
+		viewport.update();
+		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.getName()
+			, *m_light.getScene()
+			, m_light.getParent()
 			, std::move( viewport ) );
-		m_camera->Resize( p_size );
+		m_camera->resize( p_size );
 
-		m_renderQueue.Initialise( *m_light.GetScene(), *m_camera );
+		m_renderQueue.initialise( *m_light.getScene(), *m_camera );
 		return true;
 	}
 
-	void ShadowMapPassDirectional::DoCleanup()
+	void ShadowMapPassDirectional::doCleanup()
 	{
-		m_camera->Detach();
+		m_camera->detach();
 		m_camera.reset();
 	}
 
-	void ShadowMapPassDirectional::DoUpdate( RenderQueueArray & p_queues )
+	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & p_queues )
 	{
-		m_light.Update( m_camera->GetParent()->GetDerivedPosition()
-			, m_camera->GetViewport()
+		m_light.update( m_camera->getParent()->getDerivedPosition()
+			, m_camera->getViewport()
 			, m_index );
-		m_camera->Update();
+		m_camera->update();
 		p_queues.push_back( m_renderQueue );
 	}
 
-	void ShadowMapPassDirectional::DoRender( uint32_t p_face )
+	void ShadowMapPassDirectional::doRender( uint32_t p_face )
 	{
 		if ( m_camera && m_initialised )
 		{
-			m_camera->Apply();
-			m_matrixUbo.Update( m_camera->GetView()
-				, m_camera->GetViewport().GetProjection() );
-			DoRenderNodes( m_renderQueue.GetRenderNodes(), *m_camera );
+			m_camera->apply();
+			m_matrixUbo.update( m_camera->getView()
+				, m_camera->getViewport().getProjection() );
+			doRenderNodes( m_renderQueue.getRenderNodes(), *m_camera );
 		}
 	}
 
-	void ShadowMapPassDirectional::DoPrepareBackPipeline( ShaderProgram & p_program
+	void ShadowMapPassDirectional::doPrepareBackPipeline( ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
 	{
 		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
 			RasteriserState rsState;
-			rsState.SetCulledFaces( Culling::eNone );
+			rsState.setCulledFaces( Culling::eNone );
 			DepthStencilState dsState;
-			dsState.SetDepthTest( true );
+			dsState.setDepthTest( true );
 			auto & pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
+				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
 					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
 					, p_flags ) ).first->second;
 
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, p_flags]()
 				{
-					pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
-					pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
+						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !checkFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
-						pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
+						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
-						pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
+						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
 					}
 
 					m_initialised = true;

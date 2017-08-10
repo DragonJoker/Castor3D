@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -89,17 +89,17 @@ namespace Castor3D
 		 *\brief		Initialise l'implémentation.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Initialise() = 0;
+		C3D_API virtual bool initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the implementation.
 		 *\~french
 		 *\brief		Nettoie l'implémentation.
 		 */
-		C3D_API virtual void Cleanup() = 0;
+		C3D_API virtual void cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Adds a particle variable.
+		 *\brief		adds a particle variable.
 		 *\param[in]	p_name			The variable name.
 		 *\param[in]	p_type			The variable type.
 		 *\param[in]	p_defaultValue	The variable default value.
@@ -109,9 +109,9 @@ namespace Castor3D
 		 *\param[in]	p_type			Le type de la variable.
 		 *\param[in]	p_defaultValue	La valeur par défaut de la variable.
 		 */
-		C3D_API virtual void AddParticleVariable( Castor::String const & p_name
+		C3D_API virtual void addParticleVariable( castor::String const & p_name
 			, ElementType p_type
-			, Castor::String const & p_defaultValue ) = 0;
+			, castor::String const & p_defaultValue ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the particles.
@@ -124,15 +124,15 @@ namespace Castor3D
 		 *\param[in]	p_total	Le temps total écoulé.
 		 *\return		Le nombre de particules.
 		 */
-		C3D_API virtual uint32_t Update( Castor::Milliseconds const & p_time
-			, Castor::Milliseconds const & p_total ) = 0;
+		C3D_API virtual uint32_t update( castor::Milliseconds const & p_time
+			, castor::Milliseconds const & p_total ) = 0;
 		/**
 		 *\~english
 		 *\return		The implementation type.
 		 *\~french
 		 *\return		Le type d'implémentation.
 		 */
-		inline Type GetType()
+		inline Type getType()
 		{
 			return m_type;
 		}
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le système de particules parent.
 		 */
-		inline ParticleSystem const & GetParent()const
+		inline ParticleSystem const & getParent()const
 		{
 			return m_parent;
 		}

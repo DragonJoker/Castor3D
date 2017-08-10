@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Technique/RenderTechniquePass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -37,7 +37,7 @@ namespace Castor3D
 	\brief		Implémentation d'une passe de reflection mapping.
 	*/
 	class EnvironmentMapPass
-		: Castor::OwnedBy< EnvironmentMap >
+		: castor::OwnedBy< EnvironmentMap >
 	{
 	public:
 		EnvironmentMapPass( EnvironmentMapPass const & )=delete;
@@ -67,13 +67,13 @@ namespace Castor3D
 		 */
 		C3D_API ~EnvironmentMapPass();
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool Initialise( Castor::Size const & p_size );
+		bool initialise( castor::Size const & p_size );
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
+		 *\copydoc		castor3d::ShadowMapPass::doCleanup
 		 */
-		void Cleanup();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -86,14 +86,14 @@ namespace Castor3D
 		 *\param[in]	p_node		Le noeud de base.
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( SceneNode const & p_node, RenderQueueArray & p_queues );
+		C3D_API void update( SceneNode const & p_node, RenderQueueArray & p_queues );
 		/**
 		 *\~english
 		 *\brief		Render function.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		C3D_API void Render();
+		C3D_API void render();
 
 	private:
 		//!\~english	The camera node.

@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <cstddef>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -60,7 +60,7 @@ namespace Castor
 		 *\brief		Initialise le pool avec le nombre d'objets donné.
 		 *\param[in]	p_count	Le compte des objets.
 		 */
-		void Initialise( size_t p_count )noexcept
+		void initialise( size_t p_count )noexcept
 		{
 			m_total = p_count;
 			m_buffer = new uint8_t[m_total + m_total * sizeof( Object )];
@@ -85,11 +85,11 @@ namespace Castor
 		 *\~french
 		 *\brief		Nettoie le pool, rapporte les fuites de mémoire.
 		 */
-		void Cleanup()noexcept
+		void cleanup()noexcept
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				ReportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 				uint8_t * buffer = m_buffer;
 				size_t size = sizeof( Object ) + 1;
 
@@ -97,7 +97,7 @@ namespace Castor
 				{
 					if ( *buffer == ALLOCATED )
 					{
-						ReportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( buffer + 1 ) );
+						reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( buffer + 1 ) );
 					}
 
 					buffer += size;
@@ -114,18 +114,18 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Gives the address an available chunk.
-		 *\remarks		Set the marked byte to "Allocated" state.
+		 *\remarks		set the marked byte to "Allocated" state.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
-		 *\brief		Donne un chunk mémoire disponible.
+		 *\brief		donne un chunk mémoire disponible.
 		 *\remarks		Met l'octet de marquage dans l'état "Alloué".
 		 *\return		nullptr s'il n'y a plus de place disponible, l'adresse mémoire sinon.
 		 */
-		Object * Allocate()noexcept
+		Object * allocate()noexcept
 		{
 			if ( m_freeIndex == m_free )
 			{
-				ReportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
+				reportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
 				return nullptr;
 			}
 
@@ -137,7 +137,7 @@ namespace Castor
 		 *\~english
 		 *\brief		Frees the given memory.
 		 *\remarks		Checks if the given address comes from the pool, and if it has been allocated by the pool, via the marked byte.
-		 *\remarks		Set the marked byte to "Free" state.
+		 *\remarks		set the marked byte to "deallocate" state.
 		 *\param[in]	p_space	The memory to free.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
@@ -147,19 +147,19 @@ namespace Castor
 		 *\param[in]	p_space	La mémoire à libérer.
 		 *\return		true si la mémoire faisait partie du pool.
 		 */
-		bool Deallocate( void * p_space )noexcept
+		bool deallocate( void * p_space )noexcept
 		{
 			if ( p_space )
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					ReportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
 				if ( ptrdiff_t( p_space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( p_space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					ReportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
@@ -170,11 +170,11 @@ namespace Castor
 				{
 					if ( *marked == FREED )
 					{
-						ReportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )p_space );
+						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )p_space );
 						return false;
 					}
 
-					ReportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 

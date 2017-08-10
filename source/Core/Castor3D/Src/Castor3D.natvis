@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-  <Type Name="Castor3D::TUniform&lt;*&gt;">
+  <Type Name="castor3d::TUniform&lt;*&gt;">
     <DisplayString>{{name={m_name} count={m_occurences}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
@@ -12,7 +12,7 @@
     </Expand>
   </Type>
 
-  <Type Name="Castor3D::UniformBufferBinding">
+  <Type Name="castor3d::UniformBufferBinding">
     <DisplayString>{{size={m_size}}}</DisplayString>
     <Expand>
       <Item Name="size">m_size</Item>

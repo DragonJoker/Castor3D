@@ -56,7 +56,7 @@ namespace GuiCommon
 	\brief Analyseur de fichiers de langage
 	*/
 	class LanguageFileParser
-		: public Castor::FileParser
+		: public castor::FileParser
 	{
 	private:
 		StcContext * m_pStcContext;
@@ -69,15 +69,15 @@ namespace GuiCommon
 		//@}
 
 	private:
-		virtual void DoInitialiseParser( Castor::TextFile & p_file );
-		virtual void DoCleanupParser();
-		virtual bool DoDiscardParser( Castor::String const & p_line );
-		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_line ) )
+		virtual void doInitialiseParser( castor::TextFile & p_file );
+		virtual void doCleanupParser();
+		virtual bool doDiscardParser( castor::String const & p_line );
+		virtual bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( p_line ) )
 		{
 			return false;
 		}
-		virtual void DoValidate();
-		virtual Castor::String DoGetSectionName( uint32_t p_section );
+		virtual void doValidate();
+		virtual castor::String doGetSectionName( uint32_t p_section );
 	};
 
 	DECLARE_ATTRIBUTE_PARSER( Root_Language )

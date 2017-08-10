@@ -57,32 +57,32 @@ namespace CastorCom
 		 */
 		virtual ~CMaterial();
 
-		inline Castor3D::MaterialSPtr GetInternal()const
+		inline castor3d::MaterialSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::MaterialSPtr internal )
+		inline void setInternal( castor3d::MaterialSPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY_GET( PassCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Material::GetPassCount ) );
+		COM_PROPERTY_GET( PassCount, unsigned int, make_getter( m_internal.get(), &castor3d::Material::getPassCount ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
-		STDMETHOD( CreatePass )( /* [out, retval] */ IPass ** pVal );
-		STDMETHOD( GetPass )( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal );
-		STDMETHOD( DestroyPass )( /* [in] */ unsigned int val );
+		STDMETHOD( createPass )( /* [out, retval] */ IPass ** pVal );
+		STDMETHOD( getPass )( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal );
+		STDMETHOD( destroyPass )( /* [in] */ unsigned int val );
 
 	private:
-		Castor3D::MaterialSPtr m_internal;
+		castor3d::MaterialSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Material ), CMaterial );
 
-	DECLARE_VARIABLE_PTR_GETTER( Material, Castor3D, Material );
-	DECLARE_VARIABLE_PTR_PUTTER( Material, Castor3D, Material );
+	DECLARE_VARIABLE_PTR_GETTER( Material, castor3d, Material );
+	DECLARE_VARIABLE_PTR_PUTTER( Material, castor3d, Material );
 }
 
 #endif

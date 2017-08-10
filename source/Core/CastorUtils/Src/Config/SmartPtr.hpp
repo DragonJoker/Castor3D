@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Macros.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor
 	\brief		Destructeur zombie
 	\remark		Utilisé en tant que paramètre à shared_ptr, afin d'avoir une désallocation zombie (ne fait que mettre le pointeur à nullptr, sans le désallouer)
 	*/
-	struct dummy_dtor
+	struct DummyDtor
 	{
 		template< typename T >
 		inline void operator()( T * p_pPointer )throw()
@@ -46,7 +46,7 @@ namespace Castor
 			p_pPointer = 0;
 		}
 	};
-	CU_API extern dummy_dtor g_dummyDtor;
+	CU_API extern DummyDtor g_dummyDtor;
 }
 
 #endif

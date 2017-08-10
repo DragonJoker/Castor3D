@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include <Graphics/Colour.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	*\author	Sylvain DOREMUS
@@ -190,7 +190,7 @@ namespace Castor3D
 		eLeft,
 		eUp,
 		eRight,
-		eDown,
+		edown,
 		eSelect,
 		ePrint,
 		eExecute,

@@ -27,12 +27,12 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace Lwo
 {
-	LwoImporter::LwoImporter( Castor3D::Engine & p_engine )
+	LwoImporter::LwoImporter( castor3d::Engine & p_engine )
 		: Importer( p_engine )
 		, m_file( NULL )
 		, m_bIgnored( false )
@@ -44,102 +44,102 @@ namespace Lwo
 	{
 	}
 
-	ImporterUPtr LwoImporter::Create( Engine & p_engine )
+	ImporterUPtr LwoImporter::create( Engine & p_engine )
 	{
 		return std::make_unique< LwoImporter >( p_engine );
 	}
 
-	bool LwoImporter::DoImportScene( Scene & p_scene )
+	bool LwoImporter::doImportScene( Scene & p_scene )
 	{
-		auto mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_LWO" ) );
-		bool result = DoImportMesh( *mesh );
+		auto mesh = p_scene.getMeshCache().add( cuT( "Mesh_LWO" ) );
+		bool result = doImportMesh( *mesh );
 
 		if ( result )
 		{
-			SceneNodeSPtr node = p_scene.GetSceneNodeCache().Add( mesh->GetName(), p_scene.GetObjectRootNode() );
-			GeometrySPtr geometry = p_scene.GetGeometryCache().Add( mesh->GetName(), node, nullptr );
-			geometry->SetMesh( mesh );
-			m_geometries.insert( { geometry->GetName(), geometry } );
+			SceneNodeSPtr node = p_scene.getSceneNodeCache().add( mesh->getName(), p_scene.getObjectRootNode() );
+			GeometrySPtr geometry = p_scene.getGeometryCache().add( mesh->getName(), node, nullptr );
+			geometry->setMesh( mesh );
+			m_geometries.insert( { geometry->getName(), geometry } );
 		}
 
 		return result;
 	}
 
-	bool LwoImporter::DoImportMesh( Mesh & p_mesh )
+	bool LwoImporter::doImportMesh( Mesh & p_mesh )
 	{
 		UIntArray faces;
 		RealArray sizes;
-		String nodeName = m_fileName.GetFileName();
-		String meshName = m_fileName.GetFileName();
-		String materialName = m_fileName.GetFileName();
+		String nodeName = m_fileName.getFileName();
+		String meshName = m_fileName.getFileName();
+		String materialName = m_fileName.getFileName();
 		m_file = new BinaryFile( m_fileName, File::OpenMode::eRead );
 		stLWO_CHUNK currentChunk;
 		bool result{ false };
 
-		if ( m_file->IsOk() )
+		if ( m_file->isOk() )
 		{
-			Logger::LogDebug( cuT( "**************************************************" ) );
-			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			DoRead( currentChunk );
+			Logger::logDebug( cuT( "**************************************************" ) );
+			Logger::logDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
+			doRead( currentChunk );
 			char name[5] = { 0, 0, 0, 0 , 0 };
-			currentChunk.m_read += UI4( m_file->ReadArray( name, 4 ) );
+			currentChunk.m_read += UI4( m_file->readArray( name, 4 ) );
 
-			if ( currentChunk.m_id == eID_TAG_FORM && currentChunk.m_size == m_file->GetLength() - 8 && std::string( name ) == "LWO2" )
+			if ( currentChunk.m_id == eID_TAG_FORM && currentChunk.m_size == m_file->getLength() - 8 && std::string( name ) == "LWO2" )
 			{
-				DoProcess( p_mesh, currentChunk );
-				p_mesh.ComputeNormals();
+				doProcess( p_mesh, currentChunk );
+				p_mesh.computeNormals();
 			}
 
-			Logger::LogDebug( cuT( "**************************************************" ) );
+			Logger::logDebug( cuT( "**************************************************" ) );
 			result = true;
 		}
 
 		return result;
 	}
 
-	bool LwoImporter::DoRead( stLWO_CHUNK & p_chunk )
+	bool LwoImporter::doRead( stLWO_CHUNK & p_chunk )
 	{
-		bool result = m_file->IsOk();
+		bool result = m_file->isOk();
 
 		if ( result )
 		{
 			p_chunk.m_read = 0;
-			m_file->Read(	p_chunk.m_id );
-			BigEndianToSystemEndian( p_chunk.m_id );
-			result = DoIsTagId( p_chunk.m_id ) && m_file->IsOk();
+			m_file->read(	p_chunk.m_id );
+			bigEndianToSystemEndian( p_chunk.m_id );
+			result = doIsTagId( p_chunk.m_id ) && m_file->isOk();
 			char id[5];
 			StringStream toLog;
-			DoToStr( id, p_chunk.m_id );
+			doToStr( id, p_chunk.m_id );
 
 			if ( result )
 			{
-				m_file->Read(	p_chunk.m_size );
-				BigEndianToSystemEndian( p_chunk.m_size );
+				m_file->read(	p_chunk.m_size );
+				bigEndianToSystemEndian( p_chunk.m_size );
 				toLog << cuT( "Chunk : " ) << id << cuT( ", " ) << p_chunk.m_size;
-				result = m_file->IsOk();
+				result = m_file->isOk();
 			}
 			else
 			{
 				toLog << cuT( "Invalid chunk : " ) << id;
-				m_file->Seek( -4, File::OffsetMode::eCurrent );
+				m_file->seek( -4, File::OffsetMode::eCurrent );
 			}
 
-			Logger::LogDebug( toLog );
+			Logger::logDebug( toLog );
 		}
 
 		return result;
 	}
 
-	void LwoImporter::DoProcess( Mesh & p_mesh, stLWO_CHUNK & p_chunk )
+	void LwoImporter::doProcess( Mesh & p_mesh, stLWO_CHUNK & p_chunk )
 	{
 		stLWO_CHUNK currentChunk;
-		bool ok = m_file->IsOk();
+		bool ok = m_file->isOk();
 
 		while ( p_chunk.m_read < p_chunk.m_size && ok )
 		{
-			if ( DoRead( currentChunk ) )
+			if ( doRead( currentChunk ) )
 			{
-				if ( !DoIsValidChunk( currentChunk, p_chunk ) )
+				if ( !doIsValidChunk( currentChunk, p_chunk ) )
 				{
 					ok = false;
 				}
@@ -148,7 +148,7 @@ namespace Lwo
 					switch ( currentChunk.m_id )
 					{
 					case eID_TAG_LAYR:
-						DoParseLayr( currentChunk );
+						doParseLayr( currentChunk );
 						break;
 
 					default:
@@ -158,32 +158,32 @@ namespace Lwo
 							{
 							case eID_TAG_LAYR:
 							case eID_TAG_SURF:
-								DoParseSurf( currentChunk );
+								doParseSurf( currentChunk );
 								break;
 
 							case eID_TAG_CLIP:
-								DoParseClip( currentChunk );
+								doParseClip( currentChunk );
 								break;
 
 							case eID_TAG_PNTS:
-								m_pSubmesh = p_mesh.CreateSubmesh();
-								DoParsePnts( currentChunk );
+								m_pSubmesh = p_mesh.createSubmesh();
+								doParsePnts( currentChunk );
 								break;
 
 							case eID_TAG_VMAP:
-								DoParseVMap( currentChunk );
+								doParseVMap( currentChunk );
 								break;
 
 							case eID_TAG_POLS:
-								DoParsePols( currentChunk );
+								doParsePols( currentChunk );
 								break;
 
 							case eID_TAG_PTAG:
-								DoParsePTag( currentChunk );
+								doParsePTag( currentChunk );
 								break;
 
 							case eID_TAG_TAGS:
-								DoParseTags( currentChunk );
+								doParseTags( currentChunk );
 								break;
 
 							case eID_TAG_ENVL:
@@ -195,19 +195,19 @@ namespace Lwo
 							case eID_TAG_TEXT:
 							case eID_TAG_ICON:
 							default:
-								DoDiscard( currentChunk );
+								doDiscard( currentChunk );
 								break;
 							}
 						}
 						else
 						{
-							DoDiscard( currentChunk );
+							doDiscard( currentChunk );
 						}
 					}
 				}
 
 				p_chunk.m_read += currentChunk.m_read + sizeof( eID_TAG ) + sizeof( UI4 );
-				ok = m_file->IsOk();
+				ok = m_file->isOk();
 			}
 			else
 			{
@@ -217,87 +217,87 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 
 		for ( auto it : m_arraySubmeshByMatName )
 		{
-			auto material = p_mesh.GetScene()->GetMaterialView().Find( string::string_cast< xchar >( it.first ) );
+			auto material = p_mesh.getScene()->getMaterialView().find( string::stringCast< xchar >( it.first ) );
 
 			if ( material )
 			{
-				it.second->SetDefaultMaterial( material );
+				it.second->setDefaultMaterial( material );
 			}
 		}
 	}
 
-	void LwoImporter::DoDiscard( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doDiscard( stLWO_CHUNK & p_chunk )
 	{
 		if ( p_chunk.m_size > p_chunk.m_read )
 		{
 			UI4 size = p_chunk.m_size - p_chunk.m_read;
-			std::size_t remaining = std::size_t( m_file->GetLength() - m_file->Tell() );
+			std::size_t remaining = std::size_t( m_file->getLength() - m_file->tell() );
 
 			try
 			{
 				if ( size <= remaining && size > 0 )
 				{
-					m_file->Seek( size, Castor::File::OffsetMode::eCurrent );
+					m_file->seek( size, castor::File::OffsetMode::eCurrent );
 				}
 				else
 				{
-					m_file->Seek( 0, Castor::File::OffsetMode::eEnd );
+					m_file->seek( 0, castor::File::OffsetMode::eEnd );
 					throw std::range_error( "Bad chunk size" );
 				}
 			}
 			catch ( std::exception & exc )
 			{
-				Castor::Logger::LogDebug( std::stringstream() << "Exception caught when discarding chunk: " << exc.what() );
+				castor::Logger::logDebug( std::stringstream() << "Exception caught when discarding chunk: " << exc.what() );
 			}
 			catch ( ... )
 			{
-				Castor::Logger::LogDebug( cuT( "Exception caught when discarding chunk" ) );
+				castor::Logger::logDebug( cuT( "Exception caught when discarding chunk" ) );
 			}
 
 			p_chunk.m_read = p_chunk.m_size;
 		}
 	}
 
-	void LwoImporter::DoDiscard( stLWO_SUBCHUNK & p_chunk )
+	void LwoImporter::doDiscard( stLWO_SUBCHUNK & p_chunk )
 	{
 		if ( p_chunk.m_size > p_chunk.m_read )
 		{
 			UI4 size = p_chunk.m_size - p_chunk.m_read;
-			std::size_t remaining = std::size_t( m_file->GetLength() - m_file->Tell() );
+			std::size_t remaining = std::size_t( m_file->getLength() - m_file->tell() );
 
 			try
 			{
 				if ( size <= remaining && size > 0 )
 				{
-					m_file->Seek( size, Castor::File::OffsetMode::eCurrent );
+					m_file->seek( size, castor::File::OffsetMode::eCurrent );
 				}
 				else
 				{
-					m_file->Seek( 0, Castor::File::OffsetMode::eEnd );
+					m_file->seek( 0, castor::File::OffsetMode::eEnd );
 					throw std::range_error( "	Bad subchunk size" );
 				}
 			}
 			catch ( std::exception & exc )
 			{
-				Castor::Logger::LogDebug( std::stringstream() << "	Exception caught when discarding subchunk: " << exc.what() );
+				castor::Logger::logDebug( std::stringstream() << "	Exception caught when discarding subchunk: " << exc.what() );
 			}
 			catch ( ... )
 			{
-				Castor::Logger::LogDebug( cuT( "	Exception caught when discarding subchunk" ) );
+				castor::Logger::logDebug( cuT( "	Exception caught when discarding subchunk" ) );
 			}
 
 			p_chunk.m_read = p_chunk.m_size;
 		}
 	}
 
-	bool LwoImporter::DoIsValidChunk( stLWO_CHUNK & p_chunk, stLWO_CHUNK & p_parent )
+	bool LwoImporter::doIsValidChunk( stLWO_CHUNK & p_chunk, stLWO_CHUNK & p_parent )
 	{
-		bool result = DoIsTagId( p_chunk.m_id );
+		bool result = doIsTagId( p_chunk.m_id );
 
 		if ( result )
 		{
@@ -307,7 +307,7 @@ namespace Lwo
 		return result;
 	}
 
-	void LwoImporter::DoToStr( char p_szId[5], UI4 p_uiId )
+	void LwoImporter::doToStr( char p_szId[5], UI4 p_uiId )
 	{
 		p_szId[0] = ( ( uint8_t * )&p_uiId )[3];
 		p_szId[1] = ( ( uint8_t * )&p_uiId )[2];
@@ -316,7 +316,7 @@ namespace Lwo
 		p_szId[4] = 0;
 	}
 
-	bool LwoImporter::DoRead( std::string & p_strString )
+	bool LwoImporter::doRead( std::string & p_strString )
 	{
 		bool result = true;
 		static char szTmp[1000];
@@ -324,15 +324,15 @@ namespace Lwo
 		char cTmp = 1;
 		std::size_t index = 0;
 
-		while ( cTmp != 0 && m_file->IsOk() )
+		while ( cTmp != 0 && m_file->isOk() )
 		{
-			m_file->Read( cTmp );
+			m_file->read( cTmp );
 			szTmp[index++] = cTmp;
 		}
 
-		if ( !m_file->IsOk() )
+		if ( !m_file->isOk() )
 		{
-			m_file->Seek( 1 - index, File::OffsetMode::eCurrent );
+			m_file->seek( 1 - index, File::OffsetMode::eCurrent );
 			result = false;
 		}
 		else
@@ -341,65 +341,65 @@ namespace Lwo
 
 			if ( result && p_strString.size() % 2 == 0 )
 			{
-				m_file->Seek( 1, File::OffsetMode::eCurrent );
+				m_file->seek( 1, File::OffsetMode::eCurrent );
 			}
 		}
 
 		return result;
 	}
 
-	bool LwoImporter::DoRead( String const & p_tabs, stLWO_SUBCHUNK & p_subchunk )
+	bool LwoImporter::doRead( String const & p_tabs, stLWO_SUBCHUNK & p_subchunk )
 	{
-		bool result = m_file->IsOk();
+		bool result = m_file->isOk();
 
 		if ( result )
 		{
 			p_subchunk.m_read = 0;
-			m_file->Read( p_subchunk.m_id );
-			BigEndianToSystemEndian( p_subchunk.m_id );
-			result = DoIsTagId( p_subchunk.m_id ) && m_file->IsOk();
+			m_file->read( p_subchunk.m_id );
+			bigEndianToSystemEndian( p_subchunk.m_id );
+			result = doIsTagId( p_subchunk.m_id ) && m_file->isOk();
 			char id[5];
 			StringStream toLog;
-			DoToStr( id, p_subchunk.m_id );
+			doToStr( id, p_subchunk.m_id );
 
 			if ( result )
 			{
-				m_file->Read(	p_subchunk.m_size );
-				BigEndianToSystemEndian( p_subchunk.m_size );
+				m_file->read(	p_subchunk.m_size );
+				bigEndianToSystemEndian( p_subchunk.m_size );
 				toLog << p_tabs << cuT( "Subchunk : " ) << id << cuT( ", " ) << p_subchunk.m_size;
-				result = m_file->IsOk();
+				result = m_file->isOk();
 			}
 			else
 			{
 				toLog << p_tabs << cuT( "Invalid subchunk : " ) << id;
-				m_file->Seek( -4, File::OffsetMode::eCurrent );
+				m_file->seek( -4, File::OffsetMode::eCurrent );
 			}
 
-			Logger::LogDebug( toLog );
+			Logger::logDebug( toLog );
 		}
 
 		return result;
 	}
 
-	UI2 LwoImporter::DoReadVX( UI4 & p_index )
+	UI2 LwoImporter::doReadVX( UI4 & p_index )
 	{
 		UI2 result;
 		p_index = 0;
 		uint8_t byTest;
-		m_file->Read( byTest );
+		m_file->read( byTest );
 
 		if ( byTest == 0xFF )
 		{
-			m_file->Read( p_index );
-			BigEndianToSystemEndian( p_index );
+			m_file->read( p_index );
+			bigEndianToSystemEndian( p_index );
 			result = sizeof( UI4 );
 		}
 		else
 		{
-			m_file->Seek( -1, File::OffsetMode::eCurrent );
+			m_file->seek( -1, File::OffsetMode::eCurrent );
 			UI2 ui2Index = 0;
-			m_file->Read( ui2Index );
-			BigEndianToSystemEndian( ui2Index );
+			m_file->read( ui2Index );
+			bigEndianToSystemEndian( ui2Index );
 			p_index = ui2Index;
 			result = sizeof( UI2 );
 		}
@@ -407,7 +407,7 @@ namespace Lwo
 		return result;
 	}
 
-	bool LwoImporter::DoIsChunk( eID_TAG p_eId )
+	bool LwoImporter::doIsChunk( eID_TAG p_eId )
 	{
 		bool result = false;
 
@@ -440,7 +440,7 @@ namespace Lwo
 		return result;
 	}
 
-	bool LwoImporter::DoIsTagId( eID_TAG p_eId )
+	bool LwoImporter::doIsTagId( eID_TAG p_eId )
 	{
 		bool result = false;
 
@@ -577,23 +577,23 @@ namespace Lwo
 		return result;
 	}
 
-	void LwoImporter::DoParsePTag( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParsePTag( stLWO_CHUNK & p_chunk )
 	{
 		ePTAG_TYPE eType;
-		bool ok = m_file->IsOk();
+		bool ok = m_file->isOk();
 
 		if ( ok )
 		{
-			p_chunk.m_read += UI4( m_file->Read( eType ) );
-			ok = m_file->IsOk();
+			p_chunk.m_read += UI4( m_file->read( eType ) );
+			ok = m_file->isOk();
 		}
 
 		if ( ok )
 		{
 			char szType[5];
-			BigEndianToSystemEndian( eType );
-			DoToStr( szType, eType );
-			Logger::LogDebug( std::stringstream() << "\tType: " << szType );
+			bigEndianToSystemEndian( eType );
+			doToStr( szType, eType );
+			Logger::logDebug( std::stringstream() << "\tType: " << szType );
 
 			if ( eType == ePTAG_TYPE_SURF )
 			{
@@ -601,25 +601,25 @@ namespace Lwo
 				{
 					UI2 usTag;
 					UI4 uiVx;
-					p_chunk.m_read += DoReadVX( uiVx );
-					ok = m_file->IsOk();
+					p_chunk.m_read += doReadVX( uiVx );
+					ok = m_file->isOk();
 
 					if ( ok )
 					{
-						p_chunk.m_read += UI4( m_file->Read( usTag ) );
-						ok = m_file->IsOk();
+						p_chunk.m_read += UI4( m_file->read( usTag ) );
+						ok = m_file->isOk();
 					}
 
 					if ( ok )
 					{
-						BigEndianToSystemEndian( usTag );
-						//Logger::LogDebug( cuT( "\tPOLS Index : %d" ), uiVx );
-						//Logger::LogDebug( cuT( "\tTAGS Index : %d" ), usTag );
+						bigEndianToSystemEndian( usTag );
+						//Logger::logDebug( cuT( "\tPOLS Index : %d" ), uiVx );
+						//Logger::logDebug( cuT( "\tTAGS Index : %d" ), usTag );
 
 						if ( usTag < m_arrayTags.size() )
 						{
 							StringStream toLog( cuT( "\tTAG Name: " ) );
-							Logger::LogDebug( toLog << m_arrayTags[usTag].c_str() );
+							Logger::logDebug( toLog << m_arrayTags[usTag].c_str() );
 							m_arraySubmeshByMatName.push_back( std::make_pair( m_arrayTags[usTag], m_pSubmesh ) );
 						}
 					}
@@ -633,43 +633,43 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 	}
 
-	UI2 LwoImporter::DoReadBlockHeader( stLWO_SUBCHUNK & p_subchunk, eTEX_CHANNEL & p_channel )
+	UI2 LwoImporter::doReadBlockHeader( stLWO_SUBCHUNK & p_subchunk, eTEX_CHANNEL & p_channel )
 	{
 		std::string strOrdinal;
 		stLWO_SUBCHUNK currentSubchunk;
 		UI2 usReturn = 0;
-		bool ok = DoRead( cuT( "		" ), p_subchunk );
+		bool ok = doRead( cuT( "		" ), p_subchunk );
 
 		if ( ok )
 		{
 			usReturn += sizeof( eID_TAG ) + sizeof( UI2 );
-			ok	= DoRead( strOrdinal );
+			ok	= doRead( strOrdinal );
 		}
 
 		if ( ok )
 		{
 			p_subchunk.m_read += UI2( strOrdinal.size() + 1 + ( 1 - strOrdinal.size() % 2 ) );
-			Logger::LogDebug( StringStream() << cuT( "			Header ordinal: 0x" ) << std::hex << int( strOrdinal[0] ) );
+			Logger::logDebug( StringStream() << cuT( "			Header ordinal: 0x" ) << std::hex << int( strOrdinal[0] ) );
 		}
 
 		while ( ok && p_subchunk.m_read < p_subchunk.m_size )
 		{
-			if ( DoRead( cuT( "			" ), currentSubchunk ) )
+			if ( doRead( cuT( "			" ), currentSubchunk ) )
 			{
 				switch ( currentSubchunk.m_id )
 				{
 				default:
-					DoDiscard( currentSubchunk );
+					doDiscard( currentSubchunk );
 					break;
 
 				case eID_TAG_BLOK_CHAN:
-					currentSubchunk.m_read += UI2( m_file->Read( p_channel ) );
-					BigEndianToSystemEndian( p_channel );
-					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_channel );
+					currentSubchunk.m_read += UI2( m_file->read( p_channel ) );
+					bigEndianToSystemEndian( p_channel );
+					Logger::logDebug( StringStream() << cuT( "				Channel: " ) << p_channel );
 					break;
 				}
 
@@ -683,26 +683,26 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_subchunk );
+			doDiscard( p_subchunk );
 		}
 
 		usReturn += p_subchunk.m_read;
 		return usReturn;
 	}
 
-	void LwoImporter::DoReadTMap( stLWO_SUBCHUNK & p_subchunk )
+	void LwoImporter::doReadTMap( stLWO_SUBCHUNK & p_subchunk )
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		bool ok = true;
 
 		while ( ok && p_subchunk.m_read < p_subchunk.m_size )
 		{
-			if ( DoRead( cuT( "			" ), currentSubchunk ) )
+			if ( doRead( cuT( "			" ), currentSubchunk ) )
 			{
 				//switch( currentSubchunk.m_id )
 				//{
 				//default:
-				DoDiscard( currentSubchunk );
+				doDiscard( currentSubchunk );
 				//	break;
 				//}
 				p_subchunk.m_read += currentSubchunk.m_read + sizeof( eID_TAG ) + sizeof( UI2 );
@@ -715,29 +715,29 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_subchunk );
+			doDiscard( p_subchunk );
 		}
 	}
 
-	void LwoImporter::DoReadIMap( stLWO_SUBCHUNK & p_subchunk, eTEX_CHANNEL & p_channel )
+	void LwoImporter::doReadIMap( stLWO_SUBCHUNK & p_subchunk, eTEX_CHANNEL & p_channel )
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		bool ok = true;
 
 		while ( ok && p_subchunk.m_read < p_subchunk.m_size )
 		{
-			if ( DoRead( cuT( "			" ), currentSubchunk ) )
+			if ( doRead( cuT( "			" ), currentSubchunk ) )
 			{
 				switch ( currentSubchunk.m_id )
 				{
 				default:
-					DoDiscard( currentSubchunk );
+					doDiscard( currentSubchunk );
 					break;
 
 				case eID_TAG_BLOK_CHAN:
-					currentSubchunk.m_read += UI2( m_file->Read( p_channel ) );
-					BigEndianToSystemEndian( p_channel );
-					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_channel );
+					currentSubchunk.m_read += UI2( m_file->read( p_channel ) );
+					bigEndianToSystemEndian( p_channel );
+					Logger::logDebug( StringStream() << cuT( "				Channel: " ) << p_channel );
 					break;
 				}
 
@@ -751,23 +751,23 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_subchunk );
+			doDiscard( p_subchunk );
 		}
 	}
 
-	void LwoImporter::DoReadProc( stLWO_SUBCHUNK & p_subchunk )
+	void LwoImporter::doReadProc( stLWO_SUBCHUNK & p_subchunk )
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		bool ok = true;
 
 		while ( ok && p_subchunk.m_read < p_subchunk.m_size )
 		{
-			if ( DoRead( cuT( "			" ), currentSubchunk ) )
+			if ( doRead( cuT( "			" ), currentSubchunk ) )
 			{
 				//switch( currentSubchunk.m_id )
 				//{
 				//default:
-				DoDiscard( currentSubchunk );
+				doDiscard( currentSubchunk );
 				//	break;
 				//}
 				p_subchunk.m_read += currentSubchunk.m_read + sizeof( eID_TAG ) + sizeof( UI2 );
@@ -780,23 +780,23 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_subchunk );
+			doDiscard( p_subchunk );
 		}
 	}
 
-	void LwoImporter::DoReadGrad( stLWO_SUBCHUNK & p_subchunk )
+	void LwoImporter::doReadGrad( stLWO_SUBCHUNK & p_subchunk )
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		bool ok = true;
 
 		while ( ok && p_subchunk.m_read < p_subchunk.m_size )
 		{
-			if ( DoRead( cuT( "			" ), currentSubchunk ) )
+			if ( doRead( cuT( "			" ), currentSubchunk ) )
 			{
 				//switch( currentSubchunk.m_id )
 				//{
 				//default:
-				DoDiscard( currentSubchunk );
+				doDiscard( currentSubchunk );
 				//	break;
 				//}
 				p_subchunk.m_read += currentSubchunk.m_read + sizeof( eID_TAG ) + sizeof( UI2 );
@@ -809,23 +809,23 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_subchunk );
+			doDiscard( p_subchunk );
 		}
 	}
 
-	void LwoImporter::DoReadShdr( stLWO_SUBCHUNK & p_subchunk )
+	void LwoImporter::doReadShdr( stLWO_SUBCHUNK & p_subchunk )
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		bool ok = true;
 
 		while ( ok && p_subchunk.m_read < p_subchunk.m_size )
 		{
-			if ( DoRead( cuT( "			" ), currentSubchunk ) )
+			if ( doRead( cuT( "			" ), currentSubchunk ) )
 			{
 				//switch( currentSubchunk.m_id )
 				//{
 				//default:
-				DoDiscard( currentSubchunk );
+				doDiscard( currentSubchunk );
 				//	break;
 				//}
 				p_subchunk.m_read += currentSubchunk.m_read + sizeof( eID_TAG ) + sizeof( UI2 );
@@ -838,44 +838,44 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_subchunk );
+			doDiscard( p_subchunk );
 		}
 	}
 
-	void LwoImporter::DoSetChannel( TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel )
+	void LwoImporter::doSetChannel( TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel )
 	{
 		if ( p_pTexture )
 		{
 			switch ( p_channel )
 			{
 			case eTEX_CHANNEL_COLR:
-				p_pTexture->SetChannel( TextureChannel::eDiffuse );
+				p_pTexture->setChannel( TextureChannel::eDiffuse );
 				break;
 
 			case eTEX_CHANNEL_DIFF:
-				p_pTexture->SetChannel( TextureChannel::eDiffuse );
+				p_pTexture->setChannel( TextureChannel::eDiffuse );
 				break;
 
 			case eTEX_CHANNEL_SPEC:
-				p_pTexture->SetChannel( TextureChannel::eSpecular );
+				p_pTexture->setChannel( TextureChannel::eSpecular );
 				break;
 
 			case eTEX_CHANNEL_GLOS:
-				p_pTexture->SetChannel( TextureChannel::eGloss );
+				p_pTexture->setChannel( TextureChannel::eGloss );
 				break;
 
 			case eTEX_CHANNEL_TRAN:
-				p_pTexture->SetChannel( TextureChannel::eOpacity );
+				p_pTexture->setChannel( TextureChannel::eOpacity );
 				break;
 
 			case eTEX_CHANNEL_BUMP:
-				p_pTexture->SetChannel( TextureChannel::eNormal );
+				p_pTexture->setChannel( TextureChannel::eNormal );
 				break;
 			}
 		}
 	}
 
-	void LwoImporter::DoReadBlock( stLWO_SUBCHUNK & p_subchunk, PassSPtr p_pass )
+	void LwoImporter::doReadBlock( stLWO_SUBCHUNK & p_subchunk, PassSPtr p_pass )
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		stLWO_SUBCHUNK blockHeader;
@@ -884,48 +884,48 @@ namespace Lwo
 		bool ok = true;
 		TextureUnitSPtr unit;
 		ImageVxMap::iterator it;
-		p_subchunk.m_read += DoReadBlockHeader( blockHeader, eChannel );
+		p_subchunk.m_read += doReadBlockHeader( blockHeader, eChannel );
 
 		while ( ok && p_subchunk.m_read < p_subchunk.m_size )
 		{
-			if ( DoRead( cuT( "		" ), currentSubchunk ) )
+			if ( doRead( cuT( "		" ), currentSubchunk ) )
 			{
 				switch ( currentSubchunk.m_id )
 				{
 				case eID_TAG_BLOK_TMAP:
-					DoReadTMap( currentSubchunk );
+					doReadTMap( currentSubchunk );
 					break;
 
 				case eID_TAG_BLOK_IMAP:
-					DoReadIMap( currentSubchunk, eChannel );
+					doReadIMap( currentSubchunk, eChannel );
 					break;
 
 				case eID_TAG_BLOK_PROC:
-					DoReadProc( currentSubchunk );
+					doReadProc( currentSubchunk );
 					break;
 
 				case eID_TAG_BLOK_GRAD:
-					DoReadGrad( currentSubchunk );
+					doReadGrad( currentSubchunk );
 					break;
 
 				case eID_TAG_BLOK_SHDR:
-					DoReadShdr( currentSubchunk );
+					doReadShdr( currentSubchunk );
 					break;
 
 				case eID_TAG_BLOK_IMAG:
-					currentSubchunk.m_read += DoReadVX( uiVx );
+					currentSubchunk.m_read += doReadVX( uiVx );
 					it = m_mapImages.find( uiVx );
 
 					if ( it != m_mapImages.end() )
 					{
 						StringStream toLog( cuT( "			Texture found: " ) );
-						Logger::LogDebug( toLog << it->second->GetPath().c_str() );
-						unit = std::make_shared< TextureUnit >( *GetEngine() );
-						auto texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
-						texture->SetSource( it->second->GetPixels() );
-						unit->SetTexture( texture );
-						DoSetChannel( unit, eChannel );
-						p_pass->AddTextureUnit( unit );
+						Logger::logDebug( toLog << it->second->getPath().c_str() );
+						unit = std::make_shared< TextureUnit >( *getEngine() );
+						auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+						texture->setSource( it->second->getPixels() );
+						unit->setTexture( texture );
+						doSetChannel( unit, eChannel );
+						p_pass->addTextureUnit( unit );
 					}
 					else
 					{
@@ -935,10 +935,10 @@ namespace Lwo
 					break;
 
 				case eID_TAG_BLOK_CHAN:
-					currentSubchunk.m_read += UI2( m_file->Read( eChannel ) );
-					BigEndianToSystemEndian( eChannel );
-					Logger::LogDebug( StringStream() << cuT( "			Channel: " ) << eChannel );
-					DoSetChannel( unit, eChannel );
+					currentSubchunk.m_read += UI2( m_file->read( eChannel ) );
+					bigEndianToSystemEndian( eChannel );
+					Logger::logDebug( StringStream() << cuT( "			Channel: " ) << eChannel );
+					doSetChannel( unit, eChannel );
 					break;
 
 				case eID_TAG_BLOK_PROJ:
@@ -968,7 +968,7 @@ namespace Lwo
 				case eID_TAG_BLOK_FALL:
 				case eID_TAG_BLOK_CSYS:
 				default:
-					DoDiscard( currentSubchunk );
+					doDiscard( currentSubchunk );
 					break;
 				}
 
@@ -982,35 +982,35 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_subchunk );
+			doDiscard( p_subchunk );
 		}
 	}
 
-	void LwoImporter::DoParseTags( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParseTags( stLWO_CHUNK & p_chunk )
 	{
 		std::string strTag;
-		bool ok = m_file->IsOk();
+		bool ok = m_file->isOk();
 
 		while ( ok && p_chunk.m_read < p_chunk.m_size )
 		{
-			ok = DoRead( strTag );
+			ok = doRead( strTag );
 
 			if ( ok )
 			{
 				p_chunk.m_read += UI4( strTag.size() + 1 + ( 1 - strTag.size() % 2 ) );
 				m_arrayTags.push_back( strTag );
 				StringStream toLog( cuT( "\tName : " ) );
-				Logger::LogDebug( toLog << strTag.c_str() );
+				Logger::logDebug( toLog << strTag.c_str() );
 			}
 		}
 
 		if ( !ok )
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 	}
 
-	void LwoImporter::DoParseSurf( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParseSurf( stLWO_CHUNK & p_chunk )
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		stLWO_SUBCHUNK blockHeader;
@@ -1022,69 +1022,69 @@ namespace Lwo
 		float fSpec = 0;
 		float fGlos = 0;
 		UI2 usSide = 1;
-		bool ok = DoRead( m_strName );
+		bool ok = doRead( m_strName );
 
 		if ( ok )
 		{
 			p_chunk.m_read += UI4( m_strName.size() + 1 + ( 1 - m_strName.size() % 2 ) );
-			ok = DoRead( m_strSource );
+			ok = doRead( m_strSource );
 		}
 
 		if ( ok )
 		{
 			p_chunk.m_read += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
-			Logger::LogDebug( cuT( "	Name : " ) + string::string_cast< xchar >( m_strName ) );
-			Logger::LogDebug( cuT( "	Source : " ) + string::string_cast< xchar >( m_strSource ) );
-			pMaterial = GetEngine()->GetMaterialCache().Add( string::string_cast< xchar >( m_strName ), MaterialType::eLegacy );
-			REQUIRE( pMaterial->GetType() == MaterialType::eLegacy );
-			pass = pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
+			Logger::logDebug( cuT( "	Name : " ) + string::stringCast< xchar >( m_strName ) );
+			Logger::logDebug( cuT( "	Source : " ) + string::stringCast< xchar >( m_strSource ) );
+			pMaterial = getEngine()->getMaterialCache().add( string::stringCast< xchar >( m_strName ), MaterialType::eLegacy );
+			REQUIRE( pMaterial->getType() == MaterialType::eLegacy );
+			pass = pMaterial->getTypedPass< MaterialType::eLegacy >( 0u );
 		}
 
 		while ( ok && p_chunk.m_read < p_chunk.m_size )
 		{
-			if ( DoRead( cuT( "	" ), currentSubchunk ) )
+			if ( doRead( cuT( "	" ), currentSubchunk ) )
 			{
 				switch ( currentSubchunk.m_id )
 				{
 				case eID_TAG_SURF_COLR:
-					currentSubchunk.m_read += UI2( m_file->ReadArray( clrBase.ptr(), 3 ) );
-					BigEndianToSystemEndian( clrBase.ptr()[0] );
-					BigEndianToSystemEndian( clrBase.ptr()[1] );
-					BigEndianToSystemEndian( clrBase.ptr()[2] );
+					currentSubchunk.m_read += UI2( m_file->readArray( clrBase.ptr(), 3 ) );
+					bigEndianToSystemEndian( clrBase.ptr()[0] );
+					bigEndianToSystemEndian( clrBase.ptr()[1] );
+					bigEndianToSystemEndian( clrBase.ptr()[2] );
 					clrBase.alpha() = 1.0f;
-					currentSubchunk.m_read += DoReadVX( uiVx );
-					Logger::LogDebug( StringStream() << cuT( "		Colour: " ) << clrBase.red().value() << cuT( ", " ) << clrBase.green().value() << cuT( ", " ) << clrBase.blue().value() << cuT( " - VX : 0x" ) << std::hex << uiVx );
+					currentSubchunk.m_read += doReadVX( uiVx );
+					Logger::logDebug( StringStream() << cuT( "		Colour: " ) << clrBase.red().value() << cuT( ", " ) << clrBase.green().value() << cuT( ", " ) << clrBase.blue().value() << cuT( " - VX : 0x" ) << std::hex << uiVx );
 					break;
 
 				case eID_TAG_SURF_DIFF:
-					currentSubchunk.m_read += UI2( m_file->Read( fDiff ) );
-					BigEndianToSystemEndian( fDiff );
-					currentSubchunk.m_read += DoReadVX( uiVx );
-					Logger::LogDebug( StringStream() << cuT( "		Diff. base level: " ) << fDiff << cuT( " - VX : 0x" ) << std::hex << uiVx );
+					currentSubchunk.m_read += UI2( m_file->read( fDiff ) );
+					bigEndianToSystemEndian( fDiff );
+					currentSubchunk.m_read += doReadVX( uiVx );
+					Logger::logDebug( StringStream() << cuT( "		Diff. base level: " ) << fDiff << cuT( " - VX : 0x" ) << std::hex << uiVx );
 					break;
 
 				case eID_TAG_SURF_SPEC:
-					currentSubchunk.m_read += UI2( m_file->Read( fSpec ) );
-					BigEndianToSystemEndian( fSpec );
-					currentSubchunk.m_read += DoReadVX( uiVx );
-					Logger::LogDebug( StringStream() << cuT( "		Spec. base level: " ) << fSpec << cuT( " - VX : 0x" ) << std::hex << uiVx );
+					currentSubchunk.m_read += UI2( m_file->read( fSpec ) );
+					bigEndianToSystemEndian( fSpec );
+					currentSubchunk.m_read += doReadVX( uiVx );
+					Logger::logDebug( StringStream() << cuT( "		Spec. base level: " ) << fSpec << cuT( " - VX : 0x" ) << std::hex << uiVx );
 					break;
 
 				case eID_TAG_SURF_GLOS:
-					currentSubchunk.m_read += UI2( m_file->Read( fGlos ) );
-					BigEndianToSystemEndian( fGlos );
-					currentSubchunk.m_read += DoReadVX( uiVx );
-					Logger::LogDebug( StringStream() << cuT( "		Glossiness: " ) << fGlos << cuT( " - VX : 0x" ) << std::hex << uiVx );
+					currentSubchunk.m_read += UI2( m_file->read( fGlos ) );
+					bigEndianToSystemEndian( fGlos );
+					currentSubchunk.m_read += doReadVX( uiVx );
+					Logger::logDebug( StringStream() << cuT( "		Glossiness: " ) << fGlos << cuT( " - VX : 0x" ) << std::hex << uiVx );
 					break;
 
 				case eID_TAG_SURF_SIDE:
-					currentSubchunk.m_read += UI2( m_file->Read( usSide ) );
-					BigEndianToSystemEndian( usSide );
-					Logger::LogDebug( StringStream() << cuT( "		Sidedness: " ) << usSide );
+					currentSubchunk.m_read += UI2( m_file->read( usSide ) );
+					bigEndianToSystemEndian( usSide );
+					Logger::logDebug( StringStream() << cuT( "		Sidedness: " ) << usSide );
 					break;
 
 				case eID_TAG_SURF_BLOK:
-					DoReadBlock( currentSubchunk, pass );
+					doReadBlock( currentSubchunk, pass );
 					break;
 
 				case eID_TAG_SURF_LUMI:
@@ -1093,7 +1093,7 @@ namespace Lwo
 				case eID_TAG_SURF_TRNL:
 				case eID_TAG_SURF_BUMP:
 				default:
-					DoDiscard( currentSubchunk );
+					doDiscard( currentSubchunk );
 					break;
 				}
 
@@ -1107,57 +1107,57 @@ namespace Lwo
 
 		if ( ok )
 		{
-			pass->SetDiffuse( clrBase * fDiff );
-			pass->SetSpecular( clrBase * fSpec );
-			pass->SetShininess( float( 2 ^ int( ( 10 * fGlos ) + 2 ) ) );
-			pass->SetTwoSided( usSide == 3 );
+			pass->setDiffuse( clrBase * fDiff );
+			pass->setSpecular( clrBase * fSpec );
+			pass->setShininess( float( 2 ^ int( ( 10 * fGlos ) + 2 ) ) );
+			pass->setTwoSided( usSide == 3 );
 		}
 		else
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 	}
 
-	void LwoImporter::DoParseClip( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParseClip( stLWO_CHUNK & p_chunk )
 	{
 		UI4	uiIndex;
 		stLWO_SUBCHUNK currentSubchunk;
-		bool ok = m_file->Read( uiIndex ) == sizeof( UI4 );
+		bool ok = m_file->read( uiIndex ) == sizeof( UI4 );
 		std::string strName;
 		Path pathImage;
 		ImageSPtr pImage;
 
 		if ( ok )
 		{
-			BigEndianToSystemEndian( uiIndex );
+			bigEndianToSystemEndian( uiIndex );
 			p_chunk.m_read += sizeof( UI4 );
-			Logger::LogDebug( StringStream() << cuT( "	Index: 0x" ) << std::hex << uiIndex );
+			Logger::logDebug( StringStream() << cuT( "	Index: 0x" ) << std::hex << uiIndex );
 		}
 
 		while ( ok && p_chunk.m_read < p_chunk.m_size )
 		{
-			if ( DoRead( cuT( "	" ), currentSubchunk ) )
+			if ( doRead( cuT( "	" ), currentSubchunk ) )
 			{
 				switch ( currentSubchunk.m_id )
 				{
 				case eID_TAG_CLIP_STIL:
 				{
-					DoRead( strName );
+					doRead( strName );
 					currentSubchunk.m_read += UI2( strName.size() + 1 + ( 1 - strName.size() % 2 ) );
-					Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( strName ) );
-					pathImage = Path{ string::string_cast< xchar >( strName ) };
+					Logger::logDebug( cuT( "		Image : " ) + string::stringCast< xchar >( strName ) );
+					pathImage = Path{ string::stringCast< xchar >( strName ) };
 
-					if ( !File::FileExists( pathImage ) )
+					if ( !File::fileExists( pathImage ) )
 					{
-						pathImage = m_file->GetFilePath() / pathImage;
+						pathImage = m_file->getFilePath() / pathImage;
 					}
 
-					if ( !File::FileExists( pathImage ) )
+					if ( !File::fileExists( pathImage ) )
 					{
-						pathImage = m_file->GetFilePath() / cuT( "Texture" ) / pathImage;
+						pathImage = m_file->getFilePath() / cuT( "Texture" ) / pathImage;
 					}
 
-					ImageSPtr pImage = GetEngine()->GetImageCache().Add( string::string_cast< xchar >( strName ), pathImage );
+					ImageSPtr pImage = getEngine()->getImageCache().add( string::stringCast< xchar >( strName ), pathImage );
 					break;
 				}
 
@@ -1178,7 +1178,7 @@ namespace Lwo
 				case eID_TAG_CLIP_IFLT:
 				case eID_TAG_CLIP_PFLT:
 				default:
-					DoDiscard( currentSubchunk );
+					doDiscard( currentSubchunk );
 					break;
 				}
 
@@ -1192,69 +1192,69 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 	}
 
-	void LwoImporter::DoParsePnts( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParsePnts( stLWO_CHUNK & p_chunk )
 	{
 		if ( p_chunk.m_size > 0 && p_chunk.m_size % 3 == 0 )
 		{
 			F4 fCoords[3];
 			UI4 uiCount = p_chunk.m_size / ( sizeof( F4 ) * 3 );
-			Logger::LogDebug( StringStream() << cuT( "\tCount: " ) << uiCount );
+			Logger::logDebug( StringStream() << cuT( "\tCount: " ) << uiCount );
 			m_arrayPoints.resize( uiCount );
 			m_arrayUvs.resize( uiCount );
 
 			for ( UI4 i = 0 ; i < uiCount ; i++ )
 			{
-				p_chunk.m_read += UI4( m_file->ReadArray( fCoords, 3 ) );
-				BigEndianToSystemEndian( fCoords[0] );
-				BigEndianToSystemEndian( fCoords[1] );
-				BigEndianToSystemEndian( fCoords[2] );
-				m_pSubmesh->AddPoint( fCoords );
+				p_chunk.m_read += UI4( m_file->readArray( fCoords, 3 ) );
+				bigEndianToSystemEndian( fCoords[0] );
+				bigEndianToSystemEndian( fCoords[1] );
+				bigEndianToSystemEndian( fCoords[2] );
+				m_pSubmesh->addPoint( fCoords );
 			}
 		}
 	}
 
-	void LwoImporter::DoParseVMap( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParseVMap( stLWO_CHUNK & p_chunk )
 	{
 		eVMAP_TYPE eType = eVMAP_TYPE( 0 );
 		UI2 usDimension;
 		std::string strName;
-		bool ok = m_file->IsOk();
+		bool ok = m_file->isOk();
 
 		if ( ok )
 		{
-			p_chunk.m_read += UI4( m_file->Read( eType ) );
-			ok = m_file->IsOk();
+			p_chunk.m_read += UI4( m_file->read( eType ) );
+			ok = m_file->isOk();
 		}
 
 		if ( ok )
 		{
-			p_chunk.m_read += UI4( m_file->Read( usDimension ) );
-			ok = m_file->IsOk();
+			p_chunk.m_read += UI4( m_file->read( usDimension ) );
+			ok = m_file->isOk();
 		}
 
 		if ( ok )
 		{
-			ok = DoRead( strName );
+			ok = doRead( strName );
 		}
 
 		if ( ok )
 		{
 			p_chunk.m_read += UI4( strName.size() + 1 + ( 1 - strName.size() % 2 ) );
-			BigEndianToSystemEndian( eType );
-			BigEndianToSystemEndian( usDimension );
+			bigEndianToSystemEndian( eType );
+			bigEndianToSystemEndian( usDimension );
 		}
 
 		if ( ok )
 		{
 			char szType[5];
-			DoToStr( szType, eType );
-			Logger::LogDebug( StringStream() << cuT( "\tType: " ) << szType );
-			Logger::LogDebug( StringStream() << cuT( "\tDimensions: " ) << usDimension );
-			Logger::LogDebug( StringStream() << cuT( "\tName: " ) << strName.c_str() );
+			doToStr( szType, eType );
+			Logger::logDebug( StringStream() << cuT( "\tType: " ) << szType );
+			Logger::logDebug( StringStream() << cuT( "\tDimensions: " ) << usDimension );
+			Logger::logDebug( StringStream() << cuT( "\tName: " ) << strName.c_str() );
 
 			if ( eType == eVMAP_TYPE_TXUV )
 			{
@@ -1264,28 +1264,28 @@ namespace Lwo
 				while ( ok && p_chunk.m_read < p_chunk.m_size )
 				{
 					UI4 uiVx;
-					p_chunk.m_read += DoReadVX( uiVx );
-					ok = m_file->IsOk();
+					p_chunk.m_read += doReadVX( uiVx );
+					ok = m_file->isOk();
 
 					if ( ok )
 					{
-						p_chunk.m_read += UI4( m_file->ReadArray( fUv, 2 ) );
-						ok = m_file->IsOk();
+						p_chunk.m_read += UI4( m_file->readArray( fUv, 2 ) );
+						ok = m_file->isOk();
 					}
 
 					if ( ok )
 					{
-						BigEndianToSystemEndian( fUv[0] );
-						BigEndianToSystemEndian( fUv[1] );
-						Vertex::SetTexCoord( m_pSubmesh->GetPoint( uiVx ), fUv[0], fUv[1] );
+						bigEndianToSystemEndian( fUv[0] );
+						bigEndianToSystemEndian( fUv[1] );
+						Vertex::setTexCoord( m_pSubmesh->getPoint( uiVx ), fUv[0], fUv[1] );
 						i++;
 					}
 
-					//Logger::LogDebug( cuT( "\tVertex : %d - %f, %f" ), uiVx, fUv[0], fUv[1] );
+					//Logger::logDebug( cuT( "\tVertex : %d - %f, %f" ), uiVx, fUv[0], fUv[1] );
 				}
 
 				m_bHasUv = true;
-				Logger::LogDebug( StringStream() << cuT( "\tUV count: " ) << i );
+				Logger::logDebug( StringStream() << cuT( "\tUV count: " ) << i );
 			}
 			else
 			{
@@ -1295,48 +1295,48 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 	}
 
-	void LwoImporter::DoParsePols( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParsePols( stLWO_CHUNK & p_chunk )
 	{
 		std::vector< Lwo::Face > arrayFaces;
 		std::set< UI4 > setPntsIds;
 		ePOLS_TYPE eType;
-		bool ok = m_file->IsOk();
+		bool ok = m_file->isOk();
 		UI4 uiCount = 0;
 
 		if ( ok )
 		{
-			p_chunk.m_read += UI4( m_file->Read( eType ) );
-			ok = m_file->IsOk();
+			p_chunk.m_read += UI4( m_file->read( eType ) );
+			ok = m_file->isOk();
 		}
 
 		if ( ok )
 		{
 			char szType[5];
-			BigEndianToSystemEndian( eType );
-			DoToStr( szType, eType );
+			bigEndianToSystemEndian( eType );
+			doToStr( szType, eType );
 			StringStream toLog( cuT( "\tType : " ) );
-			Logger::LogDebug( toLog << szType );
+			Logger::logDebug( toLog << szType );
 
 			if ( eType == ePOLS_TYPE_FACE )
 			{
 				while ( ok && p_chunk.m_read < p_chunk.m_size )
 				{
 					UI2 usCountFlags = 0;
-					p_chunk.m_read += UI4( m_file->Read( usCountFlags ) );
+					p_chunk.m_read += UI4( m_file->read( usCountFlags ) );
 					UI2 usCount = usCountFlags & 0xFFC0;
-					BigEndianToSystemEndian( usCount );
+					bigEndianToSystemEndian( usCount );
 					Lwo::Face face( usCount );
-					ok = m_file->IsOk();
+					ok = m_file->isOk();
 
 					for ( UI2 i = 0 ; i < usCount && ok ; i++ )
 					{
-						p_chunk.m_read += DoReadVX( face[i] );
+						p_chunk.m_read += doReadVX( face[i] );
 						setPntsIds.insert( face[i] );
-						ok = m_file->IsOk();
+						ok = m_file->isOk();
 					}
 
 					if ( ok )
@@ -1346,7 +1346,7 @@ namespace Lwo
 					}
 				}
 
-				Logger::LogDebug( StringStream() << cuT( "\tFaces count: " ) << uiCount );
+				Logger::logDebug( StringStream() << cuT( "\tFaces count: " ) << uiCount );
 			}
 			else
 			{
@@ -1364,25 +1364,25 @@ namespace Lwo
 
 				for ( std::set< UI4 >::iterator it = setPntsIds.begin() ; it != setPntsIds.end() ; ++it, ++uiCount )
 				{
-					m_pSubmesh->AddPoint( m_arrayPoints[*it] );
+					m_pSubmesh->addPoint( m_arrayPoints[*it] );
 					mapPntsIds.insert( std::make_pair( *it, uiCount ) );
 				}
 
 				for ( std::vector< Lwo::Face >::iterator it = arrayFaces.begin() ; it != arrayFaces.end() ; ++it )
 				{
-					m_pSubmesh->AddFace( mapPntsIds[it->at( 1 )], mapPntsIds[it->at( 0 )], mapPntsIds[it->at( 2 )] );
+					m_pSubmesh->addFace( mapPntsIds[it->at( 1 )], mapPntsIds[it->at( 0 )], mapPntsIds[it->at( 2 )] );
 				}
 			}
 		}
 		else
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 	}
 
-	void LwoImporter::DoParseLayr( stLWO_CHUNK & p_chunk )
+	void LwoImporter::doParseLayr( stLWO_CHUNK & p_chunk )
 	{
-		bool ok = m_file->IsOk();
+		bool ok = m_file->isOk();
 		UI2 usNumber;
 		UI2 usFlags;
 		Point3f ptPivot;
@@ -1391,26 +1391,26 @@ namespace Lwo
 
 		if ( ok )
 		{
-			p_chunk.m_read += UI4( m_file->Read( usNumber ) );
-			ok = m_file->IsOk();
+			p_chunk.m_read += UI4( m_file->read( usNumber ) );
+			ok = m_file->isOk();
 		}
 
 		if ( ok && p_chunk.m_read < p_chunk.m_size )
 		{
-			p_chunk.m_read += UI4( m_file->Read( usFlags ) );
-			ok = m_file->IsOk();
+			p_chunk.m_read += UI4( m_file->read( usFlags ) );
+			ok = m_file->isOk();
 		}
 
 		if ( ok && p_chunk.m_read < p_chunk.m_size )
 		{
-			p_chunk.m_read += UI4( m_file->ReadArray( ptPivot.ptr(), 3 ) );
-			ok = m_file->IsOk();
+			p_chunk.m_read += UI4( m_file->readArray( ptPivot.ptr(), 3 ) );
+			ok = m_file->isOk();
 		}
 
 		if ( ok && p_chunk.m_read < p_chunk.m_size )
 		{
-			DoRead( strName );
-			ok = m_file->IsOk();
+			doRead( strName );
+			ok = m_file->isOk();
 		}
 
 		if ( ok )
@@ -1419,27 +1419,27 @@ namespace Lwo
 
 			if ( p_chunk.m_read < p_chunk.m_size )
 			{
-				p_chunk.m_read += UI4( m_file->Read( usParent ) );
-				ok = m_file->IsOk();
+				p_chunk.m_read += UI4( m_file->read( usParent ) );
+				ok = m_file->isOk();
 			}
 		}
 
 		if ( ok )
 		{
-			BigEndianToSystemEndian( usNumber );
-			BigEndianToSystemEndian( usFlags );
-			BigEndianToSystemEndian( ptPivot[0] );
-			BigEndianToSystemEndian( ptPivot[1] );
-			BigEndianToSystemEndian( ptPivot[2] );
-			BigEndianToSystemEndian( usParent );
+			bigEndianToSystemEndian( usNumber );
+			bigEndianToSystemEndian( usFlags );
+			bigEndianToSystemEndian( ptPivot[0] );
+			bigEndianToSystemEndian( ptPivot[1] );
+			bigEndianToSystemEndian( ptPivot[2] );
+			bigEndianToSystemEndian( usParent );
 			StringStream toLog( cuT( "\tName   : " ) );
-			Logger::LogDebug( toLog << strName.c_str() );
-			Logger::LogDebug( StringStream() << cuT( "\tNumber: " ) << usNumber );
-			Logger::LogDebug( StringStream() << cuT( "\tFlags:  0x" ) << std::hex << usFlags );
-			Logger::LogDebug( StringStream() << cuT( "\tPivot:  " ) << ptPivot );
-			Logger::LogDebug( StringStream() << cuT( "\tParent: " ) << usParent );
-			String strNameTmp = string::string_cast< xchar >( strName );
-			string::to_lower_case( strNameTmp );
+			Logger::logDebug( toLog << strName.c_str() );
+			Logger::logDebug( StringStream() << cuT( "\tNumber: " ) << usNumber );
+			Logger::logDebug( StringStream() << cuT( "\tFlags:  0x" ) << std::hex << usFlags );
+			Logger::logDebug( StringStream() << cuT( "\tPivot:  " ) << ptPivot );
+			Logger::logDebug( StringStream() << cuT( "\tParent: " ) << usParent );
+			String strNameTmp = string::stringCast< xchar >( strName );
+			string::toLowerCase( strNameTmp );
 
 			if ( usFlags & 0x01 || strNameTmp.find( cuT( "bip" ) ) == 0 || strNameTmp.find( cuT( "fcfx" ) ) == 0 || strNameTmp.find( cuT( "gundummy" ) ) == 0 || strNameTmp.find( cuT( "flap_bone" ) ) == 0 )
 			{
@@ -1453,7 +1453,7 @@ namespace Lwo
 
 		if ( !ok )
 		{
-			DoDiscard( p_chunk );
+			doDiscard( p_chunk );
 		}
 	}
 }

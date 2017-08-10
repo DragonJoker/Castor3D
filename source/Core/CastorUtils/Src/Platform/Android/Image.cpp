@@ -11,17 +11,17 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-namespace Castor
+namespace castor
 {
 	namespace
 	{
-		PxBufferBaseSPtr DoLoad8BitsPerChannel( Path const & p_path )
+		PxBufferBaseSPtr doLoad8BitsPerChannel( Path const & p_path )
 		{
 			PxBufferBaseSPtr result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
-			uint8_t * data = stbi_load( string::string_cast< char >( p_path ).c_str()
+			uint8_t * data = stbi_load( string::stringCast< char >( p_path ).c_str()
 				, &x
 				, &y
 				, &n
@@ -57,13 +57,13 @@ namespace Castor
 			return result;
 		}
 
-		PxBufferBaseSPtr DoLoad32BitsPerChannel( Path const & p_path )
+		PxBufferBaseSPtr doLoad32BitsPerChannel( Path const & p_path )
 		{
 			PxBufferBaseSPtr result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
-			float * data = stbi_loadf( string::string_cast< char >( p_path ).c_str()
+			float * data = stbi_loadf( string::stringCast< char >( p_path ).c_str()
 				, &x
 				, &y
 				, &n
@@ -117,15 +117,15 @@ namespace Castor
 		}
 
 		p_image.m_buffer.reset();
-		auto extension = string::upper_case( p_path.GetExtension() );
+		auto extension = string::upperCase( p_path.getExtension() );
 
 		if ( extension.find( cuT( "hdr" ) ) != String::npos )
 		{
-			p_image.m_buffer = DoLoad32BitsPerChannel( p_path );
+			p_image.m_buffer = doLoad32BitsPerChannel( p_path );
 		}
 		else
 		{
-			p_image.m_buffer = DoLoad8BitsPerChannel( p_path );
+			p_image.m_buffer = doLoad8BitsPerChannel( p_path );
 		}
 
 		return p_image.m_buffer != nullptr;
@@ -146,16 +146,16 @@ namespace Castor
 
 	//************************************************************************************************
 
-	Image & Image::Resample( Size const & p_size )
+	Image & Image::resample( Size const & p_size )
 	{
 		return *this;
 	}
 
-	void Image::InitialiseImageLib()
+	void Image::initialiseImageLib()
 	{
 	}
 
-	void Image::CleanupImageLib()
+	void Image::cleanupImageLib()
 	{
 	}
 

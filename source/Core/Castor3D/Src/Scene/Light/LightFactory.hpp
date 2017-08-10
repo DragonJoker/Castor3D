@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		La fabrique de sources lumineuse
 	*/
 	class LightFactory
-		: public Castor::Factory< LightCategory, LightType, LightCategoryUPtr, std::function< LightCategoryUPtr( Light & ) > >
+		: public castor::Factory< LightCategory, LightType, LightCategoryUPtr, std::function< LightCategoryUPtr( Light & ) > >
 	{
 	public:
 		/**

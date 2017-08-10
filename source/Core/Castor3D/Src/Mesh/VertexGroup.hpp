@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_VERTEX_GROUP_H___
 #define ___C3D_VERTEX_GROUP_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS

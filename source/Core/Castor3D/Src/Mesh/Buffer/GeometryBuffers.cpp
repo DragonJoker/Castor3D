@@ -1,8 +1,8 @@
 ﻿#include "GeometryBuffers.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	GeometryBuffers::GeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 		: m_topology{ p_topology }
@@ -14,16 +14,16 @@ namespace Castor3D
 	{
 	}
 
-	bool GeometryBuffers::Initialise( VertexBufferArray const & p_buffers, IndexBufferRPtr p_index )
+	bool GeometryBuffers::initialise( VertexBufferArray const & p_buffers, IndexBufferRPtr p_index )
 	{
 		m_buffers = p_buffers;
 		m_indexBuffer = p_index;
-		return DoInitialise();
+		return doInitialise();
 	}
 
-	void GeometryBuffers::Cleanup()
+	void GeometryBuffers::cleanup()
 	{
-		DoCleanup();
+		doCleanup();
 		m_indexBuffer = nullptr;
 		m_buffers.clear();
 	}

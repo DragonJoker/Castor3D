@@ -28,26 +28,26 @@ SOFTWARE.
 namespace diamond_square_terrain
 {
 	class Generator
-		: public Castor3D::MeshGenerator
+		: public castor3d::MeshGenerator
 	{
 	public:
 		Generator();
 		virtual ~Generator();
 		/**
-		*\copydoc		Castor3D::MeshGenerator::Create
+		*\copydoc		castor3d::MeshGenerator::create
 		*/
-		static Castor3D::MeshGeneratorSPtr Create();
+		static castor3d::MeshGeneratorSPtr create();
 
 	private:
 		/**
-		 *\copydoc		Castor3D::MeshGenerator::DoGenerate
+		 *\copydoc		castor3d::MeshGenerator::doGenerate
 		 */
-		virtual void DoGenerate( Castor3D::Mesh & p_mesh
-			, Castor3D::Parameters const & p_parameters );
+		virtual void doGenerate( castor3d::Mesh & p_mesh
+			, castor3d::Parameters const & p_parameters );
 
 	public:
-		static Castor::String const Type;
-		static Castor::String const Name;
+		static castor::String const Type;
+		static castor::String const Name;
 
 	private:
 	};

@@ -59,31 +59,31 @@ namespace CastorCom
 		 */
 		virtual ~CTextureLayout();
 
-		inline Castor3D::TextureLayoutSPtr GetInternal()const
+		inline castor3d::TextureLayoutSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::TextureLayoutSPtr state )
+		inline void setInternal( castor3d::TextureLayoutSPtr state )
 		{
 			m_internal = state;
 		}
 
-		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureImage *, make_indexed_getter( m_internal.get(), &Castor3D::TextureLayout::GetImage ) );
+		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureImage *, make_indexed_getter( m_internal.get(), &castor3d::TextureLayout::getImage ) );
 
-		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureLayout::GetType ) );
+		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &castor3d::TextureLayout::getType ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
 
 	private:
-		Castor3D::TextureLayoutSPtr m_internal;
+		castor3d::TextureLayoutSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( TextureLayout ), CTextureLayout );
 
-	DECLARE_VARIABLE_PTR_GETTER( TextureLayout, Castor3D, TextureLayout );
-	DECLARE_VARIABLE_PTR_PUTTER( TextureLayout, Castor3D, TextureLayout );
+	DECLARE_VARIABLE_PTR_GETTER( TextureLayout, castor3d, TextureLayout );
+	DECLARE_VARIABLE_PTR_PUTTER( TextureLayout, castor3d, TextureLayout );
 }
 
 #endif

@@ -29,10 +29,10 @@ SOFTWARE.
 #include <mutex>
 #include <condition_variable>
 
-namespace Castor
+namespace castor
 {
 	template< typename Lockable >
-	std::unique_lock< Lockable > make_unique_lock( Lockable & p_lockable )
+	std::unique_lock< Lockable > makeUniqueLock( Lockable & p_lockable )
 	{
 		return std::unique_lock< Lockable >( p_lockable );
 	}

@@ -88,7 +88,7 @@ SOFTWARE.
 	const char* classname##_VariantType = #classname; \
 	class classname##VariantData\
 		: public wxVariantData\
-		, public Castor::Aligned< alignment >\
+		, public castor::Aligned< alignment >\
 	{ \
 	public:\
 		classname##VariantData() {} \
@@ -158,8 +158,8 @@ SOFTWARE.
 
 namespace GuiCommon
 {
-	template< typename T > T GetValue( wxVariant const & p_variant );
-	template< typename T > wxVariant SetValue( T const & p_value );
+	template< typename T > T getValue( wxVariant const & p_variant );
+	template< typename T > wxVariant setValue( T const & p_value );
 
 	typedef bool ( wxEvtHandler::*ButtonEventMethod )( wxPGProperty * );
 

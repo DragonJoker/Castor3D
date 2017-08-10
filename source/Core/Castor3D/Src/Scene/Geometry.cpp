@@ -9,12 +9,12 @@
 #include "Material/Material.hpp"
 #include "Mesh/Submesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Geometry::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Geometry >{ p_tabs }
+		: castor::TextWriter< Geometry >{ p_tabs }
 	{
 	}
 
@@ -22,12 +22,12 @@ namespace Castor3D
 	{
 		bool result{ true };
 
-		if ( p_geometry.GetMesh() )
+		if ( p_geometry.getMesh() )
 		{
-			Logger::LogInfo( m_tabs + cuT( "Writing Geometry " ) + p_geometry.GetName() );
-			result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + p_geometry.GetName() + cuT( "\"\n" ) ) > 0
-					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Castor::TextWriter< Geometry >::CheckError( result, "Geometry name" );
+			Logger::logInfo( m_tabs + cuT( "Writing Geometry " ) + p_geometry.getName() );
+			result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + p_geometry.getName() + cuT( "\"\n" ) ) > 0
+					   && p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			castor::TextWriter< Geometry >::checkError( result, "Geometry name" );
 
 			if ( result )
 			{
@@ -41,39 +41,39 @@ namespace Castor3D
 
 			if ( result )
 			{
-				result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmesh \"" ) + p_geometry.GetMesh()->GetName() + cuT( "\"\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t\timport \"Meshes/" ) + p_geometry.GetMesh()->GetName() + cuT( ".cmsh\"\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-				Castor::TextWriter< Geometry >::CheckError( result, "Geometry mesh" );
+				result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "\tmesh \"" ) + p_geometry.getMesh()->getName() + cuT( "\"\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\t\timport \"Meshes/" ) + p_geometry.getMesh()->getName() + cuT( ".cmsh\"\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				castor::TextWriter< Geometry >::checkError( result, "Geometry mesh" );
 			}
 
 			if ( result )
 			{
-				result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmaterials\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
-				Castor::TextWriter< Geometry >::CheckError( result, "Geometry materials" );
+				result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "\tmaterials\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
+				castor::TextWriter< Geometry >::checkError( result, "Geometry materials" );
 			}
 
 			if ( result )
 			{
 				uint16_t index{ 0u };
 
-				for ( auto submesh : *p_geometry.GetMesh() )
+				for ( auto submesh : *p_geometry.getMesh() )
 				{
-					result = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( *submesh )->GetName() + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< Geometry >::CheckError( result, "Geometry material" );
+					result = p_file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( index++ ) + cuT( " \"" ) + p_geometry.getMaterial( *submesh )->getName() + cuT( "\"\n" ) ) > 0;
+					castor::TextWriter< Geometry >::checkError( result, "Geometry material" );
 				}
 			}
 
 			if ( result )
 			{
-				result = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			}
 
 			if ( result )
 			{
-				result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
@@ -88,65 +88,65 @@ namespace Castor3D
 	{
 		if ( p_mesh )
 		{
-			m_strMeshName = p_mesh->GetName();
+			m_strMeshName = p_mesh->getName();
 
 			for ( auto submesh : *p_mesh )
 			{
-				m_submeshesMaterials[submesh.get()] = submesh->GetDefaultMaterial();
+				m_submeshesMaterials[submesh.get()] = submesh->getDefaultMaterial();
 			}
 		}
 	}
 
 	Geometry::~Geometry()
 	{
-		Cleanup();
+		cleanup();
 	}
 
-	void Geometry::Cleanup()
+	void Geometry::cleanup()
 	{
 	}
 
-	void Geometry::CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex )
+	void Geometry::createBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex )
 	{
 		if ( !m_listCreated )
 		{
-			Cleanup();
-			MeshSPtr mesh = GetMesh();
+			cleanup();
+			MeshSPtr mesh = getMesh();
 
 			if ( mesh )
 			{
-				uint32_t nbFaces = mesh->GetFaceCount();
-				uint32_t nbVertex = mesh->GetVertexCount();
+				uint32_t nbFaces = mesh->getFaceCount();
+				uint32_t nbVertex = mesh->getVertexCount();
 				p_nbFaces += nbFaces;
 				p_nbVertex += nbVertex;
-				mesh->ComputeContainers();
-				Logger::LogInfo( StringStream() << cuT( "Geometry::CreateBuffers - NbVertex: " ) << nbVertex << cuT( ", NbFaces: " ) << nbFaces );
-				m_listCreated = mesh->GetSubmeshCount() > 0;
+				mesh->computeContainers();
+				Logger::logInfo( StringStream() << cuT( "Geometry::createBuffers - NbVertex: " ) << nbVertex << cuT( ", NbFaces: " ) << nbFaces );
+				m_listCreated = mesh->getSubmeshCount() > 0;
 			}
 		}
 	}
 
-	void Geometry::Render()
+	void Geometry::render()
 	{
 		if ( !m_listCreated )
 		{
 			uint32_t nbFaces = 0, nbVertex = 0;
-			CreateBuffers( nbFaces, nbVertex );
+			createBuffers( nbFaces, nbVertex );
 		}
 	}
 
-	void Geometry::SetMesh( MeshSPtr p_mesh )
+	void Geometry::setMesh( MeshSPtr p_mesh )
 	{
 		m_submeshesMaterials.clear();
 		m_mesh = p_mesh;
 
 		if ( p_mesh )
 		{
-			m_strMeshName = p_mesh->GetName();
+			m_strMeshName = p_mesh->getName();
 
 			for ( auto submesh : *p_mesh )
 			{
-				m_submeshesMaterials[submesh.get()] = submesh->GetDefaultMaterial();
+				m_submeshesMaterials[submesh.get()] = submesh->getDefaultMaterial();
 			}
 		}
 		else
@@ -155,9 +155,9 @@ namespace Castor3D
 		}
 	}
 
-	void Geometry::SetMaterial( Submesh & p_submesh, MaterialSPtr p_material, bool p_updateSubmesh )
+	void Geometry::setMaterial( Submesh & p_submesh, MaterialSPtr p_material, bool p_updateSubmesh )
 	{
-		MeshSPtr mesh = GetMesh();
+		MeshSPtr mesh = getMesh();
 
 		if ( mesh )
 		{
@@ -171,7 +171,7 @@ namespace Castor3D
 				bool changed = false;
 				auto itSubMat = m_submeshesMaterials.find( &p_submesh );
 				MaterialSPtr oldMaterial;
-				auto oldCount = p_submesh.GetMaxRefCount();
+				auto oldCount = p_submesh.getMaxRefCount();
 
 				if ( itSubMat != m_submeshesMaterials.end() )
 				{
@@ -179,9 +179,9 @@ namespace Castor3D
 
 					if ( oldMaterial != p_material )
 					{
-						if ( oldMaterial != p_submesh.GetDefaultMaterial() )
+						if ( oldMaterial != p_submesh.getDefaultMaterial() )
 						{
-							p_submesh.UnRef( oldMaterial );
+							p_submesh.unref( oldMaterial );
 						}
 
 						itSubMat->second = p_material;
@@ -196,36 +196,36 @@ namespace Castor3D
 
 				if ( changed )
 				{
-					GetScene()->SetChanged();
-					auto count = p_submesh.Ref( p_material ) + 1;
+					getScene()->setChanged();
+					auto count = p_submesh.ref( p_material ) + 1;
 
 					if ( count > oldCount && p_updateSubmesh )
 					{
 						if ( count == 1 )
 						{
 							// We need to update the matrix buffers only.
-							GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
+							getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender
 								, [this, &p_submesh]()
 								{
-									p_submesh.ResetMatrixBuffers();
+									p_submesh.resetMatrixBuffers();
 								} ) );
 						}
 						else
 						{
 							// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
-							GetScene()->SetChanged();
-							GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender
+							getScene()->setChanged();
+							getScene()->getListener().postEvent( MakeFunctorEvent( EventType::eQueueRender
 								, [this, &p_submesh]()
 								{
 									// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.
-									p_submesh.ResetGpuBuffers();
+									p_submesh.resetGpuBuffers();
 								} ) );
 						}
 					}
 
-					if ( p_material->HasEnvironmentMapping() )
+					if ( p_material->hasEnvironmentMapping() )
 					{
-						GetScene()->CreateEnvironmentMap( *GetParent() );
+						getScene()->createEnvironmentMap( *getParent() );
 					}
 				}
 			}
@@ -240,7 +240,7 @@ namespace Castor3D
 		}
 	}
 
-	MaterialSPtr Geometry::GetMaterial( Submesh const & p_submesh )const
+	MaterialSPtr Geometry::getMaterial( Submesh const & p_submesh )const
 	{
 		MaterialSPtr result;
 		auto it = m_submeshesMaterials.find( &p_submesh );
@@ -251,7 +251,7 @@ namespace Castor3D
 		}
 		else
 		{
-			Logger::LogError( cuT( "Geometry::GetMaterial - Wrong submesh" ) );
+			Logger::logError( cuT( "Geometry::getMaterial - Wrong submesh" ) );
 		}
 
 		return result;

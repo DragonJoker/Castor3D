@@ -30,10 +30,10 @@ SOFTWARE.
 #include <Design/Signal.hpp>
 #include <Log/Logger.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
-	static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::Create - Created " );
-	static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::Create - Duplicate " );
+	static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::create - Created " );
+	static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::create - Duplicate " );
 	static const xchar * WARNING_CACHE_NULL_OBJECT = cuT( "Cache::Insert - nullptr " );
 	/*!
 	\author 	Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace Castor3D
 		using MyCacheTraits = CacheTraits< ElementType, KeyType >;
 		using Element = ElementType;
 		using Key = KeyType;
-		using Collection = Castor::Collection< Element, Key >;
+		using Collection = castor::Collection< Element, Key >;
 		using ElementPtr = std::shared_ptr< Element >;
 		using Producer = typename MyCacheTraits::Producer;
 		using Merger = typename MyCacheTraits::Merger;
@@ -99,13 +99,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
+		 *\brief		sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
-		inline void Cleanup()
+		inline void cleanup()
 		{
-			auto lock = Castor::make_unique_lock( m_elements );
+			auto lock = castor::makeUniqueLock( m_elements );
 
 			for ( auto it : m_elements )
 			{
@@ -118,7 +118,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		inline void Clear()
+		inline void clear()
 		{
 			m_elements.clear();
 		}
@@ -128,7 +128,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si le cache est vide.
 		 */
-		inline bool IsEmpty()
+		inline bool isEmpty()
 		{
 			return m_elements.empty();
 		}
@@ -145,7 +145,7 @@ namespace Castor3D
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr Create( Key const & p_name, Parameters && ... p_parameters )
+		inline ElementPtr create( Key const & p_name, Parameters && ... p_parameters )
 		{
 			return m_produce( p_name, std::forward< Parameters >( p_parameters )... );
 		}
@@ -159,17 +159,17 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
-		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
+		inline ElementPtr add( Key const & p_name, ElementPtr p_element )
 		{
 			ElementPtr result{ p_element };
 
 			if ( p_element )
 			{
-				auto lock = Castor::make_unique_lock( m_elements );
+				auto lock = castor::makeUniqueLock( m_elements );
 
 				if ( m_elements.has( p_name ) )
 				{
-					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
+					castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
 					result = m_elements.find( p_name );
 				}
 				else
@@ -179,7 +179,7 @@ namespace Castor3D
 			}
 			else
 			{
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << GetObjectTypeName() << cuT( ": " ) );
+				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
 			}
 
 			return result;
@@ -197,22 +197,22 @@ namespace Castor3D
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr Add( Key const & p_name, Parameters && ... p_parameters )
+		inline ElementPtr add( Key const & p_name, Parameters && ... p_parameters )
 		{
 			ElementPtr result;
-			auto lock = Castor::make_unique_lock( m_elements );
+			auto lock = castor::makeUniqueLock( m_elements );
 
 			if ( !m_elements.has( p_name ) )
 			{
 				result = m_produce( p_name, std::forward< Parameters >( p_parameters )... );
 				m_initialise( result );
 				m_elements.insert( p_name, result );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
+				castor::Logger::logInfo( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
 			}
 			else
 			{
 				result = m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
+				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return result;
@@ -225,7 +225,7 @@ namespace Castor3D
 		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	p_name		Le nom d'élément.
 		 */
-		inline void Remove( Key const & p_name )
+		inline void remove( Key const & p_name )
 		{
 			m_elements.erase( p_name );
 		}
@@ -237,17 +237,17 @@ namespace Castor3D
 		 *\return		Met les éléments de ce cache dans ceux de celui donné.
 		 *\param[out]	p_destination		Le cache de destination.
 		 */
-		inline void MergeInto( MyCacheType & p_destination )
+		inline void mergeInto( MyCacheType & p_destination )
 		{
-			auto lock = Castor::make_unique_lock( m_elements );
-			auto lockOther = Castor::make_unique_lock( p_destination.m_elements );
+			auto lock = castor::makeUniqueLock( m_elements );
+			auto lockOther = castor::makeUniqueLock( p_destination.m_elements );
 
 			for ( auto it : m_elements )
 			{
 				m_merge( *this, p_destination.m_elements, it.second );
 			}
 
-			Clear();
+			clear();
 		}
 		/**
 		 *\~english
@@ -258,9 +258,9 @@ namespace Castor3D
 		 *\param[in]	p_func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void ForEach( FuncType p_func )const
+		inline void forEach( FuncType p_func )const
 		{
-			auto lock = Castor::make_unique_lock( m_elements );
+			auto lock = castor::makeUniqueLock( m_elements );
 
 			for ( auto const & element : m_elements )
 			{
@@ -276,9 +276,9 @@ namespace Castor3D
 		 *\param[in]	p_func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void ForEach( FuncType p_func )
+		inline void forEach( FuncType p_func )
 		{
-			auto lock = Castor::make_unique_lock( m_elements );
+			auto lock = castor::makeUniqueLock( m_elements );
 
 			for ( auto & element : m_elements )
 			{
@@ -291,7 +291,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'éléments.
 		 */
-		inline uint32_t GetObjectCount()const
+		inline uint32_t getObjectCount()const
 		{
 			return uint32_t( m_elements.size() );
 		}
@@ -301,7 +301,7 @@ namespace Castor3D
 		*\~french
 		*\return		L'Engine.
 		*/
-		inline Engine * GetEngine()const
+		inline Engine * getEngine()const
 		{
 			return &m_engine;
 		}
@@ -311,7 +311,7 @@ namespace Castor3D
 		*\~french
 		*\return		L'Engine.
 		*/
-		inline Castor::String const & GetObjectTypeName()const
+		inline castor::String const & getObjectTypeName()const
 		{
 			return MyCacheTraits::Name;
 		}
@@ -323,7 +323,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool Has( Key const & p_name )const
+		inline bool has( Key const & p_name )const
 		{
 			return m_elements.has( p_name );
 		}
@@ -337,7 +337,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementPtr Find( Key const & p_name )const
+		inline ElementPtr find( Key const & p_name )const
 		{
 			return m_elements.find( p_name );
 		}
@@ -502,12 +502,12 @@ namespace Castor3D
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >
-	MakeCache( Engine & engine
+	makeCache( Engine & engine
 		, typename CacheTraits< ElementType, KeyType >::Producer && p_produce
 		, ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
 		, ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
 		, typename CacheTraits< ElementType, KeyType >::Merger && p_merge = []( CacheBase< ElementType, KeyType > const &
-			, Castor::Collection< ElementType, KeyType > &
+			, castor::Collection< ElementType, KeyType > &
 			, std::shared_ptr< ElementType > ){} )
 	{
 		return std::make_unique< Cache< ElementType, KeyType > >( engine

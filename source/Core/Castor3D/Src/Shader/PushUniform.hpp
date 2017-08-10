@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Uniform.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -65,21 +65,21 @@ namespace Castor3D
 		 *\brief		Initialise la variable.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Updates this variable's value, in the shader.
 		 *\~french
 		 *\brief		Met à la jour la valeur de cette variable, dans le shader.
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\return		The parent program.
 		 *\~french
 		 *\return		La programme parent.
 		 */
-		inline ShaderProgram & GetProgram()
+		inline ShaderProgram & getProgram()
 		{
 			return m_program;
 		}
@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La programme parent.
 		 */
-		inline ShaderProgram const & GetProgram()const
+		inline ShaderProgram const & getProgram()const
 		{
 			return m_program;
 		}
@@ -99,14 +99,14 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable uniforme.
 		 */
-		virtual Uniform const & GetBaseUniform()const = 0;
+		virtual Uniform const & getBaseUniform()const = 0;
 		/**
 		 *\~english
 		 *\return		The uniform variable.
 		 *\~french
 		 *\return		La variable uniforme.
 		 */
-		virtual Uniform & GetBaseUniform() = 0;
+		virtual Uniform & getBaseUniform() = 0;
 
 	private:
 		/**
@@ -117,14 +117,14 @@ namespace Castor3D
 		 *\brief		Initialise la variable.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API virtual bool DoInitialise() = 0;
+		C3D_API virtual bool doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Updates this variable's value, in the shader.
 		 *\~french
 		 *\brief		Met à la jour la valeur de cette variable, dans le shader.
 		 */
-		C3D_API virtual void DoUpdate()const = 0;
+		C3D_API virtual void doUpdate()const = 0;
 
 	protected:
 		//!\~english	The parent shader program.
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence sur la valeur
 		 */
-		inline return_type & GetValue();
+		inline return_type & getValue();
 		/**
 		 *\~english
 		 *\brief		Retrieves the value
@@ -190,7 +190,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence constante sur la valeur
 		 */
-		inline return_const_type const & GetValue()const;
+		inline return_const_type const & getValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -203,7 +203,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline return_type & GetValue( uint32_t p_index );
+		inline return_type & getValue( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline return_const_type const & GetValue( uint32_t p_index )const;
+		inline return_const_type const & getValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
@@ -225,7 +225,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur de la variable
 		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetValue( param_type const & p_value );
+		inline void setValue( param_type const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
@@ -236,7 +236,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur
 		 *\param[in]	p_index	L'index de la valeur à modifier
 		 */
-		inline void SetValue( param_type const & p_value, uint32_t p_index );
+		inline void setValue( param_type const & p_value, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -247,7 +247,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 *\param[in]	p_size		Le nombre de valeurs.
 		 */
-		inline void SetValues( param_type const * p_values, size_t p_size );
+		inline void setValues( param_type const * p_values, size_t p_size );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -257,7 +257,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 */
 		template< size_t N >
-		inline void SetValues( param_type const( &p_values )[N] );
+		inline void setValues( param_type const( &p_values )[N] );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -267,7 +267,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 */
 		template< size_t N >
-		inline void SetValues( std::array< param_type, N > const & p_values );
+		inline void setValues( std::array< param_type, N > const & p_values );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -276,11 +276,11 @@ namespace Castor3D
 		 *\brief		Définit les valeurs de la variable.
 		 *\param[in]	p_values	Les valeurs.
 		 */
-		inline void SetValues( std::vector< param_type > const & p_values );
+		inline void setValues( std::vector< param_type > const & p_values );
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
-		 *\remarks		Doesn't check the index bounds
+		 *\remarks		doesn't check the index bounds
 		 *\param[in]	p_index	The index
 		 *\return		A reference to the value at given index
 		 *\~french
@@ -293,7 +293,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
-		 *\remarks		Doesn't check the index bounds
+		 *\remarks		doesn't check the index bounds
 		 *\param[in]	p_index	The index
 		 *\return		A constant reference to the value at given index
 		 *\~french
@@ -309,7 +309,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La programme parent.
 		 */
-		inline type & GetUniform()
+		inline type & getUniform()
 		{
 			return m_uniform;
 		}
@@ -319,7 +319,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La programme parent.
 		 */
-		inline type const & GetUniform()const
+		inline type const & getUniform()const
 		{
 			return m_uniform;
 		}
@@ -329,7 +329,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable uniforme.
 		 */
-		inline Uniform & GetBaseUniform()override
+		inline Uniform & getBaseUniform()override
 		{
 			return m_uniform;
 		}
@@ -339,7 +339,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable uniforme.
 		 */
-		inline Uniform const & GetBaseUniform()const override
+		inline Uniform const & getBaseUniform()const override
 		{
 			return m_uniform;
 		}

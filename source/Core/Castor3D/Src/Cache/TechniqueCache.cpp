@@ -1,8 +1,8 @@
 #include "TechniqueCache.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String CacheTraits< RenderTechnique, String >::Name = cuT( "RenderTechnique" );
 }

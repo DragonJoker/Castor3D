@@ -21,30 +21,30 @@ using namespace Linear;
 
 extern "C"
 {
-	C3D_LinearToneMapping_API void GetRequiredVersion( Castor3D::Version * p_version )
+	C3D_LinearToneMapping_API void getRequiredVersion( castor3d::Version * p_version )
 	{
-		*p_version = Castor3D::Version();
+		*p_version = castor3d::Version();
 	}
 
-	C3D_LinearToneMapping_API void GetType( Castor3D::PluginType * p_type )
+	C3D_LinearToneMapping_API void getType( castor3d::PluginType * p_type )
 	{
-		*p_type = Castor3D::PluginType::eToneMapping;
+		*p_type = castor3d::PluginType::eToneMapping;
 	}
 
-	C3D_LinearToneMapping_API void GetName( char const ** p_name )
+	C3D_LinearToneMapping_API void getName( char const ** p_name )
 	{
-		static Castor::String const Name = cuT( "Linear Tone Mapping" );
+		static castor::String const Name = cuT( "Linear Tone Mapping" );
 		*p_name = Name.c_str();
 	}
 
-	C3D_LinearToneMapping_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
+	C3D_LinearToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->GetRenderTargetCache().GetToneMappingFactory().Register( ToneMapping::Name
-			, &ToneMapping::Create );
+		engine->getRenderTargetCache().getToneMappingFactory().registerType( ToneMapping::Name
+			, &ToneMapping::create );
 	}
 
-	C3D_LinearToneMapping_API void OnUnload( Castor3D::Engine * engine )
+	C3D_LinearToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->GetRenderTargetCache().GetToneMappingFactory().Unregister( ToneMapping::Name );
+		engine->getRenderTargetCache().getToneMappingFactory().unregisterType( ToneMapping::Name );
 	}
 }

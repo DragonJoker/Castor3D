@@ -19,12 +19,12 @@ namespace Testing
 		m_cases.clear();
 	}
 
-	void BenchManager::Register( BenchCaseUPtr p_bench )
+	void BenchManager::registerType( BenchCaseUPtr p_bench )
 	{
 		m_benchs.push_back( std::move( p_bench ) );
 	}
 
-	void BenchManager::Register( TestCaseUPtr p_case )
+	void BenchManager::registerType( TestCaseUPtr p_case )
 	{
 		p_case->RegisterTests();
 		m_cases.push_back( std::move( p_case ) );
@@ -71,7 +71,7 @@ namespace Testing
 
 		for ( auto & bench : m_benchs )
 		{
-			std::cout << bench->GetSummary().c_str() << std::endl;
+			std::cout << bench->getSummary().c_str() << std::endl;
 		}
 	}
 
@@ -120,15 +120,15 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	bool Register( BenchCaseUPtr p_bench )
+	bool registerType( BenchCaseUPtr p_bench )
 	{
-		BenchManager::Register( std::move( p_bench ) );
+		BenchManager::registerType( std::move( p_bench ) );
 		return true;
 	}
 
-	bool Register( TestCaseUPtr p_case )
+	bool registerType( TestCaseUPtr p_case )
 	{
-		BenchManager::Register( std::move( p_case ) );
+		BenchManager::registerType( std::move( p_case ) );
 		return true;
 	}
 }

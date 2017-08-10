@@ -28,7 +28,7 @@ SOFTWARE.
 #include <algorithm>
 #include <numeric>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -40,7 +40,7 @@ namespace Castor
 	\brief		Unsupported format exception
 	*/
 	class UnsupportedFormatException
-		: public Castor::Exception
+		: public castor::Exception
 	{
 	public:
 		/**
@@ -57,7 +57,10 @@ namespace Castor
 		 *\param[in]	p_function		Nom de la fonction
 		 *\param[in]	p_line			Ligne dans la fonction
 		 */
-		UnsupportedFormatException(	std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+		UnsupportedFormatException(	std::string const & p_description
+			, char const * p_file
+			, char const * p_function
+			, uint32_t p_line )
 			: Exception( p_description, p_file, p_function, p_line )
 		{
 		}

@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor3D
 	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
 	*/
 	class TextureProjection
-		: public Castor::OwnedBy< Context >
+		: public castor::OwnedBy< Context >
 	{
 	public:
 		/**
@@ -66,14 +66,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le rendu en texture.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the render to texture.
 		 *\~french
 		 *\brief		Nettoie le rendu en texture.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Projects the given 2D texture on the current framebuffer.
@@ -84,13 +84,13 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture 2D.
 		 *\param[in]	p_camera	La caméra.
 		 */
-		C3D_API void Render( TextureLayout const & p_texture
+		C3D_API void render( TextureLayout const & p_texture
 			, Camera const & p_camera );
 
 	private:
-		ShaderProgram & DoInitialiseShader();
-		bool DoInitialiseVertexBuffer();
-		bool DoInitialisePipeline( ShaderProgram & p_program );
+		ShaderProgram & doInitialiseShader();
+		bool doInitialiseVertexBuffer();
+		bool doInitialisePipeline( ShaderProgram & p_program );
 
 	private:
 		//!\~english	The shader matrices constants buffer.
@@ -103,13 +103,13 @@ namespace Castor3D
 		//!\~french		La variable uniforme contenant la taille de la cible du rendu.
 		PushUniform2fSPtr m_sizeUniform{ nullptr };
 		//!	6 (faces) * 6 (vertex) * 3 (vertex position)
-		std::array< Castor::real, 6 * 6 * 3 > m_bufferVertex;
+		std::array< castor::real, 6 * 6 * 3 > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
-		Castor3D::BufferDeclaration m_declaration;
+		castor3d::BufferDeclaration m_declaration;
 		//!\~english	Vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad).
-		std::array< Castor3D::BufferElementGroupSPtr, 36 > m_arrayVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
@@ -124,7 +124,7 @@ namespace Castor3D
 		SamplerSPtr m_sampler;
 		//!\~english	The model matrix.
 		//!\~french		La matrice modèle.
-		Castor::Matrix4x4r m_mtxModel;
+		castor::Matrix4x4r m_mtxModel;
 	};
 }
 

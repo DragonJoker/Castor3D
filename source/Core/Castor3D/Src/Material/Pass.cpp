@@ -6,15 +6,15 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*********************************************************************************************
 
 	namespace
 	{
-		String GetName( TextureChannel channel )
+		String getName( TextureChannel channel )
 		{
 			StringStream result;
 
@@ -71,7 +71,7 @@ namespace Castor3D
 	//*********************************************************************************************
 	
 	Pass::TextWriter::TextWriter( String const & tabs )
-		: Castor::TextWriter< Pass >{ tabs }
+		: castor::TextWriter< Pass >{ tabs }
 	{
 	}
 
@@ -100,43 +100,43 @@ namespace Castor3D
 
 		bool result = true;
 
-		if ( result && pass.GetOpacity() < 1 )
+		if ( result && pass.getOpacity() < 1 )
 		{
-			result = file.WriteText( m_tabs + cuT( "\talpha " ) + string::to_string( pass.GetOpacity() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( result, "Pass opacity" );
+			result = file.writeText( m_tabs + cuT( "\talpha " ) + string::toString( pass.getOpacity() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Pass >::checkError( result, "Pass opacity" );
 		}
 
-		if ( result && pass.GetEmissive() > 0 )
+		if ( result && pass.getEmissive() > 0 )
 		{
-			result = file.WriteText( m_tabs + cuT( "\temissive " ) + string::to_string( pass.GetEmissive() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( result, "Pass emissive" );
+			result = file.writeText( m_tabs + cuT( "\temissive " ) + string::toString( pass.getEmissive() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Pass >::checkError( result, "Pass emissive" );
 		}
 
 		if ( result && pass.IsTwoSided() )
 		{
-			result = file.WriteText( m_tabs + cuT( "\ttwo_sided " ) + String( pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( result, "Pass sidedness" );
+			result = file.writeText( m_tabs + cuT( "\ttwo_sided " ) + String( pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Pass >::checkError( result, "Pass sidedness" );
 		}
 
-		if ( result && ( pass.GetColourBlendMode() != BlendMode::eNoBlend ) )
+		if ( result && ( pass.getColourBlendMode() != BlendMode::eNoBlend ) )
 		{
-			result = file.WriteText( m_tabs + cuT( "\tcolour_blend_mode " ) + StrBlendModes[uint32_t( pass.GetColourBlendMode() )] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( result, "Pass colour blend mode" );
+			result = file.writeText( m_tabs + cuT( "\tcolour_blend_mode " ) + StrBlendModes[uint32_t( pass.getColourBlendMode() )] + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Pass >::checkError( result, "Pass colour blend mode" );
 		}
 
 		if ( result )
 		{
-			if ( pass.GetAlphaFunc() != ComparisonFunc::eAlways )
+			if ( pass.getAlphaFunc() != ComparisonFunc::eAlways )
 			{
-				result = file.WriteText( m_tabs + cuT( "\talpha_func " )
-					+ strAlphaFuncs[pass.GetAlphaFunc()] + cuT( " " )
-					+ string::to_string( pass.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Pass >::CheckError( result, "Pass alpha function" );
+				result = file.writeText( m_tabs + cuT( "\talpha_func " )
+					+ strAlphaFuncs[pass.getAlphaFunc()] + cuT( " " )
+					+ string::toString( pass.getAlphaValue() ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< Pass >::checkError( result, "Pass alpha function" );
 			}
-			else if ( pass.GetAlphaBlendMode() != BlendMode::eNoBlend )
+			else if ( pass.getAlphaBlendMode() != BlendMode::eNoBlend )
 			{
-				result = file.WriteText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( pass.GetAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Pass >::CheckError( result, "Pass alpha blend mode" );
+				result = file.writeText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( pass.getAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
+				castor::TextWriter< Pass >::checkError( result, "Pass alpha blend mode" );
 			}
 		}
 
@@ -144,7 +144,7 @@ namespace Castor3D
 		{
 			for ( auto unit : pass )
 			{
-				result = TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.GetType() }( *unit, file );
+				result = TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.getType() }( *unit, file );
 			}
 		}
 
@@ -163,58 +163,58 @@ namespace Castor3D
 		m_textureUnits.clear();
 	}
 
-	void Pass::Initialise()
+	void Pass::initialise()
 	{
-		PrepareTextures();
+		prepareTextures();
 
 		for ( auto unit : m_textureUnits )
 		{
-			unit->Initialise();
+			unit->initialise();
 		}
 
-		DoInitialise();
+		doInitialise();
 	}
 
-	void Pass::Cleanup()
+	void Pass::cleanup()
 	{
-		DoCleanup();
+		doCleanup();
 
 		for ( auto unit : m_textureUnits )
 		{
-			unit->Cleanup();
+			unit->cleanup();
 		}
 	}
 
-	void Pass::BindTextures()
+	void Pass::bindTextures()
 	{
 		for ( auto it : m_textureUnits )
 		{
-			it->Bind();
+			it->bind();
 		}
 	}
 
-	void Pass::UnbindTextures()
+	void Pass::unbindTextures()
 	{
 		for ( auto it : m_textureUnits )
 		{
-			it->Unbind();
+			it->unbind();
 		}
 	}
 
-	void Pass::AddTextureUnit( TextureUnitSPtr unit )
+	void Pass::addTextureUnit( TextureUnitSPtr unit )
 	{
 		m_textureUnits.push_back( unit );
-		AddFlag( m_textureFlags, unit->GetChannel() );
+		addFlag( m_textureFlags, unit->getChannel() );
 		m_texturesReduced = false;
 	}
 
-	TextureUnitSPtr Pass::GetTextureUnit( TextureChannel channel )const
+	TextureUnitSPtr Pass::getTextureUnit( TextureChannel channel )const
 	{
 		auto it = std::find_if( m_textureUnits.begin()
 			, m_textureUnits.end()
 			, [channel]( TextureUnitSPtr unit )
 			{
-				return unit->GetChannel() == channel;
+				return unit->getChannel() == channel;
 			} );
 
 		TextureUnitSPtr result;
@@ -227,71 +227,71 @@ namespace Castor3D
 		return result;
 	}
 
-	void Pass::DestroyTextureUnit( uint32_t index )
+	void Pass::destroyTextureUnit( uint32_t index )
 	{
 		REQUIRE( index < m_textureUnits.size() );
-		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << index );
+		Logger::logInfo( StringStream() << cuT( "Destroying TextureUnit " ) << index );
 		auto it = m_textureUnits.begin();
 		m_textureUnits.erase( it + index );
 		uint32_t i = 0u;
 
 		for ( it = m_textureUnits.begin(); it != m_textureUnits.end(); ++it )
 		{
-			( *it )->SetIndex( ++i );
+			( *it )->setIndex( ++i );
 		}
 
-		DoUpdateFlags();
+		doUpdateFlags();
 		m_texturesReduced = false;
 	}
 
-	TextureUnitSPtr Pass::GetTextureUnit( uint32_t index )const
+	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
 	{
 		REQUIRE( index < m_textureUnits.size() );
 		return m_textureUnits[index];
 	}
 
-	bool Pass::HasAlphaBlending()const
+	bool Pass::hasAlphaBlending()const
 	{
-		return ( CheckFlag( m_textureFlags, TextureChannel::eOpacity ) && GetAlphaFunc() == ComparisonFunc::eAlways )
+		return ( checkFlag( m_textureFlags, TextureChannel::eOpacity ) && getAlphaFunc() == ComparisonFunc::eAlways )
 			|| m_opacity < 1.0f;
 	}
 
-	void Pass::PrepareTextures()
+	void Pass::prepareTextures()
 	{
 		if ( !m_texturesReduced )
 		{
 			for ( auto unit : m_textureUnits )
 			{
-				unit->SetIndex( 0u );
+				unit->setIndex( 0u );
 			}
 
 			uint32_t index = MinTextureIndex;
 			TextureUnitSPtr opacitySource;
 			PxBufferBaseSPtr opacityImage;
 
-			DoPrepareTexture( TextureChannel::eDiffuse, index, opacitySource, opacityImage );
-			DoPrepareTexture( TextureChannel::eSpecular, index, opacitySource, opacityImage );
-			DoPrepareTexture( TextureChannel::eEmissive, index, opacitySource, opacityImage );
+			doPrepareTexture( TextureChannel::eDiffuse, index, opacitySource, opacityImage );
+			doPrepareTexture( TextureChannel::eSpecular, index, opacitySource, opacityImage );
+			doPrepareTexture( TextureChannel::eEmissive, index, opacitySource, opacityImage );
 
-			DoPrepareTexture( TextureChannel::eNormal, index );
-			DoPrepareTexture( TextureChannel::eGloss, index );
-			DoPrepareTexture( TextureChannel::eHeight, index );
+			doPrepareTexture( TextureChannel::eNormal, index );
+			doPrepareTexture( TextureChannel::eGloss, index );
+			doPrepareTexture( TextureChannel::eHeight, index );
 
-			DoPrepareTexture( TextureChannel::eAmbientOcclusion, index );
+			doPrepareTexture( TextureChannel::eAmbientOcclusion, index );
 
-			DoPrepareOpacity( opacitySource, opacityImage, index );
+			doPrepareOpacity( opacitySource, opacityImage, index );
 
-			auto unit = GetTextureUnit( TextureChannel::eDiffuse );
+			auto unit = getTextureUnit( TextureChannel::eDiffuse );
 
 			if ( unit )
 			{
-				if ( unit->GetRenderTarget() )
+				if ( unit->getRenderTarget() )
 				{
 					m_needsGammaCorrection = false;
 				}
 				else
 				{
-					auto format = unit->GetTexture()->GetPixelFormat();
+					auto format = unit->getTexture()->getPixelFormat();
 					m_needsGammaCorrection = format != PixelFormat::eL16F32F
 						&& format != PixelFormat::eL32F
 						&& format != PixelFormat::eAL16F32F
@@ -307,9 +307,9 @@ namespace Castor3D
 
 			for ( auto unit : m_textureUnits )
 			{
-				if ( !unit->GetIndex() )
+				if ( !unit->getIndex() )
 				{
-					unit->SetIndex( index++ );
+					unit->setIndex( index++ );
 				}
 			}
 
@@ -317,12 +317,12 @@ namespace Castor3D
 		}
 	}
 
-	MaterialType Pass::GetType()const
+	MaterialType Pass::getType()const
 	{
-		return GetOwner()->GetType();
+		return getOwner()->getType();
 	}
 
-	void Pass::SetOpacity( float value )
+	void Pass::setOpacity( float value )
 	{
 		m_opacity = value;
 
@@ -331,26 +331,26 @@ namespace Castor3D
 			m_alphaBlendMode = BlendMode::eInterpolative;
 		}
 
-		DoSetOpacity( value );
+		doSetOpacity( value );
 		onChanged( *this );
 	}
 
-	ProgramFlags Pass::GetProgramFlags()const
+	ProgramFlags Pass::getProgramFlags()const
 	{
 		ProgramFlags result;
 
-		if ( HasAlphaBlending()
-			&& !CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) )
+		if ( hasAlphaBlending()
+			&& !checkFlag( getTextureFlags(), TextureChannel::eRefraction ) )
 		{
 			result |= ProgramFlag::eAlphaBlending;
 		}
 
-		if ( GetAlphaFunc() != ComparisonFunc::eAlways )
+		if ( getAlphaFunc() != ComparisonFunc::eAlways )
 		{
 			result |= ProgramFlag::eAlphaTest;
 		}
 
-		switch ( GetType() )
+		switch ( getType() )
 		{
 		case MaterialType::ePbrMetallicRoughness:
 			result |= ProgramFlag::ePbrMetallicRoughness;
@@ -364,96 +364,96 @@ namespace Castor3D
 		return result;
 	}
 
-	bool Pass::DoPrepareTexture( TextureChannel channel
+	bool Pass::doPrepareTexture( TextureChannel channel
 		, uint32_t & index
 		, TextureUnitSPtr & opacitySource
 		, PxBufferBaseSPtr & opacityBuffer )
 	{
-		PxBufferBaseSPtr opacity = DoPrepareTexture( channel, index );
+		PxBufferBaseSPtr opacity = doPrepareTexture( channel, index );
 		bool result = opacity != nullptr;
 
 		if ( result && !opacityBuffer )
 		{
 			opacityBuffer = opacity;
-			opacitySource = GetTextureUnit( channel );
+			opacitySource = getTextureUnit( channel );
 		}
 
 		return result;
 	}
 
-	PxBufferBaseSPtr Pass::DoPrepareTexture( TextureChannel channel
+	PxBufferBaseSPtr Pass::doPrepareTexture( TextureChannel channel
 		, uint32_t & index )
 	{
 		PxBufferBaseSPtr result;
-		auto unit = GetTextureUnit( channel );
+		auto unit = getTextureUnit( channel );
 
 		if ( unit )
 		{
-			auto texture = unit->GetTexture();
+			auto texture = unit->getTexture();
 
-			if ( texture && texture->GetImage().GetBuffer() )
+			if ( texture && texture->getImage().getBuffer() )
 			{
-				PxBufferBaseSPtr extracted = texture->GetImage().GetBuffer();
-				result = PF::ExtractAlpha( extracted );
+				PxBufferBaseSPtr extracted = texture->getImage().getBuffer();
+				result = PF::extractAlpha( extracted );
 
 				if ( result )
 				{
-					texture->SetSource( extracted );
+					texture->setSource( extracted );
 				}
 			}
 
-			unit->SetIndex( index++ );
-			Logger::LogDebug( cuT( "	" ) + GetName( channel ) + cuT( " map at index " ) + string::to_string( unit->GetIndex() ) );
+			unit->setIndex( index++ );
+			Logger::logDebug( cuT( "	" ) + getName( channel ) + cuT( " map at index " ) + string::toString( unit->getIndex() ) );
 		}
 
 		return result;
 	}
 
-	void Pass::DoPrepareOpacity( TextureUnitSPtr opacitySource
+	void Pass::doPrepareOpacity( TextureUnitSPtr opacitySource
 		, PxBufferBaseSPtr opacityBuffer
 		, uint32_t & index )
 	{
-		TextureUnitSPtr opacityMap = GetTextureUnit( TextureChannel::eOpacity );
+		TextureUnitSPtr opacityMap = getTextureUnit( TextureChannel::eOpacity );
 
 		if ( opacityMap
-			&& opacityMap->GetTexture()
-			&& opacityMap->GetTexture()->GetImage().GetBuffer() )
+			&& opacityMap->getTexture()
+			&& opacityMap->getTexture()->getImage().getBuffer() )
 		{
-			if ( opacityMap->GetTexture()->GetImage().GetBuffer()->format() != PixelFormat::eL8
-				&& opacityMap->GetTexture()->GetImage().GetBuffer()->format() != PixelFormat::eL16F32F
-				&& opacityMap->GetTexture()->GetImage().GetBuffer()->format() != PixelFormat::eL32F )
+			if ( opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL8
+				&& opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL16F32F
+				&& opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL32F )
 			{
-				PxBufferBaseSPtr reduced = opacityMap->GetTexture()->GetImage().GetBuffer();
-				PF::ReduceToAlpha( reduced );
-				auto texture = GetOwner()->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
-				texture->SetSource( reduced );
-				opacityMap->SetTexture( texture );
+				PxBufferBaseSPtr reduced = opacityMap->getTexture()->getImage().getBuffer();
+				PF::reduceToAlpha( reduced );
+				auto texture = getOwner()->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+				texture->setSource( reduced );
+				opacityMap->setTexture( texture );
 				opacityBuffer.reset();
 			}
 		}
 		else if ( opacityBuffer )
 		{
-			auto texture = GetOwner()->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
-			texture->SetSource( opacityBuffer );
-			opacityMap = std::make_shared< TextureUnit >( *GetOwner()->GetEngine() );
-			opacityMap->SetAutoMipmaps( opacitySource->GetAutoMipmaps() );
-			opacityMap->SetChannel( TextureChannel::eOpacity );
-			opacityMap->SetSampler( opacitySource->GetSampler() );
-			opacityMap->SetTexture( texture );
-			AddTextureUnit( opacityMap );
+			auto texture = getOwner()->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+			texture->setSource( opacityBuffer );
+			opacityMap = std::make_shared< TextureUnit >( *getOwner()->getEngine() );
+			opacityMap->setAutoMipmaps( opacitySource->getAutoMipmaps() );
+			opacityMap->setChannel( TextureChannel::eOpacity );
+			opacityMap->setSampler( opacitySource->getSampler() );
+			opacityMap->setTexture( texture );
+			addTextureUnit( opacityMap );
 			opacityBuffer.reset();
 		}
 		else if ( opacityMap )
 		{
-			DestroyTextureUnit( opacityMap->GetIndex() );
+			destroyTextureUnit( opacityMap->getIndex() );
 			opacityMap.reset();
 		}
 
 		if ( opacityMap )
 		{
-			opacityMap->SetIndex( index++ );
-			Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << opacityMap->GetIndex() );
-			AddFlag( m_textureFlags, TextureChannel::eOpacity );
+			opacityMap->setIndex( index++ );
+			Logger::logDebug( StringStream() << cuT( "	Opacity map at index " ) << opacityMap->getIndex() );
+			addFlag( m_textureFlags, TextureChannel::eOpacity );
 
 			if ( m_alphaBlendMode == BlendMode::eNoBlend )
 			{
@@ -462,19 +462,19 @@ namespace Castor3D
 		}
 		else
 		{
-			RemFlag( m_textureFlags, TextureChannel::eOpacity );
+			remFlag( m_textureFlags, TextureChannel::eOpacity );
 		}
 	}
 
-	void Pass::DoUpdateFlags()
+	void Pass::doUpdateFlags()
 	{
 		m_textureFlags = 0u;
 
 		for ( auto unit : m_textureUnits )
 		{
-			if ( unit->GetChannel() != TextureChannel( 0 ) )
+			if ( unit->getChannel() != TextureChannel( 0 ) )
 			{
-				AddFlag( m_textureFlags, unit->GetChannel() );
+				addFlag( m_textureFlags, unit->getChannel() );
 			}
 		}
 	}

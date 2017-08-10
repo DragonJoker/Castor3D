@@ -31,30 +31,30 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API Struct( GlslWriter & p_writer
-			, Castor::String const & p_name );
+			, castor::String const & p_name );
 		GlslWriter_API Struct( GlslWriter & p_writer
-			, Castor::String const & p_name
-			, Castor::String const & p_instName );
-		GlslWriter_API void End();
+			, castor::String const & p_name
+			, castor::String const & p_instName );
+		GlslWriter_API void end();
 
 		template< typename T >
-		inline void DeclMember( Castor::String const & p_name );
+		inline void declMember( castor::String const & p_name );
 		template< typename T >
-		inline void DeclMember( Castor::String const & p_name, uint32_t p_dimension );
+		inline void declMember( castor::String const & p_name, uint32_t p_dimension );
 		template< typename T >
-		inline void DeclMemberArray( Castor::String const & p_name );
+		inline void declMemberArray( castor::String const & p_name );
 		template< typename T >
-		inline T GetMember( Castor::String const & p_name );
+		inline T getMember( castor::String const & p_name );
 		template< typename T >
-		inline Array< T > GetMember( Castor::String const & p_name, uint32_t p_dimension );
+		inline Array< T > getMember( castor::String const & p_name, uint32_t p_dimension );
 		template< typename T >
-		inline Array< T > GetMemberArray( Castor::String const & p_name );
+		inline Array< T > getMemberArray( castor::String const & p_name );
 
 	private:
 		IndentBlock * m_block;
 		GlslWriter & m_writer;
-		Castor::String m_name;
-		Castor::String m_instName;
+		castor::String m_name;
+		castor::String m_instName;
 	};
 }
 

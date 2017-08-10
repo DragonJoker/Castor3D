@@ -2,8 +2,8 @@
 
 #include <Engine.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace fxaa
 {
@@ -15,31 +15,31 @@ namespace fxaa
 
 	FxaaUbo::FxaaUbo( Engine & engine )
 		: m_ubo{ FxaaUbo::Name
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, FxaaUbo::BindingPoint }
-		, m_subpixShift{ m_ubo.CreateUniform< UniformType::eFloat >( FxaaUbo::SubpixShift ) }
-		, m_spanMax{ m_ubo.CreateUniform< UniformType::eFloat >( FxaaUbo::SpanMax ) }
-		, m_reduceMul{ m_ubo.CreateUniform< UniformType::eFloat >( FxaaUbo::ReduceMul ) }
-		, m_renderSize{ m_ubo.CreateUniform< UniformType::eVec2f >( FxaaUbo::RenderSize ) }
+		, m_subpixShift{ m_ubo.createUniform< UniformType::eFloat >( FxaaUbo::SubpixShift ) }
+		, m_spanMax{ m_ubo.createUniform< UniformType::eFloat >( FxaaUbo::SpanMax ) }
+		, m_reduceMul{ m_ubo.createUniform< UniformType::eFloat >( FxaaUbo::ReduceMul ) }
+		, m_renderSize{ m_ubo.createUniform< UniformType::eVec2f >( FxaaUbo::RenderSize ) }
 	{
 	}
 
 	FxaaUbo::~FxaaUbo()
 	{
-		m_ubo.Cleanup();
+		m_ubo.cleanup();
 	}
 
-	void FxaaUbo::Update( Size const & p_size
+	void FxaaUbo::update( Size const & p_size
 		, float p_shift
 		, float p_span
 		, float p_reduce )
 	{
-		m_subpixShift->SetValue( p_shift );
-		m_spanMax->SetValue( p_span );
-		m_reduceMul->SetValue( p_reduce );
-		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
-		m_ubo.Update();
-		m_ubo.BindTo( FxaaUbo::BindingPoint );
+		m_subpixShift->setValue( p_shift );
+		m_spanMax->setValue( p_span );
+		m_reduceMul->setValue( p_reduce );
+		m_renderSize->setValue( Point2f( p_size.getWidth(), p_size.getHeight() ) );
+		m_ubo.update();
+		m_ubo.bindTo( FxaaUbo::BindingPoint );
 	}
 
 	//************************************************************************************************

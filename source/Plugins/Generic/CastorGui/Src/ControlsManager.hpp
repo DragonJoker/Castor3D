@@ -40,7 +40,7 @@ namespace CastorGui
 	*/
 	class ControlsManager
 		: public std::enable_shared_from_this< ControlsManager >
-		, public Castor3D::UserInputListener
+		, public castor3d::UserInputListener
 	{
 		friend class ButtonCtrl;
 		friend class ComboBoxCtrl;
@@ -58,7 +58,7 @@ namespace CastorGui
 		*\param[in] engine
 		*	The engine
 		*/
-		C3D_CGui_API ControlsManager( Castor3D::Engine & engine );
+		C3D_CGui_API ControlsManager( castor3d::Engine & engine );
 		/**
 		*\brief
 		*	Destructor
@@ -70,17 +70,17 @@ namespace CastorGui
 		*\return
 		*	The font
 		*/
-		Castor::FontSPtr GetDefaultFont()const
+		castor::FontSPtr getDefaultFont()const
 		{
 			return m_defaultFont.lock();
 		}
 		/**
 		*\brief
-		*	Sets the default font used by controls
+		*	sets the default font used by controls
 		*\param[in] p_font
 		*	The font
 		*/
-		void SetDefaultFont( Castor::FontSPtr p_font )
+		void setDefaultFont( castor::FontSPtr p_font )
 		{
 			m_defaultFont = p_font;
 		}
@@ -95,28 +95,28 @@ namespace CastorGui
 		*\param[in] p_control
 		*	The control
 		*/
-		C3D_CGui_API void Create( ControlSPtr p_control );
+		C3D_CGui_API void create( ControlSPtr p_control );
 		/**
 		*\brief
 		*	Destroys the given control's overlays and unbinds its callbacks from appropriate events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		C3D_CGui_API void Destroy( ControlSPtr p_control );
+		C3D_CGui_API void destroy( ControlSPtr p_control );
 		/**
 		*\brief
-		*	Adds a control that can an event target
+		*	adds a control that can an event target
 		*\param[in] p_control
 		*	The control
 		*/
-		C3D_CGui_API void AddControl( ControlSPtr p_control );
+		C3D_CGui_API void addControl( ControlSPtr p_control );
 		/**
 		*\brief
 		*	Removes a control
 		*\param[in] p_id
 		*	The control ID
 		*/
-		C3D_CGui_API void RemoveControl( uint32_t p_id );
+		C3D_CGui_API void removeControl( uint32_t p_id );
 		/**
 		*\brief
 		*	Retrieves a control
@@ -125,7 +125,7 @@ namespace CastorGui
 		*\return
 		*	The contro
 		*/
-		C3D_CGui_API ControlSPtr GetControl( uint32_t p_id );
+		C3D_CGui_API ControlSPtr getControl( uint32_t p_id );
 
 		//@}
 
@@ -136,112 +136,112 @@ namespace CastorGui
 		*\param[in] p_control
 		*	The control.
 		*/
-		void ConnectEvents( ButtonCtrl & p_control );
+		void connectEvents( ButtonCtrl & p_control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void ConnectEvents( ComboBoxCtrl & p_control );
+		void connectEvents( ComboBoxCtrl & p_control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void ConnectEvents( EditCtrl & p_control );
+		void connectEvents( EditCtrl & p_control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void ConnectEvents( ListBoxCtrl & p_control );
+		void connectEvents( ListBoxCtrl & p_control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void ConnectEvents( SliderCtrl & p_control );
+		void connectEvents( SliderCtrl & p_control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void DisconnectEvents( ButtonCtrl & p_control );
+		void disconnectEvents( ButtonCtrl & p_control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void DisconnectEvents( ComboBoxCtrl & p_control );
+		void disconnectEvents( ComboBoxCtrl & p_control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void DisconnectEvents( EditCtrl & p_control );
+		void disconnectEvents( EditCtrl & p_control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void DisconnectEvents( ListBoxCtrl & p_control );
+		void disconnectEvents( ListBoxCtrl & p_control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
 		*\param[in] p_control
 		*	The control.
 		*/
-		void DisconnectEvents( SliderCtrl & p_control );
+		void disconnectEvents( SliderCtrl & p_control );
 
 	private:
 		/**
-		 *copydoc		Castor3D::UserInputListener::DoInitialise
+		 *copydoc		castor3d::UserInputListener::doInitialise
 		 */
-		bool DoInitialise()override;
+		bool doInitialise()override;
 		/**
-		 *copydoc		Castor3D::UserInputListener::DoCleanup
+		 *copydoc		castor3d::UserInputListener::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *copydoc		Castor3D::UserInputListener::FireMaterialEvent
+		 *copydoc		castor3d::UserInputListener::fireMaterialEvent
 		 */
-		bool FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material )override;
+		bool fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )override;
 		
 		/**
-		 *copydoc		Castor3D::UserInputListener::FireTextEvent
+		 *copydoc		castor3d::UserInputListener::fireTextEvent
 		 */
-		bool FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption )override;
+		bool fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )override;
 		/**
 		*\brief
 		*	Retrieves the first handler which can be targeted by mouse, at its position
 		*\param[in] p_position
 		*	The mouse position
 		*/
-		Castor3D::EventHandlerSPtr DoGetMouseTargetableHandler( Castor::Position const & p_position )const;
+		castor3d::EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & p_position )const;
 		/**
 		*\brief
 		*	Updates the z-index ordered controls array
 		*/
-		void DoUpdate()const;
+		void doUpdate()const;
 		/**
 		*\brief
 		*	Removes a control
 		*\param[in] p_id
 		*	The control ID
 		*/
-		void DoRemoveControl( uint32_t p_id );
+		void doRemoveControl( uint32_t p_id );
 		/**
-		 *\copydoc		Castor3D::FrameListener::DoFlush
+		 *\copydoc		castor3d::FrameListener::doFlush
 		 */
-		virtual void DoFlush();
+		virtual void doFlush();
 
 	private:
 		//! The mutex used to protect the controls array.
@@ -253,7 +253,7 @@ namespace CastorGui
 		//! Tells the controls array has changed
 		bool m_changed;
 		//! The default font used by controls
-		Castor::FontWPtr m_defaultFont;
+		castor::FontWPtr m_defaultFont;
 		//! The button click event connections.
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
 		//! The combo-box item selected event connections.

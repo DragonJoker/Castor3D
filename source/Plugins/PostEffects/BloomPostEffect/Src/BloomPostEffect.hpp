@@ -35,68 +35,68 @@ namespace Bloom
 	static const uint32_t FILTER_COUNT = 4;
 
 	class BloomPostEffect
-		: public Castor3D::PostEffect
+		: public castor3d::PostEffect
 	{
 		using SurfaceArray = std::array< PostEffectSurface, FILTER_COUNT >;
 
 	public:
-		BloomPostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & renderSystem, Castor3D::Parameters const & p_param );
+		BloomPostEffect( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
 		virtual ~BloomPostEffect();
-		static Castor3D::PostEffectSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & renderSystem, Castor3D::Parameters const & p_param );
+		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
 		/**
-		 *\copydoc		Castor3D::PostEffect::Initialise
+		 *\copydoc		castor3d::PostEffect::Initialise
 		 */
-		virtual bool Initialise();
+		virtual bool initialise();
 		/**
-		 *\copydoc		Castor3D::PostEffect::Cleanup
+		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
-		virtual void Cleanup();
+		virtual void cleanup();
 		/**
-		 *\copydoc		Castor3D::PostEffect::Apply
+		 *\copydoc		castor3d::PostEffect::Apply
 		 */
-		virtual bool Apply( Castor3D::FrameBuffer & p_framebuffer );
+		virtual bool apply( castor3d::FrameBuffer & p_framebuffer );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::PostEffect::DoWriteInto
+		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		virtual bool DoWriteInto( Castor::TextFile & p_file );
+		virtual bool doWriteInto( castor::TextFile & p_file );
 
 	public:
-		static Castor::String const Type;
-		static Castor::String const Name;
-		static Castor::String const CombineMapPass0;
-		static Castor::String const CombineMapPass1;
-		static Castor::String const CombineMapPass2;
-		static Castor::String const CombineMapPass3;
-		static Castor::String const CombineMapScene;
+		static castor::String const Type;
+		static castor::String const Name;
+		static castor::String const CombineMapPass0;
+		static castor::String const CombineMapPass1;
+		static castor::String const CombineMapPass2;
+		static castor::String const CombineMapPass3;
+		static castor::String const CombineMapScene;
 		static constexpr uint32_t MaxCoefficients{ 64u };
 
 	private:
-		void DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
-		void DoDownSample( Castor3D::TextureLayout const & p_origin );
-		void DoCombine( Castor3D::TextureLayout const & p_origin );
-		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
-		bool DoInitialiseHiPassProgram();
-		bool DoInitialiseCombineProgram();
+		void doHiPassFilter( castor3d::TextureLayout const & p_origin );
+		void doDownSample( castor3d::TextureLayout const & p_origin );
+		void doCombine( castor3d::TextureLayout const & p_origin );
+		castor3d::SamplerSPtr doCreateSampler( bool p_linear );
+		bool doInitialiseHiPassProgram();
+		bool doInitialiseCombineProgram();
 
-		Castor3D::SamplerSPtr m_linearSampler;
-		Castor3D::SamplerSPtr m_nearestSampler;
+		castor3d::SamplerSPtr m_linearSampler;
+		castor3d::SamplerSPtr m_nearestSampler;
 
-		Castor3D::RenderPipelineUPtr m_hiPassPipeline;
-		Castor3D::PushUniform1sSPtr m_hiPassMapDiffuse;
+		castor3d::RenderPipelineUPtr m_hiPassPipeline;
+		castor3d::PushUniform1sSPtr m_hiPassMapDiffuse;
 
-		Castor3D::GaussianBlurSPtr m_blur;
+		castor3d::GaussianBlurSPtr m_blur;
 
-		Castor3D::MatrixUbo m_matrixUbo;
-		Castor3D::RenderPipelineUPtr m_combinePipeline;
+		castor3d::MatrixUbo m_matrixUbo;
+		castor3d::RenderPipelineUPtr m_combinePipeline;
 
-		Castor3D::Viewport m_viewport;
-		Castor3D::BufferDeclaration m_declaration;
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_vertices;
-		Castor3D::VertexBufferSPtr m_vertexBuffer;
-		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-		Castor::real m_buffer[12];
+		castor3d::Viewport m_viewport;
+		castor3d::BufferDeclaration m_declaration;
+		std::array< castor3d::BufferElementGroupSPtr, 6 > m_vertices;
+		castor3d::VertexBufferSPtr m_vertexBuffer;
+		castor3d::GeometryBuffersSPtr m_geometryBuffers;
+		castor::real m_buffer[12];
 		SurfaceArray m_hiPassSurfaces;
 		SurfaceArray m_blurSurfaces;
 		uint32_t m_size;

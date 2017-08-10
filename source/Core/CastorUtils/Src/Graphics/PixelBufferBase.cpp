@@ -1,6 +1,6 @@
 #include "PixelBuffer.hpp"
 
-namespace Castor
+namespace castor
 {
 	PxBufferBase::PxBufferBase( Size const & p_size, PixelFormat p_format )
 		: m_pixelFormat( p_format )
@@ -25,7 +25,7 @@ namespace Castor
 		clear();
 		m_size = p_pixelBuffer.m_size;
 		m_pixelFormat = p_pixelBuffer.m_pixelFormat;
-		init( p_pixelBuffer.m_buffer.data(), p_pixelBuffer.m_pixelFormat );
+		initialise( p_pixelBuffer.m_buffer.data(), p_pixelBuffer.m_pixelFormat );
 		return * this;
 	}
 
@@ -34,9 +34,9 @@ namespace Castor
 		m_buffer.clear();
 	}
 
-	void PxBufferBase::init( uint8_t const * p_buffer, PixelFormat p_bufferFormat )
+	void PxBufferBase::initialise( uint8_t const * p_buffer, PixelFormat p_bufferFormat )
 	{
-		uint8_t bpp = PF::GetBytesPerPixel( format() );
+		uint8_t bpp = PF::getBytesPerPixel( format() );
 		uint32_t newSize = count() * bpp;
 		m_buffer.resize( newSize );
 
@@ -52,9 +52,9 @@ namespace Castor
 			}
 			else
 			{
-				PF::ConvertBuffer( p_bufferFormat
+				PF::convertBuffer( p_bufferFormat
 					, p_buffer
-					, count() * PF::GetBytesPerPixel( p_bufferFormat )
+					, count() * PF::getBytesPerPixel( p_bufferFormat )
 					, format()
 					, m_buffer.data()
 					, size() );
@@ -62,10 +62,10 @@ namespace Castor
 		}
 	}
 
-	void PxBufferBase::init( Size const & p_size )
+	void PxBufferBase::initialise( Size const & p_size )
 	{
 		m_size = p_size;
-		init( nullptr, PixelFormat::eA8R8G8B8 );
+		initialise( nullptr, PixelFormat::eA8R8G8B8 );
 	}
 
 	void PxBufferBase::swap( PxBufferBase & p_pixelBuffer )
@@ -77,8 +77,8 @@ namespace Castor
 
 	void PxBufferBase::flip()
 	{
-		uint32_t fwidth = width() * PF::GetBytesPerPixel( m_pixelFormat );
-		uint32_t fheight = height();
+		uint32_t fwidth = getWidth() * PF::getBytesPerPixel( m_pixelFormat );
+		uint32_t fheight = getHeight();
 		uint32_t hheight = fheight / 2;
 		uint8_t * bufferTop = &m_buffer[0];
 		uint8_t * bufferBot = &m_buffer[( fheight - 1 ) * fwidth - 1];

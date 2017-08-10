@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,8 +42,8 @@ namespace CastorGui
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		ButtonCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		ButtonCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id );
 
@@ -57,13 +57,13 @@ namespace CastorGui
 		 *\param[in]	p_style			The style
 		 *\param[in]	p_visible		Initial visibility status
 		 */
-		ButtonCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		ButtonCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id
-			, Castor::String const & p_caption
-			, Castor::Position const & p_position
-			, Castor::Size const & p_size
+			, castor::String const & p_caption
+			, castor::Position const & p_position
+			, castor::Size const & p_size
 			, uint32_t p_style = 0
 			, bool p_visible = true );
 
@@ -71,60 +71,60 @@ namespace CastorGui
 		*/
 		virtual ~ButtonCtrl();
 
-		/** Sets the text material.
+		/** sets the text material.
 		 *\param[in]	p_material	The new value.
 		 */
-		void SetTextMaterial( Castor3D::MaterialSPtr p_material );
+		void setTextMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the highlighted button background material.
+		/** sets the highlighted button background material.
 		*\param[in]	p_material	The new value.
 		*/
-		void SetHighlightedBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		void setHighlightedBackgroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the highlighted button foreground material.
+		/** sets the highlighted button foreground material.
 		*\param[in]	p_material	The new value.
 		*/
-		void SetHighlightedForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		void setHighlightedForegroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the highlighted button text material.
+		/** sets the highlighted button text material.
 		*\param[in]	p_material	The new value.
 		*/
-		void SetHighlightedTextMaterial( Castor3D::MaterialSPtr p_material );
+		void setHighlightedTextMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the pushed button background material.
+		/** sets the pushed button background material.
 		*\param[in]	p_material	The new value.
 		*/
-		void SetPushedBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		void setPushedBackgroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the pushed button foreground material.
+		/** sets the pushed button foreground material.
 		*\param[in]	p_material	The new value.
 		*/
-		void SetPushedForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		void setPushedForegroundMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the pushed button text material.
+		/** sets the pushed button text material.
 		*\param[in]	p_material	The new value.
 		*/
-		void SetPushedTextMaterial( Castor3D::MaterialSPtr p_material );
+		void setPushedTextMaterial( castor3d::MaterialSPtr p_material );
 
-		/** Sets the caption font.
+		/** sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
-		void SetFont( Castor::String const & p_font );
+		void setFont( castor::String const & p_font );
 
-		/** Sets the horizontal alignment for the text.
+		/** sets the horizontal alignment for the text.
 		*\param[in]	p_align	The new value.
 		*/
-		void SetHAlign( Castor3D::HAlign p_align );
+		void setHAlign( castor3d::HAlign p_align );
 
-		/** Sets the vertical alignment for the text.
+		/** sets the vertical alignment for the text.
 		*\param[in]	p_align	The new value.
 		*/
-		void SetVAlign( Castor3D::VAlign p_align );
+		void setVAlign( castor3d::VAlign p_align );
 
 		/** Retrieves the caption
 		 *\return		The valu
 		 */
-		inline Castor::String const & GetCaption()const
+		inline castor::String const & getCaption()const
 		{
 			return m_caption;
 		}
@@ -134,90 +134,90 @@ namespace CastorGui
 		 *\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnButtonEventConnection Connect( ButtonEvent p_event, OnButtonEventFunction p_function )
+		inline OnButtonEventConnection connect( ButtonEvent p_event, OnButtonEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}
 
 	private:
-		/** @copydoc CastorGui::Control::DoCreate
+		/** @copydoc CastorGui::Control::doCreate
 		*/
-		void DoCreate()override;
+		void doCreate()override;
 
-		/** @copydoc CastorGui::Control::DoDestroy
+		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		void DoDestroy()override;
+		void doDestroy()override;
 
-		/** @copydoc CastorGui::Control::DoSetPosition
+		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		void DoSetPosition( Castor::Position const & p_value )override;
+		void doSetPosition( castor::Position const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoSetSize
+		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		void DoSetSize( Castor::Size const & p_value )override;
+		void doSetSize( castor::Size const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
+		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material )override;
+		void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material )override;
 
-		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
+		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material )override;
+		void doSetForegroundMaterial( castor3d::MaterialSPtr p_material )override;
 
-		/** @copydoc CastorGui::Control::DoSetCaption
+		/** @copydoc CastorGui::Control::doSetCaption
 		*/
-		void DoSetCaption( Castor::String const & p_caption )override;
+		void doSetCaption( castor::String const & p_caption )override;
 
-		/** @copydoc CastorGui::Control::DoSetVisible
+		/** @copydoc CastorGui::Control::doSetVisible
 		*/
-		void DoSetVisible( bool p_visible )override;
+		void doSetVisible( bool p_visible )override;
 
 		/** Event when mouse enters the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseEnter( Castor3D::MouseEvent const & p_event );
+		void onMouseEnter( castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse leaves the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLeave( Castor3D::MouseEvent const & p_event );
+		void onMouseLeave( castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse left button is pressed.
 		 *\param[in]	p_event		The mouse event.
 		 */
-		void OnMouseButtonDown( Castor3D::MouseEvent const & p_event );
+		void onMouseButtonDown( castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released.
 		 *\param[in]	p_event		The mouse event.
 		 */
-		void OnMouseButtonUp( Castor3D::MouseEvent const & p_event );
+		void onMouseButtonUp( castor3d::MouseEvent const & p_event );
 
 		/** Creates a material with an ambient colour equal to p_material->ambient + p_offset
 		 *\param[in]	p_material	The material.
 		 *\param[in]	p_offset	The colour offset.
 		 *\return		The created material.
 		 */
-		Castor3D::MaterialSPtr DoCreateMaterial( Castor3D::MaterialSPtr p_material, float p_offset );
+		castor3d::MaterialSPtr doCreateMaterial( castor3d::MaterialSPtr p_material, float p_offset );
 
 	private:
 		//! The caption
-		Castor::String m_caption;
+		castor::String m_caption;
 		//! The text overlay used to display the caption
-		Castor3D::TextOverlayWPtr m_text;
+		castor3d::TextOverlayWPtr m_text;
 		//! The text material.
-		Castor3D::MaterialWPtr m_textMaterial;
+		castor3d::MaterialWPtr m_textMaterial;
 		//! The highlighted button text material.
-		Castor3D::MaterialWPtr m_highlightedTextMaterial;
+		castor3d::MaterialWPtr m_highlightedTextMaterial;
 		//! The highlighted button background material.
-		Castor3D::MaterialWPtr m_highlightedBackgroundMaterial;
+		castor3d::MaterialWPtr m_highlightedBackgroundMaterial;
 		//! The highlighted button foreground material.
-		Castor3D::MaterialWPtr m_highlightedForegroundMaterial;
+		castor3d::MaterialWPtr m_highlightedForegroundMaterial;
 		//! The pushed button text material.
-		Castor3D::MaterialWPtr m_pushedTextMaterial;
+		castor3d::MaterialWPtr m_pushedTextMaterial;
 		//! The pushed button background material.
-		Castor3D::MaterialWPtr m_pushedBackgroundMaterial;
+		castor3d::MaterialWPtr m_pushedBackgroundMaterial;
 		//! The pushed button foreground material.
-		Castor3D::MaterialWPtr m_pushedForegroundMaterial;
+		castor3d::MaterialWPtr m_pushedForegroundMaterial;
 		//! The button events signals
 		OnButtonEvent m_signals[size_t( ButtonEvent::eCount )];
 	};

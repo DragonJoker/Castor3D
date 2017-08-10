@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Cache/Cache.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,10 +41,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct CacheTraits< Plugin, KeyType >
 	{
-		C3D_API static const Castor::String Name;
-		using Producer = std::function< std::shared_ptr< Plugin >( KeyType const &, PluginType, Castor::DynamicLibrarySPtr ) >;
+		C3D_API static const castor::String Name;
+		using Producer = std::function< std::shared_ptr< Plugin >( KeyType const &, PluginType, castor::DynamicLibrarySPtr ) >;
 		using Merger = std::function< void( CacheBase< Plugin, KeyType > const &
-											, Castor::Collection< Plugin, KeyType > &
+											, castor::Collection< Plugin, KeyType > &
 											, std::shared_ptr< Plugin > ) >;
 	};
 	/*!
@@ -57,11 +57,11 @@ namespace Castor3D
 	\brief		Cache de plug-ins.
 	*/
 	template<>
-	class Cache< Plugin, Castor::String >
-		: public CacheBase< Plugin, Castor::String >
+	class Cache< Plugin, castor::String >
+		: public CacheBase< Plugin, castor::String >
 	{
 	public:
-		using MyCacheType = CacheBase< Plugin, Castor::String >;
+		using MyCacheType = CacheBase< Plugin, castor::String >;
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void Clear();
+		C3D_API void clear();
 		/**
 		 *\~english
 		 *\brief		Loads a plug-in, given the plug-in name (ex: libGlRenderSystem.dll => GlRenderSystem)
@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\param[in]	p_pathFolder	Un chemin optionnel, pour y trouver le plug-in
 		 *\return		Le plug-in chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
 		 */
-		C3D_API PluginSPtr LoadPlugin( Castor::String const & p_pluginName, Castor::Path const & p_pathFolder )throw();
+		C3D_API PluginSPtr loadPlugin( castor::String const & p_pluginName, castor::Path const & p_pathFolder )throw();
 		/**
 		 *\~english
 		 *\brief		Loads a plug-in, given the plug-in file's full path
@@ -128,7 +128,7 @@ namespace Castor3D
 		 *\param[in]	p_fileFullPath	Le chemin du plug-in
 		 *\return		Le plug-in chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plug-in valide
 		 */
-		C3D_API PluginSPtr LoadPlugin( Castor::Path const & p_fileFullPath )throw();
+		C3D_API PluginSPtr loadPlugin( castor::Path const & p_fileFullPath )throw();
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-ins of given type
@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de plu-ins
 		 *\return		\p nullptr si non trouvé
 		 */
-		C3D_API PluginStrMap GetPlugins( PluginType p_type );
+		C3D_API PluginStrMap getPlugins( PluginType p_type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder
@@ -148,10 +148,10 @@ namespace Castor3D
 		 *\brief		Charge tous les plug-ins d'un dossier donné
 		 *\param[in]	p_folder	Le dossier
 		 */
-		C3D_API void LoadAllPlugins( Castor::Path const & p_folder );
+		C3D_API void loadAllPlugins( castor::Path const & p_folder );
 
 	private:
-		PluginSPtr DoLoadPlugin( Castor::Path const & p_pathFile );
+		PluginSPtr doloadPlugin( castor::Path const & p_pathFile );
 
 	private:
 		//!\~english	The loaded shared libraries map.
@@ -173,7 +173,7 @@ namespace Castor3D
 		//!\~french		Le mutex protégeant la map de plug-ins chargés triés par type.
 		std::recursive_mutex m_mutexLoadedPluginTypes;
 	};
-	using PluginCache = Cache< Plugin, Castor::String >;
+	using PluginCache = Cache< Plugin, castor::String >;
 	DECLARE_SMART_PTR( PluginCache );
 }
 

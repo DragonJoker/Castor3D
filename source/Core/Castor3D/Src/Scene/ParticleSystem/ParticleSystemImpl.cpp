@@ -1,8 +1,8 @@
 #include "ParticleSystemImpl.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ParticleSystemImpl::ParticleSystemImpl( Type p_type, ParticleSystem & p_parent )
 		: m_parent{ p_parent }

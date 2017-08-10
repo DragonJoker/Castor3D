@@ -2,16 +2,16 @@
 
 #include "ShaderProgram.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
 		bool IsLike( String const & p_name, String const & p_ref )
 		{
-			String name = string::lower_case( p_name );
-			String ref = string::lower_case( p_ref );
+			String name = string::lowerCase( p_name );
+			String ref = string::lowerCase( p_ref );
 			return name == ref
 				   || name.find( ref ) != String::npos
 				   || ref.find( name ) != String::npos;
@@ -27,13 +27,13 @@ namespace Castor3D
 	{
 	}
 
-	void ProgramInputLayout::DoAddAttribute( String const & p_name, ElementType p_type, uint32_t p_offset )
+	void ProgramInputLayout::doAddAttribute( String const & p_name, ElementType p_type, uint32_t p_offset )
 	{
-		auto usage = DoGuessUsages( p_name, p_type );
+		auto usage = doGuessUsages( p_name, p_type );
 		m_layout.push_back( BufferElementDeclaration { p_name, usage, p_type, p_offset } );
 	}
 
-	FlagCombination< ElementUsage > ProgramInputLayout::DoGuessUsages( String const & p_name, ElementType p_type )
+	FlagCombination< ElementUsage > ProgramInputLayout::doGuessUsages( String const & p_name, ElementType p_type )
 	{
 		FlagCombination< ElementUsage > result = 0u;
 

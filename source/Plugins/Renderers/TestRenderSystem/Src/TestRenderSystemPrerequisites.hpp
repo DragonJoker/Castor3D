@@ -38,7 +38,7 @@ SOFTWARE.
 
 namespace TestRender
 {
-	using Castor::real;
+	using castor::real;
 
 	class TestRenderSystem;
 	class TestAttributeBase;
@@ -94,9 +94,9 @@ namespace TestRender
 	DECLARE_SMART_PTR( TestShaderProgram );
 	DECLARE_VECTOR( TestShaderProgramSPtr, TestShaderProgramPtr );
 	DECLARE_VECTOR( TestShaderObjectSPtr, TestShaderObjectPtr );
-	DECLARE_MAP( Castor::String, TestUniformBaseSPtr, TestUniformPtrStr );
-	DECLARE_MAP( Castor3D::UniformSPtr, UboVariableInfosSPtr, UboVariableInfos );
-	DECLARE_MAP( Castor3D::UniformSPtr, TestVariableApplyerBaseSPtr, VariableApplyer );
+	DECLARE_MAP( castor::String, TestUniformBaseSPtr, TestUniformPtrStr );
+	DECLARE_MAP( castor3d::UniformSPtr, UboVariableInfosSPtr, UboVariableInfos );
+	DECLARE_MAP( castor3d::UniformSPtr, TestVariableApplyerBaseSPtr, VariableApplyer );
 
 	class TestRenderBuffer;
 	class TestColourRenderBuffer;
@@ -130,11 +130,11 @@ namespace TestRender
 	class TestTexturePboStorage;
 	class TestTextureTboStorage;
 	class TestGpuIoBuffer;
-	class TestDownloadPixelBuffer;
+	class TestdownloadPixelBuffer;
 	class TestUploadPixelBuffer;
 	DECLARE_SMART_PTR( TestTextureStorage );
 	DECLARE_SMART_PTR( TestGpuIoBuffer );
-	DECLARE_SMART_PTR( TestDownloadPixelBuffer );
+	DECLARE_SMART_PTR( TestdownloadPixelBuffer );
 	DECLARE_SMART_PTR( TestUploadPixelBuffer );
 
 	class TestOverlayRenderer;

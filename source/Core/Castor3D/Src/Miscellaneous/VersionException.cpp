@@ -1,8 +1,8 @@
 #include "VersionException.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	VersionException::VersionException( Version const & p_given, Version const & p_expected, char const * p_strFile, char const * p_strFunction, uint32_t p_uiLine )
 		:	Exception( "", p_strFile, p_strFunction, p_uiLine )
@@ -14,6 +14,6 @@ namespace Castor3D
 		stream << p_given;
 		stream << "] - Incompatible versions";
 		m_description = stream.str();
-		Logger::LogDebug( m_description );
+		Logger::logDebug( m_description );
 	}
 }

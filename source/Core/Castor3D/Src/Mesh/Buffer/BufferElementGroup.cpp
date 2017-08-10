@@ -1,26 +1,26 @@
 ﻿#include "BufferElementGroup.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	BufferElementGroup::BufferElementGroup( uint8_t * p_buffer, uint32_t p_index )
 		:	m_buffer( nullptr )
 		,	m_index( p_index )
 	{
-		LinkCoords( p_buffer );
+		linkCoords( p_buffer );
 	}
 
 	BufferElementGroup::~BufferElementGroup()
 	{
 	}
 
-	void BufferElementGroup::LinkCoords( uint8_t * p_buffer )
+	void BufferElementGroup::linkCoords( uint8_t * p_buffer )
 	{
 		m_buffer = p_buffer;
 	}
 
-	void BufferElementGroup::LinkCoords( uint8_t * p_buffer, uint32_t p_stride )
+	void BufferElementGroup::linkCoords( uint8_t * p_buffer, uint32_t p_stride )
 	{
 		if ( p_buffer )
 		{

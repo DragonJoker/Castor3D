@@ -15,9 +15,9 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String ObjectCacheTraits< Light, String >::Name = cuT( "Light" );
 
@@ -32,7 +32,7 @@ namespace Castor3D
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto index = size_t( p_element->GetLightType() );
+				auto index = size_t( p_element->getLightType() );
 				auto it = std::find( m_typeSortedLights[index].begin()
 					, m_typeSortedLights[index].end()
 					, p_element );
@@ -55,7 +55,7 @@ namespace Castor3D
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto index = size_t( p_element->GetLightType() );
+				auto index = size_t( p_element->getLightType() );
 				auto it = std::find( m_typeSortedLights[index].begin()
 					, m_typeSortedLights[index].end()
 					, p_element );
@@ -70,7 +70,7 @@ namespace Castor3D
 		};
 	}
 
-	ObjectCache< Light, Castor::String >::ObjectCache( Engine & engine
+	ObjectCache< Light, castor::String >::ObjectCache( Engine & engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode
@@ -92,72 +92,72 @@ namespace Castor3D
 			, std::move( p_merge )
 			, std::move( p_attach )
 			, std::move( p_detach ) )
-		, m_lightsTexture{ *GetEngine() }
+		, m_lightsTexture{ *getEngine() }
 	{
 	}
 
-	ObjectCache< Light, Castor::String >::~ObjectCache()
+	ObjectCache< Light, castor::String >::~ObjectCache()
 	{
 	}
 
-	void ObjectCache< Light, Castor::String >::Initialise()
+	void ObjectCache< Light, castor::String >::initialise()
 	{
-		auto texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer
+		auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eBuffer
 			, AccessType::eWrite
 			, AccessType::eRead
 			, PixelFormat::eRGBA32F
 			, Size( 1000, 1 ) );
-		texture->GetImage().InitialiseSource();
-		SamplerSPtr sampler = GetEngine()->GetLightsSampler();
-		m_lightsTexture.SetAutoMipmaps( false );
-		m_lightsTexture.SetSampler( sampler );
-		m_lightsTexture.SetTexture( texture );
-		m_lightsTexture.SetIndex( Pass::LightBufferIndex );
-		m_scene.GetListener().PostEvent( MakeInitialiseEvent( m_lightsTexture ) );
-		m_lightsBuffer = texture->GetImage().GetBuffer();
+		texture->getImage().initialiseSource();
+		SamplerSPtr sampler = getEngine()->getLightsSampler();
+		m_lightsTexture.setAutoMipmaps( false );
+		m_lightsTexture.setSampler( sampler );
+		m_lightsTexture.setTexture( texture );
+		m_lightsTexture.setIndex( Pass::LightBufferIndex );
+		m_scene.getListener().postEvent( MakeInitialiseEvent( m_lightsTexture ) );
+		m_lightsBuffer = texture->getImage().getBuffer();
 	}
 
-	void ObjectCache< Light, Castor::String >::Cleanup()
+	void ObjectCache< Light, castor::String >::cleanup()
 	{
-		m_scene.GetListener().PostEvent( MakeCleanupEvent( m_lightsTexture ) );
-		MyObjectCache::Cleanup();
+		m_scene.getListener().postEvent( MakeCleanupEvent( m_lightsTexture ) );
+		MyObjectCache::cleanup();
 	}
 
-	void ObjectCache< Light, Castor::String >::UpdateLights()const
+	void ObjectCache< Light, castor::String >::updateLights()const
 	{
-		auto layout = m_lightsTexture.GetTexture();
+		auto layout = m_lightsTexture.getTexture();
 
 		if ( layout )
 		{
-			auto const & image = layout->GetImage();
+			auto const & image = layout->getImage();
 			int index = 0;
 
 			for ( auto lights : m_typeSortedLights )
 			{
 				for ( auto light : lights )
 				{
-					light->Bind( *m_lightsBuffer, index++ );
+					light->bind( *m_lightsBuffer, index++ );
 				}
 			}
 
-			auto locked = layout->Lock( AccessType::eWrite );
+			auto locked = layout->lock( AccessType::eWrite );
 
 			if ( locked )
 			{
-				memcpy( locked, m_lightsBuffer->const_ptr(), m_lightsBuffer->size() );
+				memcpy( locked, m_lightsBuffer->constPtr(), m_lightsBuffer->size() );
 			}
 
-			layout->Unlock( true );
+			layout->unlock( true );
 		}
 	}
 
-	void ObjectCache< Light, Castor::String >::BindLights()const
+	void ObjectCache< Light, castor::String >::bindLights()const
 	{
-		m_lightsTexture.Bind();
+		m_lightsTexture.bind();
 	}
 
-	void ObjectCache< Light, Castor::String >::UnbindLights()const
+	void ObjectCache< Light, castor::String >::unbindLights()const
 	{
-		m_lightsTexture.Unbind();
+		m_lightsTexture.unbind();
 	}
 }

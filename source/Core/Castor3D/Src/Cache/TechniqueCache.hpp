@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,14 +41,14 @@ namespace Castor3D
 	template< typename KeyType >
 	struct CacheTraits< RenderTechnique, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function < std::shared_ptr< RenderTechnique >( KeyType const &
-			, Castor::String const &
+			, castor::String const &
 			, RenderTarget &
 			, Parameters const &
 			, SsaoConfig const & ) >;
 		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &
-			, Castor::Collection< RenderTechnique, KeyType > &
+			, castor::Collection< RenderTechnique, KeyType > &
 			, std::shared_ptr< RenderTechnique > ) >;
 	};
 }

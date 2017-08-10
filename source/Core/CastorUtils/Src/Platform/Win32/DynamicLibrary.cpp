@@ -8,13 +8,13 @@
 #include "Log/Logger.hpp"
 #include "Miscellaneous/Utils.hpp"
 
-namespace Castor
+namespace castor
 {
-	bool DynamicLibrary::Open( Path const & p_name )throw()
+	bool DynamicLibrary::open( Path const & p_name )throw()
 	{
 		if ( !m_pLibrary )
 		{
-			std::string name( string::string_cast< char >( p_name ) );
+			std::string name( string::stringCast< char >( p_name ) );
 			//UINT uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 			try
@@ -23,7 +23,7 @@ namespace Castor
 
 				if ( !m_pLibrary )
 				{
-					CASTOR_EXCEPTION( System::GetLastErrorText() );
+					CASTOR_EXCEPTION( System::getLastErrorText() );
 				}
 
 				m_pathLibrary = p_name;
@@ -32,14 +32,14 @@ namespace Castor
 			{
 				String strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
 				strError += p_exc.what();
-				Logger::LogError( strError );
+				Logger::logError( strError );
 				m_pLibrary = nullptr;
 			}
 			catch ( ... )
 			{
 				String strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
-				strError += System::GetLastErrorText();
-				Logger::LogError( strError );
+				strError += System::getLastErrorText();
+				Logger::logError( strError );
 				m_pLibrary = nullptr;
 			}
 
@@ -49,26 +49,26 @@ namespace Castor
 		return m_pLibrary != nullptr;
 	}
 
-	void * DynamicLibrary::DoGetFunction( String const & p_name )throw()
+	void * DynamicLibrary::doGetFunction( String const & p_name )throw()
 	{
 		void * result = nullptr;
 
 		if ( m_pLibrary )
 		{
-			std::string name( string::string_cast< char >( p_name ) );
+			std::string name( string::stringCast< char >( p_name ) );
 			UINT uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 			result = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), name.c_str() ) );
 			::SetErrorMode( uiOldMode );
 		}
 		else
 		{
-			Logger::LogError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
+			Logger::logError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
 		return result;
 	}
 
-	void DynamicLibrary::DoClose()throw()
+	void DynamicLibrary::doClose()throw()
 	{
 		if ( m_pLibrary )
 		{

@@ -1,7 +1,7 @@
 #include "Mesh/TestGeometryBuffers.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -14,22 +14,22 @@ namespace TestRender
 	{
 	}
 
-	bool TestGeometryBuffers::Draw( uint32_t p_size, uint32_t p_index )const
+	bool TestGeometryBuffers::draw( uint32_t p_size, uint32_t p_index )const
 	{
 		return true;
 	}
 
-	bool TestGeometryBuffers::DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const
+	bool TestGeometryBuffers::drawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const
 	{
 		return true;
 	}
 
-	bool TestGeometryBuffers::DoInitialise()
+	bool TestGeometryBuffers::doInitialise()
 	{
 		return true;
 	}
 
-	void TestGeometryBuffers::DoCleanup()
+	void TestGeometryBuffers::doCleanup()
 	{
 	}
 }

@@ -1,10 +1,10 @@
 #include "FileParser.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace
 	{
-		String DoStripComments( String const & p_line )
+		String doStripComments( String const & p_line )
 		{
 			String result = p_line;
 			auto index = result.find( "//" );
@@ -37,24 +37,24 @@ namespace Castor
 	{
 	}
 
-	bool FileParser::ParseFile( Path const & p_strFileName )
+	bool FileParser::parseFile( Path const & p_strFileName )
 	{
 		m_ignoreLevel = 0;
 		m_ignored = false;
 		TextFile file( p_strFileName, File::OpenMode::eRead );
-		return ParseFile( file );
+		return parseFile( file );
 	}
 
-	bool FileParser::ParseFile( TextFile & p_file )
+	bool FileParser::parseFile( TextFile & p_file )
 	{
 		bool result = false;
 
-		if ( p_file.IsOk() )
+		if ( p_file.isOk() )
 		{
 			bool bNextIsOpenBrace = false;
 			bool bCommented = false;
-			Logger::LogInfo( cuT( "FileParser : Parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
-			DoInitialiseParser( p_file );
+			Logger::logInfo( cuT( "FileParser : Parsing file [" ) + p_file.getFileName() + cuT( "]" ) );
+			doInitialiseParser( p_file );
 			auto save = 0ull;
 
 			if ( m_context->m_sections.empty() )
@@ -67,7 +67,7 @@ namespace Castor
 			String strLine;
 			String strLine2;
 			String file;
-			p_file.CopyToString( file );
+			p_file.copytoString( file );
 			string::replace( file, cuT( "\r\n" ), cuT( "\n" ) );
 			StringArray lines = string::split( file, cuT( "\n" ), uint32_t( std::count( file.begin(), file.end(), '\n' ) + 1 ), true );
 			auto it = lines.begin();
@@ -84,7 +84,7 @@ namespace Castor
 					bReuse = false;
 				}
 
-				//Logger::LogDebug( string::to_string( m_context->m_line ) + cuT( " - " ) + strLine.c_str() );
+				//Logger::logDebug( string::toString( m_context->m_line ) + cuT( " - " ) + strLine.c_str() );
 				string::trim( strLine );
 
 				if ( !strLine.empty() )
@@ -143,7 +143,7 @@ namespace Castor
 									// We got a "{" at the end of the line, so we split the line in two and reuse the line
 									strLine2 = strLine.substr( 0, strLine.size() - 1 );
 									string::trim( strLine2 );
-									bNextIsOpenBrace = DoParseScriptLine( strLine2 );
+									bNextIsOpenBrace = doParseScriptLine( strLine2 );
 									strLine = cuT( "{" );
 									bReuse = true;
 								}
@@ -153,29 +153,29 @@ namespace Castor
 									{
 										if ( strLine != cuT( "{" ) )
 										{
-											bNextIsOpenBrace = DoParseScriptBlockEnd();
+											bNextIsOpenBrace = doParseScriptBlockEnd();
 											bReuse = true;
 										}
 										else
 										{
 											bNextIsOpenBrace = false;
-											DoEnterBlock();
+											doEnterBlock();
 										}
 									}
 									else if ( strLine == cuT( "{" ) )
 									{
-										DoEnterBlock();
+										doEnterBlock();
 									}
 									else
 									{
-										bNextIsOpenBrace = DoParseScriptLine( strLine );
+										bNextIsOpenBrace = doParseScriptLine( strLine );
 									}
 
 									if ( m_ignoreLevel > 0 )
 									{
 										if ( !strLine.empty() && strLine.find( cuT( "}" ) ) == strLine.size() - 1 )
 										{
-											DoLeaveBlock();
+											doLeaveBlock();
 										}
 									}
 								}
@@ -205,43 +205,43 @@ namespace Castor
 			{
 				if ( m_context.use_count() == 1 )
 				{
-					ParseError( cuT( "Unexpected end of file" ) );
+					parseError( cuT( "Unexpected end of file" ) );
 				}
 				else
 				{
-					DoValidate();
+					doValidate();
 					result = true;
 				}
 			}
 			else
 			{
-				DoValidate();
+				doValidate();
 				result = true;
 			}
 
-			Logger::LogInfo( cuT( "FileParser : Finished parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
+			Logger::logInfo( cuT( "FileParser : Finished parsing file [" ) + p_file.getFileName() + cuT( "]" ) );
 			std::swap( m_context->m_line, save );
 		}
 
-		DoCleanupParser();
+		doCleanupParser();
 		return result;
 	}
 
-	void FileParser::ParseError( String const & p_error )
+	void FileParser::parseError( String const & p_error )
 	{
 		StringStream error;
-		error << cuT( "Error, line #" ) << m_context->m_line << cuT( ": Directive <" ) << DoGetSectionsStack() << cuT( ">: " ) << p_error;
-		Logger::LogError( error.str() );
+		error << cuT( "Error, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_error;
+		Logger::logError( error.str() );
 	}
 
-	void FileParser::ParseWarning( String const & p_warning )
+	void FileParser::parseWarning( String const & p_warning )
 	{
 		StringStream error;
-		error << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": Directive <" ) << DoGetSectionsStack() << cuT( ">: " ) << p_warning;
-		Logger::LogWarning( error.str() );
+		error << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_warning;
+		Logger::logWarning( error.str() );
 	}
 
-	bool FileParser::CheckParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received )
+	bool FileParser::checkParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received )
 	{
 		bool result = true;
 		String params( p_params );
@@ -252,12 +252,12 @@ namespace Castor
 		{
 			if ( result )
 			{
-				auto filled = param->Clone();
-				result = filled->Parse( params );
+				auto filled = param->clone();
+				result = filled->parse( params );
 
 				if ( !result )
 				{
-					missingParam = param->GetStrType();
+					missingParam = param->getStrType();
 				}
 				else
 				{
@@ -275,19 +275,19 @@ namespace Castor
 
 		if ( !result )
 		{
-			ParseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + missingParam + cuT( "> parameter that is currently missing" ) );
+			parseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + missingParam + cuT( "> parameter that is currently missing" ) );
 		}
 
 		return result;
 	}
 
-	void FileParser::AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params )
+	void FileParser::addParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params )
 	{
 		auto sectionIt = m_parsers.find( p_section );
 
 		if ( sectionIt != m_parsers.end() && sectionIt->second.find( p_name ) != sectionIt->second.end() )
 		{
-			ParseError( cuT( "Parser " ) + p_name + cuT( " for section " ) + string::to_string( p_section ) + cuT( " already exists." ) );
+			parseError( cuT( "Parser " ) + p_name + cuT( " for section " ) + string::toString( p_section ) + cuT( " already exists." ) );
 		}
 		else
 		{
@@ -295,12 +295,12 @@ namespace Castor
 		}
 	}
 
-	bool FileParser::DoParseScriptLine( String & p_line )
+	bool FileParser::doParseScriptLine( String & p_line )
 	{
 		bool bContinue = true;
 		bool result = false;
 		std::size_t uiBlockEndIndex = p_line.find( cuT( "}" ) );
-		p_line = DoStripComments( p_line );
+		p_line = doStripComments( p_line );
 
 		if ( uiBlockEndIndex != String::npos )
 		{
@@ -311,11 +311,11 @@ namespace Castor
 				// Block end at the beginning of the line, we treat it then we parse the line
 				p_line = p_line.substr( 1 );
 				string::trim( p_line );
-				DoLeaveBlock();
+				doLeaveBlock();
 
 				if ( !p_line.empty() )
 				{
-					result = DoParseScriptLine( p_line );
+					result = doParseScriptLine( p_line );
 				}
 				else
 				{
@@ -332,14 +332,14 @@ namespace Castor
 
 				if ( !p_line.empty() )
 				{
-					result = DoParseScriptLine( p_line );
+					result = doParseScriptLine( p_line );
 				}
 				else
 				{
 					result = false;
 				}
 
-				DoLeaveBlock();
+				doLeaveBlock();
 				result = false;
 				bContinue = false;
 			}
@@ -359,18 +359,18 @@ namespace Castor
 		{
 			if ( !m_context->m_sections.empty() )
 			{
-				result = DoInvokeParser( p_line, m_parsers[m_context->m_sections.back()] );
+				result = doInvokeParser( p_line, m_parsers[m_context->m_sections.back()] );
 			}
 			else
 			{
-				result = DoDelegateParser( p_line );
+				result = doDelegateParser( p_line );
 			}
 		}
 
 		return result;
 	}
 
-	bool FileParser::DoParseScriptBlockEnd()
+	bool FileParser::doParseScriptBlockEnd()
 	{
 		bool result = false;
 
@@ -392,20 +392,20 @@ namespace Castor
 		return result;
 	}
 
-	bool FileParser::DoInvokeParser( String & p_line, AttributeParserMap const & p_parsers )
+	bool FileParser::doInvokeParser( String & p_line, AttributeParserMap const & p_parsers )
 	{
 		bool result = false;
 		StringArray splitCmd = string::split( p_line, cuT( " \t" ), 1, false );
 		m_context->m_functionName = splitCmd[0];
 		AttributeParserMap::const_iterator const & iter = p_parsers.find( splitCmd[0] );
 
-		if ( !DoIsInIgnoredBlock() )
+		if ( !doIsInIgnoredBlock() )
 		{
 			if ( iter == p_parsers.end() )
 			{
-				if ( !DoDiscardParser( p_line ) )
+				if ( !doDiscardParser( p_line ) )
 				{
-					Ignore();
+					ignore();
 				}
 			}
 			else
@@ -419,7 +419,7 @@ namespace Castor
 
 				ParserParameterArray filled;
 
-				if ( !CheckParams( strParameters, iter->second.m_params, filled ) )
+				if ( !checkParams( strParameters, iter->second.m_params, filled ) )
 				{
 					bool ignored = true;
 					std::swap( ignored, m_ignored );
@@ -430,7 +430,7 @@ namespace Castor
 					}
 					catch ( Exception & p_exc )
 					{
-						ParseError( p_exc.GetFullDescription() );
+						parseError( p_exc.getFullDescription() );
 					}
 
 					std::swap( ignored, m_ignored );
@@ -445,7 +445,7 @@ namespace Castor
 		return result;
 	}
 
-	void FileParser::DoEnterBlock()
+	void FileParser::doEnterBlock()
 	{
 		if ( m_ignored )
 		{
@@ -453,9 +453,9 @@ namespace Castor
 		}
 	}
 
-	void FileParser::DoLeaveBlock()
+	void FileParser::doLeaveBlock()
 	{
-		if ( DoIsInIgnoredBlock() )
+		if ( doIsInIgnoredBlock() )
 		{
 			m_ignoreLevel--;
 
@@ -469,27 +469,27 @@ namespace Castor
 		else
 		{
 			m_ignored = false;
-			DoParseScriptBlockEnd();
+			doParseScriptBlockEnd();
 		}
 	}
 
-	bool FileParser::DoIsInIgnoredBlock()
+	bool FileParser::doIsInIgnoredBlock()
 	{
 		return m_ignored && m_ignoreLevel > 0;
 	}
 
-	String FileParser::DoGetSectionsStack()
+	String FileParser::doGetSectionsStack()
 	{
 		StringStream sections;
 
 		if ( m_context && m_context->m_sections.size() > 1 )
 		{
 			auto begin = m_context->m_sections.begin() + 1;
-			sections << DoGetSectionName( *begin );
+			sections << doGetSectionName( *begin );
 
 			std::for_each( begin + 1, m_context->m_sections.end(), [&sections, this]( uint32_t p_section )
 			{
-				sections << cuT( "::" ) << DoGetSectionName( p_section );
+				sections << cuT( "::" ) << doGetSectionName( p_section );
 			} );
 		}
 

@@ -12,8 +12,8 @@
 
 #include <Graphics/Font.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace CastorGui
 {
@@ -58,151 +58,151 @@ namespace CastorGui
 	{
 		m_caretIt = m_caption.end();
 		m_cursor = MouseCursor::eText;
-		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 
-		EventHandler::Connect( MouseEventType::ePushed, [this]( MouseEvent const & p_event )
+		EventHandler::connect( MouseEventType::ePushed, [this]( MouseEvent const & p_event )
 		{
-			OnMouseLButtonDown( p_event );
+			onMouseLButtonDown( p_event );
 		} );
-		EventHandler::Connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
+		EventHandler::connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
 		{
-			OnMouseLButtonUp( p_event );
+			onMouseLButtonUp( p_event );
 		} );
-		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
+		EventHandler::connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
-			OnKeyDown( p_event );
+			onKeyDown( p_event );
 		} );
-		EventHandler::Connect( KeyboardEventType::eReleased, [this]( KeyboardEvent const & p_event )
+		EventHandler::connect( KeyboardEventType::eReleased, [this]( KeyboardEvent const & p_event )
 		{
-			OnKeyUp( p_event );
+			onKeyUp( p_event );
 		} );
-		EventHandler::Connect( KeyboardEventType::eChar, [this]( KeyboardEvent const & p_event )
+		EventHandler::connect( KeyboardEventType::eChar, [this]( KeyboardEvent const & p_event )
 		{
-			OnChar( p_event );
+			onChar( p_event );
 		} );
-		EventHandler::Connect( HandlerEventType::eActivate, [this]( HandlerEvent const & p_event )
+		EventHandler::connect( HandlerEventType::eActivate, [this]( HandlerEvent const & p_event )
 		{
-			OnActivate( p_event );
+			onActivate( p_event );
 		} );
-		EventHandler::Connect( HandlerEventType::eDeactivate, [this]( HandlerEvent const & p_event )
+		EventHandler::connect( HandlerEventType::eDeactivate, [this]( HandlerEvent const & p_event )
 		{
-			OnDeactivate( p_event );
+			onDeactivate( p_event );
 		} );
 
-		TextOverlaySPtr text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() )
+		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlEdit_" ) + string::toString( getId() )
 			, OverlayType::eText
 			, nullptr
-			, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
-		text->SetPixelSize( GetSize() );
-		text->SetVAlign( VAlign::eBottom );
-		text->SetVisible( DoIsVisible() );
+			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
+		text->setPixelSize( getSize() );
+		text->setVAlign( VAlign::eBottom );
+		text->setVisible( doIsVisible() );
 		m_text = text;
 
-		DoUpdateStyle();
+		doUpdateStyle();
 	}
 
 	EditCtrl::~EditCtrl()
 	{
 	}
 
-	void EditCtrl::SetFont( Castor::String const & p_font )
+	void EditCtrl::setFont( castor::String const & p_font )
 	{
 		TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			text->SetFont( p_font );
+			text->setFont( p_font );
 		}
 	}
 
-	void EditCtrl::DoCreate()
+	void EditCtrl::doCreate()
 	{
 		TextOverlaySPtr text = m_text.lock();
-		text->SetMaterial( GetForegroundMaterial() );
+		text->setMaterial( getForegroundMaterial() );
 
-		if ( !text->GetFontTexture() || !text->GetFontTexture()->GetFont() )
+		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
+			text->setFont( getControlsManager()->getDefaultFont()->getName() );
 		}
 
-		DoUpdateCaption();
-		GetControlsManager()->ConnectEvents( *this );
+		doUpdateCaption();
+		getControlsManager()->connectEvents( *this );
 	}
 
-	void EditCtrl::DoDestroy()
+	void EditCtrl::doDestroy()
 	{
-		GetControlsManager()->DisconnectEvents( *this );
+		getControlsManager()->disconnectEvents( *this );
 	}
 
-	void EditCtrl::DoSetPosition( Position const & p_value )
+	void EditCtrl::doSetPosition( Position const & p_value )
 	{
 		TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			text->SetPixelPosition( Position() );
+			text->setPixelPosition( Position() );
 			text.reset();
 		}
 	}
 
-	void EditCtrl::DoSetSize( Size const & p_value )
+	void EditCtrl::doSetSize( Size const & p_value )
 	{
 		TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			text->SetPixelSize( p_value );
+			text->setPixelSize( p_value );
 			text.reset();
 		}
 	}
 
-	void EditCtrl::DoSetBackgroundMaterial( MaterialSPtr p_material )
+	void EditCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
 	{
 	}
 
-	void EditCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
+	void EditCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
 	{
 		TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			text->SetMaterial( p_material );
+			text->setMaterial( p_material );
 			text.reset();
 		}
 	}
 
-	void EditCtrl::DoSetCaption( String const & p_value )
+	void EditCtrl::doSetCaption( String const & p_value )
 	{
 		m_caption = p_value;
 		m_caretIt = m_caption.end();
-		DoUpdateCaption();
+		doUpdateCaption();
 	}
 
-	void EditCtrl::DoSetVisible( bool p_visible )
+	void EditCtrl::doSetVisible( bool p_visible )
 	{
 		TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			text->SetVisible( p_visible );
+			text->setVisible( p_visible );
 			text.reset();
 		}
 	}
 
-	void EditCtrl::DoUpdateStyle()
+	void EditCtrl::doUpdateStyle()
 	{
 		TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			if ( IsMultiLine() )
+			if ( isMultiLine() )
 			{
-				text->SetTextWrappingMode( TextWrappingMode::eBreak );
+				text->setTextWrappingMode( TextWrappingMode::eBreak );
 			}
 		}
 	}
 
-	String EditCtrl::DoGetCaptionWithCaret()const
+	String EditCtrl::doGetCaptionWithCaret()const
 	{
 		String caption( m_caption.begin(), m_caretIt.internal() );
 		caption += cuT( '|' );
@@ -215,96 +215,96 @@ namespace CastorGui
 		return caption;
 	}
 
-	void EditCtrl::OnActivate( HandlerEvent const & p_event )
+	void EditCtrl::onActivate( HandlerEvent const & p_event )
 	{
 		m_active = true;
-		DoUpdateCaption();
+		doUpdateCaption();
 	}
 
-	void EditCtrl::OnDeactivate( HandlerEvent const & p_event )
+	void EditCtrl::onDeactivate( HandlerEvent const & p_event )
 	{
 		m_active = false;
-		DoUpdateCaption();
+		doUpdateCaption();
 	}
 
-	void EditCtrl::OnMouseLButtonDown( MouseEvent const & p_event )
+	void EditCtrl::onMouseLButtonDown( MouseEvent const & p_event )
 	{
 	}
 
-	void EditCtrl::OnMouseLButtonUp( MouseEvent const & p_event )
+	void EditCtrl::onMouseLButtonUp( MouseEvent const & p_event )
 	{
 	}
 
-	void EditCtrl::OnChar( KeyboardEvent const & p_event )
+	void EditCtrl::onChar( KeyboardEvent const & p_event )
 	{
-		KeyboardKey code = p_event.GetKey();
+		KeyboardKey code = p_event.getKey();
 
 		if ( code >= KeyboardKey( 0x20 )
 			 && code <= KeyboardKey( 0xFF )
 			 && code != KeyboardKey::eDelete )
 		{
-			DoAddCharAtCaret( p_event.GetChar() );
+			doAddCharAtCaret( p_event.getChar() );
 			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
-		else if ( code == KeyboardKey::eReturn && IsMultiLine() )
+		else if ( code == KeyboardKey::eReturn && isMultiLine() )
 		{
-			DoAddCharAtCaret( cuT( "\n" ) );
+			doAddCharAtCaret( cuT( "\n" ) );
 			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
 	}
 
-	void EditCtrl::OnKeyDown( KeyboardEvent const & p_event )
+	void EditCtrl::onKeyDown( KeyboardEvent const & p_event )
 	{
-		if ( !p_event.IsCtrlDown() && !p_event.IsAltDown() )
+		if ( !p_event.isCtrlDown() && !p_event.isAltDown() )
 		{
-			KeyboardKey code = p_event.GetKey();
+			KeyboardKey code = p_event.getKey();
 
 			if ( code == KeyboardKey::eBackspace )
 			{
-				DoDeleteCharBeforeCaret();
+				doDeleteCharBeforeCaret();
 				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
 			else if ( code == KeyboardKey::eDelete )
 			{
-				DoDeleteCharAtCaret();
+				doDeleteCharAtCaret();
 				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
 			else if ( code == KeyboardKey::eLeft && m_caretIt != m_caption.begin() )
 			{
 				m_caretIt--;
-				DoUpdateCaption();
+				doUpdateCaption();
 			}
 			else if ( code == KeyboardKey::eRight && m_caretIt != m_caption.end() )
 			{
 				m_caretIt++;
-				DoUpdateCaption();
+				doUpdateCaption();
 			}
 			else if ( code == KeyboardKey::eHome && m_caretIt != m_caption.begin() )
 			{
 				m_caretIt = m_caption.begin();
-				DoUpdateCaption();
+				doUpdateCaption();
 			}
 			else if ( code == KeyboardKey::eEnd && m_caretIt != m_caption.end() )
 			{
 				m_caretIt = m_caption.end();
-				DoUpdateCaption();
+				doUpdateCaption();
 			}
 		}
 	}
 
-	void EditCtrl::OnKeyUp( KeyboardEvent const & p_event )
+	void EditCtrl::onKeyUp( KeyboardEvent const & p_event )
 	{
 	}
 
-	void EditCtrl::DoAddCharAtCaret( String const & p_char )
+	void EditCtrl::doAddCharAtCaret( String const & p_char )
 	{
 		size_t diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
 		m_caption = String( m_caption.cbegin(), m_caretIt.internal() ) + p_char + String( m_caretIt.internal(), m_caption.cend() );
 		m_caretIt = string::utf8::const_iterator( m_caption.begin() ) + diff + 1;
-		DoUpdateCaption();
+		doUpdateCaption();
 	}
 
-	void EditCtrl::DoDeleteCharAtCaret()
+	void EditCtrl::doDeleteCharAtCaret()
 	{
 		if ( m_caretIt != m_caption.end() )
 		{
@@ -319,11 +319,11 @@ namespace CastorGui
 
 			m_caption = caption;
 			m_caretIt = string::utf8::const_iterator( m_caption.begin() ) + diff;
-			DoUpdateCaption();
+			doUpdateCaption();
 		}
 	}
 
-	void EditCtrl::DoDeleteCharBeforeCaret()
+	void EditCtrl::doDeleteCharBeforeCaret()
 	{
 		if ( m_caretIt != m_caption.begin() )
 		{
@@ -339,11 +339,11 @@ namespace CastorGui
 
 			m_caption = caption;
 			m_caretIt = string::utf8::const_iterator( m_caption.begin() ) + diff;
-			DoUpdateCaption();
+			doUpdateCaption();
 		}
 	}
 
-	void EditCtrl::DoUpdateCaption()
+	void EditCtrl::doUpdateCaption()
 	{
 		TextOverlaySPtr text = m_text.lock();
 
@@ -351,11 +351,11 @@ namespace CastorGui
 		{
 			if ( m_active )
 			{
-				text->SetCaption( DoGetCaptionWithCaret() );
+				text->setCaption( doGetCaptionWithCaret() );
 			}
 			else
 			{
-				text->SetCaption( m_caption );
+				text->setCaption( m_caption );
 			}
 		}
 	}

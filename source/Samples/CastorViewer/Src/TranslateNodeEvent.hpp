@@ -31,10 +31,10 @@ namespace CastorViewer
 		: public MouseNodeEvent
 	{
 	public:
-		TranslateNodeEvent( Castor3D::SceneNodeSPtr p_node, Castor::real p_dx, Castor::real p_dy, Castor::real p_dz );
+		TranslateNodeEvent( castor3d::SceneNodeSPtr p_node, castor::real p_dx, castor::real p_dy, castor::real p_dz );
 		virtual ~TranslateNodeEvent();
 
-		bool Apply()override;
+		bool apply()override;
 	};
 }
 

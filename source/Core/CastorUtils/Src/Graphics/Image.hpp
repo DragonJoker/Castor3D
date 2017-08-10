@@ -29,7 +29,7 @@ SOFTWARE.
 #include "Colour.hpp"
 #include "PixelBuffer.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace Castor
 		\brief		Image resource loader
 		*/
 		class BinaryLoader
-			: public Castor::BinaryLoader< Image >
+			: public castor::BinaryLoader< Image >
 		{
 		public:
 			/**
@@ -83,7 +83,7 @@ namespace Castor
 		\brief		Image resource loader
 		*/
 		class BinaryWriter
-			: public Castor::BinaryWriter< Image >
+			: public castor::BinaryWriter< Image >
 		{
 		public:
 			/**
@@ -247,7 +247,7 @@ namespace Castor
 		 *\param[in]	p_size	La nouvelle résolution
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & Resample( Size const & p_size );
+		CU_API Image & resample( Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Fills all image pixels with the given colour
@@ -258,7 +258,7 @@ namespace Castor
 		 *\param[in]	p_clrColour	La couleur de remplissage
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & Fill( Colour const & p_clrColour );
+		CU_API Image & fill( Colour const & p_clrColour );
 		/**
 		 *\~english
 		 *\brief		Fills the wanted pixel with the given buffer
@@ -273,10 +273,10 @@ namespace Castor
 		 *\param[in]	p_format	Le format de pixel du tampon
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel, PixelFormat p_format );
+		CU_API Image & setPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel, PixelFormat p_format );
 		/**
 		 *\~english
-		 *\brief		Sets the colour of the wanted pixel to the given one
+		 *\brief		sets the colour of the wanted pixel to the given one
 		 *\param[in]	x,y			The pixel coordinates
 		 *\param[in]	p_clrColour	The colour
 		 *\return		A reference to the image
@@ -286,10 +286,10 @@ namespace Castor
 		 *\param[in]	p_clrColour	La couleur
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & SetPixel( uint32_t x, uint32_t y, Colour const & p_clrColour );
+		CU_API Image & setPixel( uint32_t x, uint32_t y, Colour const & p_clrColour );
 		/**
 		 *\~english
-		 *\brief		Set the wanted pixel to the given pixel
+		 *\brief		set the wanted pixel to the given pixel
 		 *\param[in]	x,y		The pixel coordinates
 		 *\param[in]	p_pixel	The pixel
 		 *\return		A reference to the image
@@ -299,11 +299,11 @@ namespace Castor
 		 *\param[in]	p_pixel	Le pixel
 		 *\return		La référence de l'image
 		 */
-		template< PixelFormat PF > Image & SetPixel( uint32_t x, uint32_t y, Pixel< PF > const & p_pixel )
+		template< PixelFormat PF > Image & setPixel( uint32_t x, uint32_t y, Pixel< PF > const & p_pixel )
 		{
 			CHECK_INVARIANTS();
-			REQUIRE( x < m_buffer->width() && y < m_buffer->height() );
-			ConvertPixel( PF, p_pixel.const_ptr(), GetPixelFormat(), m_buffer->get_at( x, y ) );
+			REQUIRE( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
+			convertPixel( PF, p_pixel.constPtr(), getPixelFormat(), m_buffer->getAt( x, y ) );
 			CHECK_INVARIANTS();
 			return * this;
 		}
@@ -317,11 +317,11 @@ namespace Castor
 		 *\param[in]	x,y		Les coordonnées du pixel
 		 *\param[out]	p_pixel	Reçoit le pixel
 		 */
-		template< PixelFormat PF > void GetPixel( uint32_t x, uint32_t y, Pixel< PF > & p_pixel )const
+		template< PixelFormat PF > void getPixel( uint32_t x, uint32_t y, Pixel< PF > & p_pixel )const
 		{
 			CHECK_INVARIANTS();
-			REQUIRE( x < m_buffer->width() && y < m_buffer->height() );
-			ConvertPixel( GetPixelFormat(), m_buffer->get_at( x, y ), PF, p_pixel.ptr() );
+			REQUIRE( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
+			convertPixel( getPixelFormat(), m_buffer->getAt( x, y ), PF, p_pixel.ptr() );
 			CHECK_INVARIANTS();
 		}
 		/**
@@ -336,7 +336,7 @@ namespace Castor
 		 *\param[out]	p_pPixel	Reçoit le pixel dans le format donné
 		 *\param[in]	p_format	Le format voulu pour le buffer
 		 */
-		CU_API void GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, PixelFormat p_format )const;
+		CU_API void getPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, PixelFormat p_format )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel colour
@@ -347,7 +347,7 @@ namespace Castor
 		 *\param[in]	x,y			Les coordonnées du pixel
 		 *\return		La couleur du pixel
 		 */
-		CU_API Colour GetPixel( uint32_t x, uint32_t y )const;
+		CU_API Colour getPixel( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given image into this one
@@ -358,7 +358,7 @@ namespace Castor
 		 *\param[in]	p_src	L'image à copier
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & CopyImage( Image const & p_src );
+		CU_API Image & copyImage( Image const & p_src );
 		/**
 		 *\~english
 		 *\brief		Gives the sub-image contained in the given rectangle
@@ -369,7 +369,7 @@ namespace Castor
 		 *\param[in]	p_rcRect	Le rectangle de la portion d'image
 		 *\return		La portion d'image
 		 */
-		CU_API Image SubImage( Rectangle const & p_rcRect )const;
+		CU_API Image subImage( Rectangle const & p_rcRect )const;
 		/**
 		 *\~english
 		 *\brief		Swaps the image lines
@@ -378,7 +378,7 @@ namespace Castor
 		 *\brief		Retourne verticalement l'image
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & Flip();
+		CU_API Image & flip();
 		/**
 		 *\~english
 		 *\brief		Swaps the image columns
@@ -387,21 +387,21 @@ namespace Castor
 		 *\brief		Retourne horizontalement l'image
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & Mirror();
+		CU_API Image & mirror();
 		/**
 		 *\~english
 		 *\brief		Initialises the image loading library.
 		 *\~french
 		 *\brief		Initialise la bibliothèque de chargement d'images.
 		 */
-		CU_API static void InitialiseImageLib();
+		CU_API static void initialiseImageLib();
 		/**
 		 *\~english
 		 *\brief		Cleans up the image loading library.
 		 *\~french
 		 *\brief		Nettoie la bibliothèque de chargement d'images.
 		 */
-		CU_API static void CleanupImageLib();
+		CU_API static void cleanupImageLib();
 		/**
 		 *\~english
 		 *\brief		Retrieves the image dimensions
@@ -410,7 +410,7 @@ namespace Castor
 		 *\brief		Récupère les dimensions de l'image
 		 *\return		Les dimensions de l'image
 		 */
-		inline Size const & GetDimensions()const
+		inline Size const & getDimensions()const
 		{
 			return m_buffer->dimensions();
 		}
@@ -422,7 +422,7 @@ namespace Castor
 		 *\brief		Récupère la taille des données de l'image
 		 *\return		La taille des données de l'image
 		 */
-		inline std::size_t GetSize()const
+		inline std::size_t getSize()const
 		{
 			return m_buffer->size();
 		}
@@ -434,9 +434,9 @@ namespace Castor
 		 *\brief		Récupère la largeur de l'image
 		 *\return		La largeur de l'image
 		 */
-		inline uint32_t GetWidth()const
+		inline uint32_t getWidth()const
 		{
-			return m_buffer->width();
+			return m_buffer->getWidth();
 		}
 		/**
 		 *\~english
@@ -446,9 +446,9 @@ namespace Castor
 		 *\brief		Récupère la hauteur de l'image
 		 *\return		La hauteur de l'image
 		 */
-		inline uint32_t GetHeight()const
+		inline uint32_t getHeight()const
 		{
-			return m_buffer->height();
+			return m_buffer->getHeight();
 		}
 		/**
 		 *\~english
@@ -458,7 +458,7 @@ namespace Castor
 		 *\brief		Récupère le chemin du fichier de l'image
 		 *\return		Le chemin du fichier de l'image
 		 */
-		inline Path GetPath()const
+		inline Path getPath()const
 		{
 			return m_pathFile;
 		}
@@ -470,7 +470,7 @@ namespace Castor
 		 *\brief		Récupère les données de l'image
 		 *\return		Les données de l'image
 		 */
-		inline uint8_t * GetBuffer()
+		inline uint8_t * getBuffer()
 		{
 			return m_buffer->ptr();
 		}
@@ -482,9 +482,9 @@ namespace Castor
 		 *\brief		Récupère les données de l'image
 		 *\return		Les données de l'image
 		 */
-		inline uint8_t const * GetBuffer()const
+		inline uint8_t const * getBuffer()const
 		{
-			return m_buffer->const_ptr();
+			return m_buffer->constPtr();
 		}
 		/**
 		 *\~english
@@ -494,7 +494,7 @@ namespace Castor
 		 *\brief		Récupère les données de l'image
 		 *\return		Les données de l'image
 		 */
-		inline PxBufferBaseSPtr GetPixels()
+		inline PxBufferBaseSPtr getPixels()
 		{
 			return m_buffer;
 		}
@@ -506,7 +506,7 @@ namespace Castor
 		 *\brief		Récupère les données de l'image
 		 *\return		Les données de l'image
 		 */
-		inline PxBufferBaseSPtr GetPixels()const
+		inline PxBufferBaseSPtr getPixels()const
 		{
 			return m_buffer;
 		}
@@ -518,7 +518,7 @@ namespace Castor
 		 *\brief		Récupère le format des pixels de l'image
 		 *\return		Le format des pixels de l'image
 		 */
-		inline PixelFormat GetPixelFormat()const
+		inline PixelFormat getPixelFormat()const
 		{
 			return m_buffer->format();
 		}

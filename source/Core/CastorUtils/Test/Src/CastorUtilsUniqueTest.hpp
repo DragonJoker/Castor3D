@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsUniqueTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void NoInstanceTest();

@@ -6,28 +6,28 @@
 #include "Animation/Skeleton/SkeletonAnimationBone.hpp"
 #include "Animation/Skeleton/SkeletonAnimationNode.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
 	namespace
 	{
-		inline void DoFind( Milliseconds const & p_time
+		inline void doFind( Milliseconds const & p_time
 			, typename KeyFrameArray::const_iterator const & p_first
 			, typename KeyFrameArray::const_iterator const & p_last
 			, typename KeyFrameArray::const_iterator & p_prv
 			, typename KeyFrameArray::const_iterator & p_cur )
 		{
-			while ( p_prv != p_first && p_prv->GetTimeIndex() >= p_time )
+			while ( p_prv != p_first && p_prv->getTimeIndex() >= p_time )
 			{
 				// Time has gone too fast backward.
 				--p_prv;
 				--p_cur;
 			}
 
-			while ( p_cur != p_last && p_cur->GetTimeIndex() < p_time )
+			while ( p_cur != p_last && p_cur->getTimeIndex() < p_time )
 			{
 				// Time has gone too fast forward.
 				++p_prv;
@@ -37,7 +37,7 @@ namespace Castor3D
 			ENSURE( p_prv != p_cur );
 		}
 
-		String const & GetObjectTypeName( SkeletonAnimationObjectType p_type )
+		String const & getObjectTypeName( SkeletonAnimationObjectType p_type )
 		{
 			static std::map< SkeletonAnimationObjectType, String > Names
 			{
@@ -56,21 +56,21 @@ namespace Castor3D
 		, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
 		: OwnedBy< SkeletonAnimationInstance >{ p_animationInstance }
 		, m_animationObject{ p_animationObject }
-		, m_prev{ p_animationObject.GetKeyFrames().empty() ? p_animationObject.GetKeyFrames().end() : p_animationObject.GetKeyFrames().begin() }
-		, m_curr{ p_animationObject.GetKeyFrames().empty() ? p_animationObject.GetKeyFrames().end() : p_animationObject.GetKeyFrames().begin() + 1 }
+		, m_prev{ p_animationObject.getKeyFrames().empty() ? p_animationObject.getKeyFrames().end() : p_animationObject.getKeyFrames().begin() }
+		, m_curr{ p_animationObject.getKeyFrames().empty() ? p_animationObject.getKeyFrames().end() : p_animationObject.getKeyFrames().begin() + 1 }
 	{
 		for ( auto moving : p_animationObject.m_children )
 		{
-			switch ( moving->GetType() )
+			switch ( moving->getType() )
 			{
 			case SkeletonAnimationObjectType::eNode:
 				m_children.push_back( std::make_shared< SkeletonAnimationInstanceNode >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationNode >( moving ), p_allObjects ) );
-				p_allObjects.insert( { GetObjectTypeName( moving->GetType() ) + moving->GetName(), m_children.back() } );
+				p_allObjects.insert( { getObjectTypeName( moving->getType() ) + moving->getName(), m_children.back() } );
 				break;
 
 			case SkeletonAnimationObjectType::eBone:
 				m_children.push_back( std::make_shared< SkeletonAnimationInstanceBone >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationBone >( moving ), p_allObjects ) );
-				p_allObjects.insert( { GetObjectTypeName( moving->GetType() ) + moving->GetName(), m_children.back() } );
+				p_allObjects.insert( { getObjectTypeName( moving->getType() ) + moving->getName(), m_children.back() } );
 				break;
 			}
 		}
@@ -80,36 +80,36 @@ namespace Castor3D
 	{
 	}
 
-	void SkeletonAnimationInstanceObject::AddChild( SkeletonAnimationInstanceObjectSPtr p_object )
+	void SkeletonAnimationInstanceObject::addChild( SkeletonAnimationInstanceObjectSPtr p_object )
 	{
 		m_children.push_back( p_object );
 	}
 
-	void SkeletonAnimationInstanceObject::Update( Milliseconds const & p_time
+	void SkeletonAnimationInstanceObject::update( Milliseconds const & p_time
 		, Matrix4x4r const & p_transformations )
 	{
-		if ( m_animationObject.HasKeyFrames() )
+		if ( m_animationObject.hasKeyFrames() )
 		{
-			if ( m_animationObject.GetKeyFrames().size() == 1 )
+			if ( m_animationObject.getKeyFrames().size() == 1 )
 			{
-				m_cumulativeTransform = p_transformations * m_prev->GetTransform();
+				m_cumulativeTransform = p_transformations * m_prev->getTransform();
 			}
 			else
 			{
-				DoFind( p_time, m_animationObject.GetKeyFrames().begin(), m_animationObject.GetKeyFrames().end() - 1, m_prev, m_curr );
-				m_cumulativeTransform = p_transformations * m_curr->GetTransform();
+				doFind( p_time, m_animationObject.getKeyFrames().begin(), m_animationObject.getKeyFrames().end() - 1, m_prev, m_curr );
+				m_cumulativeTransform = p_transformations * m_curr->getTransform();
 			}
 		}
 		else
 		{
-			m_cumulativeTransform = p_transformations * m_animationObject.GetNodeTransform();
+			m_cumulativeTransform = p_transformations * m_animationObject.getNodeTransform();
 		}
 
-		DoApply();
+		doApply();
 
 		for ( auto object : m_children )
 		{
-			object->Update( p_time, m_cumulativeTransform );
+			object->update( p_time, m_cumulativeTransform );
 		}
 	}
 

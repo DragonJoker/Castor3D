@@ -30,7 +30,7 @@ SOFTWARE.
 #include <cassert>
 #include <iostream>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\~english
@@ -75,7 +75,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
 		 */
-		static inline void Report()
+		static inline void report()
 		{
 			std::cerr << Error< PoolErrorType::eCommonOutOfMemory >::Text << std::endl;
 		}
@@ -95,7 +95,7 @@ namespace Castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	p_space	L'espace mémoire.
 		 */
-		static inline void Report( void * p_space )
+		static inline void report( void * p_space )
 		{
 			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eCommonPoolIsFull >::Text << std::endl;
 		}
@@ -115,7 +115,7 @@ namespace Castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	p_size	La taille mémoire.
 		 */
-		static inline void Report( size_t p_size )
+		static inline void report( size_t p_size )
 		{
 			std::cerr << Error< PoolErrorType::eCommonMemoryLeaksDetected >::Text << ": " << p_size << "bytes" << std::endl;
 		}
@@ -135,7 +135,7 @@ namespace Castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	p_space	L'espace mémoire.
 		 */
-		static inline void Report( void * p_space )
+		static inline void report( void * p_space )
 		{
 			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eCommonNotFromRange >::Text << std::endl;
 		}
@@ -155,7 +155,7 @@ namespace Castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	p_space	L'espace mémoire.
 		 */
-		static inline void Report( void * p_space )
+		static inline void report( void * p_space )
 		{
 			std::cerr << "***   " << Error< PoolErrorType::eMarkedLeakAddress >::Text << ": 0x" << std::hex << p_space << std::endl;
 		}
@@ -175,7 +175,7 @@ namespace Castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	p_space	L'espace mémoire.
 		 */
-		static inline void Report( void * p_space )
+		static inline void report( void * p_space )
 		{
 			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eMarkedDoubleDelete >::Text << std::endl;
 		}
@@ -195,7 +195,7 @@ namespace Castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	p_space	L'espace mémoire.
 		 */
-		static inline void Report( void * p_space )
+		static inline void report( void * p_space )
 		{
 			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eMarkedNotFromPool >::Text << std::endl;
 		}
@@ -215,7 +215,7 @@ namespace Castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	p_space	L'espace mémoire.
 		 */
-		static inline void Report( void * p_space )
+		static inline void report( void * p_space )
 		{
 			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eGrowingNotFromRanges >::Text << std::endl;
 		}
@@ -233,7 +233,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
 		 */
-		static inline void Report()
+		static inline void report()
 		{
 			std::cerr << Error< PoolErrorType::eSTLAllocatorUnique >::Text << std::endl;
 		}
@@ -249,10 +249,10 @@ namespace Castor
 	 *\param[in]	p_params	Les paramètres de l'erreur.
 	 */
 	template< PoolErrorType ErrorType, typename ... Params >
-	static inline void ReportError( char const * const p_name, Params ... p_params )
+	static inline void reportError( char const * const p_name, Params ... p_params )
 	{
 		std::cerr << "*** " << p_name << " *** ";
-		Error< ErrorType >::Report( p_params... );
+		Error< ErrorType >::report( p_params... );
 	}
 	/*!
 	\author		Sylvain DOREMUS
@@ -290,10 +290,10 @@ namespace Castor
 \author 	Sylvain DOREMUS
 \date 		03/01/2011
 \~english
-\brief		Macro to ease the use of Castor::PoolException
+\brief		Macro to ease the use of castor::PoolException
 \~french
-\brief		Macro définie pour faciliter l'utilisation de Castor::PoolException
+\brief		Macro définie pour faciliter l'utilisation de castor::PoolException
 */
-#define POOL_EXCEPTION( error ) throw Castor::PoolMemoryException< error >( __FILE__, __FUNCTION__, __LINE__ )
+#define POOL_EXCEPTION( error ) throw castor::PoolMemoryException< error >( __FILE__, __FUNCTION__, __LINE__ )
 
 #endif

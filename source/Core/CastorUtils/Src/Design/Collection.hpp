@@ -29,7 +29,7 @@ SOFTWARE.
 #include "NonCopyable.hpp"
 #include "Exception/Assertion.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -44,14 +44,14 @@ namespace Castor
 	*/
 	template< typename TObj, typename TKey >
 	class Collection
-		: public Castor::NonCopyable
+		: public castor::NonCopyable
 	{
 	public:
 		DECLARE_SMART_PTR( TObj );
 		DECLARE_TPL_MAP( TKey, TObjSPtr, TObjPtr );
 		typedef typename TObjPtrMap::value_type value_type;
 		//!\~english Typedef over the key param type	\~french Typedef sur le type de la clef en paramètre de fonction
-		typedef typename call_traits< TKey >::const_param_type key_param_type;
+		typedef typename CallTraits< TKey >::const_param_type key_param_type;
 
 	private:
 		struct Search
@@ -155,7 +155,7 @@ namespace Castor
 		 *\brief		Gives the collected objects count
 		 *\return		The count
 		 *\~french
-		 *\brief		Donne le nombre d'objets de la collection
+		 *\brief		donne le nombre d'objets de la collection
 		 *\return		Le compte
 		 */
 		inline std::size_t size()const;
@@ -202,7 +202,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Initialise la dernière rechercher (clef vide, résultat invalide).
 		 */
-		void do_init_last()const;
+		void doInitLast()const;
 		/**
 		 *\~english
 		 *\brief		Updates the last search, performing the lookup in the map.
@@ -211,7 +211,7 @@ namespace Castor
 		 *\brief		Met à jour la dernière recherche, en effectuant la recherche dans la map.
 		 *\param[in]	p_key	La clef à tester.
 		 */
-		inline void do_update_last( key_param_type p_key )const;
+		inline void doUpdateLast( key_param_type p_key )const;
 
 	private:
 		TObjPtrMap m_objects;

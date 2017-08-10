@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Importer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -57,20 +57,20 @@ namespace Castor3D
 		 *\brief		Fonction de création.
 		 *\param[in]	engine	Le moteur.
 		 */
-		static ImporterUPtr Create( Engine & engine );
+		static ImporterUPtr create( Engine & engine );
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		C3D_API bool DoImportScene( Scene & p_scene )override;
+		C3D_API bool doImportScene( Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		C3D_API bool DoImportMesh( Mesh & p_mesh )override;
+		C3D_API bool doImportMesh( Mesh & p_mesh )override;
 
 	public:
-		static Castor::String const Type;
+		static castor::String const Type;
 	};
 }
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Mesh/MeshGenerator.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -56,45 +56,15 @@ namespace Castor3D
 		 */
 		C3D_API ~Cylinder();
 		/**
-		 *\copydoc		Castor3D::MeshGenerator::Create
+		 *\copydoc		castor3d::MeshGenerator::create
 		 */
-		C3D_API static MeshGeneratorSPtr Create();
-		/**
-		 *\~english
-		 *\brief		Retrieves number of faces
-		 *\~french
-		 *\brief		Récupère le nombre de faces
-		 */
-		inline uint32_t GetFaceCount()const
-		{
-			return m_nbFaces;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves cylinder's height
-		 *\~french
-		 *\brief		Récupère la hauteur du cylindre
-		 */
-		inline real GetHeight()const
-		{
-			return m_height;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves cylinder's radius
-		 *\~french
-		 *\brief		Récupère le rayon de la base du cylindre
-		 */
-		inline real GetRadius()const
-		{
-			return m_radius;
-		}
+		C3D_API static MeshGeneratorSPtr create();
 
 	private:
 		/**
-		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void DoGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
 		real m_height;

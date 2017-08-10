@@ -36,7 +36,7 @@ namespace GuiCommon
 		PropertiesHolder( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~PropertiesHolder();
 
-		void SetPropertyData( TreeItemProperty * p_data );
+		void setPropertyData( TreeItemProperty * p_data );
 		/**
 		 *\~english
 		 *\brief		Retrieves the editable status
@@ -57,13 +57,13 @@ namespace GuiCommon
 		 *\brief		Récupère l'àditeur bouton
 		 *\return		La valeur
 		 */
-		static inline wxPGEditor * GetButtonEditor()
+		static inline wxPGEditor * getButtonEditor()
 		{
 			return m_buttonEditor;
 		}
 
 	private:
-		void OnPropertyChange( wxPropertyGridEvent & p_event );
+		void onPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
 		bool m_bCanEdit;

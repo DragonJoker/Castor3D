@@ -29,7 +29,7 @@ SOFTWARE.
 namespace GlRender
 {
 	/*!
-	\author		Sylvain Doremus.
+	\author		Sylvain doremus.
 	\version	0.8.0
 	\date		12/10/2015
 	\brief		Class used to handle texture storage buffer.
@@ -37,7 +37,7 @@ namespace GlRender
 	*/
 	template< typename Traits >
 	class GlTextureStorage
-		: public Castor3D::TextureStorage
+		: public castor3d::TextureStorage
 		, public Holder
 	{
 	public:
@@ -52,45 +52,45 @@ namespace GlRender
 		 */
 		GlTextureStorage( OpenGl & p_gl
 						  , GlRenderSystem & renderSystem
-						  , Castor3D::TextureStorageType p_type
-						  , Castor3D::TextureLayout & p_layout
-						  , Castor3D::AccessTypes const & p_cpuAccess
-						  , Castor3D::AccessTypes const & p_gpuAccess );
+						  , castor3d::TextureStorageType p_type
+						  , castor3d::TextureLayout & p_layout
+						  , castor3d::AccessTypes const & p_cpuAccess
+						  , castor3d::AccessTypes const & p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
 		~GlTextureStorage();
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Bind
+		 *\copydoc		castor3d::TextureStorage::Bind
 		 */
-		void Bind( uint32_t p_index )const override;
+		void bind( uint32_t p_index )const override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unbind
+		 *\copydoc		castor3d::TextureStorage::Unbind
 		 */
-		void Unbind( uint32_t p_index )const override;
+		void unbind( uint32_t p_index )const override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Lock
+		 *\copydoc		castor3d::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::AccessTypes const & p_lock )override;
+		uint8_t * lock( castor3d::AccessTypes const & p_lock )override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unlock
+		 *\copydoc		castor3d::TextureStorage::Unlock
 		 */
-		void Unlock( bool p_modified )override;
+		void unlock( bool p_modified )override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Lock
+		 *\copydoc		castor3d::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::AccessTypes const & p_lock, uint32_t p_index )override;
+		uint8_t * lock( castor3d::AccessTypes const & p_lock, uint32_t p_index )override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unlock
+		 *\copydoc		castor3d::TextureStorage::Unlock
 		 */
-		void Unlock( bool p_modified, uint32_t p_index )override;
+		void unlock( bool p_modified, uint32_t p_index )override;
 
-		inline GlTextureStorageType GetGlType()const
+		inline GlTextureStorageType getGlType()const
 		{
 			return m_glType;
 		}
 
-		inline GlRenderSystem * GetGlRenderSystem()const
+		inline GlRenderSystem * getGlRenderSystem()const
 		{
 			return m_glRenderSystem;
 		}

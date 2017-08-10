@@ -52,7 +52,7 @@ namespace GuiCommon
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_viewport	Le viewport cible
 		 */
-		ViewportTreeItemProperty( bool p_editable, Castor3D::Engine & engine, Castor3D::Viewport & p_viewport );
+		ViewportTreeItemProperty( bool p_editable, castor3d::Engine & engine, castor3d::Viewport & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -68,7 +68,7 @@ namespace GuiCommon
 		 *\brief		Récupère le viewport
 		 *\return		La valeur
 		 */
-		inline Castor3D::Viewport & GetViewport()
+		inline castor3d::Viewport & getViewport()
 		{
 			return m_viewport;
 		}
@@ -80,24 +80,24 @@ namespace GuiCommon
 		 *\brief		Récupère le viewport
 		 *\return		La valeur
 		 */
-		inline Castor3D::Viewport const & GetViewport()const
+		inline castor3d::Viewport const & getViewport()const
 		{
 			return m_viewport;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTypeChange( Castor3D::ViewportType p_value );
-		void OnSizeChange( Castor::Size const & p_value );
+		void OnTypeChange( castor3d::ViewportType p_value );
+		void OnSizeChange( castor::Size const & p_value );
 		void OnTopChange( double p_value );
 		void OnBottomChange( double p_value );
 		void OnLeftChange( double p_value );
@@ -108,7 +108,7 @@ namespace GuiCommon
 		void OnRatioChange( double p_value );
 
 	private:
-		Castor3D::Viewport & m_viewport;
+		castor3d::Viewport & m_viewport;
 	};
 }
 

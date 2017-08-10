@@ -1,7 +1,7 @@
 #include "PyCastor3DPrerequisites.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 BOOST_PYTHON_MODULE( castor )
 {

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformHelpers.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\remark		Il s'agit d'une variable donnée à un shader au cours de son exécution.
 	*/
 	class Uniform
-		: public Castor::NonCopyable
+		: public castor::NonCopyable
 	{
 	public:
 		/*!
@@ -52,7 +52,7 @@ namespace Castor3D
 		\brief		Loader de Uniform.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Uniform >
+			: public castor::TextWriter< Uniform >
 		{
 		public:
 			/**
@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Uniform into a text file.
@@ -72,7 +72,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier.
 			 *\param[in]	p_variable	La Uniform.
 			 */
-			C3D_API bool operator()( Uniform const & p_variable, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Uniform const & p_variable, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -100,14 +100,14 @@ namespace Castor3D
 		 *\brief		Définit la valeur de la variable à partir d'une chaîne.
 		 *\param[in]	p_value	La chaîne.
 		 */
-		C3D_API void SetStrValues( Castor::String const & p_value );
+		C3D_API void setStrValues( castor::String const & p_value );
 		/**
 		 *\~english
 		 *\brief		Retrieves the string values of the variable.
 		 *\~french
 		 *\brief		Récupère les valeurs chaîne de la variable.
 		 */
-		C3D_API Castor::String GetStrValues()const;
+		C3D_API castor::String getStrValues()const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string.
@@ -118,7 +118,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La chaîne.
 		 *\param[in]	p_index	L'indice de la valeur.
 		 */
-		C3D_API void SetStrValue( Castor::String const & p_value, uint32_t p_index = 0 );
+		C3D_API void setStrValue( castor::String const & p_value, uint32_t p_index = 0 );
 		/**
 		 *\~english
 		 *\brief		Retrieves the string value of the variable.
@@ -129,14 +129,14 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice de la valeur.
 		 *\return		La valeur chaîne de la variable.
 		 */
-		C3D_API Castor::String GetStrValue( uint32_t p_index = 0 )const;
+		C3D_API castor::String getStrValue( uint32_t p_index = 0 )const;
 		/**
 		 *\~english
 		 *\return		The pointer to the variable data.
 		 *\~french
 		 *\return		Le pointeur sur les données de la variable.
 		 */
-		C3D_API virtual uint8_t const * const const_ptr()const = 0;
+		C3D_API virtual uint8_t const * const constPtr()const = 0;
 		/**
 		 *\~english
 		 *\return		The byte size of the variable.
@@ -150,28 +150,28 @@ namespace Castor3D
 		 *\~english
 		 *\return		La type de la variable.
 		 */
-		C3D_API virtual VariableType GetType()const = 0;
+		C3D_API virtual VariableType getType()const = 0;
 		/**
 		 *\~english
 		 *\return		The variable's full type.
 		 *\~english
 		 *\return		Le type complet de la variable.
 		 */
-		C3D_API virtual UniformType GetFullType()const = 0;
+		C3D_API virtual UniformType getFullType()const = 0;
 		/**
 		 *\~english
 		 *\return		The variable's full type name.
 		 *\~english
 		 *\return		Le nom du type complet de la variable.
 		 */
-		C3D_API virtual Castor::String const & GetFullTypeName()const = 0;
+		C3D_API virtual castor::String const & getFullTypeName()const = 0;
 		/**
 		 *\~english
 		 *\return		The variable's data type name.
 		 *\~french
 		 *\return		Le nom du type de données de la variable.
 		 */
-		C3D_API virtual Castor::String const & GetDataTypeName()const = 0;
+		C3D_API virtual castor::String const & getDataTypeName()const = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the buffer holding the frame variable.
@@ -193,7 +193,7 @@ namespace Castor3D
 		 *\brief		Définit le nom de la variable.
 		 *\param[in]	p_name	Le nom.
 		 */
-		inline void SetName( Castor::String const & p_name )
+		inline void setName( castor::String const & p_name )
 		{
 			m_name = p_name;
 		}
@@ -203,7 +203,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nom de la variable, tel qu'il apparaît dans le programme shader.
 		 */
-		inline Castor::String GetName()const
+		inline castor::String getName()const
 		{
 			return m_name;
 		}
@@ -213,7 +213,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'occurences.
 		 */
-		inline const uint32_t & GetOccCount()const
+		inline const uint32_t & getOccCount()const
 		{
 			return m_occurences;
 		}
@@ -223,7 +223,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de changement.
 		 */
-		inline bool IsChanged()const
+		inline bool isChanged()const
 		{
 			return m_changed;
 		}
@@ -235,7 +235,7 @@ namespace Castor3D
 		 *\return		Définit statut de changement.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetChanged( bool p_value = true )
+		inline void setChanged( bool p_value = true )
 		{
 			m_changed = p_value;
 		}
@@ -251,7 +251,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La chaîne.
 		 *\param[in]	p_index	L'indice de la valeur.
 		 */
-		virtual void DoSetStrValue( Castor::String const & p_value, uint32_t p_index = 0 ) = 0;
+		virtual void doSetStrValue( castor::String const & p_value, uint32_t p_index = 0 ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the string value of the variable.
@@ -262,12 +262,12 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice de la valeur.
 		 *\return		La valeur chaîne de la variable.
 		 */
-		virtual Castor::String DoGetStrValue( uint32_t p_index = 0 )const = 0;
+		virtual castor::String doGetStrValue( uint32_t p_index = 0 )const = 0;
 
 	protected:
 		//!\~english	The variable name as it appears in the shader program.
 		//!\~french		Le nom de la variable tel qu'il apparaît dans le shader.
-		Castor::String m_name;
+		castor::String m_name;
 		//!\~english	Tells if the variable has changed since last execution of the shader.
 		//!\~french		Dit si la valeur de la variable a changé depuis la dernière exécution du shader.
 		mutable bool m_changed;
@@ -289,14 +289,14 @@ namespace Castor3D
 		: public Uniform
 	{
 	public:
-		using type = typename uniform_type< Type >::type;
-		using value_type = typename uniform_type< Type >::value_type;
-		using value_sub_type = typename uniform_type< Type >::value_sub_type;
-		using param_type = typename uniform_type< Type >::param_type;
-		using return_type = typename uniform_type< Type >::return_type;
-		using return_const_type = typename uniform_type< Type >::return_const_type;
-		using typed_value = typename uniform_type< Type >::typed_value_type;
-		static constexpr auto stride = variable_type< Type >::count * sizeof( value_sub_type );
+		using type = typename UniformTypeTraits< Type >::type;
+		using value_type = typename UniformTypeTraits< Type >::value_type;
+		using value_sub_type = typename UniformTypeTraits< Type >::value_sub_type;
+		using param_type = typename UniformTypeTraits< Type >::param_type;
+		using return_type = typename UniformTypeTraits< Type >::return_type;
+		using return_const_type = typename UniformTypeTraits< Type >::return_const_type;
+		using typed_value = typename UniformTypeTraits< Type >::typed_value_type;
+		static constexpr auto stride = VariableTypeTraits< Type >::count * sizeof( value_sub_type );
 
 	public:
 		/**
@@ -321,21 +321,21 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les valeurs.
 		 */
-		inline value_sub_type const * GetValues()const;
+		inline value_sub_type const * getValues()const;
 		/**
 		 *\~english
 		 *\return		A reference to the value.
 		 *\~french
 		 *\return		Une référence sur la valeur.
 		 */
-		inline return_type & GetValue();
+		inline return_type & getValue();
 		/**
 		 *\~english
 		 *\return		A constant reference to the value.
 		 *\~french
 		 *\return		Une référence constante sur la valeur.
 		 */
-		inline return_const_type const & GetValue()const;
+		inline return_const_type const & getValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index.
@@ -348,7 +348,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice.
 		 *\return		Une référence sur la valeur à l'index donné0
 		 */
-		inline return_type & GetValue( uint32_t p_index );
+		inline return_type & getValue( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index.
@@ -361,7 +361,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice.
 		 *\return		Une référence constante sur la valeur à l'index donné.
 		 */
-		inline return_const_type const & GetValue( uint32_t p_index )const;
+		inline return_const_type const & getValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable.
@@ -370,7 +370,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur de la variable.
 		 *\param[in]	p_value	La valeur.
 		 */
-		inline void SetValue( param_type const & p_value );
+		inline void setValue( param_type const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable.
@@ -381,7 +381,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\param[in]	p_index	L'index de la valeur à modifier.
 		 */
-		inline void SetValue( param_type const & p_value, uint32_t p_index );
+		inline void setValue( param_type const & p_value, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -392,7 +392,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 *\param[in]	p_size		Le nombre de valeurs.
 		 */
-		inline void SetValues( param_type const * p_values, size_t p_size );
+		inline void setValues( param_type const * p_values, size_t p_size );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -402,7 +402,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 */
 		template< size_t N >
-		inline void SetValues( param_type const( & p_values )[N] );
+		inline void setValues( param_type const( & p_values )[N] );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -412,7 +412,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 */
 		template< size_t N >
-		inline void SetValues( std::array< param_type, N > const & p_values );
+		inline void setValues( std::array< param_type, N > const & p_values );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -421,11 +421,11 @@ namespace Castor3D
 		 *\brief		Définit les valeurs de la variable.
 		 *\param[in]	p_values	Les valeurs.
 		 */
-		inline void SetValues( std::vector< param_type > const & p_values );
+		inline void setValues( std::vector< param_type > const & p_values );
 		/**
 		 *\~english
 		 *\brief		Array subscript operator.
-		 *\remarks		Doesn't check the index bounds.
+		 *\remarks		doesn't check the index bounds.
 		 *\param[in]	p_index	The index.
 		 *\return		A reference to the value at given index.
 		 *\~french
@@ -438,7 +438,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Array subscript operator.
-		 *\remarks		Doesn't check the index bounds.
+		 *\remarks		doesn't check the index bounds.
 		 *\param[in]	p_index	The index.
 		 *\return		A constant reference to the value at given index.
 		 *\~french
@@ -454,66 +454,66 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type de la variable.
 		 */
-		static inline constexpr VariableType GetVariableType();
+		static inline constexpr VariableType getVariableType();
 		/**
 		 *\~english
 		 *\return		The variable's full type.
 		 *\~english
 		 *\return		Le type complet de la variable.
 		 */
-		static inline constexpr UniformType GetUniformType();
+		static inline constexpr UniformType getUniformType();
 		/**
 		 *\~english
 		 *\return		The variable's full type name.
 		 *\~english
 		 *\return		Le nom du type complet de la variable.
 		 */
-		static inline Castor::String const & GetUniformTypeName();
+		static inline castor::String const & getUniformTypeName();
 		/**
-		 *\copydoc		Castor3D::Uniform::size
+		 *\copydoc		castor3d::Uniform::size
 		 */
 		inline uint32_t size()const override;
 		/**
-		 *\copydoc		Castor3D::Uniform::const_ptr
+		 *\copydoc		castor3d::Uniform::constPtr
 		 */
-		inline uint8_t const * const const_ptr()const override;
+		inline uint8_t const * const constPtr()const override;
 		/**
-		 *\copydoc		Castor3D::Uniform::link
+		 *\copydoc		castor3d::Uniform::link
 		 */
 		void link( uint8_t * p_buffer, uint32_t p_stride )override;
 		/**
-		 *\copydoc		Castor3D::Uniform::GetDataTypeName
+		 *\copydoc		castor3d::Uniform::getDataTypeName
 		 */
-		inline Castor::String const & GetDataTypeName()const override;
+		inline castor::String const & getDataTypeName()const override;
 		/**
-		 *\copydoc		Castor3D::Uniform::GetType
+		 *\copydoc		castor3d::Uniform::getType
 		 */
-		inline VariableType GetType()const override;
+		inline VariableType getType()const override;
 		/**
-		 *\copydoc		Castor3D::Uniform::GetFullType
+		 *\copydoc		castor3d::Uniform::getFullType
 		 */
-		inline UniformType GetFullType()const override;
+		inline UniformType getFullType()const override;
 		/**
-		 *\copydoc		Castor3D::Uniform::GetFullTypeName
+		 *\copydoc		castor3d::Uniform::getFullTypeName
 		 */
-		inline Castor::String const & GetFullTypeName()const override;
+		inline castor::String const & getFullTypeName()const override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Uniform::DoSetStrValue
+		 *\copydoc		castor3d::Uniform::doSetStrValue
 		 */
-		inline void DoSetStrValue( Castor::String const & p_value, uint32_t p_index = 0 )override;
+		inline void doSetStrValue( castor::String const & p_value, uint32_t p_index = 0 )override;
 		/**
-		 *\copydoc		Castor3D::Uniform::DoGetStrValue
+		 *\copydoc		castor3d::Uniform::doGetStrValue
 		 */
-		inline Castor::String DoGetStrValue( uint32_t p_index = 0 )const override;
+		inline castor::String doGetStrValue( uint32_t p_index = 0 )const override;
 		/**
 		 *\~english
 		 *\return		Cleans up the internal buffer of values.
 		 *\~english
 		 *\return		Nettoie le tampon interne de valeurs.
 		 */
-		inline void DoCleanupBuffer();
+		inline void doCleanupBuffer();
 
 	protected:
 		//!\~english	Tells the variable owns it's buffer.

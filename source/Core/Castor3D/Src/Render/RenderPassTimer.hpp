@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -40,7 +40,7 @@ namespace Castor3D
 	\brief		Classe englobant les données nécessaires au calcul des temps d'une passe de rendu.
 	*/
 	class RenderPassTimer
-		: public Castor::Named
+		: public castor::Named
 	{
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	name	Le nom du timer.
 		 */
 		C3D_API RenderPassTimer( Engine & engine
-			, Castor::String const & name );
+			, castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Démarre les timers.
 		 */
-		C3D_API void Start();
+		C3D_API void start();
 		/**
 		 *\~english
 		 *\brief		Stops the timers.
@@ -76,14 +76,14 @@ namespace Castor3D
 		 *\brief
 		 *\brief		Arrête les timers.
 		 */
-		C3D_API void Stop();
+		C3D_API void stop();
 		/**
 		 *\~english
 		 *\return		The CPU time.
 		 *\~french
 		 *\return		Le temps CPU.
 		 */
-		inline Castor::Nanoseconds GetCpuTime()const
+		inline castor::Nanoseconds getCpuTime()const
 		{
 			return m_cpuTime;
 		}
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le temps CPU.
 		 */
-		inline Castor::Nanoseconds GetGpuTime()const
+		inline castor::Nanoseconds getGpuTime()const
 		{
 			return m_gpuTime;
 		}
@@ -104,13 +104,13 @@ namespace Castor3D
 		Engine & m_engine;
 		//!\~english	The CPU timer.
 		//!\~french		Le timer CPU.
-		Castor::PreciseTimer m_cpuTimer;
+		castor::PreciseTimer m_cpuTimer;
 		//!\~english	The CPU time.
 		//!\~french		Le temps CPU.
-		Castor::Nanoseconds m_cpuTime;
+		castor::Nanoseconds m_cpuTime;
 		//!\~english	The GPU time.
 		//!\~french		Le temps GPU.
-		Castor::Nanoseconds m_gpuTime;
+		castor::Nanoseconds m_gpuTime;
 		//!\~english	The GPU time elapsed queries.
 		//!\~french		Les requêtes GPU de temps écoulé.
 		std::array< GpuQueryUPtr, 2 > m_timerQuery;

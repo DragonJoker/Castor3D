@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -75,7 +75,7 @@ namespace Castor3D
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
 		 */
-		C3D_API void Update( AnimatedSkeleton const & p_skeleton )const;
+		C3D_API void update( AnimatedSkeleton const & p_skeleton )const;
 		/**
 		 *\~english
 		 *\brief		Declares the GLSL variables needed to compute skinning in vertex shader.
@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\param[in]	p_writer	Le GLSL writer.
 		 *\param[in]	p_flags		Les indicateurs du programme.
 		 */
-		C3D_API static void Declare( GLSL::GlslWriter & p_writer
+		C3D_API static void declare( GLSL::GlslWriter & p_writer
 			, ProgramFlags const & p_flags );
 		/**
 		 *\~english
@@ -100,20 +100,20 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les indicateurs du programme.
 		 *\return		La matrice résultat.
 		 */
-		C3D_API static GLSL::Mat4 ComputeTransform( GLSL::GlslWriter & p_writer
+		C3D_API static GLSL::Mat4 computeTransform( GLSL::GlslWriter & p_writer
 			, ProgramFlags const & p_flags );
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}

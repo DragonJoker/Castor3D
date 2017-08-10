@@ -39,7 +39,7 @@ namespace GlRender
 	\brief		Implémentation du pipeline de rendu.
 	*/
 	class GlRenderPipeline
-		: public Castor3D::RenderPipeline
+		: public castor3d::RenderPipeline
 		, public Holder
 	{
 	public:
@@ -66,12 +66,12 @@ namespace GlRender
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
 		GlRenderPipeline( OpenGl & p_gl, GlRenderSystem & renderSystem
-					, Castor3D::DepthStencilState && p_dsState
-					, Castor3D::RasteriserState && p_rsState
-					, Castor3D::BlendState && p_bdState
-					, Castor3D::MultisampleState && p_msState
-					, Castor3D::ShaderProgram & p_program
-					, Castor3D::PipelineFlags const & p_flags );
+					, castor3d::DepthStencilState && p_dsState
+					, castor3d::RasteriserState && p_rsState
+					, castor3d::BlendState && p_bdState
+					, castor3d::MultisampleState && p_msState
+					, castor3d::ShaderProgram & p_program
+					, castor3d::PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -85,7 +85,7 @@ namespace GlRender
 		 *\~french
 		 *\brief		Applique le pipeline.
 		 */
-		void Apply()const override;
+		void apply()const override;
 	};
 }
 

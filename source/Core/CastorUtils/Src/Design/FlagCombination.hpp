@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -249,7 +249,8 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les opérandes.
 	 */
 	template< typename FlagType, typename Type >
-	inline bool operator==( FlagCombination< FlagType, Type > const & p_lhs, FlagCombination< FlagType, Type > const & p_rhs )noexcept
+	inline bool operator==( FlagCombination< FlagType, Type > const & p_lhs
+		, FlagCombination< FlagType, Type > const & p_rhs )noexcept
 	{
 		return Type( p_lhs ) == Type( p_rhs );
 	}
@@ -262,7 +263,8 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les opérandes.
 	 */
 	template< typename FlagType, typename Type >
-	inline bool operator==( FlagCombination< FlagType, Type > const & p_lhs, FlagType const & p_rhs )noexcept
+	inline bool operator==( FlagCombination< FlagType, Type > const & p_lhs
+		, FlagType const & p_rhs )noexcept
 	{
 		return Type( p_lhs ) == Type( p_rhs );
 	}
@@ -275,7 +277,8 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les opérandes.
 	 */
 	template< typename FlagType, typename Type >
-	inline bool operator!=( FlagCombination< FlagType, Type > const & p_lhs, FlagCombination< FlagType, Type > const & p_rhs )noexcept
+	inline bool operator!=( FlagCombination< FlagType, Type > const & p_lhs
+		, FlagCombination< FlagType, Type > const & p_rhs )noexcept
 	{
 		return Type( p_lhs ) != Type( p_rhs );
 	}
@@ -288,7 +291,8 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les opérandes.
 	 */
 	template< typename FlagType, typename Type >
-	inline bool operator!=( FlagCombination< FlagType, Type > const & p_lhs, FlagType const & p_rhs )noexcept
+	inline bool operator!=( FlagCombination< FlagType, Type > const & p_lhs
+		, FlagType const & p_rhs )noexcept
 	{
 		return Type( p_lhs ) != Type( p_rhs );
 	}
@@ -303,7 +307,8 @@ namespace Castor
 	 *\return		La combinaison de flags résultante.
 	 */
 	template< typename FlagType, typename Type >
-	inline FlagCombination< FlagType, Type > operator&( FlagCombination< FlagType, Type > const & p_lhs, FlagType const & p_rhs )noexcept
+	inline FlagCombination< FlagType, Type > operator&( FlagCombination< FlagType, Type > const & p_lhs
+		, FlagType const & p_rhs )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't apply binary AND on different size parameters" );
 		FlagCombination< FlagType, Type > result{ p_lhs };
@@ -320,7 +325,8 @@ namespace Castor
 	 *\return		La combinaison de flags résultante.
 	 */
 	template< typename FlagType, typename Type >
-	inline FlagCombination< FlagType, Type > operator|( FlagCombination< FlagType, Type > const & p_lhs, FlagType const & p_rhs )noexcept
+	inline FlagCombination< FlagType, Type > operator|( FlagCombination< FlagType, Type > const & p_lhs
+		, FlagType const & p_rhs )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't apply binary OR on different size parameters" );
 		FlagCombination< FlagType, Type > result{ p_lhs };
@@ -337,7 +343,7 @@ namespace Castor
 	 *\return		\p true si p_flags contient p_flag.
 	 */
 	template< typename T, typename U >
-	inline bool CheckFlag( T const & p_value, U const & p_flag )noexcept
+	inline bool checkFlag( T const & p_value, U const & p_flag )noexcept
 	{
 		static_assert( sizeof( T ) == sizeof( U ), "Can't check flags for different size parameters" );
 		return U( p_value & T( p_flag ) ) == p_flag;;
@@ -353,7 +359,8 @@ namespace Castor
 	 *\return		\p true si p_flags contient p_flag.
 	 */
 	template< typename FlagType, typename Type >
-	inline bool CheckFlag( FlagCombination< FlagType, Type > const & p_value, FlagType const & p_flag )noexcept
+	inline bool checkFlag( FlagCombination< FlagType, Type > const & p_value
+		, FlagType const & p_flag )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't check flags for different size parameters" );
 		return Type( p_value & p_flag ) == Type( p_flag );
@@ -369,14 +376,15 @@ namespace Castor
 	 *\return		\p true si p_flags contient p_flag.
 	 */
 	template< typename FlagType, typename Type >
-	inline bool CheckFlag( FlagCombination< FlagType, Type > const & p_value, Type const & p_flag )noexcept
+	inline bool checkFlag( FlagCombination< FlagType, Type > const & p_value
+		, Type const & p_flag )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't check flags for different size parameters" );
 		return Type( p_value & p_flag ) == p_flag;
 	}
 	/**
 	 *\~english
-	 *\brief			Adds a flag to the given value.
+	 *\brief			adds a flag to the given value.
 	 *\param[in,out]	p_value	The value.
 	 *\param[in]		p_flag	The flag to add.
 	 *\return			The value.
@@ -387,7 +395,8 @@ namespace Castor
 	 *\return			La valeur.
 	 */
 	template< typename FlagType, typename Type >
-	inline FlagCombination< FlagType, Type > & AddFlag( FlagCombination< FlagType, Type > & p_value, FlagType const & p_flag )noexcept
+	inline FlagCombination< FlagType, Type > & addFlag( FlagCombination< FlagType, Type > & p_value
+		, FlagType const & p_flag )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't add flags for different size parameters" );
 		p_value |= p_flag;
@@ -395,7 +404,7 @@ namespace Castor
 	}
 	/**
 	 *\~english
-	 *\brief			Adds a flag combination to the given value.
+	 *\brief			adds a flag combination to the given value.
 	 *\param[in,out]	p_value	The value.
 	 *\param[in]		p_flags	The flag combination to add.
 	 *\return			The value.
@@ -406,7 +415,8 @@ namespace Castor
 	 *\return			La valeur.
 	 */
 	template< typename FlagType, typename Type >
-	inline FlagCombination< FlagType, Type > & AddFlags( FlagCombination< FlagType, Type > & p_value, FlagCombination< FlagType, Type > const & p_flags )noexcept
+	inline FlagCombination< FlagType, Type > & addFlags( FlagCombination< FlagType, Type > & p_value
+		, FlagCombination< FlagType, Type > const & p_flags )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't add flags for different size parameters" );
 		p_value |= p_flags;
@@ -425,7 +435,8 @@ namespace Castor
 	 *\return			La valeur.
 	 */
 	template< typename FlagType, typename Type >
-	inline FlagCombination< FlagType, Type > & RemFlag( FlagCombination< FlagType, Type > & p_value, FlagType const & p_flag )noexcept
+	inline FlagCombination< FlagType, Type > & remFlag( FlagCombination< FlagType, Type > & p_value
+		, FlagType const & p_flag )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't remove flags for different size parameters" );
 		p_value &= ~Type( p_flag );
@@ -433,7 +444,7 @@ namespace Castor
 	}
 	/**
 	 *\~english
-	 *\brief		Adds a flag to the given value.
+	 *\brief		adds a flag to the given value.
 	 *\param[in]	p_value	The value.
 	 *\param[in]	p_flag	The flag to add.
 	 *\return		The new value.
@@ -444,7 +455,8 @@ namespace Castor
 	 *\return		La nouvelle valeur.
 	 */
 	template< typename FlagType, typename Type >
-	inline FlagCombination< FlagType, Type > AddFlag( FlagCombination< FlagType, Type > const & p_value, FlagType const & p_flag )noexcept
+	inline FlagCombination< FlagType, Type > addFlag( FlagCombination< FlagType, Type > const & p_value
+		, FlagType const & p_flag )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't add flags for different size parameters" );
 		return ( p_value | p_flag );
@@ -462,7 +474,8 @@ namespace Castor
 	 *\return		La nouvelle valeur.
 	 */
 	template< typename FlagType, typename Type >
-	inline FlagCombination< FlagType, Type > RemFlag( FlagCombination< FlagType, Type > const & p_value, FlagType const & p_flag )noexcept
+	inline FlagCombination< FlagType, Type > remFlag( FlagCombination< FlagType, Type > const & p_value
+		, FlagType const & p_flag )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't remove flags for different size parameters" );
 		return p_value & ~Type( p_flag );

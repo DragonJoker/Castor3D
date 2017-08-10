@@ -58,34 +58,34 @@ namespace CastorCom
 		 */
 		virtual ~CPass();
 
-		inline Castor3D::PassSPtr GetInternal()const
+		inline castor3d::PassSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::PassSPtr pass )
+		inline void setInternal( castor3d::PassSPtr pass )
 		{
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( TwoSided, boolean, make_getter( m_internal.get(), &Castor3D::Pass::IsTwoSided ), make_putter( m_internal.get(), &Castor3D::Pass::SetTwoSided ) );
-		COM_PROPERTY( Opacity, float, make_getter( m_internal.get(), &Castor3D::Pass::GetOpacity ), make_putter( m_internal.get(), &Castor3D::Pass::SetOpacity ) );
+		COM_PROPERTY( TwoSided, boolean, make_getter( m_internal.get(), &castor3d::Pass::IsTwoSided ), make_putter( m_internal.get(), &castor3d::Pass::setTwoSided ) );
+		COM_PROPERTY( Opacity, float, make_getter( m_internal.get(), &castor3d::Pass::getOpacity ), make_putter( m_internal.get(), &castor3d::Pass::setOpacity ) );
 
-		COM_PROPERTY_GET( TextureUnitCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Pass::GetTextureUnitsCount ) );
+		COM_PROPERTY_GET( TextureUnitCount, unsigned int, make_getter( m_internal.get(), &castor3d::Pass::getTextureUnitsCount ) );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( DestroyTextureUnit )( /* [in] */ ITextureUnit * val );
-		STDMETHOD( GetTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( getTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( destroyTextureUnit )( /* [in] */ ITextureUnit * val );
+		STDMETHOD( getTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
 
 	private:
-		Castor3D::PassSPtr m_internal;
+		castor3d::PassSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Pass ), CPass );
 
-	DECLARE_VARIABLE_PTR_GETTER( Pass, Castor3D, Pass );
-	DECLARE_VARIABLE_PTR_PUTTER( Pass, Castor3D, Pass );
+	DECLARE_VARIABLE_PTR_GETTER( Pass, castor3d, Pass );
+	DECLARE_VARIABLE_PTR_PUTTER( Pass, castor3d, Pass );
 }
 
 #endif

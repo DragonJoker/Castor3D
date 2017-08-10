@@ -11,80 +11,80 @@ namespace Testing
 {
 	namespace Memory
 	{
-		template< Castor::MemoryDataType MemDataType >
-		using MyObjectPool = Castor::ObjectPool< Obj, MemDataType >;
+		template< castor::MemoryDataType MemDataType >
+		using MyObjectPool = castor::ObjectPool< Obj, MemDataType >;
 
-		template< Castor::MemoryDataType MemDataType >
-		using MyAlignedObjectPool = Castor::AlignedObjectPool< Obj, MemDataType, 16 >;
+		template< castor::MemoryDataType MemDataType >
+		using MyAlignedObjectPool = castor::AlignedObjectPool< Obj, MemDataType, 16 >;
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
 			std::cout << "Memory checks" << std::endl;
-			std::cout << " Policy: " << Castor::MemoryDataNamer< MemDataType >::Name << "< Ptr >" << std::endl << std::endl;
+			std::cout << " Policy: " << castor::MemoryDataNamer< MemDataType >::Name << "< Ptr >" << std::endl << std::endl;
 			{
 				MyObjectPool< MemDataType > pool( 1 );
 				Obj * bigObjs[2];
 
 				for ( size_t i = 0; i < 2; ++i )
 				{
-					bigObjs[i] = pool.Allocate();
+					bigObjs[i] = pool.allocate();
 				}
 
 				for ( size_t i = 0; i < 2; ++i )
 				{
-					pool.Deallocate( bigObjs[i] );
+					pool.deallocate( bigObjs[i] );
 				}
 
-				pool.Deallocate( bigObjs[0] );
+				pool.deallocate( bigObjs[0] );
 			}
 			{
 				MyObjectPool< MemDataType > pool( 1 );
 				Obj * bigObj;
-				bigObj = pool.Allocate();
+				bigObj = pool.allocate();
 			}
 			{
 				MyObjectPool< MemDataType > pool( 1 );
 				Obj obj;
-				pool.Deallocate( &obj );
+				pool.deallocate( &obj );
 			}
 
 			std::cout << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
 		}
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		void AlignedChecks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
 			std::cout << "Memory checks" << std::endl;
-			std::cout << " Policy: " << Castor::MemoryDataNamer< MemDataType >::Name << "< Ptr >" << std::endl << std::endl;
+			std::cout << " Policy: " << castor::MemoryDataNamer< MemDataType >::Name << "< Ptr >" << std::endl << std::endl;
 			{
 				MyAlignedObjectPool< MemDataType > pool( 1 );
 				Obj * bigObjs[2];
 
 				for ( size_t i = 0; i < 2; ++i )
 				{
-					bigObjs[i] = pool.Allocate();
+					bigObjs[i] = pool.allocate();
 				}
 
 				for ( size_t i = 0; i < 2; ++i )
 				{
-					pool.Deallocate( bigObjs[i] );
+					pool.deallocate( bigObjs[i] );
 				}
 
-				pool.Deallocate( bigObjs[0] );
+				pool.deallocate( bigObjs[0] );
 			}
 			{
 				MyAlignedObjectPool< MemDataType > pool( 1 );
 				Obj * bigObj;
-				bigObj = pool.Allocate();
+				bigObj = pool.allocate();
 			}
 			{
 				MyAlignedObjectPool< MemDataType > pool( 1 );
 				Obj obj;
-				pool.Deallocate( &obj );
+				pool.deallocate( &obj );
 			}
 
 			std::cout << std::endl;
@@ -103,37 +103,37 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsObjectsPoolTest::DoRegisterTests()
+	void CastorUtilsObjectsPoolTest::doRegisterTests()
 	{
-		DoRegisterTest( "ObjectPoolTest", std::bind( &CastorUtilsObjectsPoolTest::ObjectPoolTest, this ) );
-		//DoRegisterTest( "AlignedObjectPoolTest", std::bind( &CastorUtilsObjectsPoolTest::AlignedObjectPoolTest, this ) );
-		DoRegisterTest( "FixedSizePerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::FixedSizePerformanceTest, this ) );
-		DoRegisterTest( "ScatteredMemoryPerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::ScatteredMemoryPerformanceTest, this ) );
-		DoRegisterTest( "VariableSizePerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::VariableSizePerformanceTest, this ) );
-		DoRegisterTest( "UniquePoolTest", std::bind( &CastorUtilsObjectsPoolTest::UniquePoolTest, this ) );
+		doRegisterTest( "ObjectPoolTest", std::bind( &CastorUtilsObjectsPoolTest::ObjectPoolTest, this ) );
+		//doRegisterTest( "AlignedObjectPoolTest", std::bind( &CastorUtilsObjectsPoolTest::AlignedObjectPoolTest, this ) );
+		doRegisterTest( "FixedSizePerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::FixedSizePerformanceTest, this ) );
+		doRegisterTest( "ScatteredMemoryPerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::ScatteredMemoryPerformanceTest, this ) );
+		doRegisterTest( "VariableSizePerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::VariableSizePerformanceTest, this ) );
+		doRegisterTest( "UniquePoolTest", std::bind( &CastorUtilsObjectsPoolTest::UniquePoolTest, this ) );
 	}
 
 	void CastorUtilsObjectsPoolTest::ObjectPoolTest()
 	{
-		Memory::Checks< Castor::MemoryDataType::eFixed >();
-		Memory::Checks< Castor::MemoryDataType::eMarked >();
-		Memory::Checks< Castor::MemoryDataType::eFixedGrowing >();
-		Memory::Checks< Castor::MemoryDataType::eFixedGrowingMarked >();
+		Memory::Checks< castor::MemoryDataType::eFixed >();
+		Memory::Checks< castor::MemoryDataType::eMarked >();
+		Memory::Checks< castor::MemoryDataType::eFixedGrowing >();
+		Memory::Checks< castor::MemoryDataType::eFixedGrowingMarked >();
 	}
 
 	void CastorUtilsObjectsPoolTest::AlignedObjectPoolTest()
 	{
-		Memory::AlignedChecks< Castor::MemoryDataType::eFixed >();
-		Memory::AlignedChecks< Castor::MemoryDataType::eFixedGrowing >();
+		Memory::AlignedChecks< castor::MemoryDataType::eFixed >();
+		Memory::AlignedChecks< castor::MemoryDataType::eFixedGrowing >();
 	}
 
 	void CastorUtilsObjectsPoolTest::FixedSizePerformanceTest()
 	{
 		FixedSizePerformance::Checks< PlacementNew::SFixedChecks< AllocPolicies::SPlacementNewPolicy > >();
-		FixedSizePerformance::Checks< Castor::MemoryDataType::eFixed >();
-		FixedSizePerformance::Checks< Castor::MemoryDataType::eMarked >();
-		FixedSizePerformance::Checks< Castor::MemoryDataType::eFixedGrowing >();
-		FixedSizePerformance::Checks< Castor::MemoryDataType::eFixedGrowingMarked >();
+		FixedSizePerformance::Checks< castor::MemoryDataType::eFixed >();
+		FixedSizePerformance::Checks< castor::MemoryDataType::eMarked >();
+		FixedSizePerformance::Checks< castor::MemoryDataType::eFixedGrowing >();
+		FixedSizePerformance::Checks< castor::MemoryDataType::eFixedGrowingMarked >();
 		FixedSizePerformance::Checks< Traditional::SFixedChecks< AllocPolicies::SNewDeletePolicy > >();
 		FixedSizePerformance::Checks< Traditional::SFixedChecks< AllocPolicies::SMallocFreePolicy > >();
 	}
@@ -141,10 +141,10 @@ namespace Testing
 	void CastorUtilsObjectsPoolTest::AllDeallPerformanceTest()
 	{
 		AllDeallPerformance::Checks< PlacementNew::SAllDeallChecks< AllocPolicies::SPlacementNewPolicy > >();
-		AllDeallPerformance::Checks< Castor::MemoryDataType::eFixed >();
-		AllDeallPerformance::Checks< Castor::MemoryDataType::eMarked >();
-		AllDeallPerformance::Checks< Castor::MemoryDataType::eFixedGrowing >();
-		AllDeallPerformance::Checks< Castor::MemoryDataType::eFixedGrowingMarked >();
+		AllDeallPerformance::Checks< castor::MemoryDataType::eFixed >();
+		AllDeallPerformance::Checks< castor::MemoryDataType::eMarked >();
+		AllDeallPerformance::Checks< castor::MemoryDataType::eFixedGrowing >();
+		AllDeallPerformance::Checks< castor::MemoryDataType::eFixedGrowingMarked >();
 		AllDeallPerformance::Checks< Traditional::SAllDeallChecks< AllocPolicies::SNewDeletePolicy > >();
 		AllDeallPerformance::Checks< Traditional::SVariableChecks< AllocPolicies::SMallocFreePolicy > >();
 	}
@@ -153,10 +153,10 @@ namespace Testing
 	{
 		ScatteredMemoryPerformance::Index index;
 		ScatteredMemoryPerformance::Checks< PlacementNew::SScatteredChecks< AllocPolicies::SPlacementNewPolicy > >( index );
-		ScatteredMemoryPerformance::Checks< Castor::MemoryDataType::eFixed >( index );
-		ScatteredMemoryPerformance::Checks< Castor::MemoryDataType::eMarked >( index );
-		ScatteredMemoryPerformance::Checks< Castor::MemoryDataType::eFixedGrowing >( index );
-		ScatteredMemoryPerformance::Checks< Castor::MemoryDataType::eFixedGrowingMarked >( index );
+		ScatteredMemoryPerformance::Checks< castor::MemoryDataType::eFixed >( index );
+		ScatteredMemoryPerformance::Checks< castor::MemoryDataType::eMarked >( index );
+		ScatteredMemoryPerformance::Checks< castor::MemoryDataType::eFixedGrowing >( index );
+		ScatteredMemoryPerformance::Checks< castor::MemoryDataType::eFixedGrowingMarked >( index );
 		ScatteredMemoryPerformance::Checks< Traditional::SScatteredChecks< AllocPolicies::SNewDeletePolicy > >( index );
 		ScatteredMemoryPerformance::Checks< Traditional::SScatteredChecks< AllocPolicies::SMallocFreePolicy > >( index );
 	}
@@ -164,8 +164,8 @@ namespace Testing
 	void CastorUtilsObjectsPoolTest::VariableSizePerformanceTest()
 	{
 		VariableSizePerformance::Checks< PlacementNew::SVariableChecks< AllocPolicies::SPlacementNewPolicy > >();
-		VariableSizePerformance::Checks< Castor::MemoryDataType::eFixedGrowing >();
-		VariableSizePerformance::Checks< Castor::MemoryDataType::eFixedGrowingMarked >();
+		VariableSizePerformance::Checks< castor::MemoryDataType::eFixedGrowing >();
+		VariableSizePerformance::Checks< castor::MemoryDataType::eFixedGrowingMarked >();
 		VariableSizePerformance::Checks< Traditional::SVariableChecks< AllocPolicies::SNewDeletePolicy > >();
 		VariableSizePerformance::Checks< Traditional::SVariableChecks< AllocPolicies::SMallocFreePolicy > >();
 	}
@@ -174,7 +174,7 @@ namespace Testing
 	{
 		UniqueObjectPool::Checks< Traditional::SFixedChecks< AllocPolicies::SNewDeletePolicy > >();
 		UniqueObjectPool::Checks< Traditional::SFixedChecks< AllocPolicies::SMallocFreePolicy > >();
-		UniqueObjectPool::Checks< Castor::MemoryDataType::eFixed >();
-		UniqueObjectPool::Checks< Castor::MemoryDataType::eFixedGrowing >();
+		UniqueObjectPool::Checks< castor::MemoryDataType::eFixed >();
+		UniqueObjectPool::Checks< castor::MemoryDataType::eFixedGrowing >();
 	}
 }
