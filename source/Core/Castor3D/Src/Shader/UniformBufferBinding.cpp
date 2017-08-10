@@ -2,9 +2,9 @@
 
 #include "UniformBuffer.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	UniformBufferBinding::UniformBufferBinding( UniformBuffer & p_ubo, ShaderProgram const  & p_program )
 		: OwnedBy< UniformBuffer >{ p_ubo }
@@ -16,12 +16,12 @@ namespace Castor3D
 	{
 	}
 
-	void UniformBufferBinding::Bind( uint32_t p_index )const
+	void UniformBufferBinding::bind( uint32_t p_index )const
 	{
 		if ( m_size )
 		{
-			GetOwner()->GetStorage().SetBindingPoint( p_index );
-			DoBind( p_index );
+			getOwner()->getStorage().setBindingPoint( p_index );
+			doBind( p_index );
 		}
 	}
 }

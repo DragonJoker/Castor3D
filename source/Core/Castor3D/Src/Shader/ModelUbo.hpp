@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -77,30 +77,30 @@ namespace Castor3D
 		 *\param[in]	p_shadowReceiver	Dit si le modèle reçoit les ombres.
 		 *\param[in]	p_materialIndex		L'indice du matériau.
 		 */
-		C3D_API void Update( bool p_shadowReceiver
+		C3D_API void update( bool p_shadowReceiver
 			, uint32_t p_materialIndex )const;
 		/**
 		 *\~english
-		 *\brief		Sets the environment map index value.
+		 *\brief		sets the environment map index value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'indice de la texture d'environnement.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		C3D_API void SetEnvMapIndex( uint32_t p_value );
+		C3D_API void setEnvMapIndex( uint32_t p_value );
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
 		/**@{*/
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -126,10 +126,10 @@ namespace Castor3D
 }
 
 #define UBO_MODEL( Writer )\
-	GLSL::Ubo model{ writer, Castor3D::ShaderProgram::BufferModel, Castor3D::ModelUbo::BindingPoint };\
-	auto c3d_shadowReceiver = model.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::ShadowReceiver );\
-	auto c3d_materialIndex = model.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::MaterialIndex );\
-	auto c3d_envMapIndex = model.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::EnvironmentIndex );\
-	model.End()
+	GLSL::Ubo model{ writer, castor3d::ShaderProgram::BufferModel, castor3d::ModelUbo::BindingPoint };\
+	auto c3d_shadowReceiver = model.declMember< GLSL::Int >( castor3d::ShaderProgram::ShadowReceiver );\
+	auto c3d_materialIndex = model.declMember< GLSL::Int >( castor3d::ShaderProgram::MaterialIndex );\
+	auto c3d_envMapIndex = model.declMember< GLSL::Int >( castor3d::ShaderProgram::EnvironmentIndex );\
+	model.end()
 
 #endif

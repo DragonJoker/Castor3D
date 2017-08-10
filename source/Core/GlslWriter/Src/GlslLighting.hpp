@@ -43,43 +43,43 @@ namespace GLSL
 		InOutVec3 m_v3Specular;
 	};
 
-	GlslWriter_API Castor::String ParamToString( Castor::String & p_sep, FragmentInput const & p_value );
-	GlslWriter_API Castor::String ParamToString( Castor::String & p_sep, OutputComponents const & p_value );
+	GlslWriter_API castor::String paramToString( castor::String & p_sep, FragmentInput const & p_value );
+	GlslWriter_API castor::String paramToString( castor::String & p_sep, OutputComponents const & p_value );
 
-	GlslWriter_API Castor::String ToString( FragmentInput const & p_value );
-	GlslWriter_API Castor::String ToString( OutputComponents const & p_value );
+	GlslWriter_API castor::String toString( FragmentInput const & p_value );
+	GlslWriter_API castor::String toString( OutputComponents const & p_value );
 
 	class LightingModel
 	{
 	public:
 		GlslWriter_API LightingModel( ShadowType p_shadows, GlslWriter & p_writer );
-		GlslWriter_API void DeclareModel();
-		GlslWriter_API void DeclareDirectionalModel();
-		GlslWriter_API void DeclarePointModel();
-		GlslWriter_API void DeclareSpotModel();
+		GlslWriter_API void declareModel();
+		GlslWriter_API void declareDirectionalModel();
+		GlslWriter_API void declarePointModel();
+		GlslWriter_API void declareSpotModel();
 		// Calls
-		GlslWriter_API DirectionalLight GetDirectionalLight( Type const & p_value );
-		GlslWriter_API PointLight GetPointLight( Type const & p_value );
-		GlslWriter_API SpotLight GetSpotLight( Type const & p_value );
+		GlslWriter_API DirectionalLight getDirectionalLight( Type const & p_value );
+		GlslWriter_API PointLight getPointLight( Type const & p_value );
+		GlslWriter_API SpotLight getSpotLight( Type const & p_value );
 
 	protected:
-		GlslWriter_API Light GetBaseLight( Type const & p_value );
-		GlslWriter_API void Declare_Light();
-		GlslWriter_API void Declare_DirectionalLight();
-		GlslWriter_API void Declare_PointLight();
-		GlslWriter_API void Declare_SpotLight();
-		GlslWriter_API void Declare_GetBaseLight();
-		GlslWriter_API void Declare_GetDirectionalLight();
-		GlslWriter_API void Declare_GetPointLight();
-		GlslWriter_API void Declare_GetSpotLight();
+		GlslWriter_API Light getBaseLight( Type const & p_value );
+		GlslWriter_API void doDeclareLight();
+		GlslWriter_API void doDeclareDirectionalLight();
+		GlslWriter_API void doDeclarePointLight();
+		GlslWriter_API void doDeclareSpotLight();
+		GlslWriter_API void doDeclareGetBaseLight();
+		GlslWriter_API void doDeclareGetDirectionalLight();
+		GlslWriter_API void doDeclareGetPointLight();
+		GlslWriter_API void doDeclareGetSpotLight();
 
-		virtual void DoDeclareModel() = 0;
-		virtual void Declare_ComputeDirectionalLight() = 0;
-		virtual void Declare_ComputePointLight() = 0;
-		virtual void Declare_ComputeSpotLight() = 0;
-		virtual void Declare_ComputeOneDirectionalLight() = 0;
-		virtual void Declare_ComputeOnePointLight() = 0;
-		virtual void Declare_ComputeOneSpotLight() = 0;
+		virtual void doDeclareModel() = 0;
+		virtual void doDeclareComputeDirectionalLight() = 0;
+		virtual void doDeclareComputePointLight() = 0;
+		virtual void doDeclareComputeSpotLight() = 0;
+		virtual void doDeclareComputeOneDirectionalLight() = 0;
+		virtual void doDeclareComputeOnePointLight() = 0;
+		virtual void doDeclareComputeOneSpotLight() = 0;
 
 	protected:
 		ShadowType m_shadows;

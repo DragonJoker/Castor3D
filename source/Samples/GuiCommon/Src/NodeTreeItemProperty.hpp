@@ -52,7 +52,7 @@ namespace GuiCommon
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_node		L'objet cible
 		 */
-		NodeTreeItemProperty( bool p_editable, Castor3D::Engine * engine, Castor3D::SceneNodeSPtr p_node );
+		NodeTreeItemProperty( bool p_editable, castor3d::Engine * engine, castor3d::SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -68,30 +68,30 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline Castor3D::SceneNodeSPtr GetNode()
+		inline castor3d::SceneNodeSPtr getNode()
 		{
 			return m_node.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnPositionChange( Castor::Point3r const & p_value );
-		void OnScaleChange( Castor::Point3r const & p_value );
-		void OnOrientationChange( Castor::Quaternion const & p_value );
+		void OnPositionChange( castor::Point3r const & p_value );
+		void OnScaleChange( castor::Point3r const & p_value );
+		void OnOrientationChange( castor::Quaternion const & p_value );
 		void OnVisibilityChange( bool p_value );
 
 	private:
-		Castor3D::Engine * m_engine;
-		Castor3D::SceneNodeWPtr m_node;
+		castor3d::Engine * m_engine;
+		castor3d::SceneNodeWPtr m_node;
 	};
 }
 

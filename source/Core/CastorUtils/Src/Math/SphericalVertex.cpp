@@ -1,6 +1,6 @@
 #include "SphericalVertex.hpp"
 
-namespace Castor
+namespace castor
 {
 	SphericalVertex::SphericalVertex( real p_radius, real p_phi, real p_theta )
 		: m_radius( p_radius )

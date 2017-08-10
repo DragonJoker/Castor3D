@@ -1,8 +1,8 @@
 #include "Particle.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Particle::Particle( BufferDeclaration const & p_description, StrStrMap const & p_defaultValues )
 		: m_description{ p_description }
@@ -16,7 +16,7 @@ namespace Castor3D
 
 			if ( it != p_defaultValues.end() && !it->second.empty() )
 			{
-				ParseValue( it->second, element.m_dataType, *this, index );
+				parseValue( it->second, element.m_dataType, *this, index );
 			}
 
 			++index;

@@ -9,9 +9,9 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Scene/Scene.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	MeshGenerator::MeshGenerator( String const & p_meshType )
 		: m_meshType{ p_meshType }
@@ -22,30 +22,30 @@ namespace Castor3D
 	{
 	}
 
-	MeshGeneratorSPtr MeshGenerator::Create()
+	MeshGeneratorSPtr MeshGenerator::create()
 	{
 		return std::make_shared< MeshGenerator >( cuT( "custom" ) );
 	}
 
-	void MeshGenerator::Generate( Mesh & p_mesh, Parameters const & p_parameters )
+	void MeshGenerator::generate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		DoGenerate( p_mesh, p_parameters );
+		doGenerate( p_mesh, p_parameters );
 
 		for ( auto submesh : p_mesh )
 		{
-			p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *submesh ) );
+			p_mesh.getScene()->getListener().postEvent( MakeInitialiseEvent( *submesh ) );
 		}
 	}
 
-	void MeshGenerator::ComputeNormals( Mesh & p_mesh, bool p_reverted )
+	void MeshGenerator::computeNormals( Mesh & p_mesh, bool p_reverted )
 	{
 		for ( auto submesh : p_mesh )
 		{
-			submesh->ComputeNormals( p_reverted );
+			submesh->computeNormals( p_reverted );
 		}
 	}
 
-	void MeshGenerator::DoGenerate( Mesh & CU_PARAM_UNUSED( p_mesh ), Parameters const &  CU_PARAM_UNUSED( p_parameters ) )
+	void MeshGenerator::doGenerate( Mesh & CU_PARAM_UNUSED( p_mesh ), Parameters const &  CU_PARAM_UNUSED( p_parameters ) )
 	{
 	}
 }

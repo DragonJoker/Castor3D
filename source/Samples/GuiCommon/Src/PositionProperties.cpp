@@ -3,7 +3,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
+using namespace castor;
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Position )
 
@@ -14,7 +14,7 @@ namespace GuiCommon
 	PositionProperty::PositionProperty( wxString const & label, wxString const & name, Position const & value )
 		: wxPGProperty( label, name )
 	{
-		SetValueI( value );
+		setValueI( value );
 		AddPrivateChild( new wxIntProperty( wxT( "X" ), wxPG_LABEL, value.x() ) );
 		AddPrivateChild( new wxIntProperty( wxT( "Y" ), wxPG_LABEL, value.y() ) );
 	}
@@ -23,7 +23,7 @@ namespace GuiCommon
 	{
 	}
 
-	void PositionProperty::RefreshChildren()
+	void PositionProperty::refreshChildren()
 	{
 		if ( GetChildCount() )
 		{
@@ -33,7 +33,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxVariant PositionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
+	wxVariant PositionProperty::childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		Position & point = PositionRefFromVariant( thisValue );
 		int val = childValue.GetLong();

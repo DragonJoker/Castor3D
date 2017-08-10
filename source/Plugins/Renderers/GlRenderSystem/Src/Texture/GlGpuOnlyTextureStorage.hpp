@@ -30,7 +30,7 @@ SOFTWARE.
 namespace GlRender
 {
 	/*!
-	\author		Sylvain Doremus.
+	\author		Sylvain doremus.
 	\version	0.8.0
 	\date		12/10/2015
 	\brief		Class used to handle GPU only (no CPU access) texture storage.
@@ -41,31 +41,31 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 */
-		GlGpuOnlyTextureStorageTraits( Castor3D::TextureStorage & p_storage );
+		GlGpuOnlyTextureStorageTraits( castor3d::TextureStorage & p_storage );
 		/**
 		 *\brief		Destructor.
 		 */
 		~GlGpuOnlyTextureStorageTraits();
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Bind
+		 *\copydoc		castor3d::TextureStorage::Bind
 		 */
-		void Bind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
+		void bind( castor3d::TextureStorage const & p_storage, uint32_t p_index )const;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unbind
+		 *\copydoc		castor3d::TextureStorage::Unbind
 		 */
-		void Unbind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
+		void unbind( castor3d::TextureStorage const & p_storage, uint32_t p_index )const;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Lock
+		 *\copydoc		castor3d::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::TextureStorage & p_storage, Castor3D::AccessTypes const & p_lock, uint32_t p_index );
+		uint8_t * lock( castor3d::TextureStorage & p_storage, castor3d::AccessTypes const & p_lock, uint32_t p_index );
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unlock
+		 *\copydoc		castor3d::TextureStorage::Unlock
 		 */
-		void Unlock( Castor3D::TextureStorage & p_storage, bool p_modified, uint32_t p_index );
+		void unlock( castor3d::TextureStorage & p_storage, bool p_modified, uint32_t p_index );
 		/**
-		*\copydoc		Castor3D::TextureStorage::Fill
+		*\copydoc		castor3d::TextureStorage::Fill
 		*/
-		void Fill( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage const & p_image );
+		void fill( castor3d::TextureStorage & p_storage, castor3d::TextureImage const & p_image );
 	};
 }
 

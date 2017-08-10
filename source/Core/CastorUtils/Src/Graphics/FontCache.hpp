@@ -29,7 +29,7 @@ SOFTWARE.
 #	undef CreateFont
 #endif
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -46,7 +46,7 @@ namespace Castor
 		: private Collection< Font, String >
 	{
 	public:
-		DECLARE_MAP( Castor::String, Castor::Path, PathName );
+		DECLARE_MAP( castor::String, castor::Path, PathName );
 
 	public:
 		/**
@@ -79,7 +79,7 @@ namespace Castor
 		 *\param[in]	p_height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr Create( Castor::String const & p_name, uint32_t p_height, Castor::Path const & p_path );
+		CU_API FontSPtr create( castor::String const & p_name, uint32_t p_height, castor::Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Creates a font.
@@ -96,10 +96,10 @@ namespace Castor
 		 *\param[in]	p_height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr Add( Castor::String const & p_name, uint32_t p_height, Castor::Path const & p_path );
+		CU_API FontSPtr add( castor::String const & p_name, uint32_t p_height, castor::Path const & p_path );
 		/**
 		 *\~english
-		 *\brief		Adds an already created font.
+		 *\brief		adds an already created font.
 		 *\param[in]	p_name	The font name.
 		 *\param[in]	p_font	The font.
 		 *\return		The font.
@@ -110,7 +110,7 @@ namespace Castor
 		 *\param[in]	p_font	La police.
 		 *\return		La police.
 		 */
-		CU_API FontSPtr Add( Castor::String const & p_name, FontSPtr p_font );
+		CU_API FontSPtr add( castor::String const & p_name, FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Tells if a font exists.
@@ -121,7 +121,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		\p false si non trouvée.
 		 */
-		CU_API bool Has( Castor::String const & p_name );
+		CU_API bool has( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
@@ -132,7 +132,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API FontSPtr Find( Castor::String const & p_name );
+		CU_API FontSPtr find( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
@@ -143,14 +143,14 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API void Remove( Castor::String const & p_name );
+		CU_API void remove( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Clears the collection and file paths.
 		 *\~french
 		 *\brief		Nettoie la collection et les chemins d'accès aux fichiers.
 		 */
-		CU_API void Clear();
+		CU_API void clear();
 
 	public:
 		using Collection< Font, String >::begin;

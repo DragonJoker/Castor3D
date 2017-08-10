@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -75,7 +75,7 @@ namespace Castor3D
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	p_model			La nouvelle matrice modèle.
 		 */
-		C3D_API void Update( Castor::Matrix4x4r const & p_model )const;
+		C3D_API void update( castor::Matrix4x4r const & p_model )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -86,20 +86,20 @@ namespace Castor3D
 		 *\param[in]	p_model			La nouvelle matrice modèle.
 		 *\param[in]	p_projection	La nouvelle matrice normale.
 		 */
-		C3D_API void Update( Castor::Matrix4x4r const & p_model
-			, Castor::Matrix4x4r const & p_normal )const;
+		C3D_API void update( castor::Matrix4x4r const & p_model
+			, castor::Matrix4x4r const & p_normal )const;
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -122,9 +122,9 @@ namespace Castor3D
 }
 
 #define UBO_MODEL_MATRIX( Writer )\
-	GLSL::Ubo modelMatrices{ writer, Castor3D::ShaderProgram::BufferModelMatrix, Castor3D::ModelMatrixUbo::BindingPoint };\
-	auto c3d_mtxModel = modelMatrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxModel );\
-	auto c3d_mtxNormal = modelMatrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxNormal );\
-	modelMatrices.End()
+	GLSL::Ubo modelMatrices{ writer, castor3d::ShaderProgram::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
+	auto c3d_mtxModel = modelMatrices.declMember< GLSL::Mat4 >( castor3d::RenderPipeline::MtxModel );\
+	auto c3d_mtxNormal = modelMatrices.declMember< GLSL::Mat4 >( castor3d::RenderPipeline::MtxNormal );\
+	modelMatrices.end()
 
 #endif

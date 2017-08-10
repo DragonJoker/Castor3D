@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor3D
 	\~french
 	\brief		Fabrique de mappage de tons.
 	*/
-	using ToneMappingFactory = Castor::Factory< ToneMapping, Castor::String, ToneMappingSPtr, std::function< ToneMappingSPtr( Engine &, Parameters const & ) > >;
+	using ToneMappingFactory = castor::Factory< ToneMapping, castor::String, ToneMappingSPtr, std::function< ToneMappingSPtr( Engine &, Parameters const & ) > >;
 }
 
 #endif

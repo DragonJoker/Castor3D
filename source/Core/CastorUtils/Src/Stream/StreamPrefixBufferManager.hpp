@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace format
 	{
@@ -39,7 +39,7 @@ namespace Castor
 		\brief		Garde les associations flux/tampon de flux
 		*/
 		template< typename prefix_type, typename char_type, typename traits = std::char_traits< char_type > >
-		class basic_prefix_buffer_manager
+		class BasicPrefixBufferManager
 		{
 		private:
 			typedef std::ios_base bos;
@@ -49,7 +49,7 @@ namespace Castor
 			typedef typename table_type::iterator iterator;
 			typedef typename table_type::const_iterator const_iterator;
 
-			basic_prefix_buffer_manager( basic_prefix_buffer_manager< prefix_type, char_type, traits > & obj ) = delete;
+			BasicPrefixBufferManager( BasicPrefixBufferManager< prefix_type, char_type, traits > & obj ) = delete;
 
 			/**
 			 *\~english
@@ -59,7 +59,7 @@ namespace Castor
 			 */
 			/** Default constructor
 			*/
-			basic_prefix_buffer_manager()
+			BasicPrefixBufferManager()
 			{
 				++sm_instances;
 			}
@@ -71,7 +71,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Destructeur
 			 */
-			~basic_prefix_buffer_manager()
+			~BasicPrefixBufferManager()
 			{
 				--sm_instances;
 
@@ -119,7 +119,7 @@ namespace Castor
 			 *\brief		Récupère le tampon associé au flux donné
 			 *\param[in]	io_s	Le flux
 			 */
-			bsb * get_buffer( std::ios_base & io_s )
+			bsb * getBuffer( std::ios_base & io_s )
 			{
 				const_iterator cb_iter( m_list.find( &io_s ) );
 
@@ -143,7 +143,7 @@ namespace Castor
 			 */
 			bool erase( std::ios_base & io_s )
 			{
-				delete get_buffer( io_s );
+				delete getBuffer( io_s );
 				return ( m_list.erase( &io_s ) == 1 );
 			}
 
@@ -162,13 +162,13 @@ namespace Castor
 
 			/**
 			 *\~english
-			 *\brief		Retrieves an instance of the basic_prefix_buffer_manager
+			 *\brief		Retrieves an instance of the BasicPrefixBufferManager
 			 *\~french
-			 *\brief		Récupère une instance du basic_prefix_buffer_manager
+			 *\brief		Récupère une instance du BasicPrefixBufferManager
 			 */
-			static basic_prefix_buffer_manager< prefix_type, char_type, traits > * instance()
+			static BasicPrefixBufferManager< prefix_type, char_type, traits > * instance()
 			{
-				static basic_prefix_buffer_manager< prefix_type, char_type, traits > ibm;
+				static BasicPrefixBufferManager< prefix_type, char_type, traits > ibm;
 				return &ibm;
 			}
 
@@ -180,7 +180,7 @@ namespace Castor
 		};
 
 		template< typename prefix_type, typename char_type, typename traits >
-		int basic_prefix_buffer_manager< prefix_type, char_type, traits >::sm_instances = 0;
+		int BasicPrefixBufferManager< prefix_type, char_type, traits >::sm_instances = 0;
 	}
 }
 

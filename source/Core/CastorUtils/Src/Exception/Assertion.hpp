@@ -46,7 +46,7 @@ SOFTWARE.
 
 #	if CASTOR_EXCEPT_ASSERT
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -105,12 +105,12 @@ namespace Castor
 	 *\param[in]	p_function		Le nom de la fonction
 	 *\param[in]	p_line			Le numéro de ligne
 	 */
-	inline void Assert( bool p_expr, char const * const p_description )
+	inline void cuAssert( bool p_expr, char const * const p_description )
 	{
 		if ( !p_expr )
 		{
-			Logger::LogError( std::stringstream() << "Assertion failed: " << p_description );
-			Logger::LogError( std::stringstream() << Debug::Backtrace{} );
+			Logger::logError( std::stringstream() << "Assertion failed: " << p_description );
+			Logger::logError( std::stringstream() << Debug::Backtrace{} );
 			assert( false );
 		}
 	}
@@ -119,12 +119,12 @@ namespace Castor
 #		define CASTOR_ASSERT( pred, text )
 	if ( !( pred ) )\
 	{\
-		throw Castor::AssertException( ( text ), __FILE__, __FUNCTION__, __LINE__ );\
+		throw castor::AssertException( ( text ), __FILE__, __FUNCTION__, __LINE__ );\
 	}
 
 #	else
 
-namespace Castor
+namespace castor
 {
 	/**
 	 *\~english
@@ -137,24 +137,24 @@ namespace Castor
 	 *\param[in]	p_description	La description de l'assertion.
 	 */
 	template< typename Expr >
-	inline void Assert( Expr const & p_expr, char const * const p_description )
+	inline void cuAssert( Expr const & p_expr, char const * const p_description )
 	{
 		if ( !p_expr )
 		{
-			Logger::LogError( std::stringstream() << "Assertion failed: " << p_description );
-			Logger::LogError( std::stringstream() << Debug::Backtrace{} );
+			Logger::logError( std::stringstream() << "Assertion failed: " << p_description );
+			Logger::logError( std::stringstream() << Debug::Backtrace{} );
 			assert( false );
 		}
 	}
 }
 
-#		define CASTOR_ASSERT( pred, text ) Castor::Assert( pred, text )
+#		define CASTOR_ASSERT( pred, text ) castor::cuAssert( pred, text )
 
 #	endif
 
 //!\~english	Calls invariant checking function.
 //!\~french		Appelle la fonction de vérification des invariants de classe.
-#	define CHECK_INVARIANTS DoContractCheckInvariants
+#	define CHECK_INVARIANTS doContractCheckInvariants
 
 #else
 
@@ -177,10 +177,10 @@ namespace Castor
 #define FAILURE( text ) CASTOR_ASSERT( false, "Failure: "#text )
 //!\~english	Declares the invariant checking function.
 //!\~french		Déclare la fonction de vérification des invariants de classe.
-#define DECLARE_INVARIANT_BLOCK() void DoContractCheckInvariants()const;
+#define DECLARE_INVARIANT_BLOCK() void doContractCheckInvariants()const;
 //!\~english	Begins invariant checking function implementation.
 //!\~french		Commence l'implémentation de la fonction de vérification des invariants de classe.
-#define BEGIN_INVARIANT_BLOCK( className ) void className::DoContractCheckInvariants()const {
+#define BEGIN_INVARIANT_BLOCK( className ) void className::doContractCheckInvariants()const {
 //!\~english	Ends invariant checking function implementation.
 //!\~french		Termine l'implémentation de la fonction de vérification des invariants de classe.
 #define END_INVARIANT_BLOCK() }

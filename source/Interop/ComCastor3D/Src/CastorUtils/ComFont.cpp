@@ -24,17 +24,17 @@ namespace CastorCom
 		if ( engine && !m_font )
 		{
 			CEngine * l_engn = static_cast< CEngine * >( engine );
-			Castor3D::Engine * l_engine = l_engn->GetInternal();
-			Castor::String l_name = FromBstr( name );
-			Castor::Path l_path{ FromBstr( path ) };
-			Castor::Path l_pathFont = l_path;
+			castor3d::Engine * l_engine = l_engn->getInternal();
+			castor::String l_name = FromBstr( name );
+			castor::Path l_path{ FromBstr( path ) };
+			castor::Path l_pathFont = l_path;
 
-			if ( !Castor::File::FileExists( l_pathFont ) )
+			if ( !castor::File::fileExists( l_pathFont ) )
 			{
-				l_pathFont = l_engine->GetDataDirectory() / l_path;
+				l_pathFont = l_engine->getDataDirectory() / l_path;
 			}
 
-			m_font = l_engine->GetFontCache().Add( l_name, height, l_pathFont );
+			m_font = l_engine->getFontCache().add( l_name, height, l_pathFont );
 
 			if ( !m_font )
 			{
@@ -49,7 +49,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CFont::GetGlyph( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph )
+	STDMETHODIMP CFont::getGlyph( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -69,7 +69,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IFont, cuT( "GetGlyph" ), ERROR_UNINITIALISED_FONT, 0, NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IFont, cuT( "getGlyph" ), ERROR_UNINITIALISED_FONT, 0, NULL );
 		}
 
 		return hr;

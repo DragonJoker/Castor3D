@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Material/Pass.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -64,15 +64,15 @@ namespace Castor3D
 		C3D_API virtual ~PassBuffer();
 		/**
 		 *\~english
-		 *\brief		Adds a pass to the buffer.
-		 *\remarks		Sets the pass' ID.
+		 *\brief		adds a pass to the buffer.
+		 *\remarks		sets the pass' ID.
 		 *\param[in]	pass	The pass.
 		 *\~french
 		 *\brief		Ajoute une passe au tampon.
 		 *\remarks		Définit l'ID de la passe.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API uint32_t AddPass( Pass & pass );
+		C3D_API uint32_t addPass( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Removes a pass from the buffer.
@@ -81,21 +81,21 @@ namespace Castor3D
 		 *\brief		Supprime une pass du tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void RemovePass( Pass & pass );
+		C3D_API void removePass( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.
 		 *\~french
 		 *\brief		Met à jour le tampon de passes.
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Binds the texture buffer.
 		 *\~french
 		 *\brief		Active le tampon de texture.
 		 */
-		C3D_API void Bind()const;
+		C3D_API void bind()const;
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\brief		Met les données de la passe dans le tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API virtual void Visit( LegacyPass const & pass );
+		C3D_API virtual void visit( LegacyPass const & pass );
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.
@@ -113,7 +113,7 @@ namespace Castor3D
 		 *\brief		Met les données de la passe dans le tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API virtual void Visit( MetallicRoughnessPbrPass const & pass );
+		C3D_API virtual void visit( MetallicRoughnessPbrPass const & pass );
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.
@@ -122,7 +122,7 @@ namespace Castor3D
 		 *\brief		Met les données de la passe dans le tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API virtual void Visit( SpecularGlossinessPbrPass const & pass );
+		C3D_API virtual void visit( SpecularGlossinessPbrPass const & pass );
 
 	public:
 		struct RgbColour

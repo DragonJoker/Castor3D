@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "AnimatedObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom de l'objet.
 		 *\param[in]	p_skeleton	Le squelette.
 		 */
-		C3D_API AnimatedSkeleton( Castor::String const & p_name, Skeleton & p_skeleton );
+		C3D_API AnimatedSkeleton( castor::String const & p_name, Skeleton & p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
 		 *\param[out]	p_variable	Reçoit les transformations.
 		 */
-		C3D_API void FillShader( Uniform4x4r & p_variable )const;
+		C3D_API void fillShader( Uniform4x4r & p_variable )const;
 		/**
 		 *\~english
 		 *\brief		Fills a buffer with this object's skeleton transforms.
@@ -103,15 +103,15 @@ namespace Castor3D
 		 *\brief		Remplit un tampon avec les transformations du squelette de cet objet.
 		 *\param[out]	p_buffer	Reçoit les transformations.
 		 */
-		C3D_API void FillBuffer( uint8_t * p_buffer )const;
+		C3D_API void fillBuffer( uint8_t * p_buffer )const;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::Update
+		 *\copydoc		castor3d::AnimatedObject::Update
 		 */
-		C3D_API void Update( Castor::Milliseconds const & p_tslf )override;
+		C3D_API void update( castor::Milliseconds const & p_tslf )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::IsPlayingAnimation
+		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
 		 */
-		C3D_API bool IsPlayingAnimation()const override
+		C3D_API bool isPlayingAnimation()const override
 		{
 			return !m_playingAnimations.empty();
 		}
@@ -123,28 +123,28 @@ namespace Castor3D
 		 *\brief		Récupère le squelette
 		 *\return		Le squelette
 		 */
-		inline Skeleton const & GetSkeleton()const
+		inline Skeleton const & getSkeleton()const
 		{
 			return m_skeleton;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoAddAnimation( Castor::String const & p_name )override;
+		void doAddAnimation( castor::String const & p_name )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoStartAnimation( AnimationInstance & p_animation )override;
+		void doStartAnimation( AnimationInstance & p_animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoStopAnimation( AnimationInstance & p_animation )override;
+		void doStopAnimation( AnimationInstance & p_animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoClearAnimations()override;
+		void doClearAnimations()override;
 
 	protected:
 		//!\~english	The skeleton affected by the animations.

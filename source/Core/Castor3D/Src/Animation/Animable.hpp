@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -40,7 +40,7 @@ namespace Castor3D
 	\brief		interface publique d'animable
 	*/
 	class Animable
-		: public Castor::OwnedBy< Scene >
+		: public castor::OwnedBy< Scene >
 	{
 	protected:
 		/**
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vid ela map d'animations.
 		 */
-		C3D_API void CleanupAnimations();
+		C3D_API void cleanupAnimations();
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API bool HasAnimation( Castor::String const & p_name )const;
+		C3D_API bool hasAnimation( castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API Animation const & GetAnimation( Castor::String const & p_name )const;
+		C3D_API Animation const & getAnimation( castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -128,14 +128,14 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API Animation & GetAnimation( Castor::String const & p_name );
+		C3D_API Animation & getAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\return		The animations.
 		 *\~french
 		 *\return		Les animations.
 		 */
-		inline AnimationPtrStrMap const & GetAnimations()const
+		inline AnimationPtrStrMap const & getAnimations()const
 		{
 			return m_animations;
 		}
@@ -143,13 +143,13 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Adds an animation.
+		 *\brief		adds an animation.
 		 *\param[in]	p_animation	The animation.
 		 *\~french
 		 *\brief		Ajoute une animation.
 		 *\param[in]	p_animation	L'animation.
 		 */
-		void DoAddAnimation( AnimationSPtr && p_animation );
+		void doAddAnimation( AnimationSPtr && p_animation );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -161,9 +161,9 @@ namespace Castor3D
 		 *\return		L'animation
 		 */
 		template< typename Type >
-		Type & DoGetAnimation( Castor::String const & p_name )
+		Type & doGetAnimation( castor::String const & p_name )
 		{
-			return static_cast< Type & >( GetAnimation( p_name ) );
+			return static_cast< Type & >( getAnimation( p_name ) );
 		}
 
 	protected:

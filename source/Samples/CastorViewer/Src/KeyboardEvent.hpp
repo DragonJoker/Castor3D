@@ -30,16 +30,16 @@ SOFTWARE.
 namespace CastorViewer
 {
 	class KeyboardEvent
-		: public Castor3D::FrameEvent
+		: public castor3d::FrameEvent
 	{
 	public:
-		KeyboardEvent( Castor3D::RenderWindowSPtr p_window );
+		KeyboardEvent( castor3d::RenderWindowSPtr p_window );
 		virtual ~KeyboardEvent();
 
-		virtual bool Apply();
+		virtual bool apply();
 
 	private:
-		Castor3D::RenderWindowWPtr m_window;
+		castor3d::RenderWindowWPtr m_window;
 	};
 }
 

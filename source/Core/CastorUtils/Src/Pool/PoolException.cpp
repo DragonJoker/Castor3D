@@ -2,7 +2,7 @@
 
 #include "MemoryDataTyper.hpp"
 
-namespace Castor
+namespace castor
 {
 	char const * const Error< PoolErrorType::eCommonOutOfMemory >::Text = "Pool is out of memory";
 	char const * const Error< PoolErrorType::eCommonPoolIsFull >::Text = "The object does not come from the pool (pool is full)";

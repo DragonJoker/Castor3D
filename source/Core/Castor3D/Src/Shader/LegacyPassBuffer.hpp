@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/ArrayView.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -62,9 +62,9 @@ namespace Castor3D
 		 */
 		C3D_API ~LegacyPassBuffer();
 		/**
-		 *\copydoc		Castor3D::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::Visit
 		 */
-		C3D_API void Visit( LegacyPass const & data )override;
+		C3D_API void visit( LegacyPass const & data )override;
 
 	public:
 
@@ -72,10 +72,10 @@ namespace Castor3D
 
 		struct PassesData
 		{
-			Castor::ArrayView< RgbaColour > diffAmb;
-			Castor::ArrayView< RgbaColour > specShin;
-			Castor::ArrayView< RgbaColour > common;
-			Castor::ArrayView< RgbaColour > reflRefr;
+			castor::ArrayView< RgbaColour > diffAmb;
+			castor::ArrayView< RgbaColour > specShin;
+			castor::ArrayView< RgbaColour > common;
+			castor::ArrayView< RgbaColour > reflRefr;
 		};
 
 #else
@@ -87,7 +87,7 @@ namespace Castor3D
 			RgbaColour common;
 			RgbaColour reflRefr;
 		};
-		using PassesData = Castor::ArrayView< PassData >;
+		using PassesData = castor::ArrayView< PassData >;
 
 #endif
 

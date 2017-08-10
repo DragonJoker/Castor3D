@@ -13,7 +13,7 @@
 #endif
 
 
-namespace Castor
+namespace castor
 {
 	namespace Debug
 	{
@@ -22,7 +22,7 @@ namespace Castor
 		template< typename CharU, typename CharT >
 		inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 		{
-			std::string ret = string::string_cast< char >( p_name );
+			std::string ret = string::stringCast< char >( p_name );
 			size_t lindex = p_name.find( "(" );
 			size_t rindex = p_name.find( "+" );
 
@@ -44,11 +44,11 @@ namespace Castor
 			}
 
 			free( real );
-			return string::string_cast< CharU >( ret );
+			return string::stringCast< CharU >( ret );
 		}
 
 		template< typename CharT >
-		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
+		inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 		{
 			p_stream << "CALL STACK:" << std::endl;
 			std::vector< void * > backTrace( p_toCapture );
@@ -57,7 +57,7 @@ namespace Castor
 
 			for ( unsigned i = p_toSkip; i < num; ++i )
 			{
-				p_stream << "== " << Demangle< CharT >( string::string_cast< char >( fnStrings[i] ) ) << std::endl;
+				p_stream << "== " << Demangle< CharT >( string::stringCast< char >( fnStrings[i] ) ) << std::endl;
 			}
 
 			free( fnStrings );
@@ -66,7 +66,7 @@ namespace Castor
 #else
 
 		template< typename CharT >
-		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
+		inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 		{
 		}
 
@@ -74,13 +74,13 @@ namespace Castor
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 
 		std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 	}

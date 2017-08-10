@@ -2,24 +2,24 @@
 
 #include "SkeletonAnimation.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< SkeletonAnimationNode >::DoWrite( SkeletonAnimationNode const & p_obj )
+	bool BinaryWriter< SkeletonAnimationNode >::doWrite( SkeletonAnimationNode const & p_obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
+			result = BinaryWriter< SkeletonAnimationObject >{}.write( p_obj, m_chunk );
 		}
 
 		return result;
@@ -27,22 +27,22 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< SkeletonAnimationNode >::DoParse( SkeletonAnimationNode & p_obj )
+	bool BinaryParser< SkeletonAnimationNode >::doParse( SkeletonAnimationNode & p_obj )
 	{
 		bool result = true;
 		String name;
 		BinaryChunk chunk;
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				result = DoParseChunk( p_obj.m_name, chunk );
+				result = doParseChunk( p_obj.m_name, chunk );
 				break;
 
 			case ChunkType::eAnimationObject:
-				result = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, chunk );
+				result = BinaryParser< SkeletonAnimationObject >{}.parse( p_obj, chunk );
 				break;
 			}
 		}

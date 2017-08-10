@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <cstring>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -69,32 +69,32 @@ namespace Castor3D
 		 *\brief		Analyse le texte donné en une liste de paramètres.
 		 *\param[in]	p_text	Le texte source.
 		 */
-		C3D_API void Parse( Castor::String const & p_text )
+		C3D_API void parse( castor::String const & p_text )
 		{
-			Castor::StringArray params = Castor::string::split( p_text, cuT( " " ), 0xFFFFFFFF, false );
+			castor::StringArray params = castor::string::split( p_text, cuT( " " ), 0xFFFFFFFF, false );
 
 			for ( auto param : params )
 			{
-				if ( param.find( cuT( "-" ) ) != Castor::String::npos )
+				if ( param.find( cuT( "-" ) ) != castor::String::npos )
 				{
 					param = param.substr( 1 );
 				}
 
-				Castor::StringArray paramNameValue = Castor::string::split( param, cuT( "=" ), 2, false );
+				castor::StringArray paramNameValue = castor::string::split( param, cuT( "=" ), 2, false );
 
 				if ( paramNameValue.size() > 1 )
 				{
-					Add( paramNameValue[0], paramNameValue[1] );
+					add( paramNameValue[0], paramNameValue[1] );
 				}
 				else
 				{
-					Add( param, true );
+					add( param, true );
 				}
 			}
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a parameter
+		 *\brief		adds a parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
 		 *\param[in]	p_name		The parameter name
 		 *\param[in]	p_values	The parameter values
@@ -109,7 +109,7 @@ namespace Castor3D
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		template< typename T >
-		inline bool Add( Castor::String const & p_name, T * p_values, uint32_t p_count )
+		inline bool add( castor::String const & p_name, T * p_values, uint32_t p_count )
 		{
 			bool result = false;
 			ParamNameMapIt it = m_mapParameters.find( p_name );
@@ -126,13 +126,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a parameters list.
+		 *\brief		adds a parameters list.
 		 *\param[in]	p_parameters	The parameters list.
 		 *\~french
 		 *\brief		Ajoute une liste de paramètres.
 		 *\param[in]	p_parameters	La liste de paramètres.
 		 */
-		inline void Add( Parameters const & p_parameters )
+		inline void add( Parameters const & p_parameters )
 		{
 			for ( auto parameter : p_parameters.m_mapParameters )
 			{
@@ -141,7 +141,7 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a parameter
+		 *\brief		adds a parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
 		 *\param[in]	p_name		The parameter name
 		 *\param[in]	p_values	The parameter values
@@ -154,13 +154,13 @@ namespace Castor3D
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		template< typename T, uint32_t N >
-		inline bool Add( Castor::String const & p_name, T const( &p_values )[N] )
+		inline bool add( castor::String const & p_name, T const( &p_values )[N] )
 		{
-			return Add( p_name, p_values, N );
+			return add( p_name, p_values, N );
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a parameter
+		 *\brief		adds a parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
 		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_value	The parameter value
@@ -173,13 +173,13 @@ namespace Castor3D
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		template< typename T >
-		inline bool Add( Castor::String const & p_name, T const & p_value )
+		inline bool add( castor::String const & p_name, T const & p_value )
 		{
-			return Add( p_name, &p_value, 1 );
+			return add( p_name, &p_value, 1 );
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a string parameter
+		 *\brief		adds a string parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
 		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_value	The parameter value
@@ -191,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
-		inline bool Add( Castor::String const & p_name, Castor::String const & p_value )
+		inline bool add( castor::String const & p_name, castor::String const & p_value )
 		{
 			bool result = false;
 			ParamNameMapIt it = m_mapParameters.find( p_name );
@@ -209,7 +209,7 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets a parameter value
+		 *\brief		sets a parameter value
 		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_value	The parameter value
 		 *\return		\p false if there is no parameter with the given name
@@ -220,7 +220,7 @@ namespace Castor3D
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T >
-		inline bool Set( Castor::String const & p_name, T const & p_value )
+		inline bool set( castor::String const & p_name, T const & p_value )
 		{
 			bool result = false;
 			ParamNameMapIt it = m_mapParameters.find( p_name );
@@ -248,7 +248,7 @@ namespace Castor3D
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T >
-		inline bool Get( Castor::String const & p_name, T * p_values, uint32_t p_count )const
+		inline bool get( castor::String const & p_name, T * p_values, uint32_t p_count )const
 		{
 			bool result = false;
 			ParamNameMapConstIt it = m_mapParameters.find( p_name );
@@ -277,9 +277,9 @@ namespace Castor3D
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T >
-		inline bool Get( Castor::String const & p_name, T & p_value )const
+		inline bool get( castor::String const & p_name, T & p_value )const
 		{
-			return Get( p_name, &p_value, 1 );
+			return get( p_name, &p_value, 1 );
 		}
 		/**
 		 *\~english
@@ -294,9 +294,9 @@ namespace Castor3D
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T, uint32_t N >
-		inline bool Get( Castor::String const & p_name, T( &p_values )[N] )const
+		inline bool get( castor::String const & p_name, T( &p_values )[N] )const
 		{
-			return Get( p_name, p_values, N );
+			return get( p_name, p_values, N );
 		}
 		/**
 		 *\~english
@@ -310,7 +310,7 @@ namespace Castor3D
 		 *\param[out]	p_value	La valeur du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		inline bool Get( Castor::String const & p_name, Castor::String & p_value )const
+		inline bool get( castor::String const & p_name, castor::String & p_value )const
 		{
 			bool result = false;
 			ParamNameMapConstIt it = m_mapParameters.find( p_name );
@@ -326,7 +326,7 @@ namespace Castor3D
 
 	private:
 		DECLARE_VECTOR( uint8_t, Byte );
-		DECLARE_MAP( Castor::String, ByteArray, ParamName );
+		DECLARE_MAP( castor::String, ByteArray, ParamName );
 		ParamNameMap m_mapParameters;
 	};
 }

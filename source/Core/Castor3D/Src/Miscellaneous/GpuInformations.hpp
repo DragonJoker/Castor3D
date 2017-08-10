@@ -33,7 +33,7 @@ SOFTWARE.
 #	undef abs
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -244,11 +244,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a supported feature.
+		 *\brief		adds a supported feature.
 		 *\~french
 		 *\brief		Ajoute une caractéristique supportée.
 		 */
-		inline void AddFeature( GpuFeature p_feature )
+		inline void addFeature( GpuFeature p_feature )
 		{
 			m_features |= uint32_t( p_feature );
 		}
@@ -258,7 +258,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Enlève une caractéristique supportée.
 		 */
-		inline void RemoveFeature( GpuFeature p_feature )
+		inline void removeFeature( GpuFeature p_feature )
 		{
 			m_features |= uint32_t( p_feature );
 		}
@@ -268,9 +268,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour le support d'une caractéristique.
 		 */
-		inline void UpdateFeature( GpuFeature p_feature, bool p_supported )
+		inline void updateFeature( GpuFeature p_feature, bool p_supported )
 		{
-			p_supported ? AddFeature( p_feature ) : RemoveFeature( p_feature );
+			p_supported ? addFeature( p_feature ) : removeFeature( p_feature );
 		}
 		/**
 		 *\~english
@@ -278,7 +278,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dit si la caractéristique est supportée.
 		 */
-		inline bool HasFeature( GpuFeature p_feature )const
+		inline bool hasFeature( GpuFeature p_feature )const
 		{
 			return GpuFeature( m_features & uint32_t( p_feature ) ) == p_feature;
 		}
@@ -288,9 +288,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut du support de la stéréo.
 		 */
-		inline bool IsStereoAvailable()const
+		inline bool isStereoAvailable()const
 		{
-			return HasFeature( GpuFeature::eStereo );
+			return hasFeature( GpuFeature::eStereo );
 		}
 		/**
 		 *\~english
@@ -298,9 +298,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut du support de l'instanciation.
 		 */
-		inline bool HasInstancing()const
+		inline bool hasInstancing()const
 		{
-			return HasFeature( GpuFeature::eInstancing );
+			return hasFeature( GpuFeature::eInstancing );
 		}
 		/**
 		 *\~english
@@ -308,9 +308,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut du support du buffer d'accumulation.
 		 */
-		inline bool HasAccumulationBuffer()const
+		inline bool hasAccumulationBuffer()const
 		{
-			return HasFeature( GpuFeature::eAccumulationBuffer );
+			return hasFeature( GpuFeature::eAccumulationBuffer );
 		}
 		/**
 		 *\~english
@@ -318,9 +318,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut du support des textures non puissance de deux.
 		 */
-		inline bool HasNonPowerOfTwoTextures()const
+		inline bool hasNonPowerOfTwoTextures()const
 		{
-			return HasFeature( GpuFeature::eNonPowerOfTwoTextures );
+			return hasFeature( GpuFeature::eNonPowerOfTwoTextures );
 		}
 		/**
 		 *\~english
@@ -328,9 +328,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut du support des tampons de constantes.
 		 */
-		inline bool HasConstantsBuffers()const
+		inline bool hasConstantsBuffers()const
 		{
-			return HasFeature( GpuFeature::eConstantsBuffers );
+			return hasFeature( GpuFeature::eConstantsBuffers );
 		}
 		/**
 		 *\~english
@@ -338,9 +338,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut du support des tampons de textures.
 		 */
-		inline bool HasTextureBuffers()const
+		inline bool hasTextureBuffers()const
 		{
-			return HasFeature( GpuFeature::eTextureBuffers );
+			return hasFeature( GpuFeature::eTextureBuffers );
 		}
 		/**
 		 *\~english
@@ -352,7 +352,7 @@ namespace Castor3D
 		 *\param[in]	p_model	Le modèle de shaders.
 		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle.
 		 */
-		inline bool CheckSupport( ShaderModel p_model )const
+		inline bool checkSupport( ShaderModel p_model )const
 		{
 			return p_model <= m_maxShaderModel;
 		}
@@ -362,7 +362,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le modèle de shader maximal supporté.
 		 */
-		inline ShaderModel GetMaxShaderModel()const
+		inline ShaderModel getMaxShaderModel()const
 		{
 			return m_maxShaderModel;
 		}
@@ -372,7 +372,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le modèle de shader maximal supporté.
 		 */
-		inline void UpdateMaxShaderModel()
+		inline void updateMaxShaderModel()
 		{
 			if ( m_useShader[size_t( ShaderType::eCompute )] )
 			{
@@ -403,7 +403,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de shader.
 		 *\return		Le statut du support du type de shader.
 		 */
-		inline bool HasShaderType( ShaderType p_type )const
+		inline bool hasShaderType( ShaderType p_type )const
 		{
 			return m_useShader[size_t( p_type )];
 		}
@@ -417,7 +417,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de shader.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void UseShaderType( ShaderType p_type, bool p_value )
+		inline void useShaderType( ShaderType p_type, bool p_value )
 		{
 			m_useShader[size_t( p_type )] = p_value;
 		}
@@ -427,7 +427,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La version du langage shader.
 		 */
-		inline uint32_t GetShaderLanguageVersion()const
+		inline uint32_t getShaderLanguageVersion()const
 		{
 			return m_shaderLanguageVersion;
 		}
@@ -439,7 +439,7 @@ namespace Castor3D
 		 *\brief		Définit la version du langage shader.
 		 *\param[in]	p_value	La version.
 		 */
-		inline void SetShaderLanguageVersion( uint32_t p_value )
+		inline void setShaderLanguageVersion( uint32_t p_value )
 		{
 			m_shaderLanguageVersion = p_value;
 		}
@@ -451,7 +451,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index.
 		 *\return		La valeur minimale pour l'index défini.
 		 */
-		inline int32_t GetMinValue( GpuMin p_index )const
+		inline int32_t getMinValue( GpuMin p_index )const
 		{
 			return m_minValues.find( p_index )->second;
 		}
@@ -463,7 +463,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index.
 		 *\param[in]	p_value	La valeur minimale pour l'index défini.
 		 */
-		inline void SetMinValue( GpuMin p_index, int32_t p_value )
+		inline void setMinValue( GpuMin p_index, int32_t p_value )
 		{
 			m_minValues[p_index] = p_value;
 		}
@@ -475,7 +475,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index.
 		 *\return		La valeur maximale pour l'index défini.
 		 */
-		inline int32_t GetMaxValue( GpuMax p_index )const
+		inline int32_t getMaxValue( GpuMax p_index )const
 		{
 			return m_maxValues.find( p_index )->second;
 		}
@@ -487,7 +487,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index.
 		 *\param[in]	p_value	La valeur maximale pour l'index défini.
 		 */
-		inline void SetMaxValue( GpuMax p_index, int32_t p_value )
+		inline void setMaxValue( GpuMax p_index, int32_t p_value )
 		{
 			m_maxValues[p_index] = p_value;
 		}
@@ -497,7 +497,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La taille totale de la VRAM.
 		 */
-		inline uint32_t GetTotalMemorySize()const
+		inline uint32_t getTotalMemorySize()const
 		{
 			return m_totalMemorySize;
 		}
@@ -507,7 +507,7 @@ namespace Castor3D
 		 *\~french
 		 *\param[in]	p_value	La taille totale de la VRAM.
 		 */
-		inline void SetTotalMemorySize( uint32_t p_value )
+		inline void setTotalMemorySize( uint32_t p_value )
 		{
 			m_totalMemorySize = p_value;
 		}
@@ -517,7 +517,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nom du vendeur du GPU.
 		 */
-		inline Castor::String const & GetVendor()const
+		inline castor::String const & getVendor()const
 		{
 			return m_vendor;
 		}
@@ -527,7 +527,7 @@ namespace Castor3D
 		 *\~french
 		 *\param[in]	p_value	Le nom du vendeur du GPU.
 		 */
-		inline void SetVendor( Castor::String const & p_value )
+		inline void setVendor( castor::String const & p_value )
 		{
 			m_vendor = p_value;
 		}
@@ -537,7 +537,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type de GPU.
 		 */
-		inline Castor::String const & GetRenderer()const
+		inline castor::String const & getRenderer()const
 		{
 			return m_renderer;
 		}
@@ -547,7 +547,7 @@ namespace Castor3D
 		 *\~french
 		 *\param[in]	p_value	Le type de GPU.
 		 */
-		inline void SetRenderer( Castor::String const & p_value )
+		inline void setRenderer( castor::String const & p_value )
 		{
 			m_renderer = p_value;
 		}
@@ -557,7 +557,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La version de l'API de rendu.
 		 */
-		inline Castor::String const & GetVersion()const
+		inline castor::String const & getVersion()const
 		{
 			return m_version;
 		}
@@ -567,7 +567,7 @@ namespace Castor3D
 		 *\~french
 		 *\param[in]	p_value	La version de l'API de rendu.
 		 */
-		inline void SetVersion( Castor::String const & p_value )
+		inline void setVersion( castor::String const & p_value )
 		{
 			m_version = p_value;
 		}
@@ -588,11 +588,11 @@ namespace Castor3D
 		//!\~english The total VRAM size.	\~french La taille totale de la VRAM.
 		uint32_t m_totalMemorySize;
 		//!\~english The GPU vendor name.	\~french Le nom du vendeur du GPU.
-		Castor::String m_vendor;
+		castor::String m_vendor;
 		//!\~english The GPU platform.	\~french Le type de GPU.
-		Castor::String m_renderer;
+		castor::String m_renderer;
 		//!\~english The rendering API version.	\~french La version de l'API de rendu.
-		Castor::String m_version;
+		castor::String m_version;
 	};
 }
 

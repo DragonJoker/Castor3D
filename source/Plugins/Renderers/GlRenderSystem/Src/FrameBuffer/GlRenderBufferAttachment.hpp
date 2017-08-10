@@ -30,7 +30,7 @@ SOFTWARE.
 namespace GlRender
 {
 	class GlRenderBufferAttachment
-		: public Castor3D::RenderBufferAttachment
+		: public castor3d::RenderBufferAttachment
 		, public Holder
 	{
 	public:
@@ -44,7 +44,7 @@ namespace GlRender
 		 *\para[in]		p_gl			Les APIs OpenGL.
 		 *\param[in]	p_renderBuffer	Le tampon de rendu.
 		 */
-		GlRenderBufferAttachment( OpenGl & p_gl, Castor3D::RenderBufferSPtr p_renderBuffer );
+		GlRenderBufferAttachment( OpenGl & p_gl, castor3d::RenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -58,7 +58,7 @@ namespace GlRender
 		 *\~french
 		 *\return		Le statut OpenGL du tampon.
 		 */
-		inline GlFramebufferStatus GetGlStatus()const
+		inline GlFramebufferStatus getGlStatus()const
 		{
 			return m_glStatus;
 		}
@@ -68,41 +68,41 @@ namespace GlRender
 		 *\~french
 		 *\return		Le point d'attache OpenGL.
 		 */
-		inline GlAttachmentPoint GetGlAttachmentPoint()const
+		inline GlAttachmentPoint getGlAttachmentPoint()const
 		{
 			return m_glAttachmentPoint;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::Download
+		 *\copydoc		castor3d::FrameBufferAttachment::download
 		 */
-		void DoDownload( Castor::Position const & p_offset
-			, Castor::PxBufferBase & p_buffer )const override;
+		void doDownload( castor::Position const & p_offset
+			, castor::PxBufferBase & p_buffer )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
+		 *\copydoc		castor3d::FrameBufferAttachment::doAttach
 		 */
-		void DoAttach()override;
+		void doAttach()override;
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
+		 *\copydoc		castor3d::FrameBufferAttachment::doDetach
 		 */
-		void DoDetach()override;
+		void doDetach()override;
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		 *\copydoc		castor3d::FrameBufferAttachment::doClear
 		 */
-		void DoClear( Castor::Colour const & p_colour )const override;
+		void doClear( castor::Colour const & p_colour )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		 *\copydoc		castor3d::FrameBufferAttachment::doClear
 		 */
-		void DoClear( float p_depth )const override;
+		void doClear( float p_depth )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		 *\copydoc		castor3d::FrameBufferAttachment::doClear
 		 */
-		void DoClear( int p_stencil )const override;
+		void doClear( int p_stencil )const override;
 		/**
-		*\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		*\copydoc		castor3d::FrameBufferAttachment::doClear
 		*/
-		void DoClear( float p_depth, int p_stencil )const override;
+		void doClear( float p_depth, int p_stencil )const override;
 
 	private:
 		GlAttachmentPoint m_glAttachmentPoint;

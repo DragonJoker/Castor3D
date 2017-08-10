@@ -2,9 +2,9 @@
 
 #include <Miscellaneous/Debug.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	FrameEvent::FrameEvent( EventType p_type )
 		: m_type( p_type )

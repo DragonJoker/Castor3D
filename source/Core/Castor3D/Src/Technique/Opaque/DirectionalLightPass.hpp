@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -78,13 +78,13 @@ namespace Castor3D
 
 		private:
 			/**
-			 *\copydoc		Castor3D::LightPass::Program::DoCreatePipeline
+			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
 			 */
-			virtual RenderPipelineUPtr DoCreatePipeline( bool blend )override;
+			virtual RenderPipelineUPtr doCreatePipeline( bool blend )override;
 			/**
-			 *\copydoc		Castor3D::LightPass::Program::DoBind
+			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
-			void DoBind( Light const & light )override;
+			void doBind( Light const & light )override;
 
 		private:
 			//!\~english	The variable containing the light intensities.
@@ -137,7 +137,7 @@ namespace Castor3D
 		 *\param[in]	scene		La scène.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 */
-		void Initialise( Scene const & scene
+		void initialise( Scene const & scene
 			, SceneUbo & sceneUbo )override;
 		/**
 		 *\~english
@@ -145,32 +145,32 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie la passe d'éclairage.
 		 */
-		void Cleanup()override;
+		void cleanup()override;
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
 		 *\~french
 		 *\return		Le nombre de primitives à dessiner.
 		 */
-		uint32_t GetCount()const override;
+		uint32_t getCount()const override;
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::LightPass::DoUpdate
+		 *\copydoc		castor3d::LightPass::doUpdate
 		 */
-		void DoUpdate( Castor::Size const & size
+		void doUpdate( castor::Size const & size
 			, Light const & light
 			, Camera const & camera )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::LightPass::DoGetVertexShaderSource
+		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
-		GLSL::Shader DoGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
+		GLSL::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::LightPass::DoCreateProgram
+		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+		LightPass::ProgramPtr doCreateProgram( GLSL::Shader const & vtx
 			, GLSL::Shader const & pxl )const override;
 
 	private:

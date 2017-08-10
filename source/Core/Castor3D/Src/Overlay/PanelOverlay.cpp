@@ -3,9 +3,9 @@
 #include "OverlayRenderer.hpp"
 #include "Overlay.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	PanelOverlay::TextWriter::TextWriter( String const & p_tabs, PanelOverlay const * p_category )
 		: OverlayCategory::TextWriter{ p_tabs }
@@ -15,10 +15,10 @@ namespace Castor3D
 
 	bool PanelOverlay::TextWriter::operator()( PanelOverlay const & p_overlay, TextFile & p_file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing PanelOverlay " ) + p_overlay.GetOverlayName() );
-		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		OverlayCategory::TextWriter::CheckError( result, "PanelOverlay name" );
+		Logger::logInfo( m_tabs + cuT( "Writing PanelOverlay " ) + p_overlay.getOverlayName() );
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + p_overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		OverlayCategory::TextWriter::checkError( result, "PanelOverlay name" );
 
 		if ( result )
 		{
@@ -27,13 +27,13 @@ namespace Castor3D
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
 	}
 
-	bool PanelOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
+	bool PanelOverlay::TextWriter::writeInto( castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}
@@ -50,25 +50,25 @@ namespace Castor3D
 	{
 	}
 
-	OverlayCategorySPtr PanelOverlay::Create()
+	OverlayCategorySPtr PanelOverlay::create()
 	{
 		return std::make_shared< PanelOverlay >();
 	}
 
-	void PanelOverlay::DoRender( OverlayRendererSPtr p_renderer )
+	void PanelOverlay::doRender( OverlayRendererSPtr p_renderer )
 	{
-		p_renderer->DrawPanel( *this );
+		p_renderer->drawPanel( *this );
 	}
 
-	void PanelOverlay::DoUpdateBuffer( Size const & p_size )
+	void PanelOverlay::doUpdateBuffer( Size const & p_size )
 	{
-		Position pos = GetAbsolutePosition( p_size );
-		Size size = GetAbsoluteSize( p_size );
+		Position pos = getAbsolutePosition( p_size );
+		Size size = getAbsoluteSize( p_size );
 
 		int32_t centerL = 0;
 		int32_t centerT = 0;
-		int32_t centerR = size.width();
-		int32_t centerB = size.height();
+		int32_t centerR = size.getWidth();
+		int32_t centerB = size.getHeight();
 
 		OverlayCategory::Vertex vertex0 = { { centerL, centerT }, { real( m_uv[0] ), real( m_uv[3] ) } };
 		OverlayCategory::Vertex vertex1 = { { centerL, centerB }, { real( m_uv[0] ), real( m_uv[1] ) } };

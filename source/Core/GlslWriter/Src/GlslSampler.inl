@@ -7,7 +7,7 @@ namespace GLSL
 	{
 	}
 
-	SamplerBuffer::SamplerBuffer( GlslWriter * p_writer, Castor::String const & p_name )
+	SamplerBuffer::SamplerBuffer( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "samplerBuffer " ), p_writer, p_name )
 	{
 	}
@@ -15,8 +15,8 @@ namespace GLSL
 	template< typename T >
 	SamplerBuffer & SamplerBuffer::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -32,7 +32,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler1D::Sampler1D( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler1D::Sampler1D( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler1D " ), p_writer, p_name )
 	{
 	}
@@ -40,8 +40,8 @@ namespace GLSL
 	template< typename T >
 	Sampler1D & Sampler1D::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -57,7 +57,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler2D::Sampler2D( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler2D::Sampler2D( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler2D " ), p_writer, p_name )
 	{
 	}
@@ -65,8 +65,8 @@ namespace GLSL
 	template< typename T >
 	Sampler2D & Sampler2D::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -82,7 +82,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler3D::Sampler3D( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler3D::Sampler3D( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler3D " ), p_writer, p_name )
 	{
 	}
@@ -90,8 +90,8 @@ namespace GLSL
 	template< typename T >
 	Sampler3D & Sampler3D::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -107,7 +107,7 @@ namespace GLSL
 	{
 	}
 
-	SamplerCube::SamplerCube( GlslWriter * p_writer, Castor::String const & p_name )
+	SamplerCube::SamplerCube( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "samplerCube " ), p_writer, p_name )
 	{
 	}
@@ -115,8 +115,8 @@ namespace GLSL
 	template< typename T >
 	SamplerCube & SamplerCube::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -132,7 +132,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler1DArray::Sampler1DArray( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler1DArray::Sampler1DArray( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler1DArray " ), p_writer, p_name )
 	{
 	}
@@ -140,8 +140,8 @@ namespace GLSL
 	template< typename T >
 	Sampler1DArray & Sampler1DArray::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -157,7 +157,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler2DArray::Sampler2DArray( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler2DArray::Sampler2DArray( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler2DArray " ), p_writer, p_name )
 	{
 	}
@@ -165,8 +165,8 @@ namespace GLSL
 	template< typename T >
 	Sampler2DArray & Sampler2DArray::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -182,7 +182,7 @@ namespace GLSL
 	{
 	}
 
-	SamplerCubeArray::SamplerCubeArray( GlslWriter * p_writer, Castor::String const & p_name )
+	SamplerCubeArray::SamplerCubeArray( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "samplerCubeArray " ), p_writer, p_name )
 	{
 	}
@@ -190,8 +190,8 @@ namespace GLSL
 	template< typename T >
 	SamplerCubeArray & SamplerCubeArray::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -207,7 +207,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler1DShadow::Sampler1DShadow( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler1DShadow::Sampler1DShadow( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler1DShadow " ), p_writer, p_name )
 	{
 	}
@@ -215,8 +215,8 @@ namespace GLSL
 	template< typename T >
 	Sampler1DShadow & Sampler1DShadow::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -232,7 +232,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler2DShadow::Sampler2DShadow( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler2DShadow::Sampler2DShadow( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler2DShadow " ), p_writer, p_name )
 	{
 	}
@@ -240,8 +240,8 @@ namespace GLSL
 	template< typename T >
 	Sampler2DShadow & Sampler2DShadow::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -257,7 +257,7 @@ namespace GLSL
 	{
 	}
 
-	SamplerCubeShadow::SamplerCubeShadow( GlslWriter * p_writer, Castor::String const & p_name )
+	SamplerCubeShadow::SamplerCubeShadow( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "samplerCubeShadow " ), p_writer, p_name )
 	{
 	}
@@ -265,8 +265,8 @@ namespace GLSL
 	template< typename T >
 	SamplerCubeShadow & SamplerCubeShadow::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -282,7 +282,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler1DArrayShadow::Sampler1DArrayShadow( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler1DArrayShadow::Sampler1DArrayShadow( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler1DArrayShadow " ), p_writer, p_name )
 	{
 	}
@@ -290,8 +290,8 @@ namespace GLSL
 	template< typename T >
 	Sampler1DArrayShadow & Sampler1DArrayShadow::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -307,7 +307,7 @@ namespace GLSL
 	{
 	}
 
-	Sampler2DArrayShadow::Sampler2DArrayShadow( GlslWriter * p_writer, Castor::String const & p_name )
+	Sampler2DArrayShadow::Sampler2DArrayShadow( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "sampler2DArrayShadow " ), p_writer, p_name )
 	{
 	}
@@ -315,8 +315,8 @@ namespace GLSL
 	template< typename T >
 	Sampler2DArrayShadow & Sampler2DArrayShadow::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -332,7 +332,7 @@ namespace GLSL
 	{
 	}
 
-	SamplerCubeArrayShadow::SamplerCubeArrayShadow( GlslWriter * p_writer, Castor::String const & p_name )
+	SamplerCubeArrayShadow::SamplerCubeArrayShadow( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "samplerCubeArrayShadow " ), p_writer, p_name )
 	{
 	}
@@ -340,8 +340,8 @@ namespace GLSL
 	template< typename T >
 	SamplerCubeArrayShadow & SamplerCubeArrayShadow::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 

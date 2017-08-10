@@ -1,6 +1,6 @@
 #include "Point.hpp"
 
-namespace Castor
+namespace castor
 {
 	template< typename T >
 	PlaneEquation< T >::PlaneEquation()
@@ -12,7 +12,7 @@ namespace Castor
 	PlaneEquation< T >::PlaneEquation( Point< T, 3 > const & p_p1, Point< T, 3 > const & p_p2, Point< T, 3 > const & p_p3 )
 		: m_d{ 0 }
 	{
-		Set( p_p1, p_p2, p_p3 );
+		set( p_p1, p_p2, p_p3 );
 	}
 
 	template< typename T >
@@ -20,7 +20,7 @@ namespace Castor
 		: m_normal{ p_normal }
 		, m_d{ 0 }
 	{
-		Set( p_normal, p_point );
+		set( p_normal, p_point );
 	}
 
 	template< typename T >
@@ -29,25 +29,25 @@ namespace Castor
 	}
 
 	template< typename T >
-	void PlaneEquation< T >::Set( Point< T, 3 > const & p_p1, Point< T, 3 > const & p_p2, Point< T, 3 > const & p_p3 )
+	void PlaneEquation< T >::set( Point< T, 3 > const & p_p1, Point< T, 3 > const & p_p2, Point< T, 3 > const & p_p3 )
 	{
 		Point< T, 3 > v( p_p2 - p_p1 );
 		Point< T, 3 > w( p_p3 - p_p1 );
-		m_normal = Castor::point::get_normalised( w ^ v );
+		m_normal = castor::point::getNormalised( w ^ v );
 		m_point = ( p_p1 + p_p2 + p_p3 ) / T( 3 );
-		m_d = -Castor::point::dot( m_point, m_normal );
+		m_d = -castor::point::dot( m_point, m_normal );
 	}
 
 	template< typename T >
-	void PlaneEquation< T >::Set( Point< T, 3 > const & p_normal, Point< T, 3 > const & p_point )
+	void PlaneEquation< T >::set( Point< T, 3 > const & p_normal, Point< T, 3 > const & p_point )
 	{
-		m_normal = Castor::point::get_normalised( p_normal );
+		m_normal = castor::point::getNormalised( p_normal );
 		m_point = p_point;
-		m_d = -Castor::point::dot( m_point, m_normal );
+		m_d = -castor::point::dot( m_point, m_normal );
 	}
 
 	template< typename T >
-	bool PlaneEquation< T >::IsParallel( PlaneEquation< T > const & p_plane )const
+	bool PlaneEquation< T >::isParallel( PlaneEquation< T > const & p_plane )const
 	{
 		T ratioA = m_normal[0] / p_plane.m_normal[0];
 		T ratioB = m_normal[1] / p_plane.m_normal[1];
@@ -57,23 +57,23 @@ namespace Castor
 	}
 
 	template< typename T >
-	T PlaneEquation< T >::Distance( Point< T, 3 > const & p_point )const
+	T PlaneEquation< T >::distance( Point< T, 3 > const & p_point )const
 	{
-		return Castor::point::dot( m_normal, p_point ) + m_d;
+		return castor::point::dot( m_normal, p_point ) + m_d;
 	}
 
 	template< typename T >
-	Point< T, 3 > PlaneEquation< T >::Project( Point< T, 3 > const & p_point )const
+	Point< T, 3 > PlaneEquation< T >::project( Point< T, 3 > const & p_point )const
 	{
-		return p_point - ( m_normal * Distance( p_point ) );
+		return p_point - ( m_normal * distance( p_point ) );
 	}
 
 	template< typename T >
-	bool PlaneEquation< T >::Intersects( PlaneEquation< T > const & p_plane, Line3D<T> & p_line )const
+	bool PlaneEquation< T >::intersects( PlaneEquation< T > const & p_plane, Line3D<T> & p_line )const
 	{
 		bool result = false;
 
-		if ( ! IsParallel( p_plane ) )
+		if ( ! isParallel( p_plane ) )
 		{
 			Point< T, 3 > normal( m_normal ^ p_plane.m_normal );
 			T constexpr zero{};
@@ -91,7 +91,7 @@ namespace Castor
 				point[2] = ( ( b2 * d1 ) - ( b1 * d2 ) ) / div;
 				point[1] = ( ( -c1 * point[2] ) - d1 ) / b1;
 				point[0] = 0;
-				p_line = Line3D< T >::FromPointAndSlope( point, normal );
+				p_line = Line3D< T >::fromPointAndSlope( point, normal );
 			}
 
 			result = true;
@@ -101,11 +101,11 @@ namespace Castor
 	}
 
 	template< typename T >
-	bool PlaneEquation< T >::Intersects( PlaneEquation< T > const & p_plane1, PlaneEquation< T > const & p_plane2, Point<T, 3> & p_intersection )const
+	bool PlaneEquation< T >::intersects( PlaneEquation< T > const & p_plane1, PlaneEquation< T > const & p_plane2, Point<T, 3> & p_intersection )const
 	{
 		bool result = false;
 
-		if ( ! IsParallel( p_plane1 ) && ! IsParallel( p_plane2 ) && ! p_plane1.IsParallel( p_plane2 ) )
+		if ( ! isParallel( p_plane1 ) && ! isParallel( p_plane2 ) && ! p_plane1.isParallel( p_plane2 ) )
 		{
 			T a1 = m_normal[0], a2 = p_plane1.m_normal[0], a3 = p_plane2.m_normal[0];
 			T b1 = m_normal[1], b2 = p_plane1.m_normal[1], b3 = p_plane2.m_normal[1];
@@ -137,7 +137,7 @@ namespace Castor
 	}
 
 	template< typename T >
-	bool PlaneEquation< T >::LineOn( Line3D< T > const & p_line )const
+	bool PlaneEquation< T >::isLineOn( Line3D< T > const & p_line )const
 	{
 		return std::abs( p_line[0] * m_normal[0] + p_line[1] * m_normal[1] + p_line[2] * m_normal[2] + m_d ) < std::numeric_limits< T >::epsilon();
 	}
@@ -147,7 +147,7 @@ namespace Castor
 	{
 		bool result = false;
 
-		if ( p_a.IsParallel( p_b ) )
+		if ( p_a.isParallel( p_b ) )
 		{
 			T ratioA = p_a.m_normal[0] / p_b.m_normal[0];
 			T ratioD = p_a.m_d / p_b.m_d;

@@ -34,7 +34,7 @@ namespace C3DMd3
 	\date 25/08/2010
 	*/
 	class Md3Importer
-		:	public Castor3D::Importer
+		:	public castor3d::Importer
 	{
 	private:
 		struct Md3Header
@@ -68,19 +68,19 @@ namespace C3DMd3
 		};
 
 		struct Md3Tag
-				: Castor::AlignedFrom< Castor::Point3r >
+				: castor::AlignedFrom< castor::Point3r >
 		{
 			char m_strName[64];
-			Castor::Point3r m_position;
-			Castor3D::real m_rotation[3][3];
+			castor::Point3r m_position;
+			castor3d::real m_rotation[3][3];
 		};
 
 		struct Md3Bone
 		{
-			Castor3D::real m_mins[3];
-			Castor3D::real m_maxs[3];
-			Castor3D::real m_position[3];
-			Castor3D::real m_scale;
+			castor3d::real m_mins[3];
+			castor3d::real m_maxs[3];
+			castor3d::real m_position[3];
+			castor3d::real m_scale;
 			char m_creator[16];
 		};
 
@@ -98,7 +98,7 @@ namespace C3DMd3
 
 		struct Md3TexCoord
 		{
-			Castor3D::real m_textureCoord[2];
+			castor3d::real m_textureCoord[2];
 		};
 
 		struct Md3Skin
@@ -110,25 +110,25 @@ namespace C3DMd3
 		/**
 		 * Constructor
 		 */
-		Md3Importer( Castor3D::Engine & p_engine );
+		Md3Importer( castor3d::Engine & p_engine );
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		bool doImportScene( castor3d::Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 
-		void DoReadMD3Data( Castor3D::Mesh & p_mesh, Castor3D::LegacyPass & p_pass );
-		void DoConvertDataStructures( Castor3D::Mesh & p_mesh, Md3MeshInfo p_meshHeader );
-		bool DoLoadSkin( Castor3D::Mesh & p_mesh, Castor::Path const & p_strSkin );
-		bool DoLoadShader( Castor3D::Mesh & p_mesh, Castor::Path const & p_strShader );
-		void DoCleanUp();
+		void doReadMD3Data( castor3d::Mesh & p_mesh, castor3d::LegacyPass & p_pass );
+		void doConvertDataStructures( castor3d::Mesh & p_mesh, Md3MeshInfo p_meshHeader );
+		bool doLoadSkin( castor3d::Mesh & p_mesh, castor::Path const & p_strSkin );
+		bool doLoadShader( castor3d::Mesh & p_mesh, castor::Path const & p_strShader );
+		void doCleanUp();
 
 	public:
 		Md3Header m_header;
@@ -141,10 +141,10 @@ namespace C3DMd3
 
 		Md3Tag * m_tags;
 		int m_numOfTags;
-		Castor3D::MeshSPtr * m_links;
-		Castor3D::SubmeshPtrStrMap m_mapSubmeshesByName;
+		castor3d::MeshSPtr * m_links;
+		castor3d::SubmeshPtrStrMap m_mapSubmeshesByName;
 
-		Castor::BinaryFile * m_pFile;
+		castor::BinaryFile * m_pFile;
 	};
 }
 

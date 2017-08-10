@@ -3,9 +3,9 @@
 #include "Animation/Skeleton/SkeletonAnimationBone.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
 		: SkeletonAnimationInstanceObject{ p_animationInstance, p_animationObject, p_allObjects }
@@ -17,13 +17,13 @@ namespace Castor3D
 	{
 	}
 
-	void SkeletonAnimationInstanceBone::DoApply()
+	void SkeletonAnimationInstanceBone::doApply()
 	{
-		BoneSPtr bone = m_animationBone.GetBone();
+		BoneSPtr bone = m_animationBone.getBone();
 
 		if ( bone )
 		{
-			m_finalTransform = m_cumulativeTransform * bone->GetOffsetMatrix();
+			m_finalTransform = m_cumulativeTransform * bone->getOffsetMatrix();
 		}
 	}
 }

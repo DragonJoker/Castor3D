@@ -6,8 +6,8 @@
 #include "FrameBuffer/TestRenderBufferAttachment.hpp"
 #include "FrameBuffer/TestTextureAttachment.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -20,79 +20,79 @@ namespace TestRender
 	{
 	}
 
-	bool TestFrameBuffer::Create()
+	bool TestFrameBuffer::create()
 	{
 		return true;
 	}
 
-	void TestFrameBuffer::Destroy()
+	void TestFrameBuffer::destroy()
 	{
 	}
 
-	void TestFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )const
+	void TestFrameBuffer::setDrawBuffers( AttachArray const & p_attaches )const
 	{
 	}
 
-	void TestFrameBuffer::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
+	void TestFrameBuffer::setReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
 	}
 
-	bool TestFrameBuffer::IsComplete()const
+	bool TestFrameBuffer::isComplete()const
 	{
 		return true;
 	}
 
-	void TestFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void TestFrameBuffer::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 	}
 
-	ColourRenderBufferSPtr TestFrameBuffer::CreateColourRenderBuffer( PixelFormat p_format )
+	ColourRenderBufferSPtr TestFrameBuffer::createColourRenderBuffer( PixelFormat p_format )
 	{
 		return std::make_shared< TestColourRenderBuffer >( p_format );
 	}
 
-	DepthStencilRenderBufferSPtr TestFrameBuffer::CreateDepthStencilRenderBuffer( PixelFormat p_format )
+	DepthStencilRenderBufferSPtr TestFrameBuffer::createDepthStencilRenderBuffer( PixelFormat p_format )
 	{
 		return std::make_shared< TestDepthStencilRenderBuffer >( p_format );
 	}
 
-	RenderBufferAttachmentSPtr TestFrameBuffer::CreateAttachment( RenderBufferSPtr p_renderBuffer )
+	RenderBufferAttachmentSPtr TestFrameBuffer::createAttachment( RenderBufferSPtr p_renderBuffer )
 	{
 		return std::make_shared< TestRenderBufferAttachment >( p_renderBuffer );
 	}
 
-	TextureAttachmentSPtr TestFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture )
+	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture )
 	{
 		return std::make_shared< TestTextureAttachment >( p_texture );
 	}
 
-	TextureAttachmentSPtr TestFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
+	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
 	{
 		return std::make_shared< TestCubeTextureFaceAttachment >( p_texture, p_face );
 	}
 
-	TextureAttachmentSPtr TestFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )
+	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )
 	{
 		return std::make_shared< TestCubeTextureFaceAttachment >( p_texture, p_face, p_mipLevel );
 	}
 
-	void TestFrameBuffer::DoClear( Castor3D::BufferComponents p_uiTargets )
+	void TestFrameBuffer::doClear( castor3d::BufferComponents p_uiTargets )
 	{
 	}
 
-	void TestFrameBuffer::DoBind( FrameBufferTarget p_target )const
+	void TestFrameBuffer::doBind( FrameBufferTarget p_target )const
 	{
 	}
 
-	void TestFrameBuffer::DoUnbind()const
+	void TestFrameBuffer::doUnbind()const
 	{
 	}
 
-	void TestFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
+	void TestFrameBuffer::doBlitInto( FrameBuffer const & p_buffer, castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
 	{
 	}
 
-	void TestFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
+	void TestFrameBuffer::doStretchInto( FrameBuffer const & p_buffer, castor::Rectangle const & p_rectSrc, castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
 	}
 }

@@ -1,6 +1,6 @@
 #include "FileParserContext.hpp"
 
-namespace Castor
+namespace castor
 {
 	FileParserContext::FileParserContext( TextFile * p_pFile )
 		: m_file( p_pFile )
@@ -12,23 +12,23 @@ namespace Castor
 	{
 	}
 
-	void FileParserContext::RegisterUserContext( String const & p_name, void * p_data )
+	void FileParserContext::registerUserContext( String const & p_name, void * p_data )
 	{
 		if ( m_userContexts.find( p_name ) != m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "A user context with name [" + string::string_cast< char >( p_name ) + "] already exists." );
+			CASTOR_EXCEPTION( "A user context with name [" + string::stringCast< char >( p_name ) + "] already exists." );
 		}
 
 		m_userContexts.insert( std::make_pair( p_name, p_data ) );
 	}
 
-	void * FileParserContext::UnregisterUserContext( String const & p_name )
+	void * FileParserContext::unregisterUserContext( String const & p_name )
 	{
 		auto it = m_userContexts.find( p_name );
 
 		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::string_cast< char >( p_name ) + "]." );
+			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( p_name ) + "]." );
 		}
 
 		void * result = it->second;
@@ -36,13 +36,13 @@ namespace Castor
 		return result;
 	}
 
-	void * FileParserContext::GetUserContext( String const & p_name )
+	void * FileParserContext::getUserContext( String const & p_name )
 	{
 		auto it = m_userContexts.find( p_name );
 
 		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::string_cast< char >( p_name ) + "]." );
+			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( p_name ) + "]." );
 		}
 
 		return it->second;

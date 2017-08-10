@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor3D
 	\remark		Une unité de texture se compose d'une texture avec des options telles que son canal, modes de mélange, transformations...
 	*/
 	class TextureUnit
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -53,7 +53,7 @@ namespace Castor3D
 		\brief		Loader de TextureUnit.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< TextureUnit >
+			: public castor::TextWriter< TextureUnit >
 		{
 		public:
 			/**
@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & tabs
+			C3D_API explicit TextWriter( castor::String const & tabs
 				, MaterialType type );
 			/**
 			 *\~english
@@ -74,7 +74,7 @@ namespace Castor3D
 			 *\param[in]	file	Le fichier.
 			 *\param[in]	unit	La TextureUnit.
 			 */
-			C3D_API bool operator()( TextureUnit const & unit, Castor::TextFile & file )override;
+			C3D_API bool operator()( TextureUnit const & unit, castor::TextFile & file )override;
 
 		private:
 			MaterialType m_type;
@@ -103,51 +103,51 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture.
 		 *\~french
 		 *\brief		Nettoie l'objet.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Sets the texture.
+		 *\brief		sets the texture.
 		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Definit la texture.
 		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void SetTexture( TextureLayoutSPtr texture );
+		C3D_API void setTexture( TextureLayoutSPtr texture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit.
 		 *\~french
 		 *\brief		Applique la texture.
 		 */
-		C3D_API void Bind()const;
+		C3D_API void bind()const;
 		/**
 		 *\~english
 		 *\brief		Removes the texture unit from the stack, in order not to interfere with other ones.
 		 *\~french
 		 *\brief		Désactive la texture.
 		 */
-		C3D_API void Unbind()const;
+		C3D_API void unbind()const;
 		/**
 		 *\~english
 		 *\return		The texture dimension.
 		 *\~french
 		 *\return		La dimension de la texture.
 		 */
-		C3D_API TextureType GetType()const;
+		C3D_API TextureType getType()const;
 		/**
 		 *\~english
 		 *\return		The texture.
 		 *\~french
 		 *\return		La texture.
 		 */
-		inline Castor3D::TextureLayoutSPtr GetTexture()const
+		inline castor3d::TextureLayoutSPtr getTexture()const
 		{
 			return m_texture;
 		}
@@ -159,19 +159,19 @@ namespace Castor3D
 		 *\brief		Récupère le canal de la texture.
 		 *\return		La valeur.
 		 */
-		inline Castor3D::TextureChannel GetChannel()const
+		inline castor3d::TextureChannel getChannel()const
 		{
 			return m_channel;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the texture channel.
+		 *\brief		sets the texture channel.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le canal de la texture.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetChannel( Castor3D::TextureChannel value )
+		inline void setChannel( castor3d::TextureChannel value )
 		{
 			m_channel = value;
 		}
@@ -181,31 +181,31 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'index de l'unité.
 		 */
-		inline uint32_t GetIndex()const
+		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the unit index.
+		 *\brief		sets the unit index.
 		 *\param[in]	p_index	The new value.
 		 *\~french
 		 *\brief		Définit l'index de l'unité.
 		 *\param[in]	p_index	La nouvelle valeur.
 		 */
-		inline void SetIndex( uint32_t value )
+		inline void setIndex( uint32_t value )
 		{
 			m_index = value;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the target holding the texture.
+		 *\brief		sets the target holding the texture.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la cible contenant la texture.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetRenderTarget( RenderTargetSPtr value )
+		inline void setRenderTarget( RenderTargetSPtr value )
 		{
 			m_renderTarget = value;
 		}
@@ -217,7 +217,7 @@ namespace Castor3D
 		 *\brief		Définit le sampler de la texture.
 		 *\param[in]	value	Le sampler.
 		 */
-		inline void SetSampler( SamplerSPtr value )
+		inline void setSampler( SamplerSPtr value )
 		{
 			m_sampler = value;
 		}
@@ -227,7 +227,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'échantillonneur.
 		 */
-		inline SamplerSPtr GetSampler()const
+		inline SamplerSPtr getSampler()const
 		{
 			return m_sampler.lock();
 		}
@@ -237,19 +237,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p false si la texture est nulle.
 		 */
-		inline bool IsTextured()const
+		inline bool isTextured()const
 		{
 			return m_texture != nullptr;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the auto mipmaps generation status.
+		 *\brief		sets the auto mipmaps generation status.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'auto génération des mipmaps.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetAutoMipmaps( bool value )
+		inline void setAutoMipmaps( bool value )
 		{
 			m_autoMipmaps = value;
 		}
@@ -259,7 +259,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut d'auto génération des mipmaps.
 		 */
-		inline bool GetAutoMipmaps()const
+		inline bool getAutoMipmaps()const
 		{
 			return m_autoMipmaps;
 		}
@@ -269,7 +269,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La cible de rendu.
 		 */
-		inline RenderTargetSPtr GetRenderTarget()const
+		inline RenderTargetSPtr getRenderTarget()const
 		{
 			return m_renderTarget.lock();
 		}
@@ -285,7 +285,7 @@ namespace Castor3D
 		TextureChannel m_channel;
 		//!\~english	The unit transformations.
 		//!\~french		Les transformations de l'unité.
-		Castor::Matrix4x4r m_transformations;
+		castor::Matrix4x4r m_transformations;
 		//!\~english	The unit texture.
 		//!\~french		La texture de l'unité.
 		TextureLayoutSPtr m_texture;
@@ -316,7 +316,7 @@ namespace Castor3D
 	 */
 	inline std::ostream & operator<<( std::ostream & streamOut, TextureUnitSPtr const & texture )
 	{
-		streamOut << texture->GetIndex();
+		streamOut << texture->getIndex();
 		return streamOut;
 	}
 }

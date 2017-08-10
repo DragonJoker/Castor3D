@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -34,7 +34,7 @@ SOFTWARE.
 #	pragma warning( disable:4503 )
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -134,7 +134,7 @@ namespace Castor3D
 	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class RenderQueue
-		: public Castor::OwnedBy< RenderPass >
+		: public castor::OwnedBy< RenderPass >
 	{
 	public:
 		/**
@@ -162,7 +162,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_camera	La caméra.
 		 */
-		C3D_API void Initialise( Scene & p_scene, Camera & p_camera );
+		C3D_API void initialise( Scene & p_scene, Camera & p_camera );
 		/**
 		 *\~english
 		 *\brief		Plugs the render queue to given scene.
@@ -171,14 +171,14 @@ namespace Castor3D
 		 *\brief		Branche la file de rendu à la scène donnée.
 		 *\param[in]	p_scene		La scène.
 		 */
-		C3D_API void Initialise( Scene & p_scene );
+		C3D_API void initialise( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Updates the render nodes.
 		 *\~french
 		 *\brief		Met à jour les noeuds de rendu.
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Retrieves a scene's nodes from a camera viewpoint.
@@ -187,7 +187,7 @@ namespace Castor3D
 		 *\brief		Récupère les noeuds d'une scène, du point de vue d'une caméra.
 		 *\return		Les noeuds de rendu
 		 */
-		C3D_API SceneRenderNodes & GetRenderNodes()const;
+		C3D_API SceneRenderNodes & getRenderNodes()const;
 
 	private:
 		/**
@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_inputNodes	Les noeuds de la scène.
 		 *\param[out]	p_outputNodes	Reçoit les noeuds à dessiner.
 		 */
-		void DoPrepareRenderNodes();
+		void doPrepareRenderNodes();
 		/**
 		 *\~english
 		 *\brief			Sorts scene render nodes.
@@ -211,7 +211,7 @@ namespace Castor3D
 		 *\brief			Trie les noeuds de rendu de scène.
 		 *\param[in,out]	p_nodes	Les noeuds.
 		 */
-		void DoSortRenderNodes();
+		void doSortRenderNodes();
 		/**
 		 *\~english
 		 *\brief		Notification that the scene has changed.
@@ -220,7 +220,7 @@ namespace Castor3D
 		 *\brief		Notification que la scène a changé.
 		 *\param[in]	p_scene	La scène changée.
 		 */
-		void OnSceneChanged( Scene const & p_scene );
+		void onSceneChanged( Scene const & p_scene );
 		/**
 		 *\~english
 		 *\brief		Notification that the camera has changed.
@@ -229,7 +229,7 @@ namespace Castor3D
 		 *\brief		Notification que la caméra a changé.
 		 *\param[in]	p_camera	La caméra changée.
 		 */
-		void OnCameraChanged( Camera const & p_camera );
+		void onCameraChanged( Camera const & p_camera );
 
 	protected:
 		//!\~english	Tells if this queue is for opaque nodes.

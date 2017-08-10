@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "ObjectPool.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -52,9 +52,9 @@ namespace Castor
 		 *\~french
 		 *\return		L'instance unique du pool d'objets.
 		 */
-		static inline MyObjectPool & Get()
+		static inline MyObjectPool & get()
 		{
-			return *DoGetInstance();
+			return *doGetInstance();
 		}
 		/**
 		 *\~english
@@ -64,11 +64,11 @@ namespace Castor
 		 *\brief		Crée l'instance unique du pool d'objets.
 		 *\param[in]	p_count	Le compte initial des objets du pool.
 		 */
-		static inline void Create( uint32_t p_count = 256u )
+		static inline void create( uint32_t p_count = 256u )
 		{
-			if ( !DoGetInstance() )
+			if ( !doGetInstance() )
 			{
-				DoGetInstance() = new MyObjectPool( p_count );
+				doGetInstance() = new MyObjectPool( p_count );
 			}
 		}
 		/**
@@ -77,17 +77,17 @@ namespace Castor
 		 *\~french
 		 *\brief		Détruit l'instance unique du pool d'objets.
 		 */
-		static inline void Destroy()
+		static inline void destroy()
 		{
-			if ( DoGetInstance() )
+			if ( doGetInstance() )
 			{
-				delete DoGetInstance();
-				DoGetInstance() = nullptr;
+				delete doGetInstance();
+				doGetInstance() = nullptr;
 			}
 		}
 
 	private:
-		static inline MyObjectPool *& DoGetInstance()
+		static inline MyObjectPool *& doGetInstance()
 		{
 			static MyObjectPool * s_instance = nullptr;
 			return s_instance;
@@ -118,9 +118,9 @@ namespace Castor
 		 *\~french
 		 *\return		L'instance unique du pool d'objets.
 		 */
-		static inline MyAlignedObjectPool & Get()
+		static inline MyAlignedObjectPool & get()
 		{
-			return *DoGetInstance();
+			return *doGetInstance();
 		}
 		/**
 		 *\~english
@@ -130,11 +130,11 @@ namespace Castor
 		 *\brief		Crée l'instance unique du pool d'objets.
 		 *\param[in]	p_count	Le compte initial des objets du pool.
 		 */
-		static inline void Create( uint32_t p_count = 256u )
+		static inline void create( uint32_t p_count = 256u )
 		{
-			if ( !DoGetInstance() )
+			if ( !doGetInstance() )
 			{
-				DoGetInstance() = new MyAlignedObjectPool( p_count );
+				doGetInstance() = new MyAlignedObjectPool( p_count );
 			}
 		}
 		/**
@@ -143,17 +143,17 @@ namespace Castor
 		 *\~french
 		 *\brief		Détruit l'instance unique du pool d'objets.
 		 */
-		static inline void Destroy()
+		static inline void destroy()
 		{
-			if ( DoGetInstance() )
+			if ( doGetInstance() )
 			{
-				delete DoGetInstance();
-				DoGetInstance() = nullptr;
+				delete doGetInstance();
+				doGetInstance() = nullptr;
 			}
 		}
 
 	private:
-		static inline MyAlignedObjectPool *& DoGetInstance()
+		static inline MyAlignedObjectPool *& doGetInstance()
 		{
 			static MyAlignedObjectPool * s_instance = nullptr;
 			return s_instance;

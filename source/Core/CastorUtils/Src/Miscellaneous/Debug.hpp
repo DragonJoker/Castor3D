@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace Debug
 	{
@@ -76,7 +76,7 @@ namespace Castor
 			Backtraced()
 			{
 				std::stringstream callStack;
-				callStack << Castor::Debug::Backtrace{};
+				callStack << castor::Debug::Backtrace{};
 				m_callStack = callStack.str();
 			}
 

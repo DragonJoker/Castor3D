@@ -18,8 +18,8 @@
 #include <stack>
 
 using namespace CastorGui;
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace CastorGui
 {
@@ -36,7 +36,7 @@ namespace CastorGui
 		uint32_t m_flags = 0;
 		uint32_t m_ctrlId = 0;
 
-		ControlRPtr GetTop()const
+		ControlRPtr getTop()const
 		{
 			ControlRPtr result = NULL;
 
@@ -62,7 +62,7 @@ namespace CastorGui
 				ControlSPtr top;
 				top = m_parents.top();
 
-				switch ( top->GetType() )
+				switch ( top->getType() )
 				{
 				case ControlType::eStatic:
 					m_static = std::static_pointer_cast< StaticCtrl >( top );
@@ -92,21 +92,21 @@ namespace CastorGui
 		}
 	};
 
-	ControlsManager & GetControlsManager( FileParserContextSPtr p_context )
+	ControlsManager & getControlsManager( FileParserContextSPtr p_context )
 	{
-		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetEngine()->GetUserInputListener() );
+		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->getEngine()->getUserInputListener() );
 	}
 
-	ParserContext & GetParserContext( FileParserContextSPtr p_context )
+	ParserContext & getParserContext( FileParserContextSPtr p_context )
 	{
-		return *static_cast< ParserContext * >( p_context->GetUserContext( PLUGIN_NAME ) );
+		return *static_cast< ParserContext * >( p_context->getUserContext( PLUGIN_NAME ) );
 	}
 
 	template< typename T >
 	std::shared_ptr< T > CreateControl( ParserContext & p_context, String const & p_name, std::shared_ptr< T > & p_control )
 	{
-		p_control = std::make_shared< T >( p_name, *p_context.m_engine, p_context.GetTop(), p_context.m_ctrlId++ );
-		p_control->AddStyle( p_context.m_flags );
+		p_control = std::make_shared< T >( p_name, *p_context.m_engine, p_context.getTop(), p_context.m_ctrlId++ );
+		p_control->addStyle( p_context.m_flags );
 		p_context.m_parents.push( p_control );
 		p_context.m_flags = 0;
 		return p_control;
@@ -116,31 +116,31 @@ namespace CastorGui
 	{
 		if ( p_control )
 		{
-			p_manager.Create( p_control );
+			p_manager.create( p_control );
 			p_context.m_parents.pop();
 		}
 	}
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Gui )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserGui )
 	{
 		ParserContext * context = new ParserContext;
-		context->m_engine = std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetEngine();
-		p_context->RegisterUserContext( PLUGIN_NAME, context );
+		context->m_engine = std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->getEngine();
+		p_context->registerUserContext( PLUGIN_NAME, context );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eGUI )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_DefaultFont )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserDefaultFont )
 	{
-		ControlsManager & ctrlsManager = GetControlsManager( p_context );
-		ParserContext & context = GetParserContext( p_context );
-		auto & cache = context.m_engine->GetFontCache();
+		ControlsManager & ctrlsManager = getControlsManager( p_context );
+		ParserContext & context = getParserContext( p_context );
+		auto & cache = context.m_engine->getFontCache();
 		String name;
-		p_params[0]->Get( name );
-		FontSPtr font = cache.Find( name );
+		p_params[0]->get( name );
+		FontSPtr font = cache.find( name );
 
 		if ( font )
 		{
-			ctrlsManager.SetDefaultFont( font );
+			ctrlsManager.setDefaultFont( font );
 		}
 		else
 		{
@@ -149,32 +149,32 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_GuiEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserGuiEnd )
 	{
-		delete reinterpret_cast< ParserContext * >( p_context->UnregisterUserContext( PLUGIN_NAME ) );
+		delete reinterpret_cast< ParserContext * >( p_context->unregisterUserContext( PLUGIN_NAME ) );
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Button )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButton )
 	{
-		ControlsManager & ctrlsManager = GetControlsManager( p_context );
-		ParserContext & context = GetParserContext( p_context );
+		ControlsManager & ctrlsManager = getControlsManager( p_context );
+		ParserContext & context = getParserContext( p_context );
 		String name;
-		p_params[0]->Get( name );
+		p_params[0]->get( name );
 		CreateControl( context, name, context.m_button );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eButton )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonFont )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonFont )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			button->SetFont( name );
+			p_params[0]->get( name );
+			button->setFont( name );
 		}
 		else
 		{
@@ -183,16 +183,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonCaption )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonCaption )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String text;
-			p_params[0]->Get( text );
-			button->SetCaption( text );
+			p_params[0]->get( text );
+			button->setCaption( text );
 		}
 		else
 		{
@@ -201,20 +201,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonTextMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonTextMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				button->SetTextMaterial( material );
+				button->setTextMaterial( material );
 			}
 			else
 			{
@@ -228,20 +228,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonHighlightedBackgroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHighlightedBackgroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				button->SetHighlightedBackgroundMaterial( material );
+				button->setHighlightedBackgroundMaterial( material );
 			}
 			else
 			{
@@ -255,20 +255,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonHighlightedForegroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHighlightedForegroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				button->SetHighlightedForegroundMaterial( material );
+				button->setHighlightedForegroundMaterial( material );
 			}
 			else
 			{
@@ -282,20 +282,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonHighlightedTextMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHighlightedTextMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				button->SetHighlightedTextMaterial( material );
+				button->setHighlightedTextMaterial( material );
 			}
 			else
 			{
@@ -309,20 +309,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonPushedBackgroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonPushedBackgroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				button->SetPushedBackgroundMaterial( material );
+				button->setPushedBackgroundMaterial( material );
 			}
 			else
 			{
@@ -336,20 +336,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonPushedForegroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonPushedForegroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				button->SetPushedForegroundMaterial( material );
+				button->setPushedForegroundMaterial( material );
 			}
 			else
 			{
@@ -363,20 +363,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonPushedTextMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonPushedTextMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				button->SetPushedTextMaterial( material );
+				button->setPushedTextMaterial( material );
 			}
 			else
 			{
@@ -390,16 +390,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonHAlign )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHAlign )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			uint32_t value;
-			p_params[0]->Get( value );
-			button->SetHAlign( HAlign( value ) );
+			p_params[0]->get( value );
+			button->setHAlign( HAlign( value ) );
 		}
 		else
 		{
@@ -408,16 +408,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonVAlign )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonVAlign )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
 
 		if ( button )
 		{
 			uint32_t value;
-			p_params[0]->Get( value );
-			button->SetVAlign( VAlign( value ) );
+			p_params[0]->get( value );
+			button->setVAlign( VAlign( value ) );
 		}
 		else
 		{
@@ -426,34 +426,34 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonEnd )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		FinishControl( GetControlsManager( p_context ), context, context.m_button );
+		ParserContext & context = getParserContext( p_context );
+		FinishControl( getControlsManager( p_context ), context, context.m_button );
 		context.Pop();
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBox )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBox )
 	{
-		ControlsManager & ctrlsManager = GetControlsManager( p_context );
-		ParserContext & context = GetParserContext( p_context );
+		ControlsManager & ctrlsManager = getControlsManager( p_context );
+		ParserContext & context = getParserContext( p_context );
 		String name;
-		p_params[0]->Get( name );
+		p_params[0]->get( name );
 		CreateControl( context, name, context.m_combo );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eComboBox )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBoxFont )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxFont )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
 
 		if ( combo )
 		{
 			String name;
-			p_params[0]->Get( name );
-			combo->SetFont( name );
+			p_params[0]->get( name );
+			combo->setFont( name );
 		}
 		else
 		{
@@ -462,16 +462,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBoxItem )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxItem )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
 
 		if ( combo )
 		{
 			String text;
-			p_params[0]->Get( text );
-			combo->AppendItem( text );
+			p_params[0]->get( text );
+			combo->appendItem( text );
 		}
 		else
 		{
@@ -480,20 +480,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBoxSelectedItemBackgroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxSelectedItemBackgroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
 
 		if ( combo )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				combo->SetSelectedItemBackgroundMaterial( material );
+				combo->setSelectedItemBackgroundMaterial( material );
 			}
 			else
 			{
@@ -507,20 +507,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBoxSelectedItemForegroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxSelectedItemForegroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
 
 		if ( combo )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				combo->SetSelectedItemForegroundMaterial( material );
+				combo->setSelectedItemForegroundMaterial( material );
 			}
 			else
 			{
@@ -534,20 +534,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBoxHighlightedItemBackgroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxHighlightedItemBackgroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
 
 		if ( combo )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				combo->SetHighlightedItemBackgroundMaterial( material );
+				combo->setHighlightedItemBackgroundMaterial( material );
 			}
 			else
 			{
@@ -561,34 +561,34 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBoxEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxEnd )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		FinishControl( GetControlsManager( p_context ), context, context.m_combo );
+		ParserContext & context = getParserContext( p_context );
+		FinishControl( getControlsManager( p_context ), context, context.m_combo );
 		context.Pop();
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Edit )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserEdit )
 	{
-		ControlsManager & ctrlsManager = GetControlsManager( p_context );
-		ParserContext & context = GetParserContext( p_context );
+		ControlsManager & ctrlsManager = getControlsManager( p_context );
+		ParserContext & context = getParserContext( p_context );
 		String name;
-		p_params[0]->Get( name );
+		p_params[0]->get( name );
 		CreateControl( context, name, context.m_edit );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eEdit )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_EditFont )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserEditFont )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		EditCtrlSPtr edit = context.m_edit;
 
 		if ( edit )
 		{
 			String name;
-			p_params[0]->Get( name );
-			edit->SetFont( name );
+			p_params[0]->get( name );
+			edit->setFont( name );
 		}
 		else
 		{
@@ -597,16 +597,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_EditCaption )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserEditCaption )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		EditCtrlSPtr edit = context.m_edit;
 
 		if ( edit )
 		{
 			String text;
-			p_params[0]->Get( text );
-			edit->SetCaption( text );
+			p_params[0]->get( text );
+			edit->setCaption( text );
 		}
 		else
 		{
@@ -615,15 +615,15 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_EditMultiLine )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserEditMultiLine )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		EditCtrlSPtr edit = context.m_edit;
 
 		if ( edit )
 		{
 			bool value;
-			p_params[0]->Get( value );
+			p_params[0]->get( value );
 			context.m_flags |= value ? ( uint32_t( EditStyle::eMultiline )
 											 | uint32_t( EditStyle::eProcessEnter )
 											 | uint32_t( EditStyle::eProcessTab ) ) : 0;
@@ -635,34 +635,34 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_EditEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserEditEnd )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		FinishControl( GetControlsManager( p_context ), context, context.m_edit );
+		ParserContext & context = getParserContext( p_context );
+		FinishControl( getControlsManager( p_context ), context, context.m_edit );
 		context.Pop();
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBox )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserListBox )
 	{
-		ControlsManager & ctrlsManager = GetControlsManager( p_context );
-		ParserContext & context = GetParserContext( p_context );
+		ControlsManager & ctrlsManager = getControlsManager( p_context );
+		ParserContext & context = getParserContext( p_context );
 		String name;
-		p_params[0]->Get( name );
+		p_params[0]->get( name );
 		CreateControl( context, name, context.m_listbox );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eListBox )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBoxFont )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxFont )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
 
 		if ( listbox )
 		{
 			String name;
-			p_params[0]->Get( name );
-			listbox->SetFont( name );
+			p_params[0]->get( name );
+			listbox->setFont( name );
 		}
 		else
 		{
@@ -671,16 +671,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBoxItem )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxItem )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
 
 		if ( listbox )
 		{
 			String text;
-			p_params[0]->Get( text );
-			listbox->AppendItem( text );
+			p_params[0]->get( text );
+			listbox->appendItem( text );
 		}
 		else
 		{
@@ -689,20 +689,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBoxSelectedItemBackgroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxSelectedItemBackgroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
 
 		if ( listbox )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				listbox->SetSelectedItemBackgroundMaterial( material );
+				listbox->setSelectedItemBackgroundMaterial( material );
 			}
 			else
 			{
@@ -716,20 +716,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBoxHighlightedItemBackgroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxHighlightedItemBackgroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
 
 		if ( listbox )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				listbox->SetHighlightedItemBackgroundMaterial( material );
+				listbox->setHighlightedItemBackgroundMaterial( material );
 			}
 			else
 			{
@@ -743,20 +743,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBoxSelectedItemForegroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxSelectedItemForegroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
 
 		if ( listbox )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				listbox->SetSelectedItemForegroundMaterial( material );
+				listbox->setSelectedItemForegroundMaterial( material );
 			}
 			else
 			{
@@ -770,51 +770,51 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBoxEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxEnd )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		FinishControl( GetControlsManager( p_context ), context, context.m_listbox );
+		ParserContext & context = getParserContext( p_context );
+		FinishControl( getControlsManager( p_context ), context, context.m_listbox );
 		context.Pop();
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Slider )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSlider )
 	{
-		ControlsManager & ctrlsManager = GetControlsManager( p_context );
-		ParserContext & context = GetParserContext( p_context );
+		ControlsManager & ctrlsManager = getControlsManager( p_context );
+		ParserContext & context = getParserContext( p_context );
 		String name;
-		p_params[0]->Get( name );
+		p_params[0]->get( name );
 		CreateControl( context, name, context.m_slider );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eSlider )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SliderEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSliderEnd )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		FinishControl( GetControlsManager( p_context ), context, context.m_slider );
+		ParserContext & context = getParserContext( p_context );
+		FinishControl( getControlsManager( p_context ), context, context.m_slider );
 		context.Pop();
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Static )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserStatic )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		String name;
-		p_params[0]->Get( name );
+		p_params[0]->get( name );
 		CreateControl( context, name, context.m_static );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eStatic )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticFont )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticFont )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
 
 		if ( ctrl )
 		{
 			String name;
-			p_params[0]->Get( name );
-			ctrl->SetFont( name );
+			p_params[0]->get( name );
+			ctrl->setFont( name );
 		}
 		else
 		{
@@ -823,16 +823,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticCaption )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticCaption )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
 
 		if ( ctrl )
 		{
 			String text;
-			p_params[0]->Get( text );
-			ctrl->SetCaption( text );
+			p_params[0]->get( text );
+			ctrl->setCaption( text );
 		}
 		else
 		{
@@ -841,16 +841,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticHAlign )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticHAlign )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
 
 		if ( ctrl )
 		{
 			uint32_t value;
-			p_params[0]->Get( value );
-			ctrl->SetHAlign( HAlign( value ) );
+			p_params[0]->get( value );
+			ctrl->setHAlign( HAlign( value ) );
 		}
 		else
 		{
@@ -859,16 +859,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticVAlign )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticVAlign )
 	{
-		ParserContext & context = GetParserContext( p_context );
+		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
 
 		if ( ctrl )
 		{
 			uint32_t value;
-			p_params[0]->Get( value );
-			ctrl->SetVAlign( VAlign( value ) );
+			p_params[0]->get( value );
+			ctrl->setVAlign( VAlign( value ) );
 		}
 		else
 		{
@@ -877,24 +877,24 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticEnd )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		FinishControl( GetControlsManager( p_context ), context, context.m_static );
+		ParserContext & context = getParserContext( p_context );
+		FinishControl( getControlsManager( p_context ), context, context.m_static );
 		context.Pop();
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlPixelPosition )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlPixelPosition )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			Position position;
-			p_params[0]->Get( position );
-			control->SetPosition( position );
+			p_params[0]->get( position );
+			control->setPosition( position );
 		}
 		else
 		{
@@ -903,16 +903,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlPixelSize )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlPixelSize )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			Size size;
-			p_params[0]->Get( size );
-			control->SetSize( size );
+			p_params[0]->get( size );
+			control->setSize( size );
 		}
 		else
 		{
@@ -921,16 +921,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlPixelBorderSize )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlPixelBorderSize )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			Rectangle size;
-			p_params[0]->Get( size );
-			control->SetBackgroundBorders( size );
+			p_params[0]->get( size );
+			control->setBackgroundBorders( size );
 		}
 		else
 		{
@@ -939,20 +939,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlBackgroundMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBackgroundMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				control->SetBackgroundMaterial( material );
+				control->setBackgroundMaterial( material );
 			}
 			else
 			{
@@ -966,20 +966,20 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlBorderMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBorderMaterial )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			String name;
-			p_params[0]->Get( name );
-			auto material = context.m_engine->GetMaterialCache().Find( name );
+			p_params[0]->get( name );
+			auto material = context.m_engine->getMaterialCache().find( name );
 
 			if ( material )
 			{
-				control->SetForegroundMaterial( material );
+				control->setForegroundMaterial( material );
 			}
 			else
 			{
@@ -993,16 +993,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlBorderInnerUv )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBorderInnerUv )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			Point4d value;
-			p_params[0]->Get( value );
-			control->GetBackground()->SetBorderInnerUV( value );
+			p_params[0]->get( value );
+			control->getBackground()->setBorderInnerUV( value );
 		}
 		else
 		{
@@ -1011,16 +1011,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlBorderOuterUv )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBorderOuterUv )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			Point4d value;
-			p_params[0]->Get( value );
-			control->GetBackground()->SetBorderOuterUV( value );
+			p_params[0]->get( value );
+			control->getBackground()->setBorderOuterUV( value );
 		}
 		else
 		{
@@ -1029,16 +1029,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlCenterUv )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlCenterUv )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			Point4d value;
-			p_params[0]->Get( value );
-			control->GetBackground()->SetUV( value );
+			p_params[0]->get( value );
+			control->getBackground()->setUV( value );
 		}
 		else
 		{
@@ -1047,16 +1047,16 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlVisible )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserControlVisible )
 	{
-		ParserContext & context = GetParserContext( p_context );
-		ControlRPtr control = context.GetTop();
+		ParserContext & context = getParserContext( p_context );
+		ControlRPtr control = context.getTop();
 
 		if ( control )
 		{
 			bool value;
-			p_params[0]->Get( value );
-			control->SetVisible( value );
+			p_params[0]->get( value );
+			control->setVisible( value );
 		}
 		else
 		{

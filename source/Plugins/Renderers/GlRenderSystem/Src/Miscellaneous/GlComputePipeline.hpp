@@ -39,7 +39,7 @@ namespace GlRender
 	\brief		Implémentation du pipeline de calcul.
 	*/
 	class GlComputePipeline
-		: public Castor3D::ComputePipeline
+		: public castor3d::ComputePipeline
 		, public Holder
 	{
 	public:
@@ -65,7 +65,7 @@ namespace GlRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		GlComputePipeline( OpenGl & p_gl, GlRenderSystem & renderSystem, Castor3D::ShaderProgram & p_program );
+		GlComputePipeline( OpenGl & p_gl, GlRenderSystem & renderSystem, castor3d::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -74,11 +74,11 @@ namespace GlRender
 		 */
 		virtual ~GlComputePipeline();
 		/**
-		 *\copydoc		Castor3D::ComputePipeline::Run
+		 *\copydoc		castor3d::ComputePipeline::Run
 		 */
-		void Run( Castor::Point3ui const & p_workgroups
-			, Castor::Point3ui const & p_workgroupSize
-			, Castor3D::MemoryBarriers const & p_barriers )const override;
+		void run( castor::Point3ui const & p_workgroups
+			, castor::Point3ui const & p_workgroupSize
+			, castor3d::MemoryBarriers const & p_barriers )const override;
 	};
 }
 

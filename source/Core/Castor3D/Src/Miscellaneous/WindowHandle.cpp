@@ -1,8 +1,8 @@
 ﻿#include "WindowHandle.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	WindowHandle::WindowHandle()
 		: m_pHandle()

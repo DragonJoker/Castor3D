@@ -40,37 +40,37 @@ namespace Ase
 	\remark		Pendant l'analyse d'un fichier, le contexte retient les données importantes
 	*/
 	class AseFileContext
-		:	public Castor::FileParserContext
+		:	public castor::FileParserContext
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, Castor::TextFile * p_pFile, Castor3D::Scene & p_scene, Castor3D::Mesh * p_mesh );
+		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, castor::TextFile * p_pFile, castor3d::Scene & p_scene, castor3d::Mesh * p_mesh );
 		/**
 		 * Initialises all members
 		 */
-		void Initialise();
+		void initialise();
 
 	public:
 		AseImporter & m_importer;
 		AseFileParser * m_pParser;
-		Castor3D::Scene & scene;
-		Castor3D::Mesh * mesh;
-		Castor3D::LightSPtr pLight;
-		Castor3D::CameraSPtr pCamera;
-		Castor3D::SceneNodeSPtr pSceneNode;
-		Castor3D::GeometrySPtr pGeometry;
-		Castor3D::Mesh * pMesh{ nullptr };
-		Castor3D::SubmeshSPtr pSubmesh;
-		Castor3D::MaterialSPtr pMaterial;
-		Castor3D::LegacyPassSPtr pPass;
-		Castor3D::TextureUnitSPtr pTextureUnit;
-		Castor::String strName;
-		Castor::String strName2;
-		Castor3D::MaterialPtrUIntMap m_mapMaterials;
-		Castor::Point3rPtrArray m_arrayTexCoords;
-		Castor3D::ViewportType eViewportType;
+		castor3d::Scene & scene;
+		castor3d::Mesh * mesh;
+		castor3d::LightSPtr pLight;
+		castor3d::CameraSPtr pCamera;
+		castor3d::SceneNodeSPtr pSceneNode;
+		castor3d::GeometrySPtr pGeometry;
+		castor3d::Mesh * pMesh{ nullptr };
+		castor3d::SubmeshSPtr pSubmesh;
+		castor3d::MaterialSPtr pMaterial;
+		castor3d::LegacyPassSPtr pPass;
+		castor3d::TextureUnitSPtr pTextureUnit;
+		castor::String strName;
+		castor::String strName2;
+		castor3d::MaterialPtrUIntMap m_mapMaterials;
+		castor::Point3rPtrArray m_arrayTexCoords;
+		castor3d::ViewportType eViewportType;
 		uint16_t uiUInt16;
 		uint32_t uiUInt32;
 		uint64_t uiUInt64;

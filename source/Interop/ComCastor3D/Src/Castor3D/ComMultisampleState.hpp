@@ -58,29 +58,29 @@ namespace CastorCom
 		 */
 		virtual ~CMultisampleState();
 
-		inline Castor3D::MultisampleStateSPtr GetInternal()const
+		inline castor3d::MultisampleStateSPtr getInternal()const
 		{
 			return m_state;
 		}
 
-		inline void SetInternal( Castor3D::MultisampleStateSPtr state )
+		inline void setInternal( castor3d::MultisampleStateSPtr state )
 		{
 			m_state = state;
 		}
 		
-		COM_PROPERTY( Multisample, boolean, make_getter( m_state.get(), &Castor3D::MultisampleState::GetMultisample ), make_putter( m_state.get(), &Castor3D::MultisampleState::SetMultisample ) );
-		COM_EVT_PROPERTY( AlphaToCoverageEnabled, boolean, make_getter( m_state.get(), &Castor3D::MultisampleState::IsAlphaToCoverageEnabled ), make_putter( m_state.get(), &Castor3D::MultisampleState::EnableAlphaToCoverage ) );
-		COM_EVT_PROPERTY( SampleCoverageMask, unsigned int, make_getter( m_state.get(), &Castor3D::MultisampleState::GetSampleCoverageMask ), make_putter( m_state.get(), &Castor3D::MultisampleState::SetSampleCoverageMask ) );
+		COM_PROPERTY( Multisample, boolean, make_getter( m_state.get(), &castor3d::MultisampleState::getMultisample ), make_putter( m_state.get(), &castor3d::MultisampleState::setMultisample ) );
+		COM_EVT_PROPERTY( AlphaToCoverageEnabled, boolean, make_getter( m_state.get(), &castor3d::MultisampleState::isAlphaToCoverageEnabled ), make_putter( m_state.get(), &castor3d::MultisampleState::enableAlphaToCoverage ) );
+		COM_EVT_PROPERTY( SampleCoverageMask, unsigned int, make_getter( m_state.get(), &castor3d::MultisampleState::getSampleCoverageMask ), make_putter( m_state.get(), &castor3d::MultisampleState::setSampleCoverageMask ) );
 
 	private:
-		Castor3D::MultisampleStateSPtr m_state;
+		castor3d::MultisampleStateSPtr m_state;
 	};
-	//!\~english	Adds the ATL object into the object map, updates the registry and creates an instance of the object.
+	//!\~english	adds the ATL object into the object map, updates the registry and creates an instance of the object.
 	//!\~french		Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet.
 	OBJECT_ENTRY_AUTO( __uuidof( MultisampleState ), CMultisampleState );
 
-	DECLARE_VARIABLE_PTR_GETTER( MultisampleState, Castor3D, MultisampleState );
-	DECLARE_VARIABLE_PTR_PUTTER( MultisampleState, Castor3D, MultisampleState );
+	DECLARE_VARIABLE_PTR_GETTER( MultisampleState, castor3d, MultisampleState );
+	DECLARE_VARIABLE_PTR_PUTTER( MultisampleState, castor3d, MultisampleState );
 }
 
 #endif

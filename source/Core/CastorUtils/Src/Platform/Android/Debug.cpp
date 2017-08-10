@@ -9,24 +9,24 @@
 
 #	include <cstdlib>
 
-namespace Castor
+namespace castor
 {
 	namespace Debug
 	{
 		template< typename CharT >
-		inline void DoShowBacktrace (std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip)
+		inline void doShowBacktrace (std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip)
 		{
 		}
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 
 		std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 

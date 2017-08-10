@@ -54,7 +54,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -90,7 +90,7 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					m_instance->GetEngine()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value]
+					m_instance->getEngine()->postEvent( castor3d::MakeFunctorEvent( castor3d::eEVENT_TYPE_PRE_RENDER, [this, value]
 					{
 						( m_instance->*m_function )( parameter_cast< Value >( value ) );
 					} ) );
@@ -99,7 +99,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -138,7 +138,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -173,13 +173,13 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				// No parameter_cast here, to be able to compile this with Value = Castor3D::ColourComponent and _Value = FLOAT
+				// No parameter_cast here, to be able to compile this with Value = castor3d::ColourComponent and _Value = FLOAT
 				( m_instance->*m_function )( m_index ) = value;
 				hr = S_OK;
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -220,7 +220,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -288,7 +288,7 @@ namespace CastorCom
 			{\
 				if ( value )\
 				{\
-					( m_instance->*m_function )( static_cast< C##ctype * >( value )->GetInternal() );\
+					( m_instance->*m_function )( static_cast< C##ctype * >( value )->getInternal() );\
 					hr = S_OK;\
 				}\
 			}\

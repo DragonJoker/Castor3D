@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Mesh/VertexGroup.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Animation */
 	//@{
@@ -158,9 +158,9 @@ namespace Castor3D
 		float m_scale;
 	};
 
-	using GroupAnimationMap = std::map< Castor::String, GroupAnimation >;
-	using Point3rInterpolator = Interpolator< Castor::Point3r >;
-	using QuaternionInterpolator = Interpolator< Castor::Quaternion >;
+	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
+	using Point3rInterpolator = Interpolator< castor::Point3r >;
+	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
 	using KeyFrameRealMap = std::map< real, KeyFrame >;
 	using KeyFrameArray = std::vector< KeyFrame >;
 
@@ -174,9 +174,9 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Animable );
 
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
+	DECLARE_MAP( castor::String, AnimationSPtr, AnimationPtrStr );
 	//! SkeletonAnimationObject pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
+	DECLARE_MAP( castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! SkeletonAnimationObject pointer array.
 	DECLARE_VECTOR( SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtr );
 	//! SkeletonAnimationObject array.

@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <Log/Logger.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -101,7 +101,7 @@ namespace Castor3D
 		 *\remarks		Exécute la fonction
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
-		virtual bool Apply()
+		virtual bool apply()
 		{
 			m_functor();
 			return true;

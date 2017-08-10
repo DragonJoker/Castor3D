@@ -3,9 +3,9 @@
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ShaderStorageBuffer::ShaderStorageBuffer( Engine & engine )
 		: CpuBuffer< uint8_t >{ engine }
@@ -16,36 +16,36 @@ namespace Castor3D
 	{
 	}
 
-	bool ShaderStorageBuffer::Initialise( BufferAccessType p_type
+	bool ShaderStorageBuffer::initialise( BufferAccessType p_type
 		, BufferAccessNature p_nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateBuffer( BufferType::eShaderStorage );
+			m_gpuBuffer = getEngine()->getRenderSystem()->createBuffer( BufferType::eShaderStorage );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			result = DoInitialise( p_type, p_nature );
+			result = doInitialise( p_type, p_nature );
 		}
 
 		if ( result )
 		{
-			m_gpuBuffer->SetBindingPoint( 0u );
+			m_gpuBuffer->setBindingPoint( 0u );
 		}
 
 		return result;
 	}
 
-	void ShaderStorageBuffer::Cleanup()
+	void ShaderStorageBuffer::cleanup()
 	{
-		DoCleanup();
+		doCleanup();
 	}
 
-	void ShaderStorageBuffer::BindTo( uint32_t p_index )const
+	void ShaderStorageBuffer::bindTo( uint32_t p_index )const
 	{
-		GetGpuBuffer().SetBindingPoint( p_index );
+		getGpuBuffer().setBindingPoint( p_index );
 	}
 }

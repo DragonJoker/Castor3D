@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -67,7 +67,7 @@ namespace Castor3D
 		 *\param[in]	vbo	Le tampon de sommets contenant l'objet à dessiner.
 		 *\param[in]	ibo	Un tampon d'indices optionnel.
 		 */
-		void Initialise( VertexBuffer & vbo
+		void initialise( VertexBuffer & vbo
 			, IndexBufferSPtr ibo );
 		/**
 		*\~english
@@ -75,7 +75,7 @@ namespace Castor3D
 		*\~french
 		*\brief		Nettoie le programme et son pipeline.
 		*/
-		void Cleanup();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the stencil pass.
@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\brief		Dessine la passe de stencil.
 		 *\param[in]	count	Le nombre de primitives à dessiner.
 		 */
-		void Render( uint32_t count );
+		void render( uint32_t count );
 
 	private:
 		//!\~english	The target FBO.

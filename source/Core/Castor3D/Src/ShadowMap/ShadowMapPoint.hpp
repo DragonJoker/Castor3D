@@ -26,7 +26,7 @@ SOFTWARE.
 #include "ShadowMap.hpp"
 #include "Render/Viewport.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -69,7 +69,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra de l'observateur.
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( Camera const & p_camera
+		C3D_API void update( Camera const & p_camera
 			, RenderQueueArray & p_queues );
 		/**
 		 *\~english
@@ -77,14 +77,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dessine les shadow maps des lumières sélectionnées.
 		 */
-		C3D_API void Render();
+		C3D_API void render();
 		/**
 		 *\~english
 		 *\return		The shadow map.
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit & GetTexture( uint32_t p_index )
+		inline TextureUnit & getTexture( uint32_t p_index )
 		{
 			REQUIRE( p_index < m_shadowMaps.size() );
 			return m_shadowMaps[p_index];
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit const & GetTexture( uint32_t p_index )const
+		inline TextureUnit const & getTexture( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_shadowMaps.size() );
 			return m_shadowMaps[p_index];
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		Les maps d'ombres.
 		 */
-		inline std::vector< TextureUnit > & GetTextures( )
+		inline std::vector< TextureUnit > & getTextures( )
 		{
 			return m_shadowMaps;
 		}
@@ -116,42 +116,42 @@ namespace Castor3D
 		 *\~english
 		 *\return		Les maps d'ombres.
 		 */
-		inline std::vector< TextureUnit > const & GetTextures()const
+		inline std::vector< TextureUnit > const & getTextures()const
 		{
 			return m_shadowMaps;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetMaxPasses
+		 *\copydoc		castor3d::ShadowMap::doGetMaxPasses
 		 */
-		int32_t DoGetMaxPasses()const override;
+		int32_t doGetMaxPasses()const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetSize
+		 *\copydoc		castor3d::ShadowMap::doGetSize
 		 */
-		Castor::Size DoGetSize()const override;
+		castor::Size doGetSize()const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoInitialise
+		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
-		void DoInitialise()override;
+		void doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoCleanup
+		 *\copydoc		castor3d::ShadowMap::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoCreatePass
+		 *\copydoc		castor3d::ShadowMap::doCreatePass
 		 */
-		ShadowMapPassSPtr DoCreatePass( Light & p_light )const override;
+		ShadowMapPassSPtr doCreatePass( Light & p_light )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
+		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
+		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
-		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;

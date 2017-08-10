@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include "Mesh/Buffer/CpuBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -73,23 +73,23 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature );
+		C3D_API bool initialise( BufferAccessType p_type, BufferAccessNature p_nature );
 		/**
 		 *\~english
 		 *\brief		Clean up the GPU buffer.
 		 *\~french
 		 *\brief		Nettoie le tampon GPU.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Sets the buffer's binding point.
+		 *\brief		sets the buffer's binding point.
 		 *\param[in]	p_index	The binding point.
 		 *\~french
 		 *\brief		Définit le point d'attache du tampon.
 		 *\param[in]	p_index	Le point d'attache.
 		 */
-		C3D_API void BindTo( uint32_t p_index )const;
+		C3D_API void bindTo( uint32_t p_index )const;
 	};
 }
 

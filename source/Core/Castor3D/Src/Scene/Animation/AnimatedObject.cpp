@@ -3,9 +3,9 @@
 #include "Mesh/Mesh.hpp"
 #include "Scene/Geometry.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	AnimatedObject::AnimatedObject( String const & p_name )
 		: Named{ p_name }
@@ -16,12 +16,12 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedObject::AddAnimation( String const & p_name )
+	void AnimatedObject::addAnimation( String const & p_name )
 	{
-		DoAddAnimation( p_name );
+		doAddAnimation( p_name );
 	}
 
-	void AnimatedObject::StartAnimation( String const & p_name )
+	void AnimatedObject::startAnimation( String const & p_name )
 	{
 		auto it = m_animations.find( p_name );
 
@@ -29,22 +29,22 @@ namespace Castor3D
 		{
 			auto & animation = *it->second;
 
-			if ( animation.GetState() != AnimationState::ePlaying )
+			if ( animation.getState() != AnimationState::ePlaying )
 			{
-				if ( animation.GetState() != AnimationState::ePaused )
+				if ( animation.getState() != AnimationState::ePaused )
 				{
-					animation.Play();
-					DoStartAnimation( animation );
+					animation.play();
+					doStartAnimation( animation );
 				}
 				else
 				{
-					animation.Play();
+					animation.play();
 				}
 			}
 		}
 	}
 
-	void AnimatedObject::StopAnimation( String const & p_name )
+	void AnimatedObject::stopAnimation( String const & p_name )
 	{
 		auto it = m_animations.find( p_name );
 
@@ -52,54 +52,54 @@ namespace Castor3D
 		{
 			auto & animation = *it->second;
 
-			if ( animation.GetState() != AnimationState::eStopped )
+			if ( animation.getState() != AnimationState::eStopped )
 			{
-				animation.Stop();
-				DoStopAnimation( animation );
+				animation.stop();
+				doStopAnimation( animation );
 			}
 		}
 	}
 
-	void AnimatedObject::PauseAnimation( String const & p_name )
+	void AnimatedObject::pauseAnimation( String const & p_name )
 	{
 		auto it = m_animations.find( p_name );
 
 		if ( it != m_animations.end() )
 		{
-			it->second->Pause();
+			it->second->pause();
 		}
 	}
 
-	void AnimatedObject::StartAllAnimations()
+	void AnimatedObject::startAllAnimations()
 	{
-		DoClearAnimations();
+		doClearAnimations();
 
 		for ( auto & it : m_animations )
 		{
-			it.second->Play();
-			DoStartAnimation( *it.second );
+			it.second->play();
+			doStartAnimation( *it.second );
 		}
 	}
 
-	void AnimatedObject::StopAllAnimations()
+	void AnimatedObject::stopAllAnimations()
 	{
 		for ( auto & it : m_animations )
 		{
-			it.second->Stop();
+			it.second->stop();
 		}
 
-		DoClearAnimations();
+		doClearAnimations();
 	}
 
-	void AnimatedObject::PauseAllAnimations()
+	void AnimatedObject::pauseAllAnimations()
 	{
 		for ( auto & it : m_animations )
 		{
-			it.second->Pause();
+			it.second->pause();
 		}
 	}
 
-	AnimationInstance & AnimatedObject::GetAnimation( Castor::String const & p_name )
+	AnimationInstance & AnimatedObject::getAnimation( castor::String const & p_name )
 	{
 		auto it = m_animations.find( p_name );
 

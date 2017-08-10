@@ -30,7 +30,7 @@ SOFTWARE.
 #include <Math/SquareMatrix.hpp>
 #include <Math/Quaternion.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -44,7 +44,7 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de l'objet.
 	*/
 	class SkeletonAnimationObject
-		: public Castor::OwnedBy< SkeletonAnimation >
+		: public castor::OwnedBy< SkeletonAnimation >
 		, public std::enable_shared_from_this< SkeletonAnimationObject >
 	{
 	protected:
@@ -77,7 +77,7 @@ namespace Castor3D
 		C3D_API virtual ~SkeletonAnimationObject();
 		/**
 		 *\~english
-		 *\brief		Adds a child to this object.
+		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
 		 *\param[in]	p_object	The child.
 		 *\~french
@@ -85,7 +85,7 @@ namespace Castor3D
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	p_object	L'enfant.
 		 */
-		C3D_API void AddChild( SkeletonAnimationObjectSPtr p_object );
+		C3D_API void addChild( SkeletonAnimationObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name.
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet.
 		 *\return		Le nom.
 		 */
-		C3D_API virtual Castor::String const & GetName()const = 0;
+		C3D_API virtual castor::String const & getName()const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a scaling key frame and adds it to the list.
@@ -111,10 +111,10 @@ namespace Castor3D
 		 *\param[in]	p_rotate	La rotation au temps de début.
 		 *\param[in]	p_scale		L'échelle au temps de début.
 		 */
-		C3D_API KeyFrame & AddKeyFrame( Castor::Milliseconds const & p_from
-			, Castor::Point3r const & p_translate = Castor::Point3r{}
-		, Castor::Quaternion const & p_rotate = Castor::Quaternion{}
-		, Castor::Point3r const & p_scale = Castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
+		C3D_API KeyFrame & addKeyFrame( castor::Milliseconds const & p_from
+			, castor::Point3r const & p_translate = castor::Point3r{}
+		, castor::Quaternion const & p_rotate = castor::Quaternion{}
+		, castor::Point3r const & p_scale = castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
 		/**
 		 *\~english
 		 *\brief		Deletes the scaling key frame at time index p_time.
@@ -123,14 +123,14 @@ namespace Castor3D
 		 *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
 		 *\param[in]	p_time	L'index de temps.
 		 */
-		C3D_API void RemoveKeyFrame( Castor::Milliseconds const & p_time );
+		C3D_API void removeKeyFrame( castor::Milliseconds const & p_time );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
-		inline InterpolatorType GetInterpolationMode()const
+		inline InterpolatorType getInterpolationMode()const
 		{
 			return m_mode;
 		}
@@ -140,7 +140,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les key frames.
 		 */
-		inline KeyFrameArray const & GetKeyFrames()const
+		inline KeyFrameArray const & getKeyFrames()const
 		{
 			return m_keyframes;
 		}
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La durée de l'animation.
 		 */
-		inline Castor::Milliseconds const & GetLength()const
+		inline castor::Milliseconds const & getLength()const
 		{
 			return m_length;
 		}
@@ -160,19 +160,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'objet mouvant.
 		 */
-		inline SkeletonAnimationObjectType GetType()const
+		inline SkeletonAnimationObjectType getType()const
 		{
 			return m_type;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation length.
+		 *\brief		sets the animation length.
 		 *\param[in]	p_length	The new value.
 		 *\~french
 		 *\brief		Définit la durée de l'animation.
 		 *\param[in]	p_length	La nouvelle valeur.
 		 */
-		inline void	SetLength( Castor::Milliseconds const & p_length )
+		inline void	setLength( castor::Milliseconds const & p_length )
 		{
 			m_length = p_length;
 		}
@@ -184,19 +184,19 @@ namespace Castor3D
 		 *\brief		Récupère les animations du noeud de transformation.
 		 *\return		La valeur.
 		 */
-		inline Castor::Matrix4x4r const & GetNodeTransform()const
+		inline castor::Matrix4x4r const & getNodeTransform()const
 		{
 			return m_nodeTransform;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation node transformation.
+		 *\brief		sets the animation node transformation.
 		 *\param[in]	p_transform	The new value.
 		 *\~french
 		 *\brief		Définit les animations du noeud de transformation.
 		 *\param[in]	p_transform	La nouvelle valeur.
 		 */
-		inline void SetNodeTransform( Castor::Matrix4x4r const & p_transform )
+		inline void setNodeTransform( castor::Matrix4x4r const & p_transform )
 		{
 			m_nodeTransform = p_transform;
 		}
@@ -208,7 +208,7 @@ namespace Castor3D
 		 *\brief		Dit si l'objet a des keyframes.
 		 *\return		\p false si pas de keyframes.
 		 */
-		inline bool HasKeyFrames()const
+		inline bool hasKeyFrames()const
 		{
 			return !m_keyframes.empty();
 		}
@@ -218,7 +218,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline SkeletonAnimationObjectPtrArray const & GetChildren()const
+		inline SkeletonAnimationObjectPtrArray const & getChildren()const
 		{
 			return m_children;
 		}
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'objet parent.
 		 */
-		inline SkeletonAnimationObjectSPtr GetParent()const
+		inline SkeletonAnimationObjectSPtr getParent()const
 		{
 			return m_parent.lock();
 		}
@@ -239,7 +239,7 @@ namespace Castor3D
 		InterpolatorType m_mode{ InterpolatorType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		Castor::Milliseconds m_length{ 0 };
+		castor::Milliseconds m_length{ 0 };
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
 		SkeletonAnimationObjectType m_type;
@@ -248,7 +248,7 @@ namespace Castor3D
 		KeyFrameArray m_keyframes;
 		//!\~english	Animation node transformations.
 		//!\~french		Transformations du noeud d'animation.
-		Castor::Matrix4x4r m_nodeTransform;
+		castor::Matrix4x4r m_nodeTransform;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
 		SkeletonAnimationObjectPtrArray m_children;
@@ -300,7 +300,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( SkeletonAnimationObject const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimationObject const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -328,7 +328,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( SkeletonAnimationObject & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimationObject & p_obj )override;
 	};
 }
 

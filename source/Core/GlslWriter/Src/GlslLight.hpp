@@ -35,7 +35,7 @@ namespace GLSL
 		: public Type
 	{
 		inline Light();
-		inline Light( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Light( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline Light & operator=( Light const & p_rhs );
 		template< typename T > inline Light & operator=( T const & p_rhs );
 		inline Vec3 m_colour()const;
@@ -46,7 +46,7 @@ namespace GLSL
 		: public Type
 	{
 		inline DirectionalLight();
-		inline DirectionalLight( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline DirectionalLight( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline DirectionalLight & operator=( DirectionalLight const & p_rhs );
 		template< typename T > inline DirectionalLight & operator=( T const & p_rhs );
 		inline Light m_lightBase()const;
@@ -58,7 +58,7 @@ namespace GLSL
 		: public Type
 	{
 		inline PointLight();
-		inline PointLight( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline PointLight( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline PointLight & operator=( PointLight const & p_rhs );
 		template< typename T > inline PointLight & operator=( T const & p_rhs );
 		inline Light m_lightBase()const;
@@ -71,7 +71,7 @@ namespace GLSL
 		: public Type
 	{
 		inline SpotLight();
-		inline SpotLight( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline SpotLight( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		inline SpotLight & operator=( SpotLight const & p_rhs );
 		template< typename T > inline SpotLight & operator=( T const & p_rhs );
 		inline Light m_lightBase()const;

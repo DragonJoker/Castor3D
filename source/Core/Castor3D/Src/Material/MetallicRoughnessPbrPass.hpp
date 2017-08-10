@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Material/Pass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace Castor3D
 		\brief Loader de Pass.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< MetallicRoughnessPbrPass >
+			: public castor::TextWriter< MetallicRoughnessPbrPass >
 		{
 		public:
 			/**
@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a LegacyPass into a text file.
@@ -72,7 +72,7 @@ namespace Castor3D
 			 *\param[in]		pass	La LegacyPass à écrire.
 			 *\param[in,out]	file	Le file où écrire la LegacyPass.
 			 */
-			C3D_API bool operator()( MetallicRoughnessPbrPass const & pass, Castor::TextFile & file )override;
+			C3D_API bool operator()( MetallicRoughnessPbrPass const & pass, castor::TextFile & file )override;
 		};
 
 	public:
@@ -95,9 +95,9 @@ namespace Castor3D
 		 */
 		C3D_API ~MetallicRoughnessPbrPass();
 		/**
-		 *\copydoc		Castor3D::Pass::Accept
+		 *\copydoc		castor3d::Pass::Accept
 		 */
-		C3D_API void Accept( PassBuffer & buffer )const override;
+		C3D_API void accept( PassBuffer & buffer )const override;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -106,45 +106,45 @@ namespace Castor3D
 		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
 		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
 		 */
-		inline uint32_t GetPassSize()const override
+		inline uint32_t getPassSize()const override
 		{
 			return 4u;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the albedo colour.
+		 *\brief		sets the albedo colour.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur d'albédo.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetAlbedo( Castor::Colour const & value )
+		inline void setAlbedo( castor::Colour const & value )
 		{
 			m_albedo = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the roughness.
+		 *\brief		sets the roughness.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la rugosité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetRoughness( float value )
+		inline void setRoughness( float value )
 		{
 			m_roughness = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the reflectance.
+		 *\brief		sets the reflectance.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la réflectivité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetMetallic( float value )
+		inline void setMetallic( float value )
 		{
 			m_metallic = value;
 			onChanged( *this );
@@ -155,7 +155,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur.
 		 */
-		inline Castor::Colour const & GetAlbedo()const
+		inline castor::Colour const & getAlbedo()const
 		{
 			return m_albedo;
 		}
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La rugosité.
 		 */
-		inline float GetRoughness()const
+		inline float getRoughness()const
 		{
 			return m_roughness;
 		}
@@ -175,29 +175,29 @@ namespace Castor3D
 		 *\~french
 		 *\return		La réflectivité.
 		 */
-		inline float const & GetMetallic()const
+		inline float const & getMetallic()const
 		{
 			return m_metallic;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Pass::DoInitialise
+		 *\copydoc		castor3d::Pass::doInitialise
 		 */
-		void DoInitialise()override;
+		void doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoCleanup
+		 *\copydoc		castor3d::Pass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoSetOpacity
+		 *\copydoc		castor3d::Pass::doSetOpacity
 		 */
-		void DoSetOpacity( float value )override;
+		void doSetOpacity( float value )override;
 
 	private:
 		//!\~english	The albedo colour.
 		//!\~french		La couleur d'albédo.
-		Castor::Colour m_albedo;
+		castor::Colour m_albedo;
 		//!\~english	The roughness.
 		//!\~french		La rugosité.
 		float m_roughness{ 1.0 };

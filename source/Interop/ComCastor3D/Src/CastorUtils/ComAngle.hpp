@@ -41,7 +41,7 @@ namespace CastorCom
 	*/
 	class CAngle
 		:	COM_ATL_OBJECT( Angle )
-		,	public Castor::Angle
+		,	public castor::Angle
 	{
 	public:
 		/**
@@ -59,9 +59,9 @@ namespace CastorCom
 		 */
 		virtual ~CAngle();
 
-		COM_PROPERTY( Degrees, FLOAT, make_getter( this, &Castor::Angle::degrees ), make_putter( this, &Castor::Angle::degrees ) );
-		COM_PROPERTY( Radians, FLOAT, make_getter( this, &Castor::Angle::radians ), make_putter( this, &Castor::Angle::radians ) );
-		COM_PROPERTY( Grads, FLOAT, make_getter( this, &Castor::Angle::grads ), make_putter( this, &Castor::Angle::grads ) );
+		COM_PROPERTY( Degrees, FLOAT, make_getter( this, &castor::Angle::degrees ), make_putter( this, &castor::Angle::degrees ) );
+		COM_PROPERTY( Radians, FLOAT, make_getter( this, &castor::Angle::radians ), make_putter( this, &castor::Angle::radians ) );
+		COM_PROPERTY( Grads, FLOAT, make_getter( this, &castor::Angle::grads ), make_putter( this, &castor::Angle::grads ) );
 
 		STDMETHOD( Cos )( /* [out, retval] */ float * pVal );
 		STDMETHOD( Sin )( /* [out, retval] */ float * pVal );
@@ -76,8 +76,8 @@ namespace CastorCom
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Angle ), CAngle );
 
-	DECLARE_VARIABLE_REF_GETTER( Angle, Castor, Angle );
-	DECLARE_VARIABLE_REF_PUTTER( Angle, Castor, Angle );
+	DECLARE_VARIABLE_REF_GETTER( Angle, castor, Angle );
+	DECLARE_VARIABLE_REF_PUTTER( Angle, castor, Angle );
 }
 
 #endif

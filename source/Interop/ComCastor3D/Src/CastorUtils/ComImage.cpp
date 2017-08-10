@@ -29,22 +29,22 @@ namespace CastorCom
 			if ( engine )
 			{
 				CEngine * l_engn = static_cast< CEngine * >( engine );
-				Castor3D::Engine * l_engine = l_engn->GetInternal();
-				Castor::String l_name = FromBstr( name );
-				Castor::Path l_path{ FromBstr( val ) };
-				Castor::Path l_pathImage = l_path;
+				castor3d::Engine * l_engine = l_engn->getInternal();
+				castor::String l_name = FromBstr( name );
+				castor::Path l_path{ FromBstr( val ) };
+				castor::Path l_pathImage = l_path;
 
-				if ( !Castor::File::FileExists( l_pathImage ) )
+				if ( !castor::File::fileExists( l_pathImage ) )
 				{
-					l_pathImage = l_engine->GetDataDirectory() / l_path;
+					l_pathImage = l_engine->getDataDirectory() / l_path;
 				}
 
-				if ( !Castor::File::FileExists( l_pathImage ) )
+				if ( !castor::File::fileExists( l_pathImage ) )
 				{
-					l_pathImage = l_engine->GetDataDirectory() / cuT( "Texture" ) / l_path;
+					l_pathImage = l_engine->getDataDirectory() / cuT( "Texture" ) / l_path;
 				}
 
-				m_image = l_engine->GetImageCache().Add( l_name, l_pathImage );
+				m_image = l_engine->getImageCache().add( l_name, l_pathImage );
 
 				if ( !m_image )
 				{
@@ -67,13 +67,13 @@ namespace CastorCom
 		if ( engine )
 		{
 			CEngine * l_engn = static_cast< CEngine * >( engine );
-			Castor3D::Engine * l_engine = l_engn->GetInternal();
-			Castor::String l_name = FromBstr( name );
+			castor3d::Engine * l_engine = l_engn->getInternal();
+			castor::String l_name = FromBstr( name );
 
 			if ( !m_image )
 			{
 				hr = S_OK;
-				m_image = l_engine->GetImageCache().Add( l_name, *static_cast< CSize * >( size ), Castor::PixelFormat( fmt ) );
+				m_image = l_engine->getImageCache().add( l_name, *static_cast< CSize * >( size ), castor::PixelFormat( fmt ) );
 			}
 			else
 			{
@@ -84,31 +84,31 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::Resample( /* [in] */ ISize * val )
+	STDMETHODIMP CImage::resample( /* [in] */ ISize * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_image )
 		{
 			hr = S_OK;
-			m_image->Resample( *static_cast< CSize * >( val ) );
+			m_image->resample( *static_cast< CSize * >( val ) );
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Resample" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "resample" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::Fill( /* [in] */ IColour * val )
+	STDMETHODIMP CImage::fill( /* [in] */ IColour * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_image )
 		{
 			hr = S_OK;
-			m_image->Fill( *static_cast< CColour * >( val ) );
+			m_image->fill( *static_cast< CColour * >( val ) );
 		}
 		else
 		{
@@ -118,24 +118,24 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::CopyImage( /* [in] */ IImage * val )
+	STDMETHODIMP CImage::copyImage( /* [in] */ IImage * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_image )
 		{
 			hr = S_OK;
-			m_image->CopyImage( *static_cast< CImage * >( val )->m_image );
+			m_image->copyImage( *static_cast< CImage * >( val )->m_image );
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "CopyImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "copyImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::SubImage( /* [in] */ IRect * val, /* [out, retval] */ IImage ** pVal )
+	STDMETHODIMP CImage::subImage( /* [in] */ IRect * val, /* [out, retval] */ IImage ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -145,19 +145,19 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Image l_img = m_image->SubImage( *static_cast< CRect * >( val ) );
-				static_cast< CImage * >( *pVal )->m_image = std::make_shared< Castor::Image >( l_img );
+				castor::Image l_img = m_image->subImage( *static_cast< CRect * >( val ) );
+				static_cast< CImage * >( *pVal )->m_image = std::make_shared< castor::Image >( l_img );
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "SubImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "subImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::Flip( /* [out, retval] */ IImage ** pVal )
+	STDMETHODIMP CImage::flip( /* [out, retval] */ IImage ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -167,8 +167,8 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Image l_img = m_image->Flip();
-				static_cast< CImage * >( *pVal )->m_image = std::make_shared< Castor::Image >( l_img );
+				castor::Image l_img = m_image->flip();
+				static_cast< CImage * >( *pVal )->m_image = std::make_shared< castor::Image >( l_img );
 			}
 		}
 		else
@@ -179,7 +179,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::Mirror( /* [out, retval] */ IImage ** pVal )
+	STDMETHODIMP CImage::mirror( /* [out, retval] */ IImage ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -189,8 +189,8 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Image l_img = m_image->Mirror();
-				static_cast< CImage * >( *pVal )->m_image = std::make_shared< Castor::Image >( l_img );
+				castor::Image l_img = m_image->mirror();
+				static_cast< CImage * >( *pVal )->m_image = std::make_shared< castor::Image >( l_img );
 			}
 		}
 		else

@@ -40,7 +40,7 @@ SOFTWARE.
 
 namespace CastorGui
 {
-	const Castor::String PLUGIN_NAME = cuT( "CastorGui" );
+	const castor::String PLUGIN_NAME = cuT( "CastorGui" );
 	static const uint32_t DEFAULT_HEIGHT = 25;
 	/*!
 	 *\author		Sylvain DOREMUS
@@ -148,7 +148,7 @@ namespace CastorGui
 	enum class ComboBoxStyle
 		: uint32_t
 	{
-		//! Read only combo box
+		//! read only combo box
 		eReadOnly = 0x00000001,
 	};
 	/*!
@@ -249,23 +249,23 @@ namespace CastorGui
 	class StaticCtrl;
 
 	using OnButtonEventFunction = std::function< void() >;
-	using OnButtonEvent = Castor::Signal< OnButtonEventFunction >;
+	using OnButtonEvent = castor::Signal< OnButtonEventFunction >;
 	using OnButtonEventConnection = OnButtonEvent::connection;
 
 	using OnComboEventFunction = std::function< void( int ) >;
-	using OnComboEvent = Castor::Signal< OnComboEventFunction >;
+	using OnComboEvent = castor::Signal< OnComboEventFunction >;
 	using OnComboEventConnection = OnComboEvent::connection;
 
-	using OnEditEventFunction = std::function< void( Castor::String const & ) >;
-	using OnEditEvent = Castor::Signal< OnEditEventFunction >;
+	using OnEditEventFunction = std::function< void( castor::String const & ) >;
+	using OnEditEvent = castor::Signal< OnEditEventFunction >;
 	using OnEditEventConnection = OnEditEvent::connection;
 
 	using OnListEventFunction = std::function< void( int ) >;
-	using OnListEvent = Castor::Signal< OnListEventFunction >;
+	using OnListEvent = castor::Signal< OnListEventFunction >;
 	using OnListEventConnection = OnListEvent::connection;
 
 	using OnSliderEventFunction = std::function< void( int ) >;
-	using OnSliderEvent = Castor::Signal< OnSliderEventFunction >;
+	using OnSliderEvent = castor::Signal< OnSliderEventFunction >;
 	using OnSliderEventConnection = OnSliderEvent::connection;
 
 	DECLARE_SMART_PTR( ControlsManager );
@@ -285,7 +285,7 @@ namespace CastorGui
 	 *\param[in]	p_colour	The material colour.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & engine, Castor::String const & p_name, Castor::Colour const & p_colour );
+	castor3d::MaterialSPtr CreateMaterial( castor3d::Engine & engine, castor::String const & p_name, castor::Colour const & p_colour );
 
 	/** Creates a texture material.
 	 *\param[in]	engine	The engine.
@@ -293,7 +293,7 @@ namespace CastorGui
 	 *\param[in]	p_texture	The material texture.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & engine, Castor::String const & p_name, Castor3D::TextureLayoutSPtr p_texture );
+	castor3d::MaterialSPtr CreateMaterial( castor3d::Engine & engine, castor::String const & p_name, castor3d::TextureLayoutSPtr p_texture );
 }
 
 #endif

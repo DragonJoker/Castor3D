@@ -26,8 +26,8 @@
 
 #include <Data/BinaryFile.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace Testing
 {
@@ -36,23 +36,23 @@ namespace Testing
 		bool ExportScene( Scene const & p_scene, Path const & p_fileName )
 		{
 			bool result = true;
-			Path folder = p_fileName.GetPath();
+			Path folder = p_fileName.getPath();
 
 			if ( folder.empty() )
 			{
-				folder = Path{ p_fileName.GetFileName() };
+				folder = Path{ p_fileName.getFileName() };
 			}
 			else
 			{
-				folder /= p_fileName.GetFileName();
+				folder /= p_fileName.getFileName();
 			}
 
-			if ( !File::DirectoryExists( folder ) )
+			if ( !File::directoryExists( folder ) )
 			{
-				File::DirectoryCreate( folder );
+				File::directoryCreate( folder );
 			}
 
-			Path filePath = folder / p_fileName.GetFileName();
+			Path filePath = folder / p_fileName.getFileName();
 
 			if ( result )
 			{
@@ -64,19 +64,19 @@ namespace Testing
 
 			if ( result )
 			{
-				if ( !File::DirectoryExists( folder / subfolder ) )
+				if ( !File::directoryExists( folder / subfolder ) )
 				{
-					File::DirectoryCreate( folder / subfolder );
+					File::directoryCreate( folder / subfolder );
 				}
 
-				auto lock = make_unique_lock( p_scene.GetMeshCache() );
+				auto lock = makeUniqueLock( p_scene.getMeshCache() );
 
-				for ( auto const & it : p_scene.GetMeshCache() )
+				for ( auto const & it : p_scene.getMeshCache() )
 				{
 					auto mesh = it.second;
 					Path path{ folder / subfolder / it.first + cuT( ".cmsh" ) };
 					BinaryFile file{ path, File::OpenMode::eWrite };
-					result &= BinaryWriter< Mesh >{}.Write( *mesh, file );
+					result &= BinaryWriter< Mesh >{}.write( *mesh, file );
 				}
 			}
 
@@ -86,23 +86,23 @@ namespace Testing
 		template< typename ObjT, typename CacheT >
 		void RenameObject( ObjT p_object, CacheT & p_cache )
 		{
-			auto name = p_object->GetName();
-			p_object->SetName( name + cuT( "_ren" ) );
-			p_cache.Remove( name );
-			p_cache.Add( p_object->GetName(), p_object );
+			auto name = p_object->getName();
+			p_object->setName( name + cuT( "_ren" ) );
+			p_cache.remove( name );
+			p_cache.add( p_object->getName(), p_object );
 		}
 
-		RenderWindowSPtr GetWindow( Engine & engine
+		RenderWindowSPtr getWindow( Engine & engine
 			, String const & p_sceneName
 			, bool p_rename )
 		{
-			auto & windows = engine.GetRenderWindowCache();
+			auto & windows = engine.getRenderWindowCache();
 			windows.lock();
 			auto it = std::find_if( windows.begin()
 				, windows.end()
 				, [p_sceneName]( auto & p_pair )
 			{
-				return p_pair.second->GetScene()->GetName() == p_sceneName;
+				return p_pair.second->getScene()->getName() == p_sceneName;
 			} );
 
 			RenderWindowSPtr window;
@@ -131,79 +131,79 @@ namespace Testing
 	{
 	}
 
-	void SceneExportTest::DoRegisterTests()
+	void SceneExportTest::doRegisterTests()
 	{
-		DoRegisterTest( "SceneExportTest::SimpleScene", std::bind( &SceneExportTest::SimpleScene, this ) );
-		DoRegisterTest( "SceneExportTest::InstancedScene", std::bind( &SceneExportTest::InstancedScene, this ) );
-		DoRegisterTest( "SceneExportTest::AlphaScene", std::bind( &SceneExportTest::AlphaScene, this ) );
-		DoRegisterTest( "SceneExportTest::AnimatedScene", std::bind( &SceneExportTest::AnimatedScene, this ) );
+		doRegisterTest( "SceneExportTest::SimpleScene", std::bind( &SceneExportTest::SimpleScene, this ) );
+		doRegisterTest( "SceneExportTest::InstancedScene", std::bind( &SceneExportTest::InstancedScene, this ) );
+		doRegisterTest( "SceneExportTest::AlphaScene", std::bind( &SceneExportTest::AlphaScene, this ) );
+		doRegisterTest( "SceneExportTest::AnimatedScene", std::bind( &SceneExportTest::AnimatedScene, this ) );
 	}
 
 	void SceneExportTest::SimpleScene()
 	{
-		DoTestScene( cuT( "light_directional.cscn" ) );
+		doTestScene( cuT( "light_directional.cscn" ) );
 	}
 
 	void SceneExportTest::InstancedScene()
 	{
-		DoTestScene( cuT( "instancing.cscn" ) );
+		doTestScene( cuT( "instancing.cscn" ) );
 	}
 
 	void SceneExportTest::AlphaScene()
 	{
-		DoTestScene( cuT( "Alpha.zip" ) );
+		doTestScene( cuT( "Alpha.zip" ) );
 	}
 
 	void SceneExportTest::AnimatedScene()
 	{
-		DoTestScene( cuT( "Anim.zip" ) );
+		doTestScene( cuT( "Anim.zip" ) );
 	}
 
-	SceneSPtr SceneExportTest::DoParseScene( Path const & p_path )
+	SceneSPtr SceneExportTest::doParseScene( Path const & p_path )
 	{
 		SceneFileParser dstParser{ m_engine };
-		CT_REQUIRE( dstParser.ParseFile( p_path ) );
-		CT_REQUIRE( dstParser.ScenesBegin() != dstParser.ScenesEnd() );
-		SceneSPtr scene{ dstParser.ScenesBegin()->second };
-		auto & windows = m_engine.GetRenderWindowCache();
-		auto window = GetWindow( m_engine, scene->GetName(), false );
+		CT_REQUIRE( dstParser.parseFile( p_path ) );
+		CT_REQUIRE( dstParser.scenesBegin() != dstParser.scenesEnd() );
+		SceneSPtr scene{ dstParser.scenesBegin()->second };
+		auto & windows = m_engine.getRenderWindowCache();
+		auto window = getWindow( m_engine, scene->getName(), false );
 
 		if ( window )
 		{
-			window->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
-			m_engine.GetRenderLoop().RenderSyncFrame();
+			window->initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
+			m_engine.getRenderLoop().renderSyncFrame();
 		}
 
 		return scene;
 	}
 
-	void SceneExportTest::DoTestScene( String const & p_name )
+	void SceneExportTest::doTestScene( String const & p_name )
 	{
-		SceneSPtr src{ DoParseScene( m_testDataFolder / p_name ) };
+		SceneSPtr src{ doParseScene( m_testDataFolder / p_name ) };
 		Path path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *src, path ) );
 		
-		RenameObject( src, m_engine.GetSceneCache() );
-		auto srcWindow = GetWindow( m_engine, src->GetName(), true );
+		RenameObject( src, m_engine.getSceneCache() );
+		auto srcWindow = getWindow( m_engine, src->getName(), true );
 		CT_CHECK( srcWindow != nullptr );
 
-		SceneSPtr dst{ DoParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
+		SceneSPtr dst{ doParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
 		CT_EQUAL( *src, *dst );
-		auto dstWindow = GetWindow( m_engine, dst->GetName(), false );
+		auto dstWindow = getWindow( m_engine, dst->getName(), false );
 		CT_CHECK( dstWindow != nullptr );
-		File::DirectoryDelete( Path{ cuT( "TestScene" ) } );
-		src->Cleanup();
-		srcWindow->Cleanup();
-		m_engine.GetRenderLoop().RenderSyncFrame();
-		m_engine.GetSceneCache().Remove( src->GetName() );
-		m_engine.GetRenderWindowCache().Remove( srcWindow->GetName() );
+		File::directoryDelete( Path{ cuT( "TestScene" ) } );
+		src->cleanup();
+		srcWindow->cleanup();
+		m_engine.getRenderLoop().renderSyncFrame();
+		m_engine.getSceneCache().remove( src->getName() );
+		m_engine.getRenderWindowCache().remove( srcWindow->getName() );
 		srcWindow.reset();
 		src.reset();
-		dst->Cleanup();
-		dstWindow->Cleanup();
-		m_engine.GetRenderLoop().RenderSyncFrame();
-		m_engine.GetSceneCache().Remove( dst->GetName() );
-		m_engine.GetRenderWindowCache().Remove( dstWindow->GetName() );
+		dst->cleanup();
+		dstWindow->cleanup();
+		m_engine.getRenderLoop().renderSyncFrame();
+		m_engine.getSceneCache().remove( dst->getName() );
+		m_engine.getRenderWindowCache().remove( dstWindow->getName() );
 		dstWindow.reset();
 		dst.reset();
 		DeCleanupEngine();

@@ -14,50 +14,50 @@
 #	endif
 #endif
 
-Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D::Engine * p_engine )
+castor3d::ImporterPlugin::ExtensionArray getExtensions( castor3d::Engine * p_engine )
 {
-	Castor3D::ImporterPlugin::Extension extension( cuT( "LWO" ), cuT( "LightWave Model" ) );
-	Castor3D::ImporterPlugin::ExtensionArray arrayReturn( 1, extension );
+	castor3d::ImporterPlugin::Extension extension( cuT( "LWO" ), cuT( "LightWave Model" ) );
+	castor3d::ImporterPlugin::ExtensionArray arrayReturn( 1, extension );
 	return arrayReturn;
 }
 
 extern "C"
 {
-	C3D_Lwo_API void GetRequiredVersion( Castor3D::Version * p_version )
+	C3D_Lwo_API void getRequiredVersion( castor3d::Version * p_version )
 	{
-		*p_version = Castor3D::Version();
+		*p_version = castor3d::Version();
 	}
 
-	C3D_Lwo_API void GetType( Castor3D::PluginType * p_type )
+	C3D_Lwo_API void getType( castor3d::PluginType * p_type )
 	{
-		*p_type = Castor3D::PluginType::eImporter;
+		*p_type = castor3d::PluginType::eImporter;
 	}
 
-	C3D_Lwo_API void GetName( char const ** p_name )
+	C3D_Lwo_API void getName( char const ** p_name )
 	{
-		static Castor::String Name = cuT( "LWO Importer" );
+		static castor::String Name = cuT( "LWO Importer" );
 		*p_name = Name.c_str();
 	}
 
-	C3D_Lwo_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_Lwo_API void OnLoad( castor3d::Engine * p_engine, castor3d::Plugin * p_plugin )
 	{
-		auto plugin = static_cast< Castor3D::ImporterPlugin * >( p_plugin );
-		auto extensions = GetExtensions( p_engine );
+		auto plugin = static_cast< castor3d::ImporterPlugin * >( p_plugin );
+		auto extensions = getExtensions( p_engine );
 
 		for ( auto const & extension : extensions )
 		{
-			plugin->AddExtension( extension );
-			p_engine->GetImporterFactory().Register( Castor::string::lower_case( extension.first ), &Lwo::LwoImporter::Create );
+			plugin->addExtension( extension );
+			p_engine->getImporterFactory().registerType( castor::string::lowerCase( extension.first ), &Lwo::LwoImporter::create );
 		}
 	}
 
-	C3D_Lwo_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_Lwo_API void OnUnload( castor3d::Engine * p_engine )
 	{
-		auto extensions = GetExtensions( p_engine );
+		auto extensions = getExtensions( p_engine );
 
 		for ( auto const & extension : extensions )
 		{
-			p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( extension.first ) );
+			p_engine->getImporterFactory().unregisterType( castor::string::lowerCase( extension.first ) );
 		}
 	}
 }

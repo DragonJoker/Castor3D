@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -59,19 +59,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La densité du brouillard.
 		 */
-		inline real GetDensity()const
+		inline real getDensity()const
 		{
 			return m_density;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the fog's density.
+		 *\brief		sets the fog's density.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la densité du brouillard.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetDensity( real p_value )
+		inline void setDensity( real p_value )
 		{
 			m_density = p_value;
 		}
@@ -81,19 +81,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type de brouillard.
 		 */
-		inline GLSL::FogType GetType()const
+		inline GLSL::FogType getType()const
 		{
 			return m_type;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the fog type.
+		 *\brief		sets the fog type.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le type de brouillard.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetType( GLSL::FogType p_value )
+		inline void setType( GLSL::FogType p_value )
 		{
 			m_type = p_value;
 		}

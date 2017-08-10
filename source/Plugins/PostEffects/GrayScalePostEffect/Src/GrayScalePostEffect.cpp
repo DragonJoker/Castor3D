@@ -31,54 +31,54 @@
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GrayScale
 {
 	namespace
 	{
-		GLSL::Shader GetVertexProgram( RenderSystem * renderSystem )
+		GLSL::Shader getVertexProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->createGlslWriter();
 
 			UBO_MATRIX( writer );
 
 			// Shader inputs
-			Vec2 position = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			Vec2 position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 
 			// Shader outputs
-			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
 				gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
 			} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
-		GLSL::Shader GetFragmentProgram( RenderSystem * renderSystem )
+		GLSL::Shader getFragmentProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
-			writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto colour = writer.DeclLocale( cuT( "colour" ), texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
-				auto average = writer.DeclLocale( cuT( "average" ), Float( 0.2126f ) * colour.r() + 0.7152f * colour.g() + 0.0722f * colour.b() );
+				auto colour = writer.declLocale( cuT( "colour" ), texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
+				auto average = writer.declLocale( cuT( "average" ), Float( 0.2126f ) * colour.r() + 0.7152f * colour.g() + 0.0722f * colour.b() );
 				plx_v4FragColor = vec4( average, average, average, 1.0 );
 			} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 	}
 
@@ -89,23 +89,23 @@ namespace GrayScale
 
 	GrayScalePostEffect::GrayScalePostEffect( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
 		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, renderSystem, p_param }
-		, m_surface{ *renderSystem.GetEngine() }
-		, m_matrixUbo{ *renderSystem.GetEngine() }
+		, m_surface{ *renderSystem.getEngine() }
+		, m_matrixUbo{ *renderSystem.getEngine() }
 	{
 		String name = cuT( "GrayScale" );
 
-		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( name ) )
+		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
-			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Add( name );
-			m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-			m_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-			m_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			m_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			m_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
+			m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+			m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+			m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+			m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+			m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
 		}
 		else
 		{
-			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( name );
+			m_sampler = m_renderTarget.getEngine()->getSamplerCache().find( name );
 		}
 	}
 
@@ -113,70 +113,70 @@ namespace GrayScale
 	{
 	}
 
-	PostEffectSPtr GrayScalePostEffect::Create( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
+	PostEffectSPtr GrayScalePostEffect::create( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
 	{
 		return std::make_shared< GrayScalePostEffect >( p_renderTarget, renderSystem, p_param );
 	}
 
-	bool GrayScalePostEffect::Initialise()
+	bool GrayScalePostEffect::initialise()
 	{
 		bool result = false;
-		auto & cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		Size size = m_renderTarget.GetSize();
+		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
+		Size size = m_renderTarget.getSize();
 
-		auto vertex = GetVertexProgram( GetRenderSystem() );
-		auto fragment = GetFragmentProgram( GetRenderSystem() );
-		ShaderProgramSPtr program = cache.GetNewProgram( false );
-		program->CreateObject( ShaderType::eVertex );
-		program->CreateObject( ShaderType::ePixel );
-		m_mapDiffuse = program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-		program->SetSource( ShaderType::eVertex, vertex );
-		program->SetSource( ShaderType::ePixel, fragment );
-		program->Initialise();
+		auto vertex = getVertexProgram( getRenderSystem() );
+		auto fragment = getFragmentProgram( getRenderSystem() );
+		ShaderProgramSPtr program = cache.getNewProgram( false );
+		program->createObject( ShaderType::eVertex );
+		program->createObject( ShaderType::ePixel );
+		m_mapDiffuse = program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->setSource( ShaderType::eVertex, vertex );
+		program->setSource( ShaderType::ePixel, fragment );
+		program->initialise();
 
 		DepthStencilState dsstate;
-		dsstate.SetDepthTest( false );
-		dsstate.SetDepthMask( WritingMask::eZero );
+		dsstate.setDepthTest( false );
+		dsstate.setDepthMask( WritingMask::eZero );
 		RasteriserState rsstate;
-		rsstate.SetCulledFaces( Culling::eBack );
-		m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( dsstate ), std::move( rsstate ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
+		rsstate.setCulledFaces( Culling::eBack );
+		m_pipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate ), std::move( rsstate ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
+		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		return m_surface.Initialise( m_renderTarget, size, 0, m_sampler );
+		return m_surface.initialise( m_renderTarget, size, 0, m_sampler );
 	}
 
-	void GrayScalePostEffect::Cleanup()
+	void GrayScalePostEffect::cleanup()
 	{
 		m_mapDiffuse.reset();
-		m_surface.Cleanup();
+		m_surface.cleanup();
 	}
 
-	bool GrayScalePostEffect::Apply( FrameBuffer & p_framebuffer )
+	bool GrayScalePostEffect::apply( FrameBuffer & p_framebuffer )
 	{
-		auto attach = p_framebuffer.GetAttachment( AttachmentPoint::eColour, 0 );
+		auto attach = p_framebuffer.getAttachment( AttachmentPoint::eColour, 0 );
 
-		if ( attach && attach->GetAttachmentType() == AttachmentType::eTexture )
+		if ( attach && attach->getAttachmentType() == AttachmentType::eTexture )
 		{
-			m_surface.m_fbo->Bind( FrameBufferTarget::eDraw );
-			auto texture = std::static_pointer_cast< TextureAttachment >( attach )->GetTexture();
-			m_surface.m_fbo->Clear( BufferComponent::eColour );
-			m_mapDiffuse->SetValue( 0 );
-			GetRenderSystem()->GetCurrentContext()->RenderTexture( 
+			m_surface.m_fbo->bind( FrameBufferTarget::eDraw );
+			auto texture = std::static_pointer_cast< TextureAttachment >( attach )->getTexture();
+			m_surface.m_fbo->clear( BufferComponent::eColour );
+			m_mapDiffuse->setValue( 0 );
+			getRenderSystem()->getCurrentContext()->renderTexture( 
 				m_surface.m_size
 				, *texture
 				, *m_pipeline
 				, m_matrixUbo );
-			m_surface.m_fbo->Unbind();
+			m_surface.m_fbo->unbind();
 
-			p_framebuffer.Bind( FrameBufferTarget::eDraw );
-			GetRenderSystem()->GetCurrentContext()->RenderTexture( texture->GetDimensions(), *m_surface.m_colourTexture.GetTexture() );
-			p_framebuffer.Unbind();
+			p_framebuffer.bind( FrameBufferTarget::eDraw );
+			getRenderSystem()->getCurrentContext()->renderTexture( texture->getDimensions(), *m_surface.m_colourTexture.getTexture() );
+			p_framebuffer.unbind();
 		}
 
 		return true;
 	}
 
-	bool GrayScalePostEffect::DoWriteInto( TextFile & p_file )
+	bool GrayScalePostEffect::doWriteInto( TextFile & p_file )
 	{
 		return true;
 	}

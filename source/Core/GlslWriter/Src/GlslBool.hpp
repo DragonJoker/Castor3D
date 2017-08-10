@@ -32,7 +32,7 @@ namespace GLSL
 	{
 		inline Boolean();
 		inline Boolean( bool p_value );
-		inline Boolean( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Boolean( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		template< typename T > inline Boolean & operator=( T const & p_rhs );
 		template< typename T > inline Boolean & operator=( int p_rhs );
 		inline operator uint32_t();

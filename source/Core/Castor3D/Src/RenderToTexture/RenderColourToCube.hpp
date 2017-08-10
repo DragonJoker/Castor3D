@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor3D
 	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
 	*/
 	class RenderColourToCube
-		: public Castor::OwnedBy< Context >
+		: public castor::OwnedBy< Context >
 	{
 	public:
 		/**
@@ -69,14 +69,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le rendu en texture.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the render to texture.
 		 *\~french
 		 *\brief		Nettoie le rendu en texture.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the wanted equirectangular 2D texture to given cube texture.
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\param[in]	p_fbo			Le FBO actif.
 		 *\param[in]	p_attachs		Les attaches de la texture cube au FBO actif.
 		 */
-		C3D_API void Render( Castor::Size const & p_size
+		C3D_API void render( castor::Size const & p_size
 			, TextureLayout const & p_2dTexture
 			, TextureLayoutSPtr p_cubeTexture
 			, FrameBufferSPtr p_fbo
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\brief		Crée le programme shader de dessin de texture 2D.
 		 *\return		Le programme.
 		 */
-		ShaderProgramSPtr DoCreateProgram();
+		ShaderProgramSPtr doCreateProgram();
 
 	private:
 		//!\~english	The uniform buffer containing matrices data.
@@ -118,13 +118,13 @@ namespace Castor3D
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
 		//!	6 (faces) * 6 (vertex) * 3 (vertex position)
-		std::array< Castor::real, 6 * 6 * 3 > m_bufferVertex;
+		std::array< castor::real, 6 * 6 * 3 > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
-		Castor3D::BufferDeclaration m_declaration;
+		castor3d::BufferDeclaration m_declaration;
 		//!\~english	Vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad).
-		std::array< Castor3D::BufferElementGroupSPtr, 36 > m_arrayVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;

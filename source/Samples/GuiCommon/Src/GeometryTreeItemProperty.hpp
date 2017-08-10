@@ -50,7 +50,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_geometry	La géométrie cible
 		 */
-		GeometryTreeItemProperty( bool p_editable, Castor3D::Geometry & p_geometry );
+		GeometryTreeItemProperty( bool p_editable, castor3d::Geometry & p_geometry );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,23 +66,23 @@ namespace GuiCommon
 		 *\brief		Récupère la géométrie
 		 *\return		La valeur
 		 */
-		inline Castor3D::Geometry & GetGeometry()
+		inline castor3d::Geometry & getGeometry()
 		{
 			return m_geometry;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::Geometry & m_geometry;
+		castor3d::Geometry & m_geometry;
 	};
 }
 

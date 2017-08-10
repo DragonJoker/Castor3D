@@ -24,8 +24,8 @@
 #include <Design/BlockGuard.hpp>
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 #define DEBUG_NODES_TRAVERSAL 1
 
@@ -33,7 +33,7 @@ namespace C3dFbx
 {
 	namespace
 	{
-		void DoInitializeSdkObjects( FbxManager *& p_fbxManager
+		void doInitializeSdkObjects( FbxManager *& p_fbxManager
 			, FbxScene *& p_fbxScene )
 		{
 			//The first thing to do is to create the FBX Manager which is the object allocator for almost all the classes in the SDK
@@ -44,9 +44,9 @@ namespace C3dFbx
 				CASTOR_EXCEPTION( cuT( "Error: Unable to create FBX Manager!" ) );
 			}
 
-			Logger::LogDebug( StringStream() << "Autodesk FBX SDK version " << p_fbxManager->GetVersion() << std::endl );
+			Logger::logDebug( StringStream() << "Autodesk FBX SDK version " << p_fbxManager->GetVersion() << std::endl );
 
-			//Create an IOSettings object. This object holds all import/export settings.
+			//create an IOsettings object. This object holds all import/export settings.
 			FbxIOSettings * ios = FbxIOSettings::Create( p_fbxManager, IOSROOT );
 			p_fbxManager->SetIOSettings( ios );
 
@@ -54,7 +54,7 @@ namespace C3dFbx
 			FbxString lPath = FbxGetApplicationDirectory();
 			p_fbxManager->LoadPluginsDirectory( lPath.Buffer() );
 
-			//Create an FBX scene. This object holds most objects imported/exported from/to files.
+			//create an FBX scene. This object holds most objects imported/exported from/to files.
 			p_fbxScene = FbxScene::Create( p_fbxManager, "My Scene" );
 
 			if ( !p_fbxScene )
@@ -63,7 +63,7 @@ namespace C3dFbx
 			}
 		}
 
-		void DoDestroySdkObjects( FbxManager * p_fbxManager )
+		void doDestroySdkObjects( FbxManager * p_fbxManager )
 		{
 			//Delete the FBX Manager. All the objects that have been allocated using the FBX Manager and that haven't been explicitly destroyed are also automatically destroyed.
 			if ( p_fbxManager )
@@ -74,20 +74,20 @@ namespace C3dFbx
 
 		static int const FBX_AUTODETECT_FILE_FORMAT = -1;
 
-		bool DoLoadScene( FbxManager * p_fbxManager
+		bool doLoadScene( FbxManager * p_fbxManager
 			, FbxDocument * p_fbxScene
 			, Path const & p_fileName )
 		{
 			int lFileMajor, lFileMinor, lFileRevision;
 			int lSDKMajor, lSDKMinor, lSDKRevision;
-			std::string fileName = string::string_cast< char >( p_fileName );
+			std::string fileName = string::stringCast< char >( p_fileName );
 
-			// Get the file version number generate by the FBX SDK.
+			// get the file version number generate by the FBX SDK.
 			FbxManager::GetFileFormatVersion( lSDKMajor, lSDKMinor, lSDKRevision );
 
-			// Create an importer.
+			// create an importer.
 			FbxImporter * fbxImporter = nullptr;
-			auto guard = make_block_guard( [&fbxImporter, &p_fbxManager]()
+			auto guard = makeBlockGuard( [&fbxImporter, &p_fbxManager]()
 				{
 					fbxImporter = FbxImporter::Create( p_fbxManager, "" );
 				},
@@ -121,39 +121,39 @@ namespace C3dFbx
 				CASTOR_EXCEPTION( stream.str() );
 			}
 
-			Logger::LogDebug( std::stringstream() << "FBX file format version for this FBX SDK is " << lSDKMajor << "." << lSDKMinor << "." << lSDKRevision );
+			Logger::logDebug( std::stringstream() << "FBX file format version for this FBX SDK is " << lSDKMajor << "." << lSDKMinor << "." << lSDKRevision );
 
 			if ( fbxImporter->IsFBX() )
 			{
-				Logger::LogDebug( std::stringstream() << "FBX file format version for file " << fileName << " is " << lFileMajor << "." << lFileMinor << "." << lFileRevision << "\n" );
+				Logger::logDebug( std::stringstream() << "FBX file format version for file " << fileName << " is " << lFileMajor << "." << lFileMinor << "." << lFileRevision << "\n" );
 
 				// From this point, it is possible to access animation stack information without
 				// the expense of loading the entire file.
-				Logger::LogDebug( "Animation Stack Information" );
+				Logger::logDebug( "Animation Stack Information" );
 
 				int lAnimStackCount = fbxImporter->GetAnimStackCount();
 
-				Logger::LogDebug( std::stringstream() << "    Number of Animation Stacks: " << lAnimStackCount );
-				Logger::LogDebug( std::stringstream() << "    Current Animation Stack: \"" << fbxImporter->GetActiveAnimStackName().Buffer() << "\"\n" );
+				Logger::logDebug( std::stringstream() << "    Number of Animation Stacks: " << lAnimStackCount );
+				Logger::logDebug( std::stringstream() << "    Current Animation Stack: \"" << fbxImporter->GetActiveAnimStackName().Buffer() << "\"\n" );
 
 				for ( int i = 0; i < lAnimStackCount; i++ )
 				{
 					FbxTakeInfo * lTakeInfo = fbxImporter->GetTakeInfo( i );
 
-					Logger::LogDebug( std::stringstream() << "    Animation Stack " << i );
-					Logger::LogDebug( std::stringstream() << "         Name: \"" << lTakeInfo->mName.Buffer() << "\"" );
-					Logger::LogDebug( std::stringstream() << "         Description: \"" << lTakeInfo->mDescription.Buffer() << "\"" );
+					Logger::logDebug( std::stringstream() << "    Animation Stack " << i );
+					Logger::logDebug( std::stringstream() << "         Name: \"" << lTakeInfo->mName.Buffer() << "\"" );
+					Logger::logDebug( std::stringstream() << "         Description: \"" << lTakeInfo->mDescription.Buffer() << "\"" );
 
 					// Change the value of the import name if the animation stack should be imported
 					// under a different name.
-					Logger::LogDebug( std::stringstream() << "         Import Name: \"" << lTakeInfo->mImportName.Buffer() << "\"" );
+					Logger::logDebug( std::stringstream() << "         Import Name: \"" << lTakeInfo->mImportName.Buffer() << "\"" );
 
-					// Set the value of the import state to false if the animation stack should be not
+					// set the value of the import state to false if the animation stack should be not
 					// be imported.
-					Logger::LogDebug( std::stringstream() << "         Import State: " << ( lTakeInfo->mSelect ? "true" : "false" ) << "\n" );
+					Logger::logDebug( std::stringstream() << "         Import State: " << ( lTakeInfo->mSelect ? "true" : "false" ) << "\n" );
 				}
 
-				// Set the import states. By default, the import states are always set to
+				// set the import states. By default, the import states are always set to
 				// true. The code below shows how to change these states.
 				auto & ioSettings = *p_fbxManager->GetIOSettings();
 				ioSettings.SetBoolProp( IMP_FBX_MATERIAL, true );
@@ -170,7 +170,7 @@ namespace C3dFbx
 
 			if ( !status && fbxImporter->GetStatus().GetCode() == FbxStatus::ePasswordError )
 			{
-				Logger::LogInfo( "Please enter password: " );
+				Logger::logInfo( "Please enter password: " );
 
 				std::string password;
 
@@ -194,7 +194,7 @@ namespace C3dFbx
 			return status;
 		}
 
-		inline uint32_t DoGetIndex( FbxMesh * p_mesh
+		inline uint32_t doGetIndex( FbxMesh * p_mesh
 			, uint32_t p_poly
 			, uint32_t p_vertex )
 		{
@@ -203,7 +203,7 @@ namespace C3dFbx
 			return result;
 		}
 
-		inline FaceIndices DoGetFace( FbxMesh * p_fbxMesh
+		inline FaceIndices doGetFace( FbxMesh * p_fbxMesh
 			, uint32_t p_poly
 			, uint32_t a
 			, uint32_t b
@@ -212,21 +212,21 @@ namespace C3dFbx
 			return
 			{
 				{
-					DoGetIndex( p_fbxMesh, p_poly, a ),
-					DoGetIndex( p_fbxMesh, p_poly, b ),
-					DoGetIndex( p_fbxMesh, p_poly, c ),
+					doGetIndex( p_fbxMesh, p_poly, a ),
+					doGetIndex( p_fbxMesh, p_poly, b ),
+					doGetIndex( p_fbxMesh, p_poly, c ),
 				}
 			};
 		}
 
 		template< typename T >
-		inline void DoFillBufferFromValue( T const & p_value, real *& p_buffer )
+		inline void doFillBufferFromValue( T const & p_value, real *& p_buffer )
 		{
 			CASTOR_EXCEPTION( "Missing buffer filler from FBX value" );
 		}
 
 		template<>
-		inline void DoFillBufferFromValue< FbxVector4 >( FbxVector4 const & p_value
+		inline void doFillBufferFromValue< FbxVector4 >( FbxVector4 const & p_value
 			, real *& p_buffer )
 		{
 			*p_buffer++ = real( p_value[0] );
@@ -235,7 +235,7 @@ namespace C3dFbx
 		}
 
 		template<>
-		inline void DoFillBufferFromValue< FbxVector2 >( FbxVector2 const & p_value
+		inline void doFillBufferFromValue< FbxVector2 >( FbxVector2 const & p_value
 			, real *& p_buffer )
 		{
 			*p_buffer++ = real( p_value[0] );
@@ -244,7 +244,7 @@ namespace C3dFbx
 		}
 
 		template< typename T >
-		inline bool DoRetrieveMeshValues( String const & p_name
+		inline bool doRetrieveMeshValues( String const & p_name
 			, FbxMesh * p_mesh
 			, FbxLayerElementTemplate< T > * p_fbxValues
 			, std::vector< real > & p_values )
@@ -266,7 +266,7 @@ namespace C3dFbx
 
 						for ( auto i = 0u; i < count; ++i )
 						{
-							DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( i ) )
+							doFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( i ) )
 								, buffer );
 						}
 					}
@@ -276,7 +276,7 @@ namespace C3dFbx
 
 						for ( auto i = 0u; i < count; ++i )
 						{
-							DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( i )
+							doFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( i )
 								, buffer );
 						}
 					}
@@ -294,7 +294,7 @@ namespace C3dFbx
 							{
 								int cpIndex = p_mesh->GetPolygonVertex( i, j );
 								auto buffer = p_values.data() + ( cpIndex * 3 );
-								DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( vertexIndex ) )
+								doFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( vertexIndex ) )
 									, buffer );
 								++vertexIndex;
 							}
@@ -310,7 +310,7 @@ namespace C3dFbx
 							{
 								int cpIndex = p_mesh->GetPolygonVertex( i, j );
 								auto buffer = p_values.data() + ( cpIndex * 3 );
-								DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( vertexIndex )
+								doFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( vertexIndex )
 									, buffer );
 								++vertexIndex;
 							}
@@ -324,13 +324,13 @@ namespace C3dFbx
 			}
 			else
 			{
-				Logger::LogWarning( StringStream() << cuT( "No " ) << p_name << cuT( " for this mesh." ) );
+				Logger::logWarning( StringStream() << cuT( "No " ) << p_name << cuT( " for this mesh." ) );
 			}
 
 			return result;
 		}
 
-		FbxAMatrix DoGetGeometryTransformation( FbxNode * p_fbxNode )
+		FbxAMatrix doGetGeometryTransformation( FbxNode * p_fbxNode )
 		{
 			if ( !p_fbxNode )
 			{
@@ -344,14 +344,14 @@ namespace C3dFbx
 			return FbxAMatrix( translate, rotate, scale );
 		}
 
-		uint32_t DoFindBoneIndex( String const & p_name
+		uint32_t doFindBoneIndex( String const & p_name
 			, Skeleton const & p_skeleton )
 		{
 			auto it = std::find_if( p_skeleton.begin()
 				, p_skeleton.end()
 				, [&]( BoneSPtr p_bone )
 				{
-					return p_bone->GetName() == p_name;
+					return p_bone->getName() == p_name;
 				} );
 
 			uint32_t result = 0xFFFFFFFF;
@@ -404,14 +404,14 @@ namespace C3dFbx
 				stream << ", type " << TypeName[p_node.GetNodeAttribute()->GetAttributeType()];
 			}
 
-			Logger::LogDebug( stream );
+			Logger::logDebug( stream );
 		}
 
 		template< typename FbxType >
 		using TraverseFunction = std::function< void( FbxNode *, FbxType * ) >;
 
 		template< typename FbxType >
-		void DoTraverseDepthFirst( FbxNode * p_fbxNode
+		void doTraverseDepthFirst( FbxNode * p_fbxNode
 			, FbxNodeAttribute::EType p_type
 			, TraverseFunction< FbxType > p_function )
 		{
@@ -432,7 +432,7 @@ namespace C3dFbx
 
 				for ( int i = 0; i < p_fbxNode->GetChildCount(); ++i )
 				{
-					DoTraverseDepthFirst( p_fbxNode->GetChild( i ), p_type, p_function );
+					doTraverseDepthFirst( p_fbxNode->GetChild( i ), p_type, p_function );
 				}
 			}
 		}
@@ -443,7 +443,7 @@ namespace C3dFbx
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & Rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
+		SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
 		{
 			SquareMatrix< T, 4 > rotate;
 			auto const qxx( p_quat.quat.x * p_quat.quat.x );
@@ -490,27 +490,27 @@ namespace C3dFbx
 	{
 	}
 
-	ImporterUPtr FbxSdkImporter::Create( Engine & p_engine )
+	ImporterUPtr FbxSdkImporter::create( Engine & p_engine )
 	{
 		return std::make_unique< FbxSdkImporter >( p_engine );
 	}
 
-	bool FbxSdkImporter::DoImportScene( Scene & p_scene )
+	bool FbxSdkImporter::doImportScene( Scene & p_scene )
 	{
 		FbxManager * fbxManager = nullptr;
 		FbxScene * fbxScene = nullptr;
 
 		// Prepare the FBX SDK.
-		DoInitializeSdkObjects( fbxManager, fbxScene );
+		doInitializeSdkObjects( fbxManager, fbxScene );
 
 		// TODO
 
-		DoDestroySdkObjects( fbxManager );
+		doDestroySdkObjects( fbxManager );
 
 		return false;
 	}
 
-	bool FbxSdkImporter::DoImportMesh( Mesh & p_mesh )
+	bool FbxSdkImporter::doImportMesh( Mesh & p_mesh )
 	{
 		bool result{ false };
 		m_mapBoneByID.clear();
@@ -519,24 +519,24 @@ namespace C3dFbx
 		FbxScene * fbxScene = nullptr;
 
 		// Prepare the FBX SDK.
-		DoInitializeSdkObjects( fbxManager, fbxScene );
+		doInitializeSdkObjects( fbxManager, fbxScene );
 
 		if ( fbxScene )
 		{
-			if ( DoLoadScene( fbxManager, fbxScene, m_fileName ) )
+			if ( doLoadScene( fbxManager, fbxScene, m_fileName ) )
 			{
 				FbxGeometryConverter converter( fbxManager );
 				converter.SplitMeshesPerMaterial( fbxScene, true );
 
 				if ( converter.Triangulate( fbxScene, true ) )
 				{
-					DoLoadMaterials( *p_mesh.GetScene(), fbxScene );
-					DoLoadSkeleton( p_mesh, fbxScene->GetRootNode() );
-					DoLoadMeshes( p_mesh, *p_mesh.GetScene(), fbxScene->GetRootNode() );
+					doLoadMaterials( *p_mesh.getScene(), fbxScene );
+					doLoadSkeleton( p_mesh, fbxScene->GetRootNode() );
+					doLoadMeshes( p_mesh, *p_mesh.getScene(), fbxScene->GetRootNode() );
 
-					if ( p_mesh.GetSkeleton() )
+					if ( p_mesh.getSkeleton() )
 					{
-						DoLoadAnimations( p_mesh, fbxScene );
+						doLoadAnimations( p_mesh, fbxScene );
 					}
 
 					result = true;
@@ -544,62 +544,62 @@ namespace C3dFbx
 			}
 		}
 
-		DoDestroySdkObjects( fbxManager );
+		doDestroySdkObjects( fbxManager );
 		return result;
 	}
 
-	void FbxSdkImporter::DoLoadMeshes( Mesh & p_mesh, Scene & p_scene, FbxNode * p_fbxNode )
+	void FbxSdkImporter::doLoadMeshes( Mesh & p_mesh, Scene & p_scene, FbxNode * p_fbxNode )
 	{
-		DoTraverseDepthFirst< FbxMesh >( p_fbxNode, FbxNodeAttribute::eMesh, [this, &p_scene, &p_mesh]( FbxNode * p_fbxNode, FbxMesh * p_fbxMesh )
+		doTraverseDepthFirst< FbxMesh >( p_fbxNode, FbxNodeAttribute::eMesh, [this, &p_scene, &p_mesh]( FbxNode * p_fbxNode, FbxMesh * p_fbxMesh )
 		{
 #if DEBUG_NODES_TRAVERSAL
-			Logger::LogDebug( StringStream{} << cuT( "  Mesh " ) << p_fbxMesh->GetName() );
+			Logger::logDebug( StringStream{} << cuT( "  Mesh " ) << p_fbxMesh->GetName() );
 #endif
 			Point3r translate = Point3r{ ( p_fbxNode->EvaluateLocalTranslation() ).Buffer() };
-			Quaternion rotate = Quaternion{ ( p_fbxNode->EvaluateLocalRotation() ).Buffer() };
+			Quaternion rotation = Quaternion{ ( p_fbxNode->EvaluateLocalRotation() ).Buffer() };
 			Point3r scale = Point3r{ ( p_fbxNode->EvaluateLocalScaling() ).Buffer() };
 			Matrix4x4r transform{ 1.0_r };
 			matrix::translate( transform, translate );
-			Rotate( transform, rotate );
+			rotate( transform, rotation );
 			matrix::scale( transform, scale );
-			SubmeshSPtr submesh = DoProcessMesh( p_mesh
+			SubmeshSPtr submesh = doProcessMesh( p_mesh
 				, p_fbxMesh
 				, transform );
 			auto material = p_fbxNode->GetMaterial( 0 );
 
 			if ( material )
 			{
-				submesh->SetDefaultMaterial( p_scene.GetMaterialView().Find( material->GetName() ) );
+				submesh->setDefaultMaterial( p_scene.getMaterialView().find( material->GetName() ) );
 			}
 
-			if ( p_mesh.GetSkeleton() )
+			if ( p_mesh.getSkeleton() )
 			{
 				FbxMesh * mesh = p_fbxNode->GetMesh();
-				std::vector< VertexBoneData > boneData{ submesh->GetPointsCount() };
-				DoProcessBonesWeights( p_fbxNode, *p_mesh.GetSkeleton(), boneData );
-				submesh->AddBoneDatas( boneData );
+				std::vector< VertexBoneData > boneData{ submesh->getPointsCount() };
+				doProcessBonesWeights( p_fbxNode, *p_mesh.getSkeleton(), boneData );
+				submesh->addBoneDatas( boneData );
 			}
 		} );
 	}
 
-	void FbxSdkImporter::DoLoadSkeleton( Mesh & p_mesh, FbxNode * p_fbxNode )
+	void FbxSdkImporter::doLoadSkeleton( Mesh & p_mesh, FbxNode * p_fbxNode )
 	{
-		SkeletonSPtr skeleton = std::make_shared< Skeleton >( *p_mesh.GetScene() );
+		SkeletonSPtr skeleton = std::make_shared< Skeleton >( *p_mesh.getScene() );
 
 		for ( int i = 0; i < p_fbxNode->GetChildCount(); ++i )
 		{
-			DoProcessBones( p_fbxNode->GetChild( i ), *skeleton, nullptr );
+			doProcessBones( p_fbxNode->GetChild( i ), *skeleton, nullptr );
 		}
 
 		if ( std::distance( skeleton->begin(), skeleton->end() ) > 0 )
 		{
-			p_mesh.SetSkeleton( skeleton );
+			p_mesh.setSkeleton( skeleton );
 		}
 	}
 
-	void FbxSdkImporter::DoLoadAnimations( Mesh & p_mesh, FbxScene * p_scene )
+	void FbxSdkImporter::doLoadAnimations( Mesh & p_mesh, FbxScene * p_scene )
 	{
-		DoTraverseDepthFirst< FbxMesh >( p_scene->GetRootNode(), FbxNodeAttribute::eMesh, [this, &p_scene, &p_mesh]( FbxNode * p_fbxNode, FbxMesh * p_fbxMesh )
+		doTraverseDepthFirst< FbxMesh >( p_scene->GetRootNode(), FbxNodeAttribute::eMesh, [this, &p_scene, &p_mesh]( FbxNode * p_fbxNode, FbxMesh * p_fbxMesh )
 		{
 			FbxMesh * mesh = p_fbxNode->GetMesh();
 			uint32_t deformersCount = mesh->GetDeformerCount();
@@ -610,18 +610,18 @@ namespace C3dFbx
 
 				if ( skin )
 				{
-					DoProcessSkeletonAnimations( p_scene, p_fbxNode, skin, *p_mesh.GetSkeleton() );
+					doProcessSkeletonAnimations( p_scene, p_fbxNode, skin, *p_mesh.getSkeleton() );
 				}
 			}
 		} );
 
-		for ( auto const & it : p_mesh.GetSkeleton()->GetAnimations() )
+		for ( auto const & it : p_mesh.getSkeleton()->getAnimations() )
 		{
-			Logger::LogDebug( StringStream() << cuT( "Found Animation: " ) << it.first );
+			Logger::logDebug( StringStream() << cuT( "Found Animation: " ) << it.first );
 		}
 	}
 
-	void FbxSdkImporter::DoProcessSkeletonAnimations( FbxScene * p_fbxScene, FbxNode * p_fbxNode, FbxSkin * p_fbxSkin, Skeleton & p_skeleton )
+	void FbxSdkImporter::doProcessSkeletonAnimations( FbxScene * p_fbxScene, FbxNode * p_fbxNode, FbxSkin * p_fbxSkin, Skeleton & p_skeleton )
 	{
 		uint32_t clustersCount = p_fbxSkin->GetClusterCount();
 		const Point3r geoTranslate{ p_fbxNode->GetGeometricTranslation( FbxNode::eSourcePivot ).Buffer() };
@@ -633,26 +633,26 @@ namespace C3dFbx
 			FbxCluster * cluster = p_fbxSkin->GetCluster( clusterIndex );
 			auto link = cluster->GetLink();
 			uint32_t animationsCount = p_fbxScene->GetSrcObjectCount( FbxCriteria::ObjectType( FbxAnimStack::ClassId ) );
-			auto bone = *( p_skeleton.begin() + DoFindBoneIndex( string::string_cast< xchar >( link->GetName() ), p_skeleton ) );
+			auto bone = *( p_skeleton.begin() + doFindBoneIndex( string::stringCast< xchar >( link->GetName() ), p_skeleton ) );
 
 			for ( uint32_t animationIndex = 0; animationIndex < animationsCount; ++animationIndex )
 			{
 				FbxAnimStack * animStack = p_fbxScene->GetSrcObject< FbxAnimStack >( animationIndex );
 				auto name = animStack->GetName();
-				auto & animation = p_skeleton.CreateAnimation( string::string_cast< xchar >( name ) );
+				auto & animation = p_skeleton.createAnimation( string::stringCast< xchar >( name ) );
 				FbxTakeInfo * takeInfo = p_fbxScene->GetTakeInfo( name );
 				uint64_t start = takeInfo->mLocalTimeSpan.GetStart().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t finish = takeInfo->mLocalTimeSpan.GetStop().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t animationLength = finish - start + 1;
 				SkeletonAnimationObjectSPtr object;
 
-				if ( bone->GetParent() )
+				if ( bone->getParent() )
 				{
-					object = animation.AddObject( bone, animation.GetObject( *bone->GetParent() ) );
+					object = animation.addObject( bone, animation.getObject( *bone->getParent() ) );
 				}
 				else
 				{
-					object = animation.AddObject( bone, nullptr );
+					object = animation.addObject( bone, nullptr );
 				}
 
 				if ( object )
@@ -673,34 +673,34 @@ namespace C3dFbx
 						Point3r scale = geoScale
 										  * Point3r{ ( p_fbxNode->EvaluateLocalScaling( time ) ).Buffer() }
 										  * Point3r{ ( link->EvaluateLocalScaling( time ) ).Buffer() };
-						object->AddKeyFrame( from, translate, rotate, scale );
+						object->addKeyFrame( from, translate, rotate, scale );
 						from += inc;
 					}
 				}
 
-				animation.UpdateLength();
+				animation.updateLength();
 			}
 		}
 	}
 
-	void FbxSdkImporter::DoProcessBones( FbxNode * p_fbxNode, Skeleton & p_skeleton, BoneSPtr p_parent )
+	void FbxSdkImporter::doProcessBones( FbxNode * p_fbxNode, Skeleton & p_skeleton, BoneSPtr p_parent )
 	{
 		auto bone = p_parent;
 
 		if ( p_fbxNode->GetNodeAttribute() && p_fbxNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton )
 		{
 			FbxSkeleton * skeleton = reinterpret_cast< FbxSkeleton * >( p_fbxNode );
-			String name = string::string_cast< xchar >( skeleton->GetName() );
+			String name = string::stringCast< xchar >( skeleton->GetName() );
 
 			if ( m_mapBoneByID.find( name ) == m_mapBoneByID.end() )
 			{
-				bone = p_skeleton.CreateBone( name );
+				bone = p_skeleton.createBone( name );
 				m_arrayBones.push_back( bone );
 				m_mapBoneByID[name] = uint32_t( m_mapBoneByID.size() );
 
 				if ( p_parent )
 				{
-					p_skeleton.SetBoneParent( bone, p_parent );
+					p_skeleton.setBoneParent( bone, p_parent );
 				}
 			}
 			else
@@ -711,15 +711,15 @@ namespace C3dFbx
 
 		for ( int i = 0; i < p_fbxNode->GetChildCount(); i++ )
 		{
-			DoProcessBones( p_fbxNode->GetChild( i ), p_skeleton, bone );
+			doProcessBones( p_fbxNode->GetChild( i ), p_skeleton, bone );
 		}
 	}
 
-	void FbxSdkImporter::DoProcessBonesWeights( FbxNode * p_fbxNode, Skeleton const & p_skeleton, std::vector< VertexBoneData > & p_boneData )
+	void FbxSdkImporter::doProcessBonesWeights( FbxNode * p_fbxNode, Skeleton const & p_skeleton, std::vector< VertexBoneData > & p_boneData )
 	{
 		FbxMesh * mesh = p_fbxNode->GetMesh();
 		uint32_t deformersCount = mesh->GetDeformerCount();
-		FbxAMatrix geometryTransform = DoGetGeometryTransformation( p_fbxNode );
+		FbxAMatrix geometryTransform = doGetGeometryTransformation( p_fbxNode );
 
 		for ( uint32_t deformerIndex = 0; deformerIndex < deformersCount; ++deformerIndex )
 		{
@@ -732,7 +732,7 @@ namespace C3dFbx
 				for ( uint32_t clusterIndex = 0; clusterIndex < clustersCount; ++clusterIndex )
 				{
 					FbxCluster * cluster = skin->GetCluster( clusterIndex );
-					uint32_t boneIndex = DoFindBoneIndex( string::string_cast< xchar >( cluster->GetLink()->GetName() ), p_skeleton );
+					uint32_t boneIndex = doFindBoneIndex( string::stringCast< xchar >( cluster->GetLink()->GetName() ), p_skeleton );
 					auto bone = *( p_skeleton.begin() + boneIndex );
 					// The transformation of the mesh at binding time.
 					FbxAMatrix transformMatrix;
@@ -741,23 +741,23 @@ namespace C3dFbx
 					FbxAMatrix transformLinkMatrix;
 					cluster->GetTransformLinkMatrix( transformLinkMatrix );
 					// Update the information in mSkeleton.
-					bone->SetOffsetMatrix( Matrix4x4r{ &( transformLinkMatrix.Inverse() * transformMatrix * geometryTransform ).Buffer()[0][0] } );
+					bone->setOffsetMatrix( Matrix4x4r{ &( transformLinkMatrix.Inverse() * transformMatrix * geometryTransform ).Buffer()[0][0] } );
 
 					// Associate each joint with the control points it affects.
 					uint32_t indicesCount = cluster->GetControlPointIndicesCount();
 
 					for ( uint32_t i = 0; i < indicesCount; ++i )
 					{
-						p_boneData[cluster->GetControlPointIndices()[i]].AddBoneData( boneIndex, real( cluster->GetControlPointWeights()[i] ) );
+						p_boneData[cluster->GetControlPointIndices()[i]].addBoneData( boneIndex, real( cluster->GetControlPointWeights()[i] ) );
 					}
 				}
 			}
 		}
 	}
 
-	void FbxSdkImporter::DoLoadMaterials( Scene & p_scene, FbxScene * p_fbxScene )
+	void FbxSdkImporter::doLoadMaterials( Scene & p_scene, FbxScene * p_fbxScene )
 	{
-		auto & cache = p_scene.GetMaterialView();
+		auto & cache = p_scene.getMaterialView();
 		FbxArray< FbxSurfaceMaterial * > mats;
 		p_fbxScene->FillMaterialArray( mats );
 		MaterialPtrStrMap materials;
@@ -765,16 +765,16 @@ namespace C3dFbx
 		auto parseLambert = [this, &p_scene]( FbxSurfaceLambert * p_lambert, LegacyPass & p_pass )
 		{
 			auto lambert = static_cast< FbxSurfaceLambert * >( p_lambert );
-			//p_pass.SetAlpha( float( lambert->TransparencyFactor ) );
+			//p_pass.setAlpha( float( lambert->TransparencyFactor ) );
 			FbxDouble3 diffuse = lambert->Diffuse;
-			p_pass.SetDiffuse( Colour::from_rgb( { float( diffuse[0] ), float( diffuse[1] ), float( diffuse[2] ) } ) * lambert->DiffuseFactor );
+			p_pass.setDiffuse( Colour::fromRGB( { float( diffuse[0] ), float( diffuse[1] ), float( diffuse[2] ) } ) * lambert->DiffuseFactor );
 			FbxDouble3 emissive = lambert->Emissive;
-			p_pass.SetEmissive( float( point::length( Point3f{ float( emissive[0] ), float( emissive[1] ), float( emissive[2] ) } ) * lambert->EmissiveFactor ) );
+			p_pass.setEmissive( float( point::length( Point3f{ float( emissive[0] ), float( emissive[1] ), float( emissive[2] ) } ) * lambert->EmissiveFactor ) );
 
-			DoLoadTexture( p_scene, lambert->Diffuse, p_pass, TextureChannel::eDiffuse );
-			DoLoadTexture( p_scene, lambert->Emissive, p_pass, TextureChannel::eEmissive );
-			DoLoadTexture( p_scene, lambert->NormalMap, p_pass, TextureChannel::eNormal );
-			DoLoadTexture( p_scene, lambert->TransparentColor, p_pass, TextureChannel::eOpacity );
+			doLoadTexture( p_scene, lambert->Diffuse, p_pass, TextureChannel::eDiffuse );
+			doLoadTexture( p_scene, lambert->Emissive, p_pass, TextureChannel::eEmissive );
+			doLoadTexture( p_scene, lambert->NormalMap, p_pass, TextureChannel::eNormal );
+			doLoadTexture( p_scene, lambert->TransparentColor, p_pass, TextureChannel::eOpacity );
 		};
 
 		for ( int i = 0; i < mats.Size(); ++i )
@@ -783,13 +783,13 @@ namespace C3dFbx
 
 			if ( materials.find( fbxMaterial->GetName() ) == materials.end() )
 			{
-				auto material = cache.Add( fbxMaterial->GetName(), MaterialType::eLegacy );
-				REQUIRE( material->GetType() == MaterialType::eLegacy );
-				material->CreatePass();
-				auto pass = material->GetTypedPass< MaterialType::eLegacy >( 0u );
-				Logger::LogDebug( StringStream() << "Material: " << fbxMaterial->GetName() );
-				String model = string::string_cast< xchar >( fbxMaterial->ShadingModel.Get().Buffer() );
-				Logger::LogDebug( StringStream() << "    ShadingModel: " << model );
+				auto material = cache.add( fbxMaterial->GetName(), MaterialType::eLegacy );
+				REQUIRE( material->getType() == MaterialType::eLegacy );
+				material->createPass();
+				auto pass = material->getTypedPass< MaterialType::eLegacy >( 0u );
+				Logger::logDebug( StringStream() << "Material: " << fbxMaterial->GetName() );
+				String model = string::stringCast< xchar >( fbxMaterial->ShadingModel.Get().Buffer() );
+				Logger::logDebug( StringStream() << "    ShadingModel: " << model );
 
 				if ( fbxMaterial->GetClassId() == FbxSurfaceLambert::ClassId )
 				{
@@ -799,29 +799,29 @@ namespace C3dFbx
 				{
 					auto phong = static_cast< FbxSurfacePhong * >( fbxMaterial );
 					parseLambert( phong, *pass );
-					pass->SetShininess( float( phong->Shininess ) );
+					pass->setShininess( float( phong->Shininess ) );
 					FbxDouble3 specular = phong->Specular;
-					pass->SetSpecular( Colour::from_rgb( { float( specular[0] ), float( specular[1] ), float( specular[2] ) } ) * phong->SpecularFactor );
-					DoLoadTexture( p_scene, phong->Specular, *pass, TextureChannel::eSpecular );
-					DoLoadTexture( p_scene, phong->Shininess, *pass, TextureChannel::eGloss );
+					pass->setSpecular( Colour::fromRGB( { float( specular[0] ), float( specular[1] ), float( specular[2] ) } ) * phong->SpecularFactor );
+					doLoadTexture( p_scene, phong->Specular, *pass, TextureChannel::eSpecular );
+					doLoadTexture( p_scene, phong->Shininess, *pass, TextureChannel::eGloss );
 				}
 			}
 		}
 	}
 
-	SubmeshSPtr FbxSdkImporter::DoProcessMesh( Mesh & p_mesh
+	SubmeshSPtr FbxSdkImporter::doProcessMesh( Mesh & p_mesh
 		, FbxMesh * p_fbxMesh
 		, Matrix4x4r const & p_transform )
 	{
 		p_fbxMesh->GenerateNormals();
-		auto submesh = p_mesh.CreateSubmesh();
-		submesh->SetDefaultMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
+		auto submesh = p_mesh.createSubmesh();
+		submesh->setDefaultMaterial( getEngine()->getMaterialCache().find( cuT( "White" ) ) );
 		bool tangentSpace = false;
 
-		Logger::LogDebug( StringStream() << "Mesh: " << p_fbxMesh->GetName() );
-		Logger::LogDebug( StringStream() << "    Points: " << p_fbxMesh->GetControlPointsCount() );
-		Logger::LogDebug( StringStream() << "    Polygons: " << p_fbxMesh->GetPolygonCount() );
-		Logger::LogDebug( StringStream() << "    Transform:\n" << p_transform );
+		Logger::logDebug( StringStream() << "Mesh: " << p_fbxMesh->GetName() );
+		Logger::logDebug( StringStream() << "    Points: " << p_fbxMesh->GetControlPointsCount() );
+		Logger::logDebug( StringStream() << "    Polygons: " << p_fbxMesh->GetPolygonCount() );
+		Logger::logDebug( StringStream() << "    Transform:\n" << p_transform );
 
 		// Vertex
 		uint32_t pointsCount = p_fbxMesh->GetControlPointsCount();
@@ -850,7 +850,7 @@ namespace C3dFbx
 			// Normals
 			auto normals = layer.GetNormals();
 
-			if ( DoRetrieveMeshValues( cuT( "Normals" ), p_fbxMesh, normals, nml ) )
+			if ( doRetrieveMeshValues( cuT( "Normals" ), p_fbxMesh, normals, nml ) )
 			{
 				index = 0u;
 				real * buffer{ nml.data() };
@@ -865,7 +865,7 @@ namespace C3dFbx
 			// Texture UVs
 			auto uvs = layer.GetUVs();
 
-			if ( DoRetrieveMeshValues( cuT( "Texture UVs" ), p_fbxMesh, uvs, tex ) )
+			if ( doRetrieveMeshValues( cuT( "Texture UVs" ), p_fbxMesh, uvs, tex ) )
 			{
 				index = 0u;
 				real * buffer{ tex.data() };
@@ -877,7 +877,7 @@ namespace C3dFbx
 				}
 			}
 
-			if ( m_parameters.Get( cuT( "tangent_space" ), tangentSpace )
+			if ( m_parameters.get( cuT( "tangent_space" ), tangentSpace )
 				&& tangentSpace )
 			{
 				p_fbxMesh->GenerateTangentsData( 0 );
@@ -885,7 +885,7 @@ namespace C3dFbx
 				// Tangents
 				auto tangents = layer.GetTangents();
 
-				if ( DoRetrieveMeshValues( cuT( "Tangents" ), p_fbxMesh, tangents, tan ) )
+				if ( doRetrieveMeshValues( cuT( "Tangents" ), p_fbxMesh, tangents, tan ) )
 				{
 					index = 0u;
 					real * buffer{ tan.data() };
@@ -900,7 +900,7 @@ namespace C3dFbx
 				// Bitangents
 				auto bitangents = layer.GetBinormals();
 
-				if ( DoRetrieveMeshValues( cuT( "Bitangents" ), p_fbxMesh, bitangents, bit ) )
+				if ( doRetrieveMeshValues( cuT( "Bitangents" ), p_fbxMesh, bitangents, bit ) )
 				{
 					index = 0u;
 					real * buffer{ bit.data() };
@@ -921,31 +921,31 @@ namespace C3dFbx
 
 		for ( auto poly = 0u; poly < polyCount; ++poly )
 		{
-			faces.push_back( DoGetFace( p_fbxMesh, poly, 0, 1, 2 ) );
+			faces.push_back( doGetFace( p_fbxMesh, poly, 0, 1, 2 ) );
 		}
 
-		submesh->AddPoints( vertices );
-		submesh->AddFaceGroup( faces );
+		submesh->addPoints( vertices );
+		submesh->addFaceGroup( faces );
 
 		if ( !tangentSpace )
 		{
-			submesh->ComputeTangentsFromNormals();
+			submesh->computeTangentsFromNormals();
 		}
 
 		return submesh;
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxFileTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
+	TextureUnitSPtr FbxSdkImporter::doLoadTexture( FbxFileTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
-		return LoadTexture( Path{ string::string_cast< xchar >( p_texture->GetRelativeFileName() ) }.GetFileName( true ), p_pass, p_channel );
+		return loadTexture( Path{ string::stringCast< xchar >( p_texture->GetRelativeFileName() ) }.getFileName( true ), p_pass, p_channel );
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxLayeredTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
+	TextureUnitSPtr FbxSdkImporter::doLoadTexture( FbxLayeredTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
 		return nullptr;
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxProceduralTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
+	TextureUnitSPtr FbxSdkImporter::doLoadTexture( FbxProceduralTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
 		return nullptr;
 	}
@@ -961,7 +961,7 @@ namespace C3dFbx
 		{ TextureChannel::eEmissive, cuT( "Emissive" ) },
 	};
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, TextureChannel p_channel )
+	TextureUnitSPtr FbxSdkImporter::doLoadTexture( Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, TextureChannel p_channel )
 	{
 		TextureUnitSPtr texture = nullptr;
 		FbxTexture * fbxtex = nullptr;
@@ -973,17 +973,17 @@ namespace C3dFbx
 			if ( object->GetClassId() == FbxFileTexture::ClassId )
 			{
 				fbxtex = static_cast< FbxTexture * >( object );
-				texture = DoLoadTexture( static_cast< FbxFileTexture * >( object ), p_pass, p_channel );
+				texture = doLoadTexture( static_cast< FbxFileTexture * >( object ), p_pass, p_channel );
 			}
 			else if ( object->GetClassId() == FbxLayeredTexture::ClassId )
 			{
 				fbxtex = static_cast< FbxTexture * >( object );
-				texture = DoLoadTexture( static_cast< FbxLayeredTexture * >( object ), p_pass, p_channel );
+				texture = doLoadTexture( static_cast< FbxLayeredTexture * >( object ), p_pass, p_channel );
 			}
 			else if ( object->GetClassId() == FbxProceduralTexture::ClassId )
 			{
 				fbxtex = static_cast< FbxTexture * >( object );
-				texture = DoLoadTexture( static_cast< FbxProceduralTexture * >( object ), p_pass, p_channel );
+				texture = doLoadTexture( static_cast< FbxProceduralTexture * >( object ), p_pass, p_channel );
 			}
 
 			object = p_property.GetSrcObject( index++ );
@@ -991,8 +991,8 @@ namespace C3dFbx
 
 		if ( texture )
 		{
-			Logger::LogDebug( StringStream() << "    Texture: " << fbxtex->GetName() << cuT( " at channel " ) << TEXTURE_CHANNEL_NAME[p_channel] );
-			texture->SetChannel( p_channel );
+			Logger::logDebug( StringStream() << "    Texture: " << fbxtex->GetName() << cuT( " at channel " ) << TEXTURE_CHANNEL_NAME[p_channel] );
+			texture->setChannel( p_channel );
 
 			static const WrapMode mode[2] =
 			{
@@ -1002,18 +1002,18 @@ namespace C3dFbx
 
 			SamplerSPtr sampler;
 
-			if ( !p_scene.GetSamplerView().Has( fbxtex->GetName() ) )
+			if ( !p_scene.getSamplerView().has( fbxtex->GetName() ) )
 			{
-				sampler = p_scene.GetSamplerView().Add( fbxtex->GetName() );
-				sampler->SetWrappingMode( TextureUVW::eU, mode[fbxtex->WrapModeU] );
-				sampler->SetWrappingMode( TextureUVW::eV, mode[fbxtex->WrapModeV] );
+				sampler = p_scene.getSamplerView().add( fbxtex->GetName() );
+				sampler->setWrappingMode( TextureUVW::eU, mode[fbxtex->WrapModeU] );
+				sampler->setWrappingMode( TextureUVW::eV, mode[fbxtex->WrapModeV] );
 			}
 			else
 			{
-				sampler = p_scene.GetSamplerView().Find( fbxtex->GetName() );
+				sampler = p_scene.getSamplerView().find( fbxtex->GetName() );
 			}
 
-			texture->SetSampler( sampler );
+			texture->setSampler( sampler );
 		}
 
 		return texture;

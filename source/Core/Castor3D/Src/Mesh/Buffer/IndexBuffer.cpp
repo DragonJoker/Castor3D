@@ -2,9 +2,9 @@
 
 #include "Engine.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	IndexBuffer::IndexBuffer( Engine & engine )
 		: CpuBuffer< uint32_t >( engine )
@@ -15,25 +15,25 @@ namespace Castor3D
 	{
 	}
 
-	bool IndexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool IndexBuffer::initialise( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateBuffer( BufferType::eElementArray );
+			m_gpuBuffer = getEngine()->getRenderSystem()->createBuffer( BufferType::eElementArray );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			result = DoInitialise( p_type, p_nature );
+			result = doInitialise( p_type, p_nature );
 		}
 
 		return result;
 	}
 
-	void IndexBuffer::Cleanup()
+	void IndexBuffer::cleanup()
 	{
-		DoCleanup();
+		doCleanup();
 	}
 }

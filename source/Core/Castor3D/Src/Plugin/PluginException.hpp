@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 #include "Exception/Exception.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor3D
 	\brief		Exception de chargement de plug-in
 	*/
 	class PluginException
-		: public Castor::Exception
+		: public castor::Exception
 	{
 	public:
 		/**
@@ -73,7 +73,7 @@ namespace Castor3D
 		 *\brief		Dit si l'exception est critique
 		 *\return		Le statut
 		 */
-		inline bool IsCritical()const
+		inline bool isCritical()const
 		{
 			return m_critical;
 		}

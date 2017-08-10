@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Cache/Cache.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,10 +41,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct CacheTraits< Material, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< Material >( KeyType const &, MaterialType ) >;
 		using Merger = std::function< void( CacheBase< Material, KeyType > const &
-			, Castor::Collection< Material, KeyType > &
+			, castor::Collection< Material, KeyType > &
 			, std::shared_ptr< Material > ) >;
 	};
 	/*!
@@ -57,11 +57,11 @@ namespace Castor3D
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
 	template<>
-	class Cache< Material, Castor::String >
-		: public CacheBase< Material, Castor::String >
+	class Cache< Material, castor::String >
+		: public CacheBase< Material, castor::String >
 	{
 	public:
-		using MyCacheType = CacheBase< Material, Castor::String >;
+		using MyCacheType = CacheBase< Material, castor::String >;
 		using MyCacheTraits = typename MyCacheType::MyCacheTraits;
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
@@ -116,28 +116,28 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le matériau par défaut.
 		 */
-		C3D_API void Initialise( MaterialType type );
+		C3D_API void initialise( MaterialType type );
 		/**
 		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
+		 *\brief		sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Deletes the default material, flush the collection
 		 *\~french
 		 *\brief		Supprime le matériau par défaut, vide la collection
 		 */
-		C3D_API void Clear();
+		C3D_API void clear();
 		/**
 		 *\~english
 		 *\brief		Updates the pass buffer.
 		 *\~french
 		 *\brief		Met à jour le tampon de passes.
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
@@ -148,7 +148,7 @@ namespace Castor3D
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		C3D_API MaterialSPtr Add( Key const & name, MaterialSPtr element );
+		C3D_API MaterialSPtr add( Key const & name, MaterialSPtr element );
 		/**
 		 *\~english
 		 *\brief		Creates an element.
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\param[in]	p_parameters	Les autres paramètres de construction.
 		 *\return		L'élément créé.
 		 */
-		C3D_API MaterialSPtr Add( Key const & name, MaterialType type );
+		C3D_API MaterialSPtr add( Key const & name, MaterialType type );
 		/**
 		 *\~english
 		 *\brief		Puts all the materials names in the given array
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\brief		Remplit la liste des noms de tous les matériaux
 		 *\param[out]	names	La liste de noms
 		 */
-		C3D_API void GetNames( Castor::StringArray & names );
+		C3D_API void getNames( castor::StringArray & names );
 		/**
 		 *\~english
 		 *\brief		Writes materials in a text file
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\param[out]	file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Write( Castor::TextFile & file )const;
+		C3D_API bool write( castor::TextFile & file )const;
 		/**
 		 *\~english
 		 *\brief		Reads materials from a text file
@@ -192,14 +192,14 @@ namespace Castor3D
 		 *\param[in]	file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Read( Castor::TextFile & file );
+		C3D_API bool read( castor::TextFile & file );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material
 		 *\~french
 		 *\brief		Récupère le matériau par défaut
 		 */
-		inline MaterialSPtr	GetDefaultMaterial()const
+		inline MaterialSPtr getDefaultMaterial()const
 		{
 			return m_defaultMaterial;
 		}
@@ -209,7 +209,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon de passes.
 		 */
-		inline PassBuffer const & GetPassBuffer()const
+		inline PassBuffer const & getPassBuffer()const
 		{
 			REQUIRE( m_passBuffer );
 			return *m_passBuffer;
@@ -223,7 +223,7 @@ namespace Castor3D
 		//!\~french		Le tampon de passes.
 		std::shared_ptr< PassBuffer > m_passBuffer;
 	};
-	using MaterialCache = Cache< Material, Castor::String >;
+	using MaterialCache = Cache< Material, castor::String >;
 	DECLARE_SMART_PTR( MaterialCache );
 }
 

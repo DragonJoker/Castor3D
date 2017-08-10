@@ -1,8 +1,8 @@
 ﻿#include "Version.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Version::Version( int p_iMajor, int p_iMinor, int p_iBuild )
 		: m_major( p_iMajor )
@@ -17,30 +17,30 @@ namespace Castor3D
 
 	bool operator==( Version const & p_a, Version const & p_b )
 	{
-		return p_a.GetMajor() == p_b.GetMajor()
-			   && p_a.GetMinor() == p_b.GetMinor()
-			   && p_a.GetBuild() == p_b.GetBuild();
+		return p_a.getMajor() == p_b.getMajor()
+			   && p_a.getMinor() == p_b.getMinor()
+			   && p_a.getBuild() == p_b.getBuild();
 	}
 
 	bool operator!=( Version const & p_a, Version const & p_b )
 	{
-		return p_a.GetMajor() != p_b.GetMajor()
-			   || p_a.GetMinor() != p_b.GetMinor()
-			   || p_a.GetBuild() != p_b.GetBuild();
+		return p_a.getMajor() != p_b.getMajor()
+			   || p_a.getMinor() != p_b.getMinor()
+			   || p_a.getBuild() != p_b.getBuild();
 	}
 
 	bool operator<( Version const & p_a, Version const & p_b )
 	{
-		return	p_a.GetMajor()  < p_b.GetMajor()
-				|| ( p_a.GetMajor() == p_b.GetMajor() && p_a.GetMinor()  < p_b.GetMinor() )
-				|| ( p_a.GetMajor() == p_b.GetMajor() && p_a.GetMinor() == p_b.GetMinor() && p_a.GetBuild()  < p_b.GetBuild() );
+		return	p_a.getMajor()  < p_b.getMajor()
+				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor()  < p_b.getMinor() )
+				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild()  < p_b.getBuild() );
 	}
 
 	bool operator>( Version const & p_a, Version const & p_b )
 	{
-		return	p_a.GetMajor()  > p_b.GetMajor()
-				|| ( p_a.GetMajor() == p_b.GetMajor() && p_a.GetMinor()  > p_b.GetMinor() )
-				|| ( p_a.GetMajor() == p_b.GetMajor() && p_a.GetMinor() == p_b.GetMinor() && p_a.GetBuild()  < p_b.GetBuild() );
+		return	p_a.getMajor()  > p_b.getMajor()
+				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor()  > p_b.getMinor() )
+				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild()  < p_b.getBuild() );
 	}
 
 	bool operator<=( Version const & p_a, Version const & p_b )
@@ -53,19 +53,19 @@ namespace Castor3D
 		return !( p_a < p_b );
 	}
 
-	std::ostream & operator<<( std::ostream & p_stream, Castor3D::Version const & p_version )
+	std::ostream & operator<<( std::ostream & p_stream, castor3d::Version const & p_version )
 	{
-		p_stream << p_version.GetMajor() << "." << p_version.GetMinor() << "." << p_version.GetBuild();
+		p_stream << p_version.getMajor() << "." << p_version.getMinor() << "." << p_version.getBuild();
 		return p_stream;
 	}
 
-	std::wostream & operator<<( std::wostream & p_stream, Castor3D::Version const & p_version )
+	std::wostream & operator<<( std::wostream & p_stream, castor3d::Version const & p_version )
 	{
-		p_stream << p_version.GetMajor() << L"." << p_version.GetMinor() << L"." << p_version.GetBuild();
+		p_stream << p_version.getMajor() << L"." << p_version.getMinor() << L"." << p_version.getBuild();
 		return p_stream;
 	}
 
-	Castor::String & operator<<( Castor::String & p_stream, Castor3D::Version const & p_version )
+	castor::String & operator<<( castor::String & p_stream, castor3d::Version const & p_version )
 	{
 		StringStream stream;
 		stream << p_version;

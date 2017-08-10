@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Graphics/Position.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Position );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Position );
 
 namespace GuiCommon
 {
@@ -37,15 +37,15 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( PositionProperty )
 
 	public:
-		PositionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Position const & value = Castor::Position() );
+		PositionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Position const & value = castor::Position() );
 		virtual ~PositionProperty();
 
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
+		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void refreshChildren();
 
 	protected:
 		// I stands for internal
-		inline void SetValueI( Castor::Position const & value )
+		inline void setValueI( castor::Position const & value )
 		{
 			m_value = WXVARIANT( value );
 		}

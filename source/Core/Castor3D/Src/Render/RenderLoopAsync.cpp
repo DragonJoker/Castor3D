@@ -5,13 +5,13 @@
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/ScopeGuard.hpp>
 
-using namespace Castor;
+using namespace castor;
 
 //*************************************************************************************************
 
-namespace Castor3D
+namespace castor3d
 {
-	static const char * CALL_RENDER_SYNC_FRAME = "Can't call RenderSyncFrame in threaded render loop";
+	static const char * CALL_RENDER_SYNC_FRAME = "Can't call renderSyncFrame in threaded render loop";
 	static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
 
@@ -25,7 +25,7 @@ namespace Castor3D
 		, m_created( false )
 		, m_interrupted( false )
 	{
-		m_mainLoopThread.reset( new std::thread( std::bind( &RenderLoopAsync::DoMainLoop, this ) ) );
+		m_mainLoopThread.reset( new std::thread( std::bind( &RenderLoopAsync::doMainLoop, this ) ) );
 	}
 
 	RenderLoopAsync::~RenderLoopAsync()
@@ -36,32 +36,32 @@ namespace Castor3D
 		m_mainLoopThread.reset();
 	}
 
-	bool RenderLoopAsync::IsCreated()const
+	bool RenderLoopAsync::isCreated()const
 	{
 		return m_created;
 	}
 
-	bool RenderLoopAsync::IsRendering()const
+	bool RenderLoopAsync::isRendering()const
 	{
 		return m_rendering;
 	}
 
-	bool RenderLoopAsync::IsInterrupted()const
+	bool RenderLoopAsync::isInterrupted()const
 	{
 		return m_interrupted;
 	}
 
-	bool RenderLoopAsync::IsEnded()const
+	bool RenderLoopAsync::isEnded()const
 	{
 		return m_ended;
 	}
 
-	bool RenderLoopAsync::IsPaused()const
+	bool RenderLoopAsync::isPaused()const
 	{
 		return m_paused;
 	}
 
-	void RenderLoopAsync::UpdateVSync( bool p_enable )
+	void RenderLoopAsync::updateVSync( bool p_enable )
 	{
 		using type = decltype( m_savedTime );
 		static auto zero = type::zero();
@@ -78,12 +78,12 @@ namespace Castor3D
 		}
 	}
 
-	void RenderLoopAsync::StartRendering()
+	void RenderLoopAsync::beginRendering()
 	{
 		m_rendering = true;
 	}
 
-	void RenderLoopAsync::RenderSyncFrame()
+	void RenderLoopAsync::renderSyncFrame()
 	{
 		if ( !m_paused )
 		{
@@ -99,14 +99,14 @@ namespace Castor3D
 
 			while ( !m_frameEnded )
 			{
-				System::Sleep( 1 );
+				System::sleep( 1 );
 			}
 
 			m_paused = true;
 		}
 	}
 
-	void RenderLoopAsync::Pause()
+	void RenderLoopAsync::pause()
 	{
 		if ( m_paused )
 		{
@@ -117,11 +117,11 @@ namespace Castor3D
 
 		while ( !m_frameEnded )
 		{
-			System::Sleep( 5 );
+			System::sleep( 5 );
 		}
 	}
 
-	void RenderLoopAsync::Resume()
+	void RenderLoopAsync::resume()
 	{
 		if ( !m_paused )
 		{
@@ -131,67 +131,67 @@ namespace Castor3D
 		m_paused = false;
 	}
 
-	void RenderLoopAsync::EndRendering()
+	void RenderLoopAsync::endRendering()
 	{
 		m_rendering = false;
 
-		while ( !IsEnded() )
+		while ( !isEnded() )
 		{
-			System::Sleep( 5 );
+			System::sleep( 5 );
 		}
 	}
 
-	ContextSPtr RenderLoopAsync::DoCreateMainContext( RenderWindow & p_window )
+	ContextSPtr RenderLoopAsync::doCreateMainContext( RenderWindow & p_window )
 	{
 		ContextSPtr result;
 
 		if ( !m_createContext )
 		{
-			DoSetWindow( &p_window );
+			doSetWindow( &p_window );
 			m_createContext = true;
 
-			while ( !IsInterrupted() && !IsCreated() )
+			while ( !isInterrupted() && !isCreated() )
 			{
-				System::Sleep( 5 );
+				System::sleep( 5 );
 			}
 
 			m_createContext = false;
-			DoSetWindow( nullptr );
-			result = m_renderSystem.GetMainContext();
+			doSetWindow( nullptr );
+			result = m_renderSystem.getMainContext();
 		}
 
 		return result;
 	}
 
-	void RenderLoopAsync::DoMainLoop()
+	void RenderLoopAsync::doMainLoop()
 	{
 		PreciseTimer timer;
 		m_frameEnded = true;
-		auto scopeGuard{ make_scope_guard( [this]()
+		auto scopeGuard{ makeScopeGuard( [this]()
 		{
-			Cleanup();
-			m_renderSystem.Cleanup();
+			cleanup();
+			m_renderSystem.cleanup();
 		} ) };
 
 		try
 		{
 			// Tant qu'on n'est pas interrompu, on continue
-			while ( !IsInterrupted() )
+			while ( !isInterrupted() )
 			{
 				// Tant qu'on n'a pas de contexte principal et qu'on ne nous a pas demandé de le créer, on attend.
-				while ( !IsInterrupted() && !m_createContext && !IsCreated() )
+				while ( !isInterrupted() && !m_createContext && !isCreated() )
 				{
-					System::Sleep( 10 );
+					System::sleep( 10 );
 				}
 
-				if ( !IsInterrupted() && m_createContext && !IsCreated() )
+				if ( !isInterrupted() && m_createContext && !isCreated() )
 				{
 					// On nous a demandé de créer le contexte principal, on le crée
-					ContextSPtr context = DoCreateContext( *DoGetWindow() );
+					ContextSPtr context = doCreateContext( *doGetWindow() );
 
 					if ( context )
 					{
-						m_renderSystem.SetMainContext( context );
+						m_renderSystem.setMainContext( context );
 						m_created = true;
 					}
 					else
@@ -201,48 +201,48 @@ namespace Castor3D
 				}
 
 				// Tant qu'on n'a pas demandé le début du rendu, on attend.
-				while ( !IsInterrupted() && !IsRendering() )
+				while ( !isInterrupted() && !isRendering() )
 				{
-					System::Sleep( 10 );
+					System::sleep( 10 );
 				}
 
 				// Le rendu est en cours
-				while ( !IsInterrupted() && IsRendering() && !IsPaused() )
+				while ( !isInterrupted() && isRendering() && !isPaused() )
 				{
 					m_frameEnded = false;
-					timer.Time();
-					DoRenderFrame();
-					auto endTime = std::chrono::duration_cast< Milliseconds >( timer.Time() );
+					timer.getElapsed();
+					doRenderFrame();
+					auto endTime = std::chrono::duration_cast< Milliseconds >( timer.getElapsed() );
 					m_frameEnded = true;
-					std::this_thread::sleep_for( std::max( 0_ms, GetFrameTime() - endTime ) );
+					std::this_thread::sleep_for( std::max( 0_ms, getFrameTime() - endTime ) );
 				}
 
 				m_ended = true;
 			}
 		}
-		catch ( Castor::Exception & p_exc )
+		catch ( castor::Exception & p_exc )
 		{
-			Logger::LogError( cuT( "RenderLoop - " ) + p_exc.GetFullDescription() );
+			Logger::logError( cuT( "RenderLoop - " ) + p_exc.getFullDescription() );
 			m_frameEnded = true;
 			m_ended = true;
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogError( std::string( "RenderLoop - " ) + p_exc.what() );
+			Logger::logError( std::string( "RenderLoop - " ) + p_exc.what() );
 			m_frameEnded = true;
 			m_ended = true;
 		}
 	}
 
-	void RenderLoopAsync::DoSetWindow( RenderWindow * p_window )
+	void RenderLoopAsync::doSetWindow( RenderWindow * p_window )
 	{
-		auto lock = make_unique_lock( m_mutexWindow );
+		auto lock = makeUniqueLock( m_mutexWindow );
 		m_window = p_window;
 	}
 
-	RenderWindow * RenderLoopAsync::DoGetWindow()const
+	RenderWindow * RenderLoopAsync::doGetWindow()const
 	{
-		auto lock = make_unique_lock( m_mutexWindow );
+		auto lock = makeUniqueLock( m_mutexWindow );
 		return m_window;
 	}
 }

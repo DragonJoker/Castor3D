@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Graphics/Position.hpp>
 #include <Graphics/Size.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -68,7 +68,7 @@ namespace Castor3D
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
 		class TextWriter
-			: public Castor::TextWriter< OverlayCategory >
+			: public castor::TextWriter< OverlayCategory >
 		{
 		public:
 			/**
@@ -77,7 +77,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file.
@@ -90,7 +90,7 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer.
 			 *\return		\p true si tout s'est bien passé.
 			 */
-			C3D_API bool operator()( OverlayCategory const & p_overlay, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( OverlayCategory const & p_overlay, castor::TextFile & p_file )override;
 			/**
 			 *\~english
 			 *\brief		Writes a OverlayCategory into a text file.
@@ -101,7 +101,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier.
 			 *\return		\p true si tout s'est bien passé.
 			 */
-			C3D_API virtual bool WriteInto( Castor::TextFile & p_file )
+			C3D_API virtual bool writeInto( castor::TextFile & p_file )
 			{
 				return false;
 			}
@@ -134,30 +134,30 @@ namespace Castor3D
 		 *\param[in]	p_tabs	Le niveau d'intentation actuel.
 		 *\return		Le TextLoader.
 		 */
-		C3D_API virtual std::unique_ptr< TextWriter > CreateTextWriter( Castor::String const & p_tabs ) = 0;
+		C3D_API virtual std::unique_ptr< TextWriter > createTextWriter( castor::String const & p_tabs ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
 		 */
-		C3D_API void Render();
+		C3D_API void render();
 		/**
 		 *\~english
-		 *\brief		Sets the material
+		 *\brief		sets the material
 		 *\param[in]	p_material	The new value
 		 *\~french
 		 *\brief		Définit le matériau
 		 *\param[in]	p_material	La nouvelle valeur
 		 */
-		C3D_API virtual void SetMaterial( MaterialSPtr p_material );
+		C3D_API virtual void setMaterial( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay name
@@ -166,7 +166,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'incrustation
 		 *\return		La valeur
 		 */
-		C3D_API Castor::String const & GetOverlayName()const;
+		C3D_API castor::String const & getOverlayName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position, in pixels
@@ -177,7 +177,7 @@ namespace Castor3D
 		 *\param[in]	p_size	La taille de l'écran
 		 *\return		La position
 		 */
-		C3D_API Castor::Position GetAbsolutePosition( Castor::Size const & p_size )const;
+		C3D_API castor::Position getAbsolutePosition( castor::Size const & p_size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay size, in pixels
@@ -188,7 +188,7 @@ namespace Castor3D
 		 *\param[in]	p_size	La taille de l'écran
 		 *\return		La taille
 		 */
-		C3D_API Castor::Size GetAbsoluteSize( Castor::Size const & p_size )const;
+		C3D_API castor::Size getAbsoluteSize( castor::Size const & p_size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position
@@ -197,7 +197,7 @@ namespace Castor3D
 		 *\brief		Récupère la position absolue de l'incrustation
 		 *\return		La position
 		 */
-		C3D_API Castor::Point2d GetAbsolutePosition()const;
+		C3D_API castor::Point2d getAbsolutePosition()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay size
@@ -206,53 +206,53 @@ namespace Castor3D
 		 *\brief		Récupère la taille absolue de l'incrustation
 		 *\return		La taille
 		 */
-		C3D_API Castor::Point2d GetAbsoluteSize()const;
+		C3D_API castor::Point2d getAbsoluteSize()const;
 		/**
 		 *\~english
 		 *\return		\p true if this overlay's or one of its parents' size has changed.
 		 *\~french
 		 *\return		\p true si les dimensions de cette incrustation ou d'un de ses parents ont changé.
 		 */
-		C3D_API bool IsSizeChanged()const;
+		C3D_API bool isSizeChanged()const;
 		/**
 		 *\~english
 		 *\return		\p true if this overlay's or one of its parents' position has changed.
 		 *\~french
 		 *\return		\p true si la position de cette incrustation ou d'un de ses parents a changé.
 		 */
-		C3D_API bool IsPositionChanged()const;
+		C3D_API bool isPositionChanged()const;
 		/**
 		 *\~english
 		 *\return		\p true if this overlay's has changed.
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		C3D_API virtual bool IsChanged()const
+		C3D_API virtual bool isChanged()const
 		{
 			return false;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay position
+		 *\brief		sets the overlay position
 		 *\param[in]	p_position	The new value
 		 *\~french
 		 *\brief		Définit la position de l'incrustation
 		 *\param[in]	p_position	La nouvelle valeur
 		 */
-		inline void SetPosition( Castor::Point2d const & p_position )
+		inline void setPosition( castor::Point2d const & p_position )
 		{
 			m_position = p_position;
 			m_positionChanged = true;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay size
+		 *\brief		sets the overlay size
 		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit la taille de l'incrustation
 		 *\param[in]	p_size	La nouvelle valeur
 		 */
-		inline void SetSize( Castor::Point2d const & p_size )
+		inline void setSize( castor::Point2d const & p_size )
 		{
 			m_ptSize = p_size;
 			m_sizeChanged = true;
@@ -265,7 +265,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Point2d const & GetSize()const
+		inline castor::Point2d const & getSize()const
 		{
 			return m_ptSize;
 		}
@@ -277,7 +277,7 @@ namespace Castor3D
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Point2d const & GetPosition()const
+		inline castor::Point2d const & getPosition()const
 		{
 			return m_position;
 		}
@@ -289,7 +289,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Size const & GetPixelSize()const
+		inline castor::Size const & getPixelSize()const
 		{
 			return m_size;
 		}
@@ -301,7 +301,7 @@ namespace Castor3D
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Position const & GetPixelPosition()const
+		inline castor::Position const & getPixelPosition()const
 		{
 			return m_pxPosition;
 		}
@@ -313,7 +313,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Point2d & GetSize()
+		inline castor::Point2d & getSize()
 		{
 			return m_ptSize;
 		}
@@ -325,7 +325,7 @@ namespace Castor3D
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Point2d & GetPosition()
+		inline castor::Point2d & getPosition()
 		{
 			return m_position;
 		}
@@ -337,7 +337,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Size & GetPixelSize()
+		inline castor::Size & getPixelSize()
 		{
 			return m_size;
 		}
@@ -349,7 +349,7 @@ namespace Castor3D
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::Position & GetPixelPosition()
+		inline castor::Position & getPixelPosition()
 		{
 			return m_pxPosition;
 		}
@@ -361,7 +361,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de l'incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayType GetType()const
+		inline OverlayType getType()const
 		{
 			return m_type;
 		}
@@ -373,7 +373,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de visibilité
 		 *\return		La valeur
 		 */
-		inline bool IsVisible()const
+		inline bool isVisible()const
 		{
 			return m_visible;
 		}
@@ -385,7 +385,7 @@ namespace Castor3D
 		 *\brief		Récupère le matériau
 		 *\return		La valeur
 		 */
-		inline MaterialSPtr GetMaterial()const
+		inline MaterialSPtr getMaterial()const
 		{
 			return m_pMaterial.lock();
 		}
@@ -397,7 +397,7 @@ namespace Castor3D
 		 *\brief		Récupère l'indice
 		 *\return		La valeur
 		 */
-		inline int GetIndex()const
+		inline int getIndex()const
 		{
 			return m_index;
 		}
@@ -409,7 +409,7 @@ namespace Castor3D
 		 *\brief		Récupère le niveau
 		 *\return		La valeur
 		 */
-		inline int GetLevel()const
+		inline int getLevel()const
 		{
 			return m_level;
 		}
@@ -421,7 +421,7 @@ namespace Castor3D
 		 *\brief		Récupère l'incrustation
 		 *\return		La valeur
 		 */
-		inline Overlay const & GetOverlay()const
+		inline Overlay const & getOverlay()const
 		{
 			return *m_pOverlay;
 		}
@@ -433,63 +433,63 @@ namespace Castor3D
 		 *\brief		Récupère l'incrustation
 		 *\return		La valeur
 		 */
-		inline Overlay & GetOverlay()
+		inline Overlay & getOverlay()
 		{
 			return *m_pOverlay;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay
+		 *\brief		sets the overlay
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit l'incrustation
 		 *\param[in]	val	La nouvelle valeur
 		 */
-		inline void SetOverlay( Overlay * val )
+		inline void setOverlay( Overlay * val )
 		{
 			m_pOverlay = val;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the visibility status
+		 *\brief		sets the visibility status
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit le statut de visibilité
 		 *\param[in]	val	La nouvelle valeur
 		 */
-		inline void SetVisible( bool val )
+		inline void setVisible( bool val )
 		{
 			m_visible = val;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay position
+		 *\brief		sets the overlay position
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit la position de l'incrustation
 		 *\param[in]	val	La nouvelle valeur
 		 */
-		inline void SetPixelPosition( Castor::Position const & val )
+		inline void setPixelPosition( castor::Position const & val )
 		{
 			m_pxPosition = val;
 			m_positionChanged = true;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay size
+		 *\brief		sets the overlay size
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit la taille de l'incrustation
 		 *\param[in]	val	La nouvelle valeur
 		 */
-		inline void SetPixelSize( Castor::Size const & val )
+		inline void setPixelSize( castor::Size const & val )
 		{
 			m_size = val;
 			m_sizeChanged = true;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay order
+		 *\brief		sets the overlay order
 		 *\param[in]	p_index	The new index
 		 *\param[in]	p_level	The new level
 		 *\~french
@@ -497,20 +497,20 @@ namespace Castor3D
 		 *\param[in]	p_index	Le nouvel indice
 		 *\param[in]	p_level	Le nouveau niveau
 		 */
-		inline void SetOrder( int p_index, int p_level )
+		inline void setOrder( int p_index, int p_level )
 		{
 			m_index = p_index;
 			m_level = p_level;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay UV
+		 *\brief		sets the overlay UV
 		 *\param[in]	val	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de l'incrustation
 		 *\param[in]	val	La nouvelle valeur (gauche, haut, droite, bas)
 		 */
-		inline void SetUV( Castor::Point4d const & val )
+		inline void setUV( castor::Point4d const & val )
 		{
 			m_uv = val;
 		}
@@ -522,7 +522,7 @@ namespace Castor3D
 		 *\brief		Récupère Les UV de l'incrustation
 		 *\return		La valeur (gauche, haut, droite, bas)
 		 */
-		inline Castor::Point4d const & GetUV()const
+		inline castor::Point4d const & getUV()const
 		{
 			return m_uv;
 		}
@@ -534,21 +534,21 @@ namespace Castor3D
 		 *\~french
 		 *\return		La taille de l'écran ou du parent.
 		 */
-		Castor::Point2d DoGetTotalSize()const;
+		castor::Point2d doGetTotalSize()const;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, taking care of wanted pixel position.
 		 *\~french
 		 *\brief		Met à jour la position de l'incrustation, en prenant en compte la la position en pixel voulue.
 		 */
-		virtual void DoUpdatePosition();
+		virtual void doUpdatePosition();
 		/**
 		 *\~english
 		 *\brief		Updates the overlay size, taking care of wanted pixel size.
 		 *\~french
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		virtual void DoUpdateSize();
+		virtual void doUpdateSize();
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
@@ -557,14 +557,14 @@ namespace Castor3D
 		 *\brief		Dessine l'incrustation
 		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
-		virtual void DoRender( OverlayRendererSPtr p_renderer ) = 0;
+		virtual void doRender( OverlayRendererSPtr p_renderer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		virtual void DoUpdate() {}
+		virtual void doUpdate() {}
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
@@ -573,19 +573,19 @@ namespace Castor3D
 		 *\brief		Met à jour le tampon de sommets.
 		 *\param[in]	p_size	Les dimensions de la cible de rendu.
 		 */
-		virtual void DoUpdateBuffer( Castor::Size const & p_size ) = 0;
+		virtual void doUpdateBuffer( castor::Size const & p_size ) = 0;
 
 	protected:
 		//!\~english The overlay	\~french L'incrustation
 		Overlay * m_pOverlay{ nullptr };
 		//!\~english The relative position (to parent or screen)	\~french La position relative (au parent ou à l'écran)
-		Castor::Point2d m_position;
+		castor::Point2d m_position;
 		//!\~english The relative size (to parent or screen)	\~french La taille relative (à l'écran ou au parent)
-		Castor::Point2d m_ptSize;
+		castor::Point2d m_ptSize;
 		//!\~english The relative position (to parent or screen), in pixels	\~french La position relative (à l'écran ou au parent), en pixels
-		Castor::Position m_pxPosition;
+		castor::Position m_pxPosition;
 		//!\~english The absolute size in pixels	\~french La taille absolue en pixels
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english The visibility	\~french La visibilité
 		bool m_visible{ true };
 		//!\~english The material used by the overlay	\~french Le matériau utilisé par l'incrustation
@@ -595,7 +595,7 @@ namespace Castor3D
 		//!\~english The overlay level	\~french Le niveau de l'overlay
 		int m_level{ 0 };
 		//!\~english The material name	\~french Le nom du matériau
-		Castor::String m_strMatName;
+		castor::String m_strMatName;
 		//!\~english The overlay type	\~french Le type de l'incrustation
 		OverlayType m_type;
 		//!\~english Tells if this overlay's size has changed.	\~french Dit si les dimensions de cette incrustation ont changé.
@@ -603,7 +603,7 @@ namespace Castor3D
 		//!\~english Tells if this overlay's position has changed.	\~french Dit si la position de cette incrustation a changé.
 		bool m_positionChanged{ true };
 		//!\~english The UV for the panel	\~french Les UV du panneau
-		Castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
+		castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
 	};
 }
 

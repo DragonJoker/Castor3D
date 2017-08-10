@@ -42,7 +42,7 @@ namespace libffmpeg
 #	undef PixelFormat
 #endif
 
-	void CheckError( int p_error, char const * const p_action )
+	void checkError( int p_error, char const * const p_action )
 	{
 		if ( p_error < 0 )
 		{
@@ -61,8 +61,8 @@ namespace libffmpeg
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GuiCommon
 {
@@ -94,7 +94,7 @@ namespace GuiCommon
 					m_recordedTime += timeDiff;
 				}
 
-				return DoUpdateTime( timeDiff );
+				return doUpdateTime( timeDiff );
 			}
 
 			virtual bool StartRecord( Size const & p_size, int p_wantedFPS )
@@ -113,7 +113,7 @@ namespace GuiCommon
 
 					try
 					{
-						DoStartRecord( p_size, strFileName );
+						doStartRecord( p_size, strFileName );
 						result = IsRecording();
 					}
 					catch ( std::bad_alloc & )
@@ -127,7 +127,7 @@ namespace GuiCommon
 						strMsg += wxT( ":\n" );
 						strMsg += wxString( exc.what(), wxMBConvLibc() );
 						strMsg += wxT( ")" );
-						throw std::runtime_error( string::string_cast< char >( make_String( strMsg ) ) );
+						throw std::runtime_error( string::stringCast< char >( make_String( strMsg ) ) );
 					}
 				}
 
@@ -137,7 +137,7 @@ namespace GuiCommon
 			virtual bool RecordFrame( PxBufferBaseSPtr p_buffer )
 			{
 				bool result = false;
-				DoRecordFrame( p_buffer );
+				doRecordFrame( p_buffer );
 				m_saved = clock::now();
 				m_recordedCount++;
 				result = true;
@@ -145,9 +145,9 @@ namespace GuiCommon
 			}
 
 		protected:
-			virtual bool DoStartRecord( Size const & p_size, wxString const & p_name ) = 0;
-			virtual bool DoUpdateTime( uint64_t p_uiTimeDiff ) = 0;
-			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer ) = 0;
+			virtual bool doStartRecord( Size const & p_size, wxString const & p_name ) = 0;
+			virtual bool doUpdateTime( uint64_t p_uiTimeDiff ) = 0;
+			virtual void doRecordFrame( PxBufferBaseSPtr p_buffer ) = 0;
 
 		protected:
 			time_point m_saved;
@@ -169,7 +169,7 @@ namespace GuiCommon
 				p_packet.stream_index = m_formatContext->streams[0]->index;
 			}
 
-			void Write( libffmpeg::AVPacket & p_packet )
+			void write( libffmpeg::AVPacket & p_packet )
 			{
 				auto timestamp = p_packet.pts;
 
@@ -188,7 +188,7 @@ namespace GuiCommon
 				libffmpeg::av_interleaved_write_frame( m_formatContext, &p_packet );
 			}
 
-			void GetFormat( wxString const & p_name )
+			void getFormat( wxString const & p_name )
 			{
 				m_outputFormat = libffmpeg::av_guess_format( nullptr, p_name.char_str().data(), nullptr );
 
@@ -228,11 +228,11 @@ namespace GuiCommon
 				}
 			}
 
-			bool Open( wxString const & p_name )
+			bool open( wxString const & p_name )
 			{
 #if LIBAVFORMAT_VERSION_MAJOR >= 57 && LIBAVFORMAT_VERSION_MINOR >= 34
-				libffmpeg::CheckError( avcodec_parameters_from_context( m_stream->codecpar, m_codecContext )
-									   , "Setting codec parameters from context" );
+				libffmpeg::checkError( avcodec_parameters_from_context( m_stream->codecpar, m_codecContext )
+									   , "setting codec parameters from context" );
 #else
 				m_stream->codec = m_codecContext;
 #endif
@@ -242,19 +242,19 @@ namespace GuiCommon
 					m_codecContext->flags |= CODEC_FLAG_GLOBAL_HEADER;
 				}
 
-				libffmpeg::CheckError( avcodec_open2( m_codecContext, m_codec, nullptr )
+				libffmpeg::checkError( avcodec_open2( m_codecContext, m_codec, nullptr )
 									   , "Codec opening" );
 
-				libffmpeg::CheckError( libffmpeg::avio_open( &m_formatContext->pb, p_name.char_str().data(), AVIO_FLAG_WRITE )
+				libffmpeg::checkError( libffmpeg::avio_open( &m_formatContext->pb, p_name.char_str().data(), AVIO_FLAG_WRITE )
 									   , "Stream opening" );
 
-				libffmpeg::CheckError( libffmpeg::avformat_write_header( m_formatContext, nullptr )
+				libffmpeg::checkError( libffmpeg::avformat_write_header( m_formatContext, nullptr )
 									   , "Writing format header to stream" );
 
 				return true;
 			}
 
-			void Close( bool p_wasRecording )
+			void close( bool p_wasRecording )
 			{
 				if ( p_wasRecording )
 				{
@@ -274,9 +274,9 @@ namespace GuiCommon
 			}
 
 		protected:
-			void DoAllocateFrame()
+			void doAllocateFrame()
 			{
-				// Allocate the encoded frame.
+				// allocate the encoded frame.
 				m_frame = libffmpeg::av_frame_alloc();
 
 				if ( !m_frame )
@@ -284,8 +284,8 @@ namespace GuiCommon
 					throw std::runtime_error( ( char const * )wxString( _( "Could not allocate encoded video frame" ) ).mb_str( wxConvUTF8 ) );
 				}
 
-				// Allocate the encoded raw picture.
-				libffmpeg::CheckError( libffmpeg::av_image_alloc( m_frame->data, m_frame->linesize, m_codecContext->width, m_codecContext->height, m_codecContext->pix_fmt, 1 )
+				// allocate the encoded raw picture.
+				libffmpeg::checkError( libffmpeg::av_image_alloc( m_frame->data, m_frame->linesize, m_codecContext->width, m_codecContext->height, m_codecContext->pix_fmt, 1 )
 									   , "Encoded picture buffer allocation" );
 			}
 
@@ -336,12 +336,12 @@ namespace GuiCommon
 
 						if ( iRet >= 0 && gotOutput )
 						{
-							Write( pkt );
+							write( pkt );
 						}
 					}
 				}
 
-				Close( IsRecording() );
+				close( IsRecording() );
 
 				if ( m_swsContext )
 				{
@@ -365,15 +365,15 @@ namespace GuiCommon
 			}
 
 		private:
-			virtual bool DoUpdateTime( uint64_t ptimeDiff )
+			virtual bool doUpdateTime( uint64_t ptimeDiff )
 			{
 				return ptimeDiff >= 1000 / m_wantedFPS;
 			}
 
-			virtual bool DoStartRecord( Size const & p_size, wxString const & p_name )
+			virtual bool doStartRecord( Size const & p_size, wxString const & p_name )
 			{
-				wxSize size( p_size.width(), p_size.height() );
-				GetFormat( p_name );
+				wxSize size( p_size.getWidth(), p_size.getHeight() );
+				getFormat( p_name );
 
 				try
 				{
@@ -401,7 +401,7 @@ namespace GuiCommon
 					libffmpeg::av_opt_set( m_codecContext->priv_data, "profile", "high", AV_OPT_SEARCH_CHILDREN );
 					libffmpeg::av_opt_set( m_codecContext->priv_data, "level", "4.1", AV_OPT_SEARCH_CHILDREN );
 
-					DoAllocateFrame();
+					doAllocateFrame();
 
 					// Retrieve the scaling and encoding context.
 					m_swsContext = libffmpeg::sws_getContext( m_codecContext->width, m_codecContext->height, libffmpeg::AV_PIX_FMT_RGBA,
@@ -413,7 +413,7 @@ namespace GuiCommon
 						throw std::runtime_error( ( char const * )wxString( _( "Could not initialise conversion context" ) ).mb_str( wxConvUTF8 ) );
 					}
 
-					if ( !Open( p_name ) )
+					if ( !open( p_name ) )
 					{
 						throw std::runtime_error( ( char const * )wxString( _( "Could not open file" ) ).mb_str( wxConvUTF8 ) );
 					}
@@ -427,15 +427,15 @@ namespace GuiCommon
 				return true;
 			}
 
-			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer )
+			virtual void doRecordFrame( PxBufferBaseSPtr p_buffer )
 			{
 				if ( IsRecording() )
 				{
 					try
 					{
-						auto buffer = p_buffer->const_ptr();
+						auto buffer = p_buffer->constPtr();
 						int lineSize[8] = { m_codecContext->width * 4, 0, 0, 0, 0, 0, 0, 0 };
-						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, p_buffer->dimensions().height(), m_frame->data, m_frame->linesize );
+						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, p_buffer->dimensions().getHeight(), m_frame->data, m_frame->linesize );
 						libffmpeg::AVPacket packet{ 0 };
 						libffmpeg::av_init_packet( &packet );
 						std::vector< uint8_t > outbuf( packet.size );
@@ -451,12 +451,12 @@ namespace GuiCommon
 						m_frame->pts = m_recordedCount++;
 						int gotOutput = 0;
 
-						libffmpeg::CheckError( libffmpeg::avcodec_encode_video2( m_codecContext, &packet, m_frame, &gotOutput )
+						libffmpeg::checkError( libffmpeg::avcodec_encode_video2( m_codecContext, &packet, m_frame, &gotOutput )
 											   , "Frame encoding" );
 
 						if ( gotOutput )
 						{
-							Write( packet );
+							write( packet );
 						}
 					}
 					catch ( std::exception & )

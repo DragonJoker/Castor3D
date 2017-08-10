@@ -3,11 +3,11 @@
 #include "Math/Math.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	template< typename ComponentType >
 	ColourT< ComponentType >::TextLoader::TextLoader()
-		: Castor::TextLoader< ColourT >()
+		: castor::TextLoader< ColourT >()
 	{
 	}
 
@@ -16,7 +16,7 @@ namespace Castor
 	{
 		bool result;
 		String strLine;
-		result = p_file.ReadLine( strLine, 1024 ) > 0;
+		result = p_file.readLine( strLine, 1024 ) > 0;
 		StringArray arraySplitted;
 
 		if ( result )
@@ -34,7 +34,7 @@ namespace Castor
 
 			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
-				p_colour[Component( i )] = string::to_double( arraySplitted[i] );
+				p_colour[Component( i )] = string::toDouble( arraySplitted[i] );
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace Castor
 
 	template< typename ComponentType >
 	ColourT< ComponentType >::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< ColourT >( p_tabs )
+		: castor::TextWriter< ColourT >( p_tabs )
 	{
 	}
 
@@ -56,24 +56,24 @@ namespace Castor
 		streamWord.setf( std::ios::boolalpha );
 		streamWord.setf( std::ios::showpoint );
 
-		for ( auto component : p_colour )
+		for ( auto PixelComponents : p_colour )
 		{
 			if ( !streamWord.str().empty() )
 			{
 				streamWord << cuT( " " );
 			}
 
-			streamWord << component.value();
+			streamWord << PixelComponents.value();
 		}
 
-		bool result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< ColourT >::CheckError( result, "ColourT value" );
+		bool result = p_file.print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
+		castor::TextWriter< ColourT >::checkError( result, "ColourT value" );
 		return result;
 	}
 
 	//*************************************************************************************************
 
-	String get_predefined_name( PredefinedColour p_predefined )
+	String getPredefinedName( PredefinedColour p_predefined )
 	{
 		static std::map< PredefinedColour, String > mapNames;
 		typedef std::map< PredefinedColour, String >::iterator MapIt;
@@ -148,7 +148,7 @@ namespace Castor
 		return result;
 	}
 
-	PredefinedColour get_predefined( String const & p_name )
+	PredefinedColour getPredefined( String const & p_name )
 	{
 		static std::map< String, PredefinedColour > mapNames;
 		typedef std::map< String, PredefinedColour >::iterator MapIt;
@@ -256,7 +256,7 @@ namespace Castor
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > & ColourT< ComponentType >::operator =( ColourT< ComponentType > const & p_colour )
+	ColourT< ComponentType > & ColourT< ComponentType >::operator=( ColourT< ComponentType > const & p_colour )
 	{
 		for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 		{
@@ -267,7 +267,7 @@ namespace Castor
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > & ColourT< ComponentType >::operator =( ColourT< ComponentType > && p_colour )
+	ColourT< ComponentType > & ColourT< ComponentType >::operator=( ColourT< ComponentType > && p_colour )
 	{
 		if ( this != &p_colour )
 		{
@@ -283,207 +283,207 @@ namespace Castor
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgb( Point3ub const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGB( Point3ub const & p_ptColour )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], uint8_t( 255 ) );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgr( Point3ub const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGR( Point3ub const & p_ptColour )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], uint8_t( 255 ) );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgba( Point4ub const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGBA( Point4ub const & p_ptColour )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_abgr( Point4ub const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromABGR( Point4ub const & p_ptColour )
 	{
-		return from_components( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
+		return fromComponents( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgra( Point4ub const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGRA( Point4ub const & p_ptColour )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_argb( Point4ub const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromARGB( Point4ub const & p_ptColour )
 	{
-		return from_components( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
+		return fromComponents( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgb( Point3f const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGB( Point3f const & p_ptColour )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], 1.0f );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], 1.0f );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgr( Point3f const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGR( Point3f const & p_ptColour )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], 1.0f );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], 1.0f );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgba( Point4f const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGBA( Point4f const & p_ptColour )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_abgr( Point4f const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromABGR( Point4f const & p_ptColour )
 	{
-		return from_components( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
+		return fromComponents( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgra( Point4f const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGRA( Point4f const & p_ptColour )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_argb( Point4f const & p_ptColour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromARGB( Point4f const & p_ptColour )
 	{
-		return from_components( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
+		return fromComponents( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgb( uint8_t const( & p_ptColour )[3] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGB( uint8_t const( & p_ptColour )[3] )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], uint8_t( 255 ) );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgr( uint8_t const( & p_ptColour )[3] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGR( uint8_t const( & p_ptColour )[3] )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], uint8_t( 255 ) );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgba( uint8_t const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGBA( uint8_t const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_abgr( uint8_t const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromABGR( uint8_t const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
+		return fromComponents( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgra( uint8_t const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGRA( uint8_t const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_argb( uint8_t const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromARGB( uint8_t const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
+		return fromComponents( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgb( float const( & p_ptColour )[3] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGB( float const( & p_ptColour )[3] )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], 1.0f );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], 1.0f );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgr( float const( & p_ptColour )[3] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGR( float const( & p_ptColour )[3] )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], 1.0f );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], 1.0f );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgba( float const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGBA( float const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
+		return fromComponents( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_abgr( float const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromABGR( float const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
+		return fromComponents( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgra( float const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGRA( float const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
+		return fromComponents( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_argb( float const( & p_ptColour )[4] )
+	ColourT< ComponentType > ColourT< ComponentType >::fromARGB( float const( & p_ptColour )[4] )
 	{
-		return from_components( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
+		return fromComponents( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgb( uint32_t p_colour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGB( uint32_t p_colour )
 	{
 		float fR = float( ( ( p_colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( p_colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
 		float fB = float( ( ( p_colour & 0x000000FF ) >>  0 ) ) / 255.0f;
 		float fA = 1.0f;
-		return from_components( fR, fG, fB, fA );
+		return fromComponents( fR, fG, fB, fA );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgr( uint32_t p_colour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGR( uint32_t p_colour )
 	{
 		float fB = float( ( ( p_colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( p_colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
 		float fR = float( ( ( p_colour & 0x000000FF ) >>  0 ) ) / 255.0f;
 		float fA = 1.0f;
-		return from_components( fR, fG, fB, fA );
+		return fromComponents( fR, fG, fB, fA );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_argb( uint32_t p_colour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromARGB( uint32_t p_colour )
 	{
 		float fA = float( ( ( p_colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fR = float( ( ( p_colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( p_colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
 		float fB = float( ( ( p_colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return from_components( fR, fG, fB, fA );
+		return fromComponents( fR, fG, fB, fA );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_bgra( uint32_t p_colour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromBGRA( uint32_t p_colour )
 	{
 		float fB = float( ( ( p_colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fG = float( ( ( p_colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fR = float( ( ( p_colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
 		float fA = float( ( ( p_colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return from_components( fR, fG, fB, fA );
+		return fromComponents( fR, fG, fB, fA );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_rgba( uint32_t p_colour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromRGBA( uint32_t p_colour )
 	{
 		float fR = float( ( ( p_colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fG = float( ( ( p_colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fB = float( ( ( p_colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
 		float fA = float( ( ( p_colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return from_components( fR, fG, fB, fA );
+		return fromComponents( fR, fG, fB, fA );
 	}
 
 	template< typename ComponentType >
-	ColourT< ComponentType > ColourT< ComponentType >::from_abgr( uint32_t p_colour )
+	ColourT< ComponentType > ColourT< ComponentType >::fromABGR( uint32_t p_colour )
 	{
 		float fA = float( ( ( p_colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fB = float( ( ( p_colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( p_colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
 		float fR = float( ( ( p_colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return from_components( fR, fG, fB, fA );
+		return fromComponents( fR, fG, fB, fA );
 	}
 
 	template< typename ComponentType >
@@ -589,199 +589,199 @@ namespace Castor
 		return clrResult;
 	}
 
-	Point3ub rgb_byte( ColourT< ColourComponent > const & p_colour )
+	Point3ub toRGBByte( ColourT< ColourComponent > const & p_colour )
 	{
 		Point3ub result;
-		p_colour.get( Component::eRed ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eBlue ).convert_to( result[2] );
+		p_colour.get( Component::eRed ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eBlue ).convertTo( result[2] );
 		return result;
 	}
 
-	Point3ub bgr_byte( ColourT< ColourComponent > const & p_colour )
+	Point3ub toBGRByte( ColourT< ColourComponent > const & p_colour )
 	{
 		Point3ub result;
-		p_colour.get( Component::eBlue ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eRed ).convert_to( result[2] );
+		p_colour.get( Component::eBlue ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eRed ).convertTo( result[2] );
 		return result;
 	}
 
-	Point4ub rgba_byte( ColourT< ColourComponent > const & p_colour )
+	Point4ub toRGBAByte( ColourT< ColourComponent > const & p_colour )
 	{
 		Point4ub result;
-		p_colour.get( Component::eRed ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eBlue ).convert_to( result[2] );
-		p_colour.get( Component::eAlpha ).convert_to( result[3] );
+		p_colour.get( Component::eRed ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eBlue ).convertTo( result[2] );
+		p_colour.get( Component::eAlpha ).convertTo( result[3] );
 		return result;
 	}
 
-	Point4ub bgra_byte( ColourT< ColourComponent > const & p_colour )
+	Point4ub toBGRAByte( ColourT< ColourComponent > const & p_colour )
 	{
 		Point4ub result;
-		p_colour.get( Component::eBlue ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eRed ).convert_to( result[2] );
-		p_colour.get( Component::eAlpha ).convert_to( result[3] );
+		p_colour.get( Component::eBlue ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eRed ).convertTo( result[2] );
+		p_colour.get( Component::eAlpha ).convertTo( result[3] );
 		return result;
 	}
 
-	Point4ub argb_byte( ColourT< ColourComponent > const & p_colour )
+	Point4ub toARGBByte( ColourT< ColourComponent > const & p_colour )
 	{
 		Point4ub result;
-		p_colour.get( Component::eAlpha ).convert_to( result[0] );
-		p_colour.get( Component::eRed ).convert_to( result[1] );
-		p_colour.get( Component::eGreen ).convert_to( result[2] );
-		p_colour.get( Component::eBlue ).convert_to( result[3] );
+		p_colour.get( Component::eAlpha ).convertTo( result[0] );
+		p_colour.get( Component::eRed ).convertTo( result[1] );
+		p_colour.get( Component::eGreen ).convertTo( result[2] );
+		p_colour.get( Component::eBlue ).convertTo( result[3] );
 		return result;
 	}
 
-	Point4ub abgr_byte( ColourT< ColourComponent > const & p_colour )
+	Point4ub toABGRByte( ColourT< ColourComponent > const & p_colour )
 	{
 		Point4ub result;
-		p_colour.get( Component::eAlpha ).convert_to( result[0] );
-		p_colour.get( Component::eBlue ).convert_to( result[1] );
-		p_colour.get( Component::eGreen ).convert_to( result[2] );
-		p_colour.get( Component::eRed ).convert_to( result[3] );
+		p_colour.get( Component::eAlpha ).convertTo( result[0] );
+		p_colour.get( Component::eBlue ).convertTo( result[1] );
+		p_colour.get( Component::eGreen ).convertTo( result[2] );
+		p_colour.get( Component::eRed ).convertTo( result[3] );
 		return result;
 	}
 
 	template< typename ComponentType >
-	Point3f rgb_float( ColourT< ComponentType > const & p_colour )
+	Point3f toRGBFloat( ColourT< ComponentType > const & p_colour )
 	{
 		Point3f result;
-		p_colour.get( Component::eRed ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eBlue ).convert_to( result[2] );
+		p_colour.get( Component::eRed ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eBlue ).convertTo( result[2] );
 		return result;
 	}
 
 	template< typename ComponentType >
-	Point3f bgr_float( ColourT< ComponentType > const & p_colour )
+	Point3f toBGRFloat( ColourT< ComponentType > const & p_colour )
 	{
 		Point3f result;
-		p_colour.get( Component::eBlue ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eRed ).convert_to( result[2] );
+		p_colour.get( Component::eBlue ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eRed ).convertTo( result[2] );
 		return result;
 	}
 
 	template< typename ComponentType >
-	Point4f rgba_float( ColourT< ComponentType > const & p_colour )
+	Point4f toRGBAFloat( ColourT< ComponentType > const & p_colour )
 	{
 		Point4f result;
-		p_colour.get( Component::eRed ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eBlue ).convert_to( result[2] );
-		p_colour.get( Component::eAlpha ).convert_to( result[3] );
+		p_colour.get( Component::eRed ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eBlue ).convertTo( result[2] );
+		p_colour.get( Component::eAlpha ).convertTo( result[3] );
 		return result;
 	}
 
 	template< typename ComponentType >
-	Point4f argb_float( ColourT< ComponentType > const & p_colour )
+	Point4f toARGBFloat( ColourT< ComponentType > const & p_colour )
 	{
 		Point4f result;
-		p_colour.get( Component::eAlpha ).convert_to( result[0] );
-		p_colour.get( Component::eRed ).convert_to( result[1] );
-		p_colour.get( Component::eGreen ).convert_to( result[2] );
-		p_colour.get( Component::eBlue ).convert_to( result[3] );
+		p_colour.get( Component::eAlpha ).convertTo( result[0] );
+		p_colour.get( Component::eRed ).convertTo( result[1] );
+		p_colour.get( Component::eGreen ).convertTo( result[2] );
+		p_colour.get( Component::eBlue ).convertTo( result[3] );
 		return result;
 	}
 
 	template< typename ComponentType >
-	Point4f abgr_float( ColourT< ComponentType > const & p_colour )
+	Point4f toABGRFloat( ColourT< ComponentType > const & p_colour )
 	{
 		Point4f result;
-		p_colour.get( Component::eAlpha ).convert_to( result[0] );
-		p_colour.get( Component::eBlue ).convert_to( result[1] );
-		p_colour.get( Component::eGreen ).convert_to( result[2] );
-		p_colour.get( Component::eRed ).convert_to( result[3] );
+		p_colour.get( Component::eAlpha ).convertTo( result[0] );
+		p_colour.get( Component::eBlue ).convertTo( result[1] );
+		p_colour.get( Component::eGreen ).convertTo( result[2] );
+		p_colour.get( Component::eRed ).convertTo( result[3] );
 		return result;
 	}
 
 	template< typename ComponentType >
-	Point4f bgra_float( ColourT< ComponentType > const & p_colour )
+	Point4f toBGRAFloat( ColourT< ComponentType > const & p_colour )
 	{
 		Point4f result;
-		p_colour.get( Component::eBlue ).convert_to( result[0] );
-		p_colour.get( Component::eGreen ).convert_to( result[1] );
-		p_colour.get( Component::eRed ).convert_to( result[2] );
-		p_colour.get( Component::eAlpha ).convert_to( result[3] );
+		p_colour.get( Component::eBlue ).convertTo( result[0] );
+		p_colour.get( Component::eGreen ).convertTo( result[1] );
+		p_colour.get( Component::eRed ).convertTo( result[2] );
+		p_colour.get( Component::eAlpha ).convertTo( result[3] );
 		return result;
 	}
 
-	uint32_t rgb_packed( ColourT< ColourComponent > const & p_colour )
+	uint32_t toRGBPacked( ColourT< ColourComponent > const & p_colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
 		uint32_t b = 0;
-		p_colour.get( Component::eRed ).convert_to( r );
-		p_colour.get( Component::eGreen ).convert_to( g );
-		p_colour.get( Component::eBlue ).convert_to( b );
+		p_colour.get( Component::eRed ).convertTo( r );
+		p_colour.get( Component::eGreen ).convertTo( g );
+		p_colour.get( Component::eBlue ).convertTo( b );
 		return ( r << 16 ) | ( g << 8 ) | ( b << 0 );
 	}
 
-	uint32_t bgr_packed( ColourT< ColourComponent > const & p_colour )
+	uint32_t toBGRPacked( ColourT< ColourComponent > const & p_colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
 		uint32_t b = 0;
-		p_colour.get( Component::eRed ).convert_to( r );
-		p_colour.get( Component::eGreen ).convert_to( g );
-		p_colour.get( Component::eBlue ).convert_to( b );
+		p_colour.get( Component::eRed ).convertTo( r );
+		p_colour.get( Component::eGreen ).convertTo( g );
+		p_colour.get( Component::eBlue ).convertTo( b );
 		return ( r << 0 ) | ( g << 8 ) | ( b << 16 );
 	}
 
-	uint32_t argb_packed( ColourT< ColourComponent > const & p_colour )
+	uint32_t toARGBPacked( ColourT< ColourComponent > const & p_colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
 		uint32_t b = 0;
 		uint32_t a = 0;
-		p_colour.get( Component::eAlpha ).convert_to( a );
-		p_colour.get( Component::eRed ).convert_to( r );
-		p_colour.get( Component::eGreen ).convert_to( g );
-		p_colour.get( Component::eBlue ).convert_to( b );
+		p_colour.get( Component::eAlpha ).convertTo( a );
+		p_colour.get( Component::eRed ).convertTo( r );
+		p_colour.get( Component::eGreen ).convertTo( g );
+		p_colour.get( Component::eBlue ).convertTo( b );
 		return ( a << 24 ) | ( r << 16 ) | ( g << 8 ) | ( b << 0 );
 	}
 
-	uint32_t rgba_packed( ColourT< ColourComponent > const & p_colour )
+	uint32_t toRGBAPacked( ColourT< ColourComponent > const & p_colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
 		uint32_t b = 0;
 		uint32_t a = 0;
-		p_colour.get( Component::eRed ).convert_to( r );
-		p_colour.get( Component::eGreen ).convert_to( g );
-		p_colour.get( Component::eBlue ).convert_to( b );
-		p_colour.get( Component::eAlpha ).convert_to( a );
+		p_colour.get( Component::eRed ).convertTo( r );
+		p_colour.get( Component::eGreen ).convertTo( g );
+		p_colour.get( Component::eBlue ).convertTo( b );
+		p_colour.get( Component::eAlpha ).convertTo( a );
 		return ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | ( a << 0 );
 	}
 
-	uint32_t abgr_packed( ColourT< ColourComponent > const & p_colour )
+	uint32_t toABGRPacked( ColourT< ColourComponent > const & p_colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
 		uint32_t b = 0;
 		uint32_t a = 0;
-		p_colour.get( Component::eAlpha ).convert_to( a );
-		p_colour.get( Component::eBlue ).convert_to( b );
-		p_colour.get( Component::eGreen ).convert_to( g );
-		p_colour.get( Component::eRed ).convert_to( r );
+		p_colour.get( Component::eAlpha ).convertTo( a );
+		p_colour.get( Component::eBlue ).convertTo( b );
+		p_colour.get( Component::eGreen ).convertTo( g );
+		p_colour.get( Component::eRed ).convertTo( r );
 		return ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | ( r << 0 );
 	}
 
-	uint32_t bgra_packed( ColourT< ColourComponent > const & p_colour )
+	uint32_t toBGRAPacked( ColourT< ColourComponent > const & p_colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
 		uint32_t b = 0;
 		uint32_t a = 0;
-		p_colour.get( Component::eBlue ).convert_to( b );
-		p_colour.get( Component::eGreen ).convert_to( g );
-		p_colour.get( Component::eRed ).convert_to( r );
-		p_colour.get( Component::eAlpha ).convert_to( a );
+		p_colour.get( Component::eBlue ).convertTo( b );
+		p_colour.get( Component::eGreen ).convertTo( g );
+		p_colour.get( Component::eRed ).convertTo( r );
+		p_colour.get( Component::eAlpha ).convertTo( a );
 		return ( b << 24 ) | ( g << 16 ) | ( r << 8 ) | ( a << 0 );
 	}
 

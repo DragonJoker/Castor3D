@@ -16,24 +16,24 @@ namespace Testing
 {
 	//*********************************************************************************************
 
-	namespace matrix = Castor::matrix;
-	using Castor::real;
-	using Castor::Angle;
-	using Castor::Logger;
-	using Castor::Matrix4x4f;
-	using Castor::Matrix4x4r;
-	using Castor::Matrix4x4d;
-	using Castor::Matrix3x3f;
-	using Castor::Matrix3x3r;
-	using Castor::Matrix3x3d;
-	using Castor::Point3f;
-	using Castor::Point3r;
-	using Castor::Point3d;
-	using Castor::Point4f;
-	using Castor::Point4r;
-	using Castor::Point4d;
-	using Castor::Quaternion;
-	using Castor::StringStream;
+	namespace matrix = castor::matrix;
+	using castor::real;
+	using castor::Angle;
+	using castor::Logger;
+	using castor::Matrix4x4f;
+	using castor::Matrix4x4r;
+	using castor::Matrix4x4d;
+	using castor::Matrix3x3f;
+	using castor::Matrix3x3r;
+	using castor::Matrix3x3d;
+	using castor::Point3f;
+	using castor::Point3r;
+	using castor::Point3d;
+	using castor::Point4f;
+	using castor::Point4r;
+	using castor::Point4d;
+	using castor::Quaternion;
+	using castor::StringStream;
 
 	//*********************************************************************************************
 
@@ -46,16 +46,16 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsMatrixTest::DoRegisterTests()
+	void CastorUtilsMatrixTest::doRegisterTests()
 	{
-		DoRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
+		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
 
 #if defined( CASTOR_USE_GLM )
 
-		//DoRegisterTest( "MatrixInversionComparison", std::bind( &CastorUtilsMatrixTest::MatrixInversionComparison, this ) );
-		DoRegisterTest( "MatrixMultiplicationComparison", std::bind( &CastorUtilsMatrixTest::MatrixMultiplicationComparison, this ) );
-		DoRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsMatrixTest::TransformationMatrixComparison, this ) );
-		DoRegisterTest( "ProjectionMatrixComparison", std::bind( &CastorUtilsMatrixTest::ProjectionMatrixComparison, this ) );
+		//doRegisterTest( "MatrixInversionComparison", std::bind( &CastorUtilsMatrixTest::MatrixInversionComparison, this ) );
+		doRegisterTest( "MatrixMultiplicationComparison", std::bind( &CastorUtilsMatrixTest::MatrixMultiplicationComparison, this ) );
+		doRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsMatrixTest::TransformationMatrixComparison, this ) );
+		doRegisterTest( "ProjectionMatrixComparison", std::bind( &CastorUtilsMatrixTest::ProjectionMatrixComparison, this ) );
 
 #endif
 	}
@@ -72,8 +72,8 @@ namespace Testing
 		mtxRGBtoYUV[0][2] =  0.615;
 		mtxRGBtoYUV[1][2] = -0.51499;
 		mtxRGBtoYUV[2][2] = -0.10001;
-		Matrix3x3d mtxYUVtoRGB( mtxRGBtoYUV.get_inverse() );
-		CT_EQUAL( mtxRGBtoYUV, mtxYUVtoRGB.get_inverse() );
+		Matrix3x3d mtxYUVtoRGB( mtxRGBtoYUV.getInverse() );
+		CT_EQUAL( mtxRGBtoYUV, mtxYUVtoRGB.getInverse() );
 		mtxRGBtoYUV[0][0] =  0.2126;
 		mtxRGBtoYUV[1][0] =  0.7152;
 		mtxRGBtoYUV[2][0] =  0.0722;
@@ -83,8 +83,8 @@ namespace Testing
 		mtxRGBtoYUV[0][2] =  0.615;
 		mtxRGBtoYUV[1][2] = -0.55861;
 		mtxRGBtoYUV[2][2] = -0.05639;
-		mtxYUVtoRGB = mtxRGBtoYUV.get_inverse();
-		CT_EQUAL( mtxRGBtoYUV, mtxYUVtoRGB.get_inverse() );
+		mtxYUVtoRGB = mtxRGBtoYUV.getInverse();
+		CT_EQUAL( mtxRGBtoYUV, mtxYUVtoRGB.getInverse() );
 	}
 
 #if defined( CASTOR_USE_GLM )
@@ -98,7 +98,7 @@ namespace Testing
 			glm::mat4 glm;
 			randomInit( mtx.ptr(), &glm[0][0], 16 );
 			CT_EQUAL( mtx, glm );
-			Matrix4x4f mtxInv( mtx.get_inverse() );
+			Matrix4x4f mtxInv( mtx.getInverse() );
 			glm::mat4 glmInv( glm::inverse( glm ) );
 			CT_EQUAL( mtxInv, glmInv );
 		}
@@ -131,7 +131,7 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::TransformationMatrixComparison()
 	{
-		Logger::LogInfo( cuT( "	Translate" ) );
+		Logger::logInfo( cuT( "	Translate" ) );
 
 		for ( real r = 0; r < 100; r += 1 )
 		{
@@ -144,7 +144,7 @@ namespace Testing
 			CT_EQUAL( mtx, mat );
 		}
 
-		Logger::LogInfo( cuT( "	Scale" ) );
+		Logger::logInfo( cuT( "	Scale" ) );
 
 		for ( real r = 0; r < 100; r += 1 )
 		{
@@ -166,7 +166,7 @@ namespace Testing
 		real bottom = 1080.0f;
 		real near = 1.0f;
 		real far = 1000.0f;
-		Logger::LogInfo( cuT( "	Ortho RH" ) );
+		Logger::logInfo( cuT( "	Ortho RH" ) );
 		{
 			Matrix4x4r mtx( 1 );
 			matrix::ortho( mtx, left, right, bottom, top, near, far );
@@ -174,7 +174,7 @@ namespace Testing
 			mat = glm::ortho( left, right, bottom, top, near, far );
 			CT_EQUAL( mtx, mat );
 		}
-		Logger::LogInfo( cuT( "	Frustum" ) );
+		Logger::logInfo( cuT( "	Frustum" ) );
 		{
 			Matrix4x4r mtx( 1 );
 			matrix::frustum( mtx, left, right, bottom, top, near, far );
@@ -182,9 +182,9 @@ namespace Testing
 			mat = glm::frustum( left, right, bottom, top, near, far );
 			CT_EQUAL( mtx, mat );
 		}
-		Logger::LogInfo( cuT( "	Perspective" ) );
+		Logger::logInfo( cuT( "	Perspective" ) );
 		{
-			Angle fov( Angle::from_degrees( 90.0 ) );
+			Angle fov( Angle::fromDegrees( 90.0 ) );
 			real aspect = 4.0f / 3.0f;
 			Matrix4x4r mtx( 1 );
 			matrix::perspective( mtx, fov, aspect, near, far );
@@ -260,32 +260,32 @@ namespace Testing
 
 	void CastorUtilsMatrixBench::MatrixMultiplicationsCastor()
 	{
-		DoNotOptimizeAway( m_mtx1 * m_mtx2 );
+		doNotOptimizeAway( m_mtx1 * m_mtx2 );
 	}
 
 	void CastorUtilsMatrixBench::MatrixInversionCastor()
 	{
-		DoNotOptimizeAway( m_mtx1.get_inverse() );
+		doNotOptimizeAway( m_mtx1.getInverse() );
 	}
 
 	void CastorUtilsMatrixBench::MatrixCopyCastor()
 	{
-		DoNotOptimizeAway( m_mtx2 = m_mtx1 );
+		doNotOptimizeAway( m_mtx2 = m_mtx1 );
 	}
 
 #if defined( CASTOR_USE_GLM )
 
 	void CastorUtilsMatrixBench::MatrixMultiplicationsGlm()
 	{
-		DoNotOptimizeAway( m_mtx1glm * m_mtx2glm );
+		doNotOptimizeAway( m_mtx1glm * m_mtx2glm );
 	}
 	void CastorUtilsMatrixBench::MatrixInversionGlm()
 	{
-		DoNotOptimizeAway( glm::inverse( m_mtx1glm ) );
+		doNotOptimizeAway( glm::inverse( m_mtx1glm ) );
 	}
 	void CastorUtilsMatrixBench::MatrixCopyGlm()
 	{
-		DoNotOptimizeAway( m_mtx2glm = m_mtx1glm );
+		doNotOptimizeAway( m_mtx2glm = m_mtx1glm );
 	}
 
 #endif

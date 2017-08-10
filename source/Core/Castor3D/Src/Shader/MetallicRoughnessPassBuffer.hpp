@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/ArrayView.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -62,13 +62,13 @@ namespace Castor3D
 		 */
 		C3D_API ~MetallicRoughnessPassBuffer();
 		/**
-		 *\copydoc		Castor3D::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::Visit
 		 */
-		C3D_API void Visit( LegacyPass const & data )override;
+		C3D_API void visit( LegacyPass const & data )override;
 		/**
-		 *\copydoc		Castor3D::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::Visit
 		 */
-		C3D_API void Visit( MetallicRoughnessPbrPass const & data )override;
+		C3D_API void visit( MetallicRoughnessPbrPass const & data )override;
 
 	public:
 
@@ -76,10 +76,10 @@ namespace Castor3D
 
 		struct PassesData
 		{
-			Castor::ArrayView< RgbaColour > albRough;
-			Castor::ArrayView< RgbaColour > metDiv;
-			Castor::ArrayView< RgbaColour > common;
-			Castor::ArrayView< RgbaColour > reflRefr;
+			castor::ArrayView< RgbaColour > albRough;
+			castor::ArrayView< RgbaColour > metDiv;
+			castor::ArrayView< RgbaColour > common;
+			castor::ArrayView< RgbaColour > reflRefr;
 		};
 
 #else
@@ -91,7 +91,7 @@ namespace Castor3D
 			RgbaColour common;
 			RgbaColour reflRefr;
 		};
-		using PassesData = Castor::ArrayView< PassData >;
+		using PassesData = castor::ArrayView< PassData >;
 
 #endif
 

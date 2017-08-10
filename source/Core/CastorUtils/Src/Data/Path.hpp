@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Miscellaneous/StringUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -101,7 +101,7 @@ namespace Castor
 		 *\param[in]	p_data	L'objet Path à copier
 		 *\return		Une référence sur cet objet Path
 		 */
-		CU_API Path & operator =( Path const & p_data );
+		CU_API Path & operator=( Path const & p_data );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -115,7 +115,7 @@ namespace Castor
 		CU_API Path & operator=( Path && p_data );
 		/**
 		 *\~english
-		 *\brief		Appends a path to the current path. Adds the separator if needed
+		 *\brief		Appends a path to the current path. adds the separator if needed
 		 *\param[in]	p_path	The path to add
 		 *\~french
 		 *\brief		Concatène un chemin à celui-ci. Ajoute le séparateur si besoin est
@@ -124,7 +124,7 @@ namespace Castor
 		CU_API Path & operator/=( Path const & p_path );
 		/**
 		 *\~english
-		 *\brief		Adds a string to the current path. Adds the separator if needed
+		 *\brief		adds a string to the current path. Adds the separator if needed
 		 *\param[in]	p_string	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères à ce chemin. Ajoute le séparateur si besoin est
@@ -133,7 +133,7 @@ namespace Castor
 		CU_API Path & operator/=( String const & p_string );
 		/**
 		 *\~english
-		 *\brief		Adds a MBCS C string to the current path. Adds the separator if needed
+		 *\brief		adds a MBCS C string to the current path. Adds the separator if needed
 		 *\param[in]	p_buffer	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères C MBCS à ce chemin. Ajoute le séparateur si besoin est
@@ -142,7 +142,7 @@ namespace Castor
 		CU_API Path & operator/=( char const * p_buffer );
 		/**
 		 *\~english
-		 *\brief		Adds a Unicode C string to the current path. Adds the separator if needed
+		 *\brief		adds a Unicode C string to the current path. Adds the separator if needed
 		 *\param[in]	p_buffer	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères C Unicode à ce chemin. Ajoute le séparateur si besoin est
@@ -160,7 +160,7 @@ namespace Castor
 		CU_API Path & operator+=( Path const & p_path );
 		/**
 		 *\~english
-		 *\brief		Adds a string to the current path.
+		 *\brief		adds a string to the current path.
 		 *\param[in]	p_string	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères à ce chemin.
@@ -169,7 +169,7 @@ namespace Castor
 		CU_API Path & operator+=( String const & p_string );
 		/**
 		 *\~english
-		 *\brief		Adds a MBCS C string to the current path.
+		 *\brief		adds a MBCS C string to the current path.
 		 *\param[in]	p_buffer	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères C MBCS à ce chemin.
@@ -178,7 +178,7 @@ namespace Castor
 		CU_API Path & operator+=( char const * p_buffer );
 		/**
 		 *\~english
-		 *\brief		Adds a Unicode C string to the current path.
+		 *\brief		adds a Unicode C string to the current path.
 		 *\param[in]	p_buffer	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères C Unicode à ce chemin.
@@ -193,7 +193,7 @@ namespace Castor
 		 *\brief		Récupère le dossier parent
 		 *\return		Le dossier parent
 		 */
-		CU_API Path GetPath()const;
+		CU_API Path getPath()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the leaf of this path (filename and extension for files).
@@ -204,7 +204,7 @@ namespace Castor
 		 *\param[in]	p_withExtension	Dit si on veur l'extension ou pas, pour les fichiers.
 		 *\return		La feuille.
 		 */
-		CU_API Path GetFileName( bool p_withExtension = false )const;
+		CU_API Path getFileName( bool p_withExtension = false )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the full path and leaf
@@ -213,7 +213,7 @@ namespace Castor
 		 *\brief		Récupère le chemin complet
 		 *\return		Le chemin complet
 		 */
-		CU_API Path GetFullFileName()const;
+		CU_API Path getFullFileName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the extension of the file name, if any
@@ -222,14 +222,14 @@ namespace Castor
 		 *\brief		Récupère l'extension du nom de fichier, s'il y en a
 		 *\return		L'extension
 		 */
-		CU_API String GetExtension()const;
+		CU_API String getExtension()const;
 
 	private:
-		void DoNormalise();
+		void doNormalise();
 	};
 	/**
 	 *\~english
-	 *\brief		Appends 2 paths. Adds the separator if needed
+	 *\brief		Appends 2 paths. adds the separator if needed
 	 *\param[in]	p_lhs	The first path to add
 	 *\param[in]	p_rhs	The second path to add
 	 *\~french
@@ -240,7 +240,7 @@ namespace Castor
 	CU_API Path operator/( Path const & p_lhs, Path const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Adds a string to a path. Adds the separator if needed
+	 *\brief		adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_lhs	The first path to add
 	 *\param[in]	p_rhs	The path to add
 	 *\~french
@@ -251,7 +251,7 @@ namespace Castor
 	CU_API Path operator/( Path const & p_lhs, String const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Adds a string to a path. Adds the separator if needed
+	 *\brief		adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_lhs	The first path to add
 	 *\param[in]	p_rhs	The path to add
 	 *\~french
@@ -262,7 +262,7 @@ namespace Castor
 	CU_API Path operator/( Path const & p_lhs, char const * p_rhs );
 	/**
 	 *\~english
-	 *\brief		Adds a string to a path. Adds the separator if needed
+	 *\brief		adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_lhs	The first path to add
 	 *\param[in]	p_rhs	The path to add
 	 *\~french
@@ -273,7 +273,7 @@ namespace Castor
 	CU_API Path operator/( Path const & p_lhs, wchar_t const * p_rhs );
 	/**
 	 *\~english
-	 *\brief		Adds a string to a path. Adds the separator if needed
+	 *\brief		adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_lhs	The path to add
 	 *\param[in]	p_rhs	The first path to add
 	 *\~french
@@ -284,7 +284,7 @@ namespace Castor
 	CU_API Path operator/( String const & p_lhs, Path const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Adds a string to a path. Adds the separator if needed
+	 *\brief		adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_lhs	The path to add
 	 *\param[in]	p_rhs	The first path to add
 	 *\~french
@@ -295,7 +295,7 @@ namespace Castor
 	CU_API Path operator/( char const * p_lhs, Path const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Adds a string to a path. Adds the separator if needed
+	 *\brief		adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_lhs	The path to add
 	 *\param[in]	p_rhs	The first path to add
 	 *\~french

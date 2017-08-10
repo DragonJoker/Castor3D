@@ -12,10 +12,10 @@
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*********************************************************************************************
 
@@ -23,11 +23,11 @@ namespace Castor3D
 	{
 		uint32_t constexpr FaceCount = 20u;
 
-		float DoCalcPointLightBSphere( const Castor3D::PointLight & light
+		float doCalcPointLightBSphere( const castor3d::PointLight & light
 			, float max )
 		{
-			return GetMaxDistance( light
-				, light.GetAttenuation()
+			return getMaxDistance( light
+				, light.getAttenuation()
 				, max );
 		}
 	}
@@ -38,8 +38,8 @@ namespace Castor3D
 		, GLSL::Shader const & vtx
 		, GLSL::Shader const & pxl )
 		: MeshLightPass::Program{ engine, vtx, pxl }
-		, m_lightPosition{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
-		, m_lightAttenuation{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
+		, m_lightPosition{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
+		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
 	{
 	}
 
@@ -47,12 +47,12 @@ namespace Castor3D
 	{
 	}
 
-	void PointLightPass::Program::DoBind( Light const & light )
+	void PointLightPass::Program::doBind( Light const & light )
 	{
-		auto & pointLight = *light.GetPointLight();
-		m_lightIntensity->SetValue( pointLight.GetIntensity() );
-		m_lightAttenuation->SetValue( pointLight.GetAttenuation() );
-		m_lightPosition->SetValue( light.GetParent()->GetDerivedPosition() );
+		auto & pointLight = *light.getPointLight();
+		m_lightIntensity->setValue( pointLight.getIntensity() );
+		m_lightAttenuation->setValue( pointLight.getAttenuation() );
+		m_lightPosition->setValue( light.getParent()->getDerivedPosition() );
 	}
 
 	//*********************************************************************************************
@@ -75,9 +75,9 @@ namespace Castor3D
 	{
 	}
 
-	Point3fArray PointLightPass::DoGenerateVertices()const
+	Point3fArray PointLightPass::doGenerateVertices()const
 	{
-		Angle const angle = Angle::from_degrees( 360.0f / FaceCount );
+		Angle const angle = Angle::fromDegrees( 360.0f / FaceCount );
 		std::vector< Point2f > arc{ FaceCount + 1 };
 		Angle alpha;
 		Point3fArray data;
@@ -125,7 +125,7 @@ namespace Castor3D
 		return data;
 	}
 
-	UIntArray PointLightPass::DoGenerateFaces()const
+	UIntArray PointLightPass::doGenerateFaces()const
 	{
 		UIntArray faces;
 		faces.reserve( FaceCount * FaceCount * 6 );
@@ -161,23 +161,23 @@ namespace Castor3D
 		return faces;
 	}
 
-	Matrix4x4r PointLightPass::DoComputeModelMatrix( Castor3D::Light const & light
+	Matrix4x4r PointLightPass::doComputeModelMatrix( castor3d::Light const & light
 		, Camera const & camera )const
 	{
-		auto lightPos = light.GetParent()->GetDerivedPosition();
-		auto camPos = camera.GetParent()->GetDerivedPosition();
-		auto far = camera.GetViewport().GetFar();
-		auto scale = DoCalcPointLightBSphere( *light.GetPointLight()
+		auto lightPos = light.getParent()->getDerivedPosition();
+		auto camPos = camera.getParent()->getDerivedPosition();
+		auto far = camera.getViewport().getFar();
+		auto scale = doCalcPointLightBSphere( *light.getPointLight()
 			, float( far - point::distance( lightPos, camPos ) - ( far / 50.0f ) ) );
 		Matrix4x4r model{ 1.0f };
-		matrix::set_transform( model
+		matrix::setTransform( model
 			, lightPos
 			, Point3f{ scale, scale, scale }
 		, Quaternion::identity() );
 		return model;
 	}
 
-	LightPass::ProgramPtr PointLightPass::DoCreateProgram( GLSL::Shader const & vtx
+	LightPass::ProgramPtr PointLightPass::doCreateProgram( GLSL::Shader const & vtx
 		, GLSL::Shader const & pxl )const
 	{
 		return std::make_unique< Program >( m_engine, vtx, pxl );

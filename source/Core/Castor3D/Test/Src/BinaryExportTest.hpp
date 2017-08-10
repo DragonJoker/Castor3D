@@ -33,11 +33,11 @@ namespace Testing
 		: public C3DTestCase
 	{
 	public:
-		explicit BinaryExportTest( Castor3D::Engine & engine );
+		explicit BinaryExportTest( castor3d::Engine & engine );
 		virtual ~BinaryExportTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void SimpleMesh();

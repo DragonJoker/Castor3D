@@ -31,7 +31,7 @@ SOFTWARE.
 #include "Shader/MatrixUbo.hpp"
 #include "Texture/TextureUnit.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -58,7 +58,7 @@ namespace Castor3D
 		 *\param[in]	config	La configuration du SSAO.
 		 */
 		SsaoPass( Engine & engine
-			, Castor::Size const & size
+			, castor::Size const & size
 			, SsaoConfig const & config
 			, GpInfoUbo & gpInfoUbo );
 		/**
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\param[in]	gp		Le résultat de la geometry pass.
 		 *\param[in]	info	Reçoit les informations de rendu.
 		 */
-		void Render( GeometryPassResult const & gp
+		void render( GeometryPassResult const & gp
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -86,26 +86,26 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le résultat de la passe SSAO.
 		 */
-		inline TextureUnit const & GetResult()const
+		inline TextureUnit const & getResult()const
 		{
 			return m_blurResult;
 		}
 
 	private:
-		void DoInitialiseQuadRendering();
-		void DoInitialiseSsaoPass();
-		void DoInitialiseBlurPass();
-		void DoCleanupQuadRendering();
-		void DoCleanupSsaoPass();
-		void DoCleanupBlurPass();
-		void DoRenderSsao( GeometryPassResult const & gp );
-		void DoRenderBlur();
+		void doInitialiseQuadRendering();
+		void doInitialiseSsaoPass();
+		void doInitialiseBlurPass();
+		void doCleanupQuadRendering();
+		void doCleanupSsaoPass();
+		void doCleanupBlurPass();
+		void doRenderSsao( GeometryPassResult const & gp );
+		void doRenderBlur();
 
 	private:
 		Engine & m_engine;
 		SsaoConfig m_config;
 		// Quad rendering
-		Castor::Size m_size;
+		castor::Size m_size;
 		MatrixUbo m_matrixUbo;
 		Viewport m_viewport;
 		// Raw SSAO pass
@@ -113,7 +113,7 @@ namespace Castor3D
 		GeometryBuffersSPtr m_ssaoGeometryBuffers;
 		RenderPipelineUPtr m_ssaoPipeline;
 		ShaderProgramSPtr m_ssaoProgram;
-		Castor::Point3fArray m_ssaoKernel;
+		castor::Point3fArray m_ssaoKernel;
 		TextureUnit m_ssaoNoise;
 		TextureUnit m_ssaoResult;
 		FrameBufferSPtr m_ssaoFbo;

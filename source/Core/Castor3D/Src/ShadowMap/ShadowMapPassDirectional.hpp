@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "ShadowMapPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -68,32 +68,32 @@ namespace Castor3D
 		 *\~french
 		 *\return		La caméra.
 		 */
-		inline CameraSPtr GetCamera()const
+		inline CameraSPtr getCamera()const
 		{
 			return m_camera;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
+		 *\copydoc		castor3d::ShadowMapPass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void DoUpdate( RenderQueueArray & p_queues )override;
+		void doUpdate( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
+		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void DoRender( uint32_t p_face )override;
+		void doRender( uint32_t p_face )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void DoPrepareBackPipeline( ShaderProgram & p_program
+		void doPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 
 	private:
@@ -102,7 +102,7 @@ namespace Castor3D
 		CameraSPtr m_camera;
 		//!\~english	The view matrix.
 		//!\~french		La matrice vue.
-		Castor::Matrix4x4r m_view;
+		castor::Matrix4x4r m_view;
 	};
 }
 

@@ -8,9 +8,9 @@
 #include "Scene/Scene.hpp"
 #include "Mesh/Mesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String ObjectCacheTraits< Geometry, String >::Name = cuT( "Geometry" );
 
@@ -29,9 +29,9 @@ namespace Castor3D
 
 			inline void operator()( GeometrySPtr p_element )
 			{
-				m_listener.PostEvent( MakeFunctorEvent( EventType::ePreRender, [p_element, this]()
+				m_listener.postEvent( MakeFunctorEvent( EventType::ePreRender, [p_element, this]()
 				{
-					p_element->CreateBuffers( m_faceCount, m_vertexCount );
+					p_element->createBuffers( m_faceCount, m_vertexCount );
 				} ) );
 			}
 
@@ -41,7 +41,7 @@ namespace Castor3D
 		};
 	}
 
-	ObjectCache< Geometry, Castor::String >::ObjectCache( Engine & engine
+	ObjectCache< Geometry, castor::String >::ObjectCache( Engine & engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode
@@ -58,7 +58,7 @@ namespace Castor3D
 			, p_rootCameraNode
 			, p_rootCameraNode
 			, std::move( p_produce )
-			, std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, p_scene.GetListener() }, std::placeholders::_1 )
+			, std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, p_scene.getListener() }, std::placeholders::_1 )
 			, std::move( p_clean )
 			, std::move( p_merge )
 			, std::move( p_attach )
@@ -66,21 +66,21 @@ namespace Castor3D
 	{
 	}
 
-	ObjectCache< Geometry, Castor::String >::~ObjectCache()
+	ObjectCache< Geometry, castor::String >::~ObjectCache()
 	{
 	}
 
-	void ObjectCache< Geometry, Castor::String >::FillInfo( RenderInfo & p_info )const
+	void ObjectCache< Geometry, castor::String >::fillInfo( RenderInfo & p_info )const
 	{
 		p_info.m_totalVertexCount += m_vertexCount;
 		p_info.m_totalFaceCount += m_faceCount;
-		auto lock = Castor::make_unique_lock( m_elements );
+		auto lock = castor::makeUniqueLock( m_elements );
 		p_info.m_totalObjectsCount += std::accumulate( m_elements.begin()
 			, m_elements.end()
 			, 0u
 			, []( uint32_t p_value, std::pair< String, GeometrySPtr > const & p_pair )
 			{
-				return p_value + p_pair.second->GetMesh()->GetSubmeshCount();
+				return p_value + p_pair.second->getMesh()->getSubmeshCount();
 			} );
 	}
 }

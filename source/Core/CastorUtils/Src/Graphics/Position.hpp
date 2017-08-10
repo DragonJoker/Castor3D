@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Math/Coords.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -89,7 +89,7 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Position & operator =( Position const & p_obj );
+		CU_API Position & operator=( Position const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -100,10 +100,10 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Position & operator =( Position && p_obj );
+		CU_API Position & operator=( Position && p_obj );
 		/**
 		 *\~english
-		 *\brief		Sets the position values
+		 *\brief		sets the position values
 		 *\param[in]	p_x, p_y	The position
 		 *\~french
 		 *\brief		Définit la position
@@ -169,7 +169,7 @@ namespace Castor
 		}
 
 		using BaseType::ptr;
-		using BaseType::const_ptr;
+		using BaseType::constPtr;
 
 	private:
 		union
@@ -178,8 +178,8 @@ namespace Castor
 			{
 				int32_t x;
 				int32_t y;
-			}		position;
-			int32_t	buffer[2];
+			} position;
+			int32_t buffer[2];
 		}	m_data;
 	};
 	/**
@@ -192,7 +192,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les positions à comparer
 	 *\return		\p true si les positions ont les mêmes coordonnées
 	 */
-	CU_API bool operator ==( Position const & p_a, Position const & p_b );
+	CU_API bool operator==( Position const & p_a, Position const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -203,7 +203,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les positions à comparer
 	 *\return		\p false si les positions ont les mêmes coordonnées
 	 */
-	CU_API bool operator !=( Position const & p_a, Position const & p_b );
+	CU_API bool operator!=( Position const & p_a, Position const & p_b );
 }
 
 #endif

@@ -33,8 +33,8 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -50,14 +50,14 @@ namespace GuiCommon
 			m_buttonEditor = RegisterEditorClass( new ButtonEventEditor() );
 		}
 
-		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesHolder::OnPropertyChange ) );
+		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesHolder::onPropertyChange ) );
 	}
 
 	PropertiesHolder::~PropertiesHolder()
 	{
 	}
 
-	void PropertiesHolder::SetPropertyData( TreeItemProperty * p_data )
+	void PropertiesHolder::setPropertyData( TreeItemProperty * p_data )
 	{
 		if ( m_data )
 		{
@@ -72,11 +72,11 @@ namespace GuiCommon
 		}
 	}
 
-	void PropertiesHolder::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void PropertiesHolder::onPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		if ( m_data )
 		{
-			m_data->OnPropertyChange( p_event );
+			m_data->onPropertyChange( p_event );
 		}
 	}
 }

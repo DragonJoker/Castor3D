@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include "Animation/Mesh/MeshAnimationSubmesh.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
 	class MeshAnimationInstanceSubmesh
-		: public Castor::OwnedBy< MeshAnimationInstance >
+		: public castor::OwnedBy< MeshAnimationInstance >
 	{
 	public:
 		/**
@@ -99,14 +99,14 @@ namespace Castor3D
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
 		 *\param[in]	p_time	Index de temps courant.
 		 */
-		C3D_API void Update( Castor::Milliseconds const & p_time );
+		C3D_API void update( castor::Milliseconds const & p_time );
 		/**
 		 *\~english
 		 *\brief		The current factor.
 		 *\~french
 		 *\brief		Le facteur courant.
 		 */
-		inline float GetCurrentFactor()const
+		inline float getCurrentFactor()const
 		{
 			return m_currentFactor;
 		}

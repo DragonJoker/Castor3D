@@ -56,7 +56,7 @@ namespace GuiCommon
 		 *\param[in]	p_pass		La passe cible.
 		 *\param[in]	p_scene		La scène.
 		 */
-		PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass, Castor3D::Scene & p_scene );
+		PassTreeItemProperty( bool p_editable, castor3d::PassSPtr p_pass, castor3d::Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -72,7 +72,7 @@ namespace GuiCommon
 		 *\brief		Récupère la gàomàtrie
 		 *\return		La valeur
 		 */
-		inline Castor3D::PassSPtr GetPass()
+		inline castor3d::PassSPtr getPass()
 		{
 			return m_pass.lock();
 		}
@@ -84,42 +84,42 @@ namespace GuiCommon
 		 *\brief		Récupère la gàomàtrie
 		 *\return		La valeur
 		 */
-		template< Castor3D::MaterialType Type >
-		inline std::shared_ptr< typename Castor3D::PassTyper< Type >::Type > GetTypedPass()
+		template< castor3d::MaterialType Type >
+		inline std::shared_ptr< typename castor3d::PassTyper< Type >::Type > getTypedPass()
 		{
 			auto pass = m_pass.lock();
-			REQUIRE( pass && pass->GetType() == Type );
-			return std::static_pointer_cast< typename Castor3D::PassTyper< Type >::Type >( pass );
+			REQUIRE( pass && pass->getType() == Type );
+			return std::static_pointer_cast< typename castor3d::PassTyper< Type >::Type >( pass );
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnDiffuseColourChange( Castor::Colour const & p_value );
-		void OnSpecularColourChange( Castor::Colour const & p_value );
+		void OnDiffuseColourChange( castor::Colour const & p_value );
+		void OnSpecularColourChange( castor::Colour const & p_value );
 		void OnAmbientChange( double p_value );
 		void OnEmissiveChange( double p_value );
 		void OnExponentChange( double p_value );
 		void OnTwoSidedChange( bool p_value );
 		void OnOpacityChange( double p_value );
 		void OnRefractionRatioChange( double p_value );
-		void OnAlbedoChange( Castor::Colour const & p_value );
+		void OnAlbedoChange( castor::Colour const & p_value );
 		void OnRoughnessChange( double p_value );
 		void OnMetallicChange( double p_value );
 		void OnGlossinessChange( double p_value );
 		bool OnEditShader( wxPGProperty * p_property );
 
 	private:
-		Castor3D::PassWPtr m_pass;
-		Castor3D::Scene & m_scene;
+		castor3d::PassWPtr m_pass;
+		castor3d::Scene & m_scene;
 	};
 }
 

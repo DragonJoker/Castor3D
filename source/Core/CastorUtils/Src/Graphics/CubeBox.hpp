@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "ContainerBox.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -93,7 +93,7 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		CU_API CubeBox & operator =( CubeBox const & p_container );
+		CU_API CubeBox & operator=( CubeBox const & p_container );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -104,7 +104,7 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		CU_API CubeBox & operator =( CubeBox && p_container );
+		CU_API CubeBox & operator=( CubeBox && p_container );
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is within the container, id est inside it but not on it's limits
@@ -115,7 +115,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est dans le container
 		 */
-		CU_API virtual bool IsWithin( Point3r const & p_v );
+		CU_API virtual bool isWithin( Point3r const & p_v );
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within
@@ -126,7 +126,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est sur la limite
 		 */
-		CU_API virtual bool IsOnLimits( Point3r const & p_v );
+		CU_API virtual bool isOnLimits( Point3r const & p_v );
 		/**
 		 *\~english
 		 *\brief		Reinitialises the combo box to the given limits
@@ -137,7 +137,7 @@ namespace Castor
 		 *\param[in]	p_ptMin	Le point minimal
 		 *\param[in]	p_ptMax	Le point maximal
 		 */
-		CU_API void Load( Point3r const & p_ptMin, Point3r const & p_ptMax );
+		CU_API void load( Point3r const & p_ptMin, Point3r const & p_ptMax );
 		/**
 		 *\~english
 		 *\brief		Retrieves the min extent
@@ -146,7 +146,7 @@ namespace Castor
 		 *\brief		Récupère le point minimal
 		 *\return		Une référence constante sur le point minimal
 		 */
-		inline Point3r const & GetMin()const
+		inline Point3r const & getMin()const
 		{
 			return m_min;
 		}
@@ -158,7 +158,7 @@ namespace Castor
 		 *\brief		Récupère le point maximal
 		 *\return		Une référence constante sur le point maximal
 		 */
-		inline Point3r const & GetMax()const
+		inline Point3r const & getMax()const
 		{
 			return m_max;
 		}

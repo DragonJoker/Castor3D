@@ -33,7 +33,7 @@ SOFTWARE.
 #	define CASTOR_ALIGNED_DECL( a )
 #endif
 
-namespace Castor
+namespace castor
 {
 	/**
 	 *\~english
@@ -47,7 +47,7 @@ namespace Castor
 	 *\param[in]	p_size		La taille désirée.
 	 *\return		La mémoire allouée, nullptr en cas d'erreur.
 	 */
-	CU_API void * AlignedAlloc( size_t p_alignment, size_t p_size );
+	CU_API void * alignedAlloc( size_t p_alignment, size_t p_size );
 	/**
 	 *\~english
 	 *\brief		Deallocates aligned memory.
@@ -56,7 +56,7 @@ namespace Castor
 	 *\brief		Désalloue de la mémoire alignée.
 	 *\param[in]	p_memory	La mémoire.
 	 */
-	CU_API void AlignedFree( void * p_memory );
+	CU_API void alignedFree( void * p_memory );
 	/**
 	 *\~english
 	 *\brief		Allocates aligned memory.
@@ -70,9 +70,9 @@ namespace Castor
 	 *\return		La mémoire allouée, nullptr en cas d'erreur.
 	 */
 	template< typename T >
-	T * AlignedAlloc( size_t p_alignment, size_t p_size )
+	T * alignedAlloc( size_t p_alignment, size_t p_size )
 	{
-		return reinterpret_cast< T * >( AlignedAlloc( p_alignment, p_size ) );
+		return reinterpret_cast< T * >( alignedAlloc( p_alignment, p_size ) );
 	}
 	/*!
 	\author		Sylvain DOREMUS
@@ -87,11 +87,11 @@ namespace Castor
 	class CASTOR_ALIGNED_DECL( A ) Aligned
 	{
 	public:
-		static const size_t align_value = A;
+		static const size_t AlignValue = A;
 
 		void * operator new( size_t p_size )
 		{
-			void * storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = castor::alignedAlloc( AlignValue, p_size );
 
 			if ( !storage )
 			{
@@ -103,7 +103,7 @@ namespace Castor
 
 		void * operator new[]( size_t p_size )
 		{
-			void * storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = castor::alignedAlloc( AlignValue, p_size );
 
 			if ( !storage )
 			{
@@ -115,17 +115,17 @@ namespace Castor
 
 		void * operator new( size_t p_size, std::nothrow_t )
 		{
-			return Castor::AlignedAlloc( align_value, p_size );
+			return castor::alignedAlloc( AlignValue, p_size );
 		}
 
 		void operator delete( void * p_memory )
 		{
-			Castor::AlignedFree( p_memory );
+			castor::alignedFree( p_memory );
 		}
 
 		void operator delete[]( void * p_memory )
 		{
-			Castor::AlignedFree( p_memory );
+			castor::alignedFree( p_memory );
 		}
 	};
 	/*!
@@ -141,11 +141,11 @@ namespace Castor
 	class CASTOR_ALIGNED_DECL( alignof( T ) ) AlignedFrom
 	{
 	public:
-		static const size_t align_value = alignof( T );
+		static const size_t AlignValue = alignof( T );
 
 		void * operator new( size_t p_size )
 		{
-			void * storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = castor::alignedAlloc( AlignValue, p_size );
 
 			if ( !storage )
 			{
@@ -157,7 +157,7 @@ namespace Castor
 
 		void * operator new[]( size_t p_size )
 		{
-			void * storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = castor::alignedAlloc( AlignValue, p_size );
 
 			if ( !storage )
 			{
@@ -169,17 +169,17 @@ namespace Castor
 
 		void * operator new( size_t p_size, std::nothrow_t )
 		{
-			return Castor::AlignedAlloc( align_value, p_size );
+			return castor::alignedAlloc( AlignValue, p_size );
 		}
 
 		void operator delete( void * p_memory )
 		{
-			Castor::AlignedFree( p_memory );
+			castor::alignedFree( p_memory );
 		}
 
 		void operator delete[]( void * p_memory )
 		{
-			Castor::AlignedFree( p_memory );
+			castor::alignedFree( p_memory );
 		}
 	};
 }

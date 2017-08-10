@@ -51,7 +51,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return S_OK;
@@ -90,7 +90,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return S_OK;
@@ -124,7 +124,7 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				m_instance->GetEngine()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, index, value]()
+				m_instance->getEngine()->postEvent( castor3d::MakeFunctorEvent( castor3d::eEVENT_TYPE_PRE_RENDER, [this, index, value]()
 				{
 					( m_instance->*m_function )( parameter_cast< Index >( index ), parameter_cast< Value >( value ) );
 				} ) );
@@ -132,7 +132,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return S_OK;
@@ -190,7 +190,7 @@ namespace CastorCom
 		template< typename _Index, typename _Value >\
 		HRESULT operator()( _Index index, _Value value )\
 		{\
-			m_instance->GetEngine()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value, index]()\
+			m_instance->getEngine()->postEvent( castor3d::MakeFunctorEvent( castor3d::eEVENT_TYPE_PRE_RENDER, [this, value, index]()\
 			{\
 				( m_instance->*m_function )( parameter_cast< Value >( value ), index );\
 			} ) );\

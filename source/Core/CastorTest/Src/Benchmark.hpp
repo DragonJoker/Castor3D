@@ -30,12 +30,12 @@ SOFTWARE.
 namespace Testing
 {
 	///
-	/// \func DoNotOptimizeAway
+	/// \func doNotOptimizeAway
 	///
 	/// From Andrei Alexandrescu
 	///
 	template< class T >
-	static inline void DoNotOptimizeAway( T && datum )
+	static inline void doNotOptimizeAway( T && datum )
 	{
 #if defined( _WIN32 )
 
@@ -57,13 +57,13 @@ namespace Testing
 		explicit BenchCase( std::string const & p_name );
 		virtual ~BenchCase();
 		virtual void Execute() = 0;
-		inline std::string const & GetSummary()const
+		inline std::string const & getSummary()const
 		{
 			return m_summary;
 		}
 
 	protected:
-		void DoBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls );
+		void doBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls );
 
 	private:
 		using clock = std::chrono::high_resolution_clock;
@@ -74,7 +74,7 @@ namespace Testing
 		std::string m_summary;
 	};
 
-#	define BENCHMARK( Name, Calls ) DoBench( #Name, [&](){ Name(); }, Calls )
+#	define BENCHMARK( Name, Calls ) doBench( #Name, [&](){ Name(); }, Calls )
 }
 
 #endif

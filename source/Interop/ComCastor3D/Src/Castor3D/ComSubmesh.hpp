@@ -58,31 +58,31 @@ namespace CastorCom
 		 */
 		virtual ~CSubmesh();
 
-		inline Castor3D::SubmeshSPtr GetInternal()const
+		inline castor3d::SubmeshSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::SubmeshSPtr internal )
+		inline void setInternal( castor3d::SubmeshSPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Topology, eTOPOLOGY, make_getter( m_internal.get(), &Castor3D::Submesh::GetTopology ), make_putter( m_internal.get(), &Castor3D::Submesh::SetTopology ) );
-		COM_PROPERTY_GET( FaceCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Submesh::GetFaceCount ) );
-		COM_PROPERTY_GET( PointsCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Submesh::GetPointsCount ) );
+		COM_PROPERTY( Topology, eTOPOLOGY, make_getter( m_internal.get(), &castor3d::Submesh::getTopology ), make_putter( m_internal.get(), &castor3d::Submesh::setTopology ) );
+		COM_PROPERTY_GET( FaceCount, unsigned int, make_getter( m_internal.get(), &castor3d::Submesh::getFaceCount ) );
+		COM_PROPERTY_GET( PointsCount, unsigned int, make_getter( m_internal.get(), &castor3d::Submesh::getPointsCount ) );
 
-		STDMETHOD( AddPoint )( /* [in] */ IVector3D * val );
-		STDMETHOD( AddFace )( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z );
+		STDMETHOD( addPoint )( /* [in] */ IVector3D * val );
+		STDMETHOD( addFace )( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z );
 
 	private:
-		Castor3D::SubmeshSPtr m_internal;
+		castor3d::SubmeshSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Submesh ), CSubmesh );
 
-	DECLARE_VARIABLE_PTR_GETTER( Submesh, Castor3D, Submesh );
-	DECLARE_VARIABLE_PTR_PUTTER( Submesh, Castor3D, Submesh );
+	DECLARE_VARIABLE_PTR_GETTER( Submesh, castor3d, Submesh );
+	DECLARE_VARIABLE_PTR_PUTTER( Submesh, castor3d, Submesh );
 }
 
 #endif

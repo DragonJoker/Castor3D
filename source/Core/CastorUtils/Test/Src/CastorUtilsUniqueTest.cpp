@@ -2,7 +2,7 @@
 
 #include <Design/Unique.hpp>
 
-using namespace Castor;
+using namespace castor;
 
 namespace Testing
 {
@@ -94,26 +94,26 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsUniqueTest::DoRegisterTests()
+	void CastorUtilsUniqueTest::doRegisterTests()
 	{
-		DoRegisterTest( "NoInstanceTest", std::bind( &CastorUtilsUniqueTest::NoInstanceTest, this ) );
-		DoRegisterTest( "OneInstanceTest", std::bind( &CastorUtilsUniqueTest::OneInstanceTest, this ) );
-		DoRegisterTest( "MultipleInstanceTest", std::bind( &CastorUtilsUniqueTest::MultipleInstanceTest, this ) );
-		DoRegisterTest( "MemoryTest", std::bind( &CastorUtilsUniqueTest::MemoryTest, this ) );
+		doRegisterTest( "NoInstanceTest", std::bind( &CastorUtilsUniqueTest::NoInstanceTest, this ) );
+		doRegisterTest( "OneInstanceTest", std::bind( &CastorUtilsUniqueTest::OneInstanceTest, this ) );
+		doRegisterTest( "MultipleInstanceTest", std::bind( &CastorUtilsUniqueTest::MultipleInstanceTest, this ) );
+		doRegisterTest( "MemoryTest", std::bind( &CastorUtilsUniqueTest::MemoryTest, this ) );
 	}
 
 	void CastorUtilsUniqueTest::NoInstanceTest()
 	{
-		//CT_CHECK_THROW( TestUnique::GetInstance() );
+		//CT_CHECK_THROW( TestUnique::getInstance() );
 	}
 
 	void CastorUtilsUniqueTest::OneInstanceTest()
 	{
 		//{
 		//	TestUnique tmp;
-		//	CT_CHECK_NOTHROW( TestUnique::GetInstance() );
+		//	CT_CHECK_NOTHROW( TestUnique::getInstance() );
 		//}
-		//CT_CHECK_THROW( TestUnique::GetInstance() );
+		//CT_CHECK_THROW( TestUnique::getInstance() );
 	}
 
 	void CastorUtilsUniqueTest::MultipleInstanceTest()

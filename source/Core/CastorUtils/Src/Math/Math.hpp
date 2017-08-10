@@ -44,7 +44,7 @@ SOFTWARE.
 #	undef abs
 #endif
 
-namespace Castor
+namespace castor
 {
 	//************************************************************************************************
 	/*!
@@ -54,11 +54,11 @@ namespace Castor
 	\~french
 	\brief		Cas récursif pour Factorielle
 	*/
-	template< typename T, int N > struct fact
+	template< typename T, int N > struct Fact
 	{
 		inline T operator()()
 		{
-			return N * fact < T, N - 1 > ()();
+			return N * Fact < T, N - 1 > ()();
 		}
 	};
 	/*!
@@ -68,7 +68,7 @@ namespace Castor
 	\~french
 	\brief		Cas d'arrêt pour Factorielle
 	*/
-	template< typename T > struct fact< T, 0 >
+	template< typename T > struct Fact< T, 0 >
 	{
 		inline T operator()()
 		{
@@ -83,11 +83,11 @@ namespace Castor
 	\~french
 	\brief		Cas récursif pour Puissance
 	*/
-	template< typename T, int N > struct power
+	template< typename T, int N > struct Power
 	{
 		inline T operator()( T x )
 		{
-			return power < T, N / 2 > ()( x ) * power < T, N / 2 > ()( x ) * power < T, N % 2 > ()( x );
+			return Power < T, N / 2 > ()( x ) * Power < T, N / 2 > ()( x ) * Power < T, N % 2 > ()( x );
 		}
 	};
 	/*!
@@ -97,7 +97,7 @@ namespace Castor
 	\~french
 	\brief		Cas d'arrêt pour Puissance
 	*/
-	template< typename T > struct power< T, 1 >
+	template< typename T > struct Power< T, 1 >
 	{
 		inline T operator()( T x )
 		{
@@ -111,7 +111,7 @@ namespace Castor
 	\~french
 	\brief		Cas d'arrêt pour Puissance
 	*/
-	template< typename T > struct power< T, 0 >
+	template< typename T > struct Power< T, 0 >
 	{
 		inline T operator()( T x )
 		{
@@ -126,11 +126,11 @@ namespace Castor
 	\~french
 	\brief		Cas récursif pour Logarithme Népérien
 	*/
-	template <int N, typename T> struct lnN
+	template <int N, typename T> struct LogN
 	{
 		inline double operator()( T x )
 		{
-			return lnN < N - 1, T > ()( x ) + power < double, 2 * N + 1 > ()( ( double( x ) - 1 ) / ( double( x ) + 1 ) ) / ( 2 * N + 1 );
+			return LogN < N - 1, T > ()( x ) + Power < double, 2 * N + 1 > ()( ( double( x ) - 1 ) / ( double( x ) + 1 ) ) / ( 2 * N + 1 );
 		}
 	};
 	/*!
@@ -140,7 +140,7 @@ namespace Castor
 	\~french
 	\brief		Cas d'arrêt pour Logarithme Népérien
 	*/
-	template< typename T > struct lnN<0, T>
+	template< typename T > struct LogN<0, T>
 	{
 		inline double operator()( T x )
 		{
@@ -154,7 +154,7 @@ namespace Castor
 	\~french
 	\brief		Logarithme Népérien utilisant une implémentation template
 	*/
-	template< typename T > struct ln
+	template< typename T > struct Ln
 	{
 	private:
 		enum
@@ -164,79 +164,12 @@ namespace Castor
 	public:
 		inline double operator()( T x )
 		{
-			return 2.0 * lnN<Precision, T>()( x );
+			return 2.0 * LogN<Precision, T>()( x );
 		}
 	};
+
 	//************************************************************************************************
-	/**
-	 *\~english
-	 *\brief		Puts the value in the range [min, max]
-	 *\param[in]	p_min, p_max	The range
-	 *\param[in]	p_value			The value to clamp
-	 *\return		The result
-	 *\~french
-	 *\brief		Met la valeur entre les bornes [min,max]
-	 *\param[in]	p_min, p_max	Les bornes
-	 *\param[in]	p_value			La valeur à clamper
-	 *\return		Le résultat
-	 */
-	template< typename T >
-	inline void clamp( T & p_value, T const & p_min, T const & p_max )
-	{
-		if ( p_value < p_min )
-		{
-			p_value = p_min;
-			return;
-		}
 
-		if ( p_value > p_max )
-		{
-			p_value = p_max;
-		}
-	}
-	/**
-	 *\~english
-	 *\brief		Returns p_value if it is in the range [min,max], p_min if lower than it, p_max if larger than it
-	 *\param[in]	p_min, p_max	The range
-	 *\param[in]	p_value			The value to clamp
-	 *\return		The result
-	 *\~french
-	 *\brief		Retourne p_value si elle est entre les bornes [min,max], p_min si elle lui est inférieure, p_max si elle lui est supérieure
-	 *\param[in]	p_min, p_max	Les bornes
-	 *\param[in]	p_value			La valeur à clamper
-	 *\return		Le résultat
-	 */
-	template< typename T >
-	inline T clamp( T const & p_value, T const & p_min, T const & p_max )
-	{
-		T tReturn = p_value;
-
-		if ( p_value < p_min )
-		{
-			tReturn = p_min;
-		}
-		else if ( p_value > p_max )
-		{
-			tReturn = p_max;
-		}
-
-		return tReturn;
-	}
-	/**
-	 *\~english
-	 *\brief		Returns absolute value of given value
-	 *\param[in]	p_val	The given value
-	 *\return		The absolute value
-	 *\~french
-	 *\brief		Donne la valeur absolue d'une valeur donnée
-	 *\param[in]	p_val	La valeur donnée
-	 *\return		La valeur absolue
-	 */
-	template< typename T >
-	inline T abs( T const & p_val )
-	{
-		return ( p_val >= 0 ? p_val : -p_val );
-	}
 	/**
 	 *\~english
 	 *\brief		Tests if a double is a number
@@ -249,7 +182,7 @@ namespace Castor
 	 *\param[in]	x	Le nombre à tester
 	 *\return		Le résultat
 	 */
-	inline bool is_nan( double x )
+	inline bool isNan( double x )
 	{
 		volatile double temp = x;
 		return temp != x;
@@ -266,7 +199,7 @@ namespace Castor
 	 *\param[in]	x	Le nombre à tester
 	 *\return		-1 si infini négatif, 1 si infini positif, 0 si fini
 	 */
-	inline int is_inf( double x )
+	inline int isInf( double x )
 	{
 		volatile double temp = x;
 

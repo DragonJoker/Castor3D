@@ -28,7 +28,7 @@ SOFTWARE.
 namespace GlRender
 {
 	/*!
-	\author		Sylvain Doremus.
+	\author		Sylvain doremus.
 	\version	0.8.0
 	\date		12/10/2015
 	\brief		Class used to handle texture storage buffer, using pixel buffer objects.
@@ -39,57 +39,57 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 */
-		GlPboTextureStorageTraits( Castor3D::TextureStorage & p_storage );
+		GlPboTextureStorageTraits( castor3d::TextureStorage & p_storage );
 		/**
 		 *\brief		Destructor.
 		 */
 		~GlPboTextureStorageTraits();
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Bind
+		 *\copydoc		castor3d::TextureStorage::Bind
 		 */
-		void Bind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
+		void bind( castor3d::TextureStorage const & p_storage, uint32_t p_index )const;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unbind
+		 *\copydoc		castor3d::TextureStorage::Unbind
 		 */
-		void Unbind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
+		void unbind( castor3d::TextureStorage const & p_storage, uint32_t p_index )const;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Lock
+		 *\copydoc		castor3d::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::TextureStorage & p_storage, Castor3D::AccessTypes const & p_lock, uint32_t p_index );
+		uint8_t * lock( castor3d::TextureStorage & p_storage, castor3d::AccessTypes const & p_lock, uint32_t p_index );
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unlock
+		 *\copydoc		castor3d::TextureStorage::Unlock
 		 */
-		void Unlock( Castor3D::TextureStorage & p_storage, bool p_modified, uint32_t p_index );
+		void unlock( castor3d::TextureStorage & p_storage, bool p_modified, uint32_t p_index );
 		/**
-		*\copydoc		Castor3D::TextureStorage::Fill
+		*\copydoc		castor3d::TextureStorage::Fill
 		*/
-		void Fill( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage const & p_image );
+		void fill( castor3d::TextureStorage & p_storage, castor3d::TextureImage const & p_image );
 
 	private:
 		/**
 		 *\brief		Uploads the image pixels in asynchonous mode.
 		 */
-		void DoUploadAsync( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage const & p_image );
+		void doUploadAsync( castor3d::TextureStorage & p_storage, castor3d::TextureImage const & p_image );
 		/**
 		 *\brief		Uploads the image pixels in synchonous mode.
 		 */
-		void DoUploadSync( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage const & p_image );
+		void doUploadSync( castor3d::TextureStorage & p_storage, castor3d::TextureImage const & p_image );
 		/**
-		 *\brief		Downloads the image pixels in asynchronous mode.
+		 *\brief		downloads the image pixels in asynchronous mode.
 		 */
-		void DoDownloadAsync( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage & p_image );
+		void doDownloadAsync( castor3d::TextureStorage & p_storage, castor3d::TextureImage & p_image );
 		/**
-		 *\brief		Downloads the image pixels in synchronous mode.
+		 *\brief		downloads the image pixels in synchronous mode.
 		 */
-		void DoDownloadSync( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage & p_image );
+		void doDownloadSync( castor3d::TextureStorage & p_storage, castor3d::TextureImage & p_image );
 		/**
 		 *\brief		Uploads the image pixels to the given storage (PBO or direct texture).
 		 */
-		void DoUploadImage( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage const & p_image, uint8_t const * p_buffer );
+		void doUploadImage( castor3d::TextureStorage & p_storage, castor3d::TextureImage const & p_image, uint8_t const * p_buffer );
 
 	private:
 		//! The parent storage.
-		Castor3D::TextureStorage & m_storage;
+		castor3d::TextureStorage & m_storage;
 		//! The pixel transfer buffer, used to upload the pixels.
 		GlUploadPixelBufferUPtr m_uploadBuffer;
 		//! The pixel transfer buffer, used to download the pixels.

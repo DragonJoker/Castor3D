@@ -5,7 +5,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
+using namespace castor;
 
 namespace GuiCommon
 {

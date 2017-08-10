@@ -1,4 +1,4 @@
-﻿#include "FrameVariableTreeItemProperty.hpp"
+#include "FrameVariableTreeItemProperty.hpp"
 
 #include <Render/RenderSystem.hpp>
 #include <Shader/UniformBuffer.hpp>
@@ -9,8 +9,8 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -57,147 +57,147 @@ namespace GuiCommon
 		static wxString PROPERTY_TYPE_DMAT4 = wxT( "dmat4x4" );
 		static wxString PROPERTY_TYPE_SAMPLER = wxT( "sampler" );
 
-		wxPGProperty * DoBuildValueProperty( wxString const & p_name
+		wxPGProperty * doBuildValueProperty( wxString const & p_name
 			, UniformSPtr p_variable )
 		{
 			wxPGProperty * result = nullptr;
 
-			switch ( p_variable->GetFullType() )
+			switch ( p_variable->getFullType() )
 			{
 			case UniformType::eBool:
-				result = new wxBoolProperty( p_name, p_name, std::static_pointer_cast< Uniform1b >( p_variable )->GetValue() );
+				result = new wxBoolProperty( p_name, p_name, std::static_pointer_cast< Uniform1b >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eInt:
-				result = new wxIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->GetValue() );
+				result = new wxIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eUInt:
-				result = new wxUIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1ui >( p_variable )->GetValue() );
+				result = new wxUIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1ui >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eFloat:
-				result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1f >( p_variable )->GetValue() );
+				result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1f >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eDouble:
-				result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1d >( p_variable )->GetValue() );
+				result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1d >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eSampler:
-				result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->GetValue() );
+				result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec2b:
-				result = new BoolPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2b >( p_variable )->GetValue() );
+				result = new BoolPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2b >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec3b:
-				result = new BoolPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3b >( p_variable )->GetValue() );
+				result = new BoolPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3b >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec4b:
-				result = new BoolPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4b >( p_variable )->GetValue() );
+				result = new BoolPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4b >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec2i:
-				result = new IntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2i >( p_variable )->GetValue() );
+				result = new IntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2i >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec3i:
-				result = new IntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3i >( p_variable )->GetValue() );
+				result = new IntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3i >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec4i:
-				result = new IntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4i >( p_variable )->GetValue() );
+				result = new IntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4i >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec2ui:
-				result = new UIntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2ui >( p_variable )->GetValue() );
+				result = new UIntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2ui >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec3ui:
-				result = new UIntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3ui >( p_variable )->GetValue() );
+				result = new UIntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3ui >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec4ui:
-				result = new UIntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4ui >( p_variable )->GetValue() );
+				result = new UIntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4ui >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec2f:
-				result = new FloatPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2f >( p_variable )->GetValue() );
+				result = new FloatPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2f >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec3f:
-				result = new FloatPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3f >( p_variable )->GetValue() );
+				result = new FloatPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3f >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec4f:
-				result = new FloatPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4f >( p_variable )->GetValue() );
+				result = new FloatPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4f >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec2d:
-				result = new DoublePointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2d >( p_variable )->GetValue() );
+				result = new DoublePointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2d >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec3d:
-				result = new DoublePointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3d >( p_variable )->GetValue() );
+				result = new DoublePointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3d >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eVec4d:
-				result = new DoublePointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4d >( p_variable )->GetValue() );
+				result = new DoublePointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4d >( p_variable )->getValue() );
 				break;
 
 			case UniformType::eMat2x2f:
-				result = new FloatMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2f{ std::static_pointer_cast< Uniform2x2f >( p_variable )->GetValue() } );
+				result = new FloatMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2f{ std::static_pointer_cast< Uniform2x2f >( p_variable )->getValue() } );
 				break;
 
 			case UniformType::eMat3x3f:
-				result = new FloatMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3f{ std::static_pointer_cast< Uniform3x3f >( p_variable )->GetValue() } );
+				result = new FloatMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3f{ std::static_pointer_cast< Uniform3x3f >( p_variable )->getValue() } );
 				break;
 
 			case UniformType::eMat4x4f:
-				result = new FloatMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4f{ std::static_pointer_cast< Uniform4x4f >( p_variable )->GetValue() } );
+				result = new FloatMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4f{ std::static_pointer_cast< Uniform4x4f >( p_variable )->getValue() } );
 				break;
 
 			case UniformType::eMat2x2d:
-				result = new DoubleMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2d{ std::static_pointer_cast< Uniform2x2d >( p_variable )->GetValue() } );
+				result = new DoubleMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2d{ std::static_pointer_cast< Uniform2x2d >( p_variable )->getValue() } );
 				break;
 
 			case UniformType::eMat3x3d:
-				result = new DoubleMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3d{ std::static_pointer_cast< Uniform3x3d >( p_variable )->GetValue() } );
+				result = new DoubleMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3d{ std::static_pointer_cast< Uniform3x3d >( p_variable )->getValue() } );
 				break;
 
 			case UniformType::eMat4x4d:
-				result = new DoubleMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4d{ std::static_pointer_cast< Uniform4x4d >( p_variable )->GetValue() } );
+				result = new DoubleMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4d{ std::static_pointer_cast< Uniform4x4d >( p_variable )->getValue() } );
 				break;
 			}
 
 			return result;
 		}
 
-		void DoSetValue( UniformSPtr p_variable, wxVariant const & p_value, int p_index = 0 )
+		void doSetValue( UniformSPtr p_variable, wxVariant const & p_value, int p_index = 0 )
 		{
-			switch ( p_variable->GetFullType() )
+			switch ( p_variable->getFullType() )
 			{
 			case UniformType::eBool:
-				std::static_pointer_cast< Uniform1b >( p_variable )->SetValue( GetValue< bool >( p_value ), p_index );
+				std::static_pointer_cast< Uniform1b >( p_variable )->setValue( getValue< bool >( p_value ), p_index );
 				break;
 
 			case UniformType::eInt:
-				std::static_pointer_cast< Uniform1i >( p_variable )->SetValue( GetValue< int >( p_value ), p_index );
+				std::static_pointer_cast< Uniform1i >( p_variable )->setValue( getValue< int >( p_value ), p_index );
 				break;
 
 			case UniformType::eUInt:
-				std::static_pointer_cast< Uniform1ui >( p_variable )->SetValue( GetValue< uint32_t >( p_value ), p_index );
+				std::static_pointer_cast< Uniform1ui >( p_variable )->setValue( getValue< uint32_t >( p_value ), p_index );
 				break;
 
 			case UniformType::eFloat:
-				std::static_pointer_cast< Uniform1f >( p_variable )->SetValue( GetValue< float >( p_value ), p_index );
+				std::static_pointer_cast< Uniform1f >( p_variable )->setValue( getValue< float >( p_value ), p_index );
 				break;
 
 			case UniformType::eDouble:
-				std::static_pointer_cast< Uniform1d >( p_variable )->SetValue( GetValue< double >( p_value ), p_index );
+				std::static_pointer_cast< Uniform1d >( p_variable )->setValue( getValue< double >( p_value ), p_index );
 				break;
 
 			case UniformType::eSampler:
@@ -205,87 +205,87 @@ namespace GuiCommon
 				break;
 
 			case UniformType::eVec2b:
-				std::static_pointer_cast< Uniform2b >( p_variable )->SetValue( PointRefFromVariant< bool, 2 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform2b >( p_variable )->setValue( PointRefFromVariant< bool, 2 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec3b:
-				std::static_pointer_cast< Uniform3b >( p_variable )->SetValue( PointRefFromVariant< bool, 3 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform3b >( p_variable )->setValue( PointRefFromVariant< bool, 3 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec4b:
-				std::static_pointer_cast< Uniform4b >( p_variable )->SetValue( PointRefFromVariant< bool, 4 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform4b >( p_variable )->setValue( PointRefFromVariant< bool, 4 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec2i:
-				std::static_pointer_cast< Uniform2i >( p_variable )->SetValue( PointRefFromVariant< int, 2 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform2i >( p_variable )->setValue( PointRefFromVariant< int, 2 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec3i:
-				std::static_pointer_cast< Uniform3i >( p_variable )->SetValue( PointRefFromVariant< int, 3 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform3i >( p_variable )->setValue( PointRefFromVariant< int, 3 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec4i:
-				std::static_pointer_cast< Uniform4i >( p_variable )->SetValue( PointRefFromVariant< int, 4 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform4i >( p_variable )->setValue( PointRefFromVariant< int, 4 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec2ui:
-				std::static_pointer_cast< Uniform2ui >( p_variable )->SetValue( PointRefFromVariant< uint32_t, 2 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform2ui >( p_variable )->setValue( PointRefFromVariant< uint32_t, 2 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec3ui:
-				std::static_pointer_cast< Uniform3ui >( p_variable )->SetValue( PointRefFromVariant< uint32_t, 3 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform3ui >( p_variable )->setValue( PointRefFromVariant< uint32_t, 3 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec4ui:
-				std::static_pointer_cast< Uniform4ui >( p_variable )->SetValue( PointRefFromVariant< uint32_t, 4 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform4ui >( p_variable )->setValue( PointRefFromVariant< uint32_t, 4 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec2f:
-				std::static_pointer_cast< Uniform2f >( p_variable )->SetValue( PointRefFromVariant< float, 2 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform2f >( p_variable )->setValue( PointRefFromVariant< float, 2 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec3f:
-				std::static_pointer_cast< Uniform3f >( p_variable )->SetValue( PointRefFromVariant< float, 3 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform3f >( p_variable )->setValue( PointRefFromVariant< float, 3 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec4f:
-				std::static_pointer_cast< Uniform4f >( p_variable )->SetValue( PointRefFromVariant< float, 4 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform4f >( p_variable )->setValue( PointRefFromVariant< float, 4 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec2d:
-				std::static_pointer_cast< Uniform2d >( p_variable )->SetValue( PointRefFromVariant< double, 2 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform2d >( p_variable )->setValue( PointRefFromVariant< double, 2 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec3d:
-				std::static_pointer_cast< Uniform3d >( p_variable )->SetValue( PointRefFromVariant< double, 3 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform3d >( p_variable )->setValue( PointRefFromVariant< double, 3 >( p_value ), p_index );
 				break;
 
 			case UniformType::eVec4d:
-				std::static_pointer_cast< Uniform4d >( p_variable )->SetValue( PointRefFromVariant< double, 4 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform4d >( p_variable )->setValue( PointRefFromVariant< double, 4 >( p_value ), p_index );
 				break;
 
 			case UniformType::eMat2x2f:
-				std::static_pointer_cast< Uniform2x2f >( p_variable )->SetValue( MatrixRefFromVariant< float, 2 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform2x2f >( p_variable )->setValue( matrixRefFromVariant< float, 2 >( p_value ), p_index );
 				break;
 
 			case UniformType::eMat3x3f:
-				std::static_pointer_cast< Uniform3x3f >( p_variable )->SetValue( MatrixRefFromVariant< float, 3 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform3x3f >( p_variable )->setValue( matrixRefFromVariant< float, 3 >( p_value ), p_index );
 				break;
 
 			case UniformType::eMat4x4f:
-				std::static_pointer_cast< Uniform4x4f >( p_variable )->SetValue( MatrixRefFromVariant< float, 4 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform4x4f >( p_variable )->setValue( matrixRefFromVariant< float, 4 >( p_value ), p_index );
 				break;
 
 			case UniformType::eMat2x2d:
-				std::static_pointer_cast< Uniform2x2d >( p_variable )->SetValue( MatrixRefFromVariant< double, 2 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform2x2d >( p_variable )->setValue( matrixRefFromVariant< double, 2 >( p_value ), p_index );
 				break;
 
 			case UniformType::eMat3x3d:
-				std::static_pointer_cast< Uniform3x3d >( p_variable )->SetValue( MatrixRefFromVariant< double, 3 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform3x3d >( p_variable )->setValue( matrixRefFromVariant< double, 3 >( p_value ), p_index );
 				break;
 
 			case UniformType::eMat4x4d:
-				std::static_pointer_cast< Uniform4x4d >( p_variable )->SetValue( MatrixRefFromVariant< double, 4 >( p_value ), p_index );
+				std::static_pointer_cast< Uniform4x4d >( p_variable )->setValue( matrixRefFromVariant< double, 4 >( p_value ), p_index );
 				break;
 			}
 		}
@@ -294,7 +294,7 @@ namespace GuiCommon
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable
 		, UniformSPtr p_variable
 		, UniformBuffer & p_buffer )
-		: TreeItemProperty( p_buffer.GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_buffer.getRenderSystem()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
 		, m_type( ShaderType::eCount )
 		, m_buffer( &p_buffer )
@@ -346,7 +346,7 @@ namespace GuiCommon
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable
 		, PushUniformSPtr p_variable
 		, ShaderType p_type )
-		: TreeItemProperty( p_variable->GetProgram().GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_variable->getProgram().getRenderSystem()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_pushVariable( p_variable )
 		, m_type( p_type )
 	{
@@ -396,21 +396,21 @@ namespace GuiCommon
 	{
 	}
 
-	void FrameVariableTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void FrameVariableTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		UniformSPtr variable = GetVariable();
+		UniformSPtr variable = getVariable();
 
 		if ( variable )
 		{
-			wxString displayName = variable->GetName();
+			wxString displayName = variable->getName();
 
-			if ( variable->GetOccCount() > 1 )
+			if ( variable->getOccCount() > 1 )
 			{
-				displayName << wxT( "[" ) << variable->GetOccCount() << wxT( "]" );
+				displayName << wxT( "[" ) << variable->getOccCount() << wxT( "]" );
 			}
 
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_VARIABLE + displayName ) );
-			p_grid->Append( new wxStringProperty( PROPERTY_NAME ) )->SetValue( variable->GetName() );
+			p_grid->Append( new wxStringProperty( PROPERTY_NAME ) )->SetValue( variable->getName() );
 
 			wxArrayString choices;
 			choices.push_back( PROPERTY_TYPE_BOOL );
@@ -439,21 +439,21 @@ namespace GuiCommon
 			choices.push_back( PROPERTY_TYPE_DMAT3 );
 			choices.push_back( PROPERTY_TYPE_DMAT4 );
 			choices.push_back( PROPERTY_TYPE_SAMPLER );
-			wxString selected = make_wxString( variable->GetFullTypeName() );
+			wxString selected = make_wxString( variable->getFullTypeName() );
 			wxEnumProperty * type = new wxEnumProperty( PROPERTY_TYPE, PROPERTY_TYPE, choices );
 			type->Enable( m_buffer != nullptr );
 			type->SetValue( selected );
 			p_grid->Append( type );
 
-			p_grid->Append( DoBuildValueProperty( PROPERTY_VALUE, variable ) );
-			p_grid->Append( new wxIntProperty( PROPERTY_OCCURENCES, wxPG_LABEL, variable->GetOccCount() ) )->Enable( false );
+			p_grid->Append( doBuildValueProperty( PROPERTY_VALUE, variable ) );
+			p_grid->Append( new wxIntProperty( PROPERTY_OCCURENCES, wxPG_LABEL, variable->getOccCount() ) )->Enable( false );
 		}
 	}
 
-	void FrameVariableTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void FrameVariableTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * property = p_event.GetProperty();
-		UniformSPtr variable = GetVariable();
+		UniformSPtr variable = getVariable();
 
 		if ( property && variable )
 		{
@@ -577,41 +577,41 @@ namespace GuiCommon
 
 	void FrameVariableTreeItemProperty::OnTypeChange( UniformType p_value )
 	{
-		auto variable = GetVariable();
-		auto buffer = GetBuffer();
+		auto variable = getVariable();
+		auto buffer = getBuffer();
 
 		if ( buffer )
 		{
-			DoApplyChange( [&p_value, variable, &buffer, this]()
+			doApplyChange( [&p_value, variable, &buffer, this]()
 			{
-				buffer->RemoveUniform( variable->GetName() );
-				m_variable = buffer->CreateUniform( p_value, variable->GetName(), variable->GetOccCount() );
+				buffer->removeUniform( variable->getName() );
+				m_variable = buffer->createUniform( p_value, variable->getName(), variable->getOccCount() );
 			} );
 		}
 	}
 
 	void FrameVariableTreeItemProperty::OnNameChange( String const & p_value )
 	{
-		auto variable = GetVariable();
-		auto buffer = GetBuffer();
+		auto variable = getVariable();
+		auto buffer = getBuffer();
 
 		if ( buffer )
 		{
-			DoApplyChange( [&p_value, variable, &buffer, this]()
+			doApplyChange( [&p_value, variable, &buffer, this]()
 			{
-				buffer->RemoveUniform( variable->GetName() );
-				m_variable = buffer->CreateUniform( variable->GetFullType(), p_value, variable->GetOccCount() );
+				buffer->removeUniform( variable->getName() );
+				m_variable = buffer->createUniform( variable->getFullType(), p_value, variable->getOccCount() );
 			} );
 		}
 	}
 
 	void FrameVariableTreeItemProperty::OnValueChange( wxVariant const & p_value )
 	{
-		UniformSPtr variable = GetVariable();
+		UniformSPtr variable = getVariable();
 
-		DoApplyChange( [&p_value, variable]()
+		doApplyChange( [&p_value, variable]()
 		{
-			DoSetValue( variable, p_value );
+			doSetValue( variable, p_value );
 		} );
 	}
 }

@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___CASTOR_NON_COPYABLE_H___
 #define ___CASTOR_NON_COPYABLE_H___
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS

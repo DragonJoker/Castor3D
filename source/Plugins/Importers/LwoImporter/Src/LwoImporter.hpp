@@ -38,64 +38,64 @@ namespace Lwo
 	\remark		Importe les données à partir de fichiers LWO (LightWave Object)
 	*/
 	class LwoImporter
-		: public Castor3D::Importer
+		: public castor3d::Importer
 	{
 	public:
-		LwoImporter( Castor3D::Engine & p_engine );
+		LwoImporter( castor3d::Engine & p_engine );
 		virtual ~LwoImporter();
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		bool doImportScene( castor3d::Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 
-		bool DoRead( stLWO_CHUNK & p_chunk );
-		void DoProcess( Castor3D::Mesh & p_mesh, stLWO_CHUNK & p_chunk );
-		void DoDiscard( stLWO_CHUNK & p_chunk );
-		void DoDiscard( stLWO_SUBCHUNK & p_chunk );
-		bool DoIsValidChunk( stLWO_CHUNK & p_chunk, stLWO_CHUNK & p_pParent );
-		void DoToStr( char p_szId[5], UI4 p_uiId );
-		bool DoRead( std::string & p_strString );
-		bool DoRead( Castor::String const & p_strTabs, stLWO_SUBCHUNK & p_pSubchunk );
-		UI2 DoReadVX( UI4 & p_index );
-		bool DoIsChunk( eID_TAG p_eId );
-		bool DoIsTagId( eID_TAG p_eId );
-		void DoParsePTag( stLWO_CHUNK & p_chunk );
-		void DoReadBlock( stLWO_SUBCHUNK & p_pSubchunk, Castor3D::PassSPtr p_pass );
-		void DoSetChannel( Castor3D::TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel );
-		void DoReadShdr( stLWO_SUBCHUNK & p_pSubchunk );
-		void DoReadGrad( stLWO_SUBCHUNK & p_pSubchunk );
-		void DoReadProc( stLWO_SUBCHUNK & p_pSubchunk );
-		void DoReadIMap( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
-		void DoReadTMap( stLWO_SUBCHUNK & p_pSubchunk );
-		UI2 DoReadBlockHeader( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
-		void DoParseTags( stLWO_CHUNK & p_chunk );
-		void DoParseSurf( stLWO_CHUNK & p_chunk );
-		void DoParseClip( stLWO_CHUNK & p_chunk );
-		void DoParsePnts( stLWO_CHUNK & p_chunk );
-		void DoParseVMap( stLWO_CHUNK & p_chunk );
-		void DoParsePols( stLWO_CHUNK & p_chunk );
-		void DoParseLayr( stLWO_CHUNK & p_chunk );
+		bool doRead( stLWO_CHUNK & p_chunk );
+		void doProcess( castor3d::Mesh & p_mesh, stLWO_CHUNK & p_chunk );
+		void doDiscard( stLWO_CHUNK & p_chunk );
+		void doDiscard( stLWO_SUBCHUNK & p_chunk );
+		bool doIsValidChunk( stLWO_CHUNK & p_chunk, stLWO_CHUNK & p_pParent );
+		void doToStr( char p_szId[5], UI4 p_uiId );
+		bool doRead( std::string & p_strString );
+		bool doRead( castor::String const & p_strTabs, stLWO_SUBCHUNK & p_pSubchunk );
+		UI2 doReadVX( UI4 & p_index );
+		bool doIsChunk( eID_TAG p_eId );
+		bool doIsTagId( eID_TAG p_eId );
+		void doParsePTag( stLWO_CHUNK & p_chunk );
+		void doReadBlock( stLWO_SUBCHUNK & p_pSubchunk, castor3d::PassSPtr p_pass );
+		void doSetChannel( castor3d::TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel );
+		void doReadShdr( stLWO_SUBCHUNK & p_pSubchunk );
+		void doReadGrad( stLWO_SUBCHUNK & p_pSubchunk );
+		void doReadProc( stLWO_SUBCHUNK & p_pSubchunk );
+		void doReadIMap( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
+		void doReadTMap( stLWO_SUBCHUNK & p_pSubchunk );
+		UI2 doReadBlockHeader( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
+		void doParseTags( stLWO_CHUNK & p_chunk );
+		void doParseSurf( stLWO_CHUNK & p_chunk );
+		void doParseClip( stLWO_CHUNK & p_chunk );
+		void doParsePnts( stLWO_CHUNK & p_chunk );
+		void doParseVMap( stLWO_CHUNK & p_chunk );
+		void doParsePols( stLWO_CHUNK & p_chunk );
+		void doParseLayr( stLWO_CHUNK & p_chunk );
 
 	public:
-		Castor::BinaryFile * m_file;
-		std::vector< Castor::Point3f > m_arrayPoints;
+		castor::BinaryFile * m_file;
+		std::vector< castor::Point3f > m_arrayPoints;
 		bool m_bHasUv;
-		std::vector< Castor::Point2f > m_arrayUvs;
+		std::vector< castor::Point2f > m_arrayUvs;
 		std::vector< std::string > m_arrayTags;
 		std::vector< SubmeshPtrStrPair > m_arraySubmeshByMatName;
-		Castor3D::SubmeshSPtr m_pSubmesh;
+		castor3d::SubmeshSPtr m_pSubmesh;
 		ImageVxMap m_mapImages;
 		std::string m_strName;
 		std::string m_strSource;
-		std::map< std::string, Castor3D::TextureUnitSPtr > m_mapTextures;
+		std::map< std::string, castor3d::TextureUnitSPtr > m_mapTextures;
 		bool m_bIgnored;
 	};
 }

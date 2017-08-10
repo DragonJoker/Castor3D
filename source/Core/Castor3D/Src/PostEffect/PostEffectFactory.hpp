@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique d'eefets post rendu.
 	*/
-	using PostEffectFactory = Castor::Factory< PostEffect, Castor::String, std::shared_ptr< PostEffect >, std::function< PostEffectSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
+	using PostEffectFactory = castor::Factory< PostEffect, castor::String, std::shared_ptr< PostEffect >, std::function< PostEffectSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
 }
 
 #endif

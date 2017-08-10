@@ -35,14 +35,14 @@ namespace CastorViewer
 	public:
 		CastorViewerApp();
 
-		inline MainFrame * GetMainFrame()const
+		inline MainFrame * getMainFrame()const
 		{
 			return m_mainFrame;
 		}
 
 	private:
-		virtual void DoLoadAppImages();
-		virtual wxWindow * DoInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen );
+		virtual void doLoadAppImages();
+		virtual wxWindow * doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen );
 
 	private:
 		MainFrame * m_mainFrame;

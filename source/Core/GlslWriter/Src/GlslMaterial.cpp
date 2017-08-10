@@ -2,7 +2,7 @@
 
 #include "GlslSource.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GLSL
 {
@@ -11,19 +11,19 @@ namespace GLSL
 	struct BaseMaterial
 		: public Type
 	{
-		BaseMaterial( Castor::String const & type )
+		BaseMaterial( castor::String const & type )
 			: Type( type )
 		{
 		}
 
-		BaseMaterial( GlslWriter * writer, Castor::String const & name = Castor::String() )
+		BaseMaterial( GlslWriter * writer, castor::String const & name = castor::String() )
 			: BaseMaterial( cuT( "BaseMaterial " ), writer, name )
 		{
 		}
 
-		BaseMaterial( Castor::String const & type
+		BaseMaterial( castor::String const & type
 			, GlslWriter * writer
-			, Castor::String const & name = Castor::String() )
+			, castor::String const & name = castor::String() )
 			: Type( type, writer, name )
 		{
 		}
@@ -55,12 +55,12 @@ namespace GLSL
 
 		Int m_hasRefraction()
 		{
-			return m_writer->Cast< Int >( Vec4( m_writer, m_name + cuT( ".m_reflRefr" ) ).y() );
+			return m_writer->cast< Int >( Vec4( m_writer, m_name + cuT( ".m_reflRefr" ) ).y() );
 		}
 
 		Int m_hasReflection()
 		{
-			return m_writer->Cast< Int >( Vec4( m_writer, m_name + cuT( ".m_reflRefr" ) ).z() );
+			return m_writer->cast< Int >( Vec4( m_writer, m_name + cuT( ".m_reflRefr" ) ).z() );
 		}
 
 		Float m_exposure()
@@ -83,7 +83,7 @@ namespace GLSL
 		{
 		}
 
-		LegacyMaterial( GlslWriter * writer, Castor::String const & name = Castor::String() )
+		LegacyMaterial( GlslWriter * writer, castor::String const & name = castor::String() )
 			: BaseMaterial( cuT( "LegacyMaterial " ), writer, name )
 		{
 		}
@@ -92,7 +92,7 @@ namespace GLSL
 		{
 			if ( m_writer )
 			{
-				m_writer->WriteAssign( *this, rhs );
+				m_writer->writeAssign( *this, rhs );
 			}
 			else
 			{
@@ -106,19 +106,19 @@ namespace GLSL
 		template< typename T >
 		LegacyMaterial & operator=( T const & rhs )
 		{
-			UpdateWriter( rhs );
-			m_writer->WriteAssign( *this, rhs );
+			updateWriter( rhs );
+			m_writer->writeAssign( *this, rhs );
 			return *this;
 		}
 
-		static void Declare( GlslWriter & writer )
+		static void declare( GlslWriter & writer )
 		{
-			Struct material = writer.GetStruct( cuT( "LegacyMaterial" ) );
-			material.DeclMember< Vec4 >( cuT( "m_diffAmb" ) );
-			material.DeclMember< Vec4 >( cuT( "m_specShin" ) );
-			material.DeclMember< Vec4 >( cuT( "m_common" ) );
-			material.DeclMember< Vec4 >( cuT( "m_reflRefr" ) );
-			material.End();
+			Struct material = writer.getStruct( cuT( "LegacyMaterial" ) );
+			material.declMember< Vec4 >( cuT( "m_diffAmb" ) );
+			material.declMember< Vec4 >( cuT( "m_specShin" ) );
+			material.declMember< Vec4 >( cuT( "m_common" ) );
+			material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
+			material.end();
 		}
 
 		Vec3 m_diffuse()
@@ -156,7 +156,7 @@ namespace GLSL
 		{
 		}
 
-		MetallicRoughnessMaterial( GlslWriter * writer, Castor::String const & name = Castor::String() )
+		MetallicRoughnessMaterial( GlslWriter * writer, castor::String const & name = castor::String() )
 			: BaseMaterial( cuT( "MetallicRoughnessMaterial " ), writer, name )
 		{
 		}
@@ -165,7 +165,7 @@ namespace GLSL
 		{
 			if ( m_writer )
 			{
-				m_writer->WriteAssign( *this, rhs );
+				m_writer->writeAssign( *this, rhs );
 			}
 			else
 			{
@@ -179,19 +179,19 @@ namespace GLSL
 		template< typename T >
 		MetallicRoughnessMaterial & operator=( T const & rhs )
 		{
-			UpdateWriter( rhs );
-			m_writer->WriteAssign( *this, rhs );
+			updateWriter( rhs );
+			m_writer->writeAssign( *this, rhs );
 			return *this;
 		}
 
-		static void Declare( GlslWriter & writer )
+		static void declare( GlslWriter & writer )
 		{
-			Struct material = writer.GetStruct( cuT( "MetallicRoughnessMaterial" ) );
-			material.DeclMember< Vec4 >( cuT( "m_albRough" ) );
-			material.DeclMember< Vec4 >( cuT( "m_metDiv" ) );
-			material.DeclMember< Vec4 >( cuT( "m_common" ) );
-			material.DeclMember< Vec4 >( cuT( "m_reflRefr" ) );
-			material.End();
+			Struct material = writer.getStruct( cuT( "MetallicRoughnessMaterial" ) );
+			material.declMember< Vec4 >( cuT( "m_albRough" ) );
+			material.declMember< Vec4 >( cuT( "m_metDiv" ) );
+			material.declMember< Vec4 >( cuT( "m_common" ) );
+			material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
+			material.end();
 		}
 
 		Vec3 m_albedo()
@@ -224,7 +224,7 @@ namespace GLSL
 		{
 		}
 
-		SpecularGlossinessMaterial( GlslWriter * writer, Castor::String const & name = Castor::String() )
+		SpecularGlossinessMaterial( GlslWriter * writer, castor::String const & name = castor::String() )
 			: BaseMaterial( cuT( "SpecularGlossinessMaterial " ), writer, name )
 		{
 		}
@@ -233,7 +233,7 @@ namespace GLSL
 		{
 			if ( m_writer )
 			{
-				m_writer->WriteAssign( *this, rhs );
+				m_writer->writeAssign( *this, rhs );
 			}
 			else
 			{
@@ -247,19 +247,19 @@ namespace GLSL
 		template< typename T >
 		SpecularGlossinessMaterial & operator=( T const & rhs )
 		{
-			UpdateWriter( rhs );
-			m_writer->WriteAssign( *this, rhs );
+			updateWriter( rhs );
+			m_writer->writeAssign( *this, rhs );
 			return *this;
 		}
 
-		static void Declare( GlslWriter & writer )
+		static void declare( GlslWriter & writer )
 		{
-			Struct material = writer.GetStruct( cuT( "SpecularGlossinessMaterial" ) );
-			material.DeclMember< Vec4 >( cuT( "m_diffDiv" ) );
-			material.DeclMember< Vec4 >( cuT( "m_specGloss" ) );
-			material.DeclMember< Vec4 >( cuT( "m_common" ) );
-			material.DeclMember< Vec4 >( cuT( "m_reflRefr" ) );
-			material.End();
+			Struct material = writer.getStruct( cuT( "SpecularGlossinessMaterial" ) );
+			material.declMember< Vec4 >( cuT( "m_diffDiv" ) );
+			material.declMember< Vec4 >( cuT( "m_specGloss" ) );
+			material.declMember< Vec4 >( cuT( "m_common" ) );
+			material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
+			material.end();
 		}
 
 		Vec3 m_diffuse()
@@ -291,51 +291,51 @@ namespace GLSL
 	{
 	}
 
-	Float Materials::GetRefractionRatio( Int const & index )const
+	Float Materials::getRefractionRatio( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_refractionRatio();
 	}
 
-	Int Materials::GetRefraction( Int const & index )const
+	Int Materials::getRefraction( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_hasRefraction();
 	}
 
-	Int Materials::GetReflection( Int const & index )const
+	Int Materials::getReflection( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_hasReflection();
 	}
 
-	Float Materials::GetOpacity( Int const & index )const
+	Float Materials::getOpacity( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_opacity();
 	}
 
-	Float Materials::GetGamma( Int const & index )const
+	Float Materials::getGamma( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_gamma();
 	}
 
-	Float Materials::GetExposure( Int const & index )const
+	Float Materials::getExposure( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_exposure();
 	}
 
-	Float Materials::GetAlphaRef( Int const & index )const
+	Float Materials::getAlphaRef( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_alphaRef();
 	}
 
-	Float Materials::GetEmissive( Int const & index )const
+	Float Materials::getEmissive( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< BaseMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_emissive();
 	}
 
@@ -346,35 +346,35 @@ namespace GLSL
 	{
 	}
 
-	void LegacyMaterials::Declare()
+	void LegacyMaterials::declare()
 	{
-		LegacyMaterial::Declare( m_writer );
+		LegacyMaterial::declare( m_writer );
 		Ssbo materials{ m_writer, PassBufferName, 0u };
-		materials.DeclMemberArray< LegacyMaterial >( cuT( "c3d_materials" ) );
-		materials.End();
+		materials.declMemberArray< LegacyMaterial >( cuT( "c3d_materials" ) );
+		materials.end();
 	}
 
-	Vec3 LegacyMaterials::GetDiffuse( Int const & index )const
+	Vec3 LegacyMaterials::getDiffuse( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_diffuse();
 	}
 
-	Vec3 LegacyMaterials::GetSpecular( Int const & index )const
+	Vec3 LegacyMaterials::getSpecular( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_specular();
 	}
 
-	Float LegacyMaterials::GetAmbient( Int const & index )const
+	Float LegacyMaterials::getAmbient( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_ambient();
 	}
 
-	Float LegacyMaterials::GetShininess( Int const & index )const
+	Float LegacyMaterials::getShininess( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_shininess();
 	}
 
@@ -385,35 +385,35 @@ namespace GLSL
 	{
 	}
 
-	void PbrMRMaterials::Declare()
+	void PbrMRMaterials::declare()
 	{
-		MetallicRoughnessMaterial::Declare( m_writer );
+		MetallicRoughnessMaterial::declare( m_writer );
 		Ssbo materials{ m_writer, PassBufferName, 0u };
-		materials.DeclMemberArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
-		materials.End();
+		materials.declMemberArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
+		materials.end();
 	}
 
-	Vec3 PbrMRMaterials::GetDiffuse( Int const & index )const
+	Vec3 PbrMRMaterials::getDiffuse( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_albedo();
 	}
 
-	Vec3 PbrMRMaterials::GetAlbedo( Int const & index )const
+	Vec3 PbrMRMaterials::getAlbedo( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_albedo();
 	}
 
-	Float PbrMRMaterials::GetRoughness( Int const & index )const
+	Float PbrMRMaterials::getRoughness( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_roughness();
 	}
 
-	Float PbrMRMaterials::GetMetallic( Int const & index )const
+	Float PbrMRMaterials::getMetallic( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_metallic();
 	}
 
@@ -424,29 +424,29 @@ namespace GLSL
 	{
 	}
 
-	void PbrSGMaterials::Declare()
+	void PbrSGMaterials::declare()
 	{
-		SpecularGlossinessMaterial::Declare( m_writer );
+		SpecularGlossinessMaterial::declare( m_writer );
 		Ssbo materials{ m_writer, PassBufferName, 0u };
-		materials.DeclMemberArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
-		materials.End();
+		materials.declMemberArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
+		materials.end();
 	}
 
-	Vec3 PbrSGMaterials::GetDiffuse( Int const & index )const
+	Vec3 PbrSGMaterials::getDiffuse( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_diffuse();
 	}
 
-	Vec3 PbrSGMaterials::GetSpecular( Int const & index )const
+	Vec3 PbrSGMaterials::getSpecular( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_specular();
 	}
 
-	Float PbrSGMaterials::GetGlossiness( Int const & index )const
+	Float PbrSGMaterials::getGlossiness( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
+		auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
 		return tmp[index].m_glossiness();
 	}
 
@@ -461,51 +461,51 @@ namespace GLSL
 	{
 	}
 
-	Float Materials::GetOpacity( Int const & index )const
+	Float Materials::getOpacity( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
 		return tmp[index].x();
 	}
 
-	Float Materials::GetEmissive( Int const & index )const
+	Float Materials::getEmissive( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
 		return tmp[index].y();
 	}
 
-	Float Materials::GetAlphaRef( Int const & index )const
+	Float Materials::getAlphaRef( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
 		return tmp[index].z();
 	}
 
-	Float Materials::GetGamma( Int const & index )const
+	Float Materials::getGamma( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
 		return tmp[index].w();
 	}
 
-	Float Materials::GetRefractionRatio( Int const & index )const
+	Float Materials::getRefractionRatio( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
 		return tmp[index].x();
 	}
 
-	Int Materials::GetRefraction( Int const & index )const
+	Int Materials::getRefraction( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
-		return m_writer.Cast< Int >( tmp[index].y() );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+		return m_writer.cast< Int >( tmp[index].y() );
 	}
 
-	Int Materials::GetReflection( Int const & index )const
+	Int Materials::getReflection( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
-		return m_writer.Cast< Int >( tmp[index].z() );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+		return m_writer.cast< Int >( tmp[index].z() );
 	}
 
-	Float Materials::GetExposure( Int const & index )const
+	Float Materials::getExposure( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matExposure" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matExposure" ), MaxMaterialsCount );
 		return tmp[index].w();
 	}
 
@@ -516,37 +516,37 @@ namespace GLSL
 	{
 	}
 
-	void LegacyMaterials::Declare()
+	void LegacyMaterials::declare()
 	{
 		Ssbo materials{ m_writer, PassBufferName, 0u };
-		materials.DeclMember< Vec4 >( cuT( "c3d_matDiffAmb" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
-		materials.End();
+		materials.declMember< Vec4 >( cuT( "c3d_matDiffAmb" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+		materials.end();
 	}
 
-	Vec3 LegacyMaterials::GetDiffuse( Int const & index )const
+	Vec3 LegacyMaterials::getDiffuse( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matDiffAmb" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matDiffAmb" ), MaxMaterialsCount );
 		return tmp[index].xyz();
 	}
 
-	Vec3 LegacyMaterials::GetSpecular( Int const & index )const
+	Vec3 LegacyMaterials::getSpecular( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
 		return tmp[index].xyz();
 	}
 
-	Float LegacyMaterials::GetAmbient( Int const & index )const
+	Float LegacyMaterials::getAmbient( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matDiffAmb" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matDiffAmb" ), MaxMaterialsCount );
 		return tmp[index].w();
 	}
 
-	Float LegacyMaterials::GetShininess( Int const & index )const
+	Float LegacyMaterials::getShininess( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
 		return tmp[index].w();
 	}
 
@@ -557,37 +557,37 @@ namespace GLSL
 	{
 	}
 
-	void PbrMRMaterials::Declare()
+	void PbrMRMaterials::declare()
 	{
 		Ssbo materials{ m_writer, PassBufferName, 0u };
-		materials.DeclMember< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matMetDiv" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
-		materials.End();
+		materials.declMember< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matMetDiv" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+		materials.end();
 	}
 
-	Vec3 PbrMRMaterials::GetDiffuse( Int const & index )const
+	Vec3 PbrMRMaterials::getDiffuse( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
 		return tmp[index].xyz();
 	}
 
-	Vec3 PbrMRMaterials::GetAlbedo( Int const & index )const
+	Vec3 PbrMRMaterials::getAlbedo( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
 		return tmp[index].xyz();
 	}
 
-	Float PbrMRMaterials::GetRoughness( Int const & index )const
+	Float PbrMRMaterials::getRoughness( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
 		return tmp[index].w();
 	}
 
-	Float PbrMRMaterials::GetMetallic( Int const & index )const
+	Float PbrMRMaterials::getMetallic( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matMetDiv" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matMetDiv" ), MaxMaterialsCount );
 		return tmp[index].x();
 	}
 
@@ -598,31 +598,31 @@ namespace GLSL
 	{
 	}
 
-	void PbrSGMaterials::Declare()
+	void PbrSGMaterials::declare()
 	{
 		Ssbo materials{ m_writer, PassBufferName, 0u };
-		materials.DeclMember< Vec4 >( cuT( "c3d_matDiffDiv" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
-		materials.DeclMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
-		materials.End();
+		materials.declMember< Vec4 >( cuT( "c3d_matDiffDiv" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
+		materials.declMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+		materials.end();
 	}
 
-	Vec3 PbrSGMaterials::GetDiffuse( Int const & index )const
+	Vec3 PbrSGMaterials::getDiffuse( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matDiffDiv" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matDiffDiv" ), MaxMaterialsCount );
 		return tmp[index].xyz();
 	}
 
-	Vec3 PbrSGMaterials::GetSpecular( Int const & index )const
+	Vec3 PbrSGMaterials::getSpecular( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
 		return tmp[index].xyz();
 	}
 
-	Float PbrSGMaterials::GetGlossiness( Int const & index )const
+	Float PbrSGMaterials::getGlossiness( Int const & index )const
 	{
-		auto tmp = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
+		auto tmp = m_writer.getBuiltin< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
 		return tmp[index].w();
 	}
 

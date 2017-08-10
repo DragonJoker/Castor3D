@@ -18,46 +18,46 @@
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*********************************************************************************************
 
 	namespace
 	{
-		GLSL::Shader DoGetVertexShader( Engine const & engine )
+		GLSL::Shader doGetVertexShader( Engine const & engine )
 		{
 			using namespace GLSL;
-			GlslWriter writer = engine.GetRenderSystem()->CreateGlslWriter();
+			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( writer );
 			UBO_MODEL_MATRIX( writer );
-			auto vertex = writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
+			auto vertex = writer.declAttribute< Vec3 >( ShaderProgram::Position );
 
 			// Shader outputs
-			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				gl_Position = c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( vertex, 1.0 );
 			} );
 
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
-		GLSL::Shader DoGetPixelShader( Engine const & engine )
+		GLSL::Shader doGetPixelShader( Engine const & engine )
 		{
 			using namespace GLSL;
-			GlslWriter writer = engine.GetRenderSystem()->CreateGlslWriter();
+			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
 
-			writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 			} );
 
-			return writer.Finalise();
+			return writer.finalise();
 		}
 	}
 
@@ -74,60 +74,60 @@ namespace Castor3D
 	{
 	}
 
-	void StencilPass::Initialise( Castor3D::VertexBuffer & vbo
-		, Castor3D::IndexBufferSPtr ibo )
+	void StencilPass::initialise( castor3d::VertexBuffer & vbo
+		, castor3d::IndexBufferSPtr ibo )
 	{
-		auto & engine = *vbo.GetEngine();
-		auto & renderSystem = *engine.GetRenderSystem();
+		auto & engine = *vbo.getEngine();
+		auto & renderSystem = *engine.getRenderSystem();
 
-		m_program = engine.GetShaderProgramCache().GetNewProgram( false );
-		m_program->CreateObject( ShaderType::eVertex );
-		m_program->CreateObject( ShaderType::ePixel );
-		m_program->SetSource( ShaderType::eVertex, DoGetVertexShader( engine ) );
-		m_program->SetSource( ShaderType::ePixel, DoGetPixelShader( engine ) );
-		m_program->Initialise();
+		m_program = engine.getShaderProgramCache().getNewProgram( false );
+		m_program->createObject( ShaderType::eVertex );
+		m_program->createObject( ShaderType::ePixel );
+		m_program->setSource( ShaderType::eVertex, doGetVertexShader( engine ) );
+		m_program->setSource( ShaderType::ePixel, doGetPixelShader( engine ) );
+		m_program->initialise();
 
-		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { vbo }, ibo.get() );
+		m_geometryBuffers = m_program->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, *m_program );
+		m_geometryBuffers->initialise( { vbo }, ibo.get() );
 
 		DepthStencilState dsstate;
-		dsstate.SetDepthTest( true );
-		dsstate.SetDepthMask( WritingMask::eZero );
-		dsstate.SetStencilTest( true );
-		dsstate.SetStencilReadMask( 0 );
-		dsstate.SetStencilRef( 0 );
-		dsstate.SetStencilFunc( StencilFunc::eAlways );
-		dsstate.SetStencilBackOps( StencilOp::eKeep, StencilOp::eIncrWrap, StencilOp::eKeep );
-		dsstate.SetStencilFrontOps( StencilOp::eKeep, StencilOp::eDecrWrap, StencilOp::eKeep );
+		dsstate.setDepthTest( true );
+		dsstate.setDepthMask( WritingMask::eZero );
+		dsstate.setStencilTest( true );
+		dsstate.setStencilReadMask( 0 );
+		dsstate.setStencilRef( 0 );
+		dsstate.setStencilFunc( StencilFunc::eAlways );
+		dsstate.setStencilBackOps( StencilOp::eKeep, StencilOp::eIncrWrap, StencilOp::eKeep );
+		dsstate.setStencilFrontOps( StencilOp::eKeep, StencilOp::eDecrWrap, StencilOp::eKeep );
 		RasteriserState rsstate;
-		rsstate.SetCulledFaces( Culling::eNone );
-		m_pipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+		rsstate.setCulledFaces( Culling::eNone );
+		m_pipeline = m_program->getRenderSystem()->createRenderPipeline( std::move( dsstate )
 			, std::move( rsstate )
 			, BlendState{}
 			, MultisampleState{}
 			, *m_program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
-		m_pipeline->AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		m_pipeline->addUniformBuffer( m_modelMatrixUbo.getUbo() );
 	}
 
-	void StencilPass::Cleanup()
+	void StencilPass::cleanup()
 	{
-		m_geometryBuffers->Cleanup();
+		m_geometryBuffers->cleanup();
 		m_geometryBuffers.reset();
-		m_pipeline->Cleanup();
+		m_pipeline->cleanup();
 		m_pipeline.reset();
 		m_program.reset();
 	}
 
-	void StencilPass::Render( uint32_t count )
+	void StencilPass::render( uint32_t count )
 	{
-		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.SetDrawBuffers( FrameBuffer::AttachArray{} );
-		m_depthAttach.Clear( 0 );
-		m_pipeline->Apply();
-		m_geometryBuffers->Draw( count, 0 );
-		m_frameBuffer.Unbind();
+		m_frameBuffer.bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.setDrawBuffers( FrameBuffer::AttachArray{} );
+		m_depthAttach.clear( 0 );
+		m_pipeline->apply();
+		m_geometryBuffers->draw( count, 0 );
+		m_frameBuffer.unbind();
 	}
 
 	//*********************************************************************************************

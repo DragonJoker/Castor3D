@@ -31,7 +31,7 @@ SOFTWARE.
 #include <Graphics/Position.hpp>
 #include <Graphics/Size.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -43,7 +43,7 @@ namespace Castor3D
 	\brief		Implémentation de viewport spécifique à l'API de rendu.
 	*/
 	class IViewportImpl
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique le viewport.
 		 */
-		C3D_API virtual void Apply()const = 0;
+		C3D_API virtual void apply()const = 0;
 
 	protected:
 		//!\~english The parent viewport.	\~french Le viewport parent.
@@ -85,13 +85,13 @@ namespace Castor3D
 	\remark		Gives its projection type, FOV, ...
 	\~french
 	\brief		Classe de représentation de viewport
-	\remark		Donne le type de projection FOV, ...
+	\remark		donne le type de projection FOV, ...
 	*/
 	class Viewport
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
-		C3D_API static const std::array< Castor::String, size_t( ViewportType::eCount ) > string_type;
+		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > string_type;
 
 		/*!
 		\author		Sylvain DOREMUS
@@ -103,7 +103,7 @@ namespace Castor3D
 		\brief		Loader de Viewport
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Viewport >
+			: public castor::TextWriter< Viewport >
 		{
 		public:
 			/**
@@ -112,7 +112,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Viewport into a text file
@@ -123,7 +123,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_viewport	Le Viewport
 			 */
-			C3D_API bool operator()( Castor3D::Viewport const & p_viewport, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( castor3d::Viewport const & p_viewport, castor::TextFile & p_file )override;
 		};
 
 	private:
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_near		Position du plan proche.
 		 *\param[in]	p_far		Position du plan éloigné.
 		 */
-		C3D_API Viewport( Engine & engine, ViewportType p_type, Castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API Viewport( Engine & engine, ViewportType p_type, castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 
 	public:
 		/**
@@ -216,14 +216,14 @@ namespace Castor3D
 		 *\brief		Crée l'implémentation spécifique à l'API de rendu.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Destroys the render API specific implementation.
 		 *\~french
 		 *\brief		Détruit l'implémentation spécifique à l'API de rendu.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the viewport specifics
@@ -234,14 +234,14 @@ namespace Castor3D
 		 *\remarks		Applique la perspective
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
-		C3D_API bool Update();
+		C3D_API bool update();
 		/**
 		 *\~english
 		 *\brief		Applies the viewport.
 		 *\~french
 		 *\brief		Applique le viewport.
 		 */
-		C3D_API void Apply()const;
+		C3D_API void apply()const;
 		/**
 		 *\~english
 		 *\brief		Builds a centered perspective viewport.
@@ -258,7 +258,7 @@ namespace Castor3D
 		 *\param[in]	p_far		Position du plan éloigné.
 		 *\return		Le viewport.
 		 */
-		C3D_API void SetPerspective( Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		C3D_API void setPerspective( castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
@@ -279,7 +279,7 @@ namespace Castor3D
 		 *\param[in]	p_far		Position du plan éloigné.
 		 *\return		Le viewport.
 		 */
-		C3D_API void SetFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API void setFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets an orthogonal projection.
@@ -300,14 +300,14 @@ namespace Castor3D
 		 *\param[in]	p_far		Position du plan éloigné.
 		 *\return		Le viewport.
 		 */
-		C3D_API void SetOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API void setOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\return		The viewport render size
 		 *\~french
 		 *\return		Les dimensions de rendu du viewport
 		 */
-		inline const Castor::Size & GetSize()const
+		inline const castor::Size & getSize()const
 		{
 			return m_size;
 		}
@@ -317,7 +317,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La position de rendu du viewport.
 		 */
-		inline const Castor::Position & GetPosition()const
+		inline const castor::Position & getPosition()const
 		{
 			return m_position;
 		}
@@ -327,7 +327,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type de projection du viewport
 		 */
-		inline ViewportType GetType()const
+		inline ViewportType getType()const
 		{
 			return m_type;
 		}
@@ -337,7 +337,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le ratio d'aspect
 		 */
-		inline real GetRatio()const
+		inline real getRatio()const
 		{
 			return m_ratio;
 		}
@@ -347,7 +347,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La position du plan proche
 		 */
-		inline real GetNear()const
+		inline real getNear()const
 		{
 			return m_near;
 		}
@@ -357,7 +357,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La position du plan lointain
 		 */
-		inline real GetFar()const
+		inline real getFar()const
 		{
 			return m_far;
 		}
@@ -367,7 +367,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'angle de vue vertical
 		 */
-		inline Castor::Angle GetFovY()const
+		inline castor::Angle getFovY()const
 		{
 			return m_fovY;
 		}
@@ -377,7 +377,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La position du plan gauche
 		 */
-		inline real GetLeft()const
+		inline real getLeft()const
 		{
 			return m_left;
 		}
@@ -387,7 +387,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La position du plan droit
 		 */
-		inline real GetRight()const
+		inline real getRight()const
 		{
 			return m_right;
 		}
@@ -397,7 +397,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La position du plan haut
 		 */
-		inline real GetTop()const
+		inline real getTop()const
 		{
 			return m_top;
 		}
@@ -407,7 +407,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La position du plan bas
 		 */
-		inline real GetBottom()const
+		inline real getBottom()const
 		{
 			return m_bottom;
 		}
@@ -417,9 +417,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La largeur du viewport
 		 */
-		inline uint32_t GetWidth()const
+		inline uint32_t getWidth()const
 		{
-			return m_size.width();
+			return m_size.getWidth();
 		}
 		/**
 		 *\~english
@@ -427,9 +427,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La hauteur du viewport
 		 */
-		inline uint32_t GetHeight()const
+		inline uint32_t getHeight()const
 		{
-			return m_size.height();
+			return m_size.getHeight();
 		}
 		/**
 		 *\~english
@@ -437,7 +437,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de modification du viewport
 		 */
-		inline bool IsModified()const
+		inline bool isModified()const
 		{
 			return m_modified;
 		}
@@ -447,31 +447,31 @@ namespace Castor3D
 		 *\~french
 		 *\return		La matrice de projection
 		 */
-		inline Castor::Matrix4x4r const & GetProjection()const
+		inline castor::Matrix4x4r const & getProjection()const
 		{
 			return m_projection;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the viewport render position.
+		 *\brief		sets the viewport render position.
 		 *\param[in]	p_position	The new value
 		 *\~french
 		 *\brief		Définit la position de rendu du viewport.
 		 *\param[in]	p_position	La nouvelle valeur
 		 */
-		inline void SetPosition( const Castor::Position & p_position )
+		inline void setPosition( const castor::Position & p_position )
 		{
 			m_position = p_position;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the viewport render size
+		 *\brief		sets the viewport render size
 		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit les dimensions de rendu du viewport
 		 *\param[in]	p_size	La nouvelle valeur
 		 */
-		inline void Resize( const Castor::Size & p_size )
+		inline void resize( const castor::Size & p_size )
 		{
 			m_size = p_size;
 		}
@@ -483,7 +483,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de projection du viewport
 		 *\return		La valeur
 		 */
-		inline void UpdateType( ViewportType p_type )
+		inline void updateType( ViewportType p_type )
 		{
 			m_modified |= m_type != p_type;
 			m_type = p_type;
@@ -496,7 +496,7 @@ namespace Castor3D
 		 *\brief		Récupère le ratio d'aspect
 		 *\return		La valeur
 		 */
-		inline void UpdateRatio( real p_rRatio )
+		inline void updateRatio( real p_rRatio )
 		{
 			m_modified |= m_ratio != p_rRatio;
 			m_ratio = p_rRatio;
@@ -509,7 +509,7 @@ namespace Castor3D
 		 *\brief		Récupère la position du plan proche
 		 *\return		La valeur
 		 */
-		inline void UpdateNear( real p_rNear )
+		inline void updateNear( real p_rNear )
 		{
 			m_modified |= m_near != p_rNear;
 			m_near = p_rNear;
@@ -522,7 +522,7 @@ namespace Castor3D
 		 *\brief		Récupère la position du plan lointain
 		 *\return		La valeur
 		 */
-		inline void UpdateFar( real p_rFar )
+		inline void updateFar( real p_rFar )
 		{
 			m_modified |= m_far != p_rFar;
 			m_far = p_rFar;
@@ -535,7 +535,7 @@ namespace Castor3D
 		 *\brief		Récupère l'angle de vue vertical
 		 *\return		La valeur
 		 */
-		inline void UpdateFovY( Castor::Angle const & p_aFovY )
+		inline void updateFovY( castor::Angle const & p_aFovY )
 		{
 			m_modified |= m_fovY != p_aFovY;
 			m_fovY = p_aFovY;
@@ -548,7 +548,7 @@ namespace Castor3D
 		 *\brief		Récupère la position du plan gauche
 		 *\return		La valeur
 		 */
-		inline void UpdateLeft( real p_rLeft )
+		inline void updateLeft( real p_rLeft )
 		{
 			m_modified |= m_left != p_rLeft;
 			m_left = p_rLeft;
@@ -561,7 +561,7 @@ namespace Castor3D
 		 *\brief		Récupère la position du plan droit
 		 *\return		La valeur
 		 */
-		inline void UpdateRight( real p_rRight )
+		inline void updateRight( real p_rRight )
 		{
 			m_modified |= m_right != p_rRight;
 			m_right = p_rRight;
@@ -574,7 +574,7 @@ namespace Castor3D
 		 *\brief		Récupère la position du plan haut
 		 *\return		La valeur
 		 */
-		inline void UpdateTop( real p_rTop )
+		inline void updateTop( real p_rTop )
 		{
 			m_modified |= m_top != p_rTop;
 			m_top = p_rTop;
@@ -587,7 +587,7 @@ namespace Castor3D
 		 *\brief		Récupère la position du plan bas
 		 *\return		La valeur
 		 */
-		inline void UpdateBottom( real p_rBottom )
+		inline void updateBottom( real p_rBottom )
 		{
 			m_modified |= m_bottom != p_rBottom;
 			m_bottom = p_rBottom;
@@ -608,7 +608,7 @@ namespace Castor3D
 		 *\param[in]	p_near		Position du plan proche
 		 *\param[in]	p_far		Position du plan lointain
 		 */
-		void DoComputePerspective( Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		void doComputePerspective( castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
@@ -627,7 +627,7 @@ namespace Castor3D
 		 *\param[in]	p_near		Position du plan proche
 		 *\param[in]	p_far		Position du plan lointain
 		 */
-		void DoComputeFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		void doComputeFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
@@ -646,7 +646,7 @@ namespace Castor3D
 		 *\param[in]	p_near		Position du plan proche
 		 *\param[in]	p_far		Position du plan lointain
 		 */
-		void DoComputeOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		void doComputeOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\brief		Builds a view matrix that looks at a given point.
@@ -659,7 +659,7 @@ namespace Castor3D
 		 *\param[in]	p_center	Le point à regarder.
 		 *\param[in]	p_up		La direction vers le haut.
 		 */
-		void DoComputeLookAt( Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
+		void doComputeLookAt( castor::Point3r const & p_eye, castor::Point3r const & p_center, castor::Point3r const & p_up );
 
 	private:
 		//!\~english	The left viewport plane.
@@ -682,16 +682,16 @@ namespace Castor3D
 		real m_near;
 		//!\~english	The viewport vertical FOV.
 		//!\~french		Angle de vue vezrtical
-		Castor::Angle m_fovY;
+		castor::Angle m_fovY;
 		//!\~english	The projection type.
 		//!\~french		Type de projection
 		ViewportType m_type;
 		//!\~english	The viewport render size.
 		//!\~french		Dimensions du viewport
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The viewport render position.
 		//!\~french		La position du viewport
-		Castor::Position m_position;
+		castor::Position m_position;
 		//!\~english	The display window ratio (4:3, 16:9, ...).
 		//!\~french		Ratio d'affichage
 		real m_ratio;
@@ -700,7 +700,7 @@ namespace Castor3D
 		bool m_modified;
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
-		Castor::Matrix4x4r m_projection;
+		castor::Matrix4x4r m_projection;
 		//!\~english	The render API specific implementation.
 		//!\~french		L'implémentation spécifique à l'API de rendu.
 		IViewportImplUPtr m_impl;

@@ -58,32 +58,32 @@ namespace CastorCom
 		 */
 		virtual ~CFont();
 
-		inline void SetInternal( Castor::FontSPtr p_font )
+		inline void setInternal( castor::FontSPtr p_font )
 		{
 			m_font = p_font;
 		}
 
-		inline Castor::FontSPtr GetInternal()const
+		inline castor::FontSPtr getInternal()const
 		{
 			return m_font;
 		}
 
-		COM_PROPERTY_GET( Height, UINT, make_getter( m_font.get(), &Castor::Font::GetHeight ) );
-		COM_PROPERTY_GET( MaxHeight, INT, make_getter( m_font.get(), &Castor::Font::GetMaxHeight ) );
-		COM_PROPERTY_GET( MaxWidth, INT, make_getter( m_font.get(), &Castor::Font::GetMaxWidth ) );
+		COM_PROPERTY_GET( Height, UINT, make_getter( m_font.get(), &castor::Font::getHeight ) );
+		COM_PROPERTY_GET( MaxHeight, INT, make_getter( m_font.get(), &castor::Font::getMaxHeight ) );
+		COM_PROPERTY_GET( MaxWidth, INT, make_getter( m_font.get(), &castor::Font::getMaxWidth ) );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR path, /* [in] */ BSTR name, /* [in] */ UINT height );
-		STDMETHOD( GetGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );
+		STDMETHOD( getGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );
 
 	private:
-		Castor::FontSPtr m_font;
+		castor::FontSPtr m_font;
 		std::map< WORD, IGlyph * > m_glyphs;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Font ), CFont );
 
-	DECLARE_VARIABLE_PTR_GETTER( Font, Castor, Font );
-	DECLARE_VARIABLE_PTR_PUTTER( Font, Castor, Font );
+	DECLARE_VARIABLE_PTR_GETTER( Font, castor, Font );
+	DECLARE_VARIABLE_PTR_PUTTER( Font, castor, Font );
 }
 
 #endif

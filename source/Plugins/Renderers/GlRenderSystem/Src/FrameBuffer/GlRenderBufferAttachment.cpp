@@ -7,8 +7,8 @@
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -24,35 +24,35 @@ namespace GlRender
 	{
 	}
 
-	void GlRenderBufferAttachment::DoDownload( Castor::Position const & p_offset
-		, Castor::PxBufferBase & p_buffer )const
+	void GlRenderBufferAttachment::doDownload( castor::Position const & p_offset
+		, castor::PxBufferBase & p_buffer )const
 	{
-		GetOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + GetAttachmentIndex() ) );
-		auto format = GetOpenGl().Get( p_buffer.format() );
-		GetOpenGl().ReadPixels( p_offset
+		getOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + getAttachmentIndex() ) );
+		auto format = getOpenGl().get( p_buffer.format() );
+		getOpenGl().ReadPixels( p_offset
 			, p_buffer.dimensions()
 			, format.Format
 			, format.Type
 			, p_buffer.ptr() );
 	}
 
-	void GlRenderBufferAttachment::DoAttach()
+	void GlRenderBufferAttachment::doAttach()
 	{
-		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
+		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( getOpenGl().get( getAttachmentPoint() ) ) + getAttachmentIndex() );
 		uint32_t uiGlName;
 
-		switch ( GetRenderBuffer()->GetComponent() )
+		switch ( getRenderBuffer()->getComponent() )
 		{
 		case BufferComponent::eColour:
-			uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( getRenderBuffer() )->getGlName();
 			break;
 
 		case BufferComponent::eDepth:
-			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( getRenderBuffer() )->getGlName();
 			break;
 
 		case BufferComponent::eStencil:
-			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( getRenderBuffer() )->getGlName();
 			break;
 
 		default:
@@ -62,8 +62,8 @@ namespace GlRender
 
 		if ( uiGlName != GlInvalidIndex )
 		{
-			GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, uiGlName );
-			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
+			getOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, uiGlName );
+			m_glStatus = GlFramebufferStatus( getOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
 
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{
@@ -76,44 +76,44 @@ namespace GlRender
 		}
 	}
 
-	void GlRenderBufferAttachment::DoDetach()
+	void GlRenderBufferAttachment::doDetach()
 	{
-		if ( GetOpenGl().HasFbo() )
+		if ( getOpenGl().hasFbo() )
 		{
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{
-				GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, 0 );
+				getOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, 0 );
 			}
 
 			m_glAttachmentPoint = GlAttachmentPoint::eNone;
 		}
 	}
 
-	void GlRenderBufferAttachment::DoClear( Colour const & p_colour )const
+	void GlRenderBufferAttachment::doClear( Colour const & p_colour )const
 	{
-		GetOpenGl().ClearBuffer( GlComponent::eColour
-			, GetAttachmentIndex()
-			, p_colour.const_ptr() );
+		getOpenGl().ClearBuffer( GlComponent::eColour
+			, getAttachmentIndex()
+			, p_colour.constPtr() );
 	}
 
-	void GlRenderBufferAttachment::DoClear( float p_depth )const
+	void GlRenderBufferAttachment::doClear( float p_depth )const
 	{
-		GetOpenGl().ClearBuffer( GlComponent::eDepth
-			, GetAttachmentIndex()
+		getOpenGl().ClearBuffer( GlComponent::eDepth
+			, getAttachmentIndex()
 			, &p_depth );
 	}
 
-	void GlRenderBufferAttachment::DoClear( int p_stencil )const
+	void GlRenderBufferAttachment::doClear( int p_stencil )const
 	{
-		GetOpenGl().ClearBuffer( GlComponent::eStencil
-			, GetAttachmentIndex()
+		getOpenGl().ClearBuffer( GlComponent::eStencil
+			, getAttachmentIndex()
 			, &p_stencil );
 	}
 
-	void GlRenderBufferAttachment::DoClear( float p_depth, int p_stencil )const
+	void GlRenderBufferAttachment::doClear( float p_depth, int p_stencil )const
 	{
-		GetOpenGl().ClearBuffer( GlComponent::eDepthStencil
-			, GetAttachmentIndex()
+		getOpenGl().ClearBuffer( GlComponent::eDepthStencil
+			, getAttachmentIndex()
 			, p_depth
 			, p_stencil );
 	}

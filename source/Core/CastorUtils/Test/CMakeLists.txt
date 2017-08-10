@@ -42,7 +42,7 @@ add_target(
 	${PROJECT_NAME}
 	bin_dos
 	"CastorUtils;CastorTest"
-	"CastorUtils;CastorTest;${CastorMinLibraries};${OpenCLLibraries}"
+	"CastorUtils;CastorTest;${OpenCLLibraries}"
 	"" ""
 	"${CUT_C_FLAGS}"
 	"${CUT_CXX_FLAGS}"

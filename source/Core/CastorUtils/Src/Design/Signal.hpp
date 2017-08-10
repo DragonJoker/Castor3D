@@ -31,10 +31,10 @@ SOFTWARE.
 #include <map>
 #include <set>
 
-namespace Castor
+namespace castor
 {
 	/*!
-	*\author	Sylvain Doremus
+	*\author	Sylvain doremus
 	*\version	0.9.0
 	*\date		01/03/2017
 	\~english
@@ -77,7 +77,7 @@ namespace Castor
 			: m_connection{ p_connection }
 			, m_signal{ &p_signal }
 		{
-			p_signal.add_connection( *this );
+			p_signal.addConnection( *this );
 
 #if !defined( NDEBUG )
 
@@ -107,8 +107,8 @@ namespace Castor
 
 			if ( m_signal )
 			{
-				m_signal->rem_connection( p_rhs );
-				m_signal->add_connection( *this );
+				m_signal->removeConnection( p_rhs );
+				m_signal->addConnection( *this );
 			}
 		}
 		/**
@@ -123,8 +123,8 @@ namespace Castor
 		{
 			Connection tmp{ std::move( p_rhs ) };
 			swap( *this, tmp );
-			m_signal->rem_connection( tmp );
-			m_signal->add_connection( *this );
+			m_signal->removeConnection( tmp );
+			m_signal->addConnection( *this );
 			return *this;
 		}
 		/**
@@ -152,7 +152,7 @@ namespace Castor
 			if ( m_signal && m_connection )
 			{
 				m_signal->disconnect( m_connection );
-				m_signal->rem_connection( *this );
+				m_signal->removeConnection( *this );
 				m_signal = nullptr;
 				m_connection = 0u;
 				result = true;
@@ -200,7 +200,7 @@ namespace Castor
 #endif
 	};
 	/*!
-	*\author	Sylvain Doremus
+	*\author	Sylvain doremus
 	*\version	0.8.0
 	*\date		10/02/2016
 	\~english
@@ -308,13 +308,13 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a connection to the list.
+		 *\brief		adds a connection to the list.
 		 *\param[in]	p_connection	The connection to add.
 		 *\~french
 		 *\brief		Ajoute une connexion à la liste.
 		 *\param[in]	p_connection	La connexion à ajouter.
 		 */
-		void add_connection( my_connection & p_connection )
+		void addConnection( my_connection & p_connection )
 		{
 			m_connections.insert( &p_connection );
 		}
@@ -326,7 +326,7 @@ namespace Castor
 		 *\brief		Enlève une connexion de la liste.
 		 *\param[in]	p_connection	La connexion à enlever.
 		 */
-		void rem_connection( my_connection & p_connection )
+		void removeConnection( my_connection & p_connection )
 		{
 			assert( m_connections.find( &p_connection ) != m_connections.end() );
 			m_connections.erase( &p_connection );

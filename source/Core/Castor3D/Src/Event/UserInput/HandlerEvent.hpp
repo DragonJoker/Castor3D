@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UserInputEvent.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	*\author	Sylvain DOREMUS
@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'évènement de gestionnaire.
 		 */
-		inline HandlerEventType GetHandlerEventType()const
+		inline HandlerEventType getHandlerEventType()const
 		{
 			return m_handlerEventType;
 		}
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le gestionnaire.
 		 */
-		inline EventHandlerSPtr GetHandler()const
+		inline EventHandlerSPtr getHandler()const
 		{
 			REQUIRE( !m_handler.expired() );
 			return m_handler.lock();

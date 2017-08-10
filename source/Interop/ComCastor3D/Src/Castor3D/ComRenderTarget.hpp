@@ -59,35 +59,35 @@ namespace CastorCom
 		 */
 		virtual ~CRenderTarget();
 
-		inline Castor3D::RenderTargetSPtr GetInternal()const
+		inline castor3d::RenderTargetSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::RenderTargetSPtr value )
+		inline void setInternal( castor3d::RenderTargetSPtr value )
 		{
 			m_internal = value;
 		}
 
-		COM_PROPERTY( SamplesCount, unsigned int, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetSamplesCount ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetSamplesCount ) );
-		COM_PROPERTY( Camera, ICamera *, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetCamera ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetCamera ) );
-		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetViewportType ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetViewportType ) );
-		COM_PROPERTY( Scene, IScene *, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetScene ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetScene ) );
-		COM_PROPERTY( PixelFormat, ePIXEL_FORMAT, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetPixelFormat ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetPixelFormat ) );
+		COM_PROPERTY( SamplesCount, unsigned int, make_getter( m_internal.get(), &castor3d::RenderTarget::getSamplesCount ), make_putter( m_internal.get(), &castor3d::RenderTarget::setSamplesCount ) );
+		COM_PROPERTY( Camera, ICamera *, make_getter( m_internal.get(), &castor3d::RenderTarget::getCamera ), make_putter( m_internal.get(), &castor3d::RenderTarget::setCamera ) );
+		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, make_getter( m_internal.get(), &castor3d::RenderTarget::getViewportType ), make_putter( m_internal.get(), &castor3d::RenderTarget::setViewportType ) );
+		COM_PROPERTY( Scene, IScene *, make_getter( m_internal.get(), &castor3d::RenderTarget::getScene ), make_putter( m_internal.get(), &castor3d::RenderTarget::setScene ) );
+		COM_PROPERTY( PixelFormat, ePIXEL_FORMAT, make_getter( m_internal.get(), &castor3d::RenderTarget::getPixelFormat ), make_putter( m_internal.get(), &castor3d::RenderTarget::setPixelFormat ) );
 
-		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetSize ) );
+		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &castor3d::RenderTarget::getSize ) );
 
 		STDMETHOD( Initialise )( /* [in] */ unsigned int index );
 		STDMETHOD( Cleanup )();
 
 	private:
-		Castor3D::RenderTargetSPtr m_internal;
+		castor3d::RenderTargetSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( RenderTarget ), CRenderTarget );
 
-	DECLARE_VARIABLE_PTR_GETTER( RenderTarget, Castor3D, RenderTarget );
-	DECLARE_VARIABLE_PTR_PUTTER( RenderTarget, Castor3D, RenderTarget );
+	DECLARE_VARIABLE_PTR_GETTER( RenderTarget, castor3d, RenderTarget );
+	DECLARE_VARIABLE_PTR_PUTTER( RenderTarget, castor3d, RenderTarget );
 }
 
 #endif

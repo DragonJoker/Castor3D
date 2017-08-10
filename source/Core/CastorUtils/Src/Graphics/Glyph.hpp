@@ -27,7 +27,7 @@ SOFTWARE.
 #include "Position.hpp"
 #include "Size.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -88,7 +88,7 @@ namespace Castor
 		 *\brief		Récupère le caractère de la glyphe
 		 *\return		La valeur
 		 */
-		inline char32_t GetCharacter()const
+		inline char32_t getCharacter()const
 		{
 			return m_character;
 		}
@@ -100,7 +100,7 @@ namespace Castor
 		 *\brief		Récupère les dimensions de la glyphe
 		 *\return		Les dimensions de la glyphe
 		 */
-		inline Size const & GetSize()const
+		inline Size const & getSize()const
 		{
 			return m_size;
 		}
@@ -110,7 +110,7 @@ namespace Castor
 		 *\~french
 		 *\return		La position de la glyphe par rapport au curseur.
 		 */
-		inline Position const & GetBearing()const
+		inline Position const & getBearing()const
 		{
 			return m_bearing;
 		}
@@ -122,7 +122,7 @@ namespace Castor
 		 *\brief		Récupère le nombre de pixels pour place la prchaine glyphe
 		 *\return		La valeur
 		 */
-		inline uint32_t GetAdvance()const
+		inline uint32_t getAdvance()const
 		{
 			return m_advance;
 		}
@@ -134,7 +134,7 @@ namespace Castor
 		 *\brief		Récupère l'image de la glyphe
 		 *\return		Une référence constante sur l'image de la glyphe
 		 */
-		inline ByteArray const & GetBitmap()const
+		inline ByteArray const & getBitmap()const
 		{
 			return m_bitmap;
 		}
@@ -161,7 +161,7 @@ namespace Castor
 	 */
 	inline bool operator==( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() == p_rhs.GetCharacter();
+		return p_lhs.getCharacter() == p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -173,7 +173,7 @@ namespace Castor
 	 */
 	inline bool operator!=( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() != p_rhs.GetCharacter();
+		return p_lhs.getCharacter() != p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -185,7 +185,7 @@ namespace Castor
 	 */
 	inline bool operator<( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() < p_rhs.GetCharacter();
+		return p_lhs.getCharacter() < p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -197,7 +197,7 @@ namespace Castor
 	 */
 	inline bool operator>( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() > p_rhs.GetCharacter();
+		return p_lhs.getCharacter() > p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -209,7 +209,7 @@ namespace Castor
 	 */
 	inline bool operator<=( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() <= p_rhs.GetCharacter();
+		return p_lhs.getCharacter() <= p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -221,7 +221,7 @@ namespace Castor
 	 */
 	inline bool operator>=( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() >= p_rhs.GetCharacter();
+		return p_lhs.getCharacter() >= p_rhs.getCharacter();
 	}
 }
 

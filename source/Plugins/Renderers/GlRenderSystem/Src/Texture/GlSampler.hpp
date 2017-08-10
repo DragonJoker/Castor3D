@@ -30,7 +30,7 @@ SOFTWARE.
 namespace GlRender
 {
 	class GlSampler
-		: public Castor3D::Sampler
+		: public castor3d::Sampler
 		, private Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >
 	{
 		using ObjectType = Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >;
@@ -40,16 +40,16 @@ namespace GlRender
 		typedef std::function< void( uint32_t p_index ) > PBindFunction;
 
 	public:
-		GlSampler( OpenGl & p_gl, GlRenderSystem * renderSystem, Castor::String const & p_name );
+		GlSampler( OpenGl & p_gl, GlRenderSystem * renderSystem, castor::String const & p_name );
 		virtual ~GlSampler();
 
-		virtual bool Initialise();
-		virtual void Cleanup();
-		virtual void Bind( uint32_t p_index )const;
-		virtual void Unbind( uint32_t p_index )const;
+		virtual bool initialise();
+		virtual void cleanup();
+		virtual void bind( uint32_t p_index )const;
+		virtual void unbind( uint32_t p_index )const;
 
 	private:
-		void DoAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip );
+		void doAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip );
 
 	private:
 		GlTexDim m_glDimension;

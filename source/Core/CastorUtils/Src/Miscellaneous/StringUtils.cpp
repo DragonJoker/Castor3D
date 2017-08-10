@@ -1,12 +1,12 @@
 #include "StringUtils.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor
+namespace castor
 {
 	namespace string
 	{
-		bool is_integer( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
+		bool isInteger( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
 			bool result = true;
 
@@ -23,7 +23,7 @@ namespace Castor
 			return result;
 		}
 
-		bool is_floating( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
+		bool isFloating( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
 			bool		result = false;
 			StringArray	arrayParts;
@@ -35,18 +35,18 @@ namespace Castor
 
 			if ( nSize > 0 && nSize < 3 )
 			{
-				result = is_integer( arrayParts[0] );
+				result = isInteger( arrayParts[0] );
 
 				if ( result && nSize > 1 )
 				{
-					result = is_integer( arrayParts[1] );
+					result = isInteger( arrayParts[1] );
 				}
 			}
 
 			return result;
 		}
 
-		short to_short( String const & p_strToTest, std::locale const & p_locale )
+		short toShort( String const & p_strToTest, std::locale const & p_locale )
 		{
 			short sReturn = 0;
 
@@ -58,7 +58,7 @@ namespace Castor
 			return sReturn;
 		}
 
-		int to_int( String const & p_strToTest, std::locale const & p_locale )
+		int toInt( String const & p_strToTest, std::locale const & p_locale )
 		{
 			int iReturn = 0;
 
@@ -70,7 +70,7 @@ namespace Castor
 			return iReturn;
 		}
 
-		long to_long( String const & p_strToTest, std::locale const & p_locale )
+		long toLong( String const & p_strToTest, std::locale const & p_locale )
 		{
 			long lReturn = 0;
 
@@ -82,7 +82,7 @@ namespace Castor
 			return lReturn;
 		}
 
-		long long to_long_long( String const & p_strToTest, std::locale const & p_locale )
+		long long toLongLong( String const & p_strToTest, std::locale const & p_locale )
 		{
 			long long llReturn = 0;
 
@@ -94,7 +94,7 @@ namespace Castor
 			return llReturn;
 		}
 
-		unsigned short to_ushort( String const & p_strToTest, std::locale const & p_locale )
+		unsigned short toUShort( String const & p_strToTest, std::locale const & p_locale )
 		{
 			unsigned short sReturn = 0;
 
@@ -106,7 +106,7 @@ namespace Castor
 			return sReturn;
 		}
 
-		unsigned int to_uint( String const & p_strToTest, std::locale const & p_locale )
+		unsigned int toUInt( String const & p_strToTest, std::locale const & p_locale )
 		{
 			unsigned int iReturn = 0;
 
@@ -118,7 +118,7 @@ namespace Castor
 			return iReturn;
 		}
 
-		unsigned long to_ulong( String const & p_strToTest, std::locale const & p_locale )
+		unsigned long toULong( String const & p_strToTest, std::locale const & p_locale )
 		{
 			unsigned long lReturn = 0;
 
@@ -130,7 +130,7 @@ namespace Castor
 			return lReturn;
 		}
 
-		unsigned long long to_ulong_long( String const & p_strToTest, std::locale const & p_locale )
+		unsigned long long toULongLong( String const & p_strToTest, std::locale const & p_locale )
 		{
 			unsigned long long llReturn = 0;
 
@@ -142,7 +142,7 @@ namespace Castor
 			return llReturn;
 		}
 
-		float to_float( String const & p_strToTest, std::locale const & p_locale )
+		float toFloat( String const & p_strToTest, std::locale const & p_locale )
 		{
 			float fReturn = 0;
 
@@ -154,7 +154,7 @@ namespace Castor
 			return fReturn;
 		}
 
-		double to_double( String const & p_strToTest, std::locale const & p_locale )
+		double toDouble( String const & p_strToTest, std::locale const & p_locale )
 		{
 			double dReturn = 0;
 
@@ -166,7 +166,7 @@ namespace Castor
 			return dReturn;
 		}
 
-		long double to_long_double( String const & p_strToTest, std::locale const & p_locale )
+		long double toLongDouble( String const & p_strToTest, std::locale const & p_locale )
 		{
 			long double ldReturn = 0;
 
@@ -178,7 +178,7 @@ namespace Castor
 			return ldReturn;
 		}
 
-		real to_real( String const & p_strToTest, std::locale const & p_locale )
+		real toReal( String const & p_strToTest, std::locale const & p_locale )
 		{
 			real rReturn = 0;
 
@@ -190,17 +190,17 @@ namespace Castor
 			return rReturn;
 		}
 
-		bool is_upper_case( String const & p_strToTest )
+		bool isUpperCase( String const & p_strToTest )
 		{
-			return p_strToTest == upper_case( p_strToTest );
+			return p_strToTest == upperCase( p_strToTest );
 		}
 
-		bool is_lower_case( String const & p_strToTest )
+		bool isLowerCase( String const & p_strToTest )
 		{
-			return p_strToTest == lower_case( p_strToTest );
+			return p_strToTest == lowerCase( p_strToTest );
 		}
 
-		String upper_case( String const & p_str )
+		String upperCase( String const & p_str )
 		{
 			String strReturn;
 			std::locale loc;
@@ -213,7 +213,7 @@ namespace Castor
 			return strReturn;
 		}
 
-		String lower_case( String const & p_str )
+		String lowerCase( String const & p_str )
 		{
 			String strReturn;
 			std::locale loc;
@@ -226,15 +226,15 @@ namespace Castor
 			return strReturn;
 		}
 
-		String & to_upper_case( String & p_str )
+		String & toUpperCase( String & p_str )
 		{
-			p_str = upper_case( p_str );
+			p_str = upperCase( p_str );
 			return p_str;
 		}
 
-		String & to_lower_case( String & p_str )
+		String & toLowerCase( String & p_str )
 		{
-			p_str = lower_case( p_str );
+			p_str = lowerCase( p_str );
 			return p_str;
 		}
 

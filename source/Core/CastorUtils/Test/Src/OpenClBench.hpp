@@ -48,9 +48,9 @@ namespace Testing
 		void MtxMultCastor();
 		void MtxMultCL();
 
-		Castor::Matrix4x4f m_mtx4x4CuA;
-		Castor::Matrix4x4f m_mtx4x4CuB;
-		Castor::Matrix4x4f m_mtx4x4CuC;
+		castor::Matrix4x4f m_mtx4x4CuA;
+		castor::Matrix4x4f m_mtx4x4CuB;
+		castor::Matrix4x4f m_mtx4x4CuC;
 		float m_bufferMtx4x4A[16];
 		float m_bufferMtx4x4B[16];
 		float m_bufferMtx4x4C[16];

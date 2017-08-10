@@ -26,7 +26,7 @@ SOFTWARE.
 #include "ParserParameter.hpp"
 #include "ParserParameterTypeException.hpp"
 
-namespace Castor
+namespace castor
 {
 	/**
 	 *\~english
@@ -40,10 +40,10 @@ namespace Castor
 	 *\param[in]	p_params	Les paramètres contenus dans la ligne.
 	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
 	 */
-	typedef std::function< bool( Castor::FileParser * p_parser, ParserParameterArray const & p_params ) > ParserFunction;
+	typedef std::function< bool( castor::FileParser * p_parser, ParserParameterArray const & p_params ) > ParserFunction;
 
 #define DO_WRITE_PARSER_NAME( funcname )\
-	funcname( Castor::FileParser * p_parser, Castor::ParserParameterArray const & p_params )
+	funcname( castor::FileParser * p_parser, castor::ParserParameterArray const & p_params )
 
 #define DO_WRITE_PARSER_END( retval )\
 		result = retval;
@@ -57,14 +57,14 @@ namespace Castor
 	bool DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool result = false;\
-		Castor::FileParserContextSPtr p_context = p_parser->GetContext();
+		castor::FileParserContextSPtr p_context = p_parser->getContext();
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define IMPLEMENT_ATTRIBUTE_PARSER_NMSPC( nmspc, funcname )\
 	bool nmspc::DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool result = false;\
-		Castor::FileParserContextSPtr p_context = p_parser->GetContext();
+		castor::FileParserContextSPtr p_context = p_parser->getContext();
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_PUSH( section )\
@@ -86,13 +86,13 @@ namespace Castor
 		return result;\
 	}
 
-	//!\~english Define to ease the call to FileParser::ParseError	\~french Un define pour faciliter l'appel de FileParser::ParseError
+	//!\~english Define to ease the call to FileParser::parseError	\~french Un define pour faciliter l'appel de FileParser::parseError
 #define PARSING_ERROR( p_error )\
-	p_parser->ParseError( p_error )
+	p_parser->parseError( p_error )
 
-	//!\~english Define to ease the call to FileParser::ParseWarning	\~french Un define pour faciliter l'appel de FileParser::ParseWarning
+	//!\~english Define to ease the call to FileParser::parseWarning	\~french Un define pour faciliter l'appel de FileParser::parseWarning
 #define PARSING_WARNING( p_warning )\
-	p_parser->ParseWarning( p_warning )
+	p_parser->parseWarning( p_warning )
 
 	//!\~english Define to ease creation of a section name	\~french Un define pour faciliter la création d'un nom de section
 #define MAKE_SECTION_NAME( a, b, c, d )\
@@ -218,7 +218,7 @@ namespace Castor
 		 *\param[in]	p_strFileName	Le nom du fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		CU_API bool ParseFile( Path const & p_strFileName );
+		CU_API bool parseFile( Path const & p_strFileName );
 		/**
 		 *\~english
 		 *\brief		Parsing function
@@ -229,7 +229,7 @@ namespace Castor
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		CU_API bool ParseFile( TextFile & p_file );
+		CU_API bool parseFile( TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Logs an error in the log file
@@ -238,7 +238,7 @@ namespace Castor
 		 *\brief		Log une erreur dans le fichier de log
 		 *\param[in]	p_error	Le texte de l'erreur
 		 */
-		CU_API void ParseError( String const & p_error );
+		CU_API void parseError( String const & p_error );
 		/**
 		 *\~english
 		 *\brief		Logs a warning in the log file
@@ -247,7 +247,7 @@ namespace Castor
 		 *\brief		Log un avertissement dans le fichier de log
 		 *\param[in]	p_warning	Le texte de l'avertissement
 		 */
-		CU_API void ParseWarning( String const & p_warning );
+		CU_API void parseWarning( String const & p_warning );
 		/**
 		 *\~english
 		 *\brief		Tests if the params given to the function will be appropriate.
@@ -262,10 +262,10 @@ namespace Castor
 		 *\param[in]	p_received		Les paramètres remplis.
 		 *\return		\p false si \p p_params ne contient pas tous les types de paramètres attendus par la fonction.
 		 */
-		CU_API bool CheckParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received );
+		CU_API bool checkParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received );
 		/**
 		 *\~english
-		 *\brief		Adds a parser function to the parsers list
+		 *\brief		adds a parser function to the parsers list
 		 *\param[in]	p_section	The parser section
 		 *\param[in]	p_name		The parser name
 		 *\param[in]	p_function	The parser function
@@ -277,14 +277,14 @@ namespace Castor
 		 *\param[in]	p_function	La fonction d'analyse
 		 *\param[in]	p_params	Les paramètres attendus
 		 */
-		CU_API void AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params = ParserParameterArray() );
+		CU_API void addParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params = ParserParameterArray() );
 		/**
 		 *\~english
 		 *\brief		Tells if the read lines are to be ignored
 		 *\~french
 		 *\brief		Dit si les lignes suivantes doivent être ignorées
 		 */
-		inline bool IsIgnored()const
+		inline bool isIgnored()const
 		{
 			return m_ignored;
 		}
@@ -294,7 +294,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Incrémente le niveau d'ignorés
 		 */
-		inline void Ignore()
+		inline void ignore()
 		{
 			m_ignored = true;
 		}
@@ -306,7 +306,7 @@ namespace Castor
 		 *\brief		Récupère le contexte d'analyse
 		 *\return		Le contexte
 		 */
-		inline FileParserContextSPtr GetContext()
+		inline FileParserContextSPtr getContext()
 		{
 			return m_context;
 		}
@@ -318,14 +318,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Initialisation spécifique
 		 */
-		CU_API virtual void DoInitialiseParser( Castor::TextFile & p_file ) = 0;
+		CU_API virtual void doInitialiseParser( castor::TextFile & p_file ) = 0;
 		/**
 		 *\~english
 		 *\brief		Specific cleanup
 		 *\~french
 		 *\brief		Nettoyage spécifique
 		 */
-		CU_API virtual void DoCleanupParser() = 0;
+		CU_API virtual void doCleanupParser() = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when \p m_iSection is out of bounds
@@ -336,7 +336,7 @@ namespace Castor
 		 *\param[in]	p_line	La ligne en cours d'analyse
 		 *\return		\p true si une accolade doit être ouverte à la ligne suivant, \p false sinon
 		 */
-		CU_API virtual bool DoDelegateParser( String const & p_line ) = 0;
+		CU_API virtual bool doDelegateParser( String const & p_line ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when no parser is found for the line.
@@ -347,34 +347,34 @@ namespace Castor
 		 *\param[in]	p_error	Le texte de l'erreur.
 		 *\return		false si la ligne doit être ignorée.
 		 */
-		CU_API virtual bool DoDiscardParser( String const & p_error ) = 0;
+		CU_API virtual bool doDiscardParser( String const & p_error ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when file parsing is completed with no error
 		 *\~french
 		 *\brief		Fonction appelée si l'analyse est complétée sans erreurs
 		 */
-		CU_API virtual void DoValidate() = 0;
+		CU_API virtual void doValidate() = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the name associated to section ID.
 		 *\param[in]	p_section	The section ID.
 		 *\return		The name.
 		 *\~french
-		 *\brief		Donne le nom associé à l'ID de section.
+		 *\brief		donne le nom associé à l'ID de section.
 		 *\param[in]	p_section	L'ID de section
 		 *\return		Le nom.
 		 */
-		CU_API virtual Castor::String DoGetSectionName( uint32_t p_section ) = 0;
+		CU_API virtual castor::String doGetSectionName( uint32_t p_section ) = 0;
 
 	private:
-		bool DoParseScriptLine( String & p_line );
-		bool DoParseScriptBlockEnd();
-		bool DoInvokeParser( Castor::String & p_line, AttributeParserMap const & p_parsers );
-		void DoEnterBlock();
-		void DoLeaveBlock();
-		bool DoIsInIgnoredBlock();
-		String DoGetSectionsStack();
+		bool doParseScriptLine( String & p_line );
+		bool doParseScriptBlockEnd();
+		bool doInvokeParser( castor::String & p_line, AttributeParserMap const & p_parsers );
+		void doEnterBlock();
+		void doLeaveBlock();
+		bool doIsInIgnoredBlock();
+		String doGetSectionsStack();
 
 	private:
 		uint32_t m_rootSectionId;

@@ -33,17 +33,17 @@ namespace Testing
 {
 	namespace Pools
 	{
-		template< typename Object, Castor::MemoryDataType MemDataType >
-		using MyObjectPool = Castor::ObjectPool< Object, MemDataType >;
+		template< typename Object, castor::MemoryDataType MemDataType >
+		using MyObjectPool = castor::ObjectPool< Object, MemDataType >;
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		struct SFixedChecks
 		{
 			template< typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = AllocPolicies::PoolPolicy< type >::Count;
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > array( obj_count );
 					type ** buffer = array.data();
@@ -52,28 +52,28 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer++ = AllocPolicies::PoolPolicy< type >::Allocate( pool );
+						*buffer++ = AllocPolicies::PoolPolicy< type >::allocate( pool );
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : array )
 					{
-						AllocPolicies::PoolPolicy< type >::Deallocate( pool, object );
+						AllocPolicies::PoolPolicy< type >::deallocate( pool, object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		struct SAllDeallChecks
 		{
 			template< typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = AllocPolicies::PoolPolicy< type >::Count;
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > array( obj_count );
 					type ** buffer = array.data();
@@ -82,30 +82,30 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer = AllocPolicies::PoolPolicy< type >::Allocate( pool );
-						AllocPolicies::PoolPolicy< type >::Deallocate( pool, *buffer );
-						*buffer++ = AllocPolicies::PoolPolicy< type >::Allocate( pool );
+						*buffer = AllocPolicies::PoolPolicy< type >::allocate( pool );
+						AllocPolicies::PoolPolicy< type >::deallocate( pool, *buffer );
+						*buffer++ = AllocPolicies::PoolPolicy< type >::allocate( pool );
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : array )
 					{
-						AllocPolicies::PoolPolicy< type >::Deallocate( pool, object );
+						AllocPolicies::PoolPolicy< type >::deallocate( pool, object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		struct SScatteredChecks
 		{
 			template< typename type >
-			static void Run( std::vector< size_t > const & index )
+			static void run( std::vector< size_t > const & index )
 			{
 				static const uint32_t obj_count = AllocPolicies::PoolPolicy< type >::Count;
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > array( obj_count );
 					type ** buffer = array.data();
@@ -114,42 +114,42 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer++ = AllocPolicies::PoolPolicy< type >::Allocate( pool );
+						*buffer++ = AllocPolicies::PoolPolicy< type >::allocate( pool );
 					}
 
 					NextStep( "Random deallocations", time );
 
 					for ( size_t i : index )
 					{
-						AllocPolicies::PoolPolicy< type >::Deallocate( pool, array[i] );
+						AllocPolicies::PoolPolicy< type >::deallocate( pool, array[i] );
 					}
 
 					NextStep( "Reallocations", time );
 
 					for ( size_t i : index )
 					{
-						array[i] = AllocPolicies::PoolPolicy< type >::Allocate( pool );
+						array[i] = AllocPolicies::PoolPolicy< type >::allocate( pool );
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : array )
 					{
-						AllocPolicies::PoolPolicy< type >::Deallocate( pool, object );
+						AllocPolicies::PoolPolicy< type >::deallocate( pool, object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		struct SVariableChecks
 		{
 			template< typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = AllocPolicies::PoolPolicy< type >::Count;
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > array( obj_count );
 					type ** buffer = array.data();
@@ -158,51 +158,51 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = AllocPolicies::PoolPolicy< type >::Allocate( pool );
+						*buffer++ = AllocPolicies::PoolPolicy< type >::allocate( pool );
 					}
 
-					NextStep( "Double size", time );
+					NextStep( "double size", time );
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = AllocPolicies::PoolPolicy< type >::Allocate( pool );
+						*buffer++ = AllocPolicies::PoolPolicy< type >::allocate( pool );
 					}
 
 					NextStep( "Triple size", time );
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = AllocPolicies::PoolPolicy< type >::Allocate( pool );
+						*buffer++ = AllocPolicies::PoolPolicy< type >::allocate( pool );
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : array )
 					{
-						AllocPolicies::PoolPolicy< type >::Deallocate( pool, object );
+						AllocPolicies::PoolPolicy< type >::deallocate( pool, object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		struct SUniqueFixedChecks
 		{
 			template< typename type >
-			using ManagedObject = Castor::PoolManagedObject< type, MemDataType >;
+			using ManagedObject = castor::PoolManagedObject< type, MemDataType >;
 
 			template < typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
 				using Type = ManagedObject< type >;
 				using Stored = Type *;
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< Stored > array( obj_count );
 					auto buffer = array.data();
-					Type::MyUniqueObjectPool::Create( obj_count );
+					Type::MyUniqueObjectPool::create( obj_count );
 					NextStep( "Allocation", time );
 
 					for ( size_t i = 0; i < obj_count; ++i )
@@ -217,9 +217,9 @@ namespace Testing
 						delete object;
 					}
 
-					Type::MyUniqueObjectPool::Destroy();
+					Type::MyUniqueObjectPool::destroy();
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 	}
@@ -230,10 +230,10 @@ namespace Testing
 		struct SFixedChecks
 		{
 			template < typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > array( obj_count );
 					type ** buffer = array.data();
@@ -241,17 +241,17 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >();
+						*buffer++ = Policy::template allocate< type >();
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : array )
 					{
-						Policy::template Deallocate< type >( object );
+						Policy::template deallocate< type >( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
@@ -259,10 +259,10 @@ namespace Testing
 		struct SAllDeallChecks
 		{
 			template < typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > array( obj_count );
 					type ** buffer = array.data();
@@ -270,19 +270,19 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer = Policy::template Allocate< type >();
-						Policy::template Deallocate< type >( *buffer );
-						*buffer++ = Policy::template Allocate< type >();
+						*buffer = Policy::template allocate< type >();
+						Policy::template deallocate< type >( *buffer );
+						*buffer++ = Policy::template allocate< type >();
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : array )
 					{
-						Policy::template Deallocate< type >( object );
+						Policy::template deallocate< type >( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
@@ -290,10 +290,10 @@ namespace Testing
 		struct SScatteredChecks
 		{
 			template < typename type >
-			static void Run( std::vector< size_t > const & index )
+			static void run( std::vector< size_t > const & index )
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > arraybuffer( obj_count );
 					type ** buffer = arraybuffer.data();
@@ -301,31 +301,31 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >();
+						*buffer++ = Policy::template allocate< type >();
 					}
 
 					NextStep( "Random deallocations", time );
 
 					for ( size_t i : index )
 					{
-						Policy::template Deallocate< type >( arraybuffer[i] );
+						Policy::template deallocate< type >( arraybuffer[i] );
 					}
 
 					NextStep( "Reallocations", time );
 
 					for ( size_t i : index )
 					{
-						arraybuffer[i] = Policy::template Allocate< type >();
+						arraybuffer[i] = Policy::template allocate< type >();
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : arraybuffer )
 					{
-						Policy::template Deallocate< type >( object );
+						Policy::template deallocate< type >( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
@@ -333,10 +333,10 @@ namespace Testing
 		struct SVariableChecks
 		{
 			template < typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > array( obj_count );
 					type ** buffer = array.data();
@@ -344,31 +344,31 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >();
+						*buffer++ = Policy::template allocate< type >();
 					}
 
-					NextStep( "Double size", time );
+					NextStep( "double size", time );
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >();
+						*buffer++ = Policy::template allocate< type >();
 					}
 
 					NextStep( "Triple size", time );
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >();
+						*buffer++ = Policy::template allocate< type >();
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : array )
 					{
-						Policy::template Deallocate< type >( object );
+						Policy::template deallocate< type >( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 	}
@@ -379,10 +379,10 @@ namespace Testing
 		struct SFixedChecks
 		{
 			template < typename type  >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > arraybuffer( obj_count );
 					std::vector< uint8_t > arraydata( obj_count * sizeof( type ) );
@@ -392,7 +392,7 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >( data );
+						*buffer++ = Policy::template allocate< type >( data );
 						data += sizeof( type );
 					}
 
@@ -400,10 +400,10 @@ namespace Testing
 
 					for ( auto object : arraybuffer )
 					{
-						Policy::template Deallocate< type >( object );
+						Policy::template deallocate< type >( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
@@ -411,10 +411,10 @@ namespace Testing
 		struct SAllDeallChecks
 		{
 			template < typename type  >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > arraybuffer( obj_count );
 					std::vector< uint8_t > arraydata( obj_count * sizeof( type ) );
@@ -424,9 +424,9 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer = Policy::template Allocate< type >( data );
-						Policy::template Deallocate( *buffer );
-						*buffer++ = Policy::template Allocate< type >( data );
+						*buffer = Policy::template allocate< type >( data );
+						Policy::template deallocate( *buffer );
+						*buffer++ = Policy::template allocate< type >( data );
 						data += sizeof( type );
 					}
 
@@ -434,10 +434,10 @@ namespace Testing
 
 					for ( auto object : arraybuffer )
 					{
-						Policy::template Deallocate< type >( object );
+						Policy::template deallocate< type >( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
@@ -445,10 +445,10 @@ namespace Testing
 		struct SScatteredChecks
 		{
 			template < typename type  >
-			static void Run( std::vector< size_t > const & index )
+			static void run( std::vector< size_t > const & index )
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > arraybuffer( obj_count );
 					std::vector< uint8_t > arraydata( obj_count * sizeof( type ) );
@@ -458,7 +458,7 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >( data );
+						*buffer++ = Policy::template allocate< type >( data );
 						data += sizeof( type );
 					}
 
@@ -466,24 +466,24 @@ namespace Testing
 
 					for ( size_t i : index )
 					{
-						Policy::template Deallocate< type >( arraybuffer[i] );
+						Policy::template deallocate< type >( arraybuffer[i] );
 					}
 
 					NextStep( "Reallocations", time );
 
 					for ( size_t i : index )
 					{
-						arraybuffer[i] = Policy::template Allocate< type >( arraybuffer[i] );
+						arraybuffer[i] = Policy::template allocate< type >( arraybuffer[i] );
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : arraybuffer )
 					{
-						Policy::template Deallocate< type >( object );
+						Policy::template deallocate< type >( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 
@@ -491,10 +491,10 @@ namespace Testing
 		struct SVariableChecks
 		{
 			template < typename type >
-			static void Run()
+			static void run()
 			{
 				static const uint32_t obj_count = MAX_SIZE / sizeof( type );
-				TimePoint time = Initialise< type, obj_count >();
+				TimePoint time = initialise< type, obj_count >();
 				{
 					std::vector< type * > arraybuffer( obj_count );
 					std::vector< uint8_t > arraydata( obj_count * sizeof( type ) );
@@ -504,15 +504,15 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >( data );
+						*buffer++ = Policy::template allocate< type >( data );
 						data += sizeof( type );
 					}
 
-					NextStep( "Double size", time );
+					NextStep( "double size", time );
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >( data );
+						*buffer++ = Policy::template allocate< type >( data );
 						data += sizeof( type );
 					}
 
@@ -520,7 +520,7 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count / 3; ++i )
 					{
-						*buffer++ = Policy::template Allocate< type >( data );
+						*buffer++ = Policy::template allocate< type >( data );
 						data += sizeof( type );
 					}
 
@@ -528,10 +528,10 @@ namespace Testing
 
 					for ( auto object : arraybuffer )
 					{
-						Policy::template Deallocate( object );
+						Policy::template deallocate( object );
 					}
 				}
-				Finalise( time );
+				finalise( time );
 			}
 		};
 	}
@@ -546,11 +546,11 @@ namespace Testing
 			std::cout << " " << typeid( Checker ).name() << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Checker::template Run< int >();
-			Checker::template Run< TinyObj >();
-			Checker::template Run< SmallObj >();
-			Checker::template Run< Obj >();
-			Checker::template Run< BigObject >();
+			Checker::template run< int >();
+			Checker::template run< TinyObj >();
+			Checker::template run< SmallObj >();
+			Checker::template run< Obj >();
+			Checker::template run< BigObject >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -559,19 +559,19 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
 			std::cout << "Fixed Size Performance checks" << std::endl;
-			std::cout << " Pools::SFixedChecks< " << Castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
+			std::cout << " Pools::SFixedChecks< " << castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Pools::SFixedChecks< MemDataType >::template Run< int >();
-			Pools::SFixedChecks< MemDataType >::template Run< TinyObj >();
-			Pools::SFixedChecks< MemDataType >::template Run< SmallObj >();
-			Pools::SFixedChecks< MemDataType >::template Run< Obj >();
-			Pools::SFixedChecks< MemDataType >::template Run< BigObject >();
+			Pools::SFixedChecks< MemDataType >::template run< int >();
+			Pools::SFixedChecks< MemDataType >::template run< TinyObj >();
+			Pools::SFixedChecks< MemDataType >::template run< SmallObj >();
+			Pools::SFixedChecks< MemDataType >::template run< Obj >();
+			Pools::SFixedChecks< MemDataType >::template run< BigObject >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -587,15 +587,15 @@ namespace Testing
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
-			std::cout << "Alloc/Dealloc Performance checks" << std::endl;
+			std::cout << "allocate/Dealloc Performance checks" << std::endl;
 			std::cout << " " << typeid( Checker ).name() << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Checker::template Run< int >();
-			Checker::template Run< TinyObj >();
-			Checker::template Run< SmallObj >();
-			Checker::template Run< Obj >();
-			Checker::template Run< BigObject >();
+			Checker::template run< int >();
+			Checker::template run< TinyObj >();
+			Checker::template run< SmallObj >();
+			Checker::template run< Obj >();
+			Checker::template run< BigObject >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -604,19 +604,19 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
-			std::cout << "Alloc/Dealloc Performance checks" << std::endl;
-			std::cout << " Pools::SAllDeallChecks< " << Castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
+			std::cout << "allocate/Dealloc Performance checks" << std::endl;
+			std::cout << " Pools::SAllDeallChecks< " << castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Pools::SAllDeallChecks< MemDataType >::template Run< int >();
-			Pools::SAllDeallChecks< MemDataType >::template Run< TinyObj >();
-			Pools::SAllDeallChecks< MemDataType >::template Run< SmallObj >();
-			Pools::SAllDeallChecks< MemDataType >::template Run< Obj >();
-			Pools::SAllDeallChecks< MemDataType >::template Run< BigObject >();
+			Pools::SAllDeallChecks< MemDataType >::template run< int >();
+			Pools::SAllDeallChecks< MemDataType >::template run< TinyObj >();
+			Pools::SAllDeallChecks< MemDataType >::template run< SmallObj >();
+			Pools::SAllDeallChecks< MemDataType >::template run< Obj >();
+			Pools::SAllDeallChecks< MemDataType >::template run< BigObject >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -632,11 +632,11 @@ namespace Testing
 		{
 			Index()
 			{
-				DoInitialiseIndex( m_intIndex, INT_COUNT / 3 );
-				DoInitialiseIndex( m_tinyObjIndex, TINYOBJ_COUNT / 3 );
-				DoInitialiseIndex( m_smallObjIndex, SMALLOBJ_COUNT / 3 );
-				DoInitialiseIndex( m_objIndex, OBJ_COUNT / 3 );
-				DoInitialiseIndex( m_bigObjIndex, BIGOBJ_COUNT / 3 );
+				doInitialiseIndex( m_intIndex, INT_COUNT / 3 );
+				doInitialiseIndex( m_tinyObjIndex, TINYOBJ_COUNT / 3 );
+				doInitialiseIndex( m_smallObjIndex, SMALLOBJ_COUNT / 3 );
+				doInitialiseIndex( m_objIndex, OBJ_COUNT / 3 );
+				doInitialiseIndex( m_bigObjIndex, BIGOBJ_COUNT / 3 );
 			}
 
 			std::vector< size_t > m_intIndex;
@@ -646,7 +646,7 @@ namespace Testing
 			std::vector< size_t > m_bigObjIndex;
 
 		private:
-			void DoInitialiseIndex( std::vector< size_t > & index, size_t count )
+			void doInitialiseIndex( std::vector< size_t > & index, size_t count )
 			{
 				std::default_random_engine engine;
 				std::uniform_int_distribution< size_t > distribution( 1, 3 );
@@ -667,11 +667,11 @@ namespace Testing
 			std::cout << " " << typeid( Checker ).name() << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Checker::template Run< int >( index.m_intIndex );
-			Checker::template Run< TinyObj >( index.m_tinyObjIndex );
-			Checker::template Run< SmallObj >( index.m_smallObjIndex );
-			Checker::template Run< Obj >( index.m_objIndex );
-			Checker::template Run< BigObject >( index.m_bigObjIndex );
+			Checker::template run< int >( index.m_intIndex );
+			Checker::template run< TinyObj >( index.m_tinyObjIndex );
+			Checker::template run< SmallObj >( index.m_smallObjIndex );
+			Checker::template run< Obj >( index.m_objIndex );
+			Checker::template run< BigObject >( index.m_bigObjIndex );
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -680,19 +680,19 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		void Checks( Index const & index )
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
 			std::cout << "Scattered Memory Performance checks" << std::endl;
-			std::cout << " Pools::SScatteredChecks< " << Castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
+			std::cout << " Pools::SScatteredChecks< " << castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Pools::SScatteredChecks< MemDataType >::template Run< int >( index.m_intIndex );
-			Pools::SScatteredChecks< MemDataType >::template Run< TinyObj >( index.m_tinyObjIndex );
-			Pools::SScatteredChecks< MemDataType >::template Run< SmallObj >( index.m_smallObjIndex );
-			Pools::SScatteredChecks< MemDataType >::template Run< Obj >( index.m_objIndex );
-			Pools::SScatteredChecks< MemDataType >::template Run< BigObject >( index.m_bigObjIndex );
+			Pools::SScatteredChecks< MemDataType >::template run< int >( index.m_intIndex );
+			Pools::SScatteredChecks< MemDataType >::template run< TinyObj >( index.m_tinyObjIndex );
+			Pools::SScatteredChecks< MemDataType >::template run< SmallObj >( index.m_smallObjIndex );
+			Pools::SScatteredChecks< MemDataType >::template run< Obj >( index.m_objIndex );
+			Pools::SScatteredChecks< MemDataType >::template run< BigObject >( index.m_bigObjIndex );
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -712,11 +712,11 @@ namespace Testing
 			std::cout << " " << typeid( Checker ).name() << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Checker::template Run< int >();
-			Checker::template Run< TinyObj >();
-			Checker::template Run< SmallObj >();
-			Checker::template Run< Obj >();
-			Checker::template Run< BigObject >();
+			Checker::template run< int >();
+			Checker::template run< TinyObj >();
+			Checker::template run< SmallObj >();
+			Checker::template run< Obj >();
+			Checker::template run< BigObject >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -725,19 +725,19 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
 			std::cout << "Variable Size Performance checks" << std::endl;
-			std::cout << " Pools::SVariableChecks< " << Castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
+			std::cout << " Pools::SVariableChecks< " << castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Pools::SVariableChecks< MemDataType >::template Run< int >();
-			Pools::SVariableChecks< MemDataType >::template Run< TinyObj >();
-			Pools::SVariableChecks< MemDataType >::template Run< SmallObj >();
-			Pools::SVariableChecks< MemDataType >::template Run< Obj >();
-			Pools::SVariableChecks< MemDataType >::template Run< BigObject >();
+			Pools::SVariableChecks< MemDataType >::template run< int >();
+			Pools::SVariableChecks< MemDataType >::template run< TinyObj >();
+			Pools::SVariableChecks< MemDataType >::template run< SmallObj >();
+			Pools::SVariableChecks< MemDataType >::template run< Obj >();
+			Pools::SVariableChecks< MemDataType >::template run< BigObject >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -757,9 +757,9 @@ namespace Testing
 			std::cout << " " << typeid( Checker ).name() << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Checker::template Run< TinyObj >();
-			Checker::template Run< SmallObj >();
-			Checker::template Run< Obj >();
+			Checker::template run< TinyObj >();
+			Checker::template run< SmallObj >();
+			Checker::template run< Obj >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
@@ -768,17 +768,17 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::MemoryDataType MemDataType >
+		template< castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
 			std::cout << "Unique Pool Fixed Size Performance checks" << std::endl;
-			std::cout << " Pools::SFixedChecks< " << Castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
+			std::cout << " Pools::SFixedChecks< " << castor::MemoryDataNamer< MemDataType >::Name << " >" << std::endl << std::endl;
 			TimePoint time = Clock::now();
 
-			Pools::SUniqueFixedChecks< MemDataType >::template Run< TinyObj >();
-			Pools::SUniqueFixedChecks< MemDataType >::template Run< SmallObj >();
-			Pools::SUniqueFixedChecks< MemDataType >::template Run< Obj >();
+			Pools::SUniqueFixedChecks< MemDataType >::template run< TinyObj >();
+			Pools::SUniqueFixedChecks< MemDataType >::template run< SmallObj >();
+			Pools::SUniqueFixedChecks< MemDataType >::template run< Obj >();
 
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;

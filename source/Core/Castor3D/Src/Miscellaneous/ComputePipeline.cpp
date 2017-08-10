@@ -3,9 +3,9 @@
 #include "Render/RenderSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ComputePipeline::ComputePipeline( RenderSystem & renderSystem, ShaderProgram & p_program )
 		: OwnedBy< RenderSystem >{ renderSystem }
@@ -17,8 +17,8 @@ namespace Castor3D
 	{
 	}
 
-	void ComputePipeline::Cleanup()
+	void ComputePipeline::cleanup()
 	{
-		m_program.Cleanup();
+		m_program.cleanup();
 	}
 }

@@ -5,7 +5,7 @@
 
 namespace GLSL
 {
-	Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name )
+	Struct::Struct( GlslWriter & p_writer, castor::String const & p_name )
 		: m_writer( p_writer )
 		, m_name( p_name )
 		, m_block( nullptr )
@@ -15,7 +15,7 @@ namespace GLSL
 		m_block = new IndentBlock( m_writer );
 	}
 
-	Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name, Castor::String const & p_instName )
+	Struct::Struct( GlslWriter & p_writer, castor::String const & p_name, castor::String const & p_instName )
 		: m_writer( p_writer )
 		, m_name( p_name )
 		, m_instName( p_instName )
@@ -23,7 +23,7 @@ namespace GLSL
 	{
 	}
 
-	void Struct::End()
+	void Struct::end()
 	{
 		delete m_block;
 		m_block = nullptr;

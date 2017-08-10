@@ -5,8 +5,8 @@
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -19,31 +19,31 @@ namespace TestRender
 	{
 	}
 
-	bool TestShaderObject::Create()
+	bool TestShaderObject::create()
 	{
 		return true;
 	}
 
-	void TestShaderObject::Destroy()
+	void TestShaderObject::destroy()
 	{
-		Detach();
+		detach();
 	}
 
-	bool TestShaderObject::Compile()
+	bool TestShaderObject::compile()
 	{
 		return true;
 	}
 
-	void TestShaderObject::Detach()
+	void TestShaderObject::detach()
 	{
 	}
 
-	void TestShaderObject::AttachTo( ShaderProgram & p_program )
+	void TestShaderObject::attachTo( ShaderProgram & p_program )
 	{
-		Detach();
+		detach();
 	}
 
-	String TestShaderObject::DoRetrieveCompilerLog()
+	String TestShaderObject::doRetrieveCompilerLog()
 	{
 		return String{};
 	}

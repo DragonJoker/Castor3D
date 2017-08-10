@@ -10,13 +10,13 @@
 #	define GL_INVALID_FRAMEBUFFER_OPERATION 0x506
 #endif
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
 	GlDebug::GlDebug( GlRenderSystem & renderSystem )
-		: Holder{ renderSystem.GetOpenGl() }
+		: Holder{ renderSystem.getOpenGl() }
 		, m_renderSystem{ renderSystem }
 	{
 		m_pfnGetError = &glGetError;
@@ -26,66 +26,66 @@ namespace GlRender
 	{
 	}
 
-	void GlDebug::Initialise()
+	void GlDebug::initialise()
 	{
-		auto & gl = GetOpenGl();
+		auto & gl = getOpenGl();
 
-		if ( gl.HasExtension( KHR_debug ) )
+		if ( gl.hasExtension( KHR_debug ) )
 		{
-			gl_api::GetFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "KHR" ) );
+			gl_api::getFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "KHR" ) );
 		}
-		else if ( gl.HasExtension( ARB_debug_output ) )
+		else if ( gl.hasExtension( ARB_debug_output ) )
 		{
-			gl_api::GetFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "ARB" ) );
+			gl_api::getFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "ARB" ) );
 		}
-		else if ( gl.HasExtension( AMDX_debug_output ) )
+		else if ( gl.hasExtension( AMDX_debug_output ) )
 		{
-			gl_api::GetFunction( m_pfnDebugMessageCallbackAMD, cuT( "glDebugMessageCallbackAMD" ), cuT( "" ) );
+			gl_api::getFunction( m_pfnDebugMessageCallbackAMD, cuT( "glDebugMessageCallbackAMD" ), cuT( "" ) );
 		}
 
 		if ( m_pfnDebugMessageCallback )
 		{
-			m_pfnDebugMessageCallback( PFNGLDEBUGPROC( &GlDebug::StDebugLog ), this );
+			m_pfnDebugMessageCallback( PFNGLDEBUGPROC( &GlDebug::debugLog ), this );
 		}
 
 		if ( m_pfnDebugMessageCallbackAMD )
 		{
-			m_pfnDebugMessageCallbackAMD( PFNGLDEBUGAMDPROC( &GlDebug::StDebugLogAMD ), this );
+			m_pfnDebugMessageCallbackAMD( PFNGLDEBUGAMDPROC( &GlDebug::debugLogAMD ), this );
 		}
 		
 		if ( m_pfnDebugMessageCallback || m_pfnDebugMessageCallbackAMD )
 		{
-			GetOpenGl().Enable( GlTweak::eDebugOutputSynchronous );
+			getOpenGl().Enable( GlTweak::eDebugOutputSynchronous );
 		}
 
-		FilterMessage( 0x00020072 );
+		filterMessage( 0x00020072 );
 		// TODO: Investigate on why I get this noisy message
-		FilterMessage( 0x00020096 );
+		filterMessage( 0x00020096 );
 	}
 
-	void GlDebug::Cleanup()
+	void GlDebug::cleanup()
 	{
 		m_pfnGetError = nullptr;
 		m_pfnDebugMessageCallback = nullptr;
 		m_pfnDebugMessageCallbackAMD = nullptr;
 	}
 
-	bool GlDebug::GlCheckError( std::string const & p_text )const
+	bool GlDebug::checkError( std::string const & p_text )const
 	{
-		return DoGlCheckError( string::string_cast< xchar >( p_text ) );
+		return doGlCheckError( string::stringCast< xchar >( p_text ) );
 	}
 
-	bool GlDebug::GlCheckError( std::wstring const & p_text )const
+	bool GlDebug::checkError( std::wstring const & p_text )const
 	{
-		return DoGlCheckError( string::string_cast< xchar >( p_text ) );
+		return doGlCheckError( string::stringCast< xchar >( p_text ) );
 	}
 
-	void GlDebug::FilterMessage( uint32_t p_message )
+	void GlDebug::filterMessage( uint32_t p_message )
 	{
 		m_filteredOut.insert( p_message );
 	}
 
-	bool GlDebug::IsFiltered( uint32_t p_message )const
+	bool GlDebug::isFiltered( uint32_t p_message )const
 	{
 		return m_filteredOut.find( p_message ) != m_filteredOut.end();
 	}
@@ -99,24 +99,24 @@ namespace GlRender
 			if ( it == m_textureUnits.end()
 				|| it->second.m_texture.m_name == 0u )
 			{
-				Logger::LogError( std::stringstream{} << "Double texture unbind for index " << p_index );
+				Logger::logError( std::stringstream{} << "double texture unbind for index " << p_index );
 			}
 		}
 		else if ( it != m_textureUnits.end()
 			&& it->second.m_texture.m_name != 0u )
 		{
-			Logger::LogError( std::stringstream{} << "Previous texture " << it->second.m_texture.m_name << " at index " << p_index << " has not been unbound " );
+			Logger::logError( std::stringstream{} << "Previous texture " << it->second.m_texture.m_name << " at index " << p_index << " has not been unbound " );
 		}
 
 		m_textureUnits[p_index].m_texture = Binding{ p_name };
 
 		if ( !p_name )
 		{
-			DoUpdateTextureUnits();
+			doUpdateTextureUnits();
 		}
 	}
 
-	void GlDebug::BindSampler( uint32_t p_name, uint32_t p_index )const
+	void GlDebug::bindSampler( uint32_t p_name, uint32_t p_index )const
 	{
 		auto it = m_textureUnits.find( p_index );
 
@@ -125,36 +125,36 @@ namespace GlRender
 			if ( it == m_textureUnits.end()
 				|| it->second.m_sampler.m_name == 0u )
 			{
-				Logger::LogError( std::stringstream{} << "Double sampler unbind for index " << p_index );
+				Logger::logError( std::stringstream{} << "double sampler unbind for index " << p_index );
 			}
 		}
 		else if ( it != m_textureUnits.end()
 			&& it->second.m_sampler.m_name != 0u )
 		{
-			Logger::LogError( std::stringstream{} << "Previous sampler " << it->second.m_sampler.m_name << " at index " << p_index << " has not been unbound " );
+			Logger::logError( std::stringstream{} << "Previous sampler " << it->second.m_sampler.m_name << " at index " << p_index << " has not been unbound " );
 		}
 
 		m_textureUnits[p_index].m_sampler = Binding{ p_name };
 
 		if ( !p_name )
 		{
-			DoUpdateTextureUnits();
+			doUpdateTextureUnits();
 		}
 	}
 
-	void GlDebug::CheckTextureUnits()const
+	void GlDebug::checkTextureUnits()const
 	{
 		for ( auto & it : m_textureUnits )
 		{
 			if ( !it.second.m_sampler.m_name
 				|| !it.second.m_texture.m_name )
 			{
-				Logger::LogError( std::stringstream{} << "Texture unit at index " << it.first << " is incomplete" );
+				Logger::logError( std::stringstream{} << "Texture unit at index " << it.first << " is incomplete" );
 			}
 		}
 	}
 
-	void GlDebug::DoUpdateTextureUnits()const
+	void GlDebug::doUpdateTextureUnits()const
 	{
 		auto it = m_textureUnits.begin();
 
@@ -174,22 +174,22 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-	bool GlDebug::Track( void * p_object
+	bool GlDebug::track( void * p_object
 		, std::string const & p_name
 		, std::string const & p_file
 		, int p_line )const
 	{
-		return m_renderSystem.Track( p_object, p_name, p_file, p_line );
+		return m_renderSystem.track( p_object, p_name, p_file, p_line );
 	}
 
-	bool GlDebug::UnTrack( void * p_object )const
+	bool GlDebug::untrack( void * p_object )const
 	{
-		return m_renderSystem.Untrack( p_object );
+		return m_renderSystem.untrack( p_object );
 	}
 
 #endif
 
-	void GlDebug::StDebugLog( GlDebugSource source
+	void GlDebug::debugLog( GlDebugSource source
 		, GlDebugType type
 		, uint32_t id
 		, GlDebugSeverity severity
@@ -197,20 +197,20 @@ namespace GlRender
 		, const char * message
 		, void * userParam )
 	{
-		reinterpret_cast< GlDebug * >( userParam )->DebugLog( source, type, id, severity, length, message );
+		reinterpret_cast< GlDebug * >( userParam )->doDebugLog( source, type, id, severity, length, message );
 	}
 
-	void GlDebug::StDebugLogAMD( uint32_t id
+	void GlDebug::debugLogAMD( uint32_t id
 		, GlDebugCategory category
 		, GlDebugSeverity severity
 		, int length
 		, const char * message
 		, void * userParam )
 	{
-		reinterpret_cast< GlDebug * >( userParam )->DebugLogAMD( id, category, severity, length, message );
+		reinterpret_cast< GlDebug * >( userParam )->doDebugLogAMD( id, category, severity, length, message );
 	}
 
-	bool GlDebug::DoGlCheckError( String const & p_text )const
+	bool GlDebug::doGlCheckError( String const & p_text )const
 	{
 		static std::map< uint32_t, String > const Errors
 		{
@@ -242,7 +242,7 @@ namespace GlRender
 			//	error << cuT( "  Message: " ) << it->second << std::endl;
 			//}
 
-			//String sysError = System::GetLastErrorText();
+			//String sysError = System::getLastErrorText();
 
 			//if ( !sysError.empty() )
 			//{
@@ -250,7 +250,7 @@ namespace GlRender
 			//}
 
 			//l_error << Debug::Backtrace{ 20, 4 };
-			//Logger::LogError( error );
+			//Logger::logError( error );
 			result = false;
 			errorCode = m_pfnGetError();
 		}
@@ -258,7 +258,7 @@ namespace GlRender
 		return result;
 	}
 
-	void GlDebug::DebugLog( GlDebugSource source
+	void GlDebug::doDebugLog( GlDebugSource source
 		, GlDebugType type
 		, uint32_t id
 		, GlDebugSeverity severity
@@ -296,10 +296,10 @@ namespace GlRender
 			{ GlDebugSeverity::eNotification, cuT( "Notification" ) },
 		};
 
-		if ( !IsFiltered( id ) )
+		if ( !isFiltered( id ) )
 		{
 			StringStream toLog;
-			auto msg = string::string_cast< xchar >( message );
+			auto msg = string::stringCast< xchar >( message );
 			string::replace( msg, '\n', ' ' );
 			toLog << cuT( "OpenGl Debug\n " );
 			toLog << cuT( "  Source: " ) << SourceName[source] << cuT( "\n" );
@@ -312,29 +312,29 @@ namespace GlRender
 			{
 			case GlDebugSeverity::eHigh:
 				toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
-				Logger::LogError( toLog );
+				Logger::logError( toLog );
 				break;
 
 			case GlDebugSeverity::eMedium:
-				Logger::LogWarning( toLog );
+				Logger::logWarning( toLog );
 				break;
 
 			case GlDebugSeverity::eLow:
-				Logger::LogInfo( toLog );
+				Logger::logInfo( toLog );
 				break;
 
 			case GlDebugSeverity::eNotification:
-				Logger::LogTrace( toLog );
+				Logger::logTrace( toLog );
 				break;
 
 			default:
-				Logger::LogWarning( toLog );
+				Logger::logWarning( toLog );
 				break;
 			}
 		}
 	}
 
-	void GlDebug::DebugLogAMD( uint32_t id
+	void GlDebug::doDebugLogAMD( uint32_t id
 		, GlDebugCategory category
 		, GlDebugSeverity severity
 		, int CU_PARAM_UNUSED( length )
@@ -361,7 +361,7 @@ namespace GlRender
 		};
 
 		StringStream toLog;
-		auto msg = string::string_cast< xchar >( message );
+		auto msg = string::stringCast< xchar >( message );
 		string::replace( msg, '\n', ' ' );
 		toLog << cuT( "OpenGl Debug\n" );
 		toLog << cuT( "  Category: " ) << CategoryName[category] << cuT( "\n" );
@@ -373,23 +373,23 @@ namespace GlRender
 		{
 		case GlDebugSeverity::eHigh:
 			toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
-			Logger::LogError( toLog );
+			Logger::logError( toLog );
 			break;
 
 		case GlDebugSeverity::eMedium:
-			Logger::LogWarning( toLog );
+			Logger::logWarning( toLog );
 			break;
 
 		case GlDebugSeverity::eLow:
-			Logger::LogInfo( toLog );
+			Logger::logInfo( toLog );
 			break;
 
 		case GlDebugSeverity::eNotification:
-			Logger::LogTrace( toLog );
+			Logger::logTrace( toLog );
 			break;
 
 		default:
-			Logger::LogWarning( toLog );
+			Logger::logWarning( toLog );
 			break;
 		}
 	}

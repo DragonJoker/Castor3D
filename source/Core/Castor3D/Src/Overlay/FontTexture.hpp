@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Design/Signal.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -40,12 +40,12 @@ namespace Castor3D
 	\brief		Contient la polica et la texture associée.
 	*/
 	class FontTexture
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
-		DECLARE_MAP( char32_t, Castor::Position, GlyphPosition );
+		DECLARE_MAP( char32_t, castor::Position, GlyphPosition );
 		using OnChangedFunction = std::function< void( FontTexture const & ) >;
-		using OnChanged = Castor::Signal< OnChangedFunction >;
+		using OnChanged = castor::Signal< OnChangedFunction >;
 
 	public:
 		/**
@@ -58,7 +58,7 @@ namespace Castor3D
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_font		La police.
 		 */
-		C3D_API FontTexture( Engine & engine, Castor::FontSPtr p_font );
+		C3D_API FontTexture( Engine & engine, castor::FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -72,21 +72,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la texture.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes the teture.
 		 *\~french
 		 *\brief		Nettoie la texture.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the glyphs.
 		 *\~french
 		 *\brief		Met à jour les glyphes.
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de la police.
 		 *\return		La valeur.
 		 */
-		C3D_API Castor::String const & GetFontName()const;
+		C3D_API castor::String const & getFontName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted glyph position.
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\param[in]	p_char	L'indice de la glyphe.
 		 *\return		La position.
 		 */
-		C3D_API Castor::Position const & GetGlyphPosition( char32_t p_char )const;
+		C3D_API castor::Position const & getGlyphPosition( char32_t p_char )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the font.
@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\brief		Récupère la police.
 		 *\return		La valeur.
 		 */
-		Castor::FontSPtr GetFont()const
+		castor::FontSPtr getFont()const
 		{
 			return m_font.lock();
 		}
@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture.
 		 *\return		La texture.
 		 */
-		inline TextureLayoutSPtr GetTexture()const
+		inline TextureLayoutSPtr getTexture()const
 		{
 			return m_texture;
 		}
@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture.
 		 *\return		La texture.
 		 */
-		inline SamplerSPtr GetSampler()const
+		inline SamplerSPtr getSampler()const
 		{
 			return m_sampler.lock();
 		}
@@ -152,7 +152,7 @@ namespace Castor3D
 	private:
 		//!\~english	The font.
 		//!\~french		La police.
-		Castor::FontWPtr m_font;
+		castor::FontWPtr m_font;
 		//!\~english	The texture sampler.
 		//!\~french		L'échantillonneur de la texture.
 		SamplerWPtr m_sampler;

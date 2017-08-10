@@ -32,49 +32,49 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API SpecularBrdfLightingModel( ShadowType shadows, GlslWriter & writer );
-		GlslWriter_API static std::shared_ptr< LightingModel > Create( ShadowType shadows, GlslWriter & writer );
-		GlslWriter_API Vec3 ComputeCombinedLighting( Vec3 const & worldEye
+		GlslWriter_API static std::shared_ptr< LightingModel > create( ShadowType shadows, GlslWriter & writer );
+		GlslWriter_API Vec3 computeCombinedLighting( Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn );
-		GlslWriter_API Vec3 ComputeDirectionalLight( DirectionalLight const & light
+		GlslWriter_API Vec3 computeDirectionalLight( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn );
-		GlslWriter_API Vec3 ComputePointLight( PointLight const & light
+		GlslWriter_API Vec3 computePointLight( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn );
-		GlslWriter_API Vec3 ComputeSpotLight( SpotLight const & light
+		GlslWriter_API Vec3 computeSpotLight( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn );
-		GlslWriter_API Vec3 ComputeOneDirectionalLight( DirectionalLight const & light
+		GlslWriter_API Vec3 computeOneDirectionalLight( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn );
-		GlslWriter_API Vec3 ComputeOnePointLight( PointLight const & light
+		GlslWriter_API Vec3 computeOnePointLight( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn );
-		GlslWriter_API Vec3 ComputeOneSpotLight( SpotLight const & light
+		GlslWriter_API Vec3 computeOneSpotLight( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
@@ -83,15 +83,15 @@ namespace GLSL
 			, FragmentInput const & fragmentIn );
 
 	protected:
-		void DoDeclareModel();
-		void Declare_ComputeDirectionalLight()override;
-		void Declare_ComputePointLight()override;
-		void Declare_ComputeSpotLight()override;
-		void Declare_ComputeOneDirectionalLight()override;
-		void Declare_ComputeOnePointLight()override;
-		void Declare_ComputeOneSpotLight()override;
+		void doDeclareModel();
+		void doDeclareComputeDirectionalLight()override;
+		void doDeclareComputePointLight()override;
+		void doDeclareComputeSpotLight()override;
+		void doDeclareComputeOneDirectionalLight()override;
+		void doDeclareComputeOnePointLight()override;
+		void doDeclareComputeOneSpotLight()override;
 
-		Vec3 DoComputeLight( Light const & light
+		Vec3 doComputeLight( Light const & light
 			, Vec3 const & worldEye
 			, Vec3 const & direction
 			, Vec3 const & diffuse
@@ -100,13 +100,13 @@ namespace GLSL
 			, Float const & shadowFactor
 			, FragmentInput const & fragmentIn );
 
-		void DoDeclare_Distribution();
-		void DoDeclare_Geometry();
-		void DoDeclare_FresnelShlick();
-		void DoDeclare_ComputeLight();
+		void doDeclareDistribution();
+		void doDeclareGeometry();
+		void doDeclareFresnelShlick();
+		void doDeclareComputeLight();
 
 	public:
-		GlslWriter_API static const Castor::String Name;
+		GlslWriter_API static const castor::String Name;
 		Function< Float, InFloat, InFloat > m_distributionGGX;
 		Function< Float, InFloat, InFloat > m_geometrySchlickGGX;
 		Function< Float, InFloat, InFloat, InFloat > m_geometrySmith;

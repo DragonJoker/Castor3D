@@ -2,8 +2,8 @@
 
 #include "Render/TestRenderSystem.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -16,56 +16,56 @@ namespace TestRender
 	{
 	}
 
-	bool TestAtomicCounterBuffer::Create()
+	bool TestAtomicCounterBuffer::create()
 	{
 		return true;
 	}
 
-	void TestAtomicCounterBuffer::Destroy()
+	void TestAtomicCounterBuffer::destroy()
 	{
 	}
 
-	void TestAtomicCounterBuffer::InitialiseStorage( uint32_t p_count
+	void TestAtomicCounterBuffer::initialiseStorage( uint32_t p_count
 		, BufferAccessType p_type
 		, BufferAccessNature p_nature )const
 	{
 	}
 
-	void TestAtomicCounterBuffer::SetBindingPoint( uint32_t p_point )const
+	void TestAtomicCounterBuffer::setBindingPoint( uint32_t p_point )const
 	{
 	}
 
-	void TestAtomicCounterBuffer::Bind()const
+	void TestAtomicCounterBuffer::bind()const
 	{
 	}
 
-	void TestAtomicCounterBuffer::Unbind()const
+	void TestAtomicCounterBuffer::unbind()const
 	{
 	}
 
-	uint8_t * TestAtomicCounterBuffer::Lock( uint32_t p_offset
+	uint8_t * TestAtomicCounterBuffer::lock( uint32_t p_offset
 		, uint32_t p_count
 		, AccessTypes const & p_flags )const
 	{
 		return nullptr;
 	}
 
-	void TestAtomicCounterBuffer::Unlock()const
+	void TestAtomicCounterBuffer::unlock()const
 	{
 	}
 
-	void TestAtomicCounterBuffer::Copy( GpuBuffer const & p_src
+	void TestAtomicCounterBuffer::copy( GpuBuffer const & p_src
 		, uint32_t p_size )const
 	{
 	}
 
-	void TestAtomicCounterBuffer::Upload( uint32_t p_offset
+	void TestAtomicCounterBuffer::upload( uint32_t p_offset
 		, uint32_t p_size
 		, uint8_t const * p_buffer )const
 	{
 	}
 
-	void TestAtomicCounterBuffer::Download( uint32_t p_offset
+	void TestAtomicCounterBuffer::download( uint32_t p_offset
 		, uint32_t p_size
 		, uint8_t * p_buffer )const
 	{

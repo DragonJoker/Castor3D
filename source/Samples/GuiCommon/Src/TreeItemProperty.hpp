@@ -116,7 +116,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_type		Le type d'objet
 		 */
-		TreeItemProperty( Castor3D::Engine * engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
+		TreeItemProperty( castor3d::Engine * engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -154,7 +154,7 @@ namespace GuiCommon
 		 *\brief		Appelàe lorsqu'une propriété est changàe
 		 *\param[in]	p_event	L'évènement
 		 */
-		void OnPropertyChange( wxPropertyGridEvent & p_event );
+		void onPropertyChange( wxPropertyGridEvent & p_event );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object type
@@ -163,7 +163,7 @@ namespace GuiCommon
 		 *\brief		Récupère le type d'objet
 		 *\return		La valeur
 		 */
-		inline ePROPERTY_DATA_TYPE GetType()const
+		inline ePROPERTY_DATA_TYPE getType()const
 		{
 			return m_type;
 		}
@@ -193,7 +193,7 @@ namespace GuiCommon
 		 *\param[in]	engine	Le moteur, pour ràcupàrer les matériaux
 		 *\return		La propriété crààe.
 		 */
-		wxEnumProperty * DoCreateMaterialProperty( wxString const & p_name );
+		wxEnumProperty * doCreateMaterialProperty( wxString const & p_name );
 		/**
 		 *\~english
 		 *\brief		Posts an functor event to the engine.
@@ -204,7 +204,7 @@ namespace GuiCommon
 		 *\param[in]	engine	Le moteur, pour ràcupàrer les matériaux
 		 *\param[in]	p_functor	La fonction à exàcuter
 		 */
-		void DoApplyChange( std::function< void() > p_functor );
+		void doApplyChange( std::function< void() > p_functor );
 		/**
 		 *\~english
 		 *\brief		Creates the menu displayed for the wxTree item, available if m_editable is true
@@ -218,7 +218,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Cràe le menu affichà pour l'objet du wxTree, disponible si m_editable est à true
 		 */
-		virtual void DoCreateTreeItemMenu();
+		virtual void doCreateTreeItemMenu();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
@@ -228,7 +228,7 @@ namespace GuiCommon
 		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnàe
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;
 		/**
 		 *\~english
 		 *\brief		Call when a property grid property is changed
@@ -237,7 +237,7 @@ namespace GuiCommon
 		 *\brief		Appelàe lorsqu'une propriété est changàe
 		 *\param[in]	p_event	L'évènement
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event ) = 0;
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event ) = 0;
 
 	protected:
 		wxMenu * m_menu;
@@ -245,7 +245,7 @@ namespace GuiCommon
 	private:
 		ePROPERTY_DATA_TYPE m_type;
 		bool m_editable;
-		Castor3D::Engine * m_engine;
+		castor3d::Engine * m_engine;
 	};
 }
 

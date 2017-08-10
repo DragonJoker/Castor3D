@@ -28,7 +28,7 @@ SOFTWARE.
 #include "Shader/SceneUbo.hpp"
 #include "TransparentPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -82,7 +82,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique le programme.
 		 */
-		void Render()const;
+		void render()const;
 
 	private:
 		//!\~english	The shader program.
@@ -121,7 +121,7 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du rendu.
 		 */
 		FinalCombinePass( Engine & engine
-			, Castor::Size const & p_size );
+			, castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -149,18 +149,18 @@ namespace Castor3D
 		 *\param[in]	p_invProj		La matrice projection inversée.
 		 *\param[in]	p_fog			Le brouillard.
 		 */
-		void Render( WeightedBlendPassResult const & p_r
+		void render( WeightedBlendPassResult const & p_r
 			, FrameBuffer const & p_frameBuffer
 			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
+			, castor::Matrix4x4r const & p_invViewProj
+			, castor::Matrix4x4r const & p_invView
+			, castor::Matrix4x4r const & p_invProj
 			, Fog const & p_fog );
 
 	private:
 		//!\~english	The render size.
 		//!\~french		La taille du rendu.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The render viewport.
 		//!\~french		La viewport du rendu.
 		Viewport m_viewport;

@@ -28,7 +28,7 @@ SOFTWARE.
 #include "StreamIndentBuffer.hpp"
 #include "StreamIndentBufferManager.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace format
 	{
@@ -41,7 +41,7 @@ namespace Castor
 		\~french
 		\brief		Garde la valeur d'intentation
 		*/
-		struct indent
+		struct Indent
 		{
 			/**
 			 *\~english
@@ -51,7 +51,7 @@ namespace Castor
 			 *\brief		Constructor
 			 *\param[in]	i	The indentation value
 			 */
-			indent( int i )
+			Indent( int i )
 				: m_indent( i )
 			{
 			}
@@ -69,7 +69,7 @@ namespace Castor
 		 *\param[in]	ios	Le flux
 		 *\return		Une référence sur la valeur d'indentation actuelle
 		 */
-		inline long & indent_value( std::ios_base & ios )
+		inline long & indentValue( std::ios_base & ios )
 		{
 			static int indentIndex = std::ios_base::xalloc();
 			return ios.iword( indentIndex );
@@ -84,9 +84,9 @@ namespace Castor
 		 *\param[in]	ios	Le flux
 		 *\return		La valeur d'indentation
 		 */
-		inline long get_indent( std::ios_base & ios )
+		inline long getIndent( std::ios_base & ios )
 		{
-			return indent_value( ios );
+			return indentValue( ios );
 		}
 		/**
 		 *\~english
@@ -98,9 +98,9 @@ namespace Castor
 		 *\param[in]	ios	Le flux
 		 *\param[in]	val	La nouvelle valeur d'indentation
 		 */
-		inline void set_indent( std::ios_base & ios, unsigned int val )
+		inline void setIndent( std::ios_base & ios, unsigned int val )
 		{
-			indent_value( ios ) = val;
+			indentValue( ios ) = val;
 		}
 		/**
 		 *\~english
@@ -110,8 +110,8 @@ namespace Castor
 		 *\brief		Initialise le flux afin de pouvoir l'indenter
 		 *\param[in]	stream	Le flux
 		 */
-		template< typename CharType, typename BufferType = basic_indent_buffer< CharType >, typename BufferManagerType = basic_indent_buffer_manager< CharType > >
-		inline BufferType * install_indent_buffer( std::basic_ostream< CharType > & stream )
+		template< typename CharType, typename BufferType = BasicIndentBuffer< CharType >, typename BufferManagerType = BasicIndentBufferManager< CharType > >
+		inline BufferType * installIndentBuffer( std::basic_ostream< CharType > & stream )
 		{
 			BufferType * sbuf( new BufferType( stream.rdbuf() ) );
 			BufferManagerType::instance()->insert( stream, sbuf );
@@ -127,11 +127,11 @@ namespace Castor
 		template< typename CharType >
 		inline void callback( std::ios_base::event ev, std::ios_base & ios, int x )
 		{
-			if ( basic_indent_buffer_manager< CharType >::instances() )
+			if ( BasicIndentBufferManager< CharType >::instances() )
 			{
 				if ( ev == std::ios_base::erase_event )
 				{
-					basic_indent_buffer_manager< CharType >::instance()->erase( ios );
+					BasicIndentBufferManager< CharType >::instance()->erase( ios );
 				}
 				else if ( ev == std::ios_base::copyfmt_event )
 				{
@@ -142,7 +142,7 @@ namespace Castor
 
 					if ( std::basic_ostream< CharType > & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
 					{
-						o_s << indent( get_indent( ios ) );
+						o_s << Indent( getIndent( ios ) );
 					}
 
 #endif
@@ -163,17 +163,17 @@ namespace Castor
 	 *\param[in]	ind		La valeur d'indentation
 	 */
 	template< typename CharType >
-	inline std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream, format::indent const & ind )
+	inline std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream, format::Indent const & ind )
 	{
-		format::basic_indent_buffer< CharType > * sbuf = dynamic_cast< format::basic_indent_buffer< CharType > * >( stream.rdbuf() );
+		format::BasicIndentBuffer< CharType > * sbuf = dynamic_cast< format::BasicIndentBuffer< CharType > * >( stream.rdbuf() );
 
 		if ( !sbuf )
 		{
-			sbuf = format::install_indent_buffer( stream );
+			sbuf = format::installIndentBuffer( stream );
 			stream.register_callback( format::callback< CharType >, 0 );
 		}
 
-		format::set_indent( stream, ind.m_indent );
+		format::setIndent( stream, ind.m_indent );
 		sbuf->indent( ind.m_indent );
 		return stream;
 	}

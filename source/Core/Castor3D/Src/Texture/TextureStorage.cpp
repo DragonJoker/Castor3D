@@ -2,9 +2,9 @@
 
 #include "Engine.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	TextureStorage::TextureStorage(
 		TextureStorageType p_type,

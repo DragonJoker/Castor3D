@@ -34,12 +34,12 @@ namespace TestRender
 	\version	0.7.0.0
 	\date		12/11/2012
 	\~english
-	\brief		Render buffer receiving depth and/or stencil component
+	\brief		Render buffer receiving depth and/or stencil PixelComponents
 	\~french
 	\brief		Render tampon recevant une composante de profondeur et/ou de stencil
 	*/
 	class TestDepthStencilRenderBuffer
-		: public Castor3D::DepthStencilRenderBuffer
+		: public castor3d::DepthStencilRenderBuffer
 	{
 	public:
 		/**
@@ -52,7 +52,7 @@ namespace TestRender
 		 *\param[in]	p_gl		L'api OpenGL.
 		 *\param[in]	p_format	Le format des pixels.
 		 */
-		TestDepthStencilRenderBuffer( Castor::PixelFormat p_format );
+		TestDepthStencilRenderBuffer( castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,33 +61,33 @@ namespace TestRender
 		 */
 		virtual ~TestDepthStencilRenderBuffer();
 		/**
-		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Create
+		 *\copydoc		castor3d::DepthStencilRenderBuffer::create
 		 */
-		virtual bool Create();
+		virtual bool create();
 		/**
-		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Destroy
+		 *\copydoc		castor3d::DepthStencilRenderBuffer::Destroy
 		 */
-		virtual void Destroy();
+		virtual void destroy();
 		/**
-		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Initialise
+		 *\copydoc		castor3d::DepthStencilRenderBuffer::Initialise
 		 */
-		virtual bool Initialise( Castor::Size const & p_size );
+		virtual bool initialise( castor::Size const & p_size );
 		/**
-		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Cleanup
+		 *\copydoc		castor3d::DepthStencilRenderBuffer::Cleanup
 		 */
-		virtual void Cleanup();
+		virtual void cleanup();
 		/**
-		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Bind
+		 *\copydoc		castor3d::DepthStencilRenderBuffer::Bind
 		 */
-		virtual void Bind();
+		virtual void bind();
 		/**
-		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Unbind
+		 *\copydoc		castor3d::DepthStencilRenderBuffer::Unbind
 		 */
-		virtual void Unbind();
+		virtual void unbind();
 		/**
-		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Resize
+		 *\copydoc		castor3d::DepthStencilRenderBuffer::Resize
 		 */
-		virtual bool Resize( Castor::Size const & p_size );
+		virtual bool resize( castor::Size const & p_size );
 	};
 }
 

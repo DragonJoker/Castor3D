@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,37 +31,37 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API Utils( GlslWriter & writer );
-		GlslWriter_API void DeclareCalcTexCoord();
-		GlslWriter_API void DeclareCalcVSPosition();
-		GlslWriter_API void DeclareCalcVSDepth();
-		GlslWriter_API void DeclareCalcWSPosition();
-		GlslWriter_API void DeclareApplyGamma();
-		GlslWriter_API void DeclareRemoveGamma();
-		GlslWriter_API void DeclareLineariseDepth();
-		GlslWriter_API void DeclareGetMapNormal();
-		GlslWriter_API void DeclareFresnelSchlick();
-		GlslWriter_API void DeclareComputeMetallicIBL();
-		GlslWriter_API void DeclareComputeSpecularIBL();
-		GlslWriter_API Vec2 CalcTexCoord();
-		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & uv
+		GlslWriter_API void declareCalcTexCoord();
+		GlslWriter_API void declareCalcVSPosition();
+		GlslWriter_API void declareCalcVSDepth();
+		GlslWriter_API void declareCalcWSPosition();
+		GlslWriter_API void declareApplyGamma();
+		GlslWriter_API void declareRemoveGamma();
+		GlslWriter_API void declareLineariseDepth();
+		GlslWriter_API void declareGetMapNormal();
+		GlslWriter_API void declareFresnelSchlick();
+		GlslWriter_API void declareComputeMetallicIBL();
+		GlslWriter_API void declareComputeSpecularIBL();
+		GlslWriter_API Vec2 calcTexCoord();
+		GlslWriter_API Vec3 calcVSPosition( Vec2 const & uv
 			, Mat4 const & invProj );
-		GlslWriter_API Float CalcVSDepth( Vec2 const & uv
+		GlslWriter_API Float calcVSDepth( Vec2 const & uv
 			, Mat4 const & proj );
-		GlslWriter_API Vec3 CalcWSPosition( Vec2 const & uv
+		GlslWriter_API Vec3 calcWSPosition( Vec2 const & uv
 			, Mat4 const & invViewProj );
-		GlslWriter_API Vec3 ApplyGamma( Float const & gamma
+		GlslWriter_API Vec3 applyGamma( Float const & gamma
 			, Vec3 const & HDR );
-		GlslWriter_API Vec3 RemoveGamma( Float const & gamma
+		GlslWriter_API Vec3 removeGamma( Float const & gamma
 			, Vec3 const & sRGB );
-		GlslWriter_API Vec3 GetMapNormal( Vec2 const & uv
+		GlslWriter_API Vec3 getMapNormal( Vec2 const & uv
 			, Vec3 const & normal
 			, Vec3 const & position );
-		GlslWriter_API Float LineariseDepth( Float const & depth
+		GlslWriter_API Float lineariseDepth( Float const & depth
 			, Mat4 const & invProj );
-		GlslWriter_API Vec3 FresnelSchlick( Float const & product
+		GlslWriter_API Vec3 fresnelSchlick( Float const & product
 			, Vec3 const & f0
 			, Float const & roughness );
-		GlslWriter_API Vec3 ComputeMetallicIBL( Vec3 const & normal
+		GlslWriter_API Vec3 computeMetallicIBL( Vec3 const & normal
 			, Vec3 const & position
 			, Vec3 const & albedo
 			, Float const & metalness
@@ -71,7 +71,7 @@ namespace GLSL
 			, SamplerCube const & prefiltered
 			, Sampler2D const & brdf
 			, Int const & invertY );
-		GlslWriter_API Vec3 ComputeSpecularIBL( Vec3 const & normal
+		GlslWriter_API Vec3 computeSpecularIBL( Vec3 const & normal
 			, Vec3 const & position
 			, Vec3 const & diffuse
 			, Vec3 const & specular
@@ -81,9 +81,8 @@ namespace GLSL
 			, SamplerCube const & prefiltered
 			, Sampler2D const & brdf
 			, Int const & invertY );
-
 	public:
-		static uint32_t constexpr MaxIblReflectionLod = 4u;
+		GlslWriter_API static uint32_t const MaxIblReflectionLod;
 
 	private:
 		GlslWriter & m_writer;

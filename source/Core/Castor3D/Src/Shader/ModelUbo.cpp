@@ -3,17 +3,17 @@
 #include "Engine.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ModelUbo::ModelUbo( Engine & engine )
 		: m_ubo{ ShaderProgram::BufferModel
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, ModelUbo::BindingPoint }
-		, m_shadowReceiver{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::ShadowReceiver ) }
-		, m_materialIndex{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::MaterialIndex ) }
-		, m_environmentIndex{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::EnvironmentIndex ) }
+		, m_shadowReceiver{ *m_ubo.createUniform< UniformType::eInt >( ShaderProgram::ShadowReceiver ) }
+		, m_materialIndex{ *m_ubo.createUniform< UniformType::eInt >( ShaderProgram::MaterialIndex ) }
+		, m_environmentIndex{ *m_ubo.createUniform< UniformType::eInt >( ShaderProgram::EnvironmentIndex ) }
 	{
 	}
 
@@ -21,17 +21,17 @@ namespace Castor3D
 	{
 	}
 
-	void ModelUbo::SetEnvMapIndex( uint32_t p_value )
+	void ModelUbo::setEnvMapIndex( uint32_t p_value )
 	{
-		m_environmentIndex.SetValue( int( p_value ) );
+		m_environmentIndex.setValue( int( p_value ) );
 	}
 
-	void ModelUbo::Update( bool p_shadowReceiver
+	void ModelUbo::update( bool p_shadowReceiver
 		, uint32_t p_materialIndex )const
 	{
-		m_shadowReceiver.SetValue( p_shadowReceiver ? 1 : 0 );
-		m_materialIndex.SetValue( p_materialIndex - 1 );
-		m_ubo.Update();
-		m_ubo.BindTo( ModelUbo::BindingPoint );
+		m_shadowReceiver.setValue( p_shadowReceiver ? 1 : 0 );
+		m_materialIndex.setValue( p_materialIndex - 1 );
+		m_ubo.update();
+		m_ubo.bindTo( ModelUbo::BindingPoint );
 	}
 }

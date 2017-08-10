@@ -29,7 +29,7 @@ SOFTWARE.
 #include "FixedSizeMarkedMemoryData.hpp"
 #include "FixedSizeMemoryData.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -44,13 +44,13 @@ namespace Castor
 	struct NewDeletePolicy
 	{
 		template< typename ... TParams >
-		static inline Object * Ctor( Object * p_space, TParams ... p_params )
+		static inline Object * create( Object * p_space, TParams ... p_params )
 		{
 			return new( p_space )Object( p_params... );
 		}
 
 		template< typename ... TParams >
-		static inline void Dtor( Object * p_space )
+		static inline void destroy( Object * p_space )
 		{
 			p_space->~Object();
 		}
@@ -88,7 +88,7 @@ namespace Castor
 		ObjectPool( size_t p_count )noexcept
 			: m_count( p_count )
 		{
-			MemoryData::Initialise( m_count );
+			MemoryData::initialise( m_count );
 		}
 		/**
 		 *\~english
@@ -98,7 +98,7 @@ namespace Castor
 		 */
 		~ObjectPool()noexcept
 		{
-			MemoryData::Cleanup();
+			MemoryData::cleanup();
 		}
 		/**
 		 *\~english
@@ -108,8 +108,8 @@ namespace Castor
 		 */
 		void Reset()noexcept
 		{
-			MemoryData::Cleanup();
-			MemoryData::Initialise( m_count );
+			MemoryData::cleanup();
+			MemoryData::initialise( m_count );
 		}
 		/**
 		 *\~english
@@ -122,9 +122,9 @@ namespace Castor
 		 *\return		L'objet construit, ou nullptr.
 		 */
 		template< typename ... TParams >
-		Object * Allocate( TParams ... p_params )
+		Object * allocate( TParams ... p_params )
 		{
-			Object * space = MemoryData::Allocate();
+			Object * space = MemoryData::allocate();
 
 			if ( !space )
 			{
@@ -143,9 +143,9 @@ namespace Castor
 		 *\param[in]	p_object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
 		 */
-		bool Deallocate( Object * p_object )noexcept
+		bool deallocate( Object * p_object )noexcept
 		{
-			if ( MemoryData::Deallocate( p_object ) )
+			if ( MemoryData::deallocate( p_object ) )
 			{
 				p_object->~Object();
 				return true;
@@ -159,7 +159,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le compte d'objets.
 		 */
-		uint32_t GetCount()noexcept
+		uint32_t getCount()noexcept
 		{
 			return m_count;
 		}
@@ -200,7 +200,7 @@ namespace Castor
 		AlignedObjectPool( size_t p_count )noexcept
 			: m_count( p_count )
 		{
-			MemoryData::Initialise( m_count );
+			MemoryData::initialise( m_count );
 		}
 		/**
 		 *\~english
@@ -210,7 +210,7 @@ namespace Castor
 		 */
 		~AlignedObjectPool()noexcept
 		{
-			MemoryData::Cleanup();
+			MemoryData::cleanup();
 		}
 		/**
 		 *\~english
@@ -220,8 +220,8 @@ namespace Castor
 		 */
 		void Reset()noexcept
 		{
-			MemoryData::Cleanup();
-			MemoryData::Initialise( m_count );
+			MemoryData::cleanup();
+			MemoryData::initialise( m_count );
 		}
 		/**
 		 *\~english
@@ -234,16 +234,16 @@ namespace Castor
 		 *\return		L'objet construit, ou nullptr.
 		 */
 		template< typename ... TParams >
-		Object * Allocate( TParams ... p_params )
+		Object * allocate( TParams ... p_params )
 		{
-			Object * space = MemoryData::Allocate();
+			Object * space = MemoryData::allocate();
 
 			if ( !space )
 			{
 				return nullptr;
 			}
 
-			return NewDeletePolicy< Object >::Ctor( space );
+			return NewDeletePolicy< Object >::create( space );
 		}
 		/**
 		 *\~english
@@ -255,11 +255,11 @@ namespace Castor
 		 *\param[in]	p_object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
 		 */
-		bool Deallocate( Object * p_object )noexcept
+		bool deallocate( Object * p_object )noexcept
 		{
-			if ( MemoryData::Deallocate( p_object ) )
+			if ( MemoryData::deallocate( p_object ) )
 			{
-				NewDeletePolicy< Object >::Dtor( p_object );
+				NewDeletePolicy< Object >::destroy( p_object );
 				return true;
 			}
 
@@ -271,7 +271,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le compte d'objets.
 		 */
-		uint32_t GetCount()noexcept
+		uint32_t getCount()noexcept
 		{
 			return m_count;
 		}

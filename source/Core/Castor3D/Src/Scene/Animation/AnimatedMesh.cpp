@@ -6,9 +6,9 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	AnimatedMesh::AnimatedMesh( String const & p_name, Mesh & p_mesh )
 		: AnimatedObject{ p_name }
@@ -20,42 +20,42 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedMesh::Update( Milliseconds const & p_tslf )
+	void AnimatedMesh::update( Milliseconds const & p_tslf )
 	{
 		if ( m_playingAnimation )
 		{
-			m_playingAnimation->Update( p_tslf );
+			m_playingAnimation->update( p_tslf );
 		}
 	}
 
-	void AnimatedMesh::DoAddAnimation( String const & p_name )
+	void AnimatedMesh::doAddAnimation( String const & p_name )
 	{
 		auto it = m_animations.find( p_name );
 
 		if ( it == m_animations.end() )
 		{
-			if ( m_mesh.HasAnimation( p_name ) )
+			if ( m_mesh.hasAnimation( p_name ) )
 			{
-				auto & animation = static_cast< MeshAnimation & >( m_mesh.GetAnimation( p_name ) );
+				auto & animation = static_cast< MeshAnimation & >( m_mesh.getAnimation( p_name ) );
 				auto instance = std::make_unique< MeshAnimationInstance >( *this, animation );
 				m_animations.emplace( p_name, std::move( instance ) );
 			}
 		}
 	}
 
-	void AnimatedMesh::DoStartAnimation( AnimationInstance & p_animation )
+	void AnimatedMesh::doStartAnimation( AnimationInstance & p_animation )
 	{
 		REQUIRE( m_playingAnimation == nullptr );
 		m_playingAnimation = &static_cast< MeshAnimationInstance & >( p_animation );
 	}
 
-	void AnimatedMesh::DoStopAnimation( AnimationInstance & p_animation )
+	void AnimatedMesh::doStopAnimation( AnimationInstance & p_animation )
 	{
 		REQUIRE( m_playingAnimation == &p_animation );
 		m_playingAnimation = nullptr;
 	}
 
-	void AnimatedMesh::DoClearAnimations()
+	void AnimatedMesh::doClearAnimations()
 	{
 		m_playingAnimation = nullptr;
 	}

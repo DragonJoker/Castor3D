@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Exception/Exception.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		Exception de comparaison de versions
 	*/
 	class VersionException
-		: public Castor::Exception
+		: public castor::Exception
 	{
 	public:
 		/**
@@ -68,7 +68,7 @@ namespace Castor3D
 		C3D_API virtual ~VersionException() throw() {}
 	};
 
-#	define CASTOR_VERSION_EXCEPTION( p_given, p_expected ) throw Castor3D::VersionException( p_given, p_expected, __FILE__, __FUNCTION__, __LINE__ )
+#	define CASTOR_VERSION_EXCEPTION( p_given, p_expected ) throw castor3d::VersionException( p_given, p_expected, __FILE__, __FUNCTION__, __LINE__ )
 }
 
 #endif

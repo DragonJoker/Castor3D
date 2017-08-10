@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Miscellaneous/Debug.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -108,10 +108,10 @@ namespace Castor3D
 		 *\return		\p true if the event was applied successfully.
 		 *\~french
 		 *\brief		Traite l'évènement.
-		 *\remarks		Doit être implémentée dans les classes filles.
+		 *\remarks		doit être implémentée dans les classes filles.
 		 *\return		\p true si l'évènement a été traité avec succès.
 		 */
-		C3D_API virtual bool Apply() = 0;
+		C3D_API virtual bool apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the event type.
@@ -120,7 +120,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de l'évènement.
 		 *\return		Le type de l'évènement.
 		 */
-		inline EventType GetType()
+		inline EventType getType()
 		{
 			return m_type;
 		}
@@ -134,7 +134,7 @@ namespace Castor3D
 
 		//!\~english	The event creation stack trace.
 		//!\~french		La pile d'appels lors de la création de l'évènement.
-		Castor::String m_stackTrace;
+		castor::String m_stackTrace;
 
 #endif
 	};

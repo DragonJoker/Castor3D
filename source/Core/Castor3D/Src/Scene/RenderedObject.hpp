@@ -28,7 +28,7 @@ SOFTWARE.
 #include "MovableObject.hpp"
 #include "RenderedObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -53,7 +53,7 @@ namespace Castor3D
 		\brief		Loader de Geometry
 		*/
 		class TextWriter
-			: public Castor::TextWriter< RenderedObject >
+			: public castor::TextWriter< RenderedObject >
 		{
 		public:
 			/**
@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a RenderedObject into a text file.
@@ -73,7 +73,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier.
 			 *\param[in]	p_object	Le RenderedObject.
 			 */
-			C3D_API bool operator()( RenderedObject const & p_object, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( RenderedObject const & p_object, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -83,7 +83,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de visibilité.
 		 */
-		inline bool IsVisible()const
+		inline bool isVisible()const
 		{
 			return m_visible;
 		}
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\brief		Définit le statut de visibilité.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetVisible( bool p_value )
+		inline void setVisible( bool p_value )
 		{
 			m_visible = p_value;
 		}
@@ -105,7 +105,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de projection d'ombres.
 		 */
-		inline bool IsShadowCaster()const
+		inline bool isShadowCaster()const
 		{
 			return m_castShadows;
 		}
@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\brief		Définit le statut de projection d'ombres.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetShadowCaster( bool p_value )
+		inline void setShadowCaster( bool p_value )
 		{
 			m_castShadows = p_value;
 		}
@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de réception d'ombres.
 		 */
-		inline bool IsShadowReceiver()const
+		inline bool isShadowReceiver()const
 		{
 			return m_receivesShadows;
 		}
@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\brief		Définit le statut de réception d'ombres.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetShadowReceiver( bool p_value )
+		inline void setShadowReceiver( bool p_value )
 		{
 			m_receivesShadows = p_value;
 		}

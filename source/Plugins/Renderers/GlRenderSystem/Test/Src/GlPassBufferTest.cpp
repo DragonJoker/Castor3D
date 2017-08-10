@@ -26,8 +26,8 @@
 #include <GlslSource.hpp>
 #include <GlslMaterial.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 #ifdef max
 #	undef max
@@ -39,172 +39,172 @@ namespace Testing
 {
 	namespace
 	{
-		GLSL::Shader DoCreateVtxShader( Engine & engine )
+		GLSL::Shader doCreateVtxShader( Engine & engine )
 		{
 			using namespace GLSL;
-			auto writer = engine.GetRenderSystem()->CreateGlslWriter();
-			auto projection = writer.DeclUniform< Mat4 >( cuT( "projection" ) );
-			auto position = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
-			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
-			writer.ImplementFunction< Void >( cuT( "main" )
+			auto writer = engine.getRenderSystem()->createGlslWriter();
+			auto projection = writer.declUniform< Mat4 >( cuT( "projection" ) );
+			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
 					gl_Position = projection * vec4( position.xy(), 0.0, 1.0 );
 				} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
-		GLSL::Shader DoCreateLegacyPixelShader( Engine & engine )
+		GLSL::Shader doCreateLegacyPixelShader( Engine & engine )
 		{
 			using namespace GLSL;
-			auto writer = engine.GetRenderSystem()->CreateGlslWriter();
+			auto writer = engine.getRenderSystem()->createGlslWriter();
 			LegacyMaterials materials{ writer };
-			materials.Declare();
+			materials.declare();
 			uint32_t index = 0;
-			auto out_c3dOutput1 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
-			auto out_c3dOutput2 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput2" ), index++ );
-			auto out_c3dOutput3 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput3" ), index++ );
-			auto out_c3dOutput4 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput4" ), index++ );
-			writer.ImplementFunction< Void >( cuT( "main" )
+			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
+			auto out_c3dOutput2 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput2" ), index++ );
+			auto out_c3dOutput3 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput3" ), index++ );
+			auto out_c3dOutput4 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput4" ), index++ );
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out_c3dOutput1 = vec4( materials.GetDiffuse( 0_i )
-						, materials.GetEmissive( 0_i ) );
-					out_c3dOutput2 = vec4( materials.GetSpecular( 0_i )
-						, materials.GetAmbient( 0_i ) );
-					out_c3dOutput3 = vec4( materials.GetShininess( 0_i )
-						, materials.GetAlphaRef( 0_i )
-						, materials.GetExposure( 0_i )
-						, materials.GetGamma( 0_i ) );
-					out_c3dOutput4 = vec4( materials.GetReflection( 0_i )
-						, materials.GetRefraction( 0_i )
-						, materials.GetRefractionRatio( 0_i )
+					out_c3dOutput1 = vec4( materials.getDiffuse( 0_i )
+						, materials.getEmissive( 0_i ) );
+					out_c3dOutput2 = vec4( materials.getSpecular( 0_i )
+						, materials.getAmbient( 0_i ) );
+					out_c3dOutput3 = vec4( materials.getShininess( 0_i )
+						, materials.getAlphaRef( 0_i )
+						, materials.getExposure( 0_i )
+						, materials.getGamma( 0_i ) );
+					out_c3dOutput4 = vec4( materials.getReflection( 0_i )
+						, materials.getRefraction( 0_i )
+						, materials.getRefractionRatio( 0_i )
 						, 0.0_f );
 					out_c3dOutput1 = vec4( 1.0_f );
 					out_c3dOutput2 = vec4( 1.0_f );
 					out_c3dOutput3 = vec4( 1.0_f );
 					out_c3dOutput4 = vec4( 1.0_f );
 				} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
-		GLSL::Shader DoCreateMetallicRoughnessPixelShader( Engine & engine )
+		GLSL::Shader doCreateMetallicRoughnessPixelShader( Engine & engine )
 		{
 			using namespace GLSL;
-			auto writer = engine.GetRenderSystem()->CreateGlslWriter();
+			auto writer = engine.getRenderSystem()->createGlslWriter();
 			PbrMRMaterials materials{ writer };
-			materials.Declare();
+			materials.declare();
 			uint32_t index = 0;
-			auto out_c3dOutput1 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
-			auto out_c3dOutput2 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput2" ), index++ );
-			auto out_c3dOutput3 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput3" ), index++ );
-			auto out_c3dOutput4 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput4" ), index++ );
-			writer.ImplementFunction< Void >( cuT( "main" )
+			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
+			auto out_c3dOutput2 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput2" ), index++ );
+			auto out_c3dOutput3 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput3" ), index++ );
+			auto out_c3dOutput4 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput4" ), index++ );
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out_c3dOutput1 = vec4( materials.GetDiffuse( 0_i )
-						, materials.GetEmissive( 0_i ) );
-					out_c3dOutput2 = vec4( materials.GetRoughness( 0_i )
-						, materials.GetMetallic( 0_i )
+					out_c3dOutput1 = vec4( materials.getDiffuse( 0_i )
+						, materials.getEmissive( 0_i ) );
+					out_c3dOutput2 = vec4( materials.getRoughness( 0_i )
+						, materials.getMetallic( 0_i )
 						, 0.0_f
 						, 0.0_f );
 					out_c3dOutput3 = vec4( 0.0_f
-						, materials.GetAlphaRef( 0_i )
-						, materials.GetExposure( 0_i )
-						, materials.GetGamma( 0_i ) );
-					out_c3dOutput4 = vec4( materials.GetReflection( 0_i )
-						, materials.GetRefraction( 0_i )
-						, materials.GetRefractionRatio( 0_i )
+						, materials.getAlphaRef( 0_i )
+						, materials.getExposure( 0_i )
+						, materials.getGamma( 0_i ) );
+					out_c3dOutput4 = vec4( materials.getReflection( 0_i )
+						, materials.getRefraction( 0_i )
+						, materials.getRefractionRatio( 0_i )
 						, 0.0_f );
 				} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
-		GLSL::Shader DoCreateSpecularGlossinessPixelShader( Engine & engine )
+		GLSL::Shader doCreateSpecularGlossinessPixelShader( Engine & engine )
 		{
 			using namespace GLSL;
-			auto writer = engine.GetRenderSystem()->CreateGlslWriter();
+			auto writer = engine.getRenderSystem()->createGlslWriter();
 			PbrSGMaterials materials{ writer };
-			materials.Declare();
+			materials.declare();
 			uint32_t index = 0;
-			auto out_c3dOutput1 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
-			auto out_c3dOutput2 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput2" ), index++ );
-			auto out_c3dOutput3 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput3" ), index++ );
-			auto out_c3dOutput4 = writer.DeclFragData< Vec4 >( cuT( "out_c3dOutput4" ), index++ );
-			writer.ImplementFunction< Void >( cuT( "main" )
+			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
+			auto out_c3dOutput2 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput2" ), index++ );
+			auto out_c3dOutput3 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput3" ), index++ );
+			auto out_c3dOutput4 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput4" ), index++ );
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out_c3dOutput1 = vec4( materials.GetDiffuse( 0_i )
-						, materials.GetEmissive( 0_i ) );
-					out_c3dOutput2 = vec4( materials.GetSpecular( 0_i )
-						, materials.GetGlossiness( 0_i ) );
+					out_c3dOutput1 = vec4( materials.getDiffuse( 0_i )
+						, materials.getEmissive( 0_i ) );
+					out_c3dOutput2 = vec4( materials.getSpecular( 0_i )
+						, materials.getGlossiness( 0_i ) );
 					out_c3dOutput3 = vec4( 0.0_f
-						, materials.GetAlphaRef( 0_i )
-						, materials.GetExposure( 0_i )
-						, materials.GetGamma( 0_i ) );
-					out_c3dOutput4 = vec4( materials.GetReflection( 0_i )
-						, materials.GetRefraction( 0_i )
-						, materials.GetRefractionRatio( 0_i )
+						, materials.getAlphaRef( 0_i )
+						, materials.getExposure( 0_i )
+						, materials.getGamma( 0_i ) );
+					out_c3dOutput4 = vec4( materials.getReflection( 0_i )
+						, materials.getRefraction( 0_i )
+						, materials.getRefractionRatio( 0_i )
 						, 0.0_f );
 				} );
-			return writer.Finalise();
+			return writer.finalise();
 		}
 
 		struct Result
 		{
 		public:
 			Result( Engine & engine )
-				: output1{ DoCreateTexture( engine ) }
-				, output2{ DoCreateTexture( engine ) }
-				, output3{ DoCreateTexture( engine ) }
-				, output4{ DoCreateTexture( engine ) }
-				, fbo{ engine.GetRenderSystem()->CreateFrameBuffer() }
+				: output1{ doCreateTexture( engine ) }
+				, output2{ doCreateTexture( engine ) }
+				, output3{ doCreateTexture( engine ) }
+				, output4{ doCreateTexture( engine ) }
+				, fbo{ engine.getRenderSystem()->createFrameBuffer() }
 			{
-				fbo->Create();
-				fbo->Initialise( Size{ 1, 1 } );
-				output1Attach = fbo->CreateAttachment( output1.GetTexture() );
-				output2Attach = fbo->CreateAttachment( output2.GetTexture() );
-				output3Attach = fbo->CreateAttachment( output3.GetTexture() );
-				output4Attach = fbo->CreateAttachment( output4.GetTexture() );
-				fbo->Bind();
-				fbo->Attach( AttachmentPoint::eColour, 0u, output1Attach, TextureType::eTwoDimensions );
-				fbo->Attach( AttachmentPoint::eColour, 1u, output2Attach, TextureType::eTwoDimensions );
-				fbo->Attach( AttachmentPoint::eColour, 2u, output3Attach, TextureType::eTwoDimensions );
-				fbo->Attach( AttachmentPoint::eColour, 3u, output4Attach, TextureType::eTwoDimensions );
-				fbo->Unbind();
-				fbo->SetClearColour( Colour::from_components( 0.0f, 0.0f, 0.0f, 0.0f ) );
+				fbo->create();
+				fbo->initialise( Size{ 1, 1 } );
+				output1Attach = fbo->createAttachment( output1.getTexture() );
+				output2Attach = fbo->createAttachment( output2.getTexture() );
+				output3Attach = fbo->createAttachment( output3.getTexture() );
+				output4Attach = fbo->createAttachment( output4.getTexture() );
+				fbo->bind();
+				fbo->attach( AttachmentPoint::eColour, 0u, output1Attach, TextureType::eTwoDimensions );
+				fbo->attach( AttachmentPoint::eColour, 1u, output2Attach, TextureType::eTwoDimensions );
+				fbo->attach( AttachmentPoint::eColour, 2u, output3Attach, TextureType::eTwoDimensions );
+				fbo->attach( AttachmentPoint::eColour, 3u, output4Attach, TextureType::eTwoDimensions );
+				fbo->unbind();
+				fbo->setClearColour( Colour::fromComponents( 0.0f, 0.0f, 0.0f, 0.0f ) );
 			}
 
 			~Result()
 			{
-				fbo->Bind();
-				fbo->DetachAll();
-				fbo->Unbind();
-				fbo->Cleanup();
-				fbo->Destroy();
+				fbo->bind();
+				fbo->detachAll();
+				fbo->unbind();
+				fbo->cleanup();
+				fbo->destroy();
 				fbo.reset();
 				output1Attach.reset();
 				output2Attach.reset();
 				output3Attach.reset();
 				output4Attach.reset();
-				output1.Cleanup();
-				output2.Cleanup();
-				output3.Cleanup();
-				output4.Cleanup();
+				output1.cleanup();
+				output2.cleanup();
+				output3.cleanup();
+				output4.cleanup();
 			}
 
 		private:
-			TextureUnit DoCreateTexture( Engine & engine )
+			TextureUnit doCreateTexture( Engine & engine )
 			{
-				auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
 					, AccessType::eRead
 					, AccessType::eWrite
 					, PixelFormat::eRGBA32F
 					, Size{ 1, 1 } );
-				texture->GetImage().InitialiseSource();
+				texture->getImage().initialiseSource();
 				TextureUnit unit{ engine };
-				unit.SetTexture( texture );
-				unit.Initialise();
+				unit.setTexture( texture );
+				unit.initialise();
 				return unit;
 			}
 
@@ -251,55 +251,55 @@ namespace Testing
 					vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( bufferVertex.data() )[i++ * declaration.stride()] );
 				}
 
-				viewport.Initialise();
-				auto & renderSystem = *engine.GetRenderSystem();
+				viewport.initialise();
+				auto & renderSystem = *engine.getRenderSystem();
 
-				program = engine.GetRenderSystem()->CreateShaderProgram();
-				program->CreateObject( ShaderType::eVertex );
-				program->CreateObject( ShaderType::ePixel );
-				program->SetSource( ShaderType::eVertex, vtx );
-				program->SetSource( ShaderType::eVertex, pxl );
-				auto projection = program->CreateUniform< UniformType::eMat4x4f >( cuT( "projection" ), ShaderType::ePixel );
-				program->Initialise();
+				program = engine.getRenderSystem()->createShaderProgram();
+				program->createObject( ShaderType::eVertex );
+				program->createObject( ShaderType::ePixel );
+				program->setSource( ShaderType::eVertex, vtx );
+				program->setSource( ShaderType::eVertex, pxl );
+				auto projection = program->createUniform< UniformType::eMat4x4f >( cuT( "projection" ), ShaderType::ePixel );
+				program->initialise();
 
-				vertexBuffer = std::make_shared< VertexBuffer >( *renderSystem.GetEngine()
+				vertexBuffer = std::make_shared< VertexBuffer >( *renderSystem.getEngine()
 					, declaration );
-				vertexBuffer->Resize( uint32_t( arrayVertex.size()
+				vertexBuffer->resize( uint32_t( arrayVertex.size()
 					* declaration.stride() ) );
-				vertexBuffer->LinkCoords( arrayVertex.begin()
+				vertexBuffer->linkCoords( arrayVertex.begin()
 					, arrayVertex.end() );
-				vertexBuffer->Initialise( BufferAccessType::eStatic
+				vertexBuffer->initialise( BufferAccessType::eStatic
 					, BufferAccessNature::eDraw );
-				geometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
+				geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
 					, *program );
-				geometryBuffers->Initialise( { *vertexBuffer }, nullptr );
+				geometryBuffers->initialise( { *vertexBuffer }, nullptr );
 
 				DepthStencilState dsState;
-				dsState.SetDepthTest( false );
-				dsState.SetDepthMask( WritingMask::eZero );
-				pipeline = renderSystem.CreateRenderPipeline( std::move( dsState )
+				dsState.setDepthTest( false );
+				dsState.setDepthMask( WritingMask::eZero );
+				pipeline = renderSystem.createRenderPipeline( std::move( dsState )
 					, RasteriserState{}
 					, BlendState{}
 					, MultisampleState{}
 					, *program
 					, PipelineFlags{} );
 
-				viewport.Resize( Size{ 1, 1 } );
-				viewport.Initialise();
-				viewport.Apply();
+				viewport.resize( Size{ 1, 1 } );
+				viewport.initialise();
+				viewport.apply();
 
-				projection->SetValue( viewport.GetProjection() );
+				projection->setValue( viewport.getProjection() );
 			}
 
 			~Pipeline()
 			{
-				pipeline->Cleanup();
+				pipeline->cleanup();
 				pipeline.reset();
-				vertexBuffer->Cleanup();
+				vertexBuffer->cleanup();
 				vertexBuffer.reset();
-				geometryBuffers->Cleanup();
+				geometryBuffers->cleanup();
 				geometryBuffers.reset();
-				viewport.Cleanup();
+				viewport.cleanup();
 
 				for ( auto & vertex : arrayVertex )
 				{
@@ -311,7 +311,7 @@ namespace Testing
 			RenderPipelineUPtr pipeline;
 			Viewport viewport;
 			std::array< real, 6 * 2 > bufferVertex;
-			Castor3D::BufferDeclaration declaration;
+			castor3d::BufferDeclaration declaration;
 			std::array< BufferElementGroupSPtr, 6 > arrayVertex;
 			VertexBufferSPtr vertexBuffer;
 			GeometryBuffersSPtr geometryBuffers;
@@ -327,64 +327,64 @@ namespace Testing
 	{
 	}
 
-	void GlPassBufferTest::DoRegisterTests()
+	void GlPassBufferTest::doRegisterTests()
 	{
-		DoRegisterTest( "GlPassBufferTest::Legacy", std::bind( &GlPassBufferTest::Legacy, this ) );
+		doRegisterTest( "GlPassBufferTest::Legacy", std::bind( &GlPassBufferTest::Legacy, this ) );
 	}
 
 	void GlPassBufferTest::Legacy()
 	{
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		auto material = m_engine.GetMaterialCache().Create( cuT( "Test" ), MaterialType::eLegacy );
-		material->CreatePass();
-		auto pass = material->GetTypedPass< MaterialType::eLegacy >( 0u );
-		pass->SetDiffuse( Colour::from_components( 0.0f, 0.1f, 0.2f, 1.0f ) );
-		pass->SetSpecular( Colour::from_components( 0.3f, 0.4f, 0.5f, 1.0f ) );
-		pass->SetShininess( 0.6f );
-		pass->SetAmbient( 0.7f );
-		pass->SetEmissive( 0.8f );
-		pass->SetOpacity( 0.9f );
-		pass->SetAlphaValue( 1.0f );
-		pass->SetRefractionRatio( 1.1f );
-		material->Initialise();
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		auto material = m_engine.getMaterialCache().create( cuT( "Test" ), MaterialType::eLegacy );
+		material->createPass();
+		auto pass = material->getTypedPass< MaterialType::eLegacy >( 0u );
+		pass->setDiffuse( Colour::fromComponents( 0.0f, 0.1f, 0.2f, 1.0f ) );
+		pass->setSpecular( Colour::fromComponents( 0.3f, 0.4f, 0.5f, 1.0f ) );
+		pass->setShininess( 0.6f );
+		pass->setAmbient( 0.7f );
+		pass->setEmissive( 0.8f );
+		pass->setOpacity( 0.9f );
+		pass->setAlphaValue( 1.0f );
+		pass->setRefractionRatio( 1.1f );
+		material->initialise();
 
 		Result result{ m_engine };
 		Pipeline pipeline{ m_engine
-			, DoCreateVtxShader( m_engine )
-			, DoCreateLegacyPixelShader( m_engine ) };
+			, doCreateVtxShader( m_engine )
+			, doCreateLegacyPixelShader( m_engine ) };
 
 		LegacyPassBuffer passBuffer{ m_engine, GLSL::MaxMaterialsCount };
-		passBuffer.AddPass( *pass );
-		passBuffer.Update();
-		passBuffer.Bind();
+		passBuffer.addPass( *pass );
+		passBuffer.update();
+		passBuffer.bind();
 
-		result.fbo->Bind();
-		result.fbo->SetDrawBuffers();
-		result.fbo->Clear( BufferComponent::eColour );
-		pipeline.pipeline->Apply();
-		pipeline.geometryBuffers->Draw( 6u, 0u );
-		result.fbo->Unbind();
-		m_engine.GetRenderSystem()->GetMainContext()->Barrier( MemoryBarrier::eFrameBuffer );
+		result.fbo->bind();
+		result.fbo->setDrawBuffers();
+		result.fbo->clear( BufferComponent::eColour );
+		pipeline.pipeline->apply();
+		pipeline.geometryBuffers->draw( 6u, 0u );
+		result.fbo->unbind();
+		m_engine.getRenderSystem()->getMainContext()->memoryBarrier( MemoryBarrier::eFrameBuffer );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
+		m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 
-		auto buffer1 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output1.GetTexture()->GetImage().GetBuffer() );
-		auto buffer2 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output2.GetTexture()->GetImage().GetBuffer() );
-		auto buffer3 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output3.GetTexture()->GetImage().GetBuffer() );
-		auto buffer4 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output4.GetTexture()->GetImage().GetBuffer() );
+		auto buffer1 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output1.getTexture()->getImage().getBuffer() );
+		auto buffer2 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output2.getTexture()->getImage().getBuffer() );
+		auto buffer3 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output3.getTexture()->getImage().getBuffer() );
+		auto buffer4 = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( result.output4.getTexture()->getImage().getBuffer() );
 
-		result.output1Attach->Download( Position{}, *buffer1 );
-		result.output2Attach->Download( Position{}, *buffer2 );
-		result.output3Attach->Download( Position{}, *buffer3 );
-		result.output4Attach->Download( Position{}, *buffer4 );
-		result.fbo->Unbind();
+		result.output1Attach->download( Position{}, *buffer1 );
+		result.output2Attach->download( Position{}, *buffer2 );
+		result.output3Attach->download( Position{}, *buffer3 );
+		result.output4Attach->download( Position{}, *buffer4 );
+		result.fbo->unbind();
 
 		auto pixel1 = *buffer1->begin();
 		auto pixel2 = *buffer2->begin();
 		auto pixel3 = *buffer3->begin();
 		auto pixel4 = *buffer4->begin();
 
-		material->Cleanup();
-		m_engine.GetMaterialCache().Remove( material->GetName() );
+		material->cleanup();
+		m_engine.getMaterialCache().remove( material->getName() );
 	}
 }

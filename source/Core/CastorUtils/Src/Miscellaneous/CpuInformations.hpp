@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <bitset>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -76,7 +76,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le nombre de coeurs (Physiques + Virtuels).
 		 */
-		inline uint32_t CoreCount()const
+		inline uint32_t getCoreCount()const
 		{
 			return m_internal.m_coreCount;
 		}
@@ -86,7 +86,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le vendeur du CPU.
 		 */
-		inline std::string Vendor()const
+		inline std::string getVendor()const
 		{
 			return m_internal.m_vendor;
 		}

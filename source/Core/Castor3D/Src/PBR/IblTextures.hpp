@@ -28,7 +28,7 @@ SOFTWARE.
 #include "PBR/EnvironmentPrefilter.hpp"
 #include "Texture/TextureUnit.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -40,7 +40,7 @@ namespace Castor3D
 	\brief		Contient les textures d'environnement utilisées dans l'IBL.
 	*/
 	class IblTextures
-		: public Castor::OwnedBy< Scene >
+		: public castor::OwnedBy< Scene >
 	{
 	public:
 		/**
@@ -67,7 +67,7 @@ namespace Castor3D
 		 *\brief		Met à jour les textures d'environnement.
 		 *\param[in]	p_source	La texture d'environnement source.
 		 */
-		C3D_API void Update( TextureLayout const & p_source );
+		C3D_API void update( TextureLayout const & p_source );
 		/**
 		 *\~english
 		 *\brief		Displays the maps.
@@ -76,14 +76,14 @@ namespace Castor3D
 		 *\brief		Affiche les textures.
 		 *\param[in]	size	La taille du rendu.
 		 */
-		C3D_API void Debug( Castor::Size const & size )const;
+		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\return		The irradiance texture.
 		 *\~french
 		 *\return		La texture d'irradiance.
 		 */
-		inline TextureUnit const & GetIrradiance()const
+		inline TextureUnit const & getIrradiance()const
 		{
 			return m_radianceTexture;
 		}
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture d'environnement préfiltrée.
 		 */
-		inline TextureUnit const & GetPrefilteredEnvironment()const
+		inline TextureUnit const & getPrefilteredEnvironment()const
 		{
 			return m_prefilteredEnvironment;
 		}
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture BRDF préfiltrée.
 		 */
-		inline TextureUnit const & GetPrefilteredBrdf()const
+		inline TextureUnit const & getPrefilteredBrdf()const
 		{
 			return m_prefilteredBrdf;
 		}

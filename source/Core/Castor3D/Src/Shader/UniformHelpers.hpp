@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <cstdint>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		Récupère le VariableType d'un UniformType.
 	*/
 	template< UniformType Type, typename Enable = void >
-	struct variable_type;
+	struct VariableTypeTraits;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -52,7 +52,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une seule valeur.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eBool
 								|| Type == UniformType::eInt
 								|| Type == UniformType::eUInt
@@ -78,7 +78,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur vec2.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eVec2b
 								|| Type == UniformType::eVec2i
 								|| Type == UniformType::eVec2ui
@@ -103,7 +103,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur vec3.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eVec3b
 								|| Type == UniformType::eVec3i
 								|| Type == UniformType::eVec3ui
@@ -128,7 +128,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur vec4.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eVec4b
 								|| Type == UniformType::eVec4i
 								|| Type == UniformType::eVec4ui
@@ -153,7 +153,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat2x2.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat2x2b
 								|| Type == UniformType::eMat2x2i
 								|| Type == UniformType::eMat2x2ui
@@ -180,7 +180,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat2x3.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat2x3b
 								|| Type == UniformType::eMat2x3i
 								|| Type == UniformType::eMat2x3ui
@@ -207,7 +207,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat2x4.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat2x4b
 								|| Type == UniformType::eMat2x4i
 								|| Type == UniformType::eMat2x4ui
@@ -234,7 +234,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat3x2.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat3x2b
 								|| Type == UniformType::eMat3x2i
 								|| Type == UniformType::eMat3x2ui
@@ -261,7 +261,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat3x3.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat3x3b
 								|| Type == UniformType::eMat3x3i
 								|| Type == UniformType::eMat3x3ui
@@ -288,7 +288,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat3x4.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat3x4b
 								|| Type == UniformType::eMat3x4i
 								|| Type == UniformType::eMat3x4ui
@@ -315,7 +315,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat4x2.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat4x2b
 								|| Type == UniformType::eMat4x2i
 								|| Type == UniformType::eMat4x2ui
@@ -342,7 +342,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat4x3.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat4x3b
 								|| Type == UniformType::eMat4x3i
 								|| Type == UniformType::eMat4x3ui
@@ -369,7 +369,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types ayant une valeur mat4x4.
 	*/
 	template< UniformType Type >
-	struct variable_type< Type
+	struct VariableTypeTraits< Type
 		, typename std::enable_if< Type == UniformType::eMat4x4b
 								|| Type == UniformType::eMat4x4i
 								|| Type == UniformType::eMat4x4ui
@@ -394,8 +394,8 @@ namespace Castor3D
 	\brief		Dit si un UniformType est de type matrice.
 	*/
 	template< UniformType Type >
-	struct is_matrix_type
-		: std::integral_constant< bool, variable_type< Type >::is_matrix >
+	struct IsMatrixType
+		: std::integral_constant< bool, VariableTypeTraits< Type >::is_matrix >
 	{
 	};
 	/*!
@@ -408,8 +408,8 @@ namespace Castor3D
 	\brief		Dit si un UniformType est de type point.
 	*/
 	template< UniformType Type >
-	struct is_point_type
-		: std::integral_constant< bool, variable_type< Type >::is_point >
+	struct IsPointType
+		: std::integral_constant< bool, VariableTypeTraits< Type >::is_point >
 	{
 	};
 	/*!
@@ -422,8 +422,8 @@ namespace Castor3D
 	\brief		Dit si un UniformType est de type valeur simple.
 	*/
 	template< UniformType Type >
-	struct is_one_type
-		: std::integral_constant< bool, variable_type< Type >::is_one >
+	struct IsOneType
+		: std::integral_constant< bool, VariableTypeTraits< Type >::is_one >
 	{
 	};
 	/*!
@@ -436,10 +436,10 @@ namespace Castor3D
 	\brief		Récupère le nom d'un UniformType.
 	*/
 	template< UniformType Type >
-	struct uniform_type_name
+	struct UniformTypeName
 	{
-		C3D_API static const Castor::String full_type_name;
-		C3D_API static const Castor::String data_type_name;
+		C3D_API static const castor::String full_type_name;
+		C3D_API static const castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -451,7 +451,7 @@ namespace Castor3D
 	\brief		Structure d'aide permettant de récupérer un sous type depuis un UniformType.
 	*/
 	template< UniformType Type, typename Enable = void >
-	struct uniform_sub_type;
+	struct UniformSubType;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -465,7 +465,7 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_sub_type < Type
+	struct UniformSubType < Type
 		, typename std::enable_if< Type == UniformType::eSampler >::type >
 	{
 		using type = int;
@@ -483,7 +483,7 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_sub_type< Type
+	struct UniformSubType< Type
 		, typename std::enable_if< Type == UniformType::eBool
 								|| Type == UniformType::eVec2b
 								|| Type == UniformType::eVec3b
@@ -513,7 +513,7 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_sub_type< Type
+	struct UniformSubType< Type
 		, typename std::enable_if< Type == UniformType::eInt
 								|| Type == UniformType::eVec2i
 								|| Type == UniformType::eVec3i
@@ -543,7 +543,7 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_sub_type< Type
+	struct UniformSubType< Type
 		, typename std::enable_if< Type == UniformType::eUInt
 								|| Type == UniformType::eVec2ui
 								|| Type == UniformType::eVec3ui
@@ -573,7 +573,7 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_sub_type< Type
+	struct UniformSubType< Type
 		, typename std::enable_if< Type == UniformType::eFloat
 								|| Type == UniformType::eVec2f
 								|| Type == UniformType::eVec3f
@@ -603,7 +603,7 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_sub_type< Type
+	struct UniformSubType< Type
 		, typename std::enable_if< Type == UniformType::eDouble
 								|| Type == UniformType::eVec2d
 								|| Type == UniformType::eVec3d
@@ -630,7 +630,7 @@ namespace Castor3D
 	\brief		Structure d'aide permettant de récupérer un type de matrice depuis un UniformType.
 	*/
 	template< typename T, size_t Columns, size_t Rows, typename Enable = void >
-	struct uniform_matrix_type;
+	struct UniformMatrixType;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -643,9 +643,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les matrices non carrées.
 	*/
 	template< typename T, size_t Columns, size_t Rows >
-	struct uniform_matrix_type< T, Columns, Rows, typename std::enable_if< Columns != Rows >::type >
+	struct UniformMatrixType< T, Columns, Rows, typename std::enable_if< Columns != Rows >::type >
 	{
-		using type = typename Castor::Matrix< T, Columns, Rows >;
+		using type = typename castor::Matrix< T, Columns, Rows >;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -659,9 +659,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les matrices carrées.
 	*/
 	template< typename T, size_t Columns, size_t Rows >
-	struct uniform_matrix_type< T, Columns, Rows, typename std::enable_if< Columns == Rows >::type >
+	struct UniformMatrixType< T, Columns, Rows, typename std::enable_if< Columns == Rows >::type >
 	{
-		using type = typename Castor::SquareMatrix< T, Columns >;
+		using type = typename castor::SquareMatrix< T, Columns >;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -673,7 +673,7 @@ namespace Castor3D
 	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
 	*/
 	template< UniformType Type, typename Enable = void >
-	struct uniform_type;
+	struct UniformTypeTraits;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -687,11 +687,11 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_type< Type, typename std::enable_if< is_matrix_type< Type >::value >::type >
+	struct UniformTypeTraits< Type, typename std::enable_if< IsMatrixType< Type >::value >::type >
 	{
 		using type = TUniform< Type >;
-		using value_sub_type = typename uniform_sub_type< Type >::type;
-		using value_type = typename uniform_matrix_type< value_sub_type, variable_type< Type >::cols, variable_type< Type >::rows >::type;
+		using value_sub_type = typename UniformSubType< Type >::type;
+		using value_type = typename UniformMatrixType< value_sub_type, VariableTypeTraits< Type >::cols, VariableTypeTraits< Type >::rows >::type;
 		using param_type = value_type;
 		using return_type = value_type;
 		using return_const_type = param_type;
@@ -710,12 +710,12 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_type< Type, typename std::enable_if< is_point_type< Type >::value >::type >
+	struct UniformTypeTraits< Type, typename std::enable_if< IsPointType< Type >::value >::type >
 	{
 		using type = TUniform< Type >;
-		using value_sub_type = typename uniform_sub_type< Type >::type;
-		using value_type = typename Castor::Coords< value_sub_type, variable_type< Type >::count >;
-		using param_type = typename Castor::Point< value_sub_type, variable_type< Type >::count >;
+		using value_sub_type = typename UniformSubType< Type >::type;
+		using value_type = typename castor::Coords< value_sub_type, VariableTypeTraits< Type >::count >;
+		using param_type = typename castor::Point< value_sub_type, VariableTypeTraits< Type >::count >;
 		using return_type = value_type;
 		using return_const_type = param_type;
 		using typed_value_type = value_type;
@@ -733,10 +733,10 @@ namespace Castor3D
 	\remarks
 	*/
 	template< UniformType Type >
-	struct uniform_type< Type, typename std::enable_if< is_one_type< Type >::value >::type >
+	struct UniformTypeTraits< Type, typename std::enable_if< IsOneType< Type >::value >::type >
 	{
 		using type = TUniform< Type >;
-		using value_sub_type = typename uniform_sub_type< Type >::type;
+		using value_sub_type = typename UniformSubType< Type >::type;
 		using value_type = value_sub_type;
 		using param_type = value_type;
 		using return_type = value_type;

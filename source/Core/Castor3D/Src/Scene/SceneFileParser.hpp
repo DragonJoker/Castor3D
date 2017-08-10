@@ -34,7 +34,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	//! Scene file sections Enum
 	/*!
@@ -83,7 +83,7 @@ namespace Castor3D
 	\date 25/08/2010
 	*/
 	class SceneFileContext
-		: public Castor::FileParserContext
+		: public castor::FileParserContext
 	{
 	public:
 		SceneSPtr pScene;
@@ -115,10 +115,10 @@ namespace Castor3D
 		MeshType eMeshType;
 		Topology ePrimitiveType;
 		ViewportSPtr pViewport;
-		Castor::String strName;
-		Castor::String strName2;
-		Castor::Path path;
-		Castor::Size size;
+		castor::String strName;
+		castor::String strName2;
+		castor::Path path;
+		castor::Size size;
 		uint8_t uiUInt8;
 		uint16_t uiUInt16;
 		uint32_t uiUInt32;
@@ -150,11 +150,11 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		C3D_API SceneFileContext( SceneFileParser * p_pParser, Castor::TextFile * p_pFile );
+		C3D_API SceneFileContext( SceneFileParser * p_pParser, castor::TextFile * p_pFile );
 		/**
 		 * Initialises all variables
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 	};
 	//! ESCN file parser
 	/*!
@@ -163,8 +163,8 @@ namespace Castor3D
 	\date 25/08/2010
 	*/
 	class SceneFileParser
-		: public Castor::FileParser
-		, public Castor::OwnedBy< Engine >
+		: public castor::FileParser
+		, public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -178,53 +178,53 @@ namespace Castor3D
 		/**
 		 * Retrieves the render window defined by the scene
 		 */
-		C3D_API RenderWindowSPtr GetRenderWindow();
+		C3D_API RenderWindowSPtr getRenderWindow();
 		/**
 		 * Parses the given file (expecting it to be in ESCN file format)
 		 *\param[in,out]	p_file	The file
 		 *\return	the parsed scene
 		 */
-		C3D_API bool ParseFile( Castor::TextFile & p_file );
+		C3D_API bool parseFile( castor::TextFile & p_file );
 		/**
 		 * Parses the given file (expecting it to be in ESCN file format)
 		 *\param[in]	p_pathFile	The file path
 		 *\return	true if successful, false if not
 		 */
-		C3D_API bool ParseFile( Castor::Path const & p_pathFile );
+		C3D_API bool parseFile( castor::Path const & p_pathFile );
 		/**
 		 * Parses the given file (expecting it to be in ESCN file format), using an external context
 		 *\param[in]	p_pathFile	The file path.
 		 *\param[in]	p_context	The context.
 		 *\return		true if successful, false if not.
 		 */
-		C3D_API bool ParseFile( Castor::Path const & p_pathFile, SceneFileContextSPtr p_context );
+		C3D_API bool parseFile( castor::Path const & p_pathFile, SceneFileContextSPtr p_context );
 
-		inline ScenePtrStrMap::iterator ScenesBegin()
+		inline ScenePtrStrMap::iterator scenesBegin()
 		{
 			return m_mapScenes.begin();
 		}
-		inline ScenePtrStrMap::const_iterator ScenesBegin()const
+		inline ScenePtrStrMap::const_iterator scenesBegin()const
 		{
 			return m_mapScenes.begin();
 		}
-		inline ScenePtrStrMap::const_iterator ScenesEnd()const
+		inline ScenePtrStrMap::const_iterator scenesEnd()const
 		{
 			return m_mapScenes.end();
 		}
 
 	private:
-		C3D_API virtual void DoInitialiseParser( Castor::TextFile & p_file );
-		C3D_API virtual void DoCleanupParser();
-		C3D_API virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_line ) )
+		C3D_API virtual void doInitialiseParser( castor::TextFile & p_file );
+		C3D_API virtual void doCleanupParser();
+		C3D_API virtual bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( p_line ) )
 		{
 			return false;
 		}
-		C3D_API virtual bool DoDiscardParser( Castor::String const & p_line );
-		C3D_API virtual void DoValidate();
-		C3D_API virtual Castor::String DoGetSectionName( uint32_t p_section );
+		C3D_API virtual bool doDiscardParser( castor::String const & p_line );
+		C3D_API virtual void doValidate();
+		C3D_API virtual castor::String doGetSectionName( uint32_t p_section );
 
 	private:
-		Castor::String m_strSceneFilePath;
+		castor::String m_strSceneFilePath;
 		ScenePtrStrMap m_mapScenes;
 		RenderWindowSPtr m_renderWindow;
 

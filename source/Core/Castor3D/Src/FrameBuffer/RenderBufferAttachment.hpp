@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "FrameBufferAttachment.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -57,9 +57,9 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~RenderBufferAttachment();
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::GetBuffer
+		 *\copydoc		castor3d::FrameBufferAttachment::getBuffer
 		 */
-		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const;
+		C3D_API virtual castor::PxBufferBaseSPtr getBuffer()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render buffer
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon de rendu
 		 *\return		Le tampon de rendu
 		 */
-		inline RenderBufferSPtr GetRenderBuffer()const
+		inline RenderBufferSPtr getRenderBuffer()const
 		{
 			return m_pRenderBuffer.lock();
 		}

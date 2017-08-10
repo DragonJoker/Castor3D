@@ -9,8 +9,8 @@
 #include <wx/dcbuffer.h>
 
 using namespace GuiCommon;
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange, Version const & p_version )
 	: wxFrame( nullptr, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
@@ -23,7 +23,7 @@ SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTit
 	m_strCopyright << wxDateTime().Now().GetCurrentYear() << wxT( " " ) << _( "DragonJoker, All rights shared" );
 	SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 	m_strEngineVersion.clear();
-	m_strEngineVersion << p_version.GetMajor() << wxT( "." ) << p_version.GetMinor() << wxT( "." ) << p_version.GetBuild();
+	m_strEngineVersion << p_version.getMajor() << wxT( "." ) << p_version.getMinor() << wxT( "." ) << p_version.getBuild();
 	wxSize size = GetClientSize();
 	m_pPanelBmp = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( size.x, size.y - 20 ) );
 	m_pGauge = new wxGauge( this, wxID_ANY, p_iRange, wxPoint( 0, size.y - 20 ), wxSize( size.x, 20 ), wxGA_SMOOTH | wxGA_HORIZONTAL | wxBORDER_NONE );
@@ -37,7 +37,7 @@ SplashScreen::~SplashScreen()
 
 void SplashScreen::Step( wxString const & p_strText, int p_iIncrement )
 {
-	Logger::LogInfo( String( cuT( "SplashScreen::Step - " ) ) + make_String( p_strText ) );
+	Logger::logInfo( String( cuT( "SplashScreen::Step - " ) ) + make_String( p_strText ) );
 	m_strStatus = p_strText;
 	Step( p_iIncrement );
 }
@@ -47,17 +47,17 @@ void SplashScreen::Step( int p_iIncrement )
 	m_pGauge->SetValue( m_pGauge->GetValue() + p_iIncrement );
 	m_strSubStatus.clear();
 	wxClientDC clientDC( m_pPanelBmp );
-	DoDraw( & clientDC );
+	doDraw( & clientDC );
 }
 
 void SplashScreen::SubStatus( wxString const & p_strText )
 {
 	m_strSubStatus = p_strText;
 	wxClientDC clientDC( m_pPanelBmp );
-	DoDraw( & clientDC );
+	doDraw( & clientDC );
 }
 
-void SplashScreen::DoDraw( wxDC * p_pDC )
+void SplashScreen::doDraw( wxDC * p_pDC )
 {
 	if ( IsVisible() )
 	{
@@ -99,7 +99,7 @@ END_EVENT_TABLE()
 void SplashScreen::OnPaint( wxPaintEvent & p_event )
 {
 	wxPaintDC paintDC( this );
-	DoDraw( &paintDC );
+	doDraw( &paintDC );
 	p_event.Skip();
 }
 

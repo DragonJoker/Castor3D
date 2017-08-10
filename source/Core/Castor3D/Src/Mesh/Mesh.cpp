@@ -6,27 +6,27 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	bool BinaryWriter< Mesh >::DoWrite( Mesh const & p_obj )
+	bool BinaryWriter< Mesh >::doWrite( Mesh const & p_obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		for ( auto submesh : p_obj )
 		{
-			result &= BinaryWriter< Submesh >{}.Write( *submesh, m_chunk );
+			result &= BinaryWriter< Submesh >{}.write( *submesh, m_chunk );
 		}
 
 		if ( result && p_obj.m_skeleton )
 		{
-			result = BinaryWriter< Skeleton >{}.Write( *p_obj.m_skeleton, m_chunk );
+			result = BinaryWriter< Skeleton >{}.write( *p_obj.m_skeleton, m_chunk );
 		}
 
 		return result;
@@ -34,7 +34,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< Mesh >::DoParse( Mesh & p_obj )
+	bool BinaryParser< Mesh >::doParse( Mesh & p_obj )
 	{
 		bool result = true;
 		SubmeshSPtr submesh;
@@ -42,12 +42,12 @@ namespace Castor3D
 		String name;
 		BinaryChunk chunk;
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				result = DoParseChunk( name, chunk );
+				result = doParseChunk( name, chunk );
 
 				if ( result )
 				{
@@ -57,8 +57,8 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmesh:
-				submesh = std::make_shared< Submesh >( *p_obj.GetScene(), p_obj, p_obj.GetSubmeshCount() );
-				result = BinaryParser< Submesh >{}.Parse( *submesh, chunk );
+				submesh = std::make_shared< Submesh >( *p_obj.getScene(), p_obj, p_obj.getSubmeshCount() );
+				result = BinaryParser< Submesh >{}.parse( *submesh, chunk );
 
 				if ( result )
 				{
@@ -68,12 +68,12 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSkeleton:
-				skeleton = std::make_shared< Skeleton >( *p_obj.GetScene() );
-				result = BinaryParser< Skeleton >{}.Parse( *skeleton, chunk );
+				skeleton = std::make_shared< Skeleton >( *p_obj.getScene() );
+				result = BinaryParser< Skeleton >{}.parse( *skeleton, chunk );
 
 				if ( result )
 				{
-					p_obj.SetSkeleton( skeleton );
+					p_obj.setSkeleton( skeleton );
 				}
 
 				break;
@@ -82,7 +82,7 @@ namespace Castor3D
 
 		if ( result )
 		{
-			p_obj.ComputeContainers();
+			p_obj.computeContainers();
 		}
 
 		return result;
@@ -99,78 +99,78 @@ namespace Castor3D
 
 	Mesh::~Mesh()
 	{
-		Cleanup();
+		cleanup();
 	}
 
-	void Mesh::Cleanup()
+	void Mesh::cleanup()
 	{
-		Animable::CleanupAnimations();
+		Animable::cleanupAnimations();
 
 		for ( auto submesh : m_submeshes )
 		{
-			submesh->Cleanup();
+			submesh->cleanup();
 		}
 
 		m_submeshes.clear();
 	}
 
-	void Mesh::ComputeContainers()
+	void Mesh::computeContainers()
 	{
 		if ( m_submeshes.size() == 0 )
 		{
 			return;
 		}
 
-		uint32_t count = GetSubmeshCount();
+		uint32_t count = getSubmeshCount();
 
 		for ( uint32_t i = 0; i < count; i++ )
 		{
-			m_submeshes[i]->ComputeContainers();
+			m_submeshes[i]->computeContainers();
 		}
 
-		Point3r min( m_submeshes[0]->GetCollisionBox().GetMin() );
-		Point3r max( m_submeshes[0]->GetCollisionBox().GetMax() );
+		Point3r min( m_submeshes[0]->getCollisionBox().getMin() );
+		Point3r max( m_submeshes[0]->getCollisionBox().getMax() );
 
 		for ( auto submesh : m_submeshes )
 		{
-			CubeBox const & box = submesh->GetCollisionBox();
-			max[0] = std::max( box.GetMax()[0], max[0] );
-			max[1] = std::max( box.GetMax()[1], max[1] );
-			max[2] = std::max( box.GetMax()[2], max[2] );
-			min[0] = std::min( box.GetMin()[0], min[0] );
-			min[1] = std::min( box.GetMin()[1], min[1] );
-			min[2] = std::min( box.GetMin()[2], min[2] );
+			CubeBox const & box = submesh->getCollisionBox();
+			max[0] = std::max( box.getMax()[0], max[0] );
+			max[1] = std::max( box.getMax()[1], max[1] );
+			max[2] = std::max( box.getMax()[2], max[2] );
+			min[0] = std::min( box.getMin()[0], min[0] );
+			min[1] = std::min( box.getMin()[1], min[1] );
+			min[2] = std::min( box.getMin()[2], min[2] );
 		}
 
-		m_box.Load( min, max );
-		m_sphere.Load( m_box );
+		m_box.load( min, max );
+		m_sphere.load( m_box );
 	}
 
-	uint32_t Mesh::GetFaceCount()const
+	uint32_t Mesh::getFaceCount()const
 	{
 		uint32_t nbFaces = 0;
 
 		for ( auto submesh : m_submeshes )
 		{
-			nbFaces += submesh->GetFaceCount();
+			nbFaces += submesh->getFaceCount();
 		}
 
 		return nbFaces;
 	}
 
-	uint32_t Mesh::GetVertexCount()const
+	uint32_t Mesh::getVertexCount()const
 	{
 		uint32_t nbFaces = 0;
 
 		for ( auto submesh : m_submeshes )
 		{
-			nbFaces += submesh->GetPointsCount();
+			nbFaces += submesh->getPointsCount();
 		}
 
 		return nbFaces;
 	}
 
-	SubmeshSPtr Mesh::GetSubmesh( uint32_t p_index )const
+	SubmeshSPtr Mesh::getSubmesh( uint32_t p_index )const
 	{
 		SubmeshSPtr result;
 
@@ -182,14 +182,14 @@ namespace Castor3D
 		return result;
 	}
 
-	SubmeshSPtr Mesh::CreateSubmesh()
+	SubmeshSPtr Mesh::createSubmesh()
 	{
-		SubmeshSPtr submesh = std::make_shared< Submesh >( *GetScene(), *this, GetSubmeshCount() );
+		SubmeshSPtr submesh = std::make_shared< Submesh >( *getScene(), *this, getSubmeshCount() );
 		m_submeshes.push_back( submesh );
 		return submesh;
 	}
 
-	void Mesh::DeleteSubmesh( SubmeshSPtr & p_submesh )
+	void Mesh::deleteSubmesh( SubmeshSPtr & p_submesh )
 	{
 		auto it = std::find( m_submeshes.begin(), m_submeshes.end(), p_submesh );
 
@@ -201,42 +201,42 @@ namespace Castor3D
 		}
 	}
 
-	void Mesh::ComputeNormals( bool p_reverted )
+	void Mesh::computeNormals( bool p_reverted )
 	{
 		for ( auto submesh : m_submeshes )
 		{
-			submesh->ComputeNormals( p_reverted );
+			submesh->computeNormals( p_reverted );
 		}
 	}
 
-	void Mesh::Ref( MaterialSPtr p_material )
+	void Mesh::ref( MaterialSPtr p_material )
 	{
 		for ( auto submesh : m_submeshes )
 		{
-			submesh->Ref( p_material );
+			submesh->ref( p_material );
 		}
 	}
 
-	void Mesh::UnRef( MaterialSPtr p_material )
+	void Mesh::unref( MaterialSPtr p_material )
 	{
 		for ( auto submesh : m_submeshes )
 		{
-			submesh->UnRef( p_material );
+			submesh->unref( p_material );
 		}
 	}
 
-	void Mesh::SetSkeleton( SkeletonSPtr p_skeleton )
+	void Mesh::setSkeleton( SkeletonSPtr p_skeleton )
 	{
 		m_skeleton = p_skeleton;
 	}
 
-	MeshAnimation & Mesh::CreateAnimation( Castor::String const & p_name )
+	MeshAnimation & Mesh::createAnimation( castor::String const & p_name )
 	{
-		if ( !HasAnimation( p_name ) )
+		if ( !hasAnimation( p_name ) )
 		{
-			DoAddAnimation( std::make_shared< MeshAnimation >( *this, p_name ) );
+			doAddAnimation( std::make_shared< MeshAnimation >( *this, p_name ) );
 		}
 
-		return DoGetAnimation< MeshAnimation >( p_name );
+		return doGetAnimation< MeshAnimation >( p_name );
 	}
 }

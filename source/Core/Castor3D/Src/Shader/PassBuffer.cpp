@@ -12,9 +12,9 @@
 
 #include <Design/ArrayView.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*********************************************************************************************
 
@@ -24,48 +24,48 @@ namespace Castor3D
 		: m_buffer{ engine }
 		, m_passCount{ count }
 	{
-		m_buffer.Resize( size * count );
-		m_buffer.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+		m_buffer.resize( size * count );
+		m_buffer.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 	}
 
 	PassBuffer::~PassBuffer()
 	{
-		m_buffer.Cleanup();
+		m_buffer.cleanup();
 	}
 
-	uint32_t PassBuffer::AddPass( Pass & pass )
+	uint32_t PassBuffer::addPass( Pass & pass )
 	{
-		REQUIRE( pass.GetId() == 0u );
+		REQUIRE( pass.getId() == 0u );
 		REQUIRE( m_passes.size() < GLSL::MaxMaterialsCount );
 		m_passes.emplace_back( &pass );
-		pass.SetId( m_passID++ );
+		pass.setId( m_passID++ );
 		m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & pass )
 		{
 			m_dirty.emplace_back( &pass );
 		} ) );
 		m_dirty.emplace_back( &pass );
-		return pass.GetId();
+		return pass.getId();
 	}
 
-	void PassBuffer::RemovePass( Pass & pass )
+	void PassBuffer::removePass( Pass & pass )
 	{
-		auto id = pass.GetId() - 1u;
+		auto id = pass.getId() - 1u;
 		REQUIRE( id < m_passes.size() );
 		REQUIRE( &pass == m_passes[id] );
 		auto it = m_passes.erase( m_passes.begin() + id );
 
 		for ( it; it != m_passes.end(); ++it )
 		{
-			( *it )->SetId( id );
+			( *it )->setId( id );
 			++id;
 		}
 
 		m_connections.erase( m_connections.begin() + id );
-		pass.SetId( 0u );
+		pass.setId( 0u );
 		m_passID--;
 	}
 
-	void PassBuffer::Update()
+	void PassBuffer::update()
 	{
 		if ( !m_dirty.empty() )
 		{
@@ -75,30 +75,30 @@ namespace Castor3D
 
 			std::for_each( dirty.begin(), end, [this]( Pass const * p_pass )
 			{
-				p_pass->Accept( *this );
+				p_pass->accept( *this );
 			} );
 
-			m_buffer.Upload();
-			m_buffer.BindTo( 0u );
+			m_buffer.upload();
+			m_buffer.bindTo( 0u );
 		}
 	}
 
-	void PassBuffer::Bind()const
+	void PassBuffer::bind()const
 	{
-		m_buffer.BindTo( 0u );
+		m_buffer.bindTo( 0u );
 	}
 
-	void PassBuffer::Visit( LegacyPass const & pass )
+	void PassBuffer::visit( LegacyPass const & pass )
 	{
 		CASTOR_EXCEPTION( "This pass buffer can't hold legacy pass data" );
 	}
 
-	void PassBuffer::Visit( MetallicRoughnessPbrPass const & pass )
+	void PassBuffer::visit( MetallicRoughnessPbrPass const & pass )
 	{
 		CASTOR_EXCEPTION( "This pass buffer can't hold metallic/roughness pass data" );
 	}
 
-	void PassBuffer::Visit( SpecularGlossinessPbrPass const & pass )
+	void PassBuffer::visit( SpecularGlossinessPbrPass const & pass )
 	{
 		CASTOR_EXCEPTION( "This pass buffer can't hold specular/glossiness pass data" );
 	}

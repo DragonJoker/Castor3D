@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Lie les valeurs de l'élément à celles données en paramètre.
 		 */
-		C3D_API void LinkCoords( uint8_t * p_buffer );
+		C3D_API void linkCoords( uint8_t * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Links the element values to the ones in parameter.
@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon de valeurs
 		 *\param[in]	p_stride	La taille binaire de l'élément
 		 */
-		C3D_API void LinkCoords( uint8_t * p_buffer, uint32_t p_stride );
+		C3D_API void linkCoords( uint8_t * p_buffer, uint32_t p_stride );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pointer on the data buffer
@@ -97,7 +97,7 @@ namespace Castor3D
 		 *\brief		Récupère un pointeur constant sur le tampon de données
 		 *\return		Le pointeur
 		 */
-		inline uint8_t const * const_ptr()const
+		inline uint8_t const * constPtr()const
 		{
 			return m_buffer;
 		}
@@ -109,19 +109,19 @@ namespace Castor3D
 		 *\brief		Récupère l'indice du groupe
 		 *\return		La valeur
 		 */
-		inline uint32_t GetIndex()const
+		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group index
+		 *\brief		sets the group index
 		 *\param[in]	p_index	The new value
 		 *\~french
 		 *\brief		Définit l'indice du groupe
 		 *\param[in]	p_index	La nouvelle valeur
 		 */
-		inline void SetIndex( uint32_t p_index )
+		inline void setIndex( uint32_t p_index )
 		{
 			m_index = p_index;
 		}

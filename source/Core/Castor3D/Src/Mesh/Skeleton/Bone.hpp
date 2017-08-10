@@ -26,9 +26,10 @@ SOFTWARE.
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
 
+#include <Design/Named.hpp>
 #include <Math/SquareMatrix.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -43,6 +44,7 @@ namespace Castor3D
 	*/
 	class Bone
 		: public std::enable_shared_from_this< Bone >
+		, public castor::Named
 	{
 		friend class Skeleton;
 		friend class BinaryWriter< Bone >;
@@ -67,49 +69,25 @@ namespace Castor3D
 		C3D_API ~Bone();
 		/**
 		 *\~english
-		 *\brief		Retrieves the bone name
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nom du bone
-		 *\return		La valeur
-		 */
-		inline Castor::String const & GetName()const
-		{
-			return m_name;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the bone name
-		 *\param[in]	p_name	The new value
-		 *\~french
-		 *\brief		Définit le nom du bone
-		 *\param[in]	p_name	La nouvelle valeur
-		 */
-		inline void SetName( Castor::String const & p_name )
-		{
-			m_name = p_name;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the transfromation matrix from mesh space to bone space
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la matrice de transformation de l'espace objet vers l'espace du bone
 		 *\return		La valeur
 		 */
-		inline const Castor::Matrix4x4r & GetOffsetMatrix()const
+		inline const castor::Matrix4x4r & getOffsetMatrix()const
 		{
 			return m_offset;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the transfromation matrix from mesh space to bone space
+		 *\brief		sets the transfromation matrix from mesh space to bone space
 		 *\param[in]	p_offset	The new value
 		 *\~french
 		 *\brief		Définit la matrice de transformation de l'espace objet vers l'espace du bone
 		 *\param[in]	p_offset	La nouvelle valeur
 		 */
-		inline void SetOffsetMatrix( const Castor::Matrix4x4r & p_offset )
+		inline void setOffsetMatrix( const castor::Matrix4x4r & p_offset )
 		{
 			m_offset = p_offset;
 		}
@@ -121,7 +99,7 @@ namespace Castor3D
 		 *\brief		Récupère le squelette parent
 		 *\return		La valeur
 		 */
-		inline const Skeleton & GetSkeleton()const
+		inline const Skeleton & getSkeleton()const
 		{
 			return m_skeleton;
 		}
@@ -131,7 +109,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'os parent.
 		 */
-		BoneSPtr GetParent()const
+		BoneSPtr getParent()const
 		{
 			return m_parent;
 		}
@@ -139,36 +117,38 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Adds a child bone
+		 *\brief		adds a child bone
 		 *\param[in]	p_bone	The bone
 		 *\~french
 		 *\brief		Ajoute un os enfant
 		 *\param[in]	p_bone	L'os
 		 */
-		void AddChild( BoneSPtr p_bone );
+		void addChild( BoneSPtr p_bone );
 		/**
 		 *\~english
-		 *\brief		Sets the parent bone.
+		 *\brief		sets the parent bone.
 		 *\param[in]	p_bone	The bone.
 		 *\~french
 		 *\brief		Définit l'os parent.
 		 *\param[in]	p_bone	L'os.
 		 */
-		void SetParent( BoneSPtr p_bone )
+		void setParent( BoneSPtr p_bone )
 		{
 			m_parent = p_bone;
 		}
 
 	private:
-		//!\~english The bone name.	\~french Le nom du bone
-		Castor::String m_name;
-		//!\~english The parent bone.	\~french L'os parent.
+		//!\~english	The parent bone.
+		//!\~french		L'os parent.
 		BoneSPtr m_parent;
-		//!\~english The matrix from mesh to bone space.	\~french La matrice de transformation de l'espace mesh vers l'espace bone.
-		Castor::Matrix4x4r m_offset;
-		//!\~english The bones depending on this one.	\~french Les bones dépendant de celui-ci.
+		//!\~english	The matrix from mesh to bone space.
+		//!\~french		La matrice de transformation de l'espace mesh vers l'espace bone.
+		castor::Matrix4x4r m_offset;
+		//!\~english	The bones depending on this one.
+		//!\~french		Les bones dépendant de celui-ci.
 		BonePtrStrMap m_children;
-		//!\~english The parent skeleton.	\~french Le squelette parent.
+		//!\~english	The parent skeleton.
+		//!\~french		Le squelette parent.
 		Skeleton & m_skeleton;
 	};
 	/*!
@@ -211,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( Bone const & p_obj )override;
+		C3D_API bool doWrite( Bone const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -239,7 +219,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( Bone & p_obj )override;
+		C3D_API bool doParse( Bone & p_obj )override;
 	};
 }
 

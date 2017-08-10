@@ -29,7 +29,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Colour.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,8 +41,8 @@ namespace Castor3D
 	\brief		Définit un sampler pour une texture
 	*/
 	class Sampler
-		: public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 	public:
 		/*!
@@ -56,7 +56,7 @@ namespace Castor3D
 		\brief		Loader de Sampler
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Sampler >
+			: public castor::TextWriter< Sampler >
 		{
 		public:
 			/**
@@ -65,7 +65,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a sampler into a text file
@@ -76,7 +76,7 @@ namespace Castor3D
 			 *\param[in]		p_sampler	L'échantillonneur
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			C3D_API bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Sampler const & p_sampler, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\param[in]	p_name	    Le nom du sampler
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Sampler( Engine & engine, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Sampler( Engine & engine, castor::String const & p_name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -106,14 +106,14 @@ namespace Castor3D
 		 *\brief		Initialise le sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Initialise() = 0;
+		C3D_API virtual bool initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanups the sampler
 		 *\~french
 		 *\brief		Nettoie le sampler
 		 */
-		C3D_API virtual void Cleanup() = 0;
+		C3D_API virtual void cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the sampler
@@ -122,7 +122,7 @@ namespace Castor3D
 		 *\brief		Applique le sampler
 		 *\param[in]	p_index	L'index du sampler
 		 */
-		C3D_API virtual void Bind( uint32_t p_index )const = 0;
+		C3D_API virtual void bind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\brief		Enlève le sampler
 		 *\param[in]	p_index	L'index du sampler
 		 */
-		C3D_API virtual void Unbind( uint32_t p_index )const = 0;
+		C3D_API virtual void unbind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the interpolation mode for given filter
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_eFilter	Le filtre concerné
 		 *\return		Le mode d'interpolation
 		 */
-		inline InterpolationMode GetInterpolationMode( InterpolationFilter p_eFilter )const
+		inline InterpolationMode getInterpolationMode( InterpolationFilter p_eFilter )const
 		{
 			return m_eInterpolationModes[uint32_t( p_eFilter )];
 		}
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\param[in]	p_eFilter	Le filtre concerné
 		 *\param[in]	p_mode		Le mode souhaité
 		 */
-		inline void SetInterpolationMode( InterpolationFilter p_eFilter, InterpolationMode p_mode )
+		inline void setInterpolationMode( InterpolationFilter p_eFilter, InterpolationMode p_mode )
 		{
 			m_eInterpolationModes[uint32_t( p_eFilter )] = p_mode;
 		}
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\param[in]	p_eUVW	La dimension
 		 *\return		Le mode de wrap
 		 */
-		inline WrapMode GetWrappingMode( TextureUVW p_eUVW )const
+		inline WrapMode getWrappingMode( TextureUVW p_eUVW )const
 		{
 			return m_eWrapModes[uint32_t( p_eUVW )];
 		}
@@ -184,7 +184,7 @@ namespace Castor3D
 		 *\param[in]	p_eUVW	La dimension
 		 *\param[in]	p_mode	Le mode de wrap
 		 */
-		inline void SetWrappingMode( TextureUVW p_eUVW, WrapMode p_mode )
+		inline void setWrappingMode( TextureUVW p_eUVW, WrapMode p_mode )
 		{
 			m_eWrapModes[uint32_t( p_eUVW )] = p_mode;
 		}
@@ -196,7 +196,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur maximale de filtrage anisotropique
 		 *\return		La valeur
 		 */
-		inline real GetMaxAnisotropy()const
+		inline real getMaxAnisotropy()const
 		{
 			return m_rMaxAnisotropy;
 		}
@@ -208,7 +208,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur maximale de filtrage anisotropique
 		 *\param[in]	p_rValue	La nouvelle valeur
 		 */
-		inline void SetMaxAnisotropy( real p_rValue )
+		inline void setMaxAnisotropy( real p_rValue )
 		{
 			m_rMaxAnisotropy = p_rValue;
 		}
@@ -220,7 +220,7 @@ namespace Castor3D
 		 *\brief		Récupère le niveau minimal pour le LOD
 		 *\return		Le niveau
 		 */
-		inline real GetMinLod()const
+		inline real getMinLod()const
 		{
 			return m_rMinLod;
 		}
@@ -232,7 +232,7 @@ namespace Castor3D
 		 *\brief		Définit le niveau minimal pour le LOD
 		 *\param[in]	p_rLod	La nouvelle valeur
 		 */
-		inline void SetMinLod( real p_rLod )
+		inline void setMinLod( real p_rLod )
 		{
 			m_rMinLod = p_rLod;
 		}
@@ -244,7 +244,7 @@ namespace Castor3D
 		 *\brief		Récupère le niveau maximal pour le LOD
 		 *\return		Le niveau
 		 */
-		inline real GetMaxLod()const
+		inline real getMaxLod()const
 		{
 			return m_rMaxLod;
 		}
@@ -256,7 +256,7 @@ namespace Castor3D
 		 *\brief		Définit le niveau maximal pour le LOD
 		 *\param[in]	p_rLod	La nouvelle valeur
 		 */
-		inline void SetMaxLod( real p_rLod )
+		inline void setMaxLod( real p_rLod )
 		{
 			m_rMaxLod = p_rLod;
 		}
@@ -268,7 +268,7 @@ namespace Castor3D
 		 *\brief		Récupère le LOD bias
 		 *\return		Le niveau
 		 */
-		inline real GetLodBias()const
+		inline real getLodBias()const
 		{
 			return m_rLodBias;
 		}
@@ -280,7 +280,7 @@ namespace Castor3D
 		 *\brief		Définit le LOD bias
 		 *\param[in]	p_rLod	La nouvelle valeur
 		 */
-		inline void SetLodBias( real p_rLod )
+		inline void setLodBias( real p_rLod )
 		{
 			m_rLodBias = p_rLod;
 		}
@@ -292,7 +292,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur de bord de la texture
 		 *\return		La couleur
 		 */
-		inline	Castor::Colour const & GetBorderColour()const
+		inline	castor::Colour const & getBorderColour()const
 		{
 			return m_clrBorderColour;
 		}
@@ -304,7 +304,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur de bord de la texture
 		 *\param[in]	p_crColour	La nouvelle valeur
 		 */
-		inline	void SetBorderColour( Castor::Colour const & p_crColour )
+		inline	void setBorderColour( castor::Colour const & p_crColour )
 		{
 			m_clrBorderColour = p_crColour;
 		}
@@ -314,7 +314,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode de comparaison.
 		 */
-		inline ComparisonMode GetComparisonMode()const
+		inline ComparisonMode getComparisonMode()const
 		{
 			return m_comparisonMode;
 		}
@@ -326,7 +326,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de comparaison.
 		 *\param[in]	p_mode		Le mode souhaité.
 		 */
-		inline void SetComparisonMode( ComparisonMode p_mode )
+		inline void setComparisonMode( ComparisonMode p_mode )
 		{
 			m_comparisonMode = p_mode;
 		}
@@ -336,7 +336,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fonction de comparaison.
 		 */
-		inline ComparisonFunc GetComparisonFunc()const
+		inline ComparisonFunc getComparisonFunc()const
 		{
 			return m_comparisonFunc;
 		}
@@ -348,7 +348,7 @@ namespace Castor3D
 		 *\brief		Définit la fonction de comparaison.
 		 *\param[in]	p_mode		La fonction souhaitée.
 		 */
-		inline void SetComparisonFunc( ComparisonFunc p_mode )
+		inline void setComparisonFunc( ComparisonFunc p_mode )
 		{
 			m_comparisonFunc = p_mode;
 		}
@@ -385,7 +385,7 @@ namespace Castor3D
 		real m_rLodBias{ 0.0_r };
 		//!\~english	Texture border colour.
 		//!\~french		Couleur des bords de la texture.
-		Castor::Colour m_clrBorderColour{ Castor::Colour::from_components( 0, 0, 0, 0 ) };
+		castor::Colour m_clrBorderColour{ castor::Colour::fromComponents( 0, 0, 0, 0 ) };
 		//!\~english	Maximal anisotropic filtering value.
 		//!\~french		Valeur maximale pour le filtrage anisotropique.
 		real m_rMaxAnisotropy{ 1.0_r };

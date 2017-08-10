@@ -40,7 +40,7 @@ namespace Testing
 		virtual ~CastorUtilsQuaternionTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 
@@ -57,7 +57,7 @@ namespace Testing
 			return TestCase::compare( a, b );
 		}
 
-		inline bool compare( Castor::SquareMatrix< float, 4 > const & a, Castor::SquareMatrix< float, 4 > const & b )
+		inline bool compare( castor::SquareMatrix< float, 4 > const & a, castor::SquareMatrix< float, 4 > const & b )
 		{
 			float epsilon = 0.0001f;
 			return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -78,7 +78,7 @@ namespace Testing
 				&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 		}
 
-		inline bool compare( Castor::SquareMatrix< double, 4 > const & a, Castor::SquareMatrix< double, 4 > const & b )
+		inline bool compare( castor::SquareMatrix< double, 4 > const & a, castor::SquareMatrix< double, 4 > const & b )
 		{
 			double epsilon = 0.0001;
 			return std::abs( a[0][0] - b[0][0] ) < epsilon

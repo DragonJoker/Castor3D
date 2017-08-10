@@ -2,16 +2,16 @@
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_library, Engine * engine )
 		: Plugin( PluginType::eImporter, p_library, *engine )
 	{
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( GetEngine(), this );
+			m_pfnOnLoad( getEngine(), this );
 		}
 	}
 
@@ -19,16 +19,16 @@ namespace Castor3D
 	{
 		if ( m_pfnOnUnload )
 		{
-			m_pfnOnUnload( GetEngine() );
+			m_pfnOnUnload( getEngine() );
 		}
 	}
 
-	ImporterPlugin::ExtensionArray const & ImporterPlugin::GetExtensions()
+	ImporterPlugin::ExtensionArray const & ImporterPlugin::getExtensions()
 	{
 		return m_extensions;
 	}
 
-	void ImporterPlugin::AddExtension( Extension const & p_extension )
+	void ImporterPlugin::addExtension( Extension const & p_extension )
 	{
 		m_extensions.push_back( p_extension );
 	}

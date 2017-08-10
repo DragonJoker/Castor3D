@@ -4,19 +4,19 @@
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Scene/SceneNode.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GuiCommon
 {
 	namespace
 	{
-		float GetValue( Angle const & p_value )
+		float getValue( Angle const & p_value )
 		{
 			return p_value.degrees();
 		}
 
-		float GetValue( float const & p_value )
+		float getValue( float const & p_value )
 		{
 			return p_value;
 		}
@@ -27,7 +27,7 @@ namespace GuiCommon
 			static T const zero{};
 			auto ret = p_velocity.value() / 1.2f;
 
-			if ( std::abs( GetValue( ret ) ) < 0.2f )
+			if ( std::abs( getValue( ret ) ) < 0.2f )
 			{
 				ret = zero;
 			}
@@ -37,17 +37,17 @@ namespace GuiCommon
 	}
 
 	NodeState::NodeState( FrameListener & p_listener
-		, Castor3D::SceneNodeSPtr p_node )
+		, castor3d::SceneNodeSPtr p_node )
 		: m_listener{ p_listener }
 		, m_node{ p_node }
-		, m_originalOrientation{ p_node->GetOrientation() }
-		, m_originalPosition{ p_node->GetPosition() }
+		, m_originalOrientation{ p_node->getOrientation() }
+		, m_originalPosition{ p_node->getPosition() }
 	{
 	}
 
 	void NodeState::Reset( float p_speed )
 	{
-		SetMaxSpeed( p_speed );
+		setMaxSpeed( p_speed );
 		m_angularVelocityX = 0.0_degrees;
 		m_angularVelocityY = 0.0_degrees;
 		m_angles = Angles{ { 0.0_radians, 0.0_radians } };
@@ -55,26 +55,26 @@ namespace GuiCommon
 		m_scalarVelocityY = 0.0f;
 		m_scalarVelocityZ = 0.0f;
 
-		m_listener.PostEvent( MakeFunctorEvent( EventType::ePostRender
+		m_listener.postEvent( MakeFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
-				m_node->SetOrientation( m_originalOrientation );
-				m_node->SetPosition( m_originalPosition );
+				m_node->setOrientation( m_originalOrientation );
+				m_node->setPosition( m_originalPosition );
 			} ) );
 	}
 
-	void NodeState::SetMaxSpeed( float p_speed )
+	void NodeState::setMaxSpeed( float p_speed )
 	{
-		m_angularVelocityX.update_range( make_range( Angle::from_degrees( -p_speed * 2 )
-			, Angle::from_degrees( p_speed * 2 ) ) );
-		m_angularVelocityY.update_range( make_range( Angle::from_degrees( -p_speed * 2 )
-			, Angle::from_degrees( p_speed * 2 ) ) );
-		m_scalarVelocityX.update_range( make_range( -p_speed, p_speed ) );
-		m_scalarVelocityY.update_range( make_range( -p_speed, p_speed ) );
-		m_scalarVelocityZ.update_range( make_range( -p_speed, p_speed ) );
+		m_angularVelocityX.updateRange( makeRange( Angle::fromDegrees( -p_speed * 2 )
+			, Angle::fromDegrees( p_speed * 2 ) ) );
+		m_angularVelocityY.updateRange( makeRange( Angle::fromDegrees( -p_speed * 2 )
+			, Angle::fromDegrees( p_speed * 2 ) ) );
+		m_scalarVelocityX.updateRange( makeRange( -p_speed, p_speed ) );
+		m_scalarVelocityY.updateRange( makeRange( -p_speed, p_speed ) );
+		m_scalarVelocityZ.updateRange( makeRange( -p_speed, p_speed ) );
 	}
 
-	bool NodeState::Update()
+	bool NodeState::update()
 	{
 		auto angles = m_angles;
 		m_angles[0] += m_angularVelocityX.value();
@@ -93,7 +93,7 @@ namespace GuiCommon
 
 		if ( translate != Point3r{} )
 		{
-			auto orientation = m_node->GetOrientation();
+			auto orientation = m_node->getOrientation();
 			Point3r right{ 1.0_r, 0.0_r, 0.0_r };
 			Point3r up{ 0.0_r, 1.0_r, 0.0_r };
 			Point3r front{ 0.0_r, 0.0_r, 1.0_r };
@@ -107,40 +107,40 @@ namespace GuiCommon
 		if ( result )
 		{
 			angles = m_angles;
-			m_listener.PostEvent( MakeFunctorEvent( EventType::ePostRender
+			m_listener.postEvent( MakeFunctorEvent( EventType::ePostRender
 			, [this, translate, angles]()
 			{
-				m_node->Translate( translate );
+				m_node->translate( translate );
 
-				Quaternion x{ Quaternion::from_axis_angle( Point3r{ 1.0, 0.0, 0.0 }, angles[0] ) };
-				Quaternion y{ Quaternion::from_axis_angle( Point3r{ 0.0, 1.0, 0.0 }, angles[1] ) };
-				m_node->SetOrientation( m_originalOrientation * y * x );
+				Quaternion x{ Quaternion::fromAxisAngle( Point3r{ 1.0, 0.0, 0.0 }, angles[0] ) };
+				Quaternion y{ Quaternion::fromAxisAngle( Point3r{ 0.0, 1.0, 0.0 }, angles[1] ) };
+				m_node->setOrientation( m_originalOrientation * y * x );
 			} ) );
 		}
 
 		return result;
 	}
 
-	void NodeState::SetAngularVelocity( Castor::Point2r const & p_value )noexcept
+	void NodeState::setAngularVelocity( castor::Point2r const & p_value )noexcept
 	{
-		m_angularVelocityX = Castor::Angle::from_degrees( p_value[0] );
-		m_angularVelocityY = Castor::Angle::from_degrees( p_value[1] );
+		m_angularVelocityX = castor::Angle::fromDegrees( p_value[0] );
+		m_angularVelocityY = castor::Angle::fromDegrees( p_value[1] );
 	}
 
-	 void NodeState::SetScalarVelocity( Castor::Point3r const & p_value )noexcept
+	 void NodeState::setScalarVelocity( castor::Point3r const & p_value )noexcept
 	{
 		m_scalarVelocityX = p_value[0];
 		m_scalarVelocityY = p_value[1];
 		m_scalarVelocityZ = p_value[2];
 	}
 
-	void NodeState::AddAngularVelocity( Castor::Point2r const & p_value )noexcept
+	void NodeState::addAngularVelocity( castor::Point2r const & p_value )noexcept
 	{
-		m_angularVelocityX += Castor::Angle::from_degrees( p_value[0] );
-		m_angularVelocityY += Castor::Angle::from_degrees( p_value[1] );
+		m_angularVelocityX += castor::Angle::fromDegrees( p_value[0] );
+		m_angularVelocityY += castor::Angle::fromDegrees( p_value[1] );
 	}
 
-	void NodeState::AddScalarVelocity( Castor::Point3r const & p_value )noexcept
+	void NodeState::addScalarVelocity( castor::Point3r const & p_value )noexcept
 	{
 		m_scalarVelocityX += p_value[0];
 		m_scalarVelocityY += p_value[1];

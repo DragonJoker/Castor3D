@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <atomic>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -72,7 +72,7 @@ namespace Castor3D
 		 *\remarks		Thread-safe.
 		 *\return		\p true si créé.
 		 */
-		C3D_API bool IsCreated()const;
+		C3D_API bool isCreated()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render start status.
@@ -83,7 +83,7 @@ namespace Castor3D
 		 *\remarks		Thread-safe.
 		 *\return		\p true si démarré.
 		 */
-		C3D_API bool IsRendering()const;
+		C3D_API bool isRendering()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render paused status.
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\remarks		Thread-safe.
 		 *\return		\p true si en pause.
 		 */
-		C3D_API bool IsPaused()const;
+		C3D_API bool isPaused()const;
 		/**
 		 *\~english
 		 *\brief		Thread-safe
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\brief		Thread-safe.
 		 *\return		\p true si la boucle de rendu est interrompue.
 		 */
-		C3D_API bool IsInterrupted()const;
+		C3D_API bool isInterrupted()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render loop end status.
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\remarks		Thread-safe.
 		 *\return		\p true si créé.
 		 */
-		C3D_API bool IsEnded()const;
+		C3D_API bool isEnded()const;
 		/**
 		 *\~english
 		 *\brief		Updates the V-Sync status.
@@ -123,33 +123,33 @@ namespace Castor3D
 		 *\brief		Met à jour le statut de synchronisation verticale.
 		 *\param[in]	p_enable	Le statut.
 		 */
-		C3D_API void UpdateVSync( bool p_enable )override;
+		C3D_API void updateVSync( bool p_enable )override;
 		/**
-		 *\copydoc		Castor3D::RenderLoop::StartRendering
+		 *\copydoc		castor3d::RenderLoop::beginRendering
 		 */
-		C3D_API void StartRendering()override;
+		C3D_API void beginRendering()override;
 		/**
-		 *\copydoc		Castor3D::RenderLoop::RenderSyncFrame
+		 *\copydoc		castor3d::RenderLoop::renderSyncFrame
 		 */
-		C3D_API void RenderSyncFrame()override;
+		C3D_API void renderSyncFrame()override;
 		/**
-		 *\copydoc		Castor3D::RenderLoop::Pause
+		 *\copydoc		castor3d::RenderLoop::Pause
 		 */
-		C3D_API void Pause()override;
+		C3D_API void pause()override;
 		/**
-		 *\copydoc		Castor3D::RenderLoop::Resume
+		 *\copydoc		castor3d::RenderLoop::Resume
 		 */
-		C3D_API void Resume()override;
+		C3D_API void resume()override;
 		/**
-		 *\copydoc		Castor3D::RenderLoop::EndRendering
+		 *\copydoc		castor3d::RenderLoop::endRendering
 		 */
-		C3D_API void EndRendering()override;
+		C3D_API void endRendering()override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderLoop::DoCreateMainContext
+		 *\copydoc		castor3d::RenderLoop::doCreateMainContext
 		 */
-		C3D_API ContextSPtr DoCreateMainContext( RenderWindow & p_window )override;
+		C3D_API ContextSPtr doCreateMainContext( RenderWindow & p_window )override;
 		/**
 		 *\~english
 		 *\brief		The threaded render loop.
@@ -158,9 +158,9 @@ namespace Castor3D
 		 *\brief		La boucle de rendu threadée.
 		 *\remarks		Le contexte principal est créé ici, car OpenGL demande à chaque thread d'avoir son contexte.
 		 */
-		C3D_API void DoMainLoop();
-		C3D_API void DoSetWindow( RenderWindow * p_window );
-		C3D_API RenderWindow * DoGetWindow()const;
+		C3D_API void doMainLoop();
+		C3D_API void doSetWindow( RenderWindow * p_window );
+		C3D_API RenderWindow * doGetWindow()const;
 
 	private:
 		//!\~english The main loop, in case of threaded rendering	\~french La boucle principale, au cas où on fait du rendu threadé
@@ -184,7 +184,7 @@ namespace Castor3D
 		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindowRPtr m_window;
 		//!\~english The saved frame time, if V-Sync is disabled.	\~french Le temps par frame sauvegardé, si la synchronisation verticale est désactivée.
-		Castor::Milliseconds m_savedTime{ 0 };
+		castor::Milliseconds m_savedTime{ 0 };
 	};
 }
 

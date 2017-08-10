@@ -1,14 +1,14 @@
 #include "Rectangle.hpp"
 
-namespace Castor
+namespace castor
 {
 	Rectangle::Rectangle( Position const & p_ptStart, Size const & p_size )
 		: Coords4i( m_data.buffer )
 	{
 		m_data.rect.left = p_ptStart.x();
 		m_data.rect.top = p_ptStart.y();
-		m_data.rect.right = m_data.rect.left + int32_t( p_size.width() );
-		m_data.rect.bottom = m_data.rect.top + int32_t( p_size.height() );
+		m_data.rect.right = m_data.rect.left + int32_t( p_size.getWidth() );
+		m_data.rect.bottom = m_data.rect.top + int32_t( p_size.getHeight() );
 	}
 
 	Rectangle::Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom )
@@ -80,6 +80,6 @@ namespace Castor
 
 	void Rectangle::size( Size & p_result )const
 	{
-		p_result.set( width(), height() );
+		p_result.set( getWidth(), getHeight() );
 	}
 }

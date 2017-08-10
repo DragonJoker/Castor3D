@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PREREQUISITES_GEOMETRY_H___
 #define ___C3D_PREREQUISITES_GEOMETRY_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Geometry */
 	//@{
@@ -68,9 +68,9 @@ namespace Castor3D
 
 	template< typename T > class Pattern;
 	typedef Pattern< Vertex > VertexPattern;
-	typedef Pattern< Castor::Point3r > Point3rPattern;
+	typedef Pattern< castor::Point3r > Point3rPattern;
 	typedef Pattern< VertexSPtr > VertexPtrPattern;
-	typedef Pattern< Castor::Point3rSPtr > Point3rPtrPattern;
+	typedef Pattern< castor::Point3rSPtr > Point3rPtrPattern;
 
 	struct FaceGroup;
 	class Face;
@@ -139,18 +139,18 @@ namespace Castor3D
 	//! Vertex pointer list
 	DECLARE_LIST( VertexSPtr, VertexPtr );
 	//! Mesh pointer array
-	DECLARE_MAP( Castor::String, MeshSPtr, MeshPtrStr );
+	DECLARE_MAP( castor::String, MeshSPtr, MeshPtrStr );
 	//! MovableObject pointer map, sorted by name
-	DECLARE_MAP( Castor::String, MovableObjectSPtr, MovableObjectPtrStr );
+	DECLARE_MAP( castor::String, MovableObjectSPtr, MovableObjectPtrStr );
 	//! Geometry pointer map, sorted by name
-	DECLARE_MAP( Castor::String, GeometrySPtr, GeometryPtrStr );
+	DECLARE_MAP( castor::String, GeometrySPtr, GeometryPtrStr );
 	DECLARE_MAP( uint32_t, int, IntUInt );
-	DECLARE_MAP( Castor::String, SubmeshSPtr, SubmeshPtrStr );
-	DECLARE_MAP( Castor::String, int, IntStr );
+	DECLARE_MAP( castor::String, SubmeshSPtr, SubmeshPtrStr );
+	DECLARE_MAP( castor::String, int, IntStr );
 	//! Bone pointer array
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
 	//! Bone pointer map sorted by name
-	DECLARE_MAP( Castor::String, BoneSPtr, BonePtrStr );
+	DECLARE_MAP( castor::String, BoneSPtr, BonePtrStr );
 	//! BonedVertex pointer array
 	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
 

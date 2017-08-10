@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	static const uint32_t C3D_MAX_BONES_PER_VERTEX = 8;
 	/*!
@@ -48,7 +48,7 @@ namespace Castor3D
 		C3D_API VertexBoneData();
 		/**
 		 *\~english
-		 *\brief		Adds bone informations to the vertex
+		 *\brief		adds bone informations to the vertex
 		 *\param[in]	p_boneId	The bone ID
 		 *\param[in]	p_weight	The bone weight
 		 *\~french
@@ -56,11 +56,13 @@ namespace Castor3D
 		 *\param[in]	p_boneId	L'ID du bone
 		 *\param[in]	p_weight	Le poids du bone
 		 */
-		C3D_API void AddBoneData( uint32_t p_boneId, real p_weight );
+		C3D_API void addBoneData( uint32_t p_boneId, real p_weight );
 
-		//!\~english The bones ID	\~french L'ID des bones
+		//!\~english	The bones ID.
+		//!\~french		L'ID des bones.
 		std::array< uint32_t, C3D_MAX_BONES_PER_VERTEX > m_ids;
-		//!\~english The bones weights	\~french Les poids des bones
+		//!\~english	The bones weights.
+		//!\~french		Les poids des bones.
 		std::array< real, C3D_MAX_BONES_PER_VERTEX > m_weights;
 	};
 }

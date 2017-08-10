@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Plugin.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API GeneratorPlugin( Castor::DynamicLibrarySPtr p_library, Engine * engine );
+		C3D_API GeneratorPlugin( castor::DynamicLibrarySPtr p_library, Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

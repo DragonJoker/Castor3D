@@ -13,14 +13,14 @@
 #undef max
 #undef abs
 
-namespace Castor
+namespace castor
 {
 #if defined( CASTOR_COMPILER_MSVC )
 
 	class ConsoleHandle
 	{
 	public:
-		bool Initialise( HANDLE p_screenBuffer )
+		bool initialise( HANDLE p_screenBuffer )
 		{
 			m_screenBuffer = p_screenBuffer;
 
@@ -72,23 +72,23 @@ namespace Castor
 					{
 						StringStream text;
 						text << cuT( "Couldn't set console window size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
-						WriteText( text.str(), true );
+						writeText( text.str(), true );
 					}
 				}
 				else
 				{
 					StringStream text;
 					text << cuT( "Couldn't set console screenbuffer size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
-					WriteText( text.str(), true );
+					writeText( text.str(), true );
 				}
 			}
 
 			m_oldCodePage = ::GetConsoleOutputCP();
-			::EnumSystemCodePages( &DoCodePageProc, CP_INSTALLED );
+			::EnumSystemCodePages( &doCodePageProc, CP_INSTALLED );
 			return m_screenBuffer != INVALID_HANDLE_VALUE;
 		}
 
-		void Cleanup()
+		void cleanup()
 		{
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE )
 			{
@@ -110,12 +110,12 @@ namespace Castor
 			}
 		}
 
-		void SetAttributes( WORD p_attributes )
+		void setAttributes( WORD p_attributes )
 		{
 			::SetConsoleTextAttribute( m_screenBuffer, p_attributes );
 		}
 
-		void WriteText( String p_text, bool p_newLine )
+		void writeText( String p_text, bool p_newLine )
 		{
 			if ( ::IsDebuggerPresent() )
 			{
@@ -155,7 +155,7 @@ namespace Castor
 						COORD coordDest;
 						coordDest.X = 0;
 						coordDest.Y = 0;
-						// Set the fill character and attributes.
+						// set the fill character and attributes.
 						CHAR_INFO fill;
 						fill.Attributes = 0;
 						fill.Char.AsciiChar = ' ';
@@ -187,7 +187,7 @@ namespace Castor
 		}
 
 	private:
-		static BOOL __stdcall DoCodePageProc( xchar * szCodePage )
+		static BOOL __stdcall doCodePageProc( xchar * szCodePage )
 		{
 			BOOL result = TRUE;
 			String codePage( szCodePage );
@@ -214,7 +214,7 @@ namespace Castor
 	class ConsoleHandle
 	{
 	public:
-		bool Initialise()
+		bool initialise()
 		{
 			m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
 
@@ -224,12 +224,12 @@ namespace Castor
 				::SetConsoleScreenBufferSize( m_screenBuffer, coord );
 			}
 
-			m_oldCodePage = ::GetConsoleOutputCP();
-			::EnumSystemCodePages( &DoCodePageProc, CP_INSTALLED );
+			m_oldCodePage = ::getConsoleOutputCP();
+			::EnumSystemCodePages( &doCodePageProc, CP_INSTALLED );
 			return m_screenBuffer != INVALID_HANDLE_VALUE;
 		}
 
-		void Cleanup()
+		void cleanup()
 		{
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE )
 			{
@@ -244,12 +244,12 @@ namespace Castor
 			}
 		}
 
-		void SetAttributes( WORD p_attributes )
+		void setAttributes( WORD p_attributes )
 		{
 			::SetConsoleTextAttribute( m_screenBuffer, p_attributes );
 		}
 
-		void WriteText( String const & p_text, bool p_newLine )
+		void writeText( String const & p_text, bool p_newLine )
 		{
 			CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 
@@ -273,7 +273,7 @@ namespace Castor
 					COORD coordDest;
 					coordDest.X = 0;
 					coordDest.Y = 0;
-					// Set the fill character and attributes.
+					// set the fill character and attributes.
 					CHAR_INFO fill;
 					fill.Attributes = 0;
 					fill.Char.AsciiChar = ' ';
@@ -292,7 +292,7 @@ namespace Castor
 		}
 
 	private:
-		static BOOL __stdcall DoCodePageProc( xchar * szCodePage )
+		static BOOL __stdcall doCodePageProc( xchar * szCodePage )
 		{
 			BOOL result = TRUE;
 			String codePage( szCodePage );
@@ -324,7 +324,7 @@ namespace Castor
 			if ( ::AllocConsole() )
 			{
 				m_allocated = true;
-				DoInitialiseConsole( INVALID_HANDLE_VALUE );
+				doInitialiseConsole( INVALID_HANDLE_VALUE );
 			}
 			else
 			{
@@ -332,7 +332,7 @@ namespace Castor
 
 				if ( lastError == ERROR_ACCESS_DENIED )
 				{
-					DoInitialiseConsole( ::GetStdHandle( STD_OUTPUT_HANDLE ) );
+					doInitialiseConsole( ::GetStdHandle( STD_OUTPUT_HANDLE ) );
 				}
 				else
 				{
@@ -343,7 +343,7 @@ namespace Castor
 
 		virtual ~DebugConsole()
 		{
-			m_handle.Cleanup();
+			m_handle.cleanup();
 
 			if ( m_allocated )
 			{
@@ -351,7 +351,7 @@ namespace Castor
 			}
 		}
 
-		void BeginLog( LogType logLevel )
+		void beginLog( LogType logLevel )
 		{
 			WORD attributes;
 
@@ -378,18 +378,18 @@ namespace Castor
 				break;
 			}
 
-			m_handle.SetAttributes( attributes );
+			m_handle.setAttributes( attributes );
 		}
 
-		void Print( String const & p_toLog, bool p_newLine )
+		void print( String const & p_toLog, bool p_newLine )
 		{
-			m_handle.WriteText( p_toLog, p_newLine );
+			m_handle.writeText( p_toLog, p_newLine );
 		}
 
 	private:
-		void DoInitialiseConsole( HANDLE p_handle )
+		void doInitialiseConsole( HANDLE p_handle )
 		{
-			if ( m_handle.Initialise( p_handle ) )
+			if ( m_handle.initialise( p_handle ) )
 			{
 				FILE * dump;
 				freopen_s( &dump, "conout$", "w", stdout );
@@ -413,7 +413,7 @@ namespace Castor
 				if ( ::AllocConsole() )
 				{
 					m_allocated = true;
-					DoInitialiseConsole( INVALID_HANDLE_VALUE );
+					doInitialiseConsole( INVALID_HANDLE_VALUE );
 				}
 				else
 				{
@@ -421,7 +421,7 @@ namespace Castor
 
 					if ( lastError == ERROR_ACCESS_DENIED )
 					{
-						DoInitialiseConsole( ::GetStdHandle( STD_OUTPUT_HANDLE ) );
+						doInitialiseConsole( ::GetStdHandle( STD_OUTPUT_HANDLE ) );
 					}
 					else
 					{
@@ -439,11 +439,11 @@ namespace Castor
 			}
 		}
 
-		void BeginLog( LogType logLevel )
+		void beginLog( LogType logLevel )
 		{
 		}
 
-		void Print( String const & p_toLog, bool p_newLine )
+		void print( String const & p_toLog, bool p_newLine )
 		{
 			printf( "%s", p_toLog.c_str() );
 
@@ -454,7 +454,7 @@ namespace Castor
 		}
 
 	private:
-		void DoInitialiseConsole( HANDLE p_handle )
+		void doInitialiseConsole( HANDLE p_handle )
 		{
 			FILE * dump;
 			freopen_s( &dump, "conout$", "w", stdout );
@@ -481,14 +481,14 @@ namespace Castor
 	{
 	}
 
-	void ProgramConsole::BeginLog( LogType logLevel )
+	void ProgramConsole::beginLog( LogType logLevel )
 	{
-		m_console->BeginLog( logLevel );
+		m_console->beginLog( logLevel );
 	}
 
-	void ProgramConsole::Print( String const & toLog, bool newLine )
+	void ProgramConsole::print( String const & toLog, bool newLine )
 	{
-		m_console->Print( toLog, newLine );
+		m_console->print( toLog, newLine );
 	}
 
 	//************************************************************************************************

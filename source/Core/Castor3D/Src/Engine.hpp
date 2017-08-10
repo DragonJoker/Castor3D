@@ -48,7 +48,7 @@ SOFTWARE.
 #include <Design/Unique.hpp>
 #include <Miscellaneous/CpuInformations.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -62,7 +62,7 @@ namespace Castor3D
 	\remark		Contient les fenêtres de rendu, les plug-ins, drivers de rendu...
 	*/
 	class Engine
-		: public Castor::Unique< Engine >
+		: public castor::Unique< Engine >
 	{
 	public:
 		/**
@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\param[in]	p_wantedFPS		Le nombre voulu de FPS
 		 *\param[in]	p_threaded		Si \p false, le rendu ne peut pas être threadé
 		 */
-		C3D_API void Initialise( uint32_t p_wantedFPS = 100, bool p_threaded = false );
+		C3D_API void initialise( uint32_t p_wantedFPS = 100, bool p_threaded = false );
 		/**
 		 *\~english
 		 *\brief		Cleanup function, destroys everything created from the beginning
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\brief		Fonction de nettoyage, détruit tout ce qui a été créé depuis le début
 		 *\remarks		Détruit aussi les RenderWindows, les seules choses restantes après ça sont le RenderSystem et les plug-ins chargés
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plug-in, given the renderer type
@@ -109,7 +109,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool LoadRenderer( Castor::String const & p_type );
+		C3D_API bool loadRenderer( castor::String const & p_type );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
@@ -118,7 +118,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	p_pEvent	L'évènement
 		 */
-		C3D_API void PostEvent( FrameEventUPtr && p_pEvent );
+		C3D_API void postEvent( FrameEventUPtr && p_pEvent );
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status
@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\remarks		Thread-safe
 		 *\return		\p true si nettoyé
 		 */
-		C3D_API bool IsCleaned();
+		C3D_API bool isCleaned();
 		/**
 		 *\~english
 		 *\brief		Tells the engine is cleaned up
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Dit que le moteur est nettoyé
 		 *\remarks		Thread-safe
 		 */
-		C3D_API void SetCleaned();
+		C3D_API void setCleaned();
 		/**
 		 *\~english
 		 *\brief		Checks the current support for given shader model
@@ -149,7 +149,7 @@ namespace Castor3D
 		 *\param[in]	p_eShaderModel	le shader model
 		 *\return		\p true si le shader model est supporté dans la configuration actuelle
 		 */
-		C3D_API bool SupportsShaderModel( ShaderModel p_eShaderModel );
+		C3D_API bool supportsShaderModel( ShaderModel p_eShaderModel );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 *\param[in]	p_parsers	Les analyseurs.
 		 */
-		C3D_API void RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers );
+		C3D_API void registerParsers( castor::String const & p_name, castor::FileParser::AttributeParsersBySection && p_parsers );
 		/**
 		 *\~english
 		 *\brief		Registers additional sections for SceneFileParser.
@@ -171,7 +171,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 *\param[in]	p_sections	Les sections.
 		 */
-		C3D_API void RegisterSections( Castor::String const & p_name, Castor::StrUIntMap const & p_sections );
+		C3D_API void registerSections( castor::String const & p_name, castor::StrUIntMap const & p_sections );
 		/**
 		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 */
-		C3D_API void UnregisterParsers( Castor::String const & p_name );
+		C3D_API void unregisterParsers( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Unregisters sections for SceneFileParser.
@@ -189,7 +189,7 @@ namespace Castor3D
 		 *\brief		Désenregistre des sections pour SceneFileParser.
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 */
-		C3D_API void UnregisterSections( Castor::String const & p_name );
+		C3D_API void unregisterSections( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
@@ -198,16 +198,16 @@ namespace Castor3D
 		 *\brief		Récupère le chemin des plug-ins
 		 *\return		Le chemin des plug-ins
 		 */
-		C3D_API static Castor::Path GetPluginsDirectory();
+		C3D_API static castor::Path getPluginsDirectory();
 		/**
 		 *\~english
 		 *\brief		Gives the Castor directory
 		 *\return		The directory
 		 *\~french
-		 *\brief		Donne le répertoire du Castor
+		 *\brief		donne le répertoire du Castor
 		 *\return		Le répertoire
 		 */
-		C3D_API static Castor::Path GetEngineDirectory();
+		C3D_API static castor::Path getEngineDirectory();
 		/**
 		 *\~english
 		 *\brief		Retrieves data path
@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\brief		Récupère le chemin des données
 		 *\return		Le chemin des données
 		 */
-		C3D_API static Castor::Path GetDataDirectory();
+		C3D_API static castor::Path getDataDirectory();
 		/**
 		 *\~english
 		 *\brief		Retrieves the images collection
@@ -225,7 +225,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageCache const & GetImageCache()const
+		inline castor::ImageCache const & getImageCache()const
 		{
 			return m_imageCache;
 		}
@@ -237,7 +237,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageCache & GetImageCache()
+		inline castor::ImageCache & getImageCache()
 		{
 			return m_imageCache;
 		}
@@ -249,7 +249,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontCache const & GetFontCache()const
+		inline castor::FontCache const & getFontCache()const
 		{
 			return m_fontCache;
 		}
@@ -261,7 +261,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontCache & GetFontCache()
+		inline castor::FontCache & getFontCache()
 		{
 			return m_fontCache;
 		}
@@ -271,19 +271,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le listener d'entrées utilisateur.
 		 */
-		inline UserInputListenerSPtr GetUserInputListener()
+		inline UserInputListenerSPtr getUserInputListener()
 		{
 			return m_userInputListener;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the user input listener.
+		 *\brief		sets the user input listener.
 		 *\param[in]	p_listener	The new value.
 		 *\~french
 		 *\brief		Définit le listener d'entrées utilisateur.
 		 *\param[in]	p_listener	La nouvelle valeur.
 		 */
-		inline void SetUserInputListener( UserInputListenerSPtr p_listener )
+		inline void setUserInputListener( UserInputListenerSPtr p_listener )
 		{
 			m_userInputListener = p_listener;
 		}
@@ -295,7 +295,7 @@ namespace Castor3D
 		 *\brief		Récupère le RenderSystem
 		 *\return		Le RenderSystem
 		 */
-		inline RenderSystem * GetRenderSystem()const
+		inline RenderSystem * getRenderSystem()const
 		{
 			return m_renderSystem.get();
 		}
@@ -307,7 +307,7 @@ namespace Castor3D
 		 *\brief		Récupère le Sampler par défault
 		 *\return		Le Sampler
 		 */
-		inline SamplerSPtr GetDefaultSampler()const
+		inline SamplerSPtr getDefaultSampler()const
 		{
 			return m_defaultSampler;
 		}
@@ -319,7 +319,7 @@ namespace Castor3D
 		 *\brief		Récupère le Sampler pour les éclairages.
 		 *\return		Le Sampler.
 		 */
-		inline SamplerSPtr GetLightsSampler()const
+		inline SamplerSPtr getLightsSampler()const
 		{
 			return m_lightsSampler;
 		}
@@ -331,7 +331,7 @@ namespace Castor3D
 		 *\brief		Récupère les analyseurs supplémentaires pour SceneFileParser.
 		 *\return		Les analyseurs.
 		 */
-		inline std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > const & GetAdditionalParsers()const
+		inline std::map< castor::String, castor::FileParser::AttributeParsersBySection > const & getAdditionalParsers()const
 		{
 			return m_additionalParsers;
 		}
@@ -343,7 +343,7 @@ namespace Castor3D
 		 *\brief		Récupère les sections supplémentaires pour SceneFileParser.
 		 *\return		Les sections.
 		 */
-		inline std::map< Castor::String, Castor::StrUIntMap > const & GetAdditionalSections()const
+		inline std::map< castor::String, castor::StrUIntMap > const & getAdditionalSections()const
 		{
 			return m_additionalSections;
 		}
@@ -353,7 +353,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La version du moteur.
 		 */
-		inline Version const & GetVersion()const
+		inline Version const & getVersion()const
 		{
 			return m_version;
 		}
@@ -363,7 +363,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La boucle de rendu.
 		 */
-		inline bool HasRenderLoop()const
+		inline bool hasRenderLoop()const
 		{
 			return m_renderLoop != nullptr;
 		}
@@ -373,7 +373,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La boucle de rendu.
 		 */
-		inline RenderLoop const & GetRenderLoop()const
+		inline RenderLoop const & getRenderLoop()const
 		{
 			return *m_renderLoop;
 		}
@@ -383,19 +383,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La boucle de rendu.
 		 */
-		inline RenderLoop & GetRenderLoop()
+		inline RenderLoop & getRenderLoop()
 		{
 			return *m_renderLoop;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the need for per object lighting.
+		 *\brief		sets the need for per object lighting.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le besoin d'un éclairage par objet.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetPerObjectLighting( bool p_value )
+		inline void setPerObjectLighting( bool p_value )
 		{
 			m_perObjectLighting = p_value;
 		}
@@ -405,7 +405,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le besoin d'un éclairage par objet.
 		 */
-		inline bool GetPerObjectLighting()
+		inline bool getPerObjectLighting()
 		{
 			return m_perObjectLighting;
 		}
@@ -415,7 +415,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Dit si le moteur utilise un boucle de rendu asynchrone.
 		 */
-		inline bool IsThreaded()
+		inline bool isThreaded()
 		{
 			return m_threaded;
 		}
@@ -425,7 +425,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de RenderSystem.
 		 */
-		inline RenderSystemFactory const & GetRenderSystemFactory()const
+		inline RenderSystemFactory const & getRenderSystemFactory()const
 		{
 			return m_renderSystemFactory;
 		}
@@ -435,7 +435,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de RenderSystem.
 		 */
-		inline RenderSystemFactory & GetRenderSystemFactory()
+		inline RenderSystemFactory & getRenderSystemFactory()
 		{
 			return m_renderSystemFactory;
 		}
@@ -445,7 +445,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de MeshGenerator.
 		 */
-		inline MeshFactory const & GetMeshFactory()const
+		inline MeshFactory const & getMeshFactory()const
 		{
 			return m_meshFactory;
 		}
@@ -455,7 +455,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de MeshGenerator.
 		 */
-		inline MeshFactory & GetMeshFactory()
+		inline MeshFactory & getMeshFactory()
 		{
 			return m_meshFactory;
 		}
@@ -465,7 +465,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de Subdivider.
 		 */
-		inline SubdividerFactory const & GetSubdividerFactory()const
+		inline SubdividerFactory const & getSubdividerFactory()const
 		{
 			return m_subdividerFactory;
 		}
@@ -475,7 +475,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de Subdivider.
 		 */
-		inline SubdividerFactory & GetSubdividerFactory()
+		inline SubdividerFactory & getSubdividerFactory()
 		{
 			return m_subdividerFactory;
 		}
@@ -485,7 +485,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de Importer.
 		 */
-		inline ImporterFactory const & GetImporterFactory()const
+		inline ImporterFactory const & getImporterFactory()const
 		{
 			return m_importerFactory;
 		}
@@ -495,7 +495,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de Subdivider.
 		 */
-		inline ImporterFactory & GetImporterFactory()
+		inline ImporterFactory & getImporterFactory()
 		{
 			return m_importerFactory;
 		}
@@ -505,7 +505,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de CpuParticleSystem.
 		 */
-		inline ParticleFactory & GetParticleFactory()
+		inline ParticleFactory & getParticleFactory()
 		{
 			return m_particleFactory;
 		}
@@ -515,7 +515,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les informations CPU.
 		 */
-		inline Castor::CpuInformations const & GetCpuInformations()const
+		inline castor::CpuInformations const & getCpuInformations()const
 		{
 			return m_cpuInformations;
 		}
@@ -525,25 +525,25 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type des matériaux.
 		 */
-		inline MaterialType GetMaterialsType()const
+		inline MaterialType getMaterialsType()const
 		{
 			return m_materialType;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the materials type.
+		 *\brief		sets the materials type.
 		 *\param[in]	p_type	The new value.
 		 *\~french
 		 *\brief		Définit le type des matériaux.
 		 *\param[in]	p_type	La nouvelle valeur.
 		 */
-		inline void SetMaterialsType( MaterialType p_type )
+		inline void setMaterialsType( MaterialType p_type )
 		{
 			m_materialType = p_type;
 		}
 
 	private:
-		void DoLoadCoreData();
+		void doLoadCoreData();
 
 	private:
 		//!\~english	The mutex, to make the engine resources access thread-safe.
@@ -605,19 +605,19 @@ namespace Castor3D
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		//!\~english	The fonts cache.
 		//!\~french		La cache de polices.
-		Castor::FontCache m_fontCache;
+		castor::FontCache m_fontCache;
 		//!\~english	The images cache.
 		//!\~french		La cache d'images.
-		Castor::ImageCache m_imageCache;
+		castor::ImageCache m_imageCache;
 		//!\~english	The user input listener.
 		//!\~french		Le listener d'entrées utilisateur.
 		UserInputListenerSPtr m_userInputListener;
 		//!\~english	The map holding the parsers, sorted by section, and plug-in name.
 		//!\~french		La map de parseurs, triés par section, et nom de plug-in.
-		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
+		std::map< castor::String, castor::FileParser::AttributeParsersBySection > m_additionalParsers;
 		//!\~english	The map holding the sections, sorted plug-in name.
 		//!\~french		La map de sections, triées par nom de plug-in.
-		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
+		std::map< castor::String, castor::StrUIntMap > m_additionalSections;
 		//!\~english	The default frame listener.
 		//!\~french		Le frame listener par défaut.
 		FrameListenerWPtr m_defaultListener;
@@ -638,7 +638,7 @@ namespace Castor3D
 		ParticleFactory m_particleFactory;
 		//!\~english	The CPU informations.
 		//!\~french		Les informations sur le CPU.
-		Castor::CpuInformations m_cpuInformations;
+		castor::CpuInformations m_cpuInformations;
 		//!\~english	The materials type.
 		//!\~french		Le type des matériaux.
 		MaterialType m_materialType;

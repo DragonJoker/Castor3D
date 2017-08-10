@@ -27,21 +27,21 @@ SOFTWARE.
 
 #include <Math/Point.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2b );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3b );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4b );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2i );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3i );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4i );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2ui );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3ui );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4ui );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2d );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3d );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2b );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3b );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4b );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2i );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3i );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4i );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2ui );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3ui );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4ui );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4d );
 
 namespace GuiCommon
 {
@@ -65,21 +65,21 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( PointProperty )
 
 	public:
-		PointProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
-		PointProperty( wxString const( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
+		PointProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+		PointProperty( wxString const( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
 		virtual ~PointProperty();
 
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
+		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void refreshChildren();
 
 	protected:
 		// I stands for internal
-		inline void SetValueI( Castor::Point< T, Count > const & value );
+		inline void setValueI( castor::Point< T, Count > const & value );
 	};
 
-	template< typename Type, size_t Count > Castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & p_variant );
-	template< typename Type, size_t Count > Castor::Point< Type, Count > & PointRefFromVariant( wxVariant & p_variant );
-	template< typename Type, size_t Count > void SetVariantFromPoint( wxVariant & p_variant, Castor::Point< Type, Count > const & p_value );
+	template< typename Type, size_t Count > castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & p_variant );
+	template< typename Type, size_t Count > castor::Point< Type, Count > & PointRefFromVariant( wxVariant & p_variant );
+	template< typename Type, size_t Count > void setVariantFromPoint( wxVariant & p_variant, castor::Point< Type, Count > const & p_value );
 
 	template< size_t Count > using BoolPointProperty = PointProperty< bool, Count >;
 	template< size_t Count > using IntPointProperty = PointProperty< int, Count >;

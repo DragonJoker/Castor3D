@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniqueObjectPool.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -108,7 +108,7 @@ namespace Castor
 		 */
 		static void * operator new( std::size_t p_size )
 		{
-			return MyUniqueObjectPool::Get().Allocate();
+			return MyUniqueObjectPool::get().allocate();
 		}
 		/**
 		 *\~english
@@ -124,7 +124,7 @@ namespace Castor
 		 */
 		static void operator delete( void * p_ptr, std::size_t p_size )
 		{
-			MyUniqueObjectPool::Get().Deallocate( reinterpret_cast< Object * >( p_ptr ) );
+			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( p_ptr ) );
 		}
 		/**
 		 *\~english
@@ -140,7 +140,7 @@ namespace Castor
 		 */
 		static void operator delete[]( void * p_ptr, std::size_t p_size )
 		{
-			MyUniqueObjectPool::Get().Deallocate( reinterpret_cast< Object * >( p_ptr ) );
+			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( p_ptr ) );
 		}
 	};
 }

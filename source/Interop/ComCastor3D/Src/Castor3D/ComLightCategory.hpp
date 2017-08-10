@@ -57,29 +57,29 @@ namespace CastorCom
 		 */
 		virtual ~CLightCategory();
 
-		inline Castor3D::LightCategorySPtr GetInternal()const
+		inline castor3d::LightCategorySPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::LightCategorySPtr internal )
+		inline void setInternal( castor3d::LightCategorySPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &Castor3D::LightCategory::GetColour ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetColour ) );
-		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetAmbientIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetAmbientIntensity ) );
-		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetDiffuseIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetDiffuseIntensity ) );
-		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetSpecularIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetSpecularIntensity ) );
+		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &castor3d::LightCategory::getColour ), make_putter( m_internal.get(), &castor3d::LightCategory::setColour ) );
+		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getAmbientIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setAmbientIntensity ) );
+		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getDiffuseIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setDiffuseIntensity ) );
+		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getSpecularIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setSpecularIntensity ) );
 
 	private:
-		Castor3D::LightCategorySPtr m_internal;
+		castor3d::LightCategorySPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( LightCategory ), CLightCategory );
 
-	//DECLARE_VARIABLE_PTR_GETTER( LightCategory, Castor3D, LightCategory );
-	//DECLARE_VARIABLE_PTR_PUTTER( LightCategory, Castor3D, LightCategory );
+	//DECLARE_VARIABLE_PTR_GETTER( LightCategory, castor3d, LightCategory );
+	//DECLARE_VARIABLE_PTR_PUTTER( LightCategory, castor3d, LightCategory );
 }
 
 #endif

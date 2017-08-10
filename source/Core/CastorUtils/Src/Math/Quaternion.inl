@@ -1,13 +1,13 @@
 #include "TransformationMatrix.hpp"
 
-namespace Castor
+namespace castor
 {
 	//*************************************************************************************************
 
 	namespace
 	{
 		template< typename T >
-		inline T mix_values( T p_a, T p_b, T p_f )
+		inline T mixValues( T p_a, T p_b, T p_f )
 		{
 			return p_a + ( p_f * ( p_b - p_a ) );
 		}
@@ -17,7 +17,7 @@ namespace Castor
 
 	template< typename T >
 	QuaternionT< T >::TextLoader::TextLoader()
-		: Castor::TextLoader< QuaternionT< T > >()
+		: castor::TextLoader< QuaternionT< T > >()
 	{
 	}
 
@@ -30,17 +30,17 @@ namespace Castor
 
 		for ( uint32_t i = 0; i < 3; ++i )
 		{
-			if ( p_file.ReadLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
+			if ( p_file.readLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
 			{
 				StringStream streamWord( strWord );
 				streamWord >> axis[i];
 			}
 
 			xchar cDump;
-			p_file.ReadChar( cDump );
+			p_file.readChar( cDump );
 		}
 
-		if ( p_file.ReadLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
+		if ( p_file.readLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
 		{
 			real degrees;
 			StringStream streamWord( strWord );
@@ -48,7 +48,7 @@ namespace Castor
 			angle.degrees( degrees );
 		}
 
-		p_object.from_axis_angle( axis, angle );
+		p_object.fromAxisAngle( axis, angle );
 		return true;
 	}
 
@@ -56,7 +56,7 @@ namespace Castor
 
 	template< typename T >
 	QuaternionT< T >::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< QuaternionT< T > >( p_tabs )
+		: castor::TextWriter< QuaternionT< T > >( p_tabs )
 	{
 	}
 
@@ -67,7 +67,7 @@ namespace Castor
 		StringStream streamWord;
 		Point3< T > axis;
 		Angle angle;
-		p_object.to_axis_angle( axis, angle );
+		p_object.toAxisAngle( axis, angle );
 
 		for ( uint32_t i = 0; i < 3; ++i )
 		{
@@ -80,8 +80,8 @@ namespace Castor
 		}
 
 		streamWord << cuT( " " ) << angle.degrees();
-		bool result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< QuaternionT< T > >::CheckError( result, "Quaternion value" );
+		bool result = p_file.print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
+		castor::TextWriter< QuaternionT< T > >::checkError( result, "Quaternion value" );
 		return result;
 	}
 
@@ -230,39 +230,39 @@ namespace Castor
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_matrix( float const * p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( float const * p_matrix )
 	{
-		return from_matrix( Matrix4x4f( p_matrix ) );
+		return fromMatrix( Matrix4x4f( p_matrix ) );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_matrix( double const * p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( double const * p_matrix )
 	{
-		return from_matrix( Matrix4x4d( p_matrix ) );
+		return fromMatrix( Matrix4x4d( p_matrix ) );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_matrix( Matrix4x4f const & p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4f const & p_matrix )
 	{
 		QuaternionT< T > result;
-		matrix::get_rotate( p_matrix, result );
+		matrix::getrotate( p_matrix, result );
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_matrix( Matrix4x4d const & p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4d const & p_matrix )
 	{
 		QuaternionT< T > result;
-		matrix::get_rotate( p_matrix, result );
+		matrix::getrotate( p_matrix, result );
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_axis_angle( Point3f const & p_vector, Angle const & p_angle )
+	QuaternionT< T > QuaternionT< T >::fromAxisAngle( Point3f const & p_vector, Angle const & p_angle )
 	{
 		QuaternionT< T > result;
 		Angle halfAngle = p_angle * 0.5f;
-		auto norm = point::get_normalised( p_vector ) * halfAngle.sin();
+		auto norm = point::getNormalised( p_vector ) * halfAngle.sin();
 		result.quat.x = T( norm[0] );
 		result.quat.y = T( norm[1] );
 		result.quat.z = T( norm[2] );
@@ -272,11 +272,11 @@ namespace Castor
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_axis_angle( Point3d const & p_vector, Angle const & p_angle )
+	QuaternionT< T > QuaternionT< T >::fromAxisAngle( Point3d const & p_vector, Angle const & p_angle )
 	{
 		QuaternionT< T > result;
 		Angle halfAngle = p_angle * 0.5;
-		auto norm = point::get_normalised( p_vector ) * halfAngle.sin();
+		auto norm = point::getNormalised( p_vector ) * halfAngle.sin();
 		result.quat.x = T( norm[0] );
 		result.quat.y = T( norm[1] );
 		result.quat.z = T( norm[2] );
@@ -286,7 +286,7 @@ namespace Castor
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_axes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z )
+	QuaternionT< T > QuaternionT< T >::fromAxes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z )
 	{
 		Matrix4x4f mtxRot;
 		mtxRot[0][0] = p_x[0];
@@ -298,11 +298,11 @@ namespace Castor
 		mtxRot[0][2] = p_z[0];
 		mtxRot[1][2] = p_z[1];
 		mtxRot[2][2] = p_z[2];
-		return from_matrix( mtxRot );
+		return fromMatrix( mtxRot );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::from_axes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z )
+	QuaternionT< T > QuaternionT< T >::fromAxes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z )
 	{
 		Matrix4x4d mtxRot;
 		mtxRot[0][0] = p_x[0];
@@ -314,7 +314,7 @@ namespace Castor
 		mtxRot[0][2] = p_z[0];
 		mtxRot[1][2] = p_z[1];
 		mtxRot[2][2] = p_z[2];
-		return from_matrix( mtxRot );
+		return fromMatrix( mtxRot );
 	}
 
 	template< typename T >
@@ -342,33 +342,33 @@ namespace Castor
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_matrix( double * p_matrix )const
+	void QuaternionT< T >::toMatrix( double * p_matrix )const
 	{
 		Matrix4x4d mtx = Matrix4x4d( p_matrix );
-		to_matrix( mtx );
+		toMatrix( mtx );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_matrix( float * p_matrix )const
+	void QuaternionT< T >::toMatrix( float * p_matrix )const
 	{
 		Matrix4x4f mtx = Matrix4x4f( p_matrix );
-		to_matrix( mtx );
+		toMatrix( mtx );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_matrix( Matrix4x4d & p_matrix )const
+	void QuaternionT< T >::toMatrix( Matrix4x4d & p_matrix )const
 	{
-		matrix::set_rotate( p_matrix, *this );
+		matrix::setRotate( p_matrix, *this );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_matrix( Matrix4x4f & p_matrix )const
+	void QuaternionT< T >::toMatrix( Matrix4x4f & p_matrix )const
 	{
-		matrix::set_rotate( p_matrix, *this );
+		matrix::setRotate( p_matrix, *this );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_axis_angle( Point3f & p_vector, Angle & p_angle )const
+	void QuaternionT< T >::toAxisAngle( Point3f & p_vector, Angle & p_angle )const
 	{
 		T const x = quat.x;
 		T const y = quat.y;
@@ -379,7 +379,7 @@ namespace Castor
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = Angle::from_radians( 0.0 );
+			p_angle = Angle::fromRadians( 0.0 );
 			p_vector[0] = T{ 1 };
 			p_vector[1] = T{ 0 };
 			p_vector[2] = T{ 0 };
@@ -397,7 +397,7 @@ namespace Castor
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_axis_angle( Point3d & p_vector, Angle & p_angle )const
+	void QuaternionT< T >::toAxisAngle( Point3d & p_vector, Angle & p_angle )const
 	{
 		T const x = quat.x;
 		T const y = quat.y;
@@ -408,7 +408,7 @@ namespace Castor
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = Angle::from_radians( 0.0 );
+			p_angle = Angle::fromRadians( 0.0 );
 			p_vector[0] = T{ 1 };
 			p_vector[1] = T{ 0 };
 			p_vector[2] = T{ 0 };
@@ -426,10 +426,10 @@ namespace Castor
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_axes( Point3f & p_x, Point3f & p_y, Point3f & p_z )const
+	void QuaternionT< T >::toAxes( Point3f & p_x, Point3f & p_y, Point3f & p_z )const
 	{
 		Matrix4x4f mtxRot;
-		to_matrix( mtxRot );
+		toMatrix( mtxRot );
 		p_x[0] = mtxRot[0][0];
 		p_x[1] = mtxRot[1][0];
 		p_x[2] = mtxRot[2][0];
@@ -442,10 +442,10 @@ namespace Castor
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_axes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const
+	void QuaternionT< T >::toAxes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const
 	{
 		Matrix4x4d mtxRot;
-		to_matrix( mtxRot );
+		toMatrix( mtxRot );
 		p_x[0] = mtxRot[0][0];
 		p_x[1] = mtxRot[1][0];
 		p_x[2] = mtxRot[2][0];
@@ -466,7 +466,7 @@ namespace Castor
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::get_conjugate()const
+	QuaternionT< T > QuaternionT< T >::getConjugate()const
 	{
 		QuaternionT< T > result( *this );
 		result.conjugate();
@@ -474,7 +474,7 @@ namespace Castor
 	}
 
 	template< typename T >
-	double QuaternionT< T >::get_magnitude()const
+	double QuaternionT< T >::getMagnitude()const
 	{
 		return point::length( *this );
 	}
@@ -489,10 +489,10 @@ namespace Castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-					   mix_values( quat.x, p_target.quat.x, T( p_factor ) ),
-					   mix_values( quat.y, p_target.quat.y, T( p_factor ) ),
-					   mix_values( quat.z, p_target.quat.z, T( p_factor ) ),
-					   mix_values( quat.w, p_target.quat.w, T( p_factor ) ) );
+				mixValues( quat.x, p_target.quat.x, T( p_factor ) ),
+				mixValues( quat.y, p_target.quat.y, T( p_factor ) ),
+				mixValues( quat.z, p_target.quat.z, T( p_factor ) ),
+				mixValues( quat.w, p_target.quat.w, T( p_factor ) ) );
 		}
 		else
 		{
@@ -512,10 +512,10 @@ namespace Castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-					   mix_values( quat.x, p_target.quat.x, T( p_factor ) ),
-					   mix_values( quat.y, p_target.quat.y, T( p_factor ) ),
-					   mix_values( quat.z, p_target.quat.z, T( p_factor ) ),
-					   mix_values( quat.w, p_target.quat.w, T( p_factor ) ) );
+				mixValues( quat.x, p_target.quat.x, T( p_factor ) ),
+				mixValues( quat.y, p_target.quat.y, T( p_factor ) ),
+				mixValues( quat.z, p_target.quat.z, T( p_factor ) ),
+				mixValues( quat.w, p_target.quat.w, T( p_factor ) ) );
 		}
 		else
 		{
@@ -552,7 +552,7 @@ namespace Castor
 		T cosTheta = point::dot( *this, p_target );
 		QuaternionT< T > target( p_target );
 
-		// Do we need to invert rotation?
+		// do we need to invert rotation?
 		if ( cosTheta < 0 )
 		{
 			cosTheta = -cosTheta;
@@ -595,7 +595,7 @@ namespace Castor
 		T cosTheta = point::dot( *this, p_target );
 		QuaternionT< T > target( p_target );
 
-		// Do we need to invert rotation?
+		// do we need to invert rotation?
 		if ( cosTheta < 0 )
 		{
 			cosTheta = -cosTheta;

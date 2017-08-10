@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Design/Collection.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -70,7 +70,7 @@ namespace Castor
 		 *\param[in]	p_path		Le chemin complet d'accès au fichier de l'image.
 		 *\return		L'image créée (ou récupérée).
 		 */
-		CU_API ImageSPtr Add( String const & p_name, Path const & p_path );
+		CU_API ImageSPtr add( String const & p_name, Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params.
@@ -84,7 +84,7 @@ namespace Castor
 		 *\param[in]	p_size		Les dimensions voulues pour l'image.
 		 *\param[in]	p_format	Le format de pixel voulu pour l'image.
 		 */
-		CU_API ImageSPtr Add( String const & p_name, Size const & p_size, PixelFormat p_format );
+		CU_API ImageSPtr add( String const & p_name, Size const & p_size, PixelFormat p_format );
 
 	public:
 		using Collection< Image, String >::begin;

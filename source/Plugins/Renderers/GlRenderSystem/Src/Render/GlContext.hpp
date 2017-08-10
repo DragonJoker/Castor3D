@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -30,44 +30,44 @@ SOFTWARE.
 namespace GlRender
 {
 	class GlContext
-		: public Castor3D::Context
+		: public castor3d::Context
 		, public Holder
 	{
 	public:
 		GlContext( GlRenderSystem & renderSystem, OpenGl & p_gl );
 		virtual ~GlContext();
 
-		GlContextImpl & GetImpl();
+		GlContextImpl & getImpl();
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Context::DoInitialise
+		 *\copydoc		castor3d::Context::doInitialise
 		 */
-		virtual bool DoInitialise();
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoCleanup
+		 *\copydoc		castor3d::Context::doCleanup
 		 */
-		virtual void DoCleanup();
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoDestroy
+		 *\copydoc		castor3d::Context::doDestroy
 		 */
-		virtual void DoDestroy();
+		void doDestroy()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoSetCurrent
+		 *\copydoc		castor3d::Context::doSetCurrent
 		 */
-		virtual void DoSetCurrent();
+		void doSetCurrent()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoEndCurrent
+		 *\copydoc		castor3d::Context::doEndCurrent
 		 */
-		virtual void DoEndCurrent();
+		void doEndCurrent()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoSwapBuffers
+		 *\copydoc		castor3d::Context::doSwapBuffers
 		 */
-		virtual void DoSwapBuffers();
+		void doSwapBuffers()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoBarrier
+		 *\copydoc		castor3d::Context::doMemoryBarrier
 		 */
-		virtual void DoBarrier( Castor3D::MemoryBarriers const & p_barriers );
+		void doMemoryBarrier( castor3d::MemoryBarriers const & p_barriers )override;
 
 	private:
 		std::unique_ptr< GlContextImpl > m_implementation;

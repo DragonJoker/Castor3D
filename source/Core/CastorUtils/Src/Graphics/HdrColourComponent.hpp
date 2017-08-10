@@ -25,17 +25,17 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		07/10=1/2016
 	\~english
-	\brief		Defines a HDR colour component (R, G, B or A) to be used in Castor::HdrColour.
+	\brief		Defines a HDR colour PixelComponents (R, G, B or A) to be used in castor::HdrColour.
 	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations
 	\~french
-	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans Castor::HdrColour
+	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans castor::HdrColour
 	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes
 	*/
 	class HdrColourComponent
@@ -59,7 +59,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_value	The component value
+		 *\param[in]	p_value	The PixelComponents value
 		 *\~french
 		 *\brief		Constructeur spécifié
 		 *\param[in]	p_value	La valeur de la composante
@@ -71,7 +71,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_rhs	The component
+		 *\param[in]	p_rhs	The PixelComponents
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
@@ -86,7 +86,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from float
-		 *\param[in]	p_rhs	The component value, must be between 0.0f and 1.0f
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0.0f and 1.0f
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un float
@@ -101,7 +101,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from double
-		 *\param[in]	p_rhs	The component value, must be between 0.0 and 1.0
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un double
@@ -116,7 +116,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from long double
-		 *\param[in]	p_rhs	The component value, must be between 0.0 and 1.0
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un long double
@@ -131,7 +131,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int8_t
-		 *\param[in]	p_rhs	The component value
+		 *\param[in]	p_rhs	The PixelComponents value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int8_t
@@ -146,7 +146,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint8_t
-		 *\param[in]	p_rhs	The component value
+		 *\param[in]	p_rhs	The PixelComponents value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint8_t
@@ -161,7 +161,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int16_t
-		 *\param[in]	p_rhs	The component value, must be between 0 and 255
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int16_t
@@ -176,7 +176,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint16_t
-		 *\param[in]	p_rhs	The component value, must be between 0 and 255
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint16_t
@@ -191,7 +191,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int32_t
-		 *\param[in]	p_rhs	The component value, must be between 0 and 255
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int32_t
@@ -206,7 +206,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint32_t
-		 *\param[in]	p_rhs	The component value, must be between 0 and 255
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint32_t
@@ -221,7 +221,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int64_t
-		 *\param[in]	p_rhs	The component value, must be between 0 and 255
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int64_t
@@ -236,7 +236,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint64_t
-		 *\param[in]	p_rhs	The component value, must be between 0 and 255
+		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint64_t
@@ -254,7 +254,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int8_t
 		 */
-		inline int8_t & convert_to( int8_t & p_value )const
+		inline int8_t & convertTo( int8_t & p_value )const
 		{
 			return p_value = int8_t( value() );
 		}
@@ -264,7 +264,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint8_t
 		 */
-		inline uint8_t & convert_to( uint8_t & p_value )const
+		inline uint8_t & convertTo( uint8_t & p_value )const
 		{
 			return p_value = uint8_t( value() );
 		}
@@ -274,7 +274,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int16_t
 		 */
-		inline int16_t & convert_to( int16_t & p_value )const
+		inline int16_t & convertTo( int16_t & p_value )const
 		{
 			return p_value = int16_t( value() );
 		}
@@ -284,7 +284,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint16_t
 		 */
-		inline uint16_t & convert_to( uint16_t & p_value )const
+		inline uint16_t & convertTo( uint16_t & p_value )const
 		{
 			return p_value = uint16_t( value() );
 		}
@@ -294,7 +294,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int32_t
 		 */
-		inline int32_t & convert_to( int32_t & p_value )const
+		inline int32_t & convertTo( int32_t & p_value )const
 		{
 			return p_value = int32_t( value() );
 		}
@@ -304,7 +304,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint32_t
 		 */
-		inline uint32_t & convert_to( uint32_t & p_value )const
+		inline uint32_t & convertTo( uint32_t & p_value )const
 		{
 			return p_value = uint32_t( value() );
 		}
@@ -314,7 +314,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int64_t
 		 */
-		inline int64_t & convert_to( int64_t & p_value )const
+		inline int64_t & convertTo( int64_t & p_value )const
 		{
 			return p_value = int64_t( value() );
 		}
@@ -324,7 +324,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint64_t
 		 */
-		inline uint64_t & convert_to( uint64_t & p_value )const
+		inline uint64_t & convertTo( uint64_t & p_value )const
 		{
 			return p_value = uint64_t( value() );
 		}
@@ -334,7 +334,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline float & convert_to( float & p_value )const
+		inline float & convertTo( float & p_value )const
 		{
 			return p_value = value();
 		}
@@ -344,7 +344,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline double & convert_to( double & p_value )const
+		inline double & convertTo( double & p_value )const
 		{
 			return p_value = value();
 		}
@@ -354,13 +354,13 @@ namespace Castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline long double & convert_to( long double & p_value )const
+		inline long double & convertTo( long double & p_value )const
 		{
 			return p_value = value();
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the component value
+		 *\brief		sets the PixelComponents value
 		 *\remarks		Clamps the result
 		 *\param[in]	p_value	The value
 		 *\~french
@@ -374,7 +374,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\remarks		Clamps the result
 		 *\param[in]	p_rhs	The value to add
 		 *\return		Result of this + p_rhs
@@ -393,7 +393,7 @@ namespace Castor
 		 *\~english
 		 *\brief		Substraction assignment operator
 		 *\remarks		Clamps the result
-		 *\param[in]	p_rhs	The value to substract
+		 *\param[in]	p_rhs	The value to subtract
 		 *\return		Result of this - p_rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -442,7 +442,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_rhs	The value to add
 		 *\return		Result of this + p_rhs
 		 *\~french
@@ -459,7 +459,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_rhs	The value to substract
+		 *\param[in]	p_rhs	The value to subtract
 		 *\return		Result of this - p_rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -518,7 +518,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the component value
+		 *\brief		Retrieves the PixelComponents value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante
@@ -530,7 +530,7 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the component value
+		 *\brief		Retrieves the PixelComponents value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante
@@ -564,7 +564,7 @@ namespace Castor
 	CU_API bool operator!=( HdrColourComponent const & p_lhs, HdrColourComponent const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Addition assignment operator
+	 *\brief		addition assignment operator
 	 *\param[in]	p_lhs, p_rhs	The components to add
 	 *\return		Result of p_lhs + p_rhs
 	 *\~french
@@ -576,7 +576,7 @@ namespace Castor
 	float operator+( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
 		float fValue;
-		p_lhs.convert_to( fValue );
+		p_lhs.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt += p_rhs;
 		return fValue;
@@ -595,7 +595,7 @@ namespace Castor
 	float operator-( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
 		float fValue;
-		p_lhs.convert_to( fValue );
+		p_lhs.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt -= p_rhs;
 		return fValue;
@@ -614,7 +614,7 @@ namespace Castor
 	float operator/( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
 		float fValue;
-		p_lhs.convert_to( fValue );
+		p_lhs.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt /= p_rhs;
 		return fValue;
@@ -633,14 +633,14 @@ namespace Castor
 	float operator*( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
 		float fValue;
-		p_lhs.convert_to( fValue );
+		p_lhs.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt *= p_rhs;
 		return fValue;
 	}
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_lhs, p_rhs	The components to add
 	 *\return		Result of p_lhs + p_rhs
 	 *\~french

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,7 +28,7 @@ SOFTWARE.
 namespace GLSL
 {
 	static uint32_t constexpr MaxMaterialsCount = 2000u;
-	Castor::String const PassBufferName = cuT( "Materials" );
+	castor::String const PassBufferName = cuT( "Materials" );
 
 	class Materials
 	{
@@ -36,16 +36,16 @@ namespace GLSL
 		GlslWriter_API Materials( GlslWriter & writer );
 
 	public:
-		GlslWriter_API virtual void Declare() = 0;
-		GlslWriter_API virtual Vec3 GetDiffuse( Int const & index )const = 0;
-		GlslWriter_API Float GetRefractionRatio( Int const & index )const;
-		GlslWriter_API Float GetOpacity( Int const & index )const;
-		GlslWriter_API Float GetEmissive( Int const & index )const;
-		GlslWriter_API Int GetRefraction( Int const & index )const;
-		GlslWriter_API Int GetReflection( Int const & index )const;
-		GlslWriter_API Float GetGamma( Int const & index )const;
-		GlslWriter_API Float GetExposure( Int const & index )const;
-		GlslWriter_API Float GetAlphaRef( Int const & index )const;
+		GlslWriter_API virtual void declare() = 0;
+		GlslWriter_API virtual Vec3 getDiffuse( Int const & index )const = 0;
+		GlslWriter_API Float getRefractionRatio( Int const & index )const;
+		GlslWriter_API Float getOpacity( Int const & index )const;
+		GlslWriter_API Float getEmissive( Int const & index )const;
+		GlslWriter_API Int getRefraction( Int const & index )const;
+		GlslWriter_API Int getReflection( Int const & index )const;
+		GlslWriter_API Float getGamma( Int const & index )const;
+		GlslWriter_API Float getExposure( Int const & index )const;
+		GlslWriter_API Float getAlphaRef( Int const & index )const;
 
 	protected:
 		GlslWriter & m_writer;
@@ -56,11 +56,11 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API LegacyMaterials( GlslWriter & writer );
-		GlslWriter_API void Declare()override;
-		GlslWriter_API Vec3 GetDiffuse( Int const & index )const override;
-		GlslWriter_API Vec3 GetSpecular( Int const & index )const;
-		GlslWriter_API Float GetAmbient( Int const & index )const;
-		GlslWriter_API Float GetShininess( Int const & index )const;
+		GlslWriter_API void declare()override;
+		GlslWriter_API Vec3 getDiffuse( Int const & index )const override;
+		GlslWriter_API Vec3 getSpecular( Int const & index )const;
+		GlslWriter_API Float getAmbient( Int const & index )const;
+		GlslWriter_API Float getShininess( Int const & index )const;
 	};
 
 	class PbrMRMaterials
@@ -68,11 +68,11 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API PbrMRMaterials( GlslWriter & writer );
-		GlslWriter_API void Declare()override;
-		GlslWriter_API Vec3 GetDiffuse( Int const & index )const override;
-		GlslWriter_API Vec3 GetAlbedo( Int const & index )const;
-		GlslWriter_API Float GetRoughness( Int const & index )const;
-		GlslWriter_API Float GetMetallic( Int const & index )const;
+		GlslWriter_API void declare()override;
+		GlslWriter_API Vec3 getDiffuse( Int const & index )const override;
+		GlslWriter_API Vec3 getAlbedo( Int const & index )const;
+		GlslWriter_API Float getRoughness( Int const & index )const;
+		GlslWriter_API Float getMetallic( Int const & index )const;
 	};
 
 	class PbrSGMaterials
@@ -80,10 +80,10 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API PbrSGMaterials( GlslWriter & writer );
-		GlslWriter_API void Declare()override;
-		GlslWriter_API Vec3 GetDiffuse( Int const & index )const override;
-		GlslWriter_API Vec3 GetSpecular( Int const & index )const;
-		GlslWriter_API Float GetGlossiness( Int const & index )const;
+		GlslWriter_API void declare()override;
+		GlslWriter_API Vec3 getDiffuse( Int const & index )const override;
+		GlslWriter_API Vec3 getSpecular( Int const & index )const;
+		GlslWriter_API Float getGlossiness( Int const & index )const;
 	};
 }
 

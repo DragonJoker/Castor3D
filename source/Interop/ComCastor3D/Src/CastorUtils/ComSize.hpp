@@ -41,7 +41,7 @@ namespace CastorCom
 	*/
 	class ATL_NO_VTABLE CSize
 		:	COM_ATL_OBJECT( Size )
-		,	public Castor::Size
+		,	public castor::Size
 	{
 	public:
 		/**
@@ -59,18 +59,18 @@ namespace CastorCom
 		 */
 		virtual ~CSize();
 
-		COM_PROPERTY( Width, UINT, make_getter( this, &Castor::Size::width ), make_putter( this, &Castor::Size::width ) );
-		COM_PROPERTY( Height, UINT, make_getter( this, &Castor::Size::height ), make_putter( this, &Castor::Size::height ) );
+		COM_PROPERTY( Width, UINT, make_getter( this, &castor::Size::getWidth ), make_putter( this, &castor::Size::getWidth ) );
+		COM_PROPERTY( Height, UINT, make_getter( this, &castor::Size::getHeight ), make_putter( this, &castor::Size::getHeight ) );
 
-		STDMETHOD( Set )( /* [in] */ UINT x, /* [in] */ UINT y );
+		STDMETHOD( set )( /* [in] */ UINT x, /* [in] */ UINT y );
 		STDMETHOD( Grow )( /* [in] */ INT x, /* [in] */ INT y );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Size ), CSize );
 
-	DECLARE_VARIABLE_VAL_GETTER( Size, Castor, Size );
-	DECLARE_VARIABLE_REF_GETTER( Size, Castor, Size );
-	DECLARE_VARIABLE_REF_PUTTER( Size, Castor, Size );
+	DECLARE_VARIABLE_VAL_GETTER( Size, castor, Size );
+	DECLARE_VARIABLE_REF_GETTER( Size, castor, Size );
+	DECLARE_VARIABLE_REF_PUTTER( Size, castor, Size );
 }
 
 #endif

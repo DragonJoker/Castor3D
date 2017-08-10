@@ -37,7 +37,7 @@ namespace Reinhard
 	\brief		Implémente l'algorithme de mappage de ton de Reinhard
 	*/
 	class ToneMapping
-		: public Castor3D::ToneMapping
+		: public castor3d::ToneMapping
 	{
 	public:
 		/**
@@ -50,7 +50,7 @@ namespace Reinhard
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		ToneMapping( Castor3D::Engine & engine, Castor3D::Parameters const & p_parameters );
+		ToneMapping( castor3d::Engine & engine, castor3d::Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -68,28 +68,28 @@ namespace Reinhard
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		static Castor3D::ToneMappingSPtr Create( Castor3D::Engine & engine, Castor3D::Parameters const & p_parameters );
+		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine, castor3d::Parameters const & p_parameters );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ToneMapping::DoCreate
+		 *\copydoc		castor3d::ToneMapping::doCreate
 		 */
-		GLSL::Shader DoCreate()override;
+		GLSL::Shader doCreate()override;
 		/**
-		 *\copydoc		Castor3D::ToneMapping::DoDestroy
+		 *\copydoc		castor3d::ToneMapping::doDestroy
 		 */
-		void DoDestroy()override;
+		void doDestroy()override;
 		/**
-		 *\copydoc		Castor3D::ToneMapping::DoUpdate
+		 *\copydoc		castor3d::ToneMapping::doUpdate
 		 */
-		void DoUpdate()override;
+		void doUpdate()override;
 		/**
-		 *\copydoc		Castor3D::ToneMapping::DoWriteInto
+		 *\copydoc		castor3d::ToneMapping::doWriteInto
 		 */
-		bool DoWriteInto( Castor::TextFile & p_file )override;
+		bool doWriteInto( castor::TextFile & p_file )override;
 
 	public:
-		static Castor::String Name;
+		static castor::String Name;
 	};
 }
 

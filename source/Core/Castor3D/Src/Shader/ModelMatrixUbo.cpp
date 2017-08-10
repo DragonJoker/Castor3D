@@ -5,16 +5,16 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
 		: m_ubo{ ShaderProgram::BufferModelMatrix
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, ModelMatrixUbo::BindingPoint }
-		, m_model{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxModel ) }
-		, m_normal{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxNormal ) }
+		, m_model{ *m_ubo.createUniform< UniformType::eMat4x4r >( RenderPipeline::MtxModel ) }
+		, m_normal{ *m_ubo.createUniform< UniformType::eMat4x4r >( RenderPipeline::MtxNormal ) }
 	{
 	}
 
@@ -22,17 +22,17 @@ namespace Castor3D
 	{
 	}
 
-	void ModelMatrixUbo::Update( Castor::Matrix4x4r const & p_model  )const
+	void ModelMatrixUbo::update( castor::Matrix4x4r const & p_model  )const
 	{
-		m_model.SetValue( p_model );
-		m_ubo.Update();
-		m_ubo.BindTo( ModelMatrixUbo::BindingPoint );
+		m_model.setValue( p_model );
+		m_ubo.update();
+		m_ubo.bindTo( ModelMatrixUbo::BindingPoint );
 	}
 
-	void ModelMatrixUbo::Update( Castor::Matrix4x4r const & p_model
-		, Castor::Matrix4x4r const & p_normal )const
+	void ModelMatrixUbo::update( castor::Matrix4x4r const & p_model
+		, castor::Matrix4x4r const & p_normal )const
 	{
-		m_normal.SetValue( p_normal );
-		Update( p_model );
+		m_normal.setValue( p_normal );
+		update( p_model );
 	}
 }

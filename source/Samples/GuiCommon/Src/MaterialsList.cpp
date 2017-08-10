@@ -29,8 +29,8 @@
 #	define LoadImage wxBitmap::LoadImage
 #endif
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -43,22 +43,22 @@ namespace GuiCommon
 		, m_propertiesHolder( p_propertiesHolder )
 	{
 		wxBusyCursor wait;
-		ImagesLoader::AddBitmap( eBMP_MATERIAL, material_xpm );
-		ImagesLoader::AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_PASS, pass_xpm );
-		ImagesLoader::AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXTURE, texture_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
-		ImagesLoader::WaitAsyncLoads();
+		ImagesLoader::addBitmap( eBMP_MATERIAL, material_xpm );
+		ImagesLoader::addBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_PASS, pass_xpm );
+		ImagesLoader::addBitmap( eBMP_PASS_SEL, pass_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXTURE, texture_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+		ImagesLoader::waitAsyncLoads();
 
 		wxImage * icons[] =
 		{
-			ImagesLoader::GetBitmap( eBMP_MATERIAL ),
-			ImagesLoader::GetBitmap( eBMP_MATERIAL_SEL ),
-			ImagesLoader::GetBitmap( eBMP_PASS ),
-			ImagesLoader::GetBitmap( eBMP_PASS_SEL ),
-			ImagesLoader::GetBitmap( eBMP_TEXTURE ),
-			ImagesLoader::GetBitmap( eBMP_TEXTURE_SEL ),
+			ImagesLoader::getBitmap( eBMP_MATERIAL ),
+			ImagesLoader::getBitmap( eBMP_MATERIAL_SEL ),
+			ImagesLoader::getBitmap( eBMP_PASS ),
+			ImagesLoader::getBitmap( eBMP_PASS_SEL ),
+			ImagesLoader::getBitmap( eBMP_TEXTURE ),
+			ImagesLoader::getBitmap( eBMP_TEXTURE_SEL ),
 		};
 
 		wxImageList * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
@@ -89,11 +89,11 @@ namespace GuiCommon
 		m_engine = engine;
 		m_scene = &p_scene;
 		wxTreeItemId root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		auto lock = Castor::make_unique_lock( m_engine->GetMaterialCache() );
+		auto lock = castor::makeUniqueLock( m_engine->getMaterialCache() );
 
-		for ( auto pair : m_engine->GetMaterialCache() )
+		for ( auto pair : m_engine->getMaterialCache() )
 		{
-			DoAddMaterial( root, pair.second );
+			doAddMaterial( root, pair.second );
 		}
 	}
 
@@ -102,11 +102,11 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::DoAddMaterial( wxTreeItemId p_id
-		, Castor3D::MaterialSPtr p_material )
+	void MaterialsList::doAddMaterial( wxTreeItemId p_id
+		, castor3d::MaterialSPtr p_material )
 	{
 		wxTreeItemId id = AppendItem( p_id
-			, p_material->GetName()
+			, p_material->getName()
 			, eBMP_MATERIAL - eBMP_MATERIAL
 			, eBMP_MATERIAL_SEL - eBMP_MATERIAL
 			, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable()
@@ -115,13 +115,13 @@ namespace GuiCommon
 
 		for ( auto pass : *p_material )
 		{
-			DoAddPass( id, index++, pass );
+			doAddPass( id, index++, pass );
 		}
 	}
 
-	void MaterialsList::DoAddPass( wxTreeItemId p_id
+	void MaterialsList::doAddPass( wxTreeItemId p_id
 		, uint32_t p_index
-		, Castor3D::PassSPtr p_pass )
+		, castor3d::PassSPtr p_pass )
 	{
 		wxTreeItemId id = AppendItem( p_id
 			, wxString( _( "Pass " ) ) << p_index
@@ -134,14 +134,14 @@ namespace GuiCommon
 
 		for ( auto unit : *p_pass )
 		{
-			DoAddTexture( id, index++, unit, p_pass->GetType() );
+			doAddTexture( id, index++, unit, p_pass->getType() );
 		}
 	}
 
-	void MaterialsList::DoAddTexture( wxTreeItemId p_id
+	void MaterialsList::doAddTexture( wxTreeItemId p_id
 		, uint32_t p_index
-		, Castor3D::TextureUnitSPtr p_texture
-		, Castor3D::MaterialType p_type )
+		, castor3d::TextureUnitSPtr p_texture
+		, castor3d::MaterialType p_type )
 	{
 		wxTreeItemId id = AppendItem( p_id
 			, wxString( _( "Texture Unit " ) ) << p_index
@@ -151,9 +151,9 @@ namespace GuiCommon
 				, p_texture
 				, p_type ) );
 
-		if ( p_texture->GetRenderTarget() )
+		if ( p_texture->getRenderTarget() )
 		{
-			RenderTargetSPtr target = p_texture->GetRenderTarget();
+			RenderTargetSPtr target = p_texture->getRenderTarget();
 
 			if ( target )
 			{
@@ -183,7 +183,7 @@ namespace GuiCommon
 	void MaterialsList::OnSelectItem( wxTreeEvent & p_event )
 	{
 		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
-		m_propertiesHolder->SetPropertyData( data );
+		m_propertiesHolder->setPropertyData( data );
 		p_event.Skip();
 	}
 
@@ -196,28 +196,28 @@ namespace GuiCommon
 
 	//void MaterialsList::AddItem( String const & p_strMaterialName )
 	//{
-	//	MaterialSPtr pMaterial = m_engine->GetMaterialCache().find( p_strMaterialName );
-	//	int iIndex = m_pListImages->GetImageCount();
+	//	MaterialSPtr pMaterial = m_engine->getMaterialCache().find( p_strMaterialName );
+	//	int iIndex = m_pListImages->getImageCount();
 	//	wxListItem item;
-	//	item.SetColumn( 0 );
-	//	item.SetMask( wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE );
-	//	item.SetId( iIndex );
-	//	item.SetImage( iIndex );
-	//	item.SetAlign( wxLIST_FORMAT_LEFT );
-	//	item.SetText( p_strMaterialName );
-	//	item.SetWidth( m_iImgWidth + 2 );
+	//	item.setColumn( 0 );
+	//	item.setMask( wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE );
+	//	item.setId( iIndex );
+	//	item.setImage( iIndex );
+	//	item.setAlign( wxLIST_FORMAT_LEFT );
+	//	item.setText( p_strMaterialName );
+	//	item.setWidth( m_iImgWidth + 2 );
 	//	wxImage * pImage = CreateMaterialImage( pMaterial, m_iImgWidth, m_iImgWidth );
 	//	wxBitmap bitmap( * pImage );
-	//	m_pListImages->Add( bitmap );
+	//	m_pListImages->add( bitmap );
 	//	m_arrayImages.push_back( pImage );
 	//
 	//	if ( InsertItem( item ) == -1 )
 	//	{
-	//		Logger::LogWarning( cuT( "MaterialsList::AddItem - Item not inserted" ) );
+	//		Logger::logWarning( cuT( "MaterialsList::AddItem - Item not inserted" ) );
 	//	}
 	//	else
 	//	{
-	//		SetItemColumnImage( iIndex, 0, iIndex );
+	//		setItemColumnImage( iIndex, 0, iIndex );
 	//	}
 	//}
 	//
@@ -228,9 +228,9 @@ namespace GuiCommon
 	//
 	//	if ( p_material )
 	//	{
-	//		if ( p_material->GetPassCount() )
+	//		if ( p_material->getPassCount() )
 	//		{
-	//			wxImage * pPassImage = CreatePassImage( p_material->GetPass( 0 ), p_width, p_height );
+	//			wxImage * pPassImage = CreatePassImage( p_material->getPass( 0 ), p_width, p_height );
 	//			wxBitmap bmpPass( *pPassImage, 32 );
 	//			dcReturn.DrawBitmap( bmpPass, 0, 0, true );
 	//			delete pPassImage;
@@ -274,17 +274,17 @@ namespace GuiCommon
 	//		double dStep = dMidRadius1;
 	//		double dX, dY;
 	//		double dRadius = 0;
-	//		p_pass->GetDiffuse().red().convert_to( byRm );
-	//		p_pass->GetDiffuse().green().convert_to( byGm );
-	//		p_pass->GetDiffuse().blue().convert_to( byBm );
-	//		p_pass->GetSpecular().red().convert_to( byRc );
-	//		p_pass->GetSpecular().green().convert_to( byGc );
-	//		p_pass->GetSpecular().blue().convert_to( byBc );
+	//		p_pass->getDiffuse().red().convertTo( byRm );
+	//		p_pass->getDiffuse().green().convertTo( byGm );
+	//		p_pass->getDiffuse().blue().convertTo( byBm );
+	//		p_pass->getSpecular().red().convertTo( byRc );
+	//		p_pass->getSpecular().green().convertTo( byGc );
+	//		p_pass->getSpecular().blue().convertTo( byBc );
 	//
-	//		if ( p_pass->GetTextureUnitsCount() )
+	//		if ( p_pass->getTextureUnitsCount() )
 	//		{
 	//			byA = 127;
-	//			wxImage * pImage = CreateTextureUnitImage( p_pass->GetTextureUnit( TextureChannel::eDiffuse ), p_width, p_height );
+	//			wxImage * pImage = CreateTextureUnitImage( p_pass->getTextureUnit( TextureChannel::eDiffuse ), p_width, p_height );
 	//
 	//			if ( pImage )
 	//			{
@@ -324,8 +324,8 @@ namespace GuiCommon
 	//					//l_byA = uint8_t( ((dMaxRadius - dRadius) * double( byAm ) / dStep) +  ((dRadius - dMidRadius2) * double( byAe ) / dStep) );
 	//				}
 	//
-	//				pMask->SetRGB( x, y, byR, byG, byB );
-	//				pMask->SetAlpha( x, y, byA / 2 );
+	//				pMask->setRGB( x, y, byR, byG, byB );
+	//				pMask->setAlpha( x, y, byA / 2 );
 	//			}
 	//		}
 	//
@@ -349,7 +349,7 @@ namespace GuiCommon
 	//
 	//		try
 	//		{
-	//			if ( bmp.IsOk() )
+	//			if ( bmp.isOk() )
 	//			{
 	//				result = new wxImage( bmp.ConvertToImage() );
 	//				result->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
@@ -357,7 +357,7 @@ namespace GuiCommon
 	//		}
 	//		catch ( ... )
 	//		{
-	//			Logger::LogWarning( cuT( "MaterialsList::CreateTextureUnitImage" ) );
+	//			Logger::logWarning( cuT( "MaterialsList::CreateTextureUnitImage" ) );
 	//		}
 	//	}
 	//

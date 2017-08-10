@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,10 +41,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct CacheTraits< FrameListener, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< FrameListener >( KeyType const & ) >;
 		using Merger = std::function< void( CacheBase< FrameListener, KeyType > const &
-											, Castor::Collection< FrameListener, KeyType > &
+											, castor::Collection< FrameListener, KeyType > &
 											, std::shared_ptr< FrameListener > ) >;
 	};
 }

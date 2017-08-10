@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "ContainerBox.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -120,7 +120,7 @@ namespace Castor
 		 *\param[in]	p_center	Le centre
 		 *\param[in]	p_radius	Le rayon
 		 */
-		CU_API void Load( Point3r const & p_center, real p_radius );
+		CU_API void load( Point3r const & p_center, real p_radius );
 		/**
 		 *\~english
 		 *\brief		Reinitialises the sphere box from a CubeBox
@@ -129,7 +129,7 @@ namespace Castor
 		 *\brief		Réinitialise à partir d'une CubeBox
 		 *\param[in]	p_box	La CubeBox
 		 */
-		CU_API void Load( CubeBox const & p_box );
+		CU_API void load( CubeBox const & p_box );
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is within the container, id est inside it but not on it's limits
@@ -140,7 +140,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est dans le container
 		 */
-		CU_API virtual bool IsWithin( Point3r const & p_v );
+		CU_API virtual bool isWithin( Point3r const & p_v );
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within
@@ -151,7 +151,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est sur la limite
 		 */
-		CU_API virtual bool IsOnLimits( Point3r const & p_v );
+		CU_API virtual bool isOnLimits( Point3r const & p_v );
 		/**
 		 *\~english
 		 *\brief		Retrieves the radius
@@ -160,7 +160,7 @@ namespace Castor
 		 *\brief		Récupère le rayon
 		 *\return		Le rayon
 		 */
-		inline real	GetRadius()const
+		inline real getRadius()const
 		{
 			return m_radius;
 		}

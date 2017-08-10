@@ -3,40 +3,40 @@
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	void SubmeshUtils::ComputeFacesFromPolygonVertex( Submesh & p_submesh )
+	void SubmeshUtils::computeFacesFromPolygonVertex( Submesh & p_submesh )
 	{
-		auto & points = p_submesh.GetPoints();
+		auto & points = p_submesh.getPoints();
 
 		if ( points.size() )
 		{
 			BufferElementGroupSPtr v1 = points[0];
 			BufferElementGroupSPtr v2 = points[1];
 			BufferElementGroupSPtr v3 = points[2];
-			p_submesh.AddFace( 0, 1, 2 );
-			Vertex::SetTexCoord( v1, 0.0, 0.0 );
-			Vertex::SetTexCoord( v2, 0.0, 0.0 );
-			Vertex::SetTexCoord( v3, 0.0, 0.0 );
+			p_submesh.addFace( 0, 1, 2 );
+			Vertex::setTexCoord( v1, 0.0, 0.0 );
+			Vertex::setTexCoord( v2, 0.0, 0.0 );
+			Vertex::setTexCoord( v3, 0.0, 0.0 );
 
 			for ( uint32_t i = 2; i < uint32_t( points.size() - 1 ); i++ )
 			{
 				v2 = points[i];
 				v3 = points[i + 1];
-				p_submesh.AddFace( 0, i, i + 1 );
-				Vertex::SetTexCoord( v2, 0.0, 0.0 );
-				Vertex::SetTexCoord( v3, 0.0, 0.0 );
+				p_submesh.addFace( 0, i, i + 1 );
+				Vertex::setTexCoord( v2, 0.0, 0.0 );
+				Vertex::setTexCoord( v3, 0.0, 0.0 );
 			}
 		}
 	}
 
-	void SubmeshUtils::ComputeNormals( Submesh & p_submesh
+	void SubmeshUtils::computeNormals( Submesh & p_submesh
 		, bool p_reverted )
 	{
-		auto & points = p_submesh.GetPoints();
-		auto & faces = p_submesh.GetFaces();
+		auto & points = p_submesh.getPoints();
+		auto & faces = p_submesh.getFaces();
 
 		Point3r vec2m1;
 		Point3r vec3m1;
@@ -57,8 +57,8 @@ namespace Castor3D
 		// First we flush normals and tangents
 		for ( auto & pt : points )
 		{
-			Vertex::SetNormal( pt, pt1 );
-			Vertex::SetTangent( pt, pt1 );
+			Vertex::setNormal( pt, pt1 );
+			Vertex::setTangent( pt, pt1 );
 		}
 
 		Coords3r coord;
@@ -71,24 +71,24 @@ namespace Castor3D
 				pVtx1 = points[face[0]];
 				pVtx2 = points[face[1]];
 				pVtx3 = points[face[2]];
-				Vertex::GetPosition( pVtx1, pt1 );
-				Vertex::GetPosition( pVtx2, pt2 );
-				Vertex::GetPosition( pVtx3, pt3 );
-				Vertex::GetTexCoord( pVtx1, uv1 );
-				Vertex::GetTexCoord( pVtx2, uv2 );
-				Vertex::GetTexCoord( pVtx3, uv3 );
+				Vertex::getPosition( pVtx1, pt1 );
+				Vertex::getPosition( pVtx2, pt2 );
+				Vertex::getPosition( pVtx3, pt3 );
+				Vertex::getTexCoord( pVtx1, uv1 );
+				Vertex::getTexCoord( pVtx2, uv2 );
+				Vertex::getTexCoord( pVtx3, uv3 );
 				vec2m1 = pt2 - pt1;
 				vec3m1 = pt3 - pt1;
 				tex2m1 = uv2 - uv1;
 				tex3m1 = uv3 - uv1;
 				vFaceNormal = -( vec3m1 ^ vec2m1 );
 				vFaceTangent = ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] );
-				Vertex::GetNormal( pVtx1, coord ) += vFaceNormal;
-				Vertex::GetNormal( pVtx2, coord ) += vFaceNormal;
-				Vertex::GetNormal( pVtx3, coord ) += vFaceNormal;
-				Vertex::GetTangent( pVtx1, coord ) += vFaceTangent;
-				Vertex::GetTangent( pVtx2, coord ) += vFaceTangent;
-				Vertex::GetTangent( pVtx3, coord ) += vFaceTangent;
+				Vertex::getNormal( pVtx1, coord ) += vFaceNormal;
+				Vertex::getNormal( pVtx2, coord ) += vFaceNormal;
+				Vertex::getNormal( pVtx3, coord ) += vFaceNormal;
+				Vertex::getTangent( pVtx1, coord ) += vFaceTangent;
+				Vertex::getTangent( pVtx2, coord ) += vFaceTangent;
+				Vertex::getTangent( pVtx3, coord ) += vFaceTangent;
 			}
 		}
 		else
@@ -98,24 +98,24 @@ namespace Castor3D
 				pVtx1 = points[face[0]];
 				pVtx2 = points[face[1]];
 				pVtx3 = points[face[2]];
-				Vertex::GetPosition( pVtx1, pt1 );
-				Vertex::GetPosition( pVtx2, pt2 );
-				Vertex::GetPosition( pVtx3, pt3 );
-				Vertex::GetTexCoord( pVtx1, uv1 );
-				Vertex::GetTexCoord( pVtx2, uv2 );
-				Vertex::GetTexCoord( pVtx3, uv3 );
+				Vertex::getPosition( pVtx1, pt1 );
+				Vertex::getPosition( pVtx2, pt2 );
+				Vertex::getPosition( pVtx3, pt3 );
+				Vertex::getTexCoord( pVtx1, uv1 );
+				Vertex::getTexCoord( pVtx2, uv2 );
+				Vertex::getTexCoord( pVtx3, uv3 );
 				vec2m1 = pt2 - pt1;
 				vec3m1 = pt3 - pt1;
 				tex2m1 = uv2 - uv1;
 				tex3m1 = uv3 - uv1;
 				vFaceNormal = vec3m1 ^ vec2m1;
 				vFaceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
-				Vertex::GetNormal( pVtx1, coord ) += vFaceNormal;
-				Vertex::GetNormal( pVtx2, coord ) += vFaceNormal;
-				Vertex::GetNormal( pVtx3, coord ) += vFaceNormal;
-				Vertex::GetTangent( pVtx1, coord ) += vFaceTangent;
-				Vertex::GetTangent( pVtx2, coord ) += vFaceTangent;
-				Vertex::GetTangent( pVtx3, coord ) += vFaceTangent;
+				Vertex::getNormal( pVtx1, coord ) += vFaceNormal;
+				Vertex::getNormal( pVtx2, coord ) += vFaceNormal;
+				Vertex::getNormal( pVtx3, coord ) += vFaceNormal;
+				Vertex::getTangent( pVtx1, coord ) += vFaceTangent;
+				Vertex::getTangent( pVtx2, coord ) += vFaceTangent;
+				Vertex::getTangent( pVtx3, coord ) += vFaceTangent;
 			}
 		}
 
@@ -123,17 +123,17 @@ namespace Castor3D
 		for ( auto vtx : points )
 		{
 			Coords3r value;
-			Vertex::GetNormal( vtx, value );
+			Vertex::getNormal( vtx, value );
 			point::normalise( value );
-			Vertex::GetTangent( vtx, value );
+			Vertex::getTangent( vtx, value );
 			point::normalise( value );
 		}
 	}
 
-	void SubmeshUtils::ComputeNormals( Submesh & p_submesh
+	void SubmeshUtils::computeNormals( Submesh & p_submesh
 		, Face const & p_face )
 	{
-		auto & points = p_submesh.GetPoints();
+		auto & points = p_submesh.getPoints();
 		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
 		Point3r vec2m1;
 		Point3r vec3m1;
@@ -144,22 +144,22 @@ namespace Castor3D
 		pVtx1 = points[p_face[0]];
 		pVtx2 = points[p_face[1]];
 		pVtx3 = points[p_face[2]];
-		Vertex::GetPosition( pVtx1, pt1 );
-		Vertex::GetPosition( pVtx2, pt2 );
-		Vertex::GetPosition( pVtx3, pt3 );
+		Vertex::getPosition( pVtx1, pt1 );
+		Vertex::getPosition( pVtx2, pt2 );
+		Vertex::getPosition( pVtx3, pt3 );
 		vec2m1 = pt2 - pt1;
 		vec3m1 = pt3 - pt1;
-		vFaceNormal = point::get_normalised( vec2m1 ^ vec3m1 );
-		Vertex::SetNormal( pVtx1, vFaceNormal );
-		Vertex::SetNormal( pVtx2, vFaceNormal );
-		Vertex::SetNormal( pVtx3, vFaceNormal );
-		ComputeTangents( p_submesh, p_face );
+		vFaceNormal = point::getNormalised( vec2m1 ^ vec3m1 );
+		Vertex::setNormal( pVtx1, vFaceNormal );
+		Vertex::setNormal( pVtx2, vFaceNormal );
+		Vertex::setNormal( pVtx3, vFaceNormal );
+		computeTangents( p_submesh, p_face );
 	}
 
-	void SubmeshUtils::ComputeTangents( Submesh & p_submesh
+	void SubmeshUtils::computeTangents( Submesh & p_submesh
 		, Face const & p_face )
 	{
-		auto & points = p_submesh.GetPoints();
+		auto & points = p_submesh.getPoints();
 		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
 		Point3r vec2m1;
 		Point3r vec3m1;
@@ -175,26 +175,26 @@ namespace Castor3D
 		pVtx1 = points[p_face[0]];
 		pVtx2 = points[p_face[1]];
 		pVtx3 = points[p_face[2]];
-		Vertex::GetPosition( pVtx1, pt1 );
-		Vertex::GetPosition( pVtx2, pt2 );
-		Vertex::GetPosition( pVtx3, pt3 );
-		Vertex::GetTexCoord( pVtx1, uv1 );
-		Vertex::GetTexCoord( pVtx2, uv2 );
-		Vertex::GetTexCoord( pVtx3, uv3 );
+		Vertex::getPosition( pVtx1, pt1 );
+		Vertex::getPosition( pVtx2, pt2 );
+		Vertex::getPosition( pVtx3, pt3 );
+		Vertex::getTexCoord( pVtx1, uv1 );
+		Vertex::getTexCoord( pVtx2, uv2 );
+		Vertex::getTexCoord( pVtx3, uv3 );
 		vec2m1 = pt2 - pt1;
 		vec3m1 = pt3 - pt1;
 		tex2m1 = uv2 - uv1;
 		tex3m1 = uv3 - uv1;
-		vFaceTangent = point::get_normalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
-		Vertex::SetTangent( pVtx1, vFaceTangent );
-		Vertex::SetTangent( pVtx2, vFaceTangent );
-		Vertex::SetTangent( pVtx3, vFaceTangent );
+		vFaceTangent = point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
+		Vertex::setTangent( pVtx1, vFaceTangent );
+		Vertex::setTangent( pVtx2, vFaceTangent );
+		Vertex::setTangent( pVtx3, vFaceTangent );
 	}
 
-	void SubmeshUtils::ComputeTangentsFromNormals( Submesh & p_submesh )
+	void SubmeshUtils::computeTangentsFromNormals( Submesh & p_submesh )
 	{
-		auto & points = p_submesh.GetPoints();
-		auto & faces = p_submesh.GetFaces();
+		auto & points = p_submesh.getPoints();
+		auto & faces = p_submesh.getFaces();
 		Point3rArray arrayTangents( points.size() );
 
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
@@ -209,12 +209,12 @@ namespace Castor3D
 			Point3r uv1;
 			Point3r uv2;
 			Point3r uv3;
-			Vertex::GetPosition( pVtx1, pt1 );
-			Vertex::GetPosition( pVtx2, pt2 );
-			Vertex::GetPosition( pVtx3, pt3 );
-			Vertex::GetTexCoord( pVtx1, uv1 );
-			Vertex::GetTexCoord( pVtx2, uv2 );
-			Vertex::GetTexCoord( pVtx3, uv3 );
+			Vertex::getPosition( pVtx1, pt1 );
+			Vertex::getPosition( pVtx2, pt2 );
+			Vertex::getPosition( pVtx3, pt3 );
+			Vertex::getTexCoord( pVtx1, uv1 );
+			Vertex::getTexCoord( pVtx2, uv2 );
+			Vertex::getTexCoord( pVtx3, uv3 );
 			Point3r vec2m1 = pt2 - pt1;
 			Point3r vec3m1 = pt3 - pt1;
 			Point3r vec3m2 = pt3 - pt2;
@@ -243,39 +243,39 @@ namespace Castor3D
 		for ( auto & value : arrayTangents )
 		{
 			Point3r normal;
-			Vertex::GetNormal( points[i], normal );
-			Point3r tangent = point::get_normalised( value );
+			Vertex::getNormal( points[i], normal );
+			Point3r tangent = point::getNormalised( value );
 			tangent -= normal * point::dot( tangent, normal );
 			Point3r bitangent = normal ^ tangent;
-			Vertex::SetTangent( points[i], tangent );
-			Vertex::SetBitangent( points[i], bitangent );
+			Vertex::setTangent( points[i], tangent );
+			Vertex::setBitangent( points[i], bitangent );
 			i++;
 		}
 	}
 
-	void SubmeshUtils::ComputeTangentsFromBitangents( Submesh & p_submesh )
+	void SubmeshUtils::computeTangentsFromBitangents( Submesh & p_submesh )
 	{
-		for ( auto & point : p_submesh.GetPoints() )
+		for ( auto & point : p_submesh.getPoints() )
 		{
 			Point3r normal;
 			Point3r bitangent;
-			Vertex::GetNormal( point, normal );
-			Vertex::GetBitangent( point, bitangent );
+			Vertex::getNormal( point, normal );
+			Vertex::getBitangent( point, bitangent );
 			Point3r tangent = normal ^ bitangent;
-			Vertex::SetTangent( point, tangent );
+			Vertex::setTangent( point, tangent );
 		}
 	}
 
-	void SubmeshUtils::ComputeBitangents( Submesh & p_submesh )
+	void SubmeshUtils::computeBitangents( Submesh & p_submesh )
 	{
-		for ( auto & point : p_submesh.GetPoints() )
+		for ( auto & point : p_submesh.getPoints() )
 		{
 			Point3r normal;
 			Point3r tangent;
-			Vertex::GetNormal( point, normal );
-			Vertex::GetTangent( point, tangent );
+			Vertex::getNormal( point, normal );
+			Vertex::getTangent( point, tangent );
 			Point3r bitangent = tangent ^ normal;
-			Vertex::SetBitangent( point, bitangent );
+			Vertex::setBitangent( point, bitangent );
 		}
 	}
 }

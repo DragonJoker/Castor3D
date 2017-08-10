@@ -25,32 +25,32 @@ SOFTWARE.
 
 #include "Shader/UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	class GpInfoUbo
 	{
 	public:
 		GpInfoUbo( Engine & engine );
 		~GpInfoUbo();
-		void Update( Castor::Size const & p_size
+		void update( castor::Size const & p_size
 			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj );
+			, castor::Matrix4x4r const & p_invViewProj
+			, castor::Matrix4x4r const & p_invView
+			, castor::Matrix4x4r const & p_invProj );
 
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const Castor::String GPInfo;
-		static const Castor::String InvViewProj;
-		static const Castor::String InvView;
-		static const Castor::String InvProj;
-		static const Castor::String View;
-		static const Castor::String Proj;
-		static const Castor::String RenderSize;
+		static const castor::String GPInfo;
+		static const castor::String InvViewProj;
+		static const castor::String InvView;
+		static const castor::String InvProj;
+		static const castor::String View;
+		static const castor::String Proj;
+		static const castor::String RenderSize;
 		static constexpr uint32_t BindingPoint = 4u;
 
 	private:
@@ -79,13 +79,13 @@ namespace Castor3D
 }
 
 #define UBO_GPINFO( p_writer )\
-	GLSL::Ubo gpInfo{ p_writer, Castor3D::GpInfoUbo::GPInfo, Castor3D::GpInfoUbo::BindingPoint };\
-	auto c3d_mtxInvViewProj = gpInfo.DeclMember< GLSL::Mat4 >( Castor3D::GpInfoUbo::InvViewProj );\
-	auto c3d_mtxInvView = gpInfo.DeclMember< GLSL::Mat4 >( Castor3D::GpInfoUbo::InvView );\
-	auto c3d_mtxInvProj = gpInfo.DeclMember< GLSL::Mat4 >( Castor3D::GpInfoUbo::InvProj );\
-	auto c3d_mtxGView = gpInfo.DeclMember< GLSL::Mat4 >( Castor3D::GpInfoUbo::View );\
-	auto c3d_mtxGProj = gpInfo.DeclMember< GLSL::Mat4 >( Castor3D::GpInfoUbo::Proj );\
-	auto c3d_renderSize = gpInfo.DeclMember< GLSL::Vec2 >( Castor3D::GpInfoUbo::RenderSize );\
-	gpInfo.End()
+	GLSL::Ubo gpInfo{ p_writer, castor3d::GpInfoUbo::GPInfo, castor3d::GpInfoUbo::BindingPoint };\
+	auto c3d_mtxInvViewProj = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::InvViewProj );\
+	auto c3d_mtxInvView = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::InvView );\
+	auto c3d_mtxInvProj = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::InvProj );\
+	auto c3d_mtxGView = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::View );\
+	auto c3d_mtxGProj = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::Proj );\
+	auto c3d_renderSize = gpInfo.declMember< GLSL::Vec2 >( castor3d::GpInfoUbo::RenderSize );\
+	gpInfo.end()
 
 #endif

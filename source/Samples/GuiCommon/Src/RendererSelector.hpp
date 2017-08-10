@@ -43,14 +43,14 @@ namespace GuiCommon
 		}	eID;
 
 	public:
-		RendererSelector( Castor3D::Engine * engine, wxWindow * p_parent, wxString const & p_strTitle );
+		RendererSelector( castor3d::Engine * engine, wxWindow * p_parent, wxString const & p_strTitle );
 		virtual ~RendererSelector();
 
-		Castor::String GetSelectedRenderer()const;
+		castor::String getSelectedRenderer()const;
 
 	private:
-		void DoDraw( wxDC * p_pDC );
-		void DoSelect();
+		void doDraw( wxDC * p_pDC );
+		void doSelect();
 
 	protected:
 		DECLARE_EVENT_TABLE()
@@ -62,7 +62,7 @@ namespace GuiCommon
 	private:
 		wxImage * m_pImgCastor;
 		wxListBox * m_pListRenderers;
-		Castor3D::Engine * m_engine;
+		castor3d::Engine * m_engine;
 	};
 }
 

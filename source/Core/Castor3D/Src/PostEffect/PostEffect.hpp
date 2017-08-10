@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -44,8 +44,8 @@ namespace Castor3D
 				<br />Les effets post rendu sont appliqués de manière cumulative.
 	*/
 	class PostEffect
-		: public Castor::OwnedBy< RenderSystem >
-		, public Castor::Named
+		: public castor::OwnedBy< RenderSystem >
+		, public castor::Named
 	{
 	protected:
 		/*!
@@ -69,7 +69,7 @@ namespace Castor3D
 			 *\brief		Constructeur.
 			 *\param[in]	engine	Le moteur.
 			 */
-			C3D_API PostEffectSurface( Castor3D::Engine & engine );
+			C3D_API PostEffectSurface( castor3d::Engine & engine );
 			/**
 			 *\~english
 			 *\brief		Initialises the surface.
@@ -84,27 +84,27 @@ namespace Castor3D
 			 *\param[in]	p_index			L'index de la surface.
 			 *\param[in]	p_sampler		L'échantillonneur de la surface.
 			 */
-			C3D_API bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
+			C3D_API bool initialise( castor3d::RenderTarget & p_renderTarget, castor::Size const & p_size, uint32_t p_index, castor3d::SamplerSPtr p_sampler );
 			/**
 			 *\~english
 			 *\brief		Cleans up the surface.
 			 *\~french
 			 *\brief		Nettoie la surface.
 			 */
-			C3D_API void Cleanup();
+			C3D_API void cleanup();
 
 			//!\~english	The surface framebuffer.
 			//!\~french		Le framebuffer de la surface.
-			Castor3D::FrameBufferSPtr m_fbo;
+			castor3d::FrameBufferSPtr m_fbo;
 			//!\~english	The surface colour texture.
 			//!\~french		La texture couleur de la surface.
-			Castor3D::TextureUnit m_colourTexture;
+			castor3d::TextureUnit m_colourTexture;
 			//!\~english	The attach between framebuffer and texture.
 			//!\~french		L'attache entre la texture et le framebuffer.
-			Castor3D::TextureAttachmentSPtr m_colourAttach;
+			castor3d::TextureAttachmentSPtr m_colourAttach;
 			//!\~english	The surface dimensions.
 			//!\~french		Les dimensions de la surface.
-			Castor::Size m_size;
+			castor::Size m_size;
 		};
 
 	public:
@@ -122,7 +122,7 @@ namespace Castor3D
 		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	p_params		Les paramètres optionnels.
 		 */
-		C3D_API PostEffect( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_params );
+		C3D_API PostEffect( castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Ecrit l'effet dans un fichier texte.
 		 *\param[in]	p_file	Le fichier.
 		 */
-		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		C3D_API bool writeInto( castor::TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -147,14 +147,14 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool Initialise() = 0;
+		C3D_API virtual bool initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void Cleanup() = 0;
+		C3D_API virtual void cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief			Render function, applies the effect to the given framebuffer.
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\param[in,out]	p_framebuffer	Le tampon d'image.
 		 *\return			\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Apply( FrameBuffer & p_framebuffer ) = 0;
+		C3D_API virtual bool apply( FrameBuffer & p_framebuffer ) = 0;
 
 	private:
 		/**
@@ -176,7 +176,7 @@ namespace Castor3D
 		 *\brief		Ecrit l'effet dans un fichier texte.
 		 *\param[in]	p_file	Le fichier.
 		 */
-		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
+		C3D_API virtual bool doWriteInto( castor::TextFile & p_file ) = 0;
 
 	protected:
 		//!\~english	The render target to which this effect is attached.

@@ -28,7 +28,7 @@ SOFTWARE.
 #include <algorithm>
 #include <cstddef>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -57,7 +57,7 @@ namespace Castor
 		 *\brief		Initialise le pool avec le nombre d'objets donné.
 		 *\param[in]	p_count	Le compte des objets, détermine aussi de combien le pool va grandir, s'il est vide.
 		 */
-		void Initialise( size_t p_count )noexcept
+		void initialise( size_t p_count )noexcept
 		{
 			m_step = p_count;
 			m_total = 0;
@@ -65,7 +65,7 @@ namespace Castor
 			m_freeIndex = m_free;
 			m_buffers = nullptr;
 			m_buffersEnd = m_buffers;
-			DoCreateBuffer();
+			doCreateBuffer();
 		}
 		/**
 		 *\~english
@@ -73,18 +73,18 @@ namespace Castor
 		 *\~french
 		 *\brief		Nettoie le pool, rapporte les fuites de mémoire.
 		 */
-		void Cleanup()noexcept
+		void cleanup()noexcept
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				ReportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 			}
 
 			delete [] m_free;
 
 			for ( auto buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
 			{
-				MemoryAllocator::Deallocate( buffer->m_data );
+				MemoryAllocator::deallocate( buffer->m_data );
 			}
 
 			m_free = nullptr;
@@ -97,19 +97,19 @@ namespace Castor
 		 *\brief		Gives the address an available chunk.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
-		 *\brief		Donne un chunk mémoire disponible.
+		 *\brief		donne un chunk mémoire disponible.
 		 *\return		nullptr s'il n'y a plus de place disponible, l'adresse mémoire sinon.
 		 */
-		Object * Allocate()noexcept
+		Object * allocate()noexcept
 		{
 			if ( m_freeIndex == m_free )
 			{
-				DoCreateBuffer();
+				doCreateBuffer();
 			}
 
 			if ( m_freeIndex == m_free )
 			{
-				ReportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
+				reportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
 				return nullptr;
 			}
 
@@ -127,13 +127,13 @@ namespace Castor
 		 *\param[in]	p_space	La mémoire à libérer.
 		 *\return		true si la mémoire faisait partie du pool.
 		 */
-		bool Deallocate( void * p_space )noexcept
+		bool deallocate( void * p_space )noexcept
 		{
 			if ( p_space )
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					ReportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
@@ -143,7 +143,7 @@ namespace Castor
 														return ptrdiff_t( p_space ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( p_space ) < ptrdiff_t( buffer.m_end );
 													} ) )
 				{
-					ReportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
@@ -161,13 +161,13 @@ namespace Castor
 		 *\~french
 		 *\brief		Crée un tampon de la taille donnée à la méthode Initialise.
 		 */
-		void DoCreateBuffer()noexcept
+		void doCreateBuffer()noexcept
 		{
 			m_total += m_step;
 			ptrdiff_t count = m_buffersEnd - m_buffers;
 			m_buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
 			m_buffersEnd = m_buffers + count;
-			m_buffersEnd->m_data = MemoryAllocator::Allocate( m_step * sizeof( Object ) );
+			m_buffersEnd->m_data = MemoryAllocator::allocate( m_step * sizeof( Object ) );
 			m_buffersEnd->m_end = nullptr;
 			auto buffer = m_buffersEnd->m_data;
 			m_free = reinterpret_cast< Object ** >( realloc( m_free, m_total * sizeof( Object * ) ) );

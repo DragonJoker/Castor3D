@@ -12,8 +12,8 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GuiCommon
 {
@@ -35,7 +35,7 @@ namespace GuiCommon
 	}
 
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, Geometry & p_geometry, Submesh & p_submesh )
-		: TreeItemProperty( p_submesh.GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
+		: TreeItemProperty( p_submesh.getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
 		, m_geometry( p_geometry )
 		, m_submesh( p_submesh )
 	{
@@ -60,7 +60,7 @@ namespace GuiCommon
 	{
 	}
 
-	void SubmeshTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void SubmeshTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		wxPGChoices choices;
 		choices.Add( PROPERTY_TOPOLOGY_POINTS );
@@ -75,7 +75,7 @@ namespace GuiCommon
 		choices.Add( PROPERTY_TOPOLOGY_POLYGON );
 		wxString selected;
 
-		switch ( m_submesh.GetTopology() )
+		switch ( m_submesh.getTopology() )
 		{
 		case Topology::ePoints:
 			selected = PROPERTY_TOPOLOGY_POINTS;
@@ -118,12 +118,12 @@ namespace GuiCommon
 			break;
 		}
 
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.GetName() ) ) );
+		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) ) );
 		p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY, PROPERTY_TOPOLOGY, choices ) )->SetValue( selected );
-		p_grid->Append( DoCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_geometry.GetMaterial( m_submesh )->GetName() ) ) );
+		p_grid->Append( doCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_geometry.getMaterial( m_submesh )->getName() ) ) );
 	}
 
-	void SubmeshTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void SubmeshTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * property = p_event.GetProperty();
 
@@ -179,26 +179,26 @@ namespace GuiCommon
 		}
 	}
 
-	void SubmeshTreeItemProperty::OnMaterialChange( Castor::String const & p_name )
+	void SubmeshTreeItemProperty::OnMaterialChange( castor::String const & p_name )
 	{
-		DoApplyChange( [p_name, this]()
+		doApplyChange( [p_name, this]()
 		{
-			auto & cache = m_submesh.GetScene()->GetEngine()->GetMaterialCache();
-			MaterialSPtr material = cache.Find( p_name );
+			auto & cache = m_submesh.getScene()->getEngine()->getMaterialCache();
+			MaterialSPtr material = cache.find( p_name );
 
 			if ( material )
 			{
-				m_geometry.SetMaterial( m_submesh, material );
-				m_geometry.GetScene()->SetChanged();
+				m_geometry.setMaterial( m_submesh, material );
+				m_geometry.getScene()->setChanged();
 			}
 		} );
 	}
 
 	void SubmeshTreeItemProperty::OnTopologyChange( Topology p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_submesh.SetTopology( p_value );
+			m_submesh.setTopology( p_value );
 		} );
 	}
 }

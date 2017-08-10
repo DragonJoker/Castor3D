@@ -1,7 +1,7 @@
 #include "PyGuiCommonPrerequisites.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 using namespace GuiCommon;
 
 BOOST_PYTHON_MODULE( castor_wx )

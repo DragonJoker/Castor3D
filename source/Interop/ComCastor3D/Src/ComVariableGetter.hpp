@@ -28,10 +28,10 @@ SOFTWARE.
 namespace CastorCom
 {
 	template< typename Class, typename Value >
-	struct VariableGetter
+	struct Variablegetter
 	{
 		typedef Value( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
+		Variablegetter( Class * instance, Function function )
 			:	m_instance( instance )
 			,	m_function( function )
 		{
@@ -53,7 +53,7 @@ namespace CastorCom
 			{
 				hr = CComError::DispatchError(
 						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
+						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
 						 cuT( "NULL instance" ),				// This is generally displayed as the title
 						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
 						 0,										// This is the context in the help file
@@ -69,17 +69,17 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename _Class >
-	VariableGetter< Class, Value >
+	Variablegetter< Class, Value >
 	make_getter( _Class * instance, Value( Class::*function )()const )
 	{
-		return VariableGetter< Class, Value >( ( Class * )instance, function );
+		return Variablegetter< Class, Value >( ( Class * )instance, function );
 	}
 
 	template< typename Value >
-	struct StaticGetter
+	struct Staticgetter
 	{
 		typedef std::function< Value() > Function;
-		StaticGetter( Function function )
+		Staticgetter( Function function )
 			: m_function( function )
 		{
 		}
@@ -102,17 +102,17 @@ namespace CastorCom
 	};
 
 	template< typename Value >
-	StaticGetter< Value >
+	Staticgetter< Value >
 	make_static_getter( Value( *function )() )
 	{
-		return StaticGetter< Value >( function );
+		return Staticgetter< Value >( function );
 	}
 
 	template< typename Class, typename Value >
-	struct VariableRefGetter
+	struct VariableRefgetter
 	{
 		typedef Value const & ( Class::*Function )()const;
-		VariableRefGetter( Class * instance, Function function )
+		VariableRefgetter( Class * instance, Function function )
 			:	m_instance( instance )
 			,	m_function( function )
 		{
@@ -134,7 +134,7 @@ namespace CastorCom
 			{
 				hr = CComError::DispatchError(
 						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
+						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
 						 cuT( "NULL instance" ),				// This is generally displayed as the title
 						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
 						 0,										// This is the context in the help file
@@ -150,17 +150,17 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename _Class >
-	VariableRefGetter< Class, Value >
+	VariableRefgetter< Class, Value >
 	make_getter( _Class * instance, Value const & ( Class::*function )()const )
 	{
-		return VariableRefGetter< Class, Value >( ( Class * )instance, function );
+		return VariableRefgetter< Class, Value >( ( Class * )instance, function );
 	}
 
 	template< typename Class, typename Value, typename Index >
-	struct ParameteredVariableGetter
+	struct ParameteredVariablegetter
 	{
 		typedef Value( Class::*Function )( Index )const;
-		ParameteredVariableGetter( Class * instance, Function function, Index index )
+		ParameteredVariablegetter( Class * instance, Function function, Index index )
 			:	m_instance( instance )
 			,	m_function( function )
 			,	m_index( index )
@@ -183,7 +183,7 @@ namespace CastorCom
 			{
 				hr = CComError::DispatchError(
 						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
+						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
 						 cuT( "NULL instance" ),				// This is generally displayed as the title
 						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
 						 0,										// This is the context in the help file
@@ -200,17 +200,17 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename Index, typename _Class, typename _Index >
-	ParameteredVariableGetter< Class, Value, Index >
+	ParameteredVariablegetter< Class, Value, Index >
 	make_getter( _Class * instance, Value( Class::*function )( Index )const, _Index index )
 	{
-		return ParameteredVariableGetter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
+		return ParameteredVariablegetter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
 	}
 
 	template< typename Class, typename Value, typename Index >
-	struct ParameteredRefVariableGetter
+	struct ParameteredRefVariablegetter
 	{
 		typedef Value const & ( Class::*Function )( Index )const;
-		ParameteredRefVariableGetter( Class * instance, Function function, Index index )
+		ParameteredRefVariablegetter( Class * instance, Function function, Index index )
 			:	m_instance( instance )
 			,	m_function( function )
 			,	m_index( index )
@@ -233,7 +233,7 @@ namespace CastorCom
 			{
 				hr = CComError::DispatchError(
 						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
+						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
 						 cuT( "NULL instance" ),				// This is generally displayed as the title
 						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
 						 0,										// This is the context in the help file
@@ -250,18 +250,18 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename Index, typename _Class, typename _Index >
-	ParameteredRefVariableGetter< Class, Value, Index >
+	ParameteredRefVariablegetter< Class, Value, Index >
 	make_getter( _Class * instance, Value const & ( Class::*function )( Index )const, _Index index )
 	{
-		return ParameteredRefVariableGetter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
+		return ParameteredRefVariablegetter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
 	}
 
 #define DECLARE_VARIABLE_VAL_GETTER( ctype, nmspc, type )\
 	template< typename Class >\
-	struct VariableGetter< Class, nmspc::type >\
+	struct Variablegetter< Class, nmspc::type >\
 	{\
 		typedef nmspc::type( Class::*Function )()const;\
-		VariableGetter( Class * instance, Function function )\
+		Variablegetter( Class * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\
 		{\
@@ -293,10 +293,10 @@ namespace CastorCom
 
 #define DECLARE_VARIABLE_REF_GETTER( ctype, nmspc, type )\
 	template< typename Class >\
-	struct VariableRefGetter< Class, Castor::type >\
+	struct VariableRefgetter< Class, castor::type >\
 	{\
 		typedef nmspc::type const & ( Class::*Function )( )const;\
-		VariableRefGetter( Class * instance, Function function )\
+		VariableRefgetter( Class * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\
 		{\
@@ -328,10 +328,10 @@ namespace CastorCom
 
 #define DECLARE_VARIABLE_PTR_GETTER( ctype, nmspc, type )\
 	template< typename Class >\
-	struct VariableGetter< Class, nmspc::type##SPtr >\
+	struct Variablegetter< Class, nmspc::type##SPtr >\
 	{\
 		typedef nmspc::type##SPtr( Class::*Function )( )const;\
-		VariableGetter( Class * instance, Function function )\
+		Variablegetter( Class * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\
 		{\
@@ -346,7 +346,7 @@ namespace CastorCom
 					hr = C##ctype::CreateInstance( value );\
 					if ( hr == S_OK )\
 					{\
-						static_cast< C##ctype * >( *value )->SetInternal( ( m_instance->*m_function )( ) );\
+						static_cast< C##ctype * >( *value )->setInternal( ( m_instance->*m_function )( ) );\
 					}\
 				}\
 			}\
@@ -363,10 +363,10 @@ namespace CastorCom
 
 #define DECLARE_VARIABLE_REF_PARAM_GETTER( ctype, nmspc, type )\
 	template< typename Class >\
-	struct VariableParamGetter\
+	struct VariableParamgetter\
 	{\
 		typedef void ( Class::*Function )( nmspc::type & )const;\
-		VariableParamGetter( Class * instance, Function function )\
+		VariableParamgetter( Class * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\
 		{\
@@ -396,10 +396,10 @@ namespace CastorCom
 		Function m_function;\
 	};\
 	template< typename Class, typename _Class >\
-	VariableParamGetter< Class >\
+	VariableParamgetter< Class >\
 	make_getter( _Class * instance, void ( Class::*function )( nmspc::type & )const )\
 	{\
-		return VariableParamGetter< Class >( ( Class * )instance, function );\
+		return VariableParamgetter< Class >( ( Class * )instance, function );\
 	}
 }
 

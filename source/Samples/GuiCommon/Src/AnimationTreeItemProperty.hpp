@@ -57,7 +57,7 @@ namespace GuiCommon
 		 *\param[in]	p_name		Le nom de l'animation cible.
 		 *\param[in]	p_state		L'état de l'animation cible.
 		 */
-		AnimationTreeItemProperty( Castor3D::Engine * engine, bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, Castor3D::GroupAnimation const & p_anim );
+		AnimationTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectGroupSPtr p_group, castor::String const & p_name, castor3d::GroupAnimation const & p_anim );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -73,7 +73,7 @@ namespace GuiCommon
 		 *\brief		Récupère l'AnimatedObjectGroup.
 		 *\return		La valeur.
 		 */
-		inline Castor3D::AnimatedObjectGroupSPtr GetGroup()
+		inline castor3d::AnimatedObjectGroupSPtr getGroup()
 		{
 			return m_group.lock();
 		}
@@ -85,7 +85,7 @@ namespace GuiCommon
 		 *\brief		Récupère le nom de l'animation.
 		 *\return		La valeur.
 		 */
-		inline Castor::String const & GetName()
+		inline castor::String const & getName()
 		{
 			return m_name;
 		}
@@ -97,7 +97,7 @@ namespace GuiCommon
 		 *\brief		Récupère l'état de l'animation.
 		 *\return		La valeur.
 		 */
-		inline Castor3D::AnimationState GetState()
+		inline castor3d::AnimationState getState()
 		{
 			return m_groupAnim.m_state;
 		}
@@ -109,7 +109,7 @@ namespace GuiCommon
 		 *\brief		Récupère l'état de l'animation.
 		 *\return		La valeur.
 		 */
-		inline float GetScale()
+		inline float getScale()
 		{
 			return m_groupAnim.m_scale;
 		}
@@ -121,20 +121,20 @@ namespace GuiCommon
 		 *\brief		Récupère l'état de l'animation.
 		 *\return		La valeur.
 		 */
-		inline bool IsLooped()
+		inline bool isLooped()
 		{
 			return m_groupAnim.m_looped;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
 		void OnSpeedChange( double p_value );
@@ -142,9 +142,9 @@ namespace GuiCommon
 		bool OnStateChange( wxPGProperty * p_property );
 
 	private:
-		Castor3D::AnimatedObjectGroupWPtr m_group;
-		Castor::String m_name;
-		Castor3D::GroupAnimation m_groupAnim;
+		castor3d::AnimatedObjectGroupWPtr m_group;
+		castor::String m_name;
+		castor3d::GroupAnimation m_groupAnim;
 	};
 }
 

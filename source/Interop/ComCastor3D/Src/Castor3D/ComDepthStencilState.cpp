@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED_STATE = cuT( "The depth stencil state must be initialised" );
+	static const castor::String ERROR_UNINITIALISED_STATE = cuT( "The depth stencil state must be initialised" );
 
 	CDepthStencilState::CDepthStencilState()
 	{
@@ -13,21 +13,21 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CDepthStencilState::SetDepthRange( /* [in] */ double dnear, /* [in] */ double dfar )
+	STDMETHODIMP CDepthStencilState::setDepthRange( /* [in] */ double dnear, /* [in] */ double dfar )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_state )
 		{
 			hr = S_OK;
-			m_state->SetDepthRange( dnear, dfar );
+			m_state->setDepthRange( dnear, dfar );
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,							// This represents the error
-					 IID_IDepthStencilState,			// This is the GUID of component throwing error
-					 cuT( "SetDepthRange" ),			// This is generally displayed as the title
+					 IID_IDepthStencilState,			// This is the GUID of PixelComponents throwing error
+					 cuT( "setDepthRange" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED_STATE.c_str(),	// This is the description
 					 0,									// This is the context in the help file
 					 NULL );

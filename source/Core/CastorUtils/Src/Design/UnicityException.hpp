@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Exception/Exception.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -68,11 +68,18 @@ namespace Castor
 	\brief		Exception d'unicité
 	*/
 	class UnicityException
-		: public Castor::Exception
+		: public castor::Exception
 	{
 	public:
-		UnicityException( UnicityError p_error, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
-			: Exception( STR_UNICITY_ERROR[uint32_t( p_error )] + p_description, p_file, p_function, p_line )
+		UnicityException( UnicityError p_error
+			, std::string const & p_description
+			, char const * p_file
+			, char const * p_function
+			, uint32_t p_line )
+			: Exception( STR_UNICITY_ERROR[uint32_t( p_error )] + p_description
+				, p_file
+				, p_function
+				, p_line )
 		{
 		}
 	};

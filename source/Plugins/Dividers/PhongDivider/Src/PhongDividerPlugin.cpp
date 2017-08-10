@@ -3,7 +3,7 @@
 #include <Engine.hpp>
 #include <Log/Logger.hpp>
 
-using namespace Castor;
+using namespace castor;
 using namespace Phong;
 
 #ifndef CASTOR_PLATFORM_WINDOWS
@@ -18,28 +18,28 @@ using namespace Phong;
 
 extern "C"
 {
-	C3D_Phong_API void GetRequiredVersion( Castor3D::Version * p_version )
+	C3D_Phong_API void getRequiredVersion( castor3d::Version * p_version )
 	{
-		*p_version = Castor3D::Version();
+		*p_version = castor3d::Version();
 	}
 
-	C3D_Phong_API void GetType( Castor3D::PluginType * p_type )
+	C3D_Phong_API void getType( castor3d::PluginType * p_type )
 	{
-		*p_type = Castor3D::PluginType::eDivider;
+		*p_type = castor3d::PluginType::eDivider;
 	}
 
-	C3D_Phong_API void GetName( char const ** p_name )
+	C3D_Phong_API void getName( char const ** p_name )
 	{
 		*p_name = Subdivider::Name.c_str();
 	}
 
-	C3D_Phong_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
+	C3D_Phong_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->GetSubdividerFactory().Register( Subdivider::Type, &Subdivider::Create );
+		engine->getSubdividerFactory().registerType( Subdivider::Type, &Subdivider::create );
 	}
 
-	C3D_Phong_API void OnUnload( Castor3D::Engine * engine )
+	C3D_Phong_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->GetSubdividerFactory().Unregister( Subdivider::Type );
+		engine->getSubdividerFactory().unregisterType( Subdivider::Type );
 	}
 }

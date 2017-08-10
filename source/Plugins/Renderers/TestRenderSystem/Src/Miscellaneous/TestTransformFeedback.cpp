@@ -2,7 +2,7 @@
 
 #include "Render/TestRenderSystem.hpp"
 
-using namespace Castor3D;
+using namespace castor3d;
 
 namespace TestRender
 {
@@ -15,28 +15,28 @@ namespace TestRender
 	{
 	}
 
-	bool TestTransformFeedback::DoInitialise()
+	bool TestTransformFeedback::doInitialise()
 	{
 		return true;
 	}
 
-	void TestTransformFeedback::DoCleanup()
+	void TestTransformFeedback::doCleanup()
 	{
 	}
 
-	void TestTransformFeedback::DoBind()const
+	void TestTransformFeedback::doBind()const
 	{
 	}
 
-	void TestTransformFeedback::DoUnbind()const
+	void TestTransformFeedback::doUnbind()const
 	{
 	}
 
-	void TestTransformFeedback::DoBegin()const
+	void TestTransformFeedback::doBegin()const
 	{
 	}
 
-	void TestTransformFeedback::DoEnd()const
+	void TestTransformFeedback::doEnd()const
 	{
 	}
 }

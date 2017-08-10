@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsPixelFormatTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void TestPixelConversions();

@@ -30,7 +30,7 @@ namespace cpy
 {
 	struct WindowHandleCreatorFromWindow
 	{
-		Castor3D::WindowHandle operator()( wxWindow * p_window )
+		castor3d::WindowHandle operator()( wxWindow * p_window )
 		{
 			return GuiCommon::make_WindowHandle( p_window );
 		}
@@ -38,7 +38,7 @@ namespace cpy
 
 	struct WindowHandleCreatorFromFrame
 	{
-		Castor3D::WindowHandle operator()( wxFrame * p_window )
+		castor3d::WindowHandle operator()( wxFrame * p_window )
 		{
 			return GuiCommon::make_WindowHandle( p_window );
 		}
@@ -53,16 +53,16 @@ namespace boost
 	{
 		namespace detail
 		{
-			inline boost::mpl::vector< Castor3D::WindowHandle, wxWindow * >
+			inline boost::mpl::vector< castor3d::WindowHandle, wxWindow * >
 			get_signature( cpy::WindowHandleCreatorFromWindow, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::WindowHandle, wxWindow * >();
+				return boost::mpl::vector< castor3d::WindowHandle, wxWindow * >();
 			}
 
-			inline boost::mpl::vector< Castor3D::WindowHandle, wxFrame * >
+			inline boost::mpl::vector< castor3d::WindowHandle, wxFrame * >
 			get_signature( cpy::WindowHandleCreatorFromFrame, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::WindowHandle, wxFrame * >();
+				return boost::mpl::vector< castor3d::WindowHandle, wxFrame * >();
 			}
 		}
 	}

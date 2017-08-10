@@ -7,16 +7,16 @@ namespace GuiCommon
 	GradientButton::GradientButton()
 		: wxButton()
 	{
-		DoInitialise();
+		doInitialise();
 	}
 
 	GradientButton::GradientButton( wxWindow * p_parent, wxWindowID p_id, wxString const & p_label, wxPoint const & p_pos, wxSize const & p_size, long p_style, wxValidator const & p_validator, wxString const & p_name )
 		: wxButton( p_parent, p_id, p_label, p_pos, p_size, p_style, p_validator, p_name )
 	{
-		DoInitialise();
+		doInitialise();
 	}
 
-	void GradientButton::DoInitialise()
+	void GradientButton::doInitialise()
 	{
 		m_gradientTopStartColour = INACTIVE_TEXT_COLOUR;
 		m_gradientTopEndColour = BORDER_COLOUR;

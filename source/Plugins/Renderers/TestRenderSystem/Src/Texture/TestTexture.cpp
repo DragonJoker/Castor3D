@@ -4,8 +4,8 @@
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -44,24 +44,24 @@ namespace TestRender
 	{
 	}
 
-	void TestTexture::GenerateMipmaps()const
+	void TestTexture::generateMipmaps()const
 	{
 	}
 
-	bool TestTexture::DoInitialise()
+	bool TestTexture::doInitialise()
 	{
 		return true;
 	}
 
-	void TestTexture::DoCleanup()
+	void TestTexture::doCleanup()
 	{
 	}
 
-	void TestTexture::DoBind( uint32_t p_index )const
+	void TestTexture::doBind( uint32_t p_index )const
 	{
 	}
 
-	void TestTexture::DoUnbind( uint32_t p_index )const
+	void TestTexture::doUnbind( uint32_t p_index )const
 	{
 	}
 }

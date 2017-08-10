@@ -39,20 +39,20 @@ namespace GuiCommon
 			, wxSize const & p_size = wxDefaultSize );
 		~MaterialsList();
 
-		void LoadMaterials( Castor3D::Engine * engine
-			, Castor3D::Scene & p_scene );
+		void LoadMaterials( castor3d::Engine * engine
+			, castor3d::Scene & p_scene );
 		void UnloadMaterials();
 
 	private:
-		void DoAddMaterial( wxTreeItemId p_id
-			, Castor3D::MaterialSPtr p_material );
-		void DoAddPass( wxTreeItemId p_id
+		void doAddMaterial( wxTreeItemId p_id
+			, castor3d::MaterialSPtr p_material );
+		void doAddPass( wxTreeItemId p_id
 			, uint32_t p_index
-			, Castor3D::PassSPtr p_pass );
-		void DoAddTexture( wxTreeItemId p_id
+			, castor3d::PassSPtr p_pass );
+		void doAddTexture( wxTreeItemId p_id
 			, uint32_t p_index
-			, Castor3D::TextureUnitSPtr p_texture
-			, Castor3D::MaterialType p_type );
+			, castor3d::TextureUnitSPtr p_texture
+			, castor3d::MaterialType p_type );
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
@@ -60,8 +60,8 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::Engine * m_engine;
-		Castor3D::Scene * m_scene;
+		castor3d::Engine * m_engine;
+		castor3d::Scene * m_scene;
 		PropertiesHolder * m_propertiesHolder;
 	};
 }

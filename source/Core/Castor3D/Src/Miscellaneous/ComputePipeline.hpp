@@ -35,7 +35,7 @@ SOFTWARE.
 
 #include <stack>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -47,7 +47,7 @@ namespace Castor3D
 	\brief		Le pipeline de calcul.
 	*/
 	class ComputePipeline
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -74,7 +74,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie le pipeline.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Runs the computation.
@@ -87,8 +87,8 @@ namespace Castor3D
 		 *\param[in]	p_workgroupSize	La taille d'un groupe de travail.
 		 *\param[in]	p_barriers		Les barri�res m�moire.
 		 */
-		C3D_API virtual void Run( Castor::Point3ui const & p_workgroups
-			, Castor::Point3ui const & p_workgroupSize
+		C3D_API virtual void run( castor::Point3ui const & p_workgroups
+			, castor::Point3ui const & p_workgroupSize
 			, MemoryBarriers const & p_barriers )const = 0;
 		/**
 		 *\~english
@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline ShaderProgram & GetProgram()
+		inline ShaderProgram & getProgram()
 		{
 			return m_program;
 		}

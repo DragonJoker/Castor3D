@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -69,6 +69,6 @@ namespace Castor
 	};
 }
 
-#	define CASTOR_TRACK( fn ) Castor::BlockTracker tracker##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#	define CASTOR_TRACK( fn ) castor::BlockTracker tracker##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
 
 #endif

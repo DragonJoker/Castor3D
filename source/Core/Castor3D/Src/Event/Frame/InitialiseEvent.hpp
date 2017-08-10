@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <Log/Logger.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -108,9 +108,9 @@ namespace Castor3D
 		 *\remarks		Initialise l'objet
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
-		virtual bool Apply()
+		virtual bool apply()
 		{
-			m_object.Initialise();
+			m_object.initialise();
 			return true;
 		}
 

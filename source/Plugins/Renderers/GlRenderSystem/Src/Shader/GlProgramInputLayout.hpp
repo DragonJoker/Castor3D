@@ -39,7 +39,7 @@ namespace GlRender
 	\remark		Holds the vertex buffer declaration, initialised by the shader program when compiled.
 	*/
 	class GlProgramInputLayout
-		: public Castor3D::ProgramInputLayout
+		: public castor3d::ProgramInputLayout
 		, public Holder
 	{
 	public:
@@ -47,24 +47,24 @@ namespace GlRender
 		 *\brief		Constructor
 		 *\param[in]	p_gl	The OpenGL APIs.
 		 */
-		GlProgramInputLayout( OpenGl & p_gl, Castor3D::RenderSystem & renderSystem );
+		GlProgramInputLayout( OpenGl & p_gl, castor3d::RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 */
 		~GlProgramInputLayout();
 		/**
-		 *\copydoc		Castor3D::ProgramInputLayout::Initialise
+		 *\copydoc		castor3d::ProgramInputLayout::Initialise
 		 */
-		virtual bool Initialise( Castor3D::ShaderProgram const & p_program );
+		virtual bool initialise( castor3d::ShaderProgram const & p_program );
 		/**
-		 *\copydoc		Castor3D::ProgramInputLayout::Cleanup
+		 *\copydoc		castor3d::ProgramInputLayout::Cleanup
 		 */
-		virtual void Cleanup();
+		virtual void cleanup();
 
 	private:
-		std::multimap< int, Castor3D::BufferElementDeclaration > DoListAttributes( Castor3D::ShaderProgram const & p_program );
-		void DoListOther( Castor3D::ShaderProgram const & p_program );
+		std::multimap< int, castor3d::BufferElementDeclaration > doListAttributes( castor3d::ShaderProgram const & p_program );
+		void doListOther( castor3d::ShaderProgram const & p_program );
 	};
 }
 

@@ -3,24 +3,24 @@
 #include "SkeletonAnimation.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< SkeletonAnimationBone >::DoWrite( SkeletonAnimationBone const & p_obj )
+	bool BinaryWriter< SkeletonAnimationBone >::doWrite( SkeletonAnimationBone const & p_obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
+			result = BinaryWriter< SkeletonAnimationObject >{}.write( p_obj, m_chunk );
 		}
 
 		return result;
@@ -28,37 +28,37 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< SkeletonAnimationBone >::DoParse( SkeletonAnimationBone & p_obj )
+	bool BinaryParser< SkeletonAnimationBone >::doParse( SkeletonAnimationBone & p_obj )
 	{
 		bool result = true;
 		String name;
 		BinaryChunk chunk;
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				result = DoParseChunk( name, chunk );
+				result = doParseChunk( name, chunk );
 
 				if ( result )
 				{
-					auto bone = static_cast< Skeleton * >( p_obj.GetOwner()->GetOwner() )->FindBone( name );
+					auto bone = static_cast< Skeleton * >( p_obj.getOwner()->getOwner() )->findBone( name );
 
 					if ( bone )
 					{
-						p_obj.SetBone( bone );
+						p_obj.setBone( bone );
 					}
 					else
 					{
-						Logger::LogError( cuT( "Couldn't find bone " ) + name + cuT( " in skeleton" ) );
+						Logger::logError( cuT( "Couldn't find bone " ) + name + cuT( " in skeleton" ) );
 					}
 				}
 
 				break;
 
 			case ChunkType::eAnimationObject:
-				result = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, chunk );
+				result = BinaryParser< SkeletonAnimationObject >{}.parse( p_obj, chunk );
 				break;
 			}
 		}
@@ -77,9 +77,9 @@ namespace Castor3D
 	{
 	}
 
-	String const & SkeletonAnimationBone::GetName()const
+	String const & SkeletonAnimationBone::getName()const
 	{
-		return GetBone()->GetName();
+		return getBone()->getName();
 	}
 
 	//*************************************************************************************************

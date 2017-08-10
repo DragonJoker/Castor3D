@@ -1,10 +1,10 @@
 namespace GLSL
 {
 	template< typename T1, typename T2 >
-	void WriteAssign( GlslWriter * p_writer, Optional< Array< T1 > > const & p_lhs, T2 const & p_rhs );
+	void writeAssign( GlslWriter * p_writer, Optional< Array< T1 > > const & p_lhs, T2 const & p_rhs );
 
 	template< typename TypeT >
-	Optional< Array< TypeT > >::Optional( GlslWriter * p_writer, Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	Optional< Array< TypeT > >::Optional( GlslWriter * p_writer, castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 		: Array< TypeT >( p_writer, p_name, p_dimension )
 		, m_enabled( p_enabled )
 	{
@@ -19,13 +19,13 @@ namespace GLSL
 
 	template< typename TypeT >
 	template< typename T >
-	Optional< Array< TypeT > >::Optional( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs, bool p_enabled )
+	Optional< Array< TypeT > >::Optional( castor::String const & p_name, uint32_t p_dimension, T const & p_rhs, bool p_enabled )
 		: Array< TypeT >( p_rhs.m_writer, p_name, p_dimension )
 		, m_enabled( p_enabled )
 	{
 		if ( m_enabled )
 		{
-			WriteAssign( TypeT::m_writer, *this, p_rhs );
+			writeAssign( TypeT::m_writer, *this, p_rhs );
 		}
 	}
 
@@ -34,7 +34,7 @@ namespace GLSL
 	{
 		if ( m_enabled )
 		{
-			WriteAssign( Array< TypeT >::m_writer, *this, p_rhs );
+			writeAssign( Array< TypeT >::m_writer, *this, p_rhs );
 		}
 
 		return *this;
@@ -46,14 +46,14 @@ namespace GLSL
 	{
 		if ( m_enabled )
 		{
-			WriteAssign( Array< TypeT >::m_writer, *this, p_rhs );
+			writeAssign( Array< TypeT >::m_writer, *this, p_rhs );
 		}
 
 		return *this;
 	}
 
 	template< typename TypeT >
-	bool Optional< Array< TypeT > >::IsEnabled()const
+	bool Optional< Array< TypeT > >::isEnabled()const
 	{
 		return m_enabled;
 	}
@@ -61,17 +61,17 @@ namespace GLSL
 	template< typename TypeT >
 	Optional< Array< TypeT > >::operator Optional< Array< TypeT > >()const
 	{
-		return Optional< Array< TypeT > >( *this, IsEnabled() );
+		return Optional< Array< TypeT > >( *this, isEnabled() );
 	}
 
 	template< typename TypeT >
-	Castor::String ParamToString( Castor::String & p_sep, Optional< Array< TypeT > > const & p_value )
+	castor::String paramToString( castor::String & p_sep, Optional< Array< TypeT > > const & p_value )
 	{
-		Castor::String result;
+		castor::String result;
 
-		if ( p_value.IsEnabled() )
+		if ( p_value.isEnabled() )
 		{
-			result = ParamToString( p_sep, static_cast< Type const & >( p_value ) );
+			result = paramToString( p_sep, static_cast< Type const & >( p_value ) );
 		}
 
 		return result;

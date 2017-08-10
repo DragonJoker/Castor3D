@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,13 +25,13 @@ SOFTWARE.
 
 #include "Animation/Animation.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		02/06/2016
-	\todo		Write and Read functions.
+	\todo		write and read functions.
 	\~english
 	\brief		Animation instance class.
 	\remark		Used to play an Animation on a specific object.
@@ -40,7 +40,7 @@ namespace Castor3D
 	\remark		Utilisée pour jouer une animation sur un objet particulier.
 	*/
 	class AnimationInstance
-		: public Castor::OwnedBy< AnimatedObject >
+		: public castor::OwnedBy< AnimatedObject >
 	{
 	public:
 		/**
@@ -69,35 +69,35 @@ namespace Castor3D
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
 		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API void Update( Castor::Milliseconds const & p_tslf );
+		C3D_API void update( castor::Milliseconds const & p_tslf );
 		/**
 		 *\~english
 		 *\brief		Plays the animation.
 		 *\~french
 		 *\brief		Démarre l'animation.
 		 */
-		C3D_API void Play();
+		C3D_API void play();
 		/**
 		 *\~english
 		 *\brief		Pauses the animation.
 		 *\~french
 		 *\brief		Met l'animation en pause.
 		 */
-		C3D_API void Pause();
+		C3D_API void pause();
 		/**
 		 *\~english
 		 *\brief		Stops the animation.
 		 *\~french
 		 *\brief		Stoppe l'animation.
 		 */
-		C3D_API void Stop();
+		C3D_API void stop();
 		/**
 		 *\~english
 		 *\return		The animation state.
 		 *\~french
 		 *\return		L'état de l'animation.
 		 */
-		inline AnimationState GetState()const
+		inline AnimationState getState()const
 		{
 			return m_state;
 		}
@@ -107,19 +107,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le multiplicateur de temps de l'animation.
 		 */
-		inline real GetScale()const
+		inline real getScale()const
 		{
 			return m_scale;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation time scale
+		 *\brief		sets the animation time scale
 		 *\param[in]	p_scale	The new value
 		 *\~french
 		 *\brief		Définit le multiplicateur de temps de l'animation
 		 *\param[in]	p_scale	La nouvelle valeur
 		 */
-		inline void	SetScale( real p_scale )
+		inline void setScale( real p_scale )
 		{
 			m_scale = p_scale;
 		}
@@ -129,19 +129,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'état de boucle de l'animation.
 		 */
-		inline bool IsLooped()const
+		inline bool isLooped()const
 		{
 			return m_looped;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation loop status
+		 *\brief		sets the animation loop status
 		 *\param[in]	p_looped	The new value
 		 *\~french
 		 *\brief		Définit l'état de boucle de l'animation
 		 *\param[in]	p_looped	La nouvelle valeur
 		 */
-		inline void SetLooped( bool p_looped )
+		inline void setLooped( bool p_looped )
 		{
 			m_looped = p_looped;
 		}
@@ -151,7 +151,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'animation.
 		 */
-		inline Animation const & GetAnimation()const
+		inline Animation const & getAnimation()const
 		{
 			return m_animation;
 		}
@@ -163,7 +163,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
 		 */
-		virtual void DoUpdate() = 0;
+		virtual void doUpdate() = 0;
 
 	protected:
 		//!\~english	The animation.
@@ -177,7 +177,7 @@ namespace Castor3D
 		bool m_looped{ false };
 		//!\~english	The current playing time.
 		//!\~french		L'index de temps courant.
-		Castor::Milliseconds m_currentTime{ 0 };
+		castor::Milliseconds m_currentTime{ 0 };
 		//!\~english	The current state of the animation.
 		//!\~french		L'état actuel de l'animation.
 		AnimationState m_state{ AnimationState::eStopped };

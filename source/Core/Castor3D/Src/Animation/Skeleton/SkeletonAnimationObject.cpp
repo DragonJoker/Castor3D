@@ -5,15 +5,15 @@
 #include "SkeletonAnimationBone.hpp"
 #include "SkeletonAnimationNode.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
 		using KeyFramed = std::array< double, 17 >;
 
-		void DoConvert( std::vector< KeyFrame > const & p_in, std::vector< KeyFramed > & p_out )
+		void doConvert( std::vector< KeyFrame > const & p_in, std::vector< KeyFramed > & p_out )
 		{
 			p_out.resize( p_in.size() );
 			auto it = p_out.begin();
@@ -22,8 +22,8 @@ namespace Castor3D
 			{
 				auto & out = *it;
 				size_t index{ 0u };
-				auto const & transform = in.GetTransform();
-				out[index++] = double( in.GetTimeIndex().count() / 1000.0 );
+				auto const & transform = in.getTransform();
+				out[index++] = double( in.getTimeIndex().count() / 1000.0 );
 				out[index++] = transform[0][0];
 				out[index++] = transform[0][1];
 				out[index++] = transform[0][2];
@@ -44,7 +44,7 @@ namespace Castor3D
 			}
 		}
 
-		void DoConvert( std::vector< KeyFramed > const & p_in, std::vector< KeyFrame > & p_out )
+		void doConvert( std::vector< KeyFramed > const & p_in, std::vector< KeyFrame > & p_out )
 		{
 			p_out.resize( p_in.size() );
 			auto it = p_out.begin();
@@ -62,45 +62,45 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryWriter< SkeletonAnimationObject >::DoWrite( SkeletonAnimationObject const & p_obj )
+	bool BinaryWriter< SkeletonAnimationObject >::doWrite( SkeletonAnimationObject const & p_obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = DoWriteChunk( p_obj.m_nodeTransform, ChunkType::eMovingTransform, m_chunk );
+			result = doWriteChunk( p_obj.m_nodeTransform, ChunkType::eMovingTransform, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = DoWriteChunk( real( p_obj.m_length.count() ) * 1000.0_r, ChunkType::eAnimLength, m_chunk );
+			result = doWriteChunk( real( p_obj.m_length.count() ) * 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( !p_obj.m_keyframes.empty() )
 		{
 			if ( result )
 			{
-				result = DoWriteChunk( uint32_t( p_obj.m_keyframes.size() ), ChunkType::eKeyframeCount, m_chunk );
+				result = doWriteChunk( uint32_t( p_obj.m_keyframes.size() ), ChunkType::eKeyframeCount, m_chunk );
 			}
 
 			if ( result )
 			{
 				std::vector< KeyFramed > keyFrames;
-				DoConvert( p_obj.m_keyframes, keyFrames );
-				result = DoWriteChunk( keyFrames, ChunkType::eKeyframes, m_chunk );
+				doConvert( p_obj.m_keyframes, keyFrames );
+				result = doWriteChunk( keyFrames, ChunkType::eKeyframes, m_chunk );
 			}
 		}
 
 		for ( auto const & moving : p_obj.m_children )
 		{
-			switch ( moving->GetType() )
+			switch ( moving->getType() )
 			{
 			case SkeletonAnimationObjectType::eNode:
-				result &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( moving ), m_chunk );
+				result &= BinaryWriter< SkeletonAnimationNode >{}.write( *std::static_pointer_cast< SkeletonAnimationNode >( moving ), m_chunk );
 				break;
 
 			case SkeletonAnimationObjectType::eBone:
-				result &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_chunk );
+				result &= BinaryWriter< SkeletonAnimationBone >{}.write( *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_chunk );
 				break;
 			}
 		}
@@ -110,7 +110,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	bool BinaryParser< SkeletonAnimationObject >::DoParse( SkeletonAnimationObject & p_obj )
+	bool BinaryParser< SkeletonAnimationObject >::doParse( SkeletonAnimationObject & p_obj )
 	{
 		bool result = true;
 		Matrix4x4r transform;
@@ -122,16 +122,16 @@ namespace Castor3D
 		uint32_t count{ 0 };
 		real length{ 0.0_r };
 
-		while ( result && DoGetSubChunk( chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eMovingTransform:
-				result = DoParseChunk( p_obj.m_nodeTransform, chunk );
+				result = doParseChunk( p_obj.m_nodeTransform, chunk );
 				break;
 
 			case ChunkType::eKeyframeCount:
-				result = DoParseChunk( count, chunk );
+				result = doParseChunk( count, chunk );
 
 				if ( result )
 				{
@@ -141,40 +141,40 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eKeyframes:
-				result = DoParseChunk( keyframes, chunk );
+				result = doParseChunk( keyframes, chunk );
 
 				if ( result )
 				{
-					DoConvert( keyframes, p_obj.m_keyframes );
+					doConvert( keyframes, p_obj.m_keyframes );
 				}
 
 				break;
 
 			case ChunkType::eAnimLength:
-				result = DoParseChunk( length, chunk );
+				result = doParseChunk( length, chunk );
 				p_obj.m_length = Milliseconds{ int64_t( length / 1000 ) };
 				break;
 
 			case ChunkType::eSkeletonAnimationBone:
-				bone = std::make_shared< SkeletonAnimationBone >( *p_obj.GetOwner() );
-				result = BinaryParser< SkeletonAnimationBone >{}.Parse( *bone, chunk );
+				bone = std::make_shared< SkeletonAnimationBone >( *p_obj.getOwner() );
+				result = BinaryParser< SkeletonAnimationBone >{}.parse( *bone, chunk );
 
 				if ( result )
 				{
-					p_obj.AddChild( bone );
-					p_obj.GetOwner()->AddObject( bone, p_obj.shared_from_this() );
+					p_obj.addChild( bone );
+					p_obj.getOwner()->addObject( bone, p_obj.shared_from_this() );
 				}
 
 				break;
 
 			case ChunkType::eSkeletonAnimationNode:
-				node = std::make_shared< SkeletonAnimationNode >( *p_obj.GetOwner() );
-				result = BinaryParser< SkeletonAnimationNode >{}.Parse( *node, chunk );
+				node = std::make_shared< SkeletonAnimationNode >( *p_obj.getOwner() );
+				result = BinaryParser< SkeletonAnimationNode >{}.parse( *node, chunk );
 
 				if ( result )
 				{
-					p_obj.AddChild( node );
-					p_obj.GetOwner()->AddObject( node, p_obj.shared_from_this() );
+					p_obj.addChild( node );
+					p_obj.getOwner()->addObject( node, p_obj.shared_from_this() );
 				}
 
 				break;
@@ -196,21 +196,21 @@ namespace Castor3D
 	{
 	}
 
-	void SkeletonAnimationObject::AddChild( SkeletonAnimationObjectSPtr p_object )
+	void SkeletonAnimationObject::addChild( SkeletonAnimationObjectSPtr p_object )
 	{
 		REQUIRE( p_object.get() != this );
 		p_object->m_parent = shared_from_this();
 		m_children.push_back( p_object );
 	}
 
-	KeyFrame & SkeletonAnimationObject::AddKeyFrame( Milliseconds const & p_from
+	KeyFrame & SkeletonAnimationObject::addKeyFrame( Milliseconds const & p_from
 		, Point3r const & p_translate
 		, Quaternion const & p_rotate
 		, Point3r const & p_scale )
 	{
 		auto it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_from]( KeyFrame & p_keyframe )
 		{
-			return p_keyframe.GetTimeIndex() >= p_from;
+			return p_keyframe.getTimeIndex() >= p_from;
 		} );
 
 		if ( it == m_keyframes.end() )
@@ -218,7 +218,7 @@ namespace Castor3D
 			m_length = p_from;
 			it = m_keyframes.insert( m_keyframes.end(), KeyFrame{ p_from, p_translate, p_rotate, p_scale } );
 		}
-		else if ( it->GetTimeIndex() > p_from )
+		else if ( it->getTimeIndex() > p_from )
 		{
 			if ( it != m_keyframes.begin() )
 			{
@@ -231,11 +231,11 @@ namespace Castor3D
 		return *it;
 	}
 
-	void SkeletonAnimationObject::RemoveKeyFrame( Milliseconds const & p_time )
+	void SkeletonAnimationObject::removeKeyFrame( Milliseconds const & p_time )
 	{
 		auto it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_time]( KeyFrame const & p_keyframe )
 		{
-			return p_keyframe.GetTimeIndex() == p_time;
+			return p_keyframe.getTimeIndex() == p_time;
 		} );
 
 		if ( it != m_keyframes.end() )

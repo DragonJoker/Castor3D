@@ -59,17 +59,17 @@ namespace CastorCom
 		 */
 		virtual ~CGlyph();
 
-		void SetInternal( Castor::Glyph * p_glyph )
+		void setInternal( castor::Glyph * p_glyph )
 		{
 			m_glyph = p_glyph;
 		}
 
-		COM_PROPERTY_GET( Size, ISize *, make_getter( m_glyph, &Castor::Glyph::GetSize ) );
-		COM_PROPERTY_GET( Bearing, IPosition *, make_getter( m_glyph, &Castor::Glyph::GetBearing ) );
-		COM_PROPERTY_GET( Advance, INT, make_getter( m_glyph, &Castor::Glyph::GetAdvance ) );
+		COM_PROPERTY_GET( Size, ISize *, make_getter( m_glyph, &castor::Glyph::getSize ) );
+		COM_PROPERTY_GET( Bearing, IPosition *, make_getter( m_glyph, &castor::Glyph::getBearing ) );
+		COM_PROPERTY_GET( Advance, INT, make_getter( m_glyph, &castor::Glyph::getAdvance ) );
 
 	private:
-		Castor::Glyph * m_glyph;
+		castor::Glyph * m_glyph;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Glyph ), CGlyph )

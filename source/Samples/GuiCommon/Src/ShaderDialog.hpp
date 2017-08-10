@@ -34,24 +34,24 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		ShaderDialog( Castor3D::Scene & p_scene
+		ShaderDialog( castor3d::Scene & p_scene
 			, bool p_bCanEdit
 			, wxWindow * p_parent
-			, Castor3D::Pass & p_pass
+			, castor3d::Pass & p_pass
 			, wxPoint const & p_position = wxDefaultPosition
 			, const wxSize p_size = wxSize( 800, 600 ) );
 		~ShaderDialog();
 
 	private:
-		void DoInitialiseShaderLanguage();
-		void DoInitialiseLayout();
-		void DoLoadPages();
-		void DoPopulateMenu();
-		void DoCleanup();
-		void DoLoadShader();
-		void DoOpenShaderFile();
-		void DoFolder( Castor3D::ShaderType p_type );
-		void DoSave( Castor3D::ShaderType p_type, bool p_createIfNone );
+		void doInitialiseShaderLanguage();
+		void doInitialiseLayout();
+		void doLoadPages();
+		void doPopulateMenu();
+		void doCleanup();
+		void doLoadShader();
+		void doOpenShaderFile();
+		void doFolder( castor3d::ShaderType p_type );
+		void doSave( castor3d::ShaderType p_type, bool p_createIfNone );
 
 		DECLARE_EVENT_TABLE()
 		void OnOpenFile( wxCommandEvent & p_event );
@@ -67,13 +67,13 @@ namespace GuiCommon
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_pNotebookEditors;
 		std::unique_ptr< StcContext > m_pStcContext;
-		ShaderEditorPage * m_pEditorPages[size_t( Castor3D::ShaderType::eCount )];
-		Castor3D::ShaderProgramWPtr m_shaderProgram;
-		Castor3D::Pass & m_pass;
+		ShaderEditorPage * m_pEditorPages[size_t( castor3d::ShaderType::eCount )];
+		castor3d::ShaderProgramWPtr m_shaderProgram;
+		castor3d::Pass & m_pass;
 		bool m_bCompiled;
 		bool m_bOwnShader;
 		bool m_bCanEdit;
-		Castor3D::Scene & m_scene;
+		castor3d::Scene & m_scene;
 	};
 }
 

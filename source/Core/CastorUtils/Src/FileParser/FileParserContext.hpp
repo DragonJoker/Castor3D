@@ -37,7 +37,7 @@ SOFTWARE.
 #	undef abs
 #endif
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -79,7 +79,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom du contexte, doit être unique.
 		 *\param[in]	p_data	Les données du contexte utilisateur.
 		 */
-		CU_API void RegisterUserContext( String const & p_name, void * p_data );
+		CU_API void registerUserContext( String const & p_name, void * p_data );
 		/**
 		 *\~english
 		 *\brief		Unregisters a user context.
@@ -90,7 +90,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom du contexte.
 		 *\return		Les données du contexte utilisateur.
 		 */
-		CU_API void * UnregisterUserContext( String const & p_name );
+		CU_API void * unregisterUserContext( String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a user context.
@@ -101,7 +101,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom du contexte.
 		 *\return		Les données du contexte utilisateur.
 		 */
-		CU_API void * GetUserContext( String const & p_name );
+		CU_API void * getUserContext( String const & p_name );
 
 	public:
 		//!\~english The file currently parsed	\~french Le fichier en cours d'analyse

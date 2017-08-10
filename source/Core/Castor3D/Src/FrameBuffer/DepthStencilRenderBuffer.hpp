@@ -25,14 +25,14 @@ SOFTWARE.
 
 #include "RenderBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
 	\date		12/11/2012
 	\~english
-	\brief		Render buffer receiving depth and/or stencil component
+	\brief		Render buffer receiving depth and/or stencil PixelComponents
 	\~french
 	\brief		Render tampon recevant une composante de profondeur et/ou de stencil
 	*/
@@ -48,7 +48,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_format	Le format des pixels du tampon
 		 */
-		C3D_API explicit DepthStencilRenderBuffer( Castor::PixelFormat p_format );
+		C3D_API explicit DepthStencilRenderBuffer( castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor

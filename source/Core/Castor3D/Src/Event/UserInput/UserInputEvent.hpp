@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	*\author	Sylvain DOREMUS
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'évènement entràe utilisateur.
 		 */
-		inline UserInputEventType GetEventType()const
+		inline UserInputEventType getEventType()const
 		{
 			return m_eventType;
 		}

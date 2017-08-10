@@ -53,16 +53,16 @@ namespace GlRender
 		GlBufferBase( OpenGl & p_gl, GlBufferTarget p_target );
 		virtual ~GlBufferBase();
 
-		void Copy( GlBufferBase< T > const & p_src, uint32_t p_size )const;
-		void InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const;
-		void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const;
-		void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const;
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const;
-		T * Lock( GlAccessType p_access )const;
-		void Unlock()const;
-		void SetBindingPoint( uint32_t p_point )const;
+		void copy( GlBufferBase< T > const & p_src, uint32_t p_size )const;
+		void initialiseStorage( uint32_t p_count, castor3d::BufferAccessType p_type, castor3d::BufferAccessNature p_nature )const;
+		void upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const;
+		void download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const;
+		T * lock( uint32_t p_offset, uint32_t p_count, castor3d::AccessTypes const & p_flags )const;
+		T * lock( GlAccessType p_access )const;
+		void unlock()const;
+		void setBindingPoint( uint32_t p_point )const;
 
-		inline uint32_t GetBindingPoint()const
+		inline uint32_t getBindingPoint()const
 		{
 			return m_bindingPoint;
 		}

@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PREREQUISITES_SCENE_H___
 #define ___C3D_PREREQUISITES_SCENE_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Scene */
 	//@{
@@ -80,7 +80,7 @@ namespace Castor3D
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de filtrage d'ombres.
 	 */
-	C3D_API GLSL::ShadowType GetShadowType( SceneFlags const & p_flags );
+	C3D_API GLSL::ShadowType getShadowType( SceneFlags const & p_flags );
 	/**
 	 *\~english
 	 *\brief		Gives the fog type matching the given flags.
@@ -91,7 +91,7 @@ namespace Castor3D
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de brouillard.
 	 */
-	C3D_API GLSL::FogType GetFogType( SceneFlags const & p_flags );
+	C3D_API GLSL::FogType getFogType( SceneFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -183,21 +183,21 @@ namespace Castor3D
 	//! SceneNode pointer array.
 	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
 	//! Scene pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SceneSPtr, ScenePtrStr );
+	DECLARE_MAP( castor::String, SceneSPtr, ScenePtrStr );
 	//! SceneNode pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SceneNodeSPtr, SceneNodePtrStr );
+	DECLARE_MAP( castor::String, SceneNodeSPtr, SceneNodePtrStr );
 	//! AnimatedObjectGroup pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
+	DECLARE_MAP( castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! AnimatedObject pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
+	DECLARE_MAP( castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
+	DECLARE_MAP( castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
 	//! SkeletonAnimationInstanceObject pointer array.
 	DECLARE_VECTOR( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
 	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
 	DECLARE_MAP( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
+	DECLARE_MAP( castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
 	//! Skeleton animation instance pointer array.
 	DECLARE_VECTOR( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
 

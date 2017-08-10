@@ -1,8 +1,8 @@
 #include "PushUniform.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	PushUniform::PushUniform( ShaderProgram & p_program )
 		: m_program{ p_program }
@@ -13,17 +13,17 @@ namespace Castor3D
 	{
 	}
 
-	bool PushUniform::Initialise()
+	bool PushUniform::initialise()
 	{
-		return DoInitialise();
+		return doInitialise();
 	}
 
-	void PushUniform::Update()
+	void PushUniform::update()
 	{
-		if ( GetBaseUniform().IsChanged() )
+		if ( getBaseUniform().isChanged() )
 		{
-			DoUpdate();
-			GetBaseUniform().SetChanged( false );
+			doUpdate();
+			getBaseUniform().setChanged( false );
 		}
 	}
 }

@@ -32,7 +32,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -46,8 +46,8 @@ namespace Castor3D
 	\remark		Gère une fenêtre dans laquelle une scène peut être rendue
 	*/
 	class RenderWindow
-		: public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 	public:
 		/*!
@@ -59,7 +59,7 @@ namespace Castor3D
 		\brief		Loader de RenderTarget
 		*/
 		class TextWriter
-			: public Castor::TextWriter< RenderWindow >
+			: public castor::TextWriter< RenderWindow >
 		{
 		public:
 			/**
@@ -68,7 +68,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a render window into a text file
@@ -79,7 +79,7 @@ namespace Castor3D
 			 *\param[in]	p_window	La fenêtre de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API bool operator()( RenderWindow const & p_window, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( RenderWindow const & p_window, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_name		Le nom de la fenêtre
 		 */
-		C3D_API RenderWindow( Castor::String const & p_name, Engine & engine );
+		C3D_API RenderWindow( castor::String const & p_name, Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,7 +103,7 @@ namespace Castor3D
 		C3D_API ~RenderWindow();
 		/**
 		 *\~english
-		 *\brief		Sets the handle, initialises the window.
+		 *\brief		sets the handle, initialises the window.
 		 *\param[in]	p_size		The window size.
 		 *\param[in]	p_handle	The handle.
 		 *\return		\p false if any problem occured
@@ -113,14 +113,14 @@ namespace Castor3D
 		 *\param[in]	p_handle	Le handle.
 		 *\return		\p false si un problème quelconque a été rencontré.
 		 */
-		C3D_API bool Initialise( Castor::Size const & p_size, WindowHandle const & p_handle );
+		C3D_API bool initialise( castor::Size const & p_size, WindowHandle const & p_handle );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance
 		 *\~french
 		 *\brief		Nettoie l'instance
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders one frame
@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\brief		Renders one frame
 		 *\param[in]	p_bForce		Dit si on force le rendu
 		 */
-		C3D_API void Render( bool p_bForce );
+		C3D_API void render( bool p_bForce );
 		/**
 		 *\~english
 		 *\brief		Resizes the window
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Redimensionne la fenêtre
 		 *\param[in]	x, y	Les nouvelles dimensions
 		 */
-		C3D_API void Resize( int x, int y );
+		C3D_API void resize( int x, int y );
 		/**
 		 *\~english
 		 *\brief		Resizes the window
@@ -147,16 +147,16 @@ namespace Castor3D
 		 *\brief		Redimensionne la fenêtre
 		 *\param[in]	p_size	Les nouvelles dimensions
 		 */
-		C3D_API void Resize( Castor::Size const & p_size );
+		C3D_API void resize( castor::Size const & p_size );
 		/**
 		 *\~english
-		 *\brief		Sets the camera
+		 *\brief		sets the camera
 		 *\param[in]	p_pCamera	The camera
 		 *\~french
 		 *\brief		Définit la caméra
 		 *\param[in]	p_pCamera	La caméra
 		 */
-		C3D_API void SetCamera( CameraSPtr p_pCamera );
+		C3D_API void setCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
 		 *\brief		Changes fullscreen status from contex
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\brief		Change le statut de plein écran à partir du contexte
 		 *\param[in]	val	Le nouveau statut de plein écran
 		 */
-		C3D_API void UpdateFullScreen( bool val );
+		C3D_API void updateFullScreen( bool val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the Scene
@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\brief		Récupère la Scene
 		 *\return		La Scene
 		 */
-		C3D_API SceneSPtr GetScene()const;
+		C3D_API SceneSPtr getScene()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Camera
@@ -183,7 +183,7 @@ namespace Castor3D
 		 *\brief		Récupère la Camera
 		 *\return		La Camera
 		 */
-		C3D_API CameraSPtr GetCamera()const;
+		C3D_API CameraSPtr getCamera()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the ViewportType
@@ -192,25 +192,25 @@ namespace Castor3D
 		 *\brief		Récupère le ViewportType
 		 *\return		Le ViewportType
 		 */
-		C3D_API ViewportType GetViewportType()const;
+		C3D_API ViewportType getViewportType()const;
 		/**
 		 *\~english
-		 *\brief		Sets the ViewportType
+		 *\brief		sets the ViewportType
 		 *\param[in]	val	The new ViewportType
 		 *\~french
 		 *\brief		Définit le ViewportType
 		 *\param[in]	val	Le nouveau ViewportType
 		 */
-		C3D_API void SetViewportType( ViewportType val );
+		C3D_API void setViewportType( ViewportType val );
 		/**
 		 *\~english
-		 *\brief		Sets the Scene
+		 *\brief		sets the Scene
 		 *\param[in]	p_scene	The new Scene
 		 *\~french
 		 *\brief		Définit la Scene
 		 *\param[in]	p_scene	La nouvelle Scene
 		 */
-		C3D_API void SetScene( SceneSPtr p_scene );
+		C3D_API void setScene( SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Retrieves the window dimensions
@@ -219,7 +219,7 @@ namespace Castor3D
 		 *\brief		Récupère les dimensions de la fenêtre
 		 *\return		Les dimensions de la fenêtre
 		 */
-		C3D_API Castor::Size GetSize()const;
+		C3D_API castor::Size getSize()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the stereo status
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'utilisation stéréo
 		 *\return		\p true si le rendu stéréo est utilisé
 		 */
-		C3D_API bool IsUsingStereo()const;
+		C3D_API bool isUsingStereo()const;
 		/**
 		 *\~english
 		 *\brief		Defines the stereo status
@@ -237,7 +237,7 @@ namespace Castor3D
 		 *\brief		Définit le statut d'utilisation stéréo
 		 *\param[in]	p_bStereo	\p true si le rendu stéréo est à utiliser
 		 */
-		C3D_API void SetStereo( bool p_bStereo );
+		C3D_API void setStereo( bool p_bStereo );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intra ocular distance
@@ -246,7 +246,7 @@ namespace Castor3D
 		 *\brief		Récupère la distance inter oculaire
 		 *\return		La distance inter oculaire
 		 */
-		C3D_API real GetIntraOcularDistance()const;
+		C3D_API real getIntraOcularDistance()const;
 		/**
 		 *\~english
 		 *\brief		Defines the intra ocular distance
@@ -255,7 +255,7 @@ namespace Castor3D
 		 *\brief		Définit la distance inter oculaire
 		 *\param[in]	p_rIao	La distance inter oculaire
 		 */
-		C3D_API void SetIntraOcularDistance( real p_rIao );
+		C3D_API void setIntraOcularDistance( real p_rIao );
 		/**
 		 *\~english
 		 *\brief		Retrieves the window pixel format
@@ -264,16 +264,16 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels de la fenêtre
 		 *\return		Le format des pixels de la fenêtre
 		 */
-		C3D_API Castor::PixelFormat GetPixelFormat()const;
+		C3D_API castor::PixelFormat getPixelFormat()const;
 		/**
 		 *\~english
-		 *\brief		Sets the window pixel format
+		 *\brief		sets the window pixel format
 		 *\param[in]	val	The new window pixel format
 		 *\~french
 		 *\brief		Définit le format des pixels de la fenêtre
 		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
 		 */
-		C3D_API void SetPixelFormat( Castor::PixelFormat val );
+		C3D_API void setPixelFormat( castor::PixelFormat val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the window index
@@ -282,7 +282,7 @@ namespace Castor3D
 		 *\brief		Récupère l'index de la fenêtre
 		 *\return		L'index de la fenêtre
 		 */
-		inline uint32_t GetIndex()const
+		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
@@ -294,7 +294,7 @@ namespace Castor3D
 		 *\brief		Récupère le handle de la fenêtre
 		 *\return		Le handle de la fenêtre
 		 */
-		inline WindowHandle const & GetHandle()const
+		inline WindowHandle const & getHandle()const
 		{
 			return m_handle;
 		}
@@ -306,7 +306,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de l'initialisation
 		 *\return		Le statut de l'initialisation
 		 */
-		inline bool IsInitialised()const
+		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
@@ -318,7 +318,7 @@ namespace Castor3D
 		 *\brief		Récupère le FrameListener
 		 *\return		Le FrameListener
 		 */
-		inline FrameListenerSPtr GetListener()const
+		inline FrameListenerSPtr getListener()const
 		{
 			return m_wpListener.lock();
 		}
@@ -330,7 +330,7 @@ namespace Castor3D
 		 *\brief		Récupère la Context
 		 *\return		La Context
 		 */
-		inline ContextSPtr GetContext()const
+		inline ContextSPtr getContext()const
 		{
 			return m_context;
 		}
@@ -342,31 +342,31 @@ namespace Castor3D
 		 *\brief		Récupère la cible du rendu
 		 *\return		La valeur
 		 */
-		inline RenderTargetSPtr GetRenderTarget()const
+		inline RenderTargetSPtr getRenderTarget()const
 		{
 			return m_renderTarget.lock();
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the render target
+		 *\brief		sets the render target
 		 *\param[in]	p_pTarget	The new value
 		 *\~french
 		 *\brief		Définit la cible du rendu
 		 *\param[in]	p_pTarget	La nouvelle valeur
 		 */
-		inline void SetRenderTarget( RenderTargetSPtr p_pTarget )
+		inline void setRenderTarget( RenderTargetSPtr p_pTarget )
 		{
 			m_renderTarget = p_pTarget;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the Context
+		 *\brief		sets the Context
 		 *\param[in]	p_context	The new Context
 		 *\~french
 		 *\brief		Définit le Context
 		 *\param[in]	p_context	Le nouveau Context
 		 */
-		inline void SetContext( ContextSPtr p_context )
+		inline void setContext( ContextSPtr p_context )
 		{
 			m_context = p_context;
 		}
@@ -376,7 +376,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dit si le contexte utilise la vsync
 		 */
-		inline bool GetVSync()const
+		inline bool getVSync()const
 		{
 			return m_bVSync;
 		}
@@ -388,7 +388,7 @@ namespace Castor3D
 		 *\brief		Définit l'utilisation de la vsync
 		 *\param[in]	p_value	L'utilisation
 		 */
-		inline void SetVSync( bool p_value )
+		inline void setVSync( bool p_value )
 		{
 			m_bVSync = p_value;
 		}
@@ -398,7 +398,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dit si le rendu est en plein écran
 		 */
-		inline bool IsFullscreen()const
+		inline bool isFullscreen()const
 		{
 			return m_bFullscreen;
 		}
@@ -410,7 +410,7 @@ namespace Castor3D
 		 *\brief		Définit le statut du rendu plein écran
 		 *\param[in]	p_value	Le statut
 		 */
-		inline void SetFullscreen( bool p_value )
+		inline void setFullscreen( bool p_value )
 		{
 			m_bFullscreen = p_value;
 		}
@@ -420,7 +420,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les tampons de rendu de la fenêtre.
 		 */
-		BackBuffersSPtr GetBackBuffers()const
+		BackBuffersSPtr getBackBuffers()const
 		{
 			return m_backBuffers;
 		}
@@ -430,7 +430,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dit que la prochaine image doit être enregistrée.
 		 */
-		inline void SaveFrame()
+		inline void saveFrame()
 		{
 			m_toSave = true;
 		}
@@ -440,7 +440,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'image enregistrée.
 		 */
-		inline Castor::PxBufferBaseSPtr GetSavedFrame()const
+		inline castor::PxBufferBaseSPtr getSavedFrame()const
 		{
 			return m_saveBuffer;
 		}
@@ -450,15 +450,15 @@ namespace Castor3D
 		 *\~french
 		 *\return		La passe de picking.
 		 */
-		inline PickingPass & GetPickingPass()
+		inline PickingPass & getPickingPass()
 		{
 			REQUIRE( m_pickingPass );
 			return *m_pickingPass;
 		}
 
 	private:
-		void DoRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture );
-		void DoUpdateSize();
+		void doRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture );
+		void doUpdateSize();
 
 	private:
 		//!\~english	Total number of render windows.
@@ -493,13 +493,13 @@ namespace Castor3D
 		BackBuffersSPtr m_backBuffers;
 		//!\~english	The window size.
 		//!\~french		Les dimensions de la fenêtre.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	Tells we need to save a frame.
 		//!\~french		Dit si l'on veut sauvegarder une immage.
 		bool m_toSave{ false };
 		//!\~english	The pixel buffer holding the saved image.
 		//!\~french		Le tampon de pixels contenant l'image sauvegardée.
-		Castor::PxBufferBaseSPtr m_saveBuffer;
+		castor::PxBufferBaseSPtr m_saveBuffer;
 		//!\~english	The picking pass.
 		//!\~french		La passe de picking.
 		PickingPassUPtr m_pickingPass;

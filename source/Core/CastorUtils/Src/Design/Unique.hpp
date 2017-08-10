@@ -26,7 +26,7 @@ SOFTWARE.
 #include "UnicityException.hpp"
 #include "NonCopyable.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -54,9 +54,9 @@ namespace Castor
 		 */
 		inline Unique( T * p_this )
 		{
-			if ( !DoGetInstance() )
+			if ( !doGetInstance() )
 			{
-				DoGetInstance() = p_this;
+				doGetInstance() = p_this;
 			}
 			else
 			{
@@ -71,7 +71,7 @@ namespace Castor
 		 */
 		inline ~Unique()
 		{
-			DoGetInstance() = nullptr;
+			doGetInstance() = nullptr;
 		}
 
 	private:
@@ -81,7 +81,7 @@ namespace Castor
 		 *\~french
 		 *\return		L'instance unique, nullptr s'il n'y en a pas.
 		 */
-		static inline T *& DoGetInstance()
+		static inline T *& doGetInstance()
 		{
 			static T * pInstance = nullptr;
 			return pInstance;

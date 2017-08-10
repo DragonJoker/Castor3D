@@ -30,7 +30,7 @@ SOFTWARE.
 #include <Math/SquareMatrix.hpp>
 #include <Math/Quaternion.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -44,7 +44,7 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
 	class SkeletonAnimationInstanceObject
-		: public Castor::OwnedBy< SkeletonAnimationInstance >
+		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{
 	protected:
 		/**
@@ -80,7 +80,7 @@ namespace Castor3D
 		C3D_API virtual ~SkeletonAnimationInstanceObject();
 		/**
 		 *\~english
-		 *\brief		Adds a child to this object.
+		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
 		 *\param[in]	p_object	The child.
 		 *\~french
@@ -88,7 +88,7 @@ namespace Castor3D
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	p_object	L'enfant.
 		 */
-		C3D_API void AddChild( SkeletonAnimationInstanceObjectSPtr p_object );
+		C3D_API void addChild( SkeletonAnimationInstanceObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time.
@@ -99,15 +99,15 @@ namespace Castor3D
 		 *\param[in]	p_time				Index de temps courant.
 		 *\param[in]	p_transformations	La matrice de transformation courante.
 		 */
-		C3D_API void Update( Castor::Milliseconds const & p_time
-			, Castor::Matrix4x4r const & p_transformations );
+		C3D_API void update( castor::Milliseconds const & p_time
+			, castor::Matrix4x4r const & p_transformations );
 		/**
 		 *\~english
 		 *\brief		The final object's animations transformation.
 		 *\~french
 		 *\brief		La transfomation finale des animations du de cet objet.
 		 */
-		inline Castor::Matrix4x4r const & GetFinalTransform()const
+		inline castor::Matrix4x4r const & getFinalTransform()const
 		{
 			return m_finalTransform;
 		}
@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline SkeletonAnimationInstanceObjectPtrArray const & GetChildren()const
+		inline SkeletonAnimationInstanceObjectPtrArray const & getChildren()const
 		{
 			return m_children;
 		}
@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet.
 		 */
-		C3D_API virtual void DoApply() = 0;
+		C3D_API virtual void doApply() = 0;
 
 	protected:
 		//!\~english	The animation object.
@@ -146,10 +146,10 @@ namespace Castor3D
 		SkeletonAnimationInstanceObjectPtrArray m_children;
 		//!\~english	The cumulative animation transformations.
 		//!\~french		Les transformations cumulées de l'animation.
-		Castor::Matrix4x4r m_cumulativeTransform;
+		castor::Matrix4x4r m_cumulativeTransform;
 		//!\~english	The matrix holding transformation at current time.
 		//!\~french		La matrice de transformation complète au temps courant de l'animation.
-		Castor::Matrix4x4r m_finalTransform;
+		castor::Matrix4x4r m_finalTransform;
 	};
 }
 

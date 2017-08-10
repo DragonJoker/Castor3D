@@ -17,8 +17,8 @@
 #include <Technique/RenderTechnique.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -43,40 +43,40 @@ namespace GuiCommon
 		, m_canEdit( p_bCanEdit || true )
 #endif
 	{
-		DoInitialiseShaderLanguage();
+		doInitialiseShaderLanguage();
 
 		if ( m_shaderModel != ShaderModel::eCount )
 		{
-			DoInitialiseLayout();
+			doInitialiseLayout();
 
-			auto & engine = *p_shader->GetRenderSystem()->GetEngine();
-			auto lock = Castor::make_unique_lock( engine.GetRenderWindowCache() );
-			auto it = engine.GetRenderWindowCache().begin();
+			auto & engine = *p_shader->getRenderSystem()->getEngine();
+			auto lock = castor::makeUniqueLock( engine.getRenderWindowCache() );
+			auto it = engine.getRenderWindowCache().begin();
 
-			if ( it != engine.GetRenderWindowCache().end() )
+			if ( it != engine.getRenderWindowCache().end() )
 			{
-				auto & technique = *it->second->GetRenderTarget()->GetTechnique();
-				auto textureFlags = p_pass.GetTextureFlags();
-				auto programFlags = p_pass.GetProgramFlags();
-				auto sceneFlags = p_scene.GetFlags();
+				auto & technique = *it->second->getRenderTarget()->getTechnique();
+				auto textureFlags = p_pass.getTextureFlags();
+				auto programFlags = p_pass.getProgramFlags();
+				auto sceneFlags = p_scene.getFlags();
 				RenderPipelineRPtr pipeline;
 
-				if ( p_pass.HasAlphaBlending())
+				if ( p_pass.hasAlphaBlending())
 				{
-					technique.GetTransparentPass().UpdateFlags( textureFlags, programFlags, sceneFlags );
-					pipeline = technique.GetTransparentPass().GetPipelineBack( p_pass.GetColourBlendMode()
-						, p_pass.GetAlphaBlendMode()
-						, p_pass.GetAlphaFunc()
+					technique.getTransparentPass().updateFlags( textureFlags, programFlags, sceneFlags );
+					pipeline = technique.getTransparentPass().getPipelineBack( p_pass.getColourBlendMode()
+						, p_pass.getAlphaBlendMode()
+						, p_pass.getAlphaFunc()
 						, textureFlags
 						, programFlags
 						, sceneFlags );
 				}
 				else
 				{
-					technique.GetOpaquePass().UpdateFlags( textureFlags, programFlags, sceneFlags );
-					pipeline = technique.GetOpaquePass().GetPipelineBack( p_pass.GetColourBlendMode()
-						, p_pass.GetAlphaBlendMode()
-						, p_pass.GetAlphaFunc()
+					technique.getOpaquePass().updateFlags( textureFlags, programFlags, sceneFlags );
+					pipeline = technique.getOpaquePass().getPipelineBack( p_pass.getColourBlendMode()
+						, p_pass.getAlphaBlendMode()
+						, p_pass.getAlphaFunc()
 						, textureFlags
 						, programFlags
 						, sceneFlags );
@@ -84,11 +84,11 @@ namespace GuiCommon
 
 				if ( pipeline )
 				{
-					DoLoadPage( *pipeline );
+					doLoadPage( *pipeline );
 				}
 				else
 				{
-					Logger::LogWarning( cuT( "Pipeline not found." ) );
+					Logger::logWarning( cuT( "Pipeline not found." ) );
 				}
 			}
 		}
@@ -96,7 +96,7 @@ namespace GuiCommon
 
 	ShaderEditorPage::~ShaderEditorPage()
 	{
-		DoCleanup();
+		doCleanup();
 		m_auiManager.UnInit();
 	}
 
@@ -131,15 +131,15 @@ namespace GuiCommon
 		}
 	}
 
-	void ShaderEditorPage::DoInitialiseShaderLanguage()
+	void ShaderEditorPage::doInitialiseShaderLanguage()
 	{
 		m_shaderModel = ShaderModel::eCount;
 		ShaderProgramSPtr program = m_shaderProgram.lock();
-		RenderSystem * renderSystem = program->GetRenderSystem();
-		m_shaderModel = program->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		RenderSystem * renderSystem = program->getRenderSystem();
+		m_shaderModel = program->getRenderSystem()->getGpuInformations().getMaxShaderModel();
 	}
 
-	void ShaderEditorPage::DoInitialiseLayout()
+	void ShaderEditorPage::doInitialiseLayout()
 	{
 		const int iListWidth = 200;
 		wxSize size = GetClientSize();
@@ -173,13 +173,51 @@ namespace GuiCommon
 
 		// Put all that in the AUI manager
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		m_auiManager.AddPane( m_editor, wxAuiPaneInfo().CaptionVisible( false ).CloseButton( false ).Name( wxT( "Shaders" ) ).Caption( _( "Shaders" ) ).Center().Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false ) );
-		m_auiManager.AddPane( m_frameVariablesList, wxAuiPaneInfo().CaptionVisible( false ).CloseButton( false ).Name( wxT( "FrameVariablesList" ) ).Caption( _( "Frame variables" ) ).Right().Dock().LeftDockable().RightDockable().Movable().PinButton().Layer( 2 ).PaneBorder( false ).MinSize( iListWidth, 0 ) );
-		m_auiManager.AddPane( m_frameVariablesProperties, wxAuiPaneInfo().CaptionVisible( false ).CloseButton( false ).Name( wxT( "Properties" ) ).Caption( _( "Properties" ) ).Right().Dock().LeftDockable().RightDockable().Movable().PinButton().Layer( 2 ).PaneBorder( false ).MinSize( iListWidth, 0 ) );
+		m_auiManager.AddPane( m_editor
+			, wxAuiPaneInfo()
+				.CaptionVisible( false )
+				.CloseButton( false )
+				.Name( wxT( "Shaders" ) )
+				.Caption( _( "Shaders" ) )
+				.Center()
+				.Layer( 0 )
+				.Movable( false )
+				.PaneBorder( false )
+				.Dockable( false ) );
+		m_auiManager.AddPane( m_frameVariablesList
+			, wxAuiPaneInfo()
+				.CaptionVisible( false )
+				.CloseButton( false )
+				.Name( wxT( "FrameVariablesList" ) )
+				.Caption( _( "Frame variables" ) )
+				.Right()
+				.Dock()
+				.LeftDockable()
+				.RightDockable()
+				.Movable()
+				.PinButton()
+				.Layer( 2 )
+				.PaneBorder( false )
+				.MinSize( iListWidth, 0 ) );
+		m_auiManager.AddPane( m_frameVariablesProperties
+			, wxAuiPaneInfo()
+				.CaptionVisible( false )
+				.CloseButton( false )
+				.Name( wxT( "Properties" ) )
+				.Caption( _( "Properties" ) )
+				.Right()
+				.Dock()
+				.LeftDockable()
+				.RightDockable()
+				.Movable()
+				.PinButton()
+				.Layer( 2 )
+				.PaneBorder( false )
+				.MinSize( iListWidth, 0 ) );
 		m_auiManager.Update();
 	}
 
-	void ShaderEditorPage::DoLoadPage( RenderPipeline & p_pipeline )
+	void ShaderEditorPage::doLoadPage( RenderPipeline & p_pipeline )
 	{
 		ShaderProgramSPtr program = m_shaderProgram.lock();
 		wxString extension = wxT( ".glsl" );
@@ -187,11 +225,11 @@ namespace GuiCommon
 		wxArrayString arrayChoices;
 		arrayChoices.push_back( wxCOMBO_NEW );
 
-		if ( program->GetObjectStatus( m_shaderType ) != ShaderStatus::eDontExist )
+		if ( program->getObjectStatus( m_shaderType ) != ShaderStatus::edontExist )
 		{
 			// Load the shader source file/text
-			m_shaderSource = program->GetSource( m_shaderType );
-			m_shaderFile = program->GetFile( m_shaderType );
+			m_shaderSource = program->getSource( m_shaderType );
+			m_shaderFile = program->getFile( m_shaderType );
 		}
 
 		// Load the shader in the editor
@@ -204,7 +242,7 @@ namespace GuiCommon
 		else if ( !m_shaderSource.empty() )
 		{
 			// or source (read only, then)
-			m_editor->SetText( m_shaderSource );
+			m_editor->setText( m_shaderSource );
 			m_editor->SetReadOnly( true );
 		}
 
@@ -217,7 +255,7 @@ namespace GuiCommon
 			, p_pipeline );
 	}
 
-	void ShaderEditorPage::DoCleanup()
+	void ShaderEditorPage::doCleanup()
 	{
 		m_auiManager.DetachPane( m_editor );
 		m_auiManager.DetachPane( m_frameVariablesList );
@@ -232,7 +270,7 @@ namespace GuiCommon
 
 	void ShaderEditorPage::OnClose( wxCloseEvent & p_event )
 	{
-		DoCleanup();
+		doCleanup();
 		p_event.Skip();
 	}
 }

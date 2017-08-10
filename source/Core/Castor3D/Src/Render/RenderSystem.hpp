@@ -30,7 +30,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -46,7 +46,7 @@ namespace Castor3D
 				<br />Ainsi c'est aussi la seule classe à même de créer les renderers
 	*/
 	class RenderSystem
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -59,7 +59,7 @@ namespace Castor3D
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_name		Le nom du renderer.
 		 */
-		C3D_API RenderSystem( Engine & engine, Castor::String const & p_name );
+		C3D_API RenderSystem( Engine & engine, castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -73,14 +73,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le render system
 		 */
-		C3D_API void Initialise( GpuInformations && p_informations );
+		C3D_API void initialise( GpuInformations && p_informations );
 		/**
 		 *\~english
 		 *\brief		Cleans the render system up
 		 *\~french
 		 *\brief		Nettoie le render system
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Pushes a scene on the stack
@@ -89,14 +89,14 @@ namespace Castor3D
 		 *\brief		Met une scène sur la pile
 		 *\param[in]	p_scene	La scène
 		 */
-		C3D_API void PushScene( Scene * p_scene );
+		C3D_API void pushScene( Scene * p_scene );
 		/**
 		 *\~english
 		 *\brief		Pops a scene from the stack
 		 *\~french
 		 *\brief		Enlève la scène du haut de la pile
 		 */
-		C3D_API void PopScene();
+		C3D_API void popScene();
 		/**
 		 *\~english
 		 *\brief		Retrieves the top scene from the stack
@@ -105,23 +105,23 @@ namespace Castor3D
 		 *\brief		Récupère la scène du haut de la pile
 		 *\return		La scène, nullptr si la pile est vide
 		 */
-		C3D_API Scene * GetTopScene();
+		C3D_API Scene * getTopScene();
 		/**
 		 *\~english
 		 *\return		A pre-configured GlslWriter instance.
 		 *\~french
 		 *\brief		Une instance pré-configurée de GlslWriter.
 		 */
-		C3D_API GLSL::GlslWriter CreateGlslWriter();
+		C3D_API GLSL::GlslWriter createGlslWriter();
 		/**
 		 *\~english
-		 *\brief		Sets the currently active render context
+		 *\brief		sets the currently active render context
 		 *\param[in]	p_context	The context
 		 *\~french
 		 *\brief		Définit le contexte de rendu actuellement actif
 		 *\param[in]	p_context	Le contexte
 		 */
-		C3D_API void SetCurrentContext( Context * p_context );
+		C3D_API void setCurrentContext( Context * p_context );
 		/**
 		 *\~english
 		 *\brief		Retrieves the currently active render context
@@ -130,14 +130,14 @@ namespace Castor3D
 		 *\brief		Récupère le contexte de rendu actuellement actif
 		 *\return		Le contexte
 		 */
-		C3D_API Context * GetCurrentContext();
+		C3D_API Context * getCurrentContext();
 		/**
 		 *\~english
 		 *\return		The GPU informations.
 		 *\~french
 		 *\return		Les informations sur le GPU.
 		 */
-		inline GpuInformations const & GetGpuInformations()const
+		inline GpuInformations const & getGpuInformations()const
 		{
 			return m_gpuInformations;
 		}
@@ -147,7 +147,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dit si le RenderSystem est initialisé
 		 */
-		inline bool IsInitialised()const
+		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
@@ -157,19 +157,19 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère l'API de rendu
 		 */
-		inline Castor::String const & GetRendererType()const
+		inline castor::String const & getRendererType()const
 		{
 			return m_name;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the main render context
+		 *\brief		sets the main render context
 		 *\param[in]	p_context	The context
 		 *\~french
 		 *\brief		Définit le contexte de rendu principal
 		 *\param[in]	p_context	Le contexte
 		 */
-		inline void SetMainContext( ContextSPtr p_context )
+		inline void setMainContext( ContextSPtr p_context )
 		{
 			m_mainContext = p_context;
 		}
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\brief		Récupère le contexte de rendu principal
 		 *\return		Le contexte
 		 */
-		inline ContextSPtr GetMainContext()
+		inline ContextSPtr getMainContext()
 		{
 			return m_mainContext;
 		}
@@ -193,7 +193,7 @@ namespace Castor3D
 		 *\brief		Récupère le renderer d'overlays
 		 *\return		La valeur
 		 */
-		inline OverlayRendererSPtr GetOverlayRenderer()
+		inline OverlayRendererSPtr getOverlayRenderer()
 		{
 			return m_overlayRenderer;
 		}
@@ -206,9 +206,9 @@ namespace Castor3D
 		 *\param[in]	p_time	La valeur d'incrément.
 		 */
 		template< class Rep, class Period >
-		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
+		inline void incGpuTime( std::chrono::duration< Rep, Period > const & p_time )
 		{
-			m_gpuTime += std::chrono::duration_cast< Castor::Nanoseconds >( p_time );
+			m_gpuTime += std::chrono::duration_cast< castor::Nanoseconds >( p_time );
 		}
 		/**
 		 *\~english
@@ -216,9 +216,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Réinitialise le temps CPU.
 		 */
-		inline void ResetGpuTime()
+		inline void resetGpuTime()
 		{
-			m_gpuTime = Castor::Nanoseconds( 0 );
+			m_gpuTime = castor::Nanoseconds( 0 );
 		}
 		/**
 		 *\~english
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Récupère le temps CPU.
 		 *\return		La valeur.
 		 */
-		inline Castor::Nanoseconds const & GetGpuTime()const
+		inline castor::Nanoseconds const & getGpuTime()const
 		{
 			return m_gpuTime;
 		}
@@ -240,7 +240,7 @@ namespace Castor3D
 		 *\brief		Crée un ShaderProgram.
 		 *\return		Le ShaderProgram créé.
 		 */
-		C3D_API virtual ShaderProgramSPtr CreateShaderProgram() = 0;
+		C3D_API virtual ShaderProgramSPtr createShaderProgram() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a UniformBufferBinding.
@@ -253,7 +253,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme parent.
 		 *\return		Le UniformBufferBinding créé.
 		 */
-		C3D_API virtual UniformBufferBindingUPtr CreateUniformBufferBinding( UniformBuffer & p_ubo
+		C3D_API virtual UniformBufferBindingUPtr createUniformBufferBinding( UniformBuffer & p_ubo
 			, ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
@@ -265,7 +265,7 @@ namespace Castor3D
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( Topology p_topology
+		C3D_API virtual GeometryBuffersSPtr createGeometryBuffers( Topology p_topology
 			, ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
@@ -275,10 +275,10 @@ namespace Castor3D
 		 *\brief		Crée un contexte de rendu
 		 *\return		Le contexte créé
 		 */
-		C3D_API virtual ContextSPtr CreateContext() = 0;
+		C3D_API virtual ContextSPtr createContext() = 0;
 		/**
 		 *\~english
-		 *\brief		Create a render pipeline.
+		 *\brief		create a render pipeline.
 		 *\param[in]	p_dsState	The depth stencil state.
 		 *\param[in]	p_rsState	The rateriser state.
 		 *\param[in]	p_bdState	The blend state.
@@ -296,7 +296,7 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les indicateurs de création.
 		 *\return		Le pipeline.
 		 */
-		C3D_API virtual RenderPipelineUPtr CreateRenderPipeline( DepthStencilState && p_dsState
+		C3D_API virtual RenderPipelineUPtr createRenderPipeline( DepthStencilState && p_dsState
 			, RasteriserState && p_rsState
 			, BlendState && p_bdState
 			, MultisampleState && p_msState
@@ -312,10 +312,10 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme shader.
 		 *\return		Le pipeline.
 		 */
-		C3D_API virtual ComputePipelineUPtr CreateComputePipeline( ShaderProgram & p_program ) = 0;
+		C3D_API virtual ComputePipelineUPtr createComputePipeline( ShaderProgram & p_program ) = 0;
 		/**
 		 *\~english
-		 *\brief		Create a sampler
+		 *\brief		create a sampler
 		 *\param[in]	p_name	The sampler name
 		 *\return		The object
 		 *\~french
@@ -323,7 +323,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'échantillonneur
 		 *\return		L'objet
 		 */
-		C3D_API virtual SamplerSPtr CreateSampler( Castor::String const & p_name ) = 0;
+		C3D_API virtual SamplerSPtr createSampler( castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
@@ -338,7 +338,7 @@ namespace Castor3D
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type
+		C3D_API virtual TextureLayoutSPtr createTexture( TextureType p_type
 			, AccessTypes const & p_cpuAccess
 			, AccessTypes const & p_gpuAccess ) = 0;
 		/**
@@ -359,11 +359,11 @@ namespace Castor3D
 		 *\param[in]	p_size		Les dimensions de la texture.
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type
+		C3D_API virtual TextureLayoutSPtr createTexture( TextureType p_type
 			, AccessTypes const & p_cpuAccess
 			, AccessTypes const & p_gpuAccess
-			, Castor::PixelFormat p_format
-			, Castor::Size const & p_size ) = 0;
+			, castor::PixelFormat p_format
+			, castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
@@ -382,11 +382,11 @@ namespace Castor3D
 		 *\param[in]	p_size		Les dimensions de la texture.
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type
+		C3D_API virtual TextureLayoutSPtr createTexture( TextureType p_type
 			, AccessTypes const & p_cpuAccess
 			, AccessTypes const & p_gpuAccess
-			, Castor::PixelFormat p_format
-			, Castor::Point3ui const & p_size ) = 0;
+			, castor::PixelFormat p_format
+			, castor::Point3ui const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture storage.
@@ -403,7 +403,7 @@ namespace Castor3D
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		Le stockage créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TextureStorageUPtr CreateTextureStorage( TextureStorageType p_type
+		C3D_API virtual TextureStorageUPtr createTextureStorage( TextureStorageType p_type
 			, TextureLayout & p_layout
 			, AccessTypes const & p_cpuAccess
 			, AccessTypes const & p_gpuAccess ) = 0;
@@ -417,7 +417,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual GpuBufferUPtr CreateBuffer( BufferType p_type ) = 0;
+		C3D_API virtual GpuBufferUPtr createBuffer( BufferType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a transform feedback instance.
@@ -432,7 +432,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programm shader.
 		 *\return		Le tampon de transform feedback créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TransformFeedbackUPtr CreateTransformFeedback( BufferDeclaration const & p_computed
+		C3D_API virtual TransformFeedbackUPtr createTransformFeedback( BufferDeclaration const & p_computed
 			, Topology p_topology
 			, ShaderProgram & p_program ) = 0;
 		/**
@@ -443,7 +443,7 @@ namespace Castor3D
 		 *\brief		Crée un tampon d'image.
 		 *\return		Le tampon d'image créé.
 		 */
-		C3D_API virtual FrameBufferSPtr CreateFrameBuffer() = 0;
+		C3D_API virtual FrameBufferSPtr createFrameBuffer() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates the window back buffers.
@@ -452,7 +452,7 @@ namespace Castor3D
 		 *\brief		Crée les tampons d'image de la fenêtre.
 		 *\return		Les tampons d'image créés.
 		 */
-		C3D_API virtual BackBuffersSPtr CreateBackBuffers() = 0;
+		C3D_API virtual BackBuffersSPtr createBackBuffers() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a GPU query.
@@ -463,7 +463,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de requête.
 		 *\return		La requête GPU créée.
 		 */
-		C3D_API virtual GpuQueryUPtr CreateQuery( QueryType p_type ) = 0;
+		C3D_API virtual GpuQueryUPtr createQuery( QueryType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a viewport render API specific implementation.
@@ -474,7 +474,7 @@ namespace Castor3D
 		 *\param[in]	p_viewport	Le voewport parent.
 		 *\return		L'implémentation créée.
 		 */
-		C3D_API virtual IViewportImplUPtr CreateViewport( Viewport & p_viewport ) = 0;
+		C3D_API virtual IViewportImplUPtr createViewport( Viewport & p_viewport ) = 0;
 
 	protected:
 		/**
@@ -483,14 +483,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le render system
 		 */
-		C3D_API virtual void DoInitialise() = 0;
+		C3D_API virtual void doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the render system up
 		 *\~french
 		 *\brief		Nettoie le render system
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 
 	protected:
 		//!\~english	Mutex used to make this class thread safe.
@@ -516,10 +516,10 @@ namespace Castor3D
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english	The current loaded renderer api type.
 		//!\~french		Le type de l'api de rendu actuellement chargée.
-		Castor::String m_name;
+		castor::String m_name;
 		//!\~english	The time spent on GPU for current frame.
 		//!\~french		Le temps passé sur le GPU pour l'image courante.
-		Castor::Nanoseconds m_gpuTime;
+		castor::Nanoseconds m_gpuTime;
 
 #if C3D_TRACE_OBJECTS
 

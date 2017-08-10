@@ -34,56 +34,56 @@ SOFTWARE.
 namespace fxaa
 {
 	class PostEffect
-		: public Castor3D::PostEffect
+		: public castor3d::PostEffect
 	{
 	public:
-		PostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & renderSystem, Castor3D::Parameters const & p_param );
+		PostEffect( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
 		~PostEffect();
-		static Castor3D::PostEffectSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & renderSystem, Castor3D::Parameters const & p_param );
+		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
 		/**
-		 *\copydoc		Castor3D::PostEffect::Initialise
+		 *\copydoc		castor3d::PostEffect::Initialise
 		 */
-		bool Initialise() override;
+		bool initialise() override;
 		/**
-		 *\copydoc		Castor3D::PostEffect::Cleanup
+		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
-		void Cleanup() override;
+		void cleanup() override;
 		/**
-		 *\copydoc		Castor3D::PostEffect::Apply
+		 *\copydoc		castor3d::PostEffect::Apply
 		 */
-		bool Apply( Castor3D::FrameBuffer & p_framebuffer ) override;
+		bool apply( castor3d::FrameBuffer & p_framebuffer ) override;
 
-		inline void SetSubpixShift( float p_value )
+		inline void setSubpixShift( float p_value )
 		{
 			m_subpixShift = p_value;
 		}
 
-		inline void SetMaxSpan( float p_value )
+		inline void setMaxSpan( float p_value )
 		{
 			m_spanMax = p_value;
 		}
 
-		inline void SetReduceMul( float p_value )
+		inline void setReduceMul( float p_value )
 		{
 			m_reduceMul = p_value;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::PostEffect::DoWriteInto
+		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		bool DoWriteInto( Castor::TextFile & p_file ) override;
+		bool doWriteInto( castor::TextFile & p_file ) override;
 
 	public:
-		static Castor::String Type;
-		static Castor::String Name;
+		static castor::String Type;
+		static castor::String Name;
 
 	private:
-		Castor3D::PushUniform1sSPtr m_mapDiffuse;
-		Castor3D::SamplerSPtr m_sampler;
-		Castor3D::RenderPipelineSPtr m_pipeline;
+		castor3d::PushUniform1sSPtr m_mapDiffuse;
+		castor3d::SamplerSPtr m_sampler;
+		castor3d::RenderPipelineSPtr m_pipeline;
 		PostEffectSurface m_surface;
-		Castor3D::MatrixUbo m_matrixUbo;
+		castor3d::MatrixUbo m_matrixUbo;
 		FxaaUbo m_fxaaUbo;
 		float m_subpixShift{ 1.0f / 4.0f };
 		float m_spanMax{ 8.0f };

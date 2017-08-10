@@ -3,8 +3,8 @@
 #include "Render/TestRenderSystem.hpp"
 #include "Shader/TestShaderProgram.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace TestRender
 {
@@ -17,12 +17,12 @@ namespace TestRender
 	{
 	}
 
-	bool TestProgramInputLayout::Initialise( ShaderProgram const & p_program )
+	bool TestProgramInputLayout::initialise( ShaderProgram const & p_program )
 	{
 		return true;
 	}
 
-	void TestProgramInputLayout::Cleanup()
+	void TestProgramInputLayout::cleanup()
 	{
 	}
 }

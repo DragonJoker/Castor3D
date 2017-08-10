@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,7 +29,7 @@ SOFTWARE.
 #include "ShadowMap/DeferredShadowMapPoint.hpp"
 #include "ShadowMap/DeferredShadowMapSpot.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	class RenderTechnique;
 	/*!
@@ -77,34 +77,34 @@ namespace Castor3D
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 *\param[out]	shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		void Render( RenderInfo & info, bool shadows )override;
+		void render( RenderInfo & info, bool shadows )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::InitialiseShadowMaps
+		 *\copydoc		castor3d::RenderPass::initialiseShadowMaps
 		 */
-		bool InitialiseShadowMaps()override;
+		bool initialiseShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::CleanupShadowMaps
+		 *\copydoc		castor3d::RenderPass::cleanupShadowMaps
 		 */
-		void CleanupShadowMaps()override;
+		void cleanupShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::UpdateShadowMaps
+		 *\copydoc		castor3d::RenderPass::updateShadowMaps
 		 */
-		void UpdateShadowMaps( RenderQueueArray & queues )override;
+		void updateShadowMaps( RenderQueueArray & queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::RenderShadowMaps
+		 *\copydoc		castor3d::RenderPass::renderShadowMaps
 		 */
-		void RenderShadowMaps()override;
+		void renderShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::AddShadowProducer
+		 *\copydoc		castor3d::RenderTechniquePass::addShadowProducer
 		 */
-		C3D_API void AddShadowProducer( Light & light )override;
+		C3D_API void addShadowProducer( Light & light )override;
 		/**
 		 *\~english
 		 *\return		The directional light shadow map.
 		 *\~french
 		 *\return		La map d'ombre de la lumière directionnelle.
 		 */
-		inline DeferredShadowMapDirectional & GetDirectionalShadowMap()
+		inline DeferredShadowMapDirectional & getDirectionalShadowMap()
 		{
 			return m_directionalShadowMap;
 		}
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La map d'ombre des lumières projecteur.
 		 */
-		inline DeferredShadowMapSpot & GetSpotShadowMap()
+		inline DeferredShadowMapSpot & getSpotShadowMap()
 		{
 			return m_spotShadowMap;
 		}
@@ -124,54 +124,54 @@ namespace Castor3D
 		 *\~french
 		 *\return		La map d'ombre des lumières ponctuelles.
 		 */
-		inline DeferredShadowMapPoint & GetPointShadowMaps()
+		inline DeferredShadowMapPoint & getPointShadowMaps()
 		{
 			return m_pointShadowMap;
 		}
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetDepthMaps
+		 *\copydoc		castor3d::RenderPass::doGetDepthMaps
 		 */
-		void DoGetDepthMaps( DepthMapArray & depthMaps )override;
+		void doGetDepthMaps( DepthMapArray & depthMaps )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
+		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		void DoUpdatePipeline( RenderPipeline & pipeline )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	private:
 		//!\~english	The shadow map used for directional lights.
@@ -185,10 +185,10 @@ namespace Castor3D
 		DeferredShadowMapPoint m_pointShadowMap;
 
 	private:
-		static Castor::String const Output1;
-		static Castor::String const Output2;
-		static Castor::String const Output3;
-		static Castor::String const Output4;
+		static castor::String const Output1;
+		static castor::String const Output2;
+		static castor::String const Output3;
+		static castor::String const Output4;
 	};
 }
 

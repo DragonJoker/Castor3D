@@ -4,16 +4,16 @@
 #include "BorderPanelOverlay.hpp"
 #include "TextOverlay.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	OverlayFactory::OverlayFactory()
 		: Factory< OverlayCategory, OverlayType >()
 	{
-		Register( OverlayType::ePanel, &PanelOverlay::Create );
-		Register( OverlayType::eBorderPanel, &BorderPanelOverlay::Create );
-		Register( OverlayType::eText, &TextOverlay::Create );
+		registerType( OverlayType::ePanel, &PanelOverlay::create );
+		registerType( OverlayType::eBorderPanel, &BorderPanelOverlay::create );
+		registerType( OverlayType::eText, &TextOverlay::create );
 	}
 
 	OverlayFactory::~OverlayFactory()

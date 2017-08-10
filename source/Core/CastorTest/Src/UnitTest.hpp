@@ -28,7 +28,7 @@ SOFTWARE.
 namespace Testing
 {
 	template< typename T >
-	inline std::string to_string( T const & p_value )
+	inline std::string toString( T const & p_value )
 	{
 		std::stringstream stream;
 		stream << p_value;
@@ -36,7 +36,7 @@ namespace Testing
 	}
 
 	template<>
-	inline std::string to_string< std::chrono::milliseconds >( std::chrono::milliseconds const & p_value )
+	inline std::string toString< std::chrono::milliseconds >( std::chrono::milliseconds const & p_value )
 	{
 		std::stringstream stream;
 		stream << p_value.count() << "ms";
@@ -44,7 +44,7 @@ namespace Testing
 	}
 
 	template<>
-	inline std::string to_string< std::chrono::microseconds >( std::chrono::microseconds const & p_value )
+	inline std::string toString< std::chrono::microseconds >( std::chrono::microseconds const & p_value )
 	{
 		std::stringstream stream;
 		stream << p_value.count() << "us";
@@ -52,7 +52,7 @@ namespace Testing
 	}
 
 	template<>
-	inline std::string to_string< std::chrono::nanoseconds >( std::chrono::nanoseconds const & p_value )
+	inline std::string toString< std::chrono::nanoseconds >( std::chrono::nanoseconds const & p_value )
 	{
 		std::stringstream stream;
 		stream << p_value.count() << "ns";
@@ -60,7 +60,7 @@ namespace Testing
 	}
 
 	template<>
-	inline std::string to_string< std::wstring >( std::wstring const & p_value )
+	inline std::string toString< std::wstring >( std::wstring const & p_value )
 	{
 		std::stringstream stream;
 		stream << p_value.c_str();
@@ -68,7 +68,7 @@ namespace Testing
 	}
 
 	template< typename T >
-	inline std::string to_string( std::pair< T const *, uint32_t > const & p_value )
+	inline std::string toString( std::pair< T const *, uint32_t > const & p_value )
 	{
 		std::stringstream stream;
 		stream << p_value.second << ": ";
@@ -81,7 +81,7 @@ namespace Testing
 		return stream.str();
 	}
 
-	inline std::string to_string( std::pair< uint8_t const *, uint32_t > const & p_value )
+	inline std::string toString( std::pair< uint8_t const *, uint32_t > const & p_value )
 	{
 		std::stringstream stream;
 		stream << p_value.second << ": ";
@@ -99,11 +99,11 @@ namespace Testing
 	{
 		using value_type = Value;
 		using pointer_type = std::shared_ptr< value_type >;
-		typedef std::function< pointer_type() > Getter;
+		typedef std::function< pointer_type() > getter;
 
 	public:
 		Lazy( std::function< Value() > const & p_expression )
-			: m_thunk{ std::make_shared< Getter >( [p_expression]()
+			: m_thunk{ std::make_shared< getter >( [p_expression]()
 			{
 				return std::make_shared< value_type >( p_expression() );
 			} ) }
@@ -137,7 +137,7 @@ namespace Testing
 		}
 
 	private:
-		mutable std::shared_ptr< Getter > m_thunk;
+		mutable std::shared_ptr< getter > m_thunk;
 	};
 
 	template< class Value >
@@ -145,11 +145,11 @@ namespace Testing
 	{
 		using value_type = std::reference_wrapper< Value >;
 		using pointer_type = std::shared_ptr< value_type >;
-		typedef std::function< pointer_type() > Getter;
+		typedef std::function< pointer_type() > getter;
 
 	public:
 		Lazy( std::function< Value &() > const & p_expression )
-			: m_thunk{ std::make_shared< Getter >( [p_expression]()
+			: m_thunk{ std::make_shared< getter >( [p_expression]()
 			{
 				return std::make_shared< value_type >( std::ref( p_expression() ) );
 			} ) }
@@ -183,18 +183,18 @@ namespace Testing
 		}
 
 	private:
-		mutable std::shared_ptr< Getter > m_thunk;
+		mutable std::shared_ptr< getter > m_thunk;
 	};
 
 	template<>
 	class Lazy< void >
 	{
 		using value_type = void;
-		typedef std::function< void() > Getter;
+		typedef std::function< void() > getter;
 
 	public:
 		Lazy( std::function< void() > const & p_expression )
-			: m_thunk{ std::make_shared< Getter >( [p_expression]()
+			: m_thunk{ std::make_shared< getter >( [p_expression]()
 		{
 			return p_expression();
 		} ) }
@@ -214,7 +214,7 @@ namespace Testing
 		}
 
 	private:
-		mutable std::shared_ptr< Getter > m_thunk;
+		mutable std::shared_ptr< getter > m_thunk;
 	};
 
 	class TestFailed
@@ -247,7 +247,7 @@ namespace Testing
 		void Execute( uint32_t & p_errCount
 			, uint32_t & p_testCount );
 
-		inline std::string const & GetName()const
+		inline std::string const & getName()const
 		{
 			return m_name;
 		}
@@ -257,17 +257,17 @@ namespace Testing
 			( *m_errorCount )++;
 		}
 
-		inline void AddTest()
+		inline void addTest()
 		{
 			( *m_testCount )++;
 		}
 
 	protected:
-		void DoRegisterTest( std::string const & p_name
+		void doRegisterTest( std::string const & p_name
 			, TestFunction p_test );
 
 	private:
-		virtual void DoRegisterTests() = 0;
+		virtual void doRegisterTests() = 0;
 
 	protected:
 		template< typename Type >
@@ -277,7 +277,7 @@ namespace Testing
 			, uint32_t const p_line
 			, char const * const p_conditionName )
 		{
-			AddTest();
+			addTest();
 			bool result = false;
 
 			try
@@ -316,7 +316,7 @@ namespace Testing
 			, uint32_t const p_line
 			, char const * const p_conditionName )
 		{
-			AddTest();
+			addTest();
 			bool result = false;
 
 			try
@@ -348,7 +348,7 @@ namespace Testing
 			, uint32_t const p_line
 			, char const * const p_conditionName )
 		{
-			AddTest();
+			addTest();
 			bool result = false;
 
 			try
@@ -372,7 +372,7 @@ namespace Testing
 			, uint32_t const p_line
 			, char const * const p_conditionName )
 		{
-			AddTest();
+			addTest();
 			bool result = false;
 
 			try
@@ -407,7 +407,7 @@ namespace Testing
 			, char const * const p_lhsName
 			, char const * const p_rhsName )
 		{
-			AddTest();
+			addTest();
 			bool result = false;
 
 			try
@@ -419,7 +419,7 @@ namespace Testing
 				if ( !result )
 				{
 					ReportFailure();
-					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << " (" << ::Testing::to_string( lhs ) << " != " << ::Testing::to_string( rhs ) << ")" << std::endl;
+					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << " (" << ::Testing::toString( lhs ) << " != " << ::Testing::toString( rhs ) << ")" << std::endl;
 				}
 			}
 			catch ( std::exception & p_exc )
@@ -449,7 +449,7 @@ namespace Testing
 			, char const * const p_lhsName
 			, char const * const p_rhsName )
 		{
-			AddTest();
+			addTest();
 			bool result = false;
 
 			try
@@ -461,7 +461,7 @@ namespace Testing
 				if ( result )
 				{
 					ReportFailure();
-					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << " (" << ::Testing::to_string( lhs ) << " == " << ::Testing::to_string( rhs ) << ")" << std::endl;
+					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << " (" << ::Testing::toString( lhs ) << " == " << ::Testing::toString( rhs ) << ")" << std::endl;
 				}
 			}
 			catch ( std::exception & p_exc )

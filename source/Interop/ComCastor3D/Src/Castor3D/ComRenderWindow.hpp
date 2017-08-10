@@ -57,40 +57,40 @@ namespace CastorCom
 		 */
 		virtual ~CRenderWindow();
 
-		inline Castor3D::RenderWindowSPtr GetInternal()const
+		inline castor3d::RenderWindowSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::RenderWindowSPtr pass )
+		inline void setInternal( castor3d::RenderWindowSPtr pass )
 		{
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( RenderTarget, IRenderTarget *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetRenderTarget ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetRenderTarget ) );
+		COM_PROPERTY( RenderTarget, IRenderTarget *, make_getter( m_internal.get(), &castor3d::RenderWindow::getRenderTarget ), make_putter( m_internal.get(), &castor3d::RenderWindow::setRenderTarget ) );
 
-		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetSize ) );
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetName ) );
+		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &castor3d::RenderWindow::getSize ) );
+		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &castor3d::RenderWindow::getName ) );
 
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( Resize )( /* [in] */ ISize * size );
 		STDMETHOD( OnMouseMove )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseLButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseLButtondown )( /* [in] */ IPosition * pos );
 		STDMETHOD( OnMouseLButtonUp )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseMButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseMButtondown )( /* [in] */ IPosition * pos );
 		STDMETHOD( OnMouseMButtonUp )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseRButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseRButtondown )( /* [in] */ IPosition * pos );
 		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos );
 
 	private:
-		Castor::real DoTransformX( int x );
-		Castor::real DoTransformY( int y );
-		int DoTransformX( Castor::real x );
-		int DoTransformY( Castor::real y );
+		castor::real doTransformX( int x );
+		castor::real doTransformY( int y );
+		int doTransformX( castor::real x );
+		int doTransformY( castor::real y );
 
 	private:
-		Castor3D::RenderWindowSPtr m_internal;
+		castor3d::RenderWindowSPtr m_internal;
 		int m_oldX;
 		int m_oldY;
 		int m_newX;
@@ -99,8 +99,8 @@ namespace CastorCom
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( RenderWindow ), CRenderWindow );
 
-	DECLARE_VARIABLE_PTR_GETTER( RenderWindow, Castor3D, RenderWindow );
-	DECLARE_VARIABLE_PTR_PUTTER( RenderWindow, Castor3D, RenderWindow );
+	DECLARE_VARIABLE_PTR_GETTER( RenderWindow, castor3d, RenderWindow );
+	DECLARE_VARIABLE_PTR_PUTTER( RenderWindow, castor3d, RenderWindow );
 }
 
 #endif

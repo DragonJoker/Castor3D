@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsZipTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void ZipFile();

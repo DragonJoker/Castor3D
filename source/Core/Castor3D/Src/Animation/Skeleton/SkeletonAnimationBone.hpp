@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "SkeletonAnimationObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -90,16 +90,16 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nom de l'objet.
 		 */
-		virtual Castor::String const & GetName()const;
+		virtual castor::String const & getName()const;
 		/**
 		 *\~english
-		 *\brief		Sets the moving object.
+		 *\brief		sets the moving object.
 		 *\param[in]	p_bone		The bone.
 		 *\~french
 		 *\brief		Définit l'objet mouvant.
 		 *\param[in]	p_bone		L'os.
 		 */
-		inline void SetBone( BoneSPtr p_bone )
+		inline void setBone( BoneSPtr p_bone )
 		{
 			m_bone = p_bone;
 		}
@@ -109,7 +109,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'objet mouvant.
 		 */
-		inline BoneSPtr GetBone()const
+		inline BoneSPtr getBone()const
 		{
 			return m_bone.lock();
 		}
@@ -162,7 +162,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( SkeletonAnimationBone const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimationBone const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -190,7 +190,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( SkeletonAnimationBone & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimationBone & p_obj )override;
 	};
 }
 

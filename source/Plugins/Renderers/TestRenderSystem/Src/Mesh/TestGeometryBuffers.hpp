@@ -41,7 +41,7 @@ namespace TestRender
 	\remark		Permet aux implémentations d'utiliser les optimisations spécifiques aux API (comme les Vertex arrays objects OpenGL)
 	*/
 	class TestGeometryBuffers
-		: public Castor3D::GeometryBuffers
+		: public castor3d::GeometryBuffers
 	{
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace TestRender
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		TestGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program );
+		TestGeometryBuffers( castor3d::Topology p_topology, castor3d::ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,23 +63,23 @@ namespace TestRender
 		 */
 		virtual ~TestGeometryBuffers();
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::Draw
+		 *\copydoc		castor3d::GeometryBuffers::Draw
 		 */
-		virtual bool Draw( uint32_t p_size, uint32_t p_index )const;
+		virtual bool draw( uint32_t p_size, uint32_t p_index )const;
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DrawInstanced
+		 *\copydoc		castor3d::GeometryBuffers::DrawInstanced
 		 */
-		virtual bool DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const;
+		virtual bool drawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DoInitialise
+		 *\copydoc		castor3d::GeometryBuffers::doInitialise
 		 */
-		virtual bool DoInitialise();
+		virtual bool doInitialise();
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DoCleanup
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
 		 */
-		virtual void DoCleanup();
+		virtual void doCleanup();
 	};
 }
 

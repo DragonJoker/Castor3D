@@ -1,9 +1,9 @@
 #include "FrameListener.hpp"
 #include "FrameEvent.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	FrameListener::FrameListener( String const & p_name )
 		: Named( p_name )
@@ -18,23 +18,23 @@ namespace Castor3D
 		}
 	}
 
-	void FrameListener::Flush()
+	void FrameListener::flush()
 	{
 		for ( auto & list : m_events )
 		{
 			list.clear();
 		}
 
-		DoFlush();
+		doFlush();
 	}
 
-	void FrameListener::PostEvent( FrameEventUPtr && p_event )
+	void FrameListener::postEvent( FrameEventUPtr && p_event )
 	{
-		auto lock = Castor::make_unique_lock( m_mutex );
-		m_events[size_t( p_event->GetType() )].push_back( std::move( p_event ) );
+		auto lock = castor::makeUniqueLock( m_mutex );
+		m_events[size_t( p_event->getType() )].push_back( std::move( p_event ) );
 	}
 
-	bool FrameListener::FireEvents( EventType p_type )
+	bool FrameListener::fireEvents( EventType p_type )
 	{
 		m_mutex.lock();
 		FrameEventPtrArray arrayEvents;
@@ -48,30 +48,30 @@ namespace Castor3D
 			{
 				if ( result )
 				{
-					result = event->Apply();
+					result = event->apply();
 				}
 			}
 		}
 		catch ( Exception & p_exc )
 		{
-			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+			Logger::logError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( p_exc.getFullDescription() ) );
 			result = false;
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.what() ) );
+			Logger::logError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( p_exc.what() ) );
 			result = false;
 		}
 		catch ( ... )
 		{
-			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events" ) );
+			Logger::logError( StringStream() << cuT( "Encountered exception while processing events" ) );
 			result = false;
 		}
 
 		return result;
 	}
 
-	void FrameListener::FlushEvents( EventType p_type )
+	void FrameListener::flushEvents( EventType p_type )
 	{
 		m_mutex.lock();
 		FrameEventPtrArray arrayEvents;

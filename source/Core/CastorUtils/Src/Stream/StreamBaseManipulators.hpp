@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,7 +29,7 @@ SOFTWARE.
 #include <cassert>
 #include <climits>
 
-namespace Castor
+namespace castor
 {
 	namespace manip
 	{
@@ -43,11 +43,11 @@ namespace Castor
 		\brief		Définit un type manipulateur de base, c'est ce que font les manipulateurs de flux lorsqu'ils prennent des paramètres, sauf qu'ils retournent un type opaque
 		*/
 		template< typename CharType >
-		struct basic_base_manip
+		struct BasicBaseManip
 		{
 			int m_base;
 
-			basic_base_manip( int base )
+			BasicBaseManip( int base )
 				: m_base( base )
 			{
 				assert( base >= 2 );
@@ -69,9 +69,9 @@ namespace Castor
 			}
 		};
 
-		typedef basic_base_manip< char > base_manip;
-		typedef basic_base_manip< wchar_t > wbase_manip;
-		typedef basic_base_manip< xchar > xbase_manip;
+		typedef BasicBaseManip< char > BaseManip;
+		typedef BasicBaseManip< wchar_t > WBaseManip;
+		typedef BasicBaseManip< xchar > XBaseManip;
 
 		/**
 		 *\~english
@@ -83,9 +83,9 @@ namespace Castor
 		 *\remarks		Crée un manipulateur, pour l'utiliser dans un flux
 		 *\param[in]	b	La base
 		 */
-		inline base_manip base( int b )
+		inline BaseManip base( int b )
 		{
-			return base_manip( b );
+			return BaseManip( b );
 		}
 
 		/**
@@ -98,9 +98,9 @@ namespace Castor
 		 *\remarks		Crée un manipulateur, pour l'utiliser dans un flux
 		 *\param[in]	b	La base
 		 */
-		inline wbase_manip wbase( int b )
+		inline WBaseManip wbase( int b )
 		{
-			return wbase_manip( b );
+			return WBaseManip( b );
 		}
 
 		/**
@@ -113,9 +113,9 @@ namespace Castor
 		 *\remarks		Crée un manipulateur, pour l'utiliser dans un flux
 		 *\param[in]	b	La base
 		 */
-		inline xbase_manip xbase( int b )
+		inline XBaseManip xbase( int b )
 		{
-			return xbase_manip( b );
+			return XBaseManip( b );
 		}
 
 		/**
@@ -130,7 +130,7 @@ namespace Castor
 		 *\param[in]	stream	Le flux
 		 *\param[in]	manip	Le manipulateur
 		 */
-		inline std::ostream & operator<<( std::ostream & stream, const manip::base_manip & manip )
+		inline std::ostream & operator<<( std::ostream & stream, const manip::BaseManip & manip )
 		{
 			manip.apply( stream );
 			return stream;
@@ -148,7 +148,7 @@ namespace Castor
 		 *\param[in]	stream	Le flux
 		 *\param[in]	manip	Le manipulateur
 		 */
-		inline std::wostream & operator<<( std::wostream & stream, const manip::wbase_manip & manip )
+		inline std::wostream & operator<<( std::wostream & stream, const manip::WBaseManip & manip )
 		{
 			manip.apply( stream );
 			return stream;
@@ -169,7 +169,7 @@ namespace Castor
 					<br />Ici nous en créons une qui connait notre manipulateur.
 		*/
 		template< typename CharType >
-		struct base_num_put
+		struct BaseNumPut
 			: std::num_put< CharType >
 		{
 			typedef typename std::num_put< CharType >::iter_type iter_type;
@@ -205,12 +205,12 @@ namespace Castor
 			template< class NumType >
 			iter_type doPutHelper( iter_type out, std::ios_base & str, CharType fill, NumType val )const
 			{
-				// Read the value stored in our xalloc location.
-				const int base = str.iword( basic_base_manip< CharType >::getIWord() );
+				// read the value stored in our xalloc location.
+				const int base = str.iword( BasicBaseManip< CharType >::getIWord() );
 
 				// we only want this manipulator to affect the next numeric value, so
 				// reset its value.
-				str.iword( basic_base_manip< CharType >::getIWord() ) = 0;
+				str.iword( BasicBaseManip< CharType >::getIWord() ) = 0;
 
 				// normal number output, use the built in putter.
 				if ( base == 0 || base == 10 )
@@ -230,10 +230,10 @@ namespace Castor
 					tempVal /= base;
 				}
 
-				// Get the format flags.
+				// get the format flags.
 				const std::ios_base::fmtflags flags = str.flags();
 
-				// Add the padding if needs by (i.e. they have used std::setw).
+				// add the padding if needs by (i.e. they have used std::setw).
 				// Only applies if we are right aligned, or none specified.
 				if ( ( flags & std::ios_base::right ) || !( ( flags & std::ios_base::internal ) || ( flags & std::ios_base::left ) ) )
 				{
@@ -261,7 +261,7 @@ namespace Castor
 					*out++ = digitChar[digits[--i]];
 				}
 
-				// Add the padding if needs by (i.e. they have used std::setw).
+				// add the padding if needs by (i.e. they have used std::setw).
 				// Only applies if we are left aligned.
 				if ( str.flags() & std::ios_base::left )
 				{

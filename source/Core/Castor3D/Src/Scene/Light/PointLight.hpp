@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Light.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs, PointLight const * p_category = nullptr );
+			C3D_API TextWriter( castor::String const & p_tabs, PointLight const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
@@ -71,11 +71,11 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			C3D_API bool operator()( PointLight const & p_light, Castor::TextFile & p_file );
+			C3D_API bool operator()( PointLight const & p_light, castor::TextFile & p_file );
 			/**
-			 *\copydoc		Castor3D::LightCategory::TextWriter::WriteInto
+			 *\copydoc		castor3d::LightCategory::TextWriter::writeInto
 			 */
-			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
+			C3D_API bool writeInto( castor::TextFile & p_file )override;
 
 		private:
 			PointLight const * m_category;
@@ -108,29 +108,29 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par Factory.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategoryUPtr Create( Light & p_light );
+		C3D_API static LightCategoryUPtr create( Light & p_light );
 		/**
-		 *\copydoc		Castor3D::LightCategory::Update
+		 *\copydoc		castor3d::LightCategory::Update
 		 */
-		C3D_API void Update( Castor::Point3r const & p_target
+		C3D_API void update( castor::Point3r const & p_target
 			, Viewport & p_viewport
 			, int32_t p_index = -1 )override;
 		/**
-		 *\copydoc		Castor3D::LightCategory::CreateTextWriter
+		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */
-		C3D_API std::unique_ptr < LightCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
+		C3D_API std::unique_ptr < LightCategory::TextWriter > createTextWriter( castor::String const & p_tabs )override
 		{
 			return std::make_unique< TextWriter >( p_tabs, this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets attenuation components
+		 *\brief		sets attenuation components
 		 *\param[in]	p_ptAttenuation	The attenuation components
 		 *\~french
 		 *\brief		Définit les composantes d'atténuation
 		 *\param[in]	p_ptAttenuation	Les composantes d'attenuation
 		 */
-		C3D_API void SetAttenuation( Castor::Point3f const & p_ptAttenuation );
+		C3D_API void setAttenuation( castor::Point3f const & p_ptAttenuation );
 		/**
 		 *\~english
 		 *\brief		Retrieves the attenuation components
@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\brief		Récupère les composantes d'attenuation
 		 *\return		Les composantes d'attenuation
 		 */
-		inline Castor::Point3f const & GetAttenuation()const
+		inline castor::Point3f const & getAttenuation()const
 		{
 			return m_attenuation;
 		}
@@ -151,26 +151,26 @@ namespace Castor3D
 		 *\brief		Récupère les composantes d'attenuation
 		 *\return		Les composantes d'attenuation
 		 */
-		inline Castor::Point3f & GetAttenuation()
+		inline castor::Point3f & getAttenuation()
 		{
 			return m_attenuation;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::LightCategory::UpdateNode
+		 *\copydoc		castor3d::LightCategory::updateNode
 		 */
-		C3D_API void UpdateNode( SceneNode const & p_node )override;
+		C3D_API void updateNode( SceneNode const & p_node )override;
 		/**
-		 *\copydoc		Castor::LightCategory::DoBind
+		 *\copydoc		castor::LightCategory::doBind
 		 */
-		C3D_API void DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const override;
+		C3D_API void doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const override;
 
 	private:
 		friend class Scene;
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//!\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
-		Castor::Point3f m_attenuation{ 1.0f, 0.0f, 0.0f };
+		castor::Point3f m_attenuation{ 1.0f, 0.0f, 0.0f };
 		//!\~english	The light source shadow map index.
 		//!\~french		L'index de la shadow map de la source lumineuse.
 		int32_t m_shadowMapIndex{ -1 };

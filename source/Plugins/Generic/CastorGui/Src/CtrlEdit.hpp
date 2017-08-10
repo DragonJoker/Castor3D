@@ -42,8 +42,8 @@ namespace CastorGui
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		EditCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		EditCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id );
 
@@ -57,13 +57,13 @@ namespace CastorGui
 		 *\param[in]	p_style		The style
 		 *\param[in]	p_visible	Initial visibility status
 		 */
-		EditCtrl( Castor::String const & p_name
-			, Castor3D::Engine & engine
+		EditCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id
-			, Castor::String const & p_caption
-			, Castor::Position const & p_position
-			, Castor::Size const & p_size
+			, castor::String const & p_caption
+			, castor::Position const & p_position
+			, castor::Size const & p_size
 			, uint32_t p_style = 0
 			, bool p_visible = true );
 
@@ -71,15 +71,15 @@ namespace CastorGui
 		 */
 		virtual ~EditCtrl();
 
-		/** Sets the caption font.
+		/** sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
-		void SetFont( Castor::String const & p_font );
+		void setFont( castor::String const & p_font );
 
 		/** Retrieves the caption
 		 *\return		The value
 		 */
-		inline Castor::String const & GetCaption()const
+		inline castor::String const & getCaption()const
 		{
 			return m_caption;
 		}
@@ -87,7 +87,7 @@ namespace CastorGui
 		/** Updates the caption
 		 *\param[in]	p_value		The new value
 		 */
-		inline void UpdateCaption( Castor::String const & p_value )
+		inline void updateCaption( castor::String const & p_value )
 		{
 			m_caption = p_value;
 		}
@@ -97,7 +97,7 @@ namespace CastorGui
 		 *\param[in]	p_function	The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnEditEventConnection Connect( EditEvent p_event, OnEditEventFunction p_function )
+		inline OnEditEventConnection connect( EditEvent p_event, OnEditEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}
@@ -105,113 +105,113 @@ namespace CastorGui
 		/** Retreves the multiline status of the edit.
 		 *\return		The value.
 		 */
-		bool IsMultiLine()const
+		bool isMultiLine()const
 		{
-			return Castor::CheckFlag( GetStyle(), EditStyle::eMultiline );
+			return castor::checkFlag( getStyle(), EditStyle::eMultiline );
 		}
 
 	private:
-		/** @copydoc CastorGui::Control::DoCreate
+		/** @copydoc CastorGui::Control::doCreate
 		*/
-		void DoCreate()override;
+		void doCreate()override;
 
-		/** @copydoc CastorGui::Control::DoDestroy
+		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		void DoDestroy()override;
+		void doDestroy()override;
 
-		/** @copydoc CastorGui::Control::DoSetPosition
+		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		void DoSetPosition( Castor::Position const & p_value )override;
+		void doSetPosition( castor::Position const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoSetSize
+		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		void DoSetSize( Castor::Size const & p_value )override;
+		void doSetSize( castor::Size const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
+		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material )override;
+		void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material )override;
 
-		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
+		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material )override;
+		void doSetForegroundMaterial( castor3d::MaterialSPtr p_material )override;
 
-		/** @copydoc CastorGui::Control::DoSetCaption
+		/** @copydoc CastorGui::Control::doSetCaption
 		*/
-		void DoSetCaption( Castor::String const & p_value )override;
+		void doSetCaption( castor::String const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoSetVisible
+		/** @copydoc CastorGui::Control::doSetVisible
 		*/
-		void DoSetVisible( bool p_visible )override;
+		void doSetVisible( bool p_visible )override;
 
-		/** @copydoc CastorGui::Control::DoUpdateStyle
+		/** @copydoc CastorGui::Control::doUpdateStyle
 		*/
-		void DoUpdateStyle()override;
+		void doUpdateStyle()override;
 
 		/** Event when the control is activated
 		 *\param[in]	p_event		The control event
 		 */
-		void OnActivate( Castor3D::HandlerEvent const & p_event );
+		void onActivate( castor3d::HandlerEvent const & p_event );
 
 		/** Event when the control is deactivated
 		 *\param[in]	p_event		The control event
 		 */
-		void OnDeactivate( Castor3D::HandlerEvent const & p_event );
+		void onDeactivate( castor3d::HandlerEvent const & p_event );
 
 		/** Event when mouse left button is pushed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLButtonDown( Castor3D::MouseEvent const & p_event );
+		void onMouseLButtonDown( castor3d::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLButtonUp( Castor3D::MouseEvent const & p_event );
+		void onMouseLButtonUp( castor3d::MouseEvent const & p_event );
 
 		/** Event when a printable key is pressed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnChar( Castor3D::KeyboardEvent const & p_event );
+		void onChar( castor3d::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
+		void onKeyDown( castor3d::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnKeyUp( Castor3D::KeyboardEvent const & p_event );
+		void onKeyUp( castor3d::KeyboardEvent const & p_event );
 
-		/** Adds a character at caret index
+		/** adds a character at caret index
 		 */
-		void DoAddCharAtCaret( Castor::String const & p_char );
+		void doAddCharAtCaret( castor::String const & p_char );
 
 		/** Removes a character at caret index
 		 */
-		void DoDeleteCharAtCaret();
+		void doDeleteCharAtCaret();
 
 		/** Removes a character before caret index (backspace)
 		 */
-		void DoDeleteCharBeforeCaret();
+		void doDeleteCharBeforeCaret();
 
 		/** Updates the caption and text overlay
 		 */
-		void DoUpdateCaption();
+		void doUpdateCaption();
 
 		/** Retrieves the caption with caret
 		 *\return		The caption and the caret at good position
 		 */
-		Castor::String DoGetCaptionWithCaret()const;
+		castor::String doGetCaptionWithCaret()const;
 
 	private:
 		//! The caption
-		Castor::String m_caption;
+		castor::String m_caption;
 		//! The caret index in the caption
-		Castor::string::utf8::const_iterator m_caretIt;
+		castor::string::utf8::const_iterator m_caretIt;
 		//! The activation status
 		bool m_active;
 		//! The text overlay used to display the caption
-		Castor3D::TextOverlayWPtr m_text;
+		castor3d::TextOverlayWPtr m_text;
 		//! The edit events signals
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
 		//! Tells if the Edit is a multiline one.

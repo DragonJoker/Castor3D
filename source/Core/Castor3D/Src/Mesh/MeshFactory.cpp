@@ -9,22 +9,22 @@
 #include "Mesh/Generator/Sphere.hpp"
 #include "Mesh/Generator/Torus.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	MeshFactory::MeshFactory()
 		: Factory< MeshGenerator, String >()
 	{
-		Register( cuT( "cone" ), Cone::Create );
-		Register( cuT( "cube" ), Cube::Create );
-		Register( cuT( "custom" ), MeshGenerator::Create );
-		Register( cuT( "cylinder" ), Cylinder::Create );
-		Register( cuT( "icosahedron" ), Icosahedron::Create );
-		Register( cuT( "plane" ), Plane::Create );
-		Register( cuT( "projection" ), Projection::Create );
-		Register( cuT( "sphere" ), Sphere::Create );
-		Register( cuT( "torus" ), Torus::Create );
+		registerType( cuT( "cone" ), Cone::create );
+		registerType( cuT( "cube" ), Cube::create );
+		registerType( cuT( "custom" ), MeshGenerator::create );
+		registerType( cuT( "cylinder" ), Cylinder::create );
+		registerType( cuT( "icosahedron" ), Icosahedron::create );
+		registerType( cuT( "plane" ), Plane::create );
+		registerType( cuT( "projection" ), Projection::create );
+		registerType( cuT( "sphere" ), Sphere::create );
+		registerType( cuT( "torus" ), Torus::create );
 	}
 
 	MeshFactory::~MeshFactory()

@@ -31,7 +31,7 @@ SOFTWARE.
 #include <Math/Coords.hpp>
 #include <Math/Point.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -85,243 +85,243 @@ namespace Castor3D
 		C3D_API virtual ~Vertex();
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position
+		 *\brief		sets the vertex position
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
 		 *\param[in]	val	La nouvelle valeur
 		 */
-		inline void SetPosition( Castor::Coords3r const & val )
+		inline void setPosition( castor::Coords3r const & val )
 		{
-			SetPosition( m_group.ptr(), val );
+			setPosition( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position
+		 *\brief		sets the vertex position
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
 		 *\param[in]	val	La nouvelle valeur
 		 */
-		inline void SetPosition( Castor::Point3r const & val )
+		inline void setPosition( castor::Point3r const & val )
 		{
-			SetPosition( m_group.ptr(), val );
+			setPosition( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position
+		 *\brief		sets the vertex position
 		 *\param[in]	x, y, z	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
 		 *\param[in]	x, y, z	La nouvelle valeur
 		 */
-		inline void SetPosition( real x, real y, real z )
+		inline void setPosition( real x, real y, real z )
 		{
-			SetPosition( m_group.ptr(), x, y, z );
+			setPosition( m_group.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position
+		 *\brief		sets the vertex position
 		 *\param[in]	p_coords	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
 		 *\param[in]	p_coords	La nouvelle valeur
 		 */
-		inline void SetPosition( real const * p_coords )
+		inline void setPosition( real const * p_coords )
 		{
-			SetPosition( m_group.ptr(), p_coords );
+			setPosition( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal
+		 *\brief		sets the vertex normal
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la normale du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetNormal( Castor::Coords3r const & val )
+		inline void setNormal( castor::Coords3r const & val )
 		{
-			SetNormal( m_group.ptr(), val );
+			setNormal( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal
+		 *\brief		sets the vertex normal
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la normale du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetNormal( Castor::Point3r const & val )
+		inline void setNormal( castor::Point3r const & val )
 		{
-			SetNormal( m_group.ptr(), val );
+			setNormal( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal
+		 *\brief		sets the vertex normal
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit la normale du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
-		inline void SetNormal( real x, real y, real z )
+		inline void setNormal( real x, real y, real z )
 		{
-			SetNormal( m_group.ptr(), x, y, z );
+			setNormal( m_group.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal
+		 *\brief		sets the vertex normal
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la normale du sommet
 		 *\param[in]	p_coords	Le tampon de données
 		 */
-		inline void SetNormal( real const * p_coords )
+		inline void setNormal( real const * p_coords )
 		{
-			SetNormal( m_group.ptr(), p_coords );
+			setNormal( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent
+		 *\brief		sets the vertex tangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la tangente du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetTangent( Castor::Coords3r const & val )
+		inline void setTangent( castor::Coords3r const & val )
 		{
-			SetTangent( m_group.ptr(), val );
+			setTangent( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent
+		 *\brief		sets the vertex tangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la tangente du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetTangent( Castor::Point3r const & val )
+		inline void setTangent( castor::Point3r const & val )
 		{
-			SetTangent( m_group.ptr(), val );
+			setTangent( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent
+		 *\brief		sets the vertex tangent
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit la tangente du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
-		inline void SetTangent( real x, real y, real z )
+		inline void setTangent( real x, real y, real z )
 		{
-			SetTangent( m_group.ptr(), x, y, z );
+			setTangent( m_group.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent
+		 *\brief		sets the vertex tangent
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la tangente du sommet
 		 *\param[in]	p_coords	Le tampon de données
 		 */
-		inline void SetTangent( real const * p_coords )
+		inline void setTangent( real const * p_coords )
 		{
-			SetTangent( m_group.ptr(), p_coords );
+			setTangent( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent
+		 *\brief		sets the vertex bitangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetBitangent( Castor::Coords3r const & val )
+		inline void setBitangent( castor::Coords3r const & val )
 		{
-			SetBitangent( m_group.ptr(), val );
+			setBitangent( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent
+		 *\brief		sets the vertex bitangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetBitangent( Castor::Point3r const & val )
+		inline void setBitangent( castor::Point3r const & val )
 		{
-			SetBitangent( m_group.ptr(), val );
+			setBitangent( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent
+		 *\brief		sets the vertex bitangent
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
-		inline void SetBitangent( real x, real y, real z )
+		inline void setBitangent( real x, real y, real z )
 		{
-			SetBitangent( m_group.ptr(), x, y, z );
+			setBitangent( m_group.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent
+		 *\brief		sets the vertex bitangent
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
 		 *\param[in]	p_coords	Le tampon de données
 		 */
-		inline void SetBitangent( real const * p_coords )
+		inline void setBitangent( real const * p_coords )
 		{
-			SetBitangent( m_group.ptr(), p_coords );
+			setBitangent( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates
+		 *\brief		sets the vertex texture coordinates
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetTexCoord( Castor::Coords3r const & val )
+		inline void setTexCoord( castor::Coords3r const & val )
 		{
-			SetTexCoord( m_group.ptr(), val );
+			setTexCoord( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates
+		 *\brief		sets the vertex texture coordinates
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
 		 *\param[in]	val	La valeur
 		 */
-		inline void SetTexCoord( Castor::Point3r const & val )
+		inline void setTexCoord( castor::Point3r const & val )
 		{
-			SetTexCoord( m_group.ptr(), val );
+			setTexCoord( m_group.ptr(), val );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates
+		 *\brief		sets the vertex texture coordinates
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
-		inline void SetTexCoord( real x, real y, real z = 0 )
+		inline void setTexCoord( real x, real y, real z = 0 )
 		{
-			SetTexCoord( m_group.ptr(), x, y, z );
+			setTexCoord( m_group.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates
+		 *\brief		sets the vertex texture coordinates
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
 		 *\param[in]	p_coords	Le tampon de données
 		 */
-		inline void SetTexCoord( real const * p_coords )
+		inline void setTexCoord( real const * p_coords )
 		{
-			SetTexCoord( m_group.ptr(), p_coords );
+			setTexCoord( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -331,9 +331,9 @@ namespace Castor3D
 		 *\brief		Récupère la position du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Coords3r & GetPosition( Castor::Coords3r & p_ptPos )
+		inline castor::Coords3r & getPosition( castor::Coords3r & p_ptPos )
 		{
-			return GetPosition( m_group.ptr(), p_ptPos );
+			return getPosition( m_group.ptr(), p_ptPos );
 		}
 		/**
 		 *\~english
@@ -343,9 +343,9 @@ namespace Castor3D
 		 *\brief		Récupère la position du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Point3r & GetPosition( Castor::Point3r & p_ptPos )const
+		inline castor::Point3r & getPosition( castor::Point3r & p_ptPos )const
 		{
-			return GetPosition( m_group.const_ptr(), p_ptPos );
+			return getPosition( m_group.constPtr(), p_ptPos );
 		}
 		/**
 		 *\~english
@@ -355,9 +355,9 @@ namespace Castor3D
 		 *\brief		Récupère la normale du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Coords3r & GetNormal( Castor::Coords3r & p_ptNml )
+		inline castor::Coords3r & getNormal( castor::Coords3r & p_ptNml )
 		{
-			return GetNormal( m_group.ptr(), p_ptNml );
+			return getNormal( m_group.ptr(), p_ptNml );
 		}
 		/**
 		 *\~english
@@ -367,9 +367,9 @@ namespace Castor3D
 		 *\brief		Récupère la normale du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Point3r & GetNormal( Castor::Point3r & p_ptNml )const
+		inline castor::Point3r & getNormal( castor::Point3r & p_ptNml )const
 		{
-			return GetNormal( m_group.const_ptr(), p_ptNml );
+			return getNormal( m_group.constPtr(), p_ptNml );
 		}
 		/**
 		 *\~english
@@ -379,9 +379,9 @@ namespace Castor3D
 		 *\brief		Récupère la tangent du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Coords3r & GetTangent( Castor::Coords3r & p_ptTan )
+		inline castor::Coords3r & getTangent( castor::Coords3r & p_ptTan )
 		{
-			return GetTangent( m_group.ptr(), p_ptTan );
+			return getTangent( m_group.ptr(), p_ptTan );
 		}
 		/**
 		 *\~english
@@ -391,9 +391,9 @@ namespace Castor3D
 		 *\brief		Récupère la tangent du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Point3r & GetTangent( Castor::Point3r & p_ptTan )const
+		inline castor::Point3r & getTangent( castor::Point3r & p_ptTan )const
 		{
-			return GetTangent( m_group.const_ptr(), p_ptTan );
+			return getTangent( m_group.constPtr(), p_ptTan );
 		}
 		/**
 		 *\~english
@@ -403,9 +403,9 @@ namespace Castor3D
 		 *\brief		Récupère la bitangente du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Coords3r & GetBitangent( Castor::Coords3r & p_ptBitan )
+		inline castor::Coords3r & getBitangent( castor::Coords3r & p_ptBitan )
 		{
-			return GetBitangent( m_group.ptr(), p_ptBitan );
+			return getBitangent( m_group.ptr(), p_ptBitan );
 		}
 		/**
 		 *\~english
@@ -415,9 +415,9 @@ namespace Castor3D
 		 *\brief		Récupère la bitangente du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Point3r & GetBitangent( Castor::Point3r & p_ptBitan )const
+		inline castor::Point3r & getBitangent( castor::Point3r & p_ptBitan )const
 		{
-			return GetBitangent( m_group.const_ptr(), p_ptBitan );
+			return getBitangent( m_group.constPtr(), p_ptBitan );
 		}
 		/**
 		 *\~english
@@ -427,9 +427,9 @@ namespace Castor3D
 		 *\brief		Récupère les coordonnées de texture du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Coords3r & GetTexCoord( Castor::Coords3r & p_ptTex )
+		inline castor::Coords3r & getTexCoord( castor::Coords3r & p_ptTex )
 		{
-			return GetTexCoord( m_group.ptr(), p_ptTex );
+			return getTexCoord( m_group.ptr(), p_ptTex );
 		}
 		/**
 		 *\~english
@@ -439,9 +439,9 @@ namespace Castor3D
 		 *\brief		Récupère les coordonnées de texture du sommet
 		 *\return		La valeur
 		 */
-		inline Castor::Point3r & GetTexCoord( Castor::Point3r & p_ptTex )const
+		inline castor::Point3r & getTexCoord( castor::Point3r & p_ptTex )const
 		{
-			return GetTexCoord( m_group.const_ptr(), p_ptTex );
+			return getTexCoord( m_group.constPtr(), p_ptTex );
 		}
 		/**
 		 *\~english
@@ -451,7 +451,7 @@ namespace Castor3D
 		 *\brief		Récupère le compte des éléments de la position
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetCountPos()
+		static inline const uint32_t getCountPos()
 		{
 			return sm_uiCountPos;
 		}
@@ -463,7 +463,7 @@ namespace Castor3D
 		 *\brief		Récupère le compte des éléments de la normale
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetCountNml()
+		static inline const uint32_t getCountNml()
 		{
 			return sm_uiCountNml;
 		}
@@ -475,7 +475,7 @@ namespace Castor3D
 		 *\brief		Récupère le compte des éléments de la tangent
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetCountTan()
+		static inline const uint32_t getCountTan()
 		{
 			return sm_uiCountTan;
 		}
@@ -487,7 +487,7 @@ namespace Castor3D
 		 *\brief		Récupère le compte des éléments de la bitangente
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetCountBin()
+		static inline const uint32_t getCountBin()
 		{
 			return sm_uiCountBin;
 		}
@@ -499,7 +499,7 @@ namespace Castor3D
 		 *\brief		Récupère le compte des éléments des coordonnées de texture
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetCountTex()
+		static inline const uint32_t getCountTex()
 		{
 			return sm_uiCountTex;
 		}
@@ -511,7 +511,7 @@ namespace Castor3D
 		 *\brief		Récupère l'offset de la position dans le tampon
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetOffsetPos()
+		static inline const uint32_t getOffsetPos()
 		{
 			return sm_uiOffsetPos;
 		}
@@ -523,7 +523,7 @@ namespace Castor3D
 		 *\brief		Récupère l'offset de la normale dans le tampon
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetOffsetNml()
+		static inline const uint32_t getOffsetNml()
 		{
 			return sm_uiOffsetNml;
 		}
@@ -535,7 +535,7 @@ namespace Castor3D
 		 *\brief		Récupère l'offset de la tangente dans le tampon
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetOffsetTan()
+		static inline const uint32_t getOffsetTan()
 		{
 			return sm_uiOffsetTan;
 		}
@@ -547,7 +547,7 @@ namespace Castor3D
 		 *\brief		Récupère l'offset de la bitangente dans le tampon
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetOffsetBin()
+		static inline const uint32_t getOffsetBin()
 		{
 			return sm_uiOffsetBin;
 		}
@@ -559,7 +559,7 @@ namespace Castor3D
 		 *\brief		Récupère l'offset des coordonnées de texture dans le tampon
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetOffsetTex()
+		static inline const uint32_t getOffsetTex()
 		{
 			return sm_uiOffsetTex;
 		}
@@ -571,7 +571,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille en octets de la position
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetSizePos()
+		static inline const uint32_t getSizePos()
 		{
 			return sm_uiSizePos;
 		}
@@ -583,7 +583,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille en octets de la normale
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetSizeNml()
+		static inline const uint32_t getSizeNml()
 		{
 			return sm_uiSizeNml;
 		}
@@ -595,7 +595,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille en octets de la tangent
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetSizeTan()
+		static inline const uint32_t getSizeTan()
 		{
 			return sm_uiSizeTan;
 		}
@@ -607,7 +607,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille en octets de la bitangente
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetSizeBin()
+		static inline const uint32_t getSizeBin()
 		{
 			return sm_uiSizeBin;
 		}
@@ -619,7 +619,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille en octets des coordonnées de texture
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetSizeTex()
+		static inline const uint32_t getSizeTex()
 		{
 			return sm_uiSizeTex;
 		}
@@ -633,7 +633,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Coords3r GetPosition( void * p_buffer );
+		C3D_API static castor::Coords3r getPosition( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
@@ -644,7 +644,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Point3r GetPosition( void const * p_buffer );
+		C3D_API static castor::Point3r getPosition( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
@@ -657,9 +657,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetPosition( void * p_buffer, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getPosition( void * p_buffer, castor::Coords3r & p_coord )
 		{
-			return p_coord = GetPosition( p_buffer );
+			return p_coord = getPosition( p_buffer );
 		}
 		/**
 		 *\~english
@@ -673,9 +673,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetPosition( void const * p_buffer, Castor::Point3r & p_coord )
+		static castor::Point3r & getPosition( void const * p_buffer, castor::Point3r & p_coord )
 		{
-			return p_coord = GetPosition( p_buffer );
+			return p_coord = getPosition( p_buffer );
 		}
 		/**
 		 *\~english
@@ -687,9 +687,9 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 */
-		static void GetPosition( void const * p_buffer, std::array< real, 3 > & p_coord )
+		static void getPosition( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto position = GetPosition( p_buffer );
+			auto position = getPosition( p_buffer );
 			p_coord[0] = position[0];
 			p_coord[1] = position[1];
 			p_coord[2] = position[2];
@@ -704,7 +704,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Coords3r GetNormal( void * p_buffer );
+		C3D_API static castor::Coords3r getNormal( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
@@ -715,7 +715,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Point3r GetNormal( void const * p_buffer );
+		C3D_API static castor::Point3r getNormal( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
@@ -728,9 +728,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetNormal( void * p_buffer, Castor::Coords3r & p_coord )
+		static castor::Coords3r & getNormal( void * p_buffer, castor::Coords3r & p_coord )
 		{
-			return p_coord = GetNormal( p_buffer );
+			return p_coord = getNormal( p_buffer );
 		}
 		/**
 		 *\~english
@@ -744,9 +744,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetNormal( void const * p_buffer, Castor::Point3r & p_coord )
+		static castor::Point3r & getNormal( void const * p_buffer, castor::Point3r & p_coord )
 		{
-			return p_coord = GetNormal( p_buffer );
+			return p_coord = getNormal( p_buffer );
 		}
 		/**
 		 *\~english
@@ -760,9 +760,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static void GetNormal( void const * p_buffer, std::array< real, 3 > & p_coord )
+		static void getNormal( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto normal = GetNormal( p_buffer );
+			auto normal = getNormal( p_buffer );
 			p_coord[0] = normal[0];
 			p_coord[1] = normal[1];
 			p_coord[2] = normal[2];
@@ -777,7 +777,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Coords3r GetTangent( void * p_buffer );
+		C3D_API static castor::Coords3r getTangent( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
@@ -788,7 +788,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Point3r GetTangent( void const * p_buffer );
+		C3D_API static castor::Point3r getTangent( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
@@ -801,9 +801,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetTangent( void * p_buffer, Castor::Coords3r & p_coord )
+		static castor::Coords3r & getTangent( void * p_buffer, castor::Coords3r & p_coord )
 		{
-			return p_coord = GetTangent( p_buffer );
+			return p_coord = getTangent( p_buffer );
 		}
 		/**
 		 *\~english
@@ -817,9 +817,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static void GetTangent( void const * p_buffer, std::array< real, 3 > & p_coord )
+		static void getTangent( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto tangent = GetTangent( p_buffer );
+			auto tangent = getTangent( p_buffer );
 			p_coord[0] = tangent[0];
 			p_coord[1] = tangent[1];
 			p_coord[2] = tangent[2];
@@ -836,9 +836,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetTangent( void const * p_buffer, Castor::Point3r & p_coord )
+		static castor::Point3r & getTangent( void const * p_buffer, castor::Point3r & p_coord )
 		{
-			return p_coord = GetTangent( p_buffer );
+			return p_coord = getTangent( p_buffer );
 		}
 		/**
 		 *\~english
@@ -850,7 +850,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Coords3r GetBitangent( void * p_buffer );
+		C3D_API static castor::Coords3r getBitangent( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
@@ -861,7 +861,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Point3r GetBitangent( void const * p_buffer );
+		C3D_API static castor::Point3r getBitangent( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
@@ -874,25 +874,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetBitangent( void * p_buffer, Castor::Coords3r & p_coord )
+		static castor::Coords3r & getBitangent( void * p_buffer, castor::Coords3r & p_coord )
 		{
-			return p_coord = GetBitangent( p_buffer );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a vertex bitangent from a buffer
-		 *\param[in]	p_buffer	The buffer
-		 *\param[out]	p_coord		Receives the value
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la bitangente d'un sommet à partir d'un tampon
-		 *\param[in]	p_buffer	Le tampon
-		 *\param[out]	p_coord		Reçoit la valeur
-		 *\return		La valeur
-		 */
-		static Castor::Point3r & GetBitangent( void const * p_buffer, Castor::Point3r & p_coord )
-		{
-			return p_coord = GetBitangent( p_buffer );
+			return p_coord = getBitangent( p_buffer );
 		}
 		/**
 		 *\~english
@@ -906,9 +890,25 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static void GetBitangent( void const * p_buffer, std::array< real, 3 > & p_coord )
+		static castor::Point3r & getBitangent( void const * p_buffer, castor::Point3r & p_coord )
 		{
-			auto bitangent = GetBitangent( p_buffer );
+			return p_coord = getBitangent( p_buffer );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a vertex bitangent from a buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\param[out]	p_coord		Receives the value
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la bitangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
+		 *\param[out]	p_coord		Reçoit la valeur
+		 *\return		La valeur
+		 */
+		static void getBitangent( void const * p_buffer, std::array< real, 3 > & p_coord )
+		{
+			auto bitangent = getBitangent( p_buffer );
 			p_coord[0] = bitangent[0];
 			p_coord[1] = bitangent[1];
 			p_coord[2] = bitangent[2];
@@ -923,7 +923,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Coords3r GetTexCoord( void * p_buffer );
+		C3D_API static castor::Coords3r getTexCoord( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
@@ -934,7 +934,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
-		C3D_API static Castor::Point3r GetTexCoord( void const * p_buffer );
+		C3D_API static castor::Point3r getTexCoord( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
@@ -947,9 +947,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetTexCoord( void * p_buffer, Castor::Coords3r & p_coord )
+		static castor::Coords3r & getTexCoord( void * p_buffer, castor::Coords3r & p_coord )
 		{
-			return p_coord = GetTexCoord( p_buffer );
+			return p_coord = getTexCoord( p_buffer );
 		}
 		/**
 		 *\~english
@@ -963,9 +963,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetTexCoord( void const * p_buffer, Castor::Point3r & p_coord )
+		static castor::Point3r & getTexCoord( void const * p_buffer, castor::Point3r & p_coord )
 		{
-			return p_coord = GetTexCoord( p_buffer );
+			return p_coord = getTexCoord( p_buffer );
 		}
 		/**
 		 *\~english
@@ -979,16 +979,16 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static void GetTexCoord( void const * p_buffer, std::array< real, 3 > & p_coord )
+		static void getTexCoord( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto texcoord = GetTexCoord( p_buffer );
+			auto texcoord = getTexCoord( p_buffer );
 			p_coord[0] = texcoord[0];
 			p_coord[1] = texcoord[1];
 			p_coord[2] = texcoord[2];
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position in a buffer
+		 *\brief		sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -996,13 +996,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetPosition( void * p_buffer, Castor::Coords3r const & p_coord )
+		static inline void setPosition( void * p_buffer, castor::Coords3r const & p_coord )
 		{
-			SetPosition( p_buffer, p_coord.const_ptr() );
+			setPosition( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position in a buffer
+		 *\brief		sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1010,13 +1010,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetPosition( void * p_buffer, Castor::Point3r const & p_coord )
+		static inline void setPosition( void * p_buffer, castor::Point3r const & p_coord )
 		{
-			SetPosition( p_buffer, p_coord.const_ptr() );
+			setPosition( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position in a buffer
+		 *\brief		sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1024,10 +1024,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		C3D_API static void SetPosition( void * p_buffer, real const * p_coord );
+		C3D_API static void setPosition( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex position in a buffer
+		 *\brief		sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1035,10 +1035,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		C3D_API static void SetPosition( void * p_buffer, real x, real y, real z );
+		C3D_API static void setPosition( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal in a buffer
+		 *\brief		sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1046,13 +1046,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetNormal( void * p_buffer, Castor::Coords3r const & p_coord )
+		static inline void setNormal( void * p_buffer, castor::Coords3r const & p_coord )
 		{
-			SetNormal( p_buffer, p_coord.const_ptr() );
+			setNormal( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal in a buffer
+		 *\brief		sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1060,13 +1060,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetNormal( void * p_buffer, Castor::Point3r const & p_coord )
+		static inline void setNormal( void * p_buffer, castor::Point3r const & p_coord )
 		{
-			SetNormal( p_buffer, p_coord.const_ptr() );
+			setNormal( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal in a buffer
+		 *\brief		sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1074,10 +1074,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		C3D_API static void SetNormal( void * p_buffer, real const * p_coord );
+		C3D_API static void setNormal( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex normal in a buffer
+		 *\brief		sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1085,10 +1085,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		C3D_API static void SetNormal( void * p_buffer, real x, real y, real z );
+		C3D_API static void setNormal( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent in a buffer
+		 *\brief		sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1096,13 +1096,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTangent( void * p_buffer, Castor::Coords3r const & p_coord )
+		static inline void setTangent( void * p_buffer, castor::Coords3r const & p_coord )
 		{
-			SetTangent( p_buffer, p_coord.const_ptr() );
+			setTangent( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent in a buffer
+		 *\brief		sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1110,13 +1110,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTangent( void * p_buffer, Castor::Point3r const & p_coord )
+		static inline void setTangent( void * p_buffer, castor::Point3r const & p_coord )
 		{
-			SetTangent( p_buffer, p_coord.const_ptr() );
+			setTangent( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent in a buffer
+		 *\brief		sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1124,10 +1124,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		C3D_API static void SetTangent( void * p_buffer, real const * p_coord );
+		C3D_API static void setTangent( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex tangent in a buffer
+		 *\brief		sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1135,10 +1135,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		C3D_API static void SetTangent( void * p_buffer, real x, real y, real z );
+		C3D_API static void setTangent( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent in a buffer
+		 *\brief		sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1146,13 +1146,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetBitangent( void * p_buffer, Castor::Coords3r const & p_coord )
+		static inline void setBitangent( void * p_buffer, castor::Coords3r const & p_coord )
 		{
-			SetBitangent( p_buffer, p_coord.const_ptr() );
+			setBitangent( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent in a buffer
+		 *\brief		sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1160,13 +1160,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetBitangent( void * p_buffer, Castor::Point3r const & p_coord )
+		static inline void setBitangent( void * p_buffer, castor::Point3r const & p_coord )
 		{
-			SetBitangent( p_buffer, p_coord.const_ptr() );
+			setBitangent( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent in a buffer
+		 *\brief		sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1174,10 +1174,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		C3D_API static void SetBitangent( void * p_buffer, real const * p_coord );
+		C3D_API static void setBitangent( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex bitangent in a buffer
+		 *\brief		sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1185,10 +1185,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		C3D_API static void SetBitangent( void * p_buffer, real x, real y, real z );
+		C3D_API static void setBitangent( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates in a buffer
+		 *\brief		sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1196,13 +1196,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( void * p_buffer, Castor::Coords3r const & p_coord )
+		static inline void setTexCoord( void * p_buffer, castor::Coords3r const & p_coord )
 		{
-			SetTexCoord( p_buffer, p_coord.const_ptr() );
+			setTexCoord( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates in a buffer
+		 *\brief		sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1210,13 +1210,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( void * p_buffer, Castor::Point3r const & p_coord )
+		static inline void setTexCoord( void * p_buffer, castor::Point3r const & p_coord )
 		{
-			SetTexCoord( p_buffer, p_coord.const_ptr() );
+			setTexCoord( p_buffer, p_coord.constPtr() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates in a buffer
+		 *\brief		sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1224,10 +1224,10 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		C3D_API static void SetTexCoord( void * p_buffer, real const * p_coord );
+		C3D_API static void setTexCoord( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		Sets the vertex texture coordinates in a buffer
+		 *\brief		sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1235,7 +1235,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		C3D_API static void SetTexCoord( void * p_buffer, real x, real y, real z = 0 );
+		C3D_API static void setTexCoord( void * p_buffer, real x, real y, real z = 0 );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group position
@@ -1248,9 +1248,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit les coordonnées
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetPosition( BufferElementGroupSPtr p_pElement, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getPosition( BufferElementGroupSPtr p_pElement, castor::Coords3r & p_coord )
 		{
-			return GetPosition( p_pElement->ptr(), p_coord );
+			return getPosition( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1264,9 +1264,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit les coordonnées
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetPosition( BufferElementGroupSPtr p_pElement, Castor::Point3r & p_point )
+		static inline castor::Point3r & getPosition( BufferElementGroupSPtr p_pElement, castor::Point3r & p_point )
 		{
-			return GetPosition( p_pElement->const_ptr(), p_point );
+			return getPosition( p_pElement->constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1280,9 +1280,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la normale
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetNormal( BufferElementGroupSPtr p_pElement, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getNormal( BufferElementGroupSPtr p_pElement, castor::Coords3r & p_coord )
 		{
-			return GetNormal( p_pElement->ptr(), p_coord );
+			return getNormal( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1296,9 +1296,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la normale
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetNormal( BufferElementGroupSPtr p_pElement, Castor::Point3r & p_point )
+		static inline castor::Point3r & getNormal( BufferElementGroupSPtr p_pElement, castor::Point3r & p_point )
 		{
-			return GetNormal( p_pElement->const_ptr(), p_point );
+			return getNormal( p_pElement->constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1312,9 +1312,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la tangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetTangent( BufferElementGroupSPtr p_pElement, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getTangent( BufferElementGroupSPtr p_pElement, castor::Coords3r & p_coord )
 		{
-			return GetTangent( p_pElement->ptr(), p_coord );
+			return getTangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1328,9 +1328,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la tangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetTangent( BufferElementGroupSPtr p_pElement, Castor::Point3r & p_point )
+		static inline castor::Point3r & getTangent( BufferElementGroupSPtr p_pElement, castor::Point3r & p_point )
 		{
-			return GetTangent( p_pElement->const_ptr(), p_point );
+			return getTangent( p_pElement->constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1344,9 +1344,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la bitangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetBitangent( BufferElementGroupSPtr p_pElement, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getBitangent( BufferElementGroupSPtr p_pElement, castor::Coords3r & p_coord )
 		{
-			return GetBitangent( p_pElement->ptr(), p_coord );
+			return getBitangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1360,9 +1360,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la bitangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetBitangent( BufferElementGroupSPtr p_pElement, Castor::Point3r & p_point )
+		static inline castor::Point3r & getBitangent( BufferElementGroupSPtr p_pElement, castor::Point3r & p_point )
 		{
-			return GetBitangent( p_pElement->const_ptr(), p_point );
+			return getBitangent( p_pElement->constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1376,9 +1376,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit les coordonnées de texture
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetTexCoord( BufferElementGroupSPtr p_pElement, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getTexCoord( BufferElementGroupSPtr p_pElement, castor::Coords3r & p_coord )
 		{
-			return GetTexCoord( p_pElement->ptr(), p_coord );
+			return getTexCoord( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1392,13 +1392,13 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit les coordonnées de texture
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetTexCoord( BufferElementGroupSPtr p_pElement, Castor::Point3r & p_point )
+		static inline castor::Point3r & getTexCoord( BufferElementGroupSPtr p_pElement, castor::Point3r & p_point )
 		{
-			return GetTexCoord( p_pElement->const_ptr(), p_point );
+			return getTexCoord( p_pElement->constPtr(), p_point );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1406,13 +1406,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroupSPtr p_pElement, Castor::Coords3r const & p_coord )
+		static inline void setPosition( BufferElementGroupSPtr p_pElement, castor::Coords3r const & p_coord )
 		{
-			SetPosition( p_pElement->ptr(), p_coord );
+			setPosition( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1420,13 +1420,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroupSPtr p_pElement, Castor::Point3r const & p_coord )
+		static inline void setPosition( BufferElementGroupSPtr p_pElement, castor::Point3r const & p_coord )
 		{
-			SetPosition( p_pElement->ptr(), p_coord );
+			setPosition( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1434,13 +1434,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroupSPtr p_pElement, real const * p_coord )
+		static inline void setPosition( BufferElementGroupSPtr p_pElement, real const * p_coord )
 		{
-			SetPosition( p_pElement->ptr(), p_coord );
+			setPosition( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1448,13 +1448,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	x, y, z		La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroupSPtr p_pElement, real x, real y, real z )
+		static inline void setPosition( BufferElementGroupSPtr p_pElement, real x, real y, real z )
 		{
-			SetPosition( p_pElement->ptr(), x, y, z );
+			setPosition( p_pElement->ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1462,13 +1462,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroupSPtr p_pElement, Castor::Coords3r const & p_coord )
+		static inline void setNormal( BufferElementGroupSPtr p_pElement, castor::Coords3r const & p_coord )
 		{
-			SetNormal( p_pElement->ptr(), p_coord );
+			setNormal( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1476,13 +1476,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroupSPtr p_pElement, Castor::Point3r const & p_coord )
+		static inline void setNormal( BufferElementGroupSPtr p_pElement, castor::Point3r const & p_coord )
 		{
-			SetNormal( p_pElement->ptr(), p_coord );
+			setNormal( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1490,13 +1490,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroupSPtr p_pElement, real const * p_coord )
+		static inline void setNormal( BufferElementGroupSPtr p_pElement, real const * p_coord )
 		{
-			SetNormal( p_pElement->ptr(), p_coord );
+			setNormal( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1504,13 +1504,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	x, y, z		La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroupSPtr p_pElement, real x, real y, real z )
+		static inline void setNormal( BufferElementGroupSPtr p_pElement, real x, real y, real z )
 		{
-			SetNormal( p_pElement->ptr(), x, y, z );
+			setNormal( p_pElement->ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1518,13 +1518,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroupSPtr p_pElement, Castor::Coords3r const & p_coord )
+		static inline void setTangent( BufferElementGroupSPtr p_pElement, castor::Coords3r const & p_coord )
 		{
-			SetTangent( p_pElement->ptr(), p_coord );
+			setTangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1532,13 +1532,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroupSPtr p_pElement, Castor::Point3r const & p_coord )
+		static inline void setTangent( BufferElementGroupSPtr p_pElement, castor::Point3r const & p_coord )
 		{
-			SetTangent( p_pElement->ptr(), p_coord );
+			setTangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1546,13 +1546,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroupSPtr p_pElement, real const * p_coord )
+		static inline void setTangent( BufferElementGroupSPtr p_pElement, real const * p_coord )
 		{
-			SetTangent( p_pElement->ptr(), p_coord );
+			setTangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1560,13 +1560,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	x, y, z		La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroupSPtr p_pElement, real x, real y, real z )
+		static inline void setTangent( BufferElementGroupSPtr p_pElement, real x, real y, real z )
 		{
-			SetTangent( p_pElement->ptr(), x, y, z );
+			setTangent( p_pElement->ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1574,13 +1574,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroupSPtr p_pElement, Castor::Coords3r const & p_coord )
+		static inline void setBitangent( BufferElementGroupSPtr p_pElement, castor::Coords3r const & p_coord )
 		{
-			SetBitangent( p_pElement->ptr(), p_coord );
+			setBitangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1588,13 +1588,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroupSPtr p_pElement, Castor::Point3r const & p_coord )
+		static inline void setBitangent( BufferElementGroupSPtr p_pElement, castor::Point3r const & p_coord )
 		{
-			SetBitangent( p_pElement->ptr(), p_coord );
+			setBitangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1602,13 +1602,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroupSPtr p_pElement, real const * p_coord )
+		static inline void setBitangent( BufferElementGroupSPtr p_pElement, real const * p_coord )
 		{
-			SetBitangent( p_pElement->ptr(), p_coord );
+			setBitangent( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1616,13 +1616,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	x, y, z		La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroupSPtr p_pElement, real x, real y, real z )
+		static inline void setBitangent( BufferElementGroupSPtr p_pElement, real x, real y, real z )
 		{
-			SetBitangent( p_pElement->ptr(), x, y, z );
+			setBitangent( p_pElement->ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1630,13 +1630,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroupSPtr p_pElement, Castor::Coords3r const & p_coord )
+		static inline void setTexCoord( BufferElementGroupSPtr p_pElement, castor::Coords3r const & p_coord )
 		{
-			SetTexCoord( p_pElement->ptr(), p_coord );
+			setTexCoord( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1644,13 +1644,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroupSPtr p_pElement, Castor::Point3r const & p_coord )
+		static inline void setTexCoord( BufferElementGroupSPtr p_pElement, castor::Point3r const & p_coord )
 		{
-			SetTexCoord( p_pElement->ptr(), p_coord );
+			setTexCoord( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1658,13 +1658,13 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroupSPtr p_pElement, real const * p_coord )
+		static inline void setTexCoord( BufferElementGroupSPtr p_pElement, real const * p_coord )
 		{
-			SetTexCoord( p_pElement->ptr(), p_coord );
+			setTexCoord( p_pElement->ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1672,9 +1672,9 @@ namespace Castor3D
 		 *\param[in]	p_pElement	Le groupe
 		 *\param[in]	x, y, z		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroupSPtr p_pElement, real x, real y, real z = 0 )
+		static inline void setTexCoord( BufferElementGroupSPtr p_pElement, real x, real y, real z = 0 )
 		{
-			SetTexCoord( p_pElement->ptr(), x, y, z );
+			setTexCoord( p_pElement->ptr(), x, y, z );
 		}
 		/**
 		 *\~english
@@ -1688,9 +1688,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit les coordonnées
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetPosition( BufferElementGroup & p_element, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getPosition( BufferElementGroup & p_element, castor::Coords3r & p_coord )
 		{
-			return GetPosition( p_element.ptr(), p_coord );
+			return getPosition( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1704,9 +1704,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit les coordonnées
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetPosition( BufferElementGroup const & p_element, Castor::Point3r & p_point )
+		static inline castor::Point3r & getPosition( BufferElementGroup const & p_element, castor::Point3r & p_point )
 		{
-			return GetPosition( p_element.const_ptr(), p_point );
+			return getPosition( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1720,9 +1720,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit les coordonnées
 		 *\return		La valeur
 		 */
-		static inline void GetPosition( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		static inline void getPosition( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
 		{
-			GetPosition( p_element.const_ptr(), p_point );
+			getPosition( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1736,9 +1736,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la normale
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetNormal( BufferElementGroup & p_element, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getNormal( BufferElementGroup & p_element, castor::Coords3r & p_coord )
 		{
-			return GetNormal( p_element.ptr(), p_coord );
+			return getNormal( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1752,9 +1752,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la normale
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetNormal( BufferElementGroup const & p_element, Castor::Point3r & p_point )
+		static inline castor::Point3r & getNormal( BufferElementGroup const & p_element, castor::Point3r & p_point )
 		{
-			return GetNormal( p_element.const_ptr(), p_point );
+			return getNormal( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1768,9 +1768,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la normale
 		 *\return		La valeur
 		 */
-		static inline void GetNormal( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		static inline void getNormal( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
 		{
-			GetNormal( p_element.const_ptr(), p_point );
+			getNormal( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1784,9 +1784,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la tangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetTangent( BufferElementGroup & p_element, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getTangent( BufferElementGroup & p_element, castor::Coords3r & p_coord )
 		{
-			return GetTangent( p_element.ptr(), p_coord );
+			return getTangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1800,9 +1800,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la tangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetTangent( BufferElementGroup const & p_element, Castor::Point3r & p_point )
+		static inline castor::Point3r & getTangent( BufferElementGroup const & p_element, castor::Point3r & p_point )
 		{
-			return GetTangent( p_element.const_ptr(), p_point );
+			return getTangent( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1816,9 +1816,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la tangente
 		 *\return		La valeur
 		 */
-		static inline void GetTangent( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		static inline void getTangent( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
 		{
-			GetTangent( p_element.const_ptr(), p_point );
+			getTangent( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1832,9 +1832,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit la bitangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetBitangent( BufferElementGroup & p_element, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getBitangent( BufferElementGroup & p_element, castor::Coords3r & p_coord )
 		{
-			return GetBitangent( p_element.ptr(), p_coord );
+			return getBitangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1848,9 +1848,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la bitangente
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetBitangent( BufferElementGroup const & p_element, Castor::Point3r & p_point )
+		static inline castor::Point3r & getBitangent( BufferElementGroup const & p_element, castor::Point3r & p_point )
 		{
-			return GetBitangent( p_element.const_ptr(), p_point );
+			return getBitangent( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1864,9 +1864,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit la bitangente
 		 *\return		La valeur
 		 */
-		static inline void GetBitangent( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		static inline void getBitangent( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
 		{
-			GetBitangent( p_element.const_ptr(), p_point );
+			getBitangent( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1880,9 +1880,9 @@ namespace Castor3D
 		 *\param[out]	p_coord		Reçoit les coordonnées de texture
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetTexCoord( BufferElementGroup & p_element, Castor::Coords3r & p_coord )
+		static inline castor::Coords3r & getTexCoord( BufferElementGroup & p_element, castor::Coords3r & p_coord )
 		{
-			return GetTexCoord( p_element.ptr(), p_coord );
+			return getTexCoord( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
@@ -1896,9 +1896,9 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit les coordonnées de texture
 		 *\return		La valeur
 		 */
-		static inline Castor::Point3r & GetTexCoord( BufferElementGroup const & p_element, Castor::Point3r & p_point )
+		static inline castor::Point3r & getTexCoord( BufferElementGroup const & p_element, castor::Point3r & p_point )
 		{
-			return GetTexCoord( p_element.const_ptr(), p_point );
+			return getTexCoord( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1912,13 +1912,13 @@ namespace Castor3D
 		 *\param[out]	p_point		Reçoit les coordonnées de texture
 		 *\return		La valeur
 		 */
-		static inline void GetTexCoord( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		static inline void getTexCoord( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
 		{
-			GetTexCoord( p_element.const_ptr(), p_point );
+			getTexCoord( p_element.constPtr(), p_point );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1926,13 +1926,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroup & p_element, Castor::Coords3r const & p_coord )
+		static inline void setPosition( BufferElementGroup & p_element, castor::Coords3r const & p_coord )
 		{
-			SetPosition( p_element.ptr(), p_coord );
+			setPosition( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1940,13 +1940,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroup & p_element, Castor::Point3r const & p_coord )
+		static inline void setPosition( BufferElementGroup & p_element, castor::Point3r const & p_coord )
 		{
-			SetPosition( p_element.ptr(), p_coord );
+			setPosition( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1954,13 +1954,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroup & p_element, real const * p_coord )
+		static inline void setPosition( BufferElementGroup & p_element, real const * p_coord )
 		{
-			SetPosition( p_element.ptr(), p_coord );
+			setPosition( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group position
+		 *\brief		sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -1968,13 +1968,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	x, y, z	La nouvelle valeur
 		 */
-		static inline void SetPosition( BufferElementGroup & p_element, real x, real y, real z )
+		static inline void setPosition( BufferElementGroup & p_element, real x, real y, real z )
 		{
-			SetPosition( p_element.ptr(), x, y, z );
+			setPosition( p_element.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1982,13 +1982,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroup & p_element, Castor::Coords3r const & p_coord )
+		static inline void setNormal( BufferElementGroup & p_element, castor::Coords3r const & p_coord )
 		{
-			SetNormal( p_element.ptr(), p_coord );
+			setNormal( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1996,13 +1996,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroup & p_element, Castor::Point3r const & p_coord )
+		static inline void setNormal( BufferElementGroup & p_element, castor::Point3r const & p_coord )
 		{
-			SetNormal( p_element.ptr(), p_coord );
+			setNormal( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2010,13 +2010,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroup & p_element, real const * p_coord )
+		static inline void setNormal( BufferElementGroup & p_element, real const * p_coord )
 		{
-			SetNormal( p_element.ptr(), p_coord );
+			setNormal( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group normal
+		 *\brief		sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -2024,13 +2024,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	x, y, z	La nouvelle valeur
 		 */
-		static inline void SetNormal( BufferElementGroup & p_element, real x, real y, real z )
+		static inline void setNormal( BufferElementGroup & p_element, real x, real y, real z )
 		{
-			SetNormal( p_element.ptr(), x, y, z );
+			setNormal( p_element.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2038,13 +2038,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroup & p_element, Castor::Coords3r const & p_coord )
+		static inline void setTangent( BufferElementGroup & p_element, castor::Coords3r const & p_coord )
 		{
-			SetTangent( p_element.ptr(), p_coord );
+			setTangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2052,13 +2052,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroup & p_element, Castor::Point3r const & p_coord )
+		static inline void setTangent( BufferElementGroup & p_element, castor::Point3r const & p_coord )
 		{
-			SetTangent( p_element.ptr(), p_coord );
+			setTangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2066,13 +2066,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroup & p_element, real const * p_coord )
+		static inline void setTangent( BufferElementGroup & p_element, real const * p_coord )
 		{
-			SetTangent( p_element.ptr(), p_coord );
+			setTangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group tangent
+		 *\brief		sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -2080,13 +2080,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	x, y, z	La nouvelle valeur
 		 */
-		static inline void SetTangent( BufferElementGroup & p_element, real x, real y, real z )
+		static inline void setTangent( BufferElementGroup & p_element, real x, real y, real z )
 		{
-			SetTangent( p_element.ptr(), x, y, z );
+			setTangent( p_element.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2094,13 +2094,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroup & p_element, Castor::Coords3r const & p_coord )
+		static inline void setBitangent( BufferElementGroup & p_element, castor::Coords3r const & p_coord )
 		{
-			SetBitangent( p_element.ptr(), p_coord );
+			setBitangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2108,13 +2108,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroup & p_element, Castor::Point3r const & p_coord )
+		static inline void setBitangent( BufferElementGroup & p_element, castor::Point3r const & p_coord )
 		{
-			SetBitangent( p_element.ptr(), p_coord );
+			setBitangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2122,13 +2122,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroup & p_element, real const * p_coord )
+		static inline void setBitangent( BufferElementGroup & p_element, real const * p_coord )
 		{
-			SetBitangent( p_element.ptr(), p_coord );
+			setBitangent( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group bitangent
+		 *\brief		sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -2136,13 +2136,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	x, y, z	La nouvelle valeur
 		 */
-		static inline void SetBitangent( BufferElementGroup & p_element, real x, real y, real z )
+		static inline void setBitangent( BufferElementGroup & p_element, real x, real y, real z )
 		{
-			SetBitangent( p_element.ptr(), x, y, z );
+			setBitangent( p_element.ptr(), x, y, z );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2150,13 +2150,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroup & p_element, Castor::Coords3r const & p_coord )
+		static inline void setTexCoord( BufferElementGroup & p_element, castor::Coords3r const & p_coord )
 		{
-			SetTexCoord( p_element.ptr(), p_coord );
+			setTexCoord( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2164,13 +2164,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroup & p_element, Castor::Point3r const & p_coord )
+		static inline void setTexCoord( BufferElementGroup & p_element, castor::Point3r const & p_coord )
 		{
-			SetTexCoord( p_element.ptr(), p_coord );
+			setTexCoord( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2178,13 +2178,13 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_coord	La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroup & p_element, real const * p_coord )
+		static inline void setTexCoord( BufferElementGroup & p_element, real const * p_coord )
 		{
-			SetTexCoord( p_element.ptr(), p_coord );
+			setTexCoord( p_element.ptr(), p_coord );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the group texture coordinates
+		 *\brief		sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -2192,9 +2192,9 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	x, y, z	La nouvelle valeur
 		 */
-		static inline void SetTexCoord( BufferElementGroup & p_element, real x, real y, real z = 0 )
+		static inline void setTexCoord( BufferElementGroup & p_element, real x, real y, real z = 0 )
 		{
-			SetTexCoord( p_element.ptr(), x, y, z );
+			setTexCoord( p_element.ptr(), x, y, z );
 		}
 
 	private:

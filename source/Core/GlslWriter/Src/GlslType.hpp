@@ -32,13 +32,13 @@ namespace GLSL
 	struct Type
 		: public Expr
 	{
-		GlslWriter_API Type( Castor::String const & p_type );
-		GlslWriter_API Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		GlslWriter_API Type( castor::String const & p_type );
+		GlslWriter_API Type( castor::String const & p_type, GlslWriter * p_writer, castor::String const & p_name = castor::String() );
 		GlslWriter_API Type( Type && p_rhs );
 		GlslWriter_API Type( Type const & p_rhs );
 		GlslWriter_API virtual ~Type();
 		GlslWriter_API Type & operator=( Type const & p_rhs );
-		GlslWriter_API operator Castor::String()const;
+		GlslWriter_API operator castor::String()const;
 		GlslWriter_API Type & operator+=( Type const & p_type );
 		GlslWriter_API Type & operator-=( Type const & p_type );
 		GlslWriter_API Type & operator*=( Type const & p_type );
@@ -56,20 +56,20 @@ namespace GLSL
 		GlslWriter_API Type & operator*=( int p_type );
 		GlslWriter_API Type & operator/=( int p_type );
 
-		Castor::String m_type;
-		Castor::String m_name;
+		castor::String m_type;
+		castor::String m_name;
 	};
 
 	template< typename T >
 	T operator-( T const & p_value )
 	{
 		T result( p_value.m_writer );
-		result.m_value << cuT( "-( " ) + Castor::String( p_value ) << cuT( " )" );
+		result.m_value << cuT( "-( " ) + castor::String( p_value ) << cuT( " )" );
 		return result;
 	}
 
-	GlslWriter_API Castor::String ToString( Type const & p_value );
-	GlslWriter_API Castor::String ParamToString( Castor::String & p_sep, Type const & p_value );
+	GlslWriter_API castor::String toString( Type const & p_value );
+	GlslWriter_API castor::String paramToString( castor::String & p_sep, Type const & p_value );
 }
 
 #endif

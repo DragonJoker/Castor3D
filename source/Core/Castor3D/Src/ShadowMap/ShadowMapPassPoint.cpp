@@ -9,9 +9,9 @@
 
 #include <Graphics/Image.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
@@ -19,18 +19,18 @@ namespace Castor3D
 		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
 
-		void DoUpdateShadowMatrices( Point3r const & p_position
+		void doUpdateShadowMatrices( Point3r const & p_position
 			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )
 		{
 			p_matrices =
 			{
 				{
-					matrix::look_at( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
-					matrix::look_at( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
-					matrix::look_at( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
-					matrix::look_at( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
-					matrix::look_at( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
-					matrix::look_at( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
+					matrix::lookAt( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
+					matrix::lookAt( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
+					matrix::lookAt( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
+					matrix::lookAt( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
+					matrix::lookAt( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
+					matrix::lookAt( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
 				}
 			};
 		}
@@ -41,111 +41,111 @@ namespace Castor3D
 		, ShadowMap const & p_shadowMap )
 		: ShadowMapPass{ engine, p_light, p_shadowMap }
 		, m_shadowConfig{ ShadowMapUbo
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, 8u }
 		, m_viewport{ engine }
 	{
-		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
-		m_shadowConfig.CreateUniform< UniformType::eFloat >( FarPlane );
-		m_renderQueue.Initialise( *p_light.GetScene() );
+		m_shadowConfig.createUniform< UniformType::eVec3f >( WorldLightPosition );
+		m_shadowConfig.createUniform< UniformType::eFloat >( FarPlane );
+		m_renderQueue.initialise( *p_light.getScene() );
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()
 	{
 	}
 
-	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
+	void ShadowMapPassPoint::doRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled );
-		RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled );
-		RenderPass::DoRender( p_nodes.m_skinnedNodes.m_backCulled );
-		RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
-		RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled );
-		RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled );
+		RenderPass::doRender( p_nodes.m_instantiatedStaticNodes.m_backCulled );
+		RenderPass::doRender( p_nodes.m_staticNodes.m_backCulled );
+		RenderPass::doRender( p_nodes.m_skinnedNodes.m_backCulled );
+		RenderPass::doRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
+		RenderPass::doRender( p_nodes.m_morphingNodes.m_backCulled );
+		RenderPass::doRender( p_nodes.m_billboardNodes.m_backCulled );
 	}
 
-	bool ShadowMapPassPoint::DoInitialise( Size const & p_size )
+	bool ShadowMapPassPoint::doInitialise( Size const & p_size )
 	{
-		real const aspect = real( p_size.width() ) / p_size.height();
+		real const aspect = real( p_size.getWidth() ) / p_size.getHeight();
 		real const near = 1.0_r;
 		real const far = 2000.0_r;
-		matrix::perspective( m_projection, Angle::from_degrees( 90.0_r ), aspect, near, far );
+		matrix::perspective( m_projection, Angle::fromDegrees( 90.0_r ), aspect, near, far );
 
-		m_viewport.Resize( p_size );
-		m_viewport.Initialise();
+		m_viewport.resize( p_size );
+		m_viewport.initialise();
 		return true;
 	}
 
-	void ShadowMapPassPoint::DoCleanup()
+	void ShadowMapPassPoint::doCleanup()
 	{
-		m_viewport.Cleanup();
-		m_matrixUbo.GetUbo().Cleanup();
-		m_shadowConfig.Cleanup();
+		m_viewport.cleanup();
+		m_matrixUbo.getUbo().cleanup();
+		m_shadowConfig.cleanup();
 		m_onNodeChanged.disconnect();
 	}
 
-	void ShadowMapPassPoint::DoUpdate( RenderQueueArray & p_queues )
+	void ShadowMapPassPoint::doUpdate( RenderQueueArray & p_queues )
 	{
-		auto position = m_light.GetParent()->GetDerivedPosition();
-		m_light.Update( position
+		auto position = m_light.getParent()->getDerivedPosition();
+		m_light.update( position
 			, m_viewport
 			, m_index );
 		p_queues.push_back( m_renderQueue );
-		DoUpdateShadowMatrices( position, m_matrices );
-		m_shadowConfig.GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( position );
-		m_shadowConfig.GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 4000.0f );
+		doUpdateShadowMatrices( position, m_matrices );
+		m_shadowConfig.getUniform< UniformType::eVec3f >( WorldLightPosition )->setValue( position );
+		m_shadowConfig.getUniform< UniformType::eFloat >( FarPlane )->setValue( 4000.0f );
 	}
 
-	void ShadowMapPassPoint::DoRender( uint32_t p_face )
+	void ShadowMapPassPoint::doRender( uint32_t p_face )
 	{
 		if ( m_initialised )
 		{
-			m_shadowConfig.Update();
-			m_shadowConfig.BindTo( 8u );
-			m_viewport.Apply();
-			m_matrixUbo.Update( m_matrices[p_face], m_projection );
-			DoRenderNodes( m_renderQueue.GetRenderNodes() );
+			m_shadowConfig.update();
+			m_shadowConfig.bindTo( 8u );
+			m_viewport.apply();
+			m_matrixUbo.update( m_matrices[p_face], m_projection );
+			doRenderNodes( m_renderQueue.getRenderNodes() );
 		}
 	}
 
-	void ShadowMapPassPoint::DoPrepareBackPipeline( ShaderProgram & p_program
+	void ShadowMapPassPoint::doPrepareBackPipeline( ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
 	{
 		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
 			RasteriserState rsState;
-			rsState.SetCulledFaces( Culling::eNone );
+			rsState.setCulledFaces( Culling::eNone );
 			DepthStencilState dsState;
-			dsState.SetDepthTest( true );
+			dsState.setDepthTest( true );
 			auto & pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
+				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
 					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
 					, p_flags ) ).first->second;
 
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, p_flags]()
 			{
-				pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
-				pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
-				pipeline.AddUniformBuffer( m_shadowConfig );
+				pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
+				pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
+				pipeline.addUniformBuffer( m_shadowConfig );
 
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+				if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 				{
-					pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
+					pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
 				}
 
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-					&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+				if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+					&& !checkFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 				{
-					pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
+					pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
 				}
 
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+				if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 				{
-					pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
+					pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
 				}
 
 				m_initialised = true;

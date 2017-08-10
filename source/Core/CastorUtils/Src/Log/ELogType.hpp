@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___CU_LOG_TYPE_H___
 #define ___CU_LOG_TYPE_H___
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS

@@ -4,8 +4,8 @@
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -18,7 +18,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlUploadPixelBuffer::DoInitialise()
+	bool GlUploadPixelBuffer::doInitialise()
 	{
 		return true;
 	}

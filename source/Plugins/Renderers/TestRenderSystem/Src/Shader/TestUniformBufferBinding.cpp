@@ -2,8 +2,8 @@
 
 #include <Shader/UniformBuffer.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -15,7 +15,7 @@ namespace TestRender
 		for ( auto & variable : p_ubo )
 		{
 			auto stride = variable->size();
-			m_variables.push_back( { variable->GetName(), size, 0u } );
+			m_variables.push_back( { variable->getName(), size, 0u } );
 			size += stride;
 		}
 
@@ -27,7 +27,7 @@ namespace TestRender
 	{
 	}
 
-	void TestUniformBufferBinding::DoBind( uint32_t p_index )const
+	void TestUniformBufferBinding::doBind( uint32_t p_index )const
 	{
 	}
 }

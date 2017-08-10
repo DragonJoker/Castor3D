@@ -30,7 +30,7 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestContext
-		: public Castor3D::Context
+		: public castor3d::Context
 	{
 	public:
 		TestContext( TestRenderSystem & p_renderSystem );
@@ -38,33 +38,33 @@ namespace TestRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Context::DoInitialise
+		 *\copydoc		castor3d::Context::doInitialise
 		 */
-		bool DoInitialise()override;
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoCleanup
+		 *\copydoc		castor3d::Context::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoDestroy
+		 *\copydoc		castor3d::Context::doDestroy
 		 */
-		void DoDestroy()override;
+		void doDestroy()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoSetCurrent
+		 *\copydoc		castor3d::Context::doSetCurrent
 		 */
-		void DoSetCurrent()override;
+		void doSetCurrent()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoEndCurrent
+		 *\copydoc		castor3d::Context::doEndCurrent
 		 */
-		void DoEndCurrent()override;
+		void doEndCurrent()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoSwapBuffers
+		 *\copydoc		castor3d::Context::doSwapBuffers
 		 */
-		void DoSwapBuffers()override;
+		void doSwapBuffers()override;
 		/**
-		 *\copydoc		Castor3D::Context::DoBarrier
+		 *\copydoc		castor3d::Context::doMemoryBarrier
 		 */
-		void DoBarrier( Castor3D::MemoryBarriers const & p_barriers )override;
+		void doMemoryBarrier( castor3d::MemoryBarriers const & p_barriers )override;
 	};
 }
 

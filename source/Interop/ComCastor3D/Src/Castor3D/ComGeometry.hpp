@@ -58,35 +58,35 @@ namespace CastorCom
 		 */
 		virtual ~CGeometry();
 
-		inline Castor3D::GeometrySPtr GetInternal()const
+		inline castor3d::GeometrySPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::GeometrySPtr internal )
+		inline void setInternal( castor3d::GeometrySPtr internal )
 		{
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Mesh, IMesh *, make_getter( m_internal.get(), &Castor3D::Geometry::GetMesh ), make_putter( m_internal.get(), &Castor3D::Geometry::SetMesh ) );
+		COM_PROPERTY( Mesh, IMesh *, make_getter( m_internal.get(), &castor3d::Geometry::getMesh ), make_putter( m_internal.get(), &castor3d::Geometry::setMesh ) );
 
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &Castor3D::MovableObject::GetName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &Castor3D::MovableObject::GetType ) );
-		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &Castor3D::MovableObject::GetScene ) );
+		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &castor3d::MovableObject::getName ) );
+		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &castor3d::MovableObject::getType ) );
+		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &castor3d::MovableObject::getScene ) );
 
-		STDMETHOD( GetMaterial )( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal );
-		STDMETHOD( SetMaterial )( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val );
-		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
+		STDMETHOD( getMaterial )( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal );
+		STDMETHOD( setMaterial )( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val );
+		STDMETHOD( attachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();
 
 	private:
-		Castor3D::GeometrySPtr m_internal;
+		castor3d::GeometrySPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Geometry ), CGeometry );
 
-	DECLARE_VARIABLE_PTR_GETTER( Geometry, Castor3D, Geometry );
-	DECLARE_VARIABLE_PTR_PUTTER( Geometry, Castor3D, Geometry );
+	DECLARE_VARIABLE_PTR_GETTER( Geometry, castor3d, Geometry );
+	DECLARE_VARIABLE_PTR_PUTTER( Geometry, castor3d, Geometry );
 }
 
 #endif

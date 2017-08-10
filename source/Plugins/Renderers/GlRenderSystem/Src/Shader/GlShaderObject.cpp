@@ -6,8 +6,8 @@
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -17,7 +17,7 @@ namespace GlRender
 		: ShaderObject( parent, type )
 		, Object( gl,
 				  "GlShaderObject",
-				  std::bind( &OpenGl::CreateShader, std::ref( gl ), gl.Get( type ) ),
+				  std::bind( &OpenGl::CreateShader, std::ref( gl ), gl.get( type ) ),
 				  std::bind( &OpenGl::DeleteShader, std::ref( gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsShader, std::ref( gl ), std::placeholders::_1 )
 				)
@@ -29,37 +29,37 @@ namespace GlRender
 	{
 	}
 
-	bool GlShaderObject::Create()
+	bool GlShaderObject::create()
 	{
-		return ObjectType::Create();
+		return ObjectType::create();
 	}
 
-	void GlShaderObject::Destroy()
+	void GlShaderObject::destroy()
 	{
-		Detach();
+		detach();
 
 		if ( m_status == ShaderStatus::eCompiled )
 		{
-			ObjectType::Destroy();
+			ObjectType::destroy();
 			m_status = ShaderStatus::eNotCompiled;
 		}
 	}
 
-	bool GlShaderObject::Compile()
+	bool GlShaderObject::compile()
 	{
 		bool result = false;
-		String loadedSource = m_source.GetSource();
+		String loadedSource = m_source.getSource();
 
 		if ( m_status != ShaderStatus::eError && !loadedSource.empty() )
 		{
 			result = true;
 
-			if ( m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+			if ( m_parent->getRenderSystem()->getGpuInformations().hasShaderType( m_type ) )
 			{
 				m_status = ShaderStatus::eNotCompiled;
 				int compiled = 0;
 				int iLength = int( loadedSource.size() );
-				std::string tmp = string::string_cast< char >( loadedSource );
+				std::string tmp = string::stringCast< char >( loadedSource );
 				std::vector< char > pszTmp( loadedSource.size() + 1 );
 				char * buffer = pszTmp.data();
 #if defined( CASTOR_COMPILER_MSVC )
@@ -67,10 +67,10 @@ namespace GlRender
 #else
 				strncpy( buffer, tmp.c_str(), tmp.size() );
 #endif
-				GetOpenGl().ShaderSource( GetGlName(), 1, const_cast< const char ** >( &buffer ), &iLength );
-				GetOpenGl().CompileShader( GetGlName() );
-				GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eCompile, &compiled );
-				Logger::LogDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << compiled );
+				getOpenGl().ShaderSource( getGlName(), 1, const_cast< const char ** >( &buffer ), &iLength );
+				getOpenGl().CompileShader( getGlName() );
+				getOpenGl().GetShaderiv( getGlName(), GlShaderStatus::eCompile, &compiled );
+				Logger::logDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << compiled );
 
 				if ( compiled )
 				{
@@ -81,57 +81,57 @@ namespace GlRender
 					m_status = ShaderStatus::eError;
 				}
 
-				result = DoCheckErrors();
+				result = doCheckErrors();
 			}
 			else
 			{
-				Logger::LogError( "GlShaderObject::Compile - Shader type not supported by currently loaded API." );
+				Logger::logError( "GlShaderObject::Compile - Shader type not supported by currently loaded API." );
 			}
 		}
 		else if ( loadedSource.empty() )
 		{
-			Logger::LogError( "GlShaderObject::Compile - No shader source." );
+			Logger::logError( "GlShaderObject::Compile - No shader source." );
 		}
 		else
 		{
-			Logger::LogWarning( "GlShaderObject::Compile - Shader is already compiled." );
+			Logger::logWarning( "GlShaderObject::Compile - Shader is already compiled." );
 		}
 
 		return result;
 	}
 
-	void GlShaderObject::Detach()
+	void GlShaderObject::detach()
 	{
-		if ( m_status == ShaderStatus::eCompiled && m_shaderProgram && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+		if ( m_status == ShaderStatus::eCompiled && m_shaderProgram && m_parent->getRenderSystem()->getGpuInformations().hasShaderType( m_type ) )
 		{
-			GetOpenGl().DetachShader( m_shaderProgram->GetGlName(), GetGlName() );
+			getOpenGl().DetachShader( m_shaderProgram->getGlName(), getGlName() );
 			m_shaderProgram = nullptr;
 		}
 	}
 
-	void GlShaderObject::AttachTo( ShaderProgram & program )
+	void GlShaderObject::attachTo( ShaderProgram & program )
 	{
-		Detach();
+		detach();
 
-		if ( m_status == ShaderStatus::eCompiled && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+		if ( m_status == ShaderStatus::eCompiled && m_parent->getRenderSystem()->getGpuInformations().hasShaderType( m_type ) )
 		{
 			m_shaderProgram = &static_cast< GlShaderProgram & >( program );
-			GetOpenGl().AttachShader( m_shaderProgram->GetGlName(), GetGlName() );
+			getOpenGl().AttachShader( m_shaderProgram->getGlName(), getGlName() );
 		}
 	}
 
-	String GlShaderObject::DoRetrieveCompilerLog()
+	String GlShaderObject::doRetrieveCompilerLog()
 	{
 		String log;
 		int infologLength = 0;
 		int charsWritten = 0;
-		GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eInfoLogLength, &infologLength );
+		getOpenGl().GetShaderiv( getGlName(), GlShaderStatus::eInfoLogLength, &infologLength );
 
 		if ( infologLength > 0 )
 		{
 			std::vector< char > infoLog( infologLength + 1 );
-			GetOpenGl().GetShaderInfoLog( GetGlName(), infologLength, &charsWritten, infoLog.data() );
-			log = string::string_cast< xchar >( infoLog.data() );
+			getOpenGl().GetShaderInfoLog( getGlName(), infologLength, &charsWritten, infoLog.data() );
+			log = string::stringCast< xchar >( infoLog.data() );
 		}
 
 		if ( !log.empty() )

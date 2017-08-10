@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Named.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		Représente les objets animés
 	*/
 	class AnimatedObject
-		: public Castor::Named
+		: public castor::Named
 	{
 	public:
 		/**
@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom de l'objet
 		 */
-		C3D_API explicit AnimatedObject( Castor::String const & p_name );
+		C3D_API explicit AnimatedObject( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -88,13 +88,13 @@ namespace Castor3D
 		C3D_API AnimatedObject & operator=( AnimatedObject const & p_rhs ) = delete;
 		/**
 		 *\~english
-		 *\brief		Adds the animation to the list
+		 *\brief		adds the animation to the list
 		 *\param[in]	p_name	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		C3D_API void AddAnimation( Castor::String const & p_name );
+		C3D_API void addAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\brief		Démarre l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		C3D_API void StartAnimation( Castor::String const & p_name );
+		C3D_API void startAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\brief		Stoppe l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		C3D_API void StopAnimation( Castor::String const & p_name );
+		C3D_API void stopAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
@@ -121,28 +121,28 @@ namespace Castor3D
 		 *\brief		Met en pause l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		C3D_API void PauseAnimation( Castor::String const & p_name );
+		C3D_API void pauseAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations
 		 *\~french
 		 *\brief		Démarre toutes les animations
 		 */
-		C3D_API void StartAllAnimations();
+		C3D_API void startAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Stops all animations
 		 *\~french
 		 *\brief		Stoppe toutes les animations
 		 */
-		C3D_API void StopAllAnimations();
+		C3D_API void stopAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Pauses all animations
 		 *\~french
 		 *\brief		Met en pause toutes les animations
 		 */
-		C3D_API void PauseAllAnimations();
+		C3D_API void pauseAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Checks if an animation with given name exists.
@@ -151,7 +151,7 @@ namespace Castor3D
 		 *\brief		Vérifie si l'animation avec le nom donné existe.
 		 *\param[in]	p_name	Le nom de l'animation.
 		 */
-		C3D_API bool HasAnimation( Castor::String const & p_name )
+		C3D_API bool hasAnimation( castor::String const & p_name )
 		{
 			return m_animations.find( p_name ) != m_animations.end();
 		}
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API AnimationInstance & GetAnimation( Castor::String const & p_name );
+		C3D_API AnimationInstance & getAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Updates the animations of the object, given the time since the last frame
@@ -174,21 +174,21 @@ namespace Castor3D
 		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
 		 *\param[in]	p_tslf		Le temps écoulé depuis la dernière frame
 		 */
-		C3D_API virtual void Update( Castor::Milliseconds const & p_tslf ) = 0;
+		C3D_API virtual void update( castor::Milliseconds const & p_tslf ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the object is playing an animation.
 		 *\~french
 		 *\return		\p true si l'objet joue une animation.
 		 */
-		C3D_API virtual bool IsPlayingAnimation()const = 0;
+		C3D_API virtual bool isPlayingAnimation()const = 0;
 		/**
 		 *\~english
 		 *\return		The animations for this object.
 		 *\~french
 		 *\return		Les animations de cet objet.
 		 */
-		inline AnimationInstancePtrStrMap const & GetAnimations()const
+		inline AnimationInstancePtrStrMap const & getAnimations()const
 		{
 			return m_animations;
 		}
@@ -196,13 +196,13 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Adds the animation to the list
+		 *\brief		adds the animation to the list
 		 *\param[in]	p_name	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		virtual void DoAddAnimation( Castor::String const & p_name ) = 0;
+		virtual void doAddAnimation( castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
@@ -211,7 +211,7 @@ namespace Castor3D
 		 *\brief		Démarre l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		virtual void DoStartAnimation( AnimationInstance & p_animation ) = 0;
+		virtual void doStartAnimation( AnimationInstance & p_animation ) = 0;
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
@@ -220,14 +220,14 @@ namespace Castor3D
 		 *\brief		Stoppe l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		virtual void DoStopAnimation( AnimationInstance & p_animation ) = 0;
+		virtual void doStopAnimation( AnimationInstance & p_animation ) = 0;
 		/**
 		 *\~english
 		 *\brief		Stops all animations
 		 *\~french
 		 *\brief		Stoppe toutes les animations
 		 */
-		virtual void DoClearAnimations() = 0;
+		virtual void doClearAnimations() = 0;
 
 	protected:
 		//!\~english	All animations.

@@ -35,7 +35,7 @@ SOFTWARE.
 
 #include "Shader/MatrixUbo.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -47,7 +47,7 @@ namespace Castor3D
 	\brief		Classe contenant le contexte de rendu
 	*/
 	class Context
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -76,35 +76,35 @@ namespace Castor3D
 		 *\param[in]	window	La RenderWindow
 		 *\return		\p true si initialisé correctement
 		 */
-		C3D_API bool Initialise( RenderWindow * window );
+		C3D_API bool initialise( RenderWindow * window );
 		/**
 		 *\~english
 		 *\brief		Cleans this context up
 		 *\~french
 		 *\brief		Nettoie le contexte
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Defines this context to be the current rendering context
 		 *\~french
 		 *\brief		Définit le contexte pour être celui de rendu actuel
 		 */
-		C3D_API void SetCurrent();
+		C3D_API void setCurrent();
 		/**
 		 *\~english
 		 *\brief		Defines this context not to be the current rendering context
 		 *\~french
 		 *\brief		Définit ce contexte pour ne pas être l'actuel
 		 */
-		C3D_API void EndCurrent();
+		C3D_API void endCurrent();
 		/**
 		 *\~english
 		 *\brief		Swaps render buffers
 		 *\~french
 		 *\brief		Echange les buffers de rendu
 		 */
-		C3D_API void SwapBuffers();
+		C3D_API void swapBuffers();
 		/**
 		 *\~english
 		 *\brief		Raise a memory barrier.
@@ -113,7 +113,7 @@ namespace Castor3D
 		 *\brief		Met en place un barrière mémoire.
 		 *\param[in]	barriers	La barrière à attendre.
 		 */
-		C3D_API void Barrier( MemoryBarriers const & barriers );
+		C3D_API void memoryBarrier( MemoryBarriers const & barriers );
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
@@ -126,8 +126,8 @@ namespace Castor3D
 		 *\param[in]	size		La taille du viewport de rendu.
 		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void RenderTextureCube( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderTextureCube( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture );
 		/**
 		 *\~english
@@ -141,7 +141,7 @@ namespace Castor3D
 		 *\param[in]	texture	La texture.
 		 *\param[in]	index	L'index de la couche.
 		 */
-		C3D_API void RenderTextureCube( Castor::Size const & size
+		C3D_API void renderTextureCube( castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index );
 		/**
@@ -160,8 +160,8 @@ namespace Castor3D
 		 *\param[in]	pipeline	Le pipeline utilisé pour dessiner la texture.
 		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
-		C3D_API void RenderTexture( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderTexture( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture
 			, RenderPipeline & pipeline
 			, MatrixUbo & matrixUbo );
@@ -177,8 +177,8 @@ namespace Castor3D
 		 *\param[in]	size		La taille du viewport de rendu.
 		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void RenderTexture( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderTexture( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture );
 		/**
 		 *\~english
@@ -194,8 +194,8 @@ namespace Castor3D
 		 *\param[in]	texture		La texture.
 		 *\param[in]	index		L'index de la couche.
 		 */
-		C3D_API void RenderTexture( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderTexture( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index );
 		/**
@@ -210,8 +210,8 @@ namespace Castor3D
 		 *\param[in]	size		La taille du viewport de rendu.
 		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void RenderDepthCube( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderDepthCube( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture );
 		/**
 		 *\~english
@@ -227,8 +227,8 @@ namespace Castor3D
 		 *\param[in]	texture		La texture.
 		 *\param[in]	index		L'index de la couche.
 		 */
-		C3D_API void RenderDepthCube( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderDepthCube( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index );
 		/**
@@ -243,8 +243,8 @@ namespace Castor3D
 		 *\param[in]	size		La taille du viewport de rendu.
 		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void RenderDepth( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderDepth( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture );
 		/**
 		 *\~english
@@ -260,8 +260,8 @@ namespace Castor3D
 		 *\param[in]	texture		La texture.
 		 *\param[in]	index		L'index de la couche.
 		 */
-		C3D_API void RenderDepth( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void renderDepth( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index );
 		/**
@@ -278,13 +278,13 @@ namespace Castor3D
 		 *\param[in]	pipeline	Le pipeline utilisé pour dessiner la texture.
 		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
-		inline void RenderTexture( Castor::Size const & size
+		inline void renderTexture( castor::Size const & size
 			, TextureLayout const & texture
 			, RenderPipeline & pipeline
 			, MatrixUbo & matrixUbo )
 		{
-			static Castor::Position const position;
-			RenderTexture( position
+			static castor::Position const position;
+			renderTexture( position
 				, size
 				, texture
 				, pipeline
@@ -300,11 +300,11 @@ namespace Castor3D
 		 *\param[in]	size		La taille du viewport de rendu.
 		 *\param[in]	texture		La texture.
 		 */
-		inline void RenderTexture( Castor::Size const & size
+		inline void renderTexture( castor::Size const & size
 			, TextureLayout const & texture )
 		{
-			static Castor::Position const position;
-			RenderTexture( position
+			static castor::Position const position;
+			renderTexture( position
 				, size
 				, texture );
 		}
@@ -320,12 +320,12 @@ namespace Castor3D
 		 *\param[in]	texture	La texture.
 		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderTexture( Castor::Size const & size
+		inline void renderTexture( castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index )
 		{
-			static Castor::Position const position;
-			RenderTexture( position
+			static castor::Position const position;
+			renderTexture( position
 				, size
 				, texture
 				, index );
@@ -340,11 +340,11 @@ namespace Castor3D
 		 *\param[in]	size	La taille du viewport de rendu.
 		 *\param[in]	texture	La texture.
 		 */
-		inline void RenderTextureCube( Castor::Size const & size
+		inline void renderTextureCube( castor::Size const & size
 			, TextureLayout const & texture )
 		{
-			static Castor::Position const position;
-			RenderTextureCube( position
+			static castor::Position const position;
+			renderTextureCube( position
 				, size
 				, texture );
 		}
@@ -358,11 +358,11 @@ namespace Castor3D
 		 *\param[in]	size	La taille du viewport de rendu.
 		 *\param[in]	texture	La texture.
 		 */
-		inline void RenderDepth( Castor::Size const & size
+		inline void renderDepth( castor::Size const & size
 			, TextureLayout const & texture )
 		{
-			static Castor::Position const position;
-			RenderDepth( position
+			static castor::Position const position;
+			renderDepth( position
 				, size
 				, texture );
 		}
@@ -378,12 +378,12 @@ namespace Castor3D
 		 *\param[in]	texture	La texture.
 		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderDepth( Castor::Size const & size
+		inline void renderDepth( castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index )
 		{
-			static Castor::Position const position;
-			RenderDepth( position
+			static castor::Position const position;
+			renderDepth( position
 				, size
 				, texture
 				, index );
@@ -398,11 +398,11 @@ namespace Castor3D
 		 *\param[in]	size	La taille du viewport de rendu.
 		 *\param[in]	texture	La texture.
 		 */
-		inline void RenderDepthCube( Castor::Size const & size
+		inline void renderDepthCube( castor::Size const & size
 			, TextureLayout const & texture )
 		{
-			static Castor::Position const position;
-			RenderDepth( position
+			static castor::Position const position;
+			renderDepth( position
 				, size
 				, texture );
 		}
@@ -418,12 +418,12 @@ namespace Castor3D
 		 *\param[in]	texture	La texture.
 		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderDepthCube( Castor::Size const & size
+		inline void renderDepthCube( castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index )
 		{
-			static Castor::Position const position;
-			RenderDepth( position
+			static castor::Position const position;
+			renderDepth( position
 				, size
 				, texture
 				, index );
@@ -440,13 +440,13 @@ namespace Castor3D
 		 *\param[in]	texture	La texture.
 		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderEquiToCube( Castor::Size const & size
+		inline void RenderEquiToCube( castor::Size const & size
 			, TextureLayout const & p_2dTexture
 			, TextureLayoutSPtr p_cubeTexture
 			, FrameBufferSPtr p_fbo
 			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs )
 		{
-			m_cube.Render( size
+			m_cube.render( size
 				, p_2dTexture
 				, p_cubeTexture
 				, p_fbo
@@ -458,7 +458,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dit si le contexte est initialisé
 		 */
-		inline bool IsInitialised()const
+		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
@@ -468,7 +468,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fenêtre de rendu.
 		 */
-		inline RenderWindow const & GetWindow()const
+		inline RenderWindow const & getWindow()const
 		{
 			return *m_window;
 		}
@@ -478,7 +478,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fenêtre de rendu.
 		 */
-		inline RenderWindow & GetWindow()
+		inline RenderWindow & getWindow()
 		{
 			return *m_window;
 		}
@@ -504,8 +504,8 @@ namespace Castor3D
 		 *\param[in]	matrixUbo		Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTextureFace( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void doRenderTextureFace( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture
 			, CubeMapFace face
 			, RenderPipeline & pipeline
@@ -533,8 +533,8 @@ namespace Castor3D
 		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	index			L'index de la couche.
 		 */
-		C3D_API void DoRenderTextureFace( Castor::Position const & position
-			, Castor::Size const & size
+		C3D_API void doRenderTextureFace( castor::Position const & position
+			, castor::Size const & size
 			, TextureLayout const & texture
 			, CubeMapFace face
 			, RenderPipeline & pipeline
@@ -548,42 +548,42 @@ namespace Castor3D
 		 *\brief		Initialise le contexte
 		 *\return		\p true si initialisé correctement
 		 */
-		C3D_API virtual bool DoInitialise() = 0;
+		C3D_API virtual bool doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans this context up
 		 *\~french
 		 *\brief		Nettoie le contexte
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the context on GPU.
 		 *\~french
 		 *\brief		Détruit le contexte sur le GPU.
 		 */
-		C3D_API virtual void DoDestroy() = 0;
+		C3D_API virtual void doDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines this context to be the current rendering context
 		 *\~french
 		 *\brief		Définit le contexte pour être celui de rendu actuel
 		 */
-		C3D_API virtual void DoSetCurrent() = 0;
+		C3D_API virtual void doSetCurrent() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines this context not to be the current rendering context
 		 *\~french
 		 *\brief		Définit ce contexte pour ne pas être l'actuel
 		 */
-		C3D_API virtual void DoEndCurrent() = 0;
+		C3D_API virtual void doEndCurrent() = 0;
 		/**
 		 *\~english
 		 *\brief		Swaps render buffers
 		 *\~french
 		 *\brief		Echange les buffers de rendu
 		 */
-		C3D_API virtual void DoSwapBuffers() = 0;
+		C3D_API virtual void doSwapBuffers() = 0;
 		/**
 		 *\~english
 		 *\brief		Raise a memory barrier.
@@ -592,7 +592,7 @@ namespace Castor3D
 		 *\brief		Met en place un barrière mémoire.
 		 *\param[in]	barriers	La barrière à attendre.
 		 */
-		C3D_API virtual void DoBarrier( MemoryBarriers const & barriers ) = 0;
+		C3D_API virtual void doMemoryBarrier( MemoryBarriers const & barriers ) = 0;
 
 	protected:
 		//!\~english	RenderWindow associated to this context.

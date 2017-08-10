@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Light.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs, SpotLight const * p_category = nullptr );
+			C3D_API TextWriter( castor::String const & p_tabs, SpotLight const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
@@ -71,11 +71,11 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			C3D_API bool operator()( SpotLight const & p_light, Castor::TextFile & p_file );
+			C3D_API bool operator()( SpotLight const & p_light, castor::TextFile & p_file );
 			/**
-			 *\copydoc		Castor3D::LightCategory::TextWriter::WriteInto
+			 *\copydoc		castor3d::LightCategory::TextWriter::writeInto
 			 */
-			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
+			C3D_API bool writeInto( castor::TextFile & p_file )override;
 
 		private:
 			SpotLight const * m_category;
@@ -111,48 +111,48 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par Factory.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategoryUPtr Create( Light & p_light );
+		C3D_API static LightCategoryUPtr create( Light & p_light );
 		/**
-		 *\copydoc		Castor3D::LightCategory::Update
+		 *\copydoc		castor3d::LightCategory::Update
 		 */
-		C3D_API void Update( Castor::Point3r const & p_target
+		C3D_API void update( castor::Point3r const & p_target
 			, Viewport & p_viewport
 			, int32_t p_index = -1 )override;
 		/**
-		 *\copydoc		Castor3D::LightCategory::CreateTextWriter
+		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */
-		C3D_API std::unique_ptr < LightCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
+		C3D_API std::unique_ptr < LightCategory::TextWriter > createTextWriter( castor::String const & p_tabs )override
 		{
 			return std::make_unique< TextWriter >( p_tabs, this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets attenuation components
+		 *\brief		sets attenuation components
 		 *\param[in]	p_ptAttenuation	The attenuation components
 		 *\~french
 		 *\brief		Définit les composantes d'atténuation
 		 *\param[in]	p_ptAttenuation	Les composantes d'attenuation
 		 */
-		C3D_API void SetAttenuation( Castor::Point3f const & p_ptAttenuation );
+		C3D_API void setAttenuation( castor::Point3f const & p_ptAttenuation );
 		/**
 		*\~english
-		*\brief			Sets the light exponent
+		*\brief			sets the light exponent
 		 *\param[in]	p_exponent	The new exponent value
 		 */
-		C3D_API void SetExponent( float p_exponent );
+		C3D_API void setExponent( float p_exponent );
 		/**
 		*\~english
-		*\brief			Sets the light cutoff
+		*\brief			sets the light cutoff
 		 *\param[in]	p_cutOff	The new cutoff value
 		 */
-		C3D_API void SetCutOff( Castor::Angle const & p_cutOff );
+		C3D_API void setCutOff( castor::Angle const & p_cutOff );
 		/**
 		 *\~english
 		 *\return		The light source direction.
 		 *\~french
 		 *\return		La direction de la source lumineuse.
 		 */
-		inline Castor::Point3f const & GetDirection()const
+		inline castor::Point3f const & getDirection()const
 		{
 			return m_direction;
 		}
@@ -162,7 +162,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La matrice de transformation de la lumière.
 		 */
-		inline Castor::Matrix4x4f const & GetLightSpaceTransform()const
+		inline castor::Matrix4x4f const & getLightSpaceTransform()const
 		{
 			return m_lightSpace;
 		}
@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\brief		Récupère les composantes d'attenuation
 		 *\return		Les composantes d'attenuation
 		 */
-		inline Castor::Point3f const & GetAttenuation()const
+		inline castor::Point3f const & getAttenuation()const
 		{
 			return m_attenuation;
 		}
@@ -186,7 +186,7 @@ namespace Castor3D
 		 *\brief		Récupère les composantes d'attenuation
 		 *\return		Les composantes d'attenuation
 		 */
-		inline Castor::Point3f & GetAttenuation()
+		inline castor::Point3f & getAttenuation()
 		{
 			return m_attenuation;
 		}
@@ -198,7 +198,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur de l'exposant
 		 *\return		La valeur de l'exposant
 		 */
-		inline float GetExponent()const
+		inline float getExponent()const
 		{
 			return m_exponent;
 		}
@@ -210,37 +210,37 @@ namespace Castor3D
 		 *\brief		Récupère l'angle du cône
 		 *\return		L'angle du cône
 		 */
-		inline Castor::Angle const & GetCutOff()const
+		inline castor::Angle const & getCutOff()const
 		{
 			return m_cutOff;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::LightCategory::UpdateNode
+		 *\copydoc		castor3d::LightCategory::updateNode
 		 */
-		C3D_API void UpdateNode( SceneNode const & p_node )override;
+		C3D_API void updateNode( SceneNode const & p_node )override;
 		/**
-		 *\copydoc		Castor::LightCategory::DoBind
+		 *\copydoc		castor::LightCategory::doBind
 		 */
-		C3D_API void DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const override;
+		C3D_API void doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const override;
 
 	private:
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
-		Castor::Point3f m_attenuation{ 1, 0, 0 };
+		castor::Point3f m_attenuation{ 1, 0, 0 };
 		//!\~english	The light exponent, id est how much the light is focused.
 		//\~french		L'exposant de la lumièrs, càd à quel point elle est concentrée.
 		float m_exponent{ 1.0f };
 		//!\~english	The angle of the cone.
 		//\~french		L'angle du cône.
-		Castor::Angle m_cutOff{ 45.0_degrees };
+		castor::Angle m_cutOff{ 45.0_degrees };
 		//!\~english	The light source space transformation matrix.
 		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
-		mutable Castor::Matrix4x4f m_lightSpace;
+		mutable castor::Matrix4x4f m_lightSpace;
 		//!\~english	The light source direction.
 		//!\~french		La direction de la source lumineuse.
-		Castor::Point3f m_direction;
+		castor::Point3f m_direction;
 		//!\~english	The light source shadow map index.
 		//!\~french		L'index de la shadow map de la source lumineuse.
 		int32_t m_shadowMapIndex{ -1 };

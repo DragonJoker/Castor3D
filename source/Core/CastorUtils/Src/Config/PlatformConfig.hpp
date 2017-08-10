@@ -38,7 +38,7 @@ SOFTWARE.
 #		define CU_API __declspec(dllimport)
 #	endif
 #	define CASTOR_DLL_EXT cuT( "dll")
-#	define dlerror() ::GetLastError()
+#	define dlerror() ::getLastError()
 #else
 #	define CASTOR_DLL_EXT cuT( "so")
 #	define CU_API

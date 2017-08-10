@@ -1,10 +1,10 @@
-#include "Miscellaneous/Utils.hpp"
+﻿#include "Miscellaneous/Utils.hpp"
 #include "Log/Logger.hpp"
 #include "Graphics/PixelFormat.hpp"
 #include "FileParserContext.hpp"
 #include "ParserParameterTypeException.hpp"
 
-namespace Castor
+namespace castor
 {
 	//*************************************************************************************************
 
@@ -31,7 +31,7 @@ namespace Castor
 		*\return		\p true si tout s'est bien passé.
 		*/
 	template< typename T >
-	inline bool ParseValues( String & p_params, size_t p_count, T * p_value )
+	inline bool parseValues( String & p_params, size_t p_count, T * p_value )
 	{
 		bool result = false;
 
@@ -78,12 +78,12 @@ namespace Castor
 			}
 			else
 			{
-				Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+				Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
 			}
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
+			Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 		}
 
 		return result;
@@ -101,9 +101,9 @@ namespace Castor
 		*\return		\p true si tout s'est bien passé.
 		*/
 	template< typename T, uint32_t Count >
-	inline bool ParseValues( String & p_params, Point< T, Count > & p_value )
+	inline bool parseValues( String & p_params, Point< T, Count > & p_value )
 	{
-		return ParseValues( p_params, Count, p_value.ptr() );
+		return parseValues( p_params, Count, p_value.ptr() );
 	}
 	/**
 		*\~english
@@ -118,9 +118,9 @@ namespace Castor
 		*\return		\p true si tout s'est bien passé.
 		*/
 	template< typename T, uint32_t Count >
-	inline bool ParseValues( String & p_params, Coords< T, Count > & p_value )
+	inline bool parseValues( String & p_params, Coords< T, Count > & p_value )
 	{
-		return ParseValues( p_params, Count, p_value.ptr() );
+		return parseValues( p_params, Count, p_value.ptr() );
 	}
 	/**
 		*\~english
@@ -135,9 +135,9 @@ namespace Castor
 		*\return		\p true si tout s'est bien passé.
 		*/
 	template< typename T, uint32_t Count >
-	inline bool ParseValues( String & p_params, Size & p_value )
+	inline bool parseValues( String & p_params, Size & p_value )
 	{
-		return ParseValues( p_params, Count, p_value.ptr() );
+		return parseValues( p_params, Count, p_value.ptr() );
 	}
 	/**
 		*\~english
@@ -152,9 +152,9 @@ namespace Castor
 		*\return		\p true si tout s'est bien passé.
 		*/
 	template< typename T, uint32_t Count >
-	inline bool ParseValues( String & p_params, Position & p_value )
+	inline bool parseValues( String & p_params, Position & p_value )
 	{
-		return ParseValues( p_params, Count, p_value.ptr() );
+		return parseValues( p_params, Count, p_value.ptr() );
 	}
 	/**
 		*\~english
@@ -169,9 +169,9 @@ namespace Castor
 		*\return		\p true si tout s'est bien passé.
 		*/
 	template< typename T, uint32_t Count >
-	inline bool ParseValues( String & p_params, Rectangle & p_value )
+	inline bool parseValues( String & p_params, Rectangle & p_value )
 	{
-		return ParseValues( p_params, Count, p_value.ptr() );
+		return parseValues( p_params, Count, p_value.ptr() );
 	}
 
 	//*************************************************************************************************
@@ -199,9 +199,9 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
-			return ParseValues( p_params, 1, &p_value );
+			return parseValues( p_params, 1, &p_value );
 		}
 	};
 	/*!
@@ -227,9 +227,9 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
-			return ParseValues( p_params, p_value );
+			return parseValues( p_params, p_value );
 		}
 	};
 	/*!
@@ -255,7 +255,7 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
 			p_value = p_params;
 			p_params.clear();
@@ -302,7 +302,7 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
 			p_value = Path{ p_params };
 			p_params.clear();
@@ -357,7 +357,7 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
 			bool result = false;
 			StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
@@ -365,7 +365,7 @@ namespace Castor
 
 			if ( !values.empty() )
 			{
-				p_value = string::to_lower_case( values[0] ) == cuT( "true" );
+				p_value = string::toLowerCase( values[0] ) == cuT( "true" );
 				result = values[0] == cuT( "true" ) || values[0] == cuT( "false" );
 
 				if ( values.size() > 1 )
@@ -400,7 +400,7 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
 			bool result = false;
 			StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
@@ -408,7 +408,7 @@ namespace Castor
 
 			if ( values.size() )
 			{
-				p_value = PF::GetFormatByName( values[0] );
+				p_value = PF::getFormatByName( values[0] );
 				result = p_value != PixelFormat::eCount;
 
 				if ( values.size() > 1 )
@@ -443,17 +443,17 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
 			bool result = false;
 
 			if ( p_params == cuT( "screen_size" ) )
 			{
-				result = Castor::System::GetScreenSize( 0, p_value );
+				result = castor::System::getScreenSize( 0, p_value );
 			}
 			else
 			{
-				result = ParseValues( p_params, p_value );
+				result = parseValues( p_params, p_value );
 			}
 
 			return result;
@@ -482,7 +482,7 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
 			bool result = false;
 			StringArray values = string::split( p_params, cuT( " \t,;" ), 5, false );
@@ -490,7 +490,7 @@ namespace Castor
 			if ( values.size() >= size_t( Component::eCount ) )
 			{
 				Point4f value;
-				result = ParseValues( p_params, value );
+				result = parseValues( p_params, value );
 
 				if ( result )
 				{
@@ -503,7 +503,7 @@ namespace Castor
 			else if ( values.size() == 3 )
 			{
 				Point3f value;
-				result = ParseValues( p_params, value );
+				result = parseValues( p_params, value );
 
 				if ( result )
 				{
@@ -551,16 +551,16 @@ namespace Castor
 							}
 						}
 
-						p_value = Colour::from_argb( value );
+						p_value = Colour::fromARGB( value );
 					}
 					else
 					{
-						Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
+					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -592,7 +592,7 @@ namespace Castor
 		 *\param[in]	p_params	La ligne contenant la valeur.
 		 *\param[out]	p_value		Reçoit le résultat.
 		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & p_params, ValueType & p_value )
 		{
 			bool result = false;
 			StringArray values = string::split( p_params, cuT( " \t,;" ), 5, false );
@@ -600,7 +600,7 @@ namespace Castor
 			if ( values.size() >= size_t( Component::eCount ) )
 			{
 				Point4f value;
-				result = ParseValues( p_params, value );
+				result = parseValues( p_params, value );
 
 				if ( result )
 				{
@@ -613,7 +613,7 @@ namespace Castor
 			else if ( values.size() == 3 )
 			{
 				Point3f value;
-				result = ParseValues( p_params, value );
+				result = parseValues( p_params, value );
 
 				if ( result )
 				{
@@ -661,16 +661,16 @@ namespace Castor
 							}
 						}
 
-						p_value = HdrColour::from_argb( value );
+						p_value = HdrColour::fromARGB( value );
 					}
 					else
 					{
-						Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
+					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -687,27 +687,27 @@ namespace Castor
 	{
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eName >::GetType()
+	inline ParameterType ParserParameter< ParameterType::eName >::getType()
 	{
 		return ParserParameterHelper< ParameterType::eName >::ParamType;
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eName >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::eName >::getBaseType()
 	{
 		return ParserParameterHelper< ParameterType::eName >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eName >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::eName >::getStrType()
 	{
 		return ParserParameterHelper< ParameterType::eName >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eName >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eName >::clone()
 	{
 		return std::make_shared< ParserParameter< ParameterType::eName > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eName >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eName >::parse( String & p_params )
 	{
 		Regex regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
 		auto begin = std::begin( p_params );
@@ -732,27 +732,27 @@ namespace Castor
 	{
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eCheckedText >::GetType()
+	inline ParameterType ParserParameter< ParameterType::eCheckedText >::getType()
 	{
 		return ParserParameterHelper< ParameterType::eCheckedText >::ParamType;
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eCheckedText >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::eCheckedText >::getBaseType()
 	{
 		return ParserParameterHelper< ParameterType::eCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eCheckedText >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::eCheckedText >::getStrType()
 	{
 		return ParserParameterHelper< ParameterType::eCheckedText >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eCheckedText >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eCheckedText >::clone()
 	{
 		return std::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eCheckedText >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eCheckedText >::parse( String & p_params )
 	{
 		bool result = false;
 		StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
@@ -785,27 +785,27 @@ namespace Castor
 	{
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::GetType()
+	inline ParameterType ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getType()
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::ParamType;
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getBaseType()
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getStrType()
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::clone()
 	{
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( String & p_params )
 	{
 		bool result = false;
 		m_value = 0;
@@ -814,7 +814,10 @@ namespace Castor
 
 		if ( !parameters.empty() )
 		{
-			StringArray values = string::split( parameters[0], cuT( "|" ), uint32_t( std::count( parameters[0].begin(), parameters[0].end(), cuT( '|' ) ) + 1 ), false );
+			StringArray values = string::split( parameters[0]
+				, cuT( "|" )
+				, uint32_t( std::count( parameters[0].begin(), parameters[0].end(), cuT( '|' ) ) + 1 )
+				, false );
 
 			for ( auto value : values )
 			{
@@ -844,27 +847,27 @@ namespace Castor
 	{
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::GetType()
+	inline ParameterType ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getType()
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::ParamType;
 	}
 
-	inline ParameterType ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getBaseType()
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getStrType()
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::clone()
 	{
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( String & p_params )
 	{
 		bool result = false;
 		m_value = 0;
@@ -873,7 +876,10 @@ namespace Castor
 
 		if ( !parameters.empty() )
 		{
-			StringArray values = string::split( parameters[0], cuT( "|" ), uint32_t( std::count( parameters[0].begin(), parameters[0].end(), cuT( '|' ) ) + 1 ), false );
+			StringArray values = string::split( parameters[0]
+				, cuT( "|" )
+				, uint32_t( std::count( parameters[0].begin(), parameters[0].end(), cuT( '|' ) ) + 1 )
+				, false );
 
 			for ( auto value : values )
 			{
@@ -898,10 +904,10 @@ namespace Castor
 	//*************************************************************************************************
 
 	template< typename T >
-	T const & ParserParameterBase::Get( T & p_value )
+	T const & ParserParameterBase::get( T & p_value )
 	{
 		static const ParameterType given = ParserValueTyper< T >::Type;
-		static const ParameterType expected = GetBaseType();
+		static const ParameterType expected = getBaseType();
 
 		if ( given == expected )
 		{

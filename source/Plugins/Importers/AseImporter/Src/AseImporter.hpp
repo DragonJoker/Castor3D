@@ -36,23 +36,23 @@ namespace Ase
 	\brief		Importeur de fichiers ASE
 	*/
 	class AseImporter
-		: public Castor3D::Importer
+		: public castor3d::Importer
 	{
 	public:
-		AseImporter( Castor3D::Engine & p_engine );
+		AseImporter( castor3d::Engine & p_engine );
 		~AseImporter();
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		bool doImportScene( castor3d::Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 	};
 }
 

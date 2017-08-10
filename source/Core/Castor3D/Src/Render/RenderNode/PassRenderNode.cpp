@@ -5,27 +5,27 @@
 #include "Shader/UniformBuffer.hpp"
 #include "Texture/TextureUnit.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
-		void DoGetTexture( Pass const & p_pass
+		void doGetTexture( Pass const & p_pass
 			, ShaderProgram const & p_program
 			, TextureChannel p_channel
 			, String const & p_name
 			, PassRenderNode & p_node )
 		{
-			TextureUnitSPtr unit = p_pass.GetTextureUnit( p_channel );
+			TextureUnitSPtr unit = p_pass.getTextureUnit( p_channel );
 
 			if ( unit )
 			{
-				auto variable = p_program.FindUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
+				auto variable = p_program.findUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
 
 				if ( variable )
 				{
-					p_node.m_textures.emplace( unit->GetIndex(), *variable );
+					p_node.m_textures.emplace( unit->getIndex(), *variable );
 				}
 			}
 		}
@@ -35,34 +35,34 @@ namespace Castor3D
 		, ShaderProgram const & p_program )
 		: m_pass{ p_pass }
 	{
-		switch ( p_pass.GetType() )
+		switch ( p_pass.getType() )
 		{
 		case MaterialType::eLegacy:
-			DoGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
 			break;
 
 		case MaterialType::ePbrMetallicRoughness:
-			DoGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapAlbedo, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eMetallic, ShaderProgram::MapMetallic, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eRoughness, ShaderProgram::MapRoughness, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapAlbedo, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eMetallic, ShaderProgram::MapMetallic, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eRoughness, ShaderProgram::MapRoughness, *this );
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			DoGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapDiffuse, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapDiffuse, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
 			break;
 
 		default:
 			FAILURE( "Unsupported material type" );
 		}
 
-		DoGetTexture( p_pass, p_program, TextureChannel::eAmbientOcclusion, ShaderProgram::MapAmbientOcclusion, *this );
-		DoGetTexture( p_pass, p_program, TextureChannel::eEmissive, ShaderProgram::MapEmissive, *this );
-		DoGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
-		DoGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );
-		DoGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eAmbientOcclusion, ShaderProgram::MapAmbientOcclusion, *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eEmissive, ShaderProgram::MapEmissive, *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
 	}
 }

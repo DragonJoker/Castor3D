@@ -4,15 +4,15 @@
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	MorphingUbo::MorphingUbo( Engine & engine )
 		: m_ubo{ ShaderProgram::BufferMorphing
-			, *engine.GetRenderSystem()
+			, *engine.getRenderSystem()
 			, MorphingUbo::BindingPoint }
-		, m_time{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::Time ) }
+		, m_time{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::Time ) }
 	{
 	}
 
@@ -20,10 +20,10 @@ namespace Castor3D
 	{
 	}
 
-	void MorphingUbo::Update( float p_time )const
+	void MorphingUbo::update( float p_time )const
 	{
-		m_time.SetValue( p_time );
-		m_ubo.Update();
-		m_ubo.BindTo( MorphingUbo::BindingPoint );
+		m_time.setValue( p_time );
+		m_ubo.update();
+		m_ubo.bindTo( MorphingUbo::BindingPoint );
 	}
 }

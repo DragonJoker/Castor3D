@@ -5,8 +5,8 @@
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -16,7 +16,7 @@ namespace GuiCommon
 	}
 
 	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, MaterialSPtr p_material )
-		: TreeItemProperty( p_material->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
+		: TreeItemProperty( p_material->getEngine(), p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
 		, m_material( p_material )
 	{
 		PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
@@ -28,19 +28,19 @@ namespace GuiCommon
 	{
 	}
 
-	void MaterialTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void MaterialTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		MaterialSPtr material = GetMaterial();
+		MaterialSPtr material = getMaterial();
 
 		if ( material )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_MATERIAL + wxString( material->GetName() ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_MATERIAL + wxString( material->getName() ) ) );
 		}
 	}
 
-	void MaterialTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void MaterialTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		MaterialSPtr material = GetMaterial();
+		MaterialSPtr material = getMaterial();
 		wxPGProperty * property = p_event.GetProperty();
 
 		if ( property && material )

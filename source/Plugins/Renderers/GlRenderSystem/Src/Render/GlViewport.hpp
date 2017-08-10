@@ -39,7 +39,7 @@ namespace GlRender
 	\brief		Implémentation de viewport spàcifique à l'API de rendu.
 	*/
 	class GlViewport
-		: public Castor3D::IViewportImpl
+		: public castor3d::IViewportImpl
 		, public Holder
 	{
 	public:
@@ -53,7 +53,7 @@ namespace GlRender
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_viewport		Le viewport parent.
 		 */
-		GlViewport( GlRenderSystem & renderSystem, Castor3D::Viewport & p_viewport );
+		GlViewport( GlRenderSystem & renderSystem, castor3d::Viewport & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -62,9 +62,9 @@ namespace GlRender
 		 */
 		virtual ~GlViewport();
 		/**
-		 *\copydoc		Castor3D::IViewportImpl::Apply
+		 *\copydoc		castor3d::IViewportImpl::Apply
 		 */
-		void Apply()const override;
+		void apply()const override;
 	};
 }
 

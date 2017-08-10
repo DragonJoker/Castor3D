@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Material/Pass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace Castor3D
 		\brief Loader de Pass.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< SpecularGlossinessPbrPass >
+			: public castor::TextWriter< SpecularGlossinessPbrPass >
 		{
 		public:
 			/**
@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a LegacyPass into a text file.
@@ -72,7 +72,7 @@ namespace Castor3D
 			 *\param[in]		p_pass	La LegacyPass à écrire.
 			 *\param[in,out]	p_file	Le file où écrire la LegacyPass.
 			 */
-			C3D_API bool operator()( SpecularGlossinessPbrPass const & p_pass, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( SpecularGlossinessPbrPass const & p_pass, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -95,9 +95,9 @@ namespace Castor3D
 		 */
 		C3D_API ~SpecularGlossinessPbrPass();
 		/**
-		 *\copydoc		Castor3D::Pass::Accept
+		 *\copydoc		castor3d::Pass::Accept
 		 */
-		C3D_API void Accept( PassBuffer & buffer )const override;
+		C3D_API void accept( PassBuffer & buffer )const override;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -106,45 +106,45 @@ namespace Castor3D
 		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
 		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
 		 */
-		inline uint32_t GetPassSize()const override
+		inline uint32_t getPassSize()const override
 		{
 			return 4u;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the albedo colour.
+		 *\brief		sets the albedo colour.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur d'albédo.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetDiffuse( Castor::Colour const & value )
+		inline void setDiffuse( castor::Colour const & value )
 		{
 			m_diffuse = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the glossiness.
+		 *\brief		sets the glossiness.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la brillance.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetGlossiness( float value )
+		inline void setGlossiness( float value )
 		{
 			m_glossiness = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the specular.
+		 *\brief		sets the specular.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la spécularité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetSpecular( Castor::Colour const & value )
+		inline void setSpecular( castor::Colour const & value )
 		{
 			m_specular = value;
 			onChanged( *this );
@@ -155,7 +155,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur.
 		 */
-		inline Castor::Colour const & GetDiffuse()const
+		inline castor::Colour const & getDiffuse()const
 		{
 			return m_diffuse;
 		}
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La brillance.
 		 */
-		inline float GetGlossiness()const
+		inline float getGlossiness()const
 		{
 			return m_glossiness;
 		}
@@ -175,32 +175,32 @@ namespace Castor3D
 		 *\~french
 		 *\return		La spécularité.
 		 */
-		inline Castor::Colour const & GetSpecular()const
+		inline castor::Colour const & getSpecular()const
 		{
 			return m_specular;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Pass::DoInitialise
+		 *\copydoc		castor3d::Pass::doInitialise
 		 */
-		void DoInitialise()override;
+		void doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoCleanup
+		 *\copydoc		castor3d::Pass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoSetOpacity
+		 *\copydoc		castor3d::Pass::doSetOpacity
 		 */
-		void DoSetOpacity( float value )override;
+		void doSetOpacity( float value )override;
 
 	private:
 		//!\~english	The diffuse colour.
 		//!\~french		La couleur diffuse.
-		Castor::Colour m_diffuse;
+		castor::Colour m_diffuse;
 		//!\~english	The specular colour.
 		//!\~french		La couleur spéculaire.
-		Castor::Colour m_specular;
+		castor::Colour m_specular;
 		//!\~english	The reflectance.
 		//!\~french		La réflectivité.
 		float m_glossiness{ 0.0 };

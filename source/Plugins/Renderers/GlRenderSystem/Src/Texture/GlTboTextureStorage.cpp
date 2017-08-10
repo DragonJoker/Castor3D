@@ -6,61 +6,61 @@
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
 	GlTboTextureStorageTraits::GlTboTextureStorageTraits( TextureStorage & p_storage )
-		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), GlBufferTarget::eTexture }
+		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).getOpenGl(), GlBufferTarget::eTexture }
 	{
-		REQUIRE( p_storage.GetType() == TextureStorageType::eBuffer );
-		bool result = m_glBuffer.Create();
+		REQUIRE( p_storage.getType() == TextureStorageType::eBuffer );
+		bool result = m_glBuffer.create();
 
 		if ( result )
 		{
 			auto & storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
-			auto buffer = p_storage.GetOwner()->GetImage().GetBuffer();
-			m_glInternal = storage.GetOpenGl().GetInternal( buffer->format() );
-			m_glBuffer.InitialiseStorage( buffer->size(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			m_glBuffer.Upload( 0u, buffer->size(), buffer->const_ptr() );
+			auto buffer = p_storage.getOwner()->getImage().getBuffer();
+			m_glInternal = storage.getOpenGl().getInternal( buffer->format() );
+			m_glBuffer.initialiseStorage( buffer->size(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_glBuffer.upload( 0u, buffer->size(), buffer->constPtr() );
 		}
 	}
 
 	GlTboTextureStorageTraits::~GlTboTextureStorageTraits()
 	{
-		m_glBuffer.Destroy();
+		m_glBuffer.destroy();
 	}
 
-	void GlTboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlTboTextureStorageTraits::bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		auto const & storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > const & >( p_storage );
-		storage.GetOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, m_glBuffer.GetGlName() );
+		storage.getOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, m_glBuffer.getGlName() );
 	}
 
-	void GlTboTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlTboTextureStorageTraits::unbind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		auto const & storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > const & >( p_storage );
-		storage.GetOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, 0 );
+		storage.getOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, 0 );
 	}
 
-	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
+	uint8_t * GlTboTextureStorageTraits::lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
 		auto & storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
-		m_glBuffer.Bind();
-		return m_glBuffer.Lock( storage.GetOpenGl().GetLockFlags( p_lock ) );
+		m_glBuffer.bind();
+		return m_glBuffer.lock( storage.getOpenGl().getLockFlags( p_lock ) );
 	}
 
-	void GlTboTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )
+	void GlTboTextureStorageTraits::unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )
 	{
-		m_glBuffer.Unlock();
-		m_glBuffer.Unbind();
+		m_glBuffer.unlock();
+		m_glBuffer.unbind();
 	}
 
-	void GlTboTextureStorageTraits::Fill( TextureStorage & p_storage, TextureImage const & p_image )
+	void GlTboTextureStorageTraits::fill( TextureStorage & p_storage, TextureImage const & p_image )
 	{
-		auto const size = p_image.GetBuffer()->dimensions();
-		auto const format = p_image.GetBuffer()->format();
-		m_glBuffer.Upload( 0u, size.width() * size.height() * PF::GetBytesPerPixel( format ), p_image.GetBuffer()->const_ptr() );
+		auto const size = p_image.getBuffer()->dimensions();
+		auto const format = p_image.getBuffer()->format();
+		m_glBuffer.upload( 0u, size.getWidth() * size.getHeight() * PF::getBytesPerPixel( format ), p_image.getBuffer()->constPtr() );
 	}
 }

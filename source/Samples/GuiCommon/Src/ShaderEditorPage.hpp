@@ -36,10 +36,10 @@ namespace GuiCommon
 	public:
 		ShaderEditorPage( bool p_bCanEdit
 			, StcContext & p_stcContext
-			, Castor3D::ShaderProgramSPtr p_shader
-			, Castor3D::ShaderType p_type
-			, Castor3D::Pass const & p_pass
-			, Castor3D::Scene const & p_scene
+			, castor3d::ShaderProgramSPtr p_shader
+			, castor3d::ShaderType p_type
+			, castor3d::Pass const & p_pass
+			, castor3d::Scene const & p_scene
 			, wxWindow * p_parent
 			, wxPoint const & p_position = wxDefaultPosition
 			, const wxSize p_size = wxSize( 800, 600 ) );
@@ -48,26 +48,26 @@ namespace GuiCommon
 		bool LoadFile( wxString const & p_file );
 		void SaveFile( bool p_createIfNone );
 
-		wxString const & GetShaderFile()const
+		wxString const & getShaderFile()const
 		{
 			return m_shaderFile;
 		}
 
-		wxString const & GetShaderSource()const
+		wxString const & getShaderSource()const
 		{
 			return m_shaderSource;
 		}
 
-		Castor3D::ShaderModel GetShaderModel()const
+		castor3d::ShaderModel getShaderModel()const
 		{
 			return m_shaderModel;
 		}
 
 	private:
-		void DoInitialiseShaderLanguage();
-		void DoInitialiseLayout();
-		void DoLoadPage( Castor3D::RenderPipeline & p_pipeline );
-		void DoCleanup();
+		void doInitialiseShaderLanguage();
+		void doInitialiseLayout();
+		void doLoadPage( castor3d::RenderPipeline & p_pipeline );
+		void doCleanup();
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
@@ -80,9 +80,9 @@ namespace GuiCommon
 		PropertiesHolder * m_frameVariablesProperties;
 		wxString m_shaderFile;
 		wxString m_shaderSource;
-		Castor3D::ShaderProgramWPtr m_shaderProgram;
-		Castor3D::ShaderType m_shaderType;
-		Castor3D::ShaderModel m_shaderModel;
+		castor3d::ShaderProgramWPtr m_shaderProgram;
+		castor3d::ShaderType m_shaderType;
+		castor3d::ShaderModel m_shaderModel;
 		bool m_canEdit;
 	};
 }

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -46,14 +46,14 @@ namespace Castor3D
 		 *\brief		Crée les faces à partir des points
 		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan
 		 */
-		C3D_API static void ComputeFacesFromPolygonVertex( Submesh & p_submesh );
+		C3D_API static void computeFacesFromPolygonVertex( Submesh & p_submesh );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API static void ComputeNormals( Submesh & p_submesh
+		C3D_API static void computeNormals( Submesh & p_submesh
 			, bool p_reverted = false );
 		/**
 		 *\~english
@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_face	La face
 		 */
-		C3D_API static void ComputeNormals( Submesh & p_submesh
+		C3D_API static void computeNormals( Submesh & p_submesh
 			, Face const & p_face );
 		/**
 		 *\~english
@@ -73,7 +73,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_face	La face
 		 */
-		C3D_API static void ComputeTangents( Submesh & p_submesh
+		C3D_API static void computeTangents( Submesh & p_submesh
 			, Face const & p_face );
 		/**
 		 *\~english
@@ -83,7 +83,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
 		 *\remarks		Cette fonction suppose que les normales sont définies
 		 */
-		C3D_API static void ComputeTangentsFromNormals( Submesh & p_submesh );
+		C3D_API static void computeTangentsFromNormals( Submesh & p_submesh );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
@@ -92,7 +92,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
 		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies
 		 */
-		C3D_API static void ComputeTangentsFromBitangents( Submesh & p_submesh );
+		C3D_API static void computeTangentsFromBitangents( Submesh & p_submesh );
 		/**
 		 *\~english
 		 *\brief		Computes bitangent for each vertex of the submesh
@@ -101,7 +101,7 @@ namespace Castor3D
 		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage
 		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies
 		 */
-		C3D_API static void ComputeBitangents( Submesh & p_submesh );
+		C3D_API static void computeBitangents( Submesh & p_submesh );
 	};
 }
 

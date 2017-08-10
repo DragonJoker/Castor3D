@@ -28,10 +28,10 @@ SOFTWARE.
 namespace CastorCom
 {
 	template< typename Class, typename Value, typename Index >
-	struct IndexedVariableGetter
+	struct IndexedVariablegetter
 	{
 		typedef Value( Class::*Function )( Index )const;
-		IndexedVariableGetter( Class * instance, Function function )
+		IndexedVariablegetter( Class * instance, Function function )
 			:	m_instance( instance )
 			,	m_function( function )
 		{
@@ -53,7 +53,7 @@ namespace CastorCom
 			{
 				hr = CComError::DispatchError(
 						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
+						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
 						 cuT( "NULL instance" ),				// This is generally displayed as the title
 						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
 						 0,										// This is the context in the help file
@@ -69,17 +69,17 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename Index, typename _Class >
-	IndexedVariableGetter< Class, Value, Index >
+	IndexedVariablegetter< Class, Value, Index >
 	make_indexed_getter( _Class * instance, Value( Class::*function )( Index )const )
 	{
-		return IndexedVariableGetter< Class, Value, Index >( ( Class * )instance, function );
+		return IndexedVariablegetter< Class, Value, Index >( ( Class * )instance, function );
 	}
 
 	template< typename Class, typename Value, typename Index >
-	struct IndexedRefVariableGetter
+	struct IndexedRefVariablegetter
 	{
 		typedef Value const & ( Class::*Function )( Index )const;
-		IndexedRefVariableGetter( Class * instance, Function function )
+		IndexedRefVariablegetter( Class * instance, Function function )
 			:	m_instance( instance )
 			,	m_function( function )
 		{
@@ -101,7 +101,7 @@ namespace CastorCom
 			{
 				hr = CComError::DispatchError(
 						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
+						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
 						 cuT( "NULL instance" ),				// This is generally displayed as the title
 						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
 						 0,										// This is the context in the help file
@@ -117,10 +117,10 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename Index, typename _Class >
-	IndexedRefVariableGetter< Class, Value, Index >
+	IndexedRefVariablegetter< Class, Value, Index >
 	make_indexed_getter( _Class * instance, Value const & ( Class::*function )( Index )const )
 	{
-		return IndexedRefVariableGetter< Class, Value, Index >( ( Class * )instance, function );
+		return IndexedRefVariablegetter< Class, Value, Index >( ( Class * )instance, function );
 	}
 }
 

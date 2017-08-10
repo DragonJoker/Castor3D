@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Render/RenderPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène pour cette technique.
 		 *\param[in]	p_camera	La caméra pour cette technique (peut être nulle).
 		 */
-		DepthPass( Castor::String const & p_name
+		DepthPass( castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera );
 		/**
@@ -67,7 +67,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène pour cette technique.
 		 *\param[in]	p_camera	La caméra pour cette technique (peut être nulle).
 		 */
-		DepthPass( Castor::String const & p_name
+		DepthPass( castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera
 			, bool p_oit );
@@ -84,79 +84,79 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		void Render();
+		void render();
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCleanup
+		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void DoUpdate( RenderQueueArray & p_queues )override;
+		void doUpdate( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
+		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		C3D_API void DoUpdatePipeline( RenderPipeline & p_pipeline)const override;
+		C3D_API void doUpdatePipeline( RenderPipeline & p_pipeline)const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		C3D_API void DoPrepareFrontPipeline( ShaderProgram & p_program
+		C3D_API void doPrepareFrontPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		C3D_API void DoPrepareBackPipeline( ShaderProgram & p_program
+		C3D_API void doPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
-		C3D_API GLSL::Shader DoGetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
@@ -172,7 +172,7 @@ namespace Castor3D
 		 *\param[in]		p_nodes		Les noeuds de rendu de la scène.
 		 *\param			p_camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRenderNodes( SceneRenderNodes & p_nodes
+		C3D_API void doRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & p_camera )const;
 
 	private:

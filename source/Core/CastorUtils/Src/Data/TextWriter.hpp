@@ -27,16 +27,16 @@ SOFTWARE.
 #include "TextFile.hpp"
 #include "Log/Logger.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
 	\~english
-	\brief		Partial Castor::Writer specialisation for text files
+	\brief		Partial castor::Writer specialisation for text files
 	\~french
-	\brief		Spécialisation partielle de Castor::Writer, pour les fichiers texte
+	\brief		Spécialisation partielle de castor::Writer, pour les fichiers texte
 	*/
 	template< class T >
 	class TextWriter
@@ -77,16 +77,16 @@ namespace Castor
 		 *\param[in]	p_subfolder	Le sous-dossier de sortie.
 		 *\return		Le chemin du fichier copié, relatif au dossier de sortie.
 		 */
-		static inline Path CopyFile( Path const & p_path, Path const & p_folder, Path const & p_subfolder )
+		static inline Path copyFile( Path const & p_path, Path const & p_folder, Path const & p_subfolder )
 		{
-			Path relative{ p_subfolder.empty() ? p_path.GetFileName( true ) : p_subfolder / p_path.GetFileName( true ) };
+			Path relative{ p_subfolder.empty() ? p_path.getFileName( true ) : p_subfolder / p_path.getFileName( true ) };
 
-			if ( !File::DirectoryExists( p_folder / p_subfolder ) )
+			if ( !File::directoryExists( p_folder / p_subfolder ) )
 			{
-				File::DirectoryCreate( p_folder / p_subfolder );
+				File::directoryCreate( p_folder / p_subfolder );
 			}
 
-			File::CopyFile( p_path, p_folder / p_subfolder );
+			File::copyFile( p_path, p_folder / p_subfolder );
 			return relative;
 		}
 		/**
@@ -95,11 +95,11 @@ namespace Castor
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		void CheckError( bool p_error, char const * const p_action )
+		void checkError( bool p_error, char const * const p_action )
 		{
 			if ( !p_error )
 			{
-				Logger::LogError( std::stringstream{} << p_action << " writing failed." );
+				Logger::logError( std::stringstream{} << p_action << " writing failed." );
 			}
 		}
 

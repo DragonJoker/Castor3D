@@ -92,12 +92,12 @@ SOFTWARE.
 namespace cpy
 {
 	template< typename Value, typename Class, typename Index >
-	struct IndexedMemberGetter
+	struct IndexedMembergetter
 	{
 		typedef Value const & ( Class::*Function )( Index )const;
 		Index m_index;
 		Function m_function;
-		IndexedMemberGetter( Function p_function, Index p_index )
+		IndexedMembergetter( Function p_function, Index p_index )
 			:	m_index( p_index )
 			,	m_function( p_function )
 		{
@@ -109,12 +109,12 @@ namespace cpy
 	};
 
 	template< typename Value, typename Class, typename Index >
-	struct IndexedMemberSetter
+	struct IndexedMembersetter
 	{
 		typedef Value & ( Class::*Function )( Index );
 		Index m_index;
 		Function m_function;
-		IndexedMemberSetter( Function p_function, Index p_index )
+		IndexedMembersetter( Function p_function, Index p_index )
 			:	m_index( p_index )
 			,	m_function( p_function )
 		{
@@ -126,12 +126,12 @@ namespace cpy
 	};
 
 	template< typename Value, typename Class, typename Index >
-	struct ParameteredMemberRefSetter
+	struct ParameteredMemberRefsetter
 	{
 		typedef void ( Class::*Function )( Index, Value const & );
 		Index m_index;
 		Function m_function;
-		ParameteredMemberRefSetter( Function p_function, Index p_index )
+		ParameteredMemberRefsetter( Function p_function, Index p_index )
 			:	m_index( p_index )
 			,	m_function( p_function )
 		{
@@ -143,12 +143,12 @@ namespace cpy
 	};
 
 	template< typename Value, typename Class, typename Index >
-	struct ParameteredMemberGetter
+	struct ParameteredMembergetter
 	{
 		typedef Value( Class::*Function )( Index )const;
 		Index m_index;
 		Function m_function;
-		ParameteredMemberGetter( Function p_function, Index p_index )
+		ParameteredMembergetter( Function p_function, Index p_index )
 			:	m_index( p_index )
 			,	m_function( p_function )
 		{
@@ -160,12 +160,12 @@ namespace cpy
 	};
 
 	template< typename Value, typename Class, typename Index >
-	struct ParameteredMemberSetter
+	struct ParameteredMembersetter
 	{
 		typedef void ( Class::*Function )( Index, Value );
 		Index m_index;
 		Function m_function;
-		ParameteredMemberSetter( Function p_function, Index p_index )
+		ParameteredMembersetter( Function p_function, Index p_index )
 			:	m_index( p_index )
 			,	m_function( p_function )
 		{
@@ -177,11 +177,11 @@ namespace cpy
 	};
 
 	template< typename Value, class Class >
-	struct MemberValueGetter
+	struct MemberValuegetter
 	{
 		typedef Value( Class::*Function )()const;
 		Function m_function;
-		MemberValueGetter( Function p_function )
+		MemberValuegetter( Function p_function )
 			: m_function( p_function )
 		{
 		}
@@ -192,11 +192,11 @@ namespace cpy
 	};
 
 	template< typename Value, class Class >
-	struct MemberValueSetter
+	struct MemberValuesetter
 	{
 		typedef void ( Class::*Function )( Value );
 		Function m_function;
-		MemberValueSetter( Function p_function )
+		MemberValuesetter( Function p_function )
 			: m_function( p_function )
 		{
 		}
@@ -207,11 +207,11 @@ namespace cpy
 	};
 
 	template< typename Value, class Class >
-	struct MemberRefValueGetter
+	struct MemberRefValuegetter
 	{
 		typedef Value const & ( Class::*Function )()const;
 		Function m_function;
-		MemberRefValueGetter( Function p_function )
+		MemberRefValuegetter( Function p_function )
 			: m_function( p_function )
 		{
 		}
@@ -222,11 +222,11 @@ namespace cpy
 	};
 
 	template< typename Value, class Class >
-	struct MemberRefValueSetter
+	struct MemberRefValuesetter
 	{
 		typedef void ( Class::*Function )( Value const & );
 		Function m_function;
-		MemberRefValueSetter( Function p_function )
+		MemberRefValuesetter( Function p_function )
 			: m_function( p_function )
 		{
 		}
@@ -237,11 +237,11 @@ namespace cpy
 	};
 
 	template< typename Value, class Class >
-	struct MemberRetValueSetter
+	struct MemberRetValuesetter
 	{
 		typedef Value & ( Class::*Function )();
 		Function m_function;
-		MemberRetValueSetter( Function p_function )
+		MemberRetValuesetter( Function p_function )
 			: m_function( p_function )
 		{
 		}
@@ -253,39 +253,39 @@ namespace cpy
 
 	struct VectorNormaliser
 	{
-		void operator()( Castor::Point3r * p_arg )
+		void operator()( castor::Point3r * p_arg )
 		{
-			Castor::point::normalise( *p_arg );
+			castor::point::normalise( *p_arg );
 		}
 	};
 
 	struct VectorNegater
 	{
-		void operator()( Castor::Point3r * p_arg )
+		void operator()( castor::Point3r * p_arg )
 		{
-			Castor::point::negate( *p_arg );
+			castor::point::negate( *p_arg );
 		}
 	};
 
 	struct VectorLengther
 	{
-		void operator()( Castor::Point3r * p_arg )
+		void operator()( castor::Point3r * p_arg )
 		{
-			Castor::point::length( *p_arg );
+			castor::point::length( *p_arg );
 		}
 	};
 
-	struct VectorDotter
+	struct Vectordotter
 	{
-		Castor::real operator()( Castor::Point3r const & p_1, Castor::Point3r const & p_2 )
+		castor::real operator()( castor::Point3r const & p_1, castor::Point3r const & p_2 )
 		{
-			return Castor::point::dot( p_1, p_2 );
+			return castor::point::dot( p_1, p_2 );
 		}
 	};
 
 	struct VectorCrosser
 	{
-		Castor::Point3r operator()( Castor::Point3r const & p_1, Castor::Point3r const & p_2 )
+		castor::Point3r operator()( castor::Point3r const & p_1, castor::Point3r const & p_2 )
 		{
 			return p_1 ^ p_2;
 		}
@@ -293,105 +293,105 @@ namespace cpy
 
 	struct PxBufferCreator
 	{
-		Castor::PxBufferBaseSPtr operator()( Castor::Size const & p_size, Castor::PixelFormat p_ePixelFormat )
+		castor::PxBufferBaseSPtr operator()( castor::Size const & p_size, castor::PixelFormat p_ePixelFormat )
 		{
-			return Castor::PxBufferBase::create( p_size, p_ePixelFormat );
+			return castor::PxBufferBase::create( p_size, p_ePixelFormat );
 		}
 	};
 	struct PointAdder
 	{
-		void operator()( Castor3D::Submesh * p_submesh, Castor::Point3r const & p_point )
+		void operator()( castor3d::Submesh * p_submesh, castor::Point3r const & p_point )
 		{
-			p_submesh->AddPoint( p_point );
+			p_submesh->addPoint( p_point );
 		}
 	};
 
 	struct FaceAdder
 	{
-		void operator()( Castor3D::Submesh * p_submesh, uint32_t a, uint32_t b, uint32_t c )
+		void operator()( castor3d::Submesh * p_submesh, uint32_t a, uint32_t b, uint32_t c )
 		{
-			p_submesh->AddFace( a, b, c );
+			p_submesh->addFace( a, b, c );
 		}
 	};
 
 	struct Texture3DResizer
 	{
-		void operator()( Castor3D::TextureImage * texture, Castor::Size const & size, uint32_t depth )
+		void operator()( castor3d::TextureImage * texture, castor::Size const & size, uint32_t depth )
 		{
-			texture->Resize( Castor::Point3ui( size.width(), size.height(), depth ) );
+			texture->resize( castor::Point3ui( size.getWidth(), size.getHeight(), depth ) );
 		}
 	};
 
 	template< class Texture, typename Param >
-	struct Texture3DImageSetter
+	struct Texture3DImagesetter
 	{
-		void operator()( Castor3D::TextureImage * texture, Castor::Size const & size, uint32_t depth, Param param )
+		void operator()( castor3d::TextureImage * texture, castor::Size const & size, uint32_t depth, Param param )
 		{
-			texture->SetSource( Castor::Point3ui( size.width(), size.height(), depth ), param );
+			texture->setSource( castor::Point3ui( size.getWidth(), size.getHeight(), depth ), param );
 		}
 	};
 
 	struct GeometryCacheElementProducer
 	{
-		Castor3D::GeometrySPtr operator()( Castor3D::GeometryCache * p_cache, Castor::String const & p_key, Castor3D::SceneNodeSPtr p_node, Castor3D::MeshSPtr p_mesh )
+		castor3d::GeometrySPtr operator()( castor3d::GeometryCache * p_cache, castor::String const & p_key, castor3d::SceneNodeSPtr p_node, castor3d::MeshSPtr p_mesh )
 		{
-			return p_cache->Add( p_key, p_node, p_mesh );
+			return p_cache->add( p_key, p_node, p_mesh );
 		}
 	};
 
 	struct LightCacheElementProducer
 	{
-		Castor3D::LightSPtr operator()( Castor3D::LightCache * p_cache, Castor::String const & p_key, Castor3D::SceneNodeSPtr p_node, Castor3D::LightType p_type )
+		castor3d::LightSPtr operator()( castor3d::LightCache * p_cache, castor::String const & p_key, castor3d::SceneNodeSPtr p_node, castor3d::LightType p_type )
 		{
-			return p_cache->Add( p_key, p_node, p_type );
+			return p_cache->add( p_key, p_node, p_type );
 		}
 	};
 
 	struct MeshCacheElementProducer
 	{
-		Castor3D::MeshSPtr operator()( Castor3D::MeshCache * p_cache, Castor::String const & p_key )
+		castor3d::MeshSPtr operator()( castor3d::MeshCache * p_cache, castor::String const & p_key )
 		{
-			return p_cache->Add( p_key );
+			return p_cache->add( p_key );
 		}
 	};
 
 	struct OverlayCacheElementProducer
 	{
-		Castor3D::OverlaySPtr operator()( Castor3D::OverlayCache * p_cache, Castor::String const & p_key, Castor3D::OverlayType p_type, Castor3D::SceneSPtr p_scene, Castor3D::OverlaySPtr p_parent )
+		castor3d::OverlaySPtr operator()( castor3d::OverlayCache * p_cache, castor::String const & p_key, castor3d::OverlayType p_type, castor3d::SceneSPtr p_scene, castor3d::OverlaySPtr p_parent )
 		{
-			return p_cache->Add( p_key, p_type, p_scene, p_parent );
+			return p_cache->add( p_key, p_type, p_scene, p_parent );
 		}
 	};
 
 	template< typename Blend >
-	struct BlendSetter
+	struct Blendsetter
 	{
-		typedef void ( Castor3D::BlendState::*Function )( Blend, uint8_t );
+		typedef void ( castor3d::BlendState::*Function )( Blend, uint8_t );
 		Function m_function;
 		uint8_t m_index;
-		BlendSetter( Function function, uint8_t index )
+		Blendsetter( Function function, uint8_t index )
 			:	m_function( function )
 			,	m_index( index )
 		{
 		}
-		void operator()( Castor3D::BlendState * state, Blend blend )
+		void operator()( castor3d::BlendState * state, Blend blend )
 		{
 			( state->*( this->m_function ) )( blend, m_index );
 		}
 	};
 
 	template< class Texture, typename Param >
-	Texture3DImageSetter< Texture, Param >
-	make_image_setter( void ( Texture::* )( Castor::Point3ui const & sizes, Param param ) )
+	Texture3DImagesetter< Texture, Param >
+	make_image_setter( void ( Texture::* )( castor::Point3ui const & sizes, Param param ) )
 	{
-		return Texture3DImageSetter< Texture, Param >();
+		return Texture3DImagesetter< Texture, Param >();
 	}
 
 	template< typename Blend >
-	BlendSetter< Blend >
-	make_blend_setter( void ( Castor3D::BlendState::*function )( Blend, uint8_t ), uint8_t index )
+	Blendsetter< Blend >
+	make_blend_setter( void ( castor3d::BlendState::*function )( Blend, uint8_t ), uint8_t index )
 	{
-		return BlendSetter< Blend >( function, index );
+		return Blendsetter< Blend >( function, index );
 	}
 }
 
@@ -405,185 +405,185 @@ namespace boost
 		{
 			template< typename Value, class Class, typename Index >
 			inline boost::mpl::vector< Value const &, Class * >
-			get_signature( cpy::IndexedMemberGetter< Value, Class, Index >, void * = 0 )
+			get_signature( cpy::IndexedMembergetter< Value, Class, Index >, void * = 0 )
 			{
 				return boost::mpl::vector< Value const &, Class * >();
 			}
 			template< typename Value, class Class, typename Index >
 			inline boost::mpl::vector< void, Class *, Value const & >
-			get_signature( cpy::IndexedMemberSetter< Value, Class, Index >, void * = 0 )
+			get_signature( cpy::IndexedMembersetter< Value, Class, Index >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Class *, Value const & >();
 			}
 			template< typename Value, class Class, typename Index >
 			inline boost::mpl::vector< void, Class *, Value const & >
-			get_signature( cpy::ParameteredMemberRefSetter< Value, Class, Index >, void * = 0 )
+			get_signature( cpy::ParameteredMemberRefsetter< Value, Class, Index >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Class *, Value const & >();
 			}
 			template< typename Value, class Class, typename Index >
 			inline boost::mpl::vector< Value, Class * >
-			get_signature( cpy::ParameteredMemberGetter< Value, Class, Index >, void * = 0 )
+			get_signature( cpy::ParameteredMembergetter< Value, Class, Index >, void * = 0 )
 			{
 				return boost::mpl::vector< Value, Class * >();
 			}
 			template< typename Value, class Class, typename Index >
 			inline boost::mpl::vector< void, Class *, Value >
-			get_signature( cpy::ParameteredMemberSetter< Value, Class, Index >, void * = 0 )
+			get_signature( cpy::ParameteredMembersetter< Value, Class, Index >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Class *, Value >();
 			}
 			template< typename Value, class Class >
 			inline boost::mpl::vector< Value const &, Class * >
-			get_signature( cpy::MemberRefValueGetter< Value, Class >, void * = 0 )
+			get_signature( cpy::MemberRefValuegetter< Value, Class >, void * = 0 )
 			{
 				return boost::mpl::vector< Value const &, Class * >();
 			}
 			template< typename Value, class Class >
 			inline boost::mpl::vector< void, Class *, Value const & >
-			get_signature( cpy::MemberRefValueSetter< Value, Class >, void * = 0 )
+			get_signature( cpy::MemberRefValuesetter< Value, Class >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Class *, Value const & >();
 			}
 			template< typename Value, class Class >
 			inline boost::mpl::vector< Value, Class * >
-			get_signature( cpy::MemberValueGetter< Value, Class >, void * = 0 )
+			get_signature( cpy::MemberValuegetter< Value, Class >, void * = 0 )
 			{
 				return boost::mpl::vector< Value, Class * >();
 			}
 			template< typename Value, class Class >
 			inline boost::mpl::vector< void, Class *, Value >
-			get_signature( cpy::MemberValueSetter< Value, Class >, void * = 0 )
+			get_signature( cpy::MemberValuesetter< Value, Class >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Class *, Value >();
 			}
 			template< typename Value, class Class >
 			inline boost::mpl::vector< void, Class *, Value >
-			get_signature( cpy::MemberRetValueSetter< Value, Class >, void * = 0 )
+			get_signature( cpy::MemberRetValuesetter< Value, Class >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Class *, Value >();
 			}
-			inline boost::mpl::vector< void, Castor::Point3r * >
+			inline boost::mpl::vector< void, castor::Point3r * >
 			get_signature( cpy::VectorNormaliser, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor::Point3r * >();
+				return boost::mpl::vector< void, castor::Point3r * >();
 			}
-			inline boost::mpl::vector< void, Castor::Point3r * >
+			inline boost::mpl::vector< void, castor::Point3r * >
 			get_signature( cpy::VectorNegater, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor::Point3r * >();
+				return boost::mpl::vector< void, castor::Point3r * >();
 			}
-			inline boost::mpl::vector< void, Castor::Point3r * >
+			inline boost::mpl::vector< void, castor::Point3r * >
 			get_signature( cpy::VectorLengther, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor::Point3r * >();
+				return boost::mpl::vector< void, castor::Point3r * >();
 			}
-			inline boost::mpl::vector< Castor::real, Castor::Point3r const &, Castor::Point3r const & >
-			get_signature( cpy::VectorDotter, void * = 0 )
+			inline boost::mpl::vector< castor::real, castor::Point3r const &, castor::Point3r const & >
+			get_signature( cpy::Vectordotter, void * = 0 )
 			{
-				return boost::mpl::vector< Castor::real, Castor::Point3r const &, Castor::Point3r const & >();
+				return boost::mpl::vector< castor::real, castor::Point3r const &, castor::Point3r const & >();
 			}
-			inline boost::mpl::vector< Castor::Point3r, Castor::Point3r const &, Castor::Point3r const & >
+			inline boost::mpl::vector< castor::Point3r, castor::Point3r const &, castor::Point3r const & >
 			get_signature( cpy::VectorCrosser, void * = 0 )
 			{
-				return boost::mpl::vector< Castor::Point3r, Castor::Point3r const &, Castor::Point3r const & >();
+				return boost::mpl::vector< castor::Point3r, castor::Point3r const &, castor::Point3r const & >();
 			}
-			inline boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::PixelFormat >
+			inline boost::mpl::vector< castor::PxBufferBaseSPtr, castor::Size const &, castor::PixelFormat >
 			get_signature( cpy::PxBufferCreator, void * = 0 )
 			{
-				return boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::PixelFormat >();
+				return boost::mpl::vector< castor::PxBufferBaseSPtr, castor::Size const &, castor::PixelFormat >();
 			}
-			inline boost::mpl::vector< Castor3D::PluginSPtr, Castor3D::Engine *, Castor::Path const & >
-			get_signature( Castor3D::PluginSPtr ( Castor3D::Engine::* )( Castor::Path const & ), void * = 0 )
+			inline boost::mpl::vector< castor3d::PluginSPtr, castor3d::Engine *, castor::Path const & >
+			get_signature( castor3d::PluginSPtr ( castor3d::Engine::* )( castor::Path const & ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::PluginSPtr, Castor3D::Engine *, Castor::Path const & >();
+				return boost::mpl::vector< castor3d::PluginSPtr, castor3d::Engine *, castor::Path const & >();
 			}
-			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const & >
-			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor::String const &, Castor::String const & ), void * = 0 )
+			inline boost::mpl::vector< castor3d::MeshSPtr, castor3d::Engine *, castor::String const &, castor::String const & >
+			get_signature( castor3d::MeshSPtr( castor3d::Engine::* )( castor::String const &, castor::String const & ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const & >();
+				return boost::mpl::vector< castor3d::MeshSPtr, castor3d::Engine *, castor::String const &, castor::String const & >();
 			}
-			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >
-			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor::String const &, Castor::String const &, Castor3D::Parameters const & ), void * = 0 )
+			inline boost::mpl::vector< castor3d::MeshSPtr, castor3d::Engine *, castor::String const &, castor::String const &, castor3d::Parameters const & >
+			get_signature( castor3d::MeshSPtr( castor3d::Engine::* )( castor::String const &, castor::String const &, castor3d::Parameters const & ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >();
+				return boost::mpl::vector< castor3d::MeshSPtr, castor3d::Engine *, castor::String const &, castor::String const &, castor3d::Parameters const & >();
 			}
-			inline boost::mpl::vector< bool, Castor3D::Engine *, Castor3D::RenderWindowSPtr >
-			get_signature( bool ( Castor3D::Engine::* )( Castor3D::RenderWindowSPtr ), void * = 0 )
+			inline boost::mpl::vector< bool, castor3d::Engine *, castor3d::RenderWindowSPtr >
+			get_signature( bool ( castor3d::Engine::* )( castor3d::RenderWindowSPtr ), void * = 0 )
 			{
-				return boost::mpl::vector< bool, Castor3D::Engine *, Castor3D::RenderWindowSPtr >();
+				return boost::mpl::vector< bool, castor3d::Engine *, castor3d::RenderWindowSPtr >();
 			}
-			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::OverlayType, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >
-			get_signature( Castor3D::OverlaySPtr( Castor3D::Engine::* )( Castor3D::OverlayType, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr ), void * = 0 )
+			inline boost::mpl::vector< castor3d::OverlaySPtr, castor3d::Engine *, castor3d::OverlayType, castor::String const &, castor3d::OverlaySPtr, castor3d::SceneSPtr >
+			get_signature( castor3d::OverlaySPtr( castor3d::Engine::* )( castor3d::OverlayType, castor::String const &, castor3d::OverlaySPtr, castor3d::SceneSPtr ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::OverlayType, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >();
+				return boost::mpl::vector< castor3d::OverlaySPtr, castor3d::Engine *, castor3d::OverlayType, castor::String const &, castor3d::OverlaySPtr, castor3d::SceneSPtr >();
 			}
-			inline boost::mpl::vector< Castor3D::RenderWindowSPtr, Castor3D::Engine * >
-			get_signature( Castor3D::RenderWindowSPtr( Castor3D::Engine::* )(), void * = 0 )
+			inline boost::mpl::vector< castor3d::RenderWindowSPtr, castor3d::Engine * >
+			get_signature( castor3d::RenderWindowSPtr( castor3d::Engine::* )(), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::RenderWindowSPtr, Castor3D::Engine * >();
+				return boost::mpl::vector< castor3d::RenderWindowSPtr, castor3d::Engine * >();
 			}
-			inline boost::mpl::vector< Castor3D::SceneSPtr, Castor3D::Engine *, Castor::String const & >
-			get_signature( Castor3D::SceneSPtr( Castor3D::Engine::* )( Castor::String const & ), void * = 0 )
+			inline boost::mpl::vector< castor3d::SceneSPtr, castor3d::Engine *, castor::String const & >
+			get_signature( castor3d::SceneSPtr( castor3d::Engine::* )( castor::String const & ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::SceneSPtr, Castor3D::Engine *, Castor::String const & >();
+				return boost::mpl::vector< castor3d::SceneSPtr, castor3d::Engine *, castor::String const & >();
 			}
-			inline boost::mpl::vector< void, Castor3D::Submesh *, Castor::Point3r const & >
+			inline boost::mpl::vector< void, castor3d::Submesh *, castor::Point3r const & >
 			get_signature( cpy::PointAdder, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor3D::Submesh *, Castor::Point3r const & >();
+				return boost::mpl::vector< void, castor3d::Submesh *, castor::Point3r const & >();
 			}
-			inline boost::mpl::vector< void, Castor3D::Submesh *, uint32_t, uint32_t, uint32_t >
+			inline boost::mpl::vector< void, castor3d::Submesh *, uint32_t, uint32_t, uint32_t >
 			get_signature( cpy::FaceAdder, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor3D::Submesh *, uint32_t, uint32_t, uint32_t >();
+				return boost::mpl::vector< void, castor3d::Submesh *, uint32_t, uint32_t, uint32_t >();
 			}
-			inline boost::mpl::vector< Castor3D::MaterialSPtr, Castor3D::Geometry *, Castor3D::SubmeshSPtr >
-			get_signature( Castor3D::MaterialSPtr( Castor3D::Geometry::* )( Castor3D::SubmeshSPtr ), void * = 0 )
+			inline boost::mpl::vector< castor3d::MaterialSPtr, castor3d::Geometry *, castor3d::SubmeshSPtr >
+			get_signature( castor3d::MaterialSPtr( castor3d::Geometry::* )( castor3d::SubmeshSPtr ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::MaterialSPtr, Castor3D::Geometry *, Castor3D::SubmeshSPtr >();
+				return boost::mpl::vector< castor3d::MaterialSPtr, castor3d::Geometry *, castor3d::SubmeshSPtr >();
 			}
-			inline boost::mpl::vector< void, Castor3D::Geometry *, Castor3D::SubmeshSPtr, Castor3D::MaterialSPtr >
-			get_signature( void ( Castor3D::Geometry::* )( Castor3D::SubmeshSPtr, Castor3D::MaterialSPtr ), void * = 0 )
+			inline boost::mpl::vector< void, castor3d::Geometry *, castor3d::SubmeshSPtr, castor3d::MaterialSPtr >
+			get_signature( void ( castor3d::Geometry::* )( castor3d::SubmeshSPtr, castor3d::MaterialSPtr ), void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor3D::Geometry *, Castor3D::SubmeshSPtr, Castor3D::MaterialSPtr >();
+				return boost::mpl::vector< void, castor3d::Geometry *, castor3d::SubmeshSPtr, castor3d::MaterialSPtr >();
 			}
-			inline boost::mpl::vector< void, Castor3D::TextureImage *, Castor::Size const &, uint32_t >
+			inline boost::mpl::vector< void, castor3d::TextureImage *, castor::Size const &, uint32_t >
 			get_signature( cpy::Texture3DResizer, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor3D::TextureImage *, Castor::Size const &, uint32_t >();
+				return boost::mpl::vector< void, castor3d::TextureImage *, castor::Size const &, uint32_t >();
 			}
 			template< class Texture, typename Param >
-			inline boost::mpl::vector< void, Texture *, Castor::Size const &, uint32_t, Param >
-			get_signature( cpy::Texture3DImageSetter< Texture, Param >, void * = 0 )
+			inline boost::mpl::vector< void, Texture *, castor::Size const &, uint32_t, Param >
+			get_signature( cpy::Texture3DImagesetter< Texture, Param >, void * = 0 )
 			{
-				return boost::mpl::vector< void, Texture *, Castor::Size const &, uint32_t, Param >();
+				return boost::mpl::vector< void, Texture *, castor::Size const &, uint32_t, Param >();
 			}
 			template< typename Blend >
-			inline boost::mpl::vector< void, Castor3D::BlendState *, Blend >
-			get_signature( cpy::BlendSetter< Blend >, void * = 0 )
+			inline boost::mpl::vector< void, castor3d::BlendState *, Blend >
+			get_signature( cpy::Blendsetter< Blend >, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor3D::BlendState *, Blend >();
+				return boost::mpl::vector< void, castor3d::BlendState *, Blend >();
 			}
-			inline boost::mpl::vector< Castor3D::GeometrySPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::MeshSPtr >
+			inline boost::mpl::vector< castor3d::GeometrySPtr, castor::String const &, castor3d::SceneNodeSPtr, castor3d::MeshSPtr >
 			get_signature( cpy::GeometryCacheElementProducer, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::GeometrySPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::MeshSPtr >();
+				return boost::mpl::vector< castor3d::GeometrySPtr, castor::String const &, castor3d::SceneNodeSPtr, castor3d::MeshSPtr >();
 			}
-			inline boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::LightType >
+			inline boost::mpl::vector< castor3d::LightSPtr, castor::String const &, castor3d::SceneNodeSPtr, castor3d::LightType >
 			get_signature( cpy::LightCacheElementProducer, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::LightType >();
+				return boost::mpl::vector< castor3d::LightSPtr, castor::String const &, castor3d::SceneNodeSPtr, castor3d::LightType >();
 			}
-			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >
+			inline boost::mpl::vector< castor3d::MeshSPtr, castor::String const &, castor::String const &, castor3d::Parameters const & >
 			get_signature( cpy::MeshCacheElementProducer, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >();
+				return boost::mpl::vector< castor3d::MeshSPtr, castor::String const &, castor::String const &, castor3d::Parameters const & >();
 			}
-			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::OverlayType, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >
+			inline boost::mpl::vector< castor3d::OverlaySPtr, castor::String const &, castor3d::OverlayType, castor3d::SceneSPtr, castor3d::OverlaySPtr >
 			get_signature( cpy::OverlayCacheElementProducer, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::OverlayType, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >();
+				return boost::mpl::vector< castor3d::OverlaySPtr, castor::String const &, castor3d::OverlayType, castor3d::SceneSPtr, castor3d::OverlaySPtr >();
 			}
 		}
 	}
@@ -598,61 +598,61 @@ namespace cpy
 	inline py::object
 	make_getter( Value const & ( Class::*p_function )( Index )const, _Index p_index )
 	{
-		return py::make_function( IndexedMemberGetter< Value, Class, Index >( p_function, Index( p_index ) ), py::return_value_policy< py::copy_const_reference >() );
+		return py::make_function( IndexedMembergetter< Value, Class, Index >( p_function, Index( p_index ) ), py::return_value_policy< py::copy_const_reference >() );
 	}
 	template< typename Value, class Class, typename Index, typename _Index >
-	inline ParameteredMemberGetter< Value, Class, Index >
+	inline ParameteredMembergetter< Value, Class, Index >
 	make_getter( Value( Class::*p_function )( Index )const, _Index p_index )
 	{
-		return ParameteredMemberGetter< Value, Class, Index >( p_function, Index( p_index ) );
+		return ParameteredMembergetter< Value, Class, Index >( p_function, Index( p_index ) );
 	}
 	template< typename Value, class Class, typename CallPolicies >
 	inline py::object
 	make_getter( Value const & ( Class::*p_function )()const, CallPolicies policies )
 	{
-		return py::make_function( MemberRefValueGetter< Value, Class >( p_function ), policies );
+		return py::make_function( MemberRefValuegetter< Value, Class >( p_function ), policies );
 	}
 	template< typename Value, class Class >
-	inline MemberValueGetter< Value, Class >
+	inline MemberValuegetter< Value, Class >
 	make_getter( Value( Class::*p_function )()const )
 	{
-		return MemberValueGetter< Value, Class >( p_function );
+		return MemberValuegetter< Value, Class >( p_function );
 	}
 	template< typename Value, class Class, typename Index, typename _Index >
-	inline IndexedMemberSetter< Value, Class, Index >
+	inline IndexedMembersetter< Value, Class, Index >
 	make_setter( Value & ( Class::*p_function )( Index ), _Index p_index )
 	{
-		return IndexedMemberSetter< Value, Class, Index >( p_function, Index( p_index ) );
+		return IndexedMembersetter< Value, Class, Index >( p_function, Index( p_index ) );
 	}
 	template< typename Value, class Class, typename Index, typename _Index >
-	inline ParameteredMemberSetter< Value, Class, Index >
+	inline ParameteredMembersetter< Value, Class, Index >
 	make_setter( void ( Class::*p_function )( Index, Value ), _Index p_index )
 	{
-		return ParameteredMemberSetter< Value, Class, Index >( p_function, Index( p_index ) );
+		return ParameteredMembersetter< Value, Class, Index >( p_function, Index( p_index ) );
 	}
 	template< typename Value, class Class, typename Index, typename _Index >
-	inline ParameteredMemberRefSetter< Value, Class, Index >
+	inline ParameteredMemberRefsetter< Value, Class, Index >
 	make_setter( void ( Class::*p_function )( Index, Value const & ), _Index p_index )
 	{
-		return ParameteredMemberRefSetter< Value, Class, Index >( p_function, Index( p_index ) );
+		return ParameteredMemberRefsetter< Value, Class, Index >( p_function, Index( p_index ) );
 	}
 	template< typename Value, class Class >
-	inline MemberRefValueSetter< Value, Class >
+	inline MemberRefValuesetter< Value, Class >
 	make_setter( void ( Class::*p_function )( Value const & ) )
 	{
-		return MemberRefValueSetter< Value, Class >( p_function );
+		return MemberRefValuesetter< Value, Class >( p_function );
 	}
 	template< typename Value, class Class >
-	inline MemberValueSetter< Value, Class >
+	inline MemberValuesetter< Value, Class >
 	make_setter( void ( Class::*p_function )( Value ) )
 	{
-		return MemberValueSetter< Value, Class >( p_function );
+		return MemberValuesetter< Value, Class >( p_function );
 	}
 	template< typename Value, class Class >
-	inline MemberRetValueSetter< Value, Class >
+	inline MemberRetValuesetter< Value, Class >
 	make_setter( Value & ( Class::*p_function )() )
 	{
-		return MemberRetValueSetter< Value, Class >( p_function );
+		return MemberRetValuesetter< Value, Class >( p_function );
 	}
 
 	inline void IndexError()

@@ -1,6 +1,6 @@
 ﻿#include "GlslBool.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GLSL
 {

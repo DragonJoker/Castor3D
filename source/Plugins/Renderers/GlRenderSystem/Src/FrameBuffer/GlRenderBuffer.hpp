@@ -60,7 +60,7 @@ namespace GlRender
 		 *\param[in]	p_internal		Le format OpenGL des pixels.
 		 *\param[in]	p_renderBuffer	Le tampon de rendu parent.
 		 */
-		GlRenderBuffer( OpenGl & p_gl, GlInternal p_internal, Castor3D::RenderBuffer & p_renderBuffer );
+		GlRenderBuffer( OpenGl & p_gl, GlInternal p_internal, castor3d::RenderBuffer & p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -78,14 +78,14 @@ namespace GlRender
 		 *\param[in]	p_size	Les dimensions.
 		 *\return		\p true si tout s'est bien passà.
 		 */
-		bool Initialise( Castor::Size const & p_size );
+		bool initialise( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Cleans the render buffer up.
 		 *\~french
 		 *\brief		Nettoie le tampon de rendu.
 		 */
-		void Cleanup();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Resizes the render buffer to given size.
@@ -96,22 +96,22 @@ namespace GlRender
 		 *\param[in]	p_size	Les dimensions.
 		 *\return		\p true si tout s'est bien passà.
 		 */
-		bool Resize( Castor::Size const & p_size );
+		bool resize( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\return		The OpenGL pixels format.
 		 *\~french
 		 *\return		Le format OpenGL des pixels.
 		 */
-		inline GlInternal GetInternal()const
+		inline GlInternal getInternal()const
 		{
 			return m_internal;
 		}
 
 	private:
 		GlInternal m_internal;
-		Castor::Size m_size;
-		Castor3D::RenderBuffer & m_renderBuffer;
+		castor::Size m_size;
+		castor3d::RenderBuffer & m_renderBuffer;
 	};
 }
 

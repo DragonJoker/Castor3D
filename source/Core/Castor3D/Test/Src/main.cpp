@@ -11,15 +11,15 @@
 #include "BinaryExportTest.hpp"
 #include "SceneExportTest.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace
 {
-	void DoLoadPlugins( Engine & engine )
+	void doloadPlugins( Engine & engine )
 	{
 		PathArray arrayFiles;
-		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), arrayFiles );
+		File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
 		PathArray arrayKept;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
@@ -45,12 +45,12 @@ namespace
 
 			for ( auto file : arrayKept )
 			{
-				if ( file.GetExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CASTOR_DLL_EXT )
 				{
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !engine.GetPluginCache().LoadPlugin( file ) )
+						if ( !engine.getPluginCache().loadPlugin( file ) )
 						{
 							arrayFailed.push_back( file );
 						}
@@ -65,7 +65,7 @@ namespace
 			// Then we load other plug-ins
 			for ( auto file : otherPlugins )
 			{
-				if ( !engine.GetPluginCache().LoadPlugin( file ) )
+				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
 					arrayFailed.push_back( file );
 				}
@@ -73,40 +73,40 @@ namespace
 
 			if ( !arrayFailed.empty() )
 			{
-				Logger::LogWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto file : arrayFailed )
 				{
-					Logger::LogWarning( Path( file ).GetFileName() );
+					Logger::logWarning( Path( file ).getFileName() );
 				}
 
 				arrayFailed.clear();
 			}
 		}
 
-		Logger::LogInfo( cuT( "Plugins loaded" ) );
+		Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	std::unique_ptr< Engine > DoInitialiseCastor()
+	std::unique_ptr< Engine > doInitialiseCastor()
 	{
-		if ( !File::DirectoryExists( Engine::GetEngineDirectory() ) )
+		if ( !File::directoryExists( Engine::getEngineDirectory() ) )
 		{
-			File::DirectoryCreate( Engine::GetEngineDirectory() );
+			File::directoryCreate( Engine::getEngineDirectory() );
 		}
 
 		std::unique_ptr< Engine > result = std::make_unique< Engine >();
-		DoLoadPlugins( *result );
+		doloadPlugins( *result );
 
-		auto renderers = result->GetPluginCache().GetPlugins( PluginType::eRenderer );
+		auto renderers = result->getPluginCache().getPlugins( PluginType::eRenderer );
 
 		if ( renderers.empty() )
 		{
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( result->LoadRenderer( TestRender::TestRenderSystem::Type ) )
+		if ( result->loadRenderer( TestRender::TestRenderSystem::Type ) )
 		{
-			result->Initialise( 1, false );
+			result->initialise( 1, false );
 		}
 		else
 		{
@@ -128,24 +128,24 @@ int main( int argc, char const * argv[] )
 	}
 
 #if defined( NDEBUG )
-	Castor::Logger::Initialise( Castor::LogType::eInfo );
+	castor::Logger::initialise( castor::LogType::eInfo );
 #else
-	Logger::Initialise( Castor::LogType::eDebug );
+	Logger::initialise( castor::LogType::eDebug );
 #endif
 
-	Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Castor3DTests.log" ) );
+	Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Castor3DTests.log" ) );
 	{
-		std::unique_ptr< Engine > engine = DoInitialiseCastor();
+		std::unique_ptr< Engine > engine = doInitialiseCastor();
 
 		// Test cases.
-		Testing::Register( std::make_unique< Testing::BinaryExportTest >( *engine ) );
-		Testing::Register( std::make_unique< Testing::SceneExportTest >( *engine ) );
+		Testing::registerType( std::make_unique< Testing::BinaryExportTest >( *engine ) );
+		Testing::registerType( std::make_unique< Testing::SceneExportTest >( *engine ) );
 
 		// Tests loop.
 		BENCHLOOP( count, result );
 
-		engine->Cleanup();
+		engine->cleanup();
 	}
-	Logger::Cleanup();
+	Logger::cleanup();
 	return result;
 }

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "File.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -49,7 +49,7 @@ namespace Castor
 	\date 03/01/2011
 	\~english
 	\brief User friendly File class
-	\remark Adds some static functions to check file/directory validity, file/directory creation...
+	\remark adds some static functions to check file/directory validity, file/directory creation...
 	\~french
 	\brief Classe de gestion de fichier
 	\remark Ajoute quelques fonctions statiques de vérification d'existence, suppression, ...
@@ -70,7 +70,9 @@ namespace Castor
 		 *\param[in]	p_mode			Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_encodingMode	Le mode d'encodage
 		 */
-		CU_API BinaryFile( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encodingMode = EncodingMode::eASCII );
+		CU_API BinaryFile( Path const & p_fileName
+			, FlagCombination< OpenMode > const & p_mode
+			, EncodingMode p_encodingMode = EncodingMode::eASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
@@ -88,7 +90,7 @@ namespace Castor
 		 *\param[in]	p_toWrite	La chaîne
 		 *\return		\p true si l'écriture s'est bien déroulée
 		 */
-		CU_API bool Write( String const & p_toWrite );
+		CU_API bool write( String const & p_toWrite );
 		/**
 		 *\~english
 		 *\brief		Reads a string from the file (binary, so reads size then content)
@@ -99,7 +101,7 @@ namespace Castor
 		 *\param[out]	p_toRead	La chaîne
 		 *\return		\p true si la lecture s'est bien déroulée
 		 */
-		CU_API bool Read( String & p_toRead );
+		CU_API bool read( String & p_toRead );
 		/**
 		 *\~english
 		 *\brief		Writes an object into the file
@@ -110,7 +112,7 @@ namespace Castor
 		 *\param[in]	p_toWrite	L'objet
 		 *\return		Le nombre d'octets écrits
 		 */
-		template< typename T > uint64_t Write( T const & p_toWrite );
+		template< typename T > uint64_t write( T const & p_toWrite );
 		/**
 		 *\~english
 		 *\brief		Reads an object from the file
@@ -121,7 +123,7 @@ namespace Castor
 		 *\param[out]	p_toRead	L'objet
 		 *\return		Le nombre d'octets lus
 		 */
-		template< typename T > uint64_t Read( T & p_toRead );
+		template< typename T > uint64_t read( T & p_toRead );
 		/**
 		 *\~english
 		 *\brief		Writes a dynamic array of objects into the file
@@ -134,7 +136,7 @@ namespace Castor
 		 *\param[in]	p_count		La taille du tableau
 		 *\return		Le nombre d'octets écrits
 		 */
-		template< typename T > uint64_t WriteArray( T const * p_toWrite, uint64_t p_count );
+		template< typename T > uint64_t writeArray( T const * p_toWrite, uint64_t p_count );
 		/**
 		 *\~english
 		 *\brief		Writes a static array of objects into the file
@@ -147,7 +149,7 @@ namespace Castor
 		 *\param[in]	p_toWrite	Le tableau d'objets
 		 *\return		Le nombre d'octets écrits
 		 */
-		template< typename T, uint64_t N > uint64_t WriteArray( T const( & p_toWrite )[N] );
+		template< typename T, uint64_t N > uint64_t writeArray( T const( & p_toWrite )[N] );
 		/**
 		 *\~english
 		 *\brief		Reads a dynamic array of objects from the file
@@ -160,7 +162,7 @@ namespace Castor
 		 *\param[in]	p_count		La taille du tableau
 		 *\return		Le nombre d'octets lus
 		 */
-		template< typename T > uint64_t ReadArray( T * p_toRead, uint64_t p_count );
+		template< typename T > uint64_t readArray( T * p_toRead, uint64_t p_count );
 		/**
 		 *\~english
 		 *\brief		Reads a static array of objects from the file
@@ -173,11 +175,11 @@ namespace Castor
 		 *\remarks		La taille du tableau est déduite à partir du paramètre
 		 *\return		Le nombre d'octets lus
 		 */
-		template< typename T, uint64_t N > uint64_t ReadArray( T( & p_toRead )[N] );
+		template< typename T, uint64_t N > uint64_t readArray( T( & p_toRead )[N] );
 	};
 	/**
 	 *\~english
-	 *\brief		Open mode dependant write function
+	 *\brief		open mode dependant write function
 	 *\param[in]	p_file		The file
 	 *\param[in]	p_toWrite	The data to write in the file
 	 *\return		A reference to this file
@@ -190,7 +192,7 @@ namespace Castor
 	template< typename T > BinaryFile & operator<<( BinaryFile & p_file, T const & p_toWrite );
 	/**
 	 *\~english
-	 *\brief		Open mode dependant read function
+	 *\brief		open mode dependant read function
 	 *\param[in]	p_file		The file
 	 *\param[out]	p_toRead	The data to read from the file
 	 *\return		A reference to this file

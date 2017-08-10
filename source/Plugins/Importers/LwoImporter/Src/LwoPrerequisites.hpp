@@ -236,9 +236,9 @@ namespace Lwo
 	struct stLWO_SUBCHUNK;
 	class LwoImporter;
 
-	typedef std::map<		UI4,			Castor::ImageSPtr		>	ImageVxMap;
+	typedef std::map<		UI4,			castor::ImageSPtr		>	ImageVxMap;
 	typedef std::vector< 	UI4										>	Face;
-	typedef std::pair< 		std::string,	Castor3D::SubmeshSPtr	>	SubmeshPtrStrPair;
+	typedef std::pair< 		std::string,	castor3d::SubmeshSPtr	>	SubmeshPtrStrPair;
 }
 
 #endif

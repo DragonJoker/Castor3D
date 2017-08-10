@@ -1,4 +1,4 @@
-﻿#include "Benchmark.hpp"
+#include "Benchmark.hpp"
 
 namespace Testing
 {
@@ -12,7 +12,7 @@ namespace Testing
 	{
 	}
 
-	void BenchCase::DoBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls )
+	void BenchCase::doBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls )
 	{
 		std::stringstream benchSep;
 		benchSep.width( BENCH_TITLE_WIDTH );

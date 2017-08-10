@@ -15,7 +15,7 @@
 #	pragma warning( pop )
 #endif
 
-namespace Castor
+namespace castor
 {
 	namespace Debug
 	{
@@ -26,7 +26,7 @@ namespace Castor
 			template< typename CharU, typename CharT >
 			inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
-				std::string ret = string::string_cast< char >( p_name );
+				std::string ret = string::stringCast< char >( p_name );
 
 				try
 				{
@@ -42,14 +42,14 @@ namespace Castor
 					// What to do...
 				}
 
-				return string::string_cast< CharU >( ret );
+				return string::stringCast< CharU >( ret );
 			}
 
 			template< typename CharT >
-			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
+			inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 			{
 				static std::mutex mutex;
-				auto lock = make_unique_lock( mutex );
+				auto lock = makeUniqueLock( mutex );
 				static bool SymbolsInitialised = false;
 				const int MaxFnNameLen( 255 );
 
@@ -78,7 +78,7 @@ namespace Castor
 						{
 							if ( ::SymFromAddr( process, reinterpret_cast< DWORD64 >( backTrace[i] ), 0, symbol ) )
 							{
-								p_stream << "== " << Demangle< CharT >( string::string_cast< char >( symbol->Name, symbol->Name + symbol->NameLen ) ) << std::endl;
+								p_stream << "== " << Demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) ) << std::endl;
 							}
 						}
 					}
@@ -95,7 +95,7 @@ namespace Castor
 #else
 
 		template< typename CharT >
-		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int, int )
+		inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int, int )
 		{
 		}
 
@@ -103,13 +103,13 @@ namespace Castor
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 
 		std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 	}

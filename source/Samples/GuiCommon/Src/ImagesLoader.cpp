@@ -1,6 +1,6 @@
 #include "ImagesLoader.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -14,12 +14,12 @@ namespace GuiCommon
 
 	ImagesLoader::~ImagesLoader()
 	{
-		Cleanup();
+		cleanup();
 	}
 
-	void ImagesLoader::Cleanup()
+	void ImagesLoader::cleanup()
 	{
-		WaitAsyncLoads();
+		waitAsyncLoads();
 		m_mutex.lock();
 
 		for ( auto pair : m_mapImages )
@@ -31,7 +31,7 @@ namespace GuiCommon
 		m_mutex.unlock();
 	}
 
-	wxImage * ImagesLoader::GetBitmap( uint32_t p_id )
+	wxImage * ImagesLoader::getBitmap( uint32_t p_id )
 	{
 		wxImage * result = nullptr;
 		m_mutex.lock();
@@ -47,7 +47,7 @@ namespace GuiCommon
 		return result;
 	}
 
-	void ImagesLoader::AddBitmap( uint32_t p_id, char const * const * p_pBits )
+	void ImagesLoader::addBitmap( uint32_t p_id, char const * const * p_pBits )
 	{
 		m_mutex.lock();
 		ImageIdMapIt it = m_mapImages.find( p_id );
@@ -68,7 +68,7 @@ namespace GuiCommon
 		}
 	}
 
-	void ImagesLoader::WaitAsyncLoads()
+	void ImagesLoader::waitAsyncLoads()
 	{
 		for ( auto thread : m_arrayCurrentLoads )
 		{

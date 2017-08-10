@@ -1,13 +1,13 @@
 #include "HdrColourComponent.hpp"
 
-namespace Castor
+namespace castor
 {
 	bool operator==( HdrColourComponent const & p_cpnA, HdrColourComponent const & p_cpnB )
 	{
 		float uiA;
 		float uiB;
-		p_cpnA.convert_to( uiA );
-		p_cpnB.convert_to( uiB );
+		p_cpnA.convertTo( uiA );
+		p_cpnB.convertTo( uiB );
 		return uiA == uiB;
 	}
 
@@ -19,7 +19,7 @@ namespace Castor
 	float operator-( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt -= p_scalar;
 		return fValue;
@@ -28,7 +28,7 @@ namespace Castor
 	float operator+( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt += p_scalar;
 		return fValue;
@@ -37,7 +37,7 @@ namespace Castor
 	float operator*( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt *= p_scalar;
 		return fValue;
@@ -46,7 +46,7 @@ namespace Castor
 	float operator/( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
 		float fValue;
-		p_cpnt.convert_to( fValue );
+		p_cpnt.convertTo( fValue );
 		HdrColourComponent cpnt( &fValue );
 		cpnt /= p_scalar;
 		return fValue;

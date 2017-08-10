@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,7 +28,7 @@ SOFTWARE.
 #include "Render/Viewport.hpp"
 #include "Scene/Geometry.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -73,7 +73,7 @@ namespace Castor3D
 		C3D_API ~PickingPass();
 		/**
 		 *\~english
-		 *\brief		Adds a scene rendered through this technique.
+		 *\brief		adds a scene rendered through this technique.
 		 *\param[in]	p_scene		The scene.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\~french
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void AddScene( Scene & p_scene, Camera & p_camera );
+		C3D_API void addScene( Scene & p_scene, Camera & p_camera );
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\param[in]	p_camera		La caméra regardant la scène.
 		 *\return		PickingPass::NodeType si rien n'a été pické.
 		 */
-		C3D_API NodeType Pick( Castor::Position const & p_position
+		C3D_API NodeType pick( castor::Position const & p_position
 			, Camera const & p_camera );
 		/**
 		 *\~english
@@ -102,7 +102,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La géométrie sélectionnée.
 		 */
-		inline GeometrySPtr GetPickedGeometry()const
+		inline GeometrySPtr getPickedGeometry()const
 		{
 			return m_geometry.lock();
 		}
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le billboard sélectionné.
 		 */
-		inline BillboardBaseSPtr GetPickedBillboard()const
+		inline BillboardBaseSPtr getPickedBillboard()const
 		{
 			return m_billboard.lock();
 		}
@@ -122,7 +122,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le sous-maillage sélectionné.
 		 */
-		inline SubmeshSPtr GetPickedSubmesh()const
+		inline SubmeshSPtr getPickedSubmesh()const
 		{
 			return m_submesh.lock();
 		}
@@ -132,13 +132,13 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'indice de la face sélectionnée.
 		 */
-		inline uint32_t GetPickedFace()const
+		inline uint32_t getPickedFace()const
 		{
 			return m_face;
 		}
 
 	private:
-		void DoRenderNodes( SceneRenderNodes & p_nodes
+		void doRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & p_camera );
 
 	private:
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\return		Les données de picking.
 		 */
-		Castor::Point3f DoFboPick( Castor::Position const & p_position
+		castor::Point3f doFboPick( castor::Position const & p_position
 			, Camera const & p_camera
 			, SceneRenderNodes & p_nodes );
 		/**
@@ -171,102 +171,102 @@ namespace Castor3D
 		 *\param[in]	p_nodes	Les noeuds de rendu.
 		 *\return		PickingPass::NodeType si rien n'a été pické.
 		 */
-		PickingPass::NodeType DoPick( Castor::Point3f const & p_pixel
+		PickingPass::NodeType doPick( castor::Point3f const & p_pixel
 			, SceneRenderNodes & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
+		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void DoRender( Scene & p_scene
+		void doRender( Scene & p_scene
 			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
+		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void DoRender( Scene & p_scene
+		void doRender( Scene & p_scene
 			, StaticRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
+		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void DoRender( Scene & p_scene
+		void doRender( Scene & p_scene
 			, SkinningRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
+		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void DoRender( Scene & p_scene
+		void doRender( Scene & p_scene
 			, SubmeshSkinningRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
+		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void DoRender( Scene & p_scene
+		void doRender( Scene & p_scene
 			, MorphingRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
+		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void DoRender( Scene & p_scene
+		void doRender( Scene & p_scene
 			, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCleanup
+		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void DoUpdate( RenderQueueArray & p_queues )override;
+		void doUpdate( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
-		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
+		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		void DoUpdatePipeline( RenderPipeline & p_pipeline )const override;
+		void doUpdatePipeline( RenderPipeline & p_pipeline )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void DoPrepareFrontPipeline( ShaderProgram & p_program
+		void doPrepareFrontPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void DoPrepareBackPipeline( ShaderProgram & p_program
+		void doPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 
@@ -276,7 +276,7 @@ namespace Castor3D
 	private:
 		//!\~english	The scenes, and cameras used to render them.
 		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
-		std::map< Castor::String, GeometryWPtr > m_pickable;
+		std::map< castor::String, GeometryWPtr > m_pickable;
 		//!\~english	The texture receiving the color render.
 		//!\~french		La texture recevant le rendu couleur.
 		TextureLayoutSPtr m_colourTexture;
@@ -312,7 +312,7 @@ namespace Castor3D
 		UniformBuffer m_pickingUbo;
 		//!\~english	Receives the picking area pixels.
 		//!\~french		Reçoit les pixels de la zone pickée.
-		Castor::PxBufferBaseSPtr m_buffer;
+		castor::PxBufferBaseSPtr m_buffer;
 	};
 }
 

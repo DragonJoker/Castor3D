@@ -1,4 +1,4 @@
-namespace Castor
+namespace castor
 {
 	//*************************************************************************************************
 
@@ -8,40 +8,40 @@ namespace Castor
 		using LhsPixel = Pixel< FT >;
 		using RhsPixel = Pixel< FU >;
 
-		static void Add( LhsPixel & p_lhs, RhsPixel const & p_rhs )
+		static void add( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
 			LhsPixel & rhs( p_rhs );
-			PxOperators< FT, FT >::Add( p_lhs, rhs );
+			PxOperators< FT, FT >::add( p_lhs, rhs );
 		}
 
-		static void Substract( LhsPixel & p_lhs, RhsPixel const & p_rhs )
+		static void subtract( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
 			LhsPixel & rhs( p_rhs );
-			PxOperators< FT, FT >::Substract( p_lhs, rhs );
+			PxOperators< FT, FT >::subtract( p_lhs, rhs );
 		}
 
-		static void Multiply( LhsPixel & p_lhs, RhsPixel const & p_rhs )
+		static void multiply( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
 			LhsPixel & rhs( p_rhs );
-			PxOperators< FT, FT >::Multiply( p_lhs, rhs );
+			PxOperators< FT, FT >::multiply( p_lhs, rhs );
 		}
 
-		static void Divide( LhsPixel & p_lhs, RhsPixel const & p_rhs )
+		static void divide( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
 			LhsPixel & rhs( p_rhs );
-			PxOperators< FT, FT >::Divide( p_lhs, rhs );
+			PxOperators< FT, FT >::divide( p_lhs, rhs );
 		}
 
-		static void Assign( LhsPixel & p_lhs, RhsPixel const & p_rhs )
+		static void assign( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
 			LhsPixel & rhs( p_rhs );
-			PxOperators< FT, FT >::Assign( p_lhs, rhs );
+			PxOperators< FT, FT >::assign( p_lhs, rhs );
 		}
 
-		static bool Equals( LhsPixel const & p_lhs, RhsPixel const & p_rhs )
+		static bool equals( LhsPixel const & p_lhs, RhsPixel const & p_rhs )
 		{
 			LhsPixel & rhs( p_rhs );
-			return PxOperators< FT, FT >::Equals( p_lhs, rhs );
+			return PxOperators< FT, FT >::equals( p_lhs, rhs );
 		}
 	};
 
@@ -50,50 +50,50 @@ namespace Castor
 	{
 		using LhsPixel = Pixel< FT >;
 
-		static void Add( LhsPixel & p_lhs, LhsPixel const & p_rhs )
+		static void add( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 			{
 				p_lhs[i] += p_rhs[i];
 			}
 		}
 
-		static void Substract( LhsPixel & p_lhs, LhsPixel const & p_rhs )
+		static void subtract( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 			{
 				p_lhs[i] -= p_rhs[i];
 			}
 		}
-		static void Multiply( LhsPixel & p_lhs, LhsPixel const & p_rhs )
+		static void multiply( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 			{
 				p_lhs[i] *= p_rhs[i];
 			}
 		}
 
-		static void Divide( LhsPixel & p_lhs, LhsPixel const & p_rhs )
+		static void divide( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 			{
 				p_lhs[i] = ( p_rhs[i] == 0 ? p_lhs[i] : p_lhs[i] / p_rhs[i] );
 			}
 		}
 
-		static void Assign( LhsPixel & p_lhs, LhsPixel const & p_rhs )
+		static void assign( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 			{
 				p_lhs[i] = p_rhs[i];
 			}
 		}
 
-		static bool Equals( LhsPixel & p_lhs, LhsPixel const & p_rhs )
+		static bool equals( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
 			bool result = true;
 
-			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 			{
 				result = p_lhs[i] == p_rhs[i];
 			}
@@ -109,8 +109,8 @@ namespace Castor
 	{
 		if ( p_init )
 		{
-			m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-			std::memset( m_components.get(), 0, pixel_definitions< FT >::Size );
+			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+			std::memset( m_components.get(), 0, PixelDefinitions< FT >::Size );
 		}
 	}
 
@@ -122,21 +122,21 @@ namespace Castor
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	Pixel< FT >::Pixel( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components )
-		:	m_components( new uint8_t[pixel_definitions< FT >::Size] )
+	Pixel< FT >::Pixel( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components )
+		:	m_components( new uint8_t[PixelDefinitions< FT >::Size] )
 	{
 		uint8_t const * src = &p_components[0];
 		uint8_t * dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
 	Pixel< FT >::Pixel( Pixel< FT > const & p_pxl )
 	{
-		if ( p_pxl.const_ptr() )
+		if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-			std::memcpy( m_components.get(), p_pxl.const_ptr(), pixel_definitions< FT >::Size );
+			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+			std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitions< FT >::Size );
 		}
 	}
 
@@ -151,12 +151,12 @@ namespace Castor
 	template< PixelFormat FU >
 	Pixel< FT >::Pixel( Pixel< FU > const & p_pxl )
 	{
-		if ( p_pxl.const_ptr() )
+		if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-			uint8_t const * src = p_pxl.const_ptr();
+			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+			uint8_t const * src = p_pxl.constPtr();
 			uint8_t * dst = m_components.get();
-			pixel_definitions< FU >::template convert< FT >( src, dst );
+			PixelDefinitions< FU >::template convert< FT >( src, dst );
 		}
 	}
 
@@ -171,19 +171,19 @@ namespace Castor
 	{
 		if ( m_components.get() )
 		{
-			if ( p_pxl.const_ptr() )
+			if ( p_pxl.constPtr() )
 			{
-				std::memcpy( m_components.get(), p_pxl.const_ptr(), pixel_definitions< FT >::Size );
+				std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitions< FT >::Size );
 			}
 			else
 			{
 				clear();
 			}
 		}
-		else if ( p_pxl.const_ptr() )
+		else if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-			std::memcpy( m_components.get(), p_pxl.const_ptr(), pixel_definitions< FT >::Size );
+			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+			std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitions< FT >::Size );
 		}
 
 		return * this;
@@ -208,23 +208,23 @@ namespace Castor
 	{
 		if ( m_components.get() )
 		{
-			if ( p_pxl.const_ptr() )
+			if ( p_pxl.constPtr() )
 			{
-				uint8_t const * src = p_pxl.const_ptr();
+				uint8_t const * src = p_pxl.constPtr();
 				uint8_t * dst = m_components.get();
-				pixel_definitions< FU >::template convert< FT >( src, dst );
+				PixelDefinitions< FU >::template convert< FT >( src, dst );
 			}
 			else
 			{
 				clear();
 			}
 		}
-		else if ( p_pxl.const_ptr() )
+		else if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-			uint8_t const * src = p_pxl.const_ptr();
+			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+			uint8_t const * src = p_pxl.constPtr();
 			uint8_t * dst = m_components.get();
-			pixel_definitions< FU >::template convert< FT >( src, dst );
+			PixelDefinitions< FU >::template convert< FT >( src, dst );
 		}
 
 		return *this;
@@ -234,7 +234,7 @@ namespace Castor
 	template< PixelFormat FU >
 	Pixel< FT > & Pixel< FT >::operator+=( Pixel< FU > const & p_px )
 	{
-		PxOperators< FT, FU >::Add( *this, p_px );
+		PxOperators< FT, FU >::add( *this, p_px );
 		return *this;
 	}
 
@@ -242,7 +242,7 @@ namespace Castor
 	template< PixelFormat FU >
 	Pixel< FT > & Pixel< FT >::operator-=( Pixel< FU > const & p_px )
 	{
-		PxOperators< FT, FU >::Substract( *this, p_px );
+		PxOperators< FT, FU >::subtract( *this, p_px );
 		return *this;
 	}
 
@@ -250,7 +250,7 @@ namespace Castor
 	template< PixelFormat FU >
 	Pixel< FT > & Pixel< FT >::operator/=( Pixel< FU > const & p_px )
 	{
-		PxOperators< FT, FU >::Divide( *this, p_px );
+		PxOperators< FT, FU >::divide( *this, p_px );
 		return *this;
 	}
 
@@ -258,7 +258,7 @@ namespace Castor
 	template< PixelFormat FU >
 	Pixel< FT > & Pixel< FT >::operator*=( Pixel< FU > const & p_px )
 	{
-		PxOperators< FT, FU >::Multiply( *this, p_px );
+		PxOperators< FT, FU >::multiply( *this, p_px );
 		return *this;
 	}
 
@@ -266,7 +266,7 @@ namespace Castor
 	template< typename U >
 	Pixel< FT > & Pixel< FT >::operator+=( U const & p_t )
 	{
-		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 		{
 			m_components.get()[i] = T( U( m_components.get()[i] ) + p_t );
 		}
@@ -278,7 +278,7 @@ namespace Castor
 	template< typename U >
 	Pixel< FT > & Pixel< FT >::operator-=( U const & p_t )
 	{
-		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 		{
 			m_components.get()[i] = T( U( m_components.get()[i] ) - p_t );
 		}
@@ -290,7 +290,7 @@ namespace Castor
 	template< typename U >
 	Pixel< FT > & Pixel< FT >::operator/=( U const & p_t )
 	{
-		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 		{
 			m_components.get()[i] = ( p_t == 0 ? m_components.get()[i] : T( U( m_components.get()[i] ) + p_t ) );
 		}
@@ -302,7 +302,7 @@ namespace Castor
 	template< typename U >
 	Pixel< FT > & Pixel< FT >::operator*=( U const & p_t )
 	{
-		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
+		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 		{
 			m_components.get()[i] = T( U( m_components.get()[i] ) * p_t );
 		}
@@ -326,8 +326,8 @@ namespace Castor
 	template< PixelFormat FT >
 	void Pixel< FT >::unlink()
 	{
-		m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-		std::memset( m_components.get(), 0, pixel_definitions< FT >::Size );
+		m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+		std::memset( m_components.get(), 0, PixelDefinitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
@@ -358,11 +358,11 @@ namespace Castor
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	void Pixel< FT >::set( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components )
+	void Pixel< FT >::set( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components )
 	{
 		uint8_t const * src = &p_components[0];
 		uint8_t * dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
@@ -371,22 +371,22 @@ namespace Castor
 	{
 		uint8_t const * src = &p_components[0];
 		uint8_t * dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
 	void Pixel< FT >::set( Pixel< FU > const & p_px )
 	{
-		uint8_t const * src = p_px.const_ptr();
+		uint8_t const * src = p_px.constPtr();
 		uint8_t * dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template < PixelFormat FT, PixelFormat FU >
 	bool operator==( Pixel< FT > const & p_pixel, Pixel< FU > const & p_pxl )
 	{
-		return PxOperators< FT, FU >::Equals( p_pixel, p_pxl );
+		return PxOperators< FT, FU >::equals( p_pixel, p_pxl );
 	}
 
 	template < PixelFormat FT, PixelFormat FU >

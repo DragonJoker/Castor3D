@@ -1,6 +1,6 @@
 #include "Quaternion.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace matrix
 	{
@@ -8,11 +8,11 @@ namespace Castor
 		SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
 		{
 			SquareMatrix< T, 4 > rotate;
-			return p_matrix *= set_rotate( rotate, p_quat );
+			return p_matrix *= setRotate( rotate, p_quat );
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & set_rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
+		SquareMatrix< T, 4 > & setRotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
 		{
 			auto const qxx( p_quat.quat.x * p_quat.quat.x );
 			auto const qyy( p_quat.quat.y * p_quat.quat.y );
@@ -48,7 +48,7 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		void get_rotate( SquareMatrix< T, 4 > const & p_matrix, QuaternionT< U > & p_quat )
+		void getrotate( SquareMatrix< T, 4 > const & p_matrix, QuaternionT< U > & p_quat )
 		{
 			double trace = double( p_matrix[0][0] + p_matrix[1][1] + p_matrix[2][2] );
 			double root;
@@ -127,7 +127,7 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & set_scale( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
+		SquareMatrix< T, 4 > & setScale( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 		{
 			std::memset( p_matrix.ptr(), 0, sizeof( T ) * 4 * 4 );
 			p_matrix[0][0] = T( x );
@@ -138,9 +138,9 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & set_scale( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_scale )
+		SquareMatrix< T, 4 > & setScale( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_scale )
 		{
-			return set_scale( p_matrix, p_scale[0], p_scale[1], p_scale[2] );
+			return setScale( p_matrix, p_scale[0], p_scale[1], p_scale[2] );
 		}
 
 		template< typename T, typename U >
@@ -157,7 +157,7 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & set_translate( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
+		SquareMatrix< T, 4 > & setTranslate( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 		{
 			std::memset( p_matrix.ptr(), 0, sizeof( T ) * 4 * 4 );
 			constexpr T const unit( 1 );
@@ -172,19 +172,19 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & set_translate( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_translation )
+		SquareMatrix< T, 4 > & setTranslate( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_translation )
 		{
-			return set_translate( p_matrix, p_translation[0], p_translation[1], p_translation[2] );
+			return setTranslate( p_matrix, p_translation[0], p_translation[1], p_translation[2] );
 		}
 
 		template< typename T, typename U, typename V >
-		SquareMatrix< T, 4 > & set_transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_scale, QuaternionT< V > const & p_orientation )
+		SquareMatrix< T, 4 > & setTransform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_scale, QuaternionT< V > const & p_orientation )
 		{
 			// Ordering:
 			//    1. Scale
 			//    2. Rotate
 			//    3. Translate
-			set_translate( p_matrix, p_position );
+			setTranslate( p_matrix, p_position );
 			rotate( p_matrix, p_orientation );
 			return scale( p_matrix, p_scale );
 		}
@@ -193,13 +193,13 @@ namespace Castor
 		SquareMatrix< T, 4 > & transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_scale, QuaternionT< V > const & p_orientation )
 		{
 			SquareMatrix< T, 4 > transform;
-			set_transform( transform, p_position, p_scale, p_orientation );
+			setTransform( transform, p_position, p_scale, p_orientation );
 			p_matrix *= transform;
 			return p_matrix;
 		}
 
 		template< typename T, typename U >
-		Point< U, 3 > get_transformed( Castor::SquareMatrix< T, 4 > const & p_matrix, Castor::Point< U, 3 > const & p_value )
+		Point< U, 3 > getTransformed( castor::SquareMatrix< T, 4 > const & p_matrix, castor::Point< U, 3 > const & p_value )
 		{
 			Point< U, 3 > result;
 
@@ -216,7 +216,7 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		static Quaternion get_transformed( Castor::SquareMatrix< T, 4 > const & p_matrix, Castor::QuaternionT< U > const & p_value )
+		static Quaternion getTransformed( castor::SquareMatrix< T, 4 > const & p_matrix, castor::QuaternionT< U > const & p_value )
 		{
 			return p_matrix * p_value;
 		}
@@ -273,7 +273,7 @@ namespace Castor
 		SquareMatrix< T, 4 > & ortho( SquareMatrix< T, 4 > & p_matrix, U p_left, U p_right, U p_bottom, U p_top, U p_near, U p_far )
 		{
 			// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml)
-			p_matrix.set_identity();
+			p_matrix.setIdentity();
 			p_matrix[0][0] = T( 2 / ( p_right - p_left ) );
 			p_matrix[1][1] = T( 2 / ( p_top - p_bottom ) );
 			p_matrix[2][2] = T( -2 / ( p_far - p_near ) );
@@ -315,13 +315,13 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & look_at( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_eye, Point< U, 3 > const & p_center, Point< U, 3 > const & p_up )
+		SquareMatrix< T, 4 > & lookAt( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_eye, Point< U, 3 > const & p_center, Point< U, 3 > const & p_up )
 		{
 			// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
-			Point< T, 3 > f( point::get_normalised( p_center - p_eye ) );
-			Point< T, 3 > s( point::get_normalised( f ^ p_up ) );
+			Point< T, 3 > f( point::getNormalised( p_center - p_eye ) );
+			Point< T, 3 > s( point::getNormalised( f ^ p_up ) );
 			Point< T, 3 > u( s ^ f );
-			p_matrix.set_identity();
+			p_matrix.setIdentity();
 			p_matrix[0][0] = s[0];
 			p_matrix[0][1] = u[0];
 			p_matrix[0][2] = -f[0];
@@ -338,15 +338,15 @@ namespace Castor
 		}
 
 		template< typename T >
-		SquareMatrix< T, 4 > look_at( Point< T, 3 > const & p_eye, Point< T, 3 > const & p_center, Point< T, 3 > const & p_up )
+		SquareMatrix< T, 4 > lookAt( Point< T, 3 > const & p_eye, Point< T, 3 > const & p_center, Point< T, 3 > const & p_up )
 		{
 			SquareMatrix< T, 4 > result;
-			look_at( result, p_eye, p_center, p_up );
+			lookAt( result, p_eye, p_center, p_up );
 			return result;
 		}
 
 		template< typename T >
-		SquareMatrix< T, 4 > & switch_hand( SquareMatrix< T, 4 > & p_matrix )
+		SquareMatrix< T, 4 > & switchHand( SquareMatrix< T, 4 > & p_matrix )
 		{
 			auto col2 = p_matrix[2];
 			auto col3 = p_matrix[3];
@@ -357,10 +357,10 @@ namespace Castor
 			return p_matrix;
 		}
 		template< typename T >
-		SquareMatrix< T, 4 > get_switch_hand( SquareMatrix< T, 4 > const & p_matrix )
+		SquareMatrix< T, 4 > getSwitchHand( SquareMatrix< T, 4 > const & p_matrix )
 		{
 			SquareMatrix< T, 4 > result( p_matrix );
-			switch_hand( result );
+			switchHand( result );
 			return result;
 		}
 	}

@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Math/Point.hpp"
 #include "PixelFormat.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -106,7 +106,7 @@ namespace Castor
 		 *\param[in]	p_components	Initialise les données à celles-ci
 		 */
 		template< PixelFormat FU >
-		Pixel( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components );
+		Pixel( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -194,7 +194,7 @@ namespace Castor
 		Pixel< FU > mul( uint8_t const & p_byVal )const;
 		/**
 		 *\~english
-		 *\brief		Deallocate components
+		 *\brief		deallocate components
 		 *\~french
 		 *\brief		Désalloue les composantes de ce pixel
 		 */
@@ -227,7 +227,7 @@ namespace Castor
 		 *\return
 		 */
 		template< PixelFormat FU >
-		void set( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components );
+		void set( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components );
 		/**
 		 *\~english
 		 *\brief		Converts given data and copies it into this pixel's components
@@ -286,7 +286,7 @@ namespace Castor
 		 *\brief		Récupère le pointeur sur les données constantes
 		 *\return		Les données
 		 */
-		inline component_const_ptr const_ptr()const
+		inline component_const_ptr constPtr()const
 		{
 			return ( m_components ? & m_components.get()[0] : nullptr );
 		}
@@ -336,7 +336,7 @@ namespace Castor
 		 */
 		inline iterator end()
 		{
-			return ( m_components ? m_components.get() + pixel_definitions< FT >::Size : nullptr );
+			return ( m_components ? m_components.get() + PixelDefinitions< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english
@@ -348,7 +348,7 @@ namespace Castor
 		 */
 		inline const_iterator end()const
 		{
-			return ( m_components ? m_components.get() + pixel_definitions< FT >::Size : nullptr );
+			return ( m_components ? m_components.get() + PixelDefinitions< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english
@@ -358,7 +358,7 @@ namespace Castor
 		 *\brief		Récupère le format du pixel
 		 *\return		Le format du pixel
 		 */
-		static PixelFormat get_format()
+		static PixelFormat getFormat()
 		{
 			return PixelFormat( FT );
 		}
@@ -370,9 +370,9 @@ namespace Castor
 		 *\brief		Récupère la taille du pixel
 		 *\return		La taille
 		 */
-		static uint32_t get_size()
+		static uint32_t getSize()
 		{
-			return pixel_definitions< FT >::Size;
+			return PixelDefinitions< FT >::Size;
 		}
 		/**
 		 *\~english

@@ -29,7 +29,7 @@ SOFTWARE.
 #include <cmath>
 #include <limits>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -121,7 +121,7 @@ namespace Castor
 		 *				Une pourcentage allant de 0.0 à 1.0, selon que la valeur est plus
 		 *				proche de \p m_max ou de \p m_min.
 		 */
-		float inv_percent( T const & p_value )const noexcept
+		float invPercent( T const & p_value )const noexcept
 		{
 			return 1.0f - percent( p_value );
 		}
@@ -159,7 +159,7 @@ namespace Castor
 		 *				\p m_min si \p percent vaut 1.0.\n
 		 *				Une valeur comprise entre \p m_min et \p m_max.
 		 */
-		T inv_value( float const & p_percent )const noexcept
+		T invValue( float const & p_percent )const noexcept
 		{
 			return T{ m_min + ( 1.0f - p_percent ) * float( m_max - m_min ) };
 		}
@@ -203,7 +203,7 @@ namespace Castor
 	 *\return		L'intervalle créé.
 	 */
 	template< typename T >
-	inline Range< T > make_range( T const & p_min, T const & p_max )noexcept
+	inline Range< T > makeRange( T const & p_min, T const & p_max )noexcept
 	{
 		return Range< T >( p_min, p_max );
 	}

@@ -1,6 +1,6 @@
 #include "ParserParameterHelpers.hpp"
 
-namespace Castor
+namespace castor
 {
 	xchar const * const RegexFormat< uint8_t >::Value = cuT( "(\\#[0-9a-fA-F]{2}"
 			"|0[xX][0-9a-fA-F]{2}"
@@ -183,7 +183,7 @@ namespace Castor
 		cuT( "HDR colour" ),
 	};
 
-	String const & GetTypeName( ParameterType p_type )
+	String const & getTypeName( ParameterType p_type )
 	{
 		return TypeName[uint32_t( p_type )];
 	}

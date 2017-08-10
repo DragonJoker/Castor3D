@@ -28,32 +28,32 @@ SOFTWARE.
 namespace Fireworks
 {
 	class ParticleSystem
-		: public Castor3D::CpuParticleSystem
+		: public castor3d::CpuParticleSystem
 	{
 	public:
-		ParticleSystem( Castor3D::ParticleSystem & p_parent );
+		ParticleSystem( castor3d::ParticleSystem & p_parent );
 		virtual ~ParticleSystem();
-		static Castor3D::CpuParticleSystemUPtr Create( Castor3D::ParticleSystem & p_parent );
-		void EmitParticle( float p_type, Castor::Point3f const & p_position, Castor::Point3f const & p_velocity, float p_age );
+		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & p_parent );
+		void emitParticle( float p_type, castor::Point3f const & p_position, castor::Point3f const & p_velocity, float p_age );
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::Update
+		 *\copydoc		castor3d::CpuParticleSystem::Update
 		 */
-		uint32_t Update( Castor::Milliseconds const & p_time
-			, Castor::Milliseconds const & p_totalTime )override;
+		uint32_t update( castor::Milliseconds const & p_time
+			, castor::Milliseconds const & p_totalTime )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::DoInitialise
+		 *\copydoc		castor3d::CpuParticleSystem::doInitialise
 		 */
-		bool DoInitialise()override;
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::DoCleanup
+		 *\copydoc		castor3d::CpuParticleSystem::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 
 	public:
-		static Castor::String const Type;
-		static Castor::String const Name;
+		static castor::String const Type;
+		static castor::String const Name;
 
 	private:
 		uint32_t m_firstUnused{ 1u };

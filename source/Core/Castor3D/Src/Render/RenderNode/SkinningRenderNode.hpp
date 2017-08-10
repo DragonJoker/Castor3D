@@ -26,7 +26,7 @@ SOFTWARE.
 #include "ObjectRenderNode.hpp"
 #include "Shader/SkinningUbo.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS

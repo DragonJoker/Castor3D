@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -103,7 +103,7 @@ namespace Castor
 		 *\brief		Récupère le type du paramètre.
 		 *\return		Le type.
 		 */
-		CU_API virtual ParameterType GetType() = 0;
+		CU_API virtual ParameterType getType() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter base type (like ParameterType::eText for ParameterType::eName).
@@ -112,9 +112,9 @@ namespace Castor
 		 *\brief		Récupère le type de base du paramètre (comme ParameterType::eText pour ParameterType::eName).
 		 *\return		Le type.
 		 */
-		CU_API virtual ParameterType GetBaseType()
+		CU_API virtual ParameterType getBaseType()
 		{
-			return GetType();
+			return getType();
 		}
 		/**
 		 *\~english
@@ -124,14 +124,14 @@ namespace Castor
 		 *\brief		Récupère le type du chaîne paramètre.
 		 *\return		Le type.
 		 */
-		CU_API virtual xchar const * const GetStrType() = 0;
+		CU_API virtual xchar const * const getStrType() = 0;
 		/**
 		 *\~english
 		 *\return		A copy of this parameter.
 		 *\~french
 		 *\return		Une copie de ce paramètre.
 		 */
-		CU_API virtual ParserParameterBaseSPtr Clone() = 0;
+		CU_API virtual ParserParameterBaseSPtr clone() = 0;
 		/**
 		 *\~english
 		 *\brief			Checks the parameter.
@@ -142,7 +142,7 @@ namespace Castor
 		 *\param[in,out]	p_params	Le texte contenant la valeur du paramètre.
 		 *\return			\p si un problème quelconque est arrivé.
 		 */
-		CU_API virtual bool Parse( String & p_params ) = 0;
+		CU_API virtual bool parse( String & p_params ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter value.
@@ -153,7 +153,7 @@ namespace Castor
 		 *\param[out]	p_value		Reçoit la valeur.
 		 *\return		La valeur.
 		 */
-		template< typename T > T const & Get( T & p_value );
+		template< typename T > T const & get( T & p_value );
 	};
 }
 

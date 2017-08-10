@@ -4,9 +4,9 @@
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	BackBuffers::BackBuffers( Engine & engine )
 		: FrameBuffer( engine )
@@ -17,18 +17,18 @@ namespace Castor3D
 	{
 	}
 
-	bool BackBuffers::Initialise( Size const & p_size, PixelFormat p_format )
+	bool BackBuffers::initialise( Size const & p_size, PixelFormat p_format )
 	{
 		m_buffer = PxBufferBase::create( p_size, p_format );
 		return true;
 	}
 
-	void BackBuffers::DoBind( FrameBufferTarget p_target )const
+	void BackBuffers::doBind( FrameBufferTarget p_target )const
 	{
-		FAILURE( "BackBuffers instances can't be bound like regular FrameBuffer ones, use BackBuffers::Bind( WindowBuffer, eFRAME_BUFFER_TARGET )." );
+		FAILURE( "BackBuffers instances can't be bound like regular FrameBuffer ones, use BackBuffers::bind( WindowBuffer, eFRAME_BUFFER_TARGET )." );
 	}
 
-	void BackBuffers::DoUnbind()const
+	void BackBuffers::doUnbind()const
 	{
 	}
 }

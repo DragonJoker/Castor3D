@@ -28,7 +28,7 @@ SOFTWARE.
 #include "Animation/Animable.hpp"
 #include "Bone.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\brief		Crée un os.
 		 *\param[in]	p_name	Le nom de l'os.
 		 */
-		C3D_API BoneSPtr CreateBone( Castor::String const & p_name );
+		C3D_API BoneSPtr createBone( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Finds a bone from a name.
@@ -103,10 +103,10 @@ namespace Castor3D
 		 *\brief		Trouve un os à partir de son nom.
 		 *\param[in]	p_name	Le nom de l'os.
 		 */
-		C3D_API BoneSPtr FindBone( Castor::String const & p_name )const;
+		C3D_API BoneSPtr findBone( castor::String const & p_name )const;
 		/**
 		 *\~english
-		 *\brief		Adds a bone to another bone's children
+		 *\brief		adds a bone to another bone's children
 		 *\param[in]	p_bone		The bone.
 		 *\param[in]	p_parent	The parent bone.
 		 *\~french
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\param[in]	p_bone		L'os.
 		 *\param[in]	p_parent	L'os parent.
 		 */
-		C3D_API void SetBoneParent( BoneSPtr p_bone, BoneSPtr p_parent );
+		C3D_API void setBoneParent( BoneSPtr p_bone, BoneSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates an animation
@@ -125,26 +125,26 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API SkeletonAnimation & CreateAnimation( Castor::String const & p_name );
+		C3D_API SkeletonAnimation & createAnimation( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\return		The global inverse transform.
 		 *\~french
 		 *\return		La transformation globale inversée.
 		 */
-		inline Castor::Matrix4x4r const & GetGlobalInverseTransform()const
+		inline castor::Matrix4x4r const & getGlobalInverseTransform()const
 		{
 			return m_globalInverse;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the global inverse transform.
+		 *\brief		sets the global inverse transform.
 		 *\param[in]	p_transform	The new value.
 		 *\~french
 		 *\brief		Définit la transformation globale inversée.
 		 *\param[in]	p_transform	La nouvelle valeur.
 		 */
-		inline void SetGlobalInverseTransform( Castor::Matrix4x4r const & p_transform )
+		inline void setGlobalInverseTransform( castor::Matrix4x4r const & p_transform )
 		{
 			m_globalInverse = p_transform;
 		}
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'os.
 		 */
-		inline size_t GetBonesCount()const
+		inline size_t getBonesCount()const
 		{
 			return m_bones.size();
 		}
@@ -205,7 +205,7 @@ namespace Castor3D
 		BonePtrArray m_bones;
 		//!\~english	The global skeleton transform.
 		//!\~french		La transformation globale du squelette
-		Castor::Matrix4x4r m_globalInverse;
+		castor::Matrix4x4r m_globalInverse;
 
 		friend class BinaryWriter< Skeleton >;
 		friend class BinaryParser< Skeleton >;
@@ -250,7 +250,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( Skeleton const & p_obj )override;
+		C3D_API bool doWrite( Skeleton const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -278,7 +278,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( Skeleton & p_obj )override;
+		C3D_API bool doParse( Skeleton & p_obj )override;
 	};
 }
 

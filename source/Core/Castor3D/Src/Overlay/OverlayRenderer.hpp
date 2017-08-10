@@ -32,11 +32,11 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-#ifdef DrawText
-#	undef DrawText
+#ifdef drawText
+#	undef drawText
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -47,7 +47,7 @@ namespace Castor3D
 	\brief		Le renderer d'incrustation
 	*/
 	class OverlayRenderer
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -70,35 +70,35 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise les tampons
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes the renderer
 		 *\~french
 		 *\brief		Nettoie le renderer
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Function to draw a PanelOverlay
 		 *\~french
 		 *\brief		Fonction de dessin d'un PanelOverlay
 		 */
-		C3D_API void DrawPanel( PanelOverlay & panelOverlay );
+		C3D_API void drawPanel( PanelOverlay & panelOverlay );
 		/**
 		 *\~english
 		 *\brief		Function to draw a BorderPanelOverlay
 		 *\~french
 		 *\brief		Fonction de dessin d'un BorderPanelOverlay
 		 */
-		C3D_API void DrawBorderPanel( BorderPanelOverlay & borderPanelOverlay );
+		C3D_API void drawBorderPanel( BorderPanelOverlay & borderPanelOverlay );
 		/**
 		 *\~english
 		 *\brief		Function to draw a TextOverlay
 		 *\~french
 		 *\brief		Fonction de dessin d'un TextOverlay
 		 */
-		C3D_API void DrawText( TextOverlay & textOverlay );
+		C3D_API void drawText( TextOverlay & textOverlay );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays rendering.
@@ -107,21 +107,21 @@ namespace Castor3D
 		 *\brief		Commence le rendu des incrustations.
 		 *\param[in]	viewport	Le viewport de la fenêtre de rendu.
 		 */
-		C3D_API void BeginRender( Viewport const & viewport );
+		C3D_API void beginRender( Viewport const & viewport );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays rendering
 		 *\~french
 		 *\brief		Termine le rendu des incrustations
 		 */
-		C3D_API void EndRender();
+		C3D_API void endRender();
 		/**
 		 *\~english
 		 *\return		The current render target size
 		 *\~french
 		 *\return		Les dimensions de la cible du rendu courant
 		 */
-		Castor::Size const & GetSize()const
+		castor::Size const & getSize()const
 		{
 			return m_size;
 		}
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si la taille de rendu a changé.
 		 */
-		bool IsSizeChanged()const
+		bool isSizeChanged()const
 		{
 			return m_sizeChanged;
 		}
@@ -176,7 +176,7 @@ namespace Castor3D
 		 *\param[in]	pass	La passe.
 		 *\return		Le programme.
 		 */
-		C3D_API OverlayRenderNode & DoGetPanelNode( Pass & pass );
+		C3D_API OverlayRenderNode & doGetPanelNode( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given pass.
@@ -187,7 +187,7 @@ namespace Castor3D
 		 *\param[in]	pass	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API OverlayRenderNode & DoGetTextNode( Pass & pass );
+		C3D_API OverlayRenderNode & doGetTextNode( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
@@ -198,7 +198,7 @@ namespace Castor3D
 		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetPanelPipeline( TextureChannels textureFlags );
+		C3D_API RenderPipeline & doGetPanelPipeline( TextureChannels textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given texture flags.
@@ -209,7 +209,7 @@ namespace Castor3D
 		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetTextPipeline( TextureChannels textureFlags );
+		C3D_API RenderPipeline & doGetTextPipeline( TextureChannels textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a program compiled using given flags.
@@ -220,18 +220,18 @@ namespace Castor3D
 		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme
 		 */
-		C3D_API RenderPipeline & DoGetPipeline( TextureChannels const & textureFlags );
+		C3D_API RenderPipeline & doGetPipeline( TextureChannels const & textureFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
-		 *\remarks		Adds this GeometryBuffers to the text GeometryBuffers array.
+		 *\remarks		adds this GeometryBuffers to the text GeometryBuffers array.
 		 *\return		The created GeometryBuffers.
 		 *\~french
 		 *\brief		Crée un GeometryBuffers pouvant contenir 1000 caractères.
 		 *\remarks		Ajoute de GeometryBuffers au tableau de GeometryBuffers de texte.
 		 *\return		Le GeometryBuffers créé.
 		 */
-		C3D_API OverlayGeometryBuffers DoCreateTextGeometryBuffers();
+		C3D_API OverlayGeometryBuffers doCreateTextGeometryBuffers();
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay.
@@ -244,7 +244,7 @@ namespace Castor3D
 		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
 		 *\param[in]	count			Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Material & material
+		C3D_API void doDrawItem( Material & material
 			, OverlayGeometryBuffers const & geometryBuffers
 			, uint32_t count );
 		/**
@@ -259,7 +259,7 @@ namespace Castor3D
 		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
 		 *\param[in]	count			Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & pass
+		C3D_API void doDrawItem( Pass & pass
 			, GeometryBuffers const & geometryBuffers
 			, uint32_t count );
 		/**
@@ -278,7 +278,7 @@ namespace Castor3D
 		 *\param[in]	sampler			L'échantillonneur de la texture.
 		 *\param[in]	count			Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & pass
+		C3D_API void doDrawItem( Pass & pass
 			, GeometryBuffers const & geometryBuffers
 			, TextureLayout const & texture
 			, Sampler const & sampler
@@ -297,7 +297,7 @@ namespace Castor3D
 		 *\param[in]	index	L'indice courant dans le tableau de GeometryBuffers de texte
 		 *\return		Le GeometryBuffers utilisé.
 		 */
-		C3D_API OverlayGeometryBuffers DoFillTextPart( int32_t count
+		C3D_API OverlayGeometryBuffers doFillTextPart( int32_t count
 			, TextOverlay::VertexArray::const_iterator & it
 			, uint32_t & index );
 		/**
@@ -310,7 +310,7 @@ namespace Castor3D
 		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( TextureChannels const & textureFlags );
+		C3D_API ShaderProgramSPtr doCreateOverlayProgram( TextureChannels const & textureFlags );
 
 	protected:
 		//!\~english	Vertex buffers for panels.
@@ -339,7 +339,7 @@ namespace Castor3D
 		BufferDeclaration m_textDeclaration;
 		//!\~english	The current render target size.
 		//!\~french		Les dimensions de la cible du rendu courant.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The shader programs used to render a panel (used for borders too).
 		//!\~french		Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi).
 		std::map< Pass *, OverlayRenderNode > m_mapPanelNodes;
@@ -363,13 +363,13 @@ namespace Castor3D
 		int m_previousTextZIndex{ 0 };
 		//!\~english	The previously rendered text.
 		//!\~french		Le texte rendu précédemment.
-		Castor::String m_previousCaption;
+		castor::String m_previousCaption;
 		//!\~english	Panel overlays vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad) pour les incrustations panneau.
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 6 > m_panelVertex;
 		//!\~english	Border panel overlays vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad) pour les incrustations bordure.
-		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
 		//!\~english	Tells if the render size has changed.
 		//!\~french		Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged{ true };

@@ -7,9 +7,9 @@
 #include "Mesh/Submesh.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
@@ -21,7 +21,7 @@ namespace Castor3D
 		for ( auto & submesh : p_animation.m_submeshes )
 		{
 			// using std::make_pair to prevent GCC from using copy ctor...
-			m_submeshes.insert( std::make_pair( submesh.GetSubmesh().GetId(), MeshAnimationInstanceSubmesh{ *this, submesh } ) );
+			m_submeshes.insert( std::make_pair( submesh.getSubmesh().getId(), MeshAnimationInstanceSubmesh{ *this, submesh } ) );
 		}
 	}
 
@@ -29,7 +29,7 @@ namespace Castor3D
 	{
 	}
 
-	MeshAnimationInstanceSubmesh const * MeshAnimationInstance::GetAnimationSubmesh( uint32_t p_index )const
+	MeshAnimationInstanceSubmesh const * MeshAnimationInstance::getAnimationSubmesh( uint32_t p_index )const
 	{
 		auto it = m_submeshes.find( p_index );
 		MeshAnimationInstanceSubmesh const * result = nullptr;
@@ -42,11 +42,11 @@ namespace Castor3D
 		return result;
 	}
 
-	void MeshAnimationInstance::DoUpdate()
+	void MeshAnimationInstance::doUpdate()
 	{
 		for ( auto & submesh : m_submeshes )
 		{
-			submesh.second.Update( m_currentTime );
+			submesh.second.update( m_currentTime );
 		}
 	}
 

@@ -101,72 +101,72 @@ namespace GuiCommon
 		StyleInfo & operator =( StyleInfo const & p_infos );
 		virtual ~StyleInfo();
 
-		inline int GetLetterCase()const
+		inline int getLetterCase()const
 		{
 			return m_iLetterCase;
 		}
 
-		inline int GetFontStyle()const
+		inline int getFontStyle()const
 		{
 			return m_iFontStyle;
 		}
 
-		inline int GetFontSize()const
+		inline int getFontSize()const
 		{
 			return m_iFontSize;
 		}
 
-		inline wxString	const & GetFontName()const
+		inline wxString	const & getFontName()const
 		{
 			return m_strFontName;
 		}
 
-		inline wxString	const & GetBackground()const
+		inline wxString	const & getBackground()const
 		{
 			return m_strBackground;
 		}
 
-		inline wxString	const & GetForeground()const
+		inline wxString	const & getForeground()const
 		{
 			return m_strForeground;
 		}
 
-		inline wxString	const & GetName()const
+		inline wxString	const & getName()const
 		{
 			return m_name;
 		}
 
-		inline void SetName( wxString const & val )
+		inline void setName( wxString const & val )
 		{
 			m_name = val;
 		}
 
-		inline void SetForeground( wxString const & val )
+		inline void setForeground( wxString const & val )
 		{
 			m_strForeground = val;
 		}
 
-		inline void SetBackground( wxString const & val )
+		inline void setBackground( wxString const & val )
 		{
 			m_strBackground = val;
 		}
 
-		inline void SetFontName( wxString const & val )
+		inline void setFontName( wxString const & val )
 		{
 			m_strFontName = val;
 		}
 
-		inline void SetFontSize( int val )
+		inline void setFontSize( int val )
 		{
 			m_iFontSize = val;
 		}
 
-		inline void SetFontStyle( int val )
+		inline void setFontStyle( int val )
 		{
 			m_iFontStyle = val;
 		}
 
-		inline void SetLetterCase( int val )
+		inline void setLetterCase( int val )
 		{
 			m_iLetterCase = val;
 		}

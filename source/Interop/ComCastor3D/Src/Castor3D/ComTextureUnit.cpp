@@ -5,7 +5,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The texture unit must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The texture unit must be initialised" );
 
 	CTextureUnit::CTextureUnit()
 	{
@@ -15,26 +15,26 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CTextureUnit::LoadTexture( /* [in] */ BSTR path )
+	STDMETHODIMP CTextureUnit::loadTexture( /* [in] */ BSTR path )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			auto l_texture = m_internal->GetEngine()->GetRenderSystem()->CreateTexture( Castor3D::TextureType::eTwoDimensions
-				, Castor3D::AccessType::eRead
-				, Castor3D::AccessType::eRead );
-			Castor::Path l_path{ FromBstr( path ) };
-			l_texture->GetImage().InitialiseSource(l_path.GetPath(), l_path.GetFileName( true ) );
-			m_internal->SetTexture( l_texture );
+			auto l_texture = m_internal->getEngine()->getRenderSystem()->createTexture( castor3d::TextureType::eTwoDimensions
+				, castor3d::AccessType::eRead
+				, castor3d::AccessType::eRead );
+			castor::Path l_path{ FromBstr( path ) };
+			l_texture->getImage().initialiseSource(l_path.getPath(), l_path.getFileName( true ) );
+			m_internal->setTexture( l_texture );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_ITextureUnit,				// This is the GUID of component throwing error
-					 cuT( "LoadTexture" ),			// This is generally displayed as the title
+					 IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
+					 cuT( "loadTexture" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 NULL );

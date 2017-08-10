@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Math/Point.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -73,14 +73,14 @@ namespace Castor3D
 		 *\param[in]	p_generateBuffers	Dit si les tampons doivent être générés
 		 *\param[in]	p_threaded			Dit si la subdivision doit être threadée
 		 */
-		C3D_API virtual void Subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false );
+		C3D_API virtual void subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false );
 		/**
 		 *\~english
 		 *\brief		Cleans all member variables
 		 *\~french
 		 *\brief		Nettoie tous les membres
 		 */
-		C3D_API virtual void Cleanup();
+		C3D_API virtual void cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -91,10 +91,10 @@ namespace Castor3D
 		 *\param[in]	x, y, z	Les coordonnées de la position du sommet
 		 *\return		Le sommet créé
 		 */
-		C3D_API BufferElementGroupSPtr AddPoint( real x, real y, real z );
+		C3D_API BufferElementGroupSPtr addPoint( real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		Adds a vertex to my list
+		 *\brief		adds a vertex to my list
 		 *\param[in]	p_v	The vertex to add
 		 *\return		The created vertex
 		 *\~french
@@ -102,7 +102,7 @@ namespace Castor3D
 		 *\param[in]	p_v	La position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
+		C3D_API BufferElementGroupSPtr addPoint( castor::Point3r const & p_v );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -113,7 +113,7 @@ namespace Castor3D
 		 *\param[in]	p_v	Les coordonnées de la position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API BufferElementGroupSPtr AddPoint( real * p_v );
+		C3D_API BufferElementGroupSPtr addPoint( real * p_v );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a face
@@ -128,7 +128,7 @@ namespace Castor3D
 		 *\param[in]	c	L'indice du troisième sommet de la face
 		 *\return		La face créée
 		 */
-		C3D_API virtual Face AddFace( uint32_t a, uint32_t b, uint32_t c );
+		C3D_API virtual Face addFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
 		 *\brief		Tests if the given Point3r is in mine
@@ -141,7 +141,7 @@ namespace Castor3D
 		 *\param[in]	p_precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		C3D_API virtual int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
+		C3D_API virtual int isInMyPoints( castor::Point3r const & p_vertex, double p_precision );
 		/**
 		 *\~english
 		 *\brief		Retrieves the points count
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre de points
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t GetPointsCount()const;
+		C3D_API uint32_t getPointsCount()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted point
@@ -161,14 +161,14 @@ namespace Castor3D
 		 *\param[in]	i	L'indice du point
 		 *\return		La valeur
 		 */
-		C3D_API BufferElementGroupSPtr GetPoint( uint32_t i )const;
+		C3D_API BufferElementGroupSPtr getPoint( uint32_t i )const;
 		/**
 		 *\~english
 		 *\return		Retrieves the points array
 		 *\~french
 		 *\return		Récupère le tableau de points
 		 */
-		C3D_API VertexPtrArray const & GetPoints()const;
+		C3D_API VertexPtrArray const & getPoints()const;
 		/**
 		 *\~english
 		 *\brief		Defines a function to execute when the threaded subdivision ends
@@ -179,7 +179,7 @@ namespace Castor3D
 		 *\remarks		Cette fonction *NE DOIT PAS* détruire le thread *NI* le subdiviseur
 		 *\param[in]	p_pfnSubdivisionEnd	Pointeur de la fonction à exécuter
 		 */
-		inline void SetSubdivisionEndCallback( SubdivisionEndFunction p_pfnSubdivisionEnd )
+		inline void setSubdivisionEndCallback( SubdivisionEndFunction p_pfnSubdivisionEnd )
 		{
 			m_pfnSubdivisionEnd = p_pfnSubdivisionEnd;
 		}
@@ -191,7 +191,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de subdivision du thread
 		 */
-		C3D_API uint32_t DoSubdivideThreaded();
+		C3D_API uint32_t doSubdivideThreaded();
 		/**
 		 *\~english
 		 *\brief		Checks if the given point is in my list and if not creates and adds it
@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_point	Les coordonnées de la position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API Castor3D::BufferElementGroupSPtr DoTryAddPoint( Castor::Point3r const & p_point );
+		C3D_API castor3d::BufferElementGroupSPtr doTryAddPoint( castor::Point3r const & p_point );
 		/**
 		 *\~english
 		 *\brief		Main subdivision function
@@ -215,28 +215,28 @@ namespace Castor3D
 		 *\param[in]	p_generateBuffers	Dit si les tampons doivent être générés
 		 *\param[in]	p_threaded			Dit si la subdivision doit être threadée
 		 */
-		C3D_API virtual void DoSubdivide( SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded );
+		C3D_API virtual void doSubdivide( SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 */
-		C3D_API virtual void DoInitialise();
+		C3D_API virtual void doInitialise();
 		/**
 		 *\~english
 		 *\brief		Swaps the internal faces with the submeshes ones
 		 *\~french
 		 *\brief		Echange les faces internes avec celles du sous-maillage
 		 */
-		C3D_API void DoSwapBuffers();
+		C3D_API void doSwapBuffers();
 		/**
 		 *\~english
 		 *\brief		Effectively subdivides the submesh
 		 *\~french
 		 *\brief		Subdivise le sous-maillage
 		 */
-		C3D_API virtual void DoSubdivide() = 0;
+		C3D_API virtual void doSubdivide() = 0;
 		/**
 		 *\~english
 		 *\brief		Computes the texture coordinates for given vertices, creates the faces
@@ -247,7 +247,7 @@ namespace Castor3D
 		 *\param[in]	p_a, p_b, p_c	Les sommets source
 		 *\param[in]	p_d, p_e, p_f	Les nouveaux sommets
 		 */
-		C3D_API void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );
+		C3D_API void doSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );
 		/**
 		 *\~english
 		 *\brief		Computes the texture coordinates for the new vertex, creates the faces
@@ -258,7 +258,7 @@ namespace Castor3D
 		 *\param[in]	p_a, p_b, p_c	Les sommets sources
 		 *\param[in]	p_p				Le nouveau sommet
 		 */
-		C3D_API void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p );
+		C3D_API void doSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p );
 
 	protected:
 		//!\~english The submesh being subdivided	\~french Le sous-maillage à diviser
@@ -278,6 +278,6 @@ namespace Castor3D
 	};
 }
 
-Castor::String & operator << ( Castor::String & p_stream, Castor3D::BufferElementGroup const & p_vertex );
+castor::String & operator << ( castor::String & p_stream, castor3d::BufferElementGroup const & p_vertex );
 
 #endif

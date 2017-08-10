@@ -28,7 +28,7 @@ SOFTWARE.
 #include "Animation/Animation.hpp"
 #include "SkeletonAnimationObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\param[in]	p_animable	L'objet animable parent.
 		 *\param[in]	p_name		Le nom de l'animation.
 		 */
-		C3D_API SkeletonAnimation( Animable & p_animable, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API SkeletonAnimation( Animable & p_animable, castor::String const & p_name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du noeud.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr AddObject( Castor::String const & p_name, SkeletonAnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr addObject( castor::String const & p_name, SkeletonAnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving bone.
@@ -110,10 +110,10 @@ namespace Castor3D
 		 *\param[in]	p_bone		L'os.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr AddObject( BoneSPtr p_bone, SkeletonAnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr addObject( BoneSPtr p_bone, SkeletonAnimationObjectSPtr p_parent );
 		/**
 		 *\~english
-		 *\brief		Adds an animated object.
+		 *\brief		adds an animated object.
 		 *\param[in]	p_object	The animated object to add.
 		 *\param[in]	p_parent	The moving object's parent.
 		 *\~french
@@ -121,7 +121,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet animé.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr AddObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr addObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.
@@ -132,7 +132,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de l'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API bool HasObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
+		C3D_API bool hasObject( SkeletonAnimationObjectType p_type, castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone.
@@ -141,7 +141,7 @@ namespace Castor3D
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr GetObject( Bone const & p_bone )const;
+		C3D_API SkeletonAnimationObjectSPtr getObject( Bone const & p_bone )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\brief		Récupère un objet animé.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr GetObject( Castor::String const & p_name )const;
+		C3D_API SkeletonAnimationObjectSPtr getObject( castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
@@ -161,14 +161,14 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type d'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
+		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonAnimationObjectType p_type, castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The moving objects.
 		 *\~french
 		 *\return		Les objets mouvants.
 		 */
-		inline SkeletonAnimationObjectPtrStrMap const & GetObjects()const
+		inline SkeletonAnimationObjectPtrStrMap const & getObjects()const
 		{
 			return m_toMove;
 		}
@@ -179,16 +179,16 @@ namespace Castor3D
 		 *\brief		Récupère le nombre d'objets mouvants
 		 *\return		Les objets mouvants racines.
 		 */
-		inline SkeletonAnimationObjectPtrArray const & GetRootObjects()const
+		inline SkeletonAnimationObjectPtrArray const & getRootObjects()const
 		{
 			return m_arrayMoving;
 		}
 
 	private:
 		/**
-		 *\copydoc		Casto3D::Animation::DoUpdateLength
+		 *\copydoc		Casto3D::Animation::doUpdateLength
 		 */
-		C3D_API void DoUpdateLength()override;
+		C3D_API void doUpdateLength()override;
 
 	protected:
 		//!\~english	The root moving objects.
@@ -242,7 +242,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( SkeletonAnimation const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimation const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -270,7 +270,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( SkeletonAnimation & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimation & p_obj )override;
 	};
 }
 

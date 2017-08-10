@@ -8,26 +8,26 @@
 #pragma GCC diagnostic ignored "-Wpedantic"
 #include <EGL/egl.h>
 
-namespace Castor
+namespace castor
 {
 	namespace System
 	{
-		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
 			bool result = false;
-			auto display = eglGetDisplay( EGLNativeDisplayType( p_screen ) );
+			auto display = eglgetDisplay( EGLNativeDisplayType( p_screen ) );
 
 			if ( !display )
 			{
-				Logger::LogError( "Failed to open display." );
+				Logger::logError( "Failed to open display." );
 			}
 			else
 			{
-				auto surface = eglGetCurrentSurface( EGL_READ );
+				auto surface = eglgetCurrentSurface( EGL_READ );
 
 				if ( !surface )
 				{
-					Logger::LogError( "Failed to open display's surface." );
+					Logger::logError( "Failed to open display's surface." );
 				}
 				else
 				{
@@ -43,7 +43,7 @@ namespace Castor
 			return result;
 		}
 
-		String GetLastErrorText()
+		String getLastErrorText()
 		{
 			String strReturn;
 			int error = errno;
@@ -51,39 +51,15 @@ namespace Castor
 
 			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				strReturn = string::to_string( error ) + cuT( " (" ) + string::string_cast< xchar >( szError ) + cuT( ")" );
+				strReturn = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
 				string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 
 			return strReturn;
 		}
-
-		uint8_t GetCPUCount()
-		{
-			struct ProcessFile
-			{
-				~ProcessFile()
-				{
-					pclose( m_file );
-				}
-				operator FILE * ()const
-				{
-					return m_file;
-				}
-				FILE * m_file;
-			};
-
-			char res[128];
-			{
-				ProcessFile file{ popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" ) };
-				ENSURE( fread( res, 1, sizeof( res ) - 1, file ) < sizeof( res ) );
-			}
-
-			return res[0];
-		}
 	}
 
-	void Localtime( std::tm * p_tm, time_t const * p_pTime )
+	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
 	{
 		p_tm = localtime( p_pTime );
 	}

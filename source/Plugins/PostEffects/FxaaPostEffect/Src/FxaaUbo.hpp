@@ -30,41 +30,41 @@ namespace fxaa
 	class FxaaUbo
 	{
 	public:
-		FxaaUbo( Castor3D::Engine & engine );
+		FxaaUbo( castor3d::Engine & engine );
 		~FxaaUbo();
-		void Update( Castor::Size const & p_size
+		void update( castor::Size const & p_size
 			, float p_shift
 			, float p_span
 			, float p_reduce );
 
-		inline Castor3D::UniformBuffer & GetUbo()
+		inline castor3d::UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const Castor::String Name;
-		static const Castor::String SubpixShift;
-		static const Castor::String SpanMax;
-		static const Castor::String ReduceMul;
-		static const Castor::String RenderSize;
+		static const castor::String Name;
+		static const castor::String SubpixShift;
+		static const castor::String SpanMax;
+		static const castor::String ReduceMul;
+		static const castor::String RenderSize;
 		static constexpr uint32_t BindingPoint = 2u;
 
 	private:
-		Castor3D::UniformBuffer m_ubo;
-		Castor3D::Uniform1fSPtr m_subpixShift;
-		Castor3D::Uniform1fSPtr m_spanMax;
-		Castor3D::Uniform1fSPtr m_reduceMul;
-		Castor3D::Uniform2fSPtr m_renderSize;
+		castor3d::UniformBuffer m_ubo;
+		castor3d::Uniform1fSPtr m_subpixShift;
+		castor3d::Uniform1fSPtr m_spanMax;
+		castor3d::Uniform1fSPtr m_reduceMul;
+		castor3d::Uniform2fSPtr m_renderSize;
 	};
 }
 
 #define UBO_FXAA( p_writer )\
 	GLSL::Ubo fxaa{ p_writer, FxaaUbo::Name, FxaaUbo::BindingPoint };\
-	auto c3d_subpixShift = fxaa.DeclMember< Float >( FxaaUbo::SubpixShift );\
-	auto c3d_spanMax = fxaa.DeclMember< Float >( FxaaUbo::SpanMax );\
-	auto c3d_reduceMul = fxaa.DeclMember< Float >( FxaaUbo::ReduceMul );\
-	auto c3d_renderSize = fxaa.DeclMember< Vec2 >( FxaaUbo::RenderSize );\
-	fxaa.End()
+	auto c3d_subpixShift = fxaa.declMember< Float >( FxaaUbo::SubpixShift );\
+	auto c3d_spanMax = fxaa.declMember< Float >( FxaaUbo::SpanMax );\
+	auto c3d_reduceMul = fxaa.declMember< Float >( FxaaUbo::ReduceMul );\
+	auto c3d_renderSize = fxaa.declMember< Vec2 >( FxaaUbo::RenderSize );\
+	fxaa.end()
 
 #endif

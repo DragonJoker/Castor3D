@@ -40,7 +40,7 @@ namespace GlRender
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Count >
-	GlVecAttribute< T, Count >::GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_divisor )
+	GlVecAttribute< T, Count >::GlVecAttribute( OpenGl & p_gl, castor3d::ShaderProgram const & p_program, uint32_t p_stride, castor::String const & p_attributeName, uint32_t p_divisor )
 		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlTyper< T >::Value, Count, p_divisor )
 	{
 	}
@@ -51,31 +51,31 @@ namespace GlRender
 	}
 
 	template< typename T, uint32_t Count >
-	void GlVecAttribute< T, Count >::Bind( bool p_bNormalised )
+	void GlVecAttribute< T, Count >::bind( bool p_bNormalised )
 	{
-		GetOpenGl().EnableVertexAttribArray( m_attributeLocation );
+		getOpenGl().EnableVertexAttribArray( m_attributeLocation );
 
 		if ( m_glType == GlType::eFloat
 			 || m_glType == GlType::eDouble
 			 || m_glType == GlType::eHalfFloat )
 		{
-			GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
+			getOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 		else
 		{
-			GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_stride, BUFFER_OFFSET( m_offset ) );
+			getOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 
 		if ( m_divisor )
 		{
-			GetOpenGl().VertexAttribDivisor( m_attributeLocation, m_divisor );
+			getOpenGl().VertexAttribDivisor( m_attributeLocation, m_divisor );
 		}
 	}
 
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName )
+	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, castor3d::ShaderProgram const & p_program, uint32_t p_stride, castor::String const & p_attributeName )
 		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlTyper< T >::Value, Columns, 1 )
 	{
 	}
@@ -86,7 +86,7 @@ namespace GlRender
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	void GlMatAttribute< T, Columns, Rows >::Bind( bool p_bNormalised )
+	void GlMatAttribute< T, Columns, Rows >::bind( bool p_bNormalised )
 	{
 		uint32_t offset = m_offset;
 		const uint32_t off = Rows * sizeof( T );
@@ -96,9 +96,9 @@ namespace GlRender
 			for ( int i = 0; i < Columns; ++i )
 			{
 				uint32_t location = uint32_t( m_attributeLocation + i );
-				GetOpenGl().EnableVertexAttribArray( location );
-				GetOpenGl().VertexAttribPointer( location, int( Rows ), m_glType, int( m_stride ), BUFFER_OFFSET( offset ) );
-				GetOpenGl().VertexAttribDivisor( location, m_divisor );
+				getOpenGl().EnableVertexAttribArray( location );
+				getOpenGl().VertexAttribPointer( location, int( Rows ), m_glType, int( m_stride ), BUFFER_OFFSET( offset ) );
+				getOpenGl().VertexAttribDivisor( location, m_divisor );
 				offset += off;
 			}
 		}
@@ -107,9 +107,9 @@ namespace GlRender
 			for ( int i = 0; i < Columns; ++i )
 			{
 				uint32_t location = uint32_t( m_attributeLocation + i );
-				GetOpenGl().EnableVertexAttribArray( location );
-				GetOpenGl().VertexAttribPointer( location, int( Rows ), m_glType, p_bNormalised, int( m_stride ), BUFFER_OFFSET( offset ) );
-				GetOpenGl().VertexAttribDivisor( location, m_divisor );
+				getOpenGl().EnableVertexAttribArray( location );
+				getOpenGl().VertexAttribPointer( location, int( Rows ), m_glType, p_bNormalised, int( m_stride ), BUFFER_OFFSET( offset ) );
+				getOpenGl().VertexAttribDivisor( location, m_divisor );
 				offset += off;
 			}
 		}

@@ -6,8 +6,8 @@
 
 #include <random>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace diamond_square_terrain
 {
@@ -78,26 +78,26 @@ namespace diamond_square_terrain
 	{
 	}
 
-	MeshGeneratorSPtr Generator::Create()
+	MeshGeneratorSPtr Generator::create()
 	{
 		return std::make_shared< Generator >();
 	}
 
-	void Generator::DoGenerate( Mesh & p_mesh
+	void Generator::doGenerate( Mesh & p_mesh
 		, Parameters const & p_parameters )
 	{
 		String param;
 		uint32_t size = 0u;
 		float roughness = 0.0f;
 
-		if ( p_parameters.Get( cuT( "roughness" ), param ) )
+		if ( p_parameters.get( cuT( "roughness" ), param ) )
 		{
-			roughness = string::to_float( param );
+			roughness = string::toFloat( param );
 		}
 
-		if ( p_parameters.Get( cuT( "detail" ), param ) )
+		if ( p_parameters.get( cuT( "detail" ), param ) )
 		{
-			size = uint32_t( pow( 2, string::to_uint( param ) ) + 1u );
+			size = uint32_t( pow( 2, string::toUInt( param ) ) + 1u );
 		}
 
 		if ( size )
@@ -186,13 +186,13 @@ namespace diamond_square_terrain
 
 			divide( size, roughness );
 
-			auto submesh = p_mesh.CreateSubmesh();
+			auto submesh = p_mesh.createSubmesh();
 
 			for ( auto y = 1u; y < max; y++ )
 			{
 				for ( auto x = 1u; x < max; x++ )
 				{
-					submesh->AddPoint( real( x ), map( x, y ), real( y ) );
+					submesh->addPoint( real( x ), map( x, y ), real( y ) );
 				}
 			}
 
@@ -201,17 +201,17 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 0u; x < max - 2; x++ )
 				{
-					submesh->AddFace( map.getIndex( x, y, size - 2 )
+					submesh->addFace( map.getIndex( x, y, size - 2 )
 						, map.getIndex( x + 1, y, size - 2 )
 						, map.getIndex( x, y + 1, size - 2 ) );
-					submesh->AddFace( map.getIndex( x + 1, y, size - 2 )
+					submesh->addFace( map.getIndex( x + 1, y, size - 2 )
 						, map.getIndex( x + 1, y + 1, size - 2 )
 						, map.getIndex( x, y + 1, size - 2 ) );
 				}
 			}
 
-			submesh->ComputeNormals( true );
-			p_mesh.ComputeContainers();
+			submesh->computeNormals( true );
+			p_mesh.computeContainers();
 		}
 	}
 }

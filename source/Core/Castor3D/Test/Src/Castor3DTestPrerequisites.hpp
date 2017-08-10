@@ -34,7 +34,7 @@ SOFTWARE.
 namespace Testing
 {
 	class TestWindowHandle
-		: public Castor3D::IWindowHandle
+		: public castor3d::IWindowHandle
 	{
 	public:
 		TestWindowHandle()

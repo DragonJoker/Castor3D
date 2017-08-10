@@ -1,11 +1,11 @@
 #include "RenderedObject.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RenderedObject::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< RenderedObject >{ p_tabs }
+		: castor::TextWriter< RenderedObject >{ p_tabs }
 	{
 	}
 
@@ -13,16 +13,16 @@ namespace Castor3D
 	{
 		bool result{ true };
 
-		if ( !p_object.IsShadowCaster() )
+		if ( !p_object.isShadowCaster() )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "cast_shadows false\n" ) ) > 0;
-			Castor::TextWriter< RenderedObject >::CheckError( result, "Object shadow caster status" );
+			result = p_file.writeText( m_tabs + cuT( "cast_shadows false\n" ) ) > 0;
+			castor::TextWriter< RenderedObject >::checkError( result, "Object shadow caster status" );
 		}
 
-		if ( !p_object.IsShadowReceiver() )
+		if ( !p_object.isShadowReceiver() )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "receives_shadows false\n" ) ) > 0;
-			Castor::TextWriter< RenderedObject >::CheckError( result, "Object shadow receiver status" );
+			result = p_file.writeText( m_tabs + cuT( "receives_shadows false\n" ) ) > 0;
+			castor::TextWriter< RenderedObject >::checkError( result, "Object shadow receiver status" );
 		}
 
 		return result;

@@ -18,13 +18,13 @@
 #include <GlslSource.hpp>
 #include <GlslMaterial.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-#if defined( DrawText )
-#	undef DrawText
+#if defined( drawText )
+#	undef drawText
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
 	static const int32_t C3D_MAX_CHARS_PER_BUFFER = 6000;
 
@@ -37,16 +37,16 @@ namespace Castor3D
 			OverlayCategory::Vertex const & vertex = *begin;
 			auto size = count * sizeof( OverlayCategory::Vertex );
 
-			vbo.Bind();
-			auto buffer = vbo.Lock( 0, uint32_t( size ), AccessType::eWrite );
+			vbo.bind();
+			auto buffer = vbo.lock( 0, uint32_t( size ), AccessType::eWrite );
 
 			if ( buffer )
 			{
 				std::memcpy( buffer, reinterpret_cast< uint8_t const * >( &vertex ), size );
-				vbo.Unlock();
+				vbo.unlock();
 			}
 
-			vbo.Unbind();
+			vbo.unbind();
 			return count;
 		}
 
@@ -57,16 +57,16 @@ namespace Castor3D
 			TextOverlay::Vertex const & vertex = *begin;
 			auto size = count * sizeof( TextOverlay::Vertex );
 
-			vbo.Bind();
-			auto buffer = vbo.Lock( 0, uint32_t( size ), AccessType::eWrite );
+			vbo.bind();
+			auto buffer = vbo.lock( 0, uint32_t( size ), AccessType::eWrite );
 
 			if ( buffer )
 			{
 				std::memcpy( buffer, reinterpret_cast< uint8_t const * >( &vertex ), size );
-				vbo.Unlock();
+				vbo.unlock();
 			}
 
-			vbo.Unbind();
+			vbo.unbind();
 			return count;
 		}
 	}
@@ -88,8 +88,8 @@ namespace Castor3D
 					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2, 1 )
 				}
 			} }
-		, m_matrixUbo{ *renderSystem.GetEngine() }
-		, m_overlayUbo{ *renderSystem.GetEngine() }
+		, m_matrixUbo{ *renderSystem.getEngine() }
+		, m_overlayUbo{ *renderSystem.getEngine() }
 	{
 	}
 
@@ -106,15 +106,15 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayRenderer::Initialise()
+	void OverlayRenderer::initialise()
 	{
 		if ( !m_panelVertexBuffer )
 		{
 			// Panel Overlays buffers
-			m_panelVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_panelVertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine(), m_declaration );
 			uint32_t stride = m_declaration.stride();
-			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * stride ) );
-			uint8_t * buffer = m_panelVertexBuffer->GetData();
+			m_panelVertexBuffer->resize( uint32_t( m_panelVertex.size() * stride ) );
+			uint8_t * buffer = m_panelVertexBuffer->getData();
 
 			for ( auto & vertex : m_panelVertex )
 			{
@@ -122,27 +122,27 @@ namespace Castor3D
 				buffer += stride;
 			}
 
-			m_panelVertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_panelVertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
 			{
-				auto & pipeline = DoGetPanelPipeline( 0u );
-				m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, pipeline.GetProgram() );
-				m_panelGeometryBuffers.m_noTexture->Initialise( { *m_panelVertexBuffer }, nullptr );
+				auto & pipeline = doGetPanelPipeline( 0u );
+				m_panelGeometryBuffers.m_noTexture = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
+				m_panelGeometryBuffers.m_noTexture->initialise( { *m_panelVertexBuffer }, nullptr );
 			}
 			{
-				auto & pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
-				m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, pipeline.GetProgram() );
-				m_panelGeometryBuffers.m_textured->Initialise( { *m_panelVertexBuffer }, nullptr );
+				auto & pipeline = doGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
+				m_panelGeometryBuffers.m_textured = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
+				m_panelGeometryBuffers.m_textured->initialise( { *m_panelVertexBuffer }, nullptr );
 			}
 		}
 
 		if ( !m_borderVertexBuffer )
 		{
 			// Border Overlays buffers
-			m_borderVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_borderVertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine(), m_declaration );
 			uint32_t stride = m_declaration.stride();
-			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * stride ) );
-			uint8_t * buffer = m_borderVertexBuffer->GetData();
+			m_borderVertexBuffer->resize( uint32_t( m_borderVertex.size() * stride ) );
+			uint8_t * buffer = m_borderVertexBuffer->getData();
 
 			for ( auto & vertex : m_borderVertex )
 			{
@@ -150,25 +150,25 @@ namespace Castor3D
 				buffer += stride;
 			}
 
-			m_borderVertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_borderVertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
 			{
-				auto & pipeline = DoGetPanelPipeline( 0 );
-				m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, pipeline.GetProgram() );
-				m_borderGeometryBuffers.m_noTexture->Initialise( { *m_borderVertexBuffer }, nullptr );
+				auto & pipeline = doGetPanelPipeline( 0 );
+				m_borderGeometryBuffers.m_noTexture = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
+				m_borderGeometryBuffers.m_noTexture->initialise( { *m_borderVertexBuffer }, nullptr );
 			}
 			{
-				auto & pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
-				m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, pipeline.GetProgram() );
-				m_borderGeometryBuffers.m_textured->Initialise( { *m_borderVertexBuffer }, nullptr );
+				auto & pipeline = doGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
+				m_borderGeometryBuffers.m_textured = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
+				m_borderGeometryBuffers.m_textured->initialise( { *m_borderVertexBuffer }, nullptr );
 			}
 		}
 
-		// Create one text overlays buffer
-		DoCreateTextGeometryBuffers();
+		// create one text overlays buffer
+		doCreateTextGeometryBuffers();
 	}
 
-	void OverlayRenderer::Cleanup()
+	void OverlayRenderer::cleanup()
 	{
 		for ( auto & vertex : m_borderVertex )
 		{
@@ -182,107 +182,107 @@ namespace Castor3D
 
 		for ( auto & pair : m_pipelines )
 		{
-			pair.second->Cleanup();
+			pair.second->cleanup();
 		}
 
-		m_overlayUbo.GetUbo().Cleanup();
-		m_matrixUbo.GetUbo().Cleanup();
+		m_overlayUbo.getUbo().cleanup();
+		m_matrixUbo.getUbo().cleanup();
 		m_pipelines.clear();
 		m_mapPanelNodes.clear();
 		m_mapTextNodes.clear();
 
 		if ( m_panelVertexBuffer )
 		{
-			m_panelGeometryBuffers.m_noTexture->Cleanup();
-			m_panelGeometryBuffers.m_textured->Cleanup();
+			m_panelGeometryBuffers.m_noTexture->cleanup();
+			m_panelGeometryBuffers.m_textured->cleanup();
 			m_panelGeometryBuffers.m_noTexture.reset();
 			m_panelGeometryBuffers.m_textured.reset();
-			m_panelVertexBuffer->Cleanup();
+			m_panelVertexBuffer->cleanup();
 			m_panelVertexBuffer.reset();
 		}
 
 		if ( m_borderVertexBuffer )
 		{
-			m_borderGeometryBuffers.m_noTexture->Cleanup();
-			m_borderGeometryBuffers.m_textured->Cleanup();
+			m_borderGeometryBuffers.m_noTexture->cleanup();
+			m_borderGeometryBuffers.m_textured->cleanup();
 			m_borderGeometryBuffers.m_noTexture.reset();
 			m_borderGeometryBuffers.m_textured.reset();
-			m_borderVertexBuffer->Cleanup();
+			m_borderVertexBuffer->cleanup();
 			m_borderVertexBuffer.reset();
 		}
 
 		for ( auto & buffer : m_textsGeometryBuffers )
 		{
-			buffer.m_noTexture->Cleanup();
-			buffer.m_textured->Cleanup();
+			buffer.m_noTexture->cleanup();
+			buffer.m_textured->cleanup();
 		}
 
 		m_textsGeometryBuffers.clear();
 
 		for ( auto buffer : m_textsVertexBuffers )
 		{
-			buffer->Cleanup();
+			buffer->cleanup();
 		}
 
 		m_textsVertexBuffers.clear();
 	}
 
-	void OverlayRenderer::DrawPanel( PanelOverlay & overlay )
+	void OverlayRenderer::drawPanel( PanelOverlay & overlay )
 	{
-		MaterialSPtr material = overlay.GetMaterial();
+		MaterialSPtr material = overlay.getMaterial();
 
 		if ( material )
 		{
-			m_overlayUbo.SetPosition( overlay.GetAbsolutePosition( m_size ) );
-			DoDrawItem( *material
+			m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
+			doDrawItem( *material
 				, m_panelGeometryBuffers
-				, FillBuffers( overlay.GetPanelVertex().begin()
-					, uint32_t( overlay.GetPanelVertex().size() )
+				, FillBuffers( overlay.getPanelVertex().begin()
+					, uint32_t( overlay.getPanelVertex().size() )
 					, *m_panelVertexBuffer ) );
 		}
 	}
 
-	void OverlayRenderer::DrawBorderPanel( BorderPanelOverlay & overlay )
+	void OverlayRenderer::drawBorderPanel( BorderPanelOverlay & overlay )
 	{
 		{
-			auto material = overlay.GetMaterial();
+			auto material = overlay.getMaterial();
 
 			if ( material )
 			{
-				m_overlayUbo.SetPosition( overlay.GetAbsolutePosition( m_size ) );
-				DoDrawItem( *material
+				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
+				doDrawItem( *material
 					, m_panelGeometryBuffers
-					, FillBuffers( overlay.GetPanelVertex().begin()
-						, uint32_t( overlay.GetPanelVertex().size() )
+					, FillBuffers( overlay.getPanelVertex().begin()
+						, uint32_t( overlay.getPanelVertex().size() )
 						, *m_panelVertexBuffer ) );
 			}
 		}
 		{
-			auto material = overlay.GetBorderMaterial();
+			auto material = overlay.getBorderMaterial();
 
 			if ( material )
 			{
-				m_overlayUbo.SetPosition( overlay.GetAbsolutePosition( m_size ) );
-				DoDrawItem( *material
+				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
+				doDrawItem( *material
 					, m_borderGeometryBuffers
-					, FillBuffers( overlay.GetBorderVertex().begin()
-						, uint32_t( overlay.GetBorderVertex().size() )
+					, FillBuffers( overlay.getBorderVertex().begin()
+						, uint32_t( overlay.getBorderVertex().size() )
 						, *m_borderVertexBuffer ) );
 			}
 		}
 	}
 
-	void OverlayRenderer::DrawText( TextOverlay & overlay )
+	void OverlayRenderer::drawText( TextOverlay & overlay )
 	{
-		FontSPtr pFont = overlay.GetFontTexture()->GetFont();
+		FontSPtr pFont = overlay.getFontTexture()->getFont();
 
 		if ( pFont )
 		{
-			MaterialSPtr material = overlay.GetMaterial();
+			MaterialSPtr material = overlay.getMaterial();
 
 			if ( material )
 			{
-				TextOverlay::VertexArray arrayVtx = overlay.GetTextVertex();
+				TextOverlay::VertexArray arrayVtx = overlay.getTextVertex();
 				int32_t count = uint32_t( arrayVtx.size() );
 				uint32_t index = 0;
 				std::vector< OverlayGeometryBuffers > geometryBuffers;
@@ -290,27 +290,27 @@ namespace Castor3D
 
 				while ( count > C3D_MAX_CHARS_PER_BUFFER )
 				{
-					geometryBuffers.push_back( DoFillTextPart( count, it, index ) );
+					geometryBuffers.push_back( doFillTextPart( count, it, index ) );
 					count -= C3D_MAX_CHARS_PER_BUFFER;
 				}
 
 				if ( count > 0 )
 				{
-					geometryBuffers.push_back( DoFillTextPart( count, it, index ) );
+					geometryBuffers.push_back( doFillTextPart( count, it, index ) );
 				}
 
-				auto texture = overlay.GetFontTexture()->GetTexture();
-				auto sampler = overlay.GetFontTexture()->GetSampler();
+				auto texture = overlay.getFontTexture()->getTexture();
+				auto sampler = overlay.getFontTexture()->getSampler();
 				count = uint32_t( arrayVtx.size() );
-				m_overlayUbo.SetPosition( overlay.GetAbsolutePosition( m_size ) );
+				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
 
 				for ( auto pass : *material )
 				{
-					if ( CheckFlag( pass->GetTextureFlags(), TextureChannel::eDiffuse ) )
+					if ( checkFlag( pass->getTextureFlags(), TextureChannel::eDiffuse ) )
 					{
 						for ( auto geoBuffers : geometryBuffers )
 						{
-							DoDrawItem( *pass
+							doDrawItem( *pass
 								, *geoBuffers.m_textured
 								, *texture
 								, *sampler
@@ -322,7 +322,7 @@ namespace Castor3D
 					{
 						for ( auto geoBuffers : geometryBuffers )
 						{
-							DoDrawItem( *pass
+							doDrawItem( *pass
 								, *geoBuffers.m_noTexture
 								, *texture
 								, *sampler
@@ -335,9 +335,9 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayRenderer::BeginRender( Viewport const & viewport )
+	void OverlayRenderer::beginRender( Viewport const & viewport )
 	{
-		auto size = viewport.GetSize();
+		auto size = viewport.getSize();
 
 		if ( m_size != size )
 		{
@@ -345,27 +345,27 @@ namespace Castor3D
 			m_size = size;
 		}
 
-		m_matrixUbo.Update( viewport.GetProjection() );
+		m_matrixUbo.update( viewport.getProjection() );
 	}
 
-	void OverlayRenderer::EndRender()
+	void OverlayRenderer::endRender()
 	{
 		m_sizeChanged = false;
 	}
 
-	OverlayRenderer::OverlayRenderNode & OverlayRenderer::DoGetPanelNode( Pass & pass )
+	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass & pass )
 	{
 		auto it = m_mapPanelNodes.find( &pass );
 
 		if ( it == m_mapPanelNodes.end() )
 		{
-			auto & pipeline = DoGetPanelPipeline( pass.GetTextureFlags() );
+			auto & pipeline = doGetPanelPipeline( pass.getTextureFlags() );
 			it = m_mapPanelNodes.insert( { &pass, OverlayRenderNode
 				{
 					pipeline,
 					{
 						pass,
-						pipeline.GetProgram(),
+						pipeline.getProgram(),
 					},
 					m_overlayUbo,
 				}
@@ -375,19 +375,19 @@ namespace Castor3D
 		return it->second;
 	}
 
-	OverlayRenderer::OverlayRenderNode & OverlayRenderer::DoGetTextNode( Pass & pass )
+	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetTextNode( Pass & pass )
 	{
 		auto it = m_mapTextNodes.find( &pass );
 
 		if ( it == m_mapTextNodes.end() )
 		{
-			auto & pipeline = DoGetTextPipeline( pass.GetTextureFlags() );
+			auto & pipeline = doGetTextPipeline( pass.getTextureFlags() );
 			it = m_mapTextNodes.insert( { &pass, OverlayRenderNode
 				{
 					pipeline,
 					{
 						pass,
-						pipeline.GetProgram(),
+						pipeline.getProgram(),
 					},
 					m_overlayUbo,
 				}
@@ -397,65 +397,65 @@ namespace Castor3D
 		return it->second;
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetPanelPipeline( TextureChannels textureFlags )
+	RenderPipeline & OverlayRenderer::doGetPanelPipeline( TextureChannels textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( textureFlags, TextureChannel::eNormal );
-		RemFlag( textureFlags, TextureChannel::eSpecular );
-		RemFlag( textureFlags, TextureChannel::eGloss );
-		RemFlag( textureFlags, TextureChannel::eHeight );
-		RemFlag( textureFlags, TextureChannel::eEmissive );
+		remFlag( textureFlags, TextureChannel::eNormal );
+		remFlag( textureFlags, TextureChannel::eSpecular );
+		remFlag( textureFlags, TextureChannel::eGloss );
+		remFlag( textureFlags, TextureChannel::eHeight );
+		remFlag( textureFlags, TextureChannel::eEmissive );
 
-		// Get shader
-		return DoGetPipeline( textureFlags );
+		// get shader
+		return doGetPipeline( textureFlags );
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetTextPipeline( TextureChannels textureFlags )
+	RenderPipeline & OverlayRenderer::doGetTextPipeline( TextureChannels textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( textureFlags, TextureChannel::eNormal );
-		RemFlag( textureFlags, TextureChannel::eSpecular );
-		RemFlag( textureFlags, TextureChannel::eGloss );
-		RemFlag( textureFlags, TextureChannel::eHeight );
-		RemFlag( textureFlags, TextureChannel::eEmissive );
-		AddFlag( textureFlags, TextureChannel::eText );
+		remFlag( textureFlags, TextureChannel::eNormal );
+		remFlag( textureFlags, TextureChannel::eSpecular );
+		remFlag( textureFlags, TextureChannel::eGloss );
+		remFlag( textureFlags, TextureChannel::eHeight );
+		remFlag( textureFlags, TextureChannel::eEmissive );
+		addFlag( textureFlags, TextureChannel::eText );
 
-		// Get shader
-		return DoGetPipeline( textureFlags );
+		// get shader
+		return doGetPipeline( textureFlags );
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetPipeline( TextureChannels const & textureFlags )
+	RenderPipeline & OverlayRenderer::doGetPipeline( TextureChannels const & textureFlags )
 	{
 		auto it = m_pipelines.find( textureFlags );
 
 		if ( it == m_pipelines.end() )
 		{
 			// Since it does not exist yet, create it and initialise it
-			auto program = DoCreateOverlayProgram( textureFlags );
+			auto program = doCreateOverlayProgram( textureFlags );
 
 			if ( program )
 			{
-				program->Initialise();
+				program->initialise();
 				BlendState blState;
-				blState.SetAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				blState.SetAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				blState.SetRgbSrcBlend( BlendOperand::eSrcAlpha );
-				blState.SetRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				blState.EnableBlend( true );
+				blState.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
+				blState.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
+				blState.setRgbSrcBlend( BlendOperand::eSrcAlpha );
+				blState.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
+				blState.enableBlend( true );
 
 				MultisampleState msState;
-				msState.EnableAlphaToCoverage( false );
+				msState.enableAlphaToCoverage( false );
 
 				DepthStencilState dsState;
-				dsState.SetDepthMask( WritingMask::eZero );
-				dsState.SetDepthTest( false );
+				dsState.setDepthMask( WritingMask::eZero );
+				dsState.setDepthTest( false );
 
 				RasteriserState rsState;
-				rsState.SetCulledFaces( Culling::eBack );
+				rsState.setCulledFaces( Culling::eBack );
 
-				auto pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( dsState ), std::move( rsState ), std::move( blState ), std::move( msState ), *program, PipelineFlags{} );
-				pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
-				pipeline->AddUniformBuffer( m_overlayUbo.GetUbo() );
+				auto pipeline = getRenderSystem()->createRenderPipeline( std::move( dsState ), std::move( rsState ), std::move( blState ), std::move( msState ), *program, PipelineFlags{} );
+				pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+				pipeline->addUniformBuffer( m_overlayUbo.getUbo() );
 				it = m_pipelines.emplace( textureFlags, std::move( pipeline ) ).first;
 			}
 			else
@@ -467,22 +467,22 @@ namespace Castor3D
 		return *it->second;
 	}
 
-	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoCreateTextGeometryBuffers()
+	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::doCreateTextGeometryBuffers()
 	{
-		auto vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_textDeclaration );
-		vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.stride() );
-		vertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+		auto vertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine(), m_textDeclaration );
+		vertexBuffer->resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.stride() );
+		vertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
 		OverlayGeometryBuffers geometryBuffers;
 		{
-			auto & pipeline = DoGetTextPipeline( 0 );
-			geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, pipeline.GetProgram() );
-			geometryBuffers.m_noTexture->Initialise( { *vertexBuffer }, nullptr );
+			auto & pipeline = doGetTextPipeline( 0 );
+			geometryBuffers.m_noTexture = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
+			geometryBuffers.m_noTexture->initialise( { *vertexBuffer }, nullptr );
 		}
 		{
-			auto & pipeline = DoGetTextPipeline( uint32_t( TextureChannel::eDiffuse ) );
-			geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, pipeline.GetProgram() );
-			geometryBuffers.m_textured->Initialise( { *vertexBuffer }, nullptr );
+			auto & pipeline = doGetTextPipeline( uint32_t( TextureChannel::eDiffuse ) );
+			geometryBuffers.m_textured = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
+			geometryBuffers.m_textured->initialise( { *vertexBuffer }, nullptr );
 		}
 
 		m_textsVertexBuffers.push_back( std::move( vertexBuffer ) );
@@ -490,62 +490,62 @@ namespace Castor3D
 		return geometryBuffers;
 	}
 
-	void OverlayRenderer::DoDrawItem( Pass & pass
+	void OverlayRenderer::doDrawItem( Pass & pass
 		, GeometryBuffers const & geometryBuffers
 		, uint32_t count )
 	{
-		auto & node = DoGetPanelNode( pass );
-		m_overlayUbo.Update( pass.GetId() );
-		node.m_pipeline.Apply();
-		pass.BindTextures();
-		geometryBuffers.Draw( count, 0 );
-		pass.UnbindTextures();
+		auto & node = doGetPanelNode( pass );
+		m_overlayUbo.update( pass.getId() );
+		node.m_pipeline.apply();
+		pass.bindTextures();
+		geometryBuffers.draw( count, 0 );
+		pass.unbindTextures();
 	}
 
-	void OverlayRenderer::DoDrawItem( Pass & pass
+	void OverlayRenderer::doDrawItem( Pass & pass
 		, GeometryBuffers const & geometryBuffers
 		, TextureLayout const & texture
 		, Sampler const & sampler
 		, uint32_t count )
 	{
-		auto & node = DoGetTextNode( pass );
+		auto & node = doGetTextNode( pass );
 
-		auto textureVariable = node.m_pipeline.GetProgram().FindUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel );
+		auto textureVariable = node.m_pipeline.getProgram().findUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel );
 
 		if ( textureVariable )
 		{
-			textureVariable->SetValue( Pass::LightBufferIndex );
+			textureVariable->setValue( Pass::LightBufferIndex );
 		}
 
-		m_overlayUbo.Update( pass.GetId() );
-		node.m_pipeline.Apply();
-		pass.BindTextures();
-		texture.Bind( Pass::LightBufferIndex );
-		sampler.Bind( Pass::LightBufferIndex );
-		geometryBuffers.Draw( count, 0 );
-		sampler.Unbind( Pass::LightBufferIndex );
-		texture.Unbind( Pass::LightBufferIndex );
-		pass.UnbindTextures();
+		m_overlayUbo.update( pass.getId() );
+		node.m_pipeline.apply();
+		pass.bindTextures();
+		texture.bind( Pass::LightBufferIndex );
+		sampler.bind( Pass::LightBufferIndex );
+		geometryBuffers.draw( count, 0 );
+		sampler.unbind( Pass::LightBufferIndex );
+		texture.unbind( Pass::LightBufferIndex );
+		pass.unbindTextures();
 	}
 
-	void OverlayRenderer::DoDrawItem( Material & material
+	void OverlayRenderer::doDrawItem( Material & material
 		, OverlayRenderer::OverlayGeometryBuffers const & geometryBuffers
 		, uint32_t count )
 	{
 		for ( auto pass : material )
 		{
-			if ( CheckFlag( pass->GetTextureFlags(), TextureChannel::eDiffuse ) )
+			if ( checkFlag( pass->getTextureFlags(), TextureChannel::eDiffuse ) )
 			{
-				DoDrawItem( *pass, *geometryBuffers.m_textured, count );
+				doDrawItem( *pass, *geometryBuffers.m_textured, count );
 			}
 			else
 			{
-				DoDrawItem( *pass, *geometryBuffers.m_noTexture, count );
+				doDrawItem( *pass, *geometryBuffers.m_noTexture, count );
 			}
 		}
 	}
 
-	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoFillTextPart( int32_t count
+	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::doFillTextPart( int32_t count
 		, TextOverlay::VertexArray::const_iterator & it
 		, uint32_t & index )
 	{
@@ -553,7 +553,7 @@ namespace Castor3D
 
 		if ( m_textsGeometryBuffers.size() <= index )
 		{
-			DoCreateTextGeometryBuffers();
+			doCreateTextGeometryBuffers();
 		}
 
 		if ( m_textsGeometryBuffers.size() > index )
@@ -573,42 +573,42 @@ namespace Castor3D
 		return geometryBuffers;
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( TextureChannels const & textureFlags )
+	ShaderProgramSPtr OverlayRenderer::doCreateOverlayProgram( TextureChannels const & textureFlags )
 	{
 		using namespace GLSL;
 
 		// Shader program
-		auto & cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderProgramSPtr program = cache.GetNewProgram( false );
-		program->CreateObject( ShaderType::eVertex );
-		program->CreateObject( ShaderType::ePixel );
+		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
+		ShaderProgramSPtr program = cache.getNewProgram( false );
+		program->createObject( ShaderType::eVertex );
+		program->createObject( ShaderType::ePixel );
 
 		// Vertex shader
 		GLSL::Shader strVs;
 		{
-			auto writer = GetRenderSystem()->CreateGlslWriter();
+			auto writer = getRenderSystem()->createGlslWriter();
 
 			UBO_MATRIX( writer );
 			UBO_OVERLAY( writer );
 
 			// Shader inputs
-			auto position = writer.DeclAttribute< IVec2 >( ShaderProgram::Position );
-			auto text = writer.DeclAttribute< Vec2 >( ShaderProgram::Text, CheckFlag( textureFlags, TextureChannel::eText ) );
-			auto texture = writer.DeclAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto position = writer.declAttribute< IVec2 >( ShaderProgram::Position );
+			auto text = writer.declAttribute< Vec2 >( ShaderProgram::Text, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 
 			// Shader outputs
-			auto vtx_text = writer.DeclOutput< Vec2 >( cuT( "vtx_text" ), CheckFlag( textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), checkFlag( textureFlags, TextureChannel::eText ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				if ( CheckFlag( textureFlags, TextureChannel::eText ) )
+				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
 					vtx_text = text;
 				}
 
-				if ( CheckFlag( textureFlags, TextureChannel::eDiffuse ) )
+				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
 					vtx_texture = texture;
 				}
@@ -616,17 +616,17 @@ namespace Castor3D
 				gl_Position = c3d_mtxProjection * vec4( c3d_position.x() + position.x(), c3d_position.y() + position.y(), 0.0, 1.0 );
 			} );
 
-			strVs = writer.Finalise();
+			strVs = writer.finalise();
 		}
 
 		// Pixel shader
 		GLSL::Shader strPs;
 		{
-			auto writer = GetRenderSystem()->CreateGlslWriter();
+			auto writer = getRenderSystem()->createGlslWriter();
 
 			std::unique_ptr< Materials > materials;
 
-			switch ( GetRenderSystem()->GetEngine()->GetMaterialsType() )
+			switch ( getRenderSystem()->getEngine()->getMaterialsType() )
 			{
 			case MaterialType::eLegacy:
 				materials = std::make_unique< LegacyMaterials >( writer );
@@ -641,35 +641,35 @@ namespace Castor3D
 				break;
 			}
 
-			materials->Declare();
+			materials->declare();
 			UBO_OVERLAY( writer );
 
 			// Shader inputs
-			auto vtx_text = writer.DeclInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapText = writer.DeclUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( textureFlags, TextureChannel::eText ) );
-			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapOpacity = writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( textureFlags, TextureChannel::eOpacity ) );
+			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" ), checkFlag( textureFlags, TextureChannel::eText ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapText = writer.declUniform< Sampler2D >( ShaderProgram::MapText, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapOpacity = writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
-			auto pxl_v4FragColor = writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+			auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
-			writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto diffuse = writer.DeclLocale( cuT( "diffuse" ), materials->GetDiffuse( c3d_materialIndex ) );
-				auto alpha = writer.DeclLocale( cuT( "alpha" ), materials->GetOpacity( c3d_materialIndex ) );
+				auto diffuse = writer.declLocale( cuT( "diffuse" ), materials->getDiffuse( c3d_materialIndex ) );
+				auto alpha = writer.declLocale( cuT( "alpha" ), materials->getOpacity( c3d_materialIndex ) );
 
-				if ( CheckFlag( textureFlags, TextureChannel::eText ) )
+				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
 					alpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).r();
 				}
 
-				if ( CheckFlag( textureFlags, TextureChannel::eDiffuse ) )
+				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
 					diffuse = texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
 				}
 
-				if ( CheckFlag( textureFlags, TextureChannel::eOpacity ) )
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
 					alpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
 				}
@@ -677,29 +677,29 @@ namespace Castor3D
 				pxl_v4FragColor = vec4( diffuse.xyz(), alpha );
 			} );
 
-			strPs = writer.Finalise();
+			strPs = writer.finalise();
 		}
 
-		if ( CheckFlag( textureFlags, TextureChannel::eText ) )
+		if ( checkFlag( textureFlags, TextureChannel::eText ) )
 		{
-			program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->SetValue( Pass::LightBufferIndex );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->setValue( Pass::LightBufferIndex );
 		}
 
 		auto index = Pass::MinTextureIndex;
 
-		if ( CheckFlag( textureFlags, TextureChannel::eDiffuse ) )
+		if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 		{
-			program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->SetValue( index++ );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( index++ );
 		}
 
-		if ( CheckFlag( textureFlags, TextureChannel::eOpacity ) )
+		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
-			program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel )->SetValue( index++ );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel )->setValue( index++ );
 		}
 
-		program->SetSource( ShaderType::eVertex, strVs );
-		program->SetSource( ShaderType::ePixel, strPs );
-		program->Initialise();
+		program->setSource( ShaderType::eVertex, strVs );
+		program->setSource( ShaderType::ePixel, strPs );
+		program->initialise();
 		return program;
 	}
 }

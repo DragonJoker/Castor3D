@@ -4,8 +4,8 @@
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -23,31 +23,31 @@ namespace TestRender
 	{
 	}
 
-	void TestTextureStorage::Bind( uint32_t p_index )const
+	void TestTextureStorage::bind( uint32_t p_index )const
 	{
 	}
 
-	void TestTextureStorage::Unbind( uint32_t p_index )const
+	void TestTextureStorage::unbind( uint32_t p_index )const
 	{
 	}
 
-	uint8_t * TestTextureStorage::Lock( AccessTypes const & p_lock )
+	uint8_t * TestTextureStorage::lock( AccessTypes const & p_lock )
 	{
-		ENSURE( CheckFlag( m_cpuAccess, p_lock ) );
+		ENSURE( checkFlag( m_cpuAccess, p_lock ) );
 		return nullptr;
 	}
 
-	void TestTextureStorage::Unlock( bool p_modified )
+	void TestTextureStorage::unlock( bool p_modified )
 	{
 	}
 
-	uint8_t * TestTextureStorage::Lock( AccessTypes const & p_lock, uint32_t p_index )
+	uint8_t * TestTextureStorage::lock( AccessTypes const & p_lock, uint32_t p_index )
 	{
-		ENSURE( CheckFlag( m_cpuAccess, p_lock ) );
+		ENSURE( checkFlag( m_cpuAccess, p_lock ) );
 		return nullptr;
 	}
 
-	void TestTextureStorage::Unlock( bool p_modified, uint32_t p_index )
+	void TestTextureStorage::unlock( bool p_modified, uint32_t p_index )
 	{
 	}
 }

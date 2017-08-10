@@ -66,8 +66,8 @@
 #	include <X11/Xlib.h>
 #endif
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GuiCommon
 {
@@ -107,7 +107,7 @@ namespace GuiCommon
 
 #endif
 
-		bool result = DoParseCommandLine();
+		bool result = doParseCommandLine();
 		wxDisplay display;
 		wxRect rect = display.GetClientArea();
 		SplashScreen splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( rect.width - 512 ) / 2, ( rect.height - 384 ) / 2 ), m_steps, m_version );
@@ -117,30 +117,30 @@ namespace GuiCommon
 
 		if ( result )
 		{
-			result = DoInitialiseLocale( splashScreen );
+			result = doInitialiseLocale( splashScreen );
 		}
 
 		if ( result )
 		{
 			try
 			{
-				DoLoadImages( splashScreen );
-				result = DoInitialiseCastor( splashScreen );
+				doLoadImages( splashScreen );
+				result = doInitialiseCastor( splashScreen );
 
 				if ( result )
 				{
-					window = DoInitialiseMainFrame( &splashScreen );
+					window = doInitialiseMainFrame( &splashScreen );
 					result = window != nullptr;
 				}
 			}
 			catch ( Exception & exc )
 			{
-				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.GetFullDescription() );
+				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.getFullDescription() );
 				result = false;
 			}
 			catch ( std::exception & exc )
 			{
-				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
+				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
 				result = false;
 			}
 		}
@@ -151,7 +151,7 @@ namespace GuiCommon
 
 		if ( !result )
 		{
-			DoCleanup();
+			doCleanup();
 		}
 
 		return result;
@@ -159,12 +159,12 @@ namespace GuiCommon
 
 	int CastorApplication::OnExit()
 	{
-		Logger::LogInfo( m_internalName + cuT( " - Exit" ) );
-		DoCleanup();
+		Logger::logInfo( m_internalName + cuT( " - Exit" ) );
+		doCleanup();
 		return wxApp::OnExit();
 	}
 
-	bool CastorApplication::DoParseCommandLine()
+	bool CastorApplication::doParseCommandLine()
 	{
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help" ) );
@@ -195,7 +195,7 @@ namespace GuiCommon
 				eLogLevel = LogType( log );
 			}
 
-			Logger::Initialise( eLogLevel );
+			Logger::initialise( eLogLevel );
 
 			if ( parser.Found( wxT( "opengl" ) ) )
 			{
@@ -218,11 +218,11 @@ namespace GuiCommon
 		return result;
 	}
 
-	bool CastorApplication::DoInitialiseLocale( SplashScreen & p_splashScreen )
+	bool CastorApplication::doInitialiseLocale( SplashScreen & p_splashScreen )
 	{
 		p_splashScreen.Step( _( "Loading language" ), 1 );
 		long lLanguage = wxLANGUAGE_DEFAULT;
-		Path pathCurrent = File::GetExecutableDirectory().GetPath();
+		Path pathCurrent = File::getExecutableDirectory().getPath();
 
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( lLanguage ) )
@@ -250,23 +250,23 @@ namespace GuiCommon
 		return true;
 	}
 
-	bool CastorApplication::DoInitialiseCastor( SplashScreen & p_splashScreen )
+	bool CastorApplication::doInitialiseCastor( SplashScreen & p_splashScreen )
 	{
 		bool result = true;
 
-		if ( !File::DirectoryExists( Engine::GetEngineDirectory() ) )
+		if ( !File::directoryExists( Engine::getEngineDirectory() ) )
 		{
-			File::DirectoryCreate( Engine::GetEngineDirectory() );
+			File::directoryCreate( Engine::getEngineDirectory() );
 		}
 
-		Logger::SetFileName( Engine::GetEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
-		Logger::LogInfo( m_internalName + cuT( " - Start" ) );
+		Logger::setFileName( Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
+		Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
 		m_castor = new Engine();
-		DoLoadPlugins( p_splashScreen );
+		doloadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto renderers = m_castor->GetPluginCache().GetPlugins( PluginType::eRenderer );
+		auto renderers = m_castor->getPluginCache().getPlugins( PluginType::eRenderer );
 
 		if ( renderers.empty() )
 		{
@@ -274,7 +274,7 @@ namespace GuiCommon
 		}
 		else if ( renderers.size() == 1 )
 		{
-			m_rendererType = std::static_pointer_cast< RendererPlugin >( renderers.begin()->second )->GetRendererType();
+			m_rendererType = std::static_pointer_cast< RendererPlugin >( renderers.begin()->second )->getRendererType();
 		}
 
 		if ( m_rendererType == RENDERER_TYPE_UNDEFINED )
@@ -284,7 +284,7 @@ namespace GuiCommon
 
 			if ( iReturn == wxID_OK )
 			{
-				m_rendererType = m_dialog.GetSelectedRenderer();
+				m_rendererType = m_dialog.getSelectedRenderer();
 			}
 			else
 			{
@@ -298,83 +298,83 @@ namespace GuiCommon
 
 		if ( result )
 		{
-			result = m_castor->LoadRenderer( m_rendererType );
+			result = m_castor->loadRenderer( m_rendererType );
 		}
 
 		return result;
 	}
 
-	void CastorApplication::DoLoadPlugins( SplashScreen & p_splashScreen )
+	void CastorApplication::doloadPlugins( SplashScreen & p_splashScreen )
 	{
 		p_splashScreen.Step( _( "Loading plug-ins" ), 1 );
-		GuiCommon::LoadPlugins( *m_castor );
+		GuiCommon::loadPlugins( *m_castor );
 	}
 
-	void CastorApplication::DoLoadImages( SplashScreen & p_splashScreen )
+	void CastorApplication::doLoadImages( SplashScreen & p_splashScreen )
 	{
 		p_splashScreen.Step( _( "Loading images" ), 1 );
 		wxInitAllImageHandlers();
-		ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP, animated_object_group_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, animated_object_group_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECT, animated_object_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECT_SEL, animated_object_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATION, animation_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATION_SEL, animation_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_SCENE, scene_xpm );
-		ImagesLoader::AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_NODE, node_xpm );
-		ImagesLoader::AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_CAMERA, camera_xpm );
-		ImagesLoader::AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_GEOMETRY, geometry_xpm );
-		ImagesLoader::AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
-		ImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_POINT_LIGHT, point_xpm );
-		ImagesLoader::AddBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_SPOT_LIGHT, spot_xpm );
-		ImagesLoader::AddBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_SUBMESH, submesh_xpm );
-		ImagesLoader::AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
-		ImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
-		ImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_MATERIAL, material_xpm );
-		ImagesLoader::AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_PASS, pass_xpm );
-		ImagesLoader::AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXTURE, texture_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_BILLBOARD, billboard_xpm );
-		ImagesLoader::AddBitmap( eBMP_BILLBOARD_SEL, billboard_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_VIEWPORT, viewport_xpm );
-		ImagesLoader::AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
-		DoLoadAppImages();
-		ImagesLoader::WaitAsyncLoads();
+		ImagesLoader::addBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
+		ImagesLoader::addBitmap( eBMP_ANIMATED_OBJECTGROUP, animated_object_group_xpm );
+		ImagesLoader::addBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, animated_object_group_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_ANIMATED_OBJECT, animated_object_xpm );
+		ImagesLoader::addBitmap( eBMP_ANIMATED_OBJECT_SEL, animated_object_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_ANIMATION, animation_xpm );
+		ImagesLoader::addBitmap( eBMP_ANIMATION_SEL, animation_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_SCENE, scene_xpm );
+		ImagesLoader::addBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_NODE, node_xpm );
+		ImagesLoader::addBitmap( eBMP_NODE_SEL, node_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_CAMERA, camera_xpm );
+		ImagesLoader::addBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_GEOMETRY, geometry_xpm );
+		ImagesLoader::addBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
+		ImagesLoader::addBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_POINT_LIGHT, point_xpm );
+		ImagesLoader::addBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_SPOT_LIGHT, spot_xpm );
+		ImagesLoader::addBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_SUBMESH, submesh_xpm );
+		ImagesLoader::addBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
+		ImagesLoader::addBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
+		ImagesLoader::addBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXT_OVERLAY, text_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_MATERIAL, material_xpm );
+		ImagesLoader::addBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_PASS, pass_xpm );
+		ImagesLoader::addBitmap( eBMP_PASS_SEL, pass_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXTURE, texture_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_BILLBOARD, billboard_xpm );
+		ImagesLoader::addBitmap( eBMP_BILLBOARD_SEL, billboard_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_VIEWPORT, viewport_xpm );
+		ImagesLoader::addBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_RENDER_TARGET, render_target_xpm );
+		ImagesLoader::addBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
+		ImagesLoader::addBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
+		doLoadAppImages();
+		ImagesLoader::waitAsyncLoads();
 	}
 
-	void CastorApplication::DoCleanup()
+	void CastorApplication::doCleanup()
 	{
-		DoCleanupCastor();
+		doCleanupCastor();
 		m_locale.reset();
-		ImagesLoader::Cleanup();
-		Logger::Cleanup();
+		ImagesLoader::cleanup();
+		Logger::cleanup();
 		wxImage::CleanUpHandlers();
 	}
 
-	void CastorApplication::DoCleanupCastor()
+	void CastorApplication::doCleanupCastor()
 	{
 		delete m_castor;
 		m_castor = nullptr;

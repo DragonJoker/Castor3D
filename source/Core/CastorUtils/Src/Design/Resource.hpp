@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Collection.hpp"
 #include "Named.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -113,7 +113,7 @@ namespace Castor
 		 *\remarks		Dit aussi à la collection le nouveau de la ressource
 		 *\param[in]	p_name	Le nouveau nom
 		 */
-		void ChangeName( String const & p_name );
+		void changeName( String const & p_name );
 	};
 
 #	include "Resource.inl"

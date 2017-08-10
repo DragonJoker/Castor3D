@@ -5,9 +5,9 @@
 #include "Render/RenderSystem.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RenderPassTimer::RenderPassTimer( Engine & engine
 		, String const & name )
@@ -16,41 +16,41 @@ namespace Castor3D
 		, m_timerQuery
 		{
 			{
-				engine.GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed ),
-				engine.GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed )
+				engine.getRenderSystem()->createQuery( QueryType::eTimeElapsed ),
+				engine.getRenderSystem()->createQuery( QueryType::eTimeElapsed )
 			}
 		}
 		, m_cpuTime{ 0_ns }
 		, m_gpuTime{ 0_ns }
 	{
-		m_timerQuery[0]->Initialise();
-		m_timerQuery[1]->Initialise();
-		m_timerQuery[1 - m_queryIndex]->Begin();
-		m_timerQuery[1 - m_queryIndex]->End();
-		engine.GetRenderLoop().RegisterTimer( *this );
+		m_timerQuery[0]->initialise();
+		m_timerQuery[1]->initialise();
+		m_timerQuery[1 - m_queryIndex]->begin();
+		m_timerQuery[1 - m_queryIndex]->end();
+		engine.getRenderLoop().registerTimer( *this );
 	}
 
 	RenderPassTimer::~RenderPassTimer()
 	{
-		m_timerQuery[0]->Cleanup();
-		m_timerQuery[1]->Cleanup();
+		m_timerQuery[0]->cleanup();
+		m_timerQuery[1]->cleanup();
 		m_timerQuery[0].reset();
 		m_timerQuery[1].reset();
 	}
 
-	void RenderPassTimer::Start()
+	void RenderPassTimer::start()
 	{
-		m_cpuTimer.Time();
-		m_timerQuery[m_queryIndex]->Begin();
+		m_cpuTimer.getElapsed();
+		m_timerQuery[m_queryIndex]->begin();
 	}
 
-	void RenderPassTimer::Stop()
+	void RenderPassTimer::stop()
 	{
-		m_cpuTime = m_cpuTimer.Time();
-		m_timerQuery[m_queryIndex]->End();
+		m_cpuTime = m_cpuTimer.getElapsed();
+		m_timerQuery[m_queryIndex]->end();
 		m_queryIndex = 1 - m_queryIndex;
 		uint64_t time = 0;
-		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::eResult, time );
+		m_timerQuery[m_queryIndex]->getInfos( QueryInfo::eResult, time );
 		m_gpuTime = Nanoseconds( time );
 	}
 }

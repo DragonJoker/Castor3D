@@ -1,4 +1,4 @@
-﻿#include "PluginCache.hpp"
+#include "PluginCache.hpp"
 
 #include "Engine.hpp"
 
@@ -15,12 +15,12 @@
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
-	static const String GetTypeFunctionABIName = cuT( "GetType" );
+	static const String getTypeFunctionABIName = cuT( "getType" );
 
 	PluginCache::Cache( Engine & engine
 						, Producer && p_produce
@@ -39,15 +39,15 @@ namespace Castor3D
 	{
 	}
 
-	void PluginCache::Clear()
+	void PluginCache::clear()
 	{
 		{
-			auto lock = make_unique_lock( m_mutexLoadedPluginTypes );
+			auto lock = makeUniqueLock( m_mutexLoadedPluginTypes );
 			m_loadedPluginTypes.clear();
 		}
 
 		{
-			auto lock = make_unique_lock( m_mutexLoadedPlugins );
+			auto lock = makeUniqueLock( m_mutexLoadedPlugins );
 
 			for ( auto & it : m_loadedPlugins )
 			{
@@ -56,7 +56,7 @@ namespace Castor3D
 		}
 
 		{
-			auto lock = make_unique_lock( m_mutexLibraries );
+			auto lock = makeUniqueLock( m_mutexLibraries );
 
 			for ( auto & it : m_libraries )
 			{
@@ -65,126 +65,126 @@ namespace Castor3D
 		}
 	}
 
-	PluginSPtr PluginCache::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
+	PluginSPtr PluginCache::loadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
 	{
 		Path strFilePath{ CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT };
 		PluginSPtr result;
 
 		try
 		{
-			result = DoLoadPlugin( strFilePath );
+			result = doloadPlugin( strFilePath );
 		}
 		catch ( VersionException & p_exc )
 		{
-			Logger::LogWarning( "LoadPlugin - Fail - " + p_exc.GetFullDescription() );
+			Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
 		}
 		catch ( PluginException & p_exc )
 		{
 			if ( !p_pathFolder.empty() )
 			{
-				result = LoadPlugin( p_pathFolder / strFilePath );
+				result = loadPlugin( p_pathFolder / strFilePath );
 			}
 			else
 			{
-				Logger::LogWarning( "LoadPlugin - Fail - " + p_exc.GetFullDescription() );
+				Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
 			}
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::string_cast< xchar >( p_exc.what() ) );
+			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( p_exc.what() ) );
 		}
 		catch ( ... )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - Unknown error" ) );
+			Logger::logWarning( cuT( "loadPlugin - Fail - Unknown error" ) );
 		}
 
 		return result;
 	}
 
-	PluginSPtr PluginCache::LoadPlugin( Path const & p_fileFullPath )throw( )
+	PluginSPtr PluginCache::loadPlugin( Path const & p_fileFullPath )throw( )
 	{
 		PluginSPtr result;
 
 		try
 		{
-			result = DoLoadPlugin( p_fileFullPath );
+			result = doloadPlugin( p_fileFullPath );
 		}
 		catch ( VersionException & p_exc )
 		{
-			Logger::LogWarning( "LoadPlugin - Fail - " + p_exc.GetFullDescription() );
+			Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
 		}
 		catch ( PluginException & p_exc )
 		{
-			Logger::LogWarning( "LoadPlugin - Fail - " + p_exc.GetFullDescription() );
+			Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::string_cast< xchar >( p_exc.what() ) );
+			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( p_exc.what() ) );
 		}
 		catch ( ... )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - Unknown error" ) );
+			Logger::logWarning( cuT( "loadPlugin - Fail - Unknown error" ) );
 		}
 
 		return result;
 	}
 
-	PluginStrMap PluginCache::GetPlugins( PluginType p_type )
+	PluginStrMap PluginCache::getPlugins( PluginType p_type )
 	{
-		auto lock = make_unique_lock( m_mutexLoadedPlugins );
+		auto lock = makeUniqueLock( m_mutexLoadedPlugins );
 		return m_loadedPlugins[size_t( p_type )];
 	}
 
-	void PluginCache::LoadAllPlugins( Path const & p_folder )
+	void PluginCache::loadAllPlugins( Path const & p_folder )
 	{
 		PathArray files;
-		File::ListDirectoryFiles( p_folder, files );
+		File::listDirectoryFiles( p_folder, files );
 
 		if ( files.size() > 0 )
 		{
 			for ( auto file : files )
 			{
-				if ( file.GetExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CASTOR_DLL_EXT )
 				{
 					try
 					{
-						DoLoadPlugin( file );
+						doloadPlugin( file );
 					}
 					catch ( ... )
 					{
-						Logger::LogInfo( cuT( "Can't load plug-in : " ) + file );
+						Logger::logInfo( cuT( "Can't load plug-in : " ) + file );
 					}
 				}
 			}
 		}
 	}
 
-	PluginSPtr PluginCache::DoLoadPlugin( Path const & p_pathFile )
+	PluginSPtr PluginCache::doloadPlugin( Path const & p_pathFile )
 	{
 		PluginSPtr result;
-		auto lockTypes = make_unique_lock( m_mutexLoadedPluginTypes );
+		auto lockTypes = makeUniqueLock( m_mutexLoadedPluginTypes );
 		auto it = m_loadedPluginTypes.find( p_pathFile );
 
 		if ( it == m_loadedPluginTypes.end() )
 		{
-			if ( !File::FileExists( p_pathFile ) )
+			if ( !File::fileExists( p_pathFile ) )
 			{
-				CASTOR_EXCEPTION( string::string_cast< char >( cuT( "File [" ) + p_pathFile + cuT( "] does not exist" ) ) );
+				CASTOR_EXCEPTION( string::stringCast< char >( cuT( "File [" ) + p_pathFile + cuT( "] does not exist" ) ) );
 			}
 
 			DynamicLibrarySPtr library = std::make_shared< DynamicLibrary >();
 
-			if ( !library->Open( p_pathFile ) )
+			if ( !library->open( p_pathFile ) )
 			{
-				CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "]" ) ), true );
+				CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "]" ) ), true );
 			}
 
 			Plugin::PGetTypeFunction pfnGetType;
 
-			if ( !library->GetFunction( pfnGetType, GetTypeFunctionABIName ) )
+			if ( !library->getFunction( pfnGetType, getTypeFunctionABIName ) )
 			{
-				String strError = cuT( "Error encountered while loading file [" ) + p_pathFile.GetFileName( true ) + cuT( "] GetType plug-in function => Not a Castor3D plug-in" );
-				CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( strError ), true );
+				String strError = cuT( "Error encountered while loading file [" ) + p_pathFile.getFileName( true ) + cuT( "] getType plug-in function => Not a Castor3D plug-in" );
+				CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 			}
 
 			PluginType type = PluginType::eCount;
@@ -193,69 +193,69 @@ namespace Castor3D
 			switch ( type )
 			{
 			case PluginType::eDivider:
-				result = std::make_shared< DividerPlugin >( library, GetEngine() );
+				result = std::make_shared< DividerPlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eImporter:
-				result = std::make_shared< ImporterPlugin >( library, GetEngine() );
+				result = std::make_shared< ImporterPlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eRenderer:
-				result = std::make_shared< RendererPlugin >( library, GetEngine() );
+				result = std::make_shared< RendererPlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eGeneric:
-				result = std::make_shared< GenericPlugin >( library, GetEngine() );
+				result = std::make_shared< GenericPlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eTechnique:
-				result = std::make_shared< TechniquePlugin >( library, GetEngine() );
+				result = std::make_shared< TechniquePlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eToneMapping:
-				result = std::make_shared< ToneMappingPlugin >( library, GetEngine() );
+				result = std::make_shared< ToneMappingPlugin >( library, getEngine() );
 				break;
 
 			case PluginType::ePostEffect:
-				result = std::make_shared< PostFxPlugin >( library, GetEngine() );
+				result = std::make_shared< PostFxPlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eParticle:
-				result = std::make_shared< ParticlePlugin >( library, GetEngine() );
+				result = std::make_shared< ParticlePlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eGenerator:
-				result = std::make_shared< GeneratorPlugin >( library, GetEngine() );
+				result = std::make_shared< GeneratorPlugin >( library, getEngine() );
 				break;
 
 			default:
 				FAILURE( "Unknown plug-in type" );
 				{
-					String strError = cuT( "Error encountered while loading plug-in [" ) + p_pathFile.GetFileName() + cuT( "] Unknown plug-in type" );
-					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( strError ), true );
+					String strError = cuT( "Error encountered while loading plug-in [" ) + p_pathFile.getFileName() + cuT( "] Unknown plug-in type" );
+					CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 				}
 				break;
 			}
 
 			Version toCheck( 0, 0 );
-			result->GetRequiredVersion( toCheck );
+			result->getRequiredVersion( toCheck );
 			String strToLog( cuT( "Plug-in [" ) );
-			Logger::LogInfo( StringStream() << strToLog << result->GetName() << cuT( "] - Required engine version : " ) << toCheck );
-			Version version = GetEngine()->GetVersion();
+			Logger::logInfo( StringStream() << strToLog << result->getName() << cuT( "] - Required engine version : " ) << toCheck );
+			Version version = getEngine()->getVersion();
 
 			if ( toCheck <= version )
 			{
 				m_loadedPluginTypes.insert( std::make_pair( p_pathFile, type ) );
 				{
-					auto lockPlugins = make_unique_lock( m_mutexLoadedPlugins );
+					auto lockPlugins = makeUniqueLock( m_mutexLoadedPlugins );
 					m_loadedPlugins[size_t( type )].insert( std::make_pair( p_pathFile, result ) );
 				}
 				{
-					auto lockLibraries = make_unique_lock( m_mutexLibraries );
+					auto lockLibraries = makeUniqueLock( m_mutexLibraries );
 					m_libraries[size_t( type )].insert( std::make_pair( p_pathFile, library ) );
 				}
 				strToLog = cuT( "Plug-in [" );
-				Logger::LogInfo( strToLog + result->GetName() + cuT( "] loaded" ) );
+				Logger::logInfo( strToLog + result->getName() + cuT( "] loaded" ) );
 			}
 			else
 			{
@@ -265,7 +265,7 @@ namespace Castor3D
 		else
 		{
 			PluginType type = it->second;
-			auto lock = make_unique_lock( m_mutexLoadedPlugins );
+			auto lock = makeUniqueLock( m_mutexLoadedPlugins );
 			result = m_loadedPlugins[size_t( type )].find( p_pathFile )->second;
 		}
 

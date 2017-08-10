@@ -36,7 +36,7 @@ namespace GuiCommon
 	public:
 		AuiDockArt();
 
-		virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect );
+		void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect );
 	};
 }
 

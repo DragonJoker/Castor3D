@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "ParserParameterBase.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -34,7 +34,7 @@ namespace Castor
 	\~english
 	\brief		Gives the regex format for given type.
 	\~french
-	\brief		Donne le format de regex pour le type donné.
+	\brief		donne le format de regex pour le type donné.
 	*/
 	template< typename T > struct RegexFormat;
 	/*!
@@ -841,7 +841,7 @@ namespace Castor
 	\brief		Structure utilisée pour déterminer si un ParameterType a un type de paramètre de base.
 	*/
 	template< ParameterType Type >
-	struct has_base_parameter_type
+	struct HasBaseParameterType
 		: public std::false_type
 	{
 	};
@@ -850,12 +850,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eName.
+	\brief		HasBaseParameterType specialisation for ParameterType::eName.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eName.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eName.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eName >
+	struct HasBaseParameterType< ParameterType::eName >
 		: public std::true_type
 	{
 	};
@@ -864,12 +864,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eCheckedText.
+	\brief		HasBaseParameterType specialisation for ParameterType::eCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eCheckedText.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eCheckedText >
+	struct HasBaseParameterType< ParameterType::eCheckedText >
 		: public std::true_type
 	{
 	};
@@ -878,12 +878,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eBitwiseOred32BitsCheckedText.
+	\brief		HasBaseParameterType specialisation for ParameterType::eBitwiseOred32BitsCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eBitwiseOred32BitsCheckedText.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eBitwiseOred32BitsCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eBitwiseOred32BitsCheckedText >
+	struct HasBaseParameterType< ParameterType::eBitwiseOred32BitsCheckedText >
 		: public std::true_type
 	{
 	};
@@ -892,12 +892,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
+	\brief		HasBaseParameterType specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eBitwiseOred64BitsCheckedText.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eBitwiseOred64BitsCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eBitwiseOred64BitsCheckedText >
+	struct HasBaseParameterType< ParameterType::eBitwiseOred64BitsCheckedText >
 		: public std::true_type
 	{
 	};
@@ -909,7 +909,7 @@ namespace Castor
 	 *\brief		Récupère le nom du type de paramètre donné.
 	 *\param[in]	p_type	Le type de paramètre.
 	 */
-	CU_API String const & GetTypeName( ParameterType p_type );
+	CU_API String const & getTypeName( ParameterType p_type );
 }
 
 #endif

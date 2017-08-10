@@ -15,15 +15,15 @@
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Context::Context( RenderSystem & renderSystem )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_window{ nullptr }
 		, m_initialised{ false }
-		, m_matrixUbo{ *renderSystem.GetEngine() }
+		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_colour{ *this, m_matrixUbo }
 		, m_colourCube{ *this, m_matrixUbo }
 		, m_colourLayer{ *this, m_matrixUbo }
@@ -40,161 +40,161 @@ namespace Castor3D
 	{
 	}
 
-	bool Context::Initialise( RenderWindow * window )
+	bool Context::initialise( RenderWindow * window )
 	{
 		m_window = window;
-		bool result = DoInitialise();
+		bool result = doInitialise();
 
 		if ( result )
 		{
-			DoSetCurrent();
-			m_colour.Initialise();
-			m_colourCube.Initialise();
-			m_colourLayer.Initialise();
-			m_colourLayerCube.Initialise();
-			m_depth.Initialise();
-			m_depthCube.Initialise();
-			m_depthLayer.Initialise();
-			m_depthLayerCube.Initialise();
-			m_cube.Initialise();
+			doSetCurrent();
+			m_colour.initialise();
+			m_colourCube.initialise();
+			m_colourLayer.initialise();
+			m_colourLayerCube.initialise();
+			m_depth.initialise();
+			m_depthCube.initialise();
+			m_depthLayer.initialise();
+			m_depthLayerCube.initialise();
+			m_cube.initialise();
 
-			DoEndCurrent();
+			doEndCurrent();
 		}
 
 		return result;
 	}
 
-	void Context::Cleanup()
+	void Context::cleanup()
 	{
 		m_initialised = false;
-		DoSetCurrent();
-		DoCleanup();
+		doSetCurrent();
+		doCleanup();
 
-		m_colour.Cleanup();
-		m_colourCube.Cleanup();
-		m_colourLayer.Cleanup();
-		m_colourLayerCube.Cleanup();
-		m_depth.Cleanup();
-		m_depthCube.Cleanup();
-		m_depthLayer.Cleanup();
-		m_depthLayerCube.Cleanup();
-		m_cube.Cleanup();
+		m_colour.cleanup();
+		m_colourCube.cleanup();
+		m_colourLayer.cleanup();
+		m_colourLayerCube.cleanup();
+		m_depth.cleanup();
+		m_depthCube.cleanup();
+		m_depthLayer.cleanup();
+		m_depthLayerCube.cleanup();
+		m_cube.cleanup();
 
-		DoEndCurrent();
-		DoDestroy();
+		doEndCurrent();
+		doDestroy();
 
 		m_window = nullptr;
-		m_matrixUbo.GetUbo().Cleanup();
+		m_matrixUbo.getUbo().cleanup();
 	}
 
-	void Context::SetCurrent()
+	void Context::setCurrent()
 	{
-		DoSetCurrent();
-		GetRenderSystem()->SetCurrentContext( this );
+		doSetCurrent();
+		getRenderSystem()->setCurrentContext( this );
 	}
 
-	void Context::EndCurrent()
+	void Context::endCurrent()
 	{
-		GetRenderSystem()->SetCurrentContext( nullptr );
-		DoEndCurrent();
+		getRenderSystem()->setCurrentContext( nullptr );
+		doEndCurrent();
 	}
 
-	void Context::SwapBuffers()
+	void Context::swapBuffers()
 	{
-		DoSwapBuffers();
+		doSwapBuffers();
 	}
 
-	void Context::Barrier( MemoryBarriers const & barriers )
+	void Context::memoryBarrier( MemoryBarriers const & barriers )
 	{
-		DoBarrier( barriers );
+		doMemoryBarrier( barriers );
 	}
 
-	void Context::RenderTextureCube( Position const & position
+	void Context::renderTextureCube( Position const & position
 		, Size const & size
 		, TextureLayout const & texture )
 	{
-		m_colourCube.Render( position
+		m_colourCube.render( position
 			, size
 			, texture );
 	}
 
-	void Context::RenderTextureCube( Size const & size
+	void Context::renderTextureCube( Size const & size
 		, TextureLayout const & texture
 		, uint32_t index )
 	{
-		m_colourLayerCube.Render( size
+		m_colourLayerCube.render( size
 			, texture
 			, index );
 	}
 
-	void Context::RenderTexture( Position const & position
+	void Context::renderTexture( Position const & position
 		, Size const & size
 		, TextureLayout const & texture
 		, RenderPipeline & pipeline
 		, MatrixUbo & matrixUbo )
 	{
-		m_colour.Render( position
+		m_colour.render( position
 			, size
 			, texture
 			, matrixUbo
 			, pipeline );
 	}
 
-	void Context::RenderTexture( Position const & position
+	void Context::renderTexture( Position const & position
 		, Size const & size
 		, TextureLayout const & texture )
 	{
-		m_colour.Render( position
+		m_colour.render( position
 			, size
 			, texture );
 	}
 
-	void Context::RenderTexture( Position const & position
+	void Context::renderTexture( Position const & position
 		, Size const & size
 		, TextureLayout const & texture
 		, uint32_t index )
 	{
-		m_colourLayer.Render( position
+		m_colourLayer.render( position
 			, size
 			, texture
 			, index );
 	}
 
-	void Context::RenderDepthCube( Position const & position
+	void Context::renderDepthCube( Position const & position
 		, Size const & size
 		, TextureLayout const & texture )
 	{
-		m_depthCube.Render( position
+		m_depthCube.render( position
 			, size
 			, texture );
 	}
 
-	void Context::RenderDepthCube( Position const & position
+	void Context::renderDepthCube( Position const & position
 		, Size const & size
 		, TextureLayout const & texture
 		, uint32_t index )
 	{
-		m_depthLayerCube.Render( position
+		m_depthLayerCube.render( position
 			, size
 			, texture
 			, index );
 	}
 
-	void Context::RenderDepth( Position const & position
+	void Context::renderDepth( Position const & position
 		, Size const & size
 		, TextureLayout const & texture )
 	{
-		m_depth.Render( position
+		m_depth.render( position
 			, size
 			, texture );
 	}
 
-	void Context::RenderDepth( Position const & position
+	void Context::renderDepth( Position const & position
 		, Size const & size
 		, TextureLayout const & texture
 		, uint32_t index )
 	{
-		m_depthLayer.Render( position
+		m_depthLayer.render( position
 			, size
 			, texture
 			, index );

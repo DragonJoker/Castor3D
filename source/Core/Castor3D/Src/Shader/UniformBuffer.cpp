@@ -6,9 +6,9 @@
 
 #include "Render/RenderSystem.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
@@ -31,7 +31,7 @@ namespace Castor3D
 
 			for ( auto it : Names )
 			{
-				if ( CheckFlag( flags, it.first ) )
+				if ( checkFlag( flags, it.first ) )
 				{
 					result += sep + it.second;
 					sep = cuT( " | " );
@@ -45,15 +45,15 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	UniformBuffer::TextWriter::TextWriter( String const & tabs )
-		: Castor::TextWriter< UniformBuffer >{ tabs }
+		: castor::TextWriter< UniformBuffer >{ tabs }
 	{
 	}
 
 	bool UniformBuffer::TextWriter::operator()( UniformBuffer const & object, TextFile & file )
 	{
-		bool result = file.WriteText( m_tabs + cuT( "constants_buffer \"" ) + object.GetName() + cuT( "\"\n" ) ) > 0
-						&& file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		CheckError( result, "Frame variable buffer" );
+		bool result = file.writeText( m_tabs + cuT( "constants_buffer \"" ) + object.getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		checkError( result, "Frame variable buffer" );
 		auto tabs = m_tabs + cuT( "\t" );
 
 		if ( result )
@@ -62,41 +62,41 @@ namespace Castor3D
 			{
 				if ( result )
 				{
-					result = file.WriteText( tabs + cuT( "variable \"" ) + variable->GetName() + cuT( "\"\n" ) ) > 0
-						&& file.WriteText( tabs + cuT( "{\n" ) ) > 0;
-					CheckError( result, "Frame variable buffer variable name" );
+					result = file.writeText( tabs + cuT( "variable \"" ) + variable->getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( tabs + cuT( "{\n" ) ) > 0;
+					checkError( result, "Frame variable buffer variable name" );
 				}
 
 				if ( result )
 				{
-					result = file.WriteText( tabs + cuT( "\tcount " ) + string::to_string( variable->GetOccCount() ) + cuT( "\n" ) ) > 0;
-					CheckError( result, "Frame variable buffer variable occurences" );
+					result = file.writeText( tabs + cuT( "\tcount " ) + string::toString( variable->getOccCount() ) + cuT( "\n" ) ) > 0;
+					checkError( result, "Frame variable buffer variable occurences" );
 				}
 
 				if ( result )
 				{
-					result = file.WriteText( tabs + cuT( "\ttype " ) + variable->GetFullTypeName() + cuT( "\n" ) ) > 0;
-					CheckError( result, "Frame variable buffer variable type name" );
+					result = file.writeText( tabs + cuT( "\ttype " ) + variable->getFullTypeName() + cuT( "\n" ) ) > 0;
+					checkError( result, "Frame variable buffer variable type name" );
 				}
 
 				if ( result )
 				{
-					result = file.WriteText( tabs + cuT( "\tvalue " ) + variable->GetStrValue() + cuT( "\n" ) ) > 0;
-					CheckError( result, "Frame variable buffer variable value" );
+					result = file.writeText( tabs + cuT( "\tvalue " ) + variable->getStrValue() + cuT( "\n" ) ) > 0;
+					checkError( result, "Frame variable buffer variable value" );
 				}
 
 				if ( result )
 				{
-					result = file.WriteText( tabs + cuT( "}\n" ) ) > 0;
-					CheckError( result, "Frame variable buffer variable end" );
+					result = file.writeText( tabs + cuT( "}\n" ) ) > 0;
+					checkError( result, "Frame variable buffer variable end" );
 				}
 			}
 		}
 
 		if ( result )
 		{
-			result = file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
-			CheckError( result, "Frame variable buffer end" );
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			checkError( result, "Frame variable buffer end" );
 		}
 
 		return result;
@@ -117,7 +117,7 @@ namespace Castor3D
 	{
 	}
 
-	UniformSPtr UniformBuffer::CreateUniform( UniformType type
+	UniformSPtr UniformBuffer::createUniform( UniformType type
 		, String const & name
 		, uint32_t occurences )
 	{
@@ -126,7 +126,7 @@ namespace Castor3D
 
 		if ( it == m_mapVariables.end() )
 		{
-			result = DoCreateVariable( type, name, occurences );
+			result = doCreateVariable( type, name, occurences );
 
 			if ( result )
 			{
@@ -142,7 +142,7 @@ namespace Castor3D
 		return result;
 	}
 
-	void UniformBuffer::RemoveUniform( String const & name )
+	void UniformBuffer::removeUniform( String const & name )
 	{
 		auto itMap = m_mapVariables.find( name );
 
@@ -153,7 +153,7 @@ namespace Castor3D
 
 		auto itList = std::find_if( m_listVariables.begin(), m_listVariables.end(), [&name]( UniformSPtr p_variable )
 		{
-			return name == p_variable->GetName();
+			return name == p_variable->getName();
 		} );
 
 		if ( itList != m_listVariables.end() )
@@ -162,11 +162,11 @@ namespace Castor3D
 		}
 	}
 
-	void UniformBuffer::Cleanup()
+	void UniformBuffer::cleanup()
 	{
 		if ( m_storage )
 		{
-			m_storage->Destroy();
+			m_storage->destroy();
 			m_storage.reset();
 		}
 
@@ -175,34 +175,34 @@ namespace Castor3D
 		m_listVariables.clear();
 	}
 
-	void UniformBuffer::BindTo( uint32_t index )const
+	void UniformBuffer::bindTo( uint32_t index )const
 	{
 		REQUIRE( m_storage );
-		m_storage->SetBindingPoint( index );
+		m_storage->setBindingPoint( index );
 	}
 
-	uint32_t UniformBuffer::GetBindingPoint()const
+	uint32_t UniformBuffer::getBindingPoint()const
 	{
 		REQUIRE( m_storage );
-		return m_storage->GetBindingPoint();
+		return m_storage->getBindingPoint();
 	}
 
-	UniformBufferBinding & UniformBuffer::CreateBinding( ShaderProgram & program )
+	UniformBufferBinding & UniformBuffer::createBinding( ShaderProgram & program )
 	{
 		auto it = m_bindings.find( &program );
 
 		if ( it == m_bindings.end() )
 		{
-			auto binding = GetRenderSystem()->CreateUniformBufferBinding( *this, program );
+			auto binding = getRenderSystem()->createUniformBufferBinding( *this, program );
 
-			if ( !m_storage && binding->GetSize() > 0 )
+			if ( !m_storage && binding->getSize() > 0 )
 			{
-				DoInitialise( *binding );
+				doInitialise( *binding );
 				ENSURE( m_storage );
 
 				if ( m_storage )
 				{
-					m_storage->SetBindingPoint( m_bindingPoint );
+					m_storage->setBindingPoint( m_bindingPoint );
 				}
 			}
 
@@ -212,36 +212,36 @@ namespace Castor3D
 		return *it->second;
 	}
 
-	UniformBufferBinding & UniformBuffer::GetBinding( ShaderProgram & program )const
+	UniformBufferBinding & UniformBuffer::getBinding( ShaderProgram & program )const
 	{
 		REQUIRE( m_bindings.find( &program ) != m_bindings.end() );
 		return *m_bindings.find( &program )->second;
 	}
 
-	void UniformBuffer::Update()const
+	void UniformBuffer::update()const
 	{
 		REQUIRE( m_storage );
 		bool changed = m_listVariables.end() != std::find_if( m_listVariables.begin()
 			, m_listVariables.end()
 			, []( UniformSPtr p_variable )
 			{
-				return p_variable->IsChanged();
+				return p_variable->isChanged();
 			} );
 
 		if ( changed )
 		{
-			m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
+			m_storage->upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
 
 			for ( auto & variable : m_listVariables )
 			{
-				variable->SetChanged( false );
+				variable->setChanged( false );
 			}
 		}
 	}
 
-	void UniformBuffer::DoInitialise( UniformBufferBinding const & binding )
+	void UniformBuffer::doInitialise( UniformBufferBinding const & binding )
 	{
-		m_buffer.resize( binding.GetSize() );
+		m_buffer.resize( binding.getSize() );
 
 		for ( auto & variable : *this )
 		{
@@ -249,7 +249,7 @@ namespace Castor3D
 				, binding.end()
 				, [&variable]( auto & p_info )
 				{
-					return variable->GetName() == p_info.m_name;
+					return variable->getName() == p_info.m_name;
 				} );
 
 			if ( it != binding.end() )
@@ -260,31 +260,31 @@ namespace Castor3D
 			}
 			else
 			{
-				Logger::LogWarning( cuT( "The variable [" ) + variable->GetName() + cuT( "] was not found in the binding." ) );
+				Logger::logWarning( cuT( "The variable [" ) + variable->getName() + cuT( "] was not found in the binding." ) );
 			}
 		}
 
 		if ( !m_storage )
 		{
-			m_storage = GetRenderSystem()->CreateBuffer( BufferType::eUniform );
-			m_storage->Create();
+			m_storage = getRenderSystem()->createBuffer( BufferType::eUniform );
+			m_storage->create();
 		}
 
-		m_storage->InitialiseStorage( uint32_t( m_buffer.size() )
+		m_storage->initialiseStorage( uint32_t( m_buffer.size() )
 			, BufferAccessType::eDynamic
 			, BufferAccessNature::eDraw );
-		m_storage->Upload( 0u
+		m_storage->upload( 0u
 			, uint32_t( m_buffer.size() )
 			, m_buffer.data() );
 
 		for ( auto & variable : *this )
 		{
-			variable->SetChanged( false );
+			variable->setChanged( false );
 		}
 	}
 
-	UniformSPtr UniformBuffer::DoCreateVariable( UniformType type
-		, Castor::String const & name
+	UniformSPtr UniformBuffer::doCreateVariable( UniformType type
+		, castor::String const & name
 		, uint32_t occurences )
 	{
 		UniformSPtr result;
@@ -434,7 +434,7 @@ namespace Castor3D
 
 		if ( result )
 		{
-			result->SetName( name );
+			result->setName( name );
 		}
 
 		return result;

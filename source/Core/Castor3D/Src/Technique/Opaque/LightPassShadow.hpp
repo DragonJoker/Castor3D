@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -40,7 +40,7 @@ SOFTWARE.
 
 #include <GlslShadow.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -82,9 +82,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nom de la shadow map.
 		 */
-		static Castor::String const & GetName()
+		static castor::String const & getName()
 		{
-			static Castor::String const name = GLSL::Shadow::MapShadowDirectional;
+			static castor::String const name = GLSL::Shadow::MapShadowDirectional;
 			return name;
 		}
 		/**
@@ -97,9 +97,9 @@ namespace Castor3D
 		 *\param[in]	shadowMap	La shadow map.
 		 *\return		Le nom de la shadow map.
 		 */
-		static TextureUnit & GetTexture( shadow_pass_type & shadowMap )
+		static TextureUnit & getTexture( shadow_pass_type & shadowMap )
 		{
-			return shadowMap.GetTexture();
+			return shadowMap.getTexture();
 		}
 		/**
 		 *\~english
@@ -111,18 +111,18 @@ namespace Castor3D
 		 *\param[in]	light	La source lumineuse générique.
 		 *\return		La source lumineuse typée.
 		 */
-		static light_type const & GetTypedLight( Light const & light )
+		static light_type const & getTypedLight( Light const & light )
 		{
-			return *light.GetDirectionalLight();
+			return *light.getDirectionalLight();
 		}
 
-		static void DebugDisplay( Castor::Position const & position
+		static void debugDisplay( castor::Position const & position
 			, TextureUnit & shadowMap )
 		{
-			Castor::Size size{ 256u, 256u };
-			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( position
+			castor::Size size{ 256u, 256u };
+			shadowMap.getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
 				, size
-				, *shadowMap.GetTexture() );
+				, *shadowMap.getTexture() );
 		}
 	};
 	/*!
@@ -154,9 +154,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nom de la shadow map.
 		 */
-		static Castor::String const & GetName()
+		static castor::String const & getName()
 		{
-			static Castor::String const name = GLSL::Shadow::MapShadowPoint;
+			static castor::String const name = GLSL::Shadow::MapShadowPoint;
 			return name;
 		}
 		/**
@@ -169,9 +169,9 @@ namespace Castor3D
 		 *\param[in]	shadowMap	La shadow map.
 		 *\return		Le nom de la shadow map.
 		 */
-		static TextureUnit & GetTexture( shadow_pass_type & shadowMap )
+		static TextureUnit & getTexture( shadow_pass_type & shadowMap )
 		{
-			return shadowMap.GetTexture();
+			return shadowMap.getTexture();
 		}
 		/**
 		 *\~english
@@ -183,18 +183,18 @@ namespace Castor3D
 		 *\param[in]	light	La source lumineuse générique.
 		 *\return		La source lumineuse typée.
 		 */
-		static light_type const & GetTypedLight( Light const & light )
+		static light_type const & getTypedLight( Light const & light )
 		{
-			return *light.GetPointLight();
+			return *light.getPointLight();
 		}
 
-		static void DebugDisplay( Castor::Position const & position
+		static void debugDisplay( castor::Position const & position
 			, TextureUnit & shadowMap )
 		{
-			Castor::Size size{ 128u, 128u };
-			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( position
+			castor::Size size{ 128u, 128u };
+			shadowMap.getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
 				, size
-				, *shadowMap.GetTexture() );
+				, *shadowMap.getTexture() );
 		}
 	};
 	/*!
@@ -226,9 +226,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nom de la shadow map.
 		 */
-		static Castor::String const & GetName()
+		static castor::String const & getName()
 		{
-			static Castor::String const name = GLSL::Shadow::MapShadowSpot;
+			static castor::String const name = GLSL::Shadow::MapShadowSpot;
 			return name;
 		}
 		/**
@@ -241,9 +241,9 @@ namespace Castor3D
 		 *\param[in]	shadowMap	La shadow map.
 		 *\return		Le nom de la shadow map.
 		 */
-		static TextureUnit & GetTexture( shadow_pass_type & shadowMap )
+		static TextureUnit & getTexture( shadow_pass_type & shadowMap )
 		{
-			return shadowMap.GetTexture();
+			return shadowMap.getTexture();
 		}
 		/**
 		 *\~english
@@ -255,18 +255,18 @@ namespace Castor3D
 		 *\param[in]	light	La source lumineuse générique.
 		 *\return		La source lumineuse typée.
 		 */
-		static light_type const & GetTypedLight( Light const & light )
+		static light_type const & getTypedLight( Light const & light )
 		{
-			return *light.GetSpotLight();
+			return *light.getSpotLight();
 		}
 
-		static void DebugDisplay( Castor::Position const & position
+		static void debugDisplay( castor::Position const & position
 			, TextureUnit & shadowMap )
 		{
-			Castor::Size size{ 256u, 256u };
-			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( position
+			castor::Size size{ 256u, 256u };
+			shadowMap.getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
 				, size
-				, *shadowMap.GetTexture() );
+				, *shadowMap.getTexture() );
 		}
 	};
 	/*!
@@ -322,8 +322,8 @@ namespace Castor3D
 				, GLSL::Shader const & pxl )
 				: my_program_type( engine, vtx, pxl )
 			{
-				this->m_program->template CreateUniform< UniformType::eSampler >( my_traits::GetName()
-					, ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
+				this->m_program->template createUniform< UniformType::eSampler >( my_traits::getName()
+					, ShaderType::ePixel )->setValue( int( DsTexture::eCount ) );
 			}
 		};
 
@@ -355,9 +355,9 @@ namespace Castor3D
 				, gpInfoUbo
 				, true }
 			, m_shadowMap{ shadowMap }
-			, m_shadowMapTexture{ my_traits::GetTexture( shadowMap ) }
+			, m_shadowMapTexture{ my_traits::getTexture( shadowMap ) }
 		{
-			m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
+			m_shadowMapTexture.setIndex( uint32_t( DsTexture::eCount ) );
 		}
 		/**
 		 *\~english
@@ -375,24 +375,24 @@ namespace Castor3D
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
-		void Render( Castor::Size const & size
+		void render( castor::Size const & size
 			, GeometryPassResult const & gp
 			, Light const & light
 			, Camera const & camera
 			, bool first )override
 		{
-			m_shadowMap.Render( my_traits::GetTypedLight( light ) );
-			my_pass_type::DoUpdate( size
+			m_shadowMap.render( my_traits::getTypedLight( light ) );
+			my_pass_type::doUpdate( size
 				, light
 				, camera );
-			m_shadowMapTexture.Bind();
-			this->m_program->Bind( light );
-			my_pass_type::DoRender( size
+			m_shadowMapTexture.bind();
+			this->m_program->bind( light );
+			my_pass_type::doRender( size
 				, gp
-				, light.GetColour()
+				, light.getColour()
 				, first );
 
-			m_shadowMapTexture.Unbind();
+			m_shadowMapTexture.unbind();
 		}
 		/**
 		 *\~english
@@ -400,16 +400,16 @@ namespace Castor3D
 		 *\~french
 		 *\return		Affiche la texture d'ombre sur l'écran.
 		 */
-		void Debug( Castor::Position const & position )const override
+		void debugDisplay( castor::Position const & position )const override
 		{
-			my_traits::DebugDisplay( position, m_shadowMapTexture );
+			my_traits::debugDisplay( position, m_shadowMapTexture );
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::LightPass::DoCreateProgram
+		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		typename LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+		typename LightPass::ProgramPtr doCreateProgram( GLSL::Shader const & vtx
 			, GLSL::Shader const & pxl )const override
 		{
 			return std::make_unique< LightPassShadow::Program >( this->m_engine

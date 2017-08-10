@@ -10,8 +10,8 @@
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -38,7 +38,7 @@ namespace GuiCommon
 	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable
 		, TextureUnitSPtr p_texture
 		, MaterialType p_type )
-		: TreeItemProperty( p_texture->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
+		: TreeItemProperty( p_texture->getEngine(), p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
 		, m_texture{ p_texture }
 		, m_materialType{ p_type }
 	{
@@ -65,9 +65,9 @@ namespace GuiCommon
 	{
 	}
 
-	void TextureTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		TextureUnitSPtr unit = GetTexture();
+		TextureUnitSPtr unit = getTexture();
 
 		if ( unit )
 		{
@@ -86,7 +86,7 @@ namespace GuiCommon
 				choices.Add( PROPERTY_CHANNEL_REFLECTION );
 				choices.Add( PROPERTY_CHANNEL_REFRACTION );
 
-				switch ( unit->GetChannel() )
+				switch ( unit->getChannel() )
 				{
 				case TextureChannel::eDiffuse:
 					selected = PROPERTY_CHANNEL_DIFFUSE;
@@ -137,7 +137,7 @@ namespace GuiCommon
 				choices.Add( PROPERTY_CHANNEL_REFLECTION );
 				choices.Add( PROPERTY_CHANNEL_REFRACTION );
 
-				switch ( unit->GetChannel() )
+				switch ( unit->getChannel() )
 				{
 				case TextureChannel::eDiffuse:
 					selected = PROPERTY_CHANNEL_ALBEDO;
@@ -180,21 +180,21 @@ namespace GuiCommon
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) );
 			p_grid->Append( new wxEnumProperty( PROPERTY_CHANNEL, PROPERTY_CHANNEL, choices ) )->SetValue( selected );
 
-			if ( unit->GetChannel() != TextureChannel::eReflection
-				&& unit->GetChannel() != TextureChannel::eRefraction )
+			if ( unit->getChannel() != TextureChannel::eReflection
+				&& unit->getChannel() != TextureChannel::eRefraction )
 			{
-				if ( unit->GetTexture()->GetImage().IsStaticSource() )
+				if ( unit->getTexture()->getImage().isStaticSource() )
 				{
-					Path path{ unit->GetTexture()->GetImage().ToString() };
+					Path path{ unit->getTexture()->getImage().toString() };
 					p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( path );
 				}
 			}
 		}
 	}
 
-	void TextureTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void TextureTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		TextureUnitSPtr unit = GetTexture();
+		TextureUnitSPtr unit = getTexture();
 		wxPGProperty * property = p_event.GetProperty();
 
 		if ( property && unit )
@@ -270,30 +270,30 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::OnChannelChange( TextureChannel p_value )
 	{
-		TextureUnitSPtr unit = GetTexture();
+		TextureUnitSPtr unit = getTexture();
 
-		DoApplyChange( [p_value, unit]()
+		doApplyChange( [p_value, unit]()
 		{
-			unit->SetChannel( p_value );
+			unit->setChannel( p_value );
 		} );
 	}
 
-	void TextureTreeItemProperty::OnImageChange( Castor::String const & p_value )
+	void TextureTreeItemProperty::OnImageChange( castor::String const & p_value )
 	{
-		TextureUnitSPtr unit = GetTexture();
+		TextureUnitSPtr unit = getTexture();
 
-		DoApplyChange( [p_value, unit]()
+		doApplyChange( [p_value, unit]()
 		{
-			if ( File::FileExists( Path{ p_value } ) )
+			if ( File::fileExists( Path{ p_value } ) )
 			{
 				// Absolute path
-				unit->SetAutoMipmaps( true );
-				auto texture = unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				unit->setAutoMipmaps( true );
+				auto texture = unit->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 					, AccessType::eRead
 					, AccessType::eRead );
-				texture->GetImage().InitialiseSource( Path{}, Path{ p_value } );
-				unit->SetTexture( texture );
-				unit->Initialise();
+				texture->getImage().initialiseSource( Path{}, Path{ p_value } );
+				unit->setTexture( texture );
+				unit->initialise();
 			}
 		} );
 	}

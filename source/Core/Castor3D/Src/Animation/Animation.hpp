@@ -29,7 +29,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -43,8 +43,8 @@ namespace Castor3D
 	\remarks	Une animation est jouée au travers d'une AnimationInstance.
 	*/
 	class Animation
-		: public Castor::Named
-		, public Castor::OwnedBy< Animable >
+		: public castor::Named
+		, public castor::OwnedBy< Animable >
 	{
 	public:
 		/**
@@ -59,7 +59,7 @@ namespace Castor3D
 		 *\param[in]	p_animable	L'objet animable parent.
 		 *\param[in]	p_name		Le nom de l'animation.
 		 */
-		C3D_API Animation( AnimationType p_type, Animable & p_animable, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Animation( AnimationType p_type, Animable & p_animable, castor::String const & p_name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -101,14 +101,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la longueur de l'animation.
 		 */
-		C3D_API void UpdateLength();
+		C3D_API void updateLength();
 		/**
 		 *\~english
 		 *\return		The animation type.
 		 *\~french
 		 *\return		Le type de l'animation.
 		 */
-		inline AnimationType GetType()const
+		inline AnimationType getType()const
 		{
 			return m_type;
 		}
@@ -118,7 +118,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La longueur de l'animation.
 		 */
-		inline Castor::Milliseconds const & GetLength()const
+		inline castor::Milliseconds const & getLength()const
 		{
 			return m_length;
 		}
@@ -130,7 +130,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la longueur de l'animation.
 		 */
-		virtual void DoUpdateLength() = 0;
+		virtual void doUpdateLength() = 0;
 
 	protected:
 		//!\~english	The animation type.
@@ -138,7 +138,7 @@ namespace Castor3D
 		AnimationType m_type{ AnimationType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		Castor::Milliseconds m_length{ 0 };
+		castor::Milliseconds m_length{ 0 };
 
 		friend class BinaryWriter< Animation >;
 		friend class BinaryParser< Animation >;
@@ -184,7 +184,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( Animation const & p_obj )override;
+		C3D_API bool doWrite( Animation const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -212,7 +212,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( Animation & p_obj )override;
+		C3D_API bool doParse( Animation & p_obj )override;
 	};
 }
 

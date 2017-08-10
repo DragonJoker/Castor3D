@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -69,13 +69,13 @@ namespace Castor3D
 		C3D_API ~OverlayUbo();
 		/**
 		 *\~english
-		 *\brief		Sets the overlay position value.
+		 *\brief		sets the overlay position value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de la position de l'incrustation.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		C3D_API void SetPosition( Castor::Position const & p_position );
+		C3D_API void setPosition( castor::Position const & p_position );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -84,19 +84,19 @@ namespace Castor3D
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
 		 */
-		C3D_API void Update( int p_materialIndex )const;
+		C3D_API void update( int p_materialIndex )const;
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -119,9 +119,9 @@ namespace Castor3D
 }
 
 #define UBO_OVERLAY( Writer )\
-	GLSL::Ubo overlay{ writer, Castor3D::ShaderProgram::BufferOverlay, Castor3D::OverlayUbo::BindingPoint };\
-	auto c3d_position = overlay.DeclMember< GLSL::IVec2 >( Castor3D::ShaderProgram::OvPosition );\
-	auto c3d_materialIndex = overlay.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::MaterialIndex );\
-	overlay.End()
+	GLSL::Ubo overlay{ writer, castor3d::ShaderProgram::BufferOverlay, castor3d::OverlayUbo::BindingPoint };\
+	auto c3d_position = overlay.declMember< GLSL::IVec2 >( castor3d::ShaderProgram::OvPosition );\
+	auto c3d_materialIndex = overlay.declMember< GLSL::Int >( castor3d::ShaderProgram::MaterialIndex );\
+	overlay.end()
 
 #endif

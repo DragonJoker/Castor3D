@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <mutex>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -68,14 +68,14 @@ namespace Castor
 		 *\brief		Initialise les en-têtes, depuis le logger donné
 		 *\param[in]	p_logger	Le logger
 		 */
-		void Initialise( Logger const & p_logger );
+		void initialise( Logger const & p_logger );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance
 		 *\~french
 		 *\brief		Nettoie l'instance
 		 */
-		void Cleanup();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Registers a callback
@@ -86,7 +86,7 @@ namespace Castor
 		 *\param[in]	p_callback	Le callback
 		 *\param[in]	p_caller	L'appelant
 		 */
-		void RegisterCallback( LogCallback p_callback, void * p_caller );
+		void registerCallback( LogCallback p_callback, void * p_caller );
 		/**
 		 *\~english
 		 *\brief		Unregisters a callback
@@ -95,10 +95,10 @@ namespace Castor
 		 *\brief		Désenregistre un callback
 		 *\param[in]	p_caller	L'appelant
 		 */
-		void UnregisterCallback( void * p_caller );
+		void unregisterCallback( void * p_caller );
 		/**
 		 *\~english
-		 *\brief		Sets the file for given log level
+		 *\brief		sets the file for given log level
 		 *\param[in]	p_logFilePath	The file path
 		 *\param[in]	p_logLevel		The log level. If LogType::eCount, sets the file for every log level
 		 *\~french
@@ -106,7 +106,7 @@ namespace Castor
 		 *\param[in]	p_logFilePath	Le chemin du fichier
 		 *\param[in]	p_logLevel		Le niveau de log. Si LogType::eCount, définit le fichier pour tous les niveaux
 		 */
-		void SetFileName( String const & p_logFilePath, LogType p_logLevel );
+		void setFileName( String const & p_logFilePath, LogType p_logLevel );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
@@ -119,7 +119,7 @@ namespace Castor
 		 *\param[in]	p_message	Le message
 		 *\param[in]	p_newLine	Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void PrintMessage( LogType p_logLevel, std::string const & p_message, bool p_newLine );
+		void printMessage( LogType p_logLevel, std::string const & p_message, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
@@ -132,7 +132,7 @@ namespace Castor
 		 *\param[in]	p_message	Le message
 		 *\param[in]	p_newLine	Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void PrintMessage( LogType p_logLevel, std::wstring const & p_message, bool p_newLine );
+		void printMessage( LogType p_logLevel, std::wstring const & p_message, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a message queue
@@ -141,7 +141,7 @@ namespace Castor
 		 *\brief		Logge une file de messages
 		 *\param[in]	p_queue	La file de messages
 		 */
-		void LogMessageQueue( MessageQueue const & p_queue );
+		void logMessageQueue( MessageQueue const & p_queue );
 
 	private:
 		/**
@@ -154,7 +154,7 @@ namespace Castor
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
 		 */
-		void DoPrintMessage( LogType p_logLevel, String const & p_message, bool p_newLine );
+		void doPrintMessage( LogType p_logLevel, String const & p_message, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a line to the console
@@ -165,7 +165,7 @@ namespace Castor
 		 *\param[in]	p_line		La ligne de texte
 		 *\param[in]	p_logLevel	Le niveau de log
 		 */
-		void DoPrintLine( String const & p_line, LogType p_logLevel, bool p_newLine );
+		void doPrintLine( String const & p_line, LogType p_logLevel, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a line in the given stream
@@ -180,7 +180,7 @@ namespace Castor
 		 *\param[in]	p_stream	Le flux
 		 *\param[in]	p_logLevel	Le niveau de log
 		 */
-		void DoLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, LogType p_logLevel, bool p_newLine );
+		void doLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, LogType p_logLevel, bool p_newLine );
 
 	private:
 		//! The files paths, per log level

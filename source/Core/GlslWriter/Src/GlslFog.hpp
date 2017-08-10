@@ -31,7 +31,7 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API Fog( FogType p_flags, GlslWriter & p_writer );
-		GlslWriter_API void ApplyFog( Vec4 & p_colour, Float const & p_dist, Float const & p_y );
+		GlslWriter_API void applyFog( Vec4 & p_colour, Float const & p_dist, Float const & p_y );
 
 	protected:
 		GlslWriter & m_writer;

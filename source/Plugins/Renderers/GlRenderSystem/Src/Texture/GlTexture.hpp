@@ -30,14 +30,14 @@ SOFTWARE.
 namespace GlRender
 {
 	/*!
-	\author		Sylvain Doremus.
+	\author		Sylvain doremus.
 	\version	0.8.0
 	\date		12/10/2015
 	\brief		Class used to handle texture, and texture storage.
 	*/
 	class GlTexture
 		: private Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >
-		, public Castor3D::TextureLayout
+		, public castor3d::TextureLayout
 	{
 		using ObjectType = Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >;
 
@@ -53,9 +53,9 @@ namespace GlRender
 		GlTexture(
 			OpenGl & p_gl,
 			GlRenderSystem & renderSystem,
-			Castor3D::TextureType p_type,
-			Castor3D::AccessTypes const & p_cpuAccess,
-			Castor3D::AccessTypes const & p_gpuAccess );
+			castor3d::TextureType p_type,
+			castor3d::AccessTypes const & p_cpuAccess,
+			castor3d::AccessTypes const & p_gpuAccess );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
@@ -69,11 +69,11 @@ namespace GlRender
 		GlTexture(
 			OpenGl & p_gl,
 			GlRenderSystem & renderSystem,
-			Castor3D::TextureType p_type,
-			Castor3D::AccessTypes const & p_cpuAccess,
-			Castor3D::AccessTypes const & p_gpuAccess,
-			Castor::PixelFormat p_format,
-			Castor::Size const & p_size );
+			castor3d::TextureType p_type,
+			castor3d::AccessTypes const & p_cpuAccess,
+			castor3d::AccessTypes const & p_gpuAccess,
+			castor::PixelFormat p_format,
+			castor::Size const & p_size );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
@@ -87,11 +87,11 @@ namespace GlRender
 		GlTexture(
 			OpenGl & p_gl,
 			GlRenderSystem & renderSystem,
-			Castor3D::TextureType p_type,
-			Castor3D::AccessTypes const & p_cpuAccess,
-			Castor3D::AccessTypes const & p_gpuAccess,
-			Castor::PixelFormat p_format,
-			Castor::Point3ui const & p_size );
+			castor3d::TextureType p_type,
+			castor3d::AccessTypes const & p_cpuAccess,
+			castor3d::AccessTypes const & p_gpuAccess,
+			castor::PixelFormat p_format,
+			castor::Point3ui const & p_size );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -99,37 +99,37 @@ namespace GlRender
 		/**
 		*\brief		Forces mipmaps generation.
 		*/
-		void GenerateMipmaps()const;
+		void generateMipmaps()const;
 		/**
 		*\return	The OpenGL texture dimension.
 		*/
-		GlTexDim GetGlDimension()const
+		GlTexDim getGlDimension()const
 		{
 			return m_glDimension;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::TextureLayout::DoInitialise
+		 *\copydoc		castor3d::TextureLayout::doInitialise
 		 */
-		bool DoInitialise()override;
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::TextureLayout::DoCleanup
+		 *\copydoc		castor3d::TextureLayout::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::TextureLayout::DoBind
+		 *\copydoc		castor3d::TextureLayout::doBind
 		 */
-		void DoBind( uint32_t p_index )const override;
+		void doBind( uint32_t p_index )const override;
 		/**
-		 *\copydoc		Castor3D::TextureLayout::DoUnbind
+		 *\copydoc		castor3d::TextureLayout::doUnbind
 		 */
-		void DoUnbind( uint32_t p_index )const override;
+		void doUnbind( uint32_t p_index )const override;
 
 	public:
-		using ObjectType::IsValid;
-		using ObjectType::GetGlName;
-		using ObjectType::GetOpenGl;
+		using ObjectType::isValid;
+		using ObjectType::getGlName;
+		using ObjectType::getOpenGl;
 
 	private:
 		//! The RenderSystem.

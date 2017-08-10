@@ -52,7 +52,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	p_light		L"AnimatedObject cible.
 		 */
-		AnimatedObjectTreeItemProperty( Castor3D::Engine * engine, bool p_editable, Castor3D::AnimatedObjectSPtr p_light );
+		AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectSPtr p_light );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,23 +68,23 @@ namespace GuiCommon
 		 *\brief		Récupère l'AnimatedObject.
 		 *\return		La valeur.
 		 */
-		inline Castor3D::AnimatedObjectSPtr GetObject()
+		inline castor3d::AnimatedObjectSPtr getObject()
 		{
 			return m_object.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::AnimatedObjectWPtr m_object;
+		castor3d::AnimatedObjectWPtr m_object;
 	};
 }
 

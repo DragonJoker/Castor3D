@@ -100,34 +100,34 @@ namespace GlRender
 		@return
 			false if not created successfully
 		*/
-		inline bool Create( bool p_prebind = true )
+		inline bool create( bool p_prebind = true )
 		{
-			bool result = IsValid();
+			bool result = isValid();
 
 			if ( !result )
 			{
-				result = ObjectType::DoCreate();
+				result = ObjectType::doCreate();
 
 				if ( result && p_prebind )
 				{
 					if ( result )
 					{
-						Bind();
-						Unbind();
+						bind();
+						unbind();
 					}
 
-					result = IsValid() && Validate();
+					result = isValid() && validate();
 
 					if ( !result )
 					{
-						ObjectType::DoDestroy();
+						ObjectType::doDestroy();
 					}
 				}
 			}
 
 			if ( result )
 			{
-				glTrack( GetOpenGl(), GetGlTypeName(), this );
+				glTrack( getOpenGl(), getGlTypeName(), this );
 
 #if !defined( NDEBUG )
 
@@ -143,26 +143,26 @@ namespace GlRender
 		@return
 			false if not bound successfully
 		*/
-		inline void Bind()const
+		inline void bind()const
 		{
-			REQUIRE( IsValid() );
-			m_binder( GetGlName() );
+			REQUIRE( isValid() );
+			m_binder( getGlName() );
 		}
 
 		/** Unbinds the object on GPU
 		*/
-		inline void Unbind()const
+		inline void unbind()const
 		{
 			m_unbinder( 0u );
 		}
 
 	public:
-		using ObjectType::Destroy;
-		using ObjectType::IsValid;
-		using ObjectType::GetGlName;
-		using ObjectType::Validate;
-		using ObjectType::GetGlTypeName;
-		using Holder::GetOpenGl;
+		using ObjectType::destroy;
+		using ObjectType::isValid;
+		using ObjectType::getGlName;
+		using ObjectType::validate;
+		using ObjectType::getGlTypeName;
+		using Holder::getOpenGl;
 
 	private:
 		//! The binding function

@@ -57,28 +57,28 @@ namespace CastorCom
 		 */
 		virtual ~CEngine();
 
-		inline Castor3D::Engine * GetInternal()const
+		inline castor3d::Engine * getInternal()const
 		{
 			return m_internal;
 		}
 
-		COM_PROPERTY_GET( PluginsDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetPluginsDirectory ) );
-		COM_PROPERTY_GET( EngineDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetEngineDirectory ) );
-		COM_PROPERTY_GET( DataDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetDataDirectory ) );
+		COM_PROPERTY_GET( PluginsDirectory, BSTR, make_static_getter( &castor3d::Engine::getPluginsDirectory ) );
+		COM_PROPERTY_GET( EngineDirectory, BSTR, make_static_getter( &castor3d::Engine::getEngineDirectory ) );
+		COM_PROPERTY_GET( DataDirectory, BSTR, make_static_getter( &castor3d::Engine::getDataDirectory ) );
 
-		STDMETHOD( Create )();
+		STDMETHOD( create )();
 		STDMETHOD( Destroy )();
 		STDMETHOD( Initialise )( /* [in] */ int fps );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( CreateScene )( /* [in] */ BSTR name, /* [out, retval] */ IScene ** pVal );
 		STDMETHOD( ClearScenes )();
-		STDMETHOD( LoadRenderer )( /* [in] */ BSTR type );
+		STDMETHOD( loadRenderer )( /* [in] */ BSTR type );
 		STDMETHOD( RenderOneFrame )();
-		STDMETHOD( LoadPlugin )( /* [in] */ BSTR path );
+		STDMETHOD( loadPlugin )( /* [in] */ BSTR path );
 		STDMETHOD( CreateOverlay )( /* [in] */ eOVERLAY_TYPE type, /* [in] */ BSTR name, /* [in] */ IOverlay * parent, /* [in] */ IScene * scene, /* [out, retval] */ IOverlay ** pVal );
 		STDMETHOD( CreateRenderWindow )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal );
 		STDMETHOD( RemoveWindow )( /* [in] */ IRenderWindow * val );
-		STDMETHOD( CreateSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
+		STDMETHOD( createSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
 		STDMETHOD( CreateBlendState )( /* [in] */ BSTR name, /* [out, retval] */ IBlendState ** pVal );
 		STDMETHOD( CreateDepthStencilState )( /* [in] */ BSTR name, /* [out, retval] */ IDepthStencilState ** pVal );
 		STDMETHOD( CreateMultisampleState )( /* [in] */ BSTR name, /* [out, retval] */ IMultisampleState ** pVal );
@@ -87,7 +87,7 @@ namespace CastorCom
 		STDMETHOD( LoadScene )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** window );
 
 	private:
-		Castor3D::Engine * m_internal;
+		castor3d::Engine * m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Engine ), CEngine )

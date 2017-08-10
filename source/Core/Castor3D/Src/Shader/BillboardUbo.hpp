@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -77,7 +77,7 @@ namespace Castor3D
 		 *\param[in]	p_dimensions	Les dimensions du billboard.
 		 *\param[in]	p_window		Les dimensions de la fenêtre.
 		 */
-		C3D_API void Update( Castor::Size const & p_dimensions )const;
+		C3D_API void update( castor::Size const & p_dimensions )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -86,19 +86,19 @@ namespace Castor3D
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	p_window		Les dimensions de la fenêtre.
 		 */
-		C3D_API void SetWindowSize( Castor::Size const & p_window )const;
+		C3D_API void setWindowSize( castor::Size const & p_window )const;
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -121,9 +121,9 @@ namespace Castor3D
 }
 
 #define UBO_BILLBOARD( Writer )\
-	GLSL::Ubo billboard{ writer, Castor3D::ShaderProgram::BufferBillboards, Castor3D::BillboardUbo::BindingPoint };\
-	auto c3d_v2iDimensions = billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::WindowSize );\
-	billboard.End()
+	GLSL::Ubo billboard{ writer, castor3d::ShaderProgram::BufferBillboards, castor3d::BillboardUbo::BindingPoint };\
+	auto c3d_v2iDimensions = billboard.declMember< IVec2 >( castor3d::ShaderProgram::Dimensions );\
+	auto c3d_v2iWindowSize = billboard.declMember< IVec2 >( castor3d::ShaderProgram::WindowSize );\
+	billboard.end()
 
 #endif

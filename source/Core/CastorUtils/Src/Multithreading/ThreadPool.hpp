@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "WorkerThread.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -64,14 +64,14 @@ namespace Castor
 		 *\~french
 		 *\return		\p true si tous les threads sont occupés.
 		 */
-		CU_API bool IsEmpty()const;
+		CU_API bool isEmpty()const;
 		/**
 		 *\~english
 		 *\return		\p true if all the threads are idle.
 		 *\~french
 		 *\return		\p true si tous les threads sont inoccupés.
 		 */
-		CU_API bool IsFull()const;
+		CU_API bool isFull()const;
 		/**
 		 *\~english
 		 *\brief		Waits for all the threads to finish their job.
@@ -82,32 +82,32 @@ namespace Castor
 		 *\param[in]	p_timeout	Le temps d'attente maximum.
 		 *\return		\p true Si tous les threads on terminé.
 		 */
-		CU_API bool WaitAll( Castor::Milliseconds const & p_timeout )const;
+		CU_API bool waitAll( castor::Milliseconds const & p_timeout )const;
 		/**
 		 *\~english
 		 *\brief		Feeds a worker thread with the given job.
 		 *\remarks		If no thread is available, waits for one to finish its job.
 		 *\param[in]	p_job	The job.
 		 *\~french
-		 *\brief		Donne à un thread de travail la tâche donnée.
+		 *\brief		donne à un thread de travail la tâche donnée.
 		 *\remarks		Si aucun thread n'est disponible, attend que l'un d'eux finisse sa tâche.
 		 *\param[in]	p_job	La tâche.
 		 */
-		CU_API void PushJob( WorkerThread::Job p_job );
+		CU_API void pushJob( WorkerThread::Job p_job );
 		/**
 		 *\~english
 		 *\return		The threads count.
 		 *\~french
 		 *\return		Le nombre de threads.
 		 */
-		inline size_t GetCount()const
+		inline size_t getCount()const
 		{
 			return m_count;
 		}
 
 	private:
-		WorkerThread & DoReserveWorker();
-		void DoFreeWorker( WorkerThread & p_worker );
+		WorkerThread & doReserveWorker();
+		void doFreeWorker( WorkerThread & p_worker );
 
 	private:
 		size_t const m_count;

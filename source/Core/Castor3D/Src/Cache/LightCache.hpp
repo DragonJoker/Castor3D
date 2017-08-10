@@ -27,7 +27,7 @@ SOFTWARE.
 #include "Cache/ObjectCache.hpp"
 #include "Texture/TextureUnit.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	using LightsArray = std::vector< LightSPtr >;
 	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
@@ -45,10 +45,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct ObjectCacheTraits< Light, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< Light >( KeyType const &, SceneNodeSPtr, LightType ) >;
 		using Merger = std::function< void( ObjectCacheBase< Light, KeyType > const &
-			, Castor::Collection< Light, KeyType > &
+			, castor::Collection< Light, KeyType > &
 			, std::shared_ptr< Light >
 			, SceneNodeSPtr
 			, SceneNodeSPtr ) >;
@@ -63,11 +63,11 @@ namespace Castor3D
 	\brief		Cache de Light.
 	*/
 	template<>
-	class ObjectCache< Light, Castor::String >
-		: public ObjectCacheBase< Light, Castor::String >
+	class ObjectCache< Light, castor::String >
+		: public ObjectCacheBase< Light, castor::String >
 	{
 	public:
-		using MyObjectCache = ObjectCacheBase< Light, Castor::String >;
+		using MyObjectCache = ObjectCacheBase< Light, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
@@ -131,14 +131,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la texture de lumières.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
+		 *\brief		sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates an object.
@@ -153,9 +153,9 @@ namespace Castor3D
 		 *\param[in]	p_type		Le type de source lumineuse.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
+		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
 		{
-			return MyObjectCache::Add( p_name, p_parent, p_type );
+			return MyObjectCache::add( p_name, p_parent, p_type );
 		}
 		/**
 		 *\~english
@@ -163,21 +163,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour la texture de sources lumineuses.
 		 */
-		C3D_API void UpdateLights()const;
+		C3D_API void updateLights()const;
 		/**
 		 *\~english
 		 *\brief		Binds the lights texture.
 		 *\~french
 		 *\brief		Active la texture de sources lumineuses.
 		 */
-		C3D_API void BindLights()const;
+		C3D_API void bindLights()const;
 		/**
 		 *\~english
 		 *\brief		Unbinds the lights texture.
 		 *\~french
 		 *\brief		Désactive la texture de sources lumineuses.
 		 */
-		C3D_API void UnbindLights()const;
+		C3D_API void unbindLights()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the count of the lights of given type.
@@ -188,9 +188,9 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de lumière.
 		 *\return		Le compte.
 		 */
-		inline uint32_t GetLightsCount( LightType p_type )const
+		inline uint32_t getLightsCount( LightType p_type )const
 		{
-			return uint32_t( GetLights( p_type ).size() );
+			return uint32_t( getLights( p_type ).size() );
 		}
 		/**
 		 *\~english
@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de lumière.
 		 *\return		Les lumières.
 		 */
-		inline LightsArray GetLights( LightType p_type )const
+		inline LightsArray getLights( LightType p_type )const
 		{
 			return m_typeSortedLights[size_t( p_type )];
 		}
@@ -216,9 +216,9 @@ namespace Castor3D
 		TextureUnit m_lightsTexture;
 		//!\~english	The lights texture buffer.
 		//!\~french		Le tampon de la texture contenant les lumières.
-		Castor::PxBufferBaseSPtr m_lightsBuffer;
+		castor::PxBufferBaseSPtr m_lightsBuffer;
 	};
-	using LightCache = ObjectCache< Light, Castor::String >;
+	using LightCache = ObjectCache< Light, castor::String >;
 	DECLARE_SMART_PTR( LightCache );
 }
 

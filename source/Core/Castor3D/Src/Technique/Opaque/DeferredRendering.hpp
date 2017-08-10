@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,7 +29,7 @@ SOFTWARE.
 #include "Technique/Transparent/TransparentPass.hpp"
 #include "Technique/Transparent/FinalCombinePass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -53,7 +53,7 @@ namespace Castor3D
 			, OpaquePass & opaquePass
 			, FrameBuffer & frameBuffer
 			, FrameBufferAttachment & depthAttach
-			, Castor::Size const & size
+			, castor::Size const & size
 			, Scene const & scene
 			, SsaoConfig const & config );
 		/**
@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\brief		Dessine les noeuds opaques.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		void Render( RenderInfo & info
+		void render( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera );
 		/**
@@ -80,7 +80,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dessine les données de débogage sur l'écran.
 		 */
-		void Debug()const;
+		void debugDisplay()const;
 		/**
 		 *\~english
 		 *\brief		Blits the depth and stencil from the geometry pass into given framebuffer.
@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\brief		Blitte la profondeur et le stencil de la geometry pass dans le tampon d'image donné.
 		 *\param[out]	p_fbo	Le tampon d'image cible.
 		 */
-		void BlitDepthInto( FrameBuffer & fbo );
+		void blitDepthInto( FrameBuffer & fbo );
 
 	private:
 		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
@@ -112,7 +112,7 @@ namespace Castor3D
 		FrameBufferAttachment & m_depthAttach;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		SceneUbo m_sceneUbo;

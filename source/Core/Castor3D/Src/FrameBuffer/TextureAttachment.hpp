@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "FrameBufferAttachment.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -57,9 +57,9 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~TextureAttachment();
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::GetBuffer
+		 *\copydoc		castor3d::FrameBufferAttachment::getBuffer
 		 */
-		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const;
+		C3D_API virtual castor::PxBufferBaseSPtr getBuffer()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture
 		 *\return		La texture
 		 */
-		inline TextureLayoutSPtr GetTexture()const
+		inline TextureLayoutSPtr getTexture()const
 		{
 			return m_texture.lock();
 		}
@@ -80,7 +80,7 @@ namespace Castor3D
 		 *\brief		Récupère la dimension cible attachée
 		 *\return		La dimension cible
 		 */
-		inline TextureType GetTarget()const
+		inline TextureType getTarget()const
 		{
 			return m_target;
 		}
@@ -92,7 +92,7 @@ namespace Castor3D
 		 *\brief		Récupère la couche associée
 		 *\return		La couche
 		 */
-		inline int GetLayer()const
+		inline int getLayer()const
 		{
 			return m_layer;
 		}
@@ -104,19 +104,19 @@ namespace Castor3D
 		 *\brief		Récupère la dimension cible attachée.
 		 *\param[in]	p_target	La dimension cible.
 		 */
-		inline void SetTarget( TextureType p_target )
+		inline void setTarget( TextureType p_target )
 		{
 			m_target = p_target;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the attached layer.
+		 *\brief		sets the attached layer.
 		 *\param[in]	p_layer	The layer.
 		 *\~french
 		 *\brief		Définit la couche associée.
 		 *\param[in]	p_layer	La couche.
 		 */
-		inline void SetLayer( int p_layer )
+		inline void setLayer( int p_layer )
 		{
 			m_layer = p_layer;
 		}

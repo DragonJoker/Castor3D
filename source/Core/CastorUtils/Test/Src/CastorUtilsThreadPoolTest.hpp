@@ -35,7 +35,7 @@ namespace Testing
 		virtual ~CastorUtilsThreadPoolTest();
 
 	private:
-		void DoRegisterTests() override;
+		void doRegisterTests() override;
 
 	private:
 		void Underload();

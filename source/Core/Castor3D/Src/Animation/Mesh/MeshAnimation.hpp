@@ -28,7 +28,7 @@ SOFTWARE.
 #include "Animation/Animation.hpp"
 #include "Animation/Mesh/MeshAnimationSubmesh.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\param[in]	p_animable	L'objet animable parent.
 		 *\param[in]	p_name		Le nom de l'animation.
 		 */
-		C3D_API MeshAnimation( Animable & p_animable, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API MeshAnimation( Animable & p_animable, castor::String const & p_name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -91,7 +91,7 @@ namespace Castor3D
 		C3D_API MeshAnimation & operator=( MeshAnimation const & p_rhs ) = delete;
 		/**
 		 *\~english
-		 *\brief		Adds a child to this object.
+		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
 		 *\param[in]	p_object	The child.
 		 *\~french
@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	p_object	L'enfant.
 		 */
-		C3D_API void AddChild( MeshAnimationSubmesh && p_object );
+		C3D_API void addChild( MeshAnimationSubmesh && p_object );
 		/**
 		 *\~english
 		 *\param[in]	p_index	The index.
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice.
 		 *\return		Le sous-maillage animé à l'indice donné.
 		 */
-		inline MeshAnimationSubmesh & GetSubmesh( uint32_t p_index )
+		inline MeshAnimationSubmesh & getSubmesh( uint32_t p_index )
 		{
 			REQUIRE( p_index < m_submeshes.size() );
 			return m_submeshes[p_index];
@@ -116,9 +116,9 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\copydoc		Casto3D::Animation::DoInitialise
+		 *\copydoc		Casto3D::Animation::doInitialise
 		 */
-		C3D_API void DoUpdateLength()override;
+		C3D_API void doUpdateLength()override;
 
 	protected:
 		//!\~english	The animated submesh.
@@ -169,7 +169,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( MeshAnimation const & p_obj )override;
+		C3D_API bool doWrite( MeshAnimation const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -197,7 +197,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( MeshAnimation & p_obj )override;
+		C3D_API bool doParse( MeshAnimation & p_obj )override;
 	};
 }
 

@@ -12,14 +12,14 @@ namespace castortd
 	public:
 		CastorDvpTD();
 
-		inline MainFrame * GetMainFrame()const
+		inline MainFrame * getMainFrame()const
 		{
 			return m_mainFrame;
 		}
 
 	private:
-		void DoLoadAppImages()override;
-		wxWindow * DoInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )override;
+		void doLoadAppImages()override;
+		wxWindow * doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )override;
 
 	private:
 		MainFrame * m_mainFrame{ nullptr };

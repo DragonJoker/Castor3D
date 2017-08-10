@@ -23,8 +23,8 @@
 #include <Scene/Scene.hpp>
 #include <Texture/TextureUnit.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace C3dPly
 {
@@ -33,37 +33,37 @@ namespace C3dPly
 	{
 	}
 
-	ImporterUPtr PlyImporter::Create( Engine & engine )
+	ImporterUPtr PlyImporter::create( Engine & engine )
 	{
 		return std::make_unique< PlyImporter >( engine );
 	}
 
-	bool PlyImporter::DoImportScene( Scene & p_scene )
+	bool PlyImporter::doImportScene( Scene & p_scene )
 	{
-		auto mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
-		bool result = DoImportMesh( *mesh );
+		auto mesh = p_scene.getMeshCache().add( cuT( "Mesh_PLY" ) );
+		bool result = doImportMesh( *mesh );
 
 		if ( result )
 		{
-			SceneNodeSPtr node = p_scene.GetSceneNodeCache().Add( mesh->GetName(), p_scene.GetObjectRootNode() );
-			GeometrySPtr geometry = p_scene.GetGeometryCache().Add( mesh->GetName(), node, nullptr );
-			geometry->SetMesh( mesh );
-			m_geometries.insert( { geometry->GetName(), geometry } );
+			SceneNodeSPtr node = p_scene.getSceneNodeCache().add( mesh->getName(), p_scene.getObjectRootNode() );
+			GeometrySPtr geometry = p_scene.getGeometryCache().add( mesh->getName(), node, nullptr );
+			geometry->setMesh( mesh );
+			m_geometries.insert( { geometry->getName(), geometry } );
 		}
 
 		return result;
 	}
 
-	bool PlyImporter::DoImportMesh( Mesh & p_mesh )
+	bool PlyImporter::doImportMesh( Mesh & p_mesh )
 	{
 		bool result{ false };
 		UIntArray faces;
 		RealArray sizes;
-		String name = m_fileName.GetFileName();
+		String name = m_fileName.getFileName();
 		String meshName = name.substr( 0, name.find_last_of( '.' ) );
 		String materialName = meshName;
 		std::ifstream isFile;
-		isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
+		isFile.open( string::stringCast< char >( m_fileName ).c_str(), std::ios::in );
 		std::string strLine;
 		std::istringstream ssToken;
 		String::size_type stIndex;
@@ -71,17 +71,17 @@ namespace C3dPly
 		VertexSPtr pVertex;
 		Coords3r ptNml;
 		Coords2r ptTex;
-		SubmeshSPtr submesh = p_mesh.CreateSubmesh();
-		MaterialSPtr pMaterial = p_mesh.GetScene()->GetMaterialView().Find( materialName );
+		SubmeshSPtr submesh = p_mesh.createSubmesh();
+		MaterialSPtr pMaterial = p_mesh.getScene()->getMaterialView().find( materialName );
 
 		if ( !pMaterial )
 		{
-			pMaterial = p_mesh.GetScene()->GetMaterialView().Add( materialName, MaterialType::eLegacy );
-			pMaterial->CreatePass();
+			pMaterial = p_mesh.getScene()->getMaterialView().add( materialName, MaterialType::eLegacy );
+			pMaterial->createPass();
 		}
 
-		pMaterial->GetPass( 0 )->SetTwoSided( true );
-		submesh->SetDefaultMaterial( pMaterial );
+		pMaterial->getPass( 0 )->setTwoSided( true );
+		submesh->setDefaultMaterial( pMaterial );
 		// Parsing the ply identification line
 		std::getline( isFile, strLine );
 
@@ -109,7 +109,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element vertex " ).length() ) );
 						ssToken >> iNbVertex;
 						ssToken.clear( std::istringstream::goodbit );
-						Logger::LogInfo( StringStream() << cuT( "Vertices: " ) << iNbVertex );
+						Logger::logInfo( StringStream() << cuT( "Vertices: " ) << iNbVertex );
 						break;
 					}
 				}
@@ -126,7 +126,7 @@ namespace C3dPly
 					else
 					{
 						isFile.seekg( -isFile.gcount() ); // Unget last line
-						Logger::LogDebug( StringStream() << cuT( "Vertex properties: " ) << iNbProperties );
+						Logger::logDebug( StringStream() << cuT( "Vertex properties: " ) << iNbProperties );
 						break;
 					}
 				}
@@ -145,7 +145,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element face " ).size() ) );
 						ssToken >> iNbFaces;
 						ssToken.clear( std::istringstream::goodbit );
-						Logger::LogInfo( StringStream() << cuT( "Triangles: " ) << iNbFaces );
+						Logger::logInfo( StringStream() << cuT( "Triangles: " ) << iNbFaces );
 						break;
 					}
 				}
@@ -204,7 +204,7 @@ namespace C3dPly
 					}
 				}
 
-				submesh->AddPoints( vertices );
+				submesh->addPoints( vertices );
 				// Parsing triangles
 				FaceSPtr pFace;
 				std::vector< FaceIndices > faces( iNbFaces );
@@ -225,21 +225,21 @@ namespace C3dPly
 					ssToken.clear( std::istringstream::goodbit );
 				}
 
-				submesh->AddFaceGroup( faces );
+				submesh->addFaceGroup( faces );
 			}
 
 			result = true;
 		}
 
-		submesh->ComputeContainers();
+		submesh->computeContainers();
 
 		if ( iNbProperties < 6 )
 		{
-			submesh->ComputeNormals( false );
+			submesh->computeNormals( false );
 		}
 		else
 		{
-			submesh->ComputeTangentsFromNormals();
+			submesh->computeTangentsFromNormals();
 		}
 
 		isFile.close();

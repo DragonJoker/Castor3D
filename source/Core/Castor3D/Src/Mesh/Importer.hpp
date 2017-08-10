@@ -29,7 +29,7 @@ SOFTWARE.
 #include <Data/Path.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor3D
 	\brief		Classe de base pour l'import de fichiers externes
 	*/
 	class Importer
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -67,7 +67,7 @@ namespace Castor3D
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool ImportScene( Scene & p_scene, Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API bool importScene( Scene & p_scene, castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\param[in]	p_initialise	Dit si le mesh importé doit être initialisé.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool ImportMesh( Mesh & p_mesh, Castor::Path const & p_pathFile, Parameters const & p_parameters, bool p_initialise );
+		C3D_API bool importMesh( Mesh & p_mesh, castor::Path const & p_pathFile, Parameters const & p_parameters, bool p_initialise );
 		/**
 		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\param[in]	p_channel	Le canal affecté à l'image.
 		 *\return		\p false en cas d'erreur.
 		 */
-		C3D_API TextureUnitSPtr LoadTexture( Castor::Path const & p_path, Pass & p_pass, TextureChannel p_channel )const;
+		C3D_API TextureUnitSPtr loadTexture( castor::Path const & p_path, Pass & p_pass, TextureChannel p_channel )const;
 
 	protected:
 		/**
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\param[out]	p_scene	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual bool DoImportScene( Scene & p_scene ) = 0;
+		C3D_API virtual bool doImportScene( Scene & p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -123,13 +123,13 @@ namespace Castor3D
 		 *\param[out]	p_mesh	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual bool DoImportMesh( Mesh & p_mesh ) = 0;
+		C3D_API virtual bool doImportMesh( Mesh & p_mesh ) = 0;
 
 	protected:
 		//!\~english The file name	\~french Le nom du fichier
-		Castor::Path m_fileName;
+		castor::Path m_fileName;
 		//!\~english The file full path	\~french Le chemin complet du fichier
-		Castor::Path m_filePath;
+		castor::Path m_filePath;
 		//!\~english The loaded scene nodes	\~french Les noeuds chargés
 		SceneNodePtrArray m_nodes;
 		//!\~english The loaded geometries	\~french Les géométries chargées

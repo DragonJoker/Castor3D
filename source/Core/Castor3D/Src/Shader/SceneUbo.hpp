@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -75,7 +75,7 @@ namespace Castor3D
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	p_camera	La camera actuelle.
 		 */
-		C3D_API void UpdateCameraPosition( Camera const & p_camera )const;
+		C3D_API void updateCameraPosition( Camera const & p_camera )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La camera actuelle.
 		 *\param[in]	p_fog		La configuration du brouillard.
 		 */
-		C3D_API void Update( Camera const & p_camera
+		C3D_API void update( Camera const & p_camera
 			, Fog const & p_fog )const;
 		/**
 		 *\~english
@@ -100,21 +100,21 @@ namespace Castor3D
 		 *\param[in]	p_camera	La camera actuelle.
 		 *\param[in]	p_lights	Les sources lumineuses sont mises à jour elles aussi.
 		 */
-		C3D_API void Update( Scene const & p_scene
+		C3D_API void update( Scene const & p_scene
 			, Camera const & p_camera
 			, bool p_lights = true )const;
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -155,15 +155,15 @@ namespace Castor3D
 }
 
 #define UBO_SCENE( Writer )\
-	GLSL::Ubo scene{ writer, Castor3D::ShaderProgram::BufferScene, Castor3D::SceneUbo::BindingPoint };\
-	auto c3d_v4AmbientLight = scene.DeclMember< GLSL::Vec4 >( Castor3D::ShaderProgram::AmbientLight );\
-	auto c3d_v4BackgroundColour = scene.DeclMember< GLSL::Vec4 >( Castor3D::ShaderProgram::BackgroundColour );\
-	auto c3d_lightsCount = scene.DeclMember< GLSL::IVec4 >( Castor3D::ShaderProgram::LightsCount );\
-	auto c3d_v3CameraPosition = scene.DeclMember< GLSL::Vec3 >( Castor3D::ShaderProgram::CameraPos );\
-	auto c3d_v3CameraNearPlane = scene.DeclMember< GLSL::Float >( Castor3D::ShaderProgram::CameraNearPlane ); \
-	auto c3d_v3CameraFarPlane = scene.DeclMember< GLSL::Float >( Castor3D::ShaderProgram::CameraFarPlane );\
-	auto c3d_iFogType = scene.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::FogType );\
-	auto c3d_fFogDensity = scene.DeclMember< GLSL::Float >( Castor3D::ShaderProgram::FogDensity );\
-	scene.End()
+	GLSL::Ubo scene{ writer, castor3d::ShaderProgram::BufferScene, castor3d::SceneUbo::BindingPoint };\
+	auto c3d_v4AmbientLight = scene.declMember< GLSL::Vec4 >( castor3d::ShaderProgram::AmbientLight );\
+	auto c3d_v4BackgroundColour = scene.declMember< GLSL::Vec4 >( castor3d::ShaderProgram::BackgroundColour );\
+	auto c3d_lightsCount = scene.declMember< GLSL::IVec4 >( castor3d::ShaderProgram::LightsCount );\
+	auto c3d_v3CameraPosition = scene.declMember< GLSL::Vec3 >( castor3d::ShaderProgram::CameraPos );\
+	auto c3d_v3CameraNearPlane = scene.declMember< GLSL::Float >( castor3d::ShaderProgram::CameraNearPlane ); \
+	auto c3d_v3CameraFarPlane = scene.declMember< GLSL::Float >( castor3d::ShaderProgram::CameraFarPlane );\
+	auto c3d_iFogType = scene.declMember< GLSL::Int >( castor3d::ShaderProgram::FogType );\
+	auto c3d_fFogDensity = scene.declMember< GLSL::Float >( castor3d::ShaderProgram::FogDensity );\
+	scene.end()
 
 #endif

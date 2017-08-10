@@ -35,15 +35,15 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( RectangleProperty )
 
 	public:
-		RectangleProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Rectangle const & value = Castor::Rectangle() );
+		RectangleProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Rectangle const & value = castor::Rectangle() );
 		virtual ~RectangleProperty();
 
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
+		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void refreshChildren();
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Rectangle const & value );
+		void setValueI( castor::Rectangle const & value );
 	};
 }
 

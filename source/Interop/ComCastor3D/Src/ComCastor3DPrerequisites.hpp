@@ -69,7 +69,7 @@ namespace CastorCom
 	class ComPosition;
 	typedef std::basic_string< TCHAR > tstring;
 
-	static const Castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
+	static const castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
 
 	template< typename T, typename FuncT >
 	HRESULT RetrieveValue( T * pVal, FuncT p_func )

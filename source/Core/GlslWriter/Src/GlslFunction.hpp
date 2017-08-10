@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,22 +28,22 @@ SOFTWARE.
 namespace GLSL
 {
 	template< typename RetT, typename ... ParamsT >
-	inline RetT WriteFunctionCall( GlslWriter * p_writer, Castor::String const & p_name, ParamsT const & ... p_params );
+	inline RetT writeFunctionCall( GlslWriter * p_writer, castor::String const & p_name, ParamsT const & ... p_params );
 
 	template< typename Return, typename ... Params >
-	inline void WriteFunctionHeader( GlslWriter & p_writer, Castor::String const & p_name, Params && ... p_params );
+	inline void writeFunctionHeader( GlslWriter & p_writer, castor::String const & p_name, Params && ... p_params );
 
 	template< typename RetT, typename ... ParamsT >
 	struct Function
 	{
 	public:
 		Function() = default;
-		Function( GlslWriter * p_writer, Castor::String const & p_name );
+		Function( GlslWriter * p_writer, castor::String const & p_name );
 		RetT operator()( ParamsT && ... p_params )const;
 
 	private:
 		GlslWriter * m_writer{ nullptr };
-		Castor::String m_name;
+		castor::String m_name;
 	};
 }
 

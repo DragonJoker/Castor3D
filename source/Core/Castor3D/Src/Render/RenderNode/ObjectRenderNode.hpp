@@ -26,7 +26,7 @@ SOFTWARE.
 #include "PassRenderNode.hpp"
 #include "SceneRenderNode.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS

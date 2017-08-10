@@ -26,7 +26,7 @@ SOFTWARE.
 #include <ShadowMap/ShadowMap.hpp>
 #include <Render/Viewport.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra de l'observateur.
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		void Update( Camera const & p_camera
+		void update( Camera const & p_camera
 			, RenderQueueArray & p_queues );
 		/**
 		 *\~english
@@ -79,14 +79,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		void Render( PointLight const & p_light );
+		void render( PointLight const & p_light );
 		/**
 		 *\~english
 		 *\return		The shadow map.
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit & GetTexture()
+		inline TextureUnit & getTexture()
 		{
 			return m_shadowMap;
 		}
@@ -96,42 +96,42 @@ namespace Castor3D
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit const & GetTexture()const
+		inline TextureUnit const & getTexture()const
 		{
 			return m_shadowMap;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetMaxPasses
+		 *\copydoc		castor3d::ShadowMap::doGetMaxPasses
 		 */
-		int32_t DoGetMaxPasses()const override;
+		int32_t doGetMaxPasses()const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetSize
+		 *\copydoc		castor3d::ShadowMap::doGetSize
 		 */
-		Castor::Size DoGetSize()const override;
+		castor::Size doGetSize()const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoInitialise
+		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
-		void DoInitialise()override;
+		void doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoCleanup
+		 *\copydoc		castor3d::ShadowMap::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoCreatePass
+		 *\copydoc		castor3d::ShadowMap::doCreatePass
 		 */
-		ShadowMapPassSPtr DoCreatePass( Light & p_light )const override;
+		ShadowMapPassSPtr doCreatePass( Light & p_light )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
+		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
+		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
-		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & textureFlags
+		GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;

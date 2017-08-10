@@ -2,12 +2,12 @@
 
 #include "Config/MultiThreadConfig.hpp"
 
-namespace Castor
+namespace castor
 {
 	ThreadPool::ThreadPool( size_t p_count )
 		: m_count{ p_count }
 	{
-		auto lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		m_available.reserve( p_count );
 		m_busy.reserve( p_count );
 
@@ -16,35 +16,35 @@ namespace Castor
 			m_available.push_back( std::make_unique< WorkerThread >() );
 			m_endConnections.push_back( m_available.back()->onEnded.connect( [this]( WorkerThread & p_worker )
 			{
-				DoFreeWorker( p_worker );
+				doFreeWorker( p_worker );
 			} ) );
 		}
 	}
 
 	ThreadPool::~ThreadPool()noexcept
 	{
-		WaitAll( Milliseconds( 0xFFFFFFFF ) );
-		auto lock = make_unique_lock( m_mutex );
+		waitAll( Milliseconds( 0xFFFFFFFF ) );
+		auto lock = makeUniqueLock( m_mutex );
 		m_endConnections.clear();
 		m_busy.clear();
 		m_available.clear();
 	}
 
-	bool ThreadPool::IsEmpty()const
+	bool ThreadPool::isEmpty()const
 	{
-		auto lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		return m_available.empty();
 	}
 
-	bool ThreadPool::IsFull()const
+	bool ThreadPool::isFull()const
 	{
-		auto lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		return m_busy.empty();
 	}
 
-	bool ThreadPool::WaitAll( Milliseconds const & p_timeout )const
+	bool ThreadPool::waitAll( Milliseconds const & p_timeout )const
 	{
-		bool result = IsFull();
+		bool result = isFull();
 
 		if ( !result )
 		{
@@ -54,7 +54,7 @@ namespace Castor
 			do
 			{
 				std::this_thread::sleep_for( Milliseconds( 1 ) );
-				result = IsFull();
+				result = isFull();
 				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
 			while ( wait < p_timeout && !result );
@@ -63,20 +63,20 @@ namespace Castor
 		return result;
 	}
 
-	void ThreadPool::PushJob( WorkerThread::Job p_job )
+	void ThreadPool::pushJob( WorkerThread::Job p_job )
 	{
-		auto & worker = DoReserveWorker();
-		worker.Feed( p_job );
+		auto & worker = doReserveWorker();
+		worker.feed( p_job );
 	}
 
-	WorkerThread & ThreadPool::DoReserveWorker()
+	WorkerThread & ThreadPool::doReserveWorker()
 	{
-		while ( IsEmpty() )
+		while ( isEmpty() )
 		{
 			std::this_thread::sleep_for( Milliseconds( 1 ) );
 		}
 
-		auto lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		auto it = m_available.rbegin();
 		auto & worker = **it;
 		m_busy.push_back( std::move( *it ) );
@@ -84,9 +84,9 @@ namespace Castor
 		return worker;
 	}
 
-	void ThreadPool::DoFreeWorker( WorkerThread & p_worker )
+	void ThreadPool::doFreeWorker( WorkerThread & p_worker )
 	{
-		auto lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		auto it = std::find_if( m_busy.begin(), m_busy.end(), [&p_worker]( WorkerPtr const & worker )
 		{
 			return worker.get() == &p_worker;

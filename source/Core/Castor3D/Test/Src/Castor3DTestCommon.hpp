@@ -45,227 +45,227 @@ namespace Testing
 	//*********************************************************************************************
 
 	template<>
-	inline std::string to_string< Castor::Angle >( Castor::Angle const & p_value )
+	inline std::string toString< castor::Angle >( castor::Angle const & p_value )
 	{
-		return Castor::string::to_string( p_value.degrees() );
+		return castor::string::toString( p_value.degrees() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Scene >( Castor3D::Scene const & p_value )
+	inline std::string toString< castor3d::Scene >( castor3d::Scene const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::SceneNode >( Castor3D::SceneNode const & p_value )
+	inline std::string toString< castor3d::SceneNode >( castor3d::SceneNode const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Animable >( Castor3D::Animable const & p_value )
+	inline std::string toString< castor3d::Animable >( castor3d::Animable const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::MovableObject >( Castor3D::MovableObject const & p_value )
+	inline std::string toString< castor3d::MovableObject >( castor3d::MovableObject const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Geometry >( Castor3D::Geometry const & p_value )
+	inline std::string toString< castor3d::Geometry >( castor3d::Geometry const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Light >( Castor3D::Light const & p_value )
+	inline std::string toString< castor3d::Light >( castor3d::Light const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Camera >( Castor3D::Camera const & p_value )
+	inline std::string toString< castor3d::Camera >( castor3d::Camera const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::LightCategory >( Castor3D::LightCategory const & p_value )
+	inline std::string toString< castor3d::LightCategory >( castor3d::LightCategory const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::DirectionalLight >( Castor3D::DirectionalLight const & p_value )
+	inline std::string toString< castor3d::DirectionalLight >( castor3d::DirectionalLight const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::PointLight >( Castor3D::PointLight const & p_value )
+	inline std::string toString< castor3d::PointLight >( castor3d::PointLight const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::SpotLight >( Castor3D::SpotLight const & p_value )
+	inline std::string toString< castor3d::SpotLight >( castor3d::SpotLight const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Viewport >( Castor3D::Viewport const & p_value )
+	inline std::string toString< castor3d::Viewport >( castor3d::Viewport const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Material >( Castor3D::Material const & p_value )
+	inline std::string toString< castor3d::Material >( castor3d::Material const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Pass >( Castor3D::Pass const & p_value )
+	inline std::string toString< castor3d::Pass >( castor3d::Pass const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Mesh >( Castor3D::Mesh const & p_value )
+	inline std::string toString< castor3d::Mesh >( castor3d::Mesh const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Submesh >( Castor3D::Submesh const & p_value )
+	inline std::string toString< castor3d::Submesh >( castor3d::Submesh const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Skeleton >( Castor3D::Skeleton const & p_value )
+	inline std::string toString< castor3d::Skeleton >( castor3d::Skeleton const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Bone >( Castor3D::Bone const & p_value )
+	inline std::string toString< castor3d::Bone >( castor3d::Bone const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::Animation >( Castor3D::Animation const & p_value )
+	inline std::string toString< castor3d::Animation >( castor3d::Animation const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::SkeletonAnimation >( Castor3D::SkeletonAnimation const & p_value )
+	inline std::string toString< castor3d::SkeletonAnimation >( castor3d::SkeletonAnimation const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::SkeletonAnimationObject >( Castor3D::SkeletonAnimationObject const & p_value )
+	inline std::string toString< castor3d::SkeletonAnimationObject >( castor3d::SkeletonAnimationObject const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::KeyFrame >( Castor3D::KeyFrame const & p_value )
+	inline std::string toString< castor3d::KeyFrame >( castor3d::KeyFrame const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::AnimatedObjectGroup >( Castor3D::AnimatedObjectGroup const & p_value )
+	inline std::string toString< castor3d::AnimatedObjectGroup >( castor3d::AnimatedObjectGroup const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::AnimatedObject >( Castor3D::AnimatedObject const & p_value )
+	inline std::string toString< castor3d::AnimatedObject >( castor3d::AnimatedObject const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetName() );
+		return castor::string::stringCast< char >( p_value.getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::AnimationInstance >( Castor3D::AnimationInstance const & p_value )
+	inline std::string toString< castor3d::AnimationInstance >( castor3d::AnimationInstance const & p_value )
 	{
-		return Castor::string::string_cast< char >( p_value.GetAnimation().GetName() );
+		return castor::string::stringCast< char >( p_value.getAnimation().getName() );
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::SkeletonAnimationInstance >( Castor3D::SkeletonAnimationInstance const & p_value )
+	inline std::string toString< castor3d::SkeletonAnimationInstance >( castor3d::SkeletonAnimationInstance const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::SkeletonAnimationInstanceObject >( Castor3D::SkeletonAnimationInstanceObject const & p_value )
+	inline std::string toString< castor3d::SkeletonAnimationInstanceObject >( castor3d::SkeletonAnimationInstanceObject const & p_value )
 	{
 		return std::string{};
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::InterpolatorType >( Castor3D::InterpolatorType const & p_value )
+	inline std::string toString< castor3d::InterpolatorType >( castor3d::InterpolatorType const & p_value )
 	{
-		static std::map< Castor3D::InterpolatorType, std::string > Names
+		static std::map< castor3d::InterpolatorType, std::string > Names
 		{
-			{ Castor3D::InterpolatorType::eNearest, "Nearest" },
-			{ Castor3D::InterpolatorType::eLinear, "Linear" },
+			{ castor3d::InterpolatorType::eNearest, "Nearest" },
+			{ castor3d::InterpolatorType::eLinear, "Linear" },
 		};
 		return Names[p_value];
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::AnimationType >( Castor3D::AnimationType const & p_value )
+	inline std::string toString< castor3d::AnimationType >( castor3d::AnimationType const & p_value )
 	{
-		static std::map< Castor3D::AnimationType, std::string > Names
+		static std::map< castor3d::AnimationType, std::string > Names
 		{
-			{ Castor3D::AnimationType::eMovable, "Movable" },
-			{ Castor3D::AnimationType::eMesh, "Mesh" },
-			{ Castor3D::AnimationType::eSkeleton, "Skeleton" },
+			{ castor3d::AnimationType::eMovable, "Movable" },
+			{ castor3d::AnimationType::eMesh, "Mesh" },
+			{ castor3d::AnimationType::eSkeleton, "Skeleton" },
 		};
 		return Names[p_value];
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::SkeletonAnimationObjectType >( Castor3D::SkeletonAnimationObjectType const & p_value )
+	inline std::string toString< castor3d::SkeletonAnimationObjectType >( castor3d::SkeletonAnimationObjectType const & p_value )
 	{
-		static std::map< Castor3D::SkeletonAnimationObjectType, std::string > Names
+		static std::map< castor3d::SkeletonAnimationObjectType, std::string > Names
 		{
-			{ Castor3D::SkeletonAnimationObjectType::eBone, "Bone" },
-			{ Castor3D::SkeletonAnimationObjectType::eNode, "Node" },
+			{ castor3d::SkeletonAnimationObjectType::eBone, "Bone" },
+			{ castor3d::SkeletonAnimationObjectType::eNode, "Node" },
 		};
 		return Names[p_value];
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::AnimationState >( Castor3D::AnimationState const & p_value )
+	inline std::string toString< castor3d::AnimationState >( castor3d::AnimationState const & p_value )
 	{
-		static std::map< Castor3D::AnimationState, std::string > Names
+		static std::map< castor3d::AnimationState, std::string > Names
 		{
-			{ Castor3D::AnimationState::ePlaying, "Playing" },
-			{ Castor3D::AnimationState::eStopped, "Stopped" },
-			{ Castor3D::AnimationState::ePaused, "Paused" },
+			{ castor3d::AnimationState::ePlaying, "Playing" },
+			{ castor3d::AnimationState::eStopped, "Stopped" },
+			{ castor3d::AnimationState::ePaused, "Paused" },
 		};
 		return Names[p_value];
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::ViewportType >( Castor3D::ViewportType const & p_value )
+	inline std::string toString< castor3d::ViewportType >( castor3d::ViewportType const & p_value )
 	{
-		static std::map< Castor3D::ViewportType, std::string > Names
+		static std::map< castor3d::ViewportType, std::string > Names
 		{
-			{ Castor3D::ViewportType::eOrtho, "Ortho" },
-			{ Castor3D::ViewportType::ePerspective, "Perspective" },
-			{ Castor3D::ViewportType::eFrustum, "Frustum" },
+			{ castor3d::ViewportType::eOrtho, "Ortho" },
+			{ castor3d::ViewportType::ePerspective, "Perspective" },
+			{ castor3d::ViewportType::eFrustum, "Frustum" },
 		};
 		return Names[p_value];
 	}
@@ -276,42 +276,42 @@ namespace Testing
 		: public TestCase
 	{
 	public:
-		C3DTestCase( std::string const & p_name, Castor3D::Engine & engine );
+		C3DTestCase( std::string const & p_name, castor3d::Engine & engine );
 
 	protected:
 		void DeCleanupEngine();
 		using TestCase::compare;
-		bool compare( Castor::Angle const & p_a, Castor::Angle const & p_b );
-		bool compare( Castor::Quaternion const & p_a, Castor::Quaternion const & p_b );
-		bool compare( Castor3D::Scene const & p_a, Castor3D::Scene const & p_b );
-		bool compare( Castor3D::SceneNode const & p_a, Castor3D::SceneNode const & p_b );
-		bool compare( Castor3D::Animable const & p_a, Castor3D::Animable const & p_b );
-		bool compare( Castor3D::MovableObject const & p_a, Castor3D::MovableObject const & p_b );
-		bool compare( Castor3D::Camera const & p_a, Castor3D::Camera const & p_b );
-		bool compare( Castor3D::Light const & p_a, Castor3D::Light const & p_b );
-		bool compare( Castor3D::Geometry const & p_a, Castor3D::Geometry const & p_b );
-		bool compare( Castor3D::LightCategory const & p_a, Castor3D::LightCategory const & p_b );
-		bool compare( Castor3D::DirectionalLight const & p_a, Castor3D::DirectionalLight const & p_b );
-		bool compare( Castor3D::PointLight const & p_a, Castor3D::PointLight const & p_b );
-		bool compare( Castor3D::SpotLight const & p_a, Castor3D::SpotLight const & p_b );
-		bool compare( Castor3D::Viewport const & p_a, Castor3D::Viewport const & p_b );
-		bool compare( Castor3D::Mesh const & p_a, Castor3D::Mesh const & p_b );
-		bool compare( Castor3D::Submesh const & p_a, Castor3D::Submesh const & p_b );
-		bool compare( Castor3D::Skeleton const & p_a, Castor3D::Skeleton const & p_b );
-		bool compare( Castor3D::Bone const & p_a, Castor3D::Bone const & p_b );
-		bool compare( Castor3D::Animation const & p_a, Castor3D::Animation const & p_b );
-		bool compare( Castor3D::SkeletonAnimation const & p_a, Castor3D::SkeletonAnimation const & p_b );
-		bool compare( Castor3D::SkeletonAnimationObject const & p_a, Castor3D::SkeletonAnimationObject const & p_b );
-		bool compare( Castor3D::KeyFrame const & p_a, Castor3D::KeyFrame const & p_b );
-		bool compare( Castor3D::AnimatedObjectGroup const & p_a, Castor3D::AnimatedObjectGroup const & p_b );
-		bool compare( Castor3D::AnimatedObject const & p_a, Castor3D::AnimatedObject const & p_b );
-		bool compare( Castor3D::AnimationInstance const & p_a, Castor3D::AnimationInstance const & p_b );
-		bool compare( Castor3D::SkeletonAnimationInstance const & p_a, Castor3D::SkeletonAnimationInstance const & p_b );
-		bool compare( Castor3D::SkeletonAnimationInstanceObject const & p_a, Castor3D::SkeletonAnimationInstanceObject const & p_b );
+		bool compare( castor::Angle const & p_a, castor::Angle const & p_b );
+		bool compare( castor::Quaternion const & p_a, castor::Quaternion const & p_b );
+		bool compare( castor3d::Scene const & p_a, castor3d::Scene const & p_b );
+		bool compare( castor3d::SceneNode const & p_a, castor3d::SceneNode const & p_b );
+		bool compare( castor3d::Animable const & p_a, castor3d::Animable const & p_b );
+		bool compare( castor3d::MovableObject const & p_a, castor3d::MovableObject const & p_b );
+		bool compare( castor3d::Camera const & p_a, castor3d::Camera const & p_b );
+		bool compare( castor3d::Light const & p_a, castor3d::Light const & p_b );
+		bool compare( castor3d::Geometry const & p_a, castor3d::Geometry const & p_b );
+		bool compare( castor3d::LightCategory const & p_a, castor3d::LightCategory const & p_b );
+		bool compare( castor3d::DirectionalLight const & p_a, castor3d::DirectionalLight const & p_b );
+		bool compare( castor3d::PointLight const & p_a, castor3d::PointLight const & p_b );
+		bool compare( castor3d::SpotLight const & p_a, castor3d::SpotLight const & p_b );
+		bool compare( castor3d::Viewport const & p_a, castor3d::Viewport const & p_b );
+		bool compare( castor3d::Mesh const & p_a, castor3d::Mesh const & p_b );
+		bool compare( castor3d::Submesh const & p_a, castor3d::Submesh const & p_b );
+		bool compare( castor3d::Skeleton const & p_a, castor3d::Skeleton const & p_b );
+		bool compare( castor3d::Bone const & p_a, castor3d::Bone const & p_b );
+		bool compare( castor3d::Animation const & p_a, castor3d::Animation const & p_b );
+		bool compare( castor3d::SkeletonAnimation const & p_a, castor3d::SkeletonAnimation const & p_b );
+		bool compare( castor3d::SkeletonAnimationObject const & p_a, castor3d::SkeletonAnimationObject const & p_b );
+		bool compare( castor3d::KeyFrame const & p_a, castor3d::KeyFrame const & p_b );
+		bool compare( castor3d::AnimatedObjectGroup const & p_a, castor3d::AnimatedObjectGroup const & p_b );
+		bool compare( castor3d::AnimatedObject const & p_a, castor3d::AnimatedObject const & p_b );
+		bool compare( castor3d::AnimationInstance const & p_a, castor3d::AnimationInstance const & p_b );
+		bool compare( castor3d::SkeletonAnimationInstance const & p_a, castor3d::SkeletonAnimationInstance const & p_b );
+		bool compare( castor3d::SkeletonAnimationInstanceObject const & p_a, castor3d::SkeletonAnimationInstanceObject const & p_b );
 
 	protected:
-		Castor3D::Engine & m_engine;
-		Castor::Path m_testDataFolder;
+		castor3d::Engine & m_engine;
+		castor::Path m_testDataFolder;
 	};
 
 	//************************************************************************************************

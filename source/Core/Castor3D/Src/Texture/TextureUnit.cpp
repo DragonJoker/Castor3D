@@ -10,12 +10,12 @@
 
 #include <Graphics/Image.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	TextureUnit::TextWriter::TextWriter( String const & tabs, MaterialType type )
-		: Castor::TextWriter< TextureUnit >{ tabs }
+		: castor::TextWriter< TextureUnit >{ tabs }
 		, m_type{ type }
 	{
 	}
@@ -24,63 +24,63 @@ namespace Castor3D
 	{
 		bool result = true;
 
-		if ( unit.IsTextured() && unit.GetTexture() )
+		if ( unit.isTextured() && unit.getTexture() )
 		{
-			auto texture = unit.GetTexture();
-			auto image = texture->GetImage().ToString();
+			auto texture = unit.getTexture();
+			auto image = texture->getImage().toString();
 
-			if ( !image.empty() || !texture->GetImage().IsStaticSource() )
+			if ( !image.empty() || !texture->getImage().isStaticSource() )
 			{
 				if ( result )
 				{
-					result = file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
-							   && file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+					result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
+							   && file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
-				if ( result && unit.GetSampler() && unit.GetSampler()->GetName() != cuT( "Default" ) )
+				if ( result && unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 				{
-					result = file.WriteText( m_tabs + cuT( "\tsampler \"" ) + unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< TextureUnit >::CheckError( result, "TextureUnit sampler" );
+					result = file.writeText( m_tabs + cuT( "\tsampler \"" ) + unit.getSampler()->getName() + cuT( "\"\n" ) ) > 0;
+					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit sampler" );
 				}
 
-				if ( result && unit.GetChannel() != TextureChannel::eUndefined )
+				if ( result && unit.getChannel() != TextureChannel::eUndefined )
 				{
 					switch ( m_type )
 					{
 					case MaterialType::eLegacy:
 					case MaterialType::ePbrSpecularGlossiness:
-						switch ( unit.GetChannel() )
+						switch ( unit.getChannel() )
 						{
 						case TextureChannel::eDiffuse:
-							result = file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eNormal:
-							result = file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eOpacity:
-							result = file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eSpecular:
-							result = file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eEmissive:
-							result = file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eHeight:
-							result = file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eGloss:
-							result = file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eAmbientOcclusion:
-							result = file.WriteText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
 							break;
 
 						default:
@@ -89,38 +89,38 @@ namespace Castor3D
 						break;
 
 					case MaterialType::ePbrMetallicRoughness:
-						switch ( unit.GetChannel() )
+						switch ( unit.getChannel() )
 						{
 						case TextureChannel::eAlbedo:
-							result = file.WriteText( m_tabs + cuT( "\tchannel albedo\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel albedo\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eNormal:
-							result = file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eOpacity:
-							result = file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eMetallic:
-							result = file.WriteText( m_tabs + cuT( "\tchannel metallic\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel metallic\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eEmissive:
-							result = file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eHeight:
-							result = file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eRoughness:
-							result = file.WriteText( m_tabs + cuT( "\tchannel roughness\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel roughness\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eAmbientOcclusion:
-							result = file.WriteText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
 							break;
 
 						default:
@@ -129,33 +129,33 @@ namespace Castor3D
 						break;
 					}
 
-					if ( !texture->GetImage().IsStaticSource() )
+					if ( !texture->getImage().isStaticSource() )
 					{
-						if ( result && unit.GetRenderTarget() )
+						if ( result && unit.getRenderTarget() )
 						{
-							result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.GetRenderTarget(), file );
+							result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.getRenderTarget(), file );
 						}
 					}
 					else
 					{
-						Path relative{ Scene::TextWriter::CopyFile( Path{ image }, file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
+						Path relative{ Scene::TextWriter::copyFile( Path{ image }, file.getFilePath(), Path{ cuT( "Textures" ) } ) };
 						String path = relative;
 						string::replace( path, cuT( "\\" ), cuT( "/" ) );
 
-						if ( unit.GetChannel() == TextureChannel::eOpacity )
+						if ( unit.getChannel() == TextureChannel::eOpacity )
 						{
-							result = file.WriteText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" a\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" a\n" ) ) > 0;
 						}
 						else
 						{
-							result = file.WriteText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" rgb\n" ) ) > 0;
+							result = file.writeText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" rgb\n" ) ) > 0;
 						}
-						Castor::TextWriter< TextureUnit >::CheckError( result, "TextureUnit image" );
+						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit image" );
 					}
 
 					if ( result )
 					{
-						result = file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+						result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 					}
 				}
 			}
@@ -172,110 +172,110 @@ namespace Castor3D
 		, m_channel( TextureChannel::eDiffuse )
 		, m_autoMipmaps( false )
 		, m_changed( false )
-		, m_sampler( engine.GetDefaultSampler() )
+		, m_sampler( engine.getDefaultSampler() )
 	{
-		m_transformations.set_identity();
+		m_transformations.setIdentity();
 	}
 
 	TextureUnit::~TextureUnit()
 	{
 		if ( !m_renderTarget.expired() )
 		{
-			GetEngine()->GetRenderTargetCache().Remove( std::move( m_renderTarget.lock() ) );
+			getEngine()->getRenderTargetCache().remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 
-	void TextureUnit::SetTexture( TextureLayoutSPtr texture )
+	void TextureUnit::setTexture( TextureLayoutSPtr texture )
 	{
 		m_texture = texture;
 		m_changed = true;
 	}
 
-	bool TextureUnit::Initialise()
+	bool TextureUnit::initialise()
 	{
 		RenderTargetSPtr target = m_renderTarget.lock();
 		bool result = false;
 
 		if ( target )
 		{
-			target->Initialise( GetIndex() );
-			m_texture = target->GetTexture().GetTexture();
+			target->initialise( getIndex() );
+			m_texture = target->getTexture().getTexture();
 			result = true;
 		}
 		else if ( m_texture )
 		{
-			result = m_texture->Initialise();
-			auto sampler = GetSampler();
+			result = m_texture->initialise();
+			auto sampler = getSampler();
 
 			if ( result
 				&& sampler
-				&& sampler->GetInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eNearest )
+				&& sampler->getInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eNearest )
 			{
-				m_texture->Bind( 0u );
-				m_texture->GenerateMipmaps();
-				m_texture->Unbind( 0u );
+				m_texture->bind( 0u );
+				m_texture->generateMipmaps();
+				m_texture->unbind( 0u );
 			}
 		}
 
 		return result;
 	}
 
-	void TextureUnit::Cleanup()
+	void TextureUnit::cleanup()
 	{
 		if ( m_texture )
 		{
-			m_texture->Cleanup();
+			m_texture->cleanup();
 		}
 
 		RenderTargetSPtr target = m_renderTarget.lock();
 
 		if ( target )
 		{
-			target->Cleanup();
+			target->cleanup();
 		}
 	}
 
-	void TextureUnit::Bind()const
+	void TextureUnit::bind()const
 	{
-		if ( m_texture && m_texture->IsInitialised() )
+		if ( m_texture && m_texture->isInitialised() )
 		{
-			m_texture->Bind( m_index );
+			m_texture->bind( m_index );
 
 			if ( m_changed
 				&& m_autoMipmaps
-				&& m_texture->GetType() != TextureType::eBuffer )
+				&& m_texture->getType() != TextureType::eBuffer )
 			{
-				m_texture->GenerateMipmaps();
+				m_texture->generateMipmaps();
 				m_changed = false;
 			}
 
-			auto sampler = GetSampler();
+			auto sampler = getSampler();
 
 			if ( sampler )
 			{
-				sampler->Bind( m_index );
+				sampler->bind( m_index );
 			}
 		}
 	}
 
-	void TextureUnit::Unbind()const
+	void TextureUnit::unbind()const
 	{
-		auto sampler = GetSampler();
+		auto sampler = getSampler();
 
 		if ( sampler )
 		{
-			sampler->Unbind( m_index );
+			sampler->unbind( m_index );
 		}
 
-		if ( m_texture && m_texture->IsInitialised() )
+		if ( m_texture && m_texture->isInitialised() )
 		{
-			m_texture->Unbind( m_index );
+			m_texture->unbind( m_index );
 		}
 	}
 
-	TextureType TextureUnit::GetType()const
+	TextureType TextureUnit::getType()const
 	{
 		REQUIRE( m_texture );
-		return m_texture->GetType();
+		return m_texture->getType();
 	}
 }

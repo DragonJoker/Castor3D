@@ -1,8 +1,8 @@
 #include "KeyFrame.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
@@ -57,7 +57,7 @@ namespace Castor3D
 	}
 
 	KeyFrame::KeyFrame( Milliseconds const & p_timeIndex
-		, Castor::Matrix4x4r const & p_transform )
+		, castor::Matrix4x4r const & p_transform )
 		: m_timeIndex{ p_timeIndex }
 		, m_transform{ p_transform }
 	{

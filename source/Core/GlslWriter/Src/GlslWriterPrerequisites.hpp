@@ -283,7 +283,7 @@ namespace GLSL
 	class PhongLightingModel;
 	class MetallicBrdfLightingModel;
 	class SpecularBrdfLightingModel;
-	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::shared_ptr< LightingModel >, std::function< std::shared_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
+	using LightingModelFactory = castor::Factory< LightingModel, castor::String, std::shared_ptr< LightingModel >, std::function< std::shared_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
 
 	struct Endl
 	{
@@ -311,9 +311,9 @@ namespace GLSL
 	{
 	};
 
-	GlslWriter_API void WriteLine( GlslWriter & p_writer, Castor::String const & p_line );
-	GlslWriter_API void RegisterName( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type );
-	GlslWriter_API void CheckNameExists( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void writeLine( GlslWriter & p_writer, castor::String const & p_line );
+	GlslWriter_API void registerName( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void checkNameExists( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
 }
 
 #undef DECLARE_GLSL_PARAMETER

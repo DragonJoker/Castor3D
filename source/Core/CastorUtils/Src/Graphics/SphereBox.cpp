@@ -1,7 +1,7 @@
 #include "SphereBox.hpp"
 #include "CubeBox.hpp"
 
-namespace Castor
+namespace castor
 {
 	SphereBox::SphereBox()
 		: ContainerBox3D()
@@ -29,8 +29,8 @@ namespace Castor
 	}
 
 	SphereBox::SphereBox( CubeBox const & p_box )
-		: ContainerBox3D( p_box.GetCenter() )
-		, m_radius( real( point::length( p_box.GetMax() - m_ptCenter ) ) )
+		: ContainerBox3D( p_box.getCenter() )
+		, m_radius( real( point::length( p_box.getMax() - m_ptCenter ) ) )
 	{
 	}
 
@@ -53,25 +53,25 @@ namespace Castor
 		return *this;
 	}
 
-	void SphereBox::Load( Point3r const & p_center, real p_radius )
+	void SphereBox::load( Point3r const & p_center, real p_radius )
 	{
 		m_ptCenter = p_center;
 		m_radius = p_radius;
 	}
 
-	void SphereBox::Load( CubeBox const & p_box )
+	void SphereBox::load( CubeBox const & p_box )
 	{
-		m_ptCenter = p_box.GetCenter();
-		m_radius = real( point::length( p_box.GetMax() - m_ptCenter ) );
-		ENSURE( std::abs( m_radius - real( point::length( m_ptCenter - p_box.GetMin() ) ) ) < 0.001 );
+		m_ptCenter = p_box.getCenter();
+		m_radius = real( point::length( p_box.getMax() - m_ptCenter ) );
+		ENSURE( std::abs( m_radius - real( point::length( m_ptCenter - p_box.getMin() ) ) ) < 0.001 );
 	}
 
-	bool SphereBox::IsWithin( Point3r const & p_v )
+	bool SphereBox::isWithin( Point3r const & p_v )
 	{
 		return point::length( p_v - m_ptCenter ) < m_radius;
 	}
 
-	bool SphereBox::IsOnLimits( Point3r const & p_v )
+	bool SphereBox::isOnLimits( Point3r const & p_v )
 	{
 		return policy::equals( real( point::length( p_v - m_ptCenter ) ), m_radius );
 	}

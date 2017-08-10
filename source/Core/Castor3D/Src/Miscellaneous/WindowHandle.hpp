@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor3D
 	\brief		Implémentation d'un handle de fenêtre, dépendant de l'OS
 	*/
 	class IWindowHandle
-		: public Castor::NonCopyable
+		: public castor::NonCopyable
 	{
 	protected:
 		/**
@@ -149,7 +149,7 @@ namespace Castor3D
 		 *\return		Le handle de la fenêtre
 		 */
 		template< class T >
-		inline std::shared_ptr< T > GetInternal()const
+		inline std::shared_ptr< T > getInternal()const
 		{
 			return std::static_pointer_cast< T >( m_pHandle );
 		}

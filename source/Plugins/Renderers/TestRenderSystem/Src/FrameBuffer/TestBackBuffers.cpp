@@ -2,8 +2,8 @@
 
 #include <Graphics/PixelBuffer.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -16,40 +16,40 @@ namespace TestRender
 	{
 	}
 
-	bool TestBackBuffers::Create()
+	bool TestBackBuffers::create()
 	{
 		return true;
 	}
 
-	void TestBackBuffers::Destroy()
+	void TestBackBuffers::destroy()
 	{
 	}
 
-	void TestBackBuffers::Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const
+	void TestBackBuffers::bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const
 	{
 	}
 
-	void TestBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )const
+	void TestBackBuffers::setDrawBuffers( FrameBuffer::AttachArray const & p_attaches )const
 	{
 	}
 
-	void TestBackBuffers::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
+	void TestBackBuffers::setReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
 	}
 
-	void TestBackBuffers::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void TestBackBuffers::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 	}
 
-	void TestBackBuffers::DoClear( Castor3D::BufferComponents p_uiTargets )
+	void TestBackBuffers::doClear( castor3d::BufferComponents p_uiTargets )
 	{
 	}
 
-	void TestBackBuffers::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
+	void TestBackBuffers::doBlitInto( FrameBuffer const & p_buffer, castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
 	{
 	}
 
-	void TestBackBuffers::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
+	void TestBackBuffers::doStretchInto( FrameBuffer const & p_buffer, castor::Rectangle const & p_rectSrc, castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
 	}
 }

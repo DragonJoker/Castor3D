@@ -1,6 +1,6 @@
 #include "CubeBox.hpp"
 
-namespace Castor
+namespace castor
 {
 	CubeBox::CubeBox()
 		: ContainerBox3D()
@@ -53,16 +53,16 @@ namespace Castor
 		return *this;
 	}
 
-	bool CubeBox::IsWithin( Point3r const & p_v )
+	bool CubeBox::isWithin( Point3r const & p_v )
 	{
 		return ( p_v[0] > m_min[0] && p_v[0] < m_max[0] )
 			   && ( p_v[1] > m_min[1] && p_v[1] < m_max[1] )
 			   && ( p_v[2] > m_min[2] && p_v[2] < m_max[2] );
 	}
 
-	bool CubeBox::IsOnLimits( Point3r const & p_v )
+	bool CubeBox::isOnLimits( Point3r const & p_v )
 	{
-		return ! IsWithin( p_v )
+		return ! isWithin( p_v )
 			   && ( policy::equals( p_v[0], m_min[0] )
 					|| policy::equals( p_v[0], m_max[0] )
 					|| policy::equals( p_v[1], m_min[1] )
@@ -71,7 +71,7 @@ namespace Castor
 					|| policy::equals( p_v[2], m_max[2] ) );
 	}
 
-	void CubeBox::Load( Point3r const & p_ptMin, Point3r const & p_ptMax )
+	void CubeBox::load( Point3r const & p_ptMin, Point3r const & p_ptMax )
 	{
 		m_min = p_ptMin;
 		m_max = p_ptMax;

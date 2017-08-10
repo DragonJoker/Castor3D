@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include "ParserParameterHelpers.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -40,7 +40,7 @@ namespace Castor
 	*/
 	template< ParameterType GivenType >
 	class ParserParameterTypeException
-		: public Castor::Exception
+		: public castor::Exception
 	{
 	public:
 		/**
@@ -52,9 +52,9 @@ namespace Castor
 		 *\param[in]	p_expectedType	Le type réel du paramètre.
 		 */
 		inline ParserParameterTypeException( ParameterType p_expectedType )
-			: Castor::Exception( "", "", "", 0 )
+			: castor::Exception( "", "", "", 0 )
 		{
-			m_description = "Wrong parameter type in parser: user gave " + string::string_cast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::string_cast< xchar >( GetTypeName( p_expectedType ) );
+			m_description = "Wrong parameter type in parser: user gave " + string::stringCast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::stringCast< xchar >( getTypeName( p_expectedType ) );
 		}
 	};
 }

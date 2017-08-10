@@ -50,7 +50,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_camera	La caméra cible
 		 */
-		CameraTreeItemProperty( bool p_editable, Castor3D::Camera & p_camera );
+		CameraTreeItemProperty( bool p_editable, castor3d::Camera & p_camera );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,26 +66,26 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::Camera & GetCamera()
+		inline castor3d::Camera & getCamera()
 		{
 			return m_camera;
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTopologyChange( Castor3D::Topology p_value );
+		void OnTopologyChange( castor3d::Topology p_value );
 
 	private:
-		Castor3D::Camera & m_camera;
+		castor3d::Camera & m_camera;
 	};
 }
 

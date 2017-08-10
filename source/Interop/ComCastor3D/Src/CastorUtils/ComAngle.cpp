@@ -14,7 +14,7 @@ namespace CastorCom
 	{
 		return RetrieveValue( pVal, [this]()
 		{
-			return float( Castor::Angle::cos() );
+			return float( castor::Angle::cos() );
 		} );
 	}
 
@@ -22,7 +22,7 @@ namespace CastorCom
 	{
 		return RetrieveValue( pVal, [this]()
 		{
-			return float( Castor::Angle::sin() );
+			return float( castor::Angle::sin() );
 		} );
 	}
 
@@ -30,7 +30,7 @@ namespace CastorCom
 	{
 		return RetrieveValue( pVal, [this]()
 		{
-			return float( Castor::Angle::tan() );
+			return float( castor::Angle::tan() );
 		} );
 	}
 
@@ -38,7 +38,7 @@ namespace CastorCom
 	{
 		return RetrieveValue( pVal, [this]()
 		{
-			return float( Castor::Angle::cosh() );
+			return float( castor::Angle::cosh() );
 		} );
 	}
 
@@ -46,7 +46,7 @@ namespace CastorCom
 	{
 		return RetrieveValue( pVal, [this]()
 		{
-			return float( Castor::Angle::sinh() );
+			return float( castor::Angle::sinh() );
 		} );
 	}
 
@@ -54,25 +54,25 @@ namespace CastorCom
 	{
 		return RetrieveValue( pVal, [this]()
 		{
-			return float( Castor::Angle::tanh() );
+			return float( castor::Angle::tanh() );
 		} );
 	}
 
 	STDMETHODIMP CAngle::ACos( /* [in] */ float val )
 	{
-		Castor::Angle::acos( val );
+		castor::Angle::acos( val );
 		return S_OK;
 	}
 
 	STDMETHODIMP CAngle::ASin( /* [in] */ float val )
 	{
-		Castor::Angle::asin( val );
+		castor::Angle::asin( val );
 		return S_OK;
 	}
 
 	STDMETHODIMP CAngle::ATan( /* [in] */ float val )
 	{
-		Castor::Angle::atan( val );
+		castor::Angle::atan( val );
 		return S_OK;
 	}
 }

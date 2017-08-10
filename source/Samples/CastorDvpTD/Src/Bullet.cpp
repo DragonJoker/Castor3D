@@ -2,8 +2,8 @@
 
 #include "Game.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace castortd
 {
@@ -19,23 +19,23 @@ namespace castortd
 	{
 	}
 
-	void Bullet::Load( float p_speed, uint32_t p_damage, Castor::Point3r const & p_origin, Enemy & p_enemy )
+	void Bullet::load( float p_speed, uint32_t p_damage, castor::Point3r const & p_origin, Enemy & p_enemy )
 	{
 		m_damage = p_damage;
-		m_node.get().SetPosition( p_origin );
+		m_node.get().setPosition( p_origin );
 		m_target = p_enemy;
 		m_speed = p_speed;
 	}
 
-	bool Bullet::Accept( Game & p_game )
+	bool Bullet::accept( Game & p_game )
 	{
 		bool reachDst{ true };
 
 		if ( m_target.get().IsAlive() )
 		{
-			auto speed = p_game.GetElapsed().count() * m_speed / 1000;
-			Point3r result = m_target.get().GetNode().GetPosition();
-			Point3r position{ m_node.get().GetPosition() };
+			auto speed = p_game.getElapsed().count() * m_speed / 1000;
+			Point3r result = m_target.get().getNode().getPosition();
+			Point3r position{ m_node.get().getPosition() };
 			Point3r direction{ result - position };
 			auto distanceToDst = point::length( direction );
 			direction[0] *= speed / distanceToDst;
@@ -45,7 +45,7 @@ namespace castortd
 			if ( !reachDst )
 			{
 				result = position + direction;
-				m_node.get().SetPosition( result );
+				m_node.get().setPosition( result );
 			}
 			else
 			{
@@ -55,7 +55,7 @@ namespace castortd
 
 		if ( reachDst )
 		{
-			m_node.get().SetPosition( Point3r{ 0, -10, 0 } );
+			m_node.get().setPosition( Point3r{ 0, -10, 0 } );
 		}
 
 		return reachDst;

@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		La fabrique d'importeurs.
 	*/
 	class ImporterFactory
-		: public Castor::Factory< Importer, Castor::String, ImporterUPtr, std::function< ImporterUPtr( Engine & ) > >
+		: public castor::Factory< Importer, castor::String, ImporterUPtr, std::function< ImporterUPtr( Engine & ) > >
 	{
 	public:
 		/**

@@ -3,13 +3,13 @@
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
-	GlSampler::GlSampler( OpenGl & p_gl, GlRenderSystem * renderSystem, Castor::String const & p_name )
-		: Sampler( *renderSystem->GetEngine(), p_name )
+	GlSampler::GlSampler( OpenGl & p_gl, GlRenderSystem * renderSystem, castor::String const & p_name )
+		: Sampler( *renderSystem->getEngine(), p_name )
 		, ObjectType( p_gl,
 					  "GlSampler",
 					  std::bind( &OpenGl::GenSamplers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -23,54 +23,54 @@ namespace GlRender
 	{
 	}
 
-	bool GlSampler::Initialise()
+	bool GlSampler::initialise()
 	{
-		bool result = IsValid();
+		bool result = isValid();
 
 		if ( !result )
 		{
-			result = ObjectType::Create();
+			result = ObjectType::create();
 
 			if ( result )
 			{
-				GlInterpolationMode minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMin ) );
-				GlInterpolationMode mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMip ) );
-				DoAdjustMinMipModes( minMode, mipMode );
+				GlInterpolationMode minMode = getOpenGl().get( getInterpolationMode( InterpolationFilter::eMin ) );
+				GlInterpolationMode mipMode = getOpenGl().get( getInterpolationMode( InterpolationFilter::eMip ) );
+				doAdjustMinMipModes( minMode, mipMode );
 
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eLODBias, float( GetLodBias() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eUWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eU ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eVWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eV ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eWWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eW ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMinFilter, int( minMode ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMagFilter, int( GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMag ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eBorderColour, GetBorderColour().const_ptr() );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMaxAnisotropy, float( GetMaxAnisotropy() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eCompareMode, int( GetOpenGl().Get( GetComparisonMode() ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eCompareFunc, int( GetOpenGl().Get( GetComparisonFunc() ) ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eLODBias, float( getLodBias() ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eUWrap, int( getOpenGl().get( getWrappingMode( TextureUVW::eU ) ) ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eVWrap, int( getOpenGl().get( getWrappingMode( TextureUVW::eV ) ) ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eWWrap, int( getOpenGl().get( getWrappingMode( TextureUVW::eW ) ) ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eMinFilter, int( minMode ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eMagFilter, int( getOpenGl().get( getInterpolationMode( InterpolationFilter::eMag ) ) ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eBorderColour, getBorderColour().constPtr() );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eMaxAnisotropy, float( getMaxAnisotropy() ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eCompareMode, int( getOpenGl().get( getComparisonMode() ) ) );
+				getOpenGl().SetSamplerParameter( getGlName(), GlSamplerParameter::eCompareFunc, int( getOpenGl().get( getComparisonFunc() ) ) );
 			}
 		}
 
 		return result;
 	}
 
-	void GlSampler::Cleanup()
+	void GlSampler::cleanup()
 	{
-		ObjectType::Destroy();
+		ObjectType::destroy();
 	}
 
-	void GlSampler::Bind( uint32_t p_index )const
+	void GlSampler::bind( uint32_t p_index )const
 	{
-		glTrackSampler( GetGlName(), p_index );
-		GetOpenGl().BindSampler( p_index, GetGlName() );
+		glTrackSampler( getGlName(), p_index );
+		getOpenGl().BindSampler( p_index, getGlName() );
 	}
 
-	void GlSampler::Unbind( uint32_t p_index )const
+	void GlSampler::unbind( uint32_t p_index )const
 	{
-		GetOpenGl().BindSampler( p_index, 0u );
+		getOpenGl().BindSampler( p_index, 0u );
 		glTrackSampler( 0u, p_index );
 	}
 
-	void GlSampler::DoAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip )
+	void GlSampler::doAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip )
 	{
 		if ( p_mip != GlInterpolationMode::eNearest )
 		{

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "SkeletonAnimationObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_animation	L'animation parente.
 		 *\param[in]	p_name		Le nom du noeud.
 		 */
-		C3D_API SkeletonAnimationNode( SkeletonAnimation & p_animation, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API SkeletonAnimationNode( SkeletonAnimation & p_animation, castor::String const & p_name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual Castor::String const & GetName()const
+		C3D_API virtual castor::String const & getName()const
 		{
 			return m_name;
 		}
@@ -104,7 +104,7 @@ namespace Castor3D
 	private:
 		//!\~english	The node name.
 		//!\~french		Le nom du noeud.
-		Castor::String m_name;
+		castor::String m_name;
 
 		friend class BinaryWriter< SkeletonAnimationNode >;
 		friend class BinaryParser< SkeletonAnimationNode >;
@@ -149,7 +149,7 @@ namespace Castor3D
 		 *\param[in]	p_obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( SkeletonAnimationNode const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimationNode const & p_obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -177,7 +177,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( SkeletonAnimationNode & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimationNode & p_obj )override;
 	};
 }
 

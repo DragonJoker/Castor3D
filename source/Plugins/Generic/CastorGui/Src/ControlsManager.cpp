@@ -13,8 +13,8 @@
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace CastorGui
 {
@@ -28,43 +28,43 @@ namespace CastorGui
 	{
 	}
 
-	bool ControlsManager::DoInitialise()
+	bool ControlsManager::doInitialise()
 	{
 		return true;
 	}
 
-	void ControlsManager::DoCleanup()
+	void ControlsManager::doCleanup()
 	{
-		auto lock = make_unique_lock( m_mutexHandlers );
+		auto lock = makeUniqueLock( m_mutexHandlers );
 
 		for ( auto handler : m_handlers )
 		{
-			std::static_pointer_cast< Control >( handler )->Destroy();
+			std::static_pointer_cast< Control >( handler )->destroy();
 		}
 	}
 
-	bool ControlsManager::FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material )
+	bool ControlsManager::fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )
 	{
-		auto lock = make_unique_lock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControls );
 		auto it = std::find_if( std::begin( m_controlsByZIndex )
 			, std::end( m_controlsByZIndex )
 			, [&p_overlay]( ControlSPtr p_control )
 		{
-			return p_control->GetName() == p_overlay;
+			return p_control->getName() == p_overlay;
 		} );
 		bool result = false;
 
 		if ( it != std::end( m_controlsByZIndex ) )
 		{
-			auto material = GetEngine()->GetMaterialCache().Find( p_material );
+			auto material = getEngine()->getMaterialCache().find( p_material );
 
 			if ( material )
 			{
 				auto control = *it;
-				m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				m_frameListener->postEvent( MakeFunctorEvent( EventType::ePreRender
 					, [control, material]()
 					{
-						control->SetBackgroundMaterial( material );
+						control->setBackgroundMaterial( material );
 					} ) );
 				result = true;
 			}
@@ -73,24 +73,24 @@ namespace CastorGui
 		return result;
 	}
 
-	bool ControlsManager::FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption )
+	bool ControlsManager::fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )
 	{
-		auto lock = make_unique_lock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControls );
 		auto it = std::find_if( std::begin( m_controlsByZIndex )
 			, std::end( m_controlsByZIndex )
 			, [&p_overlay]( ControlSPtr p_control )
 		{
-			return p_control->GetName() == p_overlay;
+			return p_control->getName() == p_overlay;
 		} );
 		bool result = false;
 
 		if ( it != std::end( m_controlsByZIndex ) )
 		{
 			auto control = *it;
-			m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
+			m_frameListener->postEvent( MakeFunctorEvent( EventType::ePreRender
 				, [control, p_caption]()
 				{
-					control->SetCaption( p_caption );
+					control->setCaption( p_caption );
 				} ) );
 			result = true;
 		}
@@ -98,42 +98,42 @@ namespace CastorGui
 		return result;
 	}
 
-	void ControlsManager::Create( ControlSPtr p_control )
+	void ControlsManager::create( ControlSPtr p_control )
 	{
-		AddControl( p_control );
-		p_control->Create( shared_from_this() );
+		addControl( p_control );
+		p_control->create( shared_from_this() );
 	}
 
-	void ControlsManager::Destroy( ControlSPtr p_control )
+	void ControlsManager::destroy( ControlSPtr p_control )
 	{
-		p_control->Destroy();
-		RemoveControl( p_control->GetId() );
+		p_control->destroy();
+		removeControl( p_control->getId() );
 	}
 
-	void ControlsManager::AddControl( ControlSPtr p_control )
+	void ControlsManager::addControl( ControlSPtr p_control )
 	{
-		DoAddHandler( p_control );
+		doAddHandler( p_control );
 
-		auto lock = make_unique_lock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControls );
 
-		if ( m_controlsById.find( p_control->GetId() ) != m_controlsById.end() )
+		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
 		{
 			CASTOR_EXCEPTION( "A control with this ID already exists in the manager" );
 		}
 
-		m_controlsById.insert( std::make_pair( p_control->GetId(), p_control ) );
+		m_controlsById.insert( std::make_pair( p_control->getId(), p_control ) );
 		m_changed = true;
 	}
 
-	void ControlsManager::RemoveControl( uint32_t p_id )
+	void ControlsManager::removeControl( uint32_t p_id )
 	{
-		auto lock = make_unique_lock( m_mutexControls );
-		DoRemoveControl( p_id );
+		auto lock = makeUniqueLock( m_mutexControls );
+		doRemoveControl( p_id );
 	}
 
-	ControlSPtr ControlsManager::GetControl( uint32_t p_id )
+	ControlSPtr ControlsManager::getControl( uint32_t p_id )
 	{
-		auto lock = make_unique_lock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControls );
 		auto it = m_controlsById.find( p_id );
 
 		if ( it == m_controlsById.end() )
@@ -144,57 +144,57 @@ namespace CastorGui
 		return it->second.lock();
 	}
 
-	void ControlsManager::ConnectEvents( ButtonCtrl & p_control )
+	void ControlsManager::connectEvents( ButtonCtrl & p_control )
 	{
-		m_onButtonClicks.emplace( &p_control, p_control.Connect( ButtonEvent::eClicked
+		m_onButtonClicks.emplace( &p_control, p_control.connect( ButtonEvent::eClicked
 			, [this, &p_control]()
 			{
-				OnClickAction( p_control.GetName() );
+				onClickAction( p_control.getName() );
 			} ) );
 	}
 
-	void ControlsManager::ConnectEvents( ComboBoxCtrl & p_control )
+	void ControlsManager::connectEvents( ComboBoxCtrl & p_control )
 	{
-		m_onComboSelects.emplace( &p_control, p_control.Connect( ComboBoxEvent::eSelected
+		m_onComboSelects.emplace( &p_control, p_control.connect( ComboBoxEvent::eSelected
 			, [this, &p_control]( int p_index )
 			{
-				OnSelectAction( p_control.GetName(), p_index );
+				onSelectAction( p_control.getName(), p_index );
 			} ) );
 	}
 
-	void ControlsManager::ConnectEvents( EditCtrl & p_control )
+	void ControlsManager::connectEvents( EditCtrl & p_control )
 	{
-		m_onEditUpdates.emplace( &p_control, p_control.Connect( EditEvent::eUpdated
+		m_onEditUpdates.emplace( &p_control, p_control.connect( EditEvent::eUpdated
 			, [this, &p_control]( String const & p_text )
 			{
-				OnTextAction( p_control.GetName(), p_text );
+				onTextAction( p_control.getName(), p_text );
 			} ) );
 	}
 
-	void ControlsManager::ConnectEvents( ListBoxCtrl & p_control )
+	void ControlsManager::connectEvents( ListBoxCtrl & p_control )
 	{
-		m_onListSelects.emplace( &p_control, p_control.Connect( ListBoxEvent::eSelected
+		m_onListSelects.emplace( &p_control, p_control.connect( ListBoxEvent::eSelected
 			, [this, &p_control]( int p_index )
 			{
-				OnSelectAction( p_control.GetName(), p_index );
+				onSelectAction( p_control.getName(), p_index );
 			} ) );
 	}
 
-	void ControlsManager::ConnectEvents( SliderCtrl & p_control )
+	void ControlsManager::connectEvents( SliderCtrl & p_control )
 	{
-		m_onSliderTracks.emplace( &p_control, p_control.Connect( SliderEvent::eThumbTrack
+		m_onSliderTracks.emplace( &p_control, p_control.connect( SliderEvent::eThumbTrack
 			, [this, &p_control]( int p_index )
 			{
-				OnSelectAction( p_control.GetName(), p_index );
+				onSelectAction( p_control.getName(), p_index );
 			} ) );
-		m_onSliderReleases.emplace( &p_control, p_control.Connect( SliderEvent::eThumbTrack
+		m_onSliderReleases.emplace( &p_control, p_control.connect( SliderEvent::eThumbTrack
 			, [this, &p_control]( int p_index )
 			{
-				OnSelectAction( p_control.GetName(), p_index );
+				onSelectAction( p_control.getName(), p_index );
 			} ) );
 	}
 
-	void ControlsManager::DisconnectEvents( ButtonCtrl & p_control )
+	void ControlsManager::disconnectEvents( ButtonCtrl & p_control )
 	{
 		auto it = m_onButtonClicks.find( &p_control );
 
@@ -204,7 +204,7 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::DisconnectEvents( ComboBoxCtrl & p_control )
+	void ControlsManager::disconnectEvents( ComboBoxCtrl & p_control )
 	{
 		auto it = m_onComboSelects.find( &p_control );
 
@@ -214,7 +214,7 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::DisconnectEvents( EditCtrl & p_control )
+	void ControlsManager::disconnectEvents( EditCtrl & p_control )
 	{
 		auto it = m_onEditUpdates.find( &p_control );
 
@@ -224,7 +224,7 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::DisconnectEvents( ListBoxCtrl & p_control )
+	void ControlsManager::disconnectEvents( ListBoxCtrl & p_control )
 	{
 		auto it = m_onListSelects.find( &p_control );
 
@@ -234,7 +234,7 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::DisconnectEvents( SliderCtrl & p_control )
+	void ControlsManager::disconnectEvents( SliderCtrl & p_control )
 	{
 		auto it = m_onSliderTracks.find( &p_control );
 
@@ -251,14 +251,14 @@ namespace CastorGui
 		}
 	}
 
-	EventHandlerSPtr ControlsManager::DoGetMouseTargetableHandler( Position const & p_position )const
+	EventHandlerSPtr ControlsManager::doGetMouseTargetableHandler( Position const & p_position )const
 	{
 		if ( m_changed )
 		{
-			DoUpdate();
+			doUpdate();
 		}
 
-		auto lock = make_unique_lock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControls );
 		EventHandlerSPtr result;
 		auto it = m_controlsByZIndex.rbegin();
 
@@ -266,11 +266,11 @@ namespace CastorGui
 		{
 			ControlSPtr control = *it;
 
-			if ( control->CatchesMouseEvents()
-					&& control->GetAbsolutePosition().x() <= p_position.x()
-					&& control->GetAbsolutePosition().x() + int32_t( control->GetSize().width() ) > p_position.x()
-					&& control->GetAbsolutePosition().y() <= p_position.y()
-					&& control->GetAbsolutePosition().y() + int32_t( control->GetSize().height() ) > p_position.y()
+			if ( control->catchesMouseEvents()
+					&& control->getAbsolutePosition().x() <= p_position.x()
+					&& control->getAbsolutePosition().x() + int32_t( control->getSize().getWidth() ) > p_position.x()
+					&& control->getAbsolutePosition().y() <= p_position.y()
+					&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > p_position.y()
 			   )
 			{
 				result = control;
@@ -282,11 +282,11 @@ namespace CastorGui
 		return result;
 	}
 
-	void ControlsManager::DoUpdate()const
+	void ControlsManager::doUpdate()const
 	{
-		auto lock = make_unique_lock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControls );
 		{
-			auto handlers = DoGetHandlers();
+			auto handlers = doGetHandlers();
 
 			for ( auto handler : handlers )
 			{
@@ -296,22 +296,22 @@ namespace CastorGui
 
 		std::sort( m_controlsByZIndex.begin(), m_controlsByZIndex.end(), []( ControlSPtr p_a, ControlSPtr p_b )
 		{
-			uint64_t a = p_a->GetBackground()->GetIndex() + p_a->GetBackground()->GetLevel() * 1000;
-			uint64_t b = p_b->GetBackground()->GetIndex() + p_b->GetBackground()->GetLevel() * 1000;
+			uint64_t a = p_a->getBackground()->getIndex() + p_a->getBackground()->getLevel() * 1000;
+			uint64_t b = p_b->getBackground()->getIndex() + p_b->getBackground()->getLevel() * 1000;
 			return a < b;
 		} );
 	}
 
-	void ControlsManager::DoFlush()
+	void ControlsManager::doFlush()
 	{
-		Cleanup();
+		cleanup();
 	}
 
-	void ControlsManager::DoRemoveControl( uint32_t p_id )
+	void ControlsManager::doRemoveControl( uint32_t p_id )
 	{
 		EventHandlerSPtr handler;
 		{
-			auto lock = make_unique_lock( m_mutexControls );
+			auto lock = makeUniqueLock( m_mutexControls );
 			auto it = m_controlsById.find( p_id );
 
 			if ( it == m_controlsById.end() )
@@ -324,6 +324,6 @@ namespace CastorGui
 		}
 
 		m_changed = true;
-		DoRemoveHandler( handler );
+		doRemoveHandler( handler );
 	}
 }

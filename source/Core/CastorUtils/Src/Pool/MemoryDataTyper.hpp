@@ -27,7 +27,7 @@ SOFTWARE.
 #include "Align/AlignedMemoryAllocator.hpp"
 #include "Align/NonAlignedMemoryAllocator.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS

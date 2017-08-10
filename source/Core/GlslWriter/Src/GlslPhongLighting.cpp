@@ -3,7 +3,7 @@
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GLSL
 {
@@ -14,24 +14,24 @@ namespace GLSL
 	{
 	}
 
-	std::shared_ptr< LightingModel > PhongLightingModel::Create( ShadowType shadows, GlslWriter & writer )
+	std::shared_ptr< LightingModel > PhongLightingModel::create( ShadowType shadows, GlslWriter & writer )
 	{
 		return std::make_shared< PhongLightingModel >( shadows, writer );
 	}
 
-	void PhongLightingModel::ComputeCombinedLighting( Vec3 const & worldEye
+	void PhongLightingModel::computeCombinedLighting( Vec3 const & worldEye
 		, Float const & shininess
 		, Int const & receivesShadows
 		, FragmentInput const & fragmentIn
 		, OutputComponents & parentOutput )
 	{
-		auto c3d_lightsCount = m_writer.GetBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
-		auto begin = m_writer.DeclLocale( cuT( "begin" ), 0_i );
-		auto end = m_writer.DeclLocale( cuT( "end" ), m_writer.Cast< Int >( c3d_lightsCount.x() ) );
+		auto c3d_lightsCount = m_writer.getBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
+		auto begin = m_writer.declLocale( cuT( "begin" ), 0_i );
+		auto end = m_writer.declLocale( cuT( "end" ), m_writer.cast< Int >( c3d_lightsCount.x() ) );
 
 		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{
-			ComputeDirectionalLight( GetDirectionalLight( i )
+			computeDirectionalLight( getDirectionalLight( i )
 				, worldEye
 				, shininess
 				, receivesShadows
@@ -41,11 +41,11 @@ namespace GLSL
 		ROF;
 
 		begin = end;
-		end += m_writer.Cast< Int >( c3d_lightsCount.y() );
+		end += m_writer.cast< Int >( c3d_lightsCount.y() );
 
 		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{
-			ComputePointLight( GetPointLight( i )
+			computePointLight( getPointLight( i )
 				, worldEye
 				, shininess
 				, receivesShadows
@@ -55,11 +55,11 @@ namespace GLSL
 		ROF;
 
 		begin = end;
-		end += m_writer.Cast< Int >( c3d_lightsCount.z() );
+		end += m_writer.cast< Int >( c3d_lightsCount.z() );
 
 		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{
-			ComputeSpotLight( GetSpotLight( i )
+			computeSpotLight( getSpotLight( i )
 				, worldEye
 				, shininess
 				, receivesShadows
@@ -69,7 +69,7 @@ namespace GLSL
 		ROF;
 	}
 
-	void PhongLightingModel::ComputeDirectionalLight( DirectionalLight const & light
+	void PhongLightingModel::computeDirectionalLight( DirectionalLight const & light
 		, Vec3 const & worldEye
 		, Float const & shininess
 		, Int const & receivesShadows
@@ -85,7 +85,7 @@ namespace GLSL
 		m_writer << Endi();
 	}
 
-	void PhongLightingModel::ComputePointLight( PointLight const & light
+	void PhongLightingModel::computePointLight( PointLight const & light
 		, Vec3 const & worldEye
 		, Float const & shininess
 		, Int const & receivesShadows
@@ -101,7 +101,7 @@ namespace GLSL
 		m_writer << Endi();
 	}
 
-	void PhongLightingModel::ComputeSpotLight( SpotLight const & light
+	void PhongLightingModel::computeSpotLight( SpotLight const & light
 		, Vec3 const & worldEye
 		, Float const & shininess
 		, Int const & receivesShadows
@@ -117,7 +117,7 @@ namespace GLSL
 		m_writer << Endi();
 	}
 
-	void PhongLightingModel::ComputeOneDirectionalLight( DirectionalLight const & light
+	void PhongLightingModel::computeOneDirectionalLight( DirectionalLight const & light
 		, Vec3 const & worldEye
 		, Float const & shininess
 		, Int const & receivesShadows
@@ -133,7 +133,7 @@ namespace GLSL
 		m_writer << Endi();
 	}
 
-	void PhongLightingModel::ComputeOnePointLight( PointLight const & light
+	void PhongLightingModel::computeOnePointLight( PointLight const & light
 		, Vec3 const & worldEye
 		, Float const & shininess
 		, Int const & receivesShadows
@@ -149,7 +149,7 @@ namespace GLSL
 		m_writer << Endi();
 	}
 
-	void PhongLightingModel::ComputeOneSpotLight( SpotLight const & light
+	void PhongLightingModel::computeOneSpotLight( SpotLight const & light
 		, Vec3 const & worldEye
 		, Float const & shininess
 		, Int const & receivesShadows
@@ -165,15 +165,15 @@ namespace GLSL
 		m_writer << Endi();
 	}
 
-	void PhongLightingModel::DoDeclareModel()
+	void PhongLightingModel::doDeclareModel()
 	{
-		DoDeclare_ComputeLight();
+		doDeclareComputeLight();
 	}
 
-	void PhongLightingModel::Declare_ComputeDirectionalLight()
+	void PhongLightingModel::doDeclareComputeDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeDirectional = m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" )
+		m_computeDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
 			, [this]( DirectionalLight const & light
 				, Vec3 const & worldEye
 				, Float const & shininess
@@ -183,24 +183,24 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
+					m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+				auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 					, normalize( light.m_direction().xyz() ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( receivesShadows
-						, m_shadowModel->ComputeDirectionalShadow( light.m_transform()
+						, m_shadowModel->computeDirectionalShadow( light.m_transform()
 							, fragmentIn.m_v3Vertex
 							, lightDirection
 							, fragmentIn.m_v3Normal ) );
 				}
 
-				DoComputeLight( light.m_lightBase()
+				doComputeLight( light.m_lightBase()
 					, worldEye
 					, lightDirection
 					, shininess
@@ -218,10 +218,10 @@ namespace GLSL
 			, output );
 	}
 
-	void PhongLightingModel::Declare_ComputePointLight()
+	void PhongLightingModel::doDeclareComputePointLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computePoint = m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" )
+		m_computePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
 			, [this]( PointLight const & light
 				, Vec3 const & worldEye
 				, Float const & shininess
@@ -231,16 +231,16 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
+					m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+				auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" )
+				auto distance = m_writer.declLocale( cuT( "distance" )
 					, length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+				auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 					, normalize( lightToVertex ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
@@ -248,7 +248,7 @@ namespace GLSL
 					IF( m_writer, light.m_index() >= 0_i )
 					{
 						shadowFactor = 1.0_f - min( receivesShadows
-							, m_shadowModel->ComputePointShadow( fragmentIn.m_v3Vertex
+							, m_shadowModel->computePointShadow( fragmentIn.m_v3Vertex
 								, light.m_position().xyz()
 								, fragmentIn.m_v3Normal
 								, light.m_index() ) );
@@ -256,14 +256,14 @@ namespace GLSL
 					FI;
 				}
 
-				DoComputeLight( light.m_lightBase()
+				doComputeLight( light.m_lightBase()
 					, worldEye
 					, lightDirection
 					, shininess
 					, shadowFactor
 					, fragmentIn
 					, output );
-				auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
+				auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 					, light.m_attenuation().x()
 					+ light.m_attenuation().y() * distance
 					+ light.m_attenuation().z() * distance * distance );
@@ -278,10 +278,10 @@ namespace GLSL
 			, output );
 	}
 
-	void PhongLightingModel::Declare_ComputeSpotLight()
+	void PhongLightingModel::doDeclareComputeSpotLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeSpot = m_writer.ImplementFunction< Void >( cuT( "ComputeSpotLight" )
+		m_computeSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
 			, [this]( SpotLight const & light
 				, Vec3 const & worldEye
 				, Float const & shininess
@@ -291,28 +291,28 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
+					m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+				auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" )
+				auto distance = m_writer.declLocale( cuT( "distance" )
 					, length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+				auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 					, normalize( lightToVertex ) );
-				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" )
+				auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
 					, dot( lightDirection, light.m_direction() ) );
 
 				IF( m_writer, spotFactor > light.m_cutOff() )
 				{
-					auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), Float( 1 ) );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), Float( 1 ) );
 
 					if ( m_shadows != ShadowType::eNone )
 					{
 						IF( m_writer, light.m_index() >= 0_i )
 						{
 							shadowFactor = 1.0_f - min( receivesShadows
-								, m_shadowModel->ComputeSpotShadow( light.m_transform()
+								, m_shadowModel->computeSpotShadow( light.m_transform()
 									, fragmentIn.m_v3Vertex
 									, lightToVertex
 									, fragmentIn.m_v3Normal
@@ -321,18 +321,18 @@ namespace GLSL
 						FI;
 					}
 
-					DoComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase()
 						, worldEye
 						, lightDirection
 						, shininess
 						, shadowFactor
 						, fragmentIn
 						, output );
-					auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
+					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 						, light.m_attenuation().x()
 						+ light.m_attenuation().y() * distance
 						+ light.m_attenuation().z() * distance * distance );
-					spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - light.m_cutOff() ) );
+					spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
 					parentOutput.m_v3Diffuse += spotFactor * output.m_v3Diffuse / attenuation;
 					parentOutput.m_v3Specular += spotFactor * output.m_v3Specular / attenuation;
 				}
@@ -346,10 +346,10 @@ namespace GLSL
 			, output );
 	}
 	
-	void PhongLightingModel::Declare_ComputeOneDirectionalLight()
+	void PhongLightingModel::doDeclareComputeOneDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeOneDirectional = m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" )
+		m_computeOneDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
 			, [this]( DirectionalLight const & light
 				, Vec3 const & worldEye
 				, Float const & shininess
@@ -359,24 +359,24 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
+					m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+				auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 					, normalize( light.m_direction().xyz() ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( receivesShadows
-						, m_shadowModel->ComputeDirectionalShadow( light.m_transform()
+						, m_shadowModel->computeDirectionalShadow( light.m_transform()
 							, fragmentIn.m_v3Vertex
 							, lightDirection
 							, fragmentIn.m_v3Normal ) );
 				}
 
-				DoComputeLight( light.m_lightBase()
+				doComputeLight( light.m_lightBase()
 					, worldEye
 					, lightDirection
 					, shininess
@@ -394,10 +394,10 @@ namespace GLSL
 			, output );
 	}
 
-	void PhongLightingModel::Declare_ComputeOnePointLight()
+	void PhongLightingModel::doDeclareComputeOnePointLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeOnePoint = m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" )
+		m_computeOnePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
 			, [this]( PointLight const & light
 				, Vec3 const & worldEye
 				, Float const & shininess
@@ -407,34 +407,34 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
+					m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+				auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" )
+				auto distance = m_writer.declLocale( cuT( "distance" )
 					, length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+				auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 					, normalize( lightToVertex ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( receivesShadows
-						, m_shadowModel->ComputePointShadow( fragmentIn.m_v3Vertex
+						, m_shadowModel->computePointShadow( fragmentIn.m_v3Vertex
 							, light.m_position().xyz()
 							, fragmentIn.m_v3Normal ) );
 				}
 
-				DoComputeLight( light.m_lightBase()
+				doComputeLight( light.m_lightBase()
 					, worldEye
 					, lightDirection
 					, shininess
 					, shadowFactor
 					, fragmentIn
 					, output );
-				auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
+				auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 					, light.m_attenuation().x()
 					+ light.m_attenuation().y() * distance
 					+ light.m_attenuation().z() * distance * distance );
@@ -449,10 +449,10 @@ namespace GLSL
 			, output );
 	}
 
-	void PhongLightingModel::Declare_ComputeOneSpotLight()
+	void PhongLightingModel::doDeclareComputeOneSpotLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeOneSpot = m_writer.ImplementFunction< Void >( cuT( "ComputeSpotLight" )
+		m_computeOneSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
 			, [this]( SpotLight const & light
 				, Vec3 const & worldEye
 				, Float const & shininess
@@ -462,43 +462,43 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
+					m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+				auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" )
+				auto distance = m_writer.declLocale( cuT( "distance" )
 					, length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+				auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 					, normalize( lightToVertex ) );
-				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" )
+				auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
 					, dot( lightDirection, light.m_direction() ) );
 
 				IF( m_writer, spotFactor > light.m_cutOff() )
 				{
-					auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), Float( 1 ) );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), Float( 1 ) );
 
 					if ( m_shadows != ShadowType::eNone )
 					{
 						shadowFactor = 1.0_f - min( receivesShadows
-							, m_shadowModel->ComputeSpotShadow( light.m_transform()
+							, m_shadowModel->computeSpotShadow( light.m_transform()
 								, fragmentIn.m_v3Vertex
 								, lightToVertex
 								, fragmentIn.m_v3Normal ) );
 					}
 
-					DoComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase()
 						, worldEye
 						, lightDirection
 						, shininess
 						, shadowFactor
 						, fragmentIn
 						, output );
-					auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
+					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 						, light.m_attenuation().x()
 						+ light.m_attenuation().y() * distance
 						+ light.m_attenuation().z() * distance * distance );
-					spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - light.m_cutOff() ) );
+					spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
 					parentOutput.m_v3Diffuse += spotFactor * output.m_v3Diffuse / attenuation;
 					parentOutput.m_v3Specular += spotFactor * output.m_v3Specular / attenuation;
 				}
@@ -512,10 +512,10 @@ namespace GLSL
 			, output );
 	}
 
-	void PhongLightingModel::DoDeclare_ComputeLight()
+	void PhongLightingModel::doDeclareComputeLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeLight = m_writer.ImplementFunction< Void >( cuT( "DoComputeLight" )
+		m_computeLight = m_writer.implementFunction< Void >( cuT( "doComputeLight" )
 			, [this]( Light const & light
 				, Vec3 const & worldEye
 				, Vec3 const & lightDirection
@@ -524,15 +524,15 @@ namespace GLSL
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )
 			{
-				auto diffuseFactor = m_writer.DeclLocale( cuT( "diffuseFactor" ), dot( fragmentIn.m_v3Normal, -lightDirection ) );
+				auto diffuseFactor = m_writer.declLocale( cuT( "diffuseFactor" ), dot( fragmentIn.m_v3Normal, -lightDirection ) );
 
 				IF( m_writer, diffuseFactor > 0.0_f )
 				{
-					auto vertexToEye = m_writer.DeclLocale( cuT( "vertexToEye" )
+					auto vertexToEye = m_writer.declLocale( cuT( "vertexToEye" )
 						, normalize( worldEye - fragmentIn.m_v3Vertex ) );
-					auto lightReflect = m_writer.DeclLocale( cuT( "lightReflect" )
+					auto lightReflect = m_writer.declLocale( cuT( "lightReflect" )
 						, normalize( reflect( lightDirection, fragmentIn.m_v3Normal ) ) );
-					auto specularFactor = m_writer.DeclLocale( cuT( "specularFactor" )
+					auto specularFactor = m_writer.declLocale( cuT( "specularFactor" )
 						, max( dot( vertexToEye, lightReflect ), 0.0 ) );
 					output.m_v3Diffuse = p_shadowFactor * light.m_colour() * light.m_intensity().x() * diffuseFactor;
 					output.m_v3Specular = p_shadowFactor * light.m_colour() * light.m_intensity().y() * pow( specularFactor, max( shininess, 0.1_f ) );
@@ -548,7 +548,7 @@ namespace GLSL
 			, output );
 	}
 
-	void PhongLightingModel::DoComputeLight( Light const & light
+	void PhongLightingModel::doComputeLight( Light const & light
 		, Vec3 const & worldEye
 		, Vec3 const & lightDirection
 		, Float const & shininess

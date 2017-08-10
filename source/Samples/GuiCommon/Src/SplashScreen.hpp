@@ -33,7 +33,7 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange, Castor3D::Version const & p_version );
+		SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange, castor3d::Version const & p_version );
 		~SplashScreen();
 
 		void Step( wxString const & p_strText, int p_iIncrement );
@@ -41,7 +41,7 @@ namespace GuiCommon
 		void SubStatus( wxString const & p_strText );
 
 	protected:
-		void DoDraw( wxDC * p_pDC );
+		void doDraw( wxDC * p_pDC );
 
 		DECLARE_EVENT_TABLE()
 		void OnPaint( wxPaintEvent & p_event );

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,7 +28,7 @@ SOFTWARE.
 #include "MovableObject.hpp"
 #include "RenderedObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,7 +54,7 @@ namespace Castor3D
 		\brief		Loader de Geometry
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Geometry >
+			: public castor::TextWriter< Geometry >
 		{
 		public:
 			/**
@@ -63,7 +63,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a geometry into a text file
@@ -74,7 +74,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_geometry	La géométrie
 			 */
-			C3D_API bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Geometry const & p_geometry, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\param[in]	p_mesh		Le maillage, par défaut nullptr
 		 *\param[in]	p_sn		Le scene node auquel la géométrie est attachée
 		 */
-		C3D_API Geometry( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh = nullptr );
+		C3D_API Geometry( castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie tous les objets créés par la géométrie
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *brief			Creates the mesh buffers
@@ -119,21 +119,21 @@ namespace Castor3D
 		 *\param[out]	p_nbFaces	Reçoit le nombre de faces du mesh
 		 *\param[out]	p_nbVertex	Reçoit le nombre de vertex du mesh
 		 */
-		C3D_API void CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex );
+		C3D_API void createBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex );
 		/**
 		 *\~english
 		 *\brief		Renders the geometry in a given display mode
 		 *\~french
 		 *\brief		Rend la géometrie dans un mode d'affichage donné
 		 */
-		C3D_API virtual void Render();
+		C3D_API virtual void render();
 		/**
 		 *\~english
 		 *\brief		End render function, dummy
 		 *\~french
 		 *\brief		Fonction de fin de rendu, inutilisée
 		 */
-		C3D_API virtual void EndRender() {}
+		C3D_API virtual void endRender() {}
 		/**
 		 *\~english
 		 *\brief		Defines this geometry's mesh
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\brief		Définit le maillage de la géométrie
 		 *\param[in]	p_mesh	Le maillage
 		 */
-		C3D_API void SetMesh( MeshSPtr p_mesh );
+		C3D_API void setMesh( MeshSPtr p_mesh );
 		/**
 		 *\~english
 		 *\brief		Retrieves the submesh material
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage
 		 *\return		Le matériau
 		 */
-		C3D_API MaterialSPtr GetMaterial( Submesh const & p_submesh )const;
+		C3D_API MaterialSPtr getMaterial( Submesh const & p_submesh )const;
 		/**
 		 *\~english
 		 *\brief		Defines a submesh material
@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage
 		 *\param[in]	p_material	Le matériau
 		 */
-		C3D_API void SetMaterial( Submesh & p_submesh, MaterialSPtr p_material, bool p_updateSubmesh = true );
+		C3D_API void setMaterial( Submesh & p_submesh, MaterialSPtr p_material, bool p_updateSubmesh = true );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh
@@ -173,7 +173,7 @@ namespace Castor3D
 		 *\brief		Récupère le maillage
 		 *\return		Le maillage
 		 */
-		inline MeshSPtr GetMesh()const
+		inline MeshSPtr getMesh()const
 		{
 			return m_mesh.lock();
 		}
@@ -184,7 +184,7 @@ namespace Castor3D
 		MeshWPtr m_mesh;
 		//!\~english	The mesh name
 		//!\~french		Le nom du maillage.
-		Castor::String m_strMeshName;
+		castor::String m_strMeshName;
 		//!\~english	Tells if the geometry has changed.
 		//!\~french		Dit si la géométrie a changé.
 		bool m_changed{ true };

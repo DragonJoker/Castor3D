@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include "Mesh/Buffer/BufferElementDeclaration.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,7 +41,7 @@ namespace Castor3D
 	\remark		Contient la déclaration des éléments du tampon de sommets, initialisé par le programme shader à la compilation.
 	*/
 	class ProgramInputLayout
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -68,14 +68,14 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme utilisé pour remplir ce layout.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Initialise( ShaderProgram const & p_program ) = 0;
+		C3D_API virtual bool initialise( ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function, on GPU side.
 		 *\~french
 		 *\brief		Fonction de nettoyage côté GPU.
 		 */
-		C3D_API virtual void Cleanup() = 0;
+		C3D_API virtual void cleanup() = 0;
 		/**
 		 *\~english
 		 *\return		An iterator to the beginning of the layout elements.
@@ -100,7 +100,7 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Adds an attribute to the layout.
+		 *\brief		adds an attribute to the layout.
 		 *\param[in]	p_name		Associated variable name.
 		 *\param[in]	p_type		Element type.
 		 *\param[in]	p_offset	Offset in the stream.
@@ -110,7 +110,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Type de l'élément.
 		 *\param[in]	p_offset	Offset dans le tampon.
 		 */
-		C3D_API void DoAddAttribute( Castor::String const & p_name, ElementType p_type, uint32_t p_offset = 0 );
+		C3D_API void doAddAttribute( castor::String const & p_name, ElementType p_type, uint32_t p_offset = 0 );
 		/**
 		 *\~english
 		 *\brief		Tries to guess possible usage for attribute, given its name and type.
@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Type de l'élément.
 		 *\return		Les utilisations possibles.
 		 */
-		Castor::FlagCombination< ElementUsage > DoGuessUsages( Castor::String const & p_name, ElementType p_type );
+		castor::FlagCombination< ElementUsage > doGuessUsages( castor::String const & p_name, ElementType p_type );
 
 	protected:
 		friend C3D_API bool operator==( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs );

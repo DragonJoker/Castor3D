@@ -31,16 +31,16 @@ namespace GlRender
 		: public GlBufferBase< uint8_t >
 	{
 	public:
-		GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * renderSystem, uint32_t p_pixelsSize, GlBufferTarget p_packMode, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
+		GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * renderSystem, uint32_t p_pixelsSize, GlBufferTarget p_packMode, castor3d::BufferAccessType p_type, castor3d::BufferAccessNature p_nature );
 		virtual ~GlGpuIoBuffer();
-		bool Initialise();
+		bool initialise();
 
 	private:
-		virtual bool DoInitialise() = 0;
+		virtual bool doInitialise() = 0;
 
 	protected:
-		Castor3D::BufferAccessType m_accessType;
-		Castor3D::BufferAccessNature m_accessNature;
+		castor3d::BufferAccessType m_accessType;
+		castor3d::BufferAccessNature m_accessNature;
 		uint32_t m_pixelsSize;
 		GlRenderSystem * m_renderSystem;
 	};

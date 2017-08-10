@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Exception/Exception.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,11 +39,17 @@ namespace Castor
 	\remark		Lancée si un Loader rencontre un erreur
 	*/
 	class LoaderException
-		: public Castor::Exception
+		: public castor::Exception
 	{
 	public:
-		LoaderException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
-			: Exception( p_description, p_file, p_function, p_line )
+		LoaderException( std::string const & p_description
+			, char const * p_file
+			, char const * p_function
+			, uint32_t p_line )
+			: Exception( p_description
+				, p_file
+				, p_function
+				, p_line )
 		{
 		}
 	};

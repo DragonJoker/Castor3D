@@ -26,12 +26,12 @@ SOFTWARE.
 #include "PassRenderNode.hpp"
 #include "SceneRenderNode.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace details
 	{
-		SceneNode & GetParentNode( Geometry & p_instance );
-		SceneNode & GetParentNode( BillboardBase & p_instance );
+		SceneNode & getParentNode( Geometry & p_instance );
+		SceneNode & getParentNode( BillboardBase & p_instance );
 	}
 	/*!
 	\author 	Sylvain DOREMUS
@@ -50,35 +50,35 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le pipeline de rendu.
 		 */
-		C3D_API virtual RenderPipeline & GetPipeline() = 0;
+		C3D_API virtual RenderPipeline & getPipeline() = 0;
 		/**
 		 *\~english
 		 *\return		The pass render node.
 		 *\~french
 		 *\return		Le noeud de rendu de passe.
 		 */
-		C3D_API virtual PassRenderNode & GetPassNode() = 0;
+		C3D_API virtual PassRenderNode & getPassNode() = 0;
 		/**
 		 *\~english
 		 *\return		The instance's scene node.
 		 *\~french
 		 *\return		Le noeud de scène de l'instance.
 		 */
-		C3D_API virtual SceneNode & GetSceneNode() = 0;
+		C3D_API virtual SceneNode & getSceneNode() = 0;
 		/**
 		 *\~english
 		 *\return		The instance's model UBO.
 		 *\~french
 		 *\return		L'UBO de modèle de l'instance.
 		 */
-		C3D_API virtual ModelUbo & GetModelUbo() = 0;
+		C3D_API virtual ModelUbo & getModelUbo() = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the node.
 		 *\~french
 		 *\brief		Dessine le noeud.
 		 */
-		C3D_API virtual void Render() = 0;
+		C3D_API virtual void render() = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -97,16 +97,16 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\copydoc		DistanceRenderNodeBase::GetPipeline
+		 *\copydoc		DistanceRenderNodeBase::getPipeline
 		 */
-		inline RenderPipeline & GetPipeline()override
+		inline RenderPipeline & getPipeline()override
 		{
 			return m_node.m_pipeline;
 		};
 		/**
-		 *\copydoc		DistanceRenderNodeBase::GetPassNode
+		 *\copydoc		DistanceRenderNodeBase::getPassNode
 		 */
-		inline PassRenderNode & GetPassNode()override
+		inline PassRenderNode & getPassNode()override
 		{
 			return m_node.m_passNode;
 		}
@@ -116,9 +116,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le noeud de scène de l'instance.
 		 */
-		inline SceneNode & GetSceneNode()override
+		inline SceneNode & getSceneNode()override
 		{
-			return details::GetParentNode( m_node.m_instance );
+			return details::getParentNode( m_node.m_instance );
 		}
 		/**
 		 *\~english
@@ -126,16 +126,16 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'UBO de modèle de l'instance.
 		 */
-		inline ModelUbo & GetModelUbo()override
+		inline ModelUbo & getModelUbo()override
 		{
 			return m_node.m_modelUbo;
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::Render
 		 */
-		inline void Render()override
+		inline void render()override
 		{
-			DoRenderNode( m_node );
+			doRenderNode( m_node );
 		}
 
 		//!\~english	The object node.

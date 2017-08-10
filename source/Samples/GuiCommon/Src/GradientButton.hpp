@@ -37,7 +37,7 @@ namespace GuiCommon
 		GradientButton( wxWindow * p_parent, wxWindowID p_id, wxString const & p_label = wxEmptyString, wxPoint const & p_pos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_style = 0, wxValidator const & p_validator = wxDefaultValidator, wxString const & p_name = wxButtonNameStr );
 
 	private:
-		void DoInitialise();
+		void doInitialise();
 		DECLARE_EVENT_TABLE()
 		void OnPaint( wxPaintEvent & p_event );
 

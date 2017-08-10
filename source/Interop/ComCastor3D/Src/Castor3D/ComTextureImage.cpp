@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The texture image must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The texture image must be initialised" );
 
 	CTextureImage::CTextureImage()
 	{
@@ -19,14 +19,14 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Resize( Castor::Size{ w, h } );
+			m_internal->resize( castor::Size{ w, h } );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
+				IID_ITextureImage,				// This is the GUID of PixelComponents throwing error
 				cuT( "Cleanup" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
@@ -42,14 +42,14 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Resize( Castor::Point3ui{ w, h, d } );
+			m_internal->resize( castor::Point3ui{ w, h, d } );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
+				IID_ITextureImage,				// This is the GUID of PixelComponents throwing error
 				cuT( "Cleanup" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
@@ -65,14 +65,14 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->InitialiseSource( static_cast< CPixelBuffer * >( val )->GetInternal() );
+			m_internal->initialiseSource( static_cast< CPixelBuffer * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
+				IID_ITextureImage,				// This is the GUID of PixelComponents throwing error
 				cuT( "Cleanup" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
@@ -88,14 +88,14 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->InitialiseSource( Castor::PxBufferBase::create( Castor::Size{ w, h }, Castor::PixelFormat( format ) ) );
+			m_internal->initialiseSource( castor::PxBufferBase::create( castor::Size{ w, h }, castor::PixelFormat( format ) ) );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
+				IID_ITextureImage,				// This is the GUID of PixelComponents throwing error
 				cuT( "Cleanup" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
@@ -111,14 +111,14 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->InitialiseSource( Castor::PxBufferBase::create( Castor::Size{ w, h * d }, Castor::PixelFormat( format ) ) );
+			m_internal->initialiseSource( castor::PxBufferBase::create( castor::Size{ w, h * d }, castor::PixelFormat( format ) ) );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError(
 				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
+				IID_ITextureImage,				// This is the GUID of PixelComponents throwing error
 				cuT( "Cleanup" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file

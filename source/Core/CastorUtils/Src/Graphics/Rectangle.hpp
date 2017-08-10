@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Position.hpp"
 #include "Size.hpp"
 
-namespace Castor
+namespace castor
 {
 	//!
 	/*!
@@ -53,7 +53,7 @@ namespace Castor
 				int32_t right;
 				int32_t bottom;
 			} rect;
-			int32_t	buffer[4];
+			int32_t buffer[4];
 		}	m_data;
 
 	public :
@@ -121,7 +121,7 @@ namespace Castor
 		CU_API Intersection intersects( Rectangle const & p_rcRect )const;
 		/**
 		 *\~english
-		 *\brief		Sets the rectangle values
+		 *\brief		sets the rectangle values
 		 *\param[in]	p_iLeft, p_iTop		Top left point
 		 *\param[in]	p_iRight, p_iBottom	Right bottom point
 		 *\~french
@@ -243,7 +243,7 @@ namespace Castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur du rectangle
 		 */
-		inline int width()const
+		inline int getWidth()const
 		{
 			return m_data.rect.right - m_data.rect.left;
 		}
@@ -255,7 +255,7 @@ namespace Castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur du rectangle
 		 */
-		inline int height()const
+		inline int getHeight()const
 		{
 			return m_data.rect.bottom - m_data.rect.top;
 		}

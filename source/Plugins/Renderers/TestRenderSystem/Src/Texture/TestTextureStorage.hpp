@@ -30,14 +30,14 @@ SOFTWARE.
 namespace TestRender
 {
 	/*!
-	\author		Sylvain Doremus.
+	\author		Sylvain doremus.
 	\version	0.8.0
 	\date		12/10/2015
 	\brief		Class used to handle texture storage buffer.
 	\remarks	Will use texture buffer objects if available, or pixel buffer objects if not.
 	*/
 	class TestTextureStorage
-		: public Castor3D::TextureStorage
+		: public castor3d::TextureStorage
 	{
 	public:
 		/**
@@ -51,38 +51,38 @@ namespace TestRender
 		 */
 		TestTextureStorage(
 			TestRenderSystem & p_renderSystem,
-			Castor3D::TextureStorageType p_type,
-			Castor3D::TextureLayout & p_layout,
-			Castor3D::AccessTypes const & p_cpuAccess,
-			Castor3D::AccessTypes const & p_gpuAccess );
+			castor3d::TextureStorageType p_type,
+			castor3d::TextureLayout & p_layout,
+			castor3d::AccessTypes const & p_cpuAccess,
+			castor3d::AccessTypes const & p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
 		~TestTextureStorage();
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Bind
+		 *\copydoc		castor3d::TextureStorage::Bind
 		 */
-		void Bind( uint32_t p_index )const override;
+		void bind( uint32_t p_index )const override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unbind
+		 *\copydoc		castor3d::TextureStorage::Unbind
 		 */
-		void Unbind( uint32_t p_index )const override;
+		void unbind( uint32_t p_index )const override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Lock
+		 *\copydoc		castor3d::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::AccessTypes const & p_lock )override;
+		uint8_t * lock( castor3d::AccessTypes const & p_lock )override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unlock
+		 *\copydoc		castor3d::TextureStorage::Unlock
 		 */
-		void Unlock( bool p_modified )override;
+		void unlock( bool p_modified )override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Lock
+		 *\copydoc		castor3d::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::AccessTypes const & p_lock, uint32_t p_index )override;
+		uint8_t * lock( castor3d::AccessTypes const & p_lock, uint32_t p_index )override;
 		/**
-		 *\copydoc		Castor3D::TextureStorage::Unlock
+		 *\copydoc		castor3d::TextureStorage::Unlock
 		 */
-		void Unlock( bool p_modified, uint32_t p_index )override;
+		void unlock( bool p_modified, uint32_t p_index )override;
 	};
 }
 

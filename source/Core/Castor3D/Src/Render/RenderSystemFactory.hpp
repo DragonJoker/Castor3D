@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -38,7 +38,7 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique de techniques de rendu
 	*/
-	using RenderSystemFactory = Castor::Factory< RenderSystem, Castor::String, RenderSystemUPtr, std::function< RenderSystemUPtr( Engine & ) > >;
+	using RenderSystemFactory = castor::Factory< RenderSystem, castor::String, RenderSystemUPtr, std::function< RenderSystemUPtr( Engine & ) > >;
 }
 
 #endif

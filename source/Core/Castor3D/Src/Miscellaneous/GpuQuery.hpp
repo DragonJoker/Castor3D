@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -37,7 +37,7 @@ namespace Castor3D
 	\brief		Implémentation d'une requête GPU.
 	*/
 	class GpuQuery
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -66,28 +66,28 @@ namespace Castor3D
 		 *\brief		Crée la requête sur le GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Destroys the query on GPU.
 		 *\~french
 		 *\brief		Détruit la requête sur le GPU.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Begins the query.
 		 *\~french
 		 *\brief		Démarre la requête.
 		 */
-		C3D_API void Begin();
+		C3D_API void begin();
 		/**
 		 *\~english
 		 *\brief		Ends the query.
 		 *\~french
 		 *\brief		Termine la requête.
 		 */
-		C3D_API void End();
+		C3D_API void end();
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -99,9 +99,9 @@ namespace Castor3D
 		 *\param[out]	p_param	Reçoit le résultat.
 		 */
 		template< typename T >
-		inline void GetInfos( QueryInfo p_infos, T & p_param )const
+		inline void getInfos( QueryInfo p_infos, T & p_param )const
 		{
-			DoGetInfos( p_infos, p_param );
+			doGetInfos( p_infos, p_param );
 		}
 
 	protected:
@@ -113,28 +113,28 @@ namespace Castor3D
 		 *\brief		Crée la requête sur le GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoInitialise() = 0;
+		C3D_API virtual bool doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the query on GPU.
 		 *\~french
 		 *\brief		Détruit la requête sur le GPU.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Begins the query.
 		 *\~french
 		 *\brief		Démarre la requête.
 		 */
-		C3D_API virtual void DoBegin()const = 0;
+		C3D_API virtual void doBegin()const = 0;
 		/**
 		 *\~english
 		 *\brief		Ends the query.
 		 *\~french
 		 *\brief		Termine la requête.
 		 */
-		C3D_API virtual void DoEnd()const = 0;
+		C3D_API virtual void doEnd()const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -145,7 +145,7 @@ namespace Castor3D
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
 		 */
-		C3D_API virtual void DoGetInfos( QueryInfo p_infos, int32_t & p_param )const = 0;
+		C3D_API virtual void doGetInfos( QueryInfo p_infos, int32_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
 		 */
-		C3D_API virtual void DoGetInfos( QueryInfo p_infos, uint32_t & p_param )const = 0;
+		C3D_API virtual void doGetInfos( QueryInfo p_infos, uint32_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -167,7 +167,7 @@ namespace Castor3D
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
 		 */
-		C3D_API virtual void DoGetInfos( QueryInfo p_infos, int64_t & p_param )const = 0;
+		C3D_API virtual void doGetInfos( QueryInfo p_infos, int64_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -178,12 +178,14 @@ namespace Castor3D
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
 		 */
-		C3D_API virtual void DoGetInfos( QueryInfo p_infos, uint64_t & p_param )const = 0;
+		C3D_API virtual void doGetInfos( QueryInfo p_infos, uint64_t & p_param )const = 0;
 
 	protected:
-		//!\~english Tells if the query is active.	\~french Dit si la requête est active.
+		//!\~english	Tells if the query is active.
+		//!\~french		Dit si la requête est active.
 		bool m_active{ false };
-		//!\~english The query type.	\~french Le type de requête.
+		//!\~english	The query type.
+		//!\~french		Le type de requête.
 		QueryType m_type;
 	};
 }

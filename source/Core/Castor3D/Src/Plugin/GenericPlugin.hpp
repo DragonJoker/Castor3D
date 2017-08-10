@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Plugin.hpp"
 #include "PluginException.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -45,9 +45,9 @@ namespace Castor3D
 	private:
 		friend class Plugin;
 		friend class Engine;
-		typedef void AddOptionalParsersFunction( SceneFileParser * p_parser );
+		typedef void addOptionalParsersFunction( SceneFileParser * p_parser );
 
-		typedef AddOptionalParsersFunction * PAddOptionalParsersFunction;
+		typedef addOptionalParsersFunction * PAddOptionalParsersFunction;
 
 	public:
 		/**
@@ -60,7 +60,7 @@ namespace Castor3D
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API GenericPlugin( Castor::DynamicLibrarySPtr p_library, Engine * engine );
+		C3D_API GenericPlugin( castor::DynamicLibrarySPtr p_library, Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

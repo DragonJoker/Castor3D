@@ -9,27 +9,27 @@
 
 namespace std
 {
-	std::ostream & operator<<( std::ostream & p_stream, Castor::Nanoseconds const & p_duration )
+	std::ostream & operator<<( std::ostream & p_stream, castor::Nanoseconds const & p_duration )
 	{
 		p_stream << std::setprecision( 3 ) << ( p_duration.count() / 1000000.0_r ) << cuT( " ms" );
 		return p_stream;
 	}
 }
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
-		TextOverlaySPtr GetTextOverlay( OverlayCache & cache, String const & name )
+		TextOverlaySPtr getTextOverlay( OverlayCache & cache, String const & name )
 		{
 			TextOverlaySPtr result;
-			OverlaySPtr overlay = cache.Find( name );
+			OverlaySPtr overlay = cache.find( name );
 
 			if ( overlay )
 			{
-				result = overlay->GetTextOverlay();
+				result = overlay->getTextOverlay();
 			}
 
 			return result;
@@ -45,23 +45,23 @@ namespace Castor3D
 	{
 	}
 
-	void DebugOverlays::Initialise( OverlayCache & cache )
+	void DebugOverlays::initialise( OverlayCache & cache )
 	{
-		OverlaySPtr panel = cache.Find( cuT( "DebugPanel" ) );
+		OverlaySPtr panel = cache.find( cuT( "DebugPanel" ) );
 		m_debugPanel = panel;
-		m_debugCpuTime = GetTextOverlay( cache, cuT( "DebugPanel-CpuTime-Value" ) );
-		m_debugGpuClientTime = GetTextOverlay( cache, cuT( "DebugPanel-GpuClientTime-Value" ) );
-		m_debugGpuServerTime = GetTextOverlay( cache, cuT( "DebugPanel-GpuServerTime-Value" ) );
-		m_debugTotalTime = GetTextOverlay( cache, cuT( "DebugPanel-TotalTime-Value" ) );
-		m_debugAverageFps = GetTextOverlay( cache, cuT( "DebugPanel-AverageFPS-Value" ) );
-		m_debugAverageTime = GetTextOverlay( cache, cuT( "DebugPanel-AverageTime-Value" ) );
-		m_debugVertexCount = GetTextOverlay( cache, cuT( "DebugPanel-VertexCount-Value" ) );
-		m_debugFaceCount = GetTextOverlay( cache, cuT( "DebugPanel-FaceCount-Value" ) );
-		m_debugObjectCount = GetTextOverlay( cache, cuT( "DebugPanel-ObjectCount-Value" ) );
-		m_debugVisibleObjectCount = GetTextOverlay( cache, cuT( "DebugPanel-VisibleObjectCount-Value" ) );
-		m_debugParticlesCount = GetTextOverlay( cache, cuT( "DebugPanel-ParticlesCount-Value" ) );
-		m_debugTime = GetTextOverlay( cache, cuT( "DebugPanel-DebugTime-Value" ) );
-		m_externTime = GetTextOverlay( cache, cuT( "DebugPanel-ExternalTime-Value" ) );
+		m_debugCpuTime = getTextOverlay( cache, cuT( "DebugPanel-CpuTime-Value" ) );
+		m_debugGpuClientTime = getTextOverlay( cache, cuT( "DebugPanel-GpuClientTime-Value" ) );
+		m_debugGpuServerTime = getTextOverlay( cache, cuT( "DebugPanel-GpuServerTime-Value" ) );
+		m_debugTotalTime = getTextOverlay( cache, cuT( "DebugPanel-TotalTime-Value" ) );
+		m_debugAverageFps = getTextOverlay( cache, cuT( "DebugPanel-AverageFPS-Value" ) );
+		m_debugAverageTime = getTextOverlay( cache, cuT( "DebugPanel-AverageTime-Value" ) );
+		m_debugVertexCount = getTextOverlay( cache, cuT( "DebugPanel-VertexCount-Value" ) );
+		m_debugFaceCount = getTextOverlay( cache, cuT( "DebugPanel-FaceCount-Value" ) );
+		m_debugObjectCount = getTextOverlay( cache, cuT( "DebugPanel-ObjectCount-Value" ) );
+		m_debugVisibleObjectCount = getTextOverlay( cache, cuT( "DebugPanel-VisibleObjectCount-Value" ) );
+		m_debugParticlesCount = getTextOverlay( cache, cuT( "DebugPanel-ParticlesCount-Value" ) );
+		m_debugTime = getTextOverlay( cache, cuT( "DebugPanel-DebugTime-Value" ) );
+		m_externTime = getTextOverlay( cache, cuT( "DebugPanel-ExternalTime-Value" ) );
 
 		m_valid = m_debugCpuTime
 			&& m_debugGpuClientTime
@@ -79,11 +79,11 @@ namespace Castor3D
 
 		if ( panel )
 		{
-			panel->SetVisible( m_valid && m_visible );
+			panel->setVisible( m_valid && m_visible );
 		}
 	}
 
-	void DebugOverlays::Cleanup()
+	void DebugOverlays::cleanup()
 	{
 		m_debugPanel.reset();
 		m_debugCpuTime.reset();
@@ -101,90 +101,90 @@ namespace Castor3D
 		m_externTime.reset();
 	}
 
-	void DebugOverlays::StartFrame()
+	void DebugOverlays::beginFrame()
 	{
 		if ( m_valid && m_visible )
 		{
 			m_gpuTime = 0_ms;
 			m_cpuTime = 0_ms;
-			m_taskTimer.Time();
+			m_taskTimer.getElapsed();
 		}
 
-		m_externalTime = m_frameTimer.Time();
+		m_externalTime = m_frameTimer.getElapsed();
 	}
 
-	void DebugOverlays::RegisterTimer( RenderPassTimer const & timer )
+	void DebugOverlays::registerTimer( RenderPassTimer const & timer )
 	{
-		auto & cache = GetEngine()->GetOverlayCache();
+		auto & cache = getEngine()->getOverlayCache();
 		RenderPassOverlays overlays{ timer };
-		auto baseName = cuT( "RenderPassOverlays " ) + string::to_string( int( m_renderPasses.size() ) ) + cuT( " " ) + timer.GetName();
-		overlays.m_panel = cache.Add( baseName
+		auto baseName = cuT( "RenderPassOverlays " ) + string::toString( int( m_renderPasses.size() ) ) + cuT( " " ) + timer.getName();
+		overlays.m_panel = cache.add( baseName
 			, OverlayType::ePanel
 			, nullptr
-			, nullptr )->GetPanelOverlay();
-		overlays.m_title = cache.Add( baseName + cuT( "_Title" )
+			, nullptr )->getPanelOverlay();
+		overlays.m_title = cache.add( baseName + cuT( "_Title" )
 			, OverlayType::eText
 			, nullptr
-			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-		overlays.m_cpuName = cache.Add( baseName + cuT( "_CPUName" )
+			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+		overlays.m_cpuName = cache.add( baseName + cuT( "_CPUName" )
 			, OverlayType::eText
 			, nullptr
-			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-		overlays.m_cpuValue = cache.Add( baseName + cuT( "_CPUValue" )
+			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+		overlays.m_cpuValue = cache.add( baseName + cuT( "_CPUValue" )
 			, OverlayType::eText
 			, nullptr
-			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-		overlays.m_gpuName = cache.Add( baseName + cuT( "_GPUName" )
+			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+		overlays.m_gpuName = cache.add( baseName + cuT( "_GPUName" )
 			, OverlayType::eText
 			, nullptr
-			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-		overlays.m_gpuValue = cache.Add( baseName + cuT( "_GPUValue" )
+			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+		overlays.m_gpuValue = cache.add( baseName + cuT( "_GPUValue" )
 			, OverlayType::eText
 			, nullptr
-			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-		overlays.m_panel->SetPixelPosition( Position{ 400, int32_t( 60 * m_renderPasses.size() ) } );
-		overlays.m_title->SetPixelPosition( Position{ 10, 0 } );
-		overlays.m_cpuName->SetPixelPosition( Position{ 10, 20 } );
-		overlays.m_gpuName->SetPixelPosition( Position{ 10, 40 } );
-		overlays.m_cpuValue->SetPixelPosition( Position{ 110, 20 } );
-		overlays.m_gpuValue->SetPixelPosition( Position{ 110, 40 } );
+			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+		overlays.m_panel->setPixelPosition( Position{ 400, int32_t( 60 * m_renderPasses.size() ) } );
+		overlays.m_title->setPixelPosition( Position{ 10, 0 } );
+		overlays.m_cpuName->setPixelPosition( Position{ 10, 20 } );
+		overlays.m_gpuName->setPixelPosition( Position{ 10, 40 } );
+		overlays.m_cpuValue->setPixelPosition( Position{ 110, 20 } );
+		overlays.m_gpuValue->setPixelPosition( Position{ 110, 40 } );
 
-		overlays.m_panel->SetPixelSize( Size{ 250, 60 } );
-		overlays.m_title->SetPixelSize( Size{ 230, 20 } );
-		overlays.m_cpuName->SetPixelSize( Size{ 100, 20 } );
-		overlays.m_gpuName->SetPixelSize( Size{ 100, 20 } );
-		overlays.m_cpuValue->SetPixelSize( Size{ 130, 20 } );
-		overlays.m_gpuValue->SetPixelSize( Size{ 130, 20 } );
+		overlays.m_panel->setPixelSize( Size{ 250, 60 } );
+		overlays.m_title->setPixelSize( Size{ 230, 20 } );
+		overlays.m_cpuName->setPixelSize( Size{ 100, 20 } );
+		overlays.m_gpuName->setPixelSize( Size{ 100, 20 } );
+		overlays.m_cpuValue->setPixelSize( Size{ 130, 20 } );
+		overlays.m_gpuValue->setPixelSize( Size{ 130, 20 } );
 
-		overlays.m_title->SetFont( cuT( "Arial20" ) );
-		overlays.m_cpuName->SetFont( cuT( "Arial10" ) );
-		overlays.m_gpuName->SetFont( cuT( "Arial10" ) );
-		overlays.m_cpuValue->SetFont( cuT( "Arial10" ) );
-		overlays.m_gpuValue->SetFont( cuT( "Arial10" ) );
+		overlays.m_title->setFont( cuT( "Arial20" ) );
+		overlays.m_cpuName->setFont( cuT( "Arial10" ) );
+		overlays.m_gpuName->setFont( cuT( "Arial10" ) );
+		overlays.m_cpuValue->setFont( cuT( "Arial10" ) );
+		overlays.m_gpuValue->setFont( cuT( "Arial10" ) );
 
-		overlays.m_title->SetCaption( timer.GetName() );
-		overlays.m_cpuName->SetCaption( cuT( "CPU Time:" ) );
-		overlays.m_gpuName->SetCaption( cuT( "GPU Time:" ) );
+		overlays.m_title->setCaption( timer.getName() );
+		overlays.m_cpuName->setCaption( cuT( "CPU Time:" ) );
+		overlays.m_gpuName->setCaption( cuT( "GPU Time:" ) );
 
-		auto & materials = GetEngine()->GetMaterialCache();
-		overlays.m_panel->SetMaterial( materials.Find( cuT( "AlphaDarkBlue" ) ) );
-		overlays.m_title->SetMaterial( materials.Find( cuT( "White" ) ) );
-		overlays.m_cpuName->SetMaterial( materials.Find( cuT( "White" ) ) );
-		overlays.m_gpuName->SetMaterial( materials.Find( cuT( "White" ) ) );
-		overlays.m_cpuValue->SetMaterial( materials.Find( cuT( "White" ) ) );
-		overlays.m_gpuValue->SetMaterial( materials.Find( cuT( "White" ) ) );
+		auto & materials = getEngine()->getMaterialCache();
+		overlays.m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
+		overlays.m_title->setMaterial( materials.find( cuT( "White" ) ) );
+		overlays.m_cpuName->setMaterial( materials.find( cuT( "White" ) ) );
+		overlays.m_gpuName->setMaterial( materials.find( cuT( "White" ) ) );
+		overlays.m_cpuValue->setMaterial( materials.find( cuT( "White" ) ) );
+		overlays.m_gpuValue->setMaterial( materials.find( cuT( "White" ) ) );
 
-		overlays.m_panel->SetVisible( m_visible );
-		overlays.m_title->SetVisible( true );
-		overlays.m_cpuName->SetVisible( true );
-		overlays.m_gpuName->SetVisible( true );
-		overlays.m_cpuValue->SetVisible( true );
-		overlays.m_gpuValue->SetVisible( true );
+		overlays.m_panel->setVisible( m_visible );
+		overlays.m_title->setVisible( true );
+		overlays.m_cpuName->setVisible( true );
+		overlays.m_gpuName->setVisible( true );
+		overlays.m_cpuValue->setVisible( true );
+		overlays.m_gpuValue->setVisible( true );
 
 		m_renderPasses.emplace_back( std::move( overlays ) );
 	}
 
-	void DebugOverlays::UnregisterTimer( RenderPassTimer const & timer )
+	void DebugOverlays::unregisterTimer( RenderPassTimer const & timer )
 	{
 		auto it = std::find_if( m_renderPasses.begin()
 			, m_renderPasses.end()
@@ -195,92 +195,92 @@ namespace Castor3D
 
 		if ( it != m_renderPasses.end() )
 		{
-			auto & cache = GetEngine()->GetOverlayCache();
+			auto & cache = getEngine()->getOverlayCache();
 			auto & overlays = *it;
-			cache.Remove( overlays.m_cpuName->GetOverlayName() );
-			cache.Remove( overlays.m_gpuName->GetOverlayName() );
-			cache.Remove( overlays.m_gpuValue->GetOverlayName() );
-			cache.Remove( overlays.m_cpuValue->GetOverlayName() );
-			cache.Remove( overlays.m_title->GetOverlayName() );
-			cache.Remove( overlays.m_panel->GetOverlayName() );
+			cache.remove( overlays.m_cpuName->getOverlayName() );
+			cache.remove( overlays.m_gpuName->getOverlayName() );
+			cache.remove( overlays.m_gpuValue->getOverlayName() );
+			cache.remove( overlays.m_cpuValue->getOverlayName() );
+			cache.remove( overlays.m_title->getOverlayName() );
+			cache.remove( overlays.m_panel->getOverlayName() );
 			m_renderPasses.erase( it );
 		}
 	}
 
-	void DebugOverlays::EndFrame( RenderInfo const & info )
+	void DebugOverlays::endFrame( RenderInfo const & info )
 	{
-		auto totalTime = m_frameTimer.Time() + m_externalTime;
+		auto totalTime = m_frameTimer.getElapsed() + m_externalTime;
 
 		if ( m_valid && m_visible )
 		{
-			m_debugTimer.Time();
+			m_debugTimer.getElapsed();
 			m_framesTimes[m_frameIndex] = totalTime;
-			m_debugTotalTime->SetCaption( StringStream() << totalTime );
-			m_debugCpuTime->SetCaption( StringStream() << m_cpuTime );
-			m_externTime->SetCaption( StringStream() << m_externalTime );
-			m_debugVertexCount->SetCaption( string::to_string( info.m_totalVertexCount ) );
-			m_debugFaceCount->SetCaption( string::to_string( info.m_totalFaceCount ) );
-			m_debugObjectCount->SetCaption( string::to_string( info.m_totalObjectsCount ) );
-			m_debugVisibleObjectCount->SetCaption( string::to_string( info.m_visibleObjectsCount ) );
-			m_debugParticlesCount->SetCaption( string::to_string( info.m_particlesCount ) );
+			m_debugTotalTime->setCaption( StringStream() << totalTime );
+			m_debugCpuTime->setCaption( StringStream() << m_cpuTime );
+			m_externTime->setCaption( StringStream() << m_externalTime );
+			m_debugVertexCount->setCaption( string::toString( info.m_totalVertexCount ) );
+			m_debugFaceCount->setCaption( string::toString( info.m_totalFaceCount ) );
+			m_debugObjectCount->setCaption( string::toString( info.m_totalObjectsCount ) );
+			m_debugVisibleObjectCount->setCaption( string::toString( info.m_visibleObjectsCount ) );
+			m_debugParticlesCount->setCaption( string::toString( info.m_particlesCount ) );
 
 			auto time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
-			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 4 ) << 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( time ).count() << cuT( " fps" ) );
-			m_debugAverageTime->SetCaption( StringStream() << time );
+			m_debugAverageFps->setCaption( StringStream() << std::setprecision( 4 ) << 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( time ).count() << cuT( " fps" ) );
+			m_debugAverageTime->setCaption( StringStream() << time );
 
 			auto gpuTotal = 0_ns;
 
 			for ( auto & pass : m_renderPasses )
 			{
-				pass.m_cpuValue->SetCaption( StringStream{} << pass.m_timer.get().GetCpuTime() );
-				pass.m_gpuValue->SetCaption( StringStream{} << pass.m_timer.get().GetGpuTime() );
-				gpuTotal += pass.m_timer.get().GetGpuTime();
+				pass.m_cpuValue->setCaption( StringStream{} << pass.m_timer.get().getCpuTime() );
+				pass.m_gpuValue->setCaption( StringStream{} << pass.m_timer.get().getGpuTime() );
+				gpuTotal += pass.m_timer.get().getGpuTime();
 			}
 
-			m_debugGpuClientTime->SetCaption( StringStream() << ( m_gpuTime - gpuTotal ) );
-			m_debugGpuServerTime->SetCaption( StringStream() << gpuTotal );
-			GetEngine()->GetRenderSystem()->ResetGpuTime();
+			m_debugGpuClientTime->setCaption( StringStream() << ( m_gpuTime - gpuTotal ) );
+			m_debugGpuServerTime->setCaption( StringStream() << gpuTotal );
+			getEngine()->getRenderSystem()->resetGpuTime();
 
 			m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
-			time = m_debugTimer.Time();
-			m_debugTime->SetCaption( StringStream() << time );
+			time = m_debugTimer.getElapsed();
+			m_debugTime->setCaption( StringStream() << time );
 
-			m_frameTimer.Time();
+			m_frameTimer.getElapsed();
 		}
 
 		std::cout << "\rTime: " << std::setw( 7 ) << totalTime;
 		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( totalTime ).count() );
 	}
 
-	void DebugOverlays::EndGpuTask()
+	void DebugOverlays::endGpuTask()
 	{
 		if ( m_valid && m_visible )
 		{
-			m_gpuTime += m_taskTimer.Time();
+			m_gpuTime += m_taskTimer.getElapsed();
 		}
 	}
 
-	void DebugOverlays::EndCpuTask()
+	void DebugOverlays::endCpuTask()
 	{
 		if ( m_valid && m_visible )
 		{
-			m_cpuTime += m_taskTimer.Time();
+			m_cpuTime += m_taskTimer.getElapsed();
 		}
 	}
 
-	void DebugOverlays::Show( bool show )
+	void DebugOverlays::show( bool show )
 	{
 		m_visible = show;
 		OverlaySPtr panel = m_debugPanel.lock();
 
 		if ( panel )
 		{
-			panel->SetVisible( m_valid && m_visible );
+			panel->setVisible( m_valid && m_visible );
 		}
 
 		for ( auto & pass : m_renderPasses )
 		{
-			pass.m_panel->SetVisible( m_valid && m_visible );
+			pass.m_panel->setVisible( m_valid && m_visible );
 		}
 	}
 }

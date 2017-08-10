@@ -51,8 +51,8 @@ namespace GuiCommon
 		 *\param[in]	p_texture	La texture cible
 		 */
 		TextureTreeItemProperty( bool p_editable
-			, Castor3D::TextureUnitSPtr p_texture
-			, Castor3D::MaterialType p_type );
+			, castor3d::TextureUnitSPtr p_texture
+			, castor3d::MaterialType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -68,28 +68,28 @@ namespace GuiCommon
 		 *\brief		Récupère la texture
 		 *\return		La valeur
 		 */
-		inline Castor3D::TextureUnitSPtr GetTexture()const
+		inline castor3d::TextureUnitSPtr getTexture()const
 		{
 			return m_texture.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnChannelChange( Castor3D::TextureChannel p_value );
-		void OnImageChange( Castor::String const & p_value );
+		void OnChannelChange( castor3d::TextureChannel p_value );
+		void OnImageChange( castor::String const & p_value );
 
 	private:
-		Castor3D::TextureUnitWPtr m_texture;
-		Castor3D::MaterialType m_materialType;
+		castor3d::TextureUnitWPtr m_texture;
+		castor3d::MaterialType m_materialType;
 	};
 }
 

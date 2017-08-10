@@ -31,7 +31,7 @@ namespace Testing
 
 	void TestCase::RegisterTests()
 	{
-		DoRegisterTests();
+		doRegisterTests();
 	}
 
 	void TestCase::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
@@ -75,14 +75,14 @@ namespace Testing
 		}
 	}
 
-	void TestCase::DoRegisterTest( std::string const & p_name, TestFunction p_test )
+	void TestCase::doRegisterTest( std::string const & p_name, TestFunction p_test )
 	{
 		m_tests.push_back( { p_name, p_test } );
 	}
 
 	//*************************************************************************************************
 
-	std::string to_string( int p_value )
+	std::string toString( int p_value )
 	{
 		std::stringstream stream;
 		stream << p_value;
@@ -90,7 +90,7 @@ namespace Testing
 	}
 
 	TestFailed::TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, int p_line )
-		: m_what( p_file + " - " + p_function + ", line " + to_string( p_line ) + " : " + p_what )
+		: m_what( p_file + " - " + p_function + ", line " + toString( p_line ) + " : " + p_what )
 	{
 	}
 

@@ -4,9 +4,9 @@
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RenderSystem::RenderSystem( Engine & engine, String const & p_name )
 		: OwnedBy< Engine >{ engine }
@@ -21,45 +21,45 @@ namespace Castor3D
 		m_mainContext.reset();
 	}
 
-	void RenderSystem::Initialise( GpuInformations && p_informations )
+	void RenderSystem::initialise( GpuInformations && p_informations )
 	{
 		m_gpuInformations = std::move( p_informations );
-		DoInitialise();
-		m_gpuInformations.UpdateMaxShaderModel();
-		REQUIRE( m_gpuInformations.GetMaxShaderModel() >= ShaderModel::eModel2 );
-		Logger::LogInfo( cuT( "Vendor: " ) + m_gpuInformations.GetVendor() );
-		Logger::LogInfo( cuT( "Renderer: " ) + m_gpuInformations.GetRenderer() );
-		Logger::LogInfo( cuT( "Version: " ) + m_gpuInformations.GetVersion() );
+		doInitialise();
+		m_gpuInformations.updateMaxShaderModel();
+		REQUIRE( m_gpuInformations.getMaxShaderModel() >= ShaderModel::eModel2 );
+		Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
+		Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
+		Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
 	}
 
-	void RenderSystem::Cleanup()
+	void RenderSystem::cleanup()
 	{
 		if ( m_mainContext )
 		{
-			m_mainContext->Cleanup();
+			m_mainContext->cleanup();
 			m_mainContext.reset();
 		}
 
-		DoCleanup();
+		doCleanup();
 
 #if C3D_TRACE_OBJECTS
 
-		m_tracker.ReportTracked();
+		m_tracker.reportTracked();
 
 #endif
 	}
 
-	void RenderSystem::PushScene( Scene * p_scene )
+	void RenderSystem::pushScene( Scene * p_scene )
 	{
 		m_stackScenes.push( p_scene );
 	}
 
-	void RenderSystem::PopScene()
+	void RenderSystem::popScene()
 	{
 		m_stackScenes.pop();
 	}
 
-	Scene * RenderSystem::GetTopScene()
+	Scene * RenderSystem::getTopScene()
 	{
 		Scene * result = nullptr;
 
@@ -71,17 +71,17 @@ namespace Castor3D
 		return result;
 	}
 
-	GLSL::GlslWriter RenderSystem::CreateGlslWriter()
+	GLSL::GlslWriter RenderSystem::createGlslWriter()
 	{
-		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
+		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion(), m_gpuInformations.hasConstantsBuffers(), m_gpuInformations.hasTextureBuffers() } };
 	}
 
-	void RenderSystem::SetCurrentContext( Context * p_context )
+	void RenderSystem::setCurrentContext( Context * p_context )
 	{
 		m_currentContexts[std::this_thread::get_id()] = p_context;
 	}
 
-	Context * RenderSystem::GetCurrentContext()
+	Context * RenderSystem::getCurrentContext()
 	{
 		Context * result{ nullptr };
 		auto it = m_currentContexts.find( std::this_thread::get_id() );

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,10 +41,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct CacheTraits< AnimatedObjectGroup, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< AnimatedObjectGroup >( KeyType const & ) >;
 		using Merger = std::function< void( CacheBase< AnimatedObjectGroup, KeyType > const &
-											, Castor::Collection< AnimatedObjectGroup, KeyType > &
+											, castor::Collection< AnimatedObjectGroup, KeyType > &
 											, std::shared_ptr< AnimatedObjectGroup > ) >;
 	};
 }

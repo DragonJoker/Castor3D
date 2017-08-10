@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,7 +42,7 @@ namespace Castor3D
 	\remark		Gère les fonctions de base d'un plug-in, permet aux plug-ins de faire des vérifications de version et  de s'enregistrer auprès du moteur
 	*/
 	class Plugin
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	private:
 		//!< Signature for the plug-in's loading function
@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Plugin( PluginType p_type, Castor::DynamicLibrarySPtr p_library, Engine & engine );
+		C3D_API Plugin( PluginType p_type, castor::DynamicLibrarySPtr p_library, Engine & engine );
 
 	public:
 		/**
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\brief		Récupère la version nécessaire au bon fonctionnement du plug-in
 		 *\return		La version
 		 */
-		C3D_API void GetRequiredVersion( Version & p_version )const;
+		C3D_API void getRequiredVersion( Version & p_version )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-in name
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom du plug-in
 		 *\return		Le nom
 		 */
-		C3D_API Castor::String GetName()const;
+		C3D_API castor::String getName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-in type
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\brief		Récupère le type du plug-in
 		 *\return		Le type
 		 */
-		inline PluginType GetType()const
+		inline PluginType getType()const
 		{
 			return m_type;
 		}

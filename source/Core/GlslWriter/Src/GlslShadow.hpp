@@ -30,35 +30,35 @@ namespace GLSL
 	class Shadow
 	{
 	public:
-		GlslWriter_API static Castor::String const MapShadowDirectional;
-		GlslWriter_API static Castor::String const MapShadowSpot;
-		GlslWriter_API static Castor::String const MapShadowPoint;
+		GlslWriter_API static castor::String const MapShadowDirectional;
+		GlslWriter_API static castor::String const MapShadowSpot;
+		GlslWriter_API static castor::String const MapShadowPoint;
 
 	public:
 		GlslWriter_API Shadow( GlslWriter & p_writer );
-		GlslWriter_API void Declare( ShadowType p_type );
-		GlslWriter_API void DeclareDirectional( ShadowType p_type );
-		GlslWriter_API void DeclarePoint( ShadowType p_type );
-		GlslWriter_API void DeclareSpot( ShadowType p_type );
-		GlslWriter_API Float ComputeDirectionalShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
-		GlslWriter_API Float ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
-		GlslWriter_API Float ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
-		GlslWriter_API Float ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
-		GlslWriter_API Float ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
+		GlslWriter_API void declare( ShadowType p_type );
+		GlslWriter_API void declareDirectional( ShadowType p_type );
+		GlslWriter_API void declarePoint( ShadowType p_type );
+		GlslWriter_API void declareSpot( ShadowType p_type );
+		GlslWriter_API Float computeDirectionalShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
+		GlslWriter_API Float computeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
+		GlslWriter_API Float computePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
+		GlslWriter_API Float computeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
+		GlslWriter_API Float computePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
 
 	private:
-		void DoDeclare_GetRandom();
-		void DoDeclare_GetShadowOffset();
-		void DoDeclare_GetLightSpacePosition();
-		void DoDeclare_ComputeDirectionalShadow();
-		void DoDeclare_ComputeSpotShadow();
-		void DoDeclare_ComputePointShadow();
-		void DoDeclare_ComputeOneSpotShadow();
-		void DoDeclare_ComputeOnePointShadow();
-		void DoDeclare_PcfSample();
-		void DoDeclare_PcfSampleDirectional();
-		void DoDeclare_PcfSampleSpot();
-		void DoDeclare_PcfSamplePoint();
+		void doDeclareGetRandom();
+		void doDeclareGetShadowOffset();
+		void doDeclareGetLightSpacePosition();
+		void doDeclareComputeDirectionalShadow();
+		void doDeclareComputeSpotShadow();
+		void doDeclareComputePointShadow();
+		void doDeclareComputeOneSpotShadow();
+		void doDeclareComputeOnePointShadow();
+		void doDeclarePcfSample();
+		void doDeclarePcfSampleDirectional();
+		void doDeclarePcfSampleSpot();
+		void doDeclarePcfSamplePoint();
 
 	private:
 		GlslWriter & m_writer;

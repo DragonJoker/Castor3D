@@ -4,31 +4,31 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	inline bool GetValue< bool >( wxVariant const & p_variant )
+	inline bool getValue< bool >( wxVariant const & p_variant )
 	{
 		return p_variant.GetBool();
 	}
 
 	template<>
-	inline int GetValue< int >( wxVariant const & p_variant )
+	inline int getValue< int >( wxVariant const & p_variant )
 	{
 		return p_variant.GetInteger();
 	}
 
 	template<>
-	inline uint32_t GetValue< uint32_t >( wxVariant const & p_variant )
+	inline uint32_t getValue< uint32_t >( wxVariant const & p_variant )
 	{
 		return uint32_t( p_variant.GetInteger() );
 	}
 
 	template<>
-	inline float GetValue< float >( wxVariant const & p_variant )
+	inline float getValue< float >( wxVariant const & p_variant )
 	{
 		return float( p_variant.GetDouble() );
 	}
 
 	template<>
-	inline double GetValue< double >( wxVariant const & p_variant )
+	inline double getValue< double >( wxVariant const & p_variant )
 	{
 		return p_variant.GetDouble();
 	}
@@ -36,31 +36,31 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	inline wxVariant SetValue< bool >( bool const & p_value )
+	inline wxVariant setValue< bool >( bool const & p_value )
 	{
 		return wxVariant( p_value );
 	}
 
 	template<>
-	inline wxVariant SetValue< int >( int const & p_value )
+	inline wxVariant setValue< int >( int const & p_value )
 	{
 		return wxVariant( p_value );
 	}
 
 	template<>
-	inline wxVariant SetValue< uint32_t >( uint32_t const & p_value )
+	inline wxVariant setValue< uint32_t >( uint32_t const & p_value )
 	{
 		return wxVariant( int( p_value ) );
 	}
 
 	template<>
-	inline wxVariant SetValue< float >( float const & p_value )
+	inline wxVariant setValue< float >( float const & p_value )
 	{
 		return wxVariant( p_value );
 	}
 
 	template<>
-	inline wxVariant SetValue< double >( double const & p_value )
+	inline wxVariant setValue< double >( double const & p_value )
 	{
 		return wxVariant( p_value );
 	}

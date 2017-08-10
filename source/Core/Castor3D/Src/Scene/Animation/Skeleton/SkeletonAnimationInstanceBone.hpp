@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "SkeletonAnimationInstanceObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -91,9 +91,9 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\copydoc		Castor3D::SkeletonAnimatedObject::DoApply
+		 *\copydoc		castor3d::SkeletonAnimatedObject::doApply
 		 */
-		void DoApply()override;
+		void doApply()override;
 
 	private:
 		//!\~english	The animation bone.

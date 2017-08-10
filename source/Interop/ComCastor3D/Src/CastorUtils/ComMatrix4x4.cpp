@@ -12,13 +12,13 @@ namespace CastorCom
 
 	STDMETHODIMP CMatrix4x4::Transpose()
 	{
-		Castor::Matrix4x4r::transpose();
+		castor::Matrix4x4r::transpose();
 		return S_OK;
 	}
 
 	STDMETHODIMP CMatrix4x4::Invert()
 	{
-		Castor::Matrix4x4r::invert();
+		castor::Matrix4x4r::invert();
 		return S_OK;
 	}
 }

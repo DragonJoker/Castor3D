@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -77,8 +77,8 @@ namespace Castor3D
 		 *\param[in]	p_view			La nouvelle matrice de vue.
 		 *\param[in]	p_projection	La nouvelle matrice de projection.
 		 */
-		C3D_API void Update( Castor::Matrix4x4r const & p_view
-			, Castor::Matrix4x4r const & p_projection )const;
+		C3D_API void update( castor::Matrix4x4r const & p_view
+			, castor::Matrix4x4r const & p_projection )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -89,19 +89,19 @@ namespace Castor3D
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
 		 *\param[in]	p_projection	La nouvelle matrice de projection.
 		 */
-		C3D_API void Update( Castor::Matrix4x4r const & p_projection )const;
+		C3D_API void update( castor::Matrix4x4r const & p_projection )const;
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -127,10 +127,10 @@ namespace Castor3D
 }
 
 #define UBO_MATRIX( Writer )\
-	GLSL::Ubo matrices{ writer, Castor3D::ShaderProgram::BufferMatrix, Castor3D::MatrixUbo::BindingPoint };\
-	auto c3d_mtxProjection = matrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxProjection );\
-	auto c3d_mtxView = matrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxView );\
-	auto c3d_mtxInvProjection = matrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxInvProjection );\
-	matrices.End()
+	GLSL::Ubo matrices{ writer, castor3d::ShaderProgram::BufferMatrix, castor3d::MatrixUbo::BindingPoint };\
+	auto c3d_mtxProjection = matrices.declMember< GLSL::Mat4 >( castor3d::RenderPipeline::MtxProjection );\
+	auto c3d_mtxView = matrices.declMember< GLSL::Mat4 >( castor3d::RenderPipeline::MtxView );\
+	auto c3d_mtxInvProjection = matrices.declMember< GLSL::Mat4 >( castor3d::RenderPipeline::MtxInvProjection );\
+	matrices.end()
 
 #endif

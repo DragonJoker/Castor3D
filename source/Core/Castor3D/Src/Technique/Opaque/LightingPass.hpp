@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,7 +26,7 @@ SOFTWARE.
 #include "CombinePass.hpp"
 #include "ReflectionPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	class OpaquePass;
 	/*!
@@ -65,7 +65,7 @@ namespace Castor3D
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightingPass( Engine & engine
-			, Castor::Size const & size
+			, castor::Size const & size
 			, Scene const & scene
 			, OpaquePass & opaque
 			, FrameBufferAttachment & depthAttach
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	gp		Le résultat de la geometry pass.
 		 */
-		bool Render( Scene const & scene
+		bool render( Scene const & scene
 			, Camera const & camera
 			, GeometryPassResult const & gp
 			, RenderInfo & info );
@@ -100,14 +100,14 @@ namespace Castor3D
 		 *\~french
 		 *\return		Affiche les textures d'ombre sur l'écran.
 		 */
-		void Debug( Castor::Size const & size )const;
+		void debugDisplay( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\return		The light pass result.
 		 *\~french
 		 *\return		Le résultat de la passe d'éclairage.
 		 */
-		inline TextureUnit const & GetResult()const
+		inline TextureUnit const & getResult()const
 		{
 			return m_result;
 		}
@@ -129,14 +129,14 @@ namespace Castor3D
 		 *\param[in]		gp		Le résultat de la geometry pass.
 		 *\param[in,out]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
-		void DoRenderLights( Scene const & scene
+		void doRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
 			, GeometryPassResult const & gp
 			, bool & first );
 
 	private:
-		Castor::Size const m_size;
+		castor::Size const m_size;
 		//!\~english	The light pass output.
 		//!\~french		La sortie de la passe de lumières.
 		TextureUnit m_result;

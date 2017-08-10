@@ -5,7 +5,7 @@
 #include "Graphics/Rectangle.hpp"
 #include "Graphics/Size.hpp"
 
-namespace Castor
+namespace castor
 {
 	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
 	template< typename T > struct ParserValueTyper;

@@ -1,10 +1,10 @@
 #include "LoopVertex.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace Loop
 {
-	Vertex::Vertex( Castor3D::BufferElementGroupSPtr p_point )
+	Vertex::Vertex( castor3d::BufferElementGroupSPtr p_point )
 		:	m_ptPoint( p_point	)
 	{
 	}
@@ -14,12 +14,12 @@ namespace Loop
 		m_mapEdges.clear();
 	}
 
-	bool Vertex::HasEdge( uint32_t p_index )
+	bool Vertex::hasEdge( uint32_t p_index )
 	{
 		return m_mapEdges.find( p_index ) != m_mapEdges.end();
 	}
 
-	EdgeSPtr Vertex::GetEdge( uint32_t p_index )
+	EdgeSPtr Vertex::getEdge( uint32_t p_index )
 	{
 		EdgeSPtr result;
 		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
@@ -32,7 +32,7 @@ namespace Loop
 		return result;
 	}
 
-	void Vertex::AddEdge( EdgeSPtr p_pEdge, uint32_t p_index )
+	void Vertex::addEdge( EdgeSPtr p_pEdge, uint32_t p_index )
 	{
 		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
 
@@ -42,7 +42,7 @@ namespace Loop
 		}
 	}
 
-	void Vertex::RemoveEdge( uint32_t p_index )
+	void Vertex::removeEdge( uint32_t p_index )
 	{
 		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
 

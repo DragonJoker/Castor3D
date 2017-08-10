@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,78 +31,78 @@ namespace GLSL
 	class Shader
 	{
 	public:
-		inline void RegisterSsbo( Castor::String const & p_name, Ssbo::Info const & p_info )
+		inline void registerSsbo( castor::String const & p_name, Ssbo::Info const & p_info )
 		{
 			m_ssbos.emplace( p_name, p_info );
 		}
 
-		inline void RegisterUbo( Castor::String const & p_name, Ubo::Info const & p_info )
+		inline void registerUbo( castor::String const & p_name, Ubo::Info const & p_info )
 		{
 			m_ubos.emplace( p_name, p_info );
 		}
 
-		inline void RegisterUniform( Castor::String const & p_name, TypeName p_type )
+		inline void registerUniform( castor::String const & p_name, TypeName p_type )
 		{
 			m_uniforms.emplace( p_name, p_type );
 		}
 
-		inline void RegisterAttribute( Castor::String const & p_name, TypeName p_type )
+		inline void registerAttribute( castor::String const & p_name, TypeName p_type )
 		{
 			m_inputs.emplace( p_name, p_type );
 		}
 
-		inline void RegisterInput( Castor::String const & p_name, TypeName p_type )
+		inline void registerInput( castor::String const & p_name, TypeName p_type )
 		{
 			m_inputs.emplace( p_name, p_type );
 		}
 
-		inline void RegisterOutput( Castor::String const & p_name, TypeName p_type )
+		inline void registerOutput( castor::String const & p_name, TypeName p_type )
 		{
 			m_outputs.emplace( p_name, p_type );
 		}
 
-		inline void SetSource( Castor::String const & p_src )
+		inline void setSource( castor::String const & p_src )
 		{
 			m_source = p_src;
 		}
 
-		inline Ssbo::Info const & GetSsboInfo( Castor::String const & p_name )const
+		inline Ssbo::Info const & getSsboInfo( castor::String const & p_name )const
 		{
 			return m_ssbos.at( p_name );
 		}
 
-		inline Ubo::Info const & GetUboInfo( Castor::String const & p_name )const
+		inline Ubo::Info const & getUboInfo( castor::String const & p_name )const
 		{
 			return m_ubos.at( p_name );
 		}
 
-		inline TypeName GetInputType( Castor::String const & p_name )const
+		inline TypeName getInputType( castor::String const & p_name )const
 		{
 			return m_inputs.at( p_name );
 		}
 
-		inline TypeName GetOutputType( Castor::String const & p_name )const
+		inline TypeName getOutputType( castor::String const & p_name )const
 		{
 			return m_outputs.at( p_name );
 		}
 		
-		inline TypeName GetUniformType( Castor::String const & p_name )const
+		inline TypeName getUniformType( castor::String const & p_name )const
 		{
 			return m_uniforms.at( p_name );
 		}
 
-		inline Castor::String const & GetSource()const
+		inline castor::String const & getSource()const
 		{
 			return m_source;
 		}
 
 	private:
-		Castor::String m_source;
-		std::map< Castor::String, Ssbo::Info > m_ssbos;
-		std::map< Castor::String, Ubo::Info > m_ubos;
-		std::map< Castor::String, TypeName > m_uniforms;
-		std::map< Castor::String, TypeName > m_inputs;
-		std::map< Castor::String, TypeName > m_outputs;
+		castor::String m_source;
+		std::map< castor::String, Ssbo::Info > m_ssbos;
+		std::map< castor::String, Ubo::Info > m_ubos;
+		std::map< castor::String, TypeName > m_uniforms;
+		std::map< castor::String, TypeName > m_inputs;
+		std::map< castor::String, TypeName > m_outputs;
 	};
 }
 

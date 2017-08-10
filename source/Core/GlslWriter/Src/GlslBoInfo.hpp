@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -36,22 +36,22 @@ namespace GLSL
 		{
 		}
 
-		inline void RegisterMember( Castor::String const & p_name, TypeName p_type )
+		inline void registerMember( castor::String const & p_name, TypeName p_type )
 		{
 			m_members.emplace( p_name, p_type );
 		}
 		
-		inline TypeName GetMemberType( Castor::String const & p_name )const
+		inline TypeName getMemberType( castor::String const & p_name )const
 		{
 			return m_members.at( p_name );
 		}
 
-		inline LayoutType GetLayout()const
+		inline LayoutType getLayout()const
 		{
 			return m_layout;
 		}
 
-		inline uint32_t GetBindingPoint()const
+		inline uint32_t getBindingPoint()const
 		{
 			return m_bind;
 		}
@@ -59,7 +59,7 @@ namespace GLSL
 	private:
 		LayoutType m_layout;
 		uint32_t m_bind;
-		std::map< Castor::String, TypeName > m_members;
+		std::map< castor::String, TypeName > m_members;
 	};
 }
 

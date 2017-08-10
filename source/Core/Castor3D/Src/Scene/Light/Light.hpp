@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,7 +54,7 @@ namespace Castor3D
 		\brief		Light loader
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Light >
+			: public castor::TextWriter< Light >
 		{
 		public:
 			/**
@@ -63,7 +63,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves a Light into a text file
@@ -76,7 +76,7 @@ namespace Castor3D
 			 *\param[in]	p_object	La Light à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API bool operator()( Light const & p_object, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Light const & p_object, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_lightType	Le type de lumière
 		 *\param[in]	p_node		Le scene node parent
 		 */
-		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType );
+		C3D_API Light( castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\param[in,out]	p_viewport	Le viewport à mettre à jour.
 		 *\param[in]		p_index		L'indice de la shadow map de la lumière, -1 si elle n'en a pas.
 		 */
-		C3D_API void Update( Castor::Point3r const & p_target
+		C3D_API void update( castor::Point3r const & p_target
 			, Viewport & p_viewport
 			, int32_t p_index = -1 );
 		/**
@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\param[out]	p_texture	La texture recevant les données de la source lumineuse.
 		 *\param[in]	p_index		L'indice de la source lumineuse.
 		 */
-		C3D_API void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index );
+		C3D_API void bind( castor::PxBufferBase & p_texture, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Material
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Attache cette lumière au node donné
 		 *\param[in]	p_node	Le nouveau node parent de cette lumière
 		 */
-		C3D_API void AttachTo( SceneNodeSPtr p_node )override;
+		C3D_API void attachTo( SceneNodeSPtr p_node )override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the DirectionalLight category
@@ -147,7 +147,7 @@ namespace Castor3D
 		 *\brief		Récupère la DirectionalLight
 		 *\return		La valeur
 		 */
-		C3D_API DirectionalLightSPtr GetDirectionalLight()const;
+		C3D_API DirectionalLightSPtr getDirectionalLight()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the PointLight category
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\brief		Récupère la PointLight
 		 *\return		La valeur
 		 */
-		C3D_API PointLightSPtr GetPointLight()const;
+		C3D_API PointLightSPtr getPointLight()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the SpotLight category
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\brief		Récupère la SpotLight
 		 *\return		La valeur
 		 */
-		C3D_API SpotLightSPtr GetSpotLight()const;
+		C3D_API SpotLightSPtr getSpotLight()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the light type
@@ -174,9 +174,9 @@ namespace Castor3D
 		 *\brief		Récupère le type de lumière
 		 *\return		La valeur
 		 */
-		inline LightType GetLightType()const
+		inline LightType getLightType()const
 		{
-			return m_category->GetLightType();
+			return m_category->getLightType();
 		}
 		/**
 		 *\~english
@@ -186,7 +186,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'activation de la lumière
 		 *\return		La valeur
 		 */
-		inline bool IsEnabled()const
+		inline bool isEnabled()const
 		{
 			return m_enabled;
 		}
@@ -196,9 +196,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur de la lumière.
 		 */
-		inline Castor::Point3f const & GetColour()const
+		inline castor::Point3f const & getColour()const
 		{
-			return m_category->GetColour();
+			return m_category->getColour();
 		}
 		/**
 		 *\~english
@@ -206,9 +206,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les valeurs d'intensité.
 		 */
-		inline Castor::Point2f const & GetIntensity()const
+		inline castor::Point2f const & getIntensity()const
 		{
-			return m_category->GetIntensity();
+			return m_category->getIntensity();
 		}
 		/**
 		 *\~english
@@ -216,9 +216,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'intensité diffuse.
 		 */
-		inline float GetDiffuseIntensity()const
+		inline float getDiffuseIntensity()const
 		{
-			return m_category->GetDiffuseIntensity();
+			return m_category->getDiffuseIntensity();
 		}
 		/**
 		 *\~english
@@ -226,127 +226,127 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'intensité spéculaire.
 		 */
-		inline float GetSpecularIntensity()const
+		inline float getSpecularIntensity()const
 		{
-			return m_category->GetSpecularIntensity();
+			return m_category->getSpecularIntensity();
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the colour.
+		 *\brief		sets the colour.
 		 *\param[in]	p_values	The new value.
 		 *\~french
 		 *\brief		Définit la couleur.
 		 *\param[in]	p_values	La nouvelle valeur.
 		 */
-		inline void SetColour( float * p_values )
+		inline void setColour( float * p_values )
 		{
-			m_category->SetColour( Castor::Point3f( p_values[0], p_values[1], p_values[2] ) );
+			m_category->setColour( castor::Point3f( p_values[0], p_values[1], p_values[2] ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the colour.
+		 *\brief		sets the colour.
 		 *\param[in]	r, g, b	The RGB components.
 		 *\~french
 		 *\brief		Définit la couleur.
 		 *\param[in]	r, g, b	Les composantes RGB.
 		 */
-		inline void SetColour( float r, float g, float b )
+		inline void setColour( float r, float g, float b )
 		{
-			m_category->SetColour( Castor::Point3f( r, g, b ) );
+			m_category->setColour( castor::Point3f( r, g, b ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the colour.
+		 *\brief		sets the colour.
 		 *\param[in]	p_colour	The new value.
 		 *\~french
 		 *\brief		Définit la couleur.
 		 *\param[in]	p_colour	La nouvelle valeur.
 		 */
-		inline void SetColour( Castor::Point3f const & p_colour )
+		inline void setColour( castor::Point3f const & p_colour )
 		{
-			m_category->SetColour( p_colour );
+			m_category->setColour( p_colour );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the colour.
+		 *\brief		sets the colour.
 		 *\param[in]	p_colour	The new value
 		 *\~french
 		 *\brief		Définit la couleur.
 		 *\param[in]	p_colour	La nouvelle valeur
 		 */
-		inline void SetColour( Castor::Colour const & p_colour )
+		inline void setColour( castor::Colour const & p_colour )
 		{
-			m_category->SetColour( rgb_float( p_colour ) );
+			m_category->setColour( toRGBFloat( p_colour ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the light's intensity values.
+		 *\brief		sets the light's intensity values.
 		 *\param[in]	p_values	The new values.
 		 *\~french
 		 *\brief		Définit les valeurs d'intensité.
 		 *\param[in]	p_values	Les nouvelles valeurs.
 		 */
-		inline void SetIntensity( float * p_values )
+		inline void setIntensity( float * p_values )
 		{
-			m_category->SetIntensity( Castor::Point2f( p_values[0], p_values[1], p_values[2] ) );
+			m_category->setIntensity( castor::Point2f( p_values[0], p_values[1], p_values[2] ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the light's intensity values.
+		 *\brief		sets the light's intensity values.
 		 *\param[in]	a, d, s	The new values.
 		 *\~french
 		 *\brief		Définit les valeurs d'intensité.
 		 *\param[in]	a, d, s	Les nouvelles valeurs.
 		 */
-		inline void SetIntensity( float d, float s )
+		inline void setIntensity( float d, float s )
 		{
-			m_category->SetIntensity( Castor::Point2f( d, s ) );
+			m_category->setIntensity( castor::Point2f( d, s ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the light's intensity values.
+		 *\brief		sets the light's intensity values.
 		 *\param[in]	p_intensity	The new values.
 		 *\~french
 		 *\brief		Définit les valeurs d'intensité.
 		 *\param[in]	p_intensity	Les nouvelles valeurs.
 		 */
-		inline void SetIntensity( Castor::Point2f const & p_intensity )
+		inline void setIntensity( castor::Point2f const & p_intensity )
 		{
-			m_category->SetIntensity( p_intensity );
+			m_category->setIntensity( p_intensity );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the diffuse intensity.
+		 *\brief		sets the diffuse intensity.
 		 *\param[in]	p_intensity	The new value.
 		 *\~french
 		 *\brief		Définit l'intensité diffuse.
 		 *\param[in]	p_intensity	La nouvelle valeur.
 		 */
-		inline void SetDiffuseIntensity( float p_intensity )
+		inline void setDiffuseIntensity( float p_intensity )
 		{
-			m_category->SetDiffuseIntensity( p_intensity );
+			m_category->setDiffuseIntensity( p_intensity );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the specular intensity.
+		 *\brief		sets the specular intensity.
 		 *\param[in]	p_intensity	The new value.
 		 *\~french
 		 *\brief		Définit l'intensité spéculaire.
 		 *\param[in]	p_intensity	La nouvelle valeur.
 		 */
-		inline void SetSpecularIntensity( float p_intensity )
+		inline void setSpecularIntensity( float p_intensity )
 		{
-			m_category->SetSpecularIntensity( p_intensity );
+			m_category->setSpecularIntensity( p_intensity );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the light enabled status
+		 *\brief		sets the light enabled status
 		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de la lumère
 		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetEnabled( bool p_value )
+		inline void setEnabled( bool p_value )
 		{
 			m_enabled = p_value;
 		}
@@ -356,9 +356,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Active la lumière
 		 */
-		inline void Enable()
+		inline void enable()
 		{
-			SetEnabled( true );
+			setEnabled( true );
 		}
 		/**
 		 *\~english
@@ -366,9 +366,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Désactive la lumière
 		 */
-		inline void Disable()
+		inline void disable()
 		{
-			SetEnabled( false );
+			setEnabled( false );
 		}
 		/**
 		 *\~english
@@ -376,7 +376,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La catégorie de source lumineuse.
 		 */
-		inline LightCategorySPtr GetCategory()const
+		inline LightCategorySPtr getCategory()const
 		{
 			return m_category;
 		}
@@ -386,25 +386,25 @@ namespace Castor3D
 		 *\~french
 		 *\return		Dit si la lumière projette des ombres.
 		 */
-		inline bool IsShadowProducer()const
+		inline bool isShadowProducer()const
 		{
 			return m_shadowCaster;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the light shadow casting status.
+		 *\brief		sets the light shadow casting status.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le statut de projection d'ombre de la lumère
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetShadowProducer( bool p_value )
+		inline void setShadowProducer( bool p_value )
 		{
 			m_shadowCaster = p_value;
 		}
 
 	protected:
-		void OnNodeChanged( SceneNode const & p_node );
+		void onNodeChanged( SceneNode const & p_node );
 
 	protected:
 		//!\~english	Tells the light is enabled.

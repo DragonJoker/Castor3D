@@ -6,8 +6,8 @@
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
@@ -15,27 +15,27 @@ namespace TestRender
 		: ShaderProgram( p_renderSystem )
 		, m_layout( p_renderSystem )
 	{
-		CreateObject( ShaderType::eVertex );
-		CreateObject( ShaderType::ePixel );
+		createObject( ShaderType::eVertex );
+		createObject( ShaderType::ePixel );
 	}
 
 	TestShaderProgram::~TestShaderProgram()
 	{
 	}
 
-	void TestShaderProgram::Cleanup()
+	void TestShaderProgram::cleanup()
 	{
-		m_layout.Cleanup();
-		DoCleanup();
+		m_layout.cleanup();
+		doCleanup();
 	}
 
-	bool TestShaderProgram::Initialise()
+	bool TestShaderProgram::initialise()
 	{
-		bool result = DoInitialise();
+		bool result = doInitialise();
 
 		if ( result )
 		{
-			m_layout.Initialise( *this );
+			m_layout.initialise( *this );
 		}
 
 		return result;
@@ -47,20 +47,20 @@ namespace TestRender
 		return true;
 	}
 
-	void TestShaderProgram::Bind()const
+	void TestShaderProgram::bind()const
 	{
 	}
 
-	void TestShaderProgram::Unbind()const
+	void TestShaderProgram::unbind()const
 	{
 	}
 
-	ShaderObjectSPtr TestShaderProgram::DoCreateObject( ShaderType p_type )
+	ShaderObjectSPtr TestShaderProgram::doCreateObject( ShaderType p_type )
 	{
 		return std::make_shared< TestShaderObject >( this, p_type );
 	}
 
-	std::shared_ptr< PushUniform > TestShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )
+	std::shared_ptr< PushUniform > TestShaderProgram::doCreateUniform( UniformType p_type, int p_occurences )
 	{
 		switch ( p_type )
 		{

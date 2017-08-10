@@ -1,8 +1,8 @@
 #include "ShadowMapPassSpot.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ShadowMapPassSpot::ShadowMapPassSpot( Engine & engine
 		, Light & p_light
@@ -15,42 +15,42 @@ namespace Castor3D
 	{
 	}
 
-	bool ShadowMapPassSpot::DoInitialise( Size const & p_size )
+	bool ShadowMapPassSpot::doInitialise( Size const & p_size )
 	{
-		Viewport viewport{ *GetEngine() };
-		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
-			, *m_light.GetScene()
-			, m_light.GetParent()
+		Viewport viewport{ *getEngine() };
+		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.getName()
+			, *m_light.getScene()
+			, m_light.getParent()
 			, std::move( viewport ) );
-		m_camera->Resize( p_size );
+		m_camera->resize( p_size );
 
-		m_renderQueue.Initialise( *m_light.GetScene(), *m_camera );
+		m_renderQueue.initialise( *m_light.getScene(), *m_camera );
 		return true;
 	}
 
-	void ShadowMapPassSpot::DoCleanup()
+	void ShadowMapPassSpot::doCleanup()
 	{
-		m_camera->Detach();
+		m_camera->detach();
 		m_camera.reset();
 	}
 
-	void ShadowMapPassSpot::DoUpdate( RenderQueueArray & p_queues )
+	void ShadowMapPassSpot::doUpdate( RenderQueueArray & p_queues )
 	{
-		m_light.Update( m_camera->GetParent()->GetDerivedPosition()
-			, m_camera->GetViewport()
+		m_light.update( m_camera->getParent()->getDerivedPosition()
+			, m_camera->getViewport()
 			, m_index );
-		m_camera->Update();
+		m_camera->update();
 		p_queues.push_back( m_renderQueue );
 	}
 
-	void ShadowMapPassSpot::DoRender( uint32_t p_face )
+	void ShadowMapPassSpot::doRender( uint32_t p_face )
 	{
 		if ( m_camera && m_initialised )
 		{
-			m_camera->Apply();
-			m_matrixUbo.Update( m_camera->GetView()
-				, m_camera->GetViewport().GetProjection() );
-			DoRenderNodes( m_renderQueue.GetRenderNodes(), *m_camera );
+			m_camera->apply();
+			m_matrixUbo.update( m_camera->getView()
+				, m_camera->getViewport().getProjection() );
+			doRenderNodes( m_renderQueue.getRenderNodes(), *m_camera );
 		}
 	}
 }

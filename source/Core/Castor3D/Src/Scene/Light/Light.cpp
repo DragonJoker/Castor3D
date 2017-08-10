@@ -8,20 +8,20 @@
 #include "Scene/Light/SpotLight.hpp"
 #include "Scene/Scene.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
 	Light::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Light >{ p_tabs }
+		: castor::TextWriter< Light >{ p_tabs }
 	{
 	}
 
 	bool Light::TextWriter::operator()( Light const & p_object, TextFile & p_file )
 	{
-		return p_object.m_category->CreateTextWriter( m_tabs )->WriteInto( p_file );
+		return p_object.m_category->createTextWriter( m_tabs )->writeInto( p_file );
 	}
 
 	//*************************************************************************************************
@@ -29,12 +29,12 @@ namespace Castor3D
 	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType )
 		: MovableObject{ p_name, p_scene, MovableType::eLight, p_node }
 	{
-		m_category = p_factory.Create( p_lightType, std::ref( *this ) );
+		m_category = p_factory.create( p_lightType, std::ref( *this ) );
 
 		if ( p_node )
 		{
-			m_notifyIndex = p_node->onChanged.connect( std::bind( &Light::OnNodeChanged, this, std::placeholders::_1 ) );
-			OnNodeChanged( *p_node );
+			m_notifyIndex = p_node->onChanged.connect( std::bind( &Light::onNodeChanged, this, std::placeholders::_1 ) );
+			onNodeChanged( *p_node );
 		}
 	}
 
@@ -42,67 +42,67 @@ namespace Castor3D
 	{
 	}
 
-	void Light::Update( Point3r const & p_target
+	void Light::update( Point3r const & p_target
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{
-		m_category->Update( p_target
+		m_category->update( p_target
 			, p_viewport
 			, p_index );
 	}
 
-	void Light::Bind( PxBufferBase & p_texture, uint32_t p_index )
+	void Light::bind( PxBufferBase & p_texture, uint32_t p_index )
 	{
-		SceneNodeSPtr node = GetParent();
+		SceneNodeSPtr node = getParent();
 
-		switch ( m_category->GetLightType() )
+		switch ( m_category->getLightType() )
 		{
 		case LightType::eDirectional:
-			GetDirectionalLight()->Bind( p_texture, p_index );
+			getDirectionalLight()->bind( p_texture, p_index );
 			break;
 
 		case LightType::ePoint:
-			GetPointLight()->Bind( p_texture, p_index );
+			getPointLight()->bind( p_texture, p_index );
 			break;
 
 		case LightType::eSpot:
-			GetSpotLight()->Bind( p_texture, p_index );
+			getSpotLight()->bind( p_texture, p_index );
 			break;
 		}
 	}
 
-	void Light::AttachTo( SceneNodeSPtr p_node )
+	void Light::attachTo( SceneNodeSPtr p_node )
 	{
-		MovableObject::AttachTo( p_node );
-		auto node = GetParent();
+		MovableObject::attachTo( p_node );
+		auto node = getParent();
 
 		if ( node )
 		{
-			m_notifyIndex = p_node->onChanged.connect( std::bind( &Light::OnNodeChanged, this, std::placeholders::_1 ) );
-			OnNodeChanged( *node );
+			m_notifyIndex = p_node->onChanged.connect( std::bind( &Light::onNodeChanged, this, std::placeholders::_1 ) );
+			onNodeChanged( *node );
 		}
 	}
 
-	DirectionalLightSPtr Light::GetDirectionalLight()const
+	DirectionalLightSPtr Light::getDirectionalLight()const
 	{
-		REQUIRE( m_category->GetLightType() == LightType::eDirectional );
+		REQUIRE( m_category->getLightType() == LightType::eDirectional );
 		return std::static_pointer_cast< DirectionalLight >( m_category );
 	}
 
-	PointLightSPtr Light::GetPointLight()const
+	PointLightSPtr Light::getPointLight()const
 	{
-		REQUIRE( m_category->GetLightType() == LightType::ePoint );
+		REQUIRE( m_category->getLightType() == LightType::ePoint );
 		return std::static_pointer_cast< PointLight >( m_category );
 	}
 
-	SpotLightSPtr Light::GetSpotLight()const
+	SpotLightSPtr Light::getSpotLight()const
 	{
-		REQUIRE( m_category->GetLightType() == LightType::eSpot );
+		REQUIRE( m_category->getLightType() == LightType::eSpot );
 		return std::static_pointer_cast< SpotLight >( m_category );
 	}
 
-	void Light::OnNodeChanged( SceneNode const & p_node )
+	void Light::onNodeChanged( SceneNode const & p_node )
 	{
-		m_category->UpdateNode( p_node );
+		m_category->updateNode( p_node );
 	}
 }

@@ -7,9 +7,9 @@
 
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	FrameBuffer::FrameBuffer( Engine & engine )
 		: OwnedBy< Engine >( engine )
@@ -20,16 +20,16 @@ namespace Castor3D
 	{
 	}
 
-	bool FrameBuffer::Initialise( Castor::Size const & p_size )
+	bool FrameBuffer::initialise( castor::Size const & p_size )
 	{
 		return true;
 	}
 
-	void FrameBuffer::Cleanup()
+	void FrameBuffer::cleanup()
 	{
 	}
 
-	void FrameBuffer::SetClearColour( Castor::Colour const & p_clrClear )
+	void FrameBuffer::setClearColour( castor::Colour const & p_clrClear )
 	{
 		m_redClear = p_clrClear.red();
 		m_greenClear = p_clrClear.green();
@@ -37,7 +37,7 @@ namespace Castor3D
 		m_alphaClear = p_clrClear.alpha();
 	}
 
-	void FrameBuffer::SetClearColour( float p_r, float p_g, float p_b, float p_a )
+	void FrameBuffer::setClearColour( float p_r, float p_g, float p_b, float p_a )
 	{
 		m_redClear = p_r;
 		m_greenClear = p_g;
@@ -45,48 +45,48 @@ namespace Castor3D
 		m_alphaClear = p_a;
 	}
 
-	void FrameBuffer::Clear( BufferComponents p_targets )
+	void FrameBuffer::clear( BufferComponents p_targets )
 	{
-		DoClear( p_targets );
+		doClear( p_targets );
 	}
 
-	void FrameBuffer::Bind( FrameBufferTarget p_target )const
+	void FrameBuffer::bind( FrameBufferTarget p_target )const
 	{
-		DoBind( p_target );
+		doBind( p_target );
 	}
 
-	void FrameBuffer::Unbind()const
+	void FrameBuffer::unbind()const
 	{
-		DoUnbind();
+		doUnbind();
 	}
 
-	void FrameBuffer::Attach( AttachmentPoint p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
+	void FrameBuffer::attach( AttachmentPoint p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
 	{
-		p_texture->SetTarget( p_target );
-		p_texture->SetLayer( p_layer );
-		DoAttach( p_point, p_index, p_texture );
+		p_texture->setTarget( p_target );
+		p_texture->setLayer( p_layer );
+		doAttach( p_point, p_index, p_texture );
 	}
 
-	void FrameBuffer::Attach( AttachmentPoint p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
+	void FrameBuffer::attach( AttachmentPoint p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
 	{
-		Attach( p_point, 0, p_texture, p_target, p_layer );
+		attach( p_point, 0, p_texture, p_target, p_layer );
 	}
 
-	void FrameBuffer::Attach( AttachmentPoint p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
+	void FrameBuffer::attach( AttachmentPoint p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		DoAttach( p_point, p_index, p_renderBuffer );
+		doAttach( p_point, p_index, p_renderBuffer );
 	}
 
-	void FrameBuffer::Attach( AttachmentPoint p_point, RenderBufferAttachmentSPtr p_renderBuffer )
+	void FrameBuffer::attach( AttachmentPoint p_point, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		Attach( p_point, 0, p_renderBuffer );
+		attach( p_point, 0, p_renderBuffer );
 	}
 
-	FrameBufferAttachmentSPtr FrameBuffer::GetAttachment( AttachmentPoint p_point, uint8_t p_index )
+	FrameBufferAttachmentSPtr FrameBuffer::getAttachment( AttachmentPoint p_point, uint8_t p_index )
 	{
 		auto it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point, &p_index]( FrameBufferAttachmentSPtr p_attach )
 		{
-			return p_attach->GetAttachmentIndex() == p_index && p_attach->GetAttachmentPoint() == p_point;
+			return p_attach->getAttachmentIndex() == p_index && p_attach->getAttachmentPoint() == p_point;
 		} );
 
 		FrameBufferAttachmentSPtr result;
@@ -99,60 +99,60 @@ namespace Castor3D
 		return result;
 	}
 
-	void FrameBuffer::DetachAll()
+	void FrameBuffer::detachAll()
 	{
 		for ( auto attach : m_attaches )
 		{
-			attach->Detach();
+			attach->detach();
 		}
 
 		m_attaches.clear();
 	}
 
-	void FrameBuffer::Resize( Castor::Size const & p_size )
+	void FrameBuffer::resize( castor::Size const & p_size )
 	{
 		for ( auto attach : m_attaches )
 		{
-			if ( attach->GetAttachmentType() == AttachmentType::eTexture )
+			if ( attach->getAttachmentType() == AttachmentType::eTexture )
 			{
-				std::static_pointer_cast< TextureAttachment >( attach )->GetTexture()->GetImage().Resize( p_size );
+				std::static_pointer_cast< TextureAttachment >( attach )->getTexture()->getImage().resize( p_size );
 			}
 			else
 			{
-				std::static_pointer_cast< RenderBufferAttachment >( attach )->GetRenderBuffer()->Resize( p_size );
+				std::static_pointer_cast< RenderBufferAttachment >( attach )->getRenderBuffer()->resize( p_size );
 			}
 		}
 	}
 
-	void FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, FlagCombination< BufferComponent > const & p_components )const
+	void FrameBuffer::blitInto( FrameBuffer const & p_target, castor::Rectangle const & p_rectSrcDst, FlagCombination< BufferComponent > const & p_components )const
 	{
-		p_target.Bind( FrameBufferTarget::eDraw );
-		Bind( FrameBufferTarget::eRead );
-		DoBlitInto( p_target, p_rectSrcDst, p_components );
-		Unbind();
-		p_target.Unbind();
+		p_target.bind( FrameBufferTarget::eDraw );
+		bind( FrameBufferTarget::eRead );
+		doBlitInto( p_target, p_rectSrcDst, p_components );
+		unbind();
+		p_target.unbind();
 	}
 
-	void FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
+	void FrameBuffer::stretchInto( FrameBuffer const & p_target, castor::Rectangle const & p_rectSrc, castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
-		p_target.Bind( FrameBufferTarget::eDraw );
-		Bind( FrameBufferTarget::eRead );
-		DoStretchInto( p_target, p_rectSrc, p_rectDst, p_components, p_interpolation );
-		Unbind();
-		p_target.Unbind();
+		p_target.bind( FrameBufferTarget::eDraw );
+		bind( FrameBufferTarget::eRead );
+		doStretchInto( p_target, p_rectSrc, p_rectDst, p_components, p_interpolation );
+		unbind();
+		p_target.unbind();
 	}
 
-	void FrameBuffer::SetDrawBuffers()const
+	void FrameBuffer::setDrawBuffers()const
 	{
-		SetDrawBuffers( m_attaches );
+		setDrawBuffers( m_attaches );
 	}
 
-	void FrameBuffer::SetDrawBuffer( FrameBufferAttachmentSPtr p_attach )const
+	void FrameBuffer::setDrawBuffer( FrameBufferAttachmentSPtr p_attach )const
 	{
-		SetDrawBuffers( AttachArray( 1, p_attach ) );
+		setDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
-	PixelFormat FrameBuffer::DoGetPixelFormat( AttachmentPoint p_point, uint8_t p_index )
+	PixelFormat FrameBuffer::doGetPixelFormat( AttachmentPoint p_point, uint8_t p_index )
 	{
 		PixelFormat result = PixelFormat::eCount;
 
@@ -160,20 +160,20 @@ namespace Castor3D
 		{
 			auto it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
 			{
-				return p_attach->GetAttachmentPoint() == p_point;
+				return p_attach->getAttachmentPoint() == p_point;
 			} );
 
 			if ( it != m_attaches.end() )
 			{
-				if ( ( *it )->GetAttachmentType() == AttachmentType::eTexture )
+				if ( ( *it )->getAttachmentType() == AttachmentType::eTexture )
 				{
 					TextureAttachmentSPtr attach = std::static_pointer_cast< TextureAttachment >( *it );
-					result = attach->GetTexture()->GetPixelFormat();
+					result = attach->getTexture()->getPixelFormat();
 				}
 				else
 				{
 					RenderBufferAttachmentSPtr attach = std::static_pointer_cast< RenderBufferAttachment >( *it );
-					result = attach->GetRenderBuffer()->GetPixelFormat();
+					result = attach->getRenderBuffer()->getPixelFormat();
 				}
 			}
 		}
@@ -181,23 +181,23 @@ namespace Castor3D
 		return result;
 	}
 
-	void FrameBuffer::DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
+	void FrameBuffer::doAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
 	{
-		DoDetach( p_point, p_index );
-		p_attach->Attach( p_point, p_index );
+		doDetach( p_point, p_index );
+		p_attach->attach( p_point, p_index );
 		m_attaches.push_back( p_attach );
 	}
 
-	void FrameBuffer::DoDetach( AttachmentPoint p_point, uint8_t p_index )
+	void FrameBuffer::doDetach( AttachmentPoint p_point, uint8_t p_index )
 	{
 		auto itAtt = std::find_if( m_attaches.begin(), m_attaches.end(), [p_point, p_index]( FrameBufferAttachmentSPtr p_att )
 		{
-			return p_att->GetAttachmentPoint() == p_point && p_att->GetAttachmentIndex() == p_index;
+			return p_att->getAttachmentPoint() == p_point && p_att->getAttachmentIndex() == p_index;
 		} );
 
 		if ( itAtt != m_attaches.end() )
 		{
-			( *itAtt )->Detach();
+			( *itAtt )->detach();
 			m_attaches.erase( itAtt );
 		}
 	}

@@ -8,8 +8,8 @@
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace Ase
 {
@@ -22,18 +22,18 @@ namespace Ase
 	{
 	}
 
-	ImporterUPtr AseImporter::Create( Engine & p_engine )
+	ImporterUPtr AseImporter::create( Engine & p_engine )
 	{
 		return std::make_unique< AseImporter >( p_engine );
 	}
 
-	bool AseImporter::DoImportScene( Scene & p_scene )
+	bool AseImporter::doImportScene( Scene & p_scene )
 	{
-		return AseFileParser{ *this, p_scene }.ParseFile( m_fileName );
+		return AseFileParser{ *this, p_scene }.parseFile( m_fileName );
 	}
 
-	bool AseImporter::DoImportMesh( Mesh & p_mesh )
+	bool AseImporter::doImportMesh( Mesh & p_mesh )
 	{
-		return AseFileParser{ *this, *p_mesh.GetScene(), p_mesh }.ParseFile( m_fileName );
+		return AseFileParser{ *this, *p_mesh.getScene(), p_mesh }.parseFile( m_fileName );
 	}
 }

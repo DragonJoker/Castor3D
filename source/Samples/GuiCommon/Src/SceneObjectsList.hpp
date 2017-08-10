@@ -37,18 +37,18 @@ namespace GuiCommon
 		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~SceneObjectsList();
 
-		void LoadScene( Castor3D::Engine * engine, Castor3D::SceneSPtr p_scene );
+		void LoadScene( castor3d::Engine * engine, castor3d::SceneSPtr p_scene );
 		void UnloadScene();
 
 	protected:
-		void DoAddRenderWindow( wxTreeItemId p_id, Castor3D::RenderWindowSPtr p_window );
-		void DoAddGeometry( wxTreeItemId p_id, Castor3D::Geometry & p_geometry );
-		void DoAddCamera( wxTreeItemId p_id, Castor3D::Camera & p_camera );
-		void DoAddLight( wxTreeItemId p_id, Castor3D::Light & p_light );
-		void DoAddBillboard( wxTreeItemId p_id, Castor3D::BillboardList & p_billboard );
-		void DoAddNode( wxTreeItemId p_id, Castor3D::SceneNodeSPtr p_node );
-		void DoAddAnimatedObjectGroup( wxTreeItemId p_id, Castor3D::AnimatedObjectGroupSPtr p_group );
-		void DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlayCategorySPtr p_overlay );
+		void doAddRenderWindow( wxTreeItemId p_id, castor3d::RenderWindowSPtr p_window );
+		void doAddGeometry( wxTreeItemId p_id, castor3d::Geometry & p_geometry );
+		void doAddCamera( wxTreeItemId p_id, castor3d::Camera & p_camera );
+		void doAddLight( wxTreeItemId p_id, castor3d::Light & p_light );
+		void doAddBillboard( wxTreeItemId p_id, castor3d::BillboardList & p_billboard );
+		void doAddNode( wxTreeItemId p_id, castor3d::SceneNodeSPtr p_node );
+		void doAddAnimatedObjectGroup( wxTreeItemId p_id, castor3d::AnimatedObjectGroupSPtr p_group );
+		void doAddOverlay( wxTreeItemId p_id, castor3d::OverlayCategorySPtr p_overlay );
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
@@ -56,8 +56,8 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::SceneWPtr m_scene;
-		Castor3D::Engine * m_engine;
+		castor3d::SceneWPtr m_scene;
+		castor3d::Engine * m_engine;
 		PropertiesHolder * m_propertiesHolder;
 	};
 }

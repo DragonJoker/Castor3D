@@ -1,4 +1,4 @@
-﻿#include <iomanip>
+#include <iomanip>
 
 namespace GLSL
 {
@@ -17,13 +17,13 @@ namespace GLSL
 	Int::Int( Int const & p_value )
 		: Type( cuT( "int " ), p_value.m_writer )
 	{
-		m_value << Castor::String( p_value );
+		m_value << castor::String( p_value );
 	}
 
 	Int::Int( Type const & p_value )
 		: Type( cuT( "int " ), p_value.m_writer )
 	{
-		m_value << Castor::String( p_value );
+		m_value << castor::String( p_value );
 	}
 
 	Int::Int( int p_value )
@@ -39,18 +39,18 @@ namespace GLSL
 	}
 
 	Int::Int( GlslWriter * p_writer, int p_value )
-		: Type( cuT( "int " ), p_writer, Castor::String() )
+		: Type( cuT( "int " ), p_writer, castor::String() )
 	{
 		m_value << p_value;
 	}
 
 	Int::Int( GlslWriter * p_writer, float p_value )
-		: Type( cuT( "int " ), p_writer, Castor::String() )
+		: Type( cuT( "int " ), p_writer, castor::String() )
 	{
 		m_value << p_value;
 	}
 
-	Int::Int( GlslWriter * p_writer, Castor::String const & p_name )
+	Int::Int( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "int " ), p_writer, p_name )
 	{
 	}
@@ -59,7 +59,7 @@ namespace GLSL
 	{
 		if ( m_writer )
 		{
-			m_writer->WriteAssign( *this, p_rhs );
+			m_writer->writeAssign( *this, p_rhs );
 		}
 		else
 		{
@@ -73,15 +73,15 @@ namespace GLSL
 	template< typename T >
 	Int & Int::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
 	template< typename T >
 	Int & Int::operator=( int p_rhs )
 	{
-		m_writer->WriteAssign( *this, p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -92,170 +92,170 @@ namespace GLSL
 
 	Int & Int::operator++()
 	{
-		m_value << cuT( "++" ) << Castor::String( *this );
+		m_value << cuT( "++" ) << castor::String( *this );
 		return *this;
 	}
 
 	Int Int::operator++( int )
 	{
 		Int result;
-		result.m_value << Castor::String( *this ) << cuT( "++" );
+		result.m_value << castor::String( *this ) << cuT( "++" );
 		return result;
 	}
 
 	inline Int & Int::operator<<=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator>>=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator<<=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator>>=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator<<=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator>>=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator&=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator|=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator&=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator|=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator&=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int & Int::operator|=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline Int operator<<( Int const & p_value, int i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " << " << ToString( i );
+		result.m_value << castor::String( p_value ) << " << " << toString( i );
 		return result;
 	}
 
 	inline Int operator>>( Int const & p_value, int i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " >> " << ToString( i );
+		result.m_value << castor::String( p_value ) << " >> " << toString( i );
 		return result;
 	}
 
 	inline Int operator<<( Int const & p_value, Int const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " << " << castor::String( i );
 		return result;
 	}
 
 	inline Int operator>>( Int const & p_value, Int const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " >> " << castor::String( i );
 		return result;
 	}
 
 	inline Int operator<<( Int const & p_value, UInt const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " << " << castor::String( i );
 		return result;
 	}
 
 	inline Int operator>>( Int const & p_value, UInt const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " >> " << castor::String( i );
 		return result;
 	}
 
 	inline Int operator&( Int const & p_value, int i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " & " << ToString( i );
+		result.m_value << castor::String( p_value ) << " & " << toString( i );
 		return result;
 	}
 
 	inline Int operator|( Int const & p_value, int i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " | " << ToString( i );
+		result.m_value << castor::String( p_value ) << " | " << toString( i );
 		return result;
 	}
 
 	inline Int operator&( Int const & p_value, Int const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " & " << castor::String( i );
 		return result;
 	}
 
 	inline Int operator|( Int const & p_value, Int const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " | " << castor::String( i );
 		return result;
 	}
 
 	inline Int operator&( Int const & p_value, UInt const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " & " << castor::String( i );
 		return result;
 	}
 
 	inline Int operator|( Int const & p_value, UInt const & i )
 	{
 		Int result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " | " << castor::String( i );
 		return result;
 	}
 
@@ -274,13 +274,13 @@ namespace GLSL
 	UInt::UInt( UInt const & p_value )
 		: Type( cuT( "uint " ), p_value.m_writer )
 	{
-		m_value << Castor::String( p_value );
+		m_value << castor::String( p_value );
 	}
 
 	UInt::UInt( Type const & p_value )
 		: Type( cuT( "uint " ), p_value.m_writer )
 	{
-		m_value << Castor::String( p_value );
+		m_value << castor::String( p_value );
 	}
 
 	UInt::UInt( unsigned int p_value )
@@ -296,18 +296,18 @@ namespace GLSL
 	}
 
 	UInt::UInt( GlslWriter * p_writer, unsigned int p_value )
-		: Type( cuT( "uint " ), p_writer, Castor::String() )
+		: Type( cuT( "uint " ), p_writer, castor::String() )
 	{
 		m_value << p_value;
 	}
 
 	UInt::UInt( GlslWriter * p_writer, float p_value )
-		: Type( cuT( "uint " ), p_writer, Castor::String() )
+		: Type( cuT( "uint " ), p_writer, castor::String() )
 	{
 		m_value << p_value;
 	}
 
-	UInt::UInt( GlslWriter * p_writer, Castor::String const & p_name )
+	UInt::UInt( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "uint " ), p_writer, p_name )
 	{
 	}
@@ -316,7 +316,7 @@ namespace GLSL
 	{
 		if ( m_writer )
 		{
-			m_writer->WriteAssign( *this, p_rhs );
+			m_writer->writeAssign( *this, p_rhs );
 		}
 		else
 		{
@@ -330,15 +330,15 @@ namespace GLSL
 	template< typename T >
 	UInt & UInt::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
 	template< typename T >
 	UInt & UInt::operator=( unsigned int p_rhs )
 	{
-		m_writer->WriteAssign( *this, p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
@@ -349,170 +349,170 @@ namespace GLSL
 
 	UInt & UInt::operator++()
 	{
-		m_value << cuT( "++" ) << Castor::String( *this );
+		m_value << cuT( "++" ) << castor::String( *this );
 		return *this;
 	}
 
 	UInt UInt::operator++( int )
 	{
 		UInt result;
-		result.m_value << Castor::String( *this ) << cuT( "++" );
+		result.m_value << castor::String( *this ) << cuT( "++" );
 		return result;
 	}
 
 	inline UInt & UInt::operator<<=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator>>=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator<<=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator>>=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator<<=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator>>=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator&=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator|=( int i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator&=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator|=( Int const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator&=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt & UInt::operator|=( UInt const & i )
 	{
-		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	inline UInt operator<<( UInt const & p_value, int i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " << " << ToString( i );
+		result.m_value << castor::String( p_value ) << " << " << toString( i );
 		return result;
 	}
 
 	inline UInt operator>>( UInt const & p_value, int i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " >> " << ToString( i );
+		result.m_value << castor::String( p_value ) << " >> " << toString( i );
 		return result;
 	}
 
 	inline UInt operator<<( UInt const & p_value, Int const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " << " << castor::String( i );
 		return result;
 	}
 
 	inline UInt operator>>( UInt const & p_value, Int const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " >> " << castor::String( i );
 		return result;
 	}
 
 	inline UInt operator<<( UInt const & p_value, UInt const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " << " << castor::String( i );
 		return result;
 	}
 
 	inline UInt operator>>( UInt const & p_value, UInt const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " >> " << castor::String( i );
 		return result;
 	}
 
 	inline UInt operator&( UInt const & p_value, int i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " & " << ToString( i );
+		result.m_value << castor::String( p_value ) << " & " << toString( i );
 		return result;
 	}
 
 	inline UInt operator|( UInt const & p_value, int i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " | " << ToString( i );
+		result.m_value << castor::String( p_value ) << " | " << toString( i );
 		return result;
 	}
 
 	inline UInt operator&( UInt const & p_value, Int const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " & " << castor::String( i );
 		return result;
 	}
 
 	inline UInt operator|( UInt const & p_value, Int const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " | " << castor::String( i );
 		return result;
 	}
 
 	inline UInt operator&( UInt const & p_value, UInt const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " & " << castor::String( i );
 		return result;
 	}
 
 	inline UInt operator|( UInt const & p_value, UInt const & i )
 	{
 		UInt result( p_value.m_writer );
-		result.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
+		result.m_value << castor::String( p_value ) << " | " << castor::String( i );
 		return result;
 	}
 
@@ -531,13 +531,13 @@ namespace GLSL
 	Float::Float( Float const & p_value )
 		: Type( cuT( "float " ) )
 	{
-		m_value << Castor::String( p_value );
+		m_value << castor::String( p_value );
 	}
 
 	Float::Float( Type const & p_value )
 		: Type( cuT( "float " ) )
 	{
-		m_value << Castor::String( p_value );
+		m_value << castor::String( p_value );
 	}
 
 	Float::Float( int p_value )
@@ -573,13 +573,13 @@ namespace GLSL
 	}
 
 	Float::Float( GlslWriter * p_writer, int p_value )
-		: Type( cuT( "float " ), p_writer, Castor::String() )
+		: Type( cuT( "float " ), p_writer, castor::String() )
 	{
 		m_value << p_value << cuT( ".0" );
 	}
 
 	Float::Float( GlslWriter * p_writer, float p_value )
-		: Type( cuT( "float " ), p_writer, Castor::String() )
+		: Type( cuT( "float " ), p_writer, castor::String() )
 	{
 		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< float >::epsilon() )
 		{
@@ -592,7 +592,7 @@ namespace GLSL
 	}
 
 	Float::Float( GlslWriter * p_writer, double p_value )
-		: Type( cuT( "float " ), p_writer, Castor::String() )
+		: Type( cuT( "float " ), p_writer, castor::String() )
 	{
 
 		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
@@ -605,7 +605,7 @@ namespace GLSL
 		}
 	}
 
-	Float::Float( GlslWriter * p_writer, Castor::String const & p_name )
+	Float::Float( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "float " ), p_writer, p_name )
 	{
 	}
@@ -614,7 +614,7 @@ namespace GLSL
 	{
 		if ( m_writer )
 		{
-			m_writer->WriteAssign( *this, p_rhs );
+			m_writer->writeAssign( *this, p_rhs );
 		}
 		else
 		{
@@ -628,15 +628,15 @@ namespace GLSL
 	template< typename T >
 	Float & Float::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 
 	template< typename T >
 	Float & Float::operator=( float p_rhs )
 	{
-		*m_writer << Castor::String( *this ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String( *this ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 

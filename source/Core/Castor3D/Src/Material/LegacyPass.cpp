@@ -8,49 +8,49 @@
 #include "Shader/PassBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*********************************************************************************************
 
 	LegacyPass::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< LegacyPass >{ p_tabs }
+		: castor::TextWriter< LegacyPass >{ p_tabs }
 	{
 	}
 
 	bool LegacyPass::TextWriter::operator()( LegacyPass const & p_pass, TextFile & p_file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing LegacyPass " ) );
-		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::logInfo( m_tabs + cuT( "Writing LegacyPass " ) );
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( result )
 		{
-			result = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass diffuse colour" );
+			result = p_file.print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
+				&& Colour::TextWriter( String() )( p_pass.getDiffuse(), p_file )
+				&& p_file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< LegacyPass >::checkError( result, "LegacyPass diffuse colour" );
 		}
 
 		if ( result )
 		{
-			result = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( p_pass.GetSpecular(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass specular colour" );
+			result = p_file.print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
+					   && Colour::TextWriter( String() )( p_pass.getSpecular(), p_file )
+				&& p_file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< LegacyPass >::checkError( result, "LegacyPass specular colour" );
 		}
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "\tambient " ) + string::to_string( p_pass.GetAmbient() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass ambient" );
+			result = p_file.writeText( m_tabs + cuT( "\tambient " ) + string::toString( p_pass.getAmbient() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< LegacyPass >::checkError( result, "LegacyPass ambient" );
 		}
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "\tshininess " ) + string::to_string( p_pass.GetShininess() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass shininess" );
+			result = p_file.writeText( m_tabs + cuT( "\tshininess " ) + string::toString( p_pass.getShininess() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< LegacyPass >::checkError( result, "LegacyPass shininess" );
 		}
 
 		if ( result )
@@ -60,7 +60,7 @@ namespace Castor3D
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
@@ -70,8 +70,8 @@ namespace Castor3D
 
 	LegacyPass::LegacyPass( Material & p_parent )
 		: Pass{ p_parent }
-		, m_diffuse{ Colour::from_rgba( 0xFFFFFFFF ) }
-		, m_specular{ Colour::from_rgba( 0xFFFFFFFF ) }
+		, m_diffuse{ Colour::fromRGBA( 0xFFFFFFFF ) }
+		, m_specular{ Colour::fromRGBA( 0xFFFFFFFF ) }
 	{
 	}
 
@@ -79,20 +79,20 @@ namespace Castor3D
 	{
 	}
 
-	void LegacyPass::Accept( PassBuffer & p_buffer )const
+	void LegacyPass::accept( PassBuffer & p_buffer )const
 	{
-		p_buffer.Visit( *this );
+		p_buffer.visit( *this );
 	}
 
-	void LegacyPass::DoInitialise()
-	{
-	}
-
-	void LegacyPass::DoCleanup()
+	void LegacyPass::doInitialise()
 	{
 	}
 
-	void LegacyPass::DoSetOpacity( float p_value )
+	void LegacyPass::doCleanup()
+	{
+	}
+
+	void LegacyPass::doSetOpacity( float p_value )
 	{
 		m_diffuse.alpha() = p_value;
 		m_specular.alpha() = p_value;

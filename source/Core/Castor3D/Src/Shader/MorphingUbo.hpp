@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "UniformBuffer.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -75,19 +75,19 @@ namespace Castor3D
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	p_time	L'indice de temps courant.
 		 */
-		C3D_API void Update( float p_time )const;
+		C3D_API void update( float p_time )const;
 		/**
 		 *\~english
-		 *\name			Getters.
+		 *\name			getters.
 		 *\~french
-		 *\name			Getters.
+		 *\name			getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline UniformBuffer const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -107,8 +107,8 @@ namespace Castor3D
 }
 
 #define UBO_MORPHING( Writer, Flags )\
-	GLSL::Ubo morphing{ writer, Castor3D::ShaderProgram::BufferMorphing, Castor3D::MorphingUbo::BindingPoint };\
-	auto c3d_fTime = morphing.DeclMember< GLSL::Float >( Castor3D::ShaderProgram::Time, CheckFlag( Flags, Castor3D::ProgramFlag::eMorphing ) );\
-	morphing.End()
+	GLSL::Ubo morphing{ writer, castor3d::ShaderProgram::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
+	auto c3d_fTime = morphing.declMember< GLSL::Float >( castor3d::ShaderProgram::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
+	morphing.end()
 
 #endif

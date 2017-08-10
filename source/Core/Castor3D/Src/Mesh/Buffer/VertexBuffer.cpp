@@ -2,9 +2,9 @@
 
 #include "Engine.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	VertexBuffer::VertexBuffer( Engine & engine, BufferDeclaration const & p_declaration )
 		: CpuBuffer< uint8_t >( engine )
@@ -16,25 +16,25 @@ namespace Castor3D
 	{
 	}
 
-	bool VertexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool VertexBuffer::initialise( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateBuffer( BufferType::eArray );
+			m_gpuBuffer = getEngine()->getRenderSystem()->createBuffer( BufferType::eArray );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			result = DoInitialise( p_type, p_nature );
+			result = doInitialise( p_type, p_nature );
 		}
 
 		return result;
 	}
 
-	void VertexBuffer::Cleanup()
+	void VertexBuffer::cleanup()
 	{
-		DoCleanup();
+		doCleanup();
 	}
 }

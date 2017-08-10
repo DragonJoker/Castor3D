@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "FaceIndices.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -67,7 +67,8 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The face vertex indices	\~french Les indices des sommets de la face
+		//!\~english	The face vertex indices.
+		//!\~french		Les indices des sommets de la face.
 		FaceIndices m_face;
 	};
 }
