@@ -241,7 +241,7 @@ namespace GuiCommon
 	 *\param[in]	p_threaded	Dit si le moteur doit initialiser sa boucle de rendu threadée.
 	 *\return		true si tout s'est bien passé.
 	 */
-	castor3d::RenderWindowSPtr LoadScene( castor3d::Engine & engine, castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
+	castor3d::RenderWindowSPtr loadScene( castor3d::Engine & engine, castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.

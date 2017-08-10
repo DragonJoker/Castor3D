@@ -1,4 +1,4 @@
-#include "SceneObjectsList.hpp"
+﻿#include "SceneObjectsList.hpp"
 
 #include "AnimatedObjectGroupTreeItemProperty.hpp"
 #include "AnimatedObjectTreeItemProperty.hpp"
@@ -120,7 +120,7 @@ namespace GuiCommon
 	{
 	}
 
-	void SceneObjectsList::LoadScene( Engine * engine, SceneSPtr p_scene )
+	void SceneObjectsList::loadScene( Engine * engine, SceneSPtr p_scene )
 	{
 		m_scene = p_scene;
 		m_engine = engine;
@@ -177,9 +177,30 @@ namespace GuiCommon
 		ExpandAll();
 	}
 
-	void SceneObjectsList::UnloadScene()
+	void SceneObjectsList::unloadScene()
 	{
 		DeleteAllItems();
+	}
+
+	void SceneObjectsList::select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh )
+	{
+		auto itg = m_ids.find( geometry );
+
+		if ( itg != m_ids.end() )
+		{
+			auto its = itg->second.find( submesh );
+
+			if ( its != itg->second.end() )
+			{
+				SelectItem( its->second );
+			}
+		}
+	}
+
+	void SceneObjectsList::doAddSubmesh( GeometrySPtr geometry, SubmeshSPtr submesh, wxTreeItemId id )
+	{
+		auto itg = m_ids.insert( { geometry, SubmeshIdMap{} } ).first;
+		itg->second.insert( { submesh, id } );
 	}
 
 	void SceneObjectsList::doAddRenderWindow( wxTreeItemId p_id, RenderWindowSPtr p_window )
@@ -194,18 +215,27 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsList::doAddGeometry( wxTreeItemId p_id, Geometry & p_geometry )
+	void SceneObjectsList::doAddGeometry( wxTreeItemId p_id, Geometry & geometry )
 	{
-		wxTreeItemId id = AppendItem( p_id, p_geometry.getName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), p_geometry ) );
+		wxTreeItemId id = AppendItem( p_id
+			, geometry.getName()
+			, eBMP_GEOMETRY
+			, eBMP_GEOMETRY_SEL
+			, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), geometry ) );
 		int count = 0;
 
-		if ( p_geometry.getMesh() )
+		if ( geometry.getMesh() )
 		{
-			for ( auto submesh : *p_geometry.getMesh() )
+			for ( auto submesh : *geometry.getMesh() )
 			{
 				wxString name = _( "Submesh " );
 				name << count++;
-				wxTreeItemId idSubmesh = AppendItem( id, name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), p_geometry, *submesh ) );
+				wxTreeItemId idSubmesh = AppendItem( id
+					, name
+					, eBMP_SUBMESH
+					, eBMP_SUBMESH_SEL
+					, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), geometry, *submesh ) );
+				doAddSubmesh( std::static_pointer_cast< Geometry >( geometry.shared_from_this() ), submesh, idSubmesh );
 			}
 		}
 	}

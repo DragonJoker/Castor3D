@@ -245,7 +245,7 @@ namespace GuiCommon
 		}
 	}
 
-	RenderWindowSPtr LoadScene( Engine & engine, Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
+	RenderWindowSPtr loadScene( Engine & engine, Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
 	{
 		RenderWindowSPtr result;
 

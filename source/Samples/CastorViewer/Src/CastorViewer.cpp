@@ -67,7 +67,7 @@ namespace CastorViewer
 
 			if ( !getFileName().empty() )
 			{
-				m_mainFrame->LoadScene( getFileName() );
+				m_mainFrame->loadScene( getFileName() );
 			}
 		}
 		else
