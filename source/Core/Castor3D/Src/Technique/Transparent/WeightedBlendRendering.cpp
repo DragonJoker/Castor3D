@@ -1,4 +1,4 @@
-#include "WeightedBlendRendering.hpp"
+﻿#include "WeightedBlendRendering.hpp"
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -15,7 +15,7 @@ namespace castor3d
 		, TransparentPass & p_transparentPass
 		, FrameBuffer & p_frameBuffer
 		, castor::Size const & p_size
-		, Scene const & p_scene )
+		, Scene const & scene )
 		: m_engine{ engine }
 		, m_transparentPass{ p_transparentPass }
 		, m_frameBuffer{ p_frameBuffer }
@@ -97,34 +97,34 @@ namespace castor3d
 		m_weightedBlendPassFrameBuffer.reset();
 	}
 
-	void WeightedBlendRendering::render( RenderInfo & p_info
-		, Scene const & p_scene
-		, Camera const & p_camera )
+	void WeightedBlendRendering::render( RenderInfo & info
+		, Scene const & scene
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )
 	{
 		static Colour accumClear = Colour::fromPredefined( PredefinedColour::eTransparentBlack );
 		static Colour revealClear = Colour::fromPredefined( PredefinedColour::eOpaqueWhite );
-		auto invView = p_camera.getView().getInverse().getTransposed();
-		auto invProj = p_camera.getViewport().getProjection().getInverse();
-		auto invViewProj = ( p_camera.getViewport().getProjection() * p_camera.getView() ).getInverse();
+		auto invView = camera.getView().getInverse().getTransposed();
+		auto invProj = camera.getViewport().getProjection().getInverse();
+		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
 
 		m_engine.setPerObjectLighting( true );
-		m_transparentPass.renderShadowMaps();
-		p_camera.apply();
+		camera.apply();
 
 		// Accumulate blend.
 		m_weightedBlendPassFrameBuffer->bind( FrameBufferTarget::eDraw );
 		m_weightedBlendPassTexAttachs[size_t( WbTexture::eAccumulation )]->clear( accumClear );
 		m_weightedBlendPassTexAttachs[size_t( WbTexture::eRevealage )]->clear( revealClear );
-		m_transparentPass.render( p_info, p_scene.hasShadows() );
+		m_transparentPass.render( info, shadowMaps );
 		m_weightedBlendPassFrameBuffer->unbind();
 
 		m_finalCombinePass->render( m_weightedBlendPassResult
 			, m_frameBuffer
-			, p_camera
+			, camera
 			, invViewProj
 			, invView
 			, invProj
-			, p_scene.getFog() );
+			, scene.getFog() );
 	}
 
 	void WeightedBlendRendering::debugDisplay()

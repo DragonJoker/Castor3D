@@ -162,9 +162,9 @@ namespace castor3d
 	ShaderProgramSPtr RenderDepthLayerToTexture::doCreateProgram()
 	{
 		auto & renderSystem = *getOwner()->getRenderSystem();
-		GLSL::Shader vtx;
+		glsl::Shader vtx;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			UBO_MATRIX( writer );
@@ -185,9 +185,9 @@ namespace castor3d
 			vtx = writer.finalise();
 		}
 
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs

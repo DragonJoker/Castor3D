@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslWriterPrerequisites.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename LayoutType >
 	struct BoInfo

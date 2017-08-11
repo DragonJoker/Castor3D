@@ -1,21 +1,28 @@
-#include "ShadowMapDirectional.hpp"
+﻿#include "ShadowMapDirectional.hpp"
 
-#include "Engine.hpp"
+#include <Engine.hpp>
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "ShadowMap/ShadowMapPassDirectional.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
-#include "Texture/TextureLayout.hpp"
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Miscellaneous/GaussianBlur.hpp>
+#include <Render/RenderPipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Scene/Light/Light.hpp>
+#include <Scene/Light/DirectionalLight.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <ShadowMap/ShadowMapPassDirectional.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 
 #include <Graphics/Image.hpp>
+#include <Miscellaneous/BlockTracker.hpp>
 
 using namespace castor;
+using namespace castor3d;
 
 namespace castor3d
 {
@@ -23,24 +30,14 @@ namespace castor3d
 	{
 		TextureUnit doInitialiseDirectional( Engine & engine, Size const & p_size )
 		{
-			SamplerSPtr sampler;
-			String const name = cuT( "ShadowMap_Directional" );
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-				sampler->setComparisonMode( ComparisonMode::eRefToTexture );
-				sampler->setComparisonFunc( ComparisonFunc::eLEqual );
-			}
+			auto sampler = engine.getSamplerCache().add( cuT( "ShadowMap_Directional" ) );
+			sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			sampler->setComparisonMode( ComparisonMode::eRefToTexture );
+			sampler->setComparisonFunc( ComparisonFunc::eLEqual );
 
 			auto texture = engine.getRenderSystem()->createTexture(
 				TextureType::eTwoDimensions,
@@ -60,9 +57,11 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapDirectional::ShadowMapDirectional( Engine & engine )
-		: ShadowMap{ engine }
-		, m_shadowMap{ doInitialiseDirectional( engine, Size{ 4096, 4096 } ) }
+	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
+		, Scene & scene )
+		: ShadowMap{ engine
+			, doInitialiseDirectional( engine, Size{ 4096, 4096 } )
+			, std::make_shared< ShadowMapPassDirectional >( engine, scene, *this ) }
 	{
 	}
 
@@ -70,60 +69,45 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapDirectional::update( Camera const & p_camera
-		, RenderQueueArray & p_queues )
+	void ShadowMapDirectional::update( Camera const & camera
+		, RenderQueueArray & queues
+		, Light & light
+		, uint32_t index )
 	{
-		if ( !m_passes.empty() )
-		{
-			for ( auto & it : m_passes )
-			{
-				it.second->update( p_queues, 0u );
-			}
-		}
+		m_pass->update( camera, queues, light, index );
 	}
 
 	void ShadowMapDirectional::render()
 	{
-		if ( !m_passes.empty() )
-		{
-			m_frameBuffer->bind( FrameBufferTarget::eDraw );
-			m_depthAttach->attach( AttachmentPoint::eDepth );
-			m_frameBuffer->clear( BufferComponent::eDepth );
-			m_passes.begin()->second->render();
-			m_depthAttach->detach();
-			m_frameBuffer->unbind();
-		}
-	}
+		m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->clear( BufferComponent::eDepth );
+		m_pass->render( 0u );
+		m_frameBuffer->unbind();
 
-	int32_t ShadowMapDirectional::doGetMaxPasses()const
-	{
-		return 1;
-	}
-
-	Size ShadowMapDirectional::doGetSize()const
-	{
-		return m_shadowMap.getTexture()->getDimensions();
+		m_blur->blur( m_shadowMap.getTexture() );
 	}
 
 	void ShadowMapDirectional::doInitialise()
 	{
-		m_shadowMap.initialise();
 		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
 
 		auto texture = m_shadowMap.getTexture();
 		m_depthAttach = m_frameBuffer->createAttachment( texture );
-		m_depthAttach->setTarget( texture->getType() );
+		m_frameBuffer->bind();
+		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach, texture->getType() );
+		ENSURE( m_frameBuffer->isComplete() );
+		m_frameBuffer->unbind();
+
+		m_blur = std::make_shared< GaussianBlur >( *getEngine()
+			, texture->getDimensions()
+			, texture->getPixelFormat()
+			, 5u );
 	}
 
 	void ShadowMapDirectional::doCleanup()
 	{
+		m_blur.reset();
 		m_depthAttach.reset();
-		m_shadowMap.cleanup();
-	}
-
-	ShadowMapPassSPtr ShadowMapDirectional::doCreatePass( Light & p_light )const
-	{
-		return std::make_shared< ShadowMapPassDirectional >( *getEngine(), p_light, *this );
 	}
 
 	void ShadowMapDirectional::doUpdateFlags( TextureChannels & textureFlags
@@ -133,12 +117,12 @@ namespace castor3d
 		addFlag( programFlags, ProgramFlag::eShadowMapDirectional );
 	}
 
-	GLSL::Shader ShadowMapDirectional::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapDirectional::doGetPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Fragment Intputs

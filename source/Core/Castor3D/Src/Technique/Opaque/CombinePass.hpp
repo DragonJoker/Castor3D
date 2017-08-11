@@ -73,7 +73,7 @@ namespace castor3d
 			, GpInfoUbo & gpInfoUbo
 			, bool hasSsao
 			, bool isPbr
-			, GLSL::FogType fogType );
+			, glsl::FogType fogType );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -102,7 +102,7 @@ namespace castor3d
 	};
 	//!\~english	An array of CombineProgram, one per fog type.
 	//!\~french		Un tableau de CombineProgram, un par type de brouillard.
-	using CombinePrograms = std::array< CombineProgram, size_t( GLSL::FogType::eCount ) * 2u >;
+	using CombinePrograms = std::array< CombineProgram, size_t( glsl::FogType::eCount ) * 2u >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0

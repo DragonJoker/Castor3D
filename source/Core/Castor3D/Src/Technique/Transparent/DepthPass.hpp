@@ -122,41 +122,41 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		C3D_API GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		C3D_API GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
-		C3D_API GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;

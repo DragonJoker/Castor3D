@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslMat.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	static uint32_t constexpr MaxMaterialsCount = 2000u;
 	castor::String const PassBufferName = cuT( "Materials" );

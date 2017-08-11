@@ -122,9 +122,9 @@ namespace castor3d
 }
 
 #define UBO_MODEL_MATRIX( Writer )\
-	GLSL::Ubo modelMatrices{ writer, castor3d::ShaderProgram::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
-	auto c3d_mtxModel = modelMatrices.declMember< GLSL::Mat4 >( castor3d::RenderPipeline::MtxModel );\
-	auto c3d_mtxNormal = modelMatrices.declMember< GLSL::Mat4 >( castor3d::RenderPipeline::MtxNormal );\
+	glsl::Ubo modelMatrices{ writer, castor3d::ShaderProgram::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
+	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxModel );\
+	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxNormal );\
 	modelMatrices.end()
 
 #endif

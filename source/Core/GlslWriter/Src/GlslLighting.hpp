@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslIntrinsics.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct FragmentInput
 	{

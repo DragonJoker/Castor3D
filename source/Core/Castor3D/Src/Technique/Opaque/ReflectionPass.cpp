@@ -75,9 +75,9 @@ namespace castor3d
 			return result;
 		}
 
-		GLSL::Shader doCreateVertexProgram( RenderSystem & renderSystem )
+		glsl::Shader doCreateVertexProgram( RenderSystem & renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -98,9 +98,9 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreateLegacyPixelProgram( RenderSystem & renderSystem )
+		glsl::Shader doCreateLegacyPixelProgram( RenderSystem & renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -123,7 +123,7 @@ namespace castor3d
 			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
 			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			declareDecodeMaterial( writer );
 
@@ -200,9 +200,9 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreatePbrMRPixelProgram( RenderSystem & renderSystem )
+		glsl::Shader doCreatePbrMRPixelProgram( RenderSystem & renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -226,7 +226,7 @@ namespace castor3d
 			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
 			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareFresnelSchlick();
 			utils.declareComputeMetallicIBL();
@@ -313,9 +313,9 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreatePbrSGPixelProgram( RenderSystem & renderSystem )
+		glsl::Shader doCreatePbrSGPixelProgram( RenderSystem & renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -339,7 +339,7 @@ namespace castor3d
 			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
 			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareFresnelSchlick();
 			utils.declareComputeSpecularIBL();

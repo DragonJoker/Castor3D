@@ -6,7 +6,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	using castor::operator<<;
 

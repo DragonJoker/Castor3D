@@ -11,7 +11,7 @@
 #include <GlslSource.hpp>
 
 using namespace castor;
-using namespace GLSL;
+using namespace glsl;
 
 namespace castor3d
 {
@@ -47,7 +47,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			GLSL::Shader vtx;
+			glsl::Shader vtx;
 			{
 				auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 

@@ -26,7 +26,7 @@ SOFTWARE.
 #include "GlslBoInfo.hpp"
 #include "GlslIndentBlock.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	class Ssbo
 	{

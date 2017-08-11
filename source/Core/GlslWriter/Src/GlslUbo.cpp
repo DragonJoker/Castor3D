@@ -3,7 +3,7 @@
 #include "GlslIndentBlock.hpp"
 #include "GlslWriter.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	Ubo::Ubo( GlslWriter & p_writer
 		, castor::String const & p_name

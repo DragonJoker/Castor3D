@@ -39,9 +39,9 @@ namespace Testing
 {
 	namespace
 	{
-		GLSL::Shader doCreateVtxShader( Engine & engine )
+		glsl::Shader doCreateVtxShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
 			auto projection = writer.declUniform< Mat4 >( cuT( "projection" ) );
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -54,9 +54,9 @@ namespace Testing
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreateLegacyPixelShader( Engine & engine )
+		glsl::Shader doCreateLegacyPixelShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
 			LegacyMaterials materials{ writer };
 			materials.declare();
@@ -88,9 +88,9 @@ namespace Testing
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreateMetallicRoughnessPixelShader( Engine & engine )
+		glsl::Shader doCreateMetallicRoughnessPixelShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
 			PbrMRMaterials materials{ writer };
 			materials.declare();
@@ -120,9 +120,9 @@ namespace Testing
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreateSpecularGlossinessPixelShader( Engine & engine )
+		glsl::Shader doCreateSpecularGlossinessPixelShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
 			PbrSGMaterials materials{ writer };
 			materials.declare();
@@ -223,8 +223,8 @@ namespace Testing
 		struct Pipeline
 		{
 			Pipeline( Engine & engine
-				, GLSL::Shader const & vtx
-				, GLSL::Shader const & pxl )
+				, glsl::Shader const & vtx
+				, glsl::Shader const & pxl )
 				: viewport{ engine }
 				, bufferVertex
 				{
@@ -353,7 +353,7 @@ namespace Testing
 			, doCreateVtxShader( m_engine )
 			, doCreateLegacyPixelShader( m_engine ) };
 
-		LegacyPassBuffer passBuffer{ m_engine, GLSL::MaxMaterialsCount };
+		LegacyPassBuffer passBuffer{ m_engine, glsl::MaxMaterialsCount };
 		passBuffer.addPass( *pass );
 		passBuffer.update();
 		passBuffer.bind();

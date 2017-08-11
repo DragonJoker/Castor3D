@@ -46,9 +46,9 @@ namespace fxaa
 		static String const ReduceMul = cuT( "c3d_fReduceMul" );
 		static String const PosPos = cuT( "vtx_posPos" );
 
-		GLSL::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
@@ -74,9 +74,9 @@ namespace fxaa
 			return writer.finalise();
 		}
 
-		GLSL::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
@@ -133,7 +133,7 @@ namespace fxaa
 					auto dirReduce = writer.declLocale( cuT( "dirReduce" )
 						, max( writer.paren( lumaNW + lumaNE + lumaSW + lumaSE ) * writer.paren( 0.25_f * c3d_reduceMul ), FXAA_REDUCE_MIN ) );
 					auto rcpDirMin = writer.declLocale( cuT( "rcpDirMin" )
-						, 1.0 / ( min( GLSL::abs( dir.x() ), GLSL::abs( dir.y() ) ) + dirReduce ) );
+						, 1.0 / ( min( glsl::abs( dir.x() ), glsl::abs( dir.y() ) ) + dirReduce ) );
 					dir = min( vec2( c3d_spanMax, c3d_spanMax )
 						, max( vec2( -c3d_spanMax, -c3d_spanMax )
 							, dir * rcpDirMin ) ) * invTargetSize;

@@ -57,7 +57,7 @@ SOFTWARE.
 	using Out##TypeName = OutParam< TypeName >;\
 	using InOut##TypeName = InOutParam< TypeName >\
 
-namespace GLSL
+namespace glsl
 {
 	/*!
 	\author 	Sylvain DOREMUS

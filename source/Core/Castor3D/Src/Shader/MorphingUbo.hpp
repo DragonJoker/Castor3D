@@ -107,8 +107,8 @@ namespace castor3d
 }
 
 #define UBO_MORPHING( Writer, Flags )\
-	GLSL::Ubo morphing{ writer, castor3d::ShaderProgram::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
-	auto c3d_fTime = morphing.declMember< GLSL::Float >( castor3d::ShaderProgram::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
+	glsl::Ubo morphing{ writer, castor3d::ShaderProgram::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
+	auto c3d_fTime = morphing.declMember< glsl::Float >( castor3d::ShaderProgram::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
 	morphing.end()
 
 #endif

@@ -126,10 +126,10 @@ namespace castor3d
 }
 
 #define UBO_MODEL( Writer )\
-	GLSL::Ubo model{ writer, castor3d::ShaderProgram::BufferModel, castor3d::ModelUbo::BindingPoint };\
-	auto c3d_shadowReceiver = model.declMember< GLSL::Int >( castor3d::ShaderProgram::ShadowReceiver );\
-	auto c3d_materialIndex = model.declMember< GLSL::Int >( castor3d::ShaderProgram::MaterialIndex );\
-	auto c3d_envMapIndex = model.declMember< GLSL::Int >( castor3d::ShaderProgram::EnvironmentIndex );\
+	glsl::Ubo model{ writer, castor3d::ShaderProgram::BufferModel, castor3d::ModelUbo::BindingPoint };\
+	auto c3d_shadowReceiver = model.declMember< glsl::Int >( castor3d::ShaderProgram::ShadowReceiver );\
+	auto c3d_materialIndex = model.declMember< glsl::Int >( castor3d::ShaderProgram::MaterialIndex );\
+	auto c3d_envMapIndex = model.declMember< glsl::Int >( castor3d::ShaderProgram::EnvironmentIndex );\
 	model.end()
 
 #endif

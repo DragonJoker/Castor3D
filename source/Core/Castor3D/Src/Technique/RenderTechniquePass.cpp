@@ -46,14 +46,14 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
-			if ( getShadowType( sceneFlags ) != GLSL::ShadowType::eNone
-				&& !program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+			if ( getShadowType( sceneFlags ) != glsl::ShadowType::eNone
+				&& !program.findUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				program.createUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional
+				program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
-				program.createUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot
+				program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot
 					, ShaderType::ePixel );
-				program.createUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint
+				program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowPoint
 					, ShaderType::ePixel, 6u );
 			}
 
@@ -188,22 +188,18 @@ namespace castor3d
 	{
 	}
 
-	void RenderTechniquePass::doRender( RenderInfo & info, bool shadows )
+	void RenderTechniquePass::doRender( RenderInfo & info
+		, ShadowMapLightTypeArray & shadowMaps )
 	{
-		auto & nodes = m_renderQueue.getRenderNodes();
-		DepthMapArray depthMaps;
-
-		if ( shadows )
-		{
-			doGetDepthMaps( depthMaps );
-		}
-
-		doRenderNodes( nodes, *m_camera, depthMaps, info );
+		doRenderNodes( m_renderQueue.getRenderNodes()
+			, *m_camera
+			, shadowMaps
+			, info );
 	}
 
 	void RenderTechniquePass::doRenderNodes( SceneRenderNodes & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		if ( !nodes.m_staticNodes.m_backCulled.empty()
@@ -216,19 +212,19 @@ namespace castor3d
 			m_timer->start();
 			m_matrixUbo.update( camera.getView()
 				, camera.getViewport().getProjection() );
-			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, depthMaps );
-			RenderPass::doRender( nodes.m_staticNodes.m_frontCulled, camera, depthMaps );
-			RenderPass::doRender( nodes.m_skinnedNodes.m_frontCulled, camera, depthMaps );
-			RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_frontCulled, camera, depthMaps );
-			RenderPass::doRender( nodes.m_morphingNodes.m_frontCulled, camera, depthMaps );
-			RenderPass::doRender( nodes.m_billboardNodes.m_frontCulled, camera, depthMaps );
+			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doRender( nodes.m_staticNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doRender( nodes.m_skinnedNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doRender( nodes.m_morphingNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doRender( nodes.m_billboardNodes.m_frontCulled, camera, shadowMaps );
 
-			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_backCulled, camera, depthMaps, info );
-			RenderPass::doRender( nodes.m_staticNodes.m_backCulled, camera, depthMaps, info );
-			RenderPass::doRender( nodes.m_skinnedNodes.m_backCulled, camera, depthMaps, info );
-			RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera, depthMaps );
-			RenderPass::doRender( nodes.m_morphingNodes.m_backCulled, camera, depthMaps, info );
-			RenderPass::doRender( nodes.m_billboardNodes.m_backCulled, camera, depthMaps, info );
+			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doRender( nodes.m_staticNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doRender( nodes.m_skinnedNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera, shadowMaps );
+			RenderPass::doRender( nodes.m_morphingNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doRender( nodes.m_billboardNodes.m_backCulled, camera, shadowMaps, info );
 			m_timer->stop();
 		}
 	}
@@ -268,11 +264,11 @@ namespace castor3d
 		}
 	}
 
-	GLSL::Shader RenderTechniquePass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderTechniquePass::doGetGeometryShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return GLSL::Shader{};
+		return glsl::Shader{};
 	}
 
 	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )const

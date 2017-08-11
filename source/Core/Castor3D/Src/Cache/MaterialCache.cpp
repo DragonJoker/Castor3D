@@ -37,15 +37,15 @@ namespace castor3d
 		switch ( type )
 		{
 		case MaterialType::eLegacy:
-			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), GLSL::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), glsl::MaxMaterialsCount );
 			break;
 
 		case MaterialType::ePbrMetallicRoughness:
-			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), GLSL::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), glsl::MaxMaterialsCount );
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), GLSL::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), glsl::MaxMaterialsCount );
 			break;
 		}
 	}

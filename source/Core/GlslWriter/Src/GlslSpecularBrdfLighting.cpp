@@ -5,7 +5,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	const String SpecularBrdfLightingModel::Name = cuT( "pbr_sg" );
 

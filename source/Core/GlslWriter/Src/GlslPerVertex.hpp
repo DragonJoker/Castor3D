@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslLight.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct gl_PerVertex
 		: public Type

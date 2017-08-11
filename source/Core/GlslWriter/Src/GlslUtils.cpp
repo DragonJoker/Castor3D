@@ -4,7 +4,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	uint32_t const Utils::MaxIblReflectionLod = 4;
 

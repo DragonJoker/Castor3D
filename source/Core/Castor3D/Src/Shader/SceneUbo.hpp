@@ -155,15 +155,15 @@ namespace castor3d
 }
 
 #define UBO_SCENE( Writer )\
-	GLSL::Ubo scene{ writer, castor3d::ShaderProgram::BufferScene, castor3d::SceneUbo::BindingPoint };\
-	auto c3d_v4AmbientLight = scene.declMember< GLSL::Vec4 >( castor3d::ShaderProgram::AmbientLight );\
-	auto c3d_v4BackgroundColour = scene.declMember< GLSL::Vec4 >( castor3d::ShaderProgram::BackgroundColour );\
-	auto c3d_lightsCount = scene.declMember< GLSL::IVec4 >( castor3d::ShaderProgram::LightsCount );\
-	auto c3d_v3CameraPosition = scene.declMember< GLSL::Vec3 >( castor3d::ShaderProgram::CameraPos );\
-	auto c3d_v3CameraNearPlane = scene.declMember< GLSL::Float >( castor3d::ShaderProgram::CameraNearPlane ); \
-	auto c3d_v3CameraFarPlane = scene.declMember< GLSL::Float >( castor3d::ShaderProgram::CameraFarPlane );\
-	auto c3d_iFogType = scene.declMember< GLSL::Int >( castor3d::ShaderProgram::FogType );\
-	auto c3d_fFogDensity = scene.declMember< GLSL::Float >( castor3d::ShaderProgram::FogDensity );\
+	glsl::Ubo scene{ writer, castor3d::ShaderProgram::BufferScene, castor3d::SceneUbo::BindingPoint };\
+	auto c3d_v4AmbientLight = scene.declMember< glsl::Vec4 >( castor3d::ShaderProgram::AmbientLight );\
+	auto c3d_v4BackgroundColour = scene.declMember< glsl::Vec4 >( castor3d::ShaderProgram::BackgroundColour );\
+	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::ShaderProgram::LightsCount );\
+	auto c3d_v3CameraPosition = scene.declMember< glsl::Vec3 >( castor3d::ShaderProgram::CameraPos );\
+	auto c3d_v3CameraNearPlane = scene.declMember< glsl::Float >( castor3d::ShaderProgram::CameraNearPlane ); \
+	auto c3d_v3CameraFarPlane = scene.declMember< glsl::Float >( castor3d::ShaderProgram::CameraFarPlane );\
+	auto c3d_iFogType = scene.declMember< glsl::Int >( castor3d::ShaderProgram::FogType );\
+	auto c3d_fFogDensity = scene.declMember< glsl::Float >( castor3d::ShaderProgram::FogDensity );\
 	scene.end()
 
 #endif

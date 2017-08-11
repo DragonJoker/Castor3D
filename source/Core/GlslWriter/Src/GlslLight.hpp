@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslMat.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	static constexpr int BaseLightComponentsCount = 2;
 	static constexpr int MaxLightComponentsCount = 14;

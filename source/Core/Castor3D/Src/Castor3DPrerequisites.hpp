@@ -747,93 +747,93 @@ namespace castor3d
 
 	namespace legacy
 	{
-		C3D_API void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_normal
-			, GLSL::Float & p_shininess
+		C3D_API void computePreLightingMapContributions( glsl::GlslWriter & p_writer
+			, glsl::Vec3 & p_normal
+			, glsl::Float & p_shininess
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags );
 
-		C3D_API void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_diffuse
-			, GLSL::Vec3 & p_specular
-			, GLSL::Vec3 & p_emissive
-			, GLSL::Float const & p_gamma
+		C3D_API void computePostLightingMapContributions( glsl::GlslWriter & p_writer
+			, glsl::Vec3 & p_diffuse
+			, glsl::Vec3 & p_specular
+			, glsl::Vec3 & p_emissive
+			, glsl::Float const & p_gamma
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags );
 
-		C3D_API std::shared_ptr< GLSL::PhongLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-			, GLSL::ShadowType p_shadows );
+		C3D_API std::shared_ptr< glsl::PhongLightingModel > createLightingModel( glsl::GlslWriter & p_writer
+			, glsl::ShadowType p_shadows );
 
-		C3D_API std::shared_ptr< GLSL::PhongLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
+		C3D_API std::shared_ptr< glsl::PhongLightingModel > createLightingModel( glsl::GlslWriter & p_writer
 			, LightType p_light
-			, GLSL::ShadowType p_shadows );
+			, glsl::ShadowType p_shadows );
 	}
 
 	namespace pbr
 	{
 		namespace mr
 		{
-			C3D_API void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_normal
-				, GLSL::Float & p_metallic
-				, GLSL::Float & p_roughness
+			C3D_API void computePreLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_normal
+				, glsl::Float & p_metallic
+				, glsl::Float & p_roughness
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags );
 
-			C3D_API void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_albedo
-				, GLSL::Vec3 & p_emissive
-				, GLSL::Float const & p_gamma
+			C3D_API void computePostLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_albedo
+				, glsl::Vec3 & p_emissive
+				, glsl::Float const & p_gamma
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags );
 
-			C3D_API std::shared_ptr< GLSL::MetallicBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, GLSL::ShadowType p_shadows );
+			C3D_API std::shared_ptr< glsl::MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
+				, glsl::ShadowType p_shadows );
 
-			C3D_API std::shared_ptr< GLSL::MetallicBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
+			C3D_API std::shared_ptr< glsl::MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
 				, LightType p_light
-				, GLSL::ShadowType p_shadows );
+				, glsl::ShadowType p_shadows );
 		}
 
 		namespace sg
 		{
-			C3D_API void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_normal
-				, GLSL::Vec3 & p_specular
-				, GLSL::Float & p_glossiness
+			C3D_API void computePreLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_normal
+				, glsl::Vec3 & p_specular
+				, glsl::Float & p_glossiness
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags );
 
-			C3D_API void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_diffuse
-				, GLSL::Vec3 & p_emissive
-				, GLSL::Float const & p_gamma
+			C3D_API void computePostLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_diffuse
+				, glsl::Vec3 & p_emissive
+				, glsl::Float const & p_gamma
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags );
 
-			C3D_API std::shared_ptr< GLSL::SpecularBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, GLSL::ShadowType p_shadows );
+			C3D_API std::shared_ptr< glsl::SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
+				, glsl::ShadowType p_shadows );
 
-			C3D_API std::shared_ptr< GLSL::SpecularBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
+			C3D_API std::shared_ptr< glsl::SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
 				, LightType p_light
-				, GLSL::ShadowType p_shadows );
+				, glsl::ShadowType p_shadows );
 		}
 	}
 
-	using ParallaxFunction = GLSL::Function< GLSL::Vec2, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Vec3 > >;
-	using ParallaxShadowFunction = GLSL::Function< GLSL::Float, GLSL::InParam< GLSL::Vec3 >, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Float > >;
+	using ParallaxFunction = glsl::Function< glsl::Vec2, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Vec3 > >;
+	using ParallaxShadowFunction = glsl::Function< glsl::Float, glsl::InParam< glsl::Vec3 >, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Float > >;
 
-	C3D_API ParallaxFunction declareParallaxMappingFunc( GLSL::GlslWriter & p_writer
+	C3D_API ParallaxFunction declareParallaxMappingFunc( glsl::GlslWriter & p_writer
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags );
 
-	C3D_API ParallaxShadowFunction declareParallaxShadowFunc( GLSL::GlslWriter & p_writer
+	C3D_API ParallaxShadowFunction declareParallaxShadowFunc( glsl::GlslWriter & p_writer
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags );
 }

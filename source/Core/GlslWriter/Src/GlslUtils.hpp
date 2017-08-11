@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslFunction.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	class Utils
 	{

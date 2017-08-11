@@ -1,4 +1,4 @@
-#include "RenderTechnique.hpp"
+﻿#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -15,7 +15,10 @@
 #include "Scene/Scene.hpp"
 #include "Scene/Skybox.hpp"
 #include "Shader/PassBuffer.hpp"
-#include "ShadowMap/ShadowMapPass.hpp"
+#include "ShadowMap/ShadowMapDirectional.hpp"
+#include "ShadowMap/ShadowMapPoint.hpp"
+#include "ShadowMap/ShadowMapSpot.hpp"
+
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Technique/ForwardRenderTechniquePass.hpp"
@@ -24,6 +27,7 @@
 
 #include <GlslSource.hpp>
 #include <GlslMaterial.hpp>
+#include <GlslShadow.hpp>
 
 using namespace castor;
 
@@ -36,6 +40,49 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
+	namespace
+	{
+		void doPrepareShadowMaps( LightCache const & cache
+			, LightType type
+			, Camera const & camera
+			, RenderTechnique::ShadowMapArray & shadowMaps
+			, ShadowMapLightTypeArray & activeShadowMaps
+			, RenderQueueArray & queues )
+		{
+			auto lock = makeUniqueLock( cache );
+			std::map< double, LightSPtr > lights;
+
+			for ( auto & light : cache.getLights( type ) )
+			{
+				light->setShadowMap( nullptr );
+
+				if ( light->isShadowProducer() )
+				{
+					lights.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
+						, light->getParent()->getDerivedPosition() )
+						, light );
+				}
+			}
+
+			size_t count = std::min( shadowMaps.size(), lights.size() );
+			auto it = lights.begin();
+
+			for ( auto i = 0u; i < count; ++i )
+			{
+				auto & shadowMap = *shadowMaps[i];
+				it->second->setShadowMap( &shadowMap );
+				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ) );
+				shadowMap.update( camera
+					, queues
+					, *( it->second )
+					, i );
+				++it;
+			}
+		}
+	}
+
 	//*************************************************************************************************
 
 	RenderTechnique::TechniqueFbo::TechniqueFbo( RenderTechnique & technique )
@@ -159,6 +206,27 @@ namespace castor3d
 		, m_frameBuffer{ *this }
 		, m_ssaoConfig{ config }
 	{
+		m_directionalShadowMaps.resize( 1u );
+		m_pointShadowMaps.resize( glsl::PointShadowMapCount );
+		m_spotShadowMaps.resize( glsl::SpotShadowMapCount );
+
+		for ( auto & shadowMap : m_directionalShadowMaps )
+		{
+			shadowMap = std::make_unique< ShadowMapDirectional >( *renderTarget.getEngine()
+				, *renderTarget.getScene() );
+		}
+
+		for ( auto & shadowMap : m_pointShadowMaps )
+		{
+			shadowMap = std::make_unique< ShadowMapPoint >( *renderTarget.getEngine()
+				, *renderTarget.getScene() );
+		}
+
+		for ( auto & shadowMap : m_spotShadowMaps )
+		{
+			shadowMap = std::make_unique< ShadowMapSpot >( *renderTarget.getEngine()
+				, *renderTarget.getScene() );
+		}
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -176,16 +244,7 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
-				m_initialised = m_opaquePass->initialiseShadowMaps();
-			}
-
-			if ( m_initialised )
-			{
-				m_initialised = m_transparentPass->initialiseShadowMaps();
-			}
-
-			if ( m_initialised )
-			{
+				doInitialiseShadowMaps();
 				m_opaquePass->initialise( m_size );
 				m_transparentPass->initialise( m_size );
 			}
@@ -224,8 +283,7 @@ namespace castor3d
 		m_postFxTimer.reset();
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
-		m_transparentPass->cleanupShadowMaps();
-		m_opaquePass->cleanupShadowMaps();
+		doCleanupShadowMaps();
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
 		m_initialised = false;
@@ -236,8 +294,7 @@ namespace castor3d
 	{
 		m_opaquePass->update( queues );
 		m_transparentPass->update( queues );
-		m_opaquePass->updateShadowMaps( queues );
-		m_transparentPass->updateShadowMaps( queues );
+		doUpdateShadowMaps( queues );
 		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
 		for ( auto & map : maps )
@@ -251,78 +308,19 @@ namespace castor3d
 		auto & scene = *m_renderTarget.getScene();
 		scene.getLightCache().updateLights();
 		m_renderSystem.pushScene( &scene );
-		auto & maps = scene.getEnvironmentMaps();
-
-		for ( auto & map : maps )
-		{
-			map.get().render();
-		}
-
 		auto & camera = *m_renderTarget.getCamera();
 		camera.resize( m_size );
 		camera.update();
 
-#if DEBUG_FORWARD_RENDERING
-
-		getEngine()->setPerObjectLighting( true );
-		m_opaquePass->renderShadowMaps();
-		m_renderTarget.getCamera()->apply();
-		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass->render( info, m_renderTarget.getScene()->hasShadows() );
-
-#else
-
-		m_deferredRendering->render( info
-			, scene
-			, camera );
-
-#endif
-
+		doRenderEnvironmentMaps();
+		doRenderShadowMaps();
+		doRenderOpaque( info );
 		scene.renderBackground( getSize(), camera );
-
-		m_particleTimer->start();
-		scene.getParticleSystemCache().forEach( [this, &info]( ParticleSystem & p_particleSystem )
-		{
-			p_particleSystem.update();
-			info.m_particlesCount += p_particleSystem.getParticlesCount();
-		} );
-
+		doUpdateParticles( info );
 		m_frameBuffer.m_frameBuffer->unbind();
-		m_particleTimer->stop();
+		doRenderTransparent( info );
+		doApplyPostEffects();
 
-#if USE_WEIGHTED_BLEND
-#	if !DEBUG_FORWARD_RENDERING
-
-		m_deferredRendering->blitDepthInto( m_weightedBlendRendering->getFbo() );
-
-#	endif
-
-		m_weightedBlendRendering->render( info
-			, scene
-			, camera );
-
-#else
-
-		getEngine()->setPerObjectLighting( true );
-		m_transparentPass->renderShadowMaps();
-		m_renderTarget.getCamera()->apply();
-		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_transparentPass->render( info, m_renderTarget.getScene()->hasShadows() );
-		m_frameBuffer.m_frameBuffer->unbind();
-
-#endif
-
-		m_postFxTimer->start();
-
-		for ( auto effect : m_renderTarget.getPostEffects() )
-		{
-			effect->apply( *m_frameBuffer.m_frameBuffer );
-		}
-
-		m_postFxTimer->stop();
 		m_renderSystem.popScene();
 	}
 
@@ -330,13 +328,6 @@ namespace castor3d
 	{
 		return true;
 	}
-
-	void RenderTechnique::addShadowProducer( Light & light )
-	{
-		m_transparentPass->addShadowProducer( light );
-		m_opaquePass->addShadowProducer( light );
-	}
-
 
 	void RenderTechnique::debugDisplay( Size const & size )const
 	{
@@ -357,5 +348,177 @@ namespace castor3d
 		m_frameBuffer.m_frameBuffer->unbind();
 
 #endif
+	}
+
+	void RenderTechnique::doInitialiseShadowMaps()
+	{
+		for ( auto & shadowMap : m_directionalShadowMaps )
+		{
+			shadowMap->initialise();
+		}
+
+		for ( auto & shadowMap : m_pointShadowMaps )
+		{
+			shadowMap->initialise();
+		}
+
+		for ( auto & shadowMap : m_spotShadowMaps )
+		{
+			shadowMap->initialise();
+		}
+	}
+
+	void RenderTechnique::doCleanupShadowMaps()
+	{
+		for ( auto & shadowMap : m_directionalShadowMaps )
+		{
+			shadowMap->cleanup();
+		}
+
+		for ( auto & shadowMap : m_pointShadowMaps )
+		{
+			shadowMap->cleanup();
+		}
+
+		for ( auto & shadowMap : m_spotShadowMaps )
+		{
+			shadowMap->cleanup();
+		}
+	}
+
+	void RenderTechnique::doUpdateShadowMaps( RenderQueueArray & queues )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto & camera = *m_renderTarget.getCamera();
+		auto & cache = scene.getLightCache();
+
+		for ( auto & array : m_activeShadowMaps )
+		{
+			array.clear();
+		}
+
+		doPrepareShadowMaps( cache
+			, LightType::eDirectional
+			, camera
+			, m_directionalShadowMaps
+			, m_activeShadowMaps
+			, queues );
+		doPrepareShadowMaps( cache
+			, LightType::ePoint
+			, camera
+			, m_pointShadowMaps
+			, m_activeShadowMaps
+			, queues );
+		doPrepareShadowMaps( cache
+			, LightType::eSpot
+			, camera
+			, m_spotShadowMaps
+			, m_activeShadowMaps
+			, queues );
+	}
+
+	void RenderTechnique::doRenderShadowMaps()
+	{
+		for ( auto & array : m_activeShadowMaps )
+		{
+			for ( auto & shadowMap : array )
+			{
+				shadowMap.get().render();
+			}
+		}
+	}
+
+	void RenderTechnique::doRenderEnvironmentMaps()
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto & maps = scene.getEnvironmentMaps();
+
+		for ( auto & map : maps )
+		{
+			map.get().render();
+		}
+	}
+
+	void RenderTechnique::doRenderOpaque( RenderInfo & info )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto & camera = *m_renderTarget.getCamera();
+
+#if DEBUG_FORWARD_RENDERING
+
+		getEngine()->setPerObjectLighting( true );
+		m_opaquePass->renderShadowMaps();
+		camera.apply();
+		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->setDrawBuffers();
+		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+		m_opaquePass->render( info
+			, scene.hasShadows()
+			, m_activeShadowMaps );
+
+#else
+
+		m_deferredRendering->render( info
+			, scene
+			, camera
+			, m_activeShadowMaps );
+
+#endif
+	}
+
+	void RenderTechnique::doUpdateParticles( RenderInfo & info )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		m_particleTimer->start();
+		scene.getParticleSystemCache().forEach( [this, &info]( ParticleSystem & particleSystem )
+		{
+			particleSystem.update();
+			info.m_particlesCount += particleSystem.getParticlesCount();
+		} );
+		m_particleTimer->stop();
+	}
+
+	void RenderTechnique::doRenderTransparent( RenderInfo & info )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto & camera = *m_renderTarget.getCamera();
+
+#if USE_WEIGHTED_BLEND
+#	if !DEBUG_FORWARD_RENDERING
+
+		m_deferredRendering->blitDepthInto( m_weightedBlendRendering->getFbo() );
+
+#	endif
+
+		m_weightedBlendRendering->render( info
+			, scene
+			, camera
+			, m_activeShadowMaps );
+
+#else
+
+		getEngine()->setPerObjectLighting( true );
+		m_transparentPass->renderShadowMaps();
+		camera.apply();
+		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->setDrawBuffers();
+		m_transparentPass->render( info
+			, scene.hasShadows()
+			, m_activeShadowMaps );
+		m_frameBuffer.m_frameBuffer->unbind();
+
+#endif
+	}
+
+	void RenderTechnique::doApplyPostEffects()
+	{
+		m_postFxTimer->start();
+
+		for ( auto effect : m_renderTarget.getPostEffects() )
+		{
+			effect->apply( *m_frameBuffer.m_frameBuffer );
+		}
+
+		m_postFxTimer->stop();
 	}
 }

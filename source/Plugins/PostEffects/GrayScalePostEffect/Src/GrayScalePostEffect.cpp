@@ -38,9 +38,9 @@ namespace GrayScale
 {
 	namespace
 	{
-		GLSL::Shader getVertexProgram( RenderSystem * renderSystem )
+		glsl::Shader getVertexProgram( RenderSystem * renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			UBO_MATRIX( writer );
@@ -60,9 +60,9 @@ namespace GrayScale
 			return writer.finalise();
 		}
 
-		GLSL::Shader getFragmentProgram( RenderSystem * renderSystem )
+		glsl::Shader getFragmentProgram( RenderSystem * renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs

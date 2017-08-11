@@ -81,7 +81,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de brouillard.
 		 */
-		inline GLSL::FogType getType()const
+		inline glsl::FogType getType()const
 		{
 			return m_type;
 		}
@@ -93,7 +93,7 @@ namespace castor3d
 		 *\brief		Définit le type de brouillard.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void setType( GLSL::FogType p_value )
+		inline void setType( glsl::FogType p_value )
 		{
 			m_type = p_value;
 		}
@@ -101,7 +101,7 @@ namespace castor3d
 	private:
 		//!\~english	The fog type.
 		//!\~french		Le type de brouillard.
-		GLSL::FogType m_type{ GLSL::FogType::eDisabled };
+		glsl::FogType m_type{ glsl::FogType::eDisabled };
 		//!\~english	The fog's density.
 		//!\~french		La densité du brouillard.
 		real m_density{ 0.0_r };

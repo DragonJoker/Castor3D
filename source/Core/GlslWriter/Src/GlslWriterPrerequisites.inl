@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	template<>
 	struct name_of< Boolean >

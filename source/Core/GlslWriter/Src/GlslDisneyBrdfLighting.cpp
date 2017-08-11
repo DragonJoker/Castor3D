@@ -5,7 +5,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	const String DisneyBrdfLightingModel::Name = cuT( "pbr_mr" );
 

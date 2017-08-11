@@ -4,7 +4,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 #if !GLSL_MATERIALS_STRUCT_OF_ARRAY
 

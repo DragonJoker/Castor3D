@@ -36,7 +36,7 @@ namespace castor3d
 	uint32_t PassBuffer::addPass( Pass & pass )
 	{
 		REQUIRE( pass.getId() == 0u );
-		REQUIRE( m_passes.size() < GLSL::MaxMaterialsCount );
+		REQUIRE( m_passes.size() < glsl::MaxMaterialsCount );
 		m_passes.emplace_back( &pass );
 		pass.setId( m_passID++ );
 		m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & pass )

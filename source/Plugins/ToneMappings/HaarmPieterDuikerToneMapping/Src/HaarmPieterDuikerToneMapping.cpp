@@ -15,7 +15,7 @@
 
 using namespace castor;
 using namespace castor3d;
-using namespace GLSL;
+using namespace glsl;
 
 namespace HaarmPieterDuiker
 {
@@ -41,11 +41,11 @@ namespace HaarmPieterDuiker
 		return std::make_shared< ToneMapping >( engine, p_parameters );
 	}
 
-	GLSL::Shader ToneMapping::doCreate()
+	glsl::Shader ToneMapping::doCreate()
 	{
 		m_gammaVar = m_configUbo.createUniform< UniformType::eFloat >( ShaderProgram::Gamma );
 
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
@@ -63,7 +63,7 @@ namespace HaarmPieterDuiker
 			auto log10 = writer.implementFunction< Vec3 >( cuT( "log10" )
 				, [&]( Vec3 const & p_in )
 				{
-					writer.returnStmt( GLSL::log2( p_in ) / GLSL::log2( 10.0_f ) );
+					writer.returnStmt( glsl::log2( p_in ) / glsl::log2( 10.0_f ) );
 				}, InVec3{ &writer, cuT( "p_in" ) } );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()

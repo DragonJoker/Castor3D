@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -30,9 +30,6 @@ namespace castor3d
 			, p_environment
 			, p_ignored
 			, p_config }
-		, m_directionalShadowMap{ *p_scene.getEngine() }
-		, m_spotShadowMap{ *p_scene.getEngine() }
-		, m_pointShadowMap{ *p_scene.getEngine() }
 	{
 	}
 
@@ -50,9 +47,6 @@ namespace castor3d
 			, p_environment
 			, p_ignored
 			, p_config }
-		, m_directionalShadowMap{ *p_scene.getEngine() }
-		, m_spotShadowMap{ *p_scene.getEngine() }
-		, m_pointShadowMap{ *p_scene.getEngine() }
 	{
 	}
 
@@ -60,96 +54,20 @@ namespace castor3d
 	{
 	}
 
-	void ForwardRenderTechniquePass::render( RenderInfo & p_info, bool p_shadows )
+	void ForwardRenderTechniquePass::render( RenderInfo & info
+		, ShadowMapLightTypeArray & shadowMaps )
 	{
 		m_scene.getLightCache().bindLights();
-		doRender( p_info, p_shadows );
+		doRender( info, shadowMaps );
 		m_scene.getLightCache().unbindLights();
 	}
 
-	void ForwardRenderTechniquePass::addShadowProducer( Light & p_light )
-	{
-		if ( p_light.isShadowProducer() )
-		{
-			switch ( p_light.getLightType() )
-			{
-			case LightType::eDirectional:
-				m_directionalShadowMap.addLight( p_light );
-				break;
-
-			case LightType::ePoint:
-				m_pointShadowMap.addLight( p_light );
-				break;
-
-			case LightType::eSpot:
-				m_spotShadowMap.addLight( p_light );
-				break;
-			}
-		}
-	}
-
-	bool ForwardRenderTechniquePass::initialiseShadowMaps()
-	{
-		m_scene.getLightCache().forEach( [this]( Light & p_light )
-		{
-			addShadowProducer( p_light );
-		} );
-
-		bool result = m_directionalShadowMap.initialise();
-
-		if ( result )
-		{
-			result = m_spotShadowMap.initialise();
-		}
-
-		if ( result )
-		{
-			result = m_pointShadowMap.initialise();
-		}
-
-		ENSURE( result );
-		return result;
-	}
-
-	void ForwardRenderTechniquePass::cleanupShadowMaps()
-	{
-		m_pointShadowMap.cleanup();
-		m_spotShadowMap.cleanup();
-		m_directionalShadowMap.cleanup();
-	}
-
-	void ForwardRenderTechniquePass::updateShadowMaps( RenderQueueArray & p_queues )
-	{
-		m_pointShadowMap.update( *m_camera, p_queues );
-		m_spotShadowMap.update( *m_camera, p_queues );
-		m_directionalShadowMap.update( *m_camera, p_queues );
-	}
-
-	void ForwardRenderTechniquePass::renderShadowMaps()
-	{
-		m_directionalShadowMap.render();
-		m_pointShadowMap.render();
-		m_spotShadowMap.render();
-	}
-
-	void ForwardRenderTechniquePass::doGetDepthMaps( DepthMapArray & p_depthMaps )
-	{
-		p_depthMaps.push_back( std::ref( m_directionalShadowMap.getTexture() ) );
-		p_depthMaps.push_back( std::ref( m_spotShadowMap.getTexture() ) );
-
-		for ( auto & map : m_pointShadowMap.getTextures() )
-		{
-			p_depthMaps.push_back( std::ref( map ) );
-		}
-	}
-	
-
-	GLSL::Shader ForwardRenderTechniquePass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
@@ -260,12 +178,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader ForwardRenderTechniquePass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
@@ -329,8 +247,8 @@ namespace castor3d
 
 		auto lighting = legacy::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 
@@ -432,7 +350,7 @@ namespace castor3d
 				pxl_v4FragColor.a() = alpha;
 			}
 
-			if ( getFogType( sceneFlags ) != GLSL::FogType::eDisabled )
+			if ( getFogType( sceneFlags ) != glsl::FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_v4FragColor, length( wvPosition ), wvPosition.y() );
@@ -442,12 +360,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader ForwardRenderTechniquePass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
@@ -505,8 +423,8 @@ namespace castor3d
 
 		auto lighting = pbr::mr::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
@@ -591,7 +509,7 @@ namespace castor3d
 				pxl_v4FragColor.a() = alpha;
 			}
 
-			if ( getFogType( sceneFlags ) != GLSL::FogType::eDisabled )
+			if ( getFogType( sceneFlags ) != glsl::FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_v4FragColor, length( wvPosition ), wvPosition.y() );
@@ -601,12 +519,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader ForwardRenderTechniquePass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
@@ -664,8 +582,8 @@ namespace castor3d
 
 		auto lighting = pbr::sg::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
@@ -750,7 +668,7 @@ namespace castor3d
 				pxl_v4FragColor.a() = alpha;
 			}
 
-			if ( getFogType( sceneFlags ) != GLSL::FogType::eDisabled )
+			if ( getFogType( sceneFlags ) != glsl::FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_v4FragColor, length( wvPosition ), wvPosition.y() );

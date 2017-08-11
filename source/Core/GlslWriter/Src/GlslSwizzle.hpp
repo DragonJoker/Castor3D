@@ -31,7 +31,7 @@ SOFTWARE.
 #	undef RGB
 #endif
 
-namespace GLSL
+namespace glsl
 {
 	template< typename Input, typename Output >
 	struct Swizzle

@@ -79,10 +79,10 @@ namespace castor3d
 			return result;
 		}
 
-		GLSL::Shader doGetVertexProgram( Engine & engine )
+		glsl::Shader doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -104,12 +104,12 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		GLSL::Shader doGetLegacyPixelProgram( Engine & engine
-			, GLSL::FogType fogType
+		glsl::Shader doGetLegacyPixelProgram( Engine & engine
+			, glsl::FogType fogType
 			, bool hasSsao )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -126,13 +126,13 @@ namespace castor3d
 			auto c3d_mapPostLight = writer.declUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareCalcVSPosition();
 			utils.declareCalcWSPosition();
 
 			declareDecodeMaterial( writer );
 
-			GLSL::Fog fog{ fogType, writer };
+			glsl::Fog fog{ fogType, writer };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -221,12 +221,12 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		GLSL::Shader doGetPbrPixelProgram( Engine & engine
-			, GLSL::FogType fogType
+		glsl::Shader doGetPbrPixelProgram( Engine & engine
+			, glsl::FogType fogType
 			, bool hasSsao )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -246,13 +246,13 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareCalcVSPosition();
 			utils.declareCalcWSPosition();
 
 			declareDecodeMaterial( writer );
 
-			GLSL::Fog fog{ fogType, writer };
+			glsl::Fog fog{ fogType, writer };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -318,7 +318,7 @@ namespace castor3d
 		}
 		
 		ShaderProgramSPtr doCreateProgram( Engine & engine
-			, GLSL::FogType fogType
+			, glsl::FogType fogType
 			, bool hasSsao
 			, bool isPbr )
 		{
@@ -393,7 +393,7 @@ namespace castor3d
 		, GpInfoUbo & gpInfo
 		, bool hasSsao
 		, bool isPbr
-		, GLSL::FogType fogType )
+		, glsl::FogType fogType )
 		: m_program{ doCreateProgram( engine, fogType, hasSsao, isPbr ) }
 		, m_geometryBuffers{ doCreateVao( engine, *m_program, vbo ) }
 		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, matrixUbo, sceneUbo, gpInfo ) }
@@ -431,14 +431,14 @@ namespace castor3d
 		, m_programs
 		{
 			{
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eDisabled },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eLinear },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eSquaredExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eDisabled },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eLinear },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eSquaredExponential }
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eDisabled },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eLinear },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eSquaredExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eDisabled },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eLinear },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eSquaredExponential }
 			}
 		}
 		, m_ssaoEnabled{ config.m_enabled }
@@ -614,7 +614,7 @@ namespace castor3d
 		ibl.getPrefilteredBrdf().getTexture()->bind( index );
 		ibl.getPrefilteredBrdf().getSampler()->bind( index );
 
-		m_programs[size_t( fog.getType() ) + size_t( GLSL::FogType::eCount )].render();
+		m_programs[size_t( fog.getType() ) + size_t( glsl::FogType::eCount )].render();
 
 		ibl.getPrefilteredBrdf().getSampler()->unbind( index );
 		ibl.getPrefilteredBrdf().getTexture()->unbind( index );

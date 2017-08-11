@@ -2,7 +2,7 @@
 
 #include "GlslWriter.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	void writeLine( GlslWriter & p_writer, castor::String const & p_line )
 	{

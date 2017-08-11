@@ -108,14 +108,14 @@ namespace castor3d
 
 	namespace legacy
 	{
-		void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_normal
-			, GLSL::Float & p_shininess
+		void computePreLightingMapContributions( glsl::GlslWriter & p_writer
+			, glsl::Vec3 & p_normal
+			, glsl::Float & p_shininess
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
@@ -139,16 +139,16 @@ namespace castor3d
 			}
 		}
 
-		void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_diffuse
-			, GLSL::Vec3 & p_specular
-			, GLSL::Vec3 & p_emissive
-			, GLSL::Float const & p_gamma
+		void computePostLightingMapContributions( glsl::GlslWriter & p_writer
+			, glsl::Vec3 & p_diffuse
+			, glsl::Vec3 & p_specular
+			, glsl::Vec3 & p_emissive
+			, glsl::Float const & p_gamma
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
@@ -175,42 +175,42 @@ namespace castor3d
 			}
 		}
 
-		std::shared_ptr< GLSL::PhongLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-			, GLSL::ShadowType p_shadows )
+		std::shared_ptr< glsl::PhongLightingModel > createLightingModel( glsl::GlslWriter & p_writer
+			, glsl::ShadowType p_shadows )
 		{
-			return std::static_pointer_cast< GLSL::PhongLightingModel >( p_writer.createLightingModel( GLSL::PhongLightingModel::Name
+			return std::static_pointer_cast< glsl::PhongLightingModel >( p_writer.createLightingModel( glsl::PhongLightingModel::Name
 				, p_shadows ) );
 		}
 
-		std::shared_ptr< GLSL::PhongLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
+		std::shared_ptr< glsl::PhongLightingModel > createLightingModel( glsl::GlslWriter & p_writer
 			, LightType p_light
-			, GLSL::ShadowType p_shadows )
+			, glsl::ShadowType p_shadows )
 		{
-			std::shared_ptr< GLSL::LightingModel > result;
+			std::shared_ptr< glsl::LightingModel > result;
 
 			switch ( p_light )
 			{
 			case LightType::eDirectional:
 			{
-				result = p_writer.createDirectionalLightingModel( GLSL::PhongLightingModel::Name
+				result = p_writer.createDirectionalLightingModel( glsl::PhongLightingModel::Name
 					, p_shadows );
-				auto light = p_writer.declUniform< GLSL::DirectionalLight >( cuT( "light" ) );
+				auto light = p_writer.declUniform< glsl::DirectionalLight >( cuT( "light" ) );
 			}
 			break;
 
 			case LightType::ePoint:
 			{
-				result = p_writer.createPointLightingModel( GLSL::PhongLightingModel::Name
+				result = p_writer.createPointLightingModel( glsl::PhongLightingModel::Name
 					, p_shadows );
-				auto light = p_writer.declUniform< GLSL::PointLight >( cuT( "light" ) );
+				auto light = p_writer.declUniform< glsl::PointLight >( cuT( "light" ) );
 			}
 			break;
 
 			case LightType::eSpot:
 			{
-				result = p_writer.createSpotLightingModel( GLSL::PhongLightingModel::Name
+				result = p_writer.createSpotLightingModel( glsl::PhongLightingModel::Name
 					, p_shadows );
-				auto light = p_writer.declUniform< GLSL::SpotLight >( cuT( "light" ) );
+				auto light = p_writer.declUniform< glsl::SpotLight >( cuT( "light" ) );
 			}
 			break;
 
@@ -219,7 +219,7 @@ namespace castor3d
 				break;
 			}
 
-			return std::static_pointer_cast< GLSL::PhongLightingModel >( result );
+			return std::static_pointer_cast< glsl::PhongLightingModel >( result );
 		}
 	}
 
@@ -227,15 +227,15 @@ namespace castor3d
 	{
 		namespace mr
 		{
-			void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_normal
-				, GLSL::Float & p_metallic
-				, GLSL::Float & p_roughness
+			void computePreLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_normal
+				, glsl::Float & p_metallic
+				, glsl::Float & p_roughness
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags )
 			{
-				using namespace GLSL;
+				using namespace glsl;
 				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
@@ -264,15 +264,15 @@ namespace castor3d
 				}
 			}
 
-			void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_albedo
-				, GLSL::Vec3 & p_emissive
-				, GLSL::Float const & p_gamma
+			void computePostLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_albedo
+				, glsl::Vec3 & p_emissive
+				, glsl::Float const & p_gamma
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags )
 			{
-				using namespace GLSL;
+				using namespace glsl;
 				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
@@ -292,42 +292,42 @@ namespace castor3d
 				}
 			}
 
-			std::shared_ptr< GLSL::MetallicBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, GLSL::ShadowType p_shadows )
+			std::shared_ptr< glsl::MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
+				, glsl::ShadowType p_shadows )
 			{
-				return std::static_pointer_cast< GLSL::MetallicBrdfLightingModel >( p_writer.createLightingModel( GLSL::MetallicBrdfLightingModel::Name
+				return std::static_pointer_cast< glsl::MetallicBrdfLightingModel >( p_writer.createLightingModel( glsl::MetallicBrdfLightingModel::Name
 					, p_shadows ) );
 			}
 
-			std::shared_ptr< GLSL::MetallicBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
+			std::shared_ptr< glsl::MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
 				, LightType p_light
-				, GLSL::ShadowType p_shadows )
+				, glsl::ShadowType p_shadows )
 			{
-				std::shared_ptr< GLSL::LightingModel > result;
+				std::shared_ptr< glsl::LightingModel > result;
 
 				switch ( p_light )
 				{
 				case LightType::eDirectional:
 				{
-					result = p_writer.createDirectionalLightingModel( GLSL::MetallicBrdfLightingModel::Name
+					result = p_writer.createDirectionalLightingModel( glsl::MetallicBrdfLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::DirectionalLight >( cuT( "light" ) );
+					auto light = p_writer.declUniform< glsl::DirectionalLight >( cuT( "light" ) );
 				}
 				break;
 
 				case LightType::ePoint:
 				{
-					result = p_writer.createPointLightingModel( GLSL::MetallicBrdfLightingModel::Name
+					result = p_writer.createPointLightingModel( glsl::MetallicBrdfLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::PointLight >( cuT( "light" ) );
+					auto light = p_writer.declUniform< glsl::PointLight >( cuT( "light" ) );
 				}
 				break;
 
 				case LightType::eSpot:
 				{
-					result = p_writer.createSpotLightingModel( GLSL::MetallicBrdfLightingModel::Name
+					result = p_writer.createSpotLightingModel( glsl::MetallicBrdfLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::SpotLight >( cuT( "light" ) );
+					auto light = p_writer.declUniform< glsl::SpotLight >( cuT( "light" ) );
 				}
 				break;
 
@@ -336,20 +336,20 @@ namespace castor3d
 					break;
 				}
 
-				return std::static_pointer_cast< GLSL::MetallicBrdfLightingModel >( result );
+				return std::static_pointer_cast< glsl::MetallicBrdfLightingModel >( result );
 			}
 		}
 		namespace sg
 		{
-			void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_normal
-				, GLSL::Vec3 & p_specular
-				, GLSL::Float & p_glossiness
+			void computePreLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_normal
+				, glsl::Vec3 & p_specular
+				, glsl::Float & p_glossiness
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags )
 			{
-				using namespace GLSL;
+				using namespace glsl;
 				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
@@ -378,15 +378,15 @@ namespace castor3d
 				}
 			}
 
-			void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_diffuse
-				, GLSL::Vec3 & p_emissive
-				, GLSL::Float const & p_gamma
+			void computePostLightingMapContributions( glsl::GlslWriter & p_writer
+				, glsl::Vec3 & p_diffuse
+				, glsl::Vec3 & p_emissive
+				, glsl::Float const & p_gamma
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags )
 			{
-				using namespace GLSL;
+				using namespace glsl;
 				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
@@ -406,42 +406,42 @@ namespace castor3d
 				}
 			}
 
-			std::shared_ptr< GLSL::SpecularBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, GLSL::ShadowType p_shadows )
+			std::shared_ptr< glsl::SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
+				, glsl::ShadowType p_shadows )
 			{
-				return std::static_pointer_cast< GLSL::SpecularBrdfLightingModel >( p_writer.createLightingModel( GLSL::SpecularBrdfLightingModel::Name
+				return std::static_pointer_cast< glsl::SpecularBrdfLightingModel >( p_writer.createLightingModel( glsl::SpecularBrdfLightingModel::Name
 					, p_shadows ) );
 			}
 
-			std::shared_ptr< GLSL::SpecularBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
+			std::shared_ptr< glsl::SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & p_writer
 				, LightType p_light
-				, GLSL::ShadowType p_shadows )
+				, glsl::ShadowType p_shadows )
 			{
-				std::shared_ptr< GLSL::LightingModel > result;
+				std::shared_ptr< glsl::LightingModel > result;
 
 				switch ( p_light )
 				{
 				case LightType::eDirectional:
 				{
-					result = p_writer.createDirectionalLightingModel( GLSL::SpecularBrdfLightingModel::Name
+					result = p_writer.createDirectionalLightingModel( glsl::SpecularBrdfLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::DirectionalLight >( cuT( "light" ) );
+					auto light = p_writer.declUniform< glsl::DirectionalLight >( cuT( "light" ) );
 				}
 				break;
 
 				case LightType::ePoint:
 				{
-					result = p_writer.createPointLightingModel( GLSL::SpecularBrdfLightingModel::Name
+					result = p_writer.createPointLightingModel( glsl::SpecularBrdfLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::PointLight >( cuT( "light" ) );
+					auto light = p_writer.declUniform< glsl::PointLight >( cuT( "light" ) );
 				}
 				break;
 
 				case LightType::eSpot:
 				{
-					result = p_writer.createSpotLightingModel( GLSL::SpecularBrdfLightingModel::Name
+					result = p_writer.createSpotLightingModel( glsl::SpecularBrdfLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::SpotLight >( cuT( "light" ) );
+					auto light = p_writer.declUniform< glsl::SpotLight >( cuT( "light" ) );
 				}
 				break;
 
@@ -450,12 +450,12 @@ namespace castor3d
 					break;
 				}
 
-				return std::static_pointer_cast< GLSL::SpecularBrdfLightingModel >( result );
+				return std::static_pointer_cast< glsl::SpecularBrdfLightingModel >( result );
 			}
 		}
 	}
 
-	ParallaxShadowFunction declareParallaxShadowFunc( GLSL::GlslWriter & p_writer
+	ParallaxShadowFunction declareParallaxShadowFunc( glsl::GlslWriter & p_writer
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags )
 	{
@@ -464,7 +464,7 @@ namespace castor3d
 		if ( checkFlag( textureFlags, TextureChannel::eHeight )
 			&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto c3d_mapHeight( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
 			auto c3d_heightScale( p_writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
 
@@ -486,7 +486,7 @@ namespace castor3d
 						auto numLayers = p_writer.declLocale( cuT( "numLayers" )
 							, mix( maxLayers
 								, minLayers
-								, GLSL::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_lightDir ) ) ) );
+								, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_lightDir ) ) ) );
 						auto layerHeight = p_writer.declLocale( cuT( "layerHeight" ), p_initialHeight / numLayers );
 						auto texStep = p_writer.declLocale( cuT( "deltaTexCoords" ), p_writer.paren( p_lightDir.xy() * c3d_heightScale ) / p_lightDir.z() / numLayers );
 
@@ -541,11 +541,11 @@ namespace castor3d
 		return result;
 	}
 
-	ParallaxFunction declareParallaxMappingFunc( GLSL::GlslWriter & p_writer
+	ParallaxFunction declareParallaxMappingFunc( glsl::GlslWriter & p_writer
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		ParallaxFunction result;
 
 		if ( checkFlag( textureFlags, TextureChannel::eHeight )
@@ -563,7 +563,7 @@ namespace castor3d
 					auto numLayers = p_writer.declLocale( cuT( "numLayers" )
 						, mix( maxLayers
 							, minLayers
-							, GLSL::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_viewDir ) ) ) );
+							, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_viewDir ) ) ) );
 					// calculate the size of each layer
 					auto layerDepth = p_writer.declLocale( cuT( "layerDepth" ), Float( 1.0f / numLayers ) );
 					// depth of current layer
@@ -612,43 +612,43 @@ namespace castor3d
 			|| checkFlag( p_flags, ProgramFlag::eShadowMapPoint );
 	}
 
-	GLSL::ShadowType getShadowType( SceneFlags const & p_flags )
+	glsl::ShadowType getShadowType( SceneFlags const & p_flags )
 	{
 		auto shadow = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eShadowFilterStratifiedPoisson ) );
 
 		switch ( shadow )
 		{
 		case SceneFlag::eShadowFilterRaw:
-			return GLSL::ShadowType::eRaw;
+			return glsl::ShadowType::eRaw;
 
 		case SceneFlag::eShadowFilterPoisson:
-			return GLSL::ShadowType::ePoisson;
+			return glsl::ShadowType::ePoisson;
 
 		case SceneFlag::eShadowFilterStratifiedPoisson:
-			return GLSL::ShadowType::eStratifiedPoisson;
+			return glsl::ShadowType::eStratifiedPoisson;
 
 		default:
-			return GLSL::ShadowType::eNone;
+			return glsl::ShadowType::eNone;
 		}
 	}
 
-	GLSL::FogType getFogType( SceneFlags const & p_flags )
+	glsl::FogType getFogType( SceneFlags const & p_flags )
 	{
 		auto fog = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eFogSquaredExponential ) );
 
 		switch ( fog )
 		{
 		case SceneFlag::eFogLinear:
-			return GLSL::FogType::eLinear;
+			return glsl::FogType::eLinear;
 
 		case SceneFlag::eFogExponential:
-			return GLSL::FogType::eExponential;
+			return glsl::FogType::eExponential;
 
 		case SceneFlag::eFogSquaredExponential:
-			return GLSL::FogType::eSquaredExponential;
+			return glsl::FogType::eSquaredExponential;
 
 		default:
-			return GLSL::FogType::eDisabled;
+			return glsl::FogType::eDisabled;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	Boolean operator==( Type const & p_a, Type const & p_b )
 	{

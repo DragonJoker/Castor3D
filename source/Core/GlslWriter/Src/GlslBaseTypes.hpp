@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslSampler.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct Int
 		: public Type

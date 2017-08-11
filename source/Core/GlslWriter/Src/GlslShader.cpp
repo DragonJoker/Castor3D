@@ -1,5 +1,5 @@
 ﻿#include "GlslShader.hpp"
 
-namespace GLSL
+namespace glsl
 {
 }

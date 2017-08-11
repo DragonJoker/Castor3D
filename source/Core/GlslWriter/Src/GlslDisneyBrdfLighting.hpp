@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslLighting.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	class DisneyBrdfLightingModel
 		: public LightingModel

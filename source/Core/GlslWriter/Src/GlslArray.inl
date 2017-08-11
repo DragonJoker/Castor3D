@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	template< typename T >
 	Array< T >::Array( GlslWriter * p_writer, const castor::String & p_name, uint32_t p_dimension )

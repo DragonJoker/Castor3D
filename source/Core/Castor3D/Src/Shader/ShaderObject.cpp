@@ -120,7 +120,7 @@ namespace castor3d
 	{
 		m_status = ShaderStatus::eNotCompiled;
 		m_file.clear();
-		m_source = GLSL::Shader{};
+		m_source = glsl::Shader{};
 
 		if ( !p_filename.empty() && File::fileExists( p_filename ) )
 		{
@@ -150,7 +150,7 @@ namespace castor3d
 		m_source.setSource( p_source );
 	}
 
-	void ShaderObject::setSource( GLSL::Shader const & p_source )
+	void ShaderObject::setSource( glsl::Shader const & p_source )
 	{
 		m_source = p_source;
 	}

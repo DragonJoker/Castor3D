@@ -575,7 +575,7 @@ namespace castor3d
 
 	ShaderProgramSPtr OverlayRenderer::doCreateOverlayProgram( TextureChannels const & textureFlags )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 
 		// Shader program
 		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
@@ -584,7 +584,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 
 		// Vertex shader
-		GLSL::Shader strVs;
+		glsl::Shader strVs;
 		{
 			auto writer = getRenderSystem()->createGlslWriter();
 
@@ -620,7 +620,7 @@ namespace castor3d
 		}
 
 		// Pixel shader
-		GLSL::Shader strPs;
+		glsl::Shader strPs;
 		{
 			auto writer = getRenderSystem()->createGlslWriter();
 

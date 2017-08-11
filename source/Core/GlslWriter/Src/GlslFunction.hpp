@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslOptionalArray.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename RetT, typename ... ParamsT >
 	inline RetT writeFunctionCall( GlslWriter * p_writer, castor::String const & p_name, ParamsT const & ... p_params );

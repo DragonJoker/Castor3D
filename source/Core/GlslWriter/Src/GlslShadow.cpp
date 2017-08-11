@@ -1,8 +1,8 @@
-#include "GlslShadow.hpp"
+﻿#include "GlslShadow.hpp"
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	castor::String const Shadow::MapShadowDirectional = cuT( "c3d_mapShadowDirectional" );
 	castor::String const Shadow::MapShadowSpot = cuT( "c3d_mapShadowSpot" );
@@ -16,7 +16,7 @@ namespace GLSL
 	void Shadow::declare( ShadowType type )
 	{
 		auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2DShadow >( MapShadowDirectional );
-		auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2DArrayShadow >( MapShadowSpot );
+		auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2DShadow >( MapShadowSpot, SpotShadowMapCount );
 		auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 		doDeclareGetRandom();
 		doDeclareGetShadowOffset();

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,20 +42,20 @@ namespace castor3d
 	class ShadowMap
 		: public castor::OwnedBy< Engine >
 	{
-	protected:
-		using ShadowMapLightMap = std::map< Light const *, ShadowMapPassSPtr >;
-		using SortedPasses = std::map< double, ShadowMapPassSPtr >;
-
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	shadowMaps	The shadow maps.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	shadowMaps	Les textures d'ombres.
 		 */
-		C3D_API ShadowMap( Engine & engine );
+		C3D_API ShadowMap( Engine & engine
+			, TextureUnit && shadowMap
+			, ShadowMapPassSPtr pass );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -79,13 +79,29 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		adds a light source, creating a shadow map pass for it.
-		 *\param[in]	light	The light source.
+		 *\brief		Updates the passes, selecting the lights that will project shadows.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[in]	camera	The viewer camera.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	light	The light source.
 		 *\~french
-		 *\brief		Ajoute une source lumineuse, créant une passe de shadow mapping pour elle.
-		 *\param[in]	light	La source lumineuse.
+		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[in]	camera	La caméra de l'observateur.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	light	La source lumineuse.
 		 */
-		C3D_API void addLight( Light & light );
+		C3D_API virtual void update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index ) = 0;
+		/**
+		 *\~english
+		 *\brief		Renders the given light's shadow map.
+		 *\~french
+		 *\brief		Dessine la shadow map de la lumière donnée.
+		 */
+		C3D_API virtual void render() = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -115,7 +131,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API GLSL::Shader getVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -131,7 +147,7 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader getGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
@@ -146,46 +162,32 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader getPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
 		/**
 		 *\~english
-		 *\return		The sorted shadow mapping passes.
+		 *\return		The shadow maps.
 		 *\~english
-		 *\return		Les passes de shadow mapping triées.
+		 *\return		Les textures d'ombres.
 		 */
-		inline SortedPasses & getPasses()
+		inline TextureUnit & getTexture()
 		{
-			return m_sorted;
+			return m_shadowMap;
 		}
 		/**
 		 *\~english
-		 *\return		The sorted shadow mapping passes.
+		 *\return		The shadow maps.
 		 *\~english
-		 *\return		Les passes de shadow mapping triées.
+		 *\return		Les textures d'ombres.
 		 */
-		inline SortedPasses const & getPasses()const
+		inline TextureUnit const & getTexture()const
 		{
-			return m_sorted;
+			return m_shadowMap;
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\return		The maximum light type specific shadow map passes.
-		 *\~english
-		 *\return		Le nombre maximum de passes de shadow maps pour le type de source lumineuse.
-		 */
-		C3D_API virtual int32_t doGetMaxPasses()const = 0;
-		/**
-		 *\~english
-		 *\return		The shadow map texture dimensions.
-		 *\~english
-		 *\return		Les dimensions de la texture de map d'ombres.
-		 */
-		C3D_API virtual castor::Size doGetSize()const = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the light type specific data.
@@ -203,17 +205,6 @@ namespace castor3d
 		 */
 		C3D_API virtual void doCleanup() = 0;
 		/**
-		 *\~english
-		 *\brief		Creates a light type specific shadow map pass.
-		 *\param[in]	light	The light source.
-		 *\return		The shadow map pass.
-		 *\~french
-		 *\brief		Crée une passe de shadow mapping spécifique au type de source lumineuse.
-		 *\param[in]	light	La source lumineuse.
-		 *\return		La passe de shadow mapping.
-		 */
-		C3D_API virtual ShadowMapPassSPtr doCreatePass( Light & light )const = 0;
-		/**
 		 *\copydoc		castor3d::ShadowMap::updateFlags
 		 */
 		C3D_API virtual void doUpdateFlags( TextureChannels & textureFlags
@@ -222,29 +213,29 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
 		 */
-		C3D_API virtual GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
 		/**
 		 *\copydoc		castor3d::ShadowMap::getGeometryShaderSource
 		 */
-		C3D_API virtual GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\copydoc		castor3d::ShadowMap::getPixelShaderSource
 		 */
-		C3D_API virtual GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
 
-		void doApplyAlphaFunc( GLSL::GlslWriter & writer
+		void doApplyAlphaFunc( glsl::GlslWriter & writer
 			, ComparisonFunc alphaFunc
-			, GLSL::Float const & alpha
-			, GLSL::Int const & material
-			, GLSL::Materials const & materials );
+			, glsl::Float const & alpha
+			, glsl::Int const & material
+			, glsl::Materials const & materials );
 
 	protected:
 		//!\~english	The frame buffer.
@@ -255,10 +246,10 @@ namespace castor3d
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english	The shadow mapping passes used during the render.
 		//!\~french		Les passes de shadow mapping utilisées pendant le rendu.
-		ShadowMapLightMap m_passes;
-		//!~english		The shadow mapping passes, sorted by light source's distance to the camera.
-		//!\~french		Les passes de shadow mapping, triées par distance de la source lumineuse à la caméra.
-		SortedPasses m_sorted;
+		ShadowMapPassSPtr m_pass;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		TextureUnit m_shadowMap;
 	};
 }
 

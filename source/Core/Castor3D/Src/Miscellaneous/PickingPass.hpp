@@ -218,34 +218,34 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
-		GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;

@@ -290,14 +290,6 @@ namespace castor3d
 		m_techniqueParameters.add( parameters );
 	}
 
-	void RenderTarget::addShadowProducer( Light & light )
-	{
-		if ( m_renderTechnique )
-		{
-			m_renderTechnique->addShadowProducer( light );
-		}
-	}
-
 	void RenderTarget::doRender( RenderInfo & info
 		, RenderTarget::TargetFbo & fbo
 		, CameraSPtr camera )

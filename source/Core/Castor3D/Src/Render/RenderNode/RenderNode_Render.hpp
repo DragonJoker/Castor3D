@@ -1,4 +1,4 @@
-﻿#include "RenderNode.hpp"
+#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -21,6 +21,7 @@
 #include "Shader/PushUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -30,38 +31,37 @@ using namespace castor;
 namespace castor3d
 {
 	inline uint32_t doFillShaderDepthMaps( RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )
+		, ShadowMapLightTypeArray & shadowMaps )
 	{
 		uint32_t index = p_pipeline.getTexturesCount() + Pass::MinTextureIndex;
 
-		if ( !p_depthMaps.empty() )
+		if ( getShadowType( p_pipeline.getFlags().m_sceneFlags ) != glsl::ShadowType::eNone )
 		{
-			auto layer = 0u;
-
-			if ( getShadowType( p_pipeline.getFlags().m_sceneFlags ) != GLSL::ShadowType::eNone )
+			for ( auto i = 0u; i < shadowMaps.size(); ++i )
 			{
-				for ( auto & depthMap : p_depthMaps )
+				auto lightType = LightType( i );
+				auto layer = 0u;
+
+				for ( auto shadowMap : shadowMaps[i] )
 				{
-					switch ( depthMap.get().getType() )
+					auto & unit = shadowMap.get().getTexture();
+
+					switch ( lightType )
 					{
-					case TextureType::eTwoDimensions:
-						depthMap.get().setIndex( index );
-						p_pipeline.getDirectionalShadowMapsVariable().setValue( index++ );
+					case LightType::eDirectional:
+						unit.setIndex( index );
+						p_pipeline.getDirectionalShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
-					case TextureType::eTwoDimensionsArray:
-						depthMap.get().setIndex( index );
-						p_pipeline.getSpotShadowMapsVariable().setValue( index++ );
+					case LightType::eSpot:
+						unit.setIndex( index );
+						p_pipeline.getSpotShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
-					case TextureType::eCube:
-						depthMap.get().setIndex( index );
+					case LightType::ePoint:
+						unit.setIndex( index );
 						p_pipeline.getPointShadowMapsVariable().setValue( index++, layer++ );
-						break;
-
-					case TextureType::eCubeArray:
-						depthMap.get().setIndex( index );
-						p_pipeline.getPointShadowMapsVariable().setValue( index++ );
+						++layer;
 						break;
 					}
 				}
@@ -92,11 +92,11 @@ namespace castor3d
 		, PassRenderNode & p_node
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, ModelUbo & p_model
 		, EnvironmentMap *& p_envMap )
 	{
-		auto index = doFillShaderDepthMaps( p_pipeline, p_depthMaps );
+		auto index = doFillShaderDepthMaps( p_pipeline, shadowMaps );
 
 		p_node.m_pass.bindTextures();
 
@@ -121,9 +121,12 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & depthMap : p_depthMaps )
+		for ( auto & array : shadowMaps )
 		{
-			depthMap.get().bind();
+			for ( auto & shadowMap : array )
+			{
+				shadowMap.get().getTexture().bind();
+			}
 		}
 
 		if ( p_node.m_pass.hasEnvironmentMapping() )
@@ -152,7 +155,7 @@ namespace castor3d
 		, PassRenderNode & p_node
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
-		, DepthMapArray const & p_depthMaps
+		, ShadowMapLightTypeArray const & shadowMaps
 		, EnvironmentMap * p_envMap )
 	{
 		if ( p_envMap )
@@ -160,9 +163,12 @@ namespace castor3d
 			p_envMap->getTexture().unbind();
 		}
 
-		for ( auto & depthMap : p_depthMaps )
+		for ( auto & array : shadowMaps )
 		{
-			depthMap.get().unbind();
+			for ( auto & shadowMap : array )
+			{
+				shadowMap.get().getTexture().unbind();
+			}
 		}
 
 		p_node.m_pass.unbindTextures();

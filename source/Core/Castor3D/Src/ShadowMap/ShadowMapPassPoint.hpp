@@ -44,18 +44,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	p_light		The light source.
-		 *\param[in]	p_shadowMap	The parent shadow map.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_light		La source lumineuse.
-		 *\param[in]	p_shadowMap	La shadow map parente.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPassPoint( Engine & engine
-			, Light & p_light
-			, ShadowMap const & p_shadowMap );
+			, Scene & scene
+			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -63,6 +63,17 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ShadowMapPassPoint();
+		/**
+		 *\copydoc		castor3d::ShadowMapPass::update
+		 */
+		void update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index )override;
+		/**
+		 *\copydoc		castor3d::ShadowMapPass::render
+		 */
+		void render( uint32_t index )override;
 
 	protected:
 		void doRenderNodes( SceneRenderNodes & p_nodes );
@@ -81,10 +92,6 @@ namespace castor3d
 		 */
 		void doUpdate( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doRender
-		 */
-		void doRender( uint32_t p_face )override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
 		void doPrepareBackPipeline( ShaderProgram & p_program
@@ -100,6 +107,12 @@ namespace castor3d
 		//!\~english	The shadow map configuration data UBO.
 		//!\~french		L'UBO de données de configuration de shadow map.
 		UniformBuffer m_shadowConfig;
+		//!\~english	The variable holding the world light position.
+		//!\~french		La variable contenant la position monde de la lumière.
+		Uniform3f & m_worldLightPosition;
+		//!\~english	The variable holding the camera's far plane.
+		//!\~french		La variable contenant la position du plan éloigné de la caméra.
+		Uniform1f & m_farPlane;
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;

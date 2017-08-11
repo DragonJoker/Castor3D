@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	template< typename T >
 	inline void Struct::declMember( castor::String const & p_name )

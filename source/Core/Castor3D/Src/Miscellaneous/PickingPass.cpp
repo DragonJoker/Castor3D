@@ -1,4 +1,4 @@
-#include "PickingPass.hpp"
+﻿#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -32,7 +32,6 @@ namespace castor3d
 			, PickingPass::NodeType p_type
 			, FuncType p_function )
 		{
-			auto depthMaps = DepthMapArray{};
 			uint32_t count{ 1u };
 
 			for ( auto itPipelines : p_nodes )
@@ -68,7 +67,6 @@ namespace castor3d
 			, PickingPass::NodeType p_type
 			, MapType & p_nodes )
 		{
-			auto depthMaps = DepthMapArray{};
 			uint32_t count{ 1u };
 
 			for ( auto itPipelines : p_nodes )
@@ -478,14 +476,14 @@ namespace castor3d
 	{
 	}
 
-	GLSL::Shader PickingPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return GLSL::Shader{};
+		return glsl::Shader{};
 	}
 
-	GLSL::Shader PickingPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -496,7 +494,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader PickingPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -507,7 +505,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader PickingPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -518,12 +516,12 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader PickingPass::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs

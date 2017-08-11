@@ -76,10 +76,10 @@ namespace castor3d
 			return result;
 		}
 
-		GLSL::Shader doGetVertexProgram( Engine & engine )
+		glsl::Shader doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -100,11 +100,11 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		GLSL::Shader doGetPixelProgram( Engine & engine
-			, GLSL::FogType p_fogType )
+		glsl::Shader doGetPixelProgram( Engine & engine
+			, glsl::FogType p_fogType )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -119,10 +119,10 @@ namespace castor3d
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareCalcVSPosition();
 
-			GLSL::Fog fog{ p_fogType, writer };
+			glsl::Fog fog{ p_fogType, writer };
 
 			auto maxComponent = writer.implementFunction< Float >( cuT( "maxComponent" )
 				, [&]( Vec3 const & v )
@@ -149,7 +149,7 @@ namespace castor3d
 						, texelFetch( c3d_mapAccumulation, coord, 0 ) );
 
 					// Suppress overflow
-					IF( writer, GLSL::isinf( maxComponent( GLSL::abs( accum.rgb() ) ) ) )
+					IF( writer, glsl::isinf( maxComponent( glsl::abs( accum.rgb() ) ) ) )
 					{
 						accum.rgb() = vec3( accum.a() );
 					}
@@ -170,7 +170,7 @@ namespace castor3d
 		}
 		
 		ShaderProgramSPtr doCreateProgram( Engine & engine
-			, GLSL::FogType p_fogType )
+			, glsl::FogType p_fogType )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetVertexProgram( engine );
@@ -223,7 +223,7 @@ namespace castor3d
 		, MatrixUbo & p_matrixUbo
 		, SceneUbo & p_sceneUbo
 		, GpInfoUbo & p_gpInfoUbo
-		, GLSL::FogType p_fogType )
+		, glsl::FogType p_fogType )
 		: m_program{ doCreateProgram( engine, p_fogType ) }
 		, m_geometryBuffers{ doCreateVao( engine, *m_program, p_vbo ) }
 		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfoUbo ) }
@@ -258,10 +258,10 @@ namespace castor3d
 		, m_gpInfo{ engine }
 		, m_programs
 		{
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eDisabled },
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eLinear },
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eExponential },
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eSquaredExponential }
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eDisabled },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eLinear },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eExponential },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eSquaredExponential }
 		}
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );

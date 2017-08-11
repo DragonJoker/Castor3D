@@ -5,7 +5,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	const String MetallicBrdfLightingModel::Name = cuT( "pbr_mr" );
 

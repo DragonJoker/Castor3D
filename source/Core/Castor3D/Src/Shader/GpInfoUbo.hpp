@@ -79,13 +79,13 @@ namespace castor3d
 }
 
 #define UBO_GPINFO( p_writer )\
-	GLSL::Ubo gpInfo{ p_writer, castor3d::GpInfoUbo::GPInfo, castor3d::GpInfoUbo::BindingPoint };\
-	auto c3d_mtxInvViewProj = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::InvViewProj );\
-	auto c3d_mtxInvView = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::InvView );\
-	auto c3d_mtxInvProj = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::InvProj );\
-	auto c3d_mtxGView = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::View );\
-	auto c3d_mtxGProj = gpInfo.declMember< GLSL::Mat4 >( castor3d::GpInfoUbo::Proj );\
-	auto c3d_renderSize = gpInfo.declMember< GLSL::Vec2 >( castor3d::GpInfoUbo::RenderSize );\
+	glsl::Ubo gpInfo{ p_writer, castor3d::GpInfoUbo::GPInfo, castor3d::GpInfoUbo::BindingPoint };\
+	auto c3d_mtxInvViewProj = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvViewProj );\
+	auto c3d_mtxInvView = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvView );\
+	auto c3d_mtxInvProj = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvProj );\
+	auto c3d_mtxGView = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::View );\
+	auto c3d_mtxGProj = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::Proj );\
+	auto c3d_renderSize = gpInfo.declMember< glsl::Vec2 >( castor3d::GpInfoUbo::RenderSize );\
 	gpInfo.end()
 
 #endif

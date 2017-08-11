@@ -38,9 +38,9 @@ namespace Bloom
 {
 	namespace
 	{
-		GLSL::Shader getVertexProgram( RenderSystem * renderSystem )
+		glsl::Shader getVertexProgram( RenderSystem * renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			UBO_MATRIX( writer );
@@ -60,9 +60,9 @@ namespace Bloom
 			return writer.finalise();
 		}
 
-		GLSL::Shader getHiPassProgram( RenderSystem * renderSystem )
+		glsl::Shader getHiPassProgram( RenderSystem * renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
@@ -75,8 +75,8 @@ namespace Bloom
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				pxl_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
-				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), GLSL::max( pxl_v4FragColor.r(), pxl_v4FragColor.g() ) );
-				maxComponent = GLSL::max( maxComponent, pxl_v4FragColor.b() );
+				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_v4FragColor.r(), pxl_v4FragColor.g() ) );
+				maxComponent = glsl::max( maxComponent, pxl_v4FragColor.b() );
 
 				IF( writer, maxComponent > 1.0_f )
 				{
@@ -91,9 +91,9 @@ namespace Bloom
 			return writer.finalise();
 		}
 
-		GLSL::Shader getCombineProgram( RenderSystem * renderSystem )
+		glsl::Shader getCombineProgram( RenderSystem * renderSystem )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs

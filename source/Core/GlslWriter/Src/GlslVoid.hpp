@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslType.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct Void
 		: public Type

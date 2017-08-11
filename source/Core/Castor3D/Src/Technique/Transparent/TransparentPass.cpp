@@ -1,4 +1,4 @@
-#include "TransparentPass.hpp"
+﻿#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -33,14 +33,14 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
-			if ( getShadowType( sceneFlags ) != GLSL::ShadowType::eNone
-				&& !p_program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+			if ( getShadowType( sceneFlags ) != glsl::ShadowType::eNone
+				&& !p_program.findUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.createUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional
+				p_program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
-				p_program.createUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot
+				p_program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot
 					, ShaderType::ePixel );
-				p_program.createUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint
+				p_program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowPoint
 					, ShaderType::ePixel, 6u );
 			}
 
@@ -140,9 +140,6 @@ namespace castor3d
 			, false
 			, nullptr
 			, p_config }
-		, m_directionalShadowMap{ *p_scene.getEngine() }
-		, m_spotShadowMap{ *p_scene.getEngine() }
-		, m_pointShadowMap{ *p_scene.getEngine() }
 	{
 	}
 
@@ -150,89 +147,12 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::render( RenderInfo & p_info, bool p_shadows )
+	void TransparentPass::render( RenderInfo & p_info
+		, ShadowMapLightTypeArray & shadowMaps )
 	{
 		m_scene.getLightCache().bindLights();
-		doRender( p_info, p_shadows );
+		doRender( p_info, shadowMaps );
 		m_scene.getLightCache().unbindLights();
-	}
-
-	void TransparentPass::addShadowProducer( Light & p_light )
-	{
-		if ( p_light.isShadowProducer() )
-		{
-			switch ( p_light.getLightType() )
-			{
-			case LightType::eDirectional:
-				m_directionalShadowMap.addLight( p_light );
-				break;
-
-			case LightType::ePoint:
-				m_pointShadowMap.addLight( p_light );
-				break;
-
-			case LightType::eSpot:
-				m_spotShadowMap.addLight( p_light );
-				break;
-			}
-		}
-	}
-
-	bool TransparentPass::initialiseShadowMaps()
-	{
-		m_scene.getLightCache().forEach( [this]( Light & p_light )
-		{
-			addShadowProducer( p_light );
-		} );
-
-		bool result = m_directionalShadowMap.initialise();
-
-		if ( result )
-		{
-			result = m_spotShadowMap.initialise();
-		}
-
-		if ( result )
-		{
-			result = m_pointShadowMap.initialise();
-		}
-
-		ENSURE( result );
-		return result;
-	}
-
-	void TransparentPass::cleanupShadowMaps()
-	{
-		m_pointShadowMap.cleanup();
-		m_spotShadowMap.cleanup();
-		m_directionalShadowMap.cleanup();
-	}
-
-	void TransparentPass::updateShadowMaps( RenderQueueArray & p_queues )
-	{
-		m_pointShadowMap.update( *m_camera, p_queues );
-		m_spotShadowMap.update( *m_camera, p_queues );
-		m_directionalShadowMap.update( *m_camera, p_queues );
-	}
-
-	void TransparentPass::renderShadowMaps()
-	{
-		m_directionalShadowMap.render();
-		m_pointShadowMap.render();
-		m_spotShadowMap.render();
-	}
-
-	void TransparentPass::doGetDepthMaps( DepthMapArray & p_depthMaps )
-	{
-		p_depthMaps.push_back( std::ref( m_directionalShadowMap.getTexture() ) );
-		p_depthMaps.push_back( std::ref( m_spotShadowMap.getTexture() ) );
-
-		for ( auto & map : m_pointShadowMap.getTextures() )
-		{
-			p_depthMaps.push_back( std::ref( map ) );
-		}
-
-		auto & scene = *getEngine()->getRenderSystem()->getTopScene();
 	}
 
 	void TransparentPass::doPrepareFrontPipeline( ShaderProgram & p_program
@@ -300,12 +220,12 @@ namespace castor3d
 		}
 	}
 
-	GLSL::Shader TransparentPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
@@ -417,12 +337,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader TransparentPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
@@ -479,8 +399,8 @@ namespace castor3d
 
 		auto lighting = legacy::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -582,7 +502,7 @@ namespace castor3d
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
 
-			if ( getFogType( sceneFlags ) != GLSL::FogType::eDisabled )
+			if ( getFogType( sceneFlags ) != glsl::FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( colour, length( wvPosition ), wvPosition.y() );
@@ -599,15 +519,15 @@ namespace castor3d
 
 			//// (9)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 0.03_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (8)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( GLSL::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (7)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( GLSL::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (other)
 			//auto a = writer.declLocale( cuT( "a" )
@@ -627,12 +547,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader TransparentPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
@@ -690,8 +610,8 @@ namespace castor3d
 
 		auto lighting = pbr::mr::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -790,15 +710,15 @@ namespace castor3d
 
 			//// (9)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 0.03_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (8)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( GLSL::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (7)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( GLSL::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (other)
 			//auto a = writer.declLocale( cuT( "a" )
@@ -818,12 +738,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader TransparentPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
@@ -881,8 +801,8 @@ namespace castor3d
 
 		auto lighting = pbr::sg::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -981,15 +901,15 @@ namespace castor3d
 
 			//// (9)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 0.03_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (8)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( GLSL::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (7)
 			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( GLSL::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( GLSL::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
 
 			//// (other)
 			//auto a = writer.declLocale( cuT( "a" )

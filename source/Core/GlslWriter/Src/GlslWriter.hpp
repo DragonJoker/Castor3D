@@ -34,7 +34,7 @@ SOFTWARE.
 
 #include <map>
 
-namespace GLSL
+namespace glsl
 {
 	struct GlslWriterConfig
 	{

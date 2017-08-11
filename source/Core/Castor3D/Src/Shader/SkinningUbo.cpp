@@ -30,42 +30,42 @@ namespace castor3d
 		m_ubo.bindTo( SkinningUbo::BindingPoint );
 	}
 
-	void SkinningUbo::declare( GLSL::GlslWriter & p_writer
+	void SkinningUbo::declare( glsl::GlslWriter & p_writer
 		, ProgramFlags const & p_flags )
 	{
 		if ( checkFlag( p_flags, ProgramFlag::eSkinning ) )
 		{
 			if ( checkFlag( p_flags, ProgramFlag::eInstantiation ) )
 			{
-				GLSL::Ssbo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
-				auto c3d_mtxBones = skinning.declMemberArray< GLSL::Mat4 >( ShaderProgram::Bones, checkFlag( p_flags, ProgramFlag::eSkinning ) );
+				glsl::Ssbo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
+				auto c3d_mtxBones = skinning.declMemberArray< glsl::Mat4 >( ShaderProgram::Bones, checkFlag( p_flags, ProgramFlag::eSkinning ) );
 				skinning.end();
 			}
 			else
 			{
-				GLSL::Ubo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
-				auto c3d_mtxBones = skinning.declMember< GLSL::Mat4 >( ShaderProgram::Bones, 400, checkFlag( p_flags, ProgramFlag::eSkinning ) );
+				glsl::Ubo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
+				auto c3d_mtxBones = skinning.declMember< glsl::Mat4 >( ShaderProgram::Bones, 400, checkFlag( p_flags, ProgramFlag::eSkinning ) );
 				skinning.end();
 			}
 		}
 	}
 
-	GLSL::Mat4 SkinningUbo::computeTransform( GLSL::GlslWriter & p_writer
+	glsl::Mat4 SkinningUbo::computeTransform( glsl::GlslWriter & p_writer
 		, ProgramFlags const & p_flags )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto bone_ids0 = p_writer.getBuiltin< IVec4 >( ShaderProgram::BoneIds0 );
 		auto bone_ids1 = p_writer.getBuiltin< IVec4 >( ShaderProgram::BoneIds1 );
 		auto weights0 = p_writer.getBuiltin< Vec4 >( ShaderProgram::Weights0 );
 		auto weights1 = p_writer.getBuiltin< Vec4 >( ShaderProgram::Weights1 );
-		auto c3d_mtxModel = p_writer.getBuiltin< GLSL::Mat4 >( RenderPipeline::MtxModel );
-		auto c3d_mtxBones = p_writer.getBuiltinArray< GLSL::Mat4 >( ShaderProgram::Bones );
+		auto c3d_mtxModel = p_writer.getBuiltin< glsl::Mat4 >( RenderPipeline::MtxModel );
+		auto c3d_mtxBones = p_writer.getBuiltinArray< glsl::Mat4 >( ShaderProgram::Bones );
 		auto mtxBoneTransform = p_writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( checkFlag( p_flags, ProgramFlag::eInstantiation ) )
 		{
-			auto gl_InstanceID = p_writer.getBuiltin< GLSL::Int >( cuT( "gl_InstanceID" ) );
-			auto transform = p_writer.getBuiltin< GLSL::Mat4 >( cuT( "transform" ) );
+			auto gl_InstanceID = p_writer.getBuiltin< glsl::Int >( cuT( "gl_InstanceID" ) );
+			auto transform = p_writer.getBuiltin< glsl::Mat4 >( cuT( "transform" ) );
 			auto mtxInstanceOffset = p_writer.declLocale< Int >( cuT( "mtxInstanceOffset" )
 				, gl_InstanceID * 400_i );
 			mtxBoneTransform = c3d_mtxBones[mtxInstanceOffset + bone_ids0[0_i]] * weights0[0_i];

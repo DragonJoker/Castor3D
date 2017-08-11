@@ -45,7 +45,7 @@ namespace castor3d
 	{
 		m_fogType.setValue( int( p_fog.getType() ) );
 
-		if ( p_fog.getType() != GLSL::FogType::eDisabled )
+		if ( p_fog.getType() != glsl::FogType::eDisabled )
 		{
 			m_fogDensity.setValue( p_fog.getDensity() );
 		}

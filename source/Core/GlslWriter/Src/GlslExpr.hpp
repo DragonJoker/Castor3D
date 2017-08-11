@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslKeywords.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct Expr
 	{

@@ -244,7 +244,7 @@ namespace castor3d
 		 *\param[in]	p_target	Le shader object concerné.
 		 *\param[in]	p_source	Le code de la source.
 		 */
-		C3D_API void setSource( ShaderType p_target, GLSL::Shader const & p_source );
+		C3D_API void setSource( ShaderType p_target, glsl::Shader const & p_source );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source.

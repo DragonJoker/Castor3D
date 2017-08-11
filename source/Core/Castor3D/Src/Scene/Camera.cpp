@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+﻿#include "Camera.hpp"
 
 #include "Engine.hpp"
 
@@ -76,14 +76,17 @@ namespace castor3d
 		m_notifyIndex.disconnect();
 	}
 
-	void Camera::attachTo( SceneNodeSPtr p_node )
+	void Camera::attachTo( SceneNodeSPtr node )
 	{
-		MovableObject::attachTo( p_node );
-
-		if ( p_node )
+		if ( node != getParent() )
 		{
-			m_notifyIndex = p_node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
-			onNodeChanged( *p_node );
+			MovableObject::attachTo( node );
+
+			if ( node )
+			{
+				m_notifyIndex = node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
+				onNodeChanged( *node );
+			}
 		}
 	}
 

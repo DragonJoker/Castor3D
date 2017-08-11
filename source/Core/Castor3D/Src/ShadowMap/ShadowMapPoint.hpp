@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,8 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_ShadowMapPoint_H___
 #define ___C3D_ShadowMapPoint_H___
 
-#include "ShadowMap.hpp"
-#include "Render/Viewport.hpp"
+#include <ShadowMap/ShadowMap.hpp>
+#include <Render/Viewport.hpp>
 
 namespace castor3d
 {
@@ -45,49 +45,41 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
+		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
+		 *\param[in]	scene	La scène.
 		 */
-		C3D_API ShadowMapPoint( Engine & engine );
+		ShadowMapPoint( Engine & engine
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapPoint();
+		~ShadowMapPoint();
 		/**
-		 *\~english
-		 *\brief		Updates the passes, selecting the lights that will project shadows.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	p_camera	The viewer camera.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
-		 *\~french
-		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	p_camera	La caméra de l'observateur.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\copydoc		castor3d::ShadowMap::update
 		 */
-		C3D_API void update( Camera const & p_camera
-			, RenderQueueArray & p_queues );
+		void update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index )override;
 		/**
-		 *\~english
-		 *\brief		Renders the selected lights shadow map.
-		 *\~french
-		 *\brief		Dessine les shadow maps des lumières sélectionnées.
+		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		C3D_API void render();
+		void render()override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit & getTexture( uint32_t p_index )
+		inline TextureUnit & getTexture()
 		{
-			REQUIRE( p_index < m_shadowMaps.size() );
-			return m_shadowMaps[p_index];
+			return m_shadowMap;
 		}
 		/**
 		 *\~english
@@ -95,41 +87,12 @@ namespace castor3d
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit const & getTexture( uint32_t p_index )const
+		inline TextureUnit const & getTexture()const
 		{
-			REQUIRE( p_index < m_shadowMaps.size() );
-			return m_shadowMaps[p_index];
-		}
-		/**
-		 *\~english
-		 *\return		The shadow maps.
-		 *\~english
-		 *\return		Les maps d'ombres.
-		 */
-		inline std::vector< TextureUnit > & getTextures( )
-		{
-			return m_shadowMaps;
-		}
-		/**
-		 *\~english
-		 *\return		The shadow maps.
-		 *\~english
-		 *\return		Les maps d'ombres.
-		 */
-		inline std::vector< TextureUnit > const & getTextures()const
-		{
-			return m_shadowMaps;
+			return m_shadowMap;
 		}
 
 	private:
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetMaxPasses
-		 */
-		int32_t doGetMaxPasses()const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetSize
-		 */
-		castor::Size doGetSize()const override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
@@ -139,10 +102,6 @@ namespace castor3d
 		 */
 		void doCleanup()override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::doCreatePass
-		 */
-		ShadowMapPassSPtr doCreatePass( Light & p_light )const override;
-		/**
 		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
 		 */
 		void doUpdateFlags( TextureChannels & textureFlags
@@ -151,7 +110,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
-		GLSL::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
@@ -167,10 +126,7 @@ namespace castor3d
 		DepthStencilRenderBufferSPtr m_depthBuffer;
 		//!\~english	The attach between colour buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		std::vector< CubeColourAttachment > m_colourAttachs;
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
-		std::vector< TextureUnit > m_shadowMaps;
+		CubeColourAttachment m_colourAttach;
 	};
 }
 

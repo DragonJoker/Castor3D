@@ -85,8 +85,9 @@ namespace castor3d
 		auto & scene = *m_camera->getScene();
 		RenderInfo info;
 		m_camera->apply();
-		m_opaquePass->render( info, false );
+		ShadowMapLightTypeArray shadowMaps;
+		m_opaquePass->render( info, shadowMaps );
 		scene.renderBackground( getOwner()->getSize(), *m_camera );
-		m_transparentPass->render( info, false );
+		m_transparentPass->render( info, shadowMaps );
 	}
 }

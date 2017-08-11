@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -71,15 +71,6 @@ namespace castor3d
 		 *\return		La cible de rendu
 		 */
 		C3D_API RenderTargetSPtr add( TargetType p_type );
-		/**
-		 *\~english
-		 *\brief		adds a shadow producing light source.
-		 *\param[in]	p_light	The light source.
-		 *\~french
-		 *\brief		Ajoute une source lumineuse produisant des ombres.
-		 *\param[in]	p_light	La source lumineuse.
-		 */
-		C3D_API void addShadowProducer( Light & p_light );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop

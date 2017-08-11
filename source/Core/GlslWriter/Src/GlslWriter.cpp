@@ -8,21 +8,21 @@
 
 #include <Log/Logger.hpp>
 
-namespace GLSL
+namespace glsl
 {
 	GlslWriter::GlslWriter( GlslWriterConfig const & p_config )
-		: m_keywords( GLSL::KeywordsBase::get( p_config ) )
+		: m_keywords( glsl::KeywordsBase::get( p_config ) )
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( p_config )
 	{
 		m_lightingFactory.registerType( PhongLightingModel::Name, &PhongLightingModel::create );
 		m_lightingFactory.registerType( MetallicBrdfLightingModel::Name, &MetallicBrdfLightingModel::create );
 		m_lightingFactory.registerType( SpecularBrdfLightingModel::Name, &SpecularBrdfLightingModel::create );
-		*this << GLSL::Version() << Endl();
+		*this << glsl::Version() << Endl();
 	}
 
 	GlslWriter::GlslWriter( GlslWriter const & p_rhs )
-		: m_keywords( GLSL::KeywordsBase::get( p_rhs.m_config ) )
+		: m_keywords( glsl::KeywordsBase::get( p_rhs.m_config ) )
 		, m_attributeIndex( p_rhs.m_attributeIndex )
 		, m_layoutIndex( p_rhs.m_layoutIndex )
 		, m_uniform( p_rhs.m_uniform )

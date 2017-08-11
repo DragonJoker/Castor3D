@@ -121,7 +121,7 @@ namespace castor3d
 }
 
 #define UBO_BILLBOARD( Writer )\
-	GLSL::Ubo billboard{ writer, castor3d::ShaderProgram::BufferBillboards, castor3d::BillboardUbo::BindingPoint };\
+	glsl::Ubo billboard{ writer, castor3d::ShaderProgram::BufferBillboards, castor3d::BillboardUbo::BindingPoint };\
 	auto c3d_v2iDimensions = billboard.declMember< IVec2 >( castor3d::ShaderProgram::Dimensions );\
 	auto c3d_v2iWindowSize = billboard.declMember< IVec2 >( castor3d::ShaderProgram::WindowSize );\
 	billboard.end()

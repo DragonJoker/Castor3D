@@ -86,7 +86,7 @@ namespace castor3d
 		 *\param[in]	p_writer	Le GLSL writer.
 		 *\param[in]	p_flags		Les indicateurs du programme.
 		 */
-		C3D_API static void declare( GLSL::GlslWriter & p_writer
+		C3D_API static void declare( glsl::GlslWriter & p_writer
 			, ProgramFlags const & p_flags );
 		/**
 		 *\~english
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\param[in]	p_flags		Les indicateurs du programme.
 		 *\return		La matrice résultat.
 		 */
-		C3D_API static GLSL::Mat4 computeTransform( GLSL::GlslWriter & p_writer
+		C3D_API static glsl::Mat4 computeTransform( glsl::GlslWriter & p_writer
 			, ProgramFlags const & p_flags );
 		/**
 		 *\~english

@@ -15,7 +15,7 @@
 
 using namespace castor;
 using namespace castor3d;
-using namespace GLSL;
+using namespace glsl;
 
 namespace HejlBurgessDawson
 {
@@ -35,9 +35,9 @@ namespace HejlBurgessDawson
 		return std::make_shared< ToneMapping >( engine, p_parameters );
 	}
 
-	GLSL::Shader ToneMapping::doCreate()
+	glsl::Shader ToneMapping::doCreate()
 	{
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 

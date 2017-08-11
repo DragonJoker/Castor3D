@@ -80,7 +80,7 @@ namespace castor3d
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de filtrage d'ombres.
 	 */
-	C3D_API GLSL::ShadowType getShadowType( SceneFlags const & p_flags );
+	C3D_API glsl::ShadowType getShadowType( SceneFlags const & p_flags );
 	/**
 	 *\~english
 	 *\brief		Gives the fog type matching the given flags.
@@ -91,7 +91,7 @@ namespace castor3d
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de brouillard.
 	 */
-	C3D_API GLSL::FogType getFogType( SceneFlags const & p_flags );
+	C3D_API glsl::FogType getFogType( SceneFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0

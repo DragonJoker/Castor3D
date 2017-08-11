@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslVec.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename ValueT >
 	struct Mat2T

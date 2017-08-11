@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -103,81 +103,40 @@ namespace castor3d
 		 */
 		C3D_API virtual ~ForwardRenderTechniquePass();
 		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\param[out]	p_info		Receives the render informations.
-		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[out]	p_info		Reçoit les informations de rendu.
-		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
+		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		C3D_API void render( RenderInfo & p_info, bool p_shadows )override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::initialiseShadowMaps
-		 */
-		C3D_API bool initialiseShadowMaps()override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::cleanupShadowMaps
-		 */
-		C3D_API void cleanupShadowMaps()override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::updateShadowMaps
-		 */
-		C3D_API void updateShadowMaps( RenderQueueArray & p_queues )override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::renderShadowMaps
-		 */
-		C3D_API void renderShadowMaps()override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::addShadowProducer
-		 */
-		C3D_API void addShadowProducer( Light & p_light )override;
+		C3D_API void render( RenderInfo & p_info
+			, ShadowMapLightTypeArray & shadowMaps )override;
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::doGetDepthMaps
-		 */
-		C3D_API void doGetDepthMaps( DepthMapArray & p_depthMaps )override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		C3D_API GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		C3D_API GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
-
-	private:
-		//!\~english	The shadow map used for directional lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type directionnelles.
-		ShadowMapDirectional m_directionalShadowMap;
-		//!\~english	The shadow map used for spot lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type spot.
-		ShadowMapSpot m_spotShadowMap;
-		//!\~english	The shadow map used for pont lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type point.
-		ShadowMapPoint m_pointShadowMap;
 	};
 }
 

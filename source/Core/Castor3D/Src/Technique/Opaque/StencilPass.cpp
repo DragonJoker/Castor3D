@@ -27,9 +27,9 @@ namespace castor3d
 
 	namespace
 	{
-		GLSL::Shader doGetVertexShader( Engine const & engine )
+		glsl::Shader doGetVertexShader( Engine const & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
@@ -48,9 +48,9 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader doGetPixelShader( Engine const & engine )
+		glsl::Shader doGetPixelShader( Engine const & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()

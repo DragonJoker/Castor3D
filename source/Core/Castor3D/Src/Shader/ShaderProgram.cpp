@@ -321,7 +321,7 @@ namespace castor3d
 		resetToCompile();
 	}
 
-	void ShaderProgram::setSource( ShaderType p_target, GLSL::Shader const & p_source )
+	void ShaderProgram::setSource( ShaderType p_target, glsl::Shader const & p_source )
 	{
 		if ( m_shaders[size_t( p_target )] )
 		{

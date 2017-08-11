@@ -2,7 +2,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	Fog::Fog( FogType p_flags, GlslWriter & p_writer )
 		: m_writer{ p_writer }
