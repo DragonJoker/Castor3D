@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -270,6 +270,15 @@ namespace Testing
 		virtual void doRegisterTests() = 0;
 
 	protected:
+		inline void Fail( char const * const p_file
+			, char const * const p_function
+			, uint32_t const p_line
+			, char const * const p_conditionName )
+		{
+			ReportFailure();
+			std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
+		}
+
 		template< typename Type >
 		inline bool Check( Lazy< Type > const & p_condition
 			, char const * const p_file
@@ -550,6 +559,9 @@ namespace Testing
 	{\
 		return E;\
 	} ) )
+
+#	define CT_FAILURE( x )\
+	Fail( __FILE__, __FUNCTION__, __LINE__, x )
 
 #	define CT_CHECK( x )\
 	Check( LAZY( ( x ) ), __FILE__, __FUNCTION__, __LINE__, #x )

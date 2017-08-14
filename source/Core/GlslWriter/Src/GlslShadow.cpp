@@ -21,7 +21,8 @@ namespace glsl
 		doDeclareGetRandom();
 		doDeclareGetShadowOffset();
 		doDeclareGetLightSpacePosition();
-		doDeclarePcfSample();
+		doDeclarePcfSample2D();
+		doDeclarePcfSampleCube();
 		doDeclareComputeDirectionalShadow();
 		doDeclareComputeSpotShadow();
 		doDeclareComputePointShadow();
@@ -33,7 +34,7 @@ namespace glsl
 		doDeclareGetRandom();
 		doDeclareGetShadowOffset();
 		doDeclareGetLightSpacePosition();
-		doDeclarePcfSampleDirectional();
+		doDeclarePcfSample2D();
 		doDeclareComputeDirectionalShadow();
 	}
 
@@ -42,7 +43,7 @@ namespace glsl
 		auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCubeShadow >( MapShadowPoint );
 		doDeclareGetRandom();
 		doDeclareGetShadowOffset();
-		doDeclarePcfSamplePoint();
+		doDeclarePcfSampleCube();
 		doDeclareComputeOnePointShadow();
 	}
 
@@ -52,7 +53,7 @@ namespace glsl
 		doDeclareGetRandom();
 		doDeclareGetShadowOffset();
 		doDeclareGetLightSpacePosition();
-		doDeclarePcfSampleSpot();
+		doDeclarePcfSample2D();
 		doDeclareComputeOneSpotShadow();
 	}
 
@@ -171,9 +172,12 @@ namespace glsl
 				, Vec3 const & lightDirection
 				, Vec3 const & normal )
 			{
+				auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
 				auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 					, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-				m_writer.returnStmt( m_sampleDirectional( vec3( lightSpacePosition.xy(), lightSpacePosition.z() ) ) );
+				m_writer.returnStmt( m_sample2D( lightSpacePosition
+					, 0.0004_f
+					, c3d_mapShadowDirectional ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -190,9 +194,12 @@ namespace glsl
 				, Vec3 const & normal
 				, Int const & index )
 			{
+				auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot, SpotShadowMapCount );
 				auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 					, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-				m_writer.returnStmt( m_sampleSpot( vec3( lightSpacePosition.xy(), lightSpacePosition.z() ), index ) );
+				m_writer.returnStmt( m_sample2D( lightSpacePosition
+					, 0.002_f
+					, c3d_mapShadowSpot[index] ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -209,6 +216,7 @@ namespace glsl
 			, Vec3 const & normal
 			, Int const & index )
 			{
+				auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 				auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 					, worldSpacePosition - lightPosition );
 				auto offset = m_writer.declLocale( cuT( "offset" )
@@ -216,7 +224,9 @@ namespace glsl
 				auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
 					, worldSpacePosition + m_writer.paren( normal * offset ) );
 				vertexToLight = worldSpace - lightPosition;
-				m_writer.returnStmt( m_samplePoint( vertexToLight, length( vertexToLight ) / 4000.0_f, index ) );
+				m_writer.returnStmt( m_sampleCube( vertexToLight
+					, length( vertexToLight ) / 4000.0_f
+					, c3d_mapShadowPoint[index] ) );
 			}
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 			, InVec3( &m_writer, cuT( "lightPosition" ) )
@@ -232,9 +242,12 @@ namespace glsl
 				, Vec3 const & lightDirection
 				, Vec3 const & normal )
 			{
+				auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot );
 				auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 					, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-				m_writer.returnStmt( m_sampleOneSpot( vec3( lightSpacePosition.xy(), lightSpacePosition.z() ) ) );
+				m_writer.returnStmt( m_sample2D( lightSpacePosition
+					, 0.002_f
+					, c3d_mapShadowSpot ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -249,6 +262,7 @@ namespace glsl
 			, Vec3 const & lightPosition
 			, Vec3 const & normal )
 			{
+				auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint );
 				auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 					, worldSpacePosition - lightPosition );
 				auto offset = m_writer.declLocale( cuT( "offset" )
@@ -256,54 +270,22 @@ namespace glsl
 				auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
 					, worldSpacePosition + m_writer.paren( normal * offset ) );
 				vertexToLight = worldSpace - lightPosition;
-				m_writer.returnStmt( m_sampleOnePoint( vertexToLight, length( vertexToLight ) / 4000.0_f ) );
+				m_writer.returnStmt( m_sampleCube( vertexToLight
+					, length( vertexToLight ) / 4000.0_f
+					, c3d_mapShadowPoint ) );
 			}
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 			, InVec3( &m_writer, cuT( "lightPosition" ) )
 			, InVec3( &m_writer, cuT( "normal" ) ) );
 	}
 
-	void Shadow::doDeclarePcfSample()
+	void Shadow::doDeclarePcfSample2D()
 	{
-		m_sampleDirectional = m_writer.implementFunction< Float >( cuT( "SampleDirectional" )
-			, [&]( Vec3 const & coords )
-			{
-				auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
-				auto shadowStep = m_writer.declLocale( cuT( "shadowStep" )
-					, 0.0004_f );
-				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-					, 0.0_f );
-				auto samples = m_writer.declLocale( cuT( "samples" )
-					, 4.0_f );
-				auto offset = m_writer.declLocale( cuT( "offset" )
-					, shadowStep * 1.5 );
-				auto numSamplesUsed = m_writer.declLocale( cuT( "numSamplesUsed" )
-					, 0.0_f );
-
-				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
-				{
-					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
-					{
-						shadowFactor += 1.0_f - texture( c3d_mapShadowDirectional, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
-						numSamplesUsed += 1.0_f;
-					}
-					ROF;
-				}
-				ROF;
-
-				m_writer.returnStmt( shadowFactor / numSamplesUsed );
-			}
-			, InVec3{ &m_writer, cuT( "coords" ) } );
-
-		m_sampleSpot = m_writer.implementFunction< Float >( cuT( "SampleSpot" )
+		m_sample2D = m_writer.implementFunction< Float >( cuT( "pcfSample2D" )
 			, [&]( Vec3 const & coords
-				, Int const & index )
+				, Float const & shadowStep
+				, Sampler2DShadow const & shadowMap )
 			{
-				auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
-				auto findex = m_writer.declLocale( cuT( "findex" )
-					, m_writer.cast< Float >( index ) );
-				auto shadowStep = m_writer.declLocale( cuT( "shadowStep" )
-					, 0.002_f );
 				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 					, 0.0_f );
 				auto samples = m_writer.declLocale( cuT( "samples" )
@@ -317,7 +299,7 @@ namespace glsl
 				{
 					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
 					{
-						shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec4( coords.xy() + vec2( x, y ), findex, coords.z() ) );
+						shadowFactor += 1.0_f - texture( shadowMap, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
 						numSamplesUsed += 1.0_f;
 					}
 					ROF;
@@ -327,14 +309,17 @@ namespace glsl
 				m_writer.returnStmt( shadowFactor / numSamplesUsed );
 			}
 			, InVec3{ &m_writer, cuT( "coords" ) }
-			, InInt{ &m_writer, cuT( "index" ) } );
+			, InFloat{ &m_writer, cuT( "shadowStep" ) }
+			, InParam< Sampler2DShadow >{ &m_writer, cuT( "shadowMap" ) } );
+	}
 
-		m_samplePoint = m_writer.implementFunction< Float >( cuT( "SamplePoint" )
+	void Shadow::doDeclarePcfSampleCube()
+	{
+		m_sampleCube = m_writer.implementFunction< Float >( cuT( "pcfSampleCube" )
 			, [&]( Vec3 const & direction
 				, Float const & depth
-				, Int const & index )
+				, SamplerCubeShadow const & shadowMap )
 			{
-				auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 					, 0.0_f );
 				auto samples = m_writer.declLocale( cuT( "samples" )
@@ -350,7 +335,7 @@ namespace glsl
 					{
 						FOR( m_writer, Float, z, -offset, "z < offset", "z += offset / (samples * 0.5)" )
 						{
-							shadowFactor += 1.0_f - texture( c3d_mapShadowPoint[index], vec4( direction + vec3( x, y, z ), depth ) );
+							shadowFactor += 1.0_f - texture( shadowMap, vec4( direction + vec3( x, y, z ), depth ) );
 							numSamplesUsed += 1.0_f;
 						}
 						ROF;
@@ -363,111 +348,6 @@ namespace glsl
 			}
 			, InVec3{ &m_writer, cuT( "direction" ) }
 			, InFloat{ &m_writer, cuT( "depth" ) }
-			, InInt{ &m_writer, cuT( "index" ) } );
-	}
-
-	void Shadow::doDeclarePcfSampleDirectional()
-	{
-		m_sampleDirectional = m_writer.implementFunction< Float >( cuT( "SampleDirectional" )
-			, [&]( Vec3 const & coords )
-			{
-				auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
-				auto shadowStep = m_writer.declLocale( cuT( "shadowStep" )
-					, 0.0004_f );
-				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-					, 0.0_f );
-				auto samples = m_writer.declLocale( cuT( "samples" )
-					, 4.0_f );
-				auto offset = m_writer.declLocale( cuT( "offset" )
-					, shadowStep * 1.5 );
-				auto numSamplesUsed = m_writer.declLocale( cuT( "numSamplesUsed" )
-					, 0.0_f );
-
-				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
-				{
-					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
-					{
-						shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
-						numSamplesUsed += 1.0_f;
-					}
-					ROF;
-				}
-				ROF;
-
-				m_writer.returnStmt( shadowFactor / numSamplesUsed );
-			}
-			, InVec3{ &m_writer, cuT( "coords" ) } );
-	}
-
-	void Shadow::doDeclarePcfSampleSpot()
-	{
-		m_sampleOneSpot = m_writer.implementFunction< Float >( cuT( "SampleSpot" )
-			, [&]( Vec3 const & coords )
-			{
-				auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot );
-				auto shadowStep = m_writer.declLocale( cuT( "shadowStep" )
-					, 0.002_f );
-				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-					, 0.0_f );
-				auto samples = m_writer.declLocale( cuT( "samples" )
-					, 4.0_f );
-				auto offset = m_writer.declLocale( cuT( "offset" )
-					, shadowStep * 1.5 );
-				auto numSamplesUsed = m_writer.declLocale( cuT( "numSamplesUsed" )
-					, 0.0_f );
-
-				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
-				{
-					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
-					{
-						shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
-						numSamplesUsed += 1.0_f;
-					}
-					ROF;
-				}
-				ROF;
-
-				m_writer.returnStmt( shadowFactor / numSamplesUsed );
-			}
-			, InVec3{ &m_writer, cuT( "coords" ) } );
-	}
-
-	void Shadow::doDeclarePcfSamplePoint()
-	{
-		m_sampleOnePoint = m_writer.implementFunction< Float >( cuT( "SamplePoint" )
-			, [&]( Vec3 const & direction
-				, Float const & depth )
-			{
-				auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
-				auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-					, 0.0_f );
-				auto samples = m_writer.declLocale( cuT( "samples" )
-					, 4.0_f );
-				auto offset = m_writer.declLocale( cuT( "offset" )
-					, max( 0.00001_f, 20.0_f * depth ) );
-				auto step = m_writer.declLocale( cuT( "step" )
-					, offset / m_writer.paren( samples * 0.5 ) );
-				auto numSamplesUsed = m_writer.declLocale( cuT( "numSamplesUsed" )
-					, 0.0_f );
-
-				FOR( m_writer, Float, x, -offset, "x < offset", "x += step" )
-				{
-					FOR( m_writer, Float, y, -offset, "y < offset", "y += step" )
-					{
-						FOR( m_writer, Float, z, -offset, "z < offset", "z += step" )
-						{
-							shadowFactor += 1.0_f - texture( c3d_mapShadowPoint, vec4( direction + vec3( x, y, z ), depth ) );
-							numSamplesUsed += 1.0_f;
-						}
-						ROF;
-					}
-					ROF;
-				}
-				ROF;
-
-				m_writer.returnStmt( shadowFactor / numSamplesUsed );
-			}
-			, InVec3{ &m_writer, cuT( "direction" ) }
-			, InFloat{ &m_writer, cuT( "depth" ) } );
+			, InParam< SamplerCubeShadow >{ &m_writer, cuT( "shadowMap" ) } );
 	}
 }

@@ -104,16 +104,11 @@ namespace castor
 		{
 			if ( m_signal )
 			{
-				m_signal->removeConnection( rhs );
+				m_signal->replaceConnection( rhs, *this );
 			}
 
 			rhs.m_signal = nullptr;
 			rhs.m_connection = 0u;
-
-			if ( m_signal )
-			{
-				m_signal->addConnection( *this );
-			}
 		}
 		/**
 		 *\~english
@@ -127,13 +122,18 @@ namespace castor
 		{
 			if ( &rhs != this )
 			{
+				disconnect();
 				m_connection = rhs.m_connection;
 				m_signal = rhs.m_signal;
-				disconnect();
 #if !defined( NDEBUG )
 				m_stack = std::move( rhs.m_stack );
 #endif
-				m_signal->addConnection( *this );
+
+				if ( m_signal )
+				{
+					m_signal->replaceConnection( rhs, *this );
+				}
+
 				rhs.m_signal = nullptr;
 				rhs.m_connection = 0u;
 			}
@@ -356,7 +356,7 @@ namespace castor
 		 *\param[in]	newConnection	La connexion à ajouter.
 		 */
 		void replaceConnection( my_connection & oldConnection
-			, my_connection newConnection )
+			, my_connection & newConnection )
 		{
 			removeConnection( oldConnection );
 			addConnection( newConnection );

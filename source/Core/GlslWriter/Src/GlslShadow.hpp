@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -55,10 +55,8 @@ namespace glsl
 		void doDeclareComputePointShadow();
 		void doDeclareComputeOneSpotShadow();
 		void doDeclareComputeOnePointShadow();
-		void doDeclarePcfSample();
-		void doDeclarePcfSampleDirectional();
-		void doDeclarePcfSampleSpot();
-		void doDeclarePcfSamplePoint();
+		void doDeclarePcfSample2D();
+		void doDeclarePcfSampleCube();
 
 	private:
 		GlslWriter & m_writer;
@@ -70,11 +68,8 @@ namespace glsl
 		Function< Float, InVec3, InVec3, InVec3, InInt > m_computePoint;
 		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_computeOneSpot;
 		Function< Float, InVec3, InVec3, InVec3 > m_computeOnePoint;
-		Function< Float, InVec3 > m_sampleDirectional;
-		Function< Float, InVec3, InInt > m_sampleSpot;
-		Function< Float, InVec3, InFloat, InInt > m_samplePoint;
-		Function< Float, InVec3 > m_sampleOneSpot;
-		Function< Float, InVec3, InFloat > m_sampleOnePoint;
+		Function< Float, InVec3, InFloat, InParam< Sampler2DShadow > > m_sample2D;
+		Function< Float, InVec3, InFloat, InParam< SamplerCubeShadow > > m_sampleCube;
 	};
 }
 
