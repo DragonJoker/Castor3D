@@ -65,7 +65,7 @@ namespace GuiCommon
 			break;
 		}
 
-		quat.fromAxisAngle( axis, angle );
+		quat = Quaternion::fromAxisAngle( axis, angle );
 		wxVariant newVariant;
 		newVariant << quat;
 		return newVariant;

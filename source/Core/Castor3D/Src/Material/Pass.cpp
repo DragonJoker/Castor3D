@@ -279,6 +279,17 @@ namespace castor3d
 
 			doPrepareTexture( TextureChannel::eAmbientOcclusion, index );
 
+			doReduceTexture( TextureChannel::eSpecular
+				, getType() == MaterialType::ePbrMetallicRoughness
+					? PixelFormat::eL8
+					: PixelFormat::eR8G8B8 );
+			doReduceTexture( TextureChannel::eGloss
+				, PixelFormat::eL8 );
+			doReduceTexture( TextureChannel::eHeight
+				, PixelFormat::eL8 );
+			doReduceTexture( TextureChannel::eAmbientOcclusion
+				, PixelFormat::eL8 );
+
 			doPrepareOpacity( opacitySource, opacityImage, index );
 
 			auto unit = getTextureUnit( TextureChannel::eDiffuse );
@@ -475,6 +486,26 @@ namespace castor3d
 			if ( unit->getChannel() != TextureChannel( 0 ) )
 			{
 				addFlag( m_textureFlags, unit->getChannel() );
+			}
+		}
+	}
+
+	void Pass::doReduceTexture( TextureChannel channel, PixelFormat format )
+	{
+		auto unit = getTextureUnit( channel );
+
+		if ( unit )
+		{
+			auto texture = unit->getTexture();
+
+			if ( texture && texture->getImage().getBuffer() )
+			{
+				auto buffer = texture->getImage().getBuffer();
+
+				if ( buffer->format() != format )
+				{
+					buffer = PxBufferBase::create( buffer->dimensions(), format, buffer->constPtr(), buffer->format() );
+				}
 			}
 		}
 	}
