@@ -1,4 +1,4 @@
-﻿#include "ShadowMap.hpp"
+#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -12,7 +12,7 @@
 #include "Texture/TextureUnit.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 
@@ -215,7 +215,7 @@ namespace castor3d
 		, ComparisonFunc alphaFunc
 		, glsl::Float const & alpha
 		, glsl::Int const & material
-		, glsl::Materials const & materials )
+		, shader::Materials const & materials )
 	{
 		using namespace glsl;
 

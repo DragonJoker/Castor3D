@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,19 +23,27 @@ SOFTWARE.
 #ifndef ___GLSL_FOG_H___
 #define ___GLSL_FOG_H___
 
-#include "GlslIntrinsics.hpp"
+#include "Castor3DPrerequisites.hpp"
 
-namespace glsl
+#include <GlslIntrinsics.hpp>
+
+namespace castor3d
 {
-	class Fog
+	namespace shader
 	{
-	public:
-		GlslWriter_API Fog( FogType p_flags, GlslWriter & p_writer );
-		GlslWriter_API void applyFog( Vec4 & p_colour, Float const & p_dist, Float const & p_y );
+		class Fog
+		{
+		public:
+			C3D_API Fog( FogType flags
+				, glsl::GlslWriter & writer );
+			C3D_API void applyFog( glsl::Vec4 & colour
+				, glsl::Float const & dist
+				, glsl::Float const & y );
 
-	protected:
-		GlslWriter & m_writer;
-	};
+		protected:
+			glsl::GlslWriter & m_writer;
+		};
+	}
 }
 
 #endif

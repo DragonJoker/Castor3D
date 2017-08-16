@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -12,8 +12,9 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -26,7 +27,7 @@ namespace castor3d
 			, ComparisonFunc alphaFunc
 			, glsl::Float const & alpha
 			, glsl::Int const & material
-			, glsl::Materials const & materials )
+			, shader::Materials const & materials )
 		{
 			using namespace glsl;
 
@@ -260,7 +261,7 @@ namespace castor3d
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
-		LegacyMaterials materials{ writer };
+		shader::LegacyMaterials materials{ writer };
 		materials.declare();
 
 		// UBOs
@@ -307,7 +308,7 @@ namespace castor3d
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
 		glsl::Utils utils{ writer };
 		utils.declareRemoveGamma();
@@ -337,13 +338,13 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			legacy::computePreLightingMapContributions( writer
+			shader::legacy::computePreLightingMapContributions( writer
 				, v3Normal
 				, fMatShininess
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			legacy::computePostLightingMapContributions( writer
+			shader::legacy::computePostLightingMapContributions( writer
 				, v3Diffuse
 				, v3Specular
 				, v3Emissive
@@ -384,7 +385,7 @@ namespace castor3d
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
-		PbrMRMaterials materials{ writer };
+		shader::PbrMRMaterials materials{ writer };
 		materials.declare();
 
 		// UBOs
@@ -434,7 +435,7 @@ namespace castor3d
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
 		glsl::Utils utils{ writer };
 		utils.declareRemoveGamma();
@@ -469,14 +470,14 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			pbr::mr::computePreLightingMapContributions( writer
+			shader::pbr::mr::computePreLightingMapContributions( writer
 				, normal
 				, matMetallic
 				, matRoughness
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			pbr::mr::computePostLightingMapContributions( writer
+			shader::pbr::mr::computePostLightingMapContributions( writer
 				, matAlbedo
 				, matEmissive
 				, matGamma
@@ -540,7 +541,7 @@ namespace castor3d
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 
-		PbrSGMaterials materials{ writer };
+		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 
 		auto c3d_mapDiffuse( writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse
@@ -574,7 +575,7 @@ namespace castor3d
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
 		glsl::Utils utils{ writer };
 		utils.declareRemoveGamma();
@@ -601,14 +602,14 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			pbr::sg::computePreLightingMapContributions( writer
+			shader::pbr::sg::computePreLightingMapContributions( writer
 				, normal
 				, matSpecular
 				, matGlossiness
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			pbr::sg::computePostLightingMapContributions( writer
+			shader::pbr::sg::computePostLightingMapContributions( writer
 				, matDiffuse
 				, matEmissive
 				, matGamma

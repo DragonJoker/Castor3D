@@ -21,9 +21,11 @@
 #include <Texture/TextureUnit.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslFog.hpp"
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 #include <random>
 
@@ -101,7 +103,7 @@ namespace castor3d
 		}
 		
 		glsl::Shader doGetPixelProgram( Engine & engine
-			, glsl::FogType p_fogType )
+			, FogType p_fogType )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
@@ -122,7 +124,7 @@ namespace castor3d
 			glsl::Utils utils{ writer };
 			utils.declareCalcVSPosition();
 
-			glsl::Fog fog{ p_fogType, writer };
+			shader::Fog fog{ p_fogType, writer };
 
 			auto maxComponent = writer.implementFunction< Float >( cuT( "maxComponent" )
 				, [&]( Vec3 const & v )
@@ -170,7 +172,7 @@ namespace castor3d
 		}
 		
 		ShaderProgramSPtr doCreateProgram( Engine & engine
-			, glsl::FogType p_fogType )
+			, FogType p_fogType )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetVertexProgram( engine );
@@ -223,7 +225,7 @@ namespace castor3d
 		, MatrixUbo & p_matrixUbo
 		, SceneUbo & p_sceneUbo
 		, GpInfoUbo & p_gpInfoUbo
-		, glsl::FogType p_fogType )
+		, FogType p_fogType )
 		: m_program{ doCreateProgram( engine, p_fogType ) }
 		, m_geometryBuffers{ doCreateVao( engine, *m_program, p_vbo ) }
 		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfoUbo ) }
@@ -258,10 +260,10 @@ namespace castor3d
 		, m_gpInfo{ engine }
 		, m_programs
 		{
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eDisabled },
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eLinear },
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eExponential },
-			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, glsl::FogType::eSquaredExponential }
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, FogType::eDisabled },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, FogType::eLinear },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, FogType::eExponential },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, FogType::eSquaredExponential }
 		}
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );

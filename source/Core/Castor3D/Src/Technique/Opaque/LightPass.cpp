@@ -20,12 +20,14 @@
 #include <Texture/TextureUnit.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
-#include <GlslPhongLighting.hpp>
-#include <GlslMetallicBrdfLighting.hpp>
-#include <GlslSpecularBrdfLighting.hpp>
+
+#include "Shader/Shaders/GlslFog.hpp"
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
+#include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -466,10 +468,10 @@ namespace castor3d
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
-		auto lighting = legacy::createLightingModel( writer
+		auto lighting = shader::legacy::createLightingModel( writer
 			, type
 			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
-		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
@@ -495,42 +497,42 @@ namespace castor3d
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" ), utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" ), v4Normal.xyz() );
 
-			OutputComponents output{ v3Diffuse, v3Specular };
+			shader::OutputComponents output{ v3Diffuse, v3Specular };
 
 			switch ( type )
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< glsl::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					lighting->computeOneDirectionalLight( light
 						, eye
 						, fMatShininess
 						, iShadowReceiver
-						, FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< glsl::PointLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
 					lighting->computeOnePointLight( light
 						, eye
 						, fMatShininess
 						, iShadowReceiver
-						, FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< glsl::SpotLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 					lighting->computeOneSpotLight( light
 						, eye
 						, fMatShininess
 						, iShadowReceiver
-						, FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 				}
 				break;
@@ -564,10 +566,10 @@ namespace castor3d
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
-		auto lighting = pbr::mr::createLightingModel( writer
+		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, type
 			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
-		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
@@ -596,40 +598,40 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< glsl::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					diffuse = lighting->computeOneDirectionalLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< glsl::PointLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
 					diffuse = lighting->computeOnePointLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< glsl::SpotLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 					diffuse = lighting->computeOneSpotLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 			}
@@ -661,10 +663,10 @@ namespace castor3d
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
-		auto lighting = pbr::sg::createLightingModel( writer
+		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, type
 			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
-		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
@@ -693,40 +695,40 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< glsl::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					litten = lighting->computeOneDirectionalLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< glsl::PointLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
 					litten = lighting->computeOnePointLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< glsl::SpotLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 					litten = lighting->computeOneSpotLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 			}

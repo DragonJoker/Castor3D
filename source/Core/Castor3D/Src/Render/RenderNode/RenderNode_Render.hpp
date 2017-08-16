@@ -35,7 +35,7 @@ namespace castor3d
 	{
 		uint32_t index = p_pipeline.getTexturesCount() + Pass::MinTextureIndex;
 
-		if ( getShadowType( p_pipeline.getFlags().m_sceneFlags ) != glsl::ShadowType::eNone )
+		if ( getShadowType( p_pipeline.getFlags().m_sceneFlags ) != ShadowType::eNone )
 		{
 			for ( auto i = 0u; i < shadowMaps.size(); ++i )
 			{

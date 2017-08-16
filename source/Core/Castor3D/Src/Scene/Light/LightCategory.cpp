@@ -86,31 +86,31 @@ namespace castor3d
 
 	void LightCategory::doCopyComponent( Point2f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * pDst = &( *p_data.getAt( p_index * glsl::MaxLightComponentsCount + p_offset++, 0u ) );
+		uint8_t * pDst = &( *p_data.getAt( p_index * shader::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( pDst, p_component.constPtr(), 2 * sizeof( float ) );
 	}
 
 	void LightCategory::doCopyComponent( Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * pDst = &( *p_data.getAt( p_index * glsl::MaxLightComponentsCount + p_offset++, 0u ) );
+		uint8_t * pDst = &( *p_data.getAt( p_index * shader::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( pDst, p_component.constPtr(), 3 * sizeof( float ) );
 	}
 
 	void LightCategory::doCopyComponent( Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * pDst = &( *p_data.getAt( p_index * glsl::MaxLightComponentsCount + p_offset++, 0u ) );
+		uint8_t * pDst = &( *p_data.getAt( p_index * shader::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( pDst, p_component.constPtr(), 4 * sizeof( float ) );
 	}
 
 	void LightCategory::doCopyComponent( ConstCoords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * pDst = &( *p_data.getAt( p_index * glsl::MaxLightComponentsCount + p_offset++, 0u ) );
+		uint8_t * pDst = &( *p_data.getAt( p_index * shader::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( pDst, p_component.constPtr(), 4 * sizeof( float ) );
 	}
 
 	void LightCategory::doCopyComponent( Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * pDst = &( *p_data.getAt( p_index * glsl::MaxLightComponentsCount + p_offset++, 0u ) );
+		uint8_t * pDst = &( *p_data.getAt( p_index * shader::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( pDst, p_component.constPtr(), 4 * sizeof( float ) );
 	}
 
@@ -124,7 +124,7 @@ namespace castor3d
 
 	void LightCategory::doCopyComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, castor::PxBufferBase & p_data )const
 	{
-		uint8_t * pDst = &( *p_data.getAt( p_index * glsl::MaxLightComponentsCount + p_offset++, 0u ) );
+		uint8_t * pDst = &( *p_data.getAt( p_index * shader::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( pDst, &p_component, sizeof( int32_t ) );
 	}
 }

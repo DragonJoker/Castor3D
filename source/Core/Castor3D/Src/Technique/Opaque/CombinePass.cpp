@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -24,9 +24,11 @@
 #include "Texture/TextureUnit.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslFog.hpp"
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 #include <random>
 
@@ -105,7 +107,7 @@ namespace castor3d
 		}
 		
 		glsl::Shader doGetLegacyPixelProgram( Engine & engine
-			, glsl::FogType fogType
+			, FogType fogType
 			, bool hasSsao )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -132,7 +134,7 @@ namespace castor3d
 
 			declareDecodeMaterial( writer );
 
-			glsl::Fog fog{ fogType, writer };
+			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -222,7 +224,7 @@ namespace castor3d
 		}
 		
 		glsl::Shader doGetPbrPixelProgram( Engine & engine
-			, glsl::FogType fogType
+			, FogType fogType
 			, bool hasSsao )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -252,7 +254,7 @@ namespace castor3d
 
 			declareDecodeMaterial( writer );
 
-			glsl::Fog fog{ fogType, writer };
+			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -318,7 +320,7 @@ namespace castor3d
 		}
 		
 		ShaderProgramSPtr doCreateProgram( Engine & engine
-			, glsl::FogType fogType
+			, FogType fogType
 			, bool hasSsao
 			, bool isPbr )
 		{
@@ -393,7 +395,7 @@ namespace castor3d
 		, GpInfoUbo & gpInfo
 		, bool hasSsao
 		, bool isPbr
-		, glsl::FogType fogType )
+		, FogType fogType )
 		: m_program{ doCreateProgram( engine, fogType, hasSsao, isPbr ) }
 		, m_geometryBuffers{ doCreateVao( engine, *m_program, vbo ) }
 		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, matrixUbo, sceneUbo, gpInfo ) }
@@ -431,14 +433,14 @@ namespace castor3d
 		, m_programs
 		{
 			{
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eDisabled },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eLinear },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, glsl::FogType::eSquaredExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eDisabled },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eLinear },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, glsl::FogType::eSquaredExponential }
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, FogType::eDisabled },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, FogType::eLinear },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, FogType::eExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, FogType::eSquaredExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, FogType::eDisabled },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, FogType::eLinear },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, FogType::eExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, FogType::eSquaredExponential }
 			}
 		}
 		, m_ssaoEnabled{ config.m_enabled }
@@ -614,7 +616,7 @@ namespace castor3d
 		ibl.getPrefilteredBrdf().getTexture()->bind( index );
 		ibl.getPrefilteredBrdf().getSampler()->bind( index );
 
-		m_programs[size_t( fog.getType() ) + size_t( glsl::FogType::eCount )].render();
+		m_programs[size_t( fog.getType() ) + size_t( FogType::eCount )].render();
 
 		ibl.getPrefilteredBrdf().getSampler()->unbind( index );
 		ibl.getPrefilteredBrdf().getTexture()->unbind( index );

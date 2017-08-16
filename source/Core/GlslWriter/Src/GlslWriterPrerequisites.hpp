@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -53,64 +53,12 @@ SOFTWARE.
 #define GLSL_MATERIALS_STRUCT_OF_ARRAY 0
 
 #define DECLARE_GLSL_PARAMETER( TypeName )\
-	using In##TypeName = InParam< TypeName >;\
-	using Out##TypeName = OutParam< TypeName >;\
-	using InOut##TypeName = InOutParam< TypeName >\
+	using In##TypeName = glsl::InParam< TypeName >;\
+	using Out##TypeName = glsl::OutParam< TypeName >;\
+	using InOut##TypeName = glsl::InOutParam< TypeName >\
 
 namespace glsl
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Shadow filter types enumeration.
-	\~french
-	\brief		Enumération des types de filtrage des ombres.
-	*/
-	enum class ShadowType
-	{
-		//!\~english	No shadows at all.
-		//!\~french		Pas d'ombres du tout.
-		eNone,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		eRaw,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		ePoisson,
-		//!\~english	Stratified poisson filtering.
-		//!\~french		Filtrage poisson stratifié.
-		eStratifiedPoisson,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Fog types enumeration.
-	\~french
-	\brief		Enumération des types de brouillard.
-	*/
-	enum class FogType
-	{
-		//!\~english	No fog.
-		//!\~french		Pas de brouillard
-		eDisabled,
-		//!\~english	Fog intensity increases linearly with distance to camera.
-		//!\~french		L'intensité du brouillard augmente lin�airement avec la distance à la caméra.
-		eLinear,
-		//!\~english	Fog intensity increases exponentially with distance to camera.
-		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
-		//!\~french		
-		eExponential,
-		//!\~english	Fog intensity increases even more with distance to camera.
-		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
-		eSquaredExponential,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
-	};
-
 	struct IndentBlock;
 	struct GlslWriterConfig;
 	class GlslWriter;
@@ -118,15 +66,6 @@ namespace glsl
 	class KeywordsBase;
 	template< int Version, class Enable = void >
 	class Keywords;
-	class LightingModel;
-	class PhongLightingModel;
-	class DeferredPhongLightingModel;
-	class Shadow;
-	struct Light;
-	struct DirectionalLight;
-	struct PointLight;
-	struct SpotLight;
-	class Materials;
 
 	enum class TypeName
 	{
@@ -166,14 +105,7 @@ namespace glsl
 		eSampler1DArrayShadow,
 		eSampler2DArrayShadow,
 		eSamplerCubeArrayShadow,
-		eLight,
-		eDirectionalLight,
-		ePointLight,
-		eSpotLight,
-		eMaterial,
-		eLegacyMaterial,
-		eMetallicRoughnessMaterial,
-		eSpecularGlossinessMaterial,
+		CASTOR_SCOPED_ENUM_BOUNDS( eBool )
 	};
 
 	template< typename T >
@@ -241,7 +173,6 @@ namespace glsl
 	using BMat3 = Mat3T< Boolean >;
 	using BMat4 = Mat4T< Boolean >;
 
-	DECLARE_GLSL_PARAMETER( Light );
 	DECLARE_GLSL_PARAMETER( Float );
 	DECLARE_GLSL_PARAMETER( Int );
 	DECLARE_GLSL_PARAMETER( UInt );
@@ -268,9 +199,6 @@ namespace glsl
 	template< typename RetT, typename ... ParamsT >
 	struct Function;
 
-	constexpr uint32_t SpotShadowMapCount = 10u;
-	constexpr uint32_t PointShadowMapCount = 6u;
-
 	template< typename T >
 	struct name_of;
 	template< typename T >
@@ -278,12 +206,6 @@ namespace glsl
 	{
 		using type = T;
 	};
-
-	class LightingModel;
-	class PhongLightingModel;
-	class MetallicBrdfLightingModel;
-	class SpecularBrdfLightingModel;
-	using LightingModelFactory = castor::Factory< LightingModel, castor::String, std::shared_ptr< LightingModel >, std::function< std::shared_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
 
 	struct Endl
 	{
@@ -315,8 +237,6 @@ namespace glsl
 	GlslWriter_API void registerName( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
 	GlslWriter_API void checkNameExists( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
 }
-
-#undef DECLARE_GLSL_PARAMETER
 
 #include "GlslWriterPrerequisites.inl"
 

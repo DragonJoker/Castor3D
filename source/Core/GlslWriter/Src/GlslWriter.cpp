@@ -1,10 +1,6 @@
-﻿#include "GlslWriter.hpp"
+#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
-#include "GlslLighting.hpp"
-#include "GlslPhongLighting.hpp"
-#include "GlslMetallicBrdfLighting.hpp"
-#include "GlslSpecularBrdfLighting.hpp"
 
 #include <Log/Logger.hpp>
 
@@ -15,9 +11,6 @@ namespace glsl
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( p_config )
 	{
-		m_lightingFactory.registerType( PhongLightingModel::Name, &PhongLightingModel::create );
-		m_lightingFactory.registerType( MetallicBrdfLightingModel::Name, &MetallicBrdfLightingModel::create );
-		m_lightingFactory.registerType( SpecularBrdfLightingModel::Name, &SpecularBrdfLightingModel::create );
 		*this << glsl::Version() << Endl();
 	}
 
@@ -65,34 +58,6 @@ namespace glsl
 			text << "No registered variable with the name [" << p_name << "].";
 			CASTOR_EXCEPTION( text.str() );
 		}
-	}
-
-	std::shared_ptr< LightingModel > GlslWriter::createLightingModel( castor::String const & p_name, ShadowType p_shadows )
-	{
-		std::shared_ptr< LightingModel > lighting = m_lightingFactory.create( p_name, p_shadows, *this );
-		lighting->declareModel();
-		return lighting;
-	}
-
-	std::shared_ptr< LightingModel > GlslWriter::createDirectionalLightingModel( castor::String const & p_name, ShadowType p_shadows )
-	{
-		std::shared_ptr< LightingModel > lighting = m_lightingFactory.create( p_name, p_shadows, *this );
-		lighting->declareDirectionalModel();
-		return lighting;
-	}
-
-	std::shared_ptr< LightingModel > GlslWriter::createPointLightingModel( castor::String const & p_name, ShadowType p_shadows )
-	{
-		std::shared_ptr< LightingModel > lighting = m_lightingFactory.create( p_name, p_shadows, *this );
-		lighting->declarePointModel();
-		return lighting;
-	}
-
-	std::shared_ptr< LightingModel > GlslWriter::createSpotLightingModel( castor::String const & p_name, ShadowType p_shadows )
-	{
-		std::shared_ptr< LightingModel > lighting = m_lightingFactory.create( p_name, p_shadows, *this );
-		lighting->declareSpotModel();
-		return lighting;
 	}
 
 	Shader GlslWriter::finalise()

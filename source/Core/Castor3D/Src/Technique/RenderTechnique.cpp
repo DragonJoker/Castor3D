@@ -1,4 +1,4 @@
-﻿#include "RenderTechnique.hpp"
+#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -26,8 +26,9 @@
 #include "Technique/Transparent/TransparentPass.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
-#include <GlslShadow.hpp>
+
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 
@@ -207,8 +208,8 @@ namespace castor3d
 		, m_ssaoConfig{ config }
 	{
 		m_directionalShadowMaps.resize( 1u );
-		m_pointShadowMaps.resize( glsl::PointShadowMapCount );
-		m_spotShadowMaps.resize( glsl::SpotShadowMapCount );
+		m_pointShadowMaps.resize( shader::PointShadowMapCount );
+		m_spotShadowMaps.resize( shader::SpotShadowMapCount );
 
 		for ( auto & shadowMap : m_directionalShadowMaps )
 		{

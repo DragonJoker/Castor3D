@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -735,6 +735,188 @@ namespace castor3d
 	DECLARE_MAP( ShaderType, AtomicCounterBufferWPtr, AtomicCounterBufferPtrShader );
 
 	//@}
+
+	namespace shader
+	{
+		enum class TypeName
+		{
+			eLight = int( glsl::TypeName::eCount ),
+			eDirectionalLight,
+			ePointLight,
+			eSpotLight,
+			eMaterial,
+			eLegacyMaterial,
+			eMetallicRoughnessMaterial,
+			eSpecularGlossinessMaterial,
+		};
+
+		static constexpr uint32_t SpotShadowMapCount = 10u;
+		static constexpr uint32_t PointShadowMapCount = 6u;
+		static constexpr int BaseLightComponentsCount = 2;
+		static constexpr int MaxLightComponentsCount = 14;
+		static constexpr float LightComponentsOffset = MaxLightComponentsCount * 0.001f;
+
+
+		class Shadow;
+		struct Light;
+		struct DirectionalLight;
+		struct PointLight;
+		struct SpotLight;
+		class Materials;
+		class LightingModel;
+		class PhongLightingModel;
+		class MetallicBrdfLightingModel;
+		class SpecularBrdfLightingModel;
+		struct BaseMaterial;
+		struct LegacyMaterial;
+		struct MetallicRoughnessMaterial;
+		struct SpecularGlossinessMaterial;
+
+		namespace legacy
+		{
+			C3D_API void computePreLightingMapContributions( glsl::GlslWriter & writer
+				, glsl::Vec3 & p_normal
+				, glsl::Float & p_shininess
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags );
+
+			C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
+				, glsl::Vec3 & p_diffuse
+				, glsl::Vec3 & p_specular
+				, glsl::Vec3 & p_emissive
+				, glsl::Float const & p_gamma
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags );
+
+			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, ShadowType shadows );
+
+			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, LightType light
+				, ShadowType shadows );
+		}
+
+		namespace pbr
+		{
+			namespace mr
+			{
+				C3D_API void computePreLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_normal
+					, glsl::Float & p_metallic
+					, glsl::Float & p_roughness
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags );
+
+				C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_albedo
+					, glsl::Vec3 & p_emissive
+					, glsl::Float const & p_gamma
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags );
+
+				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows );
+
+				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, LightType light
+					, ShadowType shadows );
+			}
+
+			namespace sg
+			{
+				C3D_API void computePreLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & normal
+					, glsl::Vec3 & specular
+					, glsl::Float & glossiness
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags );
+
+				C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & diffuse
+					, glsl::Vec3 & emissive
+					, glsl::Float const & gamma
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags );
+
+				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows );
+
+				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, LightType light
+					, ShadowType shadows );
+			}
+		}
+
+		using ParallaxFunction = glsl::Function< glsl::Vec2, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Vec3 > >;
+		using ParallaxShadowFunction = glsl::Function< glsl::Float, glsl::InParam< glsl::Vec3 >, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Float > >;
+
+		C3D_API ParallaxFunction declareParallaxMappingFunc( glsl::GlslWriter & writer
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags );
+
+		C3D_API ParallaxShadowFunction declareParallaxShadowFunc( glsl::GlslWriter & writer
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags );
+
+		DECLARE_GLSL_PARAMETER( Light );
+	}
+}
+
+namespace glsl
+{
+	template<>
+	struct name_of< castor3d::shader::Light >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::eLight );
+	};
+
+	template<>
+	struct name_of< castor3d::shader::DirectionalLight >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::eDirectionalLight );
+	};
+
+	template<>
+	struct name_of< castor3d::shader::PointLight >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::ePointLight );
+	};
+
+	template<>
+	struct name_of< castor3d::shader::SpotLight >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::eSpotLight );
+	};
+
+	template<>
+	struct name_of< castor3d::shader::BaseMaterial >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::eMaterial );
+	};
+
+	template<>
+	struct name_of< castor3d::shader::LegacyMaterial >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::eLegacyMaterial );
+	};
+
+	template<>
+	struct name_of< castor3d::shader::MetallicRoughnessMaterial >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::eMetallicRoughnessMaterial );
+	};
+
+	template<>
+	struct name_of< castor3d::shader::SpecularGlossinessMaterial >
+	{
+		static TypeName const value = TypeName( castor3d::shader::TypeName::eSpecularGlossinessMaterial );
+	};
 }
 
 #endif

@@ -16,7 +16,7 @@
 #include <Graphics/Font.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 
@@ -576,6 +576,7 @@ namespace castor3d
 	ShaderProgramSPtr OverlayRenderer::doCreateOverlayProgram( TextureChannels const & textureFlags )
 	{
 		using namespace glsl;
+		using namespace shader;
 
 		// Shader program
 		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
@@ -629,7 +630,7 @@ namespace castor3d
 			switch ( getRenderSystem()->getEngine()->getMaterialsType() )
 			{
 			case MaterialType::eLegacy:
-				materials = std::make_unique< LegacyMaterials >( writer );
+				materials = std::make_unique< shader::LegacyMaterials >( writer );
 				break;
 
 			case MaterialType::ePbrMetallicRoughness:

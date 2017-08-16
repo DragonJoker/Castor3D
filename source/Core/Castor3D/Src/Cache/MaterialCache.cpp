@@ -10,7 +10,7 @@
 #include "Shader/SpecularGlossinessPassBuffer.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <GlslMaterial.hpp>
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 
@@ -37,15 +37,15 @@ namespace castor3d
 		switch ( type )
 		{
 		case MaterialType::eLegacy:
-			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), glsl::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
 			break;
 
 		case MaterialType::ePbrMetallicRoughness:
-			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), glsl::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), glsl::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
 			break;
 		}
 	}

@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPassTimer.hpp"
@@ -8,7 +8,8 @@
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
+
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 
@@ -46,14 +47,14 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
-			if ( getShadowType( sceneFlags ) != glsl::ShadowType::eNone
-				&& !program.findUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+			if ( getShadowType( sceneFlags ) != ShadowType::eNone
+				&& !program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowDirectional
+				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
-				program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot
+				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
 					, ShaderType::ePixel );
-				program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowPoint
+				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
 					, ShaderType::ePixel, 6u );
 			}
 

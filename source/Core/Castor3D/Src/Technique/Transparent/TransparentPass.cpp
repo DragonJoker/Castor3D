@@ -1,4 +1,4 @@
-﻿#include "TransparentPass.hpp"
+#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -12,12 +12,14 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
-#include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
-#include <GlslPhongLighting.hpp>
-#include <GlslMetallicBrdfLighting.hpp>
-#include <GlslSpecularBrdfLighting.hpp>
+
+#include "Shader/Shaders/GlslFog.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -33,14 +35,14 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
-			if ( getShadowType( sceneFlags ) != glsl::ShadowType::eNone
-				&& !p_program.findUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+			if ( getShadowType( sceneFlags ) != ShadowType::eNone
+				&& !p_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowDirectional
+				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
-				p_program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowSpot
+				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
 					, ShaderType::ePixel );
-				p_program.createUniform< UniformType::eSampler >( glsl::Shadow::MapShadowPoint
+				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
 					, ShaderType::ePixel, 6u );
 			}
 
@@ -361,7 +363,7 @@ namespace castor3d
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 
-		LegacyMaterials materials{ writer };
+		shader::LegacyMaterials materials{ writer };
 		materials.declare();
 
 		if ( writer.hasTextureBuffers() )
@@ -397,15 +399,15 @@ namespace castor3d
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto lighting = legacy::createLightingModel( writer
+		auto lighting = shader::legacy::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 
 		// Fragment Outputs
 		auto pxl_v4Accumulation( writer.declFragData< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
@@ -433,19 +435,19 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			legacy::computePreLightingMapContributions( writer
+			shader::legacy::computePreLightingMapContributions( writer
 				, v3Normal
 				, fMatShininess
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			OutputComponents output{ v3Diffuse, v3Specular };
+			shader::OutputComponents output{ v3Diffuse, v3Specular };
 			lighting->computeCombinedLighting( worldEye
 				, fMatShininess
 				, c3d_shadowReceiver
-				, FragmentInput( vtx_position, v3Normal )
+				, shader::FragmentInput( vtx_position, v3Normal )
 				, output );
-			legacy::computePostLightingMapContributions( writer
+			shader::legacy::computePostLightingMapContributions( writer
 				, diffuse
 				, v3Specular
 				, emissive
@@ -502,7 +504,7 @@ namespace castor3d
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
 
-			if ( getFogType( sceneFlags ) != glsl::FogType::eDisabled )
+			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( colour, length( wvPosition ), wvPosition.y() );
@@ -571,7 +573,7 @@ namespace castor3d
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 
-		PbrMRMaterials materials{ writer };
+		shader::PbrMRMaterials materials{ writer };
 		materials.declare();
 
 		if ( writer.hasTextureBuffers() )
@@ -608,9 +610,9 @@ namespace castor3d
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto lighting = pbr::mr::createLightingModel( writer
+		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
@@ -623,7 +625,7 @@ namespace castor3d
 			utils.declareGetMapNormal();
 		}
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 
 		// Fragment Outputs
 		auto pxl_v4Accumulation( writer.declFragData< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
@@ -658,7 +660,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			pbr::mr::computePreLightingMapContributions( writer
+			shader::pbr::mr::computePreLightingMapContributions( writer
 				, normal
 				, metalness
 				, roughness
@@ -670,8 +672,8 @@ namespace castor3d
 				, metalness
 				, roughness
 				, c3d_shadowReceiver
-				, FragmentInput( vtx_position, normal ) );
-			pbr::mr::computePostLightingMapContributions( writer
+				, shader::FragmentInput( vtx_position, normal ) );
+			shader::pbr::mr::computePostLightingMapContributions( writer
 				, albedo
 				, emissive
 				, gamma
@@ -762,7 +764,7 @@ namespace castor3d
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 
-		PbrSGMaterials materials{ writer };
+		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 
 		if ( writer.hasTextureBuffers() )
@@ -799,9 +801,9 @@ namespace castor3d
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto lighting = pbr::sg::createLightingModel( writer
+		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, getShadowType( sceneFlags ) );
-		glsl::Fog fog{ getFogType( sceneFlags ), writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
@@ -814,7 +816,7 @@ namespace castor3d
 			utils.declareGetMapNormal();
 		}
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 
 		// Fragment Outputs
 		auto pxl_v4Accumulation( writer.declFragData< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
@@ -849,7 +851,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			pbr::sg::computePreLightingMapContributions( writer
+			shader::pbr::sg::computePreLightingMapContributions( writer
 				, normal
 				, specular
 				, glossiness
@@ -861,8 +863,8 @@ namespace castor3d
 				, specular
 				, glossiness
 				, c3d_shadowReceiver
-				, FragmentInput( vtx_position, normal ) );
-			pbr::sg::computePostLightingMapContributions( writer
+				, shader::FragmentInput( vtx_position, normal ) );
+			shader::pbr::sg::computePostLightingMapContributions( writer
 				, diffuse
 				, emissive
 				, gamma

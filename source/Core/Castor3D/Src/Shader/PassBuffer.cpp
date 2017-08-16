@@ -1,4 +1,4 @@
-﻿#include "PassBuffer.hpp"
+#include "PassBuffer.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -8,7 +8,7 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <GlslMaterial.hpp>
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -36,7 +36,7 @@ namespace castor3d
 	uint32_t PassBuffer::addPass( Pass & pass )
 	{
 		REQUIRE( pass.getId() == 0u );
-		REQUIRE( m_passes.size() < glsl::MaxMaterialsCount );
+		REQUIRE( m_passes.size() < shader::MaxMaterialsCount );
 		m_passes.emplace_back( &pass );
 		pass.setId( m_passID++ );
 		m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & pass )

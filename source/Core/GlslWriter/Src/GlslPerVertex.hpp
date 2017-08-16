@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GLSL_PER_VERTEX_H___
 #define ___GLSL_PER_VERTEX_H___
 
-#include "GlslLight.hpp"
+#include "GlslMat.hpp"
 
 namespace glsl
 {

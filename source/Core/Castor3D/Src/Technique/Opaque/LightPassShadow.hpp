@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -38,7 +38,7 @@ SOFTWARE.
 #include "Shader/PushUniform.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <GlslShadow.hpp>
+#include "Shader/Shaders/GlslShadow.hpp"
 
 namespace castor3d
 {
@@ -84,7 +84,7 @@ namespace castor3d
 		 */
 		static castor::String const & getName()
 		{
-			static castor::String const name = glsl::Shadow::MapShadowDirectional;
+			static castor::String const name = shader::Shadow::MapShadowDirectional;
 			return name;
 		}
 		/**
@@ -156,7 +156,7 @@ namespace castor3d
 		 */
 		static castor::String const & getName()
 		{
-			static castor::String const name = glsl::Shadow::MapShadowPoint;
+			static castor::String const name = shader::Shadow::MapShadowPoint;
 			return name;
 		}
 		/**
@@ -228,7 +228,7 @@ namespace castor3d
 		 */
 		static castor::String const & getName()
 		{
-			static castor::String const name = glsl::Shadow::MapShadowSpot;
+			static castor::String const name = shader::Shadow::MapShadowSpot;
 			return name;
 		}
 		/**

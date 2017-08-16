@@ -10,8 +10,9 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 using namespace castor3d;
