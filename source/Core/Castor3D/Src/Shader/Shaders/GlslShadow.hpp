@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,7 +23,9 @@ SOFTWARE.
 #ifndef ___GLSL_SHADOW_H___
 #define ___GLSL_SHADOW_H___
 
-#include "GlslIntrinsics.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <GlslIntrinsics.hpp>
 
 namespace castor3d
 {
