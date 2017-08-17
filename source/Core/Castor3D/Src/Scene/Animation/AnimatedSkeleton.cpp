@@ -6,7 +6,7 @@
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
-#include "Shader/Uniform.hpp"
+#include "Shader/Uniform/Uniform.hpp"
 
 using namespace castor;
 

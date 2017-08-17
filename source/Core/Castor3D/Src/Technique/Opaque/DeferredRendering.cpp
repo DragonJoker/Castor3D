@@ -1,10 +1,10 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Scene/Skybox.hpp"
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Technique/Opaque/OpaquePass.hpp"
 #include "Texture/Sampler.hpp"
 

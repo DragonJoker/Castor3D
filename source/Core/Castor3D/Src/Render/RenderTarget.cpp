@@ -9,7 +9,7 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"

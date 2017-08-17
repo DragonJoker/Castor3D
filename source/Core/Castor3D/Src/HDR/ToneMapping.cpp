@@ -6,7 +6,7 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/HdrConfigUbo.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <GlslSource.hpp>
 

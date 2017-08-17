@@ -5,7 +5,7 @@
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Shader/MatrixUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"

@@ -13,12 +13,12 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
-#include "Shader/BillboardUbo.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/ModelMatrixUbo.hpp"
-#include "Shader/ModelUbo.hpp"
-#include "Shader/SceneUbo.hpp"
-#include "Shader/PushUniform.hpp"
+#include "Shader/Ubos/BillboardUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/Uniform/PushUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "ShadowMap/ShadowMap.hpp"
@@ -30,7 +30,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	inline uint32_t doFillShaderDepthMaps( RenderPipeline & p_pipeline
+	inline uint32_t doFillShaderShadowMaps( RenderPipeline & p_pipeline
 		, ShadowMapLightTypeArray & shadowMaps )
 	{
 		uint32_t index = p_pipeline.getTexturesCount() + Pass::MinTextureIndex;
@@ -45,21 +45,20 @@ namespace castor3d
 				for ( auto shadowMap : shadowMaps[i] )
 				{
 					auto & unit = shadowMap.get().getTexture();
+					unit.getTexture()->bind( index );
+					unit.getSampler()->bind( index );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						unit.setIndex( index );
 						p_pipeline.getDirectionalShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
 					case LightType::eSpot:
-						unit.setIndex( index );
 						p_pipeline.getSpotShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
 					case LightType::ePoint:
-						unit.setIndex( index );
 						p_pipeline.getPointShadowMapsVariable().setValue( index++, layer++ );
 						++layer;
 						break;
@@ -96,9 +95,8 @@ namespace castor3d
 		, ModelUbo & p_model
 		, EnvironmentMap *& p_envMap )
 	{
-		auto index = doFillShaderDepthMaps( p_pipeline, shadowMaps );
-
 		p_node.m_pass.bindTextures();
+		auto index = doFillShaderShadowMaps( p_pipeline, shadowMaps );
 
 		if ( ( checkFlag( p_pipeline.getFlags().m_programFlags, ProgramFlag::ePbrMetallicRoughness )
 				|| checkFlag( p_pipeline.getFlags().m_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
@@ -158,20 +156,20 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, EnvironmentMap * p_envMap )
 	{
-		if ( p_envMap )
-		{
-			p_envMap->getTexture().unbind();
-		}
+		//if ( p_envMap )
+		//{
+		//	p_envMap->getTexture().unbind();
+		//}
 
-		for ( auto & array : shadowMaps )
-		{
-			for ( auto & shadowMap : array )
-			{
-				shadowMap.get().getTexture().unbind();
-			}
-		}
+		//for ( auto & array : shadowMaps )
+		//{
+		//	for ( auto & shadowMap : array )
+		//	{
+		//		shadowMap.get().getTexture().unbind();
+		//	}
+		//}
 
-		p_node.m_pass.unbindTextures();
+		//p_node.m_pass.unbindTextures();
 	}
 
 	inline void doBindPassOpacityMap( PassRenderNode & p_node

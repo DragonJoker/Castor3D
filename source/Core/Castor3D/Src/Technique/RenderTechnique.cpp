@@ -1,4 +1,4 @@
-#include "RenderTechnique.hpp"
+﻿#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -14,7 +14,7 @@
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Skybox.hpp"
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "ShadowMap/ShadowMapDirectional.hpp"
 #include "ShadowMap/ShadowMapPoint.hpp"
 #include "ShadowMap/ShadowMapSpot.hpp"
@@ -318,7 +318,6 @@ namespace castor3d
 		doRenderOpaque( info );
 		scene.renderBackground( getSize(), camera );
 		doUpdateParticles( info );
-		m_frameBuffer.m_frameBuffer->unbind();
 		doRenderTransparent( info );
 		doApplyPostEffects();
 

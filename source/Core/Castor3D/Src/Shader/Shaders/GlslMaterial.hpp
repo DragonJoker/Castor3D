@@ -59,7 +59,7 @@ namespace castor3d
 			: public Materials
 		{
 		public:
-			C3D_API shader::LegacyMaterials( glsl::GlslWriter & writer );
+			C3D_API LegacyMaterials( glsl::GlslWriter & writer );
 			C3D_API void declare()override;
 			C3D_API glsl::Vec3 getDiffuse( glsl::Int const & index )const override;
 			C3D_API glsl::Vec3 getSpecular( glsl::Int const & index )const;

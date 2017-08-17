@@ -20,7 +20,7 @@
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Shader/MatrixUbo.hpp>
+#include <Shader/Ubos/MatrixUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/RasteriserState.hpp>

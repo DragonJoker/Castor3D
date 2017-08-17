@@ -1,4 +1,4 @@
-#include "GaussianBlur.hpp"
+﻿#include "GaussianBlur.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -12,7 +12,7 @@
 #include "Scene/Camera.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/Uniform.hpp"
+#include "Shader/Uniform/Uniform.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"

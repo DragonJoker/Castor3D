@@ -28,13 +28,13 @@ SOFTWARE.
 
 #include "Render/RenderInfo.hpp"
 #include "Render/RenderQueue.hpp"
-#include "Shader/BillboardUbo.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/ModelMatrixUbo.hpp"
-#include "Shader/ModelUbo.hpp"
-#include "Shader/MorphingUbo.hpp"
-#include "Shader/SceneUbo.hpp"
-#include "Shader/SkinningUbo.hpp"
+#include "Shader/Ubos/BillboardUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/MorphingUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/Ubos/SkinningUbo.hpp"
 
 #include <unordered_map>
 

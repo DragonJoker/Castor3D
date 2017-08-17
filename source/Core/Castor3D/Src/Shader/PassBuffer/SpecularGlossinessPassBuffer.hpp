@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_LegacyPassBuffer_H___
-#define ___C3D_LegacyPassBuffer_H___
+#ifndef ___C3D_SpecularGlossinessPassBuffer_H___
+#define ___C3D_SpecularGlossinessPassBuffer_H___
 
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -34,11 +34,11 @@ namespace castor3d
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		SSBO holding the LegacyPasses data.
+	\brief		SSBO holding the SpecularGlossinessPbrPasses data.
 	\~french
-	\brief		SSBO contenant les données des LegacyPass.
+	\brief		SSBO contenant les données des SpecularGlossinessPbrPass.
 	*/
-	class LegacyPassBuffer
+	class SpecularGlossinessPassBuffer
 		: public PassBuffer
 	{
 	public:
@@ -52,19 +52,23 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	count	Le nombre maximal de passes.
 		 */
-		C3D_API LegacyPassBuffer( Engine & engine
-			, uint32_t count );
+		C3D_API SpecularGlossinessPassBuffer( Engine & engine
+			, uint32_t size );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~LegacyPassBuffer();
+		C3D_API ~SpecularGlossinessPassBuffer();
 		/**
 		 *\copydoc		castor3d::PassBuffer::Visit
 		 */
 		C3D_API void visit( LegacyPass const & data )override;
+		/**
+		 *\copydoc		castor3d::PassBuffer::Visit
+		 */
+		C3D_API void visit( SpecularGlossinessPbrPass const & pass )override;
 
 	public:
 
@@ -72,8 +76,8 @@ namespace castor3d
 
 		struct PassesData
 		{
-			castor::ArrayView< RgbaColour > diffAmb;
-			castor::ArrayView< RgbaColour > specShin;
+			castor::ArrayView< RgbaColour > diffDiv;
+			castor::ArrayView< RgbaColour > specGloss;
 			castor::ArrayView< RgbaColour > common;
 			castor::ArrayView< RgbaColour > reflRefr;
 		};
@@ -82,8 +86,8 @@ namespace castor3d
 
 		struct PassData
 		{
-			RgbaColour diffAmb;
-			RgbaColour specShin;
+			RgbaColour diffDiv;
+			RgbaColour specGloss;
 			RgbaColour common;
 			RgbaColour reflRefr;
 		};
@@ -93,12 +97,12 @@ namespace castor3d
 
 	private:
 		static constexpr uint32_t DataSize = ( sizeof( RgbColour ) * 2 )
-			+ ( sizeof( float ) * 8 )
+			+ ( sizeof( float ) * 7 )
 			+ ( sizeof( int ) * 2 );
 
 	private:
-		//!\~english	The legacy passes data.
-		//!\~french		Les données des passes legacy.
+		//!\~english	The specular/glossiness PBR passes data.
+		//!\~french		Les données des passes PBR specular/glossiness.
 		PassesData m_data;
 	};
 }

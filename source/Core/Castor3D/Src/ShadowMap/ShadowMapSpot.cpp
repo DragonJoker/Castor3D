@@ -34,6 +34,7 @@ namespace castor3d
 			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
 			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
 			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
 			sampler->setComparisonMode( ComparisonMode::eRefToTexture );
 			sampler->setComparisonFunc( ComparisonFunc::eLEqual );
 
@@ -120,7 +121,7 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		auto pxl_fFragDepth( writer.declFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
+		auto pxl_fragDepth( writer.declFragData< Float >( cuT( "pxl_fragDepth" ), 0 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -135,7 +136,7 @@ namespace castor3d
 				FI;
 			}
 
-			pxl_fFragDepth = gl_FragCoord.z();
+			pxl_fragDepth = gl_FragCoord.z();
 		} );
 
 		return writer.finalise();

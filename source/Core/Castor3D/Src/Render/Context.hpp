@@ -33,7 +33,7 @@ SOFTWARE.
 #include "RenderToTexture/RenderDepthLayerToTexture.hpp"
 #include "RenderToTexture/RenderDepthToTexture.hpp"
 
-#include "Shader/MatrixUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
 namespace castor3d
 {

@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_MetallicRoughnessPassBuffer_H___
 #define ___C3D_MetallicRoughnessPassBuffer_H___
 
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 
 #include <Design/ArrayView.hpp>
 

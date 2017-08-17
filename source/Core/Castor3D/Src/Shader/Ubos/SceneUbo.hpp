@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_SceneUbo_H___
 #define ___C3D_SceneUbo_H___
 
-#include "UniformBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace castor3d
 {

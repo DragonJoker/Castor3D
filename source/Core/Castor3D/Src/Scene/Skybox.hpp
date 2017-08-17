@@ -24,9 +24,9 @@ SOFTWARE.
 #define ___C3D_SKYBOX_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Shader/HdrConfigUbo.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "PBR/IblTextures.hpp"
 #include "Texture/TextureUnit.hpp"
 

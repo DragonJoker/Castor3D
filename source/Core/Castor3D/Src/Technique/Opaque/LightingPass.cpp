@@ -1,4 +1,4 @@
-#include "LightingPass.hpp"
+﻿#include "LightingPass.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -17,8 +17,8 @@
 #include <Scene/Scene.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Light/PointLight.hpp>
-#include <Shader/MatrixUbo.hpp>
-#include <Shader/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/MatrixUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 #include <Texture/TextureLayout.hpp>

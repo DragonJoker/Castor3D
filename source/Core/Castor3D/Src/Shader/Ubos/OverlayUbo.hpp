@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_MatrixUbo_H___
-#define ___C3D_MatrixUbo_H___
+#ifndef ___C3D_OverlayUbo_H___
+#define ___C3D_OverlayUbo_H___
 
-#include "UniformBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace castor3d
 {
@@ -36,7 +36,7 @@ namespace castor3d
 	\~french
 	\brief		Gestion du tampon de variables uniformes pour les matrices.
 	*/
-	class MatrixUbo
+	class OverlayUbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace castor3d
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API MatrixUbo( MatrixUbo const & ) = delete;
-		C3D_API MatrixUbo & operator=( MatrixUbo const & ) = delete;
-		C3D_API MatrixUbo( MatrixUbo && ) = default;
-		C3D_API MatrixUbo & operator=( MatrixUbo && ) = default;
+		C3D_API OverlayUbo( OverlayUbo const & ) = delete;
+		C3D_API OverlayUbo & operator=( OverlayUbo const & ) = delete;
+		C3D_API OverlayUbo( OverlayUbo && ) = default;
+		C3D_API OverlayUbo & operator=( OverlayUbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,37 +59,32 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API MatrixUbo( Engine & engine );
+		C3D_API OverlayUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~MatrixUbo();
+		C3D_API ~OverlayUbo();
+		/**
+		 *\~english
+		 *\brief		sets the overlay position value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de la position de l'incrustation.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		C3D_API void setPosition( castor::Position const & p_position );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_view			The new view matrix.
-		 *\param[in]	p_projection	The new projection matrix.
+		 *\param[in]	p_materialIndex	The overlay's material index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_view			La nouvelle matrice de vue.
-		 *\param[in]	p_projection	La nouvelle matrice de projection.
+		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & p_view
-			, castor::Matrix4x4r const & p_projection )const;
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\remarks		View matrix won't be updated.
-		 *\param[in]	p_projection	The new projection matrix.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\remarks		La matrice de vue ne sera pas mise à jour.
-		 *\param[in]	p_projection	La nouvelle matrice de projection.
-		 */
-		C3D_API void update( castor::Matrix4x4r const & p_projection )const;
+		C3D_API void update( int p_materialIndex )const;
 		/**
 		 *\~english
 		 *\name			getters.
@@ -108,29 +103,25 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 1u;
+		static constexpr uint32_t BindingPoint = 2u;
 
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
 		UniformBuffer m_ubo;
-		//!\~english	The view matrix variable.
-		//!\~french		La variable de la matrice vue.
-		Uniform4x4f & m_view;
-		//!\~english	The projection matrix variable.
-		//!\~french		La variable de la matrice projection.
-		Uniform4x4f & m_projection;
-		//!\~english	The inverse projection matrix variable.
-		//!\~french		La variable de la matrice projection inverse.
-		Uniform4x4f & m_invProjection;
+		//!\~english	The uniform variable containing overlay position.
+		//!\~french		La variable uniforme contenant la position de l'incrustation.
+		Uniform2i & m_position;
+		//!\~english	The uniform variable containing overlay's material index.
+		//!\~french		La variable uniforme contenant l'indice du matériau de l'incrustation.
+		Uniform1i & m_material;
 	};
 }
 
-#define UBO_MATRIX( Writer )\
-	glsl::Ubo matrices{ writer, castor3d::ShaderProgram::BufferMatrix, castor3d::MatrixUbo::BindingPoint };\
-	auto c3d_mtxProjection = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxProjection );\
-	auto c3d_mtxView = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxView );\
-	auto c3d_mtxInvProjection = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxInvProjection );\
-	matrices.end()
+#define UBO_OVERLAY( Writer )\
+	glsl::Ubo overlay{ writer, castor3d::ShaderProgram::BufferOverlay, castor3d::OverlayUbo::BindingPoint };\
+	auto c3d_position = overlay.declMember< glsl::IVec2 >( castor3d::ShaderProgram::OvPosition );\
+	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::ShaderProgram::MaterialIndex );\
+	overlay.end()
 
 #endif

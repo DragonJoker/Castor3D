@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_BillboardUbo_H___
-#define ___C3D_BillboardUbo_H___
+#ifndef ___C3D_SkinningUbo_H___
+#define ___C3D_SkinningUbo_H___
 
-#include "UniformBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace castor3d
 {
@@ -32,11 +32,11 @@ namespace castor3d
 	\version	0.10.0
 	\date		12/04/2017
 	\~english
-	\brief		Model Uniform buffer management.
+	\brief		Matrices Uniform buffer management.
 	\~french
-	\brief		Gestion du tampon de variables uniformes pour le modèle.
+	\brief		Gestion du tampon de variables uniformes pour les matrices.
 	*/
-	class BillboardUbo
+	class SkinningUbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace castor3d
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API BillboardUbo( BillboardUbo const & ) = delete;
-		C3D_API BillboardUbo & operator=( BillboardUbo const & ) = delete;
-		C3D_API BillboardUbo( BillboardUbo && ) = default;
-		C3D_API BillboardUbo & operator=( BillboardUbo && ) = default;
+		C3D_API SkinningUbo( SkinningUbo const & ) = delete;
+		C3D_API SkinningUbo & operator=( SkinningUbo const & ) = delete;
+		C3D_API SkinningUbo( SkinningUbo && ) = default;
+		C3D_API SkinningUbo & operator=( SkinningUbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,34 +59,49 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API BillboardUbo( Engine & engine );
+		C3D_API SkinningUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~BillboardUbo();
+		C3D_API ~SkinningUbo();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_dimensions	The billboard dimensions.
-		 *\param[in]	p_window		The window dimensions.
+		 *\param[in]	p_materialIndex	The overlay's material index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_dimensions	Les dimensions du billboard.
-		 *\param[in]	p_window		Les dimensions de la fenêtre.
+		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
 		 */
-		C3D_API void update( castor::Size const & p_dimensions )const;
+		C3D_API void update( AnimatedSkeleton const & p_skeleton )const;
 		/**
 		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_window		The window dimensions.
+		 *\brief		Declares the GLSL variables needed to compute skinning in vertex shader.
+		 *\param[in]	p_writer	The GLSL writer.
+		 *\param[in]	p_flags		The program flags.
 		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_window		Les dimensions de la fenêtre.
+		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
+		 *\param[in]	p_writer	Le GLSL writer.
+		 *\param[in]	p_flags		Les indicateurs du programme.
 		 */
-		C3D_API void setWindowSize( castor::Size const & p_window )const;
+		C3D_API static void declare( glsl::GlslWriter & p_writer
+			, ProgramFlags const & p_flags );
+		/**
+		 *\~english
+		 *\brief		Computes skinning transformation in vertex shader.
+		 *\param[in]	p_writer	The GLSL writer.
+		 *\param[in]	p_flags		The program flags.
+		 *\return		The resulting matrix.
+		 *\~french
+		 *\brief		Effectue le calcul de la transformation du skinning dans le vertex shader.
+		 *\param[in]	p_writer	Le GLSL writer.
+		 *\param[in]	p_flags		Les indicateurs du programme.
+		 *\return		La matrice résultat.
+		 */
+		C3D_API static glsl::Mat4 computeTransform( glsl::GlslWriter & p_writer
+			, ProgramFlags const & p_flags );
 		/**
 		 *\~english
 		 *\name			getters.
@@ -105,25 +120,16 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 9u;
+		static constexpr uint32_t BindingPoint = 5u;
 
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
 		UniformBuffer m_ubo;
-		//!\~english	The dimensions uniform variable.
-		//!\~french		La variable uniforme des dimensions.
-		Uniform2i & m_dimensions;
-		//!\~english	The window dimensions uniform variable.
-		//!\~french		La variable uniforme des dimensions de la fenêtre.
-		Uniform2i & m_windowSize;
+		//!\~english	The bones matrices uniform variable.
+		//!\~french		Le variable uniforme contenant les matrices des os.
+		Uniform4x4f & m_bonesMatrix;
 	};
 }
-
-#define UBO_BILLBOARD( Writer )\
-	glsl::Ubo billboard{ writer, castor3d::ShaderProgram::BufferBillboards, castor3d::BillboardUbo::BindingPoint };\
-	auto c3d_v2iDimensions = billboard.declMember< IVec2 >( castor3d::ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = billboard.declMember< IVec2 >( castor3d::ShaderProgram::WindowSize );\
-	billboard.end()
 
 #endif

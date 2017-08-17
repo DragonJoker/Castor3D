@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3DGL_GlPushUniform_H___
 #define ___C3DGL_GlPushUniform_H___
 
-#include <Shader/PushUniform.hpp>
+#include <Shader/Uniform/PushUniform.hpp>
 
 #include "Shader/GlUniformBase.hpp"
 

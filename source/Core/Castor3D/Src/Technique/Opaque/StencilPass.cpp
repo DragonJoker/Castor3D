@@ -1,4 +1,4 @@
-#include "StencilPass.hpp"
+﻿#include "StencilPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -10,8 +10,8 @@
 #include <Scene/Scene.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Light/PointLight.hpp>
-#include <Shader/MatrixUbo.hpp>
-#include <Shader/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/MatrixUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>

@@ -26,8 +26,8 @@ SOFTWARE.
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/GpInfoUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/GpInfoUbo.hpp"
 
 #include <Miscellaneous/BlockTracker.hpp>
 

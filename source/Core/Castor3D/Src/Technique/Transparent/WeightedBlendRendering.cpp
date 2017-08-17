@@ -5,7 +5,7 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 
 using namespace castor;
 

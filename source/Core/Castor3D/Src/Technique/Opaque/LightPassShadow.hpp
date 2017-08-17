@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -35,7 +35,7 @@ SOFTWARE.
 #include "Render/Context.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/PushUniform.hpp"
+#include "Shader/Uniform/PushUniform.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include "Shader/Shaders/GlslShadow.hpp"

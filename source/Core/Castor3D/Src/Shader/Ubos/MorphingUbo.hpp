@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_HdrConfigUbo_H___
-#define ___C3D_HdrConfigUbo_H___
+#ifndef ___C3D_MorphingUbo_H___
+#define ___C3D_MorphingUbo_H___
 
-#include "UniformBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace castor3d
 {
@@ -32,11 +32,11 @@ namespace castor3d
 	\version	0.10.0
 	\date		12/04/2017
 	\~english
-	\brief		HDR configuration Uniform buffer management.
+	\brief		Matrices Uniform buffer management.
 	\~french
-	\brief		Gestion du tampon de variables uniformes pour la configuration HDR.
+	\brief		Gestion du tampon de variables uniformes pour les matrices.
 	*/
-	class HdrConfigUbo
+	class MorphingUbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace castor3d
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API HdrConfigUbo( HdrConfigUbo const & ) = delete;
-		C3D_API HdrConfigUbo & operator=( HdrConfigUbo const & ) = delete;
-		C3D_API HdrConfigUbo( HdrConfigUbo && ) = default;
-		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && ) = default;
+		C3D_API MorphingUbo( MorphingUbo const & ) = delete;
+		C3D_API MorphingUbo & operator=( MorphingUbo const & ) = delete;
+		C3D_API MorphingUbo( MorphingUbo && ) = default;
+		C3D_API MorphingUbo & operator=( MorphingUbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,30 +59,29 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API HdrConfigUbo( Engine & engine );
+		C3D_API MorphingUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~HdrConfigUbo();
+		C3D_API ~MorphingUbo();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_config	The HDR configuration.
+		 *\param[in]	p_time	The current time index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_config	La configuration HDR.
+		 *\param[in]	p_time	L'indice de temps courant.
 		 */
-		C3D_API void update( HdrConfig const & p_config )const;
+		C3D_API void update( float p_time )const;
 		/**
 		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.
 		 */
-		/**@{*/
 		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
@@ -95,25 +94,21 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 8u;
+		static constexpr uint32_t BindingPoint = 6u;
 
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
 		UniformBuffer m_ubo;
-		//!\~english	The shadow receiver matrix variable.
-		//!\~french		La variable de la réception d'ombres.
-		Uniform1f & m_exposure;
-		//!\~english	The material index matrix variable.
-		//!\~french		La variable de l'indice du matériau.
-		Uniform1f & m_gamma;
+		//!\~english	The time uniform variable.
+		//!\~french		La variable uniforme contenant le temps.
+		Uniform1f & m_time;
 	};
 }
 
-#define UBO_HDR_CONFIG( Writer )\
-	Ubo hdrConfig{ writer, castor3d::ShaderProgram::BufferHdrConfig, castor3d::HdrConfigUbo::BindingPoint };\
-	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Exposure );\
-	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Gamma );\
-	hdrConfig.end()
+#define UBO_MORPHING( Writer, Flags )\
+	glsl::Ubo morphing{ writer, castor3d::ShaderProgram::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
+	auto c3d_fTime = morphing.declMember< glsl::Float >( castor3d::ShaderProgram::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
+	morphing.end()
 
 #endif

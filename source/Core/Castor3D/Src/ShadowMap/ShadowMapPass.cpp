@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPass.hpp"
+#include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
@@ -48,16 +48,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	void ShadowMapPass::doUpdatePipeline( RenderPipeline & p_pipeline )const
-	{
-	}
-
-	void ShadowMapPass::doPrepareFrontPipeline( ShaderProgram & program
-		, PipelineFlags const & flags )
-	{
-	}
-
-	void ShadowMapPass::doPrepareBackPipeline( ShaderProgram & program
+	void ShadowMapPass::doPreparePipeline( ShaderProgram & program
 		, PipelineFlags const & flags )
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
@@ -99,6 +90,22 @@ namespace castor3d
 					m_initialised = true;
 				} ) );
 		}
+	}
+
+	void ShadowMapPass::doUpdatePipeline( RenderPipeline & p_pipeline )const
+	{
+	}
+
+	void ShadowMapPass::doPrepareFrontPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
+	{
+		doPreparePipeline( program, flags );
+	}
+
+	void ShadowMapPass::doPrepareBackPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
+	{
+		doPreparePipeline( program, flags );
 	}
 
 	glsl::Shader ShadowMapPass::doGetVertexShaderSource( TextureChannels const & textureFlags

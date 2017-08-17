@@ -24,7 +24,7 @@ SOFTWARE.
 #define ___C3D_SkinningRenderNode_H___
 
 #include "ObjectRenderNode.hpp"
-#include "Shader/SkinningUbo.hpp"
+#include "Shader/Ubos/SkinningUbo.hpp"
 
 namespace castor3d
 {

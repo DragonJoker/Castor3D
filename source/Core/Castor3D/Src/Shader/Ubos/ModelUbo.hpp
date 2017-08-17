@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_ModelMatrixUbo_H___
-#define ___C3D_ModelMatrixUbo_H___
+#ifndef ___C3D_ModelUbo_H___
+#define ___C3D_ModelUbo_H___
 
-#include "UniformBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace castor3d
 {
@@ -32,11 +32,11 @@ namespace castor3d
 	\version	0.10.0
 	\date		12/04/2017
 	\~english
-	\brief		Matrices Uniform buffer management.
+	\brief		Model Uniform buffer management.
 	\~french
-	\brief		Gestion du tampon de variables uniformes pour les matrices.
+	\brief		Gestion du tampon de variables uniformes pour le modèle.
 	*/
-	class ModelMatrixUbo
+	class ModelUbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace castor3d
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API ModelMatrixUbo( ModelMatrixUbo const & ) = delete;
-		C3D_API ModelMatrixUbo & operator=( ModelMatrixUbo const & ) = delete;
-		C3D_API ModelMatrixUbo( ModelMatrixUbo && ) = default;
-		C3D_API ModelMatrixUbo & operator=( ModelMatrixUbo && ) = default;
+		C3D_API ModelUbo( ModelUbo const & ) = delete;
+		C3D_API ModelUbo & operator=( ModelUbo const & ) = delete;
+		C3D_API ModelUbo( ModelUbo && ) = default;
+		C3D_API ModelUbo & operator=( ModelUbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,41 +59,42 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API ModelMatrixUbo( Engine & engine );
+		C3D_API ModelUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~ModelMatrixUbo();
+		C3D_API ~ModelUbo();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_model			The new model matrix.
+		 *\param[in]	p_shadowReceiver	Tells if the model receives shadows.
+		 *\param[in]	p_materialIndex		The material index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_model			La nouvelle matrice modèle.
+		 *\param[in]	p_shadowReceiver	Dit si le modèle reçoit les ombres.
+		 *\param[in]	p_materialIndex		L'indice du matériau.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & p_model )const;
+		C3D_API void update( bool p_shadowReceiver
+			, uint32_t p_materialIndex )const;
 		/**
 		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_model			The new model matrix.
-		 *\param[in]	p_projection	The new normal matrix.
+		 *\brief		sets the environment map index value.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_model			La nouvelle matrice modèle.
-		 *\param[in]	p_projection	La nouvelle matrice normale.
+		 *\brief		Définit la valeur de l'indice de la texture d'environnement.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & p_model
-			, castor::Matrix4x4r const & p_normal )const;
+		C3D_API void setEnvMapIndex( uint32_t p_value );
 		/**
 		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.
 		 */
+		/**@{*/
 		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
@@ -106,25 +107,29 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 2u;
+		static constexpr uint32_t BindingPoint = 4u;
 
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
 		UniformBuffer m_ubo;
-		//!\~english	The view matrix variable.
-		//!\~french		La variable de la matrice vue.
-		Uniform4x4f & m_model;
-		//!\~english	The projection matrix variable.
-		//!\~french		La variable de la matrice projection.
-		Uniform4x4f & m_normal;
+		//!\~english	The shadow receiver matrix variable.
+		//!\~french		La variable de la réception d'ombres.
+		Uniform1i & m_shadowReceiver;
+		//!\~english	The material index matrix variable.
+		//!\~french		La variable de l'indice du matériau.
+		Uniform1i & m_materialIndex;
+		//!\~english	The environment map index matrix variable.
+		//!\~french		La variable de l'indice de la texture d'environnement.
+		Uniform1i & m_environmentIndex;
 	};
 }
 
-#define UBO_MODEL_MATRIX( Writer )\
-	glsl::Ubo modelMatrices{ writer, castor3d::ShaderProgram::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
-	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxModel );\
-	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxNormal );\
-	modelMatrices.end()
+#define UBO_MODEL( Writer )\
+	glsl::Ubo model{ writer, castor3d::ShaderProgram::BufferModel, castor3d::ModelUbo::BindingPoint };\
+	auto c3d_shadowReceiver = model.declMember< glsl::Int >( castor3d::ShaderProgram::ShadowReceiver );\
+	auto c3d_materialIndex = model.declMember< glsl::Int >( castor3d::ShaderProgram::MaterialIndex );\
+	auto c3d_envMapIndex = model.declMember< glsl::Int >( castor3d::ShaderProgram::EnvironmentIndex );\
+	model.end()
 
 #endif

@@ -24,11 +24,9 @@ SOFTWARE.
 #define ___C3D_SHADER_PROGRAM_H___
 
 #include "Castor3DPrerequisites.hpp"
-
-#include "PushUniform.hpp"
-#include "ProgramInputLayout.hpp"
-
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/ProgramInputLayout.hpp"
+#include "Shader/Uniform/PushUniform.hpp"
 
 #include <Design/OwnedBy.hpp>
 

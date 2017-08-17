@@ -27,7 +27,7 @@ SOFTWARE.
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/MatrixUbo.hpp>
+#include <Shader/Ubos/MatrixUbo.hpp>
 
 namespace GrayScale
 {

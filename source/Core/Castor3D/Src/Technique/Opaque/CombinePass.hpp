@@ -26,8 +26,8 @@ SOFTWARE.
 #include "LightPass.hpp"
 #include "SsaoPass.hpp"
 
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/SceneUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
 
 namespace castor3d
 {

@@ -24,7 +24,7 @@ SOFTWARE.
 #define ___C3D_GaussianBlur_H___
 
 #include "Render/Viewport.hpp"
-#include "Shader/MatrixUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>

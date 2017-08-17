@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Render/RenderInfo.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>

@@ -36,6 +36,7 @@ namespace castor3d
 			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
 			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
 			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
 			sampler->setComparisonMode( ComparisonMode::eRefToTexture );
 			sampler->setComparisonFunc( ComparisonFunc::eLEqual );
 
@@ -83,8 +84,6 @@ namespace castor3d
 		m_frameBuffer->clear( BufferComponent::eDepth );
 		m_pass->render( 0u );
 		m_frameBuffer->unbind();
-
-		m_blur->blur( m_shadowMap.getTexture() );
 	}
 
 	void ShadowMapDirectional::doInitialise()
@@ -97,16 +96,10 @@ namespace castor3d
 		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach, texture->getType() );
 		ENSURE( m_frameBuffer->isComplete() );
 		m_frameBuffer->unbind();
-
-		m_blur = std::make_shared< GaussianBlur >( *getEngine()
-			, texture->getDimensions()
-			, texture->getPixelFormat()
-			, 5u );
 	}
 
 	void ShadowMapDirectional::doCleanup()
 	{
-		m_blur.reset();
 		m_depthAttach.reset();
 	}
 
@@ -131,7 +124,7 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		auto pxl_fFragDepth( writer.declFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
+		auto pxl_fragDepth( writer.declFragData< Float >( cuT( "pxl_fragDepth" ), 0 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -146,7 +139,7 @@ namespace castor3d
 				FI;
 			}
 
-			pxl_fFragDepth = gl_FragCoord.z();
+			pxl_fragDepth = gl_FragCoord.z();
 		} );
 
 		return writer.finalise();

@@ -2,7 +2,7 @@
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
-#include <Shader/HdrConfigUbo.hpp>
+#include <Shader/Ubos/HdrConfigUbo.hpp>
 
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>

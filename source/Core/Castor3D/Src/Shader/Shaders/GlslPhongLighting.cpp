@@ -182,8 +182,8 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 						, normalize( light.m_direction().xyz() ) );
@@ -230,8 +230,8 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, fragmentIn.m_vertex - light.m_position().xyz() );
@@ -290,8 +290,8 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, fragmentIn.m_vertex - light.m_position().xyz() );
@@ -358,8 +358,8 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 						, normalize( light.m_direction().xyz() ) );
@@ -406,8 +406,8 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, fragmentIn.m_vertex - light.m_position().xyz() );
@@ -461,8 +461,8 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "specular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, fragmentIn.m_vertex - light.m_position().xyz() );

@@ -46,6 +46,7 @@ namespace castor3d
 			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
 			sampler->setComparisonMode( ComparisonMode::eRefToTexture );
 			sampler->setComparisonFunc( ComparisonFunc::eLEqual );
 			TextureUnit unit{ engine };

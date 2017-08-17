@@ -5,7 +5,7 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/HdrConfigUbo.hpp>
+#include <Shader/Ubos/HdrConfigUbo.hpp>
 #include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>

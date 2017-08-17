@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "TestRenderSystemPrerequisites.hpp"
 
-#include <Shader/PushUniform.hpp>
+#include <Shader/Uniform/PushUniform.hpp>
 
 namespace TestRender
 {

@@ -179,7 +179,7 @@ namespace castor3d
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
 					m_writer.returnStmt( m_sample2D( lightSpacePosition
-						, 0.0004_f
+						, 0.0003_f
 						, c3d_mapShadowDirectional ) );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )

@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_OverlayUbo_H___
-#define ___C3D_OverlayUbo_H___
+#ifndef ___C3D_HdrConfigUbo_H___
+#define ___C3D_HdrConfigUbo_H___
 
-#include "UniformBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace castor3d
 {
@@ -32,11 +32,11 @@ namespace castor3d
 	\version	0.10.0
 	\date		12/04/2017
 	\~english
-	\brief		Matrices Uniform buffer management.
+	\brief		HDR configuration Uniform buffer management.
 	\~french
-	\brief		Gestion du tampon de variables uniformes pour les matrices.
+	\brief		Gestion du tampon de variables uniformes pour la configuration HDR.
 	*/
-	class OverlayUbo
+	class HdrConfigUbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace castor3d
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API OverlayUbo( OverlayUbo const & ) = delete;
-		C3D_API OverlayUbo & operator=( OverlayUbo const & ) = delete;
-		C3D_API OverlayUbo( OverlayUbo && ) = default;
-		C3D_API OverlayUbo & operator=( OverlayUbo && ) = default;
+		C3D_API HdrConfigUbo( HdrConfigUbo const & ) = delete;
+		C3D_API HdrConfigUbo & operator=( HdrConfigUbo const & ) = delete;
+		C3D_API HdrConfigUbo( HdrConfigUbo && ) = default;
+		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,38 +59,30 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API OverlayUbo( Engine & engine );
+		C3D_API HdrConfigUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~OverlayUbo();
-		/**
-		 *\~english
-		 *\brief		sets the overlay position value.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de la position de l'incrustation.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		C3D_API void setPosition( castor::Position const & p_position );
+		C3D_API ~HdrConfigUbo();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
+		 *\param[in]	p_config	The HDR configuration.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
+		 *\param[in]	p_config	La configuration HDR.
 		 */
-		C3D_API void update( int p_materialIndex )const;
+		C3D_API void update( HdrConfig const & p_config )const;
 		/**
 		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.
 		 */
+		/**@{*/
 		inline UniformBuffer & getUbo()
 		{
 			return m_ubo;
@@ -103,25 +95,25 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 2u;
+		static constexpr uint32_t BindingPoint = 8u;
 
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
 		UniformBuffer m_ubo;
-		//!\~english	The uniform variable containing overlay position.
-		//!\~french		La variable uniforme contenant la position de l'incrustation.
-		Uniform2i & m_position;
-		//!\~english	The uniform variable containing overlay's material index.
-		//!\~french		La variable uniforme contenant l'indice du matériau de l'incrustation.
-		Uniform1i & m_material;
+		//!\~english	The shadow receiver matrix variable.
+		//!\~french		La variable de la réception d'ombres.
+		Uniform1f & m_exposure;
+		//!\~english	The material index matrix variable.
+		//!\~french		La variable de l'indice du matériau.
+		Uniform1f & m_gamma;
 	};
 }
 
-#define UBO_OVERLAY( Writer )\
-	glsl::Ubo overlay{ writer, castor3d::ShaderProgram::BufferOverlay, castor3d::OverlayUbo::BindingPoint };\
-	auto c3d_position = overlay.declMember< glsl::IVec2 >( castor3d::ShaderProgram::OvPosition );\
-	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::ShaderProgram::MaterialIndex );\
-	overlay.end()
+#define UBO_HDR_CONFIG( Writer )\
+	Ubo hdrConfig{ writer, castor3d::ShaderProgram::BufferHdrConfig, castor3d::HdrConfigUbo::BindingPoint };\
+	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Exposure );\
+	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Gamma );\
+	hdrConfig.end()
 
 #endif

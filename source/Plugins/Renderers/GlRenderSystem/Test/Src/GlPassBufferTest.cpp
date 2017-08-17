@@ -12,10 +12,11 @@
 #include <Miscellaneous/ComputePipeline.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/LegacyPassBuffer.hpp>
-#include <Shader/MetallicRoughnessPassBuffer.hpp>
-#include <Shader/SpecularGlossinessPassBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Shader/PassBuffer/LegacyPassBuffer.hpp>
+#include <Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp>
+#include <Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp>
+#include <Shader/Shaders/GlslMaterial.hpp>
 #include <Texture/TextureImage.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -24,7 +25,6 @@
 #include <Graphics/PixelBuffer.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
 
 using namespace castor;
 using namespace castor3d;
@@ -58,7 +58,7 @@ namespace Testing
 		{
 			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
-			LegacyMaterials materials{ writer };
+			shader::LegacyMaterials materials{ writer };
 			materials.declare();
 			uint32_t index = 0;
 			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
@@ -92,7 +92,7 @@ namespace Testing
 		{
 			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
-			PbrMRMaterials materials{ writer };
+			shader::PbrMRMaterials materials{ writer };
 			materials.declare();
 			uint32_t index = 0;
 			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
@@ -124,7 +124,7 @@ namespace Testing
 		{
 			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
-			PbrSGMaterials materials{ writer };
+			shader::PbrSGMaterials materials{ writer };
 			materials.declare();
 			uint32_t index = 0;
 			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
@@ -353,7 +353,7 @@ namespace Testing
 			, doCreateVtxShader( m_engine )
 			, doCreateLegacyPixelShader( m_engine ) };
 
-		LegacyPassBuffer passBuffer{ m_engine, glsl::MaxMaterialsCount };
+		LegacyPassBuffer passBuffer{ m_engine, shader::MaxMaterialsCount };
 		passBuffer.addPass( *pass );
 		passBuffer.update();
 		passBuffer.bind();

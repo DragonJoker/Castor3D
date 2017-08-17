@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -98,9 +98,6 @@ namespace castor3d
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 		TextureAttachmentSPtr m_depthAttach;
-		//!\~english	The gaussian blur.
-		//!\~french		Le flou gaussien.
-		GaussianBlurSPtr m_blur;
 	};
 }
 

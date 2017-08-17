@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "StencilPass.hpp"
 
-#include <Shader/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
 
 namespace castor3d
 {

@@ -1,4 +1,4 @@
-#include "LightPass.hpp"
+﻿#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -8,8 +8,8 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
-#include <Shader/ModelMatrixUbo.hpp>
-#include <Shader/SceneUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/SceneUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>

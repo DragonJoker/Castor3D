@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_MorphingUbo_H___
-#define ___C3D_MorphingUbo_H___
+#ifndef ___C3D_MatrixUbo_H___
+#define ___C3D_MatrixUbo_H___
 
-#include "UniformBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace castor3d
 {
@@ -36,7 +36,7 @@ namespace castor3d
 	\~french
 	\brief		Gestion du tampon de variables uniformes pour les matrices.
 	*/
-	class MorphingUbo
+	class MatrixUbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace castor3d
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API MorphingUbo( MorphingUbo const & ) = delete;
-		C3D_API MorphingUbo & operator=( MorphingUbo const & ) = delete;
-		C3D_API MorphingUbo( MorphingUbo && ) = default;
-		C3D_API MorphingUbo & operator=( MorphingUbo && ) = default;
+		C3D_API MatrixUbo( MatrixUbo const & ) = delete;
+		C3D_API MatrixUbo & operator=( MatrixUbo const & ) = delete;
+		C3D_API MatrixUbo( MatrixUbo && ) = default;
+		C3D_API MatrixUbo & operator=( MatrixUbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,23 +59,37 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API MorphingUbo( Engine & engine );
+		C3D_API MatrixUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~MorphingUbo();
+		C3D_API ~MatrixUbo();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_time	The current time index.
+		 *\param[in]	p_view			The new view matrix.
+		 *\param[in]	p_projection	The new projection matrix.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_time	L'indice de temps courant.
+		 *\param[in]	p_view			La nouvelle matrice de vue.
+		 *\param[in]	p_projection	La nouvelle matrice de projection.
 		 */
-		C3D_API void update( float p_time )const;
+		C3D_API void update( castor::Matrix4x4r const & p_view
+			, castor::Matrix4x4r const & p_projection )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\remarks		View matrix won't be updated.
+		 *\param[in]	p_projection	The new projection matrix.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\remarks		La matrice de vue ne sera pas mise à jour.
+		 *\param[in]	p_projection	La nouvelle matrice de projection.
+		 */
+		C3D_API void update( castor::Matrix4x4r const & p_projection )const;
 		/**
 		 *\~english
 		 *\name			getters.
@@ -94,21 +108,29 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 6u;
+		static constexpr uint32_t BindingPoint = 1u;
 
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
 		UniformBuffer m_ubo;
-		//!\~english	The time uniform variable.
-		//!\~french		La variable uniforme contenant le temps.
-		Uniform1f & m_time;
+		//!\~english	The view matrix variable.
+		//!\~french		La variable de la matrice vue.
+		Uniform4x4f & m_view;
+		//!\~english	The projection matrix variable.
+		//!\~french		La variable de la matrice projection.
+		Uniform4x4f & m_projection;
+		//!\~english	The inverse projection matrix variable.
+		//!\~french		La variable de la matrice projection inverse.
+		Uniform4x4f & m_invProjection;
 	};
 }
 
-#define UBO_MORPHING( Writer, Flags )\
-	glsl::Ubo morphing{ writer, castor3d::ShaderProgram::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
-	auto c3d_fTime = morphing.declMember< glsl::Float >( castor3d::ShaderProgram::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
-	morphing.end()
+#define UBO_MATRIX( Writer )\
+	glsl::Ubo matrices{ writer, castor3d::ShaderProgram::BufferMatrix, castor3d::MatrixUbo::BindingPoint };\
+	auto c3d_mtxProjection = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxProjection );\
+	auto c3d_mtxView = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxView );\
+	auto c3d_mtxInvProjection = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxInvProjection );\
+	matrices.end()
 
 #endif

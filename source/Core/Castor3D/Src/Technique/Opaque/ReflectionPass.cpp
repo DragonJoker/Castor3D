@@ -11,8 +11,8 @@
 #include <Render/RenderSystem.hpp>
 #include <Scene/Scene.hpp>
 #include <Scene/Skybox.hpp>
-#include <Shader/MatrixUbo.hpp>
-#include <Shader/SceneUbo.hpp>
+#include <Shader/Ubos/MatrixUbo.hpp>
+#include <Shader/Ubos/SceneUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Shader/UniformBuffer.hpp>
 #include <Texture/Sampler.hpp>

@@ -1,13 +1,13 @@
-#include "MaterialCache.hpp"
+﻿#include "MaterialCache.hpp"
 
 #include "Engine.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Scene/SceneFileParser.hpp"
-#include "Shader/LegacyPassBuffer.hpp"
-#include "Shader/MetallicRoughnessPassBuffer.hpp"
-#include "Shader/SpecularGlossinessPassBuffer.hpp"
+#include "Shader/PassBuffer/LegacyPassBuffer.hpp"
+#include "Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
+#include "Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
 #include "Texture/Sampler.hpp"
 
 #include "Shader/Shaders/GlslMaterial.hpp"
