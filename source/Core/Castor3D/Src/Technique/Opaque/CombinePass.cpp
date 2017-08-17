@@ -1,4 +1,4 @@
-#include "CombinePass.hpp"
+﻿#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -263,7 +263,7 @@ namespace castor3d
 				, [&]()
 				{
 					auto ambient = writer.declLocale( cuT( "ambient" )
-						, texture( c3d_mapReflection, vtx_texture ).xyz() );
+						, vec3( 0.0_f ) );
 					auto light = writer.declLocale( cuT( "light" )
 						, texture( c3d_mapPostLight, vtx_texture ).xyz() );
 					auto data1 = writer.declLocale( cuT( "data1" )
@@ -296,14 +296,44 @@ namespace castor3d
 						occlusion *= texture( c3d_mapSsao, vtx_texture ).r();
 					}
 
+					ambient = texture( c3d_mapReflection, vtx_texture ).xyz();
 					ambient *= c3d_v4AmbientLight.xyz() * occlusion;
 
-					auto refract = writer.declLocale( cuT( "refract" )
-						, texture( c3d_mapRefraction, vtx_texture ) );
-					
-					IF( writer, refract != vec4( -1.0_f ) )
+					IF( writer, envMapIndex >= 1_i )
 					{
-						ambient = mix( refract.xyz(), ambient, refract.w() );
+						auto refract = writer.declLocale( cuT( "refract" )
+							, texture( c3d_mapRefraction, vtx_texture ) );
+
+						IF( writer, refraction != 0_i )
+						{
+							IF( writer, reflection != 0_i )
+							{
+								ambient = mix( refract.xyz(), ambient, refract.w() );
+							}
+							ELSE
+							{
+								ambient = refract.xyz();
+							}
+							FI;
+						}
+						ELSEIF( writer, refract != vec4( -1.0_f ) )
+						{
+							ambient = mix( refract.xyz(), ambient, refract.w() );
+						}
+						FI;
+					}
+					ELSE
+					{
+						ambient = texture( c3d_mapReflection, vtx_texture ).xyz();
+						ambient *= c3d_v4AmbientLight.xyz() * occlusion;
+						auto refract = writer.declLocale( cuT( "refract" )
+							, texture( c3d_mapRefraction, vtx_texture ) );
+
+						IF( writer, refract != vec4( -1.0_f ) )
+						{
+							ambient = mix( refract.xyz(), ambient, refract.w() );
+						}
+						FI;
 					}
 					FI;
 

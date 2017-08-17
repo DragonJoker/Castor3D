@@ -331,17 +331,17 @@ namespace castor3d
 
 	void RenderTechnique::debugDisplay( Size const & size )const
 	{
-#if DISPLAY_DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING && !defined( NDEBUG )
+#if DISPLAY_DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING
 
 		m_deferredRendering->debugDisplay();
 
 #endif
-#if USE_WEIGHTED_BLEND && DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS && !defined( NDEBUG )
+#if USE_WEIGHTED_BLEND && DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS
 
 		m_weightedBlendRendering->debugDisplay();
 
 #endif
-#if DISPLAY_DEBUG_IBL_BUFFERS && !defined( NDEBUG )
+#if DISPLAY_DEBUG_IBL_BUFFERS
 
 		m_frameBuffer.m_frameBuffer->bind();
 		scene.getSkybox().getIbl().debugDisplay( size );

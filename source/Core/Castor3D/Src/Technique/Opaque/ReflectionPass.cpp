@@ -1,4 +1,4 @@
-﻿#include "ReflectionPass.hpp"
+#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -32,8 +32,7 @@ namespace castor3d
 	namespace
 	{
 		static uint32_t constexpr c_environmentStart = 6u;
-		static uint32_t constexpr c_pbrEnvironmentCount = 12u;
-		static uint32_t constexpr c_legEnvironmentCount = 16u;
+		static uint32_t constexpr c_environmentCount = 16u;
 
 		VertexBufferSPtr doCreateVbo( Engine & engine )
 		{
@@ -113,7 +112,7 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
 			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 			auto c3d_mapPostLight = writer.declUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
-			auto c3d_mapEnvironment = writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment, c_legEnvironmentCount );
+			auto c3d_mapEnvironment = writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment, c_environmentCount );
 			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
 			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
@@ -130,19 +129,26 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 			{
-				auto data1 = writer.declLocale( cuT( "data1" ), texture( c3d_mapData1, vtx_texture ) );
-				auto flags = writer.declLocale( cuT( "flags" ), data1.w() );
-				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" ), 0_i );
-				auto receiver = writer.declLocale( cuT( "receiver" ), 0_i );
-				auto reflection = writer.declLocale( cuT( "reflection" ), 0_i );
-				auto refraction = writer.declLocale( cuT( "refraction" ), 0_i );
+				auto data1 = writer.declLocale( cuT( "data1" )
+					, texture( c3d_mapData1, vtx_texture ) );
+				auto flags = writer.declLocale( cuT( "flags" )
+					, data1.w() );
+				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
+					, 0_i );
+				auto receiver = writer.declLocale( cuT( "receiver" )
+					, 0_i );
+				auto reflection = writer.declLocale( cuT( "reflection" )
+					, 0_i );
+				auto refraction = writer.declLocale( cuT( "refraction" )
+					, 0_i );
 				decodeMaterial( writer
 					, flags
 					, receiver
 					, reflection
 					, refraction
 					, envMapIndex );
-				auto postLight = writer.declLocale( cuT( "postLight" ), texture( c3d_mapPostLight, vtx_texture ).xyz() );
+				auto postLight = writer.declLocale( cuT( "postLight" )
+					, texture( c3d_mapPostLight, vtx_texture ).xyz() );
 
 				IF( writer, "envMapIndex < 1 || ( reflection + refraction == 0 )" )
 				{
@@ -159,7 +165,8 @@ namespace castor3d
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_v3CameraPosition ) );
 				envMapIndex = envMapIndex - 1_i;
-				auto diffuse = writer.declLocale( cuT( "diffuse" ), texture( c3d_mapData2, vtx_texture ).xyz() );
+				auto diffuse = writer.declLocale( cuT( "diffuse" )
+					, texture( c3d_mapData2, vtx_texture ).xyz() );
 
 				IF( writer, reflection != 0_i )
 				{
@@ -215,8 +222,9 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
 			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
-			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance, c_pbrEnvironmentCount );
-			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered, c_pbrEnvironmentCount );
+			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance );
+			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
+			auto c3d_mapEnvironment = writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment, c_environmentCount );
 			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
 			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
@@ -275,38 +283,112 @@ namespace castor3d
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_v3CameraPosition ) );
 
-				pxl_reflection = occlusion * utils.computeMetallicIBL( normal
-					, position
-					, albedo
-					, metalness
-					, roughness
-					, c3d_v3CameraPosition
-					, c3d_mapIrradiance[envMapIndex]
-					, c3d_mapPrefiltered[envMapIndex]
-					, c3d_mapBrdf
-					, envMapIndex );
-
-				auto ratio = writer.declLocale( cuT( "ratio" )
-					, texture( c3d_mapData4, vtx_texture ).w() );
-
-				IF( writer, ratio != 0.0_f )
+				IF( writer, envMapIndex > 0_i )
 				{
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, ratio ) );
-					refracted.y() = writer.ternary( envMapIndex != 0_i, refracted.y(), -refracted.y() );
-					pxl_refraction.xyz() = texture( c3d_mapPrefiltered[envMapIndex], refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
-					pxl_refraction.xyz() *= albedo / length( albedo );
-					pxl_refraction.w() = fresnel;
+					envMapIndex = envMapIndex - 1_i;
+
+					IF( writer, reflection != 0_i )
+					{
+						auto reflected = writer.declLocale( cuT( "reflected" )
+							, reflect( incident, normal ) );
+						pxl_reflection = texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
+
+						IF( writer, refraction == 0_i )
+						{
+							pxl_reflection *= albedo / length( albedo );
+						}
+						FI;
+					}
+					ELSE
+					{
+						pxl_reflection = occlusion * utils.computeMetallicIBL( normal
+							, position
+							, albedo
+							, metalness
+							, roughness
+							, c3d_v3CameraPosition
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, c3d_mapBrdf );
+					}
+					FI;
+
+					auto ratio = writer.declLocale( cuT( "ratio" )
+						, texture( c3d_mapData4, vtx_texture ).w() );
+
+					IF( writer, refraction != 0_i )
+					{
+						auto subRatio = writer.declLocale( cuT( "subRatio" )
+							, 1.0_f - ratio );
+						auto addRatio = writer.declLocale( cuT( "addRatio" )
+							, 1.0_f + ratio );
+						auto reflectance = writer.declLocale( cuT( "reflectance" )
+							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+						auto product = writer.declLocale( cuT( "product" )
+							, max( 0.0_f, dot( -incident, normal ) ) );
+						auto fresnel = writer.declLocale( cuT( "fresnel" )
+							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						auto refracted = writer.declLocale( cuT( "refracted" )
+							, refract( incident, normal, ratio ) );
+						pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
+						pxl_refraction.xyz() *= albedo / length( albedo );
+						pxl_refraction.w() = fresnel;
+					}
+					ELSEIF( writer, ratio != 0.0_f )
+					{
+						auto subRatio = writer.declLocale( cuT( "subRatio" )
+							, 1.0_f - ratio );
+						auto addRatio = writer.declLocale( cuT( "addRatio" )
+							, 1.0_f + ratio );
+						auto reflectance = writer.declLocale( cuT( "reflectance" )
+							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+						auto product = writer.declLocale( cuT( "product" )
+							, max( 0.0_f, dot( -incident, normal ) ) );
+						auto fresnel = writer.declLocale( cuT( "fresnel" )
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						auto refracted = writer.declLocale( cuT( "refracted" )
+							, refract( incident, normal, ratio ) );
+						refracted.y() = -refracted.y();
+						pxl_refraction.xyz() = texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
+						pxl_refraction.xyz() *= albedo / length( albedo );
+						pxl_refraction.w() = fresnel;
+					}
+					FI;
+				}
+				ELSE
+				{
+					pxl_reflection = occlusion * utils.computeMetallicIBL( normal
+						, position
+						, albedo
+						, metalness
+						, roughness
+						, c3d_v3CameraPosition
+						, c3d_mapIrradiance
+						, c3d_mapPrefiltered
+						, c3d_mapBrdf );
+					auto ratio = writer.declLocale( cuT( "ratio" )
+						, texture( c3d_mapData4, vtx_texture ).w() );
+
+					IF( writer, ratio != 0.0_f )
+					{
+						auto subRatio = writer.declLocale( cuT( "subRatio" )
+							, 1.0_f - ratio );
+						auto addRatio = writer.declLocale( cuT( "addRatio" )
+							, 1.0_f + ratio );
+						auto reflectance = writer.declLocale( cuT( "reflectance" )
+							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+						auto product = writer.declLocale( cuT( "product" )
+							, max( 0.0_f, dot( -incident, normal ) ) );
+						auto fresnel = writer.declLocale( cuT( "fresnel" )
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						auto refracted = writer.declLocale( cuT( "refracted" )
+							, refract( incident, normal, ratio ) );
+						refracted.y() = writer.ternary( envMapIndex >= 0_i, refracted.y(), -refracted.y() );
+						pxl_refraction.xyz() = texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
+						pxl_refraction.xyz() *= albedo / length( albedo );
+						pxl_refraction.w() = fresnel;
+					}
+					FI;
 				}
 				FI;
 			} );
@@ -328,8 +410,9 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
 			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
-			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance, c_pbrEnvironmentCount );
-			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered, c_pbrEnvironmentCount );
+			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance );
+			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
+			auto c3d_mapEnvironment = writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment, c_environmentCount );
 			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
 			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
@@ -385,25 +468,38 @@ namespace castor3d
 					, data1.xyz() );
 				auto position = writer.declLocale( cuT( "position" )
 					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+				auto incident = writer.declLocale( cuT( "incident" )
+					, normalize( position - c3d_v3CameraPosition ) );
+				envMapIndex = envMapIndex - 1_i;
 
-				pxl_reflection = occlusion * utils.computeSpecularIBL( normal
+				IF( writer, reflection != 0_i )
+				{
+					auto reflected = writer.declLocale( cuT( "reflected" )
+						, reflect( incident, normal ) );
+					pxl_reflection = texture( c3d_mapEnvironment[envMapIndex - 1], reflected ).xyz();
+				}
+				ELSE
+				{
+					pxl_reflection = occlusion * utils.computeSpecularIBL( normal
 					, position
-					, diffuse
-					, specular
-					, glossiness
-					, c3d_v3CameraPosition
-					, c3d_mapIrradiance[envMapIndex]
-					, c3d_mapPrefiltered[envMapIndex]
-					, c3d_mapBrdf
-					, envMapIndex );
+						, diffuse
+						, specular
+						, glossiness
+						, c3d_v3CameraPosition
+						, c3d_mapIrradiance
+						, c3d_mapPrefiltered
+						, c3d_mapBrdf );
+				}
+				FI;
 
 				auto ratio = writer.declLocale( cuT( "ratio" )
 					, texture( c3d_mapData4, vtx_texture ).w() );
 
-				IF( writer, ratio != 0.0_f )
+				IF( writer, refraction != 0_i )
 				{
-					auto incident = writer.declLocale( cuT( "incident" )
-						, normalize( position - c3d_v3CameraPosition ) );
+				}
+				ELSEIF( writer, ratio != 0.0_f )
+				{
 					auto roughness = writer.declLocale( cuT( "roughness" )
 						, 1.0_f - glossiness );
 					auto subRatio = writer.declLocale( cuT( "subRatio" )
@@ -419,9 +515,20 @@ namespace castor3d
 					auto refracted = writer.declLocale( cuT( "refract" )
 						, refract( incident, normal, ratio ) );
 					refracted.y() = writer.ternary( envMapIndex != 0_i, refracted.y(), -refracted.y() );
-					pxl_refraction.xyz() = texture( c3d_mapPrefiltered[envMapIndex], refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
-					pxl_refraction.xyz() *= diffuse / length( diffuse );
-					pxl_refraction.w() = fresnel;
+
+					IF( writer, refraction != 0_i )
+					{
+						pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
+						pxl_refraction.xyz() *= diffuse / length( diffuse );
+						pxl_refraction.w() = fresnel;
+					}
+					ELSE
+					{
+						pxl_refraction.xyz() = texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
+						pxl_refraction.xyz() *= diffuse / length( diffuse );
+						pxl_refraction.w() = fresnel;
+					}
+					FI;
 				}
 				FI;
 			} );
@@ -454,26 +561,16 @@ namespace castor3d
 
 			if ( isPbr )
 			{
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->setValue( c );
-				++c;
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel, c_pbrEnvironmentCount )->setValues(
-				{
-					c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7, c + 8, c + 9, c + 10, c + 11,
-				} );
-				c += c_pbrEnvironmentCount;
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel, c_pbrEnvironmentCount )->setValues(
-				{
-					c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7, c + 8, c + 9, c + 10, c + 11,
-				} );
+				result->createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->setValue( c++ );
+				result->createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel )->setValue( c++ );
+				result->createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel )->setValue( c++ );
 			}
-			else
+
+			result->createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, c_environmentCount )->setValues(
 			{
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, c_legEnvironmentCount )->setValues(
-				{
-					c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7,
-					c + 8, c + 9, c + 10, c + 11, c + 12, c + 13, c + 14, c + 15,
-				} );
-			}
+				c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7,
+				c + 8, c + 9, c + 10, c + 11, c + 12, c + 13, c + 14, c + 15,
+			} );
 
 			result->initialise();
 			return result;
@@ -669,17 +766,15 @@ namespace castor3d
 			++index;
 			skyboxIbl.getIrradiance().getTexture()->bind( index );
 			skyboxIbl.getIrradiance().getSampler()->bind( index );
-			skyboxIbl.getPrefilteredEnvironment().getTexture()->bind( index + c_pbrEnvironmentCount );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index + c_pbrEnvironmentCount );
+			++index;
+			skyboxIbl.getPrefilteredEnvironment().getTexture()->bind( index );
+			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index );
 			++index;
 
 			for ( auto & map : maps )
 			{
-				auto & ibl = map.get().getIbl();
-				ibl.getIrradiance().getTexture()->bind( index );
-				ibl.getIrradiance().getSampler()->bind( index );
-				ibl.getPrefilteredEnvironment().getTexture()->bind( index + c_pbrEnvironmentCount );
-				ibl.getPrefilteredEnvironment().getSampler()->bind( index + c_pbrEnvironmentCount );
+				map.get().getTexture().getTexture()->bind( index );
+				map.get().getTexture().getSampler()->bind( index );
 				++index;
 			}
 
@@ -693,17 +788,15 @@ namespace castor3d
 			++index;
 			skyboxIbl.getIrradiance().getTexture()->unbind( index );
 			skyboxIbl.getIrradiance().getSampler()->unbind( index );
-			skyboxIbl.getPrefilteredEnvironment().getTexture()->unbind( index + c_pbrEnvironmentCount );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index + c_pbrEnvironmentCount );
+			++index;
+			skyboxIbl.getPrefilteredEnvironment().getTexture()->unbind( index );
+			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index );
 			++index;
 
 			for ( auto & map : maps )
 			{
-				auto & ibl = map.get().getIbl();
-				ibl.getIrradiance().getTexture()->unbind( index );
-				ibl.getIrradiance().getSampler()->unbind( index );
-				ibl.getPrefilteredEnvironment().getTexture()->unbind( index + c_pbrEnvironmentCount );
-				ibl.getPrefilteredEnvironment().getSampler()->unbind( index + c_pbrEnvironmentCount );
+				map.get().getTexture().getTexture()->unbind( index );
+				map.get().getTexture().getSampler()->unbind( index );
 				++index;
 			}
 		}

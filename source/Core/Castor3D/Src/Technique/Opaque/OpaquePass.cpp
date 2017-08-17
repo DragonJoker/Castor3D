@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -487,8 +487,8 @@ namespace castor3d
 			auto flags = writer.declLocale( cuT( "flags" ), 0.0_f );
 			encodeMaterial( writer
 				, c3d_shadowReceiver
-				, 0_i
-				, 0_i
+				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
+				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
 				, flags );
 
@@ -619,8 +619,8 @@ namespace castor3d
 			auto flags = writer.declLocale( cuT( "flags" ), 0.0_f );
 			encodeMaterial( writer
 				, c3d_shadowReceiver
-				, 0_i
-				, 0_i
+				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
+				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
 				, flags );
 

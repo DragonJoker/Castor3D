@@ -310,7 +310,7 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().bind();
 		getEngine()->getOverlayCache().render( *scene, m_size );
 
-#if defined( DISPLAY_DEBUG ) && !defined( NDEBUG )
+#if 1//defined( DISPLAY_DEBUG ) && !defined( NDEBUG )
 
 		camera->apply();
 		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );

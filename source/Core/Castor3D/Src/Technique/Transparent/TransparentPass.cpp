@@ -1,4 +1,4 @@
-#include "TransparentPass.hpp"
+﻿#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -689,8 +689,7 @@ namespace castor3d
 				, c3d_v3CameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
-				, c3d_mapBrdf
-				, 0_i );
+				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
 				, albedo + emissive + ambient );
 
@@ -880,8 +879,7 @@ namespace castor3d
 				, c3d_v3CameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
-				, c3d_mapBrdf
-				, 0_i );
+				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
 				, diffuse + emissive + ambient );
 

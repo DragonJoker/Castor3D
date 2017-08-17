@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -495,8 +495,7 @@ namespace castor3d
 				, c3d_v3CameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
-				, c3d_mapBrdf
-				, 0_i );
+				, c3d_mapBrdf );
 			pxl_v4FragColor.xyz() = diffuse + emissive + ambient;
 
 			if ( !m_opaque )
@@ -654,8 +653,7 @@ namespace castor3d
 				, c3d_v3CameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
-				, c3d_mapBrdf
-				, 0_i );
+				, c3d_mapBrdf );
 			pxl_v4FragColor.xyz() = light + emissive + ambient;
 
 			if ( !m_opaque )

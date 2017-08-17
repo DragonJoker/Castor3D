@@ -1,4 +1,4 @@
-﻿#include "EnvironmentMap.hpp"
+#include "EnvironmentMap.hpp"
 
 #include "Engine.hpp"
 
@@ -193,12 +193,6 @@ namespace castor3d
 			{
 				pass->initialise( MapSize );
 			}
-
-			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
-				|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-			{
-				m_ibl = std::make_unique< IblTextures >( scene );
-			}
 		}
 
 		return result;
@@ -206,8 +200,6 @@ namespace castor3d
 
 	void EnvironmentMap::cleanup()
 	{
-		m_ibl.reset();
-
 		if ( m_frameBuffer )
 		{
 			for ( auto & pass : m_passes )
@@ -261,9 +253,14 @@ namespace castor3d
 				face++;
 			}
 
-			if ( m_ibl )
+			auto & scene = *m_node.getScene();
+
+			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
+				|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
-				m_ibl->update( *m_environmentMap.getTexture() );
+				m_environmentMap.getTexture()->bind( 0 );
+				m_environmentMap.getTexture()->generateMipmaps();
+				m_environmentMap.getTexture()->unbind( 0 );
 			}
 
 			m_render = 0u;
