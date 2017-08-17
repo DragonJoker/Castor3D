@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	template< typename T >
 	void writeAssign( GlslWriter * p_writer, Type & p_lhs, T const & p_rhs );

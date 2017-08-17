@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslPerVertex.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename TypeT >
 	struct InParam

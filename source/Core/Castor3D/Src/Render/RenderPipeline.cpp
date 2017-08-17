@@ -6,7 +6,7 @@
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 
@@ -60,9 +60,9 @@ namespace castor3d
 
 		if ( m_program.hasObject( ShaderType::ePixel ) )
 		{
-			m_directionalShadowMaps = m_program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-			m_spotShadowMaps = m_program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+			m_directionalShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional, ShaderType::ePixel );
+			m_spotShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel );
+			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint, ShaderType::ePixel );
 			m_environmentMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 
 			if ( ( checkFlag( m_flags.m_programFlags, ProgramFlag::ePbrMetallicRoughness )

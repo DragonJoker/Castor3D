@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	inline Boolean::Boolean()
 		: Type( cuT( "bool " ) )

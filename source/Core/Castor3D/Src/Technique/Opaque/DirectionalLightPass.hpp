@@ -66,8 +66,8 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
-				, GLSL::Shader const & vtx
-				, GLSL::Shader const & pxl );
+				, glsl::Shader const & vtx
+				, glsl::Shader const & pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -166,12 +166,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
-		GLSL::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
+		glsl::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr doCreateProgram( GLSL::Shader const & vtx
-			, GLSL::Shader const & pxl )const override;
+		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
+			, glsl::Shader const & pxl )const override;
 
 	private:
 		//!\~english	The vertex buffer.

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,6 +28,57 @@ namespace castor3d
 	/**@name Scene */
 	//@{
 
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Shadow filter types enumeration.
+	\~french
+	\brief		Enumération des types de filtrage des ombres.
+	*/
+	enum class ShadowType
+	{
+		//!\~english	No shadows at all.
+		//!\~french		Pas d'ombres du tout.
+		eNone,
+		//!\~english	Poisson filtering.
+		//!\~french		Filtrage poisson.
+		eRaw,
+		//!\~english	Poisson filtering.
+		//!\~french		Filtrage poisson.
+		ePoisson,
+		//!\~english	Stratified poisson filtering.
+		//!\~french		Filtrage poisson stratifié.
+		eStratifiedPoisson,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Fog types enumeration.
+	\~french
+	\brief		Enumération des types de brouillard.
+	*/
+	enum class FogType
+	{
+		//!\~english	No fog.
+		//!\~french		Pas de brouillard
+		eDisabled,
+		//!\~english	Fog intensity increases linearly with distance to camera.
+		//!\~french		L'intensité du brouillard augmente lin�airement avec la distance à la caméra.
+		eLinear,
+		//!\~english	Fog intensity increases exponentially with distance to camera.
+		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
+		//!\~french		
+		eExponential,
+		//!\~english	Fog intensity increases even more with distance to camera.
+		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
+		eSquaredExponential,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -80,7 +131,7 @@ namespace castor3d
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de filtrage d'ombres.
 	 */
-	C3D_API GLSL::ShadowType getShadowType( SceneFlags const & p_flags );
+	C3D_API ShadowType getShadowType( SceneFlags const & p_flags );
 	/**
 	 *\~english
 	 *\brief		Gives the fog type matching the given flags.
@@ -91,7 +142,7 @@ namespace castor3d
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de brouillard.
 	 */
-	C3D_API GLSL::FogType getFogType( SceneFlags const & p_flags );
+	C3D_API FogType getFogType( SceneFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0

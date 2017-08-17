@@ -315,9 +315,9 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapLineSpacingModes[cuT( "max_lines_height" )] = uint32_t( TextLineSpacingMode::eMaxLineHeight );
 	m_mapLineSpacingModes[cuT( "max_font_height" )] = uint32_t( TextLineSpacingMode::eMaxFontHeight );
 
-	m_fogTypes[cuT( "linear" )] = uint32_t( GLSL::FogType::eLinear );
-	m_fogTypes[cuT( "exponential" )] = uint32_t( GLSL::FogType::eExponential );
-	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( GLSL::FogType::eSquaredExponential );
+	m_fogTypes[cuT( "linear" )] = uint32_t( FogType::eLinear );
+	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::eExponential );
+	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::eSquaredExponential );
 
 	m_mapComparisonModes[cuT( "none" )] = uint32_t( ComparisonMode::eNone );
 	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( ComparisonMode::eRefToTexture );

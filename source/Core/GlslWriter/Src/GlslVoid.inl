@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	Void::Void()
 		: Type( cuT( "void " ) )

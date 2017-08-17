@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	gl_PerVertex::gl_PerVertex()
 		: Type( cuT( "gl_PerVertex " ) )

@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	template<>
 	struct name_of< Boolean >
@@ -214,30 +214,6 @@ namespace GLSL
 	struct name_of< SamplerCubeArrayShadow >
 	{
 		static TypeName const value = TypeName::eSamplerCubeArrayShadow;
-	};
-
-	template<>
-	struct name_of< Light >
-	{
-		static TypeName const value = TypeName::eLight;
-	};
-
-	template<>
-	struct name_of< DirectionalLight >
-	{
-		static TypeName const value = TypeName::eDirectionalLight;
-	};
-
-	template<>
-	struct name_of< PointLight >
-	{
-		static TypeName const value = TypeName::ePointLight;
-	};
-
-	template<>
-	struct name_of< SpotLight >
-	{
-		static TypeName const value = TypeName::eSpotLight;
 	};
 
 	template< typename T >

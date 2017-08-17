@@ -24,11 +24,9 @@ SOFTWARE.
 #define ___C3D_SHADER_PROGRAM_H___
 
 #include "Castor3DPrerequisites.hpp"
-
-#include "PushUniform.hpp"
-#include "ProgramInputLayout.hpp"
-
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/ProgramInputLayout.hpp"
+#include "Shader/Uniform/PushUniform.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -244,7 +242,7 @@ namespace castor3d
 		 *\param[in]	p_target	Le shader object concerné.
 		 *\param[in]	p_source	Le code de la source.
 		 */
-		C3D_API void setSource( ShaderType p_target, GLSL::Shader const & p_source );
+		C3D_API void setSource( ShaderType p_target, glsl::Shader const & p_source );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source.

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslSwizzle.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename ValueT >
 	struct Vec2T

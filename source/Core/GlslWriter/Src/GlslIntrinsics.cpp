@@ -2,7 +2,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	Vec4 operator*( Vec4 const & p_a, Mat4 const & p_b )
 	{

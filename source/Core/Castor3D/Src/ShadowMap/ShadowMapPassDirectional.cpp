@@ -1,4 +1,4 @@
-#include "ShadowMapPassDirectional.hpp"
+﻿#include "ShadowMapPassDirectional.hpp"
 
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureImage.hpp"
@@ -11,9 +11,9 @@ using namespace castor;
 namespace castor3d
 {
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
-		, Light & p_light
-		, ShadowMap const & p_shadowMap )
-		: ShadowMapPass{ engine, p_light, p_shadowMap }
+		, Scene & scene
+		, ShadowMap const & shadowMap )
+		: ShadowMapPass{ engine, scene, shadowMap }
 	{
 	}
 
@@ -21,20 +21,44 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassDirectional::doInitialise( Size const & p_size )
+	void ShadowMapPassDirectional::update( Camera const & camera
+		, RenderQueueArray & queues
+		, Light & light
+		, uint32_t index )
+	{
+		light.update( light.getParent()->getDerivedPosition()
+			, m_camera->getViewport()
+			, index );
+		m_camera->attachTo( light.getParent() );
+		m_camera->update();
+		doUpdate( queues );
+	}
+
+	void ShadowMapPassDirectional::render( uint32_t index )
+	{
+		if ( m_camera && m_initialised )
+		{
+			m_camera->apply();
+			m_matrixUbo.update( m_camera->getView()
+				, m_camera->getViewport().getProjection() );
+			doRenderNodes( m_renderQueue.getRenderNodes(), *m_camera );
+		}
+	}
+
+	bool ShadowMapPassDirectional::doInitialise( Size const & size )
 	{
 		Viewport viewport{ *getEngine() };
-		real w = real( p_size.getWidth() );
-		real h = real( p_size.getHeight() );
+		real w = real( size.getWidth() );
+		real h = real( size.getHeight() );
 		viewport.setOrtho( -w / 2, w / 2, h / 2, -h / 2, -5120.0_r, 5120.0_r );
 		viewport.update();
-		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.getName()
-			, *m_light.getScene()
-			, m_light.getParent()
+		m_camera = std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
+			, m_scene
+			, m_scene.getCameraRootNode()
 			, std::move( viewport ) );
-		m_camera->resize( p_size );
+		m_camera->resize( size );
 
-		m_renderQueue.initialise( *m_light.getScene(), *m_camera );
+		m_renderQueue.initialise( m_scene, *m_camera );
 		return true;
 	}
 
@@ -44,24 +68,9 @@ namespace castor3d
 		m_camera.reset();
 	}
 
-	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & p_queues )
+	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & queues )
 	{
-		m_light.update( m_camera->getParent()->getDerivedPosition()
-			, m_camera->getViewport()
-			, m_index );
-		m_camera->update();
-		p_queues.push_back( m_renderQueue );
-	}
-
-	void ShadowMapPassDirectional::doRender( uint32_t p_face )
-	{
-		if ( m_camera && m_initialised )
-		{
-			m_camera->apply();
-			m_matrixUbo.update( m_camera->getView()
-				, m_camera->getViewport().getProjection() );
-			doRenderNodes( m_renderQueue.getRenderNodes(), *m_camera );
-		}
+		queues.push_back( m_renderQueue );
 	}
 
 	void ShadowMapPassDirectional::doPrepareBackPipeline( ShaderProgram & p_program

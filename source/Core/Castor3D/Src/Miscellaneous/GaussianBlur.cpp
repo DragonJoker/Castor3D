@@ -1,4 +1,4 @@
-#include "GaussianBlur.hpp"
+﻿#include "GaussianBlur.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -12,7 +12,7 @@
 #include "Scene/Camera.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/Uniform.hpp"
+#include "Shader/Uniform/Uniform.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
@@ -22,9 +22,9 @@
 #include "Texture/TextureUnit.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 #include <random>
 
@@ -63,10 +63,10 @@ namespace castor3d
 			return vertexBuffer;
 		}
 
-		GLSL::Shader getVertexProgram( Engine & engine )
+		glsl::Shader getVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			UBO_MATRIX( writer );
@@ -87,10 +87,10 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader getBlurXProgram( Engine & engine )
+		glsl::Shader getBlurXProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -124,10 +124,10 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader getBlurYProgram( Engine & engine )
+		glsl::Shader getBlurYProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs

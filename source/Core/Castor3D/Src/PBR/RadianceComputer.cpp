@@ -193,9 +193,9 @@ namespace castor3d
 	ShaderProgramSPtr RadianceComputer::doCreateProgram()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		GLSL::Shader vtx;
+		glsl::Shader vtx;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
@@ -218,9 +218,9 @@ namespace castor3d
 			vtx = writer.finalise();
 		}
 
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs

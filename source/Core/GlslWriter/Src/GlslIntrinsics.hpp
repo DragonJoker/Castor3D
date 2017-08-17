@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslFunctionParam.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename T > struct IsArithmeticType : public std::false_type {};
 	template<> struct IsArithmeticType< Int > : public std::true_type {};

@@ -1,4 +1,4 @@
-#include "Castor3DPrerequisites.hpp"
+﻿#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -6,16 +6,19 @@
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
-#include <GlslMaterial.hpp>
-#include <GlslPhongLighting.hpp>
-#include <GlslMetallicBrdfLighting.hpp>
-#include <GlslSpecularBrdfLighting.hpp>
+
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
 IMPLEMENT_EXPORTED_OWNED_BY( castor3d::Engine, Engine )
 IMPLEMENT_EXPORTED_OWNED_BY( castor3d::RenderSystem, RenderSystem )
 IMPLEMENT_EXPORTED_OWNED_BY( castor3d::Scene, Scene )
 
 using namespace castor;
+using namespace glsl;
 
 namespace castor3d
 {
@@ -106,503 +109,480 @@ namespace castor3d
 		return 0;
 	}
 
-	namespace legacy
+	namespace shader
 	{
-		void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_normal
-			, GLSL::Float & p_shininess
-			, TextureChannels const & textureFlags
-			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )
+		namespace legacy
 		{
-			using namespace GLSL;
-			auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
-
-			if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
-			{
-				auto vtx_normal( p_writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
-				auto vtx_tangent( p_writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
-				auto vtx_bitangent( p_writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
-				auto c3d_mapNormal( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-
-				auto tbn = p_writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
-				auto v3MapNormal = p_writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
-				v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
-				p_normal = normalize( tbn * v3MapNormal );
-			}
-
-			if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
-			{
-				auto c3d_mapGloss( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
-
-				p_shininess = texture( c3d_mapGloss, texCoord.xy() ).r();
-			}
-		}
-
-		void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_diffuse
-			, GLSL::Vec3 & p_specular
-			, GLSL::Vec3 & p_emissive
-			, GLSL::Float const & p_gamma
-			, TextureChannels const & textureFlags
-			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )
-		{
-			using namespace GLSL;
-			auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
-
-			if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
-			{
-				auto c3d_mapDiffuse( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
-				p_diffuse *= writeFunctionCall< Vec3 >( &p_writer, cuT( "removeGamma" )
-					, p_gamma
-					, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
-			}
-
-			if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
-			{
-				auto c3d_mapSpecular( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
-
-				p_specular *= texture( c3d_mapSpecular, texCoord.xy() ).xyz();
-			}
-
-			if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
-			{
-				auto c3d_mapEmissive( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
-				p_emissive *= writeFunctionCall< Vec3 >( &p_writer, cuT( "removeGamma" )
-					, p_gamma
-					, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
-			}
-		}
-
-		std::shared_ptr< GLSL::PhongLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-			, GLSL::ShadowType p_shadows )
-		{
-			return std::static_pointer_cast< GLSL::PhongLightingModel >( p_writer.createLightingModel( GLSL::PhongLightingModel::Name
-				, p_shadows ) );
-		}
-
-		std::shared_ptr< GLSL::PhongLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-			, LightType p_light
-			, GLSL::ShadowType p_shadows )
-		{
-			std::shared_ptr< GLSL::LightingModel > result;
-
-			switch ( p_light )
-			{
-			case LightType::eDirectional:
-			{
-				result = p_writer.createDirectionalLightingModel( GLSL::PhongLightingModel::Name
-					, p_shadows );
-				auto light = p_writer.declUniform< GLSL::DirectionalLight >( cuT( "light" ) );
-			}
-			break;
-
-			case LightType::ePoint:
-			{
-				result = p_writer.createPointLightingModel( GLSL::PhongLightingModel::Name
-					, p_shadows );
-				auto light = p_writer.declUniform< GLSL::PointLight >( cuT( "light" ) );
-			}
-			break;
-
-			case LightType::eSpot:
-			{
-				result = p_writer.createSpotLightingModel( GLSL::PhongLightingModel::Name
-					, p_shadows );
-				auto light = p_writer.declUniform< GLSL::SpotLight >( cuT( "light" ) );
-			}
-			break;
-
-			default:
-				FAILURE( "Invalid light type" );
-				break;
-			}
-
-			return std::static_pointer_cast< GLSL::PhongLightingModel >( result );
-		}
-	}
-
-	namespace pbr
-	{
-		namespace mr
-		{
-			void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_normal
-				, GLSL::Float & p_metallic
-				, GLSL::Float & p_roughness
+			void computePreLightingMapContributions( glsl::GlslWriter & writer
+				, glsl::Vec3 & normal
+				, glsl::Float & shininess
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags )
 			{
-				using namespace GLSL;
-				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
+				using namespace glsl;
+				auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
 				{
-					auto vtx_normal( p_writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
-					auto vtx_tangent( p_writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
-					auto vtx_bitangent( p_writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
-					auto c3d_mapNormal( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+					auto vtx_normal( writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
+					auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
+					auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
+					auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
 
-					auto tbn = p_writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
-					auto v3MapNormal = p_writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+					auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), normal ) );
+					auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
 					v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
-					p_normal = normalize( tbn * v3MapNormal );
-				}
-
-				if ( checkFlag( textureFlags, TextureChannel::eMetallic ) )
-				{
-					auto c3d_mapMetallic( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapMetallic ) );
-					p_metallic = texture( c3d_mapMetallic, texCoord.xy() ).r();
-				}
-
-				if ( checkFlag( textureFlags, TextureChannel::eRoughness ) )
-				{
-					auto c3d_mapRoughness( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapRoughness ) );
-					p_roughness = texture( c3d_mapRoughness, texCoord.xy() ).r();
-				}
-			}
-
-			void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_albedo
-				, GLSL::Vec3 & p_emissive
-				, GLSL::Float const & p_gamma
-				, TextureChannels const & textureFlags
-				, ProgramFlags const & programFlags
-				, SceneFlags const & sceneFlags )
-			{
-				using namespace GLSL;
-				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
-
-				if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
-				{
-					auto c3d_mapAlbedo( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapAlbedo ) );
-					p_albedo *= writeFunctionCall< Vec3 >( &p_writer, cuT( "removeGamma" )
-						, p_gamma
-						, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
-				}
-
-				if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
-				{
-					auto c3d_mapEmissive( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
-					p_emissive *= writeFunctionCall< Vec3 >( &p_writer, cuT( "removeGamma" )
-						, p_gamma
-						, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
-				}
-			}
-
-			std::shared_ptr< GLSL::MetallicBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, GLSL::ShadowType p_shadows )
-			{
-				return std::static_pointer_cast< GLSL::MetallicBrdfLightingModel >( p_writer.createLightingModel( GLSL::MetallicBrdfLightingModel::Name
-					, p_shadows ) );
-			}
-
-			std::shared_ptr< GLSL::MetallicBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, LightType p_light
-				, GLSL::ShadowType p_shadows )
-			{
-				std::shared_ptr< GLSL::LightingModel > result;
-
-				switch ( p_light )
-				{
-				case LightType::eDirectional:
-				{
-					result = p_writer.createDirectionalLightingModel( GLSL::MetallicBrdfLightingModel::Name
-						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::DirectionalLight >( cuT( "light" ) );
-				}
-				break;
-
-				case LightType::ePoint:
-				{
-					result = p_writer.createPointLightingModel( GLSL::MetallicBrdfLightingModel::Name
-						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::PointLight >( cuT( "light" ) );
-				}
-				break;
-
-				case LightType::eSpot:
-				{
-					result = p_writer.createSpotLightingModel( GLSL::MetallicBrdfLightingModel::Name
-						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::SpotLight >( cuT( "light" ) );
-				}
-				break;
-
-				default:
-					FAILURE( "Invalid light type" );
-					break;
-				}
-
-				return std::static_pointer_cast< GLSL::MetallicBrdfLightingModel >( result );
-			}
-		}
-		namespace sg
-		{
-			void computePreLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_normal
-				, GLSL::Vec3 & p_specular
-				, GLSL::Float & p_glossiness
-				, TextureChannels const & textureFlags
-				, ProgramFlags const & programFlags
-				, SceneFlags const & sceneFlags )
-			{
-				using namespace GLSL;
-				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
-
-				if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
-				{
-					auto vtx_normal( p_writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
-					auto vtx_tangent( p_writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
-					auto vtx_bitangent( p_writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
-					auto c3d_mapNormal( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-
-					auto tbn = p_writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
-					auto v3MapNormal = p_writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
-					v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
-					p_normal = normalize( tbn * v3MapNormal );
-				}
-
-				if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
-				{
-					auto c3d_mapSpecular( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
-					p_specular = texture( c3d_mapSpecular, texCoord.xy() ).rgb();
+					normal = normalize( tbn * v3MapNormal );
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 				{
-					auto c3d_mapGloss( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
-					p_glossiness = texture( c3d_mapGloss, texCoord.xy() ).r();
+					auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
+					shininess = texture( c3d_mapGloss, texCoord.xy() ).r();
 				}
 			}
 
-			void computePostLightingMapContributions( GLSL::GlslWriter & p_writer
-				, GLSL::Vec3 & p_diffuse
-				, GLSL::Vec3 & p_emissive
-				, GLSL::Float const & p_gamma
+			void computePostLightingMapContributions( glsl::GlslWriter & writer
+				, glsl::Vec3 & diffuse
+				, glsl::Vec3 & specular
+				, glsl::Vec3 & emissive
+				, glsl::Float const & gamma
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags )
 			{
-				using namespace GLSL;
-				auto texCoord( p_writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
+				using namespace glsl;
+				auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-				if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
+				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
-					auto c3d_mapDiffuse( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
-					p_diffuse *= writeFunctionCall< Vec3 >( &p_writer, cuT( "removeGamma" )
-						, p_gamma
+					auto c3d_mapDiffuse( writer.getBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
+					diffuse *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+						, gamma
 						, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
+				}
+
+				if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
+				{
+					auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
+					specular *= texture( c3d_mapSpecular, texCoord.xy() ).xyz();
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 				{
-					auto c3d_mapEmissive( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
-					p_emissive *= writeFunctionCall< Vec3 >( &p_writer, cuT( "removeGamma" )
-						, p_gamma
+					auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+					emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+						, gamma
 						, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
 				}
 			}
 
-			std::shared_ptr< GLSL::SpecularBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, GLSL::ShadowType p_shadows )
+			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, ShadowType shadows )
 			{
-				return std::static_pointer_cast< GLSL::SpecularBrdfLightingModel >( p_writer.createLightingModel( GLSL::SpecularBrdfLightingModel::Name
-					, p_shadows ) );
+				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
+				result->declareModel();
+				return result;
 			}
 
-			std::shared_ptr< GLSL::SpecularBrdfLightingModel > createLightingModel( GLSL::GlslWriter & p_writer
-				, LightType p_light
-				, GLSL::ShadowType p_shadows )
+			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, LightType lightType
+				, ShadowType shadows )
 			{
-				std::shared_ptr< GLSL::LightingModel > result;
+				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
 
-				switch ( p_light )
+				switch ( lightType )
 				{
 				case LightType::eDirectional:
-				{
-					result = p_writer.createDirectionalLightingModel( GLSL::SpecularBrdfLightingModel::Name
-						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::DirectionalLight >( cuT( "light" ) );
-				}
-				break;
+					result->declareDirectionalModel();
+					writer.declUniform< DirectionalLight >( cuT( "light" ) );
+					break;
 
 				case LightType::ePoint:
-				{
-					result = p_writer.createPointLightingModel( GLSL::SpecularBrdfLightingModel::Name
-						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::PointLight >( cuT( "light" ) );
-				}
-				break;
+					result->declarePointModel();
+					writer.declUniform< PointLight >( cuT( "light" ) );
+					break;
 
 				case LightType::eSpot:
-				{
-					result = p_writer.createSpotLightingModel( GLSL::SpecularBrdfLightingModel::Name
-						, p_shadows );
-					auto light = p_writer.declUniform< GLSL::SpotLight >( cuT( "light" ) );
-				}
-				break;
+					result->declareSpotModel();
+					writer.declUniform< SpotLight >( cuT( "light" ) );
+					break;
 
 				default:
 					FAILURE( "Invalid light type" );
 					break;
 				}
 
-				return std::static_pointer_cast< GLSL::SpecularBrdfLightingModel >( result );
+				return result;
 			}
 		}
-	}
 
-	ParallaxShadowFunction declareParallaxShadowFunc( GLSL::GlslWriter & p_writer
-		, TextureChannels const & textureFlags
-		, ProgramFlags const & programFlags )
-	{
-		ParallaxShadowFunction result;
-
-		if ( checkFlag( textureFlags, TextureChannel::eHeight )
-			&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+		namespace pbr
 		{
-			using namespace GLSL;
-			auto c3d_mapHeight( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
-			auto c3d_heightScale( p_writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
-
-			result = p_writer.implementFunction< Float >( cuT( "ParallaxSoftShadowMultiplier" )
-				, [&]( Vec3 const & p_lightDir
-				, Vec2 const p_initialTexCoord
-				, Float p_initialHeight )
+			namespace mr
+			{
+				void computePreLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_normal
+					, glsl::Float & p_metallic
+					, glsl::Float & p_roughness
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags )
 				{
-					auto shadowMultiplier = p_writer.declLocale( cuT( "shadowMultiplier" ), 1.0_f );
-					auto minLayers = p_writer.declLocale( cuT( "minLayers" ), 10.0_f );
-					auto maxLayers = p_writer.declLocale( cuT( "maxLayers" ), 20.0_f );
+					using namespace glsl;
+					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-					// calculate lighting only for surface oriented to the light source
-					IF( p_writer, dot( vec3( 0.0_f, 0, 1 ), p_lightDir ) > 0.0_f )
+					if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
 					{
-						// calculate initial parameters
-						auto numSamplesUnderSurface = p_writer.declLocale( cuT( "numSamplesUnderSurface" ), 0.0_f );
-						shadowMultiplier = 0;
-						auto numLayers = p_writer.declLocale( cuT( "numLayers" )
-							, mix( maxLayers
-								, minLayers
-								, GLSL::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_lightDir ) ) ) );
-						auto layerHeight = p_writer.declLocale( cuT( "layerHeight" ), p_initialHeight / numLayers );
-						auto texStep = p_writer.declLocale( cuT( "deltaTexCoords" ), p_writer.paren( p_lightDir.xy() * c3d_heightScale ) / p_lightDir.z() / numLayers );
+						auto vtx_normal( writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
+						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
+						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
+						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
 
-						// current parameters
-						auto currentLayerHeight = p_writer.declLocale( cuT( "currentLayerHeight" ), p_initialHeight - layerHeight );
-						auto currentTextureCoords = p_writer.declLocale( cuT( "currentTextureCoords" ), p_initialTexCoord + texStep );
-						auto heightFromTexture = p_writer.declLocale( cuT( "heightFromTexture" ), texture( c3d_mapHeight, currentTextureCoords ).r() );
-						auto stepIndex = p_writer.declLocale( cuT( "stepIndex" ), 1_i );
+						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
+						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+						v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+						p_normal = normalize( tbn * v3MapNormal );
+					}
 
-						// while point is below depth 0.0 )
-						WHILE( p_writer, currentLayerHeight > 0.0_f )
+					if ( checkFlag( textureFlags, TextureChannel::eMetallic ) )
+					{
+						auto c3d_mapMetallic( writer.getBuiltin< Sampler2D >( ShaderProgram::MapMetallic ) );
+						p_metallic = texture( c3d_mapMetallic, texCoord.xy() ).r();
+					}
+
+					if ( checkFlag( textureFlags, TextureChannel::eRoughness ) )
+					{
+						auto c3d_mapRoughness( writer.getBuiltin< Sampler2D >( ShaderProgram::MapRoughness ) );
+						p_roughness = texture( c3d_mapRoughness, texCoord.xy() ).r();
+					}
+				}
+
+				void computePostLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_albedo
+					, glsl::Vec3 & p_emissive
+					, glsl::Float const & p_gamma
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags )
+				{
+					using namespace glsl;
+					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
+
+					if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
+					{
+						auto c3d_mapAlbedo( writer.getBuiltin< Sampler2D >( ShaderProgram::MapAlbedo ) );
+						p_albedo *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, p_gamma
+							, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
+					}
+
+					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
+					{
+						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+						p_emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, p_gamma
+							, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
+					}
+				}
+
+				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows )
+				{
+					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
+					result->declareModel();
+					return result;
+				}
+
+				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, LightType lightType
+					, ShadowType shadows )
+				{
+					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
+
+					switch ( lightType )
+					{
+					case LightType::eDirectional:
+						result->declareDirectionalModel();
+						writer.declUniform< DirectionalLight >( cuT( "light" ) );
+						break;
+
+					case LightType::ePoint:
+						result->declarePointModel();
+						writer.declUniform< PointLight >( cuT( "light" ) );
+						break;
+
+					case LightType::eSpot:
+						result->declareSpotModel();
+						writer.declUniform< SpotLight >( cuT( "light" ) );
+						break;
+
+					default:
+						FAILURE( "Invalid light type" );
+						break;
+					}
+
+					return result;
+				}
+			}
+			namespace sg
+			{
+				void computePreLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_normal
+					, glsl::Vec3 & p_specular
+					, glsl::Float & p_glossiness
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags )
+				{
+					using namespace glsl;
+					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
+
+					if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
+					{
+						auto vtx_normal( writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
+						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
+						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
+						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+
+						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
+						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+						v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+						p_normal = normalize( tbn * v3MapNormal );
+					}
+
+					if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
+					{
+						auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
+						p_specular = texture( c3d_mapSpecular, texCoord.xy() ).rgb();
+					}
+
+					if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
+					{
+						auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
+						p_glossiness = texture( c3d_mapGloss, texCoord.xy() ).r();
+					}
+				}
+
+				void computePostLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_diffuse
+					, glsl::Vec3 & p_emissive
+					, glsl::Float const & p_gamma
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags )
+				{
+					using namespace glsl;
+					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
+
+					if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
+					{
+						auto c3d_mapDiffuse( writer.getBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
+						p_diffuse *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, p_gamma
+							, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
+					}
+
+					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
+					{
+						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+						p_emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, p_gamma
+							, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
+					}
+				}
+
+				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows )
+				{
+					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
+					result->declareModel();
+					return result;
+				}
+
+				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, LightType lightType
+					, ShadowType shadows )
+				{
+					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
+
+					switch ( lightType )
+					{
+					case LightType::eDirectional:
+						result->declareDirectionalModel();
+						writer.declUniform< DirectionalLight >( cuT( "light" ) );
+						break;
+
+					case LightType::ePoint:
+						result->declarePointModel();
+						writer.declUniform< PointLight >( cuT( "light" ) );
+						break;
+
+					case LightType::eSpot:
+						result->declareSpotModel();
+						writer.declUniform< SpotLight >( cuT( "light" ) );
+						break;
+
+					default:
+						FAILURE( "Invalid light type" );
+						break;
+					}
+
+					return result;
+				}
+			}
+		}
+
+		ParallaxShadowFunction declareParallaxShadowFunc( glsl::GlslWriter & writer
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags )
+		{
+			ParallaxShadowFunction result;
+
+			if ( checkFlag( textureFlags, TextureChannel::eHeight )
+				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+			{
+				using namespace glsl;
+				auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+				auto c3d_heightScale( writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
+
+				result = writer.implementFunction< Float >( cuT( "ParallaxSoftShadowMultiplier" )
+					, [&]( Vec3 const & p_lightDir
+					, Vec2 const p_initialTexCoord
+					, Float p_initialHeight )
+					{
+						auto shadowMultiplier = writer.declLocale( cuT( "shadowMultiplier" ), 1.0_f );
+						auto minLayers = writer.declLocale( cuT( "minLayers" ), 10.0_f );
+						auto maxLayers = writer.declLocale( cuT( "maxLayers" ), 20.0_f );
+
+						// calculate lighting only for surface oriented to the light source
+						IF( writer, dot( vec3( 0.0_f, 0, 1 ), p_lightDir ) > 0.0_f )
 						{
-							// if point is under the surface
-							IF( p_writer, heightFromTexture < currentLayerHeight )
+							// calculate initial parameters
+							auto numSamplesUnderSurface = writer.declLocale( cuT( "numSamplesUnderSurface" ), 0.0_f );
+							shadowMultiplier = 0;
+							auto numLayers = writer.declLocale( cuT( "numLayers" )
+								, mix( maxLayers
+									, minLayers
+									, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_lightDir ) ) ) );
+							auto layerHeight = writer.declLocale( cuT( "layerHeight" ), p_initialHeight / numLayers );
+							auto texStep = writer.declLocale( cuT( "deltaTexCoords" ), writer.paren( p_lightDir.xy() * c3d_heightScale ) / p_lightDir.z() / numLayers );
+
+							// current parameters
+							auto currentLayerHeight = writer.declLocale( cuT( "currentLayerHeight" ), p_initialHeight - layerHeight );
+							auto currentTextureCoords = writer.declLocale( cuT( "currentTextureCoords" ), p_initialTexCoord + texStep );
+							auto heightFromTexture = writer.declLocale( cuT( "heightFromTexture" ), texture( c3d_mapHeight, currentTextureCoords ).r() );
+							auto stepIndex = writer.declLocale( cuT( "stepIndex" ), 1_i );
+
+							// while point is below depth 0.0 )
+							WHILE( writer, currentLayerHeight > 0.0_f )
 							{
-								// calculate partial shadowing factor
-								numSamplesUnderSurface += 1;
-								auto newShadowMultiplier = p_writer.declLocale( cuT( "newShadowMultiplier" )
-									, p_writer.paren( currentLayerHeight - heightFromTexture )
-										* p_writer.paren( 1.0_f - stepIndex / numLayers ) );
-								shadowMultiplier = max( shadowMultiplier, newShadowMultiplier );
+								// if point is under the surface
+								IF( writer, heightFromTexture < currentLayerHeight )
+								{
+									// calculate partial shadowing factor
+									numSamplesUnderSurface += 1;
+									auto newShadowMultiplier = writer.declLocale( cuT( "newShadowMultiplier" )
+										, writer.paren( currentLayerHeight - heightFromTexture )
+											* writer.paren( 1.0_f - stepIndex / numLayers ) );
+									shadowMultiplier = max( shadowMultiplier, newShadowMultiplier );
+								}
+								FI;
+
+								// offset to the next layer
+								stepIndex += 1;
+								currentLayerHeight -= layerHeight;
+								currentTextureCoords += texStep;
+								heightFromTexture = texture( c3d_mapHeight, currentTextureCoords ).r();
+							}
+							ELIHW;
+
+							// Shadowing factor should be 1 if there were no points under the surface
+							IF( writer, numSamplesUnderSurface < 1.0_f )
+							{
+								shadowMultiplier = 1.0_f;
+							}
+							ELSE
+							{
+								shadowMultiplier = 1.0_f - shadowMultiplier;
 							}
 							FI;
+						}
+						FI;
 
-							// offset to the next layer
-							stepIndex += 1;
-							currentLayerHeight -= layerHeight;
-							currentTextureCoords += texStep;
-							heightFromTexture = texture( c3d_mapHeight, currentTextureCoords ).r();
+						writer.returnStmt( shadowMultiplier );
+					}, InVec3{ &writer, cuT( "p_lightDir" ) }
+					, InVec2{ &writer, cuT( "p_initialTexCoord" ) }
+					, InFloat{ &writer, cuT( "p_initialHeight" ) } );
+			}
+
+			return result;
+		}
+
+		ParallaxFunction declareParallaxMappingFunc( glsl::GlslWriter & writer
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags )
+		{
+			using namespace glsl;
+			ParallaxFunction result;
+
+			if ( checkFlag( textureFlags, TextureChannel::eHeight )
+				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+			{
+				auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+				auto c3d_heightScale( writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
+
+				result = writer.implementFunction< Vec2 >( cuT( "ParallaxMapping" ),
+					[&]( Vec2 const & p_texCoords, Vec3 const & p_viewDir )
+					{
+						// number of depth layers
+						auto minLayers = writer.declLocale( cuT( "minLayers" ), 10.0_f );
+						auto maxLayers = writer.declLocale( cuT( "maxLayers" ), 20.0_f );
+						auto numLayers = writer.declLocale( cuT( "numLayers" )
+							, mix( maxLayers
+								, minLayers
+								, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_viewDir ) ) ) );
+						// calculate the size of each layer
+						auto layerDepth = writer.declLocale( cuT( "layerDepth" ), Float( 1.0f / numLayers ) );
+						// depth of current layer
+						auto currentLayerDepth = writer.declLocale( cuT( "currentLayerDepth" ), 0.0_f );
+						// the amount to shift the texture coordinates per layer (from vector P)
+						auto p = writer.declLocale( cuT( "p" ), p_viewDir.xy() * c3d_heightScale );
+						auto deltaTexCoords = writer.declLocale( cuT( "deltaTexCoords" ), p / numLayers );
+
+						auto currentTexCoords = writer.declLocale( cuT( "currentTexCoords" ), p_texCoords );
+						auto currentDepthMapValue = writer.declLocale( cuT( "currentDepthMapValue" ), texture( c3d_mapHeight, currentTexCoords ).r() );
+
+						WHILE( writer, currentLayerDepth < currentDepthMapValue )
+						{
+							// shift texture coordinates along direction of P
+							currentTexCoords -= deltaTexCoords;
+							// get depthmap value at current texture coordinates
+							currentDepthMapValue = texture( c3d_mapHeight, currentTexCoords ).r();
+							// get depth of next layer
+							currentLayerDepth += layerDepth;
 						}
 						ELIHW;
 
-						// Shadowing factor should be 1 if there were no points under the surface
-						IF( p_writer, numSamplesUnderSurface < 1.0_f )
-						{
-							shadowMultiplier = 1.0_f;
-						}
-						ELSE
-						{
-							shadowMultiplier = 1.0_f - shadowMultiplier;
-						}
-						FI;
-					}
-					FI;
+						// get texture coordinates before collision (reverse operations)
+						auto prevTexCoords = writer.declLocale( cuT( "prevTexCoords" ), currentTexCoords + deltaTexCoords );
 
-					p_writer.returnStmt( shadowMultiplier );
-				}, InVec3{ &p_writer, cuT( "p_lightDir" ) }
-				, InVec2{ &p_writer, cuT( "p_initialTexCoord" ) }
-				, InFloat{ &p_writer, cuT( "p_initialHeight" ) } );
+						// get depth after and before collision for linear interpolation
+						auto afterDepth = writer.declLocale( cuT( "afterDepth" ), currentDepthMapValue - currentLayerDepth );
+						auto beforeDepth = writer.declLocale( cuT( "beforeDepth" ), texture( c3d_mapHeight, prevTexCoords ).r() - currentLayerDepth + layerDepth );
+
+						// interpolation of texture coordinates
+						auto weight = writer.declLocale( cuT( "weight" ), afterDepth / writer.paren( afterDepth - beforeDepth ) );
+						auto finalTexCoords = writer.declLocale( cuT( "finalTexCoords" ), prevTexCoords * weight + currentTexCoords * writer.paren( 1.0_f - weight ) );
+
+						writer.returnStmt( finalTexCoords );
+					}, InVec2{ &writer, cuT( "p_texCoords" ) }
+					, InVec3{ &writer, cuT( "p_viewDir" ) } );
+			}
+
+			return result;
 		}
-
-		return result;
-	}
-
-	ParallaxFunction declareParallaxMappingFunc( GLSL::GlslWriter & p_writer
-		, TextureChannels const & textureFlags
-		, ProgramFlags const & programFlags )
-	{
-		using namespace GLSL;
-		ParallaxFunction result;
-
-		if ( checkFlag( textureFlags, TextureChannel::eHeight )
-			&& checkFlag( textureFlags, TextureChannel::eNormal ) )
-		{
-			auto c3d_mapHeight( p_writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
-			auto c3d_heightScale( p_writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
-
-			result = p_writer.implementFunction< Vec2 >( cuT( "ParallaxMapping" ),
-				[&]( Vec2 const & p_texCoords, Vec3 const & p_viewDir )
-				{
-					// number of depth layers
-					auto minLayers = p_writer.declLocale( cuT( "minLayers" ), 10.0_f );
-					auto maxLayers = p_writer.declLocale( cuT( "maxLayers" ), 20.0_f );
-					auto numLayers = p_writer.declLocale( cuT( "numLayers" )
-						, mix( maxLayers
-							, minLayers
-							, GLSL::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_viewDir ) ) ) );
-					// calculate the size of each layer
-					auto layerDepth = p_writer.declLocale( cuT( "layerDepth" ), Float( 1.0f / numLayers ) );
-					// depth of current layer
-					auto currentLayerDepth = p_writer.declLocale( cuT( "currentLayerDepth" ), 0.0_f );
-					// the amount to shift the texture coordinates per layer (from vector P)
-					auto p = p_writer.declLocale( cuT( "p" ), p_viewDir.xy() * c3d_heightScale );
-					auto deltaTexCoords = p_writer.declLocale( cuT( "deltaTexCoords" ), p / numLayers );
-
-					auto currentTexCoords = p_writer.declLocale( cuT( "currentTexCoords" ), p_texCoords );
-					auto currentDepthMapValue = p_writer.declLocale( cuT( "currentDepthMapValue" ), texture( c3d_mapHeight, currentTexCoords ).r() );
-
-					WHILE( p_writer, currentLayerDepth < currentDepthMapValue )
-					{
-						// shift texture coordinates along direction of P
-						currentTexCoords -= deltaTexCoords;
-						// get depthmap value at current texture coordinates
-						currentDepthMapValue = texture( c3d_mapHeight, currentTexCoords ).r();
-						// get depth of next layer
-						currentLayerDepth += layerDepth;
-					}
-					ELIHW;
-
-					// get texture coordinates before collision (reverse operations)
-					auto prevTexCoords = p_writer.declLocale( cuT( "prevTexCoords" ), currentTexCoords + deltaTexCoords );
-
-					// get depth after and before collision for linear interpolation
-					auto afterDepth = p_writer.declLocale( cuT( "afterDepth" ), currentDepthMapValue - currentLayerDepth );
-					auto beforeDepth = p_writer.declLocale( cuT( "beforeDepth" ), texture( c3d_mapHeight, prevTexCoords ).r() - currentLayerDepth + layerDepth );
-
-					// interpolation of texture coordinates
-					auto weight = p_writer.declLocale( cuT( "weight" ), afterDepth / p_writer.paren( afterDepth - beforeDepth ) );
-					auto finalTexCoords = p_writer.declLocale( cuT( "finalTexCoords" ), prevTexCoords * weight + currentTexCoords * p_writer.paren( 1.0_f - weight ) );
-
-					p_writer.returnStmt( finalTexCoords );
-				}, InVec2{ &p_writer, cuT( "p_texCoords" ) }
-				, InVec3{ &p_writer, cuT( "p_viewDir" ) } );
-		}
-
-		return result;
 	}
 
 	bool isShadowMapProgram( ProgramFlags const & p_flags )
@@ -612,43 +592,43 @@ namespace castor3d
 			|| checkFlag( p_flags, ProgramFlag::eShadowMapPoint );
 	}
 
-	GLSL::ShadowType getShadowType( SceneFlags const & p_flags )
+	ShadowType getShadowType( SceneFlags const & p_flags )
 	{
 		auto shadow = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eShadowFilterStratifiedPoisson ) );
 
 		switch ( shadow )
 		{
 		case SceneFlag::eShadowFilterRaw:
-			return GLSL::ShadowType::eRaw;
+			return ShadowType::eRaw;
 
 		case SceneFlag::eShadowFilterPoisson:
-			return GLSL::ShadowType::ePoisson;
+			return ShadowType::ePoisson;
 
 		case SceneFlag::eShadowFilterStratifiedPoisson:
-			return GLSL::ShadowType::eStratifiedPoisson;
+			return ShadowType::eStratifiedPoisson;
 
 		default:
-			return GLSL::ShadowType::eNone;
+			return ShadowType::eNone;
 		}
 	}
 
-	GLSL::FogType getFogType( SceneFlags const & p_flags )
+	FogType getFogType( SceneFlags const & p_flags )
 	{
 		auto fog = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eFogSquaredExponential ) );
 
 		switch ( fog )
 		{
 		case SceneFlag::eFogLinear:
-			return GLSL::FogType::eLinear;
+			return FogType::eLinear;
 
 		case SceneFlag::eFogExponential:
-			return GLSL::FogType::eExponential;
+			return FogType::eExponential;
 
 		case SceneFlag::eFogSquaredExponential:
-			return GLSL::FogType::eSquaredExponential;
+			return FogType::eSquaredExponential;
 
 		default:
-			return GLSL::FogType::eDisabled;
+			return FogType::eDisabled;
 		}
 	}
 }

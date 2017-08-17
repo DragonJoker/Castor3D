@@ -34,7 +34,7 @@ SOFTWARE.
 
 #include <map>
 
-namespace GLSL
+namespace glsl
 {
 	struct GlslWriterConfig
 	{
@@ -109,11 +109,6 @@ namespace GLSL
 			registerName( p_name, p_type );
 			m_shader.registerOutput( p_name, p_type );
 		}
-
-		GlslWriter_API std::shared_ptr< LightingModel > createLightingModel( castor::String const & p_name, ShadowType p_shadows );
-		GlslWriter_API std::shared_ptr< LightingModel > createDirectionalLightingModel( castor::String const & p_name, ShadowType p_shadows );
-		GlslWriter_API std::shared_ptr< LightingModel > createPointLightingModel( castor::String const & p_name, ShadowType p_shadows );
-		GlslWriter_API std::shared_ptr< LightingModel > createSpotLightingModel( castor::String const & p_name, ShadowType p_shadows );
 
 		GlslWriter_API Shader finalise();
 		GlslWriter_API void writeAssign( Type const & p_lhs, Type const & p_rhs );
@@ -324,7 +319,6 @@ namespace GLSL
 		castor::StringStream m_stream;
 		uint32_t m_attributeIndex{ 0u };
 		uint32_t m_layoutIndex{ 0u };
-		LightingModelFactory m_lightingFactory;
 		Shader m_shader;
 	};
 

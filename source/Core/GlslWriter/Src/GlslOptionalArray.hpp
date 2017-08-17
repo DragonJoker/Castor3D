@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslArray.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename TypeT >
 	struct Optional< Array< TypeT > >

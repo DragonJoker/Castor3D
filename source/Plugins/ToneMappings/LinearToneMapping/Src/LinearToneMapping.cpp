@@ -6,7 +6,7 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/HdrConfigUbo.hpp>
+#include <Shader/Ubos/HdrConfigUbo.hpp>
 #include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>
@@ -15,7 +15,7 @@
 #include <GlslUtils.hpp>
 
 using namespace castor;
-using namespace GLSL;
+using namespace glsl;
 using namespace castor3d;
 
 namespace Linear
@@ -43,11 +43,11 @@ namespace Linear
 		return std::make_shared< ToneMapping >( engine, p_parameters );
 	}
 
-	GLSL::Shader ToneMapping::doCreate()
+	glsl::Shader ToneMapping::doCreate()
 	{
 		m_gammaVar = m_configUbo.createUniform< UniformType::eFloat >( ShaderProgram::Gamma );
 
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
@@ -62,7 +62,7 @@ namespace Linear
 			// Shader outputs
 			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareApplyGamma();
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()

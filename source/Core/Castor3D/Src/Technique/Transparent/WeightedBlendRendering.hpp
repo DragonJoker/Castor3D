@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -61,14 +61,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
-		 *\param[out]	p_info	Receives the render informations.
+		 *\param[out]	info	Receives the render informations.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
+		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		void render( RenderInfo & p_info
-			, Scene const & p_scene
-			, Camera const & p_camera );
+		void render( RenderInfo & info
+			, Scene const & scene
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.

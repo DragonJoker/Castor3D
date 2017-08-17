@@ -1,6 +1,6 @@
 #include <Exception/Assertion.hpp>
 
-namespace GLSL
+namespace glsl
 {
 	inline castor::String const & KeywordsBase::getVersion()const
 	{

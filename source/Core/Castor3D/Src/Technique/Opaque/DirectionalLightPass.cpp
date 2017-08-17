@@ -10,9 +10,10 @@
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -29,8 +30,8 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DirectionalLightPass::Program::Program( Engine & engine
-		, GLSL::Shader const & vtx
-		, GLSL::Shader const & pxl )
+		, glsl::Shader const & vtx
+		, glsl::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
 		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
@@ -146,9 +147,9 @@ namespace castor3d
 		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );
 	}
 
-	GLSL::Shader DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	glsl::Shader DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
@@ -167,8 +168,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram( GLSL::Shader const & vtx
-		, GLSL::Shader const & pxl )const
+	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram( glsl::Shader const & vtx
+		, glsl::Shader const & pxl )const
 	{
 		return std::make_unique< Program >( m_engine, vtx, pxl );
 	}

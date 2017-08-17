@@ -43,18 +43,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	p_light		The light source.
-		 *\param[in]	p_shadowMap	The parent shadow map.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_light		La source lumineuse.
-		 *\param[in]	p_shadowMap	La shadow map parente.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPassSpot( Engine & engine
-			, Light & p_light
-			, ShadowMap const & p_shadowMap );
+			, Scene & scene
+			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -62,6 +62,17 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ShadowMapPassSpot();
+		/**
+		 *\copydoc		castor3d::ShadowMapPass::update
+		 */
+		void update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index )override;
+		/**
+		 *\copydoc		castor3d::ShadowMapPass::render
+		 */
+		void render( uint32_t index )override;
 		/**
 		 *\~english
 		 *\return		The camera.
@@ -77,7 +88,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool doInitialise( castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::doCleanup
 		 */
@@ -85,11 +96,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void doUpdate( RenderQueueArray & p_queues )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doRender
-		 */
-		void doRender( uint32_t p_face )override;
+		void doUpdate( RenderQueueArray & queues )override;
 
 	private:
 		//!\~english	The camera created from the light.

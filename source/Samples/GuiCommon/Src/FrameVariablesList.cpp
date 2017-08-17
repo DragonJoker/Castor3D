@@ -8,7 +8,7 @@
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/Uniform.hpp>
+#include <Shader/Uniform/Uniform.hpp>
 #include <Shader/UniformBuffer.hpp>
 #include <Shader/UniformBufferBinding.hpp>
 #include <Shader/ShaderProgram.hpp>

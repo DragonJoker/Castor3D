@@ -1,13 +1,13 @@
-#include "ShadowMapPassSpot.hpp"
+﻿#include "ShadowMapPassSpot.hpp"
 
 using namespace castor;
 
 namespace castor3d
 {
 	ShadowMapPassSpot::ShadowMapPassSpot( Engine & engine
-		, Light & p_light
-		, ShadowMap const & p_shadowMap )
-		: ShadowMapPass{ engine, p_light, p_shadowMap }
+		, Scene & scene
+		, ShadowMap const & shadowMap )
+		: ShadowMapPass{ engine, scene, shadowMap }
 	{
 	}
 
@@ -15,16 +15,40 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassSpot::doInitialise( Size const & p_size )
+	void ShadowMapPassSpot::update( Camera const & camera
+		, RenderQueueArray & queues
+		, Light & light
+		, uint32_t index )
+	{
+		light.update( light.getParent()->getDerivedPosition()
+			, m_camera->getViewport()
+			, index );
+		m_camera->attachTo( light.getParent() );
+		m_camera->update();
+		queues.push_back( m_renderQueue );
+	}
+
+	void ShadowMapPassSpot::render( uint32_t index )
+	{
+		if ( m_camera && m_initialised )
+		{
+			m_camera->apply();
+			m_matrixUbo.update( m_camera->getView()
+				, m_camera->getViewport().getProjection() );
+			doRenderNodes( m_renderQueue.getRenderNodes(), *m_camera );
+		}
+	}
+
+	bool ShadowMapPassSpot::doInitialise( Size const & size )
 	{
 		Viewport viewport{ *getEngine() };
-		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.getName()
-			, *m_light.getScene()
-			, m_light.getParent()
+		m_camera = std::make_shared< Camera >( cuT( "ShadowMapSpot" )
+			, m_scene
+			, m_scene.getCameraRootNode()
 			, std::move( viewport ) );
-		m_camera->resize( p_size );
+		m_camera->resize( size );
 
-		m_renderQueue.initialise( *m_light.getScene(), *m_camera );
+		m_renderQueue.initialise( m_scene, *m_camera );
 		return true;
 	}
 
@@ -34,23 +58,8 @@ namespace castor3d
 		m_camera.reset();
 	}
 
-	void ShadowMapPassSpot::doUpdate( RenderQueueArray & p_queues )
+	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )
 	{
-		m_light.update( m_camera->getParent()->getDerivedPosition()
-			, m_camera->getViewport()
-			, m_index );
-		m_camera->update();
-		p_queues.push_back( m_renderQueue );
-	}
-
-	void ShadowMapPassSpot::doRender( uint32_t p_face )
-	{
-		if ( m_camera && m_initialised )
-		{
-			m_camera->apply();
-			m_matrixUbo.update( m_camera->getView()
-				, m_camera->getViewport().getProjection() );
-			doRenderNodes( m_renderQueue.getRenderNodes(), *m_camera );
-		}
+		queues.push_back( m_renderQueue );
 	}
 }

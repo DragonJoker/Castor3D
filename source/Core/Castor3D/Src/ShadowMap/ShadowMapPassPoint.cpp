@@ -1,4 +1,4 @@
-#include "ShadowMapPassPoint.hpp"
+﻿#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -37,21 +37,48 @@ namespace castor3d
 	}
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
-		, Light & p_light
-		, ShadowMap const & p_shadowMap )
-		: ShadowMapPass{ engine, p_light, p_shadowMap }
+		, Scene & scene
+		, ShadowMap const & shadowMap )
+		: ShadowMapPass{ engine, scene, shadowMap }
 		, m_shadowConfig{ ShadowMapUbo
 			, *engine.getRenderSystem()
 			, 8u }
 		, m_viewport{ engine }
+		, m_worldLightPosition{ *m_shadowConfig.createUniform< UniformType::eVec3f >( WorldLightPosition ) }
+		, m_farPlane{ *m_shadowConfig.createUniform< UniformType::eFloat >( FarPlane ) }
 	{
-		m_shadowConfig.createUniform< UniformType::eVec3f >( WorldLightPosition );
-		m_shadowConfig.createUniform< UniformType::eFloat >( FarPlane );
-		m_renderQueue.initialise( *p_light.getScene() );
+		m_renderQueue.initialise( scene );
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()
 	{
+	}
+
+	void ShadowMapPassPoint::update( Camera const & camera
+		, RenderQueueArray & queues
+		, Light & light
+		, uint32_t index )
+	{
+		auto position = light.getParent()->getDerivedPosition();
+		light.update( position
+			, m_viewport
+			, index );
+		doUpdateShadowMatrices( position, m_matrices );
+		m_worldLightPosition.setValue( position );
+		m_farPlane.setValue( 4000.0f );
+		doUpdate( queues );
+	}
+
+	void ShadowMapPassPoint::render( uint32_t index )
+	{
+		if ( m_initialised )
+		{
+			m_shadowConfig.update();
+			m_shadowConfig.bindTo( 8u );
+			m_viewport.apply();
+			m_matrixUbo.update( m_matrices[index], m_projection );
+			doRenderNodes( m_renderQueue.getRenderNodes() );
+		}
 	}
 
 	void ShadowMapPassPoint::doRenderNodes( SceneRenderNodes & p_nodes )
@@ -83,29 +110,9 @@ namespace castor3d
 		m_shadowConfig.cleanup();
 		m_onNodeChanged.disconnect();
 	}
-
 	void ShadowMapPassPoint::doUpdate( RenderQueueArray & p_queues )
 	{
-		auto position = m_light.getParent()->getDerivedPosition();
-		m_light.update( position
-			, m_viewport
-			, m_index );
 		p_queues.push_back( m_renderQueue );
-		doUpdateShadowMatrices( position, m_matrices );
-		m_shadowConfig.getUniform< UniformType::eVec3f >( WorldLightPosition )->setValue( position );
-		m_shadowConfig.getUniform< UniformType::eFloat >( FarPlane )->setValue( 4000.0f );
-	}
-
-	void ShadowMapPassPoint::doRender( uint32_t p_face )
-	{
-		if ( m_initialised )
-		{
-			m_shadowConfig.update();
-			m_shadowConfig.bindTo( 8u );
-			m_viewport.apply();
-			m_matrixUbo.update( m_matrices[p_face], m_projection );
-			doRenderNodes( m_renderQueue.getRenderNodes() );
-		}
 	}
 
 	void ShadowMapPassPoint::doPrepareBackPipeline( ShaderProgram & p_program

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslWriterPrerequisites.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct OutputLayout
 	{

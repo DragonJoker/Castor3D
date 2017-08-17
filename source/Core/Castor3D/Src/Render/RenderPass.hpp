@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,13 +28,13 @@ SOFTWARE.
 
 #include "Render/RenderInfo.hpp"
 #include "Render/RenderQueue.hpp"
-#include "Shader/BillboardUbo.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/ModelMatrixUbo.hpp"
-#include "Shader/ModelUbo.hpp"
-#include "Shader/MorphingUbo.hpp"
-#include "Shader/SceneUbo.hpp"
-#include "Shader/SkinningUbo.hpp"
+#include "Shader/Ubos/BillboardUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/MorphingUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/Ubos/SkinningUbo.hpp"
 
 #include <unordered_map>
 
@@ -52,6 +52,8 @@ namespace castor3d
 											 || ( lhs.m_programFlags == rhs.m_programFlags
 												  && lhs.m_sceneFlags < rhs.m_sceneFlags ) ) ) ) ) ) );
 	}
+	using ShadowMapRefArray = std::vector< std::reference_wrapper< ShadowMap > >;
+	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -154,7 +156,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API GLSL::Shader getVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -172,7 +174,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API GLSL::Shader getPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
@@ -188,7 +190,7 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader getGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
@@ -538,14 +540,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -563,33 +565,33 @@ namespace castor3d
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
 		 *\param		camera		The viewing camera.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param		camera		La caméra regardant la scène.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		depthMaps	The depth (shadows and other) maps.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -604,14 +606,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -629,33 +631,33 @@ namespace castor3d
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
 		 *\param		camera		The viewing camera.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param		camera		La caméra regardant la scène.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		depthMaps	The depth (shadows and other) maps.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -670,14 +672,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -695,33 +697,33 @@ namespace castor3d
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
 		 *\param		camera		The viewing camera.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param		camera		La caméra regardant la scène.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		depthMaps	The depth (shadows and other) maps.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -736,14 +738,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -761,33 +763,33 @@ namespace castor3d
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
 		 *\param		camera		The viewing camera.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param		camera		La caméra regardant la scène.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		depthMaps	The depth (shadows and other) maps.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -802,14 +804,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -827,33 +829,33 @@ namespace castor3d
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
 		 *\param		camera		The viewing camera.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param		camera		La caméra regardant la scène.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		depthMaps	The depth (shadows and other) maps.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -868,14 +870,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders billboards.
 		 *\param[in]	nodes		The render nodes.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des billboards.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
@@ -893,33 +895,33 @@ namespace castor3d
 		 *\brief		Renders billboards.
 		 *\param[in]	nodes		The render nodes.
 		 *\param		camera		The viewing camera.
-		 *\param[in]	depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des billboards.
 		 *\param[in]	nodes		Les noeuds de rendu.
 		 *\param		camera		La caméra regardant la scène.
-		 *\param[in]	depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps )const;
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders billboards.
 		 *\param[in]		nodes		The render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		depthMaps	The depth (shadows and other) maps.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des billboards.
 		 *\param[in]		nodes		Les noeuds de rendu.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
 
 	private:
@@ -966,7 +968,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API virtual GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -982,7 +984,7 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const = 0;
 		/**
@@ -999,7 +1001,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1017,7 +1019,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1035,7 +1037,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;

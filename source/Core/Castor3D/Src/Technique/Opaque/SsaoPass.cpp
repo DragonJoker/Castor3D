@@ -22,9 +22,10 @@
 #include "Texture/TextureUnit.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 #include <random>
 
@@ -140,10 +141,10 @@ namespace castor3d
 			return result;
 		}
 
-		GLSL::Shader doGetSsaoVertexProgram( Engine & engine )
+		glsl::Shader doGetSsaoVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -163,10 +164,10 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		GLSL::Shader doGetSsaoPixelProgram( Engine & engine )
+		glsl::Shader doGetSsaoPixelProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
@@ -184,7 +185,7 @@ namespace castor3d
 			auto c3d_noiseScale = ssaoConfig.declMember< Vec2 >( cuT( "c3d_noiseScale" ) );
 			ssaoConfig.end();
 
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 			utils.declareCalcTexCoord();
 			utils.declareCalcVSPosition();
 			utils.declareCalcVSDepth();
@@ -226,7 +227,7 @@ namespace castor3d
 						auto sampleDepth = writer.declLocale( cuT( "sampleDepth" )
 							, utils.calcVSPosition( offset.xy(), c3d_mtxInvProj ).z() );
 						auto rangeCheck = writer.declLocale( cuT( "rangeCheck" )
-							, smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( vsPosition.z() - sampleDepth ) ) );
+							, smoothstep( 0.0_f, 1.0_f, c3d_radius / glsl::abs( vsPosition.z() - sampleDepth ) ) );
 						occlusion += writer.ternary( sampleDepth >= samplePos.z() + c3d_bias, 1.0_f, 0.0_f ) * rangeCheck;
 					}
 					ROF;
@@ -237,10 +238,10 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		GLSL::Shader doGetBlurVertexProgram( Engine & engine )
+		glsl::Shader doGetBlurVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			UBO_MATRIX( writer );
@@ -262,10 +263,10 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader doGetBlurPixelProgram( Engine & engine )
+		glsl::Shader doGetBlurPixelProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs

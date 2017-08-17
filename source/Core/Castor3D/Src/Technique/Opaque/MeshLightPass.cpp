@@ -11,8 +11,8 @@
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -22,8 +22,8 @@ namespace castor3d
 	//*********************************************************************************************
 
 	MeshLightPass::Program::Program( Engine & engine
-		, GLSL::Shader const & vtx
-		, GLSL::Shader const & pxl )
+		, glsl::Shader const & vtx
+		, glsl::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
 		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 	{
@@ -146,9 +146,9 @@ namespace castor3d
 		m_stencilPass.render( m_indexBuffer->getSize() );
 	}
 	
-	GLSL::Shader MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	glsl::Shader MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs

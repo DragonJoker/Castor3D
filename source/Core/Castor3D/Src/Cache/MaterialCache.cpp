@@ -1,16 +1,16 @@
-#include "MaterialCache.hpp"
+﻿#include "MaterialCache.hpp"
 
 #include "Engine.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Scene/SceneFileParser.hpp"
-#include "Shader/LegacyPassBuffer.hpp"
-#include "Shader/MetallicRoughnessPassBuffer.hpp"
-#include "Shader/SpecularGlossinessPassBuffer.hpp"
+#include "Shader/PassBuffer/LegacyPassBuffer.hpp"
+#include "Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
+#include "Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <GlslMaterial.hpp>
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 
@@ -37,15 +37,15 @@ namespace castor3d
 		switch ( type )
 		{
 		case MaterialType::eLegacy:
-			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), GLSL::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
 			break;
 
 		case MaterialType::ePbrMetallicRoughness:
-			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), GLSL::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), GLSL::MaxMaterialsCount );
+			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
 			break;
 		}
 	}

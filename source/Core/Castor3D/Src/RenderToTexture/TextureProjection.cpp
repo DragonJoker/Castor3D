@@ -105,9 +105,9 @@ namespace castor3d
 	ShaderProgram & TextureProjection::doInitialiseShader()
 	{
 		auto & renderSystem = *getOwner()->getRenderSystem();
-		GLSL::Shader vtx;
+		glsl::Shader vtx;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
@@ -126,9 +126,9 @@ namespace castor3d
 			vtx = writer.finalise();
 		}
 
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs

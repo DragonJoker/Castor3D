@@ -112,7 +112,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Une instance pré-configurée de GlslWriter.
 		 */
-		C3D_API GLSL::GlslWriter createGlslWriter();
+		C3D_API glsl::GlslWriter createGlslWriter();
 		/**
 		 *\~english
 		 *\brief		sets the currently active render context

@@ -88,11 +88,11 @@ namespace castor3d
 
 	bool Scene::TextWriter::operator()( Scene const & scene, TextFile & file )
 	{
-		static std::map< GLSL::FogType, castor::String > const FogTypes
+		static std::map< FogType, castor::String > const FogTypes
 		{
-			{ GLSL::FogType::eLinear, cuT( "linear" ) },
-			{ GLSL::FogType::eExponential, cuT( "exponential" ) },
-			{ GLSL::FogType::eSquaredExponential, cuT( "squared_exponential" ) },
+			{ FogType::eLinear, cuT( "linear" ) },
+			{ FogType::eExponential, cuT( "exponential" ) },
+			{ FogType::eSquaredExponential, cuT( "squared_exponential" ) },
 		};
 
 		static std::map< MaterialType, castor::String > const MaterialTypes
@@ -152,7 +152,7 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene ambient light" );
 		}
 
-		if ( result && scene.getFog().getType() != GLSL::FogType::eDisabled )
+		if ( result && scene.getFog().getType() != FogType::eDisabled )
 		{
 			Logger::logInfo( cuT( "Scene::write - Fog type" ) );
 			result = file.writeText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( scene.getFog().getType() )->second + cuT( "\n" ) ) > 0;
@@ -732,7 +732,7 @@ namespace castor3d
 
 	void Scene::renderBackground( Size const & size, Camera const & camera )
 	{
-		if ( m_fog.getType() == GLSL::FogType::eDisabled )
+		if ( m_fog.getType() == FogType::eDisabled )
 		{
 			if ( m_backgroundImage && m_backgroundImage->isInitialised())
 			{
@@ -910,15 +910,15 @@ namespace castor3d
 
 		switch ( m_fog.getType() )
 		{
-		case GLSL::FogType::eLinear:
+		case FogType::eLinear:
 			result |= SceneFlag::eFogLinear;
 			break;
 
-		case GLSL::FogType::eExponential:
+		case FogType::eExponential:
 			result |= SceneFlag::eFogExponential;
 			break;
 
-		case GLSL::FogType::eSquaredExponential:
+		case FogType::eSquaredExponential:
 			result |= SceneFlag::eFogSquaredExponential;
 			break;
 		}
@@ -927,15 +927,15 @@ namespace castor3d
 		{
 			switch ( m_shadow.getFilterType() )
 			{
-			case GLSL::ShadowType::eRaw:
+			case ShadowType::eRaw:
 				result |= SceneFlag::eShadowFilterRaw;
 				break;
 
-			case GLSL::ShadowType::ePoisson:
+			case ShadowType::ePoisson:
 				result |= SceneFlag::eShadowFilterPoisson;
 				break;
 
-			case GLSL::ShadowType::eStratifiedPoisson:
+			case ShadowType::eStratifiedPoisson:
 				result |= SceneFlag::eShadowFilterStratifiedPoisson;
 				break;
 			}

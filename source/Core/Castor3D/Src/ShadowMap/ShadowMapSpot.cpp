@@ -1,50 +1,48 @@
 #include "ShadowMapSpot.hpp"
 
-#include "Engine.hpp"
+#include <Engine.hpp>
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "ShadowMap/ShadowMapPassSpot.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Scene/Light/Light.hpp>
+#include <Scene/Light/SpotLight.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <ShadowMap/ShadowMapPassSpot.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 
+#include <Graphics/Image.hpp>
+#include <Miscellaneous/BlockTracker.hpp>
+
 using namespace castor;
+using namespace castor3d;
 
 namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doInitialiseSpot( Engine & engine, Size const & p_size )
+		TextureUnit doInitialiseSpot( Engine & engine
+			, Size const & size )
 		{
-			SamplerSPtr sampler;
-			String const name = cuT( "ShadowMap_Spot" );
+			auto sampler = engine.getSamplerCache().add( cuT( "ShadowMap_Spot" ) );
+			sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+			sampler->setComparisonMode( ComparisonMode::eRefToTexture );
+			sampler->setComparisonFunc( ComparisonFunc::eLEqual );
 
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-				sampler->setComparisonMode( ComparisonMode::eRefToTexture );
-				sampler->setComparisonFunc( ComparisonFunc::eLEqual );
-			}
-
-			auto texture = engine.getRenderSystem()->createTexture(
-				TextureType::eTwoDimensionsArray,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F,
-				Point3ui{ p_size.getWidth(), p_size.getHeight(), GLSL::SpotShadowMapCount } );
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite
+				, PixelFormat::eD32F
+				, size );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -58,9 +56,11 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapSpot::ShadowMapSpot( Engine & engine )
-		: ShadowMap{ engine }
-		, m_shadowMap{ doInitialiseSpot( engine, Size{ 1024, 1024 } ) }
+	ShadowMapSpot::ShadowMapSpot( Engine & engine
+		, Scene & scene )
+		: ShadowMap{ engine
+			, doInitialiseSpot( engine, Size{ 1024, 1024 } )
+			, std::make_shared< ShadowMapPassSpot >( engine, scene, *this ) }
 	{
 	}
 
@@ -68,90 +68,36 @@ namespace castor3d
 	{
 	}
 	
-	void ShadowMapSpot::update( Camera const & p_camera
-		, RenderQueueArray & p_queues )
+	void ShadowMapSpot::update( Camera const & camera
+		, RenderQueueArray & queues
+		, Light & light
+		, uint32_t index )
 	{
-		if ( !m_passes.empty() )
-		{
-			const int32_t max = doGetMaxPasses();
-			m_sorted.clear();
-
-			for ( auto & it : m_passes )
-			{
-				m_sorted.emplace( point::distanceSquared( p_camera.getParent()->getDerivedPosition()
-					, it.first->getParent()->getDerivedPosition() )
-					, it.second );
-			}
-
-			auto it = m_sorted.begin();
-
-			for ( int32_t i = 0; i < max && it != m_sorted.end(); ++i, ++it )
-			{
-				it->second->update( p_queues, i );
-			}
-		}
+		m_pass->update( camera, queues, light, index );
 	}
 
 	void ShadowMapSpot::render()
 	{
-		if ( !m_sorted.empty() )
-		{
-			m_frameBuffer->bind( FrameBufferTarget::eDraw );
-			auto it = m_sorted.begin();
-			const int32_t max = doGetMaxPasses();
-
-			for ( int32_t i = 0; i < max && it != m_sorted.end(); ++i, ++it )
-			{
-				m_depthAttach[i]->attach( AttachmentPoint::eDepth );
-				m_frameBuffer->clear( BufferComponent::eDepth );
-				it->second->render();
-				m_depthAttach[i]->detach();
-			}
-
-			m_frameBuffer->unbind();
-		}
-	}
-
-	int32_t ShadowMapSpot::doGetMaxPasses()const
-	{
-		return int32_t( m_shadowMap.getTexture()->getLayersCount() );
-	}
-
-	Size ShadowMapSpot::doGetSize()const
-	{
-		return m_shadowMap.getTexture()->getDimensions();
+		m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->clear( BufferComponent::eDepth );
+		m_pass->render();
+		m_frameBuffer->unbind();
 	}
 
 	void ShadowMapSpot::doInitialise()
 	{
-		m_shadowMap.initialise();
 		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
-
 		auto texture = m_shadowMap.getTexture();
-		m_depthAttach.resize( doGetMaxPasses() );
-		int i = 0;
-
-		for ( auto & attach : m_depthAttach )
-		{
-			attach = m_frameBuffer->createAttachment( texture );
-			attach->setTarget( texture->getType() );
-			attach->setLayer( i++ );
-		}
+		m_depthAttach = m_frameBuffer->createAttachment( texture );
+		m_frameBuffer->bind();
+		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach, m_shadowMap.getTexture()->getType() );
+		ENSURE( m_frameBuffer->isComplete() );
+		m_frameBuffer->unbind();
 	}
 
 	void ShadowMapSpot::doCleanup()
 	{
-		for ( auto & attach : m_depthAttach )
-		{
-			attach.reset();
-		}
-
-		m_shadowMap.cleanup();
-	}
-
-	ShadowMapPassSPtr ShadowMapSpot::doCreatePass( Light & p_light )const
-	{
-		return std::make_shared< ShadowMapPassSpot >( *getEngine(), p_light, *this );
+		m_depthAttach.reset();
 	}
 
 	void ShadowMapSpot::doUpdateFlags( TextureChannels & textureFlags
@@ -161,12 +107,12 @@ namespace castor3d
 		addFlag( programFlags, ProgramFlag::eShadowMapSpot );
 	}
 
-	GLSL::Shader ShadowMapSpot::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapSpot::doGetPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Fragment Intputs
@@ -175,7 +121,7 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		auto pxl_fFragDepth( writer.declFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
+		auto pxl_fragDepth( writer.declFragData< Float >( cuT( "pxl_fragDepth" ), 0 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -190,7 +136,7 @@ namespace castor3d
 				FI;
 			}
 
-			pxl_fFragDepth = gl_FragCoord.z();
+			pxl_fragDepth = gl_FragCoord.z();
 		} );
 
 		return writer.finalise();

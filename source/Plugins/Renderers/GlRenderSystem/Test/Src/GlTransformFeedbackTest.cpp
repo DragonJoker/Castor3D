@@ -7,8 +7,8 @@
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Shader/PushUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Shader/Uniform/PushUniform.hpp>
 #include <State/RasteriserState.hpp>
 
 #include <Buffer/GlBuffer.hpp>

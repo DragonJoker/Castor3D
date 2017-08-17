@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,6 +29,7 @@ SOFTWARE.
 #include "Texture/TextureUnit.hpp"
 #include "Technique/Opaque/DeferredRendering.hpp"
 #include "Technique/Transparent/WeightedBlendRendering.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -169,15 +170,6 @@ namespace castor3d
 		C3D_API bool writeInto( castor::TextFile & file );
 		/**
 		 *\~english
-		 *\brief		adds a shadow producing light source.
-		 *\param[in]	light	The light source.
-		 *\~french
-		 *\brief		Ajoute une source lumineuse produisant des ombres.
-		 *\param[in]	light	La source lumineuse.
-		 */
-		C3D_API void addShadowProducer( Light & light );
-		/**
-		 *\~english
 		 *\brief		Displays debug dumps.
 		 *\~french
 		 *\brief		Affiche les dumps de debug.
@@ -237,6 +229,20 @@ namespace castor3d
 			return false;
 		}
 
+	public:
+		using ShadowMapArray = std::vector< ShadowMapUPtr >;
+
+	private:
+		void doInitialiseShadowMaps();
+		void doCleanupShadowMaps();
+		void doUpdateShadowMaps( RenderQueueArray & queues );
+		void doRenderShadowMaps();
+		void doRenderEnvironmentMaps();
+		void doRenderOpaque( RenderInfo & info );
+		void doUpdateParticles( RenderInfo & info );
+		void doRenderTransparent( RenderInfo & info );
+		void doApplyPostEffects();
+
 	private:
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
@@ -274,6 +280,18 @@ namespace castor3d
 		//!\~english	The post effect timer.
 		//!\~french		Le timer d'effets post-rendu.
 		RenderPassTimerSPtr m_postFxTimer;
+		//!\~english	The directional lights shadow maps.
+		//!\~french		Les textures d'ombres pour les lumières directionnelles.
+		ShadowMapArray m_directionalShadowMaps;
+		//!\~english	The point lights shadow maps.
+		//!\~french		Les textures d'ombres pour les lumières omni-directionnelles.
+		ShadowMapArray m_pointShadowMaps;
+		//!\~english	The spot lights shadow maps.
+		//!\~french		Les textures d'ombres pour les lumières projecteurs.
+		ShadowMapArray m_spotShadowMaps;
+		//!\~english	The active shadow maps.
+		//!\~french		Les textures d'ombres actives.
+		ShadowMapLightTypeArray m_activeShadowMaps;
 	};
 }
 

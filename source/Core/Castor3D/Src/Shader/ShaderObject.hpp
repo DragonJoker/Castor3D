@@ -171,7 +171,7 @@ namespace castor3d
 		 *\remarks		La source chargée sera celle du plus haut profil supporté
 		 *\param[in]	p_source	Le code de la source
 		 */
-		C3D_API void setSource( GLSL::Shader const & p_source );
+		C3D_API void setSource( glsl::Shader const & p_source );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
@@ -427,7 +427,7 @@ namespace castor3d
 		castor::Path m_file;
 		//!\~english	The shader information.
 		//!\~french		Les informations du shader.
-		GLSL::Shader m_source;
+		glsl::Shader m_source;
 		//!\~english	The frame variables map, ordered by name.
 		//!\~french		La liste des variables de frame.
 		PushUniformMap m_mapUniforms;

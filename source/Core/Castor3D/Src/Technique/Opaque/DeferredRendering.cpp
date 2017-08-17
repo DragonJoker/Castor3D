@@ -1,10 +1,10 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Scene/Skybox.hpp"
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Technique/Opaque/OpaquePass.hpp"
 #include "Texture/Sampler.hpp"
 
@@ -155,16 +155,10 @@ namespace castor3d
 		m_sceneUbo.getUbo().cleanup();
 	}
 
-	void DeferredRendering::blitDepthInto( FrameBuffer & fbo )
-	{
-		m_geometryPassFrameBuffer->blitInto( fbo
-			, Rectangle{ Position{}, m_size }
-		, BufferComponent::eDepth | BufferComponent::eStencil );
-	}
-
 	void DeferredRendering::render( RenderInfo & info
 		, Scene const & scene
-		, Camera const & camera )
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )
 	{
 		m_engine.setPerObjectLighting( false );
 		auto invView = camera.getView().getInverse().getTransposed();
@@ -174,7 +168,8 @@ namespace castor3d
 		m_geometryPassFrameBuffer->bind( FrameBufferTarget::eDraw );
 		m_geometryPassTexAttachs[size_t( DsTexture::eDepth )]->attach( AttachmentPoint::eDepth );
 		m_geometryPassFrameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass.render( info, scene.hasShadows() );
+		m_opaquePass.render( info
+			, shadowMaps );
 		m_geometryPassFrameBuffer->unbind();
 
 		blitDepthInto( m_frameBuffer );
@@ -254,11 +249,12 @@ namespace castor3d
 		{
 			context.renderTexture( Position{ width * ( index++ ), 0 }, size, m_combinePass->getSsao() );
 		}
+	}
 
-#if DISPLAY_SHADOW_MAPS
-
-		m_lightingPass->Debug( m_size );
-
-#endif
+	void DeferredRendering::blitDepthInto( FrameBuffer & fbo )
+	{
+		m_geometryPassFrameBuffer->blitInto( fbo
+			, Rectangle{ Position{}, m_size }
+		, BufferComponent::eDepth | BufferComponent::eStencil );
 	}
 }

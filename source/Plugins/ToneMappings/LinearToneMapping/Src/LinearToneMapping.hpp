@@ -74,7 +74,7 @@ namespace Linear
 		/**
 		 *\copydoc		castor3d::ToneMapping::doCreate
 		 */
-		GLSL::Shader doCreate()override;
+		glsl::Shader doCreate()override;
 		/**
 		 *\copydoc		castor3d::ToneMapping::doDestroy
 		 */

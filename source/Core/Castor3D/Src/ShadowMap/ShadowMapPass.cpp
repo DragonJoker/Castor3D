@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPass.hpp"
+#include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
@@ -16,11 +16,11 @@ using namespace castor;
 namespace castor3d
 {
 	ShadowMapPass::ShadowMapPass( Engine & engine
-		, Light & p_light
-		, ShadowMap const & p_shadowMap )
+		, Scene & scene
+		, ShadowMap const & shadowMap )
 		: RenderPass{ cuT( "ShadowMap" ), engine, nullptr }
-		, m_shadowMap{ p_shadowMap }
-		, m_light{ p_light }
+		, m_scene{ scene }
+		, m_shadowMap{ shadowMap }
 	{
 	}
 
@@ -28,27 +28,15 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPass::render( uint32_t p_face )
+	void ShadowMapPass::doRenderNodes( SceneRenderNodes & nodes
+		, Camera const & camera )
 	{
-		doRender( p_face );
-	}
-
-	void ShadowMapPass::update( RenderQueueArray & p_queues
-		, int32_t p_index )
-	{
-		m_index = p_index;
-		RenderPass::update( p_queues );
-	}
-
-	void ShadowMapPass::doRenderNodes( SceneRenderNodes & p_nodes
-		, Camera const & p_camera )
-	{
-		RenderPass::doRender( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_camera );
-		RenderPass::doRender( p_nodes.m_staticNodes.m_backCulled, p_camera );
-		RenderPass::doRender( p_nodes.m_skinnedNodes.m_backCulled, p_camera );
-		RenderPass::doRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_camera );
-		RenderPass::doRender( p_nodes.m_morphingNodes.m_backCulled, p_camera );
-		RenderPass::doRender( p_nodes.m_billboardNodes.m_backCulled, p_camera );
+		RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_backCulled, camera );
+		RenderPass::doRender( nodes.m_staticNodes.m_backCulled, camera );
+		RenderPass::doRender( nodes.m_skinnedNodes.m_backCulled, camera );
+		RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera );
+		RenderPass::doRender( nodes.m_morphingNodes.m_backCulled, camera );
+		RenderPass::doRender( nodes.m_billboardNodes.m_backCulled, camera );
 	}
 
 	void ShadowMapPass::doUpdateFlags( TextureChannels & textureFlags
@@ -60,50 +48,41 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	void ShadowMapPass::doUpdatePipeline( RenderPipeline & p_pipeline )const
+	void ShadowMapPass::doPreparePipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
-	}
-
-	void ShadowMapPass::doPrepareFrontPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
-	{
-	}
-
-	void ShadowMapPass::doPrepareBackPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
-	{
-		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
+		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
 		{
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eNone );
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
-			auto & pipeline = *m_backPipelines.emplace( p_flags
+			auto & pipeline = *m_backPipelines.emplace( flags
 				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
 					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
+					, program
+					, flags ) ).first->second;
 
 			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, p_flags]()
+				, [this, &pipeline, flags]()
 				{
 					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
 					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
 
-					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
 						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
 					}
 
-					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
 						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
 					}
 
-					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
 						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
 					}
@@ -113,7 +92,23 @@ namespace castor3d
 		}
 	}
 
-	GLSL::Shader ShadowMapPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	void ShadowMapPass::doUpdatePipeline( RenderPipeline & p_pipeline )const
+	{
+	}
+
+	void ShadowMapPass::doPrepareFrontPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
+	{
+		doPreparePipeline( program, flags );
+	}
+
+	void ShadowMapPass::doPrepareBackPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
+	{
+		doPreparePipeline( program, flags );
+	}
+
+	glsl::Shader ShadowMapPass::doGetVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -124,7 +119,7 @@ namespace castor3d
 			, invertNormals );
 	}
 
-	GLSL::Shader ShadowMapPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
@@ -133,7 +128,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	GLSL::Shader ShadowMapPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -144,7 +139,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader ShadowMapPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -155,7 +150,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader ShadowMapPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const

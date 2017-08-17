@@ -168,7 +168,7 @@ namespace castor3d
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		REQUIRE( m_frameBuffer->isComplete() );
 
-		for ( unsigned int mip = 0; mip < GLSL::Utils::MaxIblReflectionLod + 1; ++mip )
+		for ( unsigned int mip = 0; mip < glsl::Utils::MaxIblReflectionLod + 1; ++mip )
 		{
 			Size mipSize{ uint32_t( m_size.getWidth() * std::pow( 0.5, mip ) )
 				, uint32_t( m_size.getHeight() * std::pow( 0.5, mip ) ) };
@@ -187,7 +187,7 @@ namespace castor3d
 			m_depthBuffer->resize( mipSize );
 			m_viewport.resize( mipSize );
 			m_viewport.apply();
-			m_roughnessUniform.setValue( mip / float( GLSL::Utils::MaxIblReflectionLod ) );
+			m_roughnessUniform.setValue( mip / float( glsl::Utils::MaxIblReflectionLod ) );
 			m_configUbo.update();
 			m_configUbo.bindTo( 10u );
 
@@ -211,9 +211,9 @@ namespace castor3d
 	ShaderProgramSPtr EnvironmentPrefilter::doCreateProgram()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		GLSL::Shader vtx;
+		glsl::Shader vtx;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
@@ -236,9 +236,9 @@ namespace castor3d
 			vtx = writer.finalise();
 		}
 
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
@@ -328,7 +328,7 @@ namespace castor3d
 
 					// from tangent-space vector to world-space sample vector
 					auto up = writer.declLocale( cuT( "up" )
-						, writer.ternary( GLSL::abs( p_n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
+						, writer.ternary( glsl::abs( p_n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
 					auto tangent = writer.declLocale( cuT( "tangent" )
 						, normalize( cross( up, p_n ) ) );
 					auto bitangent = writer.declLocale( cuT( "bitangent" )

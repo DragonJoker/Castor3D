@@ -24,8 +24,8 @@ SOFTWARE.
 #define ___C3D_TextureProjection_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include <Design/OwnedBy.hpp>
 

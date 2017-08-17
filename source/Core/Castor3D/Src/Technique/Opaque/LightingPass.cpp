@@ -1,4 +1,4 @@
-#include "LightingPass.hpp"
+﻿#include "LightingPass.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -17,16 +17,17 @@
 #include <Scene/Scene.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Light/PointLight.hpp>
-#include <Shader/MatrixUbo.hpp>
-#include <Shader/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/MatrixUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
+
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -95,18 +96,15 @@ namespace castor3d
 			m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
-				, gpInfoUbo
-				, opaque.getDirectionalShadowMap() );
+				, gpInfoUbo );
 			m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
-				, gpInfoUbo
-				, opaque.getPointShadowMaps() );
+				, gpInfoUbo );
 			m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
-				, gpInfoUbo
-				, opaque.getSpotShadowMap() );
+				, gpInfoUbo );
 
 			for ( auto & lightPass : m_lightPass )
 			{
@@ -180,13 +178,6 @@ namespace castor3d
 		return first;
 	}
 
-	void LightingPass::debugDisplay( Size const & size )const
-	{
-		m_lightPassShadow[0]->debugDisplay( Position{ 0, 256 } );
-		m_lightPassShadow[2]->debugDisplay( Position{ 256, 256 } );
-		m_lightPassShadow[1]->debugDisplay( Position{ 512, 256 } );
-	}
-
 	void LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType p_type
@@ -202,13 +193,14 @@ namespace castor3d
 
 			for ( auto & light : cache.getLights( p_type ) )
 			{
-				if ( light->isShadowProducer() )
+				if ( light->isShadowProducer() && light->getShadowMap() )
 				{
 					lightPassShadow.render( m_size
 						, gp
 						, *light
 						, camera
-						, p_first );
+						, p_first
+						, light->getShadowMap() );
 				}
 				else
 				{
@@ -216,7 +208,8 @@ namespace castor3d
 						, gp
 						, *light
 						, camera
-						, p_first );
+						, p_first
+						, nullptr );
 				}
 
 				p_first = false;

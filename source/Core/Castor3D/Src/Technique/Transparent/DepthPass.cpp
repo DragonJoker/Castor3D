@@ -10,8 +10,9 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -165,12 +166,12 @@ namespace castor3d
 		}
 	}
 
-	GLSL::Shader DepthPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
@@ -223,14 +224,14 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader DepthPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return GLSL::Shader{};
+		return glsl::Shader{};
 	}
 
-	GLSL::Shader DepthPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -241,7 +242,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader DepthPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -252,7 +253,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader DepthPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -263,12 +264,12 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader DepthPass::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()

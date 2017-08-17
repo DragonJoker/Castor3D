@@ -4,7 +4,7 @@
 
 using namespace castor;
 
-namespace GLSL
+namespace glsl
 {
 	std::unique_ptr< KeywordsBase > KeywordsBase::get( GlslWriterConfig const & p_rs )
 	{

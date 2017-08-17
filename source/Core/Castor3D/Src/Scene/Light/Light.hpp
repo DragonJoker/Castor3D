@@ -341,14 +341,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the light enabled status
-		 *\param[in]	p_value	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de la lumère
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setEnabled( bool p_value )
+		inline void setEnabled( bool value )
 		{
-			m_enabled = p_value;
+			m_enabled = value;
 		}
 		/**
 		 *\~english
@@ -393,14 +393,36 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the light shadow casting status.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut de projection d'ombre de la lumère
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setShadowProducer( bool p_value )
+		inline void setShadowProducer( bool value )
 		{
-			m_shadowCaster = p_value;
+			m_shadowCaster = value;
+		}
+		/**
+		 *\~english
+		 *\return		Tells if the light casts shadows.
+		 *\~french
+		 *\return		Dit si la lumière projette des ombres.
+		 */
+		inline ShadowMapRPtr getShadowMap()const
+		{
+			return m_shadowMap;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the light's shadow map.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit la texture d'ombres de la lumière.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setShadowMap( ShadowMapRPtr value )
+		{
+			m_shadowMap = value;
 		}
 
 	protected:
@@ -416,6 +438,9 @@ namespace castor3d
 		//!\~english	The Light category that effectively holds light data.
 		//!\~french		la light category contenant les données de la lumière.
 		LightCategorySPtr m_category;
+		//!\~english	The shadow map.
+		//!\~french		La texture d'ombres.
+		ShadowMapRPtr m_shadowMap{ nullptr };
 	};
 }
 

@@ -530,7 +530,7 @@ namespace castor3d
 		 *\param[in,out]	opacity			Reçoit le canal alpha de la texture.
 		 *\return			\p true Si la texture possédait un canal alpha.
 		 */
-		C3D_API bool doPrepareTexture( TextureChannel channel
+		bool doPrepareTexture( TextureChannel channel
 			, uint32_t & index
 			, TextureUnitSPtr & opacitySource
 			, castor::PxBufferBaseSPtr & opacity );
@@ -548,7 +548,7 @@ namespace castor3d
 		 *\param[in,out]	index	L'index de la texture.
 		 *\return			Le canal alpha de la texture originale.
 		 */
-		C3D_API castor::PxBufferBaseSPtr doPrepareTexture( TextureChannel channel
+		castor::PxBufferBaseSPtr doPrepareTexture( TextureChannel channel
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -562,7 +562,7 @@ namespace castor3d
 		 *\param[in]		opacityImage	Le canal alpha de opacitySource.
 		 *\param[in,out]	index			L'index de la texture.
 		 */
-		C3D_API void doPrepareOpacity( TextureUnitSPtr opacitySource
+		void doPrepareOpacity( TextureUnitSPtr opacitySource
 			, castor::PxBufferBaseSPtr opacityImage
 			, uint32_t & index );
 		/**
@@ -571,7 +571,18 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les indicateurs de texture en fonction des unités de texture.
 		 */
-		C3D_API void doUpdateFlags();
+		void doUpdateFlags();
+		/**
+		 *\~english
+		 *\brief		Reduces the texture at given channel to given pixel format.
+		 *\param[in]	channel	The texture channel.
+		 *\param[in]	format	The wanted pixel format.
+		 *\~french
+		 *\brief		Réduit la texture au canal donné dans le format de pixels donné.
+		 *\param[in]	channel	Le canal de texture.
+		 *\param[in]	format	Le format de pixels voulu.
+		 */
+		void doReduceTexture( TextureChannel channel, castor::PixelFormat format );
 
 	private:
 		/**

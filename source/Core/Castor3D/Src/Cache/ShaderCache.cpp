@@ -328,9 +328,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			GLSL::Shader strVtxShader;
+			glsl::Shader strVtxShader;
 			{
-				using namespace GLSL;
+				using namespace glsl;
 				auto writer = renderSystem.createGlslWriter();
 
 				// Shader inputs
@@ -397,7 +397,7 @@ namespace castor3d
 				strVtxShader = writer.finalise();
 			}
 
-			GLSL::Shader strPxlShader = p_renderPass.getPixelShaderSource( textureFlags
+			glsl::Shader strPxlShader = p_renderPass.getPixelShaderSource( textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc );

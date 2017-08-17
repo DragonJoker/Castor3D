@@ -1,4 +1,4 @@
-#include "StencilPass.hpp"
+﻿#include "StencilPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -10,13 +10,13 @@
 #include <Scene/Scene.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Light/PointLight.hpp>
-#include <Shader/MatrixUbo.hpp>
-#include <Shader/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/MatrixUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -27,9 +27,9 @@ namespace castor3d
 
 	namespace
 	{
-		GLSL::Shader doGetVertexShader( Engine const & engine )
+		glsl::Shader doGetVertexShader( Engine const & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
@@ -48,9 +48,9 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		GLSL::Shader doGetPixelShader( Engine const & engine )
+		glsl::Shader doGetPixelShader( Engine const & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()

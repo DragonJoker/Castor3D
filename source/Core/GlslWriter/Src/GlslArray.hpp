@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslBool.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename T >
 	struct Array

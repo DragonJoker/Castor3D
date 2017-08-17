@@ -573,6 +573,7 @@ namespace C3dAssimp
 	{
 		bool result = false;
 		MaterialSPtr material;
+		std::clog << cuT( "Mesh found: [" ) << aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
 
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
@@ -641,7 +642,7 @@ namespace C3dAssimp
 		if ( aiMeshAnim.mNumKeys )
 		{
 			String name{ string::stringCast< xchar >( aiMeshAnim.mName.C_Str() ) };
-			Logger::logDebug( cuT( "Mesh animation found: " ) + name );
+			Logger::logDebug( cuT( "Mesh animation found: [" ) + name + cuT( "]" ) );
 			auto & animation = mesh.createAnimation( name );
 			MeshAnimationSubmesh animSubmesh{ animation, submesh };
 

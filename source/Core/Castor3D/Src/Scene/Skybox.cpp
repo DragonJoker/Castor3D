@@ -19,7 +19,7 @@
 #include <GlslUtils.hpp>
 
 using namespace castor;
-using namespace GLSL;
+using namespace glsl;
 
 namespace castor3d
 {
@@ -224,7 +224,7 @@ namespace castor3d
 	{
 		auto program = getEngine()->getShaderProgramCache().getNewProgram( false );
 
-		GLSL::Shader vtx;
+		glsl::Shader vtx;
 		{
 			GlslWriter writer{ getEngine()->getRenderSystem()->createGlslWriter() };
 
@@ -247,7 +247,7 @@ namespace castor3d
 			vtx = writer.finalise();
 		}
 
-		GLSL::Shader pxl;
+		glsl::Shader pxl;
 		{
 			GlslWriter writer{ getEngine()->getRenderSystem()->createGlslWriter() };
 
@@ -255,7 +255,7 @@ namespace castor3d
 			UBO_HDR_CONFIG( writer );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 			auto skybox = writer.declUniform< SamplerCube >( cuT( "skybox" ) );
-			GLSL::Utils utils{ writer };
+			glsl::Utils utils{ writer };
 
 			if ( !m_hdr )
 			{

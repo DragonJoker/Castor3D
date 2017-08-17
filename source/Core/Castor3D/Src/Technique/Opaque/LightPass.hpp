@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,8 +26,8 @@ SOFTWARE.
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/GpInfoUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/GpInfoUbo.hpp"
 
 #include <Miscellaneous/BlockTracker.hpp>
 
@@ -121,7 +121,7 @@ namespace castor3d
 	 *\brief		Déclare la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
 	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void declareEncodeMaterial( GLSL::GlslWriter & writer );
+	void declareEncodeMaterial( glsl::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Declares the GLSL function used to decode the material specifics from a vec4.
@@ -130,7 +130,7 @@ namespace castor3d
 	 *\brief		Déclare la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
 	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void declareDecodeMaterial( GLSL::GlslWriter & writer );
+	void declareDecodeMaterial( glsl::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Declares the GLSL function used to decode the shadow receiver status from a vec4.
@@ -139,7 +139,7 @@ namespace castor3d
 	 *\brief		Déclare la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
 	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void declareDecodeReceiver( GLSL::GlslWriter & writer );
+	void declareDecodeReceiver( glsl::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
@@ -158,12 +158,12 @@ namespace castor3d
 	 *\param[in]	envMapIndex	L'indice de la texture environnementale.
 	 *\param[in]	encoded		La variable qui recevra la valeur encodée.
 	 */
-	void encodeMaterial( GLSL::GlslWriter & writer
-		, GLSL::Int const & receiver
-		, GLSL::Int const & reflection
-		, GLSL::Int const & refraction
-		, GLSL::Int const & envMapIndex
-		, GLSL::Float const & encoded );
+	void encodeMaterial( glsl::GlslWriter & writer
+		, glsl::Int const & receiver
+		, glsl::Int const & reflection
+		, glsl::Int const & refraction
+		, glsl::Int const & envMapIndex
+		, glsl::Float const & encoded );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to dencode the material specifics from a vec4.
@@ -182,12 +182,12 @@ namespace castor3d
 	 *\param[in]	refraction	La variable qui recevra le statut de réfraction.
 	 *\param[in]	envMapIndex	La variable qui recevra l'indice de la texture environnementale.
 	 */
-	void decodeMaterial( GLSL::GlslWriter & writer
-		, GLSL::Float const & encoded
-		, GLSL::Int const & receiver
-		, GLSL::Int const & reflection
-		, GLSL::Int const & refraction
-		, GLSL::Int const & envMapIndex );
+	void decodeMaterial( glsl::GlslWriter & writer
+		, glsl::Float const & encoded
+		, glsl::Int const & receiver
+		, glsl::Int const & reflection
+		, glsl::Int const & refraction
+		, glsl::Int const & envMapIndex );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
@@ -200,9 +200,9 @@ namespace castor3d
 	 *\param[in]	encoded		La valeur encodée.
 	 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
 	 */
-	void decodeReceiver( GLSL::GlslWriter & writer
-		, GLSL::Int & encoded
-		, GLSL::Int const & receiver );
+	void decodeReceiver( glsl::GlslWriter & writer
+		, glsl::Int & encoded
+		, glsl::Int const & receiver );
 	//!\~english	The geometry pass result.
 	//!\~french		Le résultat de la geometry pass.
 	using GeometryPassResult = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
@@ -245,8 +245,8 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
-				, GLSL::Shader const & vtx
-				, GLSL::Shader const & pxl );
+				, glsl::Shader const & vtx
+				, glsl::Shader const & pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -401,16 +401,8 @@ namespace castor3d
 			, GeometryPassResult const & gp
 			, Light const & light
 			, Camera const & camera
-			, bool first );
-		/**
-		 *\~english
-		 *\return		Displays the shadow map on the screen.
-		 *\~french
-		 *\return		Affiche la texture d'ombre sur l'écran.
-		 */
-		virtual void debugDisplay( castor::Position const & position )const
-		{
-		}
+			, bool first
+			, ShadowMap * shadowMapOpt );
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
@@ -517,7 +509,7 @@ namespace castor3d
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+		virtual glsl::Shader doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType type )const;
 		/**
 		 *\~english
@@ -531,7 +523,7 @@ namespace castor3d
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+		virtual glsl::Shader doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType type )const;
 		/**
 		 *\~english
@@ -545,7 +537,7 @@ namespace castor3d
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+		virtual glsl::Shader doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType type )const;
 		/**
 		 *\~english
@@ -557,7 +549,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
+		virtual glsl::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a light pass program.
@@ -570,8 +562,8 @@ namespace castor3d
 		 *\param[in]	pxl		Le source du fagment shader.
 		 *\return		Le programme créé.
 		 */
-		virtual ProgramPtr doCreateProgram( GLSL::Shader const & vtx
-			, GLSL::Shader const & pxl )const = 0;
+		virtual ProgramPtr doCreateProgram( glsl::Shader const & vtx
+			, glsl::Shader const & pxl )const = 0;
 
 	protected:
 		//!\~english	The engine.

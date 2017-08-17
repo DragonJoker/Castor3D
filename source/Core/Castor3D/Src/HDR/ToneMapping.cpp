@@ -6,12 +6,12 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/HdrConfigUbo.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <GlslSource.hpp>
 
 using namespace castor;
-using namespace GLSL;
+using namespace glsl;
 
 namespace castor3d
 {
@@ -47,7 +47,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			GLSL::Shader vtx;
+			glsl::Shader vtx;
 			{
 				auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 

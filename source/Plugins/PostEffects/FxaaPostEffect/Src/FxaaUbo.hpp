@@ -60,7 +60,7 @@ namespace fxaa
 }
 
 #define UBO_FXAA( p_writer )\
-	GLSL::Ubo fxaa{ p_writer, FxaaUbo::Name, FxaaUbo::BindingPoint };\
+	glsl::Ubo fxaa{ p_writer, FxaaUbo::Name, FxaaUbo::BindingPoint };\
 	auto c3d_subpixShift = fxaa.declMember< Float >( FxaaUbo::SubpixShift );\
 	auto c3d_spanMax = fxaa.declMember< Float >( FxaaUbo::SpanMax );\
 	auto c3d_reduceMul = fxaa.declMember< Float >( FxaaUbo::ReduceMul );\

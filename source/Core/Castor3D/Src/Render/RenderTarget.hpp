@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -225,15 +225,6 @@ namespace castor3d
 		 */
 		C3D_API void setToneMappingType( castor::String const & name
 			, Parameters const & parameters );
-		/**
-		 *\~english
-		 *\brief		adds a shadow producing light source.
-		 *\param[in]	light	The light source.
-		 *\~french
-		 *\brief		Ajoute une source lumineuse produisant des ombres.
-		 *\param[in]	light	La source lumineuse.
-		 */
-		C3D_API void addShadowProducer( Light & light );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status

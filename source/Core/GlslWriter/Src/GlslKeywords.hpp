@@ -26,12 +26,12 @@ SOFTWARE.
 #include "GlslUbo.hpp"
 #include "GlslSsbo.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	class KeywordsBase
 	{
 	public:
-		GlslWriter_API static std::unique_ptr< GLSL::KeywordsBase > get( GlslWriterConfig const & p_rs );
+		GlslWriter_API static std::unique_ptr< glsl::KeywordsBase > get( GlslWriterConfig const & p_rs );
 		GlslWriter_API castor::String getLayout (Ubo::Layout p_layout, uint32_t p_index)const;
 		GlslWriter_API castor::String getLayout( Ssbo::Layout p_layout, uint32_t p_index )const;
 

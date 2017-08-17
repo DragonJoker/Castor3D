@@ -48,18 +48,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	p_light		The light source.
-		 *\param[in]	p_shadowMap	The parent shadow map.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_light		La source lumineuse.
-		 *\param[in]	p_shadowMap	La shadow map parente.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPass( Engine & engine
-			, Light & p_light
-			, ShadowMap const & p_shadowMap );
+			, Scene & scene
+			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -69,39 +69,47 @@ namespace castor3d
 		C3D_API ~ShadowMapPass();
 		/**
 		 *\~english
-		 *\brief		Render function
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 */
-		C3D_API void render( uint32_t p_face = 0 );
-		/**
-		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
-		 *\param[out]	p_index		The pass index.
+		 *\param[in]	camera	The viewer camera.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	light	The light source.
+		 *\param[out]	index	The pass index.
 		 *\~french
 		 *\brief		Met à jour la passe de rendu.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 *\param[out]	p_index		L'indice de la passe.
+		 *\param[in]	camera	La caméra de l'observateur.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	light	La source lumineuse.
+		 *\param[out]	index	L'indice de la passe.
 		 */
-		C3D_API void update( RenderQueueArray & p_queues
-			, int32_t p_index );
+		C3D_API virtual void update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index ) = 0;
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[in]	index	The render index.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	index	L'indice du rendu.
+		 */
+		C3D_API virtual void render( uint32_t index = 0 ) = 0;
 
 	protected:
 		/**
 		 *\~english
 		 *\brief		Renders the given nodes.
-		 *\param		p_nodes		The nodes to render.
-		 *\param		p_camera	The viewing camera.
+		 *\param		nodes	The nodes to render.
+		 *\param		camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine les noeuds donnés.
-		 *\param		p_nodes		Les noeuds à dessiner.
-		 *\param		p_camera	La caméra regardant la scène.
+		 *\param		nodes	Les noeuds à dessiner.
+		 *\param		camera	La caméra regardant la scène.
 		 */
-		void doRenderNodes( SceneRenderNodes & p_nodes
-			, Camera const & p_camera );
+		void doRenderNodes( SceneRenderNodes & nodes
+			, Camera const & camera );
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -121,84 +129,78 @@ namespace castor3d
 	private:
 		/**
 		 *\~english
-		 *\brief		Render function.
-		 *\param[in]	p_scene		The scene to render.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[in]	p_scene		La scène à dessiner.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
-		 */
-		C3D_API virtual void doRender( uint32_t p_face ) = 0;
-		/**
-		 *\~english
 		 *\brief		Cleans up the pass.
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
 		virtual void doCleanup()= 0;
 		/**
+		 *\~english
+		 *\brief		Prepares the pipeline, culling back faces.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 */
+		void doPreparePipeline( ShaderProgram & program
+			, PipelineFlags const & flags );
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		void doUpdatePipeline( RenderPipeline & p_pipeline )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( ShaderProgram & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPrepareFrontPipeline( ShaderProgram & program
+			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( ShaderProgram & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPrepareBackPipeline( ShaderProgram & program
+			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		GLSL::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doGetGeometryShaderSource
 		 */
-		GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 
 	protected:
+		//!\~english	The scene.
+		//!\~french		La scène.
+		Scene & m_scene;
 		//!\~english	The parent shadow map.
 		//!\~french		La shadow map parente.
 		ShadowMap const & m_shadowMap;
-		//!\~english	The light source.
-		//!\~french		La source lumineuse.
-		Light & m_light;
 		//!\~english	Tells if the pass is initialised.
 		//!\~french		Dit si la passe est initialisée.
 		bool m_initialised{ false };
-		//!\~english	The pass index.
-		//!\~french		L'indice de la passe.
-		int32_t m_index{ 0u };
 	};
 }
 

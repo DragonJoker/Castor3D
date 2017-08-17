@@ -104,95 +104,47 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[out]	info	Receives the render informations.
-		 *\param[out]	shadows	Tells if the scene has shadow producing light sources.
+		 *\param[out]	info		Receives the render informations.
+		 *\param[out]	shadowMaps	The shadow maps.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	info	Reçoit les informations de rendu.
-		 *\param[out]	shadows	Dit si la scène a des lumières produisant des ombres.
+		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 */
-		C3D_API virtual void render( RenderInfo & info, bool shadows ) = 0;
-		/**
-		 *\~english
-		 *\return		Initialises the shadow maps.
-		 *\~french
-		 *\return		Initialise les maps de'ombres.
-		 */
-		C3D_API virtual bool initialiseShadowMaps() = 0;
-		/**
-		 *\~english
-		 *\return		Cleans up the shadow maps.
-		 *\~french
-		 *\return		Nettoie les maps de'ombres.
-		 */
-		C3D_API virtual void cleanupShadowMaps() = 0;
-		/**
-		 *\~english
-		 *\brief		Updates the shadow maps.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
-		 *\~french
-		 *\brief		Met à jour les maps d'ombres.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 */
-		C3D_API virtual void updateShadowMaps( RenderQueueArray & queues ) = 0;
-		/**
-		 *\~english
-		 *\brief		Renders the shadow maps.
-		 *\~french
-		 *\brief		Dessine les maps d'ombres.
-		 */
-		C3D_API virtual void renderShadowMaps() = 0;
-		/**
-		 *\~english
-		 *\brief		adds a shadow producing light source.
-		 *\param[in]	light	The light source.
-		 *\~french
-		 *\brief		Ajoute une source lumineuse produisant des ombres.
-		 *\param[in]	light	La source lumineuse.
-		 */
-		C3D_API virtual void addShadowProducer( Light & light ) = 0;
+		C3D_API virtual void render( RenderInfo & info
+			, ShadowMapLightTypeArray & shadowMaps ) = 0;
 
 	protected:
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[out]	info	Receives the render informations.
-		 *\param[out]	shadows	Tells if the scene has shadow producing light sources.
+		 *\param[out]	info		Receives the render informations.
+		 *\param[out]	shadowMaps	The shadow maps.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	info	Reçoit les informations de rendu.
-		 *\param[out]	shadows	Dit si la scène a des lumières produisant des ombres.
+		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 */
-		C3D_API void doRender( RenderInfo & info, bool shadows );
+		C3D_API void doRender( RenderInfo & info
+			, ShadowMapLightTypeArray & shadowMaps );
 		/**
 		 *\~english
 		 *\brief			Renders render nodes.
 		 *\param[in]		p_nodes		The scene render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		depthMaps	The depth (shadows and other) maps.
+		 *\param[in]		shadowMaps	The shadows maps.
 		 *\param[in, out]	count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine les noeuds de rendu.
 		 *\param[in]		p_nodes		Les noeuds de rendu de la scène.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]		shadowMaps	Les textures d'ombres.
 		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
 		C3D_API void doRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & camera
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the depth maps for opaque nodes.
-		 *\param[out]	depthMaps	Receives the depth maps.
-		 *\~french
-		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
-		 *\param[out]	depthMaps	Reçoit les textures.
-		 */
-		C3D_API virtual void doGetDepthMaps( DepthMapArray & depthMaps ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
@@ -214,7 +166,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API GLSL::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**

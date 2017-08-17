@@ -12,10 +12,11 @@
 #include <Miscellaneous/ComputePipeline.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/LegacyPassBuffer.hpp>
-#include <Shader/MetallicRoughnessPassBuffer.hpp>
-#include <Shader/SpecularGlossinessPassBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Shader/PassBuffer/LegacyPassBuffer.hpp>
+#include <Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp>
+#include <Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp>
+#include <Shader/Shaders/GlslMaterial.hpp>
 #include <Texture/TextureImage.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -24,7 +25,6 @@
 #include <Graphics/PixelBuffer.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
 
 using namespace castor;
 using namespace castor3d;
@@ -39,9 +39,9 @@ namespace Testing
 {
 	namespace
 	{
-		GLSL::Shader doCreateVtxShader( Engine & engine )
+		glsl::Shader doCreateVtxShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
 			auto projection = writer.declUniform< Mat4 >( cuT( "projection" ) );
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -54,11 +54,11 @@ namespace Testing
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreateLegacyPixelShader( Engine & engine )
+		glsl::Shader doCreateLegacyPixelShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
-			LegacyMaterials materials{ writer };
+			shader::LegacyMaterials materials{ writer };
 			materials.declare();
 			uint32_t index = 0;
 			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
@@ -88,11 +88,11 @@ namespace Testing
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreateMetallicRoughnessPixelShader( Engine & engine )
+		glsl::Shader doCreateMetallicRoughnessPixelShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
-			PbrMRMaterials materials{ writer };
+			shader::PbrMRMaterials materials{ writer };
 			materials.declare();
 			uint32_t index = 0;
 			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
@@ -120,11 +120,11 @@ namespace Testing
 			return writer.finalise();
 		}
 
-		GLSL::Shader doCreateSpecularGlossinessPixelShader( Engine & engine )
+		glsl::Shader doCreateSpecularGlossinessPixelShader( Engine & engine )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 			auto writer = engine.getRenderSystem()->createGlslWriter();
-			PbrSGMaterials materials{ writer };
+			shader::PbrSGMaterials materials{ writer };
 			materials.declare();
 			uint32_t index = 0;
 			auto out_c3dOutput1 = writer.declFragData< Vec4 >( cuT( "out_c3dOutput1" ), index++ );
@@ -223,8 +223,8 @@ namespace Testing
 		struct Pipeline
 		{
 			Pipeline( Engine & engine
-				, GLSL::Shader const & vtx
-				, GLSL::Shader const & pxl )
+				, glsl::Shader const & vtx
+				, glsl::Shader const & pxl )
 				: viewport{ engine }
 				, bufferVertex
 				{
@@ -353,7 +353,7 @@ namespace Testing
 			, doCreateVtxShader( m_engine )
 			, doCreateLegacyPixelShader( m_engine ) };
 
-		LegacyPassBuffer passBuffer{ m_engine, GLSL::MaxMaterialsCount };
+		LegacyPassBuffer passBuffer{ m_engine, shader::MaxMaterialsCount };
 		passBuffer.addPass( *pass );
 		passBuffer.update();
 		passBuffer.bind();

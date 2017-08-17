@@ -1,7 +1,7 @@
 #include "Fog.hpp"
 
 using namespace castor;
-using namespace GLSL;
+using namespace glsl;
 
 namespace castor3d
 {

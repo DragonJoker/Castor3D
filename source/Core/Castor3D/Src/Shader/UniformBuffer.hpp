@@ -25,9 +25,9 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Uniform.hpp"
-#include "UniformBufferBinding.hpp"
 #include "Mesh/Buffer/GpuBuffer.hpp"
+#include "Shader/UniformBufferBinding.hpp"
+#include "Shader/Uniform/Uniform.hpp"
 
 #include <Design/OwnedBy.hpp>
 #include <Design/Named.hpp>

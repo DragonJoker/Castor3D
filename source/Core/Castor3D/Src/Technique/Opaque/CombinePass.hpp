@@ -26,8 +26,8 @@ SOFTWARE.
 #include "LightPass.hpp"
 #include "SsaoPass.hpp"
 
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/SceneUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
 
 namespace castor3d
 {
@@ -73,7 +73,7 @@ namespace castor3d
 			, GpInfoUbo & gpInfoUbo
 			, bool hasSsao
 			, bool isPbr
-			, GLSL::FogType fogType );
+			, FogType fogType );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -102,7 +102,7 @@ namespace castor3d
 	};
 	//!\~english	An array of CombineProgram, one per fog type.
 	//!\~french		Un tableau de CombineProgram, un par type de brouillard.
-	using CombinePrograms = std::array< CombineProgram, size_t( GLSL::FogType::eCount ) * 2u >;
+	using CombinePrograms = std::array< CombineProgram, size_t( FogType::eCount ) * 2u >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0

@@ -1,4 +1,4 @@
-#include "RenderPanel.hpp"
+﻿#include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 #include "RotateNodeEvent.hpp"
@@ -432,7 +432,7 @@ namespace CastorViewer
 	void RenderPanel::doReloadScene()
 	{
 		doResetTimers();
-		wxGetApp().getMainFrame()->LoadScene();
+		wxGetApp().getMainFrame()->loadScene();
 	}
 
 	real RenderPanel::doTransformX( int x )
@@ -532,6 +532,7 @@ namespace CastorViewer
 				m_selectedSubmesh = &( *it );
 				Select( *m_selectedSubmesh
 					, p_geometry );
+				wxGetApp().getMainFrame()->select( p_geometry, m_selectedSubmesh->m_submesh );
 			}
 			changed = true;
 		}
@@ -884,7 +885,7 @@ namespace CastorViewer
 
 			if ( window )
 			{
-				wxGetApp().getMainFrame()->ToggleFullScreen( !window->isFullscreen() );
+				wxGetApp().getMainFrame()->toggleFullScreen( !window->isFullscreen() );
 			}
 		}
 

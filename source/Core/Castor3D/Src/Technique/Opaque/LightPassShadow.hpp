@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,19 +26,19 @@ SOFTWARE.
 #include "DirectionalLightPass.hpp"
 #include "PointLightPass.hpp"
 #include "SpotLightPass.hpp"
-#include "ShadowMap/DeferredShadowMapDirectional.hpp"
-#include "ShadowMap/DeferredShadowMapPoint.hpp"
-#include "ShadowMap/DeferredShadowMapSpot.hpp"
+#include "ShadowMap/ShadowMapDirectional.hpp"
+#include "ShadowMap/ShadowMapPoint.hpp"
+#include "ShadowMap/ShadowMapSpot.hpp"
 
-#include <Engine.hpp>
-#include <Scene/Light/Light.hpp>
-#include <Render/Context.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Shader/PushUniform.hpp>
-#include <Texture/TextureUnit.hpp>
+#include "Engine.hpp"
+#include "Scene/Light/Light.hpp"
+#include "Render/Context.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Shader/Uniform/PushUniform.hpp"
+#include "Texture/TextureUnit.hpp"
 
-#include <GlslShadow.hpp>
+#include "Shader/Shaders/GlslShadow.hpp"
 
 namespace castor3d
 {
@@ -75,7 +75,7 @@ namespace castor3d
 		using light_pass_type = DirectionalLightPass;
 		//!\~english	The shadow map type.
 		//!\~french		Le type de map d'ombre.
-		using shadow_pass_type = DeferredShadowMapDirectional;
+		using shadow_pass_type = ShadowMapDirectional;
 		/**
 		 *\~english
 		 *\return		The shadow map name.
@@ -84,7 +84,7 @@ namespace castor3d
 		 */
 		static castor::String const & getName()
 		{
-			static castor::String const name = GLSL::Shadow::MapShadowDirectional;
+			static castor::String const name = shader::Shadow::MapShadowDirectional;
 			return name;
 		}
 		/**
@@ -147,7 +147,7 @@ namespace castor3d
 		using light_pass_type = PointLightPass;
 		//!\~english	The shadow map type.
 		//!\~french		Le type de map d'ombre.
-		using shadow_pass_type = DeferredShadowMapPoint;
+		using shadow_pass_type = ShadowMapPoint;
 		/**
 		 *\~english
 		 *\return		The shadow map name.
@@ -156,7 +156,7 @@ namespace castor3d
 		 */
 		static castor::String const & getName()
 		{
-			static castor::String const name = GLSL::Shadow::MapShadowPoint;
+			static castor::String const name = shader::Shadow::MapShadowPoint;
 			return name;
 		}
 		/**
@@ -219,7 +219,7 @@ namespace castor3d
 		using light_pass_type = SpotLightPass;
 		//!\~english	The shadow map type.
 		//!\~french		Le type de map d'ombre.
-		using shadow_pass_type = DeferredShadowMapSpot;
+		using shadow_pass_type = ShadowMapSpot;
 		/**
 		 *\~english
 		 *\return		The shadow map name.
@@ -228,7 +228,7 @@ namespace castor3d
 		 */
 		static castor::String const & getName()
 		{
-			static castor::String const name = GLSL::Shadow::MapShadowSpot;
+			static castor::String const name = shader::Shadow::MapShadowSpot;
 			return name;
 		}
 		/**
@@ -318,8 +318,8 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
-				, GLSL::Shader const & vtx
-				, GLSL::Shader const & pxl )
+				, glsl::Shader const & vtx
+				, glsl::Shader const & pxl )
 				: my_program_type( engine, vtx, pxl )
 			{
 				this->m_program->template createUniform< UniformType::eSampler >( my_traits::getName()
@@ -335,29 +335,23 @@ namespace castor3d
 		 *\param[in]	frameBuffer	The target framebuffer.
 		 *\param[in]	depthAttach	The depth buffer attach.
 		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	shadowMap		The shadow map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	frameBuffer	Le tampon d'image cible.
 		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
-		 *\param[in]	shadowMap	La map d'ombre.
 		 */
 		LightPassShadow( Engine & engine
 			, FrameBuffer & frameBuffer
 			, FrameBufferAttachment & depthAttach
-			, GpInfoUbo & gpInfoUbo
-			, my_shadow_map_type & shadowMap )
+			, GpInfoUbo & gpInfoUbo )
 			: my_pass_type{ engine
 				, frameBuffer
 				, depthAttach
 				, gpInfoUbo
 				, true }
-			, m_shadowMap{ shadowMap }
-			, m_shadowMapTexture{ my_traits::getTexture( shadowMap ) }
 		{
-			m_shadowMapTexture.setIndex( uint32_t( DsTexture::eCount ) );
 		}
 		/**
 		 *\~english
@@ -379,51 +373,35 @@ namespace castor3d
 			, GeometryPassResult const & gp
 			, Light const & light
 			, Camera const & camera
-			, bool first )override
+			, bool first
+			, ShadowMap * shadowMapOpt )override
 		{
-			m_shadowMap.render( my_traits::getTypedLight( light ) );
+			auto & shadowMapTexture = shadowMapOpt->getTexture();
 			my_pass_type::doUpdate( size
 				, light
 				, camera );
-			m_shadowMapTexture.bind();
+			shadowMapTexture.setIndex( uint32_t( DsTexture::eCount ) );
+			shadowMapTexture.bind();
 			this->m_program->bind( light );
 			my_pass_type::doRender( size
 				, gp
 				, light.getColour()
 				, first );
 
-			m_shadowMapTexture.unbind();
-		}
-		/**
-		 *\~english
-		 *\return		Displays the shadow map on the screen.
-		 *\~french
-		 *\return		Affiche la texture d'ombre sur l'écran.
-		 */
-		void debugDisplay( castor::Position const & position )const override
-		{
-			my_traits::debugDisplay( position, m_shadowMapTexture );
+			shadowMapTexture.unbind();
 		}
 
 	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		typename LightPass::ProgramPtr doCreateProgram( GLSL::Shader const & vtx
-			, GLSL::Shader const & pxl )const override
+		typename LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
+			, glsl::Shader const & pxl )const override
 		{
 			return std::make_unique< LightPassShadow::Program >( this->m_engine
 				, vtx
 				, pxl );
 		}
-
-	private:
-		//!\~english	The shadow map.
-		//!\~french		Le mappage d'ombres.
-		my_shadow_map_type & m_shadowMap;
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
-		TextureUnit & m_shadowMapTexture;
 	};
 	//!\~english	The directional lights light pass with shadows.
 	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.

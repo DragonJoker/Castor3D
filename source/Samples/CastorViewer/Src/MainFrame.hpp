@@ -58,8 +58,9 @@ namespace CastorViewer
 		~MainFrame();
 
 		bool initialise();
-		void LoadScene( wxString const & p_strFileName = wxEmptyString );
-		void ToggleFullScreen( bool p_fullscreen );
+		void loadScene( wxString const & p_strFileName = wxEmptyString );
+		void toggleFullScreen( bool p_fullscreen );
+		void select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh );
 
 	private:
 		void doInitialiseGUI();

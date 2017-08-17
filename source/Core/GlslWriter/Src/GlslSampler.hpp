@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslWriter.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct SamplerBuffer
 		: public Type

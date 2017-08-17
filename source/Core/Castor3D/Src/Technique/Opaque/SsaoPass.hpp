@@ -27,8 +27,8 @@ SOFTWARE.
 
 #include "Miscellaneous/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Shader/GpInfoUbo.hpp"
-#include "Shader/MatrixUbo.hpp"
+#include "Shader/Ubos/GpInfoUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Texture/TextureUnit.hpp"
 
 namespace castor3d

@@ -33,14 +33,20 @@ namespace GuiCommon
 	class SceneObjectsList
 		: public wxTreeCtrl
 	{
+	private:
+		using SubmeshIdMap = std::map< castor3d::SubmeshSPtr, wxTreeItemId >;
+		using GeometrySubmeshIdMap = std::map< castor3d::GeometrySPtr, SubmeshIdMap >;
+
 	public:
 		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~SceneObjectsList();
 
-		void LoadScene( castor3d::Engine * engine, castor3d::SceneSPtr p_scene );
-		void UnloadScene();
+		void loadScene( castor3d::Engine * engine, castor3d::SceneSPtr p_scene );
+		void unloadScene();
+		void select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh );
 
 	protected:
+		void doAddSubmesh( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh, wxTreeItemId id );
 		void doAddRenderWindow( wxTreeItemId p_id, castor3d::RenderWindowSPtr p_window );
 		void doAddGeometry( wxTreeItemId p_id, castor3d::Geometry & p_geometry );
 		void doAddCamera( wxTreeItemId p_id, castor3d::Camera & p_camera );
@@ -59,6 +65,7 @@ namespace GuiCommon
 		castor3d::SceneWPtr m_scene;
 		castor3d::Engine * m_engine;
 		PropertiesHolder * m_propertiesHolder;
+		GeometrySubmeshIdMap m_ids;
 	};
 }
 

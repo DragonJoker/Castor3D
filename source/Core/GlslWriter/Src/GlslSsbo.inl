@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	template< typename T >
 	inline T Ssbo::declMember( castor::String const & p_name )

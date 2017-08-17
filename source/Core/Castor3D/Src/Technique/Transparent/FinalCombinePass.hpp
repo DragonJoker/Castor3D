@@ -23,9 +23,9 @@ SOFTWARE.
 #ifndef ___C3D_FinalCombinePass_H___
 #define ___C3D_FinalCombinePass_H___
 
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/GpInfoUbo.hpp"
-#include "Shader/SceneUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/GpInfoUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
 #include "TransparentPass.hpp"
 
 namespace castor3d
@@ -68,7 +68,7 @@ namespace castor3d
 			, MatrixUbo & p_matrixUbo
 			, SceneUbo & p_sceneUbo
 			, GpInfoUbo & p_gpInfoUbo
-			, GLSL::FogType p_fogType );
+			, FogType p_fogType );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -97,7 +97,7 @@ namespace castor3d
 	};
 	//!\~english	An array of FinalCombineProgram, one per fog type.
 	//!\~french		Un tableau de FinalCombineProgram, un par type de brouillard.
-	using FinalCombinePrograms = std::array< FinalCombineProgram, size_t( GLSL::FogType::eCount ) >;
+	using FinalCombinePrograms = std::array< FinalCombineProgram, size_t( FogType::eCount ) >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0

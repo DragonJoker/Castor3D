@@ -59,7 +59,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La densité du brouillard.
 		 */
-		inline GLSL::ShadowType getFilterType()const
+		inline ShadowType getFilterType()const
 		{
 			return m_filterType;
 		}
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Définit le type de brouillard.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void setFilterType( GLSL::ShadowType p_value )
+		inline void setFilterType( ShadowType p_value )
 		{
 			m_filterType = p_value;
 		}
@@ -79,7 +79,7 @@ namespace castor3d
 	private:
 		//!\~english	The shadows filter type type.
 		//!\~french		Le type de filtrage des ombres.
-		GLSL::ShadowType m_filterType{ GLSL::ShadowType::eRaw };
+		ShadowType m_filterType{ ShadowType::eRaw };
 	};
 }
 

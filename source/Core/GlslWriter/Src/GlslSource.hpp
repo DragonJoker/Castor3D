@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GLSL_SOURCE_H___
 #define ___GLSL_SOURCE_H___
 
-#include "GlslLighting.hpp"
-#include "GlslFog.hpp"
+#include "GlslIntrinsics.hpp"
+#include "GlslWriter.hpp"
 
 #endif

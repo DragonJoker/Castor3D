@@ -1,4 +1,4 @@
-﻿#include "ShadowMap.hpp"
+#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -8,16 +8,22 @@
 #include "Scene/Light/Light.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 
 namespace castor3d
 {
-	ShadowMap::ShadowMap( Engine & engine )
+	ShadowMap::ShadowMap( Engine & engine
+		, TextureUnit && shadowMap
+		, ShadowMapPassSPtr pass )
 		: OwnedBy< Engine >{ engine }
+		, m_shadowMap{ std::move( shadowMap ) }
+		, m_pass{ pass }
 	{
 	}
 
@@ -31,13 +37,19 @@ namespace castor3d
 
 		if ( !m_frameBuffer )
 		{
+			m_shadowMap.initialise();
 			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
 			result = m_frameBuffer->create();
-			auto size = doGetSize();
+			auto size = m_shadowMap.getTexture()->getDimensions();
 
 			if ( result )
 			{
 				result = m_frameBuffer->initialise( size );
+			}
+
+			if ( result )
+			{
+				result = m_pass->initialise( size );
 			}
 
 			if ( result )
@@ -55,10 +67,7 @@ namespace castor3d
 
 	void ShadowMap::cleanup()
 	{
-		for ( auto & it : m_passes )
-		{
-			it.second->cleanup();
-		}
+		m_pass->cleanup();
 
 		if ( m_frameBuffer )
 		{
@@ -71,6 +80,8 @@ namespace castor3d
 			m_frameBuffer->cleanup();
 			m_frameBuffer->destroy();
 			m_frameBuffer.reset();
+
+			m_shadowMap.cleanup();
 		}
 
 		for ( auto buffer : m_geometryBuffers )
@@ -79,18 +90,6 @@ namespace castor3d
 		}
 
 		m_geometryBuffers.clear();
-	}
-
-	void ShadowMap::addLight( Light & light )
-	{
-		auto pass = doCreatePass( light );
-		auto size = doGetSize();
-		getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
-			, [pass, size]()
-			{
-				pass->initialise( size );
-			} ) );
-		m_passes.emplace( &light, pass );
 	}
 
 	void ShadowMap::updateFlags( TextureChannels & textureFlags
@@ -106,7 +105,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	GLSL::Shader ShadowMap::getVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -117,7 +116,7 @@ namespace castor3d
 			, invertNormals );
 	}
 
-	GLSL::Shader ShadowMap::getGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getGeometryShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
@@ -126,7 +125,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	GLSL::Shader ShadowMap::getPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -137,12 +136,12 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	GLSL::Shader ShadowMap::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::doGetVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Vertex inputs
@@ -205,20 +204,20 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader ShadowMap::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::doGetGeometryShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return GLSL::Shader{};
+		return glsl::Shader{};
 	}
 
-	void ShadowMap::doApplyAlphaFunc( GLSL::GlslWriter & writer
+	void ShadowMap::doApplyAlphaFunc( glsl::GlslWriter & writer
 		, ComparisonFunc alphaFunc
-		, GLSL::Float const & alpha
-		, GLSL::Int const & material
-		, GLSL::Materials const & materials )
+		, glsl::Float const & alpha
+		, glsl::Int const & material
+		, shader::Materials const & materials )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 
 		switch ( alphaFunc )
 		{

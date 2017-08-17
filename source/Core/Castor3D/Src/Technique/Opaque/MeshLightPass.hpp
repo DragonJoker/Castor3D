@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "StencilPass.hpp"
 
-#include <Shader/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
 
 namespace castor3d
 {
@@ -68,8 +68,8 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
-				, GLSL::Shader const & vtx
-				, GLSL::Shader const & pxl );
+				, glsl::Shader const & vtx
+				, glsl::Shader const & pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -161,7 +161,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
-		GLSL::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
+		glsl::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh.

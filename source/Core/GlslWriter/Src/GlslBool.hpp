@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslOptional.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	struct Boolean
 		: public Type

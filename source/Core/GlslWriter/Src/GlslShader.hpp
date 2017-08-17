@@ -26,7 +26,7 @@ SOFTWARE.
 #include "GlslSsbo.hpp"
 #include "GlslUbo.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	class Shader
 	{

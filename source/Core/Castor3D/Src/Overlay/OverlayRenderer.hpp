@@ -25,8 +25,8 @@ SOFTWARE.
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/RenderNode/PassRenderNode.hpp"
-#include "Shader/MatrixUbo.hpp"
-#include "Shader/OverlayUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/OverlayUbo.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "TextOverlay.hpp"
 

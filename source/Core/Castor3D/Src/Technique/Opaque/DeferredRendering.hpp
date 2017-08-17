@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -73,7 +73,8 @@ namespace castor3d
 		 */
 		void render( RenderInfo & info
 			, Scene const & scene
-			, Camera const & camera );
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.

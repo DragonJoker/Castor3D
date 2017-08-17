@@ -5,7 +5,7 @@
 #include "Material/Material.hpp"
 #include "Render/RenderNode/RenderNode.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/PassBuffer.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
 using namespace castor;

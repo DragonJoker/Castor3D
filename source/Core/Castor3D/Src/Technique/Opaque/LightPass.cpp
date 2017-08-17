@@ -8,8 +8,8 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
-#include <Shader/ModelMatrixUbo.hpp>
-#include <Shader/SceneUbo.hpp>
+#include <Shader/Ubos/ModelMatrixUbo.hpp>
+#include <Shader/Ubos/SceneUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>
@@ -20,12 +20,14 @@
 #include <Texture/TextureUnit.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
-#include <GlslPhongLighting.hpp>
-#include <GlslMetallicBrdfLighting.hpp>
-#include <GlslSpecularBrdfLighting.hpp>
+
+#include "Shader/Shaders/GlslFog.hpp"
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
+#include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -140,10 +142,10 @@ namespace castor3d
 		return std::min( max, result );
 	}
 
-	void declareEncodeMaterial( GLSL::GlslWriter & writer )
+	void declareEncodeMaterial( glsl::GlslWriter & writer )
 	{
-		using namespace GLSL;
-		using GLSL::operator<<;
+		using namespace glsl;
+		using glsl::operator<<;
 		auto encodeMaterial = writer.implementFunction< Void >( cuT( "encodeMaterial" )
 			, [&]( Int const & receiver
 				, Int const & reflection
@@ -164,9 +166,9 @@ namespace castor3d
 			, OutFloat{ &writer, cuT( "encoded" ) } );
 	}
 	
-	void declareDecodeMaterial( GLSL::GlslWriter & writer )
+	void declareDecodeMaterial( glsl::GlslWriter & writer )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto decodeMaterial = writer.implementFunction< Void >( cuT( "decodeMaterial" )
 			, [&]( Float const & encoded
 				, Int receiver
@@ -189,9 +191,9 @@ namespace castor3d
 			, OutInt{ &writer, cuT( "envMapIndex" ) } );
 	}
 
-	void declareDecodeReceiver( GLSL::GlslWriter & writer )
+	void declareDecodeReceiver( glsl::GlslWriter & writer )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto decodeReceiver = writer.implementFunction< Void >( cuT( "decodeReceiver" )
 			, [&]( Int const & encoded
 				, Int receiver )
@@ -202,14 +204,14 @@ namespace castor3d
 			, OutInt{ &writer, cuT( "receiver" ) } );
 	}
 
-	void encodeMaterial( GLSL::GlslWriter & writer
-		, GLSL::Int const & receiver
-		, GLSL::Int const & reflection
-		, GLSL::Int const & refraction
-		, GLSL::Int const & envMapIndex
-		, GLSL::Float const & encoded )
+	void encodeMaterial( glsl::GlslWriter & writer
+		, glsl::Int const & receiver
+		, glsl::Int const & reflection
+		, glsl::Int const & refraction
+		, glsl::Int const & envMapIndex
+		, glsl::Float const & encoded )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		writer << writeFunctionCall< Void >( &writer
 			, cuT( "encodeMaterial" )
 			, InInt{ receiver }
@@ -220,14 +222,14 @@ namespace castor3d
 		writer << Endi{};
 	}
 
-	void decodeMaterial( GLSL::GlslWriter & writer
-		, GLSL::Float const & encoded
-		, GLSL::Int const & receiver
-		, GLSL::Int const & reflection
-		, GLSL::Int const & refraction
-		, GLSL::Int const & envMapIndex )
+	void decodeMaterial( glsl::GlslWriter & writer
+		, glsl::Float const & encoded
+		, glsl::Int const & receiver
+		, glsl::Int const & reflection
+		, glsl::Int const & refraction
+		, glsl::Int const & envMapIndex )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		writer << writeFunctionCall< Void >( &writer
 			, cuT( "decodeMaterial" )
 			, InFloat{ encoded }
@@ -238,11 +240,11 @@ namespace castor3d
 		writer << Endi{};
 	}
 
-	void decodeReceiver( GLSL::GlslWriter & writer
-		, GLSL::Int & encoded
-		, GLSL::Int const & receiver )
+	void decodeReceiver( glsl::GlslWriter & writer
+		, glsl::Int & encoded
+		, glsl::Int const & receiver )
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		writer << writeFunctionCall< Void >( &writer
 			, cuT( "decodeReceiver" )
 			, InInt{ encoded }
@@ -253,8 +255,8 @@ namespace castor3d
 	//************************************************************************************************
 
 	LightPass::Program::Program( Engine & engine
-		, GLSL::Shader const & vtx
-		, GLSL::Shader const & pxl )
+		, glsl::Shader const & vtx
+		, glsl::Shader const & pxl )
 	{
 		auto & renderSystem = *engine.getRenderSystem();
 
@@ -363,7 +365,8 @@ namespace castor3d
 		, GeometryPassResult const & gp
 		, Light const & light
 		, Camera const & camera
-		, bool first )
+		, bool first
+		, ShadowMap * shadowMapOpt )
 	{
 		doUpdate( size
 			, light
@@ -444,10 +447,10 @@ namespace castor3d
 		m_frameBuffer.unbind();
 	}
 	
-	GLSL::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType type )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
@@ -465,11 +468,11 @@ namespace castor3d
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
-		auto lighting = legacy::createLightingModel( writer
+		auto lighting = shader::legacy::createLightingModel( writer
 			, type
 			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
@@ -494,42 +497,42 @@ namespace castor3d
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" ), utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" ), v4Normal.xyz() );
 
-			OutputComponents output{ v3Diffuse, v3Specular };
+			shader::OutputComponents output{ v3Diffuse, v3Specular };
 
 			switch ( type )
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< GLSL::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					lighting->computeOneDirectionalLight( light
 						, eye
 						, fMatShininess
 						, iShadowReceiver
-						, FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< GLSL::PointLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
 					lighting->computeOnePointLight( light
 						, eye
 						, fMatShininess
 						, iShadowReceiver
-						, FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< GLSL::SpotLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 					lighting->computeOneSpotLight( light
 						, eye
 						, fMatShininess
 						, iShadowReceiver
-						, FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 				}
 				break;
@@ -542,10 +545,10 @@ namespace castor3d
 		return writer.finalise();
 	}
 	
-	GLSL::Shader LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+	glsl::Shader LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType type )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
@@ -563,11 +566,11 @@ namespace castor3d
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
-		auto lighting = pbr::mr::createLightingModel( writer
+		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, type
 			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
@@ -595,40 +598,40 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< GLSL::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					diffuse = lighting->computeOneDirectionalLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< GLSL::PointLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
 					diffuse = lighting->computeOnePointLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< GLSL::SpotLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 					diffuse = lighting->computeOneSpotLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 			}
@@ -639,10 +642,10 @@ namespace castor3d
 		return writer.finalise();
 	}
 	
-	GLSL::Shader LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+	glsl::Shader LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType type )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
@@ -660,11 +663,11 @@ namespace castor3d
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
-		auto lighting = pbr::sg::createLightingModel( writer
+		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, type
 			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
-		GLSL::Fog fog{ getFogType( sceneFlags ), writer };
-		GLSL::Utils utils{ writer };
+		shader::Fog fog{ getFogType( sceneFlags ), writer };
+		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
@@ -692,40 +695,40 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< GLSL::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					litten = lighting->computeOneDirectionalLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< GLSL::PointLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
 					litten = lighting->computeOnePointLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< GLSL::SpotLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 					litten = lighting->computeOneSpotLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal ) );
 				}
 				break;
 			}

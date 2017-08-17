@@ -26,9 +26,9 @@ SOFTWARE.
 #include "LightPass.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Shader/SceneUbo.hpp"
-#include "Shader/GpInfoUbo.hpp"
-#include "Shader/HdrConfigUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/Ubos/GpInfoUbo.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 
 namespace castor3d
 {

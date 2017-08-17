@@ -1,4 +1,4 @@
-#include "RenderPass.hpp"
+﻿#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -60,7 +60,7 @@ namespace castor3d
 		inline void doTraverseNodes( RenderPass const & pass
 			, MapType & nodes
 			, Scene & scene
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, FuncType function )
 		{
 			for ( auto itPipelines : nodes )
@@ -76,7 +76,7 @@ namespace castor3d
 							, itSubmeshes.second[0].m_passNode
 							, scene
 							, *itPipelines.first
-							, depthMaps
+							, shadowMaps
 							, itSubmeshes.second[0].m_modelUbo
 							, envMap );
 
@@ -89,7 +89,7 @@ namespace castor3d
 							, itSubmeshes.second[0].m_passNode
 							, scene
 							, *itPipelines.first
-							, depthMaps
+							, shadowMaps
 							, envMap );
 					}
 				}
@@ -131,7 +131,7 @@ namespace castor3d
 			, Camera const & camera
 			, MapType & nodes
 			, Scene & scene
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, FuncType function )
 		{
 			for ( auto itPipelines : nodes )
@@ -148,7 +148,7 @@ namespace castor3d
 							, itSubmeshes.second[0].m_passNode
 							, scene
 							, *itPipelines.first
-							, depthMaps
+							, shadowMaps
 							, itSubmeshes.second[0].m_modelUbo
 							, envMap );
 
@@ -161,7 +161,7 @@ namespace castor3d
 							, itSubmeshes.second[0].m_passNode
 							, scene
 							, *itPipelines.first
-							, depthMaps
+							, shadowMaps
 							, envMap );
 					}
 				}
@@ -193,7 +193,7 @@ namespace castor3d
 		inline void doRenderNonInstanced( RenderPass const & pass
 			, MapType & nodes
 			, Scene & scene
-			, DepthMapArray & depthMaps )
+			, ShadowMapLightTypeArray & shadowMaps )
 		{
 			for ( auto itPipelines : nodes )
 			{
@@ -206,7 +206,7 @@ namespace castor3d
 						, renderNode.m_passNode
 						, scene
 						, *itPipelines.first
-						, depthMaps
+						, shadowMaps
 						, renderNode.m_modelUbo
 						, envMap );
 
@@ -216,7 +216,7 @@ namespace castor3d
 						, renderNode.m_passNode
 						, scene
 						, *itPipelines.first
-						, depthMaps
+						, shadowMaps
 						, envMap );
 				}
 			}
@@ -250,7 +250,7 @@ namespace castor3d
 			, Camera const & camera
 			, MapType & nodes
 			, Scene & scene
-			, DepthMapArray & depthMaps )
+			, ShadowMapLightTypeArray & shadowMaps )
 		{
 			for ( auto itPipelines : nodes )
 			{
@@ -264,7 +264,7 @@ namespace castor3d
 						, renderNode.m_passNode
 						, scene
 						, *itPipelines.first
-						, depthMaps
+						, shadowMaps
 						, renderNode.m_modelUbo
 						, envMap );
 
@@ -274,7 +274,7 @@ namespace castor3d
 						, renderNode.m_passNode
 						, scene
 						, *itPipelines.first
-						, depthMaps
+						, shadowMaps
 						, envMap );
 				}
 			}
@@ -285,7 +285,7 @@ namespace castor3d
 			, Camera const & camera
 			, MapType & nodes
 			, Scene & scene
-			, DepthMapArray & depthMaps
+			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )
 		{
 			for ( auto itPipelines : nodes )
@@ -300,7 +300,7 @@ namespace castor3d
 						, renderNode.m_passNode
 						, scene
 						, *itPipelines.first
-						, depthMaps
+						, shadowMaps
 						, renderNode.m_modelUbo
 						, envMap );
 
@@ -311,7 +311,7 @@ namespace castor3d
 						, renderNode.m_passNode
 						, scene
 						, *itPipelines.first
-						, depthMaps
+						, shadowMaps
 						, envMap );
 
 					++info.m_visibleObjectsCount;
@@ -422,7 +422,7 @@ namespace castor3d
 		doUpdate( queues );
 	}
 
-	GLSL::Shader RenderPass::getVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::getVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -433,7 +433,7 @@ namespace castor3d
 			, invertNormals );
 	}
 
-	GLSL::Shader RenderPass::getGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::getGeometryShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
@@ -442,12 +442,12 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	GLSL::Shader RenderPass::getPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::getPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		GLSL::Shader result;
+		glsl::Shader result;
 
 		if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
 		{
@@ -789,12 +789,12 @@ namespace castor3d
 	}
 
 	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doTraverseNodes( *this
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -829,13 +829,13 @@ namespace castor3d
 
 	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -851,14 +851,14 @@ namespace castor3d
 
 	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -880,12 +880,12 @@ namespace castor3d
 	}
 
 	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
@@ -898,25 +898,25 @@ namespace castor3d
 
 	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, info );
 	}
 
@@ -927,12 +927,12 @@ namespace castor3d
 	}
 
 	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
@@ -945,25 +945,25 @@ namespace castor3d
 
 	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, info );
 	}
 
@@ -990,12 +990,12 @@ namespace castor3d
 	}
 
 	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doTraverseNodes( *this
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1040,13 +1040,13 @@ namespace castor3d
 
 	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1067,14 +1067,14 @@ namespace castor3d
 
 	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1101,12 +1101,12 @@ namespace castor3d
 	}
 
 	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
@@ -1119,25 +1119,25 @@ namespace castor3d
 
 	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, info );
 	}
 
@@ -1148,12 +1148,12 @@ namespace castor3d
 	}
 
 	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
@@ -1166,34 +1166,34 @@ namespace castor3d
 
 	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps )const
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps );
+			, shadowMaps );
 	}
 
 	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
 		, Camera const & camera
-		, DepthMapArray & depthMaps
+		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, depthMaps
+			, shadowMaps
 			, info );
 	}
 
-	GLSL::Shader RenderPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::doGetVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );

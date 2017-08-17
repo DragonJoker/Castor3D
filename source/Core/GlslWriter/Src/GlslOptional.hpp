@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "GlslVoid.hpp"
 
-namespace GLSL
+namespace glsl
 {
 	template< typename TypeT >
 	struct Optional

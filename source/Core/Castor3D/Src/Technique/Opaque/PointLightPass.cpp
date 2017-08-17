@@ -9,8 +9,9 @@
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
+
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -35,8 +36,8 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PointLightPass::Program::Program( Engine & engine
-		, GLSL::Shader const & vtx
-		, GLSL::Shader const & pxl )
+		, glsl::Shader const & vtx
+		, glsl::Shader const & pxl )
 		: MeshLightPass::Program{ engine, vtx, pxl }
 		, m_lightPosition{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
 		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
@@ -177,8 +178,8 @@ namespace castor3d
 		return model;
 	}
 
-	LightPass::ProgramPtr PointLightPass::doCreateProgram( GLSL::Shader const & vtx
-		, GLSL::Shader const & pxl )const
+	LightPass::ProgramPtr PointLightPass::doCreateProgram( glsl::Shader const & vtx
+		, glsl::Shader const & pxl )const
 	{
 		return std::make_unique< Program >( m_engine, vtx, pxl );
 	}

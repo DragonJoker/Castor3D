@@ -1122,7 +1122,7 @@ namespace castor3d
 		{
 			uint32_t value;
 			p_params[0]->get( value );
-			parsingContext->pScene->getFog().setType( GLSL::FogType( value ) );
+			parsingContext->pScene->getFog().setType( FogType( value ) );
 		}
 	}
 	END_ATTRIBUTE()

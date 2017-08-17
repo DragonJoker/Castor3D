@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -12,8 +12,9 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
-#include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
+
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -22,13 +23,13 @@ namespace castor3d
 {
 	namespace
 	{
-		void doApplyAlphaFunc( GLSL::GlslWriter & writer
+		void doApplyAlphaFunc( glsl::GlslWriter & writer
 			, ComparisonFunc alphaFunc
-			, GLSL::Float const & alpha
-			, GLSL::Int const & material
-			, GLSL::Materials const & materials )
+			, glsl::Float const & alpha
+			, glsl::Int const & material
+			, shader::Materials const & materials )
 		{
-			using namespace GLSL;
+			using namespace glsl;
 
 			switch ( alphaFunc )
 			{
@@ -97,9 +98,6 @@ namespace castor3d
 			, false
 			, nullptr
 			, config }
-		, m_directionalShadowMap{ *scene.getEngine() }
-		, m_spotShadowMap{ *scene.getEngine() }
-		, m_pointShadowMap{ *scene.getEngine() }
 	{
 	}
 
@@ -107,75 +105,10 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::render( RenderInfo & info, bool shadows )
+	void OpaquePass::render( RenderInfo & info
+		, ShadowMapLightTypeArray & shadowMaps )
 	{
-		doRender( info, shadows );
-	}
-
-	void OpaquePass::addShadowProducer( Light & light )
-	{
-		if ( light.isShadowProducer() )
-		{
-			switch ( light.getLightType() )
-			{
-			case LightType::eDirectional:
-				m_directionalShadowMap.addLight( light );
-				break;
-
-			case LightType::ePoint:
-				m_pointShadowMap.addLight( light );
-				break;
-
-			case LightType::eSpot:
-				m_spotShadowMap.addLight( light );
-				break;
-			}
-		}
-	}
-
-	bool OpaquePass::initialiseShadowMaps()
-	{
-		m_scene.getLightCache().forEach( [this]( Light & light )
-		{
-			addShadowProducer( light );
-		} );
-
-		bool result = m_directionalShadowMap.initialise();
-
-		if ( result )
-		{
-			result = m_spotShadowMap.initialise();
-		}
-
-		if ( result )
-		{
-			result = m_pointShadowMap.initialise();
-		}
-
-		ENSURE( result );
-		return result;
-	}
-
-	void OpaquePass::cleanupShadowMaps()
-	{
-		m_pointShadowMap.cleanup();
-		m_spotShadowMap.cleanup();
-		m_directionalShadowMap.cleanup();
-	}
-
-	void OpaquePass::updateShadowMaps( RenderQueueArray & queues )
-	{
-		m_pointShadowMap.update( *m_camera, queues );
-		m_spotShadowMap.update( *m_camera, queues );
-		m_directionalShadowMap.update( *m_camera, queues );
-	}
-
-	void OpaquePass::renderShadowMaps()
-	{
-	}
-
-	void OpaquePass::doGetDepthMaps( DepthMapArray & depthMaps )
-	{
+		doRender( info, shadowMaps );
 	}
 
 	void OpaquePass::doUpdateFlags( TextureChannels & textureFlags
@@ -186,12 +119,12 @@ namespace castor3d
 		remFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
 	}
 
-	GLSL::Shader OpaquePass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetVertexShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
@@ -320,15 +253,15 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader OpaquePass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
-		LegacyMaterials materials{ writer };
+		shader::LegacyMaterials materials{ writer };
 		materials.declare();
 
 		// UBOs
@@ -375,9 +308,9 @@ namespace castor3d
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
-		GLSL::Utils utils{ writer };
+		glsl::Utils utils{ writer };
 		utils.declareRemoveGamma();
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
@@ -405,13 +338,13 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			legacy::computePreLightingMapContributions( writer
+			shader::legacy::computePreLightingMapContributions( writer
 				, v3Normal
 				, fMatShininess
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			legacy::computePostLightingMapContributions( writer
+			shader::legacy::computePostLightingMapContributions( writer
 				, v3Diffuse
 				, v3Specular
 				, v3Emissive
@@ -444,15 +377,15 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader OpaquePass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
-		PbrMRMaterials materials{ writer };
+		shader::PbrMRMaterials materials{ writer };
 		materials.declare();
 
 		// UBOs
@@ -502,9 +435,9 @@ namespace castor3d
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
-		GLSL::Utils utils{ writer };
+		glsl::Utils utils{ writer };
 		utils.declareRemoveGamma();
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
@@ -537,14 +470,14 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			pbr::mr::computePreLightingMapContributions( writer
+			shader::pbr::mr::computePreLightingMapContributions( writer
 				, normal
 				, matMetallic
 				, matRoughness
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			pbr::mr::computePostLightingMapContributions( writer
+			shader::pbr::mr::computePostLightingMapContributions( writer
 				, matAlbedo
 				, matEmissive
 				, matGamma
@@ -584,12 +517,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	GLSL::Shader OpaquePass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		using namespace GLSL;
+		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// UBOs
@@ -608,7 +541,7 @@ namespace castor3d
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 
-		PbrSGMaterials materials{ writer };
+		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 
 		auto c3d_mapDiffuse( writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse
@@ -642,9 +575,9 @@ namespace castor3d
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
 
-		auto parallaxMapping = declareParallaxMappingFunc( writer, textureFlags, programFlags );
+		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
-		GLSL::Utils utils{ writer };
+		glsl::Utils utils{ writer };
 		utils.declareRemoveGamma();
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
@@ -669,14 +602,14 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			pbr::sg::computePreLightingMapContributions( writer
+			shader::pbr::sg::computePreLightingMapContributions( writer
 				, normal
 				, matSpecular
 				, matGlossiness
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			pbr::sg::computePostLightingMapContributions( writer
+			shader::pbr::sg::computePostLightingMapContributions( writer
 				, matDiffuse
 				, matEmissive
 				, matGamma

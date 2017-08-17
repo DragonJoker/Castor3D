@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Render/RenderInfo.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -137,7 +137,7 @@ namespace castor3d
 		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual GLSL::Shader doCreate() = 0;
+		C3D_API virtual glsl::Shader doCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.

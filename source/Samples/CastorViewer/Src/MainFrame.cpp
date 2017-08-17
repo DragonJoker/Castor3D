@@ -1,4 +1,4 @@
-#include "RenderPanel.hpp"
+﻿#include "RenderPanel.hpp"
 
 #include "MainFrame.hpp"
 #include "CastorViewer.hpp"
@@ -157,7 +157,7 @@ namespace CastorViewer
 		if ( scene )
 		{
 			m_materialsList->UnloadMaterials();
-			m_sceneObjectsList->UnloadScene();
+			m_sceneObjectsList->unloadScene();
 			m_pMainCamera.reset();
 			m_sceneNode.reset();
 			wxGetApp().getCastor()->getRenderWindowCache().cleanup();
@@ -170,7 +170,7 @@ namespace CastorViewer
 
 	}
 
-	void MainFrame::LoadScene( wxString const & fileName )
+	void MainFrame::loadScene( wxString const & fileName )
 	{
 		if ( m_pRenderPanel && wxGetApp().getCastor() )
 		{
@@ -186,11 +186,11 @@ namespace CastorViewer
 					wxGetApp().getCastor()->getRenderLoop().pause();
 				}
 
-				Logger::logDebug( cuT( "MainFrame::LoadScene - " ) + m_strFilePath );
+				Logger::logDebug( cuT( "MainFrame::loadScene - " ) + m_strFilePath );
 				doCleanupScene();
 
 				m_pRenderPanel->setRenderWindow( nullptr );
-				RenderWindowSPtr window = GuiCommon::LoadScene( *wxGetApp().getCastor(), m_strFilePath, wxGetApp().getCastor()->getRenderLoop().getWantedFps(), wxGetApp().getCastor()->isThreaded() );
+				RenderWindowSPtr window = GuiCommon::loadScene( *wxGetApp().getCastor(), m_strFilePath, wxGetApp().getCastor()->getRenderLoop().getWantedFps(), wxGetApp().getCastor()->isThreaded() );
 
 				if ( window )
 				{
@@ -232,7 +232,7 @@ namespace CastorViewer
 
 					if ( scene )
 					{
-						m_sceneObjectsList->LoadScene( wxGetApp().getCastor(), scene );
+						m_sceneObjectsList->loadScene( wxGetApp().getCastor(), scene );
 						m_materialsList->LoadMaterials( wxGetApp().getCastor(), *scene );
 					}
 
@@ -269,7 +269,7 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::ToggleFullScreen( bool fullscreen )
+	void MainFrame::toggleFullScreen( bool fullscreen )
 	{
 		ShowFullScreen( fullscreen, wxFULLSCREEN_ALL );
 
@@ -281,6 +281,14 @@ namespace CastorViewer
 		else
 		{
 			m_auiManager.LoadPerspective( m_currentPerspective );
+		}
+	}
+
+	void MainFrame::select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh )
+	{
+		if ( m_sceneObjectsList )
+		{
+			m_sceneObjectsList->select( geometry, submesh );
 		}
 	}
 
@@ -829,7 +837,7 @@ namespace CastorViewer
 
 		if ( fileDialog.ShowModal() == wxID_OK )
 		{
-			LoadScene( ( wxChar const * )fileDialog.GetPath().c_str() );
+			loadScene( ( wxChar const * )fileDialog.GetPath().c_str() );
 		}
 
 		event.Skip();
