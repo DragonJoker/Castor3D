@@ -54,12 +54,7 @@ namespace castor3d
 		, Fog const & p_fog )const
 	{
 		m_fogType.setValue( int( p_fog.getType() ) );
-
-		if ( p_fog.getType() != FogType::eDisabled )
-		{
-			m_fogDensity.setValue( p_fog.getDensity() );
-		}
-
+		m_fogDensity.setValue( p_fog.getDensity() );
 		m_cameraNearPlane.setValue( p_camera.getViewport().getNear() );
 		m_cameraFarPlane.setValue( p_camera.getViewport().getFar() );
 		updateCameraPosition( p_camera );

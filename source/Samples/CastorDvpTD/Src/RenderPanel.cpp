@@ -265,8 +265,8 @@ namespace castortd
 		EVT_SIZE( RenderPanel::OnSize )
 		EVT_MOVE( RenderPanel::OnMove )
 		EVT_PAINT( RenderPanel::OnPaint )
-		EVT_KEY_DOWN( RenderPanel::onKeydown )
-		EVT_KEY_UP( RenderPanel::OnKeyUp )
+		EVT_KEY_DOWN( RenderPanel::onKeyDown )
+		EVT_KEY_UP( RenderPanel::onKeyUp )
 		EVT_LEFT_DOWN( RenderPanel::OnMouseLdown )
 		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
 		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
@@ -344,7 +344,7 @@ namespace castortd
 		p_event.Skip();
 	}
 
-	void RenderPanel::onKeydown( wxKeyEvent & p_event )
+	void RenderPanel::onKeyDown( wxKeyEvent & p_event )
 	{
 		switch ( p_event.GetKeyCode() )
 		{
@@ -372,24 +372,21 @@ namespace castortd
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnKeyUp( wxKeyEvent & p_event )
+	void RenderPanel::onKeyUp( wxKeyEvent & p_event )
 	{
 		switch ( p_event.GetKeyCode() )
 		{
 		case WXK_NUMPAD1:
-		case '&':
 		case '1':
 			doUpgradeTowerDamage();
 			break;
 
 		case WXK_NUMPAD2:
-		case 'é':
 		case '2':
 			doUpgradeTowerRange();
 			break;
 
 		case WXK_NUMPAD3:
-		case '\"':
 		case '3':
 			doUpgradeTowerSpeed();
 			break;

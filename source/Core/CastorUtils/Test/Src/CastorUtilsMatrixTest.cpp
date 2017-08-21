@@ -46,6 +46,26 @@ namespace Testing
 	{
 	}
 
+	bool CastorUtilsMatrixTest::compare( Matrix3x3f const & lhs, Matrix3x3f const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsMatrixTest::compare( Matrix3x3d const & lhs, Matrix3x3d const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsMatrixTest::compare( Matrix4x4f const & lhs, Matrix4x4f const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsMatrixTest::compare( Matrix4x4d const & lhs, Matrix4x4d const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
 	void CastorUtilsMatrixTest::doRegisterTests()
 	{
 		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );

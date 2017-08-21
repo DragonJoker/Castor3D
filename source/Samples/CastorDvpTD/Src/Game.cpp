@@ -3,6 +3,7 @@
 #include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Engine.hpp>
 #include <Animation/Animation.hpp>
+#include <Event/Frame/FrameListener.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
