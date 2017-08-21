@@ -31,12 +31,12 @@ namespace GlRender
 	{
 	}
 
-	bool GlFrameBuffer::create()
+	bool GlFrameBuffer::initialise()
 	{
 		return BindableType::create( false );
 	}
 
-	void GlFrameBuffer::destroy()
+	void GlFrameBuffer::cleanup()
 	{
 		BindableType::destroy();
 	}

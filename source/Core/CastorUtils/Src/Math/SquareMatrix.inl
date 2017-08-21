@@ -283,7 +283,7 @@ namespace castor
 		{
 			static inline T get( castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( p_matrix ), uint32_t CU_PARAM_UNUSED( p_column ), uint32_t CU_PARAM_UNUSED( p_row ) )
 			{
-				return castor::Policy< T >::unit();
+				return T{ 1 };
 			}
 		};
 
@@ -353,7 +353,7 @@ namespace castor
 
 		for ( int i = count; i < Count; i++ )
 		{
-			this->operator[]( i )[i] = castor::Policy< T >::unit();
+			this->operator[]( i )[i] = T{ 1 };
 		}
 	}
 	template< typename T, uint32_t Count >
@@ -381,7 +381,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline T SquareMatrix< T, Count >::getDeterminant()const
 	{
-		T tReturn( castor::Policy< T >::zero() );
+		T tReturn{};
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
@@ -411,7 +411,7 @@ namespace castor
 		{
 			for ( uint32_t j = 0; j < Count && result; j++ )
 			{
-				result = castor::Policy< T >::equals( this->m_columns[i][j], this->m_columns[j][i] );
+				result = this->m_columns[i][j] == this->m_columns[j][i];
 			}
 		}
 
@@ -426,7 +426,7 @@ namespace castor
 		{
 			for ( uint32_t j = 0; j < Count && result; j++ )
 			{
-				if ( !castor::Policy< T >::isNull( this->m_columns[i][j] + this->m_columns[j][i] ) )
+				if ( this->m_columns[i][j] + this->m_columns[j][i] != T{} )
 				{
 					result = false;
 				}
@@ -477,7 +477,7 @@ namespace castor
 	{
 		T tDeterminant = getDeterminant();
 
-		if ( !castor::Policy< T >::isNull( tDeterminant ) )
+		if ( tDeterminant != T{} )
 		{
 			SquareMatrix< T, Count > mTmp;
 
@@ -626,7 +626,7 @@ namespace castor
 		{
 			for ( uint32_t j = 0; j < Count && result; j++ )
 			{
-				result = castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
+				result = p_mtxA[i][j] == p_mtxB[i][j];
 			}
 		}
 

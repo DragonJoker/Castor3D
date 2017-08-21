@@ -55,13 +55,13 @@ namespace GlRender
 		 */
 		virtual ~GlBackBuffers();
 		/**
-		 *\copydoc		castor3d::FrameBuffer::create
+		 *\copydoc		castor3d::FrameBuffer::initialise
 		 */
-		bool create()override;
+		bool initialise()override;
 		/**
-		 *\copydoc		castor3d::FrameBuffer::Destroy
+		 *\copydoc		castor3d::FrameBuffer::cleanup
 		 */
-		void destroy()override;
+		void cleanup()override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::setDrawBuffers
 		 */
@@ -71,7 +71,7 @@ namespace GlRender
 		 */
 		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )override;
 		/**
-		 *\copydoc		castor3d::BackBuffers::Bind
+		 *\copydoc		castor3d::BackBuffers::bind
 		 */
 		void bind( castor3d::WindowBuffer p_buffer, castor3d::FrameBufferTarget p_target )const override;
 		/**
@@ -79,21 +79,21 @@ namespace GlRender
 		 */
 		void setReadBuffer( castor3d::AttachmentPoint, uint8_t )const override;
 		/**
-		 *\copydoc		castor3d::FrameBuffer::CreateColourRenderBuffer
+		 *\copydoc		castor3d::FrameBuffer::createColourRenderBuffer
 		 */
 		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::CreateDepthStencilRenderBuffer
+		 *\copydoc		castor3d::FrameBuffer::createDepthStencilRenderBuffer
 		 */
 		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::IsComplete
+		 *\copydoc		castor3d::FrameBuffer::isComplete
 		 */
 		bool isComplete()const override
 		{

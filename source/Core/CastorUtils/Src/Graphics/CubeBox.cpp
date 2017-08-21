@@ -63,12 +63,12 @@ namespace castor
 	bool CubeBox::isOnLimits( Point3r const & p_v )
 	{
 		return ! isWithin( p_v )
-			   && ( policy::equals( p_v[0], m_min[0] )
-					|| policy::equals( p_v[0], m_max[0] )
-					|| policy::equals( p_v[1], m_min[1] )
-					|| policy::equals( p_v[1], m_max[1] )
-					|| policy::equals( p_v[2], m_min[2] )
-					|| policy::equals( p_v[2], m_max[2] ) );
+			   && ( p_v[0] == m_min[0]
+					|| p_v[0] == m_max[0]
+					|| p_v[1] == m_min[1]
+					|| p_v[1] == m_max[1]
+					|| p_v[2] == m_min[2]
+					|| p_v[2] == m_max[2] );
 	}
 
 	void CubeBox::load( Point3r const & p_ptMin, Point3r const & p_ptMax )

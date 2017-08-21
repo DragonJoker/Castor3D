@@ -116,25 +116,25 @@ namespace castor3d
 
 				if ( sizes.left() )
 				{
-					changed = !castor::Policy< double >::equals( ptSizes[0], sizes.left() / totalSize[0] );
+					changed |= ptSizes[0] != double( sizes.left() ) / totalSize[0];
 					ptSizes[0] = sizes.left() / totalSize[0];
 				}
 
 				if ( sizes.top() )
 				{
-					changed = !castor::Policy< double >::equals( ptSizes[1], sizes.top() / totalSize[1] );
+					changed |= ptSizes[1] != double(  sizes.top() ) / totalSize[1];
 					ptSizes[1] = sizes.top() / totalSize[1];
 				}
 
 				if ( sizes.right() )
 				{
-					changed = !castor::Policy< double >::equals( ptSizes[2], sizes.right() / totalSize[0] );
+					changed |= ptSizes[2] != double( sizes.right() ) / totalSize[0];
 					ptSizes[2] = sizes.right() / totalSize[0];
 				}
 
 				if ( sizes.bottom() )
 				{
-					changed = !castor::Policy< double >::equals( ptSizes[3], sizes.bottom() / totalSize[1] );
+					changed |= ptSizes[3] != double( sizes.bottom() ) / totalSize[1];
 					ptSizes[3] = sizes.bottom() / totalSize[1];
 				}
 

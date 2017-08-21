@@ -270,7 +270,7 @@ namespace castor
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			result = p_ptA[i] == p_ptB[i];
 		}
 
 		return result;
@@ -361,8 +361,7 @@ namespace castor
 			{
 				static T calc( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
 				{
-					T tReturn;
-					Policy< T >::initialise( tReturn );
+					T tReturn{};
 
 					for ( uint32_t i = 0; i < Count; i++ )
 					{
@@ -438,7 +437,7 @@ namespace castor
 		{
 			T l = T( length( p_point ) );
 
-			if ( !Policy< T >::isNull( l ) )
+			if ( l != T{} )
 			{
 				std::transform( p_point.constPtr(), p_point.constPtr() + Count, p_point.ptr(), [l]( T const & p_value )
 				{

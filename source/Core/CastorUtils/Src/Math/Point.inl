@@ -343,7 +343,7 @@ namespace castor
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			result = p_ptA[i] == p_ptB[i];
 		}
 
 		return result;
@@ -420,7 +420,7 @@ namespace castor
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			result = p_ptA[i] == p_ptB[i];
 		}
 
 		return result;
@@ -467,7 +467,7 @@ namespace castor
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			result = p_ptA[i] == p_ptB[i];
 		}
 
 		return result;
@@ -537,7 +537,7 @@ namespace castor
 		{
 			T tLength = T( length( p_point ) );
 
-			if ( !Policy< T >::isNull( tLength ) )
+			if ( tLength != T{} )
 			{
 				p_point /= tLength;
 			}
@@ -554,8 +554,7 @@ namespace castor
 		template< typename T, typename U, uint32_t Count >
 		T dot( Point< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T result;
-			Policy< T >::initialise( result );
+			T result{};
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
@@ -704,8 +703,7 @@ namespace castor
 		template< typename T, typename U, uint32_t Count >
 		T dot( Coords< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T result;
-			Policy< T >::initialise( result );
+			T result{};
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
@@ -765,8 +763,7 @@ namespace castor
 		template< typename T, typename U, uint32_t Count >
 		T dot( Coords< T const, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T result;
-			Policy< T >::initialise( result );
+			T result{};
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{

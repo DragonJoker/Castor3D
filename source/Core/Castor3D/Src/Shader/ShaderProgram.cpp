@@ -115,13 +115,13 @@ namespace castor3d
 	const String ShaderProgram::Transform = cuT( "transform" );
 	const String ShaderProgram::Material = cuT( "material" );
 
-	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
+	const String ShaderProgram::CameraPos = cuT( "c3d_cameraPosition" );
 	const String ShaderProgram::CameraFarPlane = cuT( "c3d_fCameraFarPlane" );
 	const String ShaderProgram::CameraNearPlane = cuT( "c3d_fCameraNearPlane" );
-	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );
-	const String ShaderProgram::BackgroundColour = cuT( "c3d_v4BackgroundColour" );
-	const String ShaderProgram::FogType = cuT( "c3d_iFogType" );
-	const String ShaderProgram::FogDensity = cuT( "c3d_fFogDensity" );
+	const String ShaderProgram::AmbientLight = cuT( "c3d_ambientLight" );
+	const String ShaderProgram::BackgroundColour = cuT( "c3d_backgroundColour" );
+	const String ShaderProgram::FogType = cuT( "c3d_fogType" );
+	const String ShaderProgram::FogDensity = cuT( "c3d_fogDensity" );
 	const String ShaderProgram::LightsCount = cuT( "c3d_lightsCount" );
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
 	const String ShaderProgram::Exposure = cuT( "c3d_fExposure" );

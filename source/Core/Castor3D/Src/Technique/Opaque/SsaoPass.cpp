@@ -1,4 +1,4 @@
-#include "SsaoPass.hpp"
+﻿#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -393,8 +393,7 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto fbo = renderSystem.createFrameBuffer();
-			fbo->create();
-			fbo->initialise( size );
+			fbo->initialise();
 			return fbo;
 		}
 
@@ -486,8 +485,7 @@ namespace castor3d
 		m_ssaoResult.initialise();
 
 		m_ssaoFbo = renderSystem.createFrameBuffer();
-		m_ssaoFbo->create();
-		m_ssaoFbo->initialise( m_size );
+		m_ssaoFbo->initialise();
 
 		m_ssaoResultAttach = m_ssaoFbo->createAttachment( ssaoResult );
 		m_ssaoFbo->bind();
@@ -523,8 +521,7 @@ namespace castor3d
 		m_blurResult.initialise();
 
 		m_blurFbo = renderSystem.createFrameBuffer();
-		m_blurFbo->create();
-		m_blurFbo->initialise( m_size );
+		m_blurFbo->initialise();
 
 		m_blurResultAttach = m_blurFbo->createAttachment( blurResult );
 		m_blurFbo->bind();
@@ -564,7 +561,6 @@ namespace castor3d
 		m_ssaoFbo->detachAll();
 		m_ssaoFbo->unbind();
 		m_ssaoFbo->cleanup();
-		m_ssaoFbo->destroy();
 		m_ssaoFbo.reset();
 		m_ssaoResultAttach.reset();
 		m_ssaoResult.cleanup();
@@ -583,7 +579,6 @@ namespace castor3d
 		m_blurFbo->detachAll();
 		m_blurFbo->unbind();
 		m_blurFbo->cleanup();
-		m_blurFbo->destroy();
 		m_blurFbo.reset();
 		m_blurResultAttach.reset();
 		m_blurResult.cleanup();

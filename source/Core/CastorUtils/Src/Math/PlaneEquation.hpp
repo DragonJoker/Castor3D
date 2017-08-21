@@ -41,7 +41,6 @@ namespace castor
 	class PlaneEquation
 	{
 	private:
-		using policy = castor::Policy< T >;
 		using point = castor::Point3< T >;
 
 	public:

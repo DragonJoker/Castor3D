@@ -47,9 +47,6 @@ namespace castor
 	class Line3D
 	{
 	private:
-		typedef castor::Policy< T > policy;
-
-	private:
 		/**
 		 *\~english
 		 *\brief		Constructor from 2 points
@@ -61,8 +58,8 @@ namespace castor
 		 *\param[in]	p_ptB	La pente de la droite
 		 */
 		Line3D( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
-			:	m_origin( p_point )
-			,	m_slope( p_ptSlope )
+			: m_origin( p_point )
+			, m_slope( p_ptSlope )
 		{
 		}
 
@@ -118,8 +115,8 @@ namespace castor
 			:	m_origin( std::move( p_line.m_origin ) )
 			,	m_slope( std::move( p_line.m_slope ) )
 		{
-			p_line.m_origin	= Point< T, 3 >();
-			p_line.m_slope	= Point< T, 3 >();
+			p_line.m_origin = Point< T, 3 >();
+			p_line.m_slope = Point< T, 3 >();
 		}
 		/**
 		 *\~english
@@ -133,8 +130,8 @@ namespace castor
 		 */
 		Line3D & operator=( Line3D const & p_line )
 		{
-			m_origin	= p_line.m_origin;
-			m_slope		= p_line.m_slope;
+			m_origin = p_line.m_origin;
+			m_slope = p_line.m_slope;
 			return * this;
 		}
 		/**
@@ -151,8 +148,8 @@ namespace castor
 		{
 			if ( this != &p_line )
 			{
-				m_origin	= std::move( p_line.m_origin );
-				m_slope		= std::move( p_line.m_slope );
+				m_origin = std::move( p_line.m_origin );
+				m_slope = std::move( p_line.m_slope );
 				p_line.m_origin	= Point< T, 3 >();
 				p_line.m_slope	= Point< T, 3 >();
 			}
@@ -189,7 +186,8 @@ namespace castor
 			double t;
 			double tp;
 
-			if ( std::abs( qp ) > std::numeric_limits< double >::epsilon() && std::abs( p * qp - pp * q ) > std::numeric_limits< double >::epsilon() )
+			if ( std::abs( qp ) > std::numeric_limits< double >::epsilon()
+				&& std::abs( p * qp - pp * q ) > std::numeric_limits< double >::epsilon() )
 			{
 				t = qp * ( ap + ( pp * ( b - bp ) / qp ) - a ) / ( p * qp - pp * q );
 				tp = ( b + q * t - bp ) / qp;
@@ -207,7 +205,8 @@ namespace castor
 					result = false;
 				}
 			}
-			else if ( std::abs( rp ) > std::numeric_limits< double >::epsilon() && std::abs( p * rp - pp * r ) > std::numeric_limits< double >::epsilon() )
+			else if ( std::abs( rp ) > std::numeric_limits< double >::epsilon()
+				&& std::abs( p * rp - pp * r ) > std::numeric_limits< double >::epsilon() )
 			{
 				t = rp * ( ap + ( pp * ( c - cp ) / rp ) - a ) / ( p * rp - pp * r );
 				tp = ( c + r * t - cp ) / rp;
@@ -245,9 +244,9 @@ namespace castor
 		 */
 		bool isIn( Point< T, 3 > const & p_point )
 		{
-			return policy::isNull( ( p_point[0] - m_origin[0] ) / m_slope[0] )
-				   && policy::isNull( ( p_point[1] - m_origin[1] ) / m_slope[1] )
-				   && policy::isNull( ( p_point[2] - m_origin[2] ) / m_slope[2] );
+			return ( p_point[0] - m_origin[0] ) / m_slope[0] == T{}
+				   && ( p_point[1] - m_origin[1] ) / m_slope[1] == T{}
+				   && ( p_point[2] - m_origin[2] ) / m_slope[2] == T{};
 		}
 
 	public:

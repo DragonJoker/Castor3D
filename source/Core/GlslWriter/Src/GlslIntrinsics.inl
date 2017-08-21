@@ -385,6 +385,12 @@ namespace glsl
 	}
 
 	template< typename Value >
+	inline Value sign( Value const & p_value )
+	{
+		return writeFunctionCall< Value >( p_value.m_writer, cuT( "sign" ), p_value );
+	}
+
+	template< typename Value >
 	inline Value neg( Value const & p_value )
 	{
 		return writeFunctionCall< Value >( p_value.m_writer, cuT( "-" ), p_value );

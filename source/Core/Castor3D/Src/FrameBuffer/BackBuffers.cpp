@@ -1,4 +1,4 @@
-﻿#include "BackBuffers.hpp"
+#include "BackBuffers.hpp"
 
 #include "Engine.hpp"
 
@@ -17,13 +17,13 @@ namespace castor3d
 	{
 	}
 
-	bool BackBuffers::initialise( Size const & p_size, PixelFormat p_format )
+	bool BackBuffers::initialise( Size const & size, PixelFormat format )
 	{
-		m_buffer = PxBufferBase::create( p_size, p_format );
+		m_buffer = PxBufferBase::create( size, format );
 		return true;
 	}
 
-	void BackBuffers::doBind( FrameBufferTarget p_target )const
+	void BackBuffers::doBind( FrameBufferTarget target )const
 	{
 		FAILURE( "BackBuffers instances can't be bound like regular FrameBuffer ones, use BackBuffers::bind( WindowBuffer, eFRAME_BUFFER_TARGET )." );
 	}

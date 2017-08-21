@@ -77,7 +77,7 @@ namespace CastorGui
 			, Position()
 			, Size() );
 		line->setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		line->setVisible( doIsVisible() );
+		line->setVisible( p_visible );
 		line->connectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			onNcKeyDown( p_control, p_event );
@@ -91,7 +91,7 @@ namespace CastorGui
 			, Position()
 			, Size() );
 		tick->setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		tick->setVisible( doIsVisible() );
+		tick->setVisible( p_visible );
 		tick->setCatchesMouseEvents( true );
 		tick->connectNC( MouseEventType::eMove, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{

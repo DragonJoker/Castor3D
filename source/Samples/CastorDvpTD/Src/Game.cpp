@@ -226,7 +226,7 @@ namespace castortd
 #if !defined( NDEBUG )
 			m_elapsed = Milliseconds{ 40 };
 #else
-			m_elapsed = std::chrono::duration_cast< Milliseconds >( Clock::now() - m_saved );
+			m_elapsed += std::chrono::duration_cast< Milliseconds >( Clock::now() - m_saved );
 #endif
 			doUpdateBullets();
 			doUpdateTowers();

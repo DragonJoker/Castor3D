@@ -19,12 +19,12 @@ namespace GlRender
 	{
 	}
 
-	bool GlBackBuffers::create()
+	bool GlBackBuffers::initialise()
 	{
 		return true;
 	}
 
-	void GlBackBuffers::destroy()
+	void GlBackBuffers::cleanup()
 	{
 	}
 

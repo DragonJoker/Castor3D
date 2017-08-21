@@ -16,12 +16,12 @@ namespace TestRender
 	{
 	}
 
-	bool TestBackBuffers::create()
+	bool TestBackBuffers::initialise()
 	{
 		return true;
 	}
 
-	void TestBackBuffers::destroy()
+	void TestBackBuffers::cleanup()
 	{
 	}
 

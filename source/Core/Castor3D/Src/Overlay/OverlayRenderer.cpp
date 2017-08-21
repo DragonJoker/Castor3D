@@ -38,14 +38,7 @@ namespace castor3d
 			auto size = count * sizeof( OverlayCategory::Vertex );
 
 			vbo.bind();
-			auto buffer = vbo.lock( 0, uint32_t( size ), AccessType::eWrite );
-
-			if ( buffer )
-			{
-				std::memcpy( buffer, reinterpret_cast< uint8_t const * >( &vertex ), size );
-				vbo.unlock();
-			}
-
+			vbo.upload( 0, uint32_t( size ), reinterpret_cast< uint8_t const * >( &vertex ) );
 			vbo.unbind();
 			return count;
 		}
@@ -58,14 +51,7 @@ namespace castor3d
 			auto size = count * sizeof( TextOverlay::Vertex );
 
 			vbo.bind();
-			auto buffer = vbo.lock( 0, uint32_t( size ), AccessType::eWrite );
-
-			if ( buffer )
-			{
-				std::memcpy( buffer, reinterpret_cast< uint8_t const * >( &vertex ), size );
-				vbo.unlock();
-			}
-
+			vbo.upload( 0, uint32_t( size ), reinterpret_cast< uint8_t const * >( &vertex ) );
 			vbo.unbind();
 			return count;
 		}

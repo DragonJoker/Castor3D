@@ -168,6 +168,7 @@ namespace glsl
 	template< typename Value > inline Value dFdyCoarse( Value const & p_value );
 	template< typename Value > inline Value dFdxFine( Value const & p_value );
 	template< typename Value > inline Value dFdyFine( Value const & p_value );
+	template< typename Value > inline Value sign( Value const & p_value );
 	GlslWriter_API Int textureSize( Sampler1D const & p_sampler, Int const p_lod );
 	GlslWriter_API IVec2 textureSize( Sampler2D const & p_sampler, Int const & p_lod );
 	GlslWriter_API IVec3 textureSize( Sampler3D const & p_sampler, Int const & p_lod );

@@ -1,4 +1,4 @@
-﻿#include "Skybox.hpp"
+#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -361,8 +361,7 @@ namespace castor3d
 		auto depthAttach = fbo->createAttachment( depthRbo );
 
 		// Fill the FBO
-		fbo->create();
-		fbo->initialise( m_equiSize );
+		fbo->initialise();
 		fbo->bind();
 		fbo->attach( AttachmentPoint::eDepth, depthAttach );
 		REQUIRE( fbo->isComplete() );
@@ -390,7 +389,6 @@ namespace castor3d
 
 		depthAttach.reset();
 		fbo->cleanup();
-		fbo->destroy();
 
 		m_equiTexture->cleanup();
 		m_equiTexture.reset();

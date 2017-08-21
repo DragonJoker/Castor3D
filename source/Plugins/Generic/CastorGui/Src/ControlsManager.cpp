@@ -287,6 +287,7 @@ namespace CastorGui
 		auto lock = makeUniqueLock( m_mutexControls );
 		{
 			auto handlers = doGetHandlers();
+			m_controlsByZIndex.clear();
 
 			for ( auto handler : handlers )
 			{

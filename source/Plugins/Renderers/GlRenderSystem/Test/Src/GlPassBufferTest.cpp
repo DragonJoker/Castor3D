@@ -160,8 +160,7 @@ namespace Testing
 				, output4{ doCreateTexture( engine ) }
 				, fbo{ engine.getRenderSystem()->createFrameBuffer() }
 			{
-				fbo->create();
-				fbo->initialise( Size{ 1, 1 } );
+				fbo->initialise();
 				output1Attach = fbo->createAttachment( output1.getTexture() );
 				output2Attach = fbo->createAttachment( output2.getTexture() );
 				output3Attach = fbo->createAttachment( output3.getTexture() );
@@ -181,7 +180,6 @@ namespace Testing
 				fbo->detachAll();
 				fbo->unbind();
 				fbo->cleanup();
-				fbo->destroy();
 				fbo.reset();
 				output1Attach.reset();
 				output2Attach.reset();

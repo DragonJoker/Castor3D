@@ -42,9 +42,6 @@ namespace castor
 	template< uint8_t Dimension >
 	class ContainerBox
 	{
-	protected:
-		typedef castor::Policy< real > policy;
-
 	public:
 		/**
 		 *\~english

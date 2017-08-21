@@ -1,4 +1,4 @@
-#include "RenderTarget.hpp"
+﻿#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -16,7 +16,11 @@
 
 #include <Graphics/Image.hpp>
 
-#define DISPLAY_DEBUG 1
+#if !defined( NDEBUG )
+#	define DISPLAY_DEBUG 1
+#else
+#	define DISPLAY_DEBUG 0
+#endif
 
 using namespace castor;
 
@@ -117,9 +121,8 @@ namespace castor3d
 		m_colourTexture.setIndex( index );
 		m_colourTexture.getTexture()->getImage().initialiseSource();
 		Size dimensions = m_colourTexture.getTexture()->getDimensions();
-		m_frameBuffer->create();
 		m_colourTexture.getTexture()->initialise();
-		m_frameBuffer->initialise( dimensions );
+		m_frameBuffer->initialise();
 
 		m_frameBuffer->bind();
 		m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.getTexture()->getType() );
@@ -137,7 +140,6 @@ namespace castor3d
 		m_frameBuffer->unbind();
 		m_frameBuffer->cleanup();
 		m_colourTexture.cleanup();
-		m_frameBuffer->destroy();
 		m_colourAttach.reset();
 		m_colourTexture.setTexture( nullptr );
 		m_frameBuffer.reset();
@@ -310,7 +312,7 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().bind();
 		getEngine()->getOverlayCache().render( *scene, m_size );
 
-#if 1//defined( DISPLAY_DEBUG ) && !defined( NDEBUG )
+#if DISPLAY_DEBUG
 
 		camera->apply();
 		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );

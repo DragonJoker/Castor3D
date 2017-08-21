@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -422,26 +422,17 @@ namespace castor3d
 		{
 			m_colourAttach = m_frameBuffer->createAttachment( m_colourTexture );
 			m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-			result = m_frameBuffer->create();
+			result = m_frameBuffer->initialise();
 		}
 
 		if ( result )
 		{
-			result = m_frameBuffer->initialise( size );
-
-			if ( result )
-			{
-				m_frameBuffer->bind();
-				m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->getType() );
-				m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-				m_frameBuffer->setDrawBuffer( m_colourAttach );
-				result = m_frameBuffer->isComplete();
-				m_frameBuffer->unbind();
-			}
-			else
-			{
-				m_frameBuffer->destroy();
-			}
+			m_frameBuffer->bind();
+			m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->getType() );
+			m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
+			m_frameBuffer->setDrawBuffer( m_colourAttach );
+			result = m_frameBuffer->isComplete();
+			m_frameBuffer->unbind();
 		}
 
 		return result;
@@ -462,7 +453,6 @@ namespace castor3d
 			m_depthBuffer->cleanup();
 
 			m_depthBuffer->destroy();
-			m_frameBuffer->destroy();
 
 			m_depthAttach.reset();
 			m_depthBuffer.reset();

@@ -479,25 +479,39 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto texCoord = writer.declLocale( cuT( "texCoord" ), utils.calcTexCoord() );
-			auto v4Diffuse = writer.declLocale( cuT( "v4Diffuse" ), texture( c3d_mapData2, texCoord ) );
-			auto v4Normal = writer.declLocale( cuT( "v4Normal" ), texture( c3d_mapData1, texCoord ) );
-			auto v4Specular = writer.declLocale( cuT( "v4Specular" ), texture( c3d_mapData3, texCoord ) );
-			auto v4Emissive = writer.declLocale( cuT( "v4Emissive" ), texture( c3d_mapData4, texCoord ) );
-			auto flags = writer.declLocale( cuT( "flags" ), writer.cast< Int >( v4Normal.w() ) );
-			auto iShadowReceiver = writer.declLocale( cuT( "iShadowReceiver" ), 0_i );
+			auto texCoord = writer.declLocale( cuT( "texCoord" )
+				, utils.calcTexCoord() );
+			auto data1 = writer.declLocale( cuT( "data1" )
+				, texture( c3d_mapData1, texCoord ) );
+			auto data2 = writer.declLocale( cuT( "data2" )
+				, texture( c3d_mapData2, texCoord ) );
+			auto data3 = writer.declLocale( cuT( "data3" )
+				, texture( c3d_mapData3, texCoord ) );
+			auto data4 = writer.declLocale( cuT( "data4" )
+				, texture( c3d_mapData4, texCoord ) );
+			auto flags = writer.declLocale( cuT( "flags" )
+				, writer.cast< Int >( data1.w() ) );
+			auto iShadowReceiver = writer.declLocale( cuT( "iShadowReceiver" )
+				, 0_i );
 			decodeReceiver( writer, flags, iShadowReceiver );
-			auto v3MapDiffuse = writer.declLocale( cuT( "v3MapDiffuse" ), v4Diffuse.xyz() );
-			auto v3MapSpecular = writer.declLocale( cuT( "v3MapSpecular" ), v4Specular.xyz() );
-			auto fMatShininess = writer.declLocale( cuT( "fMatShininess" ), v4Specular.w() );
-			auto v3Specular = writer.declLocale( cuT( "v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto v3Diffuse = writer.declLocale( cuT( "v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-			auto eye = writer.declLocale( cuT( "eye" ), c3d_v3CameraPosition );
+			auto diffuse = writer.declLocale( cuT( "diffuse" )
+				, data2.xyz() );
+			auto shininess = writer.declLocale( cuT( "shininess" )
+				, data2.w() );
+			auto specular = writer.declLocale( cuT( "specular" )
+				, data3.xyz() );
+			auto lightSpecular = writer.declLocale( cuT( "v3Specular" )
+				, vec3( 0.0_f ) );
+			auto lightDiffuse = writer.declLocale( cuT( "v3Diffuse" )
+				, vec3( 0.0_f ) );
+			auto eye = writer.declLocale( cuT( "eye" )
+				, c3d_cameraPosition );
+			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
+				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
+			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
+				, data1.xyz() );
 
-			auto wsPosition = writer.declLocale( cuT( "wsPosition" ), utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
-			auto wsNormal = writer.declLocale( cuT( "wsNormal" ), v4Normal.xyz() );
-
-			shader::OutputComponents output{ v3Diffuse, v3Specular };
+			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
 			switch ( type )
 			{
@@ -506,7 +520,7 @@ namespace castor3d
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					lighting->computeOneDirectionalLight( light
 						, eye
-						, fMatShininess
+						, shininess
 						, iShadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
@@ -518,7 +532,7 @@ namespace castor3d
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
 					lighting->computeOnePointLight( light
 						, eye
-						, fMatShininess
+						, shininess
 						, iShadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
@@ -530,7 +544,7 @@ namespace castor3d
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 					lighting->computeOneSpotLight( light
 						, eye
-						, fMatShininess
+						, shininess
 						, iShadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
@@ -538,8 +552,8 @@ namespace castor3d
 				break;
 			}
 
-			pxl_v4FragColor = vec4( v3Diffuse * v3MapDiffuse.xyz()
-				+ v3Specular * v3MapSpecular.xyz(), 1.0 );
+			pxl_v4FragColor = vec4( lightDiffuse * diffuse
+				+ lightSpecular * specular, 1.0 );
 		} );
 
 		return writer.finalise();
@@ -577,22 +591,35 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto texCoord = writer.declLocale( cuT( "texCoord" ), utils.calcTexCoord() );
-			auto data1 = writer.declLocale( cuT( "data1" ), texture( c3d_mapData1, texCoord ) );
-			auto data2 = writer.declLocale( cuT( "data2" ), texture( c3d_mapData2, texCoord ) );
-			auto data3 = writer.declLocale( cuT( "data3" ), texture( c3d_mapData3, texCoord ) );
-			auto data4 = writer.declLocale( cuT( "data4" ), texture( c3d_mapData4, texCoord ) );
-			auto metallic = writer.declLocale( cuT( "metallic" ), data3.r() );
-			auto roughness = writer.declLocale( cuT( "roughness" ), data3.g() );
-			auto flags = writer.declLocale( cuT( "flags" ), writer.cast< Int >( data1.w() ) );
-			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" ), 0_i );
+			auto texCoord = writer.declLocale( cuT( "texCoord" )
+				, utils.calcTexCoord() );
+			auto data1 = writer.declLocale( cuT( "data1" )
+				, texture( c3d_mapData1, texCoord ) );
+			auto data2 = writer.declLocale( cuT( "data2" )
+				, texture( c3d_mapData2, texCoord ) );
+			auto data3 = writer.declLocale( cuT( "data3" )
+				, texture( c3d_mapData3, texCoord ) );
+			auto data4 = writer.declLocale( cuT( "data4" )
+				, texture( c3d_mapData4, texCoord ) );
+			auto metallic = writer.declLocale( cuT( "metallic" )
+				, data3.r() );
+			auto roughness = writer.declLocale( cuT( "roughness" )
+				, data3.g() );
+			auto flags = writer.declLocale( cuT( "flags" )
+				, writer.cast< Int >( data1.w() ) );
+			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
+				, 0_i );
 			decodeReceiver( writer, flags, shadowReceiver );
-			auto albedo = writer.declLocale( cuT( "albedo" ), data2.xyz() );
-			auto diffuse = writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) );
-			auto eye = writer.declLocale( cuT( "eye" ), c3d_v3CameraPosition );
-
-			auto wsPosition = writer.declLocale( cuT( "wsPosition" ), utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
-			auto wsNormal = writer.declLocale( cuT( "wsNormal" ), data1.xyz() );
+			auto albedo = writer.declLocale( cuT( "albedo" )
+				, data2.xyz() );
+			auto diffuse = writer.declLocale( cuT( "diffuse" )
+				, vec3( 0.0_f ) );
+			auto eye = writer.declLocale( cuT( "eye" )
+				, c3d_cameraPosition );
+			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
+				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
+			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
+				, data1.xyz() );
 
 			switch ( type )
 			{
@@ -674,22 +701,35 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto texCoord = writer.declLocale( cuT( "texCoord" ), utils.calcTexCoord() );
-			auto data1 = writer.declLocale( cuT( "data1" ), texture( c3d_mapData1, texCoord ) );
-			auto data2 = writer.declLocale( cuT( "data2" ), texture( c3d_mapData2, texCoord ) );
-			auto data3 = writer.declLocale( cuT( "data3" ), texture( c3d_mapData3, texCoord ) );
-			auto data4 = writer.declLocale( cuT( "data4" ), texture( c3d_mapData4, texCoord ) );
-			auto specular = writer.declLocale( cuT( "specular" ), data3.rgb() );
-			auto glossiness = writer.declLocale( cuT( "glossiness" ), data2.a() );
-			auto flags = writer.declLocale( cuT( "flags" ), writer.cast< Int >( data1.w() ) );
-			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" ), 0_i );
+			auto texCoord = writer.declLocale( cuT( "texCoord" )
+				, utils.calcTexCoord() );
+			auto data1 = writer.declLocale( cuT( "data1" )
+				, texture( c3d_mapData1, texCoord ) );
+			auto data2 = writer.declLocale( cuT( "data2" )
+				, texture( c3d_mapData2, texCoord ) );
+			auto data3 = writer.declLocale( cuT( "data3" )
+				, texture( c3d_mapData3, texCoord ) );
+			auto data4 = writer.declLocale( cuT( "data4" )
+				, texture( c3d_mapData4, texCoord ) );
+			auto specular = writer.declLocale( cuT( "specular" )
+				, data3.rgb() );
+			auto glossiness = writer.declLocale( cuT( "glossiness" )
+				, data2.a() );
+			auto flags = writer.declLocale( cuT( "flags" )
+				, writer.cast< Int >( data1.w() ) );
+			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
+				, 0_i );
 			decodeReceiver( writer, flags, shadowReceiver );
-			auto diffuse = writer.declLocale( cuT( "diffuse" ), data2.xyz() );
-			auto litten = writer.declLocale( cuT( "litten" ), vec3( 0.0_f ) );
-			auto eye = writer.declLocale( cuT( "eye" ), c3d_v3CameraPosition );
-
-			auto wsPosition = writer.declLocale( cuT( "wsPosition" ), utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
-			auto wsNormal = writer.declLocale( cuT( "wsNormal" ), data1.xyz() );
+			auto diffuse = writer.declLocale( cuT( "diffuse" )
+				, data2.xyz() );
+			auto litten = writer.declLocale( cuT( "litten" )
+				, vec3( 0.0_f ) );
+			auto eye = writer.declLocale( cuT( "eye" )
+				, c3d_cameraPosition );
+			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
+				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
+			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
+				, data1.xyz() );
 
 			switch ( type )
 			{

@@ -47,12 +47,7 @@ namespace castor3d
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ) ) }
 	{
 		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eTransparentBlack ) );
-		bool result = m_frameBuffer->create();
-
-		if ( result )
-		{
-			result = m_frameBuffer->initialise( size );
-		}
+		bool result = m_frameBuffer->initialise();
 
 		if ( result )
 		{
@@ -124,7 +119,6 @@ namespace castor3d
 		m_frameBuffer->detachAll();
 		m_frameBuffer->unbind();
 		m_frameBuffer->cleanup();
-		m_frameBuffer->destroy();
 		m_resultAttach.reset();
 		m_result.cleanup();
 

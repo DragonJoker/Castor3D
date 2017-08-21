@@ -1,4 +1,4 @@
-﻿#include "CtrlStatic.hpp"
+#include "CtrlStatic.hpp"
 
 #include "ControlsManager.hpp"
 
@@ -60,7 +60,7 @@ namespace CastorGui
 		text->setPixelSize( getSize() );
 		m_text = text;
 		text->setCaption( m_caption );
-		text->setVisible( doIsVisible() );
+		text->setVisible( p_visible );
 		text->setVAlign( VAlign::eCenter );
 		doUpdateStyle();
 	}

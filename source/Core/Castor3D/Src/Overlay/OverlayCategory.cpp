@@ -75,28 +75,31 @@ namespace castor3d
 
 	void OverlayCategory::update()
 	{
-		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
-
-		if ( renderer )
+		if ( getOverlay().isVisible() )
 		{
-			if ( isPositionChanged() || renderer->isSizeChanged() )
-			{
-				doUpdatePosition();
-			}
+			OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
-			if ( isSizeChanged() || renderer->isSizeChanged() )
+			if ( renderer )
 			{
-				doUpdateSize();
-			}
+				if ( isPositionChanged() || renderer->isSizeChanged() )
+				{
+					doUpdatePosition();
+				}
 
-			if ( isChanged() || isSizeChanged() || renderer->isSizeChanged() )
-			{
-				doUpdate();
-				doUpdateBuffer( renderer->getSize() );
-			}
+				if ( isSizeChanged() || renderer->isSizeChanged() )
+				{
+					doUpdateSize();
+				}
 
-			m_positionChanged = false;
-			m_sizeChanged = false;
+				if ( isChanged() || isSizeChanged() || renderer->isSizeChanged() )
+				{
+					doUpdate();
+					doUpdateBuffer( renderer->getSize() );
+				}
+
+				m_positionChanged = false;
+				m_sizeChanged = false;
+			}
 		}
 	}
 
@@ -220,13 +223,13 @@ namespace castor3d
 
 				if ( pos.x() )
 				{
-					changed = !castor::Policy< double >::equals( ptPos[0], pos.x() / totalSize[0] );
+					changed |= ptPos[0] != double( pos.x() ) / totalSize[0];
 					ptPos[0] = pos.x() / totalSize[0];
 				}
 
 				if ( pos.y() )
 				{
-					changed = !castor::Policy< double >::equals( ptPos[1], pos.y() / totalSize[1] );
+					changed |= ptPos[1] != double( pos.y() ) / totalSize[1];
 					ptPos[1] = pos.y() / totalSize[1];
 				}
 
@@ -253,13 +256,13 @@ namespace castor3d
 
 				if ( size.getWidth() )
 				{
-					changed = !castor::Policy< double >::equals( ptSize[0], size.getWidth() / totalSize[0] );
+					changed |= ptSize[0] != double( size.getWidth() ) / totalSize[0];
 					ptSize[0] = size.getWidth() / totalSize[0];
 				}
 
 				if ( size.getHeight() )
 				{
-					changed = !castor::Policy< double >::equals( ptSize[1], size.getHeight() / totalSize[1] );
+					changed |=  ptSize[1] != double( size.getHeight() ) / totalSize[1];
 					ptSize[1] = size.getHeight() / totalSize[1];
 				}
 

@@ -73,6 +73,6 @@ namespace castor
 
 	bool SphereBox::isOnLimits( Point3r const & p_v )
 	{
-		return policy::equals( real( point::length( p_v - m_ptCenter ) ), m_radius );
+		return real( point::length( p_v - m_ptCenter ) ) == m_radius;
 	}
 }

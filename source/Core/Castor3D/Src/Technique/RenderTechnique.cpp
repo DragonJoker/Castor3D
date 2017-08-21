@@ -119,26 +119,17 @@ namespace castor3d
 		{
 			m_colourAttach = m_frameBuffer->createAttachment( m_colourTexture );
 			m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-			result = m_frameBuffer->create();
+			result = m_frameBuffer->initialise();
 		}
 
 		if ( result )
 		{
-			result = m_frameBuffer->initialise( size );
-
-			if ( result )
-			{
-				m_frameBuffer->bind();
-				m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->getType() );
-				m_frameBuffer->attach( AttachmentPoint::eDepthStencil, m_depthAttach, m_depthBuffer->getType() );
-				m_frameBuffer->setDrawBuffer( m_colourAttach );
-				result = m_frameBuffer->isComplete();
-				m_frameBuffer->unbind();
-			}
-			else
-			{
-				m_frameBuffer->destroy();
-			}
+			m_frameBuffer->bind();
+			m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->getType() );
+			m_frameBuffer->attach( AttachmentPoint::eDepthStencil, m_depthAttach, m_depthBuffer->getType() );
+			m_frameBuffer->setDrawBuffer( m_colourAttach );
+			result = m_frameBuffer->isComplete();
+			m_frameBuffer->unbind();
 		}
 
 		return result;
@@ -154,8 +145,6 @@ namespace castor3d
 			m_frameBuffer->cleanup();
 			m_colourTexture->cleanup();
 			m_depthBuffer->cleanup();
-
-			m_frameBuffer->destroy();
 
 			m_depthAttach.reset();
 			m_depthBuffer.reset();
@@ -348,6 +337,15 @@ namespace castor3d
 		m_frameBuffer.m_frameBuffer->unbind();
 
 #endif
+
+		auto & scene = *m_renderTarget.getScene();
+		auto & maps = scene.getEnvironmentMaps();
+		uint32_t index = 0u;
+
+		for ( auto & map : maps )
+		{
+			//map.get().debugDisplay( size, index++ );
+		}
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps()
@@ -447,13 +445,11 @@ namespace castor3d
 #if DEBUG_FORWARD_RENDERING
 
 		getEngine()->setPerObjectLighting( true );
-		m_opaquePass->renderShadowMaps();
 		camera.apply();
 		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->setDrawBuffers();
 		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->render( info
-			, scene.hasShadows()
 			, m_activeShadowMaps );
 
 #else

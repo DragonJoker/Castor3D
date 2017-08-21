@@ -1,4 +1,4 @@
-﻿#include "GlslIntrinsics.hpp"
+#include "GlslIntrinsics.hpp"
 
 using namespace castor;
 

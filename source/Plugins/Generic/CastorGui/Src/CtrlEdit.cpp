@@ -95,7 +95,7 @@ namespace CastorGui
 			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
 		text->setPixelSize( getSize() );
 		text->setVAlign( VAlign::eBottom );
-		text->setVisible( doIsVisible() );
+		text->setVisible( p_visible );
 		m_text = text;
 
 		doUpdateStyle();

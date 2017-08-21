@@ -63,4 +63,28 @@
       <Item Name="w">m_coords[3]</Item>
     </Expand>
   </Type>
+
+  <Type Name="castor::Matrix&lt;*, 2, *&gt;">
+    <Expand>
+      <Item Name="col 0">m_columns[0]</Item>
+      <Item Name="col 1">m_columns[1]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Matrix&lt;*, 3, *&gt;">
+    <Expand>
+      <Item Name="col 0">m_columns[0]</Item>
+      <Item Name="col 1">m_columns[1]</Item>
+      <Item Name="col 2">m_columns[2]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Matrix&lt;*, 4, *&gt;">
+    <Expand>
+      <Item Name="col 0">m_columns[0]</Item>
+      <Item Name="col 1">m_columns[1]</Item>
+      <Item Name="col 2">m_columns[2]</Item>
+      <Item Name="col 3">m_columns[3]</Item>
+    </Expand>
+  </Type>
 </AutoVisualizer>

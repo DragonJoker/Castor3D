@@ -278,7 +278,17 @@ namespace CastorGui
 	DECLARE_SMART_PTR( StaticCtrl );
 
 	typedef std::vector< ControlSPtr > ControlArray;
+	/** Sets the pass colour.
+	 *\param[in]	pass	The pass.
+	 *\param[in]	colour	The material colour.
+	 */
+	void setMaterialColour( castor3d::Pass & pass, castor::Colour const & colour );
 
+	/** Retrieves the pass colour.
+	 *\param[in]	pass	The pass.
+	 *\return		The material colour.
+	 */
+	castor::Colour getMaterialColour( castor3d::Pass const & pass );
 	/** Creates a colour material.
 	 *\param[in]	engine	The engine.
 	 *\param[in]	p_name		The material name.

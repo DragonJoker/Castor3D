@@ -63,7 +63,7 @@ namespace CastorGui
 			, cuT( "+" )
 			, Position( p_size.getWidth() - p_size.getHeight(), 0 )
 			, Size( p_size.getHeight(), p_size.getHeight() ) );
-		m_expand->setVisible( doIsVisible() );
+		m_expand->setVisible( p_visible );
 		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::doSwitchExpand, this ) );
 
 		m_choices = std::make_shared< ListBoxCtrl >( p_name + cuT( "_Choices" )

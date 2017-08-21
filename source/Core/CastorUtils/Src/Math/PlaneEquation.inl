@@ -52,8 +52,8 @@ namespace castor
 		T ratioA = m_normal[0] / p_plane.m_normal[0];
 		T ratioB = m_normal[1] / p_plane.m_normal[1];
 		T ratioC = m_normal[2] / p_plane.m_normal[2];
-		return policy::equals( ratioA, ratioB )
-			   && policy::equals( ratioA, ratioC );
+		return ratioA == ratioB
+			   && ratioA == ratioC;
 	}
 
 	template< typename T >
@@ -85,7 +85,7 @@ namespace castor
 			T d2 = m_d;
 			T div = ( b1 * c2 ) - ( b2 * c1 );
 
-			if ( !policy::equals( b1, zero ) && !policy::equals( div, zero ) )
+			if ( b1 != zero && div != zero )
 			{
 				Point< T, 3 > point;
 				point[2] = ( ( b2 * d1 ) - ( b1 * d2 ) ) / div;
@@ -118,7 +118,7 @@ namespace castor
 			beta = ( b3 - ( a3 / a1 ) ) / ( b2 - ( a2 / a1 ) );
 			T comp = ( c1 * alpha ) + ( c2 * beta );
 
-			if ( ! policy::equals( c3, comp ) )
+			if ( c3 != comp )
 			{
 				alpha = ( ( a2 * c1 ) / ( a1 * ( b2 - ( a2 * b1 ) / a1 ) ) ) - ( c2 / ( b2 - ( a2 * b1 ) / a1 ) );
 				beta = ( ( a2 * d ) / ( a1 * ( b2 - ( a2 * b1 ) / a1 ) ) ) - ( d1 / ( b2 - ( a2 * b1 ) / a1 ) );
@@ -151,7 +151,7 @@ namespace castor
 		{
 			T ratioA = p_a.m_normal[0] / p_b.m_normal[0];
 			T ratioD = p_a.m_d / p_b.m_d;
-			result = PlaneEquation< T >::policy::equals( ratioA, ratioD );
+			result = ratioA == ratioD;
 		}
 
 		return result;

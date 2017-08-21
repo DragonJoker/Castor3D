@@ -34,10 +34,9 @@ namespace castor3d
 		colourTexture->getImage().initialiseSource();
 		m_colourAttach = m_fbo->createAttachment( colourTexture );
 
-		m_fbo->create();
 		m_colourTexture.setTexture( colourTexture );
 		m_colourTexture.initialise();
-		m_fbo->initialise( p_size );
+		m_fbo->initialise();
 		m_fbo->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
 
 		m_fbo->bind();
@@ -57,7 +56,7 @@ namespace castor3d
 		m_fbo->cleanup();
 
 		m_colourTexture.cleanup();
-		m_fbo->destroy();
+		m_fbo->cleanup();
 
 		m_fbo.reset();
 		m_colourAttach.reset();

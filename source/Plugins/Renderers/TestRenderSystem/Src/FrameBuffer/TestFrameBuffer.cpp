@@ -20,12 +20,12 @@ namespace TestRender
 	{
 	}
 
-	bool TestFrameBuffer::create()
+	bool TestFrameBuffer::initialise()
 	{
 		return true;
 	}
 
-	void TestFrameBuffer::destroy()
+	void TestFrameBuffer::cleanup()
 	{
 	}
 

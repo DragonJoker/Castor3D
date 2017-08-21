@@ -24,12 +24,7 @@ namespace castor3d
 		auto & renderSystem = *engine.getRenderSystem();
 		m_weightedBlendPassFrameBuffer = renderSystem.createFrameBuffer();
 		m_weightedBlendPassFrameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
-		bool result = m_weightedBlendPassFrameBuffer->create();
-
-		if ( result )
-		{
-			result = m_weightedBlendPassFrameBuffer->initialise( m_size );
-		}
+		bool result = m_weightedBlendPassFrameBuffer->initialise();
 
 		if ( result )
 		{
@@ -93,7 +88,6 @@ namespace castor3d
 			texture.reset();
 		}
 
-		m_weightedBlendPassFrameBuffer->destroy();
 		m_weightedBlendPassFrameBuffer.reset();
 	}
 

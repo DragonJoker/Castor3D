@@ -1,4 +1,4 @@
-﻿#include "RenderPanel.hpp"
+#include "RenderPanel.hpp"
 
 #include "MainFrame.hpp"
 #include "CastorViewer.hpp"
@@ -205,16 +205,24 @@ namespace CastorViewer
 							ShowFullScreen( true, wxFULLSCREEN_ALL );
 						}
 
+						auto size = make_wxSize( window->getRenderTarget()->getSize() );
+
 						if ( !IsMaximized() )
 						{
-							SetClientSize( window->getSize().getWidth(), window->getSize().getHeight() );
+							SetClientSize( size );
 						}
 						else
 						{
 							Maximize( false );
-							SetClientSize( window->getSize().getWidth(), window->getSize().getHeight() );
+							SetClientSize( size );
 							Maximize();
 						}
+
+#if wxCHECK_VERSION( 2, 9, 0 )
+
+						SetMinClientSize( size );
+
+#endif
 
 						Logger::logInfo( cuT( "Scene file read" ) );
 					}
@@ -235,13 +243,6 @@ namespace CastorViewer
 						m_sceneObjectsList->loadScene( wxGetApp().getCastor(), scene );
 						m_materialsList->LoadMaterials( wxGetApp().getCastor(), *scene );
 					}
-
-#if wxCHECK_VERSION( 2, 9, 0 )
-
-					wxSize size = GetClientSize();
-					SetMinClientSize( size );
-
-#endif
 
 					m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, true );
 

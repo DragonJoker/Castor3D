@@ -1283,7 +1283,7 @@ namespace castor3d
 
 			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
-			vtx_tangentSpaceViewPosition = tbn * c3d_v3CameraPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
