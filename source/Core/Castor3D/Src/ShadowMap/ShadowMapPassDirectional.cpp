@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassDirectional.hpp"
+#include "ShadowMapPassDirectional.hpp"
 
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureImage.hpp"
@@ -71,49 +71,5 @@ namespace castor3d
 	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & queues )
 	{
 		queues.push_back( m_renderQueue );
-	}
-
-	void ShadowMapPassDirectional::doPrepareBackPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
-	{
-		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
-		{
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eNone );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
-			auto & pipeline = *m_backPipelines.emplace( p_flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
-					, std::move( rsState )
-					, BlendState{}
-					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
-
-			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, p_flags]()
-				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-
-					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
-
-					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
-
-					if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-
-					m_initialised = true;
-				} ) );
-		}
 	}
 }

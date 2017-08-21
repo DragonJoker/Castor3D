@@ -45,16 +45,16 @@ namespace Linear
 
 	glsl::Shader ToneMapping::doCreate()
 	{
-		m_gammaVar = m_configUbo.createUniform< UniformType::eFloat >( ShaderProgram::Gamma );
+		m_gammaVar = m_configUbo.createUniform< UniformType::eFloat >( HdrConfigUbo::Gamma );
 
 		glsl::Shader pxl;
 		{
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
-			Ubo config{ writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };
-			auto c3d_fExposure = config.declMember< Float >( ShaderProgram::Exposure );
-			auto c3d_fGamma = config.declMember< Float >( ShaderProgram::Gamma );
+			Ubo config{ writer, HdrConfigUbo::BufferHdrConfig, HdrConfigUbo::BindingPoint };
+			auto c3d_fExposure = config.declMember< Float >( HdrConfigUbo::Exposure );
+			auto c3d_fGamma = config.declMember< Float >( HdrConfigUbo::Gamma );
 			config.end();
 			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );

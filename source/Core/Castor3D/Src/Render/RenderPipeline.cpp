@@ -1,4 +1,4 @@
-#include "RenderPipeline.hpp"
+﻿#include "RenderPipeline.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
@@ -14,11 +14,6 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	const String RenderPipeline::MtxProjection = cuT( "c3d_mtxProjection" );
-	const String RenderPipeline::MtxModel = cuT( "c3d_mtxModel" );
-	const String RenderPipeline::MtxView = cuT( "c3d_mtxView" );
-	const String RenderPipeline::MtxInvProjection = cuT( "c3d_mtxInvProjection" );
-	const String RenderPipeline::MtxNormal = cuT( "c3d_mtxNormal" );
 	const String RenderPipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
 	{
 		cuT( "c3d_mtxTexture0" ),

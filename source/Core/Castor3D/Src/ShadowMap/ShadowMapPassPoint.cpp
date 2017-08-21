@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassPoint.hpp"
+#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -115,48 +115,49 @@ namespace castor3d
 		p_queues.push_back( m_renderQueue );
 	}
 
-	void ShadowMapPassPoint::doPrepareBackPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
+	void ShadowMapPassPoint::doPreparePipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
-		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
+		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
 		{
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eNone );
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
-			auto & pipeline = *m_backPipelines.emplace( p_flags
+			auto & pipeline = *m_backPipelines.emplace( flags
 				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
 					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
+					, program
+					, flags ) ).first->second;
 
 			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, p_flags]()
-			{
-				pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-				pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-				pipeline.addUniformBuffer( m_shadowConfig );
-
-				if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+				, [this, &pipeline, flags]()
 				{
-					pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-				}
+					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_shadowConfig );
 
-				if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-					&& !checkFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
-				{
-					pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-				}
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
+					{
+						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
+					}
 
-				if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
-				{
-					pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-				}
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					{
+						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
+					}
 
-				m_initialised = true;
-			} ) );
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
+					{
+						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
+					}
+
+					m_initialised = true;
+				} ) );
 		}
 	}
 }

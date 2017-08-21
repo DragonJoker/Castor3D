@@ -1,4 +1,4 @@
-#include "ReflectionPass.hpp"
+﻿#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -163,7 +163,7 @@ namespace castor3d
 				auto normal = writer.declLocale( cuT( "normal" )
 					, normalize( data1.xyz() ) );
 				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_v3CameraPosition ) );
+					, normalize( position - c3d_cameraPosition ) );
 				envMapIndex = envMapIndex - 1_i;
 				auto diffuse = writer.declLocale( cuT( "diffuse" )
 					, texture( c3d_mapData2, vtx_texture ).xyz() );
@@ -274,14 +274,12 @@ namespace castor3d
 					, data3.r() );
 				auto roughness = writer.declLocale( cuT( "roughness" )
 					, data3.g() );
-				auto occlusion = writer.declLocale( cuT( "occlusion" )
-					, data3.b() );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
 				auto position = writer.declLocale( cuT( "position" )
 					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_v3CameraPosition ) );
+					, normalize( position - c3d_cameraPosition ) );
 
 				IF( writer, envMapIndex > 0_i )
 				{
@@ -301,12 +299,12 @@ namespace castor3d
 					}
 					ELSE
 					{
-						pxl_reflection = occlusion * utils.computeMetallicIBL( normal
+						pxl_reflection = utils.computeMetallicIBL( normal
 							, position
 							, albedo
 							, metalness
 							, roughness
-							, c3d_v3CameraPosition
+							, c3d_cameraPosition
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -357,12 +355,12 @@ namespace castor3d
 				}
 				ELSE
 				{
-					pxl_reflection = occlusion * utils.computeMetallicIBL( normal
+					pxl_reflection = utils.computeMetallicIBL( normal
 						, position
 						, albedo
 						, metalness
 						, roughness
-						, c3d_v3CameraPosition
+						, c3d_cameraPosition
 						, c3d_mapIrradiance
 						, c3d_mapPrefiltered
 						, c3d_mapBrdf );
@@ -383,7 +381,7 @@ namespace castor3d
 							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
-						refracted.y() = writer.ternary( envMapIndex >= 0_i, refracted.y(), -refracted.y() );
+						refracted.y() = -refracted.y();
 						pxl_refraction.xyz() = texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
 						pxl_refraction.xyz() *= albedo / length( albedo );
 						pxl_refraction.w() = fresnel;
@@ -462,68 +460,118 @@ namespace castor3d
 					, data3.xyz() );
 				auto glossiness = writer.declLocale( cuT( "glossiness" )
 					, data2.w() );
-				auto occlusion = writer.declLocale( cuT( "occlusion" )
-					, data3.w() );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
 				auto position = writer.declLocale( cuT( "position" )
 					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_v3CameraPosition ) );
-				envMapIndex = envMapIndex - 1_i;
+					, normalize( position - c3d_cameraPosition ) );
 
-				IF( writer, reflection != 0_i )
+				IF( writer, envMapIndex > 0_i )
 				{
-					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, normal ) );
-					pxl_reflection = texture( c3d_mapEnvironment[envMapIndex - 1], reflected ).xyz();
-				}
-				ELSE
-				{
-					pxl_reflection = occlusion * utils.computeSpecularIBL( normal
-					, position
-						, diffuse
-						, specular
-						, glossiness
-						, c3d_v3CameraPosition
-						, c3d_mapIrradiance
-						, c3d_mapPrefiltered
-						, c3d_mapBrdf );
-				}
-				FI;
+					envMapIndex = envMapIndex - 1_i;
 
-				auto ratio = writer.declLocale( cuT( "ratio" )
-					, texture( c3d_mapData4, vtx_texture ).w() );
+					IF( writer, reflection != 0_i )
+					{
+						auto reflected = writer.declLocale( cuT( "reflected" )
+							, reflect( incident, normal ) );
+						pxl_reflection = texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
 
-				IF( writer, refraction != 0_i )
-				{
-				}
-				ELSEIF( writer, ratio != 0.0_f )
-				{
-					auto roughness = writer.declLocale( cuT( "roughness" )
-						, 1.0_f - glossiness );
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
-					auto refracted = writer.declLocale( cuT( "refract" )
-						, refract( incident, normal, ratio ) );
-					refracted.y() = writer.ternary( envMapIndex != 0_i, refracted.y(), -refracted.y() );
+						IF( writer, refraction == 0_i )
+						{
+							pxl_reflection *= diffuse / length( diffuse );
+						}
+						FI;
+					}
+					ELSE
+					{
+						pxl_reflection = utils.computeSpecularIBL( normal
+							, position
+							, diffuse
+							, specular
+							, glossiness
+							, c3d_cameraPosition
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, c3d_mapBrdf );
+					}
+					FI;
+
+					auto ratio = writer.declLocale( cuT( "ratio" )
+						, texture( c3d_mapData4, vtx_texture ).w() );
 
 					IF( writer, refraction != 0_i )
 					{
+						auto subRatio = writer.declLocale( cuT( "subRatio" )
+							, 1.0_f - ratio );
+						auto addRatio = writer.declLocale( cuT( "addRatio" )
+							, 1.0_f + ratio );
+						auto reflectance = writer.declLocale( cuT( "reflectance" )
+							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+						auto product = writer.declLocale( cuT( "product" )
+							, max( 0.0_f, dot( -incident, normal ) ) );
+						auto fresnel = writer.declLocale( cuT( "fresnel" )
+							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						auto refracted = writer.declLocale( cuT( "refracted" )
+							, refract( incident, normal, ratio ) );
 						pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
 						pxl_refraction.xyz() *= diffuse / length( diffuse );
 						pxl_refraction.w() = fresnel;
 					}
-					ELSE
+					ELSEIF( writer, ratio != 0.0_f )
 					{
+						auto roughness = writer.declLocale( cuT( "roughness" )
+							, 1.0_f - glossiness );
+						auto subRatio = writer.declLocale( cuT( "subRatio" )
+							, 1.0_f - ratio );
+						auto addRatio = writer.declLocale( cuT( "addRatio" )
+							, 1.0_f + ratio );
+						auto reflectance = writer.declLocale( cuT( "reflectance" )
+							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+						auto product = writer.declLocale( cuT( "product" )
+							, max( 0.0_f, dot( -incident, normal ) ) );
+						auto fresnel = writer.declLocale( cuT( "fresnel" )
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						auto refracted = writer.declLocale( cuT( "refracted" )
+							, refract( incident, normal, ratio ) );
+						refracted.y() = -refracted.y();
+						pxl_refraction.xyz() = texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
+						pxl_refraction.xyz() *= diffuse / length( diffuse );
+						pxl_refraction.w() = fresnel;
+					}
+					FI;
+				}
+				ELSE
+				{
+					pxl_reflection = utils.computeSpecularIBL( normal
+					, position
+						, diffuse
+						, specular
+						, glossiness
+						, c3d_cameraPosition
+						, c3d_mapIrradiance
+						, c3d_mapPrefiltered
+						, c3d_mapBrdf );
+					auto ratio = writer.declLocale( cuT( "ratio" )
+						, texture( c3d_mapData4, vtx_texture ).w() );
+
+					IF( writer, ratio != 0.0_f )
+					{
+						auto roughness = writer.declLocale( cuT( "roughness" )
+							, 1.0_f - glossiness );
+						auto subRatio = writer.declLocale( cuT( "subRatio" )
+							, 1.0_f - ratio );
+						auto addRatio = writer.declLocale( cuT( "addRatio" )
+							, 1.0_f + ratio );
+						auto reflectance = writer.declLocale( cuT( "reflectance" )
+							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+						auto product = writer.declLocale( cuT( "product" )
+							, max( 0.0_f, dot( -incident, normal ) ) );
+						auto fresnel = writer.declLocale( cuT( "fresnel" )
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						auto refracted = writer.declLocale( cuT( "refract" )
+							, refract( incident, normal, ratio ) );
+						refracted.y() = writer.ternary( envMapIndex != 0_i, refracted.y(), -refracted.y() );
 						pxl_refraction.xyz() = texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz();
 						pxl_refraction.xyz() *= diffuse / length( diffuse );
 						pxl_refraction.w() = fresnel;
@@ -663,12 +711,7 @@ namespace castor3d
 		m_matrixUbo.update( m_viewport.getProjection() );
 
 		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eTransparentBlack ) );
-		bool result = m_frameBuffer->create();
-
-		if ( result )
-		{
-			result = m_frameBuffer->initialise( size );
-		}
+		bool result = m_frameBuffer->initialise();
 
 		if ( result )
 		{
@@ -721,7 +764,6 @@ namespace castor3d
 		m_frameBuffer->detachAll();
 		m_frameBuffer->unbind();
 		m_frameBuffer->cleanup();
-		m_frameBuffer->destroy();
 		m_refractAttach.reset();
 		m_reflectAttach.reset();
 		m_reflection.cleanup();

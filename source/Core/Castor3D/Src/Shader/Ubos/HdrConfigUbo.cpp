@@ -1,4 +1,4 @@
-#include "HdrConfigUbo.hpp"
+﻿#include "HdrConfigUbo.hpp"
 
 #include "Engine.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -7,12 +7,16 @@ using namespace castor;
 
 namespace castor3d
 {
+	String const HdrConfigUbo::BufferHdrConfig = cuT( "HdrConfig" );
+	String const HdrConfigUbo::Exposure = cuT( "c3d_exposure" );
+	String const HdrConfigUbo::Gamma = cuT( "c3d_gamma" );
+
 	HdrConfigUbo::HdrConfigUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferHdrConfig
+		: m_ubo{ HdrConfigUbo::BufferHdrConfig
 			, *engine.getRenderSystem()
 			, HdrConfigUbo::BindingPoint }
-		, m_exposure{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
-		, m_gamma{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
+		, m_exposure{ *m_ubo.createUniform< UniformType::eFloat >( HdrConfigUbo::Exposure ) }
+		, m_gamma{ *m_ubo.createUniform< UniformType::eFloat >( HdrConfigUbo::Gamma ) }
 	{
 	}
 

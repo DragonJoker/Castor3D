@@ -1,4 +1,4 @@
-#include "ShadowMapPass.hpp"
+﻿#include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
@@ -69,6 +69,7 @@ namespace castor3d
 				, [this, &pipeline, flags]()
 				{
 					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
 					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
 
 					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )

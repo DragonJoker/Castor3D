@@ -202,9 +202,9 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_fTime );
-				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
-				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
 			vtx_texture = v3Texture;

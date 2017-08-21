@@ -1,4 +1,4 @@
-#include "OverlayUbo.hpp"
+﻿#include "OverlayUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -8,12 +8,16 @@ using namespace castor;
 
 namespace castor3d
 {
+	String const OverlayUbo::BufferOverlay = cuT( "Overlay" );
+	String const OverlayUbo::Position = cuT( "c3d_position" );
+	String const OverlayUbo::MaterialIndex = cuT( "c3d_materialIndex" );
+
 	OverlayUbo::OverlayUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferOverlay
+		: m_ubo{ OverlayUbo::BufferOverlay
 			, *engine.getRenderSystem()
 			, OverlayUbo::BindingPoint }
-		, m_position{ *m_ubo.createUniform< UniformType::eVec2i >( ShaderProgram::OvPosition ) }
-		, m_material{ *m_ubo.createUniform< UniformType::eInt >( ShaderProgram::MaterialIndex ) }
+		, m_position{ *m_ubo.createUniform< UniformType::eVec2i >( OverlayUbo::Position ) }
+		, m_material{ *m_ubo.createUniform< UniformType::eInt >( OverlayUbo::MaterialIndex ) }
 	{
 	}
 

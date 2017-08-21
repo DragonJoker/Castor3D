@@ -97,11 +97,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
 		void doUpdate( RenderQueueArray & queues )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
-		 */
-		void doPrepareBackPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
 
 	private:
 		//!\~english	The camera created from the light.

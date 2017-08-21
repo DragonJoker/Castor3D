@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -94,7 +94,13 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 6u;
+		static uint32_t constexpr BindingPoint = 6u;
+		//!\~english	Name of the morphing animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation de morphing.
+		C3D_API static castor::String const BufferMorphing;
+		//!\~english	Name of the morphing time attribute.
+		//!\~french		Nom de l'attribut du temps d'animation par sommet.
+		C3D_API static castor::String const Time;
 
 	private:
 		//!\~english	The UBO.
@@ -107,8 +113,8 @@ namespace castor3d
 }
 
 #define UBO_MORPHING( Writer, Flags )\
-	glsl::Ubo morphing{ writer, castor3d::ShaderProgram::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
-	auto c3d_fTime = morphing.declMember< glsl::Float >( castor3d::ShaderProgram::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
+	glsl::Ubo morphing{ writer, castor3d::MorphingUbo::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
+	auto c3d_time = morphing.declMember< glsl::Float >( castor3d::MorphingUbo::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
 	morphing.end()
 
 #endif

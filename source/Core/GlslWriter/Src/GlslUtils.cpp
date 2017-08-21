@@ -109,15 +109,15 @@ namespace glsl
 			, [&]( Float const & depth
 				, Mat4 const & invProj )
 			{
-				auto c3d_fCameraNearPlane = m_writer.getBuiltin< Float >( cuT( "c3d_fCameraNearPlane" ) );
-				auto c3d_fCameraFarPlane = m_writer.getBuiltin< Float >( cuT( "c3d_fCameraFarPlane" ) );
+				auto c3d_cameraNearPlane = m_writer.getBuiltin< Float >( cuT( "c3d_cameraNearPlane" ) );
+				auto c3d_cameraFarPlane = m_writer.getBuiltin< Float >( cuT( "c3d_cameraFarPlane" ) );
 				auto z = m_writer.declLocale( cuT( "z" )
 					, depth *2.0_f - 1.0_f );
 				auto unprojected = m_writer.declLocale( cuT( "unprojected" )
 					, invProj * vec4( 0.0_f, 0.0_f, z, 1.0_f ) );
 				z = unprojected.z() / unprojected.w();
-				m_writer.returnStmt( m_writer.paren( z - c3d_fCameraNearPlane )
-					/ m_writer.paren( c3d_fCameraFarPlane - c3d_fCameraNearPlane ) );
+				m_writer.returnStmt( m_writer.paren( z - c3d_cameraNearPlane )
+					/ m_writer.paren( c3d_cameraFarPlane - c3d_cameraNearPlane ) );
 
 			}
 			, InFloat{ &m_writer, cuT( "depth" ) }

@@ -1,4 +1,4 @@
-#include "ModelMatrixUbo.hpp"
+﻿#include "ModelMatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -9,12 +9,16 @@ using namespace castor;
 
 namespace castor3d
 {
+	String const ModelMatrixUbo::BufferModelMatrix = cuT( "ModelMatrices" );
+	String const ModelMatrixUbo::MtxModel = cuT( "c3d_mtxModel" );
+	String const ModelMatrixUbo::MtxNormal = cuT( "c3d_mtxNormal" );
+
 	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferModelMatrix
+		: m_ubo{ ModelMatrixUbo::BufferModelMatrix
 			, *engine.getRenderSystem()
 			, ModelMatrixUbo::BindingPoint }
-		, m_model{ *m_ubo.createUniform< UniformType::eMat4x4r >( RenderPipeline::MtxModel ) }
-		, m_normal{ *m_ubo.createUniform< UniformType::eMat4x4r >( RenderPipeline::MtxNormal ) }
+		, m_model{ *m_ubo.createUniform< UniformType::eMat4x4r >( ModelMatrixUbo::MtxModel ) }
+		, m_normal{ *m_ubo.createUniform< UniformType::eMat4x4r >( ModelMatrixUbo::MtxNormal ) }
 	{
 	}
 

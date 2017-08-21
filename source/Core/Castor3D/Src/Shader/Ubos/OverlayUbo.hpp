@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -104,6 +104,15 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t BindingPoint = 2u;
+		//!\~english	Name of the overlay information frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
+		C3D_API static castor::String const BufferOverlay;
+		//!\~english	Name of the overlay position frame variable.
+		//!\~french		Nom de la frame variable contenant la position de l'incrustation.
+		C3D_API static castor::String const Position;
+		//!\~english	Name of the material index frame variable.
+		//!\~french		Nom de la frame variable contenant l'indice du matériau.
+		C3D_API static castor::String const MaterialIndex;
 
 	private:
 		//!\~english	The UBO.
@@ -119,9 +128,9 @@ namespace castor3d
 }
 
 #define UBO_OVERLAY( Writer )\
-	glsl::Ubo overlay{ writer, castor3d::ShaderProgram::BufferOverlay, castor3d::OverlayUbo::BindingPoint };\
-	auto c3d_position = overlay.declMember< glsl::IVec2 >( castor3d::ShaderProgram::OvPosition );\
-	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::ShaderProgram::MaterialIndex );\
+	glsl::Ubo overlay{ writer, castor3d::OverlayUbo::BufferOverlay, castor3d::OverlayUbo::BindingPoint };\
+	auto c3d_position = overlay.declMember< glsl::IVec2 >( castor3d::OverlayUbo::Position );\
+	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::OverlayUbo::MaterialIndex );\
 	overlay.end()
 
 #endif

@@ -12,18 +12,28 @@ using namespace castor;
 
 namespace castor3d
 {
+	String const SceneUbo::BufferScene = cuT( "Scene" );
+	String const SceneUbo::AmbientLight = cuT( "c3d_ambientLight" );
+	String const SceneUbo::BackgroundColour = cuT( "c3d_backgroundColour" );
+	String const SceneUbo::CameraPos = cuT( "c3d_cameraPosition" );
+	String const SceneUbo::CameraNearPlane = cuT( "c3d_cameraNearPlane" );
+	String const SceneUbo::CameraFarPlane = cuT( "c3d_cameraFarPlane" );
+	String const SceneUbo::FogType = cuT( "c3d_fogType" );
+	String const SceneUbo::FogDensity = cuT( "c3d_fogDensity" );
+	String const SceneUbo::LightsCount = cuT( "c3d_lightsCount" );
+
 	SceneUbo::SceneUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferScene
+		: m_ubo{ SceneUbo::BufferScene
 			, *engine.getRenderSystem()
 			, SceneUbo::BindingPoint }
-		, m_ambientLight{ *m_ubo.createUniform< UniformType::eVec4f >( ShaderProgram::AmbientLight ) }
-		, m_backgroundColour{ *m_ubo.createUniform< UniformType::eVec4f >( ShaderProgram::BackgroundColour ) }
-		, m_lightsCount{ *m_ubo.createUniform< UniformType::eVec4i >( ShaderProgram::LightsCount ) }
-		, m_cameraPos{ *m_ubo.createUniform< UniformType::eVec3f >( ShaderProgram::CameraPos ) }
-		, m_cameraNearPlane{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::CameraNearPlane ) }
-		, m_cameraFarPlane{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::CameraFarPlane ) }
-		, m_fogType{ *m_ubo.createUniform< UniformType::eInt >( ShaderProgram::FogType ) }
-		, m_fogDensity{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::FogDensity ) }
+		, m_ambientLight{ *m_ubo.createUniform< UniformType::eVec4f >( SceneUbo::AmbientLight ) }
+		, m_backgroundColour{ *m_ubo.createUniform< UniformType::eVec4f >( SceneUbo::BackgroundColour ) }
+		, m_lightsCount{ *m_ubo.createUniform< UniformType::eVec4i >( SceneUbo::LightsCount ) }
+		, m_cameraPos{ *m_ubo.createUniform< UniformType::eVec3f >( SceneUbo::CameraPos ) }
+		, m_cameraNearPlane{ *m_ubo.createUniform< UniformType::eFloat >( SceneUbo::CameraNearPlane ) }
+		, m_cameraFarPlane{ *m_ubo.createUniform< UniformType::eFloat >( SceneUbo::CameraFarPlane ) }
+		, m_fogType{ *m_ubo.createUniform< UniformType::eInt >( SceneUbo::FogType ) }
+		, m_fogDensity{ *m_ubo.createUniform< UniformType::eFloat >( SceneUbo::FogDensity ) }
 	{
 	}
 

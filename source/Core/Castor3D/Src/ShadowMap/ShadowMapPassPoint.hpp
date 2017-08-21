@@ -92,9 +92,9 @@ namespace castor3d
 		 */
 		void doUpdate( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::ShadowMapPass::doPreparePipeline
 		 */
-		void doPrepareBackPipeline( ShaderProgram & p_program
+		void doPreparePipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 
 	private:

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -620,132 +620,9 @@ namespace castor3d
 		/**@name Scene */
 		//@{
 
-		//!\~english	Name of the camera position frame variable.
-		//!\~french		Nom de la frame variable contenant la position de la caméra.
-		C3D_API static const castor::String CameraPos;
-		//!\~english	Name of the camera far plane frame variable.
-		//!\~french		Nom de la frame variable contenant la valeur du plan éloigné de la caméra.
-		C3D_API static const castor::String CameraFarPlane;
-		//!\~english	Name of the camera near plane frame variable.
-		//!\~french		Nom de la frame variable contenant la valeur du plan proche de la caméra.
-		C3D_API static const castor::String CameraNearPlane;
-		//!\~english	Name of the ambient light frame variable.
-		//!\~french		Nom de la frame variable contenant la lumière ambiante.
-		C3D_API static const castor::String AmbientLight;
-		//!\~english	Name of the background colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur de fond.
-		C3D_API static const castor::String BackgroundColour;
-		//!\~english	Name of the fog type frame variable.
-		//!\~french		Nom de la frame variable contenant le type de brouillard.
-		C3D_API static const castor::String FogType;
-		//!\~english	Name of the fog's density frame variable.
-		//!\~french		Nom de la frame variable contenant la densité du brouillard.
-		C3D_API static const castor::String FogDensity;
-		//!\~english	Name of the lights count frame variable.
-		//!\~french		Nom de la frame variable contenant le compte des lumières.
-		C3D_API static const castor::String LightsCount;
 		//!\~english	Name of the lights frame variable.
 		//!\~french		Nom de la frame variable contenant les lumières.
 		C3D_API static const castor::String Lights;
-		//!\~english	Name of the exposure frame variable.
-		//!\~french		Nom de la frame variable contenant l'exposition.
-		C3D_API static const castor::String Exposure;
-		//!\~english	Name of the gamma correction frame variable.
-		//!\~french		Nom de la frame variable contenant la correction gamma.
-		C3D_API static const castor::String Gamma;
-
-		//@}
-		/**@name Pass */
-		//@{
-
-		/**@name Legacy */
-		//@{
-
-		//!\~english	Name of the diffuse material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur diffuse du matériau.
-		C3D_API static const castor::String MatDiffuse;
-		//!\~english	Name of the specular material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur spéculaire du matériau.
-		C3D_API static const castor::String MatSpecular;
-		//!\~english	Name of the emissive material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur émissive du matériau.
-		C3D_API static const castor::String MatEmissive;
-		//!\~english	Name of the material shininess frame variable.
-		//!\~french		Nom de la frame variable contenant l'exposante du matériau.
-		C3D_API static const castor::String MatShininess;
-
-		//@}
-		/**@name PBR */
-		//@{
-
-		//!\~english	Name of the material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur du matériau.
-		C3D_API static const castor::String MatAlbedo;
-		//!\~english	Name of the material roughness frame variable.
-		//!\~french		Nom de la frame variable contenant la rugosité du matériau.
-		C3D_API static const castor::String MatRoughness;
-		//!\~english	Name of the material reflectance frame variable.
-		//!\~french		Nom de la frame variable contenant la réflectivité du matériau.
-		C3D_API static const castor::String MatMetallic;
-
-		//@}
-
-		//!\~english	Name of the material opacity frame variable.
-		//!\~french		Nom de la frame variable contenant l'opacité du matériau.
-		C3D_API static const castor::String MatOpacity;
-		//!\~english	Name of the material refraction ratio frame variable.
-		//!\~french		Nom de la frame variable contenant le ratio de réfraction du matériau.
-		C3D_API static const castor::String MatRefractionRatio;
-		//!\~english	Name of the shadow map image frame variable.
-		//!\~french		Nom de la frame variable contenant l'image de shadow map.
-		C3D_API static const castor::String MapShadow;
-		//!\~english	Name of the overlay text image frame variable.
-		//!\~french		Nom de la frame variable contenant l'image de texte pour les overlays.
-		C3D_API static const castor::String MapText;
-
-		//@}
-		/**@name Model */
-		//@{
-
-		//!\~english	Name of the shadow receiver status frame variable.
-		//!\~french		Nom de la frame variable contenant le statut de réception d'ombres.
-		C3D_API static const castor::String ShadowReceiver;
-		//!\~english	Name of the material index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice du matériau.
-		C3D_API static const castor::String MaterialIndex;
-		//!\~english	Name of the material environment index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
-		C3D_API static const castor::String EnvironmentIndex;
-
-		//@}
-		/**@name Animation */
-		//@{
-
-		//!\~english	Name of the bones matrices attribute.
-		//!\~french		Nom de l'attribut de de matrices d'os.
-		C3D_API static const castor::String Bones;
-		//!\~english	Name of the morphing time attribute.
-		//!\~french		Nom de l'attribut du temps d'animation par sommet.
-		C3D_API static const castor::String Time;
-
-		//@}
-		/**@name Billboard */
-		//@{
-
-		//!\~english	Name of the billboard dimensions frame variable.
-		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
-		C3D_API static const castor::String Dimensions;
-		//!\~english	Name of the window dimensions frame variable.
-		//!\~french		Nom de la frame variable contenant les dimensions de la fenêtre.
-		C3D_API static const castor::String WindowSize;
-
-		//@}
-		/**@name Overlay */
-		//@{
-
-		//!\~english	Name of the overlay position frame variable.
-		//!\~french		Nom de la frame variable contenant la position de l'incrustation.
-		C3D_API static const castor::String OvPosition;
 
 		//@}
 		/**@name Textures */
@@ -796,41 +673,9 @@ namespace castor3d
 		//!\~english	Name of the BRDF texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture BRDF.
 		C3D_API static const castor::String MapBrdf;
-
-		//@}
-		/**@name Frame Variable Buffers */
-		//@{
-
-		//!\~english	Name of the matrix frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les matrices.
-		C3D_API static const castor::String BufferMatrix;
-		//!\~english	Name of the model matrix frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les matrices modèle.
-		C3D_API static const castor::String BufferModelMatrix;
-		//!\~english	Name of the scene frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de scène.
-		C3D_API static const castor::String BufferScene;
-		//!\~english	Name of the HDR configuration frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
-		C3D_API static const castor::String BufferHdrConfig;
-		//!\~english	Name of the pass frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de passe.
-		C3D_API static const castor::String BufferPass;
-		//!\~english	Name of the model frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de modèle.
-		C3D_API static const castor::String BufferModel;
-		//!\~english	Name of the billboards frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de billboards.
-		C3D_API static const castor::String BufferBillboards;
-		//!\~english	Name of the skinning animation frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
-		C3D_API static const castor::String BufferSkinning;
-		//!\~english	Name of the morphing animation frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données d'animation de morphing.
-		C3D_API static const castor::String BufferMorphing;
-		//!\~english	Name of the overlay information frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
-		C3D_API static const castor::String BufferOverlay;
+		//!\~english	Name of the overlay text image frame variable.
+		//!\~french		Nom de la frame variable contenant l'image de texte pour les overlays.
+		C3D_API static const castor::String MapText;
 
 		//@}
 

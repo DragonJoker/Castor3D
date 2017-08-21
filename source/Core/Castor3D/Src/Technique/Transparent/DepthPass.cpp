@@ -211,8 +211,8 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_fTime );
-				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
+				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
 			}
 
 			v4Vertex = mtxModel * v4Vertex;

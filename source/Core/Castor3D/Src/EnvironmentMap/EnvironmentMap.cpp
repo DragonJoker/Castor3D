@@ -145,12 +145,7 @@ namespace castor3d
 		{
 			auto & scene = *m_node.getScene();
 			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
-			result = m_frameBuffer->create();
-
-			if ( result )
-			{
-				result = m_frameBuffer->initialise( MapSize );
-			}
+			result = m_frameBuffer->initialise();
 
 			if ( result )
 			{
@@ -222,7 +217,6 @@ namespace castor3d
 			m_depthBuffer.reset();
 			m_environmentMap.cleanup();
 			m_frameBuffer->cleanup();
-			m_frameBuffer->destroy();
 			m_frameBuffer.reset();
 		}
 	}

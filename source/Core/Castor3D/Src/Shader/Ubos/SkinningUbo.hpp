@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -121,6 +121,12 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t BindingPoint = 5u;
+		//!\~english	Name of the skinning animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
+		C3D_API static castor::String const BufferSkinning;
+		//!\~english	Name of the bones matrices attribute.
+		//!\~french		Nom de l'attribut de de matrices d'os.
+		C3D_API static castor::String const Bones;
 
 	private:
 		//!\~english	The UBO.

@@ -43,7 +43,7 @@ namespace HejlBurgessDawson
 
 			// Shader inputs
 			Ubo config{ writer, ToneMapping::HdrConfigUbo, HdrConfigUbo::BindingPoint };
-			auto c3d_exposure = config.declMember< Float >( ShaderProgram::Exposure );
+			auto c3d_exposure = config.declMember< Float >( HdrConfigUbo::Exposure );
 			config.end();
 			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );

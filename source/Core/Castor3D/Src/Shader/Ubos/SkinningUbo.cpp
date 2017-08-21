@@ -1,9 +1,10 @@
-#include "SkinningUbo.hpp"
+﻿#include "SkinningUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include <GlslSource.hpp>
 
@@ -11,11 +12,14 @@ using namespace castor;
 
 namespace castor3d
 {
+	String const SkinningUbo::BufferSkinning = cuT( "Skinning" );
+	String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
+
 	SkinningUbo::SkinningUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferSkinning
+		: m_ubo{ SkinningUbo::BufferSkinning
 			, *engine.getRenderSystem()
 			, SkinningUbo::BindingPoint }
-		, m_bonesMatrix{ *m_ubo.createUniform< UniformType::eMat4x4f >( ShaderProgram::Bones, 400u ) }
+		, m_bonesMatrix{ *m_ubo.createUniform< UniformType::eMat4x4f >( SkinningUbo::Bones, 400u ) }
 	{
 	}
 
@@ -37,14 +41,14 @@ namespace castor3d
 		{
 			if ( checkFlag( p_flags, ProgramFlag::eInstantiation ) )
 			{
-				glsl::Ssbo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
-				auto c3d_mtxBones = skinning.declMemberArray< glsl::Mat4 >( ShaderProgram::Bones, checkFlag( p_flags, ProgramFlag::eSkinning ) );
+				glsl::Ssbo skinning{ p_writer, SkinningUbo::BufferSkinning, SkinningUbo::BindingPoint };
+				auto c3d_mtxBones = skinning.declMemberArray< glsl::Mat4 >( SkinningUbo::Bones, checkFlag( p_flags, ProgramFlag::eSkinning ) );
 				skinning.end();
 			}
 			else
 			{
-				glsl::Ubo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
-				auto c3d_mtxBones = skinning.declMember< glsl::Mat4 >( ShaderProgram::Bones, 400, checkFlag( p_flags, ProgramFlag::eSkinning ) );
+				glsl::Ubo skinning{ p_writer, SkinningUbo::BufferSkinning, SkinningUbo::BindingPoint };
+				auto c3d_mtxBones = skinning.declMember< glsl::Mat4 >( SkinningUbo::Bones, 400, checkFlag( p_flags, ProgramFlag::eSkinning ) );
 				skinning.end();
 			}
 		}
@@ -58,8 +62,8 @@ namespace castor3d
 		auto bone_ids1 = p_writer.getBuiltin< IVec4 >( ShaderProgram::BoneIds1 );
 		auto weights0 = p_writer.getBuiltin< Vec4 >( ShaderProgram::Weights0 );
 		auto weights1 = p_writer.getBuiltin< Vec4 >( ShaderProgram::Weights1 );
-		auto c3d_mtxModel = p_writer.getBuiltin< glsl::Mat4 >( RenderPipeline::MtxModel );
-		auto c3d_mtxBones = p_writer.getBuiltinArray< glsl::Mat4 >( ShaderProgram::Bones );
+		auto c3d_mtxModel = p_writer.getBuiltin< glsl::Mat4 >( ModelMatrixUbo::MtxModel );
+		auto c3d_mtxBones = p_writer.getBuiltinArray< glsl::Mat4 >( SkinningUbo::Bones );
 		auto mtxBoneTransform = p_writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( checkFlag( p_flags, ProgramFlag::eInstantiation ) )

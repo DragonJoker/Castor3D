@@ -375,13 +375,13 @@ namespace castor3d
 					vtx_tangent = up;
 					vtx_bitangent = right;
 
-					auto width = writer.declLocale( cuT( "width" ), c3d_v2iDimensions.x() );
-					auto height = writer.declLocale( cuT( "height" ), c3d_v2iDimensions.y() );
+					auto width = writer.declLocale( cuT( "width" ), c3d_dimensions.x() );
+					auto height = writer.declLocale( cuT( "height" ), c3d_dimensions.y() );
 
 					if ( checkFlag( programFlags, ProgramFlag::eFixedSize ) )
 					{
-						width = c3d_v2iDimensions.x() / c3d_v2iWindowSize.x();
-						height = c3d_v2iDimensions.y() / c3d_v2iWindowSize.y();
+						width = c3d_dimensions.x() / c3d_windowSize.x();
+						height = c3d_dimensions.y() / c3d_windowSize.y();
 					}
 
 					vtx_position = bbcenter

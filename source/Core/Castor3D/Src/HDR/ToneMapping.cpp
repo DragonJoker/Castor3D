@@ -26,7 +26,7 @@ namespace castor3d
 			, *engine.getRenderSystem()
 			, HdrConfigUbo::BindingPoint }
 	{
-		m_exposureVar = m_configUbo.createUniform< UniformType::eFloat >( ShaderProgram::Exposure );
+		m_exposureVar = m_configUbo.createUniform< UniformType::eFloat >( HdrConfigUbo::Exposure );
 		
 		String param;
 
