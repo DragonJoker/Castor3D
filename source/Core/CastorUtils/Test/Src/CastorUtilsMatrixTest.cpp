@@ -46,6 +46,20 @@ namespace Testing
 	{
 	}
 
+	void CastorUtilsMatrixTest::doRegisterTests()
+	{
+		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
+
+#if defined( CASTOR_USE_GLM )
+
+		//doRegisterTest( "MatrixInversionComparison", std::bind( &CastorUtilsMatrixTest::MatrixInversionComparison, this ) );
+		doRegisterTest( "MatrixMultiplicationComparison", std::bind( &CastorUtilsMatrixTest::MatrixMultiplicationComparison, this ) );
+		doRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsMatrixTest::TransformationMatrixComparison, this ) );
+		doRegisterTest( "ProjectionMatrixComparison", std::bind( &CastorUtilsMatrixTest::ProjectionMatrixComparison, this ) );
+
+#endif
+	}
+
 	bool CastorUtilsMatrixTest::compare( Matrix3x3f const & lhs, Matrix3x3f const & rhs )
 	{
 		return Testing::compare( lhs, rhs );
@@ -79,20 +93,6 @@ namespace Testing
 	}
 
 #endif
-
-	void CastorUtilsMatrixTest::doRegisterTests()
-	{
-		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
-
-#if defined( CASTOR_USE_GLM )
-
-		//doRegisterTest( "MatrixInversionComparison", std::bind( &CastorUtilsMatrixTest::MatrixInversionComparison, this ) );
-		doRegisterTest( "MatrixMultiplicationComparison", std::bind( &CastorUtilsMatrixTest::MatrixMultiplicationComparison, this ) );
-		doRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsMatrixTest::TransformationMatrixComparison, this ) );
-		doRegisterTest( "ProjectionMatrixComparison", std::bind( &CastorUtilsMatrixTest::ProjectionMatrixComparison, this ) );
-
-#endif
-	}
 
 	void CastorUtilsMatrixTest::MatrixInversion()
 	{

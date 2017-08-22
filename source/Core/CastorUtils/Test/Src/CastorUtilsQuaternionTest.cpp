@@ -54,6 +54,16 @@ namespace Testing
 
 #if defined( CASTOR_USE_GLM )
 
+	bool CastorUtilsQuaternionTest::compare( Matrix4x4f const & lhs, glm::mat4x4 const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsQuaternionTest::compare( Matrix4x4d const & lhs, glm::mat4x4 const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
 	void CastorUtilsQuaternionTest::TransformationMatrixComparison()
 	{
 		Logger::logInfo( cuT( "	Rotate on X" ) );
