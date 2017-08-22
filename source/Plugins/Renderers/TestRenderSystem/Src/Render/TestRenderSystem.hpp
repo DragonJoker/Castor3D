@@ -79,10 +79,6 @@ namespace TestRender
 			, castor3d::Topology p_topology
 			, castor3d::ShaderProgram & p_program )override;
 		/**
-		 *\copydoc		castor3d::RenderSystem::CreateUInt8Buffer
-		 */
-		castor3d::GpuBufferUPtr createBuffer( castor3d::BufferType p_type )override;
-		/**
 		 *\copydoc		castor3d::RenderSystem::createTexture
 		 */
 		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType p_type
@@ -137,6 +133,10 @@ namespace TestRender
 		 *\copydoc		castor3d::RenderSystem::doCleanup
 		 */
 		void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::RenderSystem::doCreateBuffer
+		 */
+		castor3d::GpuBufferUPtr doCreateBuffer( castor3d::BufferType p_type )override;
 
 	public:
 		C3D_Test_API static castor::String Name;

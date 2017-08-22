@@ -266,14 +266,16 @@ namespace castor3d
 
 		if ( !m_storage )
 		{
-			m_storage = getRenderSystem()->createBuffer( BufferType::eUniform );
+			auto buffer = getRenderSystem()->getBuffer( BufferType::eUniform
+				, uint32_t( m_buffer.size() )
+				, BufferAccessType::eDynamic
+				, BufferAccessNature::eDraw );
+			m_storage = std::move( buffer.buffer );
+			m_offset = buffer.offset;
 			m_storage->create();
 		}
 
-		m_storage->initialiseStorage( uint32_t( m_buffer.size() )
-			, BufferAccessType::eDynamic
-			, BufferAccessNature::eDraw );
-		m_storage->upload( 0u
+		m_storage->upload( m_offset
 			, uint32_t( m_buffer.size() )
 			, m_buffer.data() );
 

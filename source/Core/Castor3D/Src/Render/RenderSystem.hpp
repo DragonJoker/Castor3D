@@ -32,6 +32,11 @@ SOFTWARE.
 
 namespace castor3d
 {
+	struct GpuBufferOffset
+	{
+		GpuBufferUPtr buffer;
+		uint32_t offset;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -131,6 +136,26 @@ namespace castor3d
 		 *\return		Le contexte
 		 */
 		C3D_API Context * getCurrentContext();
+		/**
+		 *\~english
+		 *\brief		Retrieves a GPU buffer with the given size.
+		 *\param[in]	type			The buffer type.
+		 *\param[in]	size			The wanted buffer size.
+		 *\param[in]	accessType		Buffer access type.
+		 *\param[in]	accessNature	Buffer access nature.
+		 *\return		The created buffer, depending on current API.
+		 *\~french
+		 *\brief		Récupère un tampon GPU avec la taille donnée.
+		 *\param[in]	type			Le type de tampon.
+		 *\param[in]	size			La taille voulue pour le tampon.
+		 *\param[in]	accessType		Type d'accès du tampon.
+		 *\param[in]	accessNature	Nature d'accès du tampon.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
+		 */
+		C3D_API GpuBufferOffset getBuffer( BufferType type
+			, uint32_t size
+			, BufferAccessType accessType
+			, BufferAccessNature accessNature );
 		/**
 		 *\~english
 		 *\return		The GPU informations.
@@ -409,17 +434,6 @@ namespace castor3d
 			, AccessTypes const & p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a GPU buffer.
-		 *\param[in]	p_type	The buffer type.
-		 *\return		The created buffer, depending on current API.
-		 *\~french
-		 *\brief		Crée un tampon GPU.
-		 *\param[in]	p_type	Le type de tampon.
-		 *\return		Le tampon créé, dépendant de l'API actuelle.
-		 */
-		C3D_API virtual GpuBufferUPtr createBuffer( BufferType p_type ) = 0;
-		/**
-		 *\~english
 		 *\brief		Creates a transform feedback instance.
 		 *\param[in]	p_computed	The computed elements description.
 		 *\param[in]	p_topology	The topology.
@@ -491,6 +505,17 @@ namespace castor3d
 		 *\brief		Nettoie le render system
 		 */
 		C3D_API virtual void doCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a GPU buffer.
+		 *\param[in]	p_type	The buffer type.
+		 *\return		The created buffer, depending on current API.
+		 *\~french
+		 *\brief		Crée un tampon GPU.
+		 *\param[in]	p_type	Le type de tampon.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
+		 */
+		C3D_API virtual GpuBufferUPtr doCreateBuffer( BufferType p_type ) = 0;
 
 	protected:
 		//!\~english	Mutex used to make this class thread safe.

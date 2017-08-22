@@ -3,10 +3,10 @@
 
 namespace TestRender
 {
-	TestBuffer::TestBuffer( TestRenderSystem & p_renderSystem
-		, castor3d::BufferType p_type )
-		: castor3d::GpuBuffer( p_renderSystem )
-		, m_type{ p_type }
+	TestBuffer::TestBuffer( TestRenderSystem & renderSystem
+		, castor3d::BufferType type )
+		: castor3d::GpuBuffer( renderSystem )
+		, m_type{ type }
 	{
 	}
 
@@ -23,13 +23,13 @@ namespace TestRender
 	{
 	}
 
-	void TestBuffer::initialiseStorage( uint32_t p_count
-		, castor3d::BufferAccessType p_type
-		, castor3d::BufferAccessNature p_nature )const
+	void TestBuffer::initialiseStorage( uint32_t count
+		, castor3d::BufferAccessType type
+		, castor3d::BufferAccessNature nature )const
 	{
 	}
 
-	void TestBuffer::setBindingPoint( uint32_t p_point )const
+	void TestBuffer::setBindingPoint( uint32_t point )const
 	{
 	}
 
@@ -46,9 +46,9 @@ namespace TestRender
 	{
 	}
 
-	uint8_t * TestBuffer::lock( uint32_t p_offset
-		, uint32_t p_count
-		, castor3d::AccessTypes const & p_flags )const
+	uint8_t * TestBuffer::lock( uint32_t offset
+		, uint32_t count
+		, castor3d::AccessTypes const & flags )const
 	{
 		return nullptr;
 	}
@@ -57,20 +57,22 @@ namespace TestRender
 	{
 	}
 
-	void TestBuffer::copy( castor3d::GpuBuffer const & p_src
-		, uint32_t p_size )const
+	void TestBuffer::copy( castor3d::GpuBuffer const & src
+		, uint32_t srcOffset
+		, uint32_t dstOffset
+		, uint32_t size )const
 	{
 	}
 
-	void TestBuffer::upload( uint32_t p_offset
-		, uint32_t p_size
-		, uint8_t const * p_buffer )const
+	void TestBuffer::upload( uint32_t offset
+		, uint32_t size
+		, uint8_t const * buffer )const
 	{
 	}
 
-	void TestBuffer::download( uint32_t p_offset
-		, uint32_t p_size
-		, uint8_t * p_buffer )const
+	void TestBuffer::download( uint32_t offset
+		, uint32_t size
+		, uint8_t * buffer )const
 	{
 	}
 }

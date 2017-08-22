@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -321,6 +321,9 @@ namespace castor3d
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
 		GpuBufferUPtr m_storage;
+		//!\~english	The offset in the GPU buffer.
+		//!\~french		Le décalage dans le tampon GPU.
+		uint32_t m_offset{ 0u };
 		//!\~english	The bindings per program.
 		//!\~french		Les bindings par programme.
 		UniformBufferBindingMap m_bindings;

@@ -93,4 +93,19 @@ namespace castor3d
 
 		return result;
 	}
+
+	GpuBufferOffset RenderSystem::getBuffer( BufferType type
+		, uint32_t size
+		, BufferAccessType accessType
+		, BufferAccessNature accessNature )
+	{
+		GpuBufferOffset result;
+		result.buffer = doCreateBuffer( type );
+		result.buffer->create();
+		result.buffer->initialiseStorage( size
+			, accessType
+			, accessNature );
+		result.offset = 0u;
+		return result;
+	}
 }

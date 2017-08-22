@@ -457,52 +457,6 @@ namespace GlRender
 			, static_cast< GlShaderProgram const & >( p_program ) );
 	}
 
-	GpuBufferUPtr GlRenderSystem::createBuffer( BufferType p_type )
-	{
-		GpuBufferUPtr result;
-
-		switch ( p_type )
-		{
-		case BufferType::eArray:
-			result = std::make_unique< GlBuffer >( *this
-				, getOpenGl()
-				, GlBufferTarget::eArray );
-			break;
-
-		case BufferType::eElementArray:
-			result = std::make_unique< GlBuffer >( *this
-				, getOpenGl()
-				, GlBufferTarget::eElementArray );
-			break;
-
-		case BufferType::eUniform:
-			result = std::make_unique< GlBuffer >( *this
-				, getOpenGl()
-				, GlBufferTarget::eUniform );
-			break;
-
-		case BufferType::eAtomicCounter:
-			if ( getOpenGl().hasSsbo() )
-			{
-				result = std::make_unique< GlBuffer >( *this
-					, getOpenGl()
-					, GlBufferTarget::eAtomicCounter );
-			}
-			break;
-
-		case BufferType::eShaderStorage:
-			if ( getOpenGl().hasSsbo() )
-			{
-				result = std::make_unique< GlBuffer >( *this
-					, getOpenGl()
-					, GlBufferTarget::eShaderStorage );
-			}
-			break;
-		}
-
-		return result;
-	}
-
 	TransformFeedbackUPtr GlRenderSystem::createTransformFeedback( BufferDeclaration const & p_computed
 		, Topology p_topology
 		, ShaderProgram & p_program )
@@ -610,6 +564,52 @@ namespace GlRender
 		m_extensionsInit = false;
 		m_initialised = false;
 		getOpenGl().cleanup();
+	}
+
+	GpuBufferUPtr GlRenderSystem::doCreateBuffer( BufferType p_type )
+	{
+		GpuBufferUPtr result;
+
+		switch ( p_type )
+		{
+		case BufferType::eArray:
+			result = std::make_unique< GlBuffer >( *this
+				, getOpenGl()
+				, GlBufferTarget::eArray );
+			break;
+
+		case BufferType::eElementArray:
+			result = std::make_unique< GlBuffer >( *this
+				, getOpenGl()
+				, GlBufferTarget::eElementArray );
+			break;
+
+		case BufferType::eUniform:
+			result = std::make_unique< GlBuffer >( *this
+				, getOpenGl()
+				, GlBufferTarget::eUniform );
+			break;
+
+		case BufferType::eAtomicCounter:
+			if ( getOpenGl().hasSsbo() )
+			{
+				result = std::make_unique< GlBuffer >( *this
+					, getOpenGl()
+					, GlBufferTarget::eAtomicCounter );
+			}
+			break;
+
+		case BufferType::eShaderStorage:
+			if ( getOpenGl().hasSsbo() )
+			{
+				result = std::make_unique< GlBuffer >( *this
+					, getOpenGl()
+					, GlBufferTarget::eShaderStorage );
+			}
+			break;
+		}
+
+		return result;
 	}
 
 #if C3D_TRACE_OBJECTS

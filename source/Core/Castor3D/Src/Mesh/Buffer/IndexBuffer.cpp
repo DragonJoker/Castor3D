@@ -1,4 +1,4 @@
-#include "IndexBuffer.hpp"
+﻿#include "IndexBuffer.hpp"
 
 #include "Engine.hpp"
 
@@ -15,18 +15,24 @@ namespace castor3d
 	{
 	}
 
-	bool IndexBuffer::initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool IndexBuffer::initialise( BufferAccessType type
+		, BufferAccessNature nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = getEngine()->getRenderSystem()->createBuffer( BufferType::eElementArray );
+			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eElementArray
+				, getSize() * sizeof( uint32_t )
+				, type
+				, nature );
+			m_gpuBuffer = std::move( buffer.buffer );
+			m_offset = buffer.offset;
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			result = doInitialise( p_type, p_nature );
+			upload();
 		}
 
 		return result;

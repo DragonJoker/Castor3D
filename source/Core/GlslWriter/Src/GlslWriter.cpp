@@ -1,4 +1,4 @@
-#include "GlslWriter.hpp"
+﻿#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
 
@@ -78,7 +78,7 @@ namespace glsl
 
 	void GlslWriter::writeAssign( Type const & p_lhs, unsigned int const & p_rhs )
 	{
-		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( "u;" ) << std::endl;
 	}
 
 	void GlslWriter::writeAssign( Type const & p_lhs, float const & p_rhs )

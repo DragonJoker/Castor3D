@@ -1,4 +1,4 @@
-#include "TestRenderSystem.hpp"
+﻿#include "TestRenderSystem.hpp"
 
 #include "FrameBuffer/TestBackBuffers.hpp"
 #include "FrameBuffer/TestFrameBuffer.hpp"
@@ -10,11 +10,9 @@
 #include "Render/TestContext.hpp"
 #include "Render/TestRenderPipeline.hpp"
 #include "Render/TestViewport.hpp"
-#include "Shader/TestAtomicCounterBuffer.hpp"
 #include "Shader/TestUniformBufferBinding.hpp"
 #include "Shader/TestShaderObject.hpp"
 #include "Shader/TestShaderProgram.hpp"
-#include "Shader/TestShaderStorageBuffer.hpp"
 #include "Texture/TestSampler.hpp"
 #include "Texture/TestTextureStorage.hpp"
 #include "Texture/TestTexture.hpp"
@@ -94,11 +92,6 @@ namespace TestRender
 		return std::make_unique< TestTransformFeedback >( *this, p_computed, p_topology, p_program );
 	}
 
-	GpuBufferUPtr TestRenderSystem::createBuffer( BufferType p_type )
-	{
-		return std::make_unique< TestBuffer >( *this, p_type );
-	}
-
 	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess );
@@ -145,5 +138,10 @@ namespace TestRender
 
 	void TestRenderSystem::doCleanup()
 	{
+	}
+
+	GpuBufferUPtr TestRenderSystem::doCreateBuffer( BufferType p_type )
+	{
+		return std::make_unique< TestBuffer >( *this, p_type );
 	}
 }

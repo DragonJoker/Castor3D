@@ -1,4 +1,4 @@
-#include "VertexBuffer.hpp"
+﻿#include "VertexBuffer.hpp"
 
 #include "Engine.hpp"
 
@@ -6,9 +6,10 @@ using namespace castor;
 
 namespace castor3d
 {
-	VertexBuffer::VertexBuffer( Engine & engine, BufferDeclaration const & p_declaration )
+	VertexBuffer::VertexBuffer( Engine & engine
+		, BufferDeclaration const & declaration )
 		: CpuBuffer< uint8_t >( engine )
-		, m_bufferDeclaration( p_declaration )
+		, m_bufferDeclaration( declaration )
 	{
 	}
 
@@ -16,18 +17,24 @@ namespace castor3d
 	{
 	}
 
-	bool VertexBuffer::initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool VertexBuffer::initialise( BufferAccessType type
+		, BufferAccessNature nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = getEngine()->getRenderSystem()->createBuffer( BufferType::eArray );
+			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eArray
+				, getSize()
+				, type
+				, nature );
+			m_gpuBuffer = std::move( buffer.buffer );
+			m_offset = buffer.offset;
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			result = doInitialise( p_type, p_nature );
+			upload();
 		}
 
 		return result;
