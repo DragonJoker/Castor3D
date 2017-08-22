@@ -70,7 +70,9 @@ namespace castor3d
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		C3D_API virtual Type interpolate( Type const & p_src, Type const & p_dst, real p_percent )const = 0;
+		C3D_API virtual Type interpolate( Type const & p_src
+			, Type const & p_dst
+			, real p_percent )const = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -122,7 +124,9 @@ namespace castor3d
 		 *\brief		Fonction d'interpolation.
 		 *\param[in]	p_src		Le départ.
 		 */
-		inline Type interpolate( Type const & p_src, Type const &, real )const
+		inline Type interpolate( Type const & p_src
+			, Type const &
+			, real )const override
 		{
 			return p_src;
 		}
@@ -171,7 +175,9 @@ namespace castor3d
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline Type interpolate( Type const & p_src, Type const & p_dst, real p_percent )const
+		inline Type interpolate( Type const & p_src
+			, Type const & p_dst
+			, real p_percent )const override
 		{
 			Type result;
 
@@ -235,7 +241,9 @@ namespace castor3d
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline castor::Quaternion interpolate( castor::Quaternion const & p_src, castor::Quaternion const & p_dst, real p_percent )const
+		inline castor::Quaternion interpolate( castor::Quaternion const & p_src
+			, castor::Quaternion const & p_dst
+			, real p_percent )const override
 		{
 			castor::Quaternion result;
 

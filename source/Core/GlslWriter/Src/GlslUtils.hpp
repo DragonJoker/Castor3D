@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -69,8 +69,7 @@ namespace glsl
 			, Vec3 const & worldEye
 			, SamplerCube const & irradiance
 			, SamplerCube const & prefiltered
-			, Sampler2D const & brdf
-			, Int const & invertY );
+			, Sampler2D const & brdf );
 		GlslWriter_API Vec3 computeSpecularIBL( Vec3 const & normal
 			, Vec3 const & position
 			, Vec3 const & diffuse
@@ -79,8 +78,7 @@ namespace glsl
 			, Vec3 const & worldEye
 			, SamplerCube const & irradiance
 			, SamplerCube const & prefiltered
-			, Sampler2D const & brdf
-			, Int const & invertY );
+			, Sampler2D const & brdf );
 	public:
 		GlslWriter_API static uint32_t const MaxIblReflectionLod;
 
@@ -95,8 +93,8 @@ namespace glsl
 		Function< Vec3, InVec2, InVec3, InVec3 > m_getMapNormal;
 		Function< Float, InFloat, InMat4 > m_lineariseDepth;
 		Function< Vec3, InFloat, InVec3, InFloat > m_fresnelSchlick;
-		Function< Vec3, InVec3, InVec3, InVec3, InFloat, InFloat, InVec3, InParam< SamplerCube >, InParam< SamplerCube >, InParam< Sampler2D >, InInt > m_computeMetallicIBL;
-		Function< Vec3, InVec3, InVec3, InVec3, InVec3, InFloat, InVec3, InParam< SamplerCube >, InParam< SamplerCube >, InParam< Sampler2D >, InInt > m_computeSpecularIBL;
+		Function< Vec3, InVec3, InVec3, InVec3, InFloat, InFloat, InVec3, InParam< SamplerCube >, InParam< SamplerCube >, InParam< Sampler2D > > m_computeMetallicIBL;
+		Function< Vec3, InVec3, InVec3, InVec3, InVec3, InFloat, InVec3, InParam< SamplerCube >, InParam< SamplerCube >, InParam< Sampler2D > > m_computeSpecularIBL;
 	};
 }
 

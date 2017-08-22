@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -108,7 +108,11 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 1u;
+		static uint32_t constexpr BindingPoint = 1u;
+		C3D_API static castor::String const BufferMatrix;
+		C3D_API static castor::String const MtxProjection;
+		C3D_API static castor::String const MtxView;
+		C3D_API static castor::String const MtxInvProjection;
 
 	private:
 		//!\~english	The UBO.
@@ -127,10 +131,10 @@ namespace castor3d
 }
 
 #define UBO_MATRIX( Writer )\
-	glsl::Ubo matrices{ writer, castor3d::ShaderProgram::BufferMatrix, castor3d::MatrixUbo::BindingPoint };\
-	auto c3d_mtxProjection = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxProjection );\
-	auto c3d_mtxView = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxView );\
-	auto c3d_mtxInvProjection = matrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxInvProjection );\
+	glsl::Ubo matrices{ writer, castor3d::MatrixUbo::BufferMatrix, castor3d::MatrixUbo::BindingPoint };\
+	auto c3d_mtxProjection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::MtxProjection );\
+	auto c3d_mtxView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::MtxView );\
+	auto c3d_mtxInvProjection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::MtxInvProjection );\
 	matrices.end()
 
 #endif

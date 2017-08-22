@@ -1,4 +1,4 @@
-﻿#include "CtrlListBox.hpp"
+#include "CtrlListBox.hpp"
 
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
@@ -314,7 +314,7 @@ namespace CastorGui
 
 		if ( !material )
 		{
-			Colour colour = getBackgroundMaterial()->getTypedPass< MaterialType::eLegacy >( 0u )->getDiffuse();
+			Colour colour = getMaterialColour( *getBackgroundMaterial()->getPass( 0u ) );
 			colour.red() = std::min( 1.0f, float( colour.red() ) / 2.0f );
 			colour.green() = std::min( 1.0f, float( colour.green() ) / 2.0f );
 			colour.blue() = std::min( 1.0f, float( colour.blue() ) / 2.0f );
@@ -369,8 +369,7 @@ namespace CastorGui
 	void ListBoxCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
 	{
 		int i = 0;
-		auto pass = p_material->getTypedPass< MaterialType::eLegacy >( 0u );
-		Colour colour = pass->getDiffuse();
+		Colour colour = getMaterialColour( *p_material->getPass( 0u ) );
 		setItemBackgroundMaterial( p_material );
 		colour.red() = std::min( 1.0f, colour.red() / 2.0f );
 		colour.green() = std::min( 1.0f, colour.green() / 2.0f );
@@ -379,7 +378,7 @@ namespace CastorGui
 		setHighlightedItemBackgroundMaterial( CreateMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
 
 		colour.alpha() = 0.0;
-		pass->setDiffuse( colour );
+		setMaterialColour( *p_material->getPass( 0u ), colour );
 
 		for ( auto item : m_items )
 		{

@@ -52,8 +52,8 @@ namespace castortd
 		void OnPaint( wxPaintEvent & p_event );
 		void OnsetFocus( wxFocusEvent & p_event );
 		void OnKillFocus( wxFocusEvent & p_event );
-		void onKeydown( wxKeyEvent & p_event );
-		void OnKeyUp( wxKeyEvent & p_event );
+		void onKeyDown( wxKeyEvent & p_event );
+		void onKeyUp( wxKeyEvent & p_event );
 		void OnMouseLdown( wxMouseEvent & p_event );
 		void OnMouseLUp( wxMouseEvent & p_event );
 		void OnMouseRUp( wxMouseEvent & p_event );

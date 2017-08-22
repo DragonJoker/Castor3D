@@ -3,6 +3,7 @@
 #include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Engine.hpp>
 #include <Animation/Animation.hpp>
+#include <Event/Frame/FrameListener.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
@@ -226,7 +227,7 @@ namespace castortd
 #if !defined( NDEBUG )
 			m_elapsed = Milliseconds{ 40 };
 #else
-			m_elapsed = std::chrono::duration_cast< Milliseconds >( Clock::now() - m_saved );
+			m_elapsed += std::chrono::duration_cast< Milliseconds >( Clock::now() - m_saved );
 #endif
 			doUpdateBullets();
 			doUpdateTowers();

@@ -40,9 +40,6 @@ namespace castor
 	template< typename T >
 	class Line2D
 	{
-	private:
-		typedef castor::Policy< T > policy;
-
 	public:
 		/**
 		 *\~english
@@ -56,8 +53,8 @@ namespace castor
 		 */
 		Line2D( T xA, T yA, T xB, T yB )
 		{
-			policy::assign( a, ( yA - yB ) / ( xA - xB ) );
-			policy::assign( b, yB - a * xB );
+			a = ( yA - yB ) / ( xA - xB );
+			b = yB - a * xB;
 		}
 		/**
 		 *\~english
@@ -84,8 +81,8 @@ namespace castor
 			:	a( std::move( p_line.a ) )
 			,	b( std::move( p_line.b ) )
 		{
-			p_line.a = policy::zero();
-			p_line.b = policy::zero();
+			p_line.a = T{};
+			p_line.b = T{};
 		}
 		/**
 		 *\~english
@@ -119,8 +116,8 @@ namespace castor
 			{
 				a = std::move( p_line.a );
 				b = std::move( p_line.b );
-				p_line.a = policy::zero();
-				p_line.b = policy::zero();
+				p_line.a = T{};
+				p_line.b = T{};
 			}
 
 			return * this;
@@ -141,7 +138,7 @@ namespace castor
 		{
 			bool result = false;
 
-			if ( policy::equals( a, p_line.a ) )
+			if ( a == p_line.a )
 			{
 				x = ( p_line.b - b ) / ( a - p_line.a );
 				y = a * x + b;

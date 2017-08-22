@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -140,7 +140,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
 		 */
-		void doPreparePipeline( ShaderProgram & program
+		virtual void doPreparePipeline( ShaderProgram & program
 			, PipelineFlags const & flags );
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline

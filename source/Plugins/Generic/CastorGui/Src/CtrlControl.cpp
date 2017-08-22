@@ -34,7 +34,6 @@ namespace CastorGui
 		, m_position( p_position )
 		, m_size( p_size )
 		, m_style( p_style )
-		, m_visible( p_visible )
 		, m_borders( 0, 0, 0, 0 )
 		, m_cursor( MouseCursor::eHand )
 		, m_parent( p_parent )
@@ -53,7 +52,7 @@ namespace CastorGui
 		overlay->setPixelSize( getSize() );
 		BorderPanelOverlaySPtr panel = overlay->getBorderPanelOverlay();
 		panel->setBorderPosition( BorderPosition::eInternal );
-		panel->setVisible( m_visible );
+		panel->setVisible( p_visible );
 		m_background = panel;
 	}
 
@@ -171,21 +170,18 @@ namespace CastorGui
 
 	void Control::setVisible( bool p_value )
 	{
-		m_visible = p_value;
 		BorderPanelOverlaySPtr panel = getBackground();
-
-		if ( panel )
-		{
-			panel->setVisible( m_visible );
-			panel.reset();
-		}
-
-		doSetVisible( m_visible );
+		REQUIRE( panel );
+		panel->setVisible( p_value );
+		panel.reset();
+		doSetVisible( p_value );
 	}
 
 	bool Control::isVisible()const
 	{
-		bool visible = m_visible;
+		BorderPanelOverlaySPtr panel = getBackground();
+		REQUIRE( panel );
+		bool visible = panel->isVisible();
 		ControlRPtr parent = getParent();
 
 		if ( visible && parent )
@@ -221,5 +217,12 @@ namespace CastorGui
 	{
 		m_style &= ~p_style;
 		doUpdateStyle();
+	}
+
+	bool Control::doIsVisible()const
+	{
+		auto panel = getBackground();
+		REQUIRE( panel );
+		return panel->isVisible();
 	}
 }

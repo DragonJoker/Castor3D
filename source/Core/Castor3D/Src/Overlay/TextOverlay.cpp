@@ -475,14 +475,14 @@ namespace castor3d
 
 		for ( auto const & character : p_line.m_characters )
 		{
-			auto bottomBearing = std::max( 0.0, double( character.m_glyph.getSize().getHeight() - character.m_glyph.getBearing().y() ) );
+			auto bottomBearing = std::max( 0.0, double( character.m_glyph.getSize().getHeight() ) - character.m_glyph.getBearing().y() );
 			p_line.m_height = std::max( p_line.m_height, character.m_size[1] + bottomBearing );
 			maxBottomBearing = std::max( maxBottomBearing, bottomBearing );
 		}
 
 		for ( auto & character : p_line.m_characters )
 		{
-			character.m_position[1] = std::max( 0.0, double( maxBottomBearing + character.m_glyph.getBearing().y() ) );
+			character.m_position[1] = std::max( 0.0, maxBottomBearing + character.m_glyph.getBearing().y() );
 		}
 
 		p_line.m_width = p_left;

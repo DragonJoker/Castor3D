@@ -54,13 +54,13 @@ namespace TestRender
 		 */
 		virtual ~TestFrameBuffer();
 		/**
-		 *\copydoc		castor3d::FrameBuffer::create
+		 *\copydoc		castor3d::FrameBuffer::initialise
 		 */
-		bool create()override;
+		bool initialise()override;
 		/**
-		 *\copydoc		castor3d::FrameBuffer::Destroy
+		 *\copydoc		castor3d::FrameBuffer::cleanup
 		 */
-		void destroy()override;
+		void cleanup()override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::setDrawBuffers
 		 */

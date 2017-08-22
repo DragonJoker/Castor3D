@@ -61,94 +61,57 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the internal buffer, in RAM memory.
-		 *\param[in]	p_size		The buffer dimensions.
-		 *\param[in]	p_format	The buffer pixel format.
+		 *\param[in]	size	The buffer dimensions.
+		 *\param[in]	format	The buffer pixel format.
 		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Initialise le tampon interne, en mémoire RAM.
-		 *\param[in]	p_size		Les dimensions du tampon.
-		 *\param[in]	p_format	Le format des pixels du tampon.
+		 *\param[in]	size	Les dimensions du tampon.
+		 *\param[in]	format	Le format des pixels du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( castor::Size const & p_size, castor::PixelFormat p_format );
+		C3D_API bool initialise( castor::Size const & size, castor::PixelFormat format );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
-		 *\param[in]	p_buffer	The frame buffer to bind.
-		 *\param[in]	p_target	The frame buffer binding target.
+		 *\param[in]	buffer	The frame buffer to bind.
+		 *\param[in]	target	The frame buffer binding target.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 *\param[in]	p_buffer	Le tampon d'image à activer.
-		 *\param[in]	p_target	La cible d'activation du tampon d'image.
+		 *\param[in]	buffer	Le tampon d'image à activer.
+		 *\param[in]	target	La cible d'activation du tampon d'image.
 		 */
-		C3D_API virtual void bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const = 0;
+		C3D_API virtual void bind( WindowBuffer buffer, FrameBufferTarget target )const = 0;
 		/**
-		 *\~english
-		 *\brief		Creates an attachment to a render buffer
-		 *\param[in]	p_renderBuffer	The render buffer
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à un tampon de rendu
-		 *\param[in]	p_renderBuffer	Le tampon de rendu
-		 *\return		L'attache créée
+		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr p_renderBuffer )override
+		C3D_API RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer )override
 		{
 			return nullptr;
 		}
 		/**
-		 *\~english
-		 *\brief		Creates an attachment to a texture
-		 *\param[in]	p_texture	The texture
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à une texture
-		 *\param[in]	p_texture	La texture
-		 *\return		L'attache créée
+		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr p_texture )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )override
 		{
 			return nullptr;
 		}
 		/**
-		 *\~english
-		 *\brief		Creates an attachment to a cube texture's face.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_face		The face.
-		 *\return		The created attachment.
-		 *\~french
-		 *\brief		Crée une attache à une face d'une texture cube.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_face		La face.
-		 *\return		L'attache créée.
+		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face )override
 		{
 			return nullptr;
 		}
 		/**
-		 *\~english
-		 *\brief		Creates an attachment to a cube texture's face.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_face		The face.
-		 *\return		The created attachment.
-		 *\~french
-		 *\brief		Crée une attache à une face d'une texture cube.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_face		La face.
-		 *\return		L'attache créée.
+		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face, uint32_t mipLevel )override
 		{
 			return nullptr;
 		}
 		/**
-		 *\~english
-		 *\brief		Checks if the FBO is complete
-		 *\return		\p false if the buffer is in error if there is an attachment missing
-		 *\~french
-		 *\brief		Vérifie si le FBO est complet
-		 *\return		\p false si le tampon est en erreur ou s'il manque une attache.
+		 *\copydoc		castor3d::FrameBuffer::doBind
 		 */
 		C3D_API virtual bool isComplete()const
 		{
@@ -163,7 +126,6 @@ namespace castor3d
 		using FrameBuffer::setDrawBuffer;
 		using FrameBuffer::attach;
 		using FrameBuffer::detachAll;
-		using FrameBuffer::create;
 		using FrameBuffer::setReadBuffer;
 		using FrameBuffer::createColourRenderBuffer;
 		using FrameBuffer::createDepthStencilRenderBuffer;

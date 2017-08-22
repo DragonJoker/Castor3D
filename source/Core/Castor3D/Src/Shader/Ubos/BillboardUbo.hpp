@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -105,7 +105,16 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 9u;
+		C3D_API static constexpr uint32_t BindingPoint = 9u;
+		//!\~english	Name of the billboards frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de billboards.
+		C3D_API static castor::String const BufferBillboard;
+		//!\~english	Name of the billboard dimensions frame variable.
+		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
+		C3D_API static castor::String const Dimensions;
+		//!\~english	Name of the window dimensions frame variable.
+		//!\~french		Nom de la frame variable contenant les dimensions de la fenêtre.
+		C3D_API static castor::String const WindowSize;
 
 	private:
 		//!\~english	The UBO.
@@ -121,9 +130,9 @@ namespace castor3d
 }
 
 #define UBO_BILLBOARD( Writer )\
-	glsl::Ubo billboard{ writer, castor3d::ShaderProgram::BufferBillboards, castor3d::BillboardUbo::BindingPoint };\
-	auto c3d_v2iDimensions = billboard.declMember< IVec2 >( castor3d::ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = billboard.declMember< IVec2 >( castor3d::ShaderProgram::WindowSize );\
+	glsl::Ubo billboard{ writer, castor3d::BillboardUbo::BufferBillboard, castor3d::BillboardUbo::BindingPoint };\
+	auto c3d_dimensions = billboard.declMember< IVec2 >( castor3d::BillboardUbo::Dimensions );\
+	auto c3d_windowSize = billboard.declMember< IVec2 >( castor3d::BillboardUbo::WindowSize );\
 	billboard.end()
 
 #endif

@@ -1,4 +1,4 @@
-#include "ShadowMap.hpp"
+﻿#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -39,13 +39,8 @@ namespace castor3d
 		{
 			m_shadowMap.initialise();
 			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
-			result = m_frameBuffer->create();
+			result = m_frameBuffer->initialise();
 			auto size = m_shadowMap.getTexture()->getDimensions();
-
-			if ( result )
-			{
-				result = m_frameBuffer->initialise( size );
-			}
 
 			if ( result )
 			{
@@ -78,7 +73,6 @@ namespace castor3d
 			doCleanup();
 
 			m_frameBuffer->cleanup();
-			m_frameBuffer->destroy();
 			m_frameBuffer.reset();
 
 			m_shadowMap.cleanup();
@@ -147,17 +141,27 @@ namespace castor3d
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
 		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer );
 		UBO_MODEL_MATRIX( writer );
+		UBO_MODEL( writer );
 		SkinningUbo::declare( writer, programFlags );
 		UBO_MORPHING( writer, programFlags );
 
@@ -165,6 +169,7 @@ namespace castor3d
 		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
 		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		std::function< void() > main = [&]()
@@ -186,11 +191,20 @@ namespace castor3d
 				mtxModel = c3d_mtxModel;
 			}
 
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				vtx_material = material;
+			}
+			else
+			{
+				vtx_material = c3d_materialIndex;
+			}
+
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_fTime );
-				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
-				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
 			vtx_texture = v3Texture;
@@ -215,7 +229,7 @@ namespace castor3d
 		, ComparisonFunc alphaFunc
 		, glsl::Float const & alpha
 		, glsl::Int const & material
-		, shader::Materials const & materials )
+		, shader::Materials const & materials )const
 	{
 		using namespace glsl;
 

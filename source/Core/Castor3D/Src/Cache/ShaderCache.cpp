@@ -358,7 +358,7 @@ namespace castor3d
 				writer.implementFunction< void >( cuT( "main" ), [&]()
 				{
 					auto bbcenter = writer.declLocale( cuT( "bbcenter" ), writer.paren( c3d_mtxModel * vec4( center, 1.0 ) ).xyz() );
-					auto toCamera = writer.declLocale( cuT( "toCamera" ), c3d_v3CameraPosition - bbcenter );
+					auto toCamera = writer.declLocale( cuT( "toCamera" ), c3d_cameraPosition - bbcenter );
 					toCamera.y() = 0.0_f;
 					toCamera = normalize( toCamera );
 					auto right = writer.declLocale( cuT( "right" ), vec3( c3d_mtxView[0][0], c3d_mtxView[1][0], c3d_mtxView[2][0] ) );
@@ -375,13 +375,13 @@ namespace castor3d
 					vtx_tangent = up;
 					vtx_bitangent = right;
 
-					auto width = writer.declLocale( cuT( "width" ), c3d_v2iDimensions.x() );
-					auto height = writer.declLocale( cuT( "height" ), c3d_v2iDimensions.y() );
+					auto width = writer.declLocale( cuT( "width" ), c3d_dimensions.x() );
+					auto height = writer.declLocale( cuT( "height" ), c3d_dimensions.y() );
 
 					if ( checkFlag( programFlags, ProgramFlag::eFixedSize ) )
 					{
-						width = c3d_v2iDimensions.x() / c3d_v2iWindowSize.x();
-						height = c3d_v2iDimensions.y() / c3d_v2iWindowSize.y();
+						width = c3d_dimensions.x() / c3d_windowSize.x();
+						height = c3d_dimensions.y() / c3d_windowSize.y();
 					}
 
 					vtx_position = bbcenter

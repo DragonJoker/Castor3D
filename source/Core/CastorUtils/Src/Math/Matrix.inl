@@ -476,7 +476,7 @@ namespace castor
 		{
 			for ( uint32_t j = 0; j < Rows && result; j++ )
 			{
-				result = castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
+				result = p_mtxA[i][j] == p_mtxB[i][j];
 			}
 		}
 

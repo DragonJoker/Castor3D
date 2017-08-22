@@ -109,15 +109,15 @@ namespace glsl
 			, [&]( Float const & depth
 				, Mat4 const & invProj )
 			{
-				auto c3d_fCameraNearPlane = m_writer.getBuiltin< Float >( cuT( "c3d_fCameraNearPlane" ) );
-				auto c3d_fCameraFarPlane = m_writer.getBuiltin< Float >( cuT( "c3d_fCameraFarPlane" ) );
+				auto c3d_cameraNearPlane = m_writer.getBuiltin< Float >( cuT( "c3d_cameraNearPlane" ) );
+				auto c3d_cameraFarPlane = m_writer.getBuiltin< Float >( cuT( "c3d_cameraFarPlane" ) );
 				auto z = m_writer.declLocale( cuT( "z" )
 					, depth *2.0_f - 1.0_f );
 				auto unprojected = m_writer.declLocale( cuT( "unprojected" )
 					, invProj * vec4( 0.0_f, 0.0_f, z, 1.0_f ) );
 				z = unprojected.z() / unprojected.w();
-				m_writer.returnStmt( m_writer.paren( z - c3d_fCameraNearPlane )
-					/ m_writer.paren( c3d_fCameraFarPlane - c3d_fCameraNearPlane ) );
+				m_writer.returnStmt( m_writer.paren( z - c3d_cameraNearPlane )
+					/ m_writer.paren( c3d_cameraFarPlane - c3d_cameraNearPlane ) );
 
 			}
 			, InFloat{ &m_writer, cuT( "depth" ) }
@@ -184,8 +184,7 @@ namespace glsl
 				, Vec3 const & worldEye
 				, SamplerCube const & irradianceMap
 				, SamplerCube const & prefilteredEnvMap
-				, Sampler2D const & brdfMap
-				, Int const & invertY )
+				, Sampler2D const & brdfMap )
 			{
 				auto V = m_writer.declLocale( cuT( "V" )
 					, normalize( worldEye - position ) );
@@ -207,7 +206,7 @@ namespace glsl
 
 				auto R = m_writer.declLocale( cuT( "R" )
 					, reflect( -V, normal ) );
-				R.y() = m_writer.ternary( invertY != 0_i, R.y(), -R.y() );
+				R.y() = -R.y();
 				auto prefilteredColor = m_writer.declLocale( cuT( "prefilteredColor" )
 					, texture( prefilteredEnvMap, R, roughness * MaxIblReflectionLod ).rgb() );
 				auto envBRDF = m_writer.declLocale( cuT( "envBRDF" )
@@ -225,8 +224,7 @@ namespace glsl
 			, InVec3{ &m_writer, cuT( "worldEye" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "irradianceMap" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "prefilteredEnvMap" ) }
-			, InParam< Sampler2D >{ &m_writer, cuT( "brdfMap" ) }
-			, InInt{ &m_writer, cuT( "invertY" ) } );
+			, InParam< Sampler2D >{ &m_writer, cuT( "brdfMap" ) } );
 	}
 
 	void Utils::declareComputeSpecularIBL()
@@ -240,8 +238,7 @@ namespace glsl
 				, Vec3 const & worldEye
 				, SamplerCube const & irradianceMap
 				, SamplerCube const & prefilteredEnvMap
-				, Sampler2D const & brdfMap
-				, Int const & invertY )
+				, Sampler2D const & brdfMap )
 			{
 				auto roughness = m_writer.declLocale( cuT( "roughness" )
 					, 1.0_f - glossiness );
@@ -265,7 +262,7 @@ namespace glsl
 
 				auto R = m_writer.declLocale( cuT( "R" )
 					, reflect( -V, normal ) );
-				R.y() = m_writer.ternary( invertY != 0_i, R.y(), -R.y() );
+				R.y() = -R.y();
 				auto prefilteredColor = m_writer.declLocale( cuT( "prefilteredColor" )
 					, texture( prefilteredEnvMap, R, roughness * MaxIblReflectionLod ).rgb() );
 				auto envBRDF = m_writer.declLocale( cuT( "envBRDF" )
@@ -283,8 +280,7 @@ namespace glsl
 			, InVec3{ &m_writer, cuT( "worldEye" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "irradianceMap" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "prefilteredEnvMap" ) }
-			, InParam< Sampler2D >{ &m_writer, cuT( "brdfMap" ) }
-			, InInt{ &m_writer, cuT( "invertY" ) } );
+			, InParam< Sampler2D >{ &m_writer, cuT( "brdfMap" ) } );
 	}
 
 	Vec2 Utils::calcTexCoord()
@@ -353,8 +349,7 @@ namespace glsl
 		, Vec3 const & worldEye
 		, SamplerCube const & irradianceMap
 		, SamplerCube const & prefilteredEnvMap
-		, Sampler2D const & brdfMap
-		, Int const & invertY )
+		, Sampler2D const & brdfMap )
 	{
 		return m_computeMetallicIBL( normal
 			, position
@@ -364,8 +359,7 @@ namespace glsl
 			, worldEye 
 			, irradianceMap
 			, prefilteredEnvMap
-			, brdfMap
-			, invertY );
+			, brdfMap );
 	}
 
 	Vec3 Utils::computeSpecularIBL( Vec3 const & normal
@@ -376,8 +370,7 @@ namespace glsl
 		, Vec3 const & worldEye
 		, SamplerCube const & irradianceMap
 		, SamplerCube const & prefilteredEnvMap
-		, Sampler2D const & brdfMap
-		, Int const & invertY )
+		, Sampler2D const & brdfMap )
 	{
 		return m_computeSpecularIBL( normal
 			, position
@@ -387,7 +380,6 @@ namespace glsl
 			, worldEye 
 			, irradianceMap
 			, prefilteredEnvMap
-			, brdfMap
-			, invertY );
+			, brdfMap );
 	}
 }

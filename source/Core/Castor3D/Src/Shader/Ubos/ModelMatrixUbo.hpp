@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -107,6 +107,9 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t BindingPoint = 2u;
+		C3D_API static castor::String const BufferModelMatrix;
+		C3D_API static castor::String const MtxModel;
+		C3D_API static castor::String const MtxNormal;
 
 	private:
 		//!\~english	The UBO.
@@ -122,9 +125,9 @@ namespace castor3d
 }
 
 #define UBO_MODEL_MATRIX( Writer )\
-	glsl::Ubo modelMatrices{ writer, castor3d::ShaderProgram::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
-	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxModel );\
-	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::RenderPipeline::MtxNormal );\
+	glsl::Ubo modelMatrices{ writer, castor3d::ModelMatrixUbo::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
+	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxModel );\
+	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxNormal );\
 	modelMatrices.end()
 
 #endif

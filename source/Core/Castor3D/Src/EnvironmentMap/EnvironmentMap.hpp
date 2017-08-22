@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -115,17 +115,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The IBL textures.
-		 *\~english
-		 *\return		Les textures d'IBL.
-		 */
-		inline IblTextures const & getIbl()const
-		{
-			REQUIRE( m_ibl );
-			return *m_ibl;
-		}
-		/**
-		 *\~english
 		 *\return		The reflection map.
 		 *\~english
 		 *\return		La texture d'environnement.
@@ -192,9 +181,6 @@ namespace castor3d
 		//!\~english	The render pass for each cube face.
 		//!\~french		La passe de rendu pour chaque face du cube.
 		EnvironmentMapPasses m_passes;
-		//!\~english	The IBL textures.
-		//!\~french		Les textures d'IBL.
-		IblTexturesUPtr m_ibl;
 		//!\~english	The render call count (1 of 5 triggers an actual render).
 		//!\~french		Le nombre d'appels à la fonction de rendu (1 sur 5 effectue réellement un rendu).
 		uint32_t m_render = 0u;

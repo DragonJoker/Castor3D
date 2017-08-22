@@ -1,20 +1,21 @@
 ﻿#include "ShadowMapDirectional.hpp"
 
-#include <Engine.hpp>
+#include "Engine.hpp"
 
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Miscellaneous/GaussianBlur.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Light/Light.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <ShadowMap/ShadowMapPassDirectional.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureImage.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
+#include "Miscellaneous/GaussianBlur.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Light/Light.hpp"
+#include "Scene/Light/DirectionalLight.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "ShadowMap/ShadowMapPassDirectional.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureImage.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 
@@ -28,6 +29,27 @@ namespace castor3d
 {
 	namespace
 	{
+		std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
+			, ProgramFlags const & programFlags )
+		{
+			std::unique_ptr< shader::Materials > result;
+
+			if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
+			{
+				result = std::make_unique< shader::PbrMRMaterials >( writer );
+			}
+			else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+			{
+				result = std::make_unique< shader::PbrSGMaterials >( writer );
+			}
+			else
+			{
+				result = std::make_unique< shader::LegacyMaterials >( writer );
+			}
+
+			return result;
+		}
+
 		TextureUnit doInitialiseDirectional( Engine & engine, Size const & p_size )
 		{
 			auto sampler = engine.getSamplerCache().add( cuT( "ShadowMap_Directional" ) );
@@ -120,8 +142,12 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+
+		auto materials = doCreateMaterials( writer, programFlags );
+		materials->declare();
 
 		// Fragment Outputs
 		auto pxl_fragDepth( writer.declFragData< Float >( cuT( "pxl_fragDepth" ), 0 ) );
@@ -130,13 +156,13 @@ namespace castor3d
 		{
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-
-				IF( writer, alpha < 0.2_f )
-				{
-					writer.discard();
-				}
-				FI;
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				doApplyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, vtx_material
+					, *materials );
 			}
 
 			pxl_fragDepth = gl_FragCoord.z();

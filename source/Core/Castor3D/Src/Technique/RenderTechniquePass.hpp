@@ -146,6 +146,27 @@ namespace castor3d
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
 		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	alpha		The alpha value.
+		 *\param[in]	material	The material index.
+		 *\param[in]	materials	The materials.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	alpha		La valeur d'opacité.
+		 *\param[in]	material	L'indice du matériau.
+		 *\param[in]	materials	Les matériaux.
+		 */
+		C3D_API void doApplyAlphaFunc( glsl::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, glsl::Float const & alpha
+			, glsl::Int const & material
+			, shader::Materials const & materials )const;
+		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
 		C3D_API bool doInitialise( castor::Size const & size )override;

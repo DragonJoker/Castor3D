@@ -46,8 +46,6 @@ namespace castor
 		typedef __square_type __transpose;
 
 	public:
-		//!\~english Typedef on the policy	\~french Typedef sur la politique
-		typedef typename Matrix< __value_type, Count, Count >::policy policy;
 		//!\~english Typedef on the data type	\~french Typedef sur le type de données
 		typedef typename Matrix< __value_type, Count, Count >::value_type value_type;
 		//!\~english Typedef on the column type	\~french Typedef sur le type de colonne

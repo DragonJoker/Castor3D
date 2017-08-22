@@ -1,4 +1,4 @@
-#include "MorphingUbo.hpp"
+﻿#include "MorphingUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -8,11 +8,14 @@ using namespace castor;
 
 namespace castor3d
 {
+	String const MorphingUbo::BufferMorphing = cuT( "Morphing" );
+	String const MorphingUbo::Time = cuT( "c3d_time" );
+
 	MorphingUbo::MorphingUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferMorphing
+		: m_ubo{ MorphingUbo::BufferMorphing
 			, *engine.getRenderSystem()
 			, MorphingUbo::BindingPoint }
-		, m_time{ *m_ubo.createUniform< UniformType::eFloat >( ShaderProgram::Time ) }
+		, m_time{ *m_ubo.createUniform< UniformType::eFloat >( MorphingUbo::Time ) }
 	{
 	}
 

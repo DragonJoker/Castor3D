@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -96,6 +96,15 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t BindingPoint = 8u;
+		//!\~english	Name of the HDR configuration frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
+		C3D_API static castor::String const BufferHdrConfig;
+		//!\~english	Name of the exposure frame variable.
+		//!\~french		Nom de la frame variable contenant l'exposition.
+		C3D_API static castor::String const Exposure;
+		//!\~english	Name of the gamma correction frame variable.
+		//!\~french		Nom de la frame variable contenant la correction gamma.
+		C3D_API static castor::String const Gamma;
 
 	private:
 		//!\~english	The UBO.
@@ -111,9 +120,9 @@ namespace castor3d
 }
 
 #define UBO_HDR_CONFIG( Writer )\
-	Ubo hdrConfig{ writer, castor3d::ShaderProgram::BufferHdrConfig, castor3d::HdrConfigUbo::BindingPoint };\
-	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Exposure );\
-	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::ShaderProgram::Gamma );\
+	Ubo hdrConfig{ writer, castor3d::HdrConfigUbo::BufferHdrConfig, castor3d::HdrConfigUbo::BindingPoint };\
+	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Exposure );\
+	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Gamma );\
 	hdrConfig.end()
 
 #endif

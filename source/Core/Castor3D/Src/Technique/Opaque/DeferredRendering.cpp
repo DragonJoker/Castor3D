@@ -1,4 +1,4 @@
-#include "DeferredRendering.hpp"
+﻿#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -64,12 +64,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *engine.getRenderSystem();
 		m_geometryPassFrameBuffer = renderSystem.createFrameBuffer();
-		bool result = m_geometryPassFrameBuffer->create();
-
-		if ( result )
-		{
-			result = m_geometryPassFrameBuffer->initialise( m_size );
-		}
+		bool result = m_geometryPassFrameBuffer->initialise();
 
 		if ( result )
 		{
@@ -147,7 +142,6 @@ namespace castor3d
 			texture.reset();
 		}
 
-		m_geometryPassFrameBuffer->destroy();
 		m_geometryPassFrameBuffer.reset();
 		m_combinePass.reset();
 		m_reflection.reset();

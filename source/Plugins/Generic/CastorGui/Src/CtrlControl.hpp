@@ -262,10 +262,7 @@ namespace CastorGui
 		/** Retrieves the visibility status
 		 *\return		The value
 		*/
-		inline bool doIsVisible()const
-		{
-			return m_visible;
-		}
+		bool doIsVisible()const;
 
 	private:
 		/** Creates the control's overlays and sub-controls
@@ -365,8 +362,6 @@ namespace CastorGui
 		castor::Size m_size;
 		//! The borders size
 		castor::Rectangle m_borders;
-		//! Visibility status
-		bool m_visible;
 		//! The border panel overlay used as a background
 		castor3d::BorderPanelOverlayWPtr m_background;
 		//! The child controls

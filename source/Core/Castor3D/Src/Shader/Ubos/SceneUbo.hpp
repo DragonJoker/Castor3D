@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -122,6 +122,33 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t BindingPoint = 3u;
+		//!\~english	Name of the scene frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de scène.
+		C3D_API static castor::String const BufferScene;
+		//!\~english	Name of the ambient light frame variable.
+		//!\~french		Nom de la frame variable contenant la lumière ambiante.
+		C3D_API static castor::String const AmbientLight;
+		//!\~english	Name of the background colour frame variable.
+		//!\~french		Nom de la frame variable contenant la couleur de fond.
+		C3D_API static castor::String const BackgroundColour;
+		//!\~english	Name of the lights count frame variable.
+		//!\~french		Nom de la frame variable contenant le compte des lumières.
+		C3D_API static castor::String const LightsCount;
+		//!\~english	Name of the camera position frame variable.
+		//!\~french		Nom de la frame variable contenant la position de la caméra.
+		C3D_API static castor::String const CameraPos;
+		//!\~english	Name of the camera near plane frame variable.
+		//!\~french		Nom de la frame variable contenant la valeur du plan proche de la caméra.
+		C3D_API static castor::String const CameraNearPlane;
+		//!\~english	Name of the camera far plane frame variable.
+		//!\~french		Nom de la frame variable contenant la valeur du plan éloigné de la caméra.
+		C3D_API static castor::String const CameraFarPlane;
+		//!\~english	Name of the fog type frame variable.
+		//!\~french		Nom de la frame variable contenant le type de brouillard.
+		C3D_API static castor::String const FogType;
+		//!\~english	Name of the fog's density frame variable.
+		//!\~french		Nom de la frame variable contenant la densité du brouillard.
+		C3D_API static castor::String const FogDensity;
 
 	private:
 		//!\~english	The UBO.
@@ -155,15 +182,15 @@ namespace castor3d
 }
 
 #define UBO_SCENE( Writer )\
-	glsl::Ubo scene{ writer, castor3d::ShaderProgram::BufferScene, castor3d::SceneUbo::BindingPoint };\
-	auto c3d_v4AmbientLight = scene.declMember< glsl::Vec4 >( castor3d::ShaderProgram::AmbientLight );\
-	auto c3d_v4BackgroundColour = scene.declMember< glsl::Vec4 >( castor3d::ShaderProgram::BackgroundColour );\
-	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::ShaderProgram::LightsCount );\
-	auto c3d_v3CameraPosition = scene.declMember< glsl::Vec3 >( castor3d::ShaderProgram::CameraPos );\
-	auto c3d_v3CameraNearPlane = scene.declMember< glsl::Float >( castor3d::ShaderProgram::CameraNearPlane ); \
-	auto c3d_v3CameraFarPlane = scene.declMember< glsl::Float >( castor3d::ShaderProgram::CameraFarPlane );\
-	auto c3d_iFogType = scene.declMember< glsl::Int >( castor3d::ShaderProgram::FogType );\
-	auto c3d_fFogDensity = scene.declMember< glsl::Float >( castor3d::ShaderProgram::FogDensity );\
+	glsl::Ubo scene{ writer, castor3d::SceneUbo::BufferScene, castor3d::SceneUbo::BindingPoint };\
+	auto c3d_ambientLight = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::AmbientLight );\
+	auto c3d_backgroundColour = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
+	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::SceneUbo::LightsCount );\
+	auto c3d_cameraPosition = scene.declMember< glsl::Vec3 >( castor3d::SceneUbo::CameraPos );\
+	auto c3d_cameraNearPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraNearPlane ); \
+	auto c3d_cameraFarPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraFarPlane );\
+	auto c3d_fogType = scene.declMember< glsl::Int >( castor3d::SceneUbo::FogType );\
+	auto c3d_fogDensity = scene.declMember< glsl::Float >( castor3d::SceneUbo::FogDensity );\
 	scene.end()
 
 #endif

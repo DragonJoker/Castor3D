@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+﻿#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -115,31 +115,7 @@ namespace castor3d
 	const String ShaderProgram::Transform = cuT( "transform" );
 	const String ShaderProgram::Material = cuT( "material" );
 
-	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
-	const String ShaderProgram::CameraFarPlane = cuT( "c3d_fCameraFarPlane" );
-	const String ShaderProgram::CameraNearPlane = cuT( "c3d_fCameraNearPlane" );
-	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );
-	const String ShaderProgram::BackgroundColour = cuT( "c3d_v4BackgroundColour" );
-	const String ShaderProgram::FogType = cuT( "c3d_iFogType" );
-	const String ShaderProgram::FogDensity = cuT( "c3d_fFogDensity" );
-	const String ShaderProgram::LightsCount = cuT( "c3d_lightsCount" );
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
-	const String ShaderProgram::Exposure = cuT( "c3d_fExposure" );
-	const String ShaderProgram::Gamma = cuT( "c3d_fGamma" );
-	const String ShaderProgram::MatDiffuse = cuT( "c3d_v4MatDiffuse" );
-	const String ShaderProgram::MatSpecular = cuT( "c3d_v4MatSpecular" );
-	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
-	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
-	const String ShaderProgram::MatAlbedo = cuT( "c3d_v4MatAlbedo" );
-	const String ShaderProgram::MatRoughness = cuT( "c3d_fRoughness" );
-	const String ShaderProgram::MatMetallic = cuT( "c3d_fMetallic" );
-	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
-	const String ShaderProgram::MatRefractionRatio = cuT( "c3d_refractionRatio" );
-	const String ShaderProgram::Time = cuT( "c3d_fTime" );
-	const String ShaderProgram::Bones = cuT( "c3d_mtxBones" );
-	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
-	const String ShaderProgram::WindowSize = cuT( "c3d_v2iWindowSize" );
-	const String ShaderProgram::OvPosition = cuT( "c3d_v2iPosition" );
 	const String ShaderProgram::MapDiffuse = cuT ("c3d_mapDiffuse");
 	const String ShaderProgram::MapAlbedo = cuT( "c3d_mapAlbedo" );
 	const String ShaderProgram::MapSpecular = cuT ("c3d_mapSpecular");
@@ -155,22 +131,7 @@ namespace castor3d
 	const String ShaderProgram::MapIrradiance = cuT( "c3d_mapIrradiance" );
 	const String ShaderProgram::MapPrefiltered = cuT( "c3d_mapPrefiltered" );
 	const String ShaderProgram::MapBrdf = cuT( "c3d_mapBrdf" );
-	const String ShaderProgram::MapShadow = cuT( "c3d_mapShadow" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
-	const String ShaderProgram::ShadowReceiver = cuT( "c3d_shadowReceiver" );
-	const String ShaderProgram::MaterialIndex = cuT( "c3d_materialIndex" );
-	const String ShaderProgram::EnvironmentIndex = cuT( "c3d_envMapIndex" );
-
-	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
-	const String ShaderProgram::BufferModelMatrix = cuT( "ModelMatrices" );
-	const String ShaderProgram::BufferHdrConfig = cuT( "HdrConfig" );
-	const String ShaderProgram::BufferScene = cuT( "Scene" );
-	const String ShaderProgram::BufferPass = cuT( "Pass" );
-	const String ShaderProgram::BufferModel = cuT( "Model" );
-	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
-	const String ShaderProgram::BufferSkinning = cuT( "Skinning" );
-	const String ShaderProgram::BufferMorphing = cuT( "Morphing" );
-	const String ShaderProgram::BufferOverlay = cuT( "Overlay" );
 
 	//*************************************************************************************************
 

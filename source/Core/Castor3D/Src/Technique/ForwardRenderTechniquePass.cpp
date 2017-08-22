@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -143,11 +143,11 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_fTime );
-				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
-				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_fTime, 1.0 );
-				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_fTime, 1.0 );
-				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
+				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
+				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
 			vtx_texture = v3Texture;
@@ -173,7 +173,7 @@ namespace castor3d
 
 			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
-			vtx_tangentSpaceViewPosition = tbn * c3d_v3CameraPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
@@ -262,14 +262,14 @@ namespace castor3d
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
 			auto v3Normal = writer.declLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
-			auto v3Ambient = writer.declLocale( cuT( "v3Ambient" ), c3d_v4AmbientLight.xyz() );
+			auto v3Ambient = writer.declLocale( cuT( "v3Ambient" ), c3d_ambientLight.xyz() );
 			auto v3Diffuse = writer.declLocale( cuT( "v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
 			auto v3Specular = writer.declLocale( cuT( "v3Specular" ), vec3( 0.0_f, 0, 0 ) );
 			auto fMatShininess = writer.declLocale( cuT( "fMatShininess" ), materials.getShininess( vtx_material ) );
 			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" ), utils.removeGamma(gamma, materials.getDiffuse( vtx_material ) ) );
 			auto emissive = writer.declLocale( cuT( "emissive" ), diffuse * materials.getEmissive( vtx_material ) );
-			auto worldEye = writer.declLocale( cuT( "worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto worldEye = writer.declLocale( cuT( "worldEye" ), vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
 			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
 			auto texCoord = writer.declLocale( cuT( "texCoord" ), vtx_texture );
@@ -279,7 +279,8 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
@@ -310,7 +311,7 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
-				auto incident = writer.declLocale( cuT( "i" ), normalize( vtx_position - c3d_v3CameraPosition ) );
+				auto incident = writer.declLocale( cuT( "i" ), normalize( vtx_position - c3d_cameraPosition ) );
 				auto reflectedColour = writer.declLocale( cuT( "reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
 				auto refractedColour = writer.declLocale( cuT( "refractedColour" ), diffuse / 2.0 );
 
@@ -350,6 +351,16 @@ namespace castor3d
 				}
 
 				pxl_v4FragColor.a() = alpha;
+			}
+			else if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				doApplyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, vtx_material
+					, materials );
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
@@ -440,13 +451,13 @@ namespace castor3d
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
 			auto normal = writer.declLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
-			auto ambient = writer.declLocale( cuT( "ambient" ), c3d_v4AmbientLight.xyz() );
+			auto ambient = writer.declLocale( cuT( "ambient" ), c3d_ambientLight.xyz() );
 			auto metalness = writer.declLocale( cuT( "metallic" ), materials.getMetallic( vtx_material ) );
 			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
 			auto albedo = writer.declLocale( cuT( "albedo" ), utils.removeGamma( gamma, materials.getAlbedo( vtx_material ) ) );
 			auto roughness = writer.declLocale( cuT( "roughness" ), materials.getRoughness( vtx_material ) );
 			auto emissive = writer.declLocale( cuT( "emissive" ), albedo * materials.getEmissive( vtx_material ) );
-			auto worldEye = writer.declLocale( cuT( "worldEye" ), c3d_v3CameraPosition );
+			auto worldEye = writer.declLocale( cuT( "worldEye" ), c3d_cameraPosition );
 			auto texCoord = writer.declLocale( cuT( "texCoord" ), vtx_texture );
 			auto occlusion = writer.declLocale( cuT( "occlusion" )
 				, 1.0_f );
@@ -461,7 +472,8 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
@@ -492,11 +504,10 @@ namespace castor3d
 				, albedo
 				, metalness
 				, roughness
-				, c3d_v3CameraPosition
+				, c3d_cameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
-				, c3d_mapBrdf
-				, 0_i );
+				, c3d_mapBrdf );
 			pxl_v4FragColor.xyz() = diffuse + emissive + ambient;
 
 			if ( !m_opaque )
@@ -509,6 +520,16 @@ namespace castor3d
 				}
 
 				pxl_v4FragColor.a() = alpha;
+			}
+			else if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				doApplyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, vtx_material
+					, materials );
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
@@ -599,13 +620,13 @@ namespace castor3d
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
 			auto normal = writer.declLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
-			auto ambient = writer.declLocale( cuT( "ambient" ), c3d_v4AmbientLight.xyz() );
+			auto ambient = writer.declLocale( cuT( "ambient" ), c3d_ambientLight.xyz() );
 			auto specular = writer.declLocale( cuT( "specular" ), materials.getSpecular( vtx_material ) );
 			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" ), utils.removeGamma( gamma, materials.getDiffuse( vtx_material ) ) );
 			auto glossiness = writer.declLocale( cuT( "glossiness" ), materials.getGlossiness( vtx_material ) );
 			auto emissive = writer.declLocale( cuT( "emissive" ), diffuse * materials.getEmissive( vtx_material ) );
-			auto worldEye = writer.declLocale( cuT( "worldEye" ), c3d_v3CameraPosition );
+			auto worldEye = writer.declLocale( cuT( "worldEye" ), c3d_cameraPosition );
 			auto texCoord = writer.declLocale( cuT( "texCoord" ), vtx_texture );
 			auto occlusion = writer.declLocale( cuT( "occlusion" )
 				, 1.0_f );
@@ -620,7 +641,8 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
@@ -651,11 +673,10 @@ namespace castor3d
 				, diffuse
 				, specular
 				, glossiness
-				, c3d_v3CameraPosition
+				, c3d_cameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
-				, c3d_mapBrdf
-				, 0_i );
+				, c3d_mapBrdf );
 			pxl_v4FragColor.xyz() = light + emissive + ambient;
 
 			if ( !m_opaque )
@@ -668,6 +689,16 @@ namespace castor3d
 				}
 
 				pxl_v4FragColor.a() = alpha;
+			}
+			else if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				doApplyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, vtx_material
+					, materials );
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )

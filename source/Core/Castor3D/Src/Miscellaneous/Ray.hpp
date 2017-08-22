@@ -41,9 +41,6 @@ namespace castor3d
 	*/
 	class Ray
 	{
-	private:
-		typedef castor::Policy<real> policy;
-
 	public:
 		/**
 		 *\~english

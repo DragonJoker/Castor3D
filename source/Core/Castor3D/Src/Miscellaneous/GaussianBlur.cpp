@@ -262,8 +262,7 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto fbo = renderSystem.createFrameBuffer();
-			fbo->create();
-			fbo->initialise( size );
+			fbo->initialise();
 			return fbo;
 		}
 
@@ -343,7 +342,6 @@ namespace castor3d
 		m_fbo->detachAll();
 		m_fbo->unbind();
 		m_fbo->cleanup();
-		m_fbo->destroy();
 		m_fbo.reset();
 		m_colourAttach.reset();
 		m_colour.cleanup();

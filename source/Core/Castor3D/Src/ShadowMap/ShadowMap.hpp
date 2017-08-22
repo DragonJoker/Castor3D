@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -231,11 +231,15 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
 
+	protected:
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::doApplyAlphaFunc
+		 */
 		void doApplyAlphaFunc( glsl::GlslWriter & writer
 			, ComparisonFunc alphaFunc
 			, glsl::Float const & alpha
 			, glsl::Int const & material
-			, shader::Materials const & materials );
+			, shader::Materials const & materials )const;
 
 	protected:
 		//!\~english	The frame buffer.

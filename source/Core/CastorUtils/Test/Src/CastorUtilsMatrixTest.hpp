@@ -41,6 +41,17 @@ namespace Testing
 
 	private:
 		void doRegisterTests() override;
+		bool compare( castor::Matrix3x3f const & lhs, castor::Matrix3x3f const & rhs );
+		bool compare( castor::Matrix3x3d const & lhs, castor::Matrix3x3d const & rhs );
+		bool compare( castor::Matrix4x4f const & lhs, castor::Matrix4x4f const & rhs );
+		bool compare( castor::Matrix4x4d const & lhs, castor::Matrix4x4d const & rhs );
+
+#if defined( CASTOR_USE_GLM )
+
+		bool compare( castor::Matrix4x4f const & lhs, glm::mat4x4 const & rhs );
+		bool compare( castor::Matrix4x4d const & lhs, glm::mat4x4 const & rhs );
+
+#endif
 
 	private:
 		void MatrixInversion();

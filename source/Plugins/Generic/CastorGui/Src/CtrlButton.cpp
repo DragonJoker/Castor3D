@@ -81,7 +81,7 @@ namespace CastorGui
 		text->setHAlign( HAlign::eCenter );
 		text->setVAlign( VAlign::eCenter );
 		text->setCaption( m_caption );
-		text->setVisible( doIsVisible() );
+		text->setVisible( p_visible );
 		m_text = text;
 	}
 
@@ -333,7 +333,7 @@ namespace CastorGui
 
 	MaterialSPtr ButtonCtrl::doCreateMaterial( MaterialSPtr p_material, float p_offset )
 	{
-		Colour colour = p_material->getTypedPass< MaterialType::eLegacy >( 0u )->getDiffuse();
+		Colour colour = getMaterialColour( *p_material->getPass( 0u ) );
 		colour.red() = float( colour.red() ) + p_offset;
 		colour.green() = float( colour.green() ) + p_offset;
 		colour.blue() = float( colour.blue() ) + p_offset;

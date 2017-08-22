@@ -77,7 +77,6 @@ namespace castor
 	{
 	protected:
 		typedef T __value_type;
-		typedef castor::Policy< __value_type > __policy;
 		typedef Matrix< __value_type, Columns, Rows > __type;
 		typedef Matrix< __value_type, Rows, Columns > __transpose;
 		typedef Point< __value_type, Columns > __row;
@@ -87,9 +86,6 @@ namespace castor
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
 	public:
-		//!\~english	Typedef on the policy.
-		//!\~french		Typedef sur la politique.
-		typedef __policy policy;
 		//!\~english	Typedef on the data type.
 		//!\~french		Typedef sur le type de données.
 		typedef __value_type value_type;
@@ -394,7 +390,7 @@ namespace castor
 		 *\brief		Initialise la matrice comme une matrice de Jordan, avec la valeur donnée.
 		 *\param[in]	p_value	La valeur.
 		 */
-		void initialise( value_type const & p_value = policy::zero() );
+		void initialise( value_type const & p_value = value_type{} );
 		/**
 		 *\~english
 		 *\return		The transposed of this matrix.

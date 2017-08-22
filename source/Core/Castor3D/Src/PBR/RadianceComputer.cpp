@@ -1,4 +1,4 @@
-﻿#include "RadianceComputer.hpp"
+#include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
 
@@ -93,8 +93,7 @@ namespace castor3d
 		m_depthBuffer->initialise( m_size );
 		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
 
-		m_frameBuffer->create();
-		m_frameBuffer->initialise( m_size );
+		m_frameBuffer->initialise();
 		m_frameBuffer->bind();
 		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
 		REQUIRE( m_frameBuffer->isComplete() );
@@ -123,7 +122,6 @@ namespace castor3d
 		m_frameBuffer->detachAll();
 		m_frameBuffer->unbind();
 		m_frameBuffer->cleanup();
-		m_frameBuffer->destroy();
 		m_frameBuffer.reset();
 		m_depthAttach.reset();
 		m_depthBuffer->cleanup();

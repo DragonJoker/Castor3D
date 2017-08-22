@@ -1,4 +1,4 @@
-#include "AssimpImporter.hpp"
+﻿#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -578,6 +578,7 @@ namespace C3dAssimp
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
 			material = doProcessMaterial( scene, *aiScene.mMaterials[aiMesh.mMaterialIndex] );
+			std::clog << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( "]" ) << std::endl;
 		}
 
 		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material )

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -108,6 +108,18 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t BindingPoint = 4u;
+		//!\~english	Name of the model frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de modèle.
+		C3D_API static castor::String const BufferModel;
+		//!\~english	Name of the shadow receiver status frame variable.
+		//!\~french		Nom de la frame variable contenant le statut de réception d'ombres.
+		C3D_API static castor::String const ShadowReceiver;
+		//!\~english	Name of the material index frame variable.
+		//!\~french		Nom de la frame variable contenant l'indice du matériau.
+		C3D_API static castor::String const MaterialIndex;
+		//!\~english	Name of the material environment index frame variable.
+		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
+		C3D_API static castor::String const EnvironmentIndex;
 
 	private:
 		//!\~english	The UBO.
@@ -126,10 +138,10 @@ namespace castor3d
 }
 
 #define UBO_MODEL( Writer )\
-	glsl::Ubo model{ writer, castor3d::ShaderProgram::BufferModel, castor3d::ModelUbo::BindingPoint };\
-	auto c3d_shadowReceiver = model.declMember< glsl::Int >( castor3d::ShaderProgram::ShadowReceiver );\
-	auto c3d_materialIndex = model.declMember< glsl::Int >( castor3d::ShaderProgram::MaterialIndex );\
-	auto c3d_envMapIndex = model.declMember< glsl::Int >( castor3d::ShaderProgram::EnvironmentIndex );\
+	glsl::Ubo model{ writer, castor3d::ModelUbo::BufferModel, castor3d::ModelUbo::BindingPoint };\
+	auto c3d_shadowReceiver = model.declMember< glsl::Int >( castor3d::ModelUbo::ShadowReceiver );\
+	auto c3d_materialIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::MaterialIndex );\
+	auto c3d_envMapIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::EnvironmentIndex );\
 	model.end()
 
 #endif

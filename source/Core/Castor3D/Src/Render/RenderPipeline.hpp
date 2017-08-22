@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -244,11 +244,6 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static const castor::String MtxProjection;
-		C3D_API static const castor::String MtxModel;
-		C3D_API static const castor::String MtxView;
-		C3D_API static const castor::String MtxInvProjection;
-		C3D_API static const castor::String MtxNormal;
 		C3D_API static const castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 
 	protected:

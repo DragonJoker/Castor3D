@@ -1,4 +1,4 @@
-﻿#include "Camera.hpp"
+#include "Camera.hpp"
 
 #include "Engine.hpp"
 
@@ -13,31 +13,31 @@ using namespace castor;
 
 namespace castor3d
 {
-	Camera::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< Camera >{ p_tabs }
+	Camera::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Camera >{ tabs }
 	{
 	}
 
-	bool Camera::TextWriter::operator()( Camera const & p_camera, TextFile & p_file )
+	bool Camera::TextWriter::operator()( Camera const & camera, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Camera " ) + p_camera.getName() );
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::logInfo( m_tabs + cuT( "Writing Camera " ) + camera.getName() );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + camera.getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< Camera >::checkError( result, "Camera name" );
 
 		if ( result )
 		{
-			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_camera, p_file );
+			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( camera, file );
 		}
 
 		if ( result )
 		{
-			result = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( p_camera.getViewport(), p_file );
+			result = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( camera.getViewport(), file );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
@@ -45,29 +45,41 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, Viewport && p_viewport )
-		: MovableObject{ p_name, p_scene, MovableType::eCamera, p_node }
-		, m_viewport{ std::move( p_viewport ) }
+	Camera::Camera( String const & name
+		, Scene & scene
+		, SceneNodeSPtr node
+		, Viewport && viewport
+		, bool invertX )
+		: MovableObject{ name, scene, MovableType::eCamera, node }
+		, m_viewport{ std::move( viewport ) }
 		, m_frustum{ m_viewport }
+		, m_invertX{ invertX }
 	{
-		if ( p_scene.getEngine()->getRenderSystem()->getCurrentContext() )
+		if ( scene.getEngine()->getRenderSystem()->getCurrentContext() )
 		{
 			m_viewport.initialise();
 		}
 		else
 		{
-			p_scene.getListener().postEvent( MakeInitialiseEvent( m_viewport ) );
+			scene.getListener().postEvent( MakeInitialiseEvent( m_viewport ) );
 		}
 
-		if ( p_node )
+		if ( node )
 		{
-			m_notifyIndex = p_node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
-			onNodeChanged( *p_node );
+			m_notifyIndex = node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
+			onNodeChanged( *node );
 		}
 	}
 
-	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node )
-		: Camera{ p_name, p_scene, p_node, Viewport{ *p_scene.getEngine() } }
+	Camera::Camera( String const & name
+		, Scene & scene
+		, SceneNodeSPtr node
+		, bool invertX )
+		: Camera{ name
+			, scene
+			, node
+			, Viewport{ *scene.getEngine() }
+			, invertX }
 	{
 	}
 
@@ -113,6 +125,12 @@ namespace castor3d
 
 				// Update view matrix
 				matrix::lookAt( m_view, position, position + front, up );
+
+				if ( m_invertX )
+				{
+					matrix::scale( m_view, Point3f{ -1.0f, 1.0f, 1.0f } );
+				}
+
 				m_nodeChanged = false;
 			}
 		}
@@ -123,14 +141,14 @@ namespace castor3d
 		m_viewport.apply();
 	}
 
-	void Camera::resize( uint32_t p_width, uint32_t p_height )
+	void Camera::resize( uint32_t width, uint32_t height )
 	{
-		resize( Size( p_width, p_height ) );
+		resize( Size( width, height ) );
 	}
 
-	void Camera::resize( Size const & p_size )
+	void Camera::resize( Size const & size )
 	{
-		m_viewport.resize( p_size );
+		m_viewport.resize( size );
 	}
 
 	ViewportType Camera::getViewportType()const
@@ -148,27 +166,31 @@ namespace castor3d
 		return m_viewport.getHeight();
 	}
 
-	void Camera::setViewportType( ViewportType val )
+	void Camera::setViewportType( ViewportType value )
 	{
-		m_viewport.updateType( val );
+		m_viewport.updateType( value );
 	}
 
-	bool Camera::isVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const
+	bool Camera::isVisible( CubeBox const & box
+		, Matrix4x4r const & transformations )const
 	{
-		return m_frustum.isVisible( p_box, p_transformations );
+		return m_frustum.isVisible( box
+			, transformations );
 	}
 
-	bool Camera::isVisible( castor::SphereBox const & p_box, castor::Matrix4x4r const & p_transformations )const
+	bool Camera::isVisible( castor::SphereBox const & box
+		, castor::Matrix4x4r const & transformations )const
 	{
-		return m_frustum.isVisible( p_box, p_transformations );
+		return m_frustum.isVisible( box
+			, transformations );
 	}
 
-	bool Camera::isVisible( Point3r const & p_point )const
+	bool Camera::isVisible( Point3r const & point )const
 	{
-		return m_frustum.isVisible( p_point );
+		return m_frustum.isVisible( point );
 	}
 
-	void Camera::onNodeChanged( SceneNode const & p_node )
+	void Camera::onNodeChanged( SceneNode const & node )
 	{
 		m_nodeChanged = true;
 		onChanged( *this );

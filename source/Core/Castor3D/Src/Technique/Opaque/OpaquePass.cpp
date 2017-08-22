@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -21,69 +21,6 @@ using namespace castor3d;
 
 namespace castor3d
 {
-	namespace
-	{
-		void doApplyAlphaFunc( glsl::GlslWriter & writer
-			, ComparisonFunc alphaFunc
-			, glsl::Float const & alpha
-			, glsl::Int const & material
-			, shader::Materials const & materials )
-		{
-			using namespace glsl;
-
-			switch ( alphaFunc )
-			{
-			case ComparisonFunc::eLess:
-				IF( writer, alpha >= materials.getAlphaRef( material ) )
-				{
-					writer.discard();
-				}
-				FI;
-				break;
-
-			case ComparisonFunc::eLEqual:
-				IF( writer, alpha > materials.getAlphaRef( material ) )
-				{
-					writer.discard();
-				}
-				FI;
-				break;
-
-			case ComparisonFunc::eEqual:
-				IF( writer, alpha != materials.getAlphaRef( material ) )
-				{
-					writer.discard();
-				}
-				FI;
-				break;
-
-			case ComparisonFunc::eNEqual:
-				IF( writer, alpha == materials.getAlphaRef( material ) )
-				{
-					writer.discard();
-				}
-				FI;
-				break;
-
-			case ComparisonFunc::eGEqual:
-				IF( writer, alpha < materials.getAlphaRef( material ) )
-				{
-					writer.discard();
-				}
-				FI;
-				break;
-
-			case ComparisonFunc::eGreater:
-				IF( writer, alpha <= materials.getAlphaRef( material ) )
-				{
-					writer.discard();
-				}
-				FI;
-				break;
-			}
-		}
-	}
-
 	String const OpaquePass::Output1 = cuT( "c3d_output1" );
 	String const OpaquePass::Output2 = cuT( "c3d_output2" );
 	String const OpaquePass::Output3 = cuT( "c3d_output3" );
@@ -190,35 +127,33 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
-
-				if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-				{
-					vtx_material = material;
-				}
-				else
-				{
-					vtx_material = c3d_materialIndex;
-				}
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				mtxModel = transform;
-				vtx_material = material;
 			}
 			else
 			{
 				mtxModel = c3d_mtxModel;
+			}
+
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				vtx_material = material;
+			}
+			else
+			{
 				vtx_material = c3d_materialIndex;
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto time = writer.declLocale( cuT( "time" )
-					, 1.0_f - c3d_fTime );
-				p = vec4( p.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
-				n = vec4( n.xyz() * time + normal2.xyz() * c3d_fTime, 1.0 );
-				t = vec4( t.xyz() * time + tangent2.xyz() * c3d_fTime, 1.0 );
-				tex = tex * writer.paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+					, 1.0_f - c3d_time );
+				p = vec4( p.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				n = vec4( n.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
+				t = vec4( t.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
+				tex = tex * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
 			vtx_texture = tex;
@@ -246,7 +181,7 @@ namespace castor3d
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
-			vtx_tangentSpaceViewPosition = tbn * c3d_v3CameraPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
@@ -288,6 +223,8 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
 		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
@@ -315,16 +252,16 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto v3Normal = writer.declLocale( cuT( "v3Normal" )
+			auto normal = writer.declLocale( cuT( "normal" )
 				, normalize( vtx_normal ) );
-			auto v3Diffuse = writer.declLocale( cuT( "v3Diffuse" )
+			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, materials.getDiffuse( vtx_material ) );
-			auto v3Specular = writer.declLocale( cuT( "v3Specular" )
+			auto specular = writer.declLocale( cuT( "specular" )
 				, materials.getSpecular( vtx_material ) );
-			auto fMatShininess = writer.declLocale( cuT( "fMatShininess" )
+			auto matShininess = writer.declLocale( cuT( "matShininess" )
 				, materials.getShininess( vtx_material ) );
-			auto v3Emissive = writer.declLocale( cuT( "v3Emissive" )
-				, v3Diffuse * materials.getEmissive( vtx_material ) );
+			auto emissive = writer.declLocale( cuT( "emissive" )
+				, diffuse * materials.getEmissive( vtx_material ) );
 			auto gamma = writer.declLocale( cuT( "gamma" )
 				, materials.getGamma( vtx_material ) );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
@@ -333,21 +270,21 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" )
-					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
 			shader::legacy::computePreLightingMapContributions( writer
-				, v3Normal
-				, fMatShininess
+				, normal
+				, matShininess
 				, textureFlags
 				, programFlags
 				, sceneFlags );
 			shader::legacy::computePostLightingMapContributions( writer
-				, v3Diffuse
-				, v3Specular
-				, v3Emissive
+				, diffuse
+				, specular
+				, emissive
 				, gamma
 				, textureFlags
 				, programFlags
@@ -368,10 +305,18 @@ namespace castor3d
 				doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
 			}
 
-			out_c3dOutput1 = vec4( v3Normal, flags );
-			out_c3dOutput2 = vec4( v3Diffuse, 0.0_f );
-			out_c3dOutput3 = vec4( v3Specular, fMatShininess );
-			out_c3dOutput4 = vec4( v3Emissive, materials.getRefractionRatio( vtx_material ) );
+			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
+				, 1.0_f );
+
+			if ( checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) )
+			{
+				ambientOcclusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
+			}
+
+			out_c3dOutput1 = vec4( normal, flags );
+			out_c3dOutput2 = vec4( diffuse, matShininess );
+			out_c3dOutput3 = vec4( specular, ambientOcclusion );
+			out_c3dOutput4 = vec4( emissive, materials.getRefractionRatio( vtx_material ) );
 		} );
 
 		return writer.finalise();
@@ -465,8 +410,8 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" )
-					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
@@ -487,8 +432,8 @@ namespace castor3d
 			auto flags = writer.declLocale( cuT( "flags" ), 0.0_f );
 			encodeMaterial( writer
 				, c3d_shadowReceiver
-				, 0_i
-				, 0_i
+				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
+				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
 				, flags );
 
@@ -510,7 +455,7 @@ namespace castor3d
 
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
-			out_c3dOutput3 = vec4( matMetallic, matRoughness, ambientOcclusion, 0.0_f );
+			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, materials.getRefractionRatio( vtx_material ) );
 		} );
 
@@ -598,7 +543,8 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
@@ -619,8 +565,8 @@ namespace castor3d
 			auto flags = writer.declLocale( cuT( "flags" ), 0.0_f );
 			encodeMaterial( writer
 				, c3d_shadowReceiver
-				, 0_i
-				, 0_i
+				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
+				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
 				, flags );
 
