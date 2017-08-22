@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -33,6 +33,11 @@ namespace Testing
 		std::stringstream stream;
 		stream << p_value;
 		return stream.str();
+	}
+
+	inline std::string toString( nullptr_t const & )
+	{
+		return "nullptr";
 	}
 
 	template<>
