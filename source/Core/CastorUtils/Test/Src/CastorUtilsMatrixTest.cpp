@@ -66,6 +66,20 @@ namespace Testing
 		return Testing::compare( lhs, rhs );
 	}
 
+#if defined( CASTOR_USE_GLM )
+
+	bool CastorUtilsMatrixTest::compare( Matrix4x4f const & lhs, glm::mat4x4 const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsMatrixTest::compare( Matrix4x4d const & lhs, glm::mat4x4 const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+#endif
+
 	void CastorUtilsMatrixTest::doRegisterTests()
 	{
 		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );

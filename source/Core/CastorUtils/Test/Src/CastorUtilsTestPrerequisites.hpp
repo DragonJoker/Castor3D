@@ -94,28 +94,8 @@ namespace Testing
 		}
 	}
 
-	inline bool compare( castor::SquareMatrix< float, 4 > const & a, castor::SquareMatrix< float, 4 > const & b )
-	{
-		float epsilon = 0.001f;
-		return std::abs( a[0][0] - b[0][0] ) < epsilon
-			&& std::abs( a[0][1] - b[0][1] ) < epsilon
-			&& std::abs( a[0][2] - b[0][2] ) < epsilon
-			&& std::abs( a[0][3] - b[0][3] ) < epsilon
-			&& std::abs( a[1][0] - b[1][0] ) < epsilon
-			&& std::abs( a[1][1] - b[1][1] ) < epsilon
-			&& std::abs( a[1][2] - b[1][2] ) < epsilon
-			&& std::abs( a[1][3] - b[1][3] ) < epsilon
-			&& std::abs( a[2][0] - b[2][0] ) < epsilon
-			&& std::abs( a[2][1] - b[2][1] ) < epsilon
-			&& std::abs( a[2][2] - b[2][2] ) < epsilon
-			&& std::abs( a[2][3] - b[2][3] ) < epsilon
-			&& std::abs( a[3][0] - b[3][0] ) < epsilon
-			&& std::abs( a[3][1] - b[3][1] ) < epsilon
-			&& std::abs( a[3][2] - b[3][2] ) < epsilon
-			&& std::abs( a[3][3] - b[3][3] ) < epsilon;
-	}
-
-	inline bool compare( castor::SquareMatrix< double, 4 > const & a, castor::SquareMatrix< double, 4 > const & b )
+	template< typename T >
+	inline bool compare( castor::SquareMatrix< T, 4 > const & a, castor::SquareMatrix< T, 4 > const & b )
 	{
 		double epsilon = 0.001;
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -136,24 +116,10 @@ namespace Testing
 			&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 	}
 
-
-	inline bool compare( castor::SquareMatrix< float, 3 > const & a, castor::SquareMatrix< float, 3 > const & b )
+	template< typename T >
+	inline bool compare( castor::SquareMatrix< T, 3 > const & a, castor::SquareMatrix< T, 3 > const & b )
 	{
 		float epsilon = 0.001f;
-		return std::abs( a[0][0] - b[0][0] ) < epsilon
-			&& std::abs( a[0][1] - b[0][1] ) < epsilon
-			&& std::abs( a[0][2] - b[0][2] ) < epsilon
-			&& std::abs( a[1][0] - b[1][0] ) < epsilon
-			&& std::abs( a[1][1] - b[1][1] ) < epsilon
-			&& std::abs( a[1][2] - b[1][2] ) < epsilon
-			&& std::abs( a[2][0] - b[2][0] ) < epsilon
-			&& std::abs( a[2][1] - b[2][1] ) < epsilon
-			&& std::abs( a[2][2] - b[2][2] ) < epsilon;
-	}
-
-	inline bool compare( castor::SquareMatrix< double, 3 > const & a, castor::SquareMatrix< double, 3 > const & b )
-	{
-		double epsilon = 0.001;
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
 			&& std::abs( a[0][1] - b[0][1] ) < epsilon
 			&& std::abs( a[0][2] - b[0][2] ) < epsilon
@@ -168,7 +134,7 @@ namespace Testing
 #if defined( CASTOR_USE_GLM )
 
 	template< typename T >
-	inline bool operator==( castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
+	inline bool compare( castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
 	{
 		T epsilon = T( 0.001 );
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
