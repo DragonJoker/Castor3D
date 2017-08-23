@@ -329,7 +329,8 @@ namespace castor3d
 	void LightPass::Program::render( Size const & size
 		, Point3f const & colour
 		, uint32_t count
-		, bool first )const
+		, bool first
+		, VertexBuffer const & vbo )const
 	{
 		m_lightColour->setValue( colour );
 
@@ -342,7 +343,7 @@ namespace castor3d
 			m_blendPipeline->apply();
 		}
 
-		m_geometryBuffers->draw( count, 0 );
+		m_geometryBuffers->draw( count, 0u );
 	}
 
 	//************************************************************************************************
@@ -437,7 +438,8 @@ namespace castor3d
 		m_program->render( size
 			, colour
 			, getCount()
-			, first );
+			, first
+			, *m_vertexBuffer );
 
 		gp[size_t( DsTexture::eData4 )]->unbind();
 		gp[size_t( DsTexture::eData3 )]->unbind();

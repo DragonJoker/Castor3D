@@ -108,6 +108,9 @@ namespace castor3d
 		//!\~english	The pipeline used by the light pass.
 		//!\~french		Le pipeline utilisé par la passe lumières.
 		RenderPipelineUPtr m_pipeline;
+		//!\~english	The vertex buffer used to render the pass.
+		//!\~french		Le tampon de sommets utilisé par le rendu de la passe.
+		VertexBuffer const * m_vbo;
 	};
 }
 

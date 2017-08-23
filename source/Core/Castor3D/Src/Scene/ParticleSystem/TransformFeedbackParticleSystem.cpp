@@ -1,4 +1,4 @@
-#include "TransformFeedbackParticleSystem.hpp"
+﻿#include "TransformFeedbackParticleSystem.hpp"
 
 #include "ParticleSystem.hpp"
 #include "Particle.hpp"
@@ -113,13 +113,14 @@ namespace castor3d
 		m_emitterPosition->setValue( m_parent.getParent()->getDerivedPosition() );
 		m_ubo.update();
 		auto & gbuffers = *m_updateGeometryBuffers[m_vtx];
+		auto & vbuffer = *m_updateVertexBuffers[m_vtx];
 		auto & transform = *m_transformFeedbacks[m_tfb];
 
 		m_updatePipeline->apply();
 		m_randomTexture.bind();
 		transform.bind();
 
-		gbuffers.draw( std::max( 1u, m_transformFeedbacks[m_vtx]->getWrittenPrimitives() ), 0 );
+		gbuffers.draw( std::max( 1u, m_transformFeedbacks[m_vtx]->getWrittenPrimitives() ), 0u );
 
 		transform.unbind();
 		m_randomTexture.unbind();

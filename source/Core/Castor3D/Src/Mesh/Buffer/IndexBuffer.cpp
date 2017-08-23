@@ -24,8 +24,9 @@ namespace castor3d
 				, getSize() * sizeof( uint32_t )
 				, type
 				, nature );
-			m_gpuBuffer = std::move( buffer.buffer );
+			m_gpuBuffer = buffer.buffer;
 			m_offset = buffer.offset;
+			doInitialise( type, nature );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
@@ -40,6 +41,13 @@ namespace castor3d
 
 	void IndexBuffer::cleanup()
 	{
-		doCleanup();
+		if ( m_gpuBuffer )
+		{
+			getEngine()->getRenderSystem()->putBuffer( BufferType::eElementArray
+				, m_accessType
+				, m_accessNature
+				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
+			m_gpuBuffer.reset();
+		}
 	}
 }

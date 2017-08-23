@@ -127,7 +127,7 @@ namespace castor3d
 	 *\param[in]	p_object	L'objet à initialiser
 	 */
 	template< typename T >
-	std::unique_ptr< InitialiseEvent< T > > MakeInitialiseEvent( T & p_object )
+	std::unique_ptr< InitialiseEvent< T > > makeInitialiseEvent( T & p_object )
 	{
 		return std::make_unique< InitialiseEvent< T > >( p_object );
 	}

@@ -136,7 +136,7 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::RenderSystem::doCreateBuffer
 		 */
-		castor3d::GpuBufferUPtr doCreateBuffer( castor3d::BufferType p_type )override;
+		castor3d::GpuBufferSPtr doCreateBuffer( castor3d::BufferType p_type )override;
 
 	public:
 		C3D_Test_API static castor::String Name;

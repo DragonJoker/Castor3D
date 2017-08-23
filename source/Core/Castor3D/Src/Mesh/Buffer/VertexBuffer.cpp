@@ -26,8 +26,9 @@ namespace castor3d
 				, getSize()
 				, type
 				, nature );
-			m_gpuBuffer = std::move( buffer.buffer );
+			m_gpuBuffer = buffer.buffer;
 			m_offset = buffer.offset;
+			doInitialise( type, nature );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
@@ -42,6 +43,13 @@ namespace castor3d
 
 	void VertexBuffer::cleanup()
 	{
-		doCleanup();
+		if ( m_gpuBuffer )
+		{
+			getEngine()->getRenderSystem()->putBuffer( BufferType::eArray
+				, m_accessType
+				, m_accessNature
+				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
+			m_gpuBuffer.reset();
+		}
 	}
 }

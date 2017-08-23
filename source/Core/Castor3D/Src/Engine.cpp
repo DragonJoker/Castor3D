@@ -40,11 +40,11 @@ namespace castor3d
 		};
 		auto eventInit = [this]( auto p_element )
 		{
-			this->postEvent( MakeInitialiseEvent( *p_element ) );
+			this->postEvent( makeInitialiseEvent( *p_element ) );
 		};
 		auto eventClean = [this]( auto p_element )
 		{
-			this->postEvent( MakeCleanupEvent( *p_element ) );
+			this->postEvent( makeCleanupEvent( *p_element ) );
 		};
 		auto instantInit = [this]( auto p_element )
 		{
@@ -208,12 +208,12 @@ namespace castor3d
 
 		if ( m_lightsSampler )
 		{
-			postEvent( MakeInitialiseEvent( *m_lightsSampler ) );
+			postEvent( makeInitialiseEvent( *m_lightsSampler ) );
 		}
 
 		if ( m_defaultSampler )
 		{
-			postEvent( MakeInitialiseEvent( *m_defaultSampler ) );
+			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
 		}
 
 		if ( p_threaded )
@@ -249,15 +249,16 @@ namespace castor3d
 
 			if ( m_lightsSampler )
 			{
-				postEvent( MakeCleanupEvent( *m_lightsSampler ) );
+				postEvent( makeCleanupEvent( *m_lightsSampler ) );
 			}
 
 			if ( m_defaultSampler )
 			{
-				postEvent( MakeCleanupEvent( *m_defaultSampler ) );
+				postEvent( makeCleanupEvent( *m_defaultSampler ) );
 			}
 
 			m_techniqueCache->cleanup();
+
 			m_renderLoop.reset();
 
 			m_targetCache->clear();

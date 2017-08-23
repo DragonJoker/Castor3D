@@ -1,4 +1,4 @@
-#include "BillboardList.hpp"
+﻿#include "BillboardList.hpp"
 
 #include "Engine.hpp"
 
@@ -172,7 +172,7 @@ namespace castor3d
 		{
 			buffers = getParentScene().getEngine()->getRenderSystem()->createGeometryBuffers( Topology::eTriangleFan, p_program );
 
-			getParentScene().getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, buffers]()
+			getParentScene().getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this, buffers]()
 			{
 				buffers->initialise( { *m_quad, *m_vertexBuffer }, nullptr );
 			} ) );

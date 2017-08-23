@@ -23,12 +23,6 @@ namespace TestRender
 	{
 	}
 
-	void TestBuffer::initialiseStorage( uint32_t count
-		, castor3d::BufferAccessType type
-		, castor3d::BufferAccessNature nature )const
-	{
-	}
-
 	void TestBuffer::setBindingPoint( uint32_t point )const
 	{
 	}
@@ -73,6 +67,12 @@ namespace TestRender
 	void TestBuffer::download( uint32_t offset
 		, uint32_t size
 		, uint8_t * buffer )const
+	{
+	}
+
+	void TestBuffer::doInitialiseStorage( uint32_t count
+		, castor3d::BufferAccessType type
+		, castor3d::BufferAccessNature nature )const
 	{
 	}
 }

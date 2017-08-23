@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "Miscellaneous/GpuInformations.hpp"
 #include "Miscellaneous/GpuObjectTracker.hpp"
+#include "Mesh/Buffer/GpuBufferPool.hpp"
 
 #include <stack>
 
@@ -32,11 +33,6 @@ SOFTWARE.
 
 namespace castor3d
 {
-	struct GpuBufferOffset
-	{
-		GpuBufferUPtr buffer;
-		uint32_t offset;
-	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -53,6 +49,8 @@ namespace castor3d
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
 	{
+		friend class GpuBufferPool;
+
 	public:
 		/**
 		 *\~english
@@ -156,6 +154,31 @@ namespace castor3d
 			, uint32_t size
 			, BufferAccessType accessType
 			, BufferAccessNature accessNature );
+		/**
+		 *\~english
+		 *\brief		Releases a GPU buffer.
+		 *\param[in]	type			The buffer type.
+		 *\param[in]	accessType		Buffer access type.
+		 *\param[in]	accessNature	Buffer access nature.
+		 *\param[in]	bufferOffset	The buffer offset to release.
+		 *\~french
+		 *\brief		Libère un tampon GPU.
+		 *\param[in]	type			Le type de tampon.
+		 *\param[in]	accessType		Type d'accès du tampon.
+		 *\param[in]	accessNature	Nature d'accès du tampon.
+		 *\param[in]	bufferOffset	Le tampon à libérer.
+		 */
+		C3D_API void putBuffer( BufferType type
+			, BufferAccessType accessType
+			, BufferAccessNature accessNature
+			, GpuBufferOffset const & bufferOffset );
+		/**
+		 *\~english
+		 *\brief		Cleans up the buffer pool.
+		 *\~french
+		 *\brief		Nettoie le pool de tampons.
+		 */
+		C3D_API void cleanupPool();
 		/**
 		 *\~english
 		 *\return		The GPU informations.
@@ -515,7 +538,7 @@ namespace castor3d
 		 *\param[in]	p_type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual GpuBufferUPtr doCreateBuffer( BufferType p_type ) = 0;
+		C3D_API virtual GpuBufferSPtr doCreateBuffer( BufferType p_type ) = 0;
 
 	protected:
 		//!\~english	Mutex used to make this class thread safe.
@@ -545,6 +568,9 @@ namespace castor3d
 		//!\~english	The time spent on GPU for current frame.
 		//!\~french		Le temps passé sur le GPU pour l'image courante.
 		castor::Nanoseconds m_gpuTime;
+		//!\~english	The GPU buffer pool.
+		//!\~french		Le pool de tampons GPU.
+		GpuBufferPool m_gpuBufferPool;
 
 #if C3D_TRACE_OBJECTS
 

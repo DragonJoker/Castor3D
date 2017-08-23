@@ -195,9 +195,6 @@ namespace castor3d
 		//!\~english	The uniform buffer containing the model data.
 		//!\~french		Le tampon d'uniformes contenant les données de modèle.
 		ModelMatrixUbo m_modelMatrixUbo;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
 		//!\~english	The index buffer.
 		//!\~french		Le tampon d'indices.
 		IndexBufferSPtr m_indexBuffer;

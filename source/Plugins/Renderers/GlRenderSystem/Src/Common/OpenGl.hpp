@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -472,6 +472,8 @@ namespace GlRender
 
 		inline void DrawArrays( GlTopology mode, int first, int count )const;
 		inline void DrawElements( GlTopology mode, int count, GlType type, const void * indices )const;
+		inline void DrawArraysIndirect( GlTopology mode, const void * indirect )const;
+		inline void DrawElementsIndirect( GlTopology mode, GlType type, const void * indirect )const;
 		inline void DrawArraysInstanced( GlTopology mode, int first, int count, int primcount )const;
 		inline void DrawElementsInstanced( GlTopology mode, int count, GlType type, const void * indices, int primcount )const;
 
@@ -1085,6 +1087,8 @@ namespace GlRender
 
 		GlFunction< void, GlTopology, int , int > m_pfnDrawArrays;
 		GlFunction< void, GlTopology, int , GlType, void const * > m_pfnDrawElements;
+		GlFunction< void, GlTopology, const void * > m_pfnDrawArraysIndirect;
+		GlFunction< void, GlTopology, GlType, const void * > m_pfnDrawElementsIndirect;
 		GlFunction< void, GlTopology, int , int , int > m_pfnDrawArraysInstanced;
 		GlFunction< void, GlTopology, int , GlType, void const * , int > m_pfnDrawElementsInstanced;
 		GlFunction< void, uint32_t, uint32_t > m_pfnVertexAttribDivisor;
@@ -1503,6 +1507,7 @@ namespace GlRender
 	MAKE_GL_EXTENSION( ARB_compute_variable_group_size );
 	MAKE_GL_EXTENSION( ARB_debug_output );
 	MAKE_GL_EXTENSION( ARB_draw_buffers_blend );
+	MAKE_GL_EXTENSION( ARB_draw_indirect );
 	MAKE_GL_EXTENSION( ARB_draw_instanced );
 	MAKE_GL_EXTENSION( ARB_explicit_uniform_location );
 	MAKE_GL_EXTENSION( ARB_fragment_program );

@@ -1,4 +1,4 @@
-#include "Submesh.hpp"
+﻿#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -463,7 +463,7 @@ namespace castor3d
 			}
 
 			doGenerateMatrixBuffer( count );
-			m_matrixBuffer->initialise( BufferAccessType::eStream, BufferAccessNature::eDraw );
+			m_matrixBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 	}
 
@@ -489,7 +489,7 @@ namespace castor3d
 			m_dirty = false;
 		}
 
-		p_geometryBuffers.draw( size, 0 );
+		p_geometryBuffers.draw( size, 0u );
 	}
 
 	void Submesh::drawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
@@ -508,7 +508,7 @@ namespace castor3d
 			m_dirty = false;
 		}
 
-		p_geometryBuffers.drawInstanced( size, 0, p_count );
+		p_geometryBuffers.drawInstanced( size, 0u, p_count );
 	}
 
 	void Submesh::computeFacesFromPolygonVertex()
@@ -1065,7 +1065,7 @@ namespace castor3d
 		}
 		else
 		{
-			getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, buffers]()
+			getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, buffers]()
 			{
 				p_geometryBuffers->initialise( buffers, &m_indexBuffer );
 			} ) );

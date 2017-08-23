@@ -1,4 +1,4 @@
-﻿#include "TestRenderSystem.hpp"
+#include "TestRenderSystem.hpp"
 
 #include "FrameBuffer/TestBackBuffers.hpp"
 #include "FrameBuffer/TestFrameBuffer.hpp"
@@ -140,8 +140,8 @@ namespace TestRender
 	{
 	}
 
-	GpuBufferUPtr TestRenderSystem::doCreateBuffer( BufferType p_type )
+	GpuBufferSPtr TestRenderSystem::doCreateBuffer( BufferType p_type )
 	{
-		return std::make_unique< TestBuffer >( *this, p_type );
+		return std::make_shared< TestBuffer >( *this, p_type );
 	}
 }

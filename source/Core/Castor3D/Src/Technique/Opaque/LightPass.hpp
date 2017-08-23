@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -311,7 +311,8 @@ namespace castor3d
 			void render( castor::Size const & size
 				, castor::Point3f const & colour
 				, uint32_t count
-				, bool first )const;
+				, bool first
+				, VertexBuffer const & vbo )const;
 
 		private:
 			/**
@@ -587,6 +588,9 @@ namespace castor3d
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo & m_gpInfoUbo;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferSPtr m_vertexBuffer;
 	};
 }
 

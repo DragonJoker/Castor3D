@@ -113,13 +113,13 @@ namespace castor3d
 		m_lightsTexture.setSampler( sampler );
 		m_lightsTexture.setTexture( texture );
 		m_lightsTexture.setIndex( Pass::LightBufferIndex );
-		m_scene.getListener().postEvent( MakeInitialiseEvent( m_lightsTexture ) );
+		m_scene.getListener().postEvent( makeInitialiseEvent( m_lightsTexture ) );
 		m_lightsBuffer = texture->getImage().getBuffer();
 	}
 
 	void ObjectCache< Light, castor::String >::cleanup()
 	{
-		m_scene.getListener().postEvent( MakeCleanupEvent( m_lightsTexture ) );
+		m_scene.getListener().postEvent( makeCleanupEvent( m_lightsTexture ) );
 		MyObjectCache::cleanup();
 	}
 

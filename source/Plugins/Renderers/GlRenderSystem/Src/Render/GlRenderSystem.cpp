@@ -1,4 +1,4 @@
-#include "Render/GlRenderSystem.hpp"
+﻿#include "Render/GlRenderSystem.hpp"
 
 #include "Buffer/GlBuffer.hpp"
 #include "Common/OpenGl.hpp"
@@ -566,26 +566,26 @@ namespace GlRender
 		getOpenGl().cleanup();
 	}
 
-	GpuBufferUPtr GlRenderSystem::doCreateBuffer( BufferType p_type )
+	GpuBufferSPtr GlRenderSystem::doCreateBuffer( BufferType p_type )
 	{
-		GpuBufferUPtr result;
+		GpuBufferSPtr result;
 
 		switch ( p_type )
 		{
 		case BufferType::eArray:
-			result = std::make_unique< GlBuffer >( *this
+			result = std::make_shared< GlBuffer >( *this
 				, getOpenGl()
 				, GlBufferTarget::eArray );
 			break;
 
 		case BufferType::eElementArray:
-			result = std::make_unique< GlBuffer >( *this
+			result = std::make_shared< GlBuffer >( *this
 				, getOpenGl()
 				, GlBufferTarget::eElementArray );
 			break;
 
 		case BufferType::eUniform:
-			result = std::make_unique< GlBuffer >( *this
+			result = std::make_shared< GlBuffer >( *this
 				, getOpenGl()
 				, GlBufferTarget::eUniform );
 			break;
@@ -593,7 +593,7 @@ namespace GlRender
 		case BufferType::eAtomicCounter:
 			if ( getOpenGl().hasSsbo() )
 			{
-				result = std::make_unique< GlBuffer >( *this
+				result = std::make_shared< GlBuffer >( *this
 					, getOpenGl()
 					, GlBufferTarget::eAtomicCounter );
 			}
@@ -602,7 +602,7 @@ namespace GlRender
 		case BufferType::eShaderStorage:
 			if ( getOpenGl().hasSsbo() )
 			{
-				result = std::make_unique< GlBuffer >( *this
+				result = std::make_shared< GlBuffer >( *this
 					, getOpenGl()
 					, GlBufferTarget::eShaderStorage );
 			}

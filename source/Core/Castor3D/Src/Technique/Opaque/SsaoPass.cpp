@@ -596,7 +596,7 @@ namespace castor3d
 		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( 1u );
 		m_ssaoNoise.bind();
 		m_ssaoPipeline->apply();
-		m_ssaoGeometryBuffers->draw( 6u, 0 );
+		m_ssaoGeometryBuffers->draw( 6u, 0u );
 		m_ssaoNoise.unbind();
 		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( 1u );
 		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( 1u );
@@ -614,7 +614,7 @@ namespace castor3d
 		m_blurFbo->clear( BufferComponent::eColour );
 		m_ssaoResult.bind();
 		m_blurPipeline->apply();
-		m_blurGeometryBuffers->draw( 6u, 0 );
+		m_blurGeometryBuffers->draw( 6u, 0u );
 		m_ssaoResult.unbind();
 		m_blurFbo->unbind();
 		m_blurTimer->stop();

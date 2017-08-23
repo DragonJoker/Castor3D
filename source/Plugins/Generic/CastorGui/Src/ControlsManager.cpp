@@ -61,7 +61,7 @@ namespace CastorGui
 			if ( material )
 			{
 				auto control = *it;
-				m_frameListener->postEvent( MakeFunctorEvent( EventType::ePreRender
+				m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
 					, [control, material]()
 					{
 						control->setBackgroundMaterial( material );
@@ -87,7 +87,7 @@ namespace CastorGui
 		if ( it != std::end( m_controlsByZIndex ) )
 		{
 			auto control = *it;
-			m_frameListener->postEvent( MakeFunctorEvent( EventType::ePreRender
+			m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [control, p_caption]()
 				{
 					control->setCaption( p_caption );

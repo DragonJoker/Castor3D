@@ -33,7 +33,7 @@ namespace castor3d
 
 		for ( auto submesh : p_mesh )
 		{
-			p_mesh.getScene()->getListener().postEvent( MakeInitialiseEvent( *submesh ) );
+			p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
 		}
 	}
 

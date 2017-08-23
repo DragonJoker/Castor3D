@@ -1,4 +1,4 @@
-﻿#include "GlBuffer.hpp"
+#include "GlBuffer.hpp"
 #include "Render/GlRenderSystem.hpp"
 
 namespace GlRender
@@ -32,21 +32,6 @@ namespace GlRender
 	void GlBuffer::destroy()
 	{
 		BindableType::destroy();
-	}
-
-	void GlBuffer::initialiseStorage( uint32_t count
-		, castor3d::BufferAccessType type
-		, castor3d::BufferAccessNature nature )const
-	{
-		REQUIRE( count > 0 );
-		REQUIRE( this->getGlName() != GlInvalidIndex );
-		bind();
-		getOpenGl().BufferData( m_target
-			, count
-			, nullptr
-			, BindableType::getOpenGl().getBufferFlags( uint32_t( nature ) | uint32_t( type ) ) );
-		m_allocatedSize = count;
-		unbind();
 	}
 
 	void GlBuffer::setBindingPoint( uint32_t index )const
@@ -171,5 +156,20 @@ namespace GlRender
 		REQUIRE( this->getGlName() != GlInvalidIndex );
 		return reinterpret_cast< uint8_t * >( BindableType::getOpenGl().MapBuffer( m_target
 			, access ) );
+	}
+
+	void GlBuffer::doInitialiseStorage( uint32_t count
+		, castor3d::BufferAccessType type
+		, castor3d::BufferAccessNature nature )const
+	{
+		REQUIRE( count > 0 );
+		REQUIRE( this->getGlName() != GlInvalidIndex );
+		bind();
+		getOpenGl().BufferData( m_target
+			, count
+			, nullptr
+			, BindableType::getOpenGl().getBufferFlags( uint32_t( nature ) | uint32_t( type ) ) );
+		m_allocatedSize = count;
+		unbind();
 	}
 }

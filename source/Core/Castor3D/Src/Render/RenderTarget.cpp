@@ -273,7 +273,7 @@ namespace castor3d
 			ToneMappingSPtr toneMapping;
 			std::swap( m_toneMapping, toneMapping );
 			// Give ownership of the tone mapping to the event (capture by value in the lambda).
-			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender, [toneMapping]()
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, [toneMapping]()
 			{
 				toneMapping->cleanup();
 			} ) );

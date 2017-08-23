@@ -171,7 +171,7 @@ namespace castor3d
 
 		if ( m_bGenerateBuffers )
 		{
-			m_submesh->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			m_submesh->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_submesh->computeNormals();
 				m_submesh->initialise();

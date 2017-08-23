@@ -306,7 +306,7 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 
-			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
 				{
 					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
@@ -362,7 +362,7 @@ namespace castor3d
 				, program
 				, flags ) ).first->second;
 
-			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
 				{
 					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
@@ -386,66 +386,6 @@ namespace castor3d
 						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
 					}
 				} ) );
-		}
-	}
-
-	void RenderTechniquePass::doApplyAlphaFunc( glsl::GlslWriter & writer
-		, ComparisonFunc alphaFunc
-		, glsl::Float const & alpha
-		, glsl::Int const & material
-		, shader::Materials const & materials )const
-	{
-		using namespace glsl;
-
-		switch ( alphaFunc )
-		{
-		case ComparisonFunc::eLess:
-			IF( writer, alpha >= materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eLEqual:
-			IF( writer, alpha > materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eEqual:
-			IF( writer, alpha != materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eNEqual:
-			IF( writer, alpha == materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGEqual:
-			IF( writer, alpha < materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGreater:
-			IF( writer, alpha <= materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
 		}
 	}
 }

@@ -320,7 +320,7 @@ namespace castor3d
 		castor::ByteArray m_buffer;
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		GpuBufferUPtr m_storage;
+		GpuBufferSPtr m_storage;
 		//!\~english	The offset in the GPU buffer.
 		//!\~french		Le décalage dans le tampon GPU.
 		uint32_t m_offset{ 0u };

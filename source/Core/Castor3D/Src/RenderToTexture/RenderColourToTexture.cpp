@@ -1,4 +1,4 @@
-#include "RenderColourToTexture.hpp"
+﻿#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -149,7 +149,7 @@ namespace castor3d
 
 		p_texture.bind( 0u );
 		m_sampler->bind( 0u );
-		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0 );
+		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
 		m_sampler->unbind( 0u );
 		p_texture.unbind( 0u );
 	}

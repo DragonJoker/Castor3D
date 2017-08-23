@@ -41,15 +41,9 @@ namespace TestRender
 		 */
 		bool create()override;
 		/**
-		 *\copydoc		castor3d::GpuBuffer::Destroy
+		 *\copydoc		castor3d::GpuBuffer::destroy
 		 */
 		void destroy()override;
-		/**
-		 *\copydoc		castor3d::GpuBuffer::InitialiseStorage
-		 */
-		void initialiseStorage( uint32_t count
-			, castor3d::BufferAccessType type
-			, castor3d::BufferAccessNature nature )const override;
 		/**
 		 *\copydoc		castor3d::GpuBuffer::setBindingPoint
 		 */
@@ -59,32 +53,32 @@ namespace TestRender
 		 */
 		uint32_t getBindingPoint()const override;
 		/**
-		 *\copydoc		castor3d::GpuBuffer::Lock
+		 *\copydoc		castor3d::GpuBuffer::lock
 		 */
 		uint8_t * lock( uint32_t offset
 			, uint32_t count
 			, castor3d::AccessTypes const & flags )const override;
 		/**
-		 *\copydoc		castor3d::GpuBuffer::Unlock
+		 *\copydoc		castor3d::GpuBuffer::unlock
 		 */
 		void unlock()const override;
 		/**
-		 *\copydoc		castor3d::GpuBuffer::Bind
+		 *\copydoc		castor3d::GpuBuffer::bind
 		 */
 		void bind()const override;
 		/**
-		 *\copydoc		castor3d::GpuBuffer::Unbind
+		 *\copydoc		castor3d::GpuBuffer::unbind
 		 */
 		void unbind()const override;
 		/**
-		 *\copydoc		castor3d::GpuBuffer::Copy
+		 *\copydoc		castor3d::GpuBuffer::copy
 		 */
 		void copy( castor3d::GpuBuffer const & src
 			, uint32_t srcOffset
 			, uint32_t dstOffset
 			, uint32_t size )const override;
 		/**
-		 *\copydoc		castor3d::GpuBuffer::Upload
+		 *\copydoc		castor3d::GpuBuffer::upload
 		 */
 		void upload( uint32_t offset
 			, uint32_t count
@@ -95,6 +89,14 @@ namespace TestRender
 		void download( uint32_t offset
 			, uint32_t count
 			, uint8_t * buffer )const override;
+
+	private:
+		/**
+		 *\copydoc		castor3d::GpuBuffer::doInitialiseStorage
+		 */
+		void doInitialiseStorage( uint32_t count
+			, castor3d::BufferAccessType type
+			, castor3d::BufferAccessNature nature )const override;
 
 	private:
 		castor3d::BufferType m_type;

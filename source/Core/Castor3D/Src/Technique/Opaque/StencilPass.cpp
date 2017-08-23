@@ -77,6 +77,7 @@ namespace castor3d
 	void StencilPass::initialise( castor3d::VertexBuffer & vbo
 		, castor3d::IndexBufferSPtr ibo )
 	{
+		m_vbo = &vbo;
 		auto & engine = *vbo.getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
 
@@ -126,7 +127,7 @@ namespace castor3d
 		m_frameBuffer.setDrawBuffers( FrameBuffer::AttachArray{} );
 		m_depthAttach.clear( 0 );
 		m_pipeline->apply();
-		m_geometryBuffers->draw( count, 0 );
+		m_geometryBuffers->draw( count, 0u );
 		m_frameBuffer.unbind();
 	}
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,24 +26,113 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
+#include <Pool/BuddyAllocator.hpp>
 
 #include <cstddef>
 
 namespace castor3d
 {
+	struct GpuBufferBuddyAllocatorTraits
+	{
+		using PointerType = uint32_t;
+		struct Block
+		{
+			PointerType data;
+		};
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	size	The allocator size.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	size	La taille de l'allocateur.
+		 */
+		inline GpuBufferBuddyAllocatorTraits( size_t size )
+			: m_allocatedSize{ size }
+		{
+		}
+		/**
+		 *\~english
+		 *\return		The allocator size.
+		 *\~french
+		 *\return		La taille de l'allocateur.
+		 */
+		inline size_t getSize()const
+		{
+			return m_allocatedSize;
+		}
+		/**
+		 *\~english
+		 *\brief		Creates a memory block.
+		 *\param[in]	offset	The block memory offset.
+		 *\return		The block.
+		 *\~french
+		 *\brief		Crée un bloc de mémoire.
+		 *\param[in]	offset	Le décalage en mémoire du bloc.
+		 *\return		Le block.
+		 */
+		inline PointerType getPointer( uint32_t offset )
+		{
+			return offset;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the offset from a memory block.
+		 *\param[in]	pointer	The memory block.
+		 *\return		The offset.
+		 *\~french
+		 *\brief		Récupère le décalage en mémoire d'un block.
+		 *\param[in]	pointer	Le bloc mémoire.
+		 *\return		Le décalage.
+		 */
+		inline size_t getOffset( PointerType pointer )const
+		{
+			return size_t( pointer );
+		}
+		/**
+		 *\~english
+		 *\return		The null memory block.
+		 *\~french
+		 *\return		Le block mémoire nul.
+		 */
+		inline Block getNull()const
+		{
+			static Block result{ ~0u };
+			return result;
+		}
+		/**
+		 *\~english
+		 *\return		The null memory block.
+		 *\~french
+		 *\return		Le block mémoire nul.
+		 */
+		inline bool isNull( PointerType pointer )const
+		{
+			return pointer == getNull().data;
+		}
+
+	private:
+		size_t m_allocatedSize;
+	};
+	using GpuBufferAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
+	using GpuBufferAllocatorUPtr = std::unique_ptr< GpuBufferAllocator >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.5.0
 	\date		22/10/2011
 	\~english
 	\brief		Base class for renderer dependant buffers
+	\remarks	Contains data for multiple CPU buffers.
 	\~french
 	\brief		Classe de base pour les tampons dépendants du renderer
+	\remarks	Contient les données pour de multiples tampons CPU.
 	\remark
 	*/
 	class GpuBuffer
 		: public castor::OwnedBy< RenderSystem >
 	{
+		friend class GpuBufferPool;
+
 	public:
 		/**
 		 *\~english
@@ -51,19 +140,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		explicit inline GpuBuffer( RenderSystem & renderSystem )
-			: castor::OwnedBy< RenderSystem >( renderSystem )
-		{
-		}
+		C3D_API explicit GpuBuffer( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~GpuBuffer()
-		{
-		}
+		C3D_API virtual ~GpuBuffer();
 		/**
 		 *\~english
 		 *\brief		Creation function.
@@ -92,9 +176,39 @@ namespace castor3d
 		 *\param[in]	type	Type d'accès du tampon.
 		 *\param[in]	nature	Nature d'accès du tampon.
 		 */
-		C3D_API virtual void initialiseStorage( uint32_t count
+		C3D_API void initialiseStorage( uint32_t level
+			, uint32_t minBlockSize
 			, BufferAccessType type
-			, BufferAccessNature nature )const = 0;
+			, BufferAccessNature nature );
+		/**
+		 *\~english
+		 *\param[in]	size	The requested memory size.
+		 *\return		\p true if there is enough remaining memory for given size.
+		 *\~french
+		 *\param[in]	size	La taille requise pour la mémoire.
+		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
+		 */
+		C3D_API bool hasAvailable( size_t size )const;
+		/**
+		 *\~english
+		 *\brief		Allocates a memory chunk for a CPU buffer.
+		 *\param[in]	size	The requested memory size.
+		 *\return		The memory chunk offset.
+		 *\~french
+		 *\brief		Alloue une zone mémoire pour un CPU buffer.
+		 *\param[in]	size	La taille requise pour la mémoire.
+		 *\return		L'offset de la zone mémoire.
+		 */
+		C3D_API uint32_t allocate( size_t size );
+		/**
+		 *\~english
+		 *\brief		Deallocates memory.
+		 *\param[in]	offset	The memory chunk offset.
+		 *\~french
+		 *\brief		Désalloue de la mémoire.
+		 *\param[in]	offset	L'offset de la zone mémoire.
+		 */
+		C3D_API void deallocate( uint32_t offset );
 		/**
 		 *\~english
 		 *\brief		sets the buffer's binding point.
@@ -218,6 +332,26 @@ namespace castor3d
 		C3D_API virtual void download( uint32_t offset
 			, uint32_t count
 			, uint8_t * buffer )const = 0;
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Initialises the GPU buffer storage.
+		 *\param[in]	count	The buffer elements count.
+		 *\param[in]	type	Buffer access type.
+		 *\param[in]	nature	Buffer access nature.
+		 *\~french
+		 *\brief		Initialise le stockage GPU du tampon.
+		 *\param[in]	count	Le nombre d'éléments du tampon.
+		 *\param[in]	type	Type d'accès du tampon.
+		 *\param[in]	nature	Nature d'accès du tampon.
+		 */
+		C3D_API virtual void doInitialiseStorage( uint32_t size
+			, BufferAccessType type
+			, BufferAccessNature nature )const = 0;
+
+	private:
+		GpuBufferAllocatorUPtr m_allocator;
 	};
 }
 

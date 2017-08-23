@@ -185,7 +185,7 @@ namespace castortd
 		{
 			// We need to update the render nodes (since the submesh's geometry buffers are now invalid).
 			m_scene.setChanged();
-			m_scene.getListener().postEvent( MakeFunctorEvent( EventType::eQueueRender
+			m_scene.getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
 				, [this, submesh]()
 			{
 				// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.

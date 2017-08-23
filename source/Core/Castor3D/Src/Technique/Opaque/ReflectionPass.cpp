@@ -674,10 +674,10 @@ namespace castor3d
 		m_program.reset();
 	}
 
-	void ReflectionPass::ProgramPipeline::render()
+	void ReflectionPass::ProgramPipeline::render( VertexBuffer const & vbo )
 	{
 		m_pipeline->apply();
-		m_geometryBuffers->draw( 6u, 0 );
+		m_geometryBuffers->draw( 6u, 0u );
 	}
 
 	ReflectionPass::ReflectionPass( Engine & engine
@@ -823,7 +823,7 @@ namespace castor3d
 			auto program = p_scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 				? 2u
 				: 1u;
-			m_programs[program].render();
+			m_programs[program].render( *m_vertexBuffer );
 			index = c_environmentStart;
 			skyboxIbl.getPrefilteredBrdf().getTexture()->unbind( index );
 			skyboxIbl.getPrefilteredBrdf().getSampler()->unbind( index );
@@ -853,7 +853,7 @@ namespace castor3d
 				++index;
 			}
 
-			m_programs[0].render();
+			m_programs[0].render( *m_vertexBuffer );
 			index = c_environmentStart;
 
 			for ( auto & map : maps )

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -140,7 +140,7 @@ namespace castor3d
 		 */
 		inline void upload()const
 		{
-			return upload( m_offset
+			return upload( 0u
 				, uint32_t( m_data.size() )
 				, m_data.data() );
 		}
@@ -175,7 +175,7 @@ namespace castor3d
 		 */
 		inline void download()
 		{
-			download( m_offset
+			download( 0u
 				, uint32_t( m_data.size() )
 				, m_data.data() );
 		}
@@ -390,27 +390,29 @@ namespace castor3d
 		{
 			return m_data.end();
 		}
-
-	protected:
 		/**
 		 *\~english
-		 *\brief		Cleans up the GPU buffer.
+		 *\return		The offset in the GPU buffer.
 		 *\~french
-		 *\brief		Nettoie le tampon GPU.
+		 *\return		L'offset dans le tampon GPU.
 		 */
-		inline void doCleanup()
+		inline uint32_t getOffset()const
 		{
-			if ( m_gpuBuffer )
-			{
-				m_gpuBuffer->destroy();
-				m_gpuBuffer.reset();
-			}
+			return m_offset;
+		}
+
+	protected:
+		inline void doInitialise( BufferAccessType accessType
+			, BufferAccessNature accessNature )
+		{
+			m_accessType = accessType;
+			m_accessNature = accessNature;
 		}
 
 	protected:
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		GpuBufferUPtr m_gpuBuffer;
+		GpuBufferSPtr m_gpuBuffer;
 		//!\~english	The buffer data.
 		//!\~french		Les données du tampon.
 		TArray m_data;
@@ -420,6 +422,12 @@ namespace castor3d
 		//!<\~english	The saved buffer size (to still have a size after clear).
 		//!\~french		La taille sauvegardée, afin de toujours l'avoir après un clear.
 		uint32_t m_savedSize{ 0u };
+		//!<\~english	Buffer access type.
+		//!\~french		Type d'accès du tampon.
+		BufferAccessType m_accessType;
+		//!<\~english	Buffer access nature.
+		//!\~french		Nature d'accès du tampon.
+		BufferAccessNature m_accessNature;
 	};
 }
 

@@ -1,4 +1,4 @@
-#include "OverlayRenderer.hpp"
+﻿#include "OverlayRenderer.hpp"
 
 #include "Engine.hpp"
 
@@ -221,6 +221,7 @@ namespace castor3d
 		{
 			m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
 			doDrawItem( *material
+				, *m_panelVertexBuffer
 				, m_panelGeometryBuffers
 				, FillBuffers( overlay.getPanelVertex().begin()
 					, uint32_t( overlay.getPanelVertex().size() )
@@ -237,6 +238,7 @@ namespace castor3d
 			{
 				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
 				doDrawItem( *material
+					, *m_panelVertexBuffer
 					, m_panelGeometryBuffers
 					, FillBuffers( overlay.getPanelVertex().begin()
 						, uint32_t( overlay.getPanelVertex().size() )
@@ -250,6 +252,7 @@ namespace castor3d
 			{
 				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
 				doDrawItem( *material
+					, *m_borderVertexBuffer
 					, m_borderGeometryBuffers
 					, FillBuffers( overlay.getBorderVertex().begin()
 						, uint32_t( overlay.getBorderVertex().size() )
@@ -272,17 +275,21 @@ namespace castor3d
 				int32_t count = uint32_t( arrayVtx.size() );
 				uint32_t index = 0;
 				std::vector< OverlayGeometryBuffers > geometryBuffers;
+				std::vector< VertexBufferSPtr > vertexBuffers;
 				TextOverlay::VertexArray::const_iterator it = arrayVtx.begin();
 
 				while ( count > C3D_MAX_CHARS_PER_BUFFER )
 				{
 					geometryBuffers.push_back( doFillTextPart( count, it, index ) );
+					vertexBuffers.push_back( m_textsVertexBuffers[index] );
+					++index;
 					count -= C3D_MAX_CHARS_PER_BUFFER;
 				}
 
 				if ( count > 0 )
 				{
 					geometryBuffers.push_back( doFillTextPart( count, it, index ) );
+					vertexBuffers.push_back( m_textsVertexBuffers[index] );
 				}
 
 				auto texture = overlay.getFontTexture()->getTexture();
@@ -292,16 +299,20 @@ namespace castor3d
 
 				for ( auto pass : *material )
 				{
+					auto itV = vertexBuffers.begin();
+
 					if ( checkFlag( pass->getTextureFlags(), TextureChannel::eDiffuse ) )
 					{
 						for ( auto geoBuffers : geometryBuffers )
 						{
 							doDrawItem( *pass
+								, *( *itV )
 								, *geoBuffers.m_textured
 								, *texture
 								, *sampler
 								, std::min( count, C3D_MAX_CHARS_PER_BUFFER ) );
 							count -= C3D_MAX_CHARS_PER_BUFFER;
+							++itV;
 						}
 					}
 					else
@@ -309,11 +320,13 @@ namespace castor3d
 						for ( auto geoBuffers : geometryBuffers )
 						{
 							doDrawItem( *pass
+								, *( *itV )
 								, *geoBuffers.m_noTexture
 								, *texture
 								, *sampler
 								, std::min( count, C3D_MAX_CHARS_PER_BUFFER ) );
 							count -= C3D_MAX_CHARS_PER_BUFFER;
+							++itV;
 						}
 					}
 				}
@@ -477,6 +490,7 @@ namespace castor3d
 	}
 
 	void OverlayRenderer::doDrawItem( Pass & pass
+		, VertexBuffer const & vertexBuffer
 		, GeometryBuffers const & geometryBuffers
 		, uint32_t count )
 	{
@@ -484,11 +498,12 @@ namespace castor3d
 		m_overlayUbo.update( pass.getId() );
 		node.m_pipeline.apply();
 		pass.bindTextures();
-		geometryBuffers.draw( count, 0 );
+		geometryBuffers.draw( count, 0u );
 		pass.unbindTextures();
 	}
 
 	void OverlayRenderer::doDrawItem( Pass & pass
+		, VertexBuffer const & vertexBuffer
 		, GeometryBuffers const & geometryBuffers
 		, TextureLayout const & texture
 		, Sampler const & sampler
@@ -508,13 +523,14 @@ namespace castor3d
 		pass.bindTextures();
 		texture.bind( Pass::LightBufferIndex );
 		sampler.bind( Pass::LightBufferIndex );
-		geometryBuffers.draw( count, 0 );
+		geometryBuffers.draw( count, 0u );
 		sampler.unbind( Pass::LightBufferIndex );
 		texture.unbind( Pass::LightBufferIndex );
 		pass.unbindTextures();
 	}
 
 	void OverlayRenderer::doDrawItem( Material & material
+		, VertexBuffer const & vertexBuffer
 		, OverlayRenderer::OverlayGeometryBuffers const & geometryBuffers
 		, uint32_t count )
 	{
@@ -522,18 +538,24 @@ namespace castor3d
 		{
 			if ( checkFlag( pass->getTextureFlags(), TextureChannel::eDiffuse ) )
 			{
-				doDrawItem( *pass, *geometryBuffers.m_textured, count );
+				doDrawItem( *pass
+					, vertexBuffer
+					, *geometryBuffers.m_textured
+					, count );
 			}
 			else
 			{
-				doDrawItem( *pass, *geometryBuffers.m_noTexture, count );
+				doDrawItem( *pass
+					, vertexBuffer
+					, *geometryBuffers.m_noTexture
+					, count );
 			}
 		}
 	}
 
 	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::doFillTextPart( int32_t count
 		, TextOverlay::VertexArray::const_iterator & it
-		, uint32_t & index )
+		, uint32_t index )
 	{
 		OverlayGeometryBuffers geometryBuffers;
 
@@ -549,7 +571,6 @@ namespace castor3d
 			count = std::min( count, C3D_MAX_CHARS_PER_BUFFER );
 			FillBuffers( it, count, *vertexBuffer );
 			it += count;
-			index++;
 		}
 		else
 		{

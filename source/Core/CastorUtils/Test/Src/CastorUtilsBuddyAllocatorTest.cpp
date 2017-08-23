@@ -1,4 +1,4 @@
-#include "CastorUtilsBuddyAllocatorTest.hpp"
+﻿#include "CastorUtilsBuddyAllocatorTest.hpp"
 
 #include <Pool/BuddyAllocator.hpp>
 
@@ -27,18 +27,34 @@ namespace Testing
 		{
 			BuddyAllocator allocator{ 4, 1 };
 			CT_EQUAL( allocator.getSize(), 16 );
+			for ( auto i = 1u; i < allocator.getSize(); ++i )
+			{
+				CT_CHECK( allocator.hasAvailable( i ) );
+			}
 		}
 		{
 			BuddyAllocator allocator{ 4, 2 };
 			CT_EQUAL( allocator.getSize(), 32 );
+			for ( auto i = 1u; i < allocator.getSize(); ++i )
+			{
+				CT_CHECK( allocator.hasAvailable( i ) );
+			}
 		}
 		{
 			BuddyAllocator allocator{ 5, 2 };
 			CT_EQUAL( allocator.getSize(), 64 );
+			for ( auto i = 1u; i < allocator.getSize(); ++i )
+			{
+				CT_CHECK( allocator.hasAvailable( i ) );
+			}
 		}
 		{
 			BuddyAllocator allocator{ 5, 3 };
 			CT_EQUAL( allocator.getSize(), 96 );
+			for ( auto i = 1u; i < allocator.getSize(); ++i )
+			{
+				CT_CHECK( allocator.hasAvailable( i ) );
+			}
 		}
 		{
 			BuddyAllocator allocator{ 31, 1 };
@@ -52,6 +68,10 @@ namespace Testing
 			BuddyAllocator allocator{ 16, 128 };
 			CT_EQUAL( allocator.getSize(), 8388608u );
 		}
+		{
+			BuddyAllocator allocator{ 20, 96 };
+			CT_EQUAL( allocator.getSize(), 100663296u );
+		}
 	}
 
 	void CastorUtilsBuddyAllocatorTest::AllocationTest()
@@ -60,16 +80,20 @@ namespace Testing
 			BuddyAllocator allocator{ 4, 1 };
 			auto buf1 = allocator.allocate( 16 );
 			CT_NEQUAL( buf1, nullptr );
+			CT_CHECK( !allocator.hasAvailable( 1 ) );
 			CT_EQUAL( allocator.allocate( 1 ), nullptr );
 		}
 		{
 			BuddyAllocator allocator{ 4, 1 };
 			auto buf1 = allocator.allocate( 8 );
 			CT_NEQUAL( buf1, nullptr );
+			CT_CHECK( allocator.hasAvailable( 4 ) );
 			auto buf2 = allocator.allocate( 4 );
 			CT_NEQUAL( buf2, nullptr );
+			CT_CHECK( allocator.hasAvailable( 4 ) );
 			auto buf3 = allocator.allocate( 4 );
 			CT_NEQUAL( buf3, nullptr );
+			CT_CHECK( !allocator.hasAvailable( 2 ) );
 			CT_EQUAL( allocator.allocate( 2 ), nullptr );
 		}
 		{
@@ -110,11 +134,16 @@ namespace Testing
 		}
 		{
 			BuddyAllocator allocator{ 4, 1 };
+			CT_CHECK( allocator.hasAvailable( 8 ) );
 			auto buf1 = allocator.allocate( 8 );
 			CT_NEQUAL( buf1, nullptr );
+			CT_CHECK( allocator.hasAvailable( 5 ) );
 			auto buf2 = allocator.allocate( 5 );
 			CT_NEQUAL( buf2, nullptr );
+			CT_CHECK( !allocator.hasAvailable( 4 ) );
 			CT_EQUAL( allocator.allocate( 4 ), nullptr );
+			CT_CHECK( !allocator.hasAvailable( 2 ) );
+			CT_EQUAL( allocator.allocate( 2 ), nullptr );
 		}
 	}
 

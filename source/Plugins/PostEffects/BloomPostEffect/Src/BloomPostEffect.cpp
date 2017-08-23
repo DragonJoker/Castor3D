@@ -1,4 +1,4 @@
-#include "BloomPostEffect.hpp"
+﻿#include "BloomPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -397,7 +397,7 @@ namespace Bloom
 		p_origin.bind( 4 );
 		m_linearSampler->bind( 4 );
 
-		m_geometryBuffers->draw( uint32_t( m_vertices.size() ), 0 );
+		m_geometryBuffers->draw( uint32_t( m_vertices.size() ), 0u );
 
 		texture0.unbind();
 		texture1.unbind();
