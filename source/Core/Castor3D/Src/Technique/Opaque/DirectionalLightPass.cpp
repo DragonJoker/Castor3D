@@ -1,4 +1,4 @@
-#include "DirectionalLightPass.hpp"
+﻿#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -123,7 +123,6 @@ namespace castor3d
 		doInitialise( scene
 			, LightType::eDirectional
 			, *m_vertexBuffer
-			, nullptr
 			, sceneUbo
 			, nullptr );
 		m_viewport.update();

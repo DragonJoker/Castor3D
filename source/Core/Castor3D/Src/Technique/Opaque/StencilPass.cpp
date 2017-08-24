@@ -74,8 +74,7 @@ namespace castor3d
 	{
 	}
 
-	void StencilPass::initialise( castor3d::VertexBuffer & vbo
-		, castor3d::IndexBufferSPtr ibo )
+	void StencilPass::initialise( castor3d::VertexBuffer & vbo )
 	{
 		m_vbo = &vbo;
 		auto & engine = *vbo.getEngine();
@@ -89,7 +88,7 @@ namespace castor3d
 		m_program->initialise();
 
 		m_geometryBuffers = m_program->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->initialise( { vbo }, ibo.get() );
+		m_geometryBuffers->initialise( { vbo }, nullptr );
 
 		DepthStencilState dsstate;
 		dsstate.setDepthTest( true );

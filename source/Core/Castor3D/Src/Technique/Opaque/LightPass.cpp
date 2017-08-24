@@ -286,7 +286,6 @@ namespace castor3d
 	}
 
 	void LightPass::Program::initialise( VertexBuffer & vbo
-		, IndexBufferSPtr ibo
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, UniformBuffer & gpInfoUbo
@@ -311,7 +310,7 @@ namespace castor3d
 		}
 
 		m_geometryBuffers = m_program->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->initialise( { vbo }, ibo.get() );
+		m_geometryBuffers->initialise( { vbo }, nullptr );
 	}
 
 	void LightPass::Program::cleanup()
@@ -384,7 +383,6 @@ namespace castor3d
 	void LightPass::doInitialise( Scene const & scene
 		, LightType type
 		, VertexBuffer & vbo
-		, IndexBufferSPtr ibo
 		, SceneUbo & sceneUbo
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
@@ -407,7 +405,6 @@ namespace castor3d
 		}
 
 		m_program->initialise( vbo
-			, ibo
 			, m_matrixUbo
 			, sceneUbo
 			, m_gpInfoUbo.getUbo()
