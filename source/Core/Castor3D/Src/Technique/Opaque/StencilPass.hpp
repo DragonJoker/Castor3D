@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -61,14 +61,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialises the program and its pipeline.
 		 *\param[in]	vbo	The vertex buffer containing the object to render.
-		 *\param[in]	ibo	An optional index buffer.
 		 *\~french
 		 *\brief		Initialise le programme et son pipeline.
 		 *\param[in]	vbo	Le tampon de sommets contenant l'objet à dessiner.
-		 *\param[in]	ibo	Un tampon d'indices optionnel.
 		 */
-		void initialise( VertexBuffer & vbo
-			, IndexBufferSPtr ibo );
+		void initialise( VertexBuffer & vbo );
 		/**
 		*\~english
 		*\brief		Cleans up the program and its pipeline.
@@ -108,6 +105,9 @@ namespace castor3d
 		//!\~english	The pipeline used by the light pass.
 		//!\~french		Le pipeline utilisé par la passe lumières.
 		RenderPipelineUPtr m_pipeline;
+		//!\~english	The vertex buffer used to render the pass.
+		//!\~french		Le tampon de sommets utilisé par le rendu de la passe.
+		VertexBuffer const * m_vbo;
 	};
 }
 

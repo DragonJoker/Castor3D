@@ -233,7 +233,12 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::doApplyAlphaFunc
+		 *\copydoc		castor3d::RenderPass::doCreateMaterials
+		 */
+		C3D_API std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
+			, ProgramFlags const & programFlags )const;
+		/**
+		 *\copydoc		castor3d::RenderPass::doApplyAlphaFunc
 		 */
 		void doApplyAlphaFunc( glsl::GlslWriter & writer
 			, ComparisonFunc alphaFunc

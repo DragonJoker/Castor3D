@@ -177,7 +177,7 @@ namespace castortd
 					{
 					case Cell::State::Empty:
 						freeCell = true;
-						m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry]()
+						m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this, p_geometry]()
 						{
 							Point3r position = p_geometry->getParent()->getPosition();
 							auto height = p_geometry->getMesh()->getCollisionBox().getMax()[1] - p_geometry->getMesh()->getCollisionBox().getMin()[1];
@@ -201,7 +201,7 @@ namespace castortd
 				}
 			}
 
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePreRender, [this, freeCell]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, freeCell]()
 			{
 				m_marker->setVisible( freeCell );
 			} ) );
@@ -212,7 +212,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeDamage() && m_game.CanAfford( m_selectedTower->getDamageUpgradeCost() ) )
 		{
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				m_game.UpgradeTowerDamage( *m_selectedTower );
 			} ) );
@@ -223,7 +223,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeSpeed() && m_game.CanAfford( m_selectedTower->getSpeedUpgradeCost() ) )
 		{
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				m_game.UpgradeTowerSpeed( *m_selectedTower );
 			} ) );
@@ -234,7 +234,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeRange() && m_game.CanAfford( m_selectedTower->getRangeUpgradeCost() ) )
 		{
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				m_game.UpgradeTowerRange( *m_selectedTower );
 			} ) );
@@ -392,7 +392,7 @@ namespace castortd
 			break;
 
 		case WXK_F1:
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				if ( m_game.IsRunning() )
 				{
@@ -403,7 +403,7 @@ namespace castortd
 
 		case WXK_RETURN:
 		case WXK_NUMPAD_ENTER:
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				if ( m_game.isEnded() )
 				{
@@ -418,7 +418,7 @@ namespace castortd
 			break;
 
 		case WXK_SPACE:
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				if ( m_game.IsStarted() )
 				{
@@ -488,7 +488,7 @@ namespace castortd
 				m_y = doTransformY( p_event.GetY() );
 				m_oldX = m_x;
 				m_oldY = m_y;
-				m_listener->postEvent( MakeFunctorEvent( EventType::ePreRender, [this, window]()
+				m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window]()
 				{
 					Camera & camera = *window->getCamera();
 					camera.update();
@@ -654,7 +654,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() )
 		{
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< LongRangeTower >( m_longRange ) ) )
 				{
@@ -668,7 +668,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() )
 		{
-			m_listener->postEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 			{
 				if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< ShortRangeTower >( m_shortRange ) ) )
 				{

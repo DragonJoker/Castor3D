@@ -1,4 +1,4 @@
-#include "SpotLightPass.hpp"
+﻿#include "SpotLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -108,57 +108,52 @@ namespace castor3d
 				, 1.0f } ) );
 		}
 
-		return data;
-	}
-
-	UIntArray SpotLightPass::doGenerateFaces()const
-	{
-		UIntArray faces;
+		Point3fArray result;
 
 		// Side
 		for ( auto i = 0u; i < FaceCount - 1; i++ )
 		{
-			faces.push_back( 0u );
-			faces.push_back( i + 3u );
-			faces.push_back( i + 2u );
+			result.push_back( data[0u] );
+			result.push_back( data[i + 3u] );
+			result.push_back( data[i + 2u] );
 		}
 
 		// Last face
-		faces.push_back( 0u );
-		faces.push_back( 2u );
-		faces.push_back( FaceCount + 1 );
+		result.push_back( data[0u] );
+		result.push_back( data[2u] );
+		result.push_back( data[FaceCount + 1] );
 
 		// Base
 		auto second = 2u + FaceCount;
 		for ( auto i = 0u; i < FaceCount - 1; i++ )
 		{
 			// Center to intermediate.
-			faces.push_back( 1u );
-			faces.push_back( i + second + 0u );
-			faces.push_back( i + second + 1u );
+			result.push_back( data[1u] );
+			result.push_back( data[i + second + 0u] );
+			result.push_back( data[i + second + 1u] );
 			// Intermediate to border.
-			faces.push_back( i + second + 0u );
-			faces.push_back( i + 2u );
-			faces.push_back( i + 3u );
-			faces.push_back( i + second + 0u );
-			faces.push_back( i + 3u );
-			faces.push_back( i + second + 1u );
+			result.push_back( data[i + second + 0u] );
+			result.push_back( data[i + 2u] );
+			result.push_back( data[i + 3u] );
+			result.push_back( data[i + second + 0u] );
+			result.push_back( data[i + 3u] );
+			result.push_back( data[i + second + 1u] );
 		}
 		// Last face
 		auto third = second + FaceCount - 1u;
 		// Center to intermediate.
-		faces.push_back( 1u );
-		faces.push_back( third );
-		faces.push_back( second );
+		result.push_back( data[1u] );
+		result.push_back( data[third] );
+		result.push_back( data[second] );
 		// Intermediate to border
-		faces.push_back( third );
-		faces.push_back( FaceCount + 1u );
-		faces.push_back( 2u );
-		faces.push_back( third );
-		faces.push_back( 2u );
-		faces.push_back( second );
+		result.push_back( data[third] );
+		result.push_back( data[FaceCount + 1u] );
+		result.push_back( data[2u] );
+		result.push_back( data[third] );
+		result.push_back( data[2u] );
+		result.push_back( data[second] );
 
-		return faces;
+		return result;
 	}
 
 	Matrix4x4r SpotLightPass::doComputeModelMatrix( castor3d::Light const & light

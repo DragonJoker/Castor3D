@@ -29,27 +29,6 @@ namespace castor3d
 {
 	namespace
 	{
-		std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
-			, ProgramFlags const & programFlags )
-		{
-			std::unique_ptr< shader::Materials > result;
-
-			if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
-			{
-				result = std::make_unique< shader::PbrMRMaterials >( writer );
-			}
-			else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
-			{
-				result = std::make_unique< shader::PbrSGMaterials >( writer );
-			}
-			else
-			{
-				result = std::make_unique< shader::LegacyMaterials >( writer );
-			}
-
-			return result;
-		}
-
 		TextureUnit doInitialiseDirectional( Engine & engine, Size const & p_size )
 		{
 			auto sampler = engine.getSamplerCache().add( cuT( "ShadowMap_Directional" ) );
@@ -143,7 +122,8 @@ namespace castor3d
 		// Fragment Intputs
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
+		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto materials = doCreateMaterials( writer, programFlags );

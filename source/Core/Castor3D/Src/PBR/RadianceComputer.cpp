@@ -1,4 +1,4 @@
-#include "RadianceComputer.hpp"
+﻿#include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
 

@@ -412,12 +412,13 @@ namespace GlRender
 		ePixelUnpack = 0x88EC,
 		eTexture = 0x8C2A,
 		eUniform = 0x8A11,
-		eTransformFeedback = 0x8E22,
 		eTransformFeedbackBuffer = 0x8C8E,
+		eTransformFeedback = 0x8E22,
 		eRead = 0x8F36,
 		eWrite = 0x8F37,
+		eIndirect = 0x8F3F,
 		eAtomicCounter = 0x92C0,
-		eShaderStorage = 0x90D2,
+		eShaderStorage = 0x90D2
 	};
 
 	enum class GlShaderType
@@ -1260,6 +1261,23 @@ namespace GlRender
 	class GlRenderTarget;
 	class GlRenderWindow;
 	class OpenGl;
+
+	struct DrawElementsIndirectCommand
+	{
+		uint32_t count;
+		uint32_t primCount;
+		uint32_t firstIndex;
+		uint32_t baseVertex;
+		uint32_t baseInstance;
+	};
+
+	struct DrawArraysIndirectCommand
+	{
+		uint32_t count;
+		uint32_t primCount;
+		uint32_t first;
+		uint32_t baseInstance;
+	};
 }
 
 #	if C3DGL_DEBUG_FUNCTION_CALLS

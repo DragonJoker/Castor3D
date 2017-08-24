@@ -1,4 +1,4 @@
-#include "BrdfPrefilter.hpp"
+﻿#include "BrdfPrefilter.hpp"
 
 #include "Engine.hpp"
 
@@ -136,7 +136,7 @@ namespace castor3d
 		m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
 		m_matrixUbo.update( m_viewport.getProjection() );
 		m_pipeline->apply();
-		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0 );
+		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
 		m_frameBuffer->unbind();
 	}
 

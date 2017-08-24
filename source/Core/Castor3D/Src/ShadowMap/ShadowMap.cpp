@@ -7,6 +7,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -225,6 +226,27 @@ namespace castor3d
 		return glsl::Shader{};
 	}
 
+	std::unique_ptr< shader::Materials > ShadowMap::doCreateMaterials( glsl::GlslWriter & writer
+		, ProgramFlags const & programFlags )const
+	{
+		std::unique_ptr< shader::Materials > result;
+
+		if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
+		{
+			result = std::make_unique< shader::PbrMRMaterials >( writer );
+		}
+		else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+		{
+			result = std::make_unique< shader::PbrSGMaterials >( writer );
+		}
+		else
+		{
+			result = std::make_unique< shader::LegacyMaterials >( writer );
+		}
+
+		return result;
+	}
+
 	void ShadowMap::doApplyAlphaFunc( glsl::GlslWriter & writer
 		, ComparisonFunc alphaFunc
 		, glsl::Float const & alpha
@@ -291,4 +313,5 @@ namespace castor3d
 			FI;
 			break;
 		}
-	}}
+	}
+}

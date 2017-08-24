@@ -174,9 +174,6 @@ namespace castor3d
 			, glsl::Shader const & pxl )const override;
 
 	private:
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
 		//!\~english	The viewport used when rendering is done.
 		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Viewport m_viewport;

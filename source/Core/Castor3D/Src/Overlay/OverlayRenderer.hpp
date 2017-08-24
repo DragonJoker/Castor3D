@@ -245,6 +245,7 @@ namespace castor3d
 		 *\param[in]	count			Le nombre de sommets.
 		 */
 		C3D_API void doDrawItem( Material & material
+			, VertexBuffer const & vertexBuffer
 			, OverlayGeometryBuffers const & geometryBuffers
 			, uint32_t count );
 		/**
@@ -260,6 +261,7 @@ namespace castor3d
 		 *\param[in]	count			Le nombre de sommets.
 		 */
 		C3D_API void doDrawItem( Pass & pass
+			, VertexBuffer const & vertexBuffer
 			, GeometryBuffers const & geometryBuffers
 			, uint32_t count );
 		/**
@@ -279,6 +281,7 @@ namespace castor3d
 		 *\param[in]	count			Le nombre de sommets.
 		 */
 		C3D_API void doDrawItem( Pass & pass
+			, VertexBuffer const & vertexBuffer
 			, GeometryBuffers const & geometryBuffers
 			, TextureLayout const & texture
 			, Sampler const & sampler
@@ -299,7 +302,7 @@ namespace castor3d
 		 */
 		C3D_API OverlayGeometryBuffers doFillTextPart( int32_t count
 			, TextOverlay::VertexArray::const_iterator & it
-			, uint32_t & index );
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for overlays rendering use.

@@ -297,7 +297,7 @@ namespace C3DMd3
 					}
 
 					m_mapSubmeshesByName.find( strSection )->second->setDefaultMaterial( material );
-					p_mesh.getScene()->getListener().postEvent( MakeInitialiseEvent( *material ) );
+					p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *material ) );
 				}
 			}
 
@@ -342,7 +342,7 @@ namespace C3DMd3
 				}
 
 				p_mesh.getSubmesh( uiIndex )->setDefaultMaterial( material );
-				p_mesh.getScene()->getListener().postEvent( MakeInitialiseEvent( *material ) );
+				p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *material ) );
 				uiIndex++;
 			}
 

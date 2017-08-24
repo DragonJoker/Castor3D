@@ -188,7 +188,7 @@ namespace castor3d
 
 		if ( m_initialised )
 		{
-			m_wpListener.lock()->postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			m_wpListener.lock()->postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				doUpdateSize();
 			} ) );

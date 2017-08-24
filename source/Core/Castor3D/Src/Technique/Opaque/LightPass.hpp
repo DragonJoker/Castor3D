@@ -258,7 +258,6 @@ namespace castor3d
 			 *\~english
 			 *\brief		Initialises the program and its pipeline.
 			 *\param[in]	vbo				The vertex buffer containing the object to render.
-			 *\param[in]	ibo				An optional index buffer.
 			 *\param[in]	matrixUbo		The matrix UBO.
 			 *\param[in]	sceneUbo		The scene UBO.
 			 *\param[in]	gpInfoUbo		The geometry pass UBO.
@@ -266,14 +265,12 @@ namespace castor3d
 			 *\~french
 			 *\brief		Initialise le programme et son pipeline.
 			 *\param[in]	vbo				Le tampon de sommets contenant l'objet à dessiner.
-			 *\param[in]	ibo				Un tampon d'indices optionnel.
 			 *\param[in]	matrixUbo		L'UBO des matrices.
 			 *\param[in]	sceneUbo		L'UBO de la scène.
 			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
 			void initialise( VertexBuffer & vbo
-				, IndexBufferSPtr ibo
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, UniformBuffer & gpInfoUbo
@@ -311,7 +308,8 @@ namespace castor3d
 			void render( castor::Size const & size
 				, castor::Point3f const & colour
 				, uint32_t count
-				, bool first )const;
+				, bool first
+				, uint32_t offset )const;
 
 		private:
 			/**
@@ -454,7 +452,6 @@ namespace castor3d
 		void doInitialise( Scene const & scene
 			, LightType type
 			, VertexBuffer & vbo
-			, IndexBufferSPtr ibo
 			, SceneUbo & sceneUbo
 			, ModelMatrixUbo * modelMatrixUbo );
 		/**
@@ -587,6 +584,12 @@ namespace castor3d
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo & m_gpInfoUbo;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The index buffer offset.
+		//!\~french		Le décalage du tampon d'indices.
+		uint32_t m_offset{ 0u };
 	};
 }
 

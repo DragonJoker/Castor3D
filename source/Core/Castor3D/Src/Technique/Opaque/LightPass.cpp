@@ -286,7 +286,6 @@ namespace castor3d
 	}
 
 	void LightPass::Program::initialise( VertexBuffer & vbo
-		, IndexBufferSPtr ibo
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, UniformBuffer & gpInfoUbo
@@ -311,7 +310,7 @@ namespace castor3d
 		}
 
 		m_geometryBuffers = m_program->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->initialise( { vbo }, ibo.get() );
+		m_geometryBuffers->initialise( { vbo }, nullptr );
 	}
 
 	void LightPass::Program::cleanup()
@@ -329,7 +328,8 @@ namespace castor3d
 	void LightPass::Program::render( Size const & size
 		, Point3f const & colour
 		, uint32_t count
-		, bool first )const
+		, bool first
+		, uint32_t offset )const
 	{
 		m_lightColour->setValue( colour );
 
@@ -342,7 +342,7 @@ namespace castor3d
 			m_blendPipeline->apply();
 		}
 
-		m_geometryBuffers->draw( count, 0 );
+		m_geometryBuffers->draw( count, offset );
 	}
 
 	//************************************************************************************************
@@ -383,7 +383,6 @@ namespace castor3d
 	void LightPass::doInitialise( Scene const & scene
 		, LightType type
 		, VertexBuffer & vbo
-		, IndexBufferSPtr ibo
 		, SceneUbo & sceneUbo
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
@@ -406,7 +405,6 @@ namespace castor3d
 		}
 
 		m_program->initialise( vbo
-			, ibo
 			, m_matrixUbo
 			, sceneUbo
 			, m_gpInfoUbo.getUbo()
@@ -437,7 +435,8 @@ namespace castor3d
 		m_program->render( size
 			, colour
 			, getCount()
-			, first );
+			, first
+			, m_offset );
 
 		gp[size_t( DsTexture::eData4 )]->unbind();
 		gp[size_t( DsTexture::eData3 )]->unbind();

@@ -42,7 +42,7 @@ namespace castor3d
 
 				for ( auto submesh : *mesh )
 				{
-					p_scene.getListener().postEvent( MakeInitialiseEvent( *submesh ) );
+					p_scene.getListener().postEvent( makeInitialiseEvent( *submesh ) );
 				}
 			}
 		}
@@ -69,7 +69,7 @@ namespace castor3d
 
 				for ( auto submesh : p_mesh )
 				{
-					p_mesh.getScene()->getListener().postEvent( MakeInitialiseEvent( *submesh ) );
+					p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
 				}
 			}
 		}

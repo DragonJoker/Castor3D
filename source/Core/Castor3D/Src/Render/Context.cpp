@@ -1,4 +1,4 @@
-﻿#include "Context.hpp"
+#include "Context.hpp"
 
 #include "Engine.hpp"
 
@@ -79,6 +79,11 @@ namespace castor3d
 		m_depthLayer.cleanup();
 		m_depthLayerCube.cleanup();
 		m_cube.cleanup();
+
+		if ( getRenderSystem()->getMainContext().get() == this )
+		{
+			getRenderSystem()->cleanupPool();
+		}
 
 		doEndCurrent();
 		doDestroy();

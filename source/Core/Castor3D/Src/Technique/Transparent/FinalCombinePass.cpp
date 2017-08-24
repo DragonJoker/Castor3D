@@ -1,4 +1,4 @@
-#include "FinalCombinePass.hpp"
+﻿#include "FinalCombinePass.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -242,10 +242,10 @@ namespace castor3d
 		m_program.reset();
 	}
 
-	void FinalCombineProgram::render()const
+	void FinalCombineProgram::render( VertexBuffer const & vbo )const
 	{
 		m_pipeline->apply();
-		m_geometryBuffers->draw( 6u, 0 );
+		m_geometryBuffers->draw( 6u, 0u );
 	}
 
 	//*********************************************************************************************
@@ -307,7 +307,7 @@ namespace castor3d
 		p_r[size_t( WbTexture::eAccumulation )]->getSampler()->bind( 1u );
 		p_r[size_t( WbTexture::eRevealage )]->getTexture()->bind( 2u );
 		p_r[size_t( WbTexture::eRevealage )]->getSampler()->bind( 2u );
-		program.render();
+		program.render( *m_vertexBuffer );
 		p_r[size_t( WbTexture::eRevealage )]->getTexture()->unbind( 2u );
 		p_r[size_t( WbTexture::eRevealage )]->getSampler()->unbind( 2u );
 		p_r[size_t( WbTexture::eAccumulation )]->getTexture()->unbind( 1u );

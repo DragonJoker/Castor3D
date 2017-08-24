@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -106,7 +106,7 @@ namespace castor3d
 				, bool p_pbr
 				, bool p_isMR );
 			~ProgramPipeline();
-			void render();
+			void render( VertexBuffer const & vbo );
 			//!\~english	The shader program.
 			//!\~french		Le shader program.
 			ShaderProgramSPtr m_program;

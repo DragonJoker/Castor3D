@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -171,13 +171,6 @@ namespace castor3d
 		virtual castor::Point3fArray doGenerateVertices()const = 0;
 		/**
 		 *\~english
-		 *\return		The faces needed to draw the mesh.
-		 *\~french
-		 *\return		Les faces nécessaires au dessin du maillage.
-		 */
-		virtual UIntArray doGenerateFaces()const = 0;
-		/**
-		 *\~english
 		 *\brief		Computes the matrix used to render the model.
 		 *\param[in]	light		The light.
 		 *\param[in]	camera	The viewing camera.
@@ -195,18 +188,15 @@ namespace castor3d
 		//!\~english	The uniform buffer containing the model data.
 		//!\~french		Le tampon d'uniformes contenant les données de modèle.
 		ModelMatrixUbo m_modelMatrixUbo;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The index buffer.
-		//!\~french		Le tampon d'indices.
-		IndexBufferSPtr m_indexBuffer;
 		//!\~english	The light's stencil pass.
 		//!\~french		La passe stencil de la lumière.
 		StencilPass m_stencilPass;
 		//!\~english	The light source type.
 		//!\~french		Le type de source lumineuse.
 		LightType m_type;
+		//!\~english	The vertex count.
+		//!\~french		Le nombre de sommets.
+		uint32_t m_count;
 	};
 }
 

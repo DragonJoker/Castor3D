@@ -132,7 +132,7 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 
-			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
 				{
 					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );

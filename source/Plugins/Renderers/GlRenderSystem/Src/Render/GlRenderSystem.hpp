@@ -78,10 +78,6 @@ namespace GlRender
 		castor3d::UniformBufferBindingUPtr createUniformBufferBinding(castor3d::UniformBuffer & p_ubo
 			, castor3d::ShaderProgram const & p_program )override;
 		/**
-		 *\copydoc		castor3d::RenderSystem::createBuffer
-		 */
-		castor3d::GpuBufferUPtr createBuffer( castor3d::BufferType p_type )override;
-		/**
 		 *\copydoc		castor3d::RenderSystem::createTransformFeedback
 		 */
 		castor3d::TransformFeedbackUPtr createTransformFeedback( castor3d::BufferDeclaration const & p_computed
@@ -168,6 +164,10 @@ namespace GlRender
 		 *\copydoc		castor3d::RenderSystem::doCleanup
 		 */
 		void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::RenderSystem::doCreateBuffer
+		 */
+		castor3d::GpuBufferSPtr doCreateBuffer( castor3d::BufferType p_type )override;
 
 	public:
 		C3D_Gl_API static castor::String Name;

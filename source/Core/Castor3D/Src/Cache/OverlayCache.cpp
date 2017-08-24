@@ -84,7 +84,7 @@ namespace castor3d
 		, m_viewport{ *getEngine() }
 	{
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
-		getEngine()->postEvent( MakeInitialiseEvent( m_viewport ) );
+		getEngine()->postEvent( makeInitialiseEvent( m_viewport ) );
 	}
 
 	Cache< Overlay, castor::String >::~Cache()
@@ -105,7 +105,7 @@ namespace castor3d
 
 		for ( auto it : m_fontTextures )
 		{
-			getEngine()->postEvent( MakeCleanupEvent( *it.second ) );
+			getEngine()->postEvent( makeCleanupEvent( *it.second ) );
 		}
 	}
 
@@ -222,7 +222,7 @@ namespace castor3d
 		{
 			result = std::make_shared< FontTexture >( *getEngine(), p_font );
 			m_fontTextures.emplace( p_font->getName(), result );
-			getEngine()->postEvent( MakeInitialiseEvent( *result ) );
+			getEngine()->postEvent( makeInitialiseEvent( *result ) );
 		}
 
 		return result;
