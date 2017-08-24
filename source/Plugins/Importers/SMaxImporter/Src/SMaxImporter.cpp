@@ -339,7 +339,7 @@ namespace C3dSMax
 				}
 			}
 
-			p_scene.getListener().postEvent( MakeInitialiseEvent( *pMaterial ) );
+			p_scene.getListener().postEvent( makeInitialiseEvent( *pMaterial ) );
 		}
 	}
 

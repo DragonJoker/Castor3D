@@ -35,7 +35,7 @@ namespace Testing
 		return stream.str();
 	}
 
-	inline std::string toString( nullptr_t const & )
+	inline std::string toString( std::nullptr_t const & )
 	{
 		return "nullptr";
 	}

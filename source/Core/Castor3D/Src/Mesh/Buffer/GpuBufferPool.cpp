@@ -47,7 +47,8 @@ namespace castor3d
 	{
 		GpuBufferOffset result;
 
-		if ( type != BufferType::eArray )
+		if ( type != BufferType::eArray
+			&& type != BufferType::eElementArray )
 		{
 			result.buffer = getRenderSystem()->doCreateBuffer( type );
 			result.buffer->create();
@@ -96,7 +97,8 @@ namespace castor3d
 		, BufferAccessNature accessNature
 		, GpuBufferOffset const & bufferOffset )
 	{
-		if ( type != BufferType::eArray )
+		if ( type != BufferType::eArray
+			&& type != BufferType::eElementArray )
 		{
 			bufferOffset.buffer->destroy();
 		}

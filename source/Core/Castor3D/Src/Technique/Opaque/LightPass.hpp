@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -312,7 +312,7 @@ namespace castor3d
 				, castor::Point3f const & colour
 				, uint32_t count
 				, bool first
-				, VertexBuffer const & vbo )const;
+				, uint32_t offset )const;
 
 		private:
 			/**
@@ -591,6 +591,9 @@ namespace castor3d
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The index buffer offset.
+		//!\~french		Le décalage du tampon d'indices.
+		uint32_t m_offset{ 0u };
 	};
 }
 

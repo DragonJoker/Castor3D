@@ -330,7 +330,7 @@ namespace castor3d
 		, Point3f const & colour
 		, uint32_t count
 		, bool first
-		, VertexBuffer const & vbo )const
+		, uint32_t offset )const
 	{
 		m_lightColour->setValue( colour );
 
@@ -343,7 +343,7 @@ namespace castor3d
 			m_blendPipeline->apply();
 		}
 
-		m_geometryBuffers->draw( count, 0u );
+		m_geometryBuffers->draw( count, offset );
 	}
 
 	//************************************************************************************************
@@ -439,7 +439,7 @@ namespace castor3d
 			, colour
 			, getCount()
 			, first
-			, *m_vertexBuffer );
+			, m_offset );
 
 		gp[size_t( DsTexture::eData4 )]->unbind();
 		gp[size_t( DsTexture::eData3 )]->unbind();

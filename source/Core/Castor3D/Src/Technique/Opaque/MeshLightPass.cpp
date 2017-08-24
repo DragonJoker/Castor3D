@@ -1,4 +1,4 @@
-#include "MeshLightPass.hpp"
+﻿#include "MeshLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -113,6 +113,7 @@ namespace castor3d
 			, faces.data()
 			, faces.size() * sizeof( *faces.data() ) );
 		m_indexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_offset = m_indexBuffer->getOffset();
 
 		m_stencilPass.initialise( *m_vertexBuffer
 			, m_indexBuffer );

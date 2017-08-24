@@ -472,11 +472,6 @@ namespace castor3d
 		ENSURE( m_initialised );
 		uint32_t size = m_vertexBuffer.getSize() / m_vertexBuffer.getDeclaration().stride();
 
-		if ( !m_indexBuffer.isEmpty() )
-		{
-			size = m_indexBuffer.getSize();
-		}
-
 		if ( m_dirty )
 		{
 			m_vertexBuffer.upload();
@@ -489,7 +484,15 @@ namespace castor3d
 			m_dirty = false;
 		}
 
-		p_geometryBuffers.draw( size, 0u );
+		if ( !m_indexBuffer.isEmpty() )
+		{
+			size = m_indexBuffer.getSize();
+			p_geometryBuffers.draw( size, m_indexBuffer.getOffset() );
+		}
+		else
+		{
+			p_geometryBuffers.draw( size, 0u );
+		}
 	}
 
 	void Submesh::drawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
@@ -497,18 +500,21 @@ namespace castor3d
 		ENSURE( m_initialised );
 		uint32_t size = m_vertexBuffer.getSize() / m_vertexBuffer.getDeclaration().stride();
 
-		if ( !m_indexBuffer.isEmpty() )
-		{
-			size = m_indexBuffer.getSize();
-		}
-
 		if ( m_dirty )
 		{
 			m_vertexBuffer.upload();
 			m_dirty = false;
 		}
 
-		p_geometryBuffers.drawInstanced( size, 0u, p_count );
+		if ( !m_indexBuffer.isEmpty() )
+		{
+			size = m_indexBuffer.getSize();
+			p_geometryBuffers.drawInstanced( size, m_indexBuffer.getOffset(), p_count );
+		}
+		else
+		{
+			p_geometryBuffers.drawInstanced( size, 0u, p_count );
+		}
 	}
 
 	void Submesh::computeFacesFromPolygonVertex()
