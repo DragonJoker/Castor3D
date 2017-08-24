@@ -5,7 +5,18 @@ scene "Scene"
 	materials legacy
 	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.5 0.5 1.0
-	include "common_materials.cscn"
+
+	material "Silver"
+	{
+		pass
+		{
+			diffuse 0.75164	0.75164	0.75164 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.628281 0.628281 0.628281 1.0
+			shininess 51.2
+			two_sided true
+		}
+	}
 
 	scene_node "SunLightNode1"
 	{
