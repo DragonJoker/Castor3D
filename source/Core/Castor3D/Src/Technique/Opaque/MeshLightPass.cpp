@@ -80,11 +80,6 @@ namespace castor3d
 
 	MeshLightPass::~MeshLightPass()
 	{
-		m_stencilPass.cleanup();
-		m_indexBuffer->cleanup();
-		m_vertexBuffer->cleanup();
-		m_modelMatrixUbo.getUbo().cleanup();
-		m_matrixUbo.getUbo().cleanup();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
 	}
@@ -129,6 +124,11 @@ namespace castor3d
 	void MeshLightPass::cleanup()
 	{
 		doCleanup();
+		m_stencilPass.cleanup();
+		m_indexBuffer->cleanup();
+		m_vertexBuffer->cleanup();
+		m_modelMatrixUbo.getUbo().cleanup();
+		m_matrixUbo.getUbo().cleanup();
 	}
 
 	uint32_t MeshLightPass::getCount()const

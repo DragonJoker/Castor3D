@@ -1,4 +1,4 @@
-#include "Mesh/GlGeometryBuffers.hpp"
+﻿#include "Mesh/GlGeometryBuffers.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Mesh/GlAttribute.hpp"
@@ -46,11 +46,16 @@ namespace GlRender
 
 		if ( m_indexBuffer )
 		{
-			getOpenGl().DrawElements( m_glTopology, int( size ), GlType::eUnsignedInt, BUFFER_OFFSET( 0u ) );
+			getOpenGl().DrawElements( m_glTopology
+				, int( size )
+				, GlType::eUnsignedInt
+				, BUFFER_OFFSET( index * sizeof( uint32_t ) ) );
 		}
 		else
 		{
-			getOpenGl().DrawArrays( m_glTopology, int( 0u ), int( size ) );
+			getOpenGl().DrawArrays( m_glTopology
+				, int( 0u )
+				, int( size ) );
 		}
 
 		ObjectType::unbind();
@@ -66,11 +71,18 @@ namespace GlRender
 
 		if ( m_indexBuffer )
 		{
-			getOpenGl().DrawElementsInstanced( m_glTopology, int( size ), GlType::eUnsignedInt, BUFFER_OFFSET( 0u ), int( count ) );
+			getOpenGl().DrawElementsInstanced( m_glTopology
+				, int( size )
+				, GlType::eUnsignedInt
+				, BUFFER_OFFSET( index * sizeof( uint32_t ) )
+				, int( count ) );
 		}
 		else
 		{
-			getOpenGl().DrawArraysInstanced( m_glTopology, int( 0u ), int( size ), int( count ) );
+			getOpenGl().DrawArraysInstanced( m_glTopology
+				, int( 0u )
+				, int( size )
+				, int( count ) );
 		}
 
 		ObjectType::unbind();

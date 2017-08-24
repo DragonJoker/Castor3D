@@ -92,7 +92,7 @@ namespace castor3d
 			, AccessTypes const & flags )const
 		{
 			REQUIRE( m_gpuBuffer );
-			return reinterpret_cast< T * >( m_gpuBuffer->lock( m_offset + offset * sizeof( T )
+			return reinterpret_cast< T * >( m_gpuBuffer->lock( ( m_offset + offset ) * sizeof( T )
 				, count * sizeof( T )
 				, flags ) );
 		}
@@ -128,7 +128,7 @@ namespace castor3d
 			, T const * buffer )const
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->upload( m_offset + offset * sizeof( T )
+			return m_gpuBuffer->upload( ( m_offset + offset ) * sizeof( T )
 				, count * sizeof( T )
 				, reinterpret_cast< uint8_t const * >( buffer ) );
 		}
@@ -163,7 +163,7 @@ namespace castor3d
 			, T * buffer )
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->download( m_offset + offset * sizeof( T )
+			return m_gpuBuffer->download( ( m_offset + offset ) * sizeof( T )
 				, count * sizeof( T )
 				, reinterpret_cast< uint8_t * >( buffer ) );
 		}
@@ -220,7 +220,7 @@ namespace castor3d
 			REQUIRE( m_gpuBuffer );
 			m_gpuBuffer->copy( src
 				, srcOffset
-				, m_offset
+				, m_offset * sizeof( T )
 				, size * sizeof( T ) );
 		}
 		/**
@@ -237,7 +237,9 @@ namespace castor3d
 			, uint32_t size )
 		{
 			REQUIRE( src.m_gpuBuffer );
-			return copy( *src.m_gpuBuffer, src.m_offset, size );
+			return copy( *src.m_gpuBuffer
+				, src.m_offset * sizeof( T )
+				, size );
 		}
 		/**
 		 *\~english
