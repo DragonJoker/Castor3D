@@ -106,7 +106,7 @@ namespace CastorGui
 		if ( getControlsManager() )
 		{
 			StaticCtrlSPtr item = doCreateItemCtrl( p_value );
-			getEngine().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, item]()
+			getEngine().postEvent( makeFunctorEvent( EventType::ePreRender, [this, item]()
 			{
 				getControlsManager()->create( item );
 			} ) );
@@ -142,7 +142,7 @@ namespace CastorGui
 				if ( getControlsManager() )
 				{
 					ControlSPtr control = *it;
-					getEngine().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, control]()
+					getEngine().postEvent( makeFunctorEvent( EventType::ePreRender, [this, control]()
 					{
 						getControlsManager()->destroy( control );
 					} ) );

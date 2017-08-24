@@ -61,16 +61,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
-		 *\param[in]	p_type		Buffer access type.
-		 *\param[in]	p_nature	Buffer access nature.
+		 *\param[in]	type	Buffer access type.
+		 *\param[in]	nature	Buffer access nature.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
-		 *\param[in]	p_type		Type d'accès du tampon.
-		 *\param[in]	p_nature	Nature d'accès du tampon.
+		 *\param[in]	type	Type d'accès du tampon.
+		 *\param[in]	nature	Nature d'accès du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( BufferAccessType p_type, BufferAccessNature p_nature );
+		C3D_API bool initialise( BufferAccessType type
+			, BufferAccessNature nature );
 		/**
 		 *\~english
 		 *\brief		Clean up the GPU buffer.

@@ -1,4 +1,4 @@
-#include "GlTransformFeedbackTest.hpp"
+﻿#include "GlTransformFeedbackTest.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -310,7 +310,7 @@ namespace Testing
 
 			pipeline->apply();
 			transformFeedback->bind();
-			CT_CHECK( geometryBuffers->draw( 5, 0 ) );
+			CT_CHECK( geometryBuffers->draw( 5, 0u ) );
 			transformFeedback->unbind();
 			CT_EQUAL( transformFeedback->getWrittenPrimitives(), 5 );
 
@@ -383,7 +383,7 @@ namespace Testing
 
 		pipeline->apply();
 		transformFeedback->bind();
-		CT_CHECK( geometryBuffers->draw( 5, 0 ) );
+		CT_CHECK( geometryBuffers->draw( 5, 0u ) );
 		transformFeedback->unbind();
 		m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 
@@ -464,7 +464,7 @@ namespace Testing
 
 		pipeline->apply();
 		transformFeedback->bind();
-		CT_CHECK( geometryBuffers->draw( 5, 0 ) );
+		CT_CHECK( geometryBuffers->draw( 5, 0u ) );
 		transformFeedback->unbind();
 		m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 		CT_EQUAL( transformFeedback->getWrittenPrimitives(), 5 );
@@ -582,7 +582,7 @@ namespace Testing
 
 			pipeline->apply();
 			transformFeedback->bind();
-			CT_CHECK( geometryBuffers->draw( std::max( 1u, transformFeedback->getWrittenPrimitives() ), 0 ) );
+			CT_CHECK( geometryBuffers->draw( std::max( 1u, transformFeedback->getWrittenPrimitives() ), 0u ) );
 			transformFeedback->unbind();
 			m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 
@@ -711,7 +711,7 @@ namespace Testing
 
 			pipeline->apply();
 			transformFeedback[tfb]->bind();
-			CT_CHECK( geometryBuffers[vtx]->draw( std::max( 1u, transformFeedback[vtx]->getWrittenPrimitives() ), 0 ) );
+			CT_CHECK( geometryBuffers[vtx]->draw( std::max( 1u, transformFeedback[vtx]->getWrittenPrimitives() ), 0u ) );
 			transformFeedback[tfb]->unbind();
 			m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 

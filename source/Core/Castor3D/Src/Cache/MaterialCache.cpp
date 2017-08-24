@@ -31,7 +31,7 @@ namespace castor3d
 		else
 		{
 			m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-			getEngine()->postEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
+			getEngine()->postEvent( makeInitialiseEvent( *m_defaultMaterial ) );
 		}
 
 		switch ( type )

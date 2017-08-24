@@ -144,10 +144,6 @@ namespace castor3d
 		 */
 		castor::Point3fArray doGenerateVertices()const override;
 		/**
-		 *\copydoc		castor3d::MeshLightPass::doGenerateFaces
-		 */
-		UIntArray doGenerateFaces()const override;
-		/**
 		 *\copydoc		castor3d::MeshLightPass::doComputeModelMatrix
 		 */
 		castor::Matrix4x4r doComputeModelMatrix( Light const & light

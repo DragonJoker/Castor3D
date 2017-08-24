@@ -149,7 +149,7 @@ namespace CastorViewer
 		void Restore( RenderPanel::SelectedSubmesh & p_selected
 			, GeometrySPtr p_geometry )
 		{
-			p_geometry->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePostRender
+			p_geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
 				, [p_selected, p_geometry]()
 				{
 					p_geometry->setMaterial( *p_selected.m_submesh, p_selected.m_originalMaterial );
@@ -213,7 +213,7 @@ namespace CastorViewer
 				break;
 			}
 
-			p_geometry->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePostRender
+			p_geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
 				, [p_selected, p_geometry]()
 				{
 					p_geometry->setMaterial( *p_selected.m_submesh, p_selected.m_selectedMaterial );
@@ -385,7 +385,7 @@ namespace CastorViewer
 		if ( camera )
 		{
 			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
+			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
 			{
 				Quaternion orientation{ cameraNode->getOrientation() };
 				orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
@@ -402,7 +402,7 @@ namespace CastorViewer
 		if ( camera )
 		{
 			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
+			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
 			{
 				Quaternion orientation{ cameraNode->getOrientation() };
 				orientation *= Quaternion::fromAxisAngle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
@@ -539,7 +539,7 @@ namespace CastorViewer
 
 		if ( changed )
 		{
-			scene->getListener().postEvent( MakeFunctorEvent( EventType::ePostRender
+			scene->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
 				, [scene]()
 				{
 					scene->setChanged();
@@ -912,7 +912,7 @@ namespace CastorViewer
 				{
 					auto x = m_oldX;
 					auto y = m_oldY;
-					m_listener->postEvent( MakeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
+					m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
 					{
 						Camera & camera = *window->getCamera();
 						camera.update();
@@ -975,7 +975,7 @@ namespace CastorViewer
 			{
 				auto x = m_oldX;
 				auto y = m_oldY;
-				m_listener->postEvent( MakeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
+				m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
 				{
 					Camera & camera = *window->getCamera();
 					camera.update();

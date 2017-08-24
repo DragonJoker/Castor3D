@@ -122,7 +122,7 @@ namespace castor3d
 	 *\param[in]	p_functor	Le foncteur à exécuter
 	 */
 	template< typename Functor >
-	inline std::unique_ptr< FunctorEvent< Functor > > MakeFunctorEvent( EventType p_type, Functor p_functor )
+	inline std::unique_ptr< FunctorEvent< Functor > > makeFunctorEvent( EventType p_type, Functor p_functor )
 	{
 		return std::make_unique< FunctorEvent< Functor > >( p_type, p_functor );
 	}

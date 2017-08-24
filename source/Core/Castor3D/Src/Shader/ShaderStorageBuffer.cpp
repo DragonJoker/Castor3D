@@ -1,4 +1,4 @@
-#include "ShaderStorageBuffer.hpp"
+﻿#include "ShaderStorageBuffer.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
@@ -16,24 +16,26 @@ namespace castor3d
 	{
 	}
 
-	bool ShaderStorageBuffer::initialise( BufferAccessType p_type
-		, BufferAccessNature p_nature )
+	bool ShaderStorageBuffer::initialise( BufferAccessType type
+		, BufferAccessNature nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = getEngine()->getRenderSystem()->createBuffer( BufferType::eShaderStorage );
+			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eShaderStorage
+				, getSize()
+				, type
+				, nature );
+			m_gpuBuffer = buffer.buffer;
+			m_offset = buffer.offset;
+			doInitialise( type, nature );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			result = doInitialise( p_type, p_nature );
-		}
-
-		if ( result )
-		{
-			m_gpuBuffer->setBindingPoint( 0u );
+			upload();
+			bindTo( 0u );
 		}
 
 		return result;
@@ -41,11 +43,18 @@ namespace castor3d
 
 	void ShaderStorageBuffer::cleanup()
 	{
-		doCleanup();
+		if ( m_gpuBuffer )
+		{
+			getEngine()->getRenderSystem()->putBuffer( BufferType::eShaderStorage
+				, m_accessType
+				, m_accessNature
+				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
+			m_gpuBuffer.reset();
+		}
 	}
 
-	void ShaderStorageBuffer::bindTo( uint32_t p_index )const
+	void ShaderStorageBuffer::bindTo( uint32_t index )const
 	{
-		getGpuBuffer().setBindingPoint( p_index );
+		getGpuBuffer().setBindingPoint( index );
 	}
 }

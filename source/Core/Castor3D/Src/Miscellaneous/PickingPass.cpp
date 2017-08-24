@@ -1,10 +1,13 @@
-#include "PickingPass.hpp"
+﻿#include "PickingPass.hpp"
 
+#include "Cache/MaterialCache.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -247,6 +250,7 @@ namespace castor3d
 	{
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 		p_camera.apply();
 		m_pickingUbo.bindTo( 7u );
 		doRenderNodes( p_nodes, p_camera );
@@ -519,16 +523,33 @@ namespace castor3d
 		auto c3d_iDrawIndex( uboPicking.declMember< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( uboPicking.declMember< UInt >( NodeIndex ) );
 		uboPicking.end();
+		auto materials = doCreateMaterials( writer, programFlags );
+		materials->declare();
 
 		// Fragment Intputs
 		auto gl_PrimitiveID( writer.declBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
+		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs
 		auto pxl_v4FragColor( writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
+			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				doApplyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, vtx_material
+					, *materials );
+			}
+
 			pxl_v4FragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );
 		} );
 

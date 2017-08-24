@@ -98,7 +98,7 @@ namespace C3DMd2
 			}
 
 			p_mesh.computeNormals();
-			p_mesh.getScene()->getListener().postEvent( MakeInitialiseEvent( *material ) );
+			p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *material ) );
 			result = true;
 		}
 

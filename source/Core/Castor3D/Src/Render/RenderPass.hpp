@@ -393,6 +393,39 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
+		 *\brief		Creates the appropriate GLSL materials buffer.
+		 *\param[in]	writer			The GLSL writer.
+		 *\param		programFlags	The program flags.
+		 *\~french
+		 *\brief		Crée le tampon de matériaux GLSL approprié.
+		 *\param[in]	writer			Le writer GLSL.
+		 *\param		programFlags	Les indicateurs de programme.
+		 */
+		C3D_API std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
+			, ProgramFlags const & programFlags )const;
+		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	alpha		The alpha value.
+		 *\param[in]	material	The material index.
+		 *\param[in]	materials	The materials.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	alpha		La valeur d'opacité.
+		 *\param[in]	material	L'indice du matériau.
+		 *\param[in]	materials	Les matériaux.
+		 */
+		C3D_API void doApplyAlphaFunc( glsl::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, glsl::Float const & alpha
+			, glsl::Int const & material
+			, shader::Materials const & materials )const;
+		/**
+		 *\~english
 		 *\brief		Creates a render node.
 		 *\param[in]	pass		The pass.
 		 *\param[in]	pipeline	The pipeline.

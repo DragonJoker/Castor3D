@@ -1,4 +1,4 @@
-#include "PointLightPass.hpp"
+﻿#include "PointLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -123,13 +123,8 @@ namespace castor3d
 			}
 		}
 
-		return data;
-	}
-
-	UIntArray PointLightPass::doGenerateFaces()const
-	{
-		UIntArray faces;
-		faces.reserve( FaceCount * FaceCount * 6 );
+		Point3fArray result;
+		result.reserve( FaceCount * FaceCount * 6u );
 		uint32_t cur = 0;
 		uint32_t prv = 0;
 
@@ -145,12 +140,12 @@ namespace castor3d
 
 			for ( uint32_t i = 0; i < FaceCount; ++i )
 			{
-				faces.push_back( prv + 0 );
-				faces.push_back( cur + 0 );
-				faces.push_back( prv + 1 );
-				faces.push_back( cur + 0 );
-				faces.push_back( cur + 1 );
-				faces.push_back( prv + 1 );
+				result.push_back( data[prv + 0] );
+				result.push_back( data[cur + 0] );
+				result.push_back( data[prv + 1] );
+				result.push_back( data[cur + 0] );
+				result.push_back( data[cur + 1] );
+				result.push_back( data[prv + 1] );
 				prv++;
 				cur++;
 			}
@@ -159,7 +154,7 @@ namespace castor3d
 			cur++;
 		}
 
-		return faces;
+		return result;
 	}
 
 	Matrix4x4r PointLightPass::doComputeModelMatrix( castor3d::Light const & light

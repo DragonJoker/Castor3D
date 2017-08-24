@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GL_GEOMETRY_BUFFERS_H___
 #define ___GL_GEOMETRY_BUFFERS_H___
 
-#include "Buffer/GlBufferBase.hpp"
+#include "Buffer/GlBuffer.hpp"
 #include "Shader/GlShaderProgram.hpp"
 
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -55,14 +55,16 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_topology	The buffers topology.
-		 *\param[in]	p_program	The shader program.
+		 *\param[in]	topology	The buffers topology.
+		 *\param[in]	program		The shader program.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_topology	La topologie des tampons.
-		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	topology	La topologie des tampons.
+		 *\param[in]	program		Le programme shader.
 		 */
-		GlGeometryBuffers( OpenGl & p_gl, castor3d::Topology p_topology, castor3d::ShaderProgram const & p_program );
+		GlGeometryBuffers( OpenGl & gl
+			, castor3d::Topology topology
+			, castor3d::ShaderProgram const & program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -73,11 +75,14 @@ namespace GlRender
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::Draw
 		 */
-		virtual bool draw( uint32_t p_size, uint32_t p_index )const;
+		virtual bool draw( uint32_t size
+			, uint32_t index )const;
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::DrawInstanced
 		 */
-		virtual bool drawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const;
+		virtual bool drawInstanced( uint32_t size
+			, uint32_t index
+			, uint32_t count )const;
 
 	private:
 		/**
@@ -89,10 +94,23 @@ namespace GlRender
 		 */
 		virtual void doCleanup();
 
-		castor3d::BufferDeclaration::const_iterator doFindElement( castor3d::BufferDeclaration const & p_declaration, castor3d::BufferElementDeclaration const & p_element )const;
-		GlAttributeBaseSPtr doCreateAttribute( castor3d::BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_divisor, castor3d::BufferDeclaration const & p_declaration );
-		bool doCreateAttributes( castor3d::ProgramInputLayout const & p_layout, castor3d::BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes );
-		void doBindAttributes( GlAttributePtrArray const & p_attributes )const;
+		castor3d::BufferDeclaration::const_iterator doFindElement( castor3d::BufferDeclaration const & declaration
+			, castor3d::BufferElementDeclaration const & element )const;
+		GlAttributeBaseSPtr doCreateAttribute( castor3d::BufferElementDeclaration const & element
+			, uint32_t offset
+			, uint32_t divisor
+			, castor3d::BufferDeclaration const & declaration );
+		bool doCreateAttributes( castor3d::ProgramInputLayout const & layout
+			, castor3d::BufferDeclaration const & declaration
+			, uint32_t offset
+			, GlAttributePtrArray & attributes );
+		void doBindAttributes( GlAttributePtrArray const & attributes )const;
+		void doDrawElementsIndirect( uint32_t size
+			, uint32_t index
+			, uint32_t count )const;
+		void doDrawArraysIndirect( uint32_t size
+			, uint32_t index
+			, uint32_t count )const;
 
 	private:
 		//! The shader program.
@@ -101,6 +119,10 @@ namespace GlRender
 		GlAttributePtrArray m_attributes;
 		//! The topology type.
 		GlTopology m_glTopology;
+		GlBuffer m_glIndirectArraysBuffer;
+		GlBuffer m_glIndirectElementsBuffer;
+		mutable DrawArraysIndirectCommand m_arraysCommand;
+		mutable DrawElementsIndirectCommand m_elementsCommand;
 	};
 }
 

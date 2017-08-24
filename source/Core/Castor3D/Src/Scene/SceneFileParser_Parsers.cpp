@@ -2529,7 +2529,7 @@ namespace castor3d
 			parsingContext->vertexTan.clear();
 			parsingContext->vertexTex.clear();
 			parsingContext->faces.clear();
-			parsingContext->pSubmesh->getParent().getScene()->getListener().postEvent( MakeInitialiseEvent( *parsingContext->pSubmesh ) );
+			parsingContext->pSubmesh->getParent().getScene()->getListener().postEvent( makeInitialiseEvent( *parsingContext->pSubmesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()

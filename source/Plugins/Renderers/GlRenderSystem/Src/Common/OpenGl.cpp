@@ -1,4 +1,4 @@
-﻿#include "Common/OpenGl.hpp"
+#include "Common/OpenGl.hpp"
 
 #include "Render/GlRenderSystem.hpp"
 
@@ -1010,7 +1010,12 @@ namespace GlRender
 		{
 			gl_api::getFunction( m_pfnMemoryBarrier, cuT( "glMemoryBarrier" ), cuT( "ARB" ) );
 			gl_api::getFunction( m_pfnMemoryBarrierByRegion, cuT( "glMemoryBarrierByRegion" ), cuT( "ARB" ) );
-			
+		}
+
+		if ( hasExtension( ARB_draw_indirect ) )
+		{
+			gl_api::getFunction( m_pfnDrawArraysIndirect, cuT( "glDrawArraysIndirect" ), cuT( "ARB" ) );
+			gl_api::getFunction( m_pfnDrawElementsIndirect, cuT( "glDrawElementsIndirect" ), cuT( "ARB" ) );
 		}
 
 		return true;

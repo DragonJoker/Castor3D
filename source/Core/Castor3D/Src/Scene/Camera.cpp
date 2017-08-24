@@ -61,7 +61,7 @@ namespace castor3d
 		}
 		else
 		{
-			scene.getListener().postEvent( MakeInitialiseEvent( m_viewport ) );
+			scene.getListener().postEvent( makeInitialiseEvent( m_viewport ) );
 		}
 
 		if ( node )

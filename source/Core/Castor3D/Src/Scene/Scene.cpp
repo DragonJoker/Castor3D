@@ -379,11 +379,11 @@ namespace castor3d
 		};
 		auto eventInitialise = [this]( auto element )
 		{
-			this->getListener().postEvent( MakeInitialiseEvent( *element ) );
+			this->getListener().postEvent( makeInitialiseEvent( *element ) );
 		};
 		auto eventClean = [this]( auto element )
 		{
-			this->getListener().postEvent( MakeCleanupEvent( *element ) );
+			this->getListener().postEvent( makeCleanupEvent( *element ) );
 		};
 		auto attachObject = []( auto element
 			, SceneNodeSPtr parent
@@ -667,7 +667,7 @@ namespace castor3d
 	{
 		m_lightCache->initialise();
 
-		getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 		{
 			m_colour = std::make_unique< TextureProjection >( *getEngine()->getRenderSystem()->getCurrentContext() );
 			m_colour->initialise();
@@ -689,7 +689,7 @@ namespace castor3d
 
 		for ( auto & pass : m_reflectionMapsArray )
 		{
-			getListener().postEvent( MakeFunctorEvent( EventType::ePreRender
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 				, [&pass]()
 				{
 					pass.get().cleanup();
@@ -704,7 +704,7 @@ namespace castor3d
 		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->cleanup();
 
-		getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 		{
 			if ( m_colour )
 			{
@@ -715,7 +715,7 @@ namespace castor3d
 
 		if ( m_backgroundImage )
 		{
-			getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->cleanup();
 			} ) );
@@ -723,7 +723,7 @@ namespace castor3d
 
 		if ( m_skybox )
 		{
-			getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_skybox->cleanup();
 			} ) );
@@ -802,7 +802,7 @@ namespace castor3d
 			m_skybox->getTexture().getImage( 3u ).initialiseSource( buffer );
 			m_skybox->getTexture().getImage( 4u ).initialiseSource( buffer );
 			m_skybox->getTexture().getImage( 5u ).initialiseSource( buffer );
-			getListener().postEvent( MakeInitialiseEvent( *m_skybox ) );
+			getListener().postEvent( makeInitialiseEvent( *m_skybox ) );
 		}
 
 		m_changed = false;
@@ -817,7 +817,7 @@ namespace castor3d
 			auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
 			texture->setSource( folder, relative );
 			m_backgroundImage = texture;
-			getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->initialise();
 				m_backgroundImage->bind( 0 );
@@ -838,7 +838,7 @@ namespace castor3d
 	{
 		m_skybox = std::move( skybox );
 		m_skybox->setScene( *this );
-		getListener().postEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 		{
 			m_skybox->initialise();
 		} ) );
@@ -973,7 +973,7 @@ namespace castor3d
 			auto & pass = *it->second;
 			m_reflectionMapsArray.emplace_back( pass );
 
-			getListener().postEvent( MakeFunctorEvent( EventType::ePreRender
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 				, [&pass]()
 				{
 					pass.initialise();

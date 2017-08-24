@@ -720,7 +720,7 @@ namespace Ase
 		for ( auto submesh : *pContext->pMesh )
 		{
 			submesh->computeNormals();
-			pContext->pMesh->getScene()->getListener().postEvent( MakeInitialiseEvent( *submesh ) );
+			pContext->pMesh->getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()

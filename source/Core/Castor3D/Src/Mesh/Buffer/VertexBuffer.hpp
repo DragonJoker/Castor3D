@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -48,13 +48,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_declaration	The buffer declaration.
+		 *\param[in]	declaration	The buffer declaration.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_declaration	La déclaration du tampon.
+		 *\param[in]	declaration	La déclaration du tampon.
 		 */
-		C3D_API VertexBuffer( Engine & engine, BufferDeclaration const & p_declaration );
+		C3D_API VertexBuffer( Engine & engine
+			, BufferDeclaration const & declaration );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -65,16 +66,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
-		 *\param[in]	p_type		Buffer access type.
-		 *\param[in]	p_nature	Buffer access nature.
+		 *\param[in]	type	Buffer access type.
+		 *\param[in]	nature	Buffer access nature.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
-		 *\param[in]	p_type		Type d'accès du tampon.
-		 *\param[in]	p_nature	Nature d'accès du tampon.
+		 *\param[in]	type	Type d'accès du tampon.
+		 *\param[in]	nature	Nature d'accès du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( BufferAccessType p_type, BufferAccessNature p_nature );
+		C3D_API bool initialise( BufferAccessType type
+			, BufferAccessNature nature );
 		/**
 		 *\~english
 		 *\brief		Clean up the GPU buffer.
@@ -103,12 +105,12 @@ namespace castor3d
 		 *\param[in]	p_begin, p_end	Les itérateurs du tableau d'éléments
 		 */
 		template< typename ItType >
-		inline void linkCoords( ItType p_begin, ItType p_end )
+		inline void linkCoords( ItType begin, ItType end )
 		{
 			uint32_t stride = m_bufferDeclaration.stride();
 			uint8_t * buffer = CpuBuffer< uint8_t >::getData();
 
-			for ( auto it = p_begin; it != p_end; ++it )
+			for ( auto it = begin; it != end; ++it )
 			{
 				( *it )->linkCoords( buffer, stride );
 				buffer += stride;

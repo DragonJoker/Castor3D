@@ -1,4 +1,4 @@
-#include "MeshLightPass.hpp"
+﻿#include "MeshLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -80,12 +80,6 @@ namespace castor3d
 
 	MeshLightPass::~MeshLightPass()
 	{
-		m_stencilPass.cleanup();
-		m_indexBuffer->cleanup();
-		m_vertexBuffer->cleanup();
-		m_modelMatrixUbo.getUbo().cleanup();
-		m_matrixUbo.getUbo().cleanup();
-		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
 	}
 
@@ -98,6 +92,7 @@ namespace castor3d
 		} );
 
 		auto data = doGenerateVertices();
+		m_count = uint32_t( data.size() );
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, declaration );
 		auto size = data.size() * sizeof( *data.data() );
 		m_vertexBuffer->resize( uint32_t( size ) );
@@ -106,21 +101,11 @@ namespace castor3d
 			, size );
 		m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 
-		auto faces = doGenerateFaces();
-		m_indexBuffer = std::make_shared< IndexBuffer >( m_engine );
-		m_indexBuffer->resize( uint32_t( faces.size() ) );
-		std::memcpy( m_indexBuffer->getData()
-			, faces.data()
-			, faces.size() * sizeof( *faces.data() ) );
-		m_indexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-
-		m_stencilPass.initialise( *m_vertexBuffer
-			, m_indexBuffer );
+		m_stencilPass.initialise( *m_vertexBuffer );
 
 		doInitialise( scene
 			, m_type
 			, *m_vertexBuffer
-			, m_indexBuffer
 			, sceneUbo
 			, &m_modelMatrixUbo );
 	}
@@ -128,11 +113,15 @@ namespace castor3d
 	void MeshLightPass::cleanup()
 	{
 		doCleanup();
+		m_stencilPass.cleanup();
+		m_vertexBuffer->cleanup();
+		m_modelMatrixUbo.getUbo().cleanup();
+		m_matrixUbo.getUbo().cleanup();
 	}
 
 	uint32_t MeshLightPass::getCount()const
 	{
-		return m_indexBuffer->getSize();
+		return m_count;
 	}
 
 	void MeshLightPass::doUpdate( Size const & size
@@ -143,7 +132,7 @@ namespace castor3d
 		m_matrixUbo.update( camera.getView(), camera.getViewport().getProjection() );
 		m_modelMatrixUbo.update( model );
 		camera.apply();
-		m_stencilPass.render( m_indexBuffer->getSize() );
+		m_stencilPass.render( m_count );
 	}
 	
 	glsl::Shader MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const

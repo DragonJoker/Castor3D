@@ -286,25 +286,25 @@ namespace glsl
 	UInt::UInt( unsigned int p_value )
 		: Type( cuT( "uint " ) )
 	{
-		m_value << p_value;
+		m_value << p_value << "u";
 	}
 
 	UInt::UInt( float p_value )
 		: Type( cuT( "uint " ) )
 	{
-		m_value << p_value;
+		m_value << static_cast< unsigned int >( p_value ) << "u";
 	}
 
 	UInt::UInt( GlslWriter * p_writer, unsigned int p_value )
 		: Type( cuT( "uint " ), p_writer, castor::String() )
 	{
-		m_value << p_value;
+		m_value << p_value << "u";
 	}
 
 	UInt::UInt( GlslWriter * p_writer, float p_value )
 		: Type( cuT( "uint " ), p_writer, castor::String() )
 	{
-		m_value << p_value;
+		m_value << static_cast< unsigned int >( p_value ) << "u";
 	}
 
 	UInt::UInt( GlslWriter * p_writer, castor::String const & p_name )

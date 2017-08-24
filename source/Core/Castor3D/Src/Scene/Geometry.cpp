@@ -204,7 +204,7 @@ namespace castor3d
 						if ( count == 1 )
 						{
 							// We need to update the matrix buffers only.
-							getScene()->getListener().postEvent( MakeFunctorEvent( EventType::ePreRender
+							getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 								, [this, &p_submesh]()
 								{
 									p_submesh.resetMatrixBuffers();
@@ -214,7 +214,7 @@ namespace castor3d
 						{
 							// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
 							getScene()->setChanged();
-							getScene()->getListener().postEvent( MakeFunctorEvent( EventType::eQueueRender
+							getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
 								, [this, &p_submesh]()
 								{
 									// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.

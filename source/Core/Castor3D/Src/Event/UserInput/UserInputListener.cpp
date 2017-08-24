@@ -22,7 +22,7 @@ namespace castor3d
 		m_keyboard.m_ctrl = false;
 		m_keyboard.m_alt = false;
 		m_keyboard.m_shift = false;
-		m_frameListener->postEvent( MakeInitialiseEvent( *this ) );
+		m_frameListener->postEvent( makeInitialiseEvent( *this ) );
 	}
 
 	UserInputListener::~UserInputListener()
@@ -31,7 +31,7 @@ namespace castor3d
 
 	bool UserInputListener::initialise()
 	{
-		m_frameListener->postEvent( MakeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::processEvents, this ) ) );
+		m_frameListener->postEvent( makeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::processEvents, this ) ) );
 		m_enabled = doInitialise();
 		return m_enabled;
 	}
@@ -65,7 +65,7 @@ namespace castor3d
 		if ( m_enabled )
 		{
 			// Push this method again, for next frame.
-			m_frameListener->postEvent( MakeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::processEvents, this ) ) );
+			m_frameListener->postEvent( makeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::processEvents, this ) ) );
 		}
 	}
 
@@ -351,7 +351,7 @@ namespace castor3d
 
 			if ( material )
 			{
-				this->m_frameListener->postEvent( MakeFunctorEvent( EventType::ePreRender
+				this->m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
 					, [overlay, material]()
 					{
 						overlay->setMaterial( material );

@@ -1,4 +1,4 @@
-#include "IndexBuffer.hpp"
+﻿#include "IndexBuffer.hpp"
 
 #include "Engine.hpp"
 
@@ -15,18 +15,26 @@ namespace castor3d
 	{
 	}
 
-	bool IndexBuffer::initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool IndexBuffer::initialise( BufferAccessType type
+		, BufferAccessNature nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = getEngine()->getRenderSystem()->createBuffer( BufferType::eElementArray );
+			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eElementArray
+				, getSize() * sizeof( uint32_t )
+				, type
+				, nature );
+			m_gpuBuffer = buffer.buffer;
+			REQUIRE( !( buffer.offset % sizeof( uint32_t ) ) );
+			m_offset = buffer.offset / sizeof( uint32_t );
+			doInitialise( type, nature );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			result = doInitialise( p_type, p_nature );
+			upload();
 		}
 
 		return result;
@@ -34,6 +42,13 @@ namespace castor3d
 
 	void IndexBuffer::cleanup()
 	{
-		doCleanup();
+		if ( m_gpuBuffer )
+		{
+			getEngine()->getRenderSystem()->putBuffer( BufferType::eElementArray
+				, m_accessType
+				, m_accessNature
+				, GpuBufferOffset{ m_gpuBuffer, m_offset * sizeof( uint32_t ) } );
+			m_gpuBuffer.reset();
+		}
 	}
 }

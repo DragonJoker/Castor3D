@@ -97,7 +97,7 @@ namespace castor3d
 		m_pipeline->apply();
 		p_texture.bind( 0 );
 		m_sampler->bind( 0 );
-		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0 );
+		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
 		m_sampler->unbind( 0 );
 		p_texture.unbind( 0 );
 	}

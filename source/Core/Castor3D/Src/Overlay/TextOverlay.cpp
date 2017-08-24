@@ -204,7 +204,7 @@ namespace castor3d
 
 			fontTexture->update();
 
-			getOverlay().getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender, [fontTexture]()
+			getOverlay().getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, [fontTexture]()
 			{
 				fontTexture->cleanup();
 				fontTexture->initialise();

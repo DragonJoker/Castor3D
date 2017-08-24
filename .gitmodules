@@ -4,3 +4,6 @@
 [submodule "dependencies"]
 	path = dependencies
 	url = https://github.com/DragonJoker/Castor3DDeps.git
+[submodule "data/TestScenes"]
+	path = data/TestScenes
+	url = git@github.com:DragonJoker/Castor3DTestScenes.git

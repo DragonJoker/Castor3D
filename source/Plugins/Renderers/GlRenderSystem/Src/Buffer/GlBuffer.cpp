@@ -1,22 +1,22 @@
-﻿#include "GlBuffer.hpp"
+#include "GlBuffer.hpp"
 #include "Render/GlRenderSystem.hpp"
 
 namespace GlRender
 {
 	GlBuffer::GlBuffer( GlRenderSystem & renderSystem
-		, OpenGl & p_gl
-		, GlBufferTarget p_target )
+		, OpenGl & gl
+		, GlBufferTarget target )
 		: castor3d::GpuBuffer( renderSystem )
-		, BindableType{ p_gl,
+		, BindableType{ gl,
 			"GlBuffer",
-			std::bind( &OpenGl::GenBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-			std::bind( &OpenGl::DeleteBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-			std::bind( &OpenGl::IsBuffer, std::ref( p_gl ), std::placeholders::_1 ),
-			[&p_gl, p_target]( uint32_t p_glName )
+			std::bind( &OpenGl::GenBuffers, std::ref( gl ), std::placeholders::_1, std::placeholders::_2 ),
+			std::bind( &OpenGl::DeleteBuffers, std::ref( gl ), std::placeholders::_1, std::placeholders::_2 ),
+			std::bind( &OpenGl::IsBuffer, std::ref( gl ), std::placeholders::_1 ),
+			[&gl, target]( uint32_t glName )
 			{
-				return p_gl.BindBuffer( p_target, p_glName );
+				return gl.BindBuffer( target, glName );
 			} }
-		, m_target{ p_target }
+		, m_target{ target }
 	{
 	}
 
@@ -34,26 +34,11 @@ namespace GlRender
 		BindableType::destroy();
 	}
 
-	void GlBuffer::initialiseStorage( uint32_t p_count
-		, castor3d::BufferAccessType p_type
-		, castor3d::BufferAccessNature p_nature )const
+	void GlBuffer::setBindingPoint( uint32_t index )const
 	{
-		REQUIRE( p_count > 0 );
-		REQUIRE( this->getGlName() != GlInvalidIndex );
-		bind();
-		getOpenGl().BufferData( m_target
-			, p_count
-			, nullptr
-			, BindableType::getOpenGl().getBufferFlags( uint32_t( p_nature ) | uint32_t( p_type ) ) );
-		m_allocatedSize = p_count;
-		unbind();
-	}
-
-	void GlBuffer::setBindingPoint( uint32_t p_index )const
-	{
-		m_bindingPoint = p_index;
+		m_bindingPoint = index;
 		getOpenGl().BindBufferBase( m_target
-			, p_index
+			, m_bindingPoint
 			, getGlName() );
 	}
 
@@ -72,90 +57,92 @@ namespace GlRender
 		BindableType::unbind();
 	}
 
-	void GlBuffer::copy( castor3d::GpuBuffer const & p_src
-		, uint32_t p_size )const
+	void GlBuffer::copy( castor3d::GpuBuffer const & src
+		, uint32_t srcOffset
+		, uint32_t dstOffset
+		, uint32_t size )const
 	{
 		REQUIRE( this->getGlName() != GlInvalidIndex );
-		REQUIRE( p_size > 0 );
-		REQUIRE( m_allocatedSize >= p_size );
-		REQUIRE( static_cast< GlBuffer const & >( p_src ).m_allocatedSize >= p_size );
+		REQUIRE( size > 0 );
+		REQUIRE( m_allocatedSize >= size + dstOffset );
+		REQUIRE( static_cast< GlBuffer const & >( src ).m_allocatedSize >= size + srcOffset );
 		getOpenGl().BindBuffer( GlBufferTarget::eRead
-			, static_cast< GlBuffer const & >( p_src ).getGlName() );
+			, static_cast< GlBuffer const & >( src ).getGlName() );
 		getOpenGl().BindBuffer( GlBufferTarget::eWrite, getGlName() );
 		BindableType::getOpenGl().CopyBufferSubData( GlBufferTarget::eRead
 			, GlBufferTarget::eWrite
-			, 0
-			, 0
-			, p_size );
+			, srcOffset
+			, dstOffset
+			, size );
 		getOpenGl().BindBuffer( GlBufferTarget::eWrite, 0 );
 		getOpenGl().BindBuffer( GlBufferTarget::eRead, 0 );
 	}
 
-	void GlBuffer::upload( uint32_t p_offset
-		, uint32_t p_count
-		, uint8_t const * p_buffer )const
+	void GlBuffer::upload( uint32_t offset
+		, uint32_t count
+		, uint8_t const * buffer )const
 	{
 		REQUIRE( this->getGlName() != GlInvalidIndex );
-		REQUIRE( p_count > 0 );
-		REQUIRE( m_allocatedSize >= p_count + p_offset );
+		REQUIRE( count > 0 );
+		REQUIRE( m_allocatedSize >= count + offset );
 		bind();
 		static auto const provider = BindableType::getOpenGl().getProvider();
 
 		if ( provider == GlProvider::eNvidia || provider == GlProvider::eATI )
 		{
-			auto buffer = lock( p_offset
-				, p_count
+			auto data = lock( offset
+				, count
 				, castor3d::AccessType::eWrite );
 
 			if ( buffer )
 			{
-				std::memcpy( buffer, p_buffer, p_count );
+				std::memcpy( data, buffer, count );
 				unlock();
 			}
 		}
 		else
 		{
 			BindableType::getOpenGl().BufferSubData( m_target
-				, p_offset
-				, p_count
-				, p_buffer );
+				, offset
+				, count
+				, buffer );
 		}
 
 		unbind();
 	}
 
-	void GlBuffer::download( uint32_t p_offset
-		, uint32_t p_count
-		, uint8_t * p_buffer )const
+	void GlBuffer::download( uint32_t offset
+		, uint32_t count
+		, uint8_t * buffer )const
 	{
 		REQUIRE( this->getGlName() != GlInvalidIndex );
-		REQUIRE( p_count > 0 );
-		REQUIRE( m_allocatedSize >= p_count + p_offset );
+		REQUIRE( count > 0 );
+		REQUIRE( m_allocatedSize >= count + offset );
 		bind();
-		auto buffer = lock( p_offset
-			, p_count
+		auto data = lock( offset
+			, count
 			, castor3d::AccessType::eRead );
 
 		if ( buffer )
 		{
-			std::memcpy( p_buffer, buffer, p_count );
+			std::memcpy( buffer, data, count );
 			unlock();
 		}
 
 		unbind();
 	}
 
-	uint8_t * GlBuffer::lock( uint32_t p_offset
-		, uint32_t p_count
-		, castor3d::AccessTypes const & p_flags )const
+	uint8_t * GlBuffer::lock( uint32_t offset
+		, uint32_t count
+		, castor3d::AccessTypes const & flags )const
 	{
 		REQUIRE( this->getGlName() != GlInvalidIndex );
-		REQUIRE( p_count > 0 );
-		REQUIRE( m_allocatedSize >= p_count + p_offset );
+		REQUIRE( count > 0 );
+		REQUIRE( m_allocatedSize >= count + offset );
 		return reinterpret_cast< uint8_t * >( BindableType::getOpenGl().MapBufferRange( m_target
-			, p_offset
-			, p_count
-			, BindableType::getOpenGl().getBitfieldFlags( p_flags ) ) );
+			, offset
+			, count
+			, BindableType::getOpenGl().getBitfieldFlags( flags ) ) );
 	}
 
 	void GlBuffer::unlock()const
@@ -164,10 +151,25 @@ namespace GlRender
 		getOpenGl().UnmapBuffer( m_target );
 	}
 
-	uint8_t * GlBuffer::lock( GlAccessType p_access )const
+	uint8_t * GlBuffer::lock( GlAccessType access )const
 	{
 		REQUIRE( this->getGlName() != GlInvalidIndex );
 		return reinterpret_cast< uint8_t * >( BindableType::getOpenGl().MapBuffer( m_target
-			, p_access ) );
+			, access ) );
+	}
+
+	void GlBuffer::doInitialiseStorage( uint32_t count
+		, castor3d::BufferAccessType type
+		, castor3d::BufferAccessNature nature )const
+	{
+		REQUIRE( count > 0 );
+		REQUIRE( this->getGlName() != GlInvalidIndex );
+		bind();
+		getOpenGl().BufferData( m_target
+			, count
+			, nullptr
+			, BindableType::getOpenGl().getBufferFlags( uint32_t( nature ) | uint32_t( type ) ) );
+		m_allocatedSize = count;
+		unbind();
 	}
 }

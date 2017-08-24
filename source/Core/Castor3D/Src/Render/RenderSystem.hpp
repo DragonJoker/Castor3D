@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "Miscellaneous/GpuInformations.hpp"
 #include "Miscellaneous/GpuObjectTracker.hpp"
+#include "Mesh/Buffer/GpuBufferPool.hpp"
 
 #include <stack>
 
@@ -48,6 +49,8 @@ namespace castor3d
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
 	{
+		friend class GpuBufferPool;
+
 	public:
 		/**
 		 *\~english
@@ -131,6 +134,51 @@ namespace castor3d
 		 *\return		Le contexte
 		 */
 		C3D_API Context * getCurrentContext();
+		/**
+		 *\~english
+		 *\brief		Retrieves a GPU buffer with the given size.
+		 *\param[in]	type			The buffer type.
+		 *\param[in]	size			The wanted buffer size.
+		 *\param[in]	accessType		Buffer access type.
+		 *\param[in]	accessNature	Buffer access nature.
+		 *\return		The created buffer, depending on current API.
+		 *\~french
+		 *\brief		Récupère un tampon GPU avec la taille donnée.
+		 *\param[in]	type			Le type de tampon.
+		 *\param[in]	size			La taille voulue pour le tampon.
+		 *\param[in]	accessType		Type d'accès du tampon.
+		 *\param[in]	accessNature	Nature d'accès du tampon.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
+		 */
+		C3D_API GpuBufferOffset getBuffer( BufferType type
+			, uint32_t size
+			, BufferAccessType accessType
+			, BufferAccessNature accessNature );
+		/**
+		 *\~english
+		 *\brief		Releases a GPU buffer.
+		 *\param[in]	type			The buffer type.
+		 *\param[in]	accessType		Buffer access type.
+		 *\param[in]	accessNature	Buffer access nature.
+		 *\param[in]	bufferOffset	The buffer offset to release.
+		 *\~french
+		 *\brief		Libère un tampon GPU.
+		 *\param[in]	type			Le type de tampon.
+		 *\param[in]	accessType		Type d'accès du tampon.
+		 *\param[in]	accessNature	Nature d'accès du tampon.
+		 *\param[in]	bufferOffset	Le tampon à libérer.
+		 */
+		C3D_API void putBuffer( BufferType type
+			, BufferAccessType accessType
+			, BufferAccessNature accessNature
+			, GpuBufferOffset const & bufferOffset );
+		/**
+		 *\~english
+		 *\brief		Cleans up the buffer pool.
+		 *\~french
+		 *\brief		Nettoie le pool de tampons.
+		 */
+		C3D_API void cleanupPool();
 		/**
 		 *\~english
 		 *\return		The GPU informations.
@@ -409,17 +457,6 @@ namespace castor3d
 			, AccessTypes const & p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a GPU buffer.
-		 *\param[in]	p_type	The buffer type.
-		 *\return		The created buffer, depending on current API.
-		 *\~french
-		 *\brief		Crée un tampon GPU.
-		 *\param[in]	p_type	Le type de tampon.
-		 *\return		Le tampon créé, dépendant de l'API actuelle.
-		 */
-		C3D_API virtual GpuBufferUPtr createBuffer( BufferType p_type ) = 0;
-		/**
-		 *\~english
 		 *\brief		Creates a transform feedback instance.
 		 *\param[in]	p_computed	The computed elements description.
 		 *\param[in]	p_topology	The topology.
@@ -491,6 +528,17 @@ namespace castor3d
 		 *\brief		Nettoie le render system
 		 */
 		C3D_API virtual void doCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a GPU buffer.
+		 *\param[in]	p_type	The buffer type.
+		 *\return		The created buffer, depending on current API.
+		 *\~french
+		 *\brief		Crée un tampon GPU.
+		 *\param[in]	p_type	Le type de tampon.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
+		 */
+		C3D_API virtual GpuBufferSPtr doCreateBuffer( BufferType p_type ) = 0;
 
 	protected:
 		//!\~english	Mutex used to make this class thread safe.
@@ -520,6 +568,9 @@ namespace castor3d
 		//!\~english	The time spent on GPU for current frame.
 		//!\~french		Le temps passé sur le GPU pour l'image courante.
 		castor::Nanoseconds m_gpuTime;
+		//!\~english	The GPU buffer pool.
+		//!\~french		Le pool de tampons GPU.
+		GpuBufferPool m_gpuBufferPool;
 
 #if C3D_TRACE_OBJECTS
 

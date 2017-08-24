@@ -87,7 +87,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Applique le programme.
 		 */
-		void render()const;
+		void render( VertexBuffer const & vertexBuffer )const;
 
 	private:
 		//!\~english	The shader program.

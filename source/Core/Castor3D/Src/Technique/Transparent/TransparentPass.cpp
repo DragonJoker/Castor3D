@@ -182,7 +182,7 @@ namespace castor3d
 					, p_program
 					, p_flags ) ).first->second;
 
-			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, p_flags]()
 			{
 				doCompletePipeline( p_flags, pipeline );
@@ -214,7 +214,7 @@ namespace castor3d
 					, p_program
 					, p_flags ) ).first->second;
 
-			getEngine()->postEvent( MakeFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, p_flags]()
 			{
 				doCompletePipeline( p_flags, pipeline );

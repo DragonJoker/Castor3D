@@ -9,16 +9,22 @@ using namespace castor;
 
 namespace GlRender
 {
-	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, ShaderProgram const & p_program, uint32_t p_stride, String const & p_attributeName, GlType p_glType, uint32_t p_count, uint32_t p_divisor )
-		: Holder( p_gl )
-		, m_program( p_program )
-		, m_stride( p_stride )
-		, m_attributeName( p_attributeName )
+	GlAttributeBase::GlAttributeBase( OpenGl & gl
+		, ShaderProgram const & program
+		, uint32_t stride
+		, String const & attributeName
+		, GlType glType
+		, uint32_t count
+		, uint32_t divisor )
+		: Holder( gl )
+		, m_program( program )
+		, m_stride( stride )
+		, m_attributeName( attributeName )
 		, m_attributeLocation( GlInvalidIndex )
-		, m_count( p_count )
-		, m_divisor( p_divisor )
+		, m_count( count )
+		, m_divisor( divisor )
 		, m_offset( 0u )
-		, m_glType( p_glType )
+		, m_glType( glType )
 	{
 		if ( m_program.getStatus() == ProgramStatus::eLinked )
 		{
@@ -31,7 +37,7 @@ namespace GlRender
 		m_attributeLocation = uint32_t( GlInvalidIndex );
 	}
 
-	void GlAttributeBase::bind( bool p_bNormalised )
+	void GlAttributeBase::bind( bool normalised )
 	{
 		getOpenGl().EnableVertexAttribArray( m_attributeLocation );
 
@@ -39,7 +45,7 @@ namespace GlRender
 			 || m_glType == GlType::eDouble
 			 || m_glType == GlType::eHalfFloat )
 		{
-			getOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
+			getOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, normalised, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 		else
 		{

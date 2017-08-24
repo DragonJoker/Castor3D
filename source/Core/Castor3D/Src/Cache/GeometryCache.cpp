@@ -29,7 +29,7 @@ namespace castor3d
 
 			inline void operator()( GeometrySPtr p_element )
 			{
-				m_listener.postEvent( MakeFunctorEvent( EventType::ePreRender, [p_element, this]()
+				m_listener.postEvent( makeFunctorEvent( EventType::ePreRender, [p_element, this]()
 				{
 					p_element->createBuffers( m_faceCount, m_vertexCount );
 				} ) );

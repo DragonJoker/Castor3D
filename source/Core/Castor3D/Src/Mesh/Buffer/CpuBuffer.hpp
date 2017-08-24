@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -74,27 +74,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
-		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset in the buffer.
-		 *\param[in]	p_count		The mapped elements count.
-		 *\param[in]	p_flags		The lock flags.
+		 *\remarks		Maps from buffer[offset*sizeof( T )] to buffer[(offset+p_uiSize-1)*sizeof( T )].
+		 *\param[in]	offset	The start offset in the buffer.
+		 *\param[in]	count	The mapped elements count.
+		 *\param[in]	flags	The lock flags.
 		 *\return		The mapped buffer address.
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
-		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Le nombre d'éléments à mapper.
-		 *\param[in]	p_flags		Les flags de lock.
+		 *\remarks		Mappe de tampon[offset*sizeof( T )] à tampon[(offset+p_uiSize-1) * sizeof( T )].
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	count	Le nombre d'éléments à mapper.
+		 *\param[in]	flags	Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		inline T * lock( uint32_t p_offset
-			, uint32_t p_count
-			, AccessTypes const & p_flags )const
+		inline T * lock( uint32_t offset
+			, uint32_t count
+			, AccessTypes const & flags )const
 		{
 			REQUIRE( m_gpuBuffer );
-			return reinterpret_cast< T * >( m_gpuBuffer->lock( p_offset * sizeof( T )
-				, p_count * sizeof( T )
-				, p_flags ) );
+			return reinterpret_cast< T * >( m_gpuBuffer->lock( ( m_offset + offset ) * sizeof( T )
+				, count * sizeof( T )
+				, flags ) );
 		}
 		/**
 		 *\~english
@@ -112,25 +112,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
-		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset.
-		 *\param[in]	p_count		Elements count.
-		 *\param[in]	p_buffer	The data.
+		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
+		 *\param[in]	offset	The start offset.
+		 *\param[in]	count	Elements count.
+		 *\param[in]	buffer	The data.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
-		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Nombre d'éléments.
-		 *\param[in]	p_buffer	Les données.
+		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	count	Nombre d'éléments.
+		 *\param[in]	buffer	Les données.
 		 */
-		inline void upload( uint32_t p_offset
-			, uint32_t p_count
-			, T const * p_buffer )const
+		inline void upload( uint32_t offset
+			, uint32_t count
+			, T const * buffer )const
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->upload( p_offset * sizeof( T )
-				, p_count * sizeof( T )
-				, reinterpret_cast< uint8_t const * >( p_buffer ) );
+			return m_gpuBuffer->upload( ( m_offset + offset ) * sizeof( T )
+				, count * sizeof( T )
+				, reinterpret_cast< uint8_t const * >( buffer ) );
 		}
 		/**
 		 *\~english
@@ -147,25 +147,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
-		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset.
-		 *\param[in]	p_count		Elements count.
-		 *\param[out]	p_buffer	The data.
+		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
+		 *\param[in]	offset	The start offset.
+		 *\param[in]	count		Elements count.
+		 *\param[out]	buffer	The data.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
-		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Nombre d'éléments.
-		 *\param[out]	p_buffer	Les données.
+		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	count		Nombre d'éléments.
+		 *\param[out]	buffer	Les données.
 		 */
-		inline void download( uint32_t p_offset
-			, uint32_t p_count
-			, T * p_buffer )
+		inline void download( uint32_t offset
+			, uint32_t count
+			, T * buffer )
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->download( p_offset * sizeof( T )
-				, p_count * sizeof( T )
-				, reinterpret_cast< uint8_t * >( p_buffer ) );
+			return m_gpuBuffer->download( ( m_offset + offset ) * sizeof( T )
+				, count * sizeof( T )
+				, reinterpret_cast< uint8_t * >( buffer ) );
 		}
 		/**
 		 *\~english
@@ -204,35 +204,42 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
-		 *\param[in]	p_src	The cource buffer.
-		 *\param[in]	p_size	The number of elements to copy.
+		 *\param[in]	src			The source buffer.
+		 *\param[in]	srcOffset	The offset in the source buffer.
+		 *\param[in]	size		The number of elements to copy.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
-		 *\param[in]	p_src	Le tampon source.
-		 *\param[in]	p_size	Le nombre d'éléments à copier.
+		 *\param[in]	src			Le tampon source.
+		 *\param[in]	srcOffset	Le décalage dans le tampon source.
+		 *\param[in]	size		Le nombre d'éléments à copier.
 		 */
-		inline void copy( GpuBuffer const & p_src
-			, uint32_t p_size )
+		inline void copy( GpuBuffer const & src
+			, uint32_t srcOffset
+			, uint32_t size )
 		{
 			REQUIRE( m_gpuBuffer );
-			m_gpuBuffer->copy( p_src
-				, p_size * sizeof( T ) );
+			m_gpuBuffer->copy( src
+				, srcOffset
+				, m_offset * sizeof( T )
+				, size * sizeof( T ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
-		 *\param[in]	p_src	The cource buffer.
-		 *\param[in]	p_size	The number of elements to copy.
+		 *\param[in]	src		The cource buffer.
+		 *\param[in]	size	The number of elements to copy.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
-		 *\param[in]	p_src	Le tampon source.
-		 *\param[in]	p_size	Le nombre d'éléments à copier.
+		 *\param[in]	src		Le tampon source.
+		 *\param[in]	size	Le nombre d'éléments à copier.
 		 */
-		inline void copy( CpuBuffer< T > const & p_src
-			, uint32_t p_size )
+		inline void copy( CpuBuffer< T > const & src
+			, uint32_t size )
 		{
-			REQUIRE( p_src.m_gpuBuffer );
-			return copy( *p_src.m_gpuBuffer, p_size );
+			REQUIRE( src.m_gpuBuffer );
+			return copy( *src.m_gpuBuffer
+				, src.m_offset * sizeof( T )
+				, size );
 		}
 		/**
 		 *\~english
@@ -248,40 +255,40 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief		Index opertor.
-		*\param[in]	p_index	The index.
+		*\param[in]	index	The index.
 		*\~french
 		*\brief		Opérateur d'indexation.
-		*\param[in]	p_index	L'index.
+		*\param[in]	index	L'index.
 		*/
-		inline T const & operator[]( uint32_t p_index )const
+		inline T const & operator[]( uint32_t index )const
 		{
-			REQUIRE( p_index < m_data.size() );
-			return m_data[p_index];
+			REQUIRE( index < m_data.size() );
+			return m_data[index];
 		}
 		/**
 		*\~english
 		*\brief		Index opertor.
-		*\param[in]	p_index	The index.
+		*\param[in]	index	The index.
 		*\~french
 		*\brief		Opérateur d'indexation.
-		*\param[in]	p_index	L'index.
+		*\param[in]	index	L'index.
 		*/
-		inline T & operator[]( uint32_t p_index )
+		inline T & operator[]( uint32_t index )
 		{
-			REQUIRE( p_index < m_data.size() );
-			return m_data[p_index];
+			REQUIRE( index < m_data.size() );
+			return m_data[index];
 		}
 		/**
 		 *\~english
 		 *\brief		adds a value at the end of the buffer.
-		 *\param[in]	p_value	The value.
+		 *\param[in]	value	The value.
 		 *\~french
 		 *\brief		Ajoute une valeur à la fin du tampon.
-		 *\param[in]	p_value	La valeur.
+		 *\param[in]	value	La valeur.
 		 */
-		inline void addElement( T const & p_value )
+		inline void addElement( T const & value )
 		{
-			m_data.push_back( p_value );
+			m_data.push_back( value );
 		}
 		/**
 		 *\~english
@@ -306,14 +313,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the allocated size of the buffer.
-		 *\param[in]	p_value	The new size.
+		 *\param[in]	value	The new size.
 		 *\~french
 		 *\brief		Définit la taille allouée du tampon.
-		 *\param[in]	p_value	La nouvelle taille.
+		 *\param[in]	value	La nouvelle taille.
 		 */
-		inline void resize( uint32_t p_value )
+		inline void resize( uint32_t value )
 		{
-			m_data.resize( p_value, T{} );
+			m_data.resize( value, T{} );
 		}
 		/**
 		 *\~english
@@ -385,63 +392,44 @@ namespace castor3d
 		{
 			return m_data.end();
 		}
+		/**
+		 *\~english
+		 *\return		The offset in the GPU buffer.
+		 *\~french
+		 *\return		L'offset dans le tampon GPU.
+		 */
+		inline uint32_t getOffset()const
+		{
+			return m_offset;
+		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Initialises the GPU buffer.
-		 *\param[in]	p_type		Buffer access type.
-		 *\param[in]	p_nature	Buffer access nature.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Initialise le tampon GPU.
-		 *\param[in]	p_type		Type d'accès du tampon.
-		 *\param[in]	p_nature	Nature d'accès du tampon.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		inline bool doInitialise( BufferAccessType p_type
-			, BufferAccessNature p_nature )
+		inline void doInitialise( BufferAccessType accessType
+			, BufferAccessNature accessNature )
 		{
-			REQUIRE( m_gpuBuffer );
-			bool result = m_gpuBuffer->create();
-
-			if ( result )
-			{
-				m_gpuBuffer->initialiseStorage( uint32_t( m_data.size() * sizeof( T ) )
-					, p_type
-					, p_nature );
-				m_gpuBuffer->upload( 0u
-					, uint32_t( m_data.size() * sizeof( T ) )
-					, reinterpret_cast< uint8_t * >( m_data.data() ) );
-			}
-
-			return result;
-		}
-		/**
-		 *\~english
-		 *\brief		Cleans up the GPU buffer.
-		 *\~french
-		 *\brief		Nettoie le tampon GPU.
-		 */
-		inline void doCleanup()
-		{
-			if ( m_gpuBuffer )
-			{
-				m_gpuBuffer->destroy();
-				m_gpuBuffer.reset();
-			}
+			m_accessType = accessType;
+			m_accessNature = accessNature;
 		}
 
 	protected:
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		GpuBufferUPtr m_gpuBuffer;
+		GpuBufferSPtr m_gpuBuffer;
 		//!\~english	The buffer data.
 		//!\~french		Les données du tampon.
 		TArray m_data;
+		//!\~english	The buffer start offset.
+		//!\~french		Le décalage de début du tampon.
+		uint32_t m_offset{ 0u };
 		//!<\~english	The saved buffer size (to still have a size after clear).
 		//!\~french		La taille sauvegardée, afin de toujours l'avoir après un clear.
 		uint32_t m_savedSize{ 0u };
+		//!<\~english	Buffer access type.
+		//!\~french		Type d'accès du tampon.
+		BufferAccessType m_accessType;
+		//!<\~english	Buffer access nature.
+		//!\~french		Nature d'accès du tampon.
+		BufferAccessNature m_accessNature;
 	};
 }
 

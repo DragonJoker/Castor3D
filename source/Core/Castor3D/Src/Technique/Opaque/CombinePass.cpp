@@ -448,10 +448,10 @@ namespace castor3d
 		m_program.reset();
 	}
 
-	void CombineProgram::render()const
+	void CombineProgram::render( VertexBuffer const & vertexBuffer )const
 	{
 		m_pipeline->apply();
-		m_geometryBuffers->draw( 6u, 0 );
+		m_geometryBuffers->draw( 6u, 0u );
 	}
 
 	//*********************************************************************************************
@@ -550,7 +550,7 @@ namespace castor3d
 		light.getTexture()->bind( index );
 		light.getSampler()->bind( index );
 
-		m_programs[size_t( fog.getType() )].render();
+		m_programs[size_t( fog.getType() )].render( *m_vertexBuffer );
 
 		light.getTexture()->unbind( index );
 		light.getSampler()->unbind( index );
@@ -652,7 +652,7 @@ namespace castor3d
 		ibl.getPrefilteredBrdf().getTexture()->bind( index );
 		ibl.getPrefilteredBrdf().getSampler()->bind( index );
 
-		m_programs[size_t( fog.getType() ) + size_t( FogType::eCount )].render();
+		m_programs[size_t( fog.getType() ) + size_t( FogType::eCount )].render( *m_vertexBuffer );
 
 		ibl.getPrefilteredBrdf().getSampler()->unbind( index );
 		ibl.getPrefilteredBrdf().getTexture()->unbind( index );

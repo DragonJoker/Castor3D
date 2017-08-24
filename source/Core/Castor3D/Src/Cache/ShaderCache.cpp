@@ -44,7 +44,7 @@ namespace castor3d
 	{
 		for ( auto program : m_arrayPrograms )
 		{
-			getEngine()->postEvent( MakeCleanupEvent( *program ) );
+			getEngine()->postEvent( makeCleanupEvent( *program ) );
 		}
 	}
 
@@ -259,7 +259,7 @@ namespace castor3d
 			}
 			else
 			{
-				getEngine()->postEvent( MakeInitialiseEvent( *p_program ) );
+				getEngine()->postEvent( makeInitialiseEvent( *p_program ) );
 			}
 		}
 	}

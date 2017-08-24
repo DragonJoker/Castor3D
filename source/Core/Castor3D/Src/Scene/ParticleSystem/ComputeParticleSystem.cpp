@@ -141,7 +141,7 @@ namespace castor3d
 
 		if ( m_particlesCount )
 		{
-			m_parent.getBillboards()->getVertexBuffer().copy( m_particlesStorages[m_out]->getGpuBuffer()
+			m_parent.getBillboards()->getVertexBuffer().copy( *m_particlesStorages[m_out]
 				, m_particlesCount * m_inputs.stride());
 		}
 

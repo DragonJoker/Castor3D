@@ -920,6 +920,16 @@ namespace GlRender
 		EXEC_FUNCTION( DrawElements, mode, count, type, indices );
 	}
 
+	void OpenGl::DrawArraysIndirect( GlTopology mode, const void * indirect )const
+	{
+		EXEC_FUNCTION( DrawArraysIndirect, mode, indirect );
+	}
+
+	void OpenGl::DrawElementsIndirect( GlTopology mode, GlType type, const void * indirect )const
+	{
+		EXEC_FUNCTION( DrawElementsIndirect, mode, type, indirect );
+	}
+
 	void OpenGl::Enable( GlTweak mode )const
 	{
 		EXEC_FUNCTION( EnableTweak, mode );

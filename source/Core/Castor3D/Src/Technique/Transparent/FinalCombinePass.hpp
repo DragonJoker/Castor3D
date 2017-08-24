@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -82,7 +82,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Applique le programme.
 		 */
-		void render()const;
+		void render( VertexBuffer const & vbo )const;
 
 	private:
 		//!\~english	The shader program.

@@ -1,4 +1,4 @@
-#include "RenderSystem.hpp"
+﻿#include "RenderSystem.hpp"
 
 #include "Render/Context.hpp"
 
@@ -13,6 +13,7 @@ namespace castor3d
 		, m_name{ p_name }
 		, m_initialised{ false }
 		, m_gpuInformations{}
+		, m_gpuBufferPool{ *this }
 	{
 	}
 
@@ -47,6 +48,11 @@ namespace castor3d
 		m_tracker.reportTracked();
 
 #endif
+	}
+
+	void RenderSystem::cleanupPool()
+	{
+		m_gpuBufferPool.cleanup();
 	}
 
 	void RenderSystem::pushScene( Scene * p_scene )
@@ -92,5 +98,27 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	GpuBufferOffset RenderSystem::getBuffer( BufferType type
+		, uint32_t size
+		, BufferAccessType accessType
+		, BufferAccessNature accessNature )
+	{
+		return m_gpuBufferPool.getGpuBuffer( type
+			, size
+			, accessType
+			, accessNature );
+	}
+
+	void RenderSystem::putBuffer( BufferType type
+		, BufferAccessType accessType
+		, BufferAccessNature accessNature
+		, GpuBufferOffset const & bufferOffset )
+	{
+		m_gpuBufferPool.putGpuBuffer( type
+			, accessType
+			, accessNature
+			, bufferOffset );
 	}
 }
