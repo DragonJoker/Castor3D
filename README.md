@@ -67,14 +67,14 @@ Implemented Plug-ins
 - ReinhardToneMapping: Reinhard tone mapping.
 
 
-![Sponza](http://DragonJoker.github.com/Castor3D/doc/Sponza-PBR-Bloom-small.png)
-![Cerberus](http://DragonJoker.github.com/Castor3D/doc/Cerberus-PBR-small.png)
-![Park](http://DragonJoker.github.com/Castor3D/doc/Park-Legacy-small.png)
+![Sponza](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-small.png)
+![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-small.png)
+![Park](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-small.png)
 
 Links
 -----
 
-- [Building Castor3D](http://DragonJoker.github.com/Castor3D/doc/build)
+- [Building Castor3D](http://dragonjoker.github.com/Castor3D/pages/build)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
 General Questions
