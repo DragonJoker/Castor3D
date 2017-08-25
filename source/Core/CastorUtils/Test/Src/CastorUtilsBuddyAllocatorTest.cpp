@@ -57,10 +57,6 @@ namespace Testing
 			}
 		}
 		{
-			BuddyAllocator allocator{ 31, 1 };
-			CT_EQUAL( allocator.getSize(), 1u << 31u );
-		}
-		{
 			BuddyAllocator allocator{ 16, 8 };
 			CT_EQUAL( allocator.getSize(), 524288u );
 		}
