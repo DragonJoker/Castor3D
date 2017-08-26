@@ -1,4 +1,4 @@
-#include "FrameBuffer/GlFrameBuffer.hpp"
+﻿#include "FrameBuffer/GlFrameBuffer.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlColourRenderBuffer.hpp"
@@ -153,7 +153,7 @@ namespace GlRender
 		getOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, getOpenGl().getComponents( p_components ), getOpenGl().get( p_interpolation ) );
 	}
 
-	void GlFrameBuffer::doClear( BufferComponents p_targets )
+	void GlFrameBuffer::doClear( BufferComponents p_targets )const
 	{
 		getOpenGl().ClearColor( m_redClear, m_greenClear, m_blueClear, m_alphaClear );
 		getOpenGl().ClearDepth( 1.0 );

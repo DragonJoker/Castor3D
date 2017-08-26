@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -515,6 +515,7 @@ namespace castor3d
 		m_timer->start();
 		frameBuffer.bind( FrameBufferTarget::eDraw );
 		frameBuffer.setDrawBuffers();
+		frameBuffer.clear( BufferComponent::eColour );
 
 		m_viewport.apply();
 		uint32_t index{ 0u };

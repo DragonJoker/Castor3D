@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -144,7 +144,7 @@ namespace GlRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::doClear
 		 */
-		void doClear( castor3d::BufferComponents p_targets )override;
+		void doClear( castor3d::BufferComponents p_targets )const override;
 
 	private:
 		mutable GlFrameBufferMode m_bindingMode;

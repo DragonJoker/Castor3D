@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -38,6 +38,7 @@ SOFTWARE.
 #include "Cache/SamplerCache.hpp"
 
 #include "RenderToTexture/TextureProjection.hpp"
+#include "Scene/ColourSkybox.hpp"
 #include "Scene/Fog.hpp"
 #include "Scene/Shadow.hpp"
 
@@ -269,6 +270,13 @@ namespace castor3d
 		C3D_API IblTextures const & getIbl( SceneNode const & node )const;
 		/**
 		 *\~english
+		 *\return		The skybox.
+		 *\~french
+		 *\return		La skybox.
+		 */
+		C3D_API Skybox const & getSkybox()const;
+		/**
+		 *\~english
 		 *\return		The reflection maps list.
 		 *\~french
 		 *\return		La liste des reflection maps.
@@ -413,17 +421,6 @@ namespace castor3d
 		inline bool hasSkybox()const
 		{
 			return m_skybox != nullptr;
-		}
-		/**
-		 *\~english
-		 *\return		The skybox.
-		 *\~french
-		 *\return		La skybox.
-		 */
-		inline Skybox const & getSkybox()const
-		{
-			REQUIRE( m_skybox );
-			return *m_skybox;
 		}
 		/**
 		 *\~english
@@ -623,6 +620,9 @@ namespace castor3d
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxUPtr m_skybox;
+		//!\~english	The skybox for background colour.
+		//!\~french		La skybox pour la couleur de fond.
+		ColourSkybox m_backgroundColourSkybox;
 		//!\~english	The LightCategory factory.
 		//!\~french		La fabrique de LightCategory.
 		LightFactory m_lightFactory;

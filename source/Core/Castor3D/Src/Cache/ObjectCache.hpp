@@ -608,7 +608,7 @@ namespace castor3d
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< ObjectCache< ElementType, KeyType > >
-	MakeObjectCache( Engine & engine
+	makeObjectCache( Engine & engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode

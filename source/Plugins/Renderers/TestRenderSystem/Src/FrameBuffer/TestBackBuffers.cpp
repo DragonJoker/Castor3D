@@ -41,7 +41,7 @@ namespace TestRender
 	{
 	}
 
-	void TestBackBuffers::doClear( castor3d::BufferComponents p_uiTargets )
+	void TestBackBuffers::doClear( castor3d::BufferComponents p_uiTargets )const
 	{
 	}
 

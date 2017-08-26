@@ -1,4 +1,4 @@
-#include "FrameBuffer/GlBackBuffers.hpp"
+﻿#include "FrameBuffer/GlBackBuffers.hpp"
 
 #include "Common/OpenGl.hpp"
 
@@ -62,7 +62,7 @@ namespace GlRender
 		getOpenGl().ReadPixels( Position(), p_buffer->dimensions(), pxFmt.Format, pxFmt.Type, p_buffer->ptr() );
 	}
 
-	void GlBackBuffers::doClear( BufferComponents p_targets )
+	void GlBackBuffers::doClear( BufferComponents p_targets )const
 	{
 		getOpenGl().ClearColor( m_redClear, m_greenClear, m_blueClear, m_alphaClear );
 		getOpenGl().ClearDepth( 1.0 );

@@ -122,7 +122,7 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::doClear
 		 */
-		void doClear( castor3d::BufferComponents p_targets )override;
+		void doClear( castor3d::BufferComponents p_targets )const override;
 	};
 }
 

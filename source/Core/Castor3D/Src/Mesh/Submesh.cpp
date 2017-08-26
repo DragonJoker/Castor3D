@@ -1,4 +1,4 @@
-﻿#include "Submesh.hpp"
+#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -662,6 +662,11 @@ namespace castor3d
 		{
 			m_instanceCount[material] = 0;
 			it = m_instanceCount.find( material );
+		}
+
+		if ( m_defaultMaterial.expired() )
+		{
+			m_defaultMaterial = material;
 		}
 
 		return it->second++;

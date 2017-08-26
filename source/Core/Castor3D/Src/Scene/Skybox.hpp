@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -102,14 +102,14 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise();
+		C3D_API virtual bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void cleanup();
+		C3D_API virtual void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the skybox.
@@ -118,7 +118,7 @@ namespace castor3d
 		 *\brief		Dessine la skybox.
 		 *\param[in]	camera	La caméra de la scène.
 		 */
-		C3D_API void render( Camera const & camera );
+		C3D_API virtual void render( Camera const & camera );
 		/**
 		*\~english
 		*\return		sets the skybox's equirectangular texture.
@@ -190,14 +190,14 @@ namespace castor3d
 			m_scene = &scene;
 		}
 
-	private:
-		ShaderProgram & doInitialiseShader();
+	protected:
+		virtual ShaderProgram & doInitialiseShader();
 		bool doInitialiseTexture();
 		void doInitialiseEquiTexture();
 		bool doInitialiseVertexBuffer();
 		bool doInitialisePipeline( ShaderProgram & program );
 
-	private:
+	protected:
 		//!\~english	The skybox's scene.
 		//!\~french		La scène de la skybox.
 		SceneRPtr m_scene{ nullptr };

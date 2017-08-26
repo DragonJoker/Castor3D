@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -110,7 +110,7 @@ namespace castor3d
 		 *\brief		Vide les tampons.
 		 *\param[in]	targets	Les tampons à vider (combinaison de BufferComponent).
 		 */
-		C3D_API void clear( BufferComponents targets );
+		C3D_API void clear( BufferComponents targets )const;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -416,7 +416,7 @@ namespace castor3d
 		 *\brief		Vide les composantes de tampon données.
 		 *\param[in]	targets	Les composantes, combinaison de BufferComponent.
 		 */
-		C3D_API virtual void doClear( BufferComponents targets ) = 0;
+		C3D_API virtual void doClear( BufferComponents targets )const = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active

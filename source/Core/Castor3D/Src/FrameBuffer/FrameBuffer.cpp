@@ -1,4 +1,4 @@
-#include "FrameBuffer.hpp"
+﻿#include "FrameBuffer.hpp"
 #include "RenderBufferAttachment.hpp"
 #include "TextureAttachment.hpp"
 #include "RenderBuffer.hpp"
@@ -36,7 +36,7 @@ namespace castor3d
 		m_alphaClear = a;
 	}
 
-	void FrameBuffer::clear( BufferComponents targets )
+	void FrameBuffer::clear( BufferComponents targets )const
 	{
 		doClear( targets );
 	}
