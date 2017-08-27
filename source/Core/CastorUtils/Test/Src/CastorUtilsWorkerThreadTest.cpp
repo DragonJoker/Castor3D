@@ -37,9 +37,11 @@ namespace Testing
 			{
 				data.push_back( data.size() );
 			}
+
+			std::this_thread::sleep_for( 100_ms );
 		} );
 
-		CT_CHECK( !worker.wait( std::chrono::milliseconds( 1 ) ) );
+		CT_CHECK( !worker.wait( 1_ms ) );
 		CT_CHECK( !worker.isEnded() );
 		CT_CHECK( worker.wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
 		CT_CHECK( worker.isEnded() );
