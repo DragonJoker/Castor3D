@@ -25,7 +25,7 @@ namespace GuiCommon
 	{
 	}
 
-	void RectangleProperty::refreshChildren()
+	void RectangleProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
@@ -37,7 +37,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxVariant RectangleProperty::childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
+	wxVariant RectangleProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		castor::Point4i & point = Point4iRefFromVariant( thisValue );
 		int val = childValue.GetLong();

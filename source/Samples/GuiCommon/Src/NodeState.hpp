@@ -40,6 +40,10 @@ namespace GuiCommon
 	class NodeState
 	{
 	public:
+		static float constexpr MaxAngularSpeed = 5.0f;
+		static float constexpr MaxScalarSpeed = 20.0f;
+
+	public:
 		/**
 		*\brief
 		*	Définit le noeud affecté par les évènements.
@@ -111,31 +115,33 @@ namespace GuiCommon
 		castor::RangedValue< castor::Angle > m_angularVelocityX
 		{
 			0.0_degrees,
-			castor::makeRange( -5.0_degrees, 5.0_degrees )
+			castor::makeRange( castor::Angle::fromDegrees( -MaxAngularSpeed )
+				, castor::Angle::fromDegrees( MaxAngularSpeed ) )
 		};
 		//! La vitesse de rotation sur l'axe Y.
 		castor::RangedValue< castor::Angle > m_angularVelocityY
 		{
 			0.0_degrees,
-			castor::makeRange( -5.0_degrees, 5.0_degrees )
+			castor::makeRange( castor::Angle::fromDegrees( -MaxAngularSpeed )
+				, castor::Angle::fromDegrees( MaxAngularSpeed ) )
 		};
 		//! La vitesse de translation sur l'axe X.
 		castor::RangedValue< float > m_scalarVelocityX
 		{
 			0.0f,
-			castor::makeRange( -5.0f, 5.0f )
+			castor::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
 		};
 		//! La vitesse de translation sur l'axe Y.
 		castor::RangedValue< float > m_scalarVelocityY
 		{
 			0.0f,
-			castor::makeRange( -5.0f, 5.0f )
+			castor::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
 		};
 		//! La vitesse de translation sur l'axe Z.
 		castor::RangedValue< float > m_scalarVelocityZ
 		{
 			0.0f,
-			castor::makeRange( -5.0f, 5.0f )
+			castor::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
 		};
 	};
 	using NodeStatePtr = std::unique_ptr< NodeState >;

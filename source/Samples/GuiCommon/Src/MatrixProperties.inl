@@ -195,7 +195,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, size_t Count >
-	void MatrixProperty< T, Count >::refreshChildren()
+	void MatrixProperty< T, Count >::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
@@ -204,7 +204,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, size_t Count >
-	wxVariant MatrixProperty< T, Count >::childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
+	wxVariant MatrixProperty< T, Count >::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		return MatrixPropertyHelper< T, Count >::childChanged( thisValue, childIndex, childValue );
 	}

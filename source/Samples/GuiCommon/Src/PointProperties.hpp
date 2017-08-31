@@ -69,8 +69,8 @@ namespace GuiCommon
 		PointProperty( wxString const( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
 		virtual ~PointProperty();
 
-		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void refreshChildren();
+		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
+		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal

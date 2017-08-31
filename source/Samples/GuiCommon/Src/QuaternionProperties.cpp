@@ -1,4 +1,4 @@
-#include "QuaternionProperties.hpp"
+﻿#include "QuaternionProperties.hpp"
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
@@ -26,7 +26,7 @@ namespace GuiCommon
 	{
 	}
 
-	void QuaternionProperty::refreshChildren()
+	void QuaternionProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
@@ -39,7 +39,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxVariant QuaternionProperty::childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
+	wxVariant QuaternionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		Quaternion & quat = QuaternionRefFromVariant( thisValue );
 		auto axis = m_axis;

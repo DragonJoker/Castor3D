@@ -47,8 +47,8 @@ namespace GuiCommon
 		MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
 		virtual ~MatrixProperty();
 
-		virtual wxVariant childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void refreshChildren();
+		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
+		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal

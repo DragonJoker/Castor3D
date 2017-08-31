@@ -287,7 +287,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, size_t Count >
-	void PointProperty< T, Count >::refreshChildren()
+	void PointProperty< T, Count >::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
@@ -296,7 +296,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, size_t Count >
-	wxVariant PointProperty< T, Count >::childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
+	wxVariant PointProperty< T, Count >::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		return PointPropertyHelper< T, Count >::childChanged( thisValue, childIndex, childValue );
 	}

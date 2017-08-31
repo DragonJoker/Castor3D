@@ -23,7 +23,7 @@ namespace GuiCommon
 	{
 	}
 
-	void PositionProperty::refreshChildren()
+	void PositionProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
@@ -33,7 +33,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxVariant PositionProperty::childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
+	wxVariant PositionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		Position & point = PositionRefFromVariant( thisValue );
 		int val = childValue.GetLong();

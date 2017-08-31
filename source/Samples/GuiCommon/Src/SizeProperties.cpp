@@ -23,7 +23,7 @@ namespace GuiCommon
 	{
 	}
 
-	void SizeProperty::refreshChildren()
+	void SizeProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
@@ -33,7 +33,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxVariant SizeProperty::childChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const
+	wxVariant SizeProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const
 	{
 		Size & size = SizeRefFromVariant( thisValue );
 		int val = childValue.GetLong();
