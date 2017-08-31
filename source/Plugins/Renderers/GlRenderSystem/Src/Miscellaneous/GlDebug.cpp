@@ -1,14 +1,13 @@
-#include "Miscellaneous/GlDebug.hpp"
+﻿#include "Miscellaneous/GlDebug.hpp"
 
 #include "Common/OpenGl.hpp"
+#include "Common/GlGetFunction.hpp"
 #include "Render/GlRenderSystem.hpp"
 
 #include <map>
 #include <iomanip>
 
-#ifndef GL_INVALID_FRAMEBUFFER_OPERATION
-#	define GL_INVALID_FRAMEBUFFER_OPERATION 0x506
-#endif
+#include <GL/gl.h>
 
 using namespace castor3d;
 using namespace castor;
@@ -212,15 +211,23 @@ namespace GlRender
 
 	bool GlDebug::doGlCheckError( String const & p_text )const
 	{
+		static uint32_t constexpr InvalidEnum = 0x0500;
+		static uint32_t constexpr InvalidValue = 0x0501;
+		static uint32_t constexpr InvalidOperation = 0x0502;
+		static uint32_t constexpr StackOverflow = 0x0503;
+		static uint32_t constexpr StackUnderflow = 0x0504;
+		static uint32_t constexpr OutOfMemory = 0x0505;
+		static uint32_t constexpr InvalidFramebufferOperation = 0x0506;
+
 		static std::map< uint32_t, String > const Errors
 		{
-			{ GL_INVALID_ENUM, cuT( "Invalid Enum" ) },
-			{ GL_INVALID_VALUE, cuT( "Invalid Value" ) },
-			{ GL_INVALID_OPERATION, cuT( "Invalid Operation" ) },
-			{ GL_STACK_OVERFLOW, cuT( "Stack Overflow" ) },
-			{ GL_STACK_UNDERFLOW, cuT( "Stack Underflow" ) },
-			{ GL_OUT_OF_MEMORY, cuT( "Out of memory" ) },
-			{ GL_INVALID_FRAMEBUFFER_OPERATION, cuT( "Invalid frame buffer operation" ) },
+			{ InvalidEnum, cuT( "Invalid Enum" ) },
+			{ InvalidValue, cuT( "Invalid Value" ) },
+			{ InvalidOperation, cuT( "Invalid Operation" ) },
+			{ StackOverflow, cuT( "Stack Overflow" ) },
+			{ StackUnderflow, cuT( "Stack Underflow" ) },
+			{ OutOfMemory, cuT( "Out of memory" ) },
+			{ InvalidFramebufferOperation, cuT( "Invalid frame buffer operation" ) },
 		};
 
 		bool result = true;

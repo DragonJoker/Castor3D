@@ -2,6 +2,7 @@
 
 #if defined( CASTOR_PLATFORM_LINUX )
 
+#include "Common/GlGetFunction.hpp"
 #include "Render/GlX11Context.hpp"
 
 #include "Common/OpenGl.hpp"

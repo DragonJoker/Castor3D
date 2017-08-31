@@ -2,6 +2,7 @@
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
+#include "Common/GlGetFunction.hpp"
 #include "Render/GlMswContext.hpp"
 
 #include "Common/OpenGl.hpp"

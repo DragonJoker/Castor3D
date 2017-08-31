@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,17 +23,14 @@ SOFTWARE.
 #ifndef ___C3DGL_GlObjects___
 #define ___C3DGL_GlObjects___
 
-#include <Config/PlatformConfig.hpp>
-
 #if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <Windows.h>
 #elif defined( CASTOR_PLATFORM_LINUX )
 #	include <X11/Xlib.h>
 #	include <GL/glx.h>
-#	define GLX_GLXEXT_PROTOTYPES
-#	include <GL/glxext.h>
 #endif
-#include <GL/gl.h>
+
+#include <Config/PlatformConfig.hpp>
 
 #include "Common/GlObject.hpp"
 #include "Miscellaneous/GlDebug.hpp"
@@ -48,8 +45,6 @@ SOFTWARE.
 #	undef MemoryBarrier
 #endif
 
-#define GL_USE_STD_FUNCTION 0
-
 #if !defined( CALLBACK )
 #	if defined( CASTOR_PLATFORM_WINDOWS )
 #		define CALLBACK __stdcall
@@ -57,6 +52,8 @@ SOFTWARE.
 #		define CALLBACK
 #	endif
 #endif
+
+#define GL_USE_STD_FUNCTION 0
 
 namespace GlRender
 {
@@ -557,11 +554,11 @@ namespace GlRender
 		inline void DrawPixels( int width, int height, GlFormat format, GlType type, void const * data )const;
 		inline void PixelStore( GlStorageMode p_mode, int p_iParam )const;
 		inline void PixelStore( GlStorageMode p_mode, float p_fParam )const;
-		inline void TexStorage1D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width )const;
-		inline void TexStorage2D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const;
-		inline void TexStorage3D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const;
-		inline void TexStorage2DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const;
-		inline void TexStorage3DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const;
+		inline void TexStorage1D( GlTextureStorageType target, int levels, GlInternal internalformat, int width )const;
+		inline void TexStorage2D( GlTextureStorageType target, int levels, GlInternal internalformat, int width, int height )const;
+		inline void TexStorage3D( GlTextureStorageType target, int levels, GlInternal internalformat, int width, int height, int depth )const;
+		inline void TexStorage2DMultisample( GlTextureStorageType target, int samples, GlInternal internalformat, int width, int height, uint8_t fixedsamplelocations )const;
+		inline void TexStorage3DMultisample( GlTextureStorageType target, int samples, GlInternal internalformat, int width, int height, int depth, uint8_t fixedsamplelocations )const;
 
 		//@}
 		/**@name Sampler functions */
@@ -1145,11 +1142,11 @@ namespace GlRender
 		GlFunction< void, int, int , uint32_t , uint32_t , void const * > m_pfnDrawPixels;
 		GlFunction< void, uint32_t, int > m_pfnPixelStorei;
 		GlFunction< void, uint32_t, float > m_pfnPixelStoref;
-		GlFunction< void, GLenum, GLint , GLint , GLsizei > m_pfnTexStorage1D;
-		GlFunction< void, GLenum, GLint , GLint , GLsizei , GLsizei > m_pfnTexStorage2D;
-		GlFunction< void, GLenum, GLint , GLint , GLsizei , GLsizei , GLsizei > m_pfnTexStorage3D;
-		GlFunction< void, GLenum, GLsizei , GLint , GLsizei , GLsizei , GLboolean > m_pfnTexStorage2DMultisample;
-		GlFunction< void, GLenum, GLsizei , GLint , GLsizei , GLsizei , GLsizei , GLboolean > m_pfnTexStorage3DMultisample;
+		GlFunction< void, uint32_t, int , int , int > m_pfnTexStorage1D;
+		GlFunction< void, uint32_t, int , int , int , int > m_pfnTexStorage2D;
+		GlFunction< void, uint32_t, int , int , int , int , int > m_pfnTexStorage3D;
+		GlFunction< void, uint32_t, int , int , int , int , uint8_t > m_pfnTexStorage2DMultisample;
+		GlFunction< void, uint32_t, int , int , int , int , int , uint8_t > m_pfnTexStorage3DMultisample;
 
 		//@}
 		/**@name Sampler */
@@ -1444,60 +1441,6 @@ namespace GlRender
 
 		GlFunction< void, uint32_t, int > m_pfnPatchParameteri;
 	};
-
-	namespace gl_api
-	{
-		template< typename Func >
-		bool getFunction( castor::String const & p_name, Func & p_func )
-		{
-#if defined( CASTOR_PLATFORM_WINDOWS )
-			p_func = reinterpret_cast< Func >( wglGetProcAddress( castor::string::stringCast< char >( p_name ).c_str() ) );
-#else
-			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( reinterpret_cast< GLubyte const * >( castor::string::stringCast< char >( p_name ).c_str() ) ) );
-#endif
-			return p_func != nullptr;
-		}
-
-		template< typename Ret, typename ... Arguments >
-		bool getFunction( castor::String const & p_name, GlFunction< Ret, Arguments... > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( Arguments... );
-			PFNType pfnResult = nullptr;
-
-			if ( getFunction( p_name, pfnResult ) )
-			{
-				p_func = pfnResult;
-			}
-
-			return pfnResult != nullptr;
-		}
-
-		template< typename Ret, typename ... Arguments >
-		bool getFunction( castor::String const & p_name, std::function< Ret( Arguments... ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( Arguments... );
-			PFNType pfnResult = nullptr;
-
-			if ( getFunction( p_name, pfnResult ) )
-			{
-				p_func = pfnResult;
-			}
-
-			return pfnResult != nullptr;
-		}
-
-		template< typename T >
-		inline void getFunction( T & p_function, castor::String const & p_name, castor::String const & p_extension )
-		{
-			if ( !gl_api::getFunction( p_name, p_function ) )
-			{
-				if ( !gl_api::getFunction( p_name + p_extension, p_function ) )
-				{
-					castor::Logger::logWarning( cuT( "Unable to retrieve function " ) + p_name );
-				}
-			}
-		}
-	}
 
 #	define MAKE_GL_EXTENSION( x )	static const castor::String x = cuT( "GL_" ) cuT( #x )
 

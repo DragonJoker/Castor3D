@@ -1,4 +1,4 @@
-﻿#include "GlImmutableTextureStorage.hpp"
+#include "GlImmutableTextureStorage.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Texture/GlTexture.hpp"
@@ -19,7 +19,7 @@ namespace GlRender
 {
 	namespace
 	{
-		GLint doGetMinLevels( Size const & p_size )
+		int doGetMinLevels( Size const & p_size )
 		{
 			auto minDim = std::min( p_size.getWidth(), p_size.getHeight() );
 			auto levels = 1;

@@ -1,5 +1,6 @@
-#include "Common/OpenGl.hpp"
+﻿#include "Common/OpenGl.hpp"
 
+#include "Common/GlGetFunction.hpp"
 #include "Render/GlRenderSystem.hpp"
 
 #include <Graphics/Rectangle.hpp>
@@ -9,6 +10,8 @@
 #include <GlslWriter.hpp>
 
 #include <iomanip>
+
+#include <GL/GL.h>
 
 using namespace castor3d;
 using namespace castor;

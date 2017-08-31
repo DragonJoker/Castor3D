@@ -238,7 +238,7 @@ namespace GlRender
 
 	bool BufFunctionsBase::IsBufferResident( GlBufferTarget target )const
 	{
-		return EXEC_FUNCTION( IsBufferResident, uint32_t( target ) ) != GL_FALSE;
+		return EXEC_FUNCTION( IsBufferResident, uint32_t( target ) ) != 0;
 	}
 
 	void BufFunctionsBase::MakeNamedBufferResident( uint32_t buffer, GlAccessType access )const
@@ -253,7 +253,7 @@ namespace GlRender
 
 	bool BufFunctionsBase::IsNamedBufferResident( uint32_t buffer )const
 	{
-		return EXEC_FUNCTION( IsNamedBufferResident, uint32_t( buffer ) ) != GL_FALSE;
+		return EXEC_FUNCTION( IsNamedBufferResident, uint32_t( buffer ) ) != 0;
 	}
 
 	void BufFunctionsBase::GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, uint64_t * params )const
@@ -1014,7 +1014,7 @@ namespace GlRender
 
 	bool OpenGl::DeleteContext( HGLRC hContext )const
 	{
-		return EXEC_FUNCTION( DeleteContext, hContext ) == GL_TRUE;
+		return EXEC_FUNCTION( DeleteContext, hContext ) == 1;
 	}
 
 #elif defined( CASTOR_PLATFORM_LINUX )
@@ -1088,7 +1088,7 @@ namespace GlRender
 
 	bool OpenGl::IsTexture( uint32_t texture )const
 	{
-		return EXEC_FUNCTION( IsTexture, texture ) != GL_FALSE;
+		return EXEC_FUNCTION( IsTexture, texture ) != 0;
 	}
 
 	void OpenGl::BindTexture( GlTexDim mode, uint32_t texture )const
@@ -1316,27 +1316,27 @@ namespace GlRender
 		EXEC_FUNCTION( PixelStoref, uint32_t( p_mode ), p_fParam );
 	}
 
-	void OpenGl::TexStorage1D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width )const
+	void OpenGl::TexStorage1D( GlTextureStorageType target, int levels, GlInternal internalformat, int width )const
 	{
 		EXEC_FUNCTION( TexStorage1D, uint32_t( target ), levels, int( internalformat ), width );
 	}
 
-	void OpenGl::TexStorage2D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const
+	void OpenGl::TexStorage2D( GlTextureStorageType target, int levels, GlInternal internalformat, int width, int height )const
 	{
 		EXEC_FUNCTION( TexStorage2D, uint32_t( target ), levels, int( internalformat ), width, height );
 	}
 
-	void OpenGl::TexStorage3D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const
+	void OpenGl::TexStorage3D( GlTextureStorageType target, int levels, GlInternal internalformat, int width, int height, int depth )const
 	{
 		EXEC_FUNCTION( TexStorage3D, uint32_t( target ), levels, int( internalformat ), width, height, depth );
 	}
 
-	void OpenGl::TexStorage2DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const
+	void OpenGl::TexStorage2DMultisample( GlTextureStorageType target, int samples, GlInternal internalformat, int width, int height, uint8_t fixedsamplelocations )const
 	{
 		EXEC_FUNCTION( TexStorage2DMultisample, uint32_t( target ), samples, int( internalformat ), width, height, fixedsamplelocations );
 	}
 
-	void OpenGl::TexStorage3DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const
+	void OpenGl::TexStorage3DMultisample( GlTextureStorageType target, int samples, GlInternal internalformat, int width, int height, int depth, uint8_t fixedsamplelocations )const
 	{
 		EXEC_FUNCTION( TexStorage3DMultisample, uint32_t( target ), samples, int( internalformat ), width, height, depth, fixedsamplelocations );
 	}
@@ -1353,7 +1353,7 @@ namespace GlRender
 
 	bool OpenGl::IsSampler( uint32_t sampler )const
 	{
-		return EXEC_FUNCTION( IsSampler, sampler ) != GL_FALSE;
+		return EXEC_FUNCTION( IsSampler, sampler ) != 0;
 	}
 
 	void OpenGl::BindSampler( uint32_t unit, uint32_t sampler )const
@@ -1423,7 +1423,7 @@ namespace GlRender
 
 	bool OpenGl::IsBuffer( uint32_t buffer )const
 	{
-		return EXEC_FUNCTION( IsBuffer, buffer ) != GL_FALSE;
+		return EXEC_FUNCTION( IsBuffer, buffer ) != 0;
 	}
 
 	void OpenGl::BindBuffer( GlBufferTarget p_target, uint32_t buffer )const
@@ -1583,7 +1583,7 @@ namespace GlRender
 
 	bool OpenGl::IsTransformFeedback( uint32_t buffer )const
 	{
-		return EXEC_FUNCTION( IsTransformFeedback, buffer ) != GL_FALSE;
+		return EXEC_FUNCTION( IsTransformFeedback, buffer ) != 0;
 	}
 
 	void OpenGl::BeginTransformFeedback( GlTopology primitive )const
@@ -1628,7 +1628,7 @@ namespace GlRender
 
 	bool OpenGl::IsFramebuffer( uint32_t framebuffer )const
 	{
-		return EXEC_FUNCTION( IsFramebuffer, framebuffer ) != GL_FALSE;
+		return EXEC_FUNCTION( IsFramebuffer, framebuffer ) != 0;
 	}
 
 	void OpenGl::BindFramebuffer( GlFrameBufferMode p_eBindingMode, uint32_t framebuffer )const
@@ -1678,7 +1678,7 @@ namespace GlRender
 
 	bool OpenGl::IsRenderbuffer( uint32_t framebuffer )const
 	{
-		return EXEC_FUNCTION( IsRenderbuffer, framebuffer ) != GL_FALSE;
+		return EXEC_FUNCTION( IsRenderbuffer, framebuffer ) != 0;
 	}
 
 	void OpenGl::BindRenderbuffer( GlRenderBufferMode p_eBindingMode, uint32_t id )const
@@ -2095,7 +2095,7 @@ namespace GlRender
 
 	bool OpenGl::IsShader( uint32_t shader )const
 	{
-		return EXEC_FUNCTION( IsShader, shader ) != GL_FALSE;
+		return EXEC_FUNCTION( IsShader, shader ) != 0;
 	}
 
 	void OpenGl::AttachShader( uint32_t program, uint32_t shader )const
@@ -2150,7 +2150,7 @@ namespace GlRender
 
 	bool OpenGl::IsProgram( uint32_t program )const
 	{
-		return EXEC_FUNCTION( IsProgram, program ) != GL_FALSE;
+		return EXEC_FUNCTION( IsProgram, program ) != 0;
 	}
 
 	void OpenGl::LinkProgram( uint32_t program )const
@@ -2265,7 +2265,7 @@ namespace GlRender
 
 	bool OpenGl::IsVertexArray( uint32_t array )const
 	{
-		return EXEC_FUNCTION( IsVertexArray, array ) != GL_FALSE;
+		return EXEC_FUNCTION( IsVertexArray, array ) != 0;
 	}
 
 	void OpenGl::BindVertexArray( uint32_t array )const
@@ -2295,7 +2295,7 @@ namespace GlRender
 
 	bool OpenGl::IsQuery( uint32_t p_query )const
 	{
-		return EXEC_FUNCTION( IsQuery, p_query ) != GL_FALSE;
+		return EXEC_FUNCTION( IsQuery, p_query ) != 0;
 	}
 
 	void OpenGl::BeginQuery( GlQueryType p_target, uint32_t p_query )const
