@@ -41,34 +41,31 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "\tmesh \"" ) + p_geometry.getMesh()->getName() + cuT( "\"\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\t\timport \"Meshes/" ) + p_geometry.getMesh()->getName() + cuT( ".cmsh\"\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tmesh \"" ) + p_geometry.getMesh()->getName() + cuT( "\"\n" ) ) > 0;
 				castor::TextWriter< Geometry >::checkError( result, "Geometry mesh" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "\tmaterials\n" ) ) > 0
+				result = p_file.writeText( m_tabs + cuT( "\tmaterials\n" ) ) > 0
 						   && p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
 				castor::TextWriter< Geometry >::checkError( result, "Geometry materials" );
-			}
 
-			if ( result )
-			{
-				uint16_t index{ 0u };
-
-				for ( auto submesh : *p_geometry.getMesh() )
+				if ( result )
 				{
-					result = p_file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( index++ ) + cuT( " \"" ) + p_geometry.getMaterial( *submesh )->getName() + cuT( "\"\n" ) ) > 0;
-					castor::TextWriter< Geometry >::checkError( result, "Geometry material" );
-				}
-			}
+					uint16_t index{ 0u };
 
-			if ( result )
-			{
-				result = p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+					for ( auto submesh : *p_geometry.getMesh() )
+					{
+						result &= p_file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( index++ ) + cuT( " \"" ) + p_geometry.getMaterial( *submesh )->getName() + cuT( "\"\n" ) ) > 0;
+						castor::TextWriter< Geometry >::checkError( result, "Geometry material" );
+					}
+
+					if ( result )
+					{
+						result = p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+					}
+				}
 			}
 
 			if ( result )

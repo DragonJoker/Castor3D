@@ -10,6 +10,27 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
+	Mesh::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Mesh >{ tabs }
+	{
+	}
+
+	bool Mesh::TextWriter::operator()( Mesh const & object
+		, TextFile & file )
+	{
+		Logger::logInfo( m_tabs + cuT( "Writing Mesh " ) + object.getName() );
+		auto result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "mesh \"" ) + object.getName() + cuT( "\"\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "\timport \"Meshes/" ) + object.getName() + cuT( ".cmsh\"\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+		castor::TextWriter< Mesh >::checkError( result, "Mesh" );
+		return result;
+	}
+
+	//*************************************************************************************************
+
 	bool BinaryWriter< Mesh >::doWrite( Mesh const & p_obj )
 	{
 		bool result = true;

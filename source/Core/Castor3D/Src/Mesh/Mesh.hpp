@@ -53,6 +53,39 @@ namespace castor3d
 		, public Animable
 	{
 	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		Scene loader
+		\~english
+		\brief		Loader de scène
+		*/
+		class TextWriter
+			: public castor::TextWriter< Mesh >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API explicit TextWriter( castor::String const & tabs );
+			/**
+			 *\~english
+			 *\brief		Writes an object into a text file..
+			 *\param[in]	object	the object to save.
+			 *\param[in]	file	the file to write the scene in.
+			 *\~french
+			 *\brief		Ecrit un objet dans un fichier texte.
+			 *\param[in]	object	L'objet à écrire.
+			 *\param[in]	file	Le fichier.
+			 */
+			C3D_API bool operator()( Mesh const & object, castor::TextFile & file )override;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.

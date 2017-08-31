@@ -107,6 +107,11 @@ namespace castor3d
 
 		bool result = true;
 
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "// Global configuration\n" ) ) > 0;
+		}
+
 		if ( scene.getEngine()->getRenderLoop().hasDebugOverlays() )
 		{
 			result = file.writeText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
@@ -118,6 +123,11 @@ namespace castor3d
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + scene.getName() + cuT( "\"\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene name" );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Scene configuration\n" ) ) > 0;
 		}
 
 		if ( result )
@@ -167,10 +177,20 @@ namespace castor3d
 			}
 		}
 
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Skybox\n" ) ) > 0;
+		}
+
 		if ( result && scene.hasSkybox() )
 		{
 			Logger::logInfo( cuT( "Scene::write - Skybox" ) );
 			result = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( scene.getSkybox(), file );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Fonts\n" ) ) > 0;
 		}
 
 		if ( result )
@@ -186,6 +206,11 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Samplers\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
 			Logger::logInfo( cuT( "Scene::write - Samplers" ) );
 
 			for ( auto const & name : scene.getSamplerView() )
@@ -197,6 +222,11 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Materials\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
 			Logger::logInfo( cuT( "Scene::write - Materials" ) );
 
 			for ( auto const & name : scene.getMaterialView() )
@@ -204,6 +234,11 @@ namespace castor3d
 				auto material = scene.getMaterialView().find( name );
 				result &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *material, file );
 			}
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Overlays\n" ) ) > 0;
 		}
 
 		if ( result )
@@ -223,6 +258,30 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Meshes\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
+			Logger::logInfo( cuT( "Scene::write - Meshes" ) );
+			auto lock = makeUniqueLock( scene.getMeshCache() );
+
+			for ( auto const & it : scene.getMeshCache() )
+			{
+				if ( result )
+				{
+					result = Mesh::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
+			}
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras nodes\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
 			Logger::logInfo( cuT( "Scene::write - Cameras nodes" ) );
 
 			for ( auto const & it : scene.getCameraRootNode()->getChildren() )
@@ -238,12 +297,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Scene::write - Objects nodes" ) );
-
-			for ( auto const & it : scene.getObjectRootNode()->getChildren() )
-			{
-				result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
-			}
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras\n" ) ) > 0;
 		}
 
 		if ( result )
@@ -264,6 +318,26 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Objects nodes\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
+			Logger::logInfo( cuT( "Scene::write - Objects nodes" ) );
+
+			for ( auto const & it : scene.getObjectRootNode()->getChildren() )
+			{
+				result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+			}
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Lights\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
 			Logger::logInfo( cuT( "Scene::write - Lights" ) );
 			auto lock = makeUniqueLock( scene.getLightCache() );
 
@@ -271,6 +345,11 @@ namespace castor3d
 			{
 				result &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
 			}
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Geometries\n" ) ) > 0;
 		}
 
 		if ( result )
@@ -286,6 +365,11 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Particle systems\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
 			Logger::logInfo( cuT( "Scene::write - Particle systems" ) );
 			auto lock = makeUniqueLock( scene.getParticleSystemCache() );
 
@@ -293,6 +377,11 @@ namespace castor3d
 			{
 				result &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
 			}
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Animated object groups\n" ) ) > 0;
 		}
 
 		if ( result )
@@ -307,6 +396,11 @@ namespace castor3d
 		}
 
 		file.writeText( cuT( "}\n" ) );
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "// Windows\n" ) ) > 0;
+		}
 
 		if ( result )
 		{
@@ -761,6 +855,7 @@ namespace castor3d
 			else
 			{
 				m_backgroundColourSkybox.setColour( m_backgroundColour );
+				m_backgroundColourSkybox.update();
 				m_backgroundColourSkybox.render( camera );
 			}
 		}
@@ -768,6 +863,7 @@ namespace castor3d
 			|| getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
 			m_backgroundColourSkybox.setColour( m_backgroundColour );
+			m_backgroundColourSkybox.update();
 			m_backgroundColourSkybox.render( camera );
 		}
 	}
@@ -996,9 +1092,9 @@ namespace castor3d
 
 	Skybox const & Scene::getSkybox()const
 	{
-		if ( m_fog.getType() == FogType::eDisabled )
+		if ( m_fog.getType() == FogType::eDisabled
+			&& m_skybox )
 		{
-			REQUIRE( m_skybox );
 			return *m_skybox;
 		}
 

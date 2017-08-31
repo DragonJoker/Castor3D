@@ -1168,6 +1168,32 @@ namespace castor3d
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticleSystem )
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMesh )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->bBool1 = false;
+		p_params[0]->get( parsingContext->strName2 );
+
+		if ( parsingContext->pScene )
+		{
+			auto const & cache = parsingContext->pScene->getMeshCache();
+
+			if ( cache.has( parsingContext->strName2 ) )
+			{
+				parsingContext->pMesh = cache.find( parsingContext->strName2 );
+			}
+			else
+			{
+				parsingContext->pMesh.reset();
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No scene initialised" ) );
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eMesh )
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemParent )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -1655,6 +1681,25 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserNodeDirection )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pSceneNode )
+		{
+			PARSING_ERROR( cuT( "No Scene node initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			Point3r direction;
+			p_params[0]->get( direction );
+			Point3r up{ 0, 1, 0 };
+			Point3r right{ direction ^ up };
+			parsingContext->pSceneNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserNodeScale )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -1718,32 +1763,6 @@ namespace castor3d
 		}
 	}
 	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( parserObjectMesh )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->bBool1 = false;
-		p_params[0]->get( parsingContext->strName2 );
-
-		if ( parsingContext->pScene )
-		{
-			auto const & cache = parsingContext->pScene->getMeshCache();
-
-			if ( cache.has( parsingContext->strName2 ) )
-			{
-				parsingContext->pMesh = cache.find( parsingContext->strName2 );
-			}
-			else
-			{
-				parsingContext->pMesh.reset();
-			}
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "No scene initialised" ) );
-		}
-	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eMesh )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserObjectMaterial )
 	{
@@ -1848,9 +1867,16 @@ namespace castor3d
 
 				if ( cache.has( name ) )
 				{
-					SubmeshSPtr submesh = parsingContext->pGeometry->getMesh()->getSubmesh( index );
-					MaterialSPtr material = cache.find( name );
-					parsingContext->pGeometry->setMaterial( *submesh, material );
+					if ( parsingContext->pGeometry->getMesh()->getSubmeshCount() > index )
+					{
+						SubmeshSPtr submesh = parsingContext->pGeometry->getMesh()->getSubmesh( index );
+						MaterialSPtr material = cache.find( name );
+						parsingContext->pGeometry->setMaterial( *submesh, material );
+					}
+					else
+					{
+						PARSING_ERROR( cuT( "Submesh index is too high" ) );
+					}
 				}
 				else
 				{
@@ -1941,24 +1967,25 @@ namespace castor3d
 				String tmp;
 				StringArray arrayStrParams = string::split( p_params[1]->get( tmp ), cuT( "-" ), 20, false );
 
-				if ( arrayStrParams.size() )
+				for ( auto param : arrayStrParams )
 				{
-					for ( StringArrayConstIt it = arrayStrParams.begin(); it != arrayStrParams.end(); ++it )
+					if ( param.find( cuT( "smooth_normals" ) ) == 0 )
 					{
-						if ( it->find( cuT( "smooth_normals" ) ) == 0 )
-						{
-							String strNml = cuT( "smooth" );
-							parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-						}
-						else if ( it->find( cuT( "flat_normals" ) ) == 0 )
-						{
-							String strNml = cuT( "flat" );
-							parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-						}
-						else if ( it->find( cuT( "tangent_space" ) ) == 0 )
-						{
-							parameters.add( cuT( "tangent_space" ), true );
-						}
+						String strNml = cuT( "smooth" );
+						parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
+					}
+					else if ( param.find( cuT( "flat_normals" ) ) == 0 )
+					{
+						String strNml = cuT( "flat" );
+						parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
+					}
+					else if ( param.find( cuT( "tangent_space" ) ) == 0 )
+					{
+						parameters.add( cuT( "tangent_space" ), true );
+					}
+					else if ( param.find( cuT( "split_mesh" ) ) == 0 )
+					{
+						parameters.add( cuT( "split_mesh" ), true );
 					}
 				}
 			}
@@ -2126,7 +2153,11 @@ namespace castor3d
 
 		if ( parsingContext->pMesh )
 		{
-			parsingContext->pGeometry->setMesh( parsingContext->pMesh );
+			if ( parsingContext->pGeometry )
+			{
+				parsingContext->pGeometry->setMesh( parsingContext->pMesh );
+			}
+
 			parsingContext->pMesh.reset();
 		}
 	}

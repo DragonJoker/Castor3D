@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -95,6 +95,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogType )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogDensity )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneParticleSystem )
+	DECLARE_ATTRIBUTE_PARSER( parserMesh )
 
 	// ParticleSystem parsers
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemParent )
@@ -123,11 +124,11 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserNodeParent )
 	DECLARE_ATTRIBUTE_PARSER( parserNodePosition )
 	DECLARE_ATTRIBUTE_PARSER( parserNodeOrientation )
+	DECLARE_ATTRIBUTE_PARSER( parserNodeDirection )
 	DECLARE_ATTRIBUTE_PARSER( parserNodeScale )
 
 	// Object Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserObjectParent )
-	DECLARE_ATTRIBUTE_PARSER( parserObjectMesh )
 	DECLARE_ATTRIBUTE_PARSER( parserObjectMaterial )
 	DECLARE_ATTRIBUTE_PARSER( parserObjectMaterials )
 	DECLARE_ATTRIBUTE_PARSER( parserObjectCastShadows )
