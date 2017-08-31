@@ -332,117 +332,119 @@ namespace castor3d
 			for ( auto primitive : p_scene.getGeometryCache() )
 			{
 				if ( p_ignored != primitive.second->getParent().get()
-					&& primitive.second->getParent()->isVisible() )
+					&& primitive.second->getParent()->isVisible()
+					&& primitive.second->getMesh() )
 				{
 					MeshSPtr mesh = primitive.second->getMesh();
-					REQUIRE( mesh );
 
 					for ( auto submesh : *mesh )
 					{
 						MaterialSPtr material( primitive.second->getMaterial( *submesh ) );
-						REQUIRE( material );
 
-						for ( auto pass : *material )
+						if ( material )
 						{
-							auto programFlags = submesh->getProgramFlags();
-							auto sceneFlags = p_scene.getFlags();
-							remFlag( programFlags, ProgramFlag::eSkinning );
-							remFlag( programFlags, ProgramFlag::eMorphing );
-							auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Skeleton" ) ) );
-							auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Mesh" ) ) );
-
-							if ( material->getType() == MaterialType::ePbrMetallicRoughness )
+							for ( auto pass : *material )
 							{
-								addFlag( programFlags, ProgramFlag::ePbrMetallicRoughness );
-							}
-							else if ( material->getType() == MaterialType::ePbrSpecularGlossiness )
-							{
-								addFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness );
-							}
+								auto programFlags = submesh->getProgramFlags();
+								auto sceneFlags = p_scene.getFlags();
+								remFlag( programFlags, ProgramFlag::eSkinning );
+								remFlag( programFlags, ProgramFlag::eMorphing );
+								auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Skeleton" ) ) );
+								auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Mesh" ) ) );
 
-							if ( skeleton && submesh->hasBoneData() )
-							{
-								addFlag( programFlags, ProgramFlag::eSkinning );
-							}
-
-							if ( mesh )
-							{
-								addFlag( programFlags, ProgramFlag::eMorphing );
-							}
-
-							if ( !shadows
-								|| !primitive.second->isShadowReceiver() )
-							{
-								remFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
-							}
-
-							pass->prepareTextures();
-
-							if ( submesh->getRefCount( material ) > 1
-								&& !checkFlag( programFlags, ProgramFlag::eMorphing )
-								&& ( !pass->hasAlphaBlending() || p_renderPass.isOrderIndependent() )
-								&& p_renderPass.getEngine()->getRenderSystem()->getGpuInformations().hasInstancing()
-								&& !pass->hasEnvironmentMapping() )
-							{
-								addFlag( programFlags, ProgramFlag::eInstantiation );
-							}
-							else
-							{
-								remFlag( programFlags, ProgramFlag::eInstantiation );
-							}
-
-							addFlags( programFlags, pass->getProgramFlags() );
-
-							auto textureFlags = pass->getTextureFlags();
-							p_renderPass.preparePipeline( pass->getColourBlendMode()
-								, pass->getAlphaBlendMode()
-								, pass->getAlphaFunc()
-								, textureFlags
-								, programFlags
-								, sceneFlags
-								, pass->IsTwoSided() );
-
-							if ( checkFlag( programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
-							{
-								if ( !isShadowMapProgram( programFlags )
-									|| primitive.second->isShadowCaster() )
+								if ( material->getType() == MaterialType::ePbrMetallicRoughness )
 								{
-									if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+									addFlag( programFlags, ProgramFlag::ePbrMetallicRoughness );
+								}
+								else if ( material->getType() == MaterialType::ePbrSpecularGlossiness )
+								{
+									addFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness );
+								}
+
+								if ( skeleton && submesh->hasBoneData() )
+								{
+									addFlag( programFlags, ProgramFlag::eSkinning );
+								}
+
+								if ( mesh )
+								{
+									addFlag( programFlags, ProgramFlag::eMorphing );
+								}
+
+								if ( !shadows
+									|| !primitive.second->isShadowReceiver() )
+								{
+									remFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+								}
+
+								pass->prepareTextures();
+
+								if ( submesh->getRefCount( material ) > 1
+									&& !checkFlag( programFlags, ProgramFlag::eMorphing )
+									&& ( !pass->hasAlphaBlending() || p_renderPass.isOrderIndependent() )
+									&& p_renderPass.getEngine()->getRenderSystem()->getGpuInformations().hasInstancing()
+									&& !pass->hasEnvironmentMapping() )
+								{
+									addFlag( programFlags, ProgramFlag::eInstantiation );
+								}
+								else
+								{
+									remFlag( programFlags, ProgramFlag::eInstantiation );
+								}
+
+								addFlags( programFlags, pass->getProgramFlags() );
+
+								auto textureFlags = pass->getTextureFlags();
+								p_renderPass.preparePipeline( pass->getColourBlendMode()
+									, pass->getAlphaBlendMode()
+									, pass->getAlphaFunc()
+									, textureFlags
+									, programFlags
+									, sceneFlags
+									, pass->IsTwoSided() );
+
+								if ( checkFlag( programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
+								{
+									if ( !isShadowMapProgram( programFlags )
+										|| primitive.second->isShadowCaster() )
 									{
-										doAddSkinningNode( p_renderPass
-											, textureFlags
-											, programFlags
-											, sceneFlags
-											, *pass
-											, *submesh
-											, *primitive.second
-											, *skeleton
-											, p_skinning
-											, p_instancedSkinning );
-									}
-									else if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
-									{
-										doAddMorphingNode( p_renderPass
-											, textureFlags
-											, programFlags
-											, sceneFlags
-											, *pass
-											, *submesh
-											, *primitive.second
-											, *mesh
-											, p_morphing );
-									}
-									else
-									{
-										doAddStaticNode( p_renderPass
-											, textureFlags
-											, programFlags
-											, sceneFlags
-											, *pass
-											, *submesh
-											, *primitive.second
-											, p_static
-											, p_instanced );
+										if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+										{
+											doAddSkinningNode( p_renderPass
+												, textureFlags
+												, programFlags
+												, sceneFlags
+												, *pass
+												, *submesh
+												, *primitive.second
+												, *skeleton
+												, p_skinning
+												, p_instancedSkinning );
+										}
+										else if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+										{
+											doAddMorphingNode( p_renderPass
+												, textureFlags
+												, programFlags
+												, sceneFlags
+												, *pass
+												, *submesh
+												, *primitive.second
+												, *mesh
+												, p_morphing );
+										}
+										else
+										{
+											doAddStaticNode( p_renderPass
+												, textureFlags
+												, programFlags
+												, sceneFlags
+												, *pass
+												, *submesh
+												, *primitive.second
+												, p_static
+												, p_instanced );
+										}
 									}
 								}
 							}

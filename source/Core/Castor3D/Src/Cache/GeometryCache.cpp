@@ -80,7 +80,9 @@ namespace castor3d
 			, 0u
 			, []( uint32_t p_value, std::pair< String, GeometrySPtr > const & p_pair )
 			{
-				return p_value + p_pair.second->getMesh()->getSubmeshCount();
+				return p_value + ( p_pair.second->getMesh()
+					? p_pair.second->getMesh()->getSubmeshCount()
+					: 0u );
 			} );
 	}
 }

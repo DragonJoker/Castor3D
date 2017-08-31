@@ -41,13 +41,13 @@ namespace castor3d
 				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
 				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
-					, ShaderType::ePixel );
+					, ShaderType::ePixel, shader::SpotShadowMapCount );
 				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
-					, ShaderType::ePixel, 6u );
+					, ShaderType::ePixel, shader::PointShadowMapCount );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness )
-				|| checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
+				|| checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
 			{
 				p_program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
 					, ShaderType::ePixel );
@@ -825,7 +825,7 @@ namespace castor3d
 		{
 			auto normal = writer.declLocale( cuT( "normal" ), normalize( vtx_normal ) );
 			auto ambient = writer.declLocale( cuT( "ambient" ), c3d_ambientLight.xyz() );
-			auto light = writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) );
+			auto light = writer.declLocale( cuT( "light" ), vec3( 0.0_f ) );
 			auto specular = writer.declLocale( cuT( "specular" ), materials.getSpecular( vtx_material ) );
 			auto glossiness = writer.declLocale( cuT( "glossiness" ), materials.getGlossiness( vtx_material ) );
 			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
@@ -881,7 +881,7 @@ namespace castor3d
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, diffuse + emissive + ambient );
+				, diffuse + ambient + emissive );
 
 			auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
 

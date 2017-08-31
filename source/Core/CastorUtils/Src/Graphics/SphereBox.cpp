@@ -1,4 +1,4 @@
-#include "SphereBox.hpp"
+﻿#include "SphereBox.hpp"
 #include "CubeBox.hpp"
 
 namespace castor
@@ -63,7 +63,10 @@ namespace castor
 	{
 		m_ptCenter = p_box.getCenter();
 		m_radius = real( point::length( p_box.getMax() - m_ptCenter ) );
-		ENSURE( std::abs( m_radius - real( point::length( m_ptCenter - p_box.getMin() ) ) ) < 0.001 );
+#if !defined( NDEBUG )
+		auto diff = std::abs( m_radius - real( point::length( m_ptCenter - p_box.getMin() ) ) );
+		ENSURE( diff < 0.01 );
+#endif
 	}
 
 	bool SphereBox::isWithin( Point3r const & p_v )

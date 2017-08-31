@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPassTimer.hpp"
@@ -53,9 +53,9 @@ namespace castor3d
 				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
 				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
-					, ShaderType::ePixel );
+					, ShaderType::ePixel, shader::SpotShadowMapCount );
 				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
-					, ShaderType::ePixel, 6u );
+					, ShaderType::ePixel, shader::PointShadowMapCount );
 			}
 
 			if ( ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness )

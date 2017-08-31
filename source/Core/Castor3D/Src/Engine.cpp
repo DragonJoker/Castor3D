@@ -34,6 +34,7 @@ namespace castor3d
 		, m_cleaned( true )
 		, m_perObjectLighting( true )
 		, m_threaded( false )
+		, m_materialType{ MaterialType::eLegacy }
 	{
 		auto dummy = []( auto p_element )
 		{

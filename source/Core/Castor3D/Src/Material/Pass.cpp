@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -300,7 +300,7 @@ namespace castor3d
 				{
 					m_needsGammaCorrection = false;
 				}
-				else
+				else if ( unit->getTexture() )
 				{
 					auto format = unit->getTexture()->getPixelFormat();
 					m_needsGammaCorrection = format != PixelFormat::eL16F32F

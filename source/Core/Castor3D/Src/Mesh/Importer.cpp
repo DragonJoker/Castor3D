@@ -23,14 +23,18 @@ namespace castor3d
 	{
 	}
 
-	bool Importer::importScene( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters )
+	bool Importer::importScene( Scene & scene
+		, Path const & fileName
+		, Parameters const & parameters )
 	{
-		m_fileName = p_fileName;
+		bool splitSubmeshes = false;
+		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
+		m_fileName = fileName;
 		m_filePath = m_fileName.getPath();
-		m_parameters = p_parameters;
+		m_parameters = parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		bool result = doImportScene( p_scene );
+		bool result = doImportScene( scene );
 
 		if ( result )
 		{
@@ -42,7 +46,7 @@ namespace castor3d
 
 				for ( auto submesh : *mesh )
 				{
-					p_scene.getListener().postEvent( makeInitialiseEvent( *submesh ) );
+					scene.getListener().postEvent( makeInitialiseEvent( *submesh ) );
 				}
 			}
 		}
@@ -50,32 +54,37 @@ namespace castor3d
 		return result;
 	}
 
-	bool Importer::importMesh( Mesh & p_mesh, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
+	bool Importer::importMesh( Mesh & mesh
+		, Path const & fileName
+		, Parameters const & parameters
+		, bool initialise )
 	{
-		m_fileName = p_fileName;
+		bool splitSubmeshes = false;
+		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
+		m_fileName = fileName;
 		m_filePath = m_fileName.getPath();
-		m_parameters = p_parameters;
+		m_parameters = parameters;
 		m_nodes.clear();
 		m_geometries.clear();
 		bool result = true;
 
-		if ( !p_mesh.getSubmeshCount() )
+		if ( !mesh.getSubmeshCount() )
 		{
-			result = doImportMesh( p_mesh );
+			result = doImportMesh( mesh );
 
-			if ( result && p_initialise )
+			if ( result && initialise )
 			{
-				p_mesh.computeContainers();
+				mesh.computeContainers();
 
-				for ( auto submesh : p_mesh )
+				for ( auto submesh : mesh )
 				{
-					p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
+					mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
 				}
 			}
 		}
 		else
 		{
-			for ( auto submesh : p_mesh )
+			for ( auto submesh : mesh )
 			{
 				submesh->ref( submesh->getDefaultMaterial() );
 			}
@@ -84,32 +93,36 @@ namespace castor3d
 		return result;
 	}
 
-	TextureUnitSPtr Importer::loadTexture( Path const & p_path, Pass & p_pass, TextureChannel p_channel )const
+	TextureUnitSPtr Importer::loadTexture( Path const & path
+		, Pass & pass
+		, TextureChannel channel )const
 	{
 		TextureUnitSPtr unit;
 		Path relative;
 		Path folder;
 
-		if ( File::fileExists( p_path ) )
+		if ( File::fileExists( path ) )
 		{
-			relative = p_path;
+			relative = path;
 		}
-		else if ( File::fileExists( m_filePath / p_path ) )
+		else if ( File::fileExists( m_filePath / path ) )
 		{
-			auto fullPath = m_filePath / p_path;
+			auto fullPath = m_filePath / path;
 			folder = fullPath.getPath();
 			relative = fullPath.getFileName( true );;
 		}
 		else
 		{
 			PathArray files;
-			String fileName = p_path.getFileName( true );
+			String fileName = path.getFileName( true );
 			File::listDirectoryFiles( m_filePath, files, true );
-			auto it = std::find_if( files.begin(), files.end(), [&fileName]( Path const & p_file )
-			{
-				return p_file.getFileName( true ) == fileName
-					   || p_file.getFileName( true ).find( fileName ) == 0;
-			} );
+			auto it = std::find_if( files.begin()
+				, files.end()
+				, [&fileName]( Path const & p_file )
+				{
+					return p_file.getFileName( true ) == fileName
+						   || p_file.getFileName( true ).find( fileName ) == 0;
+				} );
 
 			folder = m_filePath;
 
@@ -128,28 +141,30 @@ namespace castor3d
 		{
 			try
 			{
-				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *p_pass.getOwner()->getEngine() );
+				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *pass.getOwner()->getEngine() );
 				unit->setAutoMipmaps( true );
-				auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
+				auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+					, AccessType::eRead
+					, AccessType::eRead );
 				texture->setSource( folder, relative );
 				unit->setTexture( texture );
-				unit->setChannel( p_channel );
-				p_pass.addTextureUnit( unit );
+				unit->setChannel( channel );
+				pass.addTextureUnit( unit );
 			}
 			catch ( std::exception & p_exc )
 			{
 				unit.reset();
-				Logger::logWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << p_path << cuT( ":\n" ) << p_exc.what() );
+				Logger::logWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << p_exc.what() );
 			}
 			catch ( ... )
 			{
 				unit.reset();
-				Logger::logWarning( cuT( "Unknown error encountered while loading texture file " ) + p_path );
+				Logger::logWarning( cuT( "Unknown error encountered while loading texture file " ) + path );
 			}
 		}
 		else
 		{
-			Logger::logWarning( StringStream() << cuT( "Couldn't load texture file " ) << p_path << cuT( ":\nFile does not exist." ) );
+			Logger::logWarning( StringStream() << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) );
 		}
 
 		return unit;

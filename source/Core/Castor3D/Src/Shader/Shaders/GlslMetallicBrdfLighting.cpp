@@ -579,7 +579,7 @@ namespace castor3d
 						, specfresnel * NDF * G );
 					auto denominator = m_writer.declLocale( cuT( "denominator" )
 						, 4.0_f * NdotV * NdotL + 0.001_f );
-					auto specular = m_writer.declLocale( cuT( "specular" )
+					auto specReflectance = m_writer.declLocale( cuT( "specReflectance" )
 						, nominator / denominator );
 					auto kS = m_writer.declLocale( cuT( "kS" )
 						, specfresnel );
@@ -588,7 +588,7 @@ namespace castor3d
 
 					kD *= 1.0_f - metallic;
 
-					m_writer.returnStmt( shadowFactor * m_writer.paren( m_writer.paren( kD * albedo / PI + specular ) * radiance * NdotL ) );
+					m_writer.returnStmt( shadowFactor * m_writer.paren( m_writer.paren( kD * albedo / PI + specReflectance ) * radiance * NdotL ) );
 				}
 				, InLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -680,7 +680,7 @@ namespace castor3d
 					m_writer.returnStmt( f0 + m_writer.paren( vec3( 1.0_f ) - f0 ) * pow( 1.0_f - product, 5.0 ) );
 				}
 				, InFloat( &m_writer, cuT( "product" ) )
-				, InVec3( &m_writer, cuT( "p_f0" ) ) );
+				, InVec3( &m_writer, cuT( "f0" ) ) );
 		}
 	
 		Vec3 MetallicBrdfLightingModel::doComputeLight( Light const & light

@@ -94,7 +94,7 @@ namespace castor
 			return m_value;
 		}
 
-		const T * operator->()const noexcept
+		T const * operator->()const noexcept
 		{
 			return &m_value;
 		}

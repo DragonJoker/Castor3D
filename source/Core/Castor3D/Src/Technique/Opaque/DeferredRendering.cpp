@@ -179,35 +179,22 @@ namespace castor3d
 			, m_geometryPassResult
 			, info );
 
-		if ( scene.hasSkybox() )
-		{
-			m_reflection->render( m_geometryPassResult
-				, m_lightingPass->getResult()
-				, scene
-				, info );
+		m_reflection->render( m_geometryPassResult
+			, m_lightingPass->getResult()
+			, scene
+			, info );
 
-			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
-				|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-			{
-				m_combinePass->render( m_geometryPassResult
-					, m_lightingPass->getResult()
-					, m_reflection->getReflection()
-					, m_reflection->getRefraction()
-					, scene.getSkybox().getIbl()
-					, scene.getFog()
-					, m_frameBuffer
-					, info );
-			}
-			else
-			{
-				m_combinePass->render( m_geometryPassResult
-					, m_lightingPass->getResult()
-					, m_reflection->getReflection()
-					, m_reflection->getRefraction()
-					, scene.getFog()
-					, m_frameBuffer
-					, info );
-			}
+		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
+			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+		{
+			m_combinePass->render( m_geometryPassResult
+				, m_lightingPass->getResult()
+				, m_reflection->getReflection()
+				, m_reflection->getRefraction()
+				, scene.getSkybox().getIbl()
+				, scene.getFog()
+				, m_frameBuffer
+				, info );
 		}
 		else
 		{

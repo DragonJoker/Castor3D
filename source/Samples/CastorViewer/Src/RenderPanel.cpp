@@ -1,4 +1,4 @@
-﻿#include "RenderPanel.hpp"
+#include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 #include "RotateNodeEvent.hpp"
@@ -374,7 +374,11 @@ namespace CastorViewer
 	void RenderPanel::doResetNode()
 	{
 		doResetTimers();
-		m_currentState->Reset( DEF_CAM_SPEED );
+
+		if ( m_currentState )
+		{
+			m_currentState->Reset( DEF_CAM_SPEED );
+		}
 	}
 
 	void RenderPanel::doTurnCameraHoriz()

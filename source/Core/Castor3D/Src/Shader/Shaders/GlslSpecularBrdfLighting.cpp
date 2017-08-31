@@ -26,9 +26,12 @@ namespace castor3d
 			, FragmentInput const & fragmentIn )
 		{
 			auto c3d_lightsCount = m_writer.getBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
-			auto begin = m_writer.declLocale( cuT( "begin" ), 0_i );
-			auto end = m_writer.declLocale( cuT( "end" ), m_writer.cast< Int >( c3d_lightsCount.x() ) );
-			auto result = m_writer.declLocale( cuT( "result" ), vec3( 0.0_f ) );
+			auto begin = m_writer.declLocale( cuT( "begin" )
+				, 0_i );
+			auto end = m_writer.declLocale( cuT( "end" )
+				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
@@ -205,8 +208,6 @@ namespace castor3d
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						Shadow shadows{ m_writer };
-
 						IF ( m_writer, receivesShadows != 0_i )
 						{
 							shadowFactor = 1.0_f - min( receivesShadows
@@ -280,7 +281,8 @@ namespace castor3d
 							, glossiness
 							, shadowFactor
 							, fragmentIn ) );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" ), light.m_attenuation().x() + light.m_attenuation().y() * distance + light.m_attenuation().z() * distance * distance );
+					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
+						, light.m_attenuation().x() + light.m_attenuation().y() * distance + light.m_attenuation().z() * distance * distance );
 					m_writer.returnStmt( result / attenuation );
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
@@ -539,6 +541,8 @@ namespace castor3d
 					, Float const & shadowFactor
 					, FragmentInput const & fragmentIn )
 				{
+					auto roughness = m_writer.declLocale( cuT( "roughness" )
+						, 1.0_f - glossiness );
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
 					auto L = m_writer.declLocale( cuT( "L" )
@@ -551,8 +555,6 @@ namespace castor3d
 						, normalize( fragmentIn.m_normal ) );
 					auto radiance = m_writer.declLocale( cuT( "radiance" )
 						, light.m_colour() );
-					auto roughness = m_writer.declLocale( cuT( "roughness" )
-						, 1.0_f - glossiness );
 
 					auto NdotL = m_writer.declLocale( cuT( "NdotL" )
 						, max( 0.0_f, dot( N, L ) ) );

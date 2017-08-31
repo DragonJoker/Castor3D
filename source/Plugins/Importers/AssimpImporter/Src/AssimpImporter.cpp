@@ -452,12 +452,10 @@ namespace C3dAssimp
 			| aiProcess_LimitBoneWeights
 			| aiProcess_Debone;
 		bool tangentSpace = false;
-		xchar buffer[1024] = { 0 };
+		String normals;
 
-		if ( m_parameters.get( cuT( "normals" ), buffer ) )
+		if ( m_parameters.get( cuT( "normals" ), normals ) )
 		{
-			String normals = buffer;
-
 			if ( normals == cuT( "smooth" ) )
 			{
 				flags |= aiProcess_GenSmoothNormals;
@@ -803,7 +801,7 @@ namespace C3dAssimp
 			auto bone = m_arrayBones[itBone->second];
 			object = p_animation.addObject( bone, parent );
 
-			if ( parent->getType() == SkeletonAnimationObjectType::eBone )
+			if ( parent && parent->getType() == SkeletonAnimationObjectType::eBone )
 			{
 				skeleton.setBoneParent( bone, std::static_pointer_cast< SkeletonAnimationBone >( parent )->getBone() );
 			}

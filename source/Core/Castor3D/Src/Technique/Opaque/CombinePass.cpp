@@ -105,7 +105,7 @@ namespace castor3d
 				} );
 			return writer.finalise();
 		}
-		
+
 		glsl::Shader doGetLegacyPixelProgram( Engine & engine
 			, FogType fogType
 			, bool hasSsao )
@@ -226,7 +226,7 @@ namespace castor3d
 				} );
 			return writer.finalise();
 		}
-		
+
 		glsl::Shader doGetPbrPixelProgram( Engine & engine
 			, FogType fogType
 			, bool hasSsao )
@@ -354,7 +354,7 @@ namespace castor3d
 				} );
 			return writer.finalise();
 		}
-		
+
 		ShaderProgramSPtr doCreateProgram( Engine & engine
 			, FogType fogType
 			, bool hasSsao
