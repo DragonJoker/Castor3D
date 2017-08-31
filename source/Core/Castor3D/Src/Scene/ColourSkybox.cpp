@@ -71,11 +71,13 @@ namespace castor3d
 
 	void ColourSkybox::render( Camera const & camera )
 	{
-		REQUIRE( m_texture );
+		Skybox::render( camera );
+	}
 
+	void ColourSkybox::update()
+	{
 		if ( m_colour.isDirty()
-			&& ( m_scene->getMaterialsType() == MaterialType::ePbrMetallicRoughness
-				|| m_scene->getMaterialsType() == MaterialType::ePbrSpecularGlossiness ) )
+			&& m_ibl )
 		{
 			constexpr PixelFormat format{ PixelFormat::eRGB32F };
 			Pixel< format > pixel{ true };
@@ -96,8 +98,6 @@ namespace castor3d
 			m_ibl->update( *m_texture );
 			m_colour.reset();
 		}
-
-		Skybox::render( camera );
 	}
 
 	void ColourSkybox::setColour( castor::Colour const & value )

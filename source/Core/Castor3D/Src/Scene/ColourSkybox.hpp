@@ -78,6 +78,13 @@ namespace castor3d
 		C3D_API void render( Camera const & camera )override;
 		/**
 		 *\~english
+		 *\brief		Updates the skybox.
+		 *\~french
+		 *\brief		Met la skybox à jour.
+		 */
+		C3D_API void update();
+		/**
+		 *\~english
 		 *\brief		Defines the skybox's colour.
 		 *\param[in]	value	The new value.
 		 *\~french
