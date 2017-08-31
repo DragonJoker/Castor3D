@@ -1,4 +1,4 @@
-#include "SubmeshTreeItemProperty.hpp"
+﻿#include "SubmeshTreeItemProperty.hpp"
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>
@@ -9,7 +9,9 @@
 #include <Scene/Scene.hpp>
 
 #include "AdditionalProperties.hpp"
+#include "CubeBoxProperties.hpp"
 #include "PointProperties.hpp"
+#include "SphereBoxProperties.hpp"
 
 #include <wx/propgrid/advprops.h>
 
@@ -22,9 +24,8 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
 		static wxString PROPERTY_SUBMESH_MATERIAL = _( "Material" );
-		static wxString PROPERTY_SUBMESH_LIMITS_MIN = _( "Min" );
-		static wxString PROPERTY_SUBMESH_LIMITS_MAX = _( "Max" );
-		static wxString PROPERTY_SUBMESH_LIMITS_CENTER = _( "Center" );
+		static wxString PROPERTY_SUBMESH_CUBE_BOX = _( "Cube box" );
+		static wxString PROPERTY_SUBMESH_SPHERE_BOX = _( "Sphere box" );
 		static wxString PROPERTY_TOPOLOGY = _( "Topology" );
 		static wxString PROPERTY_TOPOLOGY_POINTS = _( "Points" );
 		static wxString PROPERTY_TOPOLOGY_LINES = _( "Lines" );
@@ -45,9 +46,8 @@ namespace GuiCommon
 	{
 		PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
 		PROPERTY_SUBMESH_MATERIAL = _( "Material" );
-		PROPERTY_SUBMESH_LIMITS_MIN = _( "Min" );
-		PROPERTY_SUBMESH_LIMITS_MAX = _( "Max" );
-		PROPERTY_SUBMESH_LIMITS_CENTER = _( "Center" );
+		PROPERTY_SUBMESH_CUBE_BOX = _( "Cube box" );
+		PROPERTY_SUBMESH_SPHERE_BOX = _( "Sphere box" );
 		PROPERTY_TOPOLOGY = _( "Topology" );
 		PROPERTY_TOPOLOGY_POINTS = _( "Points" );
 		PROPERTY_TOPOLOGY_LINES = _( "Lines" );
@@ -126,10 +126,15 @@ namespace GuiCommon
 		}
 
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) ) );
-		p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY, PROPERTY_TOPOLOGY, choices ) )->SetValue( selected );
-		p_grid->Append( new Point3rProperty( PROPERTY_SUBMESH_LIMITS_MIN, PROPERTY_SUBMESH_LIMITS_MIN, m_submesh.getCollisionBox().getMin() ) )->Enable( false );
-		p_grid->Append( new Point3rProperty( PROPERTY_SUBMESH_LIMITS_MAX, PROPERTY_SUBMESH_LIMITS_MAX, m_submesh.getCollisionBox().getMax() ) )->Enable( false );
-		p_grid->Append( new Point3rProperty( PROPERTY_SUBMESH_LIMITS_CENTER, PROPERTY_SUBMESH_LIMITS_CENTER, m_submesh.getCollisionBox().getCenter() ) )->Enable( false );
+		p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY
+			, PROPERTY_TOPOLOGY
+			, choices ) )->SetValue( selected );
+		p_grid->Append( new SphereBoxProperty( PROPERTY_SUBMESH_SPHERE_BOX
+			, PROPERTY_SUBMESH_SPHERE_BOX
+			, m_submesh.getCollisionSphere() ) )->Enable( false );
+		p_grid->Append( new CubeBoxProperty( PROPERTY_SUBMESH_CUBE_BOX
+			, PROPERTY_SUBMESH_CUBE_BOX
+			, m_submesh.getCollisionBox() ) )->Enable( false );
 		p_grid->Append( doCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_geometry.getMaterial( m_submesh )->getName() ) ) );
 	}
 
