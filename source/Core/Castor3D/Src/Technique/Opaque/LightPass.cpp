@@ -101,14 +101,13 @@ namespace castor3d
 	}
 
 	float getMaxDistance( LightCategory const & light
-		, Point3f const & attenuation
-		, float max )
+		, Point3f const & attenuation )
 	{
 		constexpr float threshold = 0.000001f;
 		auto constant = std::abs( attenuation[0] );
 		auto linear = std::abs( attenuation[1] );
 		auto quadratic = std::abs( attenuation[2] );
-		float result = max;
+		float result = std::numeric_limits< float >::max();
 
 		if ( constant >= threshold
 			|| linear >= threshold
@@ -117,29 +116,40 @@ namespace castor3d
 			float maxChannel = std::max( std::max( light.getColour()[0]
 				, light.getColour()[1] )
 				, light.getColour()[2] );
-			auto c = 256.0f * maxChannel * light.getDiffuseIntensity();
+			result = 256.0f * maxChannel * light.getDiffuseIntensity();
 
 			if ( quadratic >= threshold )
 			{
 				if ( linear < threshold )
 				{
-					REQUIRE( c >= constant );
-					result = sqrtf( ( c - constant ) / quadratic );
+					REQUIRE( result >= constant );
+					result = sqrtf( ( result - constant ) / quadratic );
 				}
 				else
 				{
-					auto delta = linear * linear - 4 * quadratic * ( constant - c );
+					auto delta = linear * linear - 4 * quadratic * ( constant - result );
 					REQUIRE( delta >= 0 );
 					result = ( -linear + sqrtf( delta ) ) / ( 2 * quadratic );
 				}
 			}
 			else if ( linear >= threshold )
 			{
-				result = ( c - constant ) / linear;
+				result = ( result - constant ) / linear;
 			}
 		}
+		else
+		{
+			Logger::logError( cuT( "Light's attenuation is set to (0.0, 0.0, 0.0), which results in infinite litten distance, not representable." ) );
+		}
 
-		return std::min( max, result );
+		return result;
+	}
+
+	float getMaxDistance( LightCategory const & light
+		, Point3f const & attenuation
+		, float max )
+	{
+		return std::min( max, getMaxDistance( light, attenuation ) );
 	}
 
 	void declareEncodeMaterial( glsl::GlslWriter & writer )

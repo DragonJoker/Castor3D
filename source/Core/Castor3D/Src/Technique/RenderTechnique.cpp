@@ -59,7 +59,9 @@ namespace castor3d
 			{
 				light->setShadowMap( nullptr );
 
-				if ( light->isShadowProducer() )
+				if ( light->isShadowProducer()
+					&& ( light->getLightType() == LightType::eDirectional
+						|| camera.isVisible( light->getCubeBox(), light->getParent()->getDerivedTransformationMatrix() ) ) )
 				{
 					lights.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
 						, light->getParent()->getDerivedPosition() )
@@ -259,8 +261,8 @@ namespace castor3d
 #endif
 			}
 
-			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ) );
-			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Post effects" ) );
+			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
+			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Post effects" ), cuT( "Post effects" ) );
 			ENSURE( m_initialised );
 		}
 

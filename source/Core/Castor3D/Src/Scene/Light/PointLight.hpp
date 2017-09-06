@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "Light.hpp"
 
+#include <Design/ChangeTracked.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -110,6 +112,13 @@ namespace castor3d
 		 */
 		C3D_API static LightCategoryUPtr create( Light & p_light );
 		/**
+		 *\~english
+		 *\return		The vertices needed to draw the mesh materialising the ligh's volume of effect.
+		 *\~french
+		 *\return		Les sommets nécessaires au dessin du maillage représentant le volume d'effet de la lumière.
+		 */
+		C3D_API static castor::Point3fArray const & generateVertices();
+		/**
 		 *\copydoc		castor3d::LightCategory::Update
 		 */
 		C3D_API void update( castor::Point3r const & p_target
@@ -141,19 +150,7 @@ namespace castor3d
 		 */
 		inline castor::Point3f const & getAttenuation()const
 		{
-			return m_attenuation;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the attenuation components
-		 *\return		The attenuation components
-		 *\~french
-		 *\brief		Récupère les composantes d'attenuation
-		 *\return		Les composantes d'attenuation
-		 */
-		inline castor::Point3f & getAttenuation()
-		{
-			return m_attenuation;
+			return m_attenuation.value();
 		}
 
 	private:
@@ -170,7 +167,7 @@ namespace castor3d
 		friend class Scene;
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//!\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
-		castor::Point3f m_attenuation{ 1.0f, 0.0f, 0.0f };
+		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1.0f, 0.0f, 0.0f } };
 		//!\~english	The light source shadow map index.
 		//!\~french		L'index de la shadow map de la source lumineuse.
 		int32_t m_shadowMapIndex{ -1 };

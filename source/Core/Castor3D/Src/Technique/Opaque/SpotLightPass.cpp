@@ -29,7 +29,7 @@ namespace castor3d
 			auto length = getMaxDistance( light
 				, light.getAttenuation()
 				, max );
-			auto width = light.getCutOff().degrees() / 22.5f;
+			auto width = light.getCutOff().degrees() / ( 45.0f );
 			return Point2f{ length * width, length };
 		}
 	}
@@ -87,73 +87,7 @@ namespace castor3d
 
 	Point3fArray SpotLightPass::doGenerateVertices()const
 	{
-		Point3fArray data;
-		Angle alpha;
-		auto angle = Angle::fromDegrees( 360.0f / FaceCount );
-
-		data.emplace_back( 0.0f, 0.0f, 0.0f );
-		data.emplace_back( 0.0f, 0.0f, 1.0f );
-
-		for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
-		{
-			data.push_back( point::getNormalised( Point3f{ alpha.cos() / 2.0f
-				, alpha.sin() / 2.0f
-				, 1.0f } ) );
-		}
-
-		for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
-		{
-			data.push_back( point::getNormalised( Point3f{ alpha.cos() / 4.0f
-				, alpha.sin() / 4.0f
-				, 1.0f } ) );
-		}
-
-		Point3fArray result;
-
-		// Side
-		for ( auto i = 0u; i < FaceCount - 1; i++ )
-		{
-			result.push_back( data[0u] );
-			result.push_back( data[i + 3u] );
-			result.push_back( data[i + 2u] );
-		}
-
-		// Last face
-		result.push_back( data[0u] );
-		result.push_back( data[2u] );
-		result.push_back( data[FaceCount + 1] );
-
-		// Base
-		auto second = 2u + FaceCount;
-		for ( auto i = 0u; i < FaceCount - 1; i++ )
-		{
-			// Center to intermediate.
-			result.push_back( data[1u] );
-			result.push_back( data[i + second + 0u] );
-			result.push_back( data[i + second + 1u] );
-			// Intermediate to border.
-			result.push_back( data[i + second + 0u] );
-			result.push_back( data[i + 2u] );
-			result.push_back( data[i + 3u] );
-			result.push_back( data[i + second + 0u] );
-			result.push_back( data[i + 3u] );
-			result.push_back( data[i + second + 1u] );
-		}
-		// Last face
-		auto third = second + FaceCount - 1u;
-		// Center to intermediate.
-		result.push_back( data[1u] );
-		result.push_back( data[third] );
-		result.push_back( data[second] );
-		// Intermediate to border
-		result.push_back( data[third] );
-		result.push_back( data[FaceCount + 1u] );
-		result.push_back( data[2u] );
-		result.push_back( data[third] );
-		result.push_back( data[2u] );
-		result.push_back( data[second] );
-
-		return result;
+		return SpotLight::generateVertices();
 	}
 
 	Matrix4x4r SpotLightPass::doComputeModelMatrix( castor3d::Light const & light

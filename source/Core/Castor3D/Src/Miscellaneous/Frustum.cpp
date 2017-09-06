@@ -1,4 +1,4 @@
-#include "Frustum.hpp"
+﻿#include "Frustum.hpp"
 
 #include "Render/Viewport.hpp"
 
@@ -174,22 +174,20 @@ namespace castor3d
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		Intersection result{ Intersection::eIn };
 		Point3r center = p_box.getCenter() + Point3r{ m_transformations[3][0], m_transformations[3][1], m_transformations[3][2] };
-		size_t i{ 0u };
 
-		while ( i < size_t( FrustumPlane::eCount ) && result != Intersection::eOut )
+		for ( auto & plane : m_planes )
 		{
-			float distance = m_planes[i].distance( center );
+			float distance = plane.distance( center );
 
-			if ( distance < -p_box.getRadius() )
+			if ( distance < -( p_box.getRadius() ) )
 			{
-				result = Intersection::eOut;
+				return false;
 			}
-			else if ( distance < p_box.getRadius() )
+
+			if ( distance < p_box.getRadius() )
 			{
 				result = Intersection::eIntersect;
 			}
-
-			++i;
 		}
 
 		return result != Intersection::eOut;

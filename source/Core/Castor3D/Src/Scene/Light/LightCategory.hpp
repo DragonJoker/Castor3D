@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,6 +24,8 @@ SOFTWARE.
 #define ___C3D_LIGHT_CATEGORY_H___
 
 #include "Castor3DPrerequisites.hpp"
+
+#include <Graphics/CubeBox.hpp>
 
 namespace castor3d
 {
@@ -281,16 +283,26 @@ namespace castor3d
 			return m_light;
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the parent light
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la lumière parente
-		 *\return		La valeur
-		 */
+		*\~english
+		*\brief		Retrieves the parent light
+		*\return		The value
+		*\~french
+		*\brief		Récupère la lumière parente
+		*\return		La valeur
+		*/
 		inline Light & getLight()
 		{
 			return m_light;
+		}
+		/**
+		 *\~english
+		 *\return		The light's cube box.
+		 *\~french
+		 *\return		La cube box de la lumière.
+		 */
+		inline castor::CubeBox const & getCubeBox()const
+		{
+			return m_cubeBox;
 		}
 
 	protected:
@@ -446,6 +458,11 @@ namespace castor3d
 		 *\param[in]	p_offset	Le décalage de début.
 		 */
 		C3D_API virtual void doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const = 0;
+
+	protected:
+		//!\~english	The cube box for the light volume of effect.
+		//!\~french		La cube box pour le volume d'effet de la lumière.
+		castor::CubeBox m_cubeBox;
 
 	private:
 		//!\~english	The light type.

@@ -1,6 +1,7 @@
-#include "SpotLight.hpp"
+﻿#include "SpotLight.hpp"
 
 #include "Render/Viewport.hpp"
+#include "Technique/Opaque/LightPass.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -8,6 +9,19 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		static uint32_t constexpr FaceCount = 40;
+
+		Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light )
+		{
+			auto length = getMaxDistance( light
+				, light.getAttenuation() );
+			auto width = light.getCutOff().degrees() / ( 45.0f * 2.0f );
+			return Point2f{ length * width, length };
+		}
+	}
+
 	SpotLight::TextWriter::TextWriter( String const & p_tabs, SpotLight const * p_category )
 		: LightCategory::TextWriter{ p_tabs }
 		, m_category{ p_category }
@@ -67,6 +81,81 @@ namespace castor3d
 		return std::unique_ptr< SpotLight >( new SpotLight{ p_light } );
 	}
 
+	Point3fArray const & SpotLight::generateVertices()
+	{
+		static Point3fArray result;
+
+		if ( result.empty() )
+		{
+			Point3fArray data;
+			Angle alpha;
+			auto angle = Angle::fromDegrees( 360.0f / FaceCount );
+
+			data.emplace_back( 0.0f, 0.0f, 0.0f );
+			data.emplace_back( 0.0f, 0.0f, 1.0f );
+
+			for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
+			{
+				data.push_back( point::getNormalised( Point3f{ alpha.cos()
+					, alpha.sin()
+					, 1.0f } ) );
+			}
+
+			for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
+			{
+				data.push_back( point::getNormalised( Point3f{ alpha.cos() / 2.0f
+					, alpha.sin() / 2.0f
+					, 1.0f } ) );
+			}
+
+
+			// Side
+			for ( auto i = 0u; i < FaceCount - 1; i++ )
+			{
+				result.push_back( data[0u] );
+				result.push_back( data[i + 3u] );
+				result.push_back( data[i + 2u] );
+			}
+
+			// Last face
+			result.push_back( data[0u] );
+			result.push_back( data[2u] );
+			result.push_back( data[FaceCount + 1] );
+
+			// Base
+			auto second = 2u + FaceCount;
+			for ( auto i = 0u; i < FaceCount - 1; i++ )
+			{
+				// Center to intermediate.
+				result.push_back( data[1u] );
+				result.push_back( data[i + second + 0u] );
+				result.push_back( data[i + second + 1u] );
+				// Intermediate to border.
+				result.push_back( data[i + second + 0u] );
+				result.push_back( data[i + 2u] );
+				result.push_back( data[i + 3u] );
+				result.push_back( data[i + second + 0u] );
+				result.push_back( data[i + 3u] );
+				result.push_back( data[i + second + 1u] );
+			}
+			// Last face
+			auto third = second + FaceCount - 1u;
+			// Center to intermediate.
+			result.push_back( data[1u] );
+			result.push_back( data[third] );
+			result.push_back( data[second] );
+			// Intermediate to border
+			result.push_back( data[third] );
+			result.push_back( data[FaceCount + 1u] );
+			result.push_back( data[2u] );
+			result.push_back( data[third] );
+			result.push_back( data[2u] );
+			result.push_back( data[second] );
+		}
+
+		return result;
+	}
+
 	void SpotLight::update( Point3r const & p_target
 		, Viewport & p_viewport
 		, int32_t p_index )
@@ -82,6 +171,15 @@ namespace castor3d
 		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
 		m_lightSpace = p_viewport.getProjection() * m_lightSpace;
 		m_shadowMapIndex = p_index;
+
+		if ( m_attenuation.isDirty()
+			|| m_cutOff.isDirty() )
+		{
+			auto & data = SpotLight::generateVertices();
+			auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
+			m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
+				, Point3r{ scale[0], scale[0], scale[1] } );
+		}
 	}
 
 	void SpotLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
@@ -91,7 +189,7 @@ namespace castor3d
 		doCopyComponent( position, p_index, p_offset, p_texture );
 		doCopyComponent( m_attenuation, p_index, p_offset, p_texture );
 		doCopyComponent( m_direction, p_index, p_offset, p_texture );
-		doCopyComponent( Point2f{ m_exponent, m_cutOff.cos() }, p_index, p_offset, p_texture );
+		doCopyComponent( Point2f{ m_exponent, m_cutOff.value().cos() }, p_index, p_offset, p_texture );
 		doCopyComponent( m_lightSpace, p_index, p_offset, p_texture );
 	}
 

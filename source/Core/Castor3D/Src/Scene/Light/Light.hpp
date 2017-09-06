@@ -340,6 +340,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The light's cube box.
+		 *\~french
+		 *\return		La cube box de la lumière.
+		 */
+		inline castor::CubeBox const & getCubeBox()const
+		{
+			return m_category->getCubeBox();
+		}
+		/**
+		 *\~english
 		 *\brief		sets the light enabled status
 		 *\param[in]	value	The new value
 		 *\~french

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,6 +24,8 @@ SOFTWARE.
 #define ___C3D_SPOT_LIGHT_H___
 
 #include "Light.hpp"
+
+#include <Design/ChangeTracked.hpp>
 
 namespace castor3d
 {
@@ -113,6 +115,13 @@ namespace castor3d
 		 */
 		C3D_API static LightCategoryUPtr create( Light & p_light );
 		/**
+		 *\~english
+		 *\return		The vertices needed to draw the mesh materialising the ligh's volume of effect.
+		 *\~french
+		 *\return		Les sommets nécessaires au dessin du maillage représentant le volume d'effet de la lumière.
+		 */
+		C3D_API static castor::Point3fArray const & generateVertices();
+		/**
 		 *\copydoc		castor3d::LightCategory::Update
 		 */
 		C3D_API void update( castor::Point3r const & p_target
@@ -176,19 +185,7 @@ namespace castor3d
 		 */
 		inline castor::Point3f const & getAttenuation()const
 		{
-			return m_attenuation;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the attenuation components
-		 *\return		The attenuation components
-		 *\~french
-		 *\brief		Récupère les composantes d'attenuation
-		 *\return		Les composantes d'attenuation
-		 */
-		inline castor::Point3f & getAttenuation()
-		{
-			return m_attenuation;
+			return m_attenuation.value();
 		}
 		/**
 		 *\~english
@@ -212,7 +209,7 @@ namespace castor3d
 		 */
 		inline castor::Angle const & getCutOff()const
 		{
-			return m_cutOff;
+			return m_cutOff.value();
 		}
 
 	private:
@@ -228,13 +225,13 @@ namespace castor3d
 	private:
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
-		castor::Point3f m_attenuation{ 1, 0, 0 };
+		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1, 0, 0 } };
 		//!\~english	The light exponent, id est how much the light is focused.
 		//\~french		L'exposant de la lumièrs, càd à quel point elle est concentrée.
 		float m_exponent{ 1.0f };
 		//!\~english	The angle of the cone.
 		//\~french		L'angle du cône.
-		castor::Angle m_cutOff{ 45.0_degrees };
+		castor::ChangeTracked< castor::Angle > m_cutOff{ 45.0_degrees };
 		//!\~english	The light source space transformation matrix.
 		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
 		mutable castor::Matrix4x4f m_lightSpace;

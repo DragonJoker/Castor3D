@@ -62,10 +62,10 @@ namespace castor
 	void SphereBox::load( CubeBox const & p_box )
 	{
 		m_ptCenter = p_box.getCenter();
-		m_radius = real( point::length( p_box.getMax() - m_ptCenter ) );
+		m_radius = real( point::distance( p_box.getMax(), m_ptCenter ) );
 #if !defined( NDEBUG )
-		auto diff = std::abs( m_radius - real( point::length( m_ptCenter - p_box.getMin() ) ) );
-		ENSURE( diff < 0.01 );
+		auto radius = real( point::distance( m_ptCenter, p_box.getMin() ) );
+		ENSURE( std::abs( m_radius - radius ) < 0.01 );
 #endif
 	}
 
