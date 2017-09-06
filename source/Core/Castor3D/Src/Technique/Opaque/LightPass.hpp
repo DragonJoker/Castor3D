@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -96,6 +96,20 @@ namespace castor3d
 	 *\return		Le nom.
 	 */
 	uint32_t getTextureAttachmentIndex( DsTexture texture );
+	/**
+	 *\~english
+	 *\brief		Retrieve the maximum litten distance for given light and attenuation.
+	 *\param[in]	light		The light source.
+	 *\param[in]	attenuation	The attenuation values.
+	 *\return		The value.
+	 *\~french
+	 *\brief		Récupère l'indice d'attache pour la valeur d'énumeration de texture.
+	 *\param[in]	light		La source lumineuse.
+	 *\param[in]	attenuation	Les valeurs d'atténuation.
+	 *\return		La valeur.
+	 */
+	float getMaxDistance( LightCategory const & light
+		, castor::Point3f const & attenuation );
 	/**
 	 *\~english
 	 *\brief		Retrieve the maximum litten distance for given light and attenuation.

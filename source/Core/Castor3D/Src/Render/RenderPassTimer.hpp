@@ -46,14 +46,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	name	The timer name.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	category	The render pass category.
+		 *\param[in]	name		The timer name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	name	Le nom du timer.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	category	La catégorie de la passe de rendu.
+		 *\param[in]	name		Le nom du timer.
 		 */
 		C3D_API RenderPassTimer( Engine & engine
+			, castor::String const & category
 			, castor::String const & name );
 		/**
 		 *\~english
@@ -97,11 +100,24 @@ namespace castor3d
 		{
 			return m_gpuTime;
 		}
+		/**
+		 *\~english
+		 *\return		The render pass category.
+		 *\~french
+		 *\return		La categorie de la passe de rendu.
+		 */
+		inline castor::String const & getCategory()const
+		{
+			return m_category;
+		}
 
 	private:
 		//!\~english	The engine.
 		//!\~french		Le moteur.
 		Engine & m_engine;
+		//!\~english	The render pass category.
+		//!\~french		La categorie de la passe de rendu.
+		castor::String m_category;
 		//!\~english	The CPU timer.
 		//!\~french		Le timer CPU.
 		castor::PreciseTimer m_cpuTimer;

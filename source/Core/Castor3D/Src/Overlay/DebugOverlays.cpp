@@ -1,4 +1,4 @@
-﻿#include "DebugOverlays.hpp"
+#include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
 #include "Overlay/PanelOverlay.hpp"
@@ -116,94 +116,116 @@ namespace castor3d
 	void DebugOverlays::registerTimer( RenderPassTimer const & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
-		RenderPassOverlays overlays{ timer };
-		auto baseName = cuT( "RenderPassOverlays " ) + string::toString( int( m_renderPasses.size() ) ) + cuT( " " ) + timer.getName();
-		overlays.m_panel = cache.add( baseName
-			, OverlayType::ePanel
-			, nullptr
-			, nullptr )->getPanelOverlay();
-		overlays.m_title = cache.add( baseName + cuT( "_Title" )
-			, OverlayType::eText
-			, nullptr
-			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		overlays.m_cpuName = cache.add( baseName + cuT( "_CPUName" )
-			, OverlayType::eText
-			, nullptr
-			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		overlays.m_cpuValue = cache.add( baseName + cuT( "_CPUValue" )
-			, OverlayType::eText
-			, nullptr
-			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		overlays.m_gpuName = cache.add( baseName + cuT( "_GPUName" )
-			, OverlayType::eText
-			, nullptr
-			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		overlays.m_gpuValue = cache.add( baseName + cuT( "_GPUValue" )
-			, OverlayType::eText
-			, nullptr
-			, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		overlays.m_panel->setPixelPosition( Position{ 400, int32_t( 60 * m_renderPasses.size() ) } );
-		overlays.m_title->setPixelPosition( Position{ 10, 0 } );
-		overlays.m_cpuName->setPixelPosition( Position{ 10, 20 } );
-		overlays.m_gpuName->setPixelPosition( Position{ 10, 40 } );
-		overlays.m_cpuValue->setPixelPosition( Position{ 110, 20 } );
-		overlays.m_gpuValue->setPixelPosition( Position{ 110, 40 } );
+		
+		auto it = m_renderPasses.find( timer.getCategory() );
 
-		overlays.m_panel->setPixelSize( Size{ 250, 60 } );
-		overlays.m_title->setPixelSize( Size{ 230, 20 } );
-		overlays.m_cpuName->setPixelSize( Size{ 100, 20 } );
-		overlays.m_gpuName->setPixelSize( Size{ 100, 20 } );
-		overlays.m_cpuValue->setPixelSize( Size{ 130, 20 } );
-		overlays.m_gpuValue->setPixelSize( Size{ 130, 20 } );
+		if ( it == m_renderPasses.end() )
+		{
+			auto pair = m_renderPasses.emplace( timer.getCategory(), RenderPassOverlays{} );
+			it = pair.first;
 
-		overlays.m_title->setFont( cuT( "Arial20" ) );
-		overlays.m_cpuName->setFont( cuT( "Arial10" ) );
-		overlays.m_gpuName->setFont( cuT( "Arial10" ) );
-		overlays.m_cpuValue->setFont( cuT( "Arial10" ) );
-		overlays.m_gpuValue->setFont( cuT( "Arial10" ) );
+			if ( pair.second )
+			{
+				auto & overlays = it->second;
+				auto baseName = cuT( "RenderPassOverlays " ) + string::toString( int( m_renderPasses.size() ) ) + cuT( " " ) + timer.getName();
+				overlays.m_panel = cache.add( baseName
+					, OverlayType::ePanel
+					, nullptr
+					, nullptr )->getPanelOverlay();
+				overlays.m_title = cache.add( baseName + cuT( "_Title" )
+					, OverlayType::eText
+					, nullptr
+					, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+				overlays.m_cpuName = cache.add( baseName + cuT( "_CPUName" )
+					, OverlayType::eText
+					, nullptr
+					, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+				overlays.m_cpuValue = cache.add( baseName + cuT( "_CPUValue" )
+					, OverlayType::eText
+					, nullptr
+					, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+				overlays.m_gpuName = cache.add( baseName + cuT( "_GPUName" )
+					, OverlayType::eText
+					, nullptr
+					, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+				overlays.m_gpuValue = cache.add( baseName + cuT( "_GPUValue" )
+					, OverlayType::eText
+					, nullptr
+					, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+				overlays.m_panel->setPixelPosition( Position{ 400, int32_t( 60 * ( m_renderPasses.size() - 1 ) ) } );
+				overlays.m_title->setPixelPosition( Position{ 10, 0 } );
+				overlays.m_cpuName->setPixelPosition( Position{ 10, 20 } );
+				overlays.m_gpuName->setPixelPosition( Position{ 10, 40 } );
+				overlays.m_cpuValue->setPixelPosition( Position{ 110, 20 } );
+				overlays.m_gpuValue->setPixelPosition( Position{ 110, 40 } );
 
-		overlays.m_title->setCaption( timer.getName() );
-		overlays.m_cpuName->setCaption( cuT( "CPU Time:" ) );
-		overlays.m_gpuName->setCaption( cuT( "GPU Time:" ) );
+				overlays.m_panel->setPixelSize( Size{ 250, 60 } );
+				overlays.m_title->setPixelSize( Size{ 230, 20 } );
+				overlays.m_cpuName->setPixelSize( Size{ 100, 20 } );
+				overlays.m_gpuName->setPixelSize( Size{ 100, 20 } );
+				overlays.m_cpuValue->setPixelSize( Size{ 130, 20 } );
+				overlays.m_gpuValue->setPixelSize( Size{ 130, 20 } );
 
-		auto & materials = getEngine()->getMaterialCache();
-		overlays.m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
-		overlays.m_title->setMaterial( materials.find( cuT( "White" ) ) );
-		overlays.m_cpuName->setMaterial( materials.find( cuT( "White" ) ) );
-		overlays.m_gpuName->setMaterial( materials.find( cuT( "White" ) ) );
-		overlays.m_cpuValue->setMaterial( materials.find( cuT( "White" ) ) );
-		overlays.m_gpuValue->setMaterial( materials.find( cuT( "White" ) ) );
+				overlays.m_title->setFont( cuT( "Arial20" ) );
+				overlays.m_cpuName->setFont( cuT( "Arial10" ) );
+				overlays.m_gpuName->setFont( cuT( "Arial10" ) );
+				overlays.m_cpuValue->setFont( cuT( "Arial10" ) );
+				overlays.m_gpuValue->setFont( cuT( "Arial10" ) );
 
-		overlays.m_panel->setVisible( m_visible );
-		overlays.m_title->setVisible( true );
-		overlays.m_cpuName->setVisible( true );
-		overlays.m_gpuName->setVisible( true );
-		overlays.m_cpuValue->setVisible( true );
-		overlays.m_gpuValue->setVisible( true );
+				overlays.m_title->setCaption( timer.getName() );
+				overlays.m_cpuName->setCaption( cuT( "CPU Time:" ) );
+				overlays.m_gpuName->setCaption( cuT( "GPU Time:" ) );
 
-		m_renderPasses.emplace_back( std::move( overlays ) );
+				auto & materials = getEngine()->getMaterialCache();
+				overlays.m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
+				overlays.m_title->setMaterial( materials.find( cuT( "White" ) ) );
+				overlays.m_cpuName->setMaterial( materials.find( cuT( "White" ) ) );
+				overlays.m_gpuName->setMaterial( materials.find( cuT( "White" ) ) );
+				overlays.m_cpuValue->setMaterial( materials.find( cuT( "White" ) ) );
+				overlays.m_gpuValue->setMaterial( materials.find( cuT( "White" ) ) );
+
+				overlays.m_panel->setVisible( m_visible );
+				overlays.m_title->setVisible( true );
+				overlays.m_cpuName->setVisible( true );
+				overlays.m_gpuName->setVisible( true );
+				overlays.m_cpuValue->setVisible( true );
+				overlays.m_gpuValue->setVisible( true );
+			}
+		}
+
+		it->second.m_timers.emplace_back( std::ref( timer ) );
 	}
 
 	void DebugOverlays::unregisterTimer( RenderPassTimer const & timer )
 	{
-		auto it = std::find_if( m_renderPasses.begin()
-			, m_renderPasses.end()
-			, [&timer]( RenderPassOverlays const & overlays )
-			{
-				return &overlays.m_timer.get() == &timer;
-			} );
+		auto itC = m_renderPasses.find( timer.getCategory() );
 
-		if ( it != m_renderPasses.end() )
+		if ( itC != m_renderPasses.end() )
 		{
-			auto & cache = getEngine()->getOverlayCache();
-			auto & overlays = *it;
-			cache.remove( overlays.m_cpuName->getOverlayName() );
-			cache.remove( overlays.m_gpuName->getOverlayName() );
-			cache.remove( overlays.m_gpuValue->getOverlayName() );
-			cache.remove( overlays.m_cpuValue->getOverlayName() );
-			cache.remove( overlays.m_title->getOverlayName() );
-			cache.remove( overlays.m_panel->getOverlayName() );
-			m_renderPasses.erase( it );
+			auto & overlays = itC->second;
+			auto it = std::find_if( overlays.m_timers.begin()
+				, overlays.m_timers.end()
+				, [&timer]( auto const & lookup )
+				{
+					return &lookup.get() == &timer;
+				} );
+
+			if ( it != overlays.m_timers.end() )
+			{
+				overlays.m_timers.erase( it );
+
+				if ( overlays.m_timers.empty() )
+				{
+					auto & cache = getEngine()->getOverlayCache();
+					cache.remove( overlays.m_cpuName->getOverlayName() );
+					cache.remove( overlays.m_gpuName->getOverlayName() );
+					cache.remove( overlays.m_gpuValue->getOverlayName() );
+					cache.remove( overlays.m_cpuValue->getOverlayName() );
+					cache.remove( overlays.m_title->getOverlayName() );
+					cache.remove( overlays.m_panel->getOverlayName() );
+					m_renderPasses.erase( itC );
+				}
+			}
 		}
 	}
 
@@ -232,9 +254,18 @@ namespace castor3d
 
 			for ( auto & pass : m_renderPasses )
 			{
-				pass.m_cpuValue->setCaption( StringStream{} << pass.m_timer.get().getCpuTime() );
-				pass.m_gpuValue->setCaption( StringStream{} << pass.m_timer.get().getGpuTime() );
-				gpuTotal += pass.m_timer.get().getGpuTime();
+				Nanoseconds cpu{ 0 };
+				Nanoseconds gpu{ 0 };
+
+				for ( auto & timer : pass.second.m_timers )
+				{
+					cpu += timer.get().getCpuTime();
+					gpu += timer.get().getGpuTime();
+				}
+
+				pass.second.m_cpuValue->setCaption( StringStream{} << cpu );
+				pass.second.m_gpuValue->setCaption( StringStream{} << gpu );
+				gpuTotal += gpu;
 			}
 
 			m_debugGpuClientTime->setCaption( StringStream() << ( m_gpuTime - gpuTotal ) );
@@ -280,7 +311,7 @@ namespace castor3d
 
 		for ( auto & pass : m_renderPasses )
 		{
-			pass.m_panel->setVisible( m_valid && m_visible );
+			pass.second.m_panel->setVisible( m_valid && m_visible );
 		}
 	}
 }

@@ -90,7 +90,7 @@ namespace castor3d
 			m_colour = std::make_unique< RenderColourToTexture >( *getEngine()->getRenderSystem()->getMainContext(), m_matrixUbo );
 			m_colour->initialise();
 
-			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ) );
+			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
 		}
 
 		return result;

@@ -1,4 +1,4 @@
-﻿#include "RenderPassTimer.hpp"
+#include "RenderPassTimer.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderLoop.hpp"
@@ -10,9 +10,11 @@ using namespace castor;
 namespace castor3d
 {
 	RenderPassTimer::RenderPassTimer( Engine & engine
+		, String const & category
 		, String const & name )
 		: Named{ name }
 		, m_engine{ engine }
+		, m_category{ category }
 		, m_timerQuery
 		{
 			{

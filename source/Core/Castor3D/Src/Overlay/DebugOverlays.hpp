@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -141,7 +141,7 @@ namespace castor3d
 	private:
 		struct RenderPassOverlays
 		{
-			std::reference_wrapper< RenderPassTimer const > m_timer;
+			std::vector< std::reference_wrapper< RenderPassTimer const > > m_timers;
 			PanelOverlaySPtr m_panel;
 			TextOverlaySPtr m_title;
 			TextOverlaySPtr m_cpuName;
@@ -149,7 +149,7 @@ namespace castor3d
 			TextOverlaySPtr m_gpuName;
 			TextOverlaySPtr m_gpuValue;
 		};
-		using RenderPassOverlaysArray = std::vector< RenderPassOverlays >;
+		using RenderPassOverlaysArray = std::map< castor::String, RenderPassOverlays >;
 
 	private:
 #if defined( _NDEBUG )

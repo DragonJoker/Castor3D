@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -430,8 +430,8 @@ namespace castor3d
 		, m_blurResult{ engine }
 		, m_viewport{ engine }
 		, m_config{ config }
-		, m_ssaoTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao raw" ) ) }
-		, m_blurTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao blur" ) ) }
+		, m_ssaoTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao raw" ), cuT( "Ssao raw" ) ) }
+		, m_blurTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao blur" ), cuT( "Ssao blur" ) ) }
 		, m_gpInfoUbo{ gpInfoUbo }
 	{
 		doInitialiseQuadRendering();

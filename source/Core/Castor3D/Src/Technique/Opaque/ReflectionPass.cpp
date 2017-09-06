@@ -1,4 +1,4 @@
-#include "ReflectionPass.hpp"
+﻿#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -702,7 +702,7 @@ namespace castor3d
 				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, true, true },
 			}
 		}
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.initialise();

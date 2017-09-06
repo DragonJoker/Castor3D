@@ -1,4 +1,4 @@
-#include "CombinePass.hpp"
+﻿#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -481,7 +481,7 @@ namespace castor3d
 		}
 		, m_ssaoEnabled{ config.m_enabled }
 		, m_ssao{ engine, size, config, gpInfoUbo }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Combine" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Combine" ), cuT( "Combine" ) ) }
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.initialise();

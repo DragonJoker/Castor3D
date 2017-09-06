@@ -394,7 +394,7 @@ namespace castor3d
 
 	bool RenderPass::initialise( Size const & size )
 	{
-		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), getName() );
+		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), getName(), getName() );
 		return doInitialise( size );
 	}
 

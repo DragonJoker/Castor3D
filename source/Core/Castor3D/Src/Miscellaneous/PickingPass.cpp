@@ -549,6 +549,16 @@ namespace castor3d
 					, vtx_material
 					, *materials );
 			}
+			else if ( alphaFunc != ComparisonFunc::eAlways )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, materials->getOpacity( vtx_material ) );
+				doApplyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, vtx_material
+					, *materials );
+			}
 
 			pxl_v4FragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );
 		} );
