@@ -66,6 +66,8 @@ namespace castor3d
 				child->setSize( child->getAbsoluteSize() );
 			}
 		}
+
+		m_overlays.erase( p_element->getCategory() );
 	}
 
 	//*************************************************************************************************

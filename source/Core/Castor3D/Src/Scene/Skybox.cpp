@@ -173,18 +173,34 @@ namespace castor3d
 
 	void Skybox::cleanup()
 	{
-		REQUIRE( m_texture );
-		m_texture->cleanup();
-		m_texture.reset();
-		m_geometryBuffers->cleanup();
-		m_geometryBuffers.reset();
-		m_vertexBuffer->cleanup();
-		m_vertexBuffer.reset();
+		if ( m_texture )
+		{
+			m_texture->cleanup();
+			m_texture.reset();
+		}
+
+		if ( m_geometryBuffers )
+		{
+			m_geometryBuffers->cleanup();
+			m_geometryBuffers.reset();
+		}
+
+		if ( m_vertexBuffer )
+		{
+			m_vertexBuffer->cleanup();
+			m_vertexBuffer.reset();
+		}
+
 		m_matrixUbo.getUbo().cleanup();
 		m_modelMatrixUbo.getUbo().cleanup();
 		m_configUbo.getUbo().cleanup();
-		m_pipeline->cleanup();
-		m_pipeline.reset();
+
+		if ( m_pipeline )
+		{
+			m_pipeline->cleanup();
+			m_pipeline.reset();
+		}
+
 		m_ibl.reset();
 	}
 

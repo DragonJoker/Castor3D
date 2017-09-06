@@ -162,8 +162,6 @@ namespace castor3d
 	{
 		auto node = getLight().getParent();
 		node->update();
-		p_viewport.setPerspective( getCutOff() * 2, p_viewport.getRatio(), 1.0_r, 1000.0_r );
-		p_viewport.update();
 		auto orientation = node->getDerivedOrientation();
 		auto position = node->getDerivedPosition();
 		Point3f up{ 0, 1, 0 };
@@ -180,6 +178,12 @@ namespace castor3d
 			m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
 				, Point3r{ scale[0], scale[0], scale[1] } );
 		}
+
+		p_viewport.setPerspective( getCutOff() * 2
+			, p_viewport.getRatio()
+			, 1.0_r
+			, real( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) ) );
+		p_viewport.update();
 	}
 
 	void SpotLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const

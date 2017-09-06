@@ -1,4 +1,4 @@
-#include "RenderPassTimer.hpp"
+﻿#include "RenderPassTimer.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderLoop.hpp"
@@ -34,6 +34,11 @@ namespace castor3d
 
 	RenderPassTimer::~RenderPassTimer()
 	{
+		if ( m_engine.hasRenderLoop() )
+		{
+			m_engine.getRenderLoop().unregisterTimer( *this );
+		}
+
 		m_timerQuery[0]->cleanup();
 		m_timerQuery[1]->cleanup();
 		m_timerQuery[0].reset();

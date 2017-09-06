@@ -64,28 +64,28 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_produce		The element producer.
-		 *\param[in]	p_initialise	The element initialiser.
-		 *\param[in]	p_clean			The element cleaner.
-		 *\param[in]	p_merge			The element collection merger.
+		 *\param[in]	produce		The element producer.
+		 *\param[in]	initialise	The element initialiser.
+		 *\param[in]	clean			The element cleaner.
+		 *\param[in]	merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_produce		Le créateur d'objet.
-		 *\param[in]	p_initialise	L'initialiseur d'objet.
-		 *\param[in]	p_clean			Le nettoyeur d'objet.
-		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
+		 *\param[in]	produce		Le créateur d'objet.
+		 *\param[in]	initialise	L'initialiseur d'objet.
+		 *\param[in]	clean			Le nettoyeur d'objet.
+		 *\param[in]	merge			Le fusionneur de collection d'objets.
 		 */
 		inline CacheBase( Engine & engine
-			, Producer && p_produce
-			, Initialiser && p_initialise
-			, Cleaner && p_clean
-			, Merger && p_merge )
+			, Producer && produce
+			, Initialiser && initialise
+			, Cleaner && clean
+			, Merger && merge )
 			: m_engine{ engine }
-			, m_produce{ std::move( p_produce ) }
-			, m_initialise{ std::move( p_initialise ) }
-			, m_clean{ std::move( p_clean ) }
-			, m_merge{ std::move( p_merge ) }
+			, m_produce{ std::move( produce ) }
+			, m_initialise{ std::move( initialise ) }
+			, m_clean{ std::move( clean ) }
+			, m_merge{ std::move( merge ) }
 		{
 		}
 		/**
@@ -135,51 +135,59 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an element.
-		 *\param[in]	p_name			The element name.
-		 *\param[in]	p_parameters	The other constructor parameters.
+		 *\param[in]	name		The element name.
+		 *\param[in]	parameters	The other constructor parameters.
 		 *\return		The created element.
 		 *\~french
 		 *\brief		Crée un élément.
-		 *\param[in]	p_name			Le nom d'élément.
-		 *\param[in]	p_parameters	Les autres paramètres de construction.
+		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	parameters	Les autres paramètres de construction.
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr create( Key const & p_name, Parameters && ... p_parameters )
+		inline ElementPtr create( Key const & name
+			, Parameters && ... parameters )
 		{
-			return m_produce( p_name, std::forward< Parameters >( p_parameters )... );
+			return m_produce( name
+				, std::forward< Parameters >( parameters )... );
 		}
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
-		 *\param[in]	p_name		The element name.
-		 *\param[in]	p_element	The element.
+		 *\param[in]	name	The element name.
+		 *\param[in]	element	The element.
 		 *\~french
 		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'élément.
-		 *\param[in]	p_element	L'élément.
+		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	element	L'élément.
 		 */
-		inline ElementPtr add( Key const & p_name, ElementPtr p_element )
+		inline ElementPtr add( Key const & name, ElementPtr element )
 		{
-			ElementPtr result{ p_element };
+			ElementPtr result{ element };
 
-			if ( p_element )
+			if ( element )
 			{
 				auto lock = castor::makeUniqueLock( m_elements );
 
-				if ( m_elements.has( p_name ) )
+				if ( m_elements.has( name ) )
 				{
-					castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
-					result = m_elements.find( p_name );
+					castor::Logger::logWarning( castor::StringStream()
+						<< WARNING_CACHE_DUPLICATE_OBJECT
+						<< getObjectTypeName()
+						<< cuT( ": " )
+						<< name );
+					result = m_elements.find( name );
 				}
 				else
 				{
-					m_elements.insert( p_name, p_element );
+					m_elements.insert( name, element );
 				}
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
+				castor::Logger::logWarning( castor::StringStream()
+					<< WARNING_CACHE_NULL_OBJECT
+					<< getObjectTypeName() );
 			}
 
 			return result;
@@ -187,32 +195,40 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an element.
-		 *\param[in]	p_name			The element name.
-		 *\param[in]	p_parameters	The other constructor parameters.
+		 *\param[in]	name		The element name.
+		 *\param[in]	parameters	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un élément.
-		 *\param[in]	p_name			Le nom d'élément.
-		 *\param[in]	p_parameters	Les autres paramètres de construction.
+		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	parameters	Les autres paramètres de construction.
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr add( Key const & p_name, Parameters && ... p_parameters )
+		inline ElementPtr add( Key const & name, Parameters && ... parameters )
 		{
 			ElementPtr result;
 			auto lock = castor::makeUniqueLock( m_elements );
 
-			if ( !m_elements.has( p_name ) )
+			if ( !m_elements.has( name ) )
 			{
-				result = m_produce( p_name, std::forward< Parameters >( p_parameters )... );
+				result = m_produce( name
+					, std::forward< Parameters >( parameters )... );
 				m_initialise( result );
-				m_elements.insert( p_name, result );
-				castor::Logger::logInfo( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+				m_elements.insert( name, result );
+				castor::Logger::logDebug( castor::StringStream()
+					<< INFO_CACHE_CREATED_OBJECT
+					<< getObjectTypeName()
+					<< cuT( ": " ) << name );
 			}
 			else
 			{
-				result = m_elements.find( p_name );
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+				result = m_elements.find( name );
+				castor::Logger::logWarning( castor::StringStream()
+					<< WARNING_CACHE_DUPLICATE_OBJECT
+					<< getObjectTypeName()
+					<< cuT( ": " )
+					<< name );
 			}
 
 			return result;
@@ -220,31 +236,31 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
-		 *\param[in]	p_name		The element name.
+		 *\param[in]	name		The element name.
 		 *\~french
 		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'élément.
+		 *\param[in]	name		Le nom d'élément.
 		 */
-		inline void remove( Key const & p_name )
+		inline void remove( Key const & name )
 		{
-			m_elements.erase( p_name );
+			m_elements.erase( name );
 		}
 		/**
 		 *\~english
 		 *\return		Merges this cache's elements to the one given.
-		 *\param[out]	p_destination		The destination cache.
+		 *\param[out]	destination		The destination cache.
 		 *\~french
 		 *\return		Met les éléments de ce cache dans ceux de celui donné.
-		 *\param[out]	p_destination		Le cache de destination.
+		 *\param[out]	destination		Le cache de destination.
 		 */
-		inline void mergeInto( MyCacheType & p_destination )
+		inline void mergeInto( MyCacheType & destination )
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
-			auto lockOther = castor::makeUniqueLock( p_destination.m_elements );
+			auto lockOther = castor::makeUniqueLock( destination.m_elements );
 
 			for ( auto it : m_elements )
 			{
-				m_merge( *this, p_destination.m_elements, it.second );
+				m_merge( *this, destination.m_elements, it.second );
 			}
 
 			clear();
@@ -252,37 +268,37 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Applies a function to all the elements of this cache.
-		 *\param[in]	p_func	The function.
+		 *\param[in]	func	The function.
 		 *\~french
 		 *\brief		Applique une fonction à tous les éléments de ce cache.
-		 *\param[in]	p_func	La fonction.
+		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType p_func )const
+		inline void forEach( FuncType func )const
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
 
 			for ( auto const & element : m_elements )
 			{
-				p_func( *element.second );
+				func( *element.second );
 			}
 		}
 		/**
 		 *\~english
 		 *\brief		Applies a function to all the elements of this cache.
-		 *\param[in]	p_func	The function.
+		 *\param[in]	func	The function.
 		 *\~french
 		 *\brief		Applique une fonction à tous les éléments de ce cache.
-		 *\param[in]	p_func	La fonction.
+		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType p_func )
+		inline void forEach( FuncType func )
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
 
 			for ( auto & element : m_elements )
 			{
-				p_func( *element.second );
+				func( *element.second );
 			}
 		}
 		/**
@@ -317,29 +333,29 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_name		The element name.
+		 *\param[in]	name		The element name.
 		 *\return		\p true if an element with given name exists.
 		 *\~french
-		 *\param[in]	p_name		Le nom d'élément.
+		 *\param[in]	name		Le nom d'élément.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool has( Key const & p_name )const
+		inline bool has( Key const & name )const
 		{
-			return m_elements.has( p_name );
+			return m_elements.has( name );
 		}
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
-		 *\param[in]	p_name		The object name.
+		 *\param[in]	name		The object name.
 		 *\return		The found element, nullptr if not found.
 		 *\~french
 		 *\brief		Cherche un élément par son nom.
-		 *\param[in]	p_name		Le nom d'élément.
+		 *\param[in]	name		Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementPtr find( Key const & p_name )const
+		inline ElementPtr find( Key const & name )const
 		{
-			return m_elements.find( p_name );
+			return m_elements.find( name );
 		}
 		/**
 		 *\~english
@@ -450,28 +466,28 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_produce		The element producer.
-		 *\param[in]	p_initialise	The element initialiser.
-		 *\param[in]	p_clean			The element cleaner.
-		 *\param[in]	p_merge			The element collection merger.
+		 *\param[in]	produce		The element producer.
+		 *\param[in]	initialise	The element initialiser.
+		 *\param[in]	clean			The element cleaner.
+		 *\param[in]	merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_produce		Le créateur d'objet.
-		 *\param[in]	p_initialise	L'initialiseur d'objet.
-		 *\param[in]	p_clean			Le nettoyeur d'objet.
-		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
+		 *\param[in]	produce		Le créateur d'objet.
+		 *\param[in]	initialise	L'initialiseur d'objet.
+		 *\param[in]	clean			Le nettoyeur d'objet.
+		 *\param[in]	merge			Le fusionneur de collection d'objets.
 		 */
 		inline Cache( Engine & engine
-			, Producer && p_produce
-			, Initialiser && p_initialise = Initialiser{}
-			, Cleaner && p_clean = Cleaner{}
-			, Merger && p_merge = Merger{} )
+			, Producer && produce
+			, Initialiser && initialise = Initialiser{}
+			, Cleaner && clean = Cleaner{}
+			, Merger && merge = Merger{} )
 			: MyCacheType( engine
-				, std::move( p_produce )
-				, std::move( p_initialise )
-				, std::move( p_clean )
-				, std::move( p_merge ) )
+				, std::move( produce )
+				, std::move( initialise )
+				, std::move( clean )
+				, std::move( merge ) )
 		{
 		}
 		/**
@@ -488,33 +504,33 @@ namespace castor3d
 	 *\~english
 	 *\brief		Creates a cache.
 	 *\param[in]	engine		The engine.
-	 *\param[in]	p_produce		The element producer.
-	 *\param[in]	p_initialise	The element initialiser.
-	 *\param[in]	p_clean			The element cleaner.
-	 *\param[in]	p_merge			The element collection merger.
+	 *\param[in]	produce		The element producer.
+	 *\param[in]	initialise	The element initialiser.
+	 *\param[in]	clean			The element cleaner.
+	 *\param[in]	merge			The element collection merger.
 	 *\~french
 	 *\brief		Crée un cache.
 	 *\param[in]	engine		Le moteur.
-	 *\param[in]	p_produce		Le créateur d'objet.
-	 *\param[in]	p_initialise	L'initialiseur d'objet.
-	 *\param[in]	p_clean			Le nettoyeur d'objet.
-	 *\param[in]	p_merge			Le fusionneur de collection d'objets.
+	 *\param[in]	produce		Le créateur d'objet.
+	 *\param[in]	initialise	L'initialiseur d'objet.
+	 *\param[in]	clean			Le nettoyeur d'objet.
+	 *\param[in]	merge			Le fusionneur de collection d'objets.
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >
 	makeCache( Engine & engine
-		, typename CacheTraits< ElementType, KeyType >::Producer && p_produce
-		, ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
-		, ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
-		, typename CacheTraits< ElementType, KeyType >::Merger && p_merge = []( CacheBase< ElementType, KeyType > const &
+		, typename CacheTraits< ElementType, KeyType >::Producer && produce
+		, ElementInitialiser< ElementType > && initialise = []( std::shared_ptr< ElementType > ){}
+		, ElementCleaner< ElementType > && clean = []( std::shared_ptr< ElementType > ){}
+		, typename CacheTraits< ElementType, KeyType >::Merger && merge = []( CacheBase< ElementType, KeyType > const &
 			, castor::Collection< ElementType, KeyType > &
 			, std::shared_ptr< ElementType > ){} )
 	{
 		return std::make_unique< Cache< ElementType, KeyType > >( engine
-			, std::move( p_produce )
-			, std::move( p_initialise )
-			, std::move( p_clean )
-			, std::move(p_merge) );
+			, std::move( produce )
+			, std::move( initialise )
+			, std::move( clean )
+			, std::move( merge ) );
 	}
 }
 
