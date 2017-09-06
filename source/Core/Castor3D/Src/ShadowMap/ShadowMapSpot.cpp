@@ -1,17 +1,18 @@
 #include "ShadowMapSpot.hpp"
 
-#include <Engine.hpp>
+#include "Engine.hpp"
 
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Light/Light.hpp>
-#include <Scene/Light/SpotLight.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <ShadowMap/ShadowMapPassSpot.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureImage.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Light/Light.hpp"
+#include "Scene/Light/SpotLight.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "ShadowMap/ShadowMapPassSpot.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureImage.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 
@@ -28,15 +29,25 @@ namespace castor3d
 		TextureUnit doInitialiseSpot( Engine & engine
 			, Size const & size )
 		{
-			auto sampler = engine.getSamplerCache().add( cuT( "ShadowMap_Spot" ) );
-			sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
-			sampler->setComparisonMode( ComparisonMode::eRefToTexture );
-			sampler->setComparisonFunc( ComparisonFunc::eLEqual );
+			String const name = cuT( "ShadowMap_Spot" );
+			SamplerSPtr sampler;
+
+			if ( engine.getSamplerCache().has( name ) )
+			{
+				sampler = engine.getSamplerCache().find( name );
+			}
+			else
+			{
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+				sampler->setComparisonMode( ComparisonMode::eRefToTexture );
+				sampler->setComparisonFunc( ComparisonFunc::eLEqual );
+			}
 
 			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
@@ -117,24 +128,24 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
+		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+
+		auto materials = doCreateMaterials( writer, programFlags );
+		materials->declare();
 
 		// Fragment Outputs
 		auto pxl_fragDepth( writer.declFragData< Float >( cuT( "pxl_fragDepth" ), 0 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-			{
-				auto alpha = writer.declLocale( cuT( "alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-
-				IF( writer, alpha < 0.2_f )
-				{
-					writer.discard();
-				}
-				FI;
-			}
+			doDiscardAlpha( writer
+				, textureFlags
+				, alphaFunc
+				, vtx_material
+				, *materials );
 
 			pxl_fragDepth = gl_FragCoord.z();
 		} );

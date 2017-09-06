@@ -1,4 +1,4 @@
-﻿#include "ShadowMapDirectional.hpp"
+#include "ShadowMapDirectional.hpp"
 
 #include "Engine.hpp"
 
@@ -134,16 +134,11 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-				doApplyAlphaFunc( writer
-					, alphaFunc
-					, alpha
-					, vtx_material
-					, *materials );
-			}
+			doDiscardAlpha( writer
+				, textureFlags
+				, alphaFunc
+				, vtx_material
+				, *materials );
 
 			pxl_fragDepth = gl_FragCoord.z();
 		} );

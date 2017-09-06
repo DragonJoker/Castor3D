@@ -208,15 +208,11 @@ namespace castor3d
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						IF ( m_writer, receivesShadows != 0_i )
-						{
-							shadowFactor = 1.0_f - min( receivesShadows
-								, m_shadowModel->computeDirectionalShadow( light.m_transform()
-									, fragmentIn.m_vertex
-									, -lightDirection
-									, fragmentIn.m_normal ) );
-						}
-						FI;
+						shadowFactor = 1.0_f - min( m_writer.cast< Float >( receivesShadows )
+							, m_shadowModel->computeDirectionalShadow( light.m_transform()
+								, fragmentIn.m_vertex
+								, -lightDirection
+								, fragmentIn.m_normal ) );
 					}
 
 					m_writer.returnStmt( doComputeLight( light.m_lightBase()
@@ -261,15 +257,11 @@ namespace castor3d
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						IF ( m_writer, receivesShadows != 0_i )
-						{
-							shadowFactor = 1.0_f - min( receivesShadows
-								, m_shadowModel->computePointShadow( fragmentIn.m_vertex
-									, light.m_position().xyz()
-									, fragmentIn.m_normal
-									, light.m_index() ) );
-						}
-						FI;
+						shadowFactor = 1.0_f - min( m_writer.cast< Float >( receivesShadows )
+							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
+								, light.m_position().xyz()
+								, fragmentIn.m_normal
+								, light.m_index() ) );
 					}
 
 					auto result = m_writer.declLocale( cuT( "result" )
@@ -324,16 +316,12 @@ namespace castor3d
 
 						if ( m_shadows != ShadowType::eNone )
 						{
-							IF ( m_writer, receivesShadows != 0_i )
-							{
-								shadowFactor = 1.0_f - min( receivesShadows
-									, m_shadowModel->computeSpotShadow( light.m_transform()
-										, fragmentIn.m_vertex
-										, -lightToVertex
-										, fragmentIn.m_normal
-										, light.m_index() ) );
-							}
-							FI;
+							shadowFactor = 1.0_f - min( m_writer.cast< Float >( receivesShadows )
+								, m_shadowModel->computeSpotShadow( light.m_transform()
+									, fragmentIn.m_vertex
+									, -lightToVertex
+									, fragmentIn.m_normal
+									, light.m_index() ) );
 						}
 
 						result = doComputeLight( light.m_lightBase()
@@ -385,7 +373,7 @@ namespace castor3d
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						shadowFactor = 1.0_f - min( receivesShadows
+						shadowFactor = 1.0_f - min( m_writer.cast< Float >( receivesShadows )
 							, m_shadowModel->computeDirectionalShadow( light.m_transform()
 								, fragmentIn.m_vertex
 								, -lightDirection
@@ -434,7 +422,7 @@ namespace castor3d
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						shadowFactor = 1.0_f - min( receivesShadows
+						shadowFactor = 1.0_f - min( m_writer.cast< Float >( receivesShadows )
 							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
 								, light.m_position().xyz()
 								, fragmentIn.m_normal ) );
@@ -494,7 +482,7 @@ namespace castor3d
 
 						if ( m_shadows != ShadowType::eNone )
 						{
-							shadowFactor = 1.0_f - min( receivesShadows
+							shadowFactor = 1.0_f - min( m_writer.cast< Float >( receivesShadows )
 								, m_shadowModel->computeSpotShadow( light.m_transform()
 									, fragmentIn.m_vertex
 									, -lightToVertex

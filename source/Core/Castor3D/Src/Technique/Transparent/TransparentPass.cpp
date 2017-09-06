@@ -639,8 +639,8 @@ namespace castor3d
 			auto metalness = writer.declLocale( cuT( "metallic" ), materials.getMetallic( vtx_material ) );
 			auto roughness = writer.declLocale( cuT( "roughness" ), materials.getRoughness( vtx_material ) );
 			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
-			auto albedo = writer.declLocale( cuT( "albedo" ), utils.removeGamma(gamma, materials.getAlbedo( vtx_material ) ) );
-			auto emissive = writer.declLocale( cuT( "emissive" ), diffuse * materials.getEmissive( vtx_material ) );
+			auto albedo = writer.declLocale( cuT( "albedo" ), utils.removeGamma( gamma, materials.getAlbedo( vtx_material ) ) );
+			auto emissive = writer.declLocale( cuT( "emissive" ), albedo * materials.getEmissive( vtx_material ) );
 			auto worldEye = writer.declLocale( cuT( "worldEye" ), vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" ), vec3( 1.0_f ) );
 			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" ), vec3( 1.0_f ) );
@@ -691,7 +691,7 @@ namespace castor3d
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, albedo + emissive + ambient );
+				, ( albedo * ambient ) + emissive );
 
 			auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
 
@@ -881,7 +881,7 @@ namespace castor3d
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, diffuse + ambient + emissive );
+				, ( diffuse * ambient ) + emissive );
 
 			auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
 

@@ -300,6 +300,7 @@ namespace castor3d
 		fbo.m_frameBuffer->setClearColour( scene->getBackgroundColour() );
 
 		// Render the scene through the RenderTechnique.
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 		m_renderTechnique->render( info );
 
 		// Then draw the render's result to the RenderTarget's frame buffer.

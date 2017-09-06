@@ -297,12 +297,20 @@ namespace castor3d
 				, c3d_envMapIndex
 				, flags );
 
-			if ( alphaFunc != ComparisonFunc::eAlways
-				&& checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-				doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
+					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				}
+				else
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, materials.getOpacity( vtx_material ) );
+					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				}
 			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
@@ -437,12 +445,20 @@ namespace castor3d
 				, c3d_envMapIndex
 				, flags );
 
-			if ( alphaFunc != ComparisonFunc::eAlways
-				&& checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-				doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
+					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				}
+				else
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, materials.getOpacity( vtx_material ) );
+					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				}
 			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
@@ -570,12 +586,20 @@ namespace castor3d
 				, c3d_envMapIndex
 				, flags );
 
-			if ( alphaFunc != ComparisonFunc::eAlways
-				&& checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-				doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
+					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				}
+				else
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, materials.getOpacity( vtx_material ) );
+					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+				}
 			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )

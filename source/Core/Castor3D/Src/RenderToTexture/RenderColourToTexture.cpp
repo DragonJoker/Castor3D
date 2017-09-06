@@ -1,4 +1,4 @@
-﻿#include "RenderColourToTexture.hpp"
+#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -73,7 +73,7 @@ namespace castor3d
 		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
 			, program );
 		m_geometryBuffers->initialise( { *m_vertexBuffer }
-		, nullptr );
+			, nullptr );
 
 		DepthStencilState dsState;
 		dsState.setDepthTest( false );
@@ -86,12 +86,23 @@ namespace castor3d
 			, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( cuT( "RenderColourToTexture" ) );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		String const name = cuT( "RenderColourToTexture" );
+		SamplerSPtr sampler;
+
+		if ( getOwner()->getRenderSystem()->getEngine()->getSamplerCache().has( name ) )
+		{
+			m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().find( name );
+		}
+		else
+		{
+			m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( name );
+			m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		}
+
 		m_viewport.update();
 	}
 

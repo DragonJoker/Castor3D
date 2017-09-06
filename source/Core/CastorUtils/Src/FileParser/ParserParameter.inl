@@ -1,4 +1,4 @@
-﻿#include "Miscellaneous/Utils.hpp"
+#include "Miscellaneous/Utils.hpp"
 #include "Log/Logger.hpp"
 #include "Graphics/PixelFormat.hpp"
 #include "FileParserContext.hpp"

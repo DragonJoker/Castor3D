@@ -252,8 +252,8 @@ namespace castor3d
 
 	bool Pass::hasAlphaBlending()const
 	{
-		return ( checkFlag( m_textureFlags, TextureChannel::eOpacity ) && getAlphaFunc() == ComparisonFunc::eAlways )
-			|| m_opacity < 1.0f;
+		return ( checkFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f )
+			&& getAlphaFunc() == ComparisonFunc::eAlways;
 	}
 
 	void Pass::prepareTextures()
@@ -337,7 +337,9 @@ namespace castor3d
 	{
 		m_opacity = value;
 
-		if ( m_opacity < 1.0f && m_alphaBlendMode == BlendMode::eNoBlend )
+		if ( m_opacity < 1.0f
+			&& m_alphaBlendMode == BlendMode::eNoBlend
+			&& m_alphaFunc == ComparisonFunc::eAlways )
 		{
 			m_alphaBlendMode = BlendMode::eInterpolative;
 		}

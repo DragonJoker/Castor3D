@@ -1,4 +1,4 @@
-﻿#include "ForwardRenderTechniquePass.hpp"
+#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -343,7 +343,8 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, materials.getOpacity( vtx_material ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -352,15 +353,28 @@ namespace castor3d
 
 				pxl_v4FragColor.a() = alpha;
 			}
-			else if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-				doApplyAlphaFunc( writer
-					, alphaFunc
-					, alpha
-					, vtx_material
-					, materials );
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, vtx_material
+						, materials );
+				}
+				else
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, materials.getOpacity( vtx_material ) );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, vtx_material
+						, materials );
+				}
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
@@ -521,15 +535,28 @@ namespace castor3d
 
 				pxl_v4FragColor.a() = alpha;
 			}
-			else if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-				doApplyAlphaFunc( writer
-					, alphaFunc
-					, alpha
-					, vtx_material
-					, materials );
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, vtx_material
+						, materials );
+				}
+				else
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, materials.getOpacity( vtx_material ) );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, vtx_material
+						, materials );
+				}
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
@@ -690,15 +717,28 @@ namespace castor3d
 
 				pxl_v4FragColor.a() = alpha;
 			}
-			else if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-				doApplyAlphaFunc( writer
-					, alphaFunc
-					, alpha
-					, vtx_material
-					, materials );
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, vtx_material
+						, materials );
+				}
+				else
+				{
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, materials.getOpacity( vtx_material ) );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, vtx_material
+						, materials );
+				}
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )

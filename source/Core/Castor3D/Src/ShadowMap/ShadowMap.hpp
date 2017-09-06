@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -237,6 +237,27 @@ namespace castor3d
 		 */
 		C3D_API std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
 			, ProgramFlags const & programFlags )const;
+		/**
+		 *\~english
+		 *\brief		Discards materials with alpha blend or alpha func, if needed.
+		 *\param[in]	writer			The GLSL writer.
+		 *\param[in]	textureFlags	The texture flags.
+		 *\param		alphaFunc		The alpha function.
+		 *\param[in]	material		The material index.
+		 *\param[in]	materials		The materials.
+		 *\~french
+		 *\brief		Défausse les matériaux avec du mélange alpha ou un fonction alpha, si besoin est.
+		 *\param[in]	writer			Le writer GLSL.
+		 *\param[in]	textureFlags	Les indicateurs de texture.
+		 *\param		alphaFunc		La fonction d'opacité.
+		 *\param[in]	material		L'indice du matériau.
+		 *\param[in]	materials		Les matériaux.
+		 */
+		void doDiscardAlpha( glsl::GlslWriter & writer
+			, TextureChannels const & textureFlags
+			, ComparisonFunc alphaFunc
+			, glsl::Int const & material
+			, shader::Materials const & materials )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::doApplyAlphaFunc
 		 */

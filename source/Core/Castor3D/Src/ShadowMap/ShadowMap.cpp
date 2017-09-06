@@ -247,6 +247,36 @@ namespace castor3d
 		return result;
 	}
 
+	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
+		, TextureChannels const & textureFlags
+		, ComparisonFunc alphaFunc
+		, glsl::Int const & material
+		, shader::Materials const & materials )const
+	{
+		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+		{
+			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
+			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+			doApplyAlphaFunc( writer
+				, alphaFunc
+				, alpha
+				, material
+				, materials );
+		}
+		else if ( alphaFunc != ComparisonFunc::eAlways )
+		{
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, materials.getOpacity( material ) );
+			doApplyAlphaFunc( writer
+				, alphaFunc
+				, alpha
+				, material
+				, materials );
+		}
+	}
+
 	void ShadowMap::doApplyAlphaFunc( glsl::GlslWriter & writer
 		, ComparisonFunc alphaFunc
 		, glsl::Float const & alpha
