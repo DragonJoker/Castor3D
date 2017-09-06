@@ -23,14 +23,14 @@ SOFTWARE.
 #ifndef ___C3DGL_GlObjects___
 #define ___C3DGL_GlObjects___
 
+#include <Config/PlatformConfig.hpp>
+
 #if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <Windows.h>
 #elif defined( CASTOR_PLATFORM_LINUX )
 #	include <X11/Xlib.h>
 #	include <GL/glx.h>
 #endif
-
-#include <Config/PlatformConfig.hpp>
 
 #include "Common/GlObject.hpp"
 #include "Miscellaneous/GlDebug.hpp"

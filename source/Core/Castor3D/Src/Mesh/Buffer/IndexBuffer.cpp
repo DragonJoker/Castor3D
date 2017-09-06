@@ -47,7 +47,7 @@ namespace castor3d
 			getEngine()->getRenderSystem()->putBuffer( BufferType::eElementArray
 				, m_accessType
 				, m_accessNature
-				, GpuBufferOffset{ m_gpuBuffer, m_offset * sizeof( uint32_t ) } );
+								   , GpuBufferOffset{ m_gpuBuffer, uint32_t( m_offset * sizeof( uint32_t ) ) } );
 			m_gpuBuffer.reset();
 		}
 	}

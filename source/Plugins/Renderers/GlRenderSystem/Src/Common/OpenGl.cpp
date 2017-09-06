@@ -11,7 +11,7 @@
 
 #include <iomanip>
 
-#include <GL/GL.h>
+#include <GL/gl.h>
 
 using namespace castor3d;
 using namespace castor;
