@@ -33,16 +33,14 @@ SOFTWARE.
 namespace GuiCommon
 {
 	using Angles = std::array< castor::Angle, 2u >;
+	static float constexpr MaxAngularSpeed = 5.0f;
+	static float constexpr MaxScalarSpeed = 20.0f;
 	/**
 	*\brief
 	*	Classe de gestion des déplacements d'un noeud de scène.
 	*/
 	class NodeState
 	{
-	public:
-		static float constexpr MaxAngularSpeed = 5.0f;
-		static float constexpr MaxScalarSpeed = 20.0f;
-
 	public:
 		/**
 		*\brief

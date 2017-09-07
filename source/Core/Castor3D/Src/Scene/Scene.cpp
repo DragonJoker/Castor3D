@@ -898,6 +898,37 @@ namespace castor3d
 			}
 		}
 
+		if ( !m_skybox
+			&& !m_backgroundImage
+			&& getMaterialsType() == MaterialType::eLegacy )
+		{
+			m_skybox = std::make_unique< Skybox >( *getEngine() );
+			m_skybox->setScene( *this );
+			Size size{ 16, 16 };
+			constexpr PixelFormat format{ PixelFormat::eR8G8B8 };
+			UbPixel pixel{ true };
+			uint8_t c;
+			pixel.set< format >( { { m_backgroundColour.red().convertTo( c )
+				, m_backgroundColour.green().convertTo( c )
+				, m_backgroundColour.blue().convertTo( c ) } } );
+			auto buffer = PxBufferBase::create( size, format );
+			auto data = buffer->ptr();
+
+			for ( uint32_t i = 0u; i < 256; ++i )
+			{
+				std::memcpy( data, pixel.constPtr(), 3 );
+				data += 3;
+			}
+
+			m_skybox->getTexture().getImage( 0u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 1u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 2u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 3u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 4u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 5u ).initialiseSource( buffer );
+			getListener().postEvent( makeInitialiseEvent( *m_skybox ) );
+		}
+
 		m_changed = false;
 	}
 
