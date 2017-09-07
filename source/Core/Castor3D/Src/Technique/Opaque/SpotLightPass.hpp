@@ -101,6 +101,9 @@ namespace castor3d
 			//!\~english	The variable containing the light space transformation matrix.
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
 			PushUniform4x4fSPtr m_lightTransform;
+			//!\~english	The variable containing the light far plane position.
+			//!\~french		La variable contenant la position du plan lointain de la lumière.
+			PushUniform1fSPtr m_lightFarPlane;
 		};
 
 	public:

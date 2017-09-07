@@ -177,12 +177,15 @@ namespace castor3d
 			auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
 			m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
 				, Point3r{ scale[0], scale[0], scale[1] } );
+			m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+			m_attenuation.reset();
+			m_cutOff.reset();
 		}
 
 		p_viewport.setPerspective( getCutOff() * 2
 			, p_viewport.getRatio()
 			, 1.0_r
-			, real( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) ) );
+			, m_farPlane );
 		p_viewport.update();
 	}
 

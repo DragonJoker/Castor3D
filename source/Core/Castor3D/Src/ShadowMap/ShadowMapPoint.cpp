@@ -1,4 +1,4 @@
-#include "ShadowMapPoint.hpp"
+﻿#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -34,8 +34,8 @@ namespace castor3d
 	namespace
 	{
 		static String const ShadowMapUbo = cuT( "ShadowMap" );
-		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
-		static String const FarPlane = cuT( "c3d_fFarPlane" );
+		static String const WorldLightPosition = cuT( "c3d_worldLightPosition" );
+		static String const FarPlane = cuT( "c3d_farPlane" );
 
 		TextureUnit doInitialisePoint( Engine & engine
 			, Size const & size )
@@ -112,6 +112,15 @@ namespace castor3d
 		}
 	}
 
+	void ShadowMapPoint::debugDisplay( castor::Size const & size, uint32_t index )
+	{
+		Size displaySize{ 128u, 128u };
+		Position position{ int32_t( displaySize.getWidth() * 4 * index), int32_t( displaySize.getHeight() * 4 ) };
+		getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
+			, displaySize
+			, *m_shadowMap.getTexture() );
+	}
+
 	void ShadowMapPoint::doInitialise()
 	{
 		constexpr float component = std::numeric_limits< float >::max();
@@ -170,7 +179,7 @@ namespace castor3d
 		// Fragment Intputs
 		Ubo shadowMap{ writer, ShadowMapUbo, 8u };
 		auto c3d_v3WordLightPosition( shadowMap.declMember< Vec3 >( WorldLightPosition ) );
-		auto c3d_fFarPlane( shadowMap.declMember< Float >( FarPlane ) );
+		auto c3d_farPlane( shadowMap.declMember< Float >( FarPlane ) );
 		shadowMap.end();
 
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
@@ -194,7 +203,7 @@ namespace castor3d
 				, *materials );
 
 			auto distance = writer.declLocale( cuT( "distance" ), length( vtx_position - c3d_v3WordLightPosition ) );
-			pxl_fFragColor = distance / c3d_fFarPlane;
+			pxl_fFragColor = distance / c3d_farPlane;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

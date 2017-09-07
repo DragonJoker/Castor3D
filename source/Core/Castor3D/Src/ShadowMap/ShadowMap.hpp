@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -102,6 +102,17 @@ namespace castor3d
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
 		C3D_API virtual void render() = 0;
+		/**
+		 *\~english
+		 *\brief		Dumps the shadow map on screen.
+		 *\param[in]	size	The dump dimensions.
+		 *\param[in]	index	The shadow map index (to compute its position).
+		 *\~french
+		 *\brief		Dumpe la texture d'ombres sur l'écran.
+		 *\param[in]	size	Les dimensions d'affichage.
+		 *\param[in]	index	L'indice de la texture d'ombres (pour calculer sa position).
+		 */
+		C3D_API virtual void debugDisplay( castor::Size const & size, uint32_t index ) = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.

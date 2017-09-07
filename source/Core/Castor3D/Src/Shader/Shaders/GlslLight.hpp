@@ -80,6 +80,7 @@ namespace castor3d
 			C3D_API Light m_lightBase()const;
 			C3D_API glsl::Vec3 m_position()const;
 			C3D_API glsl::Vec3 m_attenuation()const;
+			C3D_API glsl::Float m_farPlane()const;
 			C3D_API glsl::Int m_index()const;
 
 			template< typename T >
@@ -101,6 +102,7 @@ namespace castor3d
 			C3D_API Light m_lightBase()const;
 			C3D_API glsl::Vec3 m_position()const;
 			C3D_API glsl::Vec3 m_attenuation()const;
+			C3D_API glsl::Float m_farPlane()const;
 			C3D_API glsl::Vec3 m_direction()const;
 			C3D_API glsl::Float m_exponent()const;
 			C3D_API glsl::Float m_cutOff()const;

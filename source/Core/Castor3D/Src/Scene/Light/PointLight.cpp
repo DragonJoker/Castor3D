@@ -1,4 +1,4 @@
-#include "PointLight.hpp"
+﻿#include "PointLight.hpp"
 
 #include "Render/Viewport.hpp"
 #include "Technique/Opaque/LightPass.hpp"
@@ -160,10 +160,14 @@ namespace castor3d
 		if ( m_attenuation.isDirty() )
 		{
 			auto & data = PointLight::generateVertices();
-			auto scale = doCalcPointLightBSphere( *this ) / 2.0f;;
+			auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
 			m_cubeBox.load( Point3r{ -scale, -scale, -scale }
 				, Point3r{ scale, scale, scale } );
+			m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+			m_attenuation.reset();
 		}
+
+		p_viewport.updateFar( m_farPlane );
 	}
 
 	void PointLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const

@@ -136,6 +136,10 @@ namespace castor3d
 			{
 				result = ( result - constant ) / linear;
 			}
+			else
+			{
+				result = 4000.0f;
+			}
 		}
 		else
 		{
@@ -473,6 +477,13 @@ namespace castor3d
 		auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
+		auto shadowType = getShadowType( sceneFlags );
+
+		if ( type == LightType::ePoint && shadowType != ShadowType::eNone )
+		{
+			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
+		}
+
 		// Shader outputs
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
@@ -585,6 +596,13 @@ namespace castor3d
 		auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
+		auto shadowType = getShadowType( sceneFlags );
+
+		if ( type == LightType::ePoint && shadowType != ShadowType::eNone )
+		{
+			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
+		}
+
 		// Shader outputs
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
@@ -694,6 +712,13 @@ namespace castor3d
 		auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
 		auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+
+		auto shadowType = getShadowType( sceneFlags );
+
+		if ( type == LightType::ePoint && shadowType != ShadowType::eNone )
+		{
+			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
+		}
 
 		// Shader outputs
 		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );

@@ -188,6 +188,7 @@ namespace castor3d
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
 			lightDecl.declMember< Vec3 >( cuT( "m_position" ) );
 			lightDecl.declMember< Vec3 >( cuT( "m_attenuation" ) );
+			lightDecl.declMember< Float >( cuT( "m_farPlane" ) );
 			lightDecl.declMember< Int >( cuT( "m_index" ) );
 			lightDecl.end();
 		}
@@ -198,6 +199,7 @@ namespace castor3d
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
 			lightDecl.declMember< Vec3 >( cuT( "m_position" ) );
 			lightDecl.declMember< Vec3 >( cuT( "m_attenuation" ) );
+			lightDecl.declMember< Float >( cuT( "m_farPlane" ) );
 			lightDecl.declMember< Int >( cuT( "m_index" ) );
 			lightDecl.declMember< Vec3 >( cuT( "m_direction" ) );
 			lightDecl.declMember< Float >( cuT( "m_exponent" ) );

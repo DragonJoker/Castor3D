@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -70,6 +70,10 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
 		void render()override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::debugDisplay
+		 */
+		void debugDisplay( castor::Size const & size, uint32_t index )override;
 
 	private:
 		/**

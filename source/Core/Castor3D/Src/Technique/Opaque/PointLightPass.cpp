@@ -39,6 +39,7 @@ namespace castor3d
 		: MeshLightPass::Program{ engine, vtx, pxl }
 		, m_lightPosition{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
 		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
+		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_farPlane" ), ShaderType::ePixel ) }
 	{
 	}
 
@@ -52,6 +53,7 @@ namespace castor3d
 		m_lightIntensity->setValue( pointLight.getIntensity() );
 		m_lightAttenuation->setValue( pointLight.getAttenuation() );
 		m_lightPosition->setValue( light.getParent()->getDerivedPosition() );
+		m_lightFarPlane->setValue( pointLight.getFarPlane() );
 	}
 
 	//*********************************************************************************************
