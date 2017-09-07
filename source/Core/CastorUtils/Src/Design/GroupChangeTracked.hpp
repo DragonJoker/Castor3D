@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___CU_ChangeTracked_H___
-#define ___CU_ChangeTracked_H___
+#ifndef ___CU_GroupChangeTracked_H___
+#define ___CU_GroupChangeTracked_H___
 
 #include "CastorUtilsPrerequisites.hpp"
 
@@ -39,38 +39,25 @@ namespace castor
 	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
 	*/
 	template< typename T >
-	class ChangeTracked
+	class GroupChangeTracked
 	{
 	public:
-		ChangeTracked()noexcept
+		GroupChangeTracked( bool & dirty )noexcept
 			: m_value{}
-			, m_dirty{ true }
+			, m_dirty{ dirty }
 		{
 		}
 
-		ChangeTracked( T const & rhs )noexcept
+		GroupChangeTracked( bool & dirty, T const & rhs )noexcept
 			: m_value{ rhs }
-			, m_dirty{ true }
+			, m_dirty{ dirty }
 		{
 		}
 
-		ChangeTracked( ChangeTracked< T > const & rhs )noexcept
-			: m_value{ rhs.m_value }
-			, m_dirty{ true }
-		{
-		}
-
-		ChangeTracked & operator=( T const & rhs )noexcept
+		GroupChangeTracked & operator=( T const & rhs )noexcept
 		{
 			m_dirty |= m_value != rhs;
 			m_value = rhs;
-			return *this;
-		}
-
-		ChangeTracked & operator=( ChangeTracked< T > const & rhs )noexcept
-		{
-			m_dirty |= m_value != rhs.m_value;
-			m_value = rhs.m_value;
 			return *this;
 		}
 
@@ -101,49 +88,49 @@ namespace castor
 
 	private:
 		T m_value;
-		bool m_dirty;
+		bool & m_dirty;
 	};
 
 	template< typename T >
-	bool operator==( ChangeTracked< T > const & lhs, T const & rhs )
+	bool operator==( GroupChangeTracked< T > const & lhs
+		, T const & rhs )
 	{
 		return lhs.value() == rhs;
 	}
 
 	template< typename T >
-	bool operator==( T const & lhs, ChangeTracked< T > const & rhs )
+	bool operator==( T const & lhs
+		, GroupChangeTracked< T > const & rhs )
 	{
 		return lhs == rhs.value();
 	}
 
 	template< typename T >
-	bool operator==( ChangeTracked< T > const & lhs, ChangeTracked< T > const & rhs )
+	bool operator==( GroupChangeTracked< T > const & lhs
+		, GroupChangeTracked< T > const & rhs )
 	{
 		return lhs.value() == rhs.value();
 	}
 
 	template< typename T >
-	bool operator!=( ChangeTracked< T > const & lhs, T const & rhs )
+	bool operator!=( GroupChangeTracked< T > const & lhs
+		, T const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
 	template< typename T >
-	bool operator!=( T const & lhs, ChangeTracked< T > const & rhs )
+	bool operator!=( T const & lhs
+		, GroupChangeTracked< T > const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
 	template< typename T >
-	bool operator!=( ChangeTracked< T > const & lhs, ChangeTracked< T > const & rhs )
+	bool operator!=( GroupChangeTracked< T > const & lhs
+		, GroupChangeTracked< T > const & rhs )
 	{
 		return !operator==( lhs, rhs );
-	}
-
-	template< typename T >
-	ChangeTracked< T > makeChangeTracked( T const & value )
-	{
-		return ChangeTracked< T >{ value };
 	}
 }
 
