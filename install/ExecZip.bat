@@ -1,6 +1,6 @@
 @echo OFF
 
-set DATA_DIR=..\..\..\..\data\TestScenes
+set DATA_DIR=..\..\..\..\..\Castor3DTestScenes
 
 setlocal disableDelayedExpansion
 for /f "delims=" %%A in ('forfiles /s /p %DATA_DIR% /m *.zip /c "cmd /c echo @relpath"') do (

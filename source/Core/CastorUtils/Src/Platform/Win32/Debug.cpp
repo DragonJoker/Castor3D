@@ -57,37 +57,41 @@ namespace castor
 				unsigned int num( ::RtlCaptureStackBackTrace( p_toSkip, p_toCapture - p_toSkip, backTrace.data(), nullptr ) );
 
 				::HANDLE process( ::GetCurrentProcess() );
-				p_stream << "CALL STACK:" << std::endl;
 
-				// symbol->Name type is char [1] so there is space for \0 already
-				SYMBOL_INFO * symbol( ( SYMBOL_INFO * )malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
-
-				if ( symbol )
+				if ( process != INVALID_HANDLE_VALUE )
 				{
-					symbol->MaxNameLen = MaxFnNameLen;
-					symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+					p_stream << "CALL STACK:" << std::endl;
 
-					if ( !SymbolsInitialised )
-					{
-						SymbolsInitialised = ::SymInitialize( process, nullptr, TRUE ) == TRUE;
-					}
+					// symbol->Name type is char [1] so there is space for \0 already
+					SYMBOL_INFO * symbol( ( SYMBOL_INFO * )malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
 
-					if ( SymbolsInitialised )
+					if ( symbol )
 					{
-						for ( unsigned int i = 0; i < num; ++i )
+						symbol->MaxNameLen = MaxFnNameLen;
+						symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+
+						if ( !SymbolsInitialised )
 						{
-							if ( ::SymFromAddr( process, reinterpret_cast< DWORD64 >( backTrace[i] ), 0, symbol ) )
+							SymbolsInitialised = ::SymInitialize( process, nullptr, TRUE ) == TRUE;
+						}
+
+						if ( SymbolsInitialised )
+						{
+							for ( unsigned int i = 0; i < num; ++i )
 							{
-								p_stream << "== " << Demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) ) << std::endl;
+								if ( ::SymFromAddr( process, reinterpret_cast< DWORD64 >( backTrace[i] ), 0, symbol ) )
+								{
+									p_stream << "== " << Demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) ) << std::endl;
+								}
 							}
 						}
-					}
-					else
-					{
-						p_stream << "== Unable to retrieve the call stack" << std::endl;
-					}
+						else
+						{
+							p_stream << "== Unable to retrieve the call stack" << std::endl;
+						}
 
-					free( symbol );
+						free( symbol );
+					}
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-#include "ShadowMapDirectional.hpp"
+﻿#include "ShadowMapDirectional.hpp"
 
 #include "Engine.hpp"
 
@@ -85,6 +85,15 @@ namespace castor3d
 		m_frameBuffer->clear( BufferComponent::eDepth );
 		m_pass->render( 0u );
 		m_frameBuffer->unbind();
+	}
+
+	void ShadowMapDirectional::debugDisplay( castor::Size const & size, uint32_t index )
+	{
+		Size displaySize{ 256u, 256u };
+		Position position{ int32_t( displaySize.getWidth() * index ), int32_t( displaySize.getHeight() * 3u ) };
+		getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
+			, displaySize
+			, *m_shadowMap.getTexture() );
 	}
 
 	void ShadowMapDirectional::doInitialise()

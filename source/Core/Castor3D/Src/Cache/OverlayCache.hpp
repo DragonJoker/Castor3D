@@ -69,7 +69,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur de comparaison.
 		 */
-		inline bool operator()( OverlayCategorySPtr p_a, OverlayCategorySPtr p_b )
+		inline bool operator()( OverlayCategorySPtr p_a, OverlayCategorySPtr p_b )const
 		{
 			return p_a->getLevel() < p_b->getLevel() || ( p_a->getLevel() == p_b->getLevel() && p_a->getIndex() < p_b->getIndex() );
 		}
@@ -268,6 +268,23 @@ namespace castor3d
 		inline ElementPtr add( Key const & p_name, ElementPtr p_element )
 		{
 			return MyCacheType::add( p_name, p_element );
+		}
+		/**
+		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name		The element name.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name		Le nom d'élément.
+		 */
+		inline void remove( Key const & name )
+		{
+			if ( m_elements.has( name ) )
+			{
+				auto element = m_elements.find( name );
+				m_clean( element );
+				m_elements.erase( name );
+			}
 		}
 		/**
 		 *\~english

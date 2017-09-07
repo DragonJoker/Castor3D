@@ -1,4 +1,4 @@
-﻿#include "SpotLightPass.hpp"
+#include "SpotLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -46,6 +46,7 @@ namespace castor3d
 		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
 		, m_lightExponent{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_exponent" ), ShaderType::ePixel ) }
 		, m_lightCutOff{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_cutOff" ), ShaderType::ePixel ) }
+		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_farPlane" ), ShaderType::ePixel ) }
 	{
 	}
 
@@ -63,6 +64,7 @@ namespace castor3d
 		m_lightCutOff->setValue( spotLight.getCutOff().cos() );
 		m_lightDirection->setValue( spotLight.getDirection() );
 		m_lightTransform->setValue( spotLight.getLightSpaceTransform() );
+		m_lightFarPlane->setValue( spotLight.getFarPlane() );
 	}
 
 	//*********************************************************************************************

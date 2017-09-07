@@ -89,6 +89,9 @@ namespace castor3d
 			//!\~english	The variable containing the light attenuation.
 			//!\~french		La variable contenant l'atténuation de la lumière.
 			PushUniform3fSPtr m_lightAttenuation;
+			//!\~english	The variable containing the light far plane position.
+			//!\~french		La variable contenant la position du plan lointain de la lumière.
+			PushUniform1fSPtr m_lightFarPlane;
 		};
 
 	public:

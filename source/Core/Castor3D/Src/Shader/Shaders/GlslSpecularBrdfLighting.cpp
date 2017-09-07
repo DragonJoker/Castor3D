@@ -267,6 +267,7 @@ namespace castor3d
 								, m_shadowModel->computePointShadow( fragmentIn.m_vertex
 									, light.m_position().xyz()
 									, fragmentIn.m_normal
+									, light.m_farPlane()
 									, light.m_index() ) );
 						}
 						FI;
@@ -437,7 +438,8 @@ namespace castor3d
 						shadowFactor = 1.0_f - min( receivesShadows
 							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
 								, light.m_position().xyz()
-								, fragmentIn.m_normal ) );
+								, fragmentIn.m_normal
+								, light.m_farPlane() ) );
 					}
 
 					auto result = m_writer.declLocale( cuT( "result" )

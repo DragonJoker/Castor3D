@@ -56,6 +56,7 @@ namespace castor3d
 			C3D_API glsl::Float computePointShadow( glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
 				, glsl::Vec3 const & normal
+				, glsl::Float const & farPlane
 				, glsl::Int const & index );
 			C3D_API glsl::Float computeSpotShadow( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
@@ -63,7 +64,8 @@ namespace castor3d
 				, glsl::Vec3 const & normal );
 			C3D_API glsl::Float computePointShadow( glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
-				, glsl::Vec3 const & normal );
+				, glsl::Vec3 const & normal
+				, glsl::Float const & farPlane );
 
 		private:
 			void doDeclareGetRandom();
@@ -104,6 +106,7 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InVec3
+				, glsl::InFloat
 				, glsl::InInt > m_computePoint;
 			glsl::Function< glsl::Float
 				, glsl::InMat4
@@ -113,7 +116,8 @@ namespace castor3d
 			glsl::Function< glsl::Float
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InVec3 > m_computeOnePoint;
+				, glsl::InVec3
+				, glsl::InFloat > m_computeOnePoint;
 			glsl::Function< glsl::Float
 				, glsl::InVec3
 				, glsl::InFloat

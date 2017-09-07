@@ -87,11 +87,13 @@ namespace castor3d
 		Float Shadow::computePointShadow( Vec3 const & worldSpacePosition
 			, Vec3 const & lightDirection
 			, Vec3 const & normal
+			, glsl::Float const & farPlane
 			, Int const & index )
 		{
 			return m_computePoint( worldSpacePosition
 				, lightDirection
 				, normal
+				, farPlane
 				, index );
 		}
 
@@ -108,11 +110,13 @@ namespace castor3d
 
 		Float Shadow::computePointShadow( Vec3 const & worldSpacePosition
 			, Vec3 const & lightDirection
-			, Vec3 const & normal )
+			, Vec3 const & normal
+			, glsl::Float const & farPlane )
 		{
 			return m_computeOnePoint( worldSpacePosition
 				, lightDirection
-				, normal );
+				, normal
+				, farPlane );
 		}
 
 		void Shadow::doDeclareGetRandom()
@@ -217,6 +221,7 @@ namespace castor3d
 				, [this]( Vec3 const & worldSpacePosition
 				, Vec3 const & lightPosition
 				, Vec3 const & normal
+				, Float const & farPlane
 				, Int const & index )
 				{
 					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
@@ -228,12 +233,13 @@ namespace castor3d
 						, worldSpacePosition + m_writer.paren( normal * offset ) );
 					vertexToLight = worldSpace - lightPosition;
 					m_writer.returnStmt( m_sampleCube( vertexToLight
-						, length( vertexToLight ) / 4000.0_f
+						, length( vertexToLight ) / farPlane
 						, c3d_mapShadowPoint[index] ) );
 				}
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 				, InVec3( &m_writer, cuT( "lightPosition" ) )
 				, InVec3( &m_writer, cuT( "normal" ) )
+				, InFloat( &m_writer, cuT( "farPlane" ) )
 				, InInt( &m_writer, cuT( "index" ) ) );
 		}
 
@@ -262,8 +268,9 @@ namespace castor3d
 		{
 			m_computeOnePoint = m_writer.implementFunction< Float >( cuT( "computePointShadow" )
 				, [this]( Vec3 const & worldSpacePosition
-				, Vec3 const & lightPosition
-				, Vec3 const & normal )
+					, Vec3 const & lightPosition
+					, Vec3 const & normal
+					, Float const & farPlane )
 				{
 					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
@@ -274,12 +281,13 @@ namespace castor3d
 						, worldSpacePosition + m_writer.paren( normal * offset ) );
 					vertexToLight = worldSpace - lightPosition;
 					m_writer.returnStmt( m_sampleCube( vertexToLight
-						, length( vertexToLight ) / 4000.0_f
+						, length( vertexToLight ) / farPlane
 						, c3d_mapShadowPoint ) );
 				}
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 				, InVec3( &m_writer, cuT( "lightPosition" ) )
-				, InVec3( &m_writer, cuT( "normal" ) ) );
+				, InVec3( &m_writer, cuT( "normal" ) )
+				, InFloat( &m_writer, cuT( "farPlane" ) ) );
 		}
 
 		void Shadow::doDeclarePcfSample2D()

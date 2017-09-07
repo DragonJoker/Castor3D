@@ -1,4 +1,4 @@
-﻿#include "DirectionalLightPass.hpp"
+#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>

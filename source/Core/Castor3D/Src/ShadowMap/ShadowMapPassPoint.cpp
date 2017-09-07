@@ -16,8 +16,8 @@ namespace castor3d
 	namespace
 	{
 		static String const ShadowMapUbo = cuT( "ShadowMap" );
-		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
-		static String const FarPlane = cuT( "c3d_fFarPlane" );
+		static String const WorldLightPosition = cuT( "c3d_worldLightPosition" );
+		static String const FarPlane = cuT( "c3d_farPlane" );
 
 		void doUpdateShadowMatrices( Point3r const & p_position
 			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )
@@ -65,7 +65,7 @@ namespace castor3d
 			, index );
 		doUpdateShadowMatrices( position, m_matrices );
 		m_worldLightPosition.setValue( position );
-		m_farPlane.setValue( 4000.0f );
+		m_farPlane.setValue( m_viewport.getFar() );
 		doUpdate( queues );
 	}
 

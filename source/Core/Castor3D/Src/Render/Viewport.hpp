@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_VIEWPORT_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Design/GroupChangeTracked.hpp"
 
 #include <Math/Angle.hpp>
 #include <Math/PlaneEquation.hpp>
@@ -131,29 +132,38 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The core engine.
-		 *\param[in]	p_type		Projection type.
-		 *\param[in]	p_fovy		Y Field of View.
-		 *\param[in]	p_aspect	Width / Height ratio.
-		 *\param[in]	p_left		Left clipping plane value.
-		 *\param[in]	p_right		Right clipping plane value.
-		 *\param[in]	p_bottom	Bottom clipping plane value.
-		 *\param[in]	p_top		Top clipping plane value.
-		 *\param[in]	p_near		Near clipping plane value.
-		 *\param[in]	p_far		Far clipping plane value.
+		 *\param[in]	type	Projection type.
+		 *\param[in]	fovy	Y Field of View.
+		 *\param[in]	aspect	Width / Height ratio.
+		 *\param[in]	left	Left clipping plane value.
+		 *\param[in]	right	Right clipping plane value.
+		 *\param[in]	bottom	Bottom clipping plane value.
+		 *\param[in]	top		Top clipping plane value.
+		 *\param[in]	near	Near clipping plane value.
+		 *\param[in]	far		Far clipping plane value.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_type		Type de projection.
-		 *\param[in]	p_fovy		Angle de vision Y.
-		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
-		 *\param[in]	p_left		Position du plan gauche.
-		 *\param[in]	p_right		Position du plan droit.
-		 *\param[in]	p_bottom	Position du plan bas.
-		 *\param[in]	p_top		Position du plan haut.
-		 *\param[in]	p_near		Position du plan proche.
-		 *\param[in]	p_far		Position du plan éloigné.
+		 *\param[in]	type	Type de projection.
+		 *\param[in]	fovy	Angle de vision Y.
+		 *\param[in]	aspect	Ratio Largeur / Hauteur.
+		 *\param[in]	left	Position du plan gauche.
+		 *\param[in]	right	Position du plan droit.
+		 *\param[in]	bottom	Position du plan bas.
+		 *\param[in]	top		Position du plan haut.
+		 *\param[in]	near	Position du plan proche.
+		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API Viewport( Engine & engine, ViewportType p_type, castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API Viewport( Engine & engine
+			, ViewportType type
+			, castor::Angle const & fovy
+			, real aspect
+			, real left
+			, real right
+			, real bottom
+			, real top
+			, real near
+			, real far );
 
 	public:
 		/**
@@ -168,39 +178,39 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
-		 *\param[in]	p_rhs	The object to copy.
+		 *\param[in]	rhs	The object to copy.
 		 *\~french
 		 *\brief		Constructeur par copie.
-		 *\param[in]	p_rhs	L'objet à copier.
+		 *\param[in]	rhs	L'objet à copier.
 		 */
-		C3D_API Viewport( Viewport const & p_rhs );
+		C3D_API Viewport( Viewport const & rhs );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
-		 *\param[in]	p_rhs	The object to copy.
+		 *\param[in]	rhs	The object to copy.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	p_rhs	L'objet à copier.
+		 *\param[in]	rhs	L'objet à copier.
 		 */
-		C3D_API Viewport & operator=( Viewport const & p_rhs );
+		C3D_API Viewport & operator=( Viewport const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move constructor.
-		 *\param[in]	p_rhs	The object to move.
+		 *\param[in]	rhs	The object to move.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
-		 *\param[in]	p_rhs	L'objet à déplacer.
+		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		C3D_API Viewport( Viewport && p_rhs ) = default;
+		C3D_API Viewport( Viewport && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
-		 *\param[in]	p_rhs	The object to move.
+		 *\param[in]	rhs	The object to move.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
-		 *\param[in]	p_rhs	L'objet à déplacer.
+		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		C3D_API Viewport & operator=( Viewport && p_rhs ) = default;
+		C3D_API Viewport & operator=( Viewport && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -245,62 +255,69 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Builds a centered perspective viewport.
-		 *\param[in]	p_fovy		Y Field of View.
-		 *\param[in]	p_aspect	Width / Height ratio.
-		 *\param[in]	p_near		Near clipping plane value.
-		 *\param[in]	p_far		Far clipping plane value.
-		 *\return		The viewport.
+		 *\param[in]	fovy	Y Field of View.
+		 *\param[in]	aspect	Width / Height ratio.
+		 *\param[in]	near	Near clipping plane value.
+		 *\param[in]	far		Far clipping plane value.
 		 *\~french
 		 *\brief		Construit vioewport en perspective centrée.
-		 *\param[in]	p_fovy		Angle de vision Y.
-		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
-		 *\param[in]	p_near		Position du plan proche.
-		 *\param[in]	p_far		Position du plan éloigné.
-		 *\return		Le viewport.
+		 *\param[in]	fovy	Angle de vision Y.
+		 *\param[in]	aspect	Ratio Largeur / Hauteur.
+		 *\param[in]	near	Position du plan proche.
+		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API void setPerspective( castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		C3D_API void setPerspective( castor::Angle const & fovy
+			, real aspect
+			, real near
+			, real far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
-		 *\param[in]	p_left		Left clipping plane value.
-		 *\param[in]	p_right		Right clipping plane value.
-		 *\param[in]	p_bottom	Bottom clipping plane value.
-		 *\param[in]	p_top		Top clipping plane value.
-		 *\param[in]	p_near		Near clipping plane value.
-		 *\param[in]	p_far		Far clipping plane value.
-		 *\return		The viewport.
+		 *\param[in]	left	Left clipping plane value.
+		 *\param[in]	right	Right clipping plane value.
+		 *\param[in]	bottom	Bottom clipping plane value.
+		 *\param[in]	top		Top clipping plane value.
+		 *\param[in]	near	Near clipping plane value.
+		 *\param[in]	far		Far clipping plane value.
 		 *\~french
 		 *\brief		Construit une matrice de projection en perspective non centrée.
-		 *\param[in]	p_left		Position du plan gauche.
-		 *\param[in]	p_right		Position du plan droit.
-		 *\param[in]	p_bottom	Position du plan bas.
-		 *\param[in]	p_top		Position du plan haut.
-		 *\param[in]	p_near		Position du plan proche.
-		 *\param[in]	p_far		Position du plan éloigné.
-		 *\return		Le viewport.
+		 *\param[in]	left	Position du plan gauche.
+		 *\param[in]	right	Position du plan droit.
+		 *\param[in]	bottom	Position du plan bas.
+		 *\param[in]	top		Position du plan haut.
+		 *\param[in]	near	Position du plan proche.
+		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API void setFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API void setFrustum( real left
+			, real right
+			, real bottom
+			, real top
+			, real near
+			, real far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets an orthogonal projection.
-		 *\param[in]	p_left		Left clipping plane value.
-		 *\param[in]	p_right		Right clipping plane value.
-		 *\param[in]	p_bottom	Bottom clipping plane value.
-		 *\param[in]	p_top		Top clipping plane value.
-		 *\param[in]	p_near		Near clipping plane value.
-		 *\param[in]	p_far		Far clipping plane value.
-		 *\return		The viewport.
+		 *\param[in]	left	Left clipping plane value.
+		 *\param[in]	right	Right clipping plane value.
+		 *\param[in]	bottom	Bottom clipping plane value.
+		 *\param[in]	top		Top clipping plane value.
+		 *\param[in]	near	Near clipping plane value.
+		 *\param[in]	far		Far clipping plane value.
 		 *\~french
 		 *\brief		Construit une matrice de projection orthographique.
-		 *\param[in]	p_left		Position du plan gauche.
-		 *\param[in]	p_right		Position du plan droit.
-		 *\param[in]	p_bottom	Position du plan bas.
-		 *\param[in]	p_top		Position du plan haut.
-		 *\param[in]	p_near		Position du plan proche.
-		 *\param[in]	p_far		Position du plan éloigné.
-		 *\return		Le viewport.
+		 *\param[in]	left	Position du plan gauche.
+		 *\param[in]	right	Position du plan droit.
+		 *\param[in]	bottom	Position du plan bas.
+		 *\param[in]	top		Position du plan haut.
+		 *\param[in]	near	Position du plan proche.
+		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API void setOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API void setOrtho( real left
+			, real right
+			, real bottom
+			, real top
+			, real near
+			, real far );
 		/**
 		 *\~english
 		 *\return		The viewport render size
@@ -349,7 +366,7 @@ namespace castor3d
 		 */
 		inline real getNear()const
 		{
-			return m_near;
+			return m_near.value();
 		}
 		/**
 		 *\~english
@@ -359,7 +376,7 @@ namespace castor3d
 		 */
 		inline real getFar()const
 		{
-			return m_far;
+			return m_far.value();
 		}
 		/**
 		 *\~english
@@ -369,7 +386,7 @@ namespace castor3d
 		 */
 		inline castor::Angle getFovY()const
 		{
-			return m_fovY;
+			return m_fovY.value();
 		}
 		/**
 		 *\~english
@@ -379,7 +396,7 @@ namespace castor3d
 		 */
 		inline real getLeft()const
 		{
-			return m_left;
+			return m_left.value();
 		}
 		/**
 		 *\~english
@@ -389,7 +406,7 @@ namespace castor3d
 		 */
 		inline real getRight()const
 		{
-			return m_right;
+			return m_right.value();
 		}
 		/**
 		 *\~english
@@ -399,7 +416,7 @@ namespace castor3d
 		 */
 		inline real getTop()const
 		{
-			return m_top;
+			return m_top.value();
 		}
 		/**
 		 *\~english
@@ -409,7 +426,7 @@ namespace castor3d
 		 */
 		inline real getBottom()const
 		{
-			return m_bottom;
+			return m_bottom.value();
 		}
 		/**
 		 *\~english
@@ -454,26 +471,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the viewport render position.
-		 *\param[in]	p_position	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la position de rendu du viewport.
-		 *\param[in]	p_position	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setPosition( const castor::Position & p_position )
+		inline void setPosition( const castor::Position & value )
 		{
-			m_position = p_position;
+			m_position = value;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the viewport render size
-		 *\param[in]	p_size	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit les dimensions de rendu du viewport
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void resize( const castor::Size & p_size )
+		inline void resize( const castor::Size & value )
 		{
-			m_size = p_size;
+			m_size = value;
 		}
 		/**
 		 *\~english
@@ -483,10 +500,9 @@ namespace castor3d
 		 *\brief		Récupère le type de projection du viewport
 		 *\return		La valeur
 		 */
-		inline void updateType( ViewportType p_type )
+		inline void updateType( ViewportType value )
 		{
-			m_modified |= m_type != p_type;
-			m_type = p_type;
+			m_type = value;
 		}
 		/**
 		 *\~english
@@ -496,10 +512,9 @@ namespace castor3d
 		 *\brief		Récupère le ratio d'aspect
 		 *\return		La valeur
 		 */
-		inline void updateRatio( real p_rRatio )
+		inline void updateRatio( real value )
 		{
-			m_modified |= m_ratio != p_rRatio;
-			m_ratio = p_rRatio;
+			m_ratio = value;
 		}
 		/**
 		 *\~english
@@ -509,10 +524,9 @@ namespace castor3d
 		 *\brief		Récupère la position du plan proche
 		 *\return		La valeur
 		 */
-		inline void updateNear( real p_rNear )
+		inline void updateNear( real value )
 		{
-			m_modified |= m_near != p_rNear;
-			m_near = p_rNear;
+			m_near = value;
 		}
 		/**
 		 *\~english
@@ -522,10 +536,9 @@ namespace castor3d
 		 *\brief		Récupère la position du plan lointain
 		 *\return		La valeur
 		 */
-		inline void updateFar( real p_rFar )
+		inline void updateFar( real value )
 		{
-			m_modified |= m_far != p_rFar;
-			m_far = p_rFar;
+			m_far = value;
 		}
 		/**
 		 *\~english
@@ -535,10 +548,9 @@ namespace castor3d
 		 *\brief		Récupère l'angle de vue vertical
 		 *\return		La valeur
 		 */
-		inline void updateFovY( castor::Angle const & p_aFovY )
+		inline void updateFovY( castor::Angle const & value )
 		{
-			m_modified |= m_fovY != p_aFovY;
-			m_fovY = p_aFovY;
+			m_fovY = value;
 		}
 		/**
 		 *\~english
@@ -548,10 +560,9 @@ namespace castor3d
 		 *\brief		Récupère la position du plan gauche
 		 *\return		La valeur
 		 */
-		inline void updateLeft( real p_rLeft )
+		inline void updateLeft( real value )
 		{
-			m_modified |= m_left != p_rLeft;
-			m_left = p_rLeft;
+			m_left = value;
 		}
 		/**
 		 *\~english
@@ -561,10 +572,9 @@ namespace castor3d
 		 *\brief		Récupère la position du plan droit
 		 *\return		La valeur
 		 */
-		inline void updateRight( real p_rRight )
+		inline void updateRight( real value )
 		{
-			m_modified |= m_right != p_rRight;
-			m_right = p_rRight;
+			m_right = value;
 		}
 		/**
 		 *\~english
@@ -574,10 +584,9 @@ namespace castor3d
 		 *\brief		Récupère la position du plan haut
 		 *\return		La valeur
 		 */
-		inline void updateTop( real p_rTop )
+		inline void updateTop( real value )
 		{
-			m_modified |= m_top != p_rTop;
-			m_top = p_rTop;
+			m_top = value;
 		}
 		/**
 		 *\~english
@@ -587,102 +596,122 @@ namespace castor3d
 		 *\brief		Récupère la position du plan bas
 		 *\return		La valeur
 		 */
-		inline void updateBottom( real p_rBottom )
+		inline void updateBottom( real value )
 		{
-			m_modified |= m_bottom != p_rBottom;
-			m_bottom = p_rBottom;
+			m_bottom = value;
 		}
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
-		 *\param[in]	p_fovy		Y Field of View
-		 *\param[in]	p_aspect	Width / Height ratio
-		 *\param[in]	p_near		Near clipping plane value
-		 *\param[in]	p_far		Far clipping plane value
+		 *\param[in]	fovy	Y Field of View
+		 *\param[in]	aspect	Width / Height ratio
+		 *\param[in]	near	Near clipping plane value
+		 *\param[in]	far		Far clipping plane value
 		 *\~french
 		 *\brief		Construit une matrice de projection en perspective centrée
-		 *\param[in]	p_fovy		Angle de vision Y
-		 *\param[in]	p_aspect	Ratio Largeur / Hauteur
-		 *\param[in]	p_near		Position du plan proche
-		 *\param[in]	p_far		Position du plan lointain
+		 *\param[in]	fovy	Angle de vision Y
+		 *\param[in]	aspect	Ratio Largeur / Hauteur
+		 *\param[in]	near	Position du plan proche
+		 *\param[in]	far		Position du plan lointain
 		 */
-		void doComputePerspective( castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		void doComputePerspective( castor::Angle const & fovy
+			, real aspect
+			, real near
+			, real far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
-		 *\param[in]	p_left		Left clipping plane value
-		 *\param[in]	p_right		Right clipping plane value
-		 *\param[in]	p_bottom	Bottom clipping plane value
-		 *\param[in]	p_top		Top clipping plane value
-		 *\param[in]	p_near		Near clipping plane value
-		 *\param[in]	p_far		Far clipping plane value
+		 *\param[in]	left	Left clipping plane value
+		 *\param[in]	right	Right clipping plane value
+		 *\param[in]	bottom	Bottom clipping plane value
+		 *\param[in]	top		Top clipping plane value
+		 *\param[in]	near	Near clipping plane value
+		 *\param[in]	far		Far clipping plane value
 		 *\~french
 		 *\brief		Construit une matrice de projection en perspective non centrée
-		 *\param[in]	p_left		Position du plan gauche
-		 *\param[in]	p_right		Position du plan droit
-		 *\param[in]	p_bottom	Position du plan bas
-		 *\param[in]	p_top		Position du plan haut
-		 *\param[in]	p_near		Position du plan proche
-		 *\param[in]	p_far		Position du plan lointain
+		 *\param[in]	left	Position du plan gauche
+		 *\param[in]	right	Position du plan droit
+		 *\param[in]	bottom	Position du plan bas
+		 *\param[in]	top		Position du plan haut
+		 *\param[in]	near	Position du plan proche
+		 *\param[in]	far		Position du plan lointain
 		 */
-		void doComputeFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		void doComputeFrustum( real left
+			, real right
+			, real bottom
+			, real top
+			, real near
+			, real far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
-		 *\param[in]	p_left		Left clipping plane value
-		 *\param[in]	p_right		Right clipping plane value
-		 *\param[in]	p_bottom	Bottom clipping plane value
-		 *\param[in]	p_top		Top clipping plane value
-		 *\param[in]	p_near		Near clipping plane value
-		 *\param[in]	p_far		Far clipping plane value
+		 *\param[in]	left	Left clipping plane value
+		 *\param[in]	right	Right clipping plane value
+		 *\param[in]	bottom	Bottom clipping plane value
+		 *\param[in]	top		Top clipping plane value
+		 *\param[in]	near	Near clipping plane value
+		 *\param[in]	far		Far clipping plane value
 		 *\~french
 		 *\brief		Construit une matrice de projection orthographique non centrée
-		 *\param[in]	p_left		Position du plan gauche
-		 *\param[in]	p_right		Position du plan droit
-		 *\param[in]	p_bottom	Position du plan bas
-		 *\param[in]	p_top		Position du plan haut
-		 *\param[in]	p_near		Position du plan proche
-		 *\param[in]	p_far		Position du plan lointain
+		 *\param[in]	left	Position du plan gauche
+		 *\param[in]	right	Position du plan droit
+		 *\param[in]	bottom	Position du plan bas
+		 *\param[in]	top		Position du plan haut
+		 *\param[in]	near	Position du plan proche
+		 *\param[in]	far		Position du plan lointain
 		 */
-		void doComputeOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		void doComputeOrtho( real left
+			, real right
+			, real bottom
+			, real top
+			, real near
+			, real far );
 		/**
 		 *\~english
 		 *\brief		Builds a view matrix that looks at a given point.
-		 *\param[in]	p_eye		The eye position.
-		 *\param[in]	p_center	The point to look at.
-		 *\param[in]	p_up		The up direction..
+		 *\param[in]	eye		The eye position.
+		 *\param[in]	center	The point to look at.
+		 *\param[in]	up		The up direction..
 		 *\~french
 		 *\brief		Construit une matrice de vue regardant un point donné.
-		 *\param[in]	p_eye		La position de l'oeil.
-		 *\param[in]	p_center	Le point à regarder.
-		 *\param[in]	p_up		La direction vers le haut.
+		 *\param[in]	eye		La position de l'oeil.
+		 *\param[in]	center	Le point à regarder.
+		 *\param[in]	up		La direction vers le haut.
 		 */
-		void doComputeLookAt( castor::Point3r const & p_eye, castor::Point3r const & p_center, castor::Point3r const & p_up );
+		void doComputeLookAt( castor::Point3r const & eye
+			, castor::Point3r const & center
+			, castor::Point3r const & up );
 
 	private:
+		//!\~english	Tells the view frustum's planes need to be updated.
+		//!\~french		Dit que les plans du frustum de vue doivent être mis à jour
+		bool m_modified;
 		//!\~english	The left viewport plane.
 		//!\~french		Position du plan gauche.
-		real m_left;
+		castor::GroupChangeTracked< real > m_left;
 		//!\~english	The right viewport plane.
 		//!\~french		Position du plan droit
-		real m_right;
+		castor::GroupChangeTracked< real > m_right;
 		//!\~english	The top viewport plane.
 		//!\~french		Position du plan haut
-		real m_top;
+		castor::GroupChangeTracked< real > m_top;
 		//!\~english	The bottom viewport plane.
 		//!\~french		Position du plan bas
-		real m_bottom;
+		castor::GroupChangeTracked< real > m_bottom;
 		//!\~english	The viewport farthest viewable distance.
 		//!\~french		Position du plan lointain
-		real m_far;
+		castor::GroupChangeTracked< real > m_far;
 		//!\~english	The viewport nearest viewable distance.
 		//!\~french		Position du plan proche
-		real m_near;
+		castor::GroupChangeTracked< real > m_near;
 		//!\~english	The viewport vertical FOV.
 		//!\~french		Angle de vue vezrtical
-		castor::Angle m_fovY;
+		castor::GroupChangeTracked< castor::Angle > m_fovY;
+		//!\~english	The display window ratio (4:3, 16:9, ...).
+		//!\~french		Ratio d'affichage
+		castor::GroupChangeTracked< real > m_ratio;
 		//!\~english	The projection type.
 		//!\~french		Type de projection
 		ViewportType m_type;
@@ -692,12 +721,6 @@ namespace castor3d
 		//!\~english	The viewport render position.
 		//!\~french		La position du viewport
 		castor::Position m_position;
-		//!\~english	The display window ratio (4:3, 16:9, ...).
-		//!\~french		Ratio d'affichage
-		real m_ratio;
-		//!\~english	Tells the view frustum's planes need to be updated.
-		//!\~french		Dit que les plans du frustum de vue doivent être mis à jour
-		bool m_modified;
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		castor::Matrix4x4r m_projection;

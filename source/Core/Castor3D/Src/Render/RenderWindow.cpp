@@ -148,6 +148,8 @@ namespace castor3d
 			{
 				context->setCurrent();
 			}
+
+			m_context.reset();
 		}
 	}
 

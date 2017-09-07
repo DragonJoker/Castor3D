@@ -348,6 +348,16 @@ namespace castor3d
 		{
 			//map.get().debugDisplay( size, index++ );
 		}
+
+		index = 0u;
+
+		for ( auto & maps : m_activeShadowMaps )
+		{
+			for ( auto & map : maps )
+			{
+				map.get().debugDisplay( size, index++ );
+			}
+		}
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps()

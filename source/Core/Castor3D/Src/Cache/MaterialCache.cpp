@@ -1,4 +1,4 @@
-﻿#include "MaterialCache.hpp"
+#include "MaterialCache.hpp"
 
 #include "Engine.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
@@ -133,7 +133,7 @@ namespace castor3d
 			result = m_produce( name, type );
 			m_initialise( result );
 			m_elements.insert( name, result );
-			castor::Logger::logInfo( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 		}
 		else
 		{
