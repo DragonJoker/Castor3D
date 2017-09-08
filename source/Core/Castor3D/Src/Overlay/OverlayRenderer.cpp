@@ -660,7 +660,7 @@ namespace castor3d
 			auto c3d_mapOpacity = writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
-			auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -682,7 +682,7 @@ namespace castor3d
 					alpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
 				}
 
-				pxl_v4FragColor = vec4( diffuse.xyz(), alpha );
+				pxl_fragColor = vec4( diffuse.xyz(), alpha );
 			} );
 
 			strPs = writer.finalise();

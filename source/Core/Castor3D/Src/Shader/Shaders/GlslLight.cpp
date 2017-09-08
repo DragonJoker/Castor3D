@@ -130,7 +130,7 @@ namespace castor3d
 
 		Float PointLight::m_farPlane()const
 		{
-			return Int( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
+			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
 		}
 
 		Int PointLight::m_index()const
@@ -182,7 +182,7 @@ namespace castor3d
 
 		Float SpotLight::m_farPlane()const
 		{
-			return Int( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
+			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
 		}
 
 		Vec3 SpotLight::m_direction()const

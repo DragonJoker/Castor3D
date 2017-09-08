@@ -57,12 +57,12 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Writes a LightCategory into a text file.
-			 *\param[in]	p_file	The file.
+			 *\param[in]	file	The file.
 			 *\~french
 			 *\brief		Ecrit une LightCategory dans un fichier texte.
-			 *\param[in]	p_file	Le fichier.
+			 *\param[in]	file	Le fichier.
 			 */
-			C3D_API virtual bool writeInto( castor::TextFile & p_file ) = 0;
+			C3D_API virtual bool writeInto( castor::TextFile & file ) = 0;
 
 		protected:
 			/**
@@ -71,18 +71,18 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a LightCategory into a text file.
-			 *\param[in]	p_file	The file.
-			 *\param[in]	p_light	The LightCategory to save.
+			 *\param[in]	file	The file.
+			 *\param[in]	light	The LightCategory to save.
 			 *\~french
 			 *\brief		Ecrit une LightCategory dans un fichier texte.
-			 *\param[in]	p_file	Le fichier.
-			 *\param[in]	p_light	La LightCategory.
+			 *\param[in]	file	Le fichier.
+			 *\param[in]	light	La LightCategory.
 			 */
-			C3D_API bool operator()( LightCategory const & p_light, castor::TextFile & p_file )override;
+			C3D_API bool operator()( LightCategory const & light, castor::TextFile & file )override;
 		};
 
 	private:
@@ -92,14 +92,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_lightType	The light category type.
-		 *\param[in]	p_light		The parent Light.
+		 *\param[in]	lightType	The light category type.
+		 *\param[in]	light		The parent Light.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_lightType	Le type de catégorie de lumière.
-		 *\param[in]	p_light		La Light parente.
+		 *\param[in]	lightType	Le type de catégorie de lumière.
+		 *\param[in]	light		La Light parente.
 		 */
-		C3D_API explicit LightCategory( LightType p_lightType, Light & p_light );
+		C3D_API explicit LightCategory( LightType lightType, Light & light );
 
 	public:
 		/**
@@ -112,95 +112,93 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Updates the light viewport.
-		 *\param[in]		p_target	The target position, used by directional shadow map.
-		 *\param[in,out]	p_viewport	The viewport to update.
-		 *\param[in]		p_index		The light shadow map index, -1 if it doesn't have any.
+		 *\param[in]		target		The target position, used by directional shadow map.
+		 *\param[in,out]	viewport	The viewport to update.
+		 *\param[in]		index		The light shadow map index, -1 if it doesn't have any.
 		 *\~french
 		 *\brief			Met le viewport de la source à jour.
-		 *\param[in]		p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
-		 *\param[in,out]	p_viewport	Le viewport à mettre à jour.
-		 *\param[in]		p_index		L'indice de la shadow map de la lumière, -1 si elle n'en a pas.
+		 *\param[in]		target		La position de la cible, utilisée pour la map d'ombres des source directionnelles.
+		 *\param[in,out]	viewport	Le viewport à mettre à jour.
+		 *\param[in]		index		L'indice de la shadow map de la lumière, -1 si elle n'en a pas.
 		 */
-		C3D_API virtual void update( castor::Point3r const & p_target
-			, Viewport & p_viewport
-			, int32_t p_index = -1 ) = 0;
+		C3D_API virtual void update( castor::Point3r const & target
+			, Viewport & viewport
+			, int32_t index = -1 ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a LightCategroy specific TextLoader.
-		 *\param[in]	p_tabs	The current indentation level.
+		 *\param[in]	tabs	The current indentation level.
 		 *\return		The TextLoader.
 		 *\~french
 		 *\brief		Crée un TextLoader spécifique à la LightCategory.
-		 *\param[in]	p_tabs	Le niveau d'intentation actuel.
+		 *\param[in]	tabs	Le niveau d'intentation actuel.
 		 *\return		Le TextLoader.
 		 */
-		C3D_API virtual std::unique_ptr< TextWriter > createTextWriter( castor::String const & p_tabs ) = 0;
+		C3D_API virtual std::unique_ptr< TextWriter > createTextWriter( castor::String const & tabs ) = 0;
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
-		 *\param[out]	p_texture	The texture that receives the light's data.
-		 *\param[in]	p_index		The light index.
+		 *\param[out]	texture	The texture that receives the light's data.
+		 *\param[in]	index	The light index.
 		 *\~french
 		 *\brief		Met la lumière dans la texture donnée.
-		 *\param[out]	p_texture	La texture recevant les données de la source lumineuse.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[out]	texture	La texture recevant les données de la source lumineuse.
+		 *\param[in]	index	L'indice de la source lumineuse.
 		 */
-		C3D_API void bind( castor::PxBufferBase & p_texture, uint32_t p_index )const;
+		C3D_API void bind( castor::PxBufferBase & texture, uint32_t index )const;
 		/**
 		 *\~english
-		 *\brief		sets the light's colour.
-		 *\param[in]	p_colour	The new value.
+		 *\brief		Sets the light's colour.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur.
-		 *\param[in]	p_colour	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setColour( castor::Point3f const & p_colour )
+		inline void setColour( castor::Point3f const & value )
 		{
-			m_colour = p_colour;
+			m_colour = value;
 		}
 		/**
 		 *\~english
-		 *\brief		sets the light's intensity values.
-		 *\param[in]	p_intensity	The new values.
+		 *\brief		Sets the light's intensity values.
+		 *\param[in]	value	The new values.
 		 *\~french
 		 *\brief		Définit les valeurs d'intensité.
-		 *\param[in]	p_intensity	Les nouvelles valeurs.
+		 *\param[in]	value	Les nouvelles valeurs.
 		 */
-		inline void setIntensity( castor::Point2f const & p_intensity )
+		inline void setIntensity( castor::Point2f const & value )
 		{
-			m_intensity = p_intensity;
+			m_intensity = value;
 		}
 		/**
 		 *\~english
-		 *\brief		sets the light's diffuse intensity
-		 *\param[in]	p_intensity	The new value
+		 *\brief		Sets the light's diffuse intensity.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit l'intensité diffuse
-		 *\param[in]	p_intensity	La nouvelle valeur
+		 *\brief		Définit l'intensité diffuse.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setDiffuseIntensity( float p_intensity )
+		inline void setDiffuseIntensity( float value )
 		{
-			m_intensity[0] = p_intensity;
+			m_intensity[0] = value;
 		}
 		/**
 		 *\~english
-		 *\brief		sets the light's specular intensity
-		 *\param[in]	p_intensity	The new value
+		 *\brief		Sets the light's specular intensity.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit l'intensité spéculaire
-		 *\param[in]	p_intensity	La nouvelle valeur
+		 *\brief		Définit l'intensité spéculaire.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setSpecularIntensity( float p_intensity )
+		inline void setSpecularIntensity( float value )
 		{
-			m_intensity[1] = p_intensity;
+			m_intensity[1] = value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the light type
-		 *\return		The value
+		 *\return		The light type.
 		 *\~french
-		 *\brief		Récupère le type de lumière
-		 *\return		La valeur
+		 *\return		Le type de lumière.
 		 */
 		inline LightType getLightType()const
 		{
@@ -208,11 +206,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the diffuse colour
-		 *\return		The value
+		 *\return		The diffuse intensity.
 		 *\~french
-		 *\brief		Récupère la couleur diffuse
-		 *\return		La valeur
+		 *\return		L'intensité diffuse.
 		 */
 		inline float getDiffuseIntensity()const
 		{
@@ -220,11 +216,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the specular colour
-		 *\return		The value
+		 *\return		The specular intensity.
 		 *\~french
-		 *\brief		Récupère la couleur spéculaire
-		 *\return		La valeur
+		 *\return		L'intensité spéculaire.
 		 */
 		inline float getSpecularIntensity()const
 		{
@@ -232,9 +226,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The intensity values
+		 *\return		The intensity values.
 		 *\~french
-		 *\return		Les valeurs d'intensité
+		 *\return		Les valeurs d'intensité.
 		 */
 		inline castor::Point2f const & getIntensity()const
 		{
@@ -242,9 +236,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The intensity values
+		 *\return		The intensity values.
 		 *\~french
-		 *\return		Les valeurs d'intensité
+		 *\return		Les valeurs d'intensité.
 		 */
 		inline castor::Point2f & getIntensity()
 		{
@@ -272,24 +266,20 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parent light
-		 *\return		The value
+		 *\return		The parent light.
 		 *\~french
-		 *\brief		Récupère la lumière parente
-		 *\return		La valeur
+		 *\return		La lumière parente.
 		 */
 		inline Light const & getLight()const
 		{
 			return m_light;
 		}
 		/**
-		*\~english
-		*\brief		Retrieves the parent light
-		*\return		The value
-		*\~french
-		*\brief		Récupère la lumière parente
-		*\return		La valeur
-		*/
+		 *\~english
+		 *\return		The parent light.
+		 *\~french
+		 *\return		La lumière parente.
+		 */
 		inline Light & getLight()
 		{
 			return m_light;
@@ -320,144 +310,167 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
-		 *\param[in]	p_component	The PixelComponents.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The PixelComponents offset.
-		 *\param[out]	p_data		The destination buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
-		 *\param[in]	p_component	La composante.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de la composante.
-		 *\param[in]	p_data		Le tampon de destination.
+		 *\param[in]	components	La composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
 		 */
-		void doCopyComponent( castor::Point2f const & p_component
-			, uint32_t p_index
-			, uint32_t & p_offset
-			, castor::PxBufferBase & p_data )const;
+		void doCopyComponent( castor::Point2f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
-		 *\param[in]	p_component	The PixelComponents.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The PixelComponents offset.
-		 *\param[out]	p_data		The destination buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
-		 *\param[in]	p_component	La composante.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de la composante.
-		 *\param[in]	p_data		Le tampon de destination.
+		 *\param[in]	components	La composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
 		 */
-		void doCopyComponent( castor::Point3f const & p_component
-			, uint32_t p_index
-			, uint32_t & p_offset
-			, castor::PxBufferBase & p_data )const;
+		void doCopyComponent( castor::Point3f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
-		 *\param[in]	p_component	The PixelComponents.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The PixelComponents offset.
-		 *\param[out]	p_data		The destination buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	component	The last component.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
-		 *\param[in]	p_component	La composante.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de la composante.
-		 *\param[in]	p_data		Le tampon de destination.
+		 *\param[in]	components	Les composantes.
+		 *\param[in]	component	La dernière composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
 		 */
-		void doCopyComponent( castor::Point4f const & p_component
-			, uint32_t p_index
-			, uint32_t & p_offset
-			, castor::PxBufferBase & p_data )const;
+		void doCopyComponent( castor::Point3f const & components
+			, float component
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
-		 *\param[in]	p_component	The PixelComponents.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The PixelComponents offset.
-		 *\param[out]	p_data		The destination buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
-		 *\param[in]	p_component	La composante.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de la composante.
-		 *\param[in]	p_data		Le tampon de destination.
+		 *\param[in]	components	La composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
 		 */
-		void doCopyComponent( castor::ConstCoords4f const & p_component
-			, uint32_t p_index
-			, uint32_t & p_offset
-			, castor::PxBufferBase & p_data )const;
+		void doCopyComponent( castor::Point4f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
-		 *\param[in]	p_component	The PixelComponents.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The PixelComponents offset.
-		 *\param[out]	p_data		The destination buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
-		 *\param[in]	p_component	La composante.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de la composante.
-		 *\param[in]	p_data		Le tampon de destination.
+		 *\param[in]	components	La composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
 		 */
-		void doCopyComponent( castor::Coords4f const & p_component
-			, uint32_t p_index
-			, uint32_t & p_offset
-			, castor::PxBufferBase & p_data )const;
+		void doCopyComponent( castor::ConstCoords4f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
-		 *\param[in]	p_component	The PixelComponents.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The PixelComponents offset.
-		 *\param[out]	p_data		The destination buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
-		 *\param[in]	p_component	La composante.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de la composante.
-		 *\param[in]	p_data		Le tampon de destination.
+		 *\param[in]	components	La composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
 		 */
-		void doCopyComponent( castor::Matrix4x4f const & p_component
-			, uint32_t p_index
-			, uint32_t & p_offset
-			, castor::PxBufferBase & p_data )const;
+		void doCopyComponent( castor::Coords4f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
-		 *\param[in]	p_component	The PixelComponents.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The PixelComponents offset.
-		 *\param[out]	p_data		The destination buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
-		 *\param[in]	p_component	La composante.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de la composante.
-		 *\param[in]	p_data		Le tampon de destination.
+		 *\param[in]	components	La composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
 		 */
-		void doCopyComponent( int32_t const & p_component
-			, uint32_t p_index
-			, uint32_t & p_offset
-			, castor::PxBufferBase & p_data )const;
+		void doCopyComponent( castor::Matrix4x4f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light PixelComponents values into the buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	components	La composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
+		 */
+		void doCopyComponent( int32_t const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Puts the light source's type specific data into the given texture.
-		 *\param[out]	p_texture	The texture that receives the light's data.
-		 *\param[in]	p_index		The light index.
-		 *\param[in]	p_offset	The starting offset.
+		 *\param[out]	texture	The texture that receives the light's data.
+		 *\param[in]	index	The light index.
+		 *\param[in]	offset	The starting offset.
 		 *\~french
 		 *\brief		Met les informations spécifiques au type de source lumineuse dans la texture donnée.
-		 *\param[out]	p_texture	La texture recevant les données de la source lumineuse.
-		 *\param[in]	p_index		L'indice de la source lumineuse.
-		 *\param[in]	p_offset	Le décalage de début.
+		 *\param[out]	texture	La texture recevant les données de la source lumineuse.
+		 *\param[in]	index	L'indice de la source lumineuse.
+		 *\param[in]	offset	Le décalage de début.
 		 */
-		C3D_API virtual void doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const = 0;
+		C3D_API virtual void doBind( castor::PxBufferBase & texture
+			, uint32_t index
+			, uint32_t & offset )const = 0;
 
 	protected:
 		//!\~english	The cube box for the light volume of effect.

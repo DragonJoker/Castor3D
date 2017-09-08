@@ -48,8 +48,8 @@ namespace castor3d
 		//***********************************************************************************************
 
 		FragmentInput::FragmentInput( GlslWriter & p_writer )
-			: m_vertex{ &p_writer, cuT( "vertex" ) }
-			, m_normal{ &p_writer, cuT( "normal" ) }
+			: m_vertex{ &p_writer, cuT( "inVertex" ) }
+			, m_normal{ &p_writer, cuT( "inNormal" ) }
 		{
 		}
 
@@ -63,8 +63,8 @@ namespace castor3d
 		//***********************************************************************************************
 
 		OutputComponents::OutputComponents( GlslWriter & p_writer )
-			: m_diffuse{ &p_writer, cuT( "diffuse" ) }
-			, m_specular{ &p_writer, cuT( "specular" ) }
+			: m_diffuse{ &p_writer, cuT( "outDiffuse" ) }
+			, m_specular{ &p_writer, cuT( "outSpecular" ) }
 		{
 		}
 
@@ -322,7 +322,9 @@ namespace castor3d
 						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
 						lightReturn.m_position() = v4PosIndex.rgb();
 						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
+						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
+						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
+						lightReturn.m_farPlane() = v4AttFarPlane.a();
 					}
 					else
 					{
@@ -331,7 +333,9 @@ namespace castor3d
 						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
 						lightReturn.m_position() = v4PosIndex.rgb();
 						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
+						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
+						lightReturn.m_farPlane() = v4AttFarPlane.a();
 					}
 				}
 				else
@@ -345,7 +349,9 @@ namespace castor3d
 					lightReturn.m_position() = v4PosIndex.rgb();
 					lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
 					offset += mult;
-					lightReturn.m_attenuation() = texture( c3d_sLights, factor + offset + decal ).rgb();
+					auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
+					lightReturn.m_attenuation() = v4AttFarPlane.rgb();
+					lightReturn.m_farPlane() = v4AttFarPlane.a();
 					offset += mult;
 				}
 
@@ -370,7 +376,9 @@ namespace castor3d
 						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
 						lightReturn.m_position() = v4PosIndex.rgb();
 						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
+						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
+						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
+						lightReturn.m_farPlane() = v4AttFarPlane.a();
 						lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
 						auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++ ).rg() );
 						lightReturn.m_exponent() = v2Spot.x();
@@ -388,7 +396,9 @@ namespace castor3d
 						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
 						lightReturn.m_position() = v4PosIndex.rgb();
 						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
+						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
+						lightReturn.m_farPlane() = v4AttFarPlane.a();
 						lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
 						auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
 						lightReturn.m_exponent() = v2Spot.x();
@@ -412,7 +422,9 @@ namespace castor3d
 					lightReturn.m_position() = v4PosIndex.rgb();
 					lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
 					offset += mult;
-					lightReturn.m_attenuation() = texture( c3d_sLights, factor + offset + decal ).rgb();
+					auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
+					lightReturn.m_attenuation() = v4AttFarPlane.rgb();
+					lightReturn.m_farPlane() = v4AttFarPlane.a();
 					offset += mult;
 					lightReturn.m_direction() = normalize( texture( c3d_sLights, factor + offset + decal ).rgb() );
 					offset += mult;
