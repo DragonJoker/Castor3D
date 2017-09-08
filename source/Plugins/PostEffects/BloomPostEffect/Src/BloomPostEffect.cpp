@@ -70,21 +70,21 @@ namespace Bloom
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				pxl_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
-				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_v4FragColor.r(), pxl_v4FragColor.g() ) );
-				maxComponent = glsl::max( maxComponent, pxl_v4FragColor.b() );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
+				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_fragColor.r(), pxl_fragColor.g() ) );
+				maxComponent = glsl::max( maxComponent, pxl_fragColor.b() );
 
 				IF( writer, maxComponent > 1.0_f )
 				{
-					pxl_v4FragColor.xyz() /= maxComponent;
+					pxl_fragColor.xyz() /= maxComponent;
 				}
 				ELSE
 				{
-					pxl_v4FragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );

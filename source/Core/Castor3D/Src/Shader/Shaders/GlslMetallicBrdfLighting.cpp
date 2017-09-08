@@ -18,30 +18,30 @@ namespace castor3d
 		{
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeCombinedLighting( Vec3 const & worldEye
+		void MetallicBrdfLightingModel::computeCombinedLighting( Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & parentOutput )
 		{
 			auto c3d_lightsCount = m_writer.getBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
 			auto begin = m_writer.declLocale( cuT( "begin" )
 				, 0_i );
 			auto end = m_writer.declLocale( cuT( "end" )
 				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
-			auto result = m_writer.declLocale( cuT( "result" )
-				, vec3( 0.0_f ) );
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				result += computeDirectionalLight( getDirectionalLight( i )
+				computeDirectionalLight( getDirectionalLight( i )
 					, worldEye
 					, albedo
 					, metallic
 					, roughness
 					, receivesShadows
-					, fragmentIn );
+					, fragmentIn
+					, parentOutput );
 			}
 			ROF;
 
@@ -50,13 +50,14 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				result += computePointLight( getPointLight( i )
+				computePointLight( getPointLight( i )
 					, worldEye
 					, albedo
 					, metallic
 					, roughness
 					, receivesShadows
-					, fragmentIn );
+					, fragmentIn
+					, parentOutput );
 			}
 			ROF;
 
@@ -65,119 +66,136 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				result += computeSpotLight( getSpotLight( i )
+				computeSpotLight( getSpotLight( i )
 					, worldEye
 					, albedo
 					, metallic
 					, roughness
 					, receivesShadows
-					, fragmentIn );
+					, fragmentIn
+					, parentOutput );
 			}
 			ROF;
-
-			return result;
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeDirectionalLight( DirectionalLight const & light
+		void MetallicBrdfLightingModel::computeDirectionalLight( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & parentOutput )
 		{
-			return m_computeDirectional( DirectionalLight{ light }
+			m_writer << m_computeDirectional( DirectionalLight{ light }
 				, worldEye
 				, albedo
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, FragmentInput{ fragmentIn }
+				, parentOutput );
+			m_writer << Endi();
 		}
 
-		Vec3 MetallicBrdfLightingModel::computePointLight( PointLight const & light
+		void MetallicBrdfLightingModel::computePointLight( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & parentOutput )
 		{
-			return m_computePoint( PointLight{ light }
+			m_writer << m_computePoint( PointLight{ light }
 				, worldEye
 				, albedo
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, FragmentInput{ fragmentIn }
+				, parentOutput );
+			m_writer << Endi();
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeSpotLight( SpotLight const & light
+		void MetallicBrdfLightingModel::computeSpotLight( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & parentOutput )
 		{
-			return m_computeSpot( SpotLight{ light }
+			m_writer << m_computeSpot( SpotLight{ light }
 				, worldEye
 				, albedo
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, FragmentInput{ fragmentIn }
+				, parentOutput );
+			m_writer << Endi();
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeOneDirectionalLight( DirectionalLight const & light
+		void MetallicBrdfLightingModel::computeOneDirectionalLight( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & parentOutput )
 		{
-			return m_computeOneDirectional( DirectionalLight{ light }
+			m_writer << m_computeOneDirectional( DirectionalLight{ light }
 				, worldEye
 				, albedo
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, FragmentInput{ fragmentIn }
+				, parentOutput );
+			m_writer << Endi();
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeOnePointLight( PointLight const & light
+		void MetallicBrdfLightingModel::computeOnePointLight( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & parentOutput )
 		{
-			return m_computeOnePoint( PointLight{ light }
+			m_writer << m_computeOnePoint( PointLight{ light }
 				, worldEye
 				, albedo
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, FragmentInput{ fragmentIn }
+				, parentOutput );
+			m_writer << Endi();
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeOneSpotLight( SpotLight const & light
+		void MetallicBrdfLightingModel::computeOneSpotLight( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & parentOutput )
 		{
-			return m_computeOneSpot( SpotLight{ light }
+			m_writer << m_computeOneSpot( SpotLight{ light }
 				, worldEye
 				, albedo
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, FragmentInput{ fragmentIn }
+				, parentOutput );
+			m_writer << Endi();
 		}
 
 		void MetallicBrdfLightingModel::doDeclareModel()
@@ -191,15 +209,21 @@ namespace castor3d
 		void MetallicBrdfLightingModel::doDeclareComputeDirectionalLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeDirectional = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLight" )
+			m_computeDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
 				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 						, normalize( -light.m_direction().xyz() ) );
@@ -215,14 +239,17 @@ namespace castor3d
 								, fragmentIn.m_normal ) );
 					}
 
-					m_writer.returnStmt( doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase()
 						, worldEye
 						, lightDirection
 						, albedo
 						, metallic
 						, roughness
 						, shadowFactor
-						, fragmentIn ) );
+						, fragmentIn
+						, output );
+					parentOutput.m_diffuse += output.m_diffuse;
+					parentOutput.m_specular += output.m_specular;
 				}
 				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -230,21 +257,28 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "metallic" ) )
 				, InFloat( &m_writer, cuT( "roughness" ) )
 				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer } );
+				, FragmentInput{ m_writer }
+				, output );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareComputePointLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computePoint = m_writer.implementFunction< Vec3 >( cuT( "computePointLight" )
+			m_computePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
 				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, light.m_position().xyz() - fragmentIn.m_vertex );
@@ -265,18 +299,19 @@ namespace castor3d
 								, light.m_index() ) );
 					}
 
-					auto result = m_writer.declLocale( cuT( "result" )
-						, doComputeLight( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, albedo
-							, metallic
-							, roughness
-							, shadowFactor
-							, fragmentIn ) );
+					doComputeLight( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, albedo
+						, metallic
+						, roughness
+						, shadowFactor
+						, fragmentIn
+						, output );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 						, light.m_attenuation().x() + light.m_attenuation().y() * distance + light.m_attenuation().z() * distance * distance );
-					m_writer.returnStmt( result / attenuation );
+					parentOutput.m_diffuse += output.m_diffuse / attenuation;
+					parentOutput.m_specular += output.m_specular / attenuation;
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -284,21 +319,28 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "metallic" ) )
 				, InFloat( &m_writer, cuT( "roughness" ) )
 				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer } );
+				, FragmentInput{ m_writer }
+				, output );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareComputeSpotLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeSpot = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLight" )
+			m_computeSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
 				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, light.m_position().xyz() - fragmentIn.m_vertex );
@@ -308,8 +350,6 @@ namespace castor3d
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
 						, dot( lightDirection, -light.m_direction() ) );
-					auto result = m_writer.declLocale( cuT( "result" )
-						, vec3( 0.0_f ) );
 
 					IF( m_writer, spotFactor > light.m_cutOff() )
 					{
@@ -325,25 +365,24 @@ namespace castor3d
 									, light.m_index() ) );
 						}
 
-						result = doComputeLight( light.m_lightBase()
+						doComputeLight( light.m_lightBase()
 							, worldEye
 							, lightDirection
 							, albedo
 							, metallic
 							, roughness
 							, shadowFactor
-							, fragmentIn );
+							, fragmentIn
+							, output );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 							, light.m_attenuation().x()
 							+ light.m_attenuation().y() * distance
 							+ light.m_attenuation().z() * distance * distance );
 						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
-
-						result = spotFactor * result / attenuation;
+						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
+						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 					}
 					FI;
-
-					m_writer.returnStmt( result );
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -351,21 +390,28 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "metallic" ) )
 				, InFloat( &m_writer, cuT( "roughness" ) )
 				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer } );
+				, FragmentInput{ m_writer }
+				, output );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareComputeOneDirectionalLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeOneDirectional = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLight" )
+			m_computeOneDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
 				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
 						, normalize( -light.m_direction().xyz() ) );
@@ -381,14 +427,17 @@ namespace castor3d
 								, fragmentIn.m_normal ) );
 					}
 
-					m_writer.returnStmt( doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase()
 						, worldEye
 						, lightDirection
 						, albedo
 						, metallic
 						, roughness
 						, shadowFactor
-						, fragmentIn ) );
+						, fragmentIn
+						, output );
+					parentOutput.m_diffuse += output.m_diffuse;
+					parentOutput.m_specular += output.m_specular;
 				}
 				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -396,21 +445,28 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "metallic" ) )
 				, InFloat( &m_writer, cuT( "roughness" ) )
 				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer } );
+				, FragmentInput{ m_writer }
+				, output );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareComputeOnePointLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeOnePoint = m_writer.implementFunction< Vec3 >( cuT( "computePointLight" )
+			m_computeOnePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
 				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, light.m_position().xyz() - fragmentIn.m_vertex );
@@ -430,20 +486,21 @@ namespace castor3d
 								, light.m_farPlane() ) );
 					}
 
-					auto result = m_writer.declLocale( cuT( "result" )
-						, doComputeLight( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, albedo
-							, metallic
-							, roughness
-							, shadowFactor
-							, fragmentIn ) );
+					doComputeLight( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, albedo
+						, metallic
+						, roughness
+						, shadowFactor
+						, fragmentIn
+						, output );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 						, light.m_attenuation().x()
 						+ light.m_attenuation().y() * distance
 						+ light.m_attenuation().z() * distance * distance );
-					m_writer.returnStmt( result / attenuation );
+					parentOutput.m_diffuse += output.m_diffuse / attenuation;
+					parentOutput.m_specular += output.m_specular / attenuation;
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -451,21 +508,28 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "metallic" ) )
 				, InFloat( &m_writer, cuT( "roughness" ) )
 				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer } );
+				, FragmentInput{ m_writer }
+				, output );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareComputeOneSpotLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeOneSpot = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLight" )
+			m_computeOneSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
 				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
 						, light.m_position().xyz() - fragmentIn.m_vertex );
@@ -475,8 +539,6 @@ namespace castor3d
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
 						, dot( lightDirection, -light.m_direction() ) );
-					auto result = m_writer.declLocale( cuT( "result" )
-						, vec3( 0.0_f ) );
 
 					IF( m_writer, spotFactor > light.m_cutOff() )
 					{
@@ -491,24 +553,24 @@ namespace castor3d
 									, fragmentIn.m_normal ) );
 						}
 
-						result = doComputeLight( light.m_lightBase()
+						doComputeLight( light.m_lightBase()
 							, worldEye
 							, lightDirection
 							, albedo
 							, metallic
 							, roughness
 							, shadowFactor
-							, fragmentIn );
+							, fragmentIn
+							, output );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 							, light.m_attenuation().x()
 							+ light.m_attenuation().y() * distance
 							+ light.m_attenuation().z() * distance * distance );
 						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
-						result = spotFactor * result / attenuation;
+						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
+						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 					}
 					FI;
-
-					m_writer.returnStmt( result );
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -516,12 +578,14 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "metallic" ) )
 				, InFloat( &m_writer, cuT( "roughness" ) )
 				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer } );
+				, FragmentInput{ m_writer }
+				, output );
 		}
 	
 		void MetallicBrdfLightingModel::doDeclareComputeLight()
 		{
-			m_computeLight = m_writer.implementFunction< Vec3 >( cuT( "doComputeLight" )
+			OutputComponents output{ m_writer };
+			m_computeLight = m_writer.implementFunction< Void >( cuT( "doComputeLight" )
 				, [this]( Light const & light
 					, Vec3 const & worldEye
 					, Vec3 const & direction
@@ -529,7 +593,8 @@ namespace castor3d
 					, Float const & metallic
 					, Float const & roughness
 					, Float const & shadowFactor
-					, FragmentInput const & fragmentIn )
+					, FragmentInput const & fragmentIn
+					, OutputComponents & output )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
@@ -578,7 +643,8 @@ namespace castor3d
 
 					kD *= 1.0_f - metallic;
 
-					m_writer.returnStmt( shadowFactor * m_writer.paren( m_writer.paren( kD * albedo / PI + specReflectance ) * radiance * NdotL ) );
+					output.m_diffuse = shadowFactor * m_writer.paren( m_writer.paren( kD * albedo / PI ) * radiance * NdotL );
+					output.m_specular = shadowFactor * m_writer.paren( specReflectance * radiance * NdotL );
 				}
 				, InLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -587,7 +653,8 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "metallic" ) )
 				, InFloat( &m_writer, cuT( "roughness" ) )
 				, InFloat( &m_writer, cuT( "shadowFactor" ) )
-				, FragmentInput{ m_writer } );
+				, FragmentInput{ m_writer }
+				, output );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareDistribution()
@@ -673,23 +740,26 @@ namespace castor3d
 				, InVec3( &m_writer, cuT( "f0" ) ) );
 		}
 	
-		Vec3 MetallicBrdfLightingModel::doComputeLight( Light const & light
+		void MetallicBrdfLightingModel::doComputeLight( Light const & light
 			, Vec3 const & worldEye
 			, Vec3 const & direction
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, Float const & shadowFactor
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output )
 		{
-			return m_computeLight( light
+			m_writer << m_computeLight( light
 				, worldEye
 				, direction
 				, albedo
 				, metallic
 				, roughness
 				, shadowFactor
-				, FragmentInput{ fragmentIn } );
+				, FragmentInput{ fragmentIn }
+				, output );
+			m_writer << Endi();
 		}
 
 		//***********************************************************************************************

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -96,13 +96,23 @@ namespace castor3d
 			, RenderInfo & info );
 		/**
 		 *\~english
-		 *\return		The light pass result.
+		 *\return		The light pass diffuse result.
 		 *\~french
-		 *\return		Le résultat de la passe d'éclairage.
+		 *\return		Le résultat diffus de la passe d'éclairage.
 		 */
-		inline TextureUnit const & getResult()const
+		inline TextureUnit const & getDiffuse()const
 		{
-			return m_result;
+			return m_diffuse;
+		}
+		/**
+		 *\~english
+		 *\return		The light pass specular result.
+		 *\~french
+		 *\return		Le résultat spéculaire de la passe d'éclairage.
+		 */
+		inline TextureUnit const & getSpecular()const
+		{
+			return m_specular;
 		}
 
 	private:
@@ -130,15 +140,21 @@ namespace castor3d
 
 	private:
 		castor::Size const m_size;
-		//!\~english	The light pass output.
-		//!\~french		La sortie de la passe de lumières.
-		TextureUnit m_result;
+		//!\~english	The lighting pass diffuse result.
+		//!\~french		L'éclairage diffus de la passe d'éclairage.
+		TextureUnit m_diffuse;
+		//!\~english	The lighting pass specular result.
+		//!\~french		L'éclairage spéculaire de la passe d'éclairage.
+		TextureUnit m_specular;
 		//!\~english	The target FBO.
 		//!\~french		Le FBO cible.
 		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attachments between textures and deferred shading frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		TextureAttachmentSPtr m_resultAttach;
+		//!\~english	The attachment between diffuse result and the frame buffer.
+		//!\~french		L'attache entre le résultat diffus et le tampon d'images.
+		TextureAttachmentSPtr m_diffuseAttach;
+		//!\~english	The attachment between specular result and the frame buffer.
+		//!\~french		L'attache entre le résultat spéculaire et le tampon d'images.
+		TextureAttachmentSPtr m_specularAttach;
 		//!\~english	The light passes.
 		//!\~french		Les passes de lumière.
 		LightPasses m_lightPass;

@@ -125,7 +125,8 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
 			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 			auto c3d_mapSsao = writer.declUniform< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao );
-			auto c3d_mapPostLight = writer.declUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
+			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
+			auto c3d_mapLightSpecular = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightSpecular" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			glsl::Utils utils{ writer };
@@ -144,8 +145,10 @@ namespace castor3d
 				{
 					auto ambient = writer.declLocale( cuT( "ambient" )
 						, c3d_ambientLight.xyz() );
-					auto postLight = writer.declLocale( cuT( "light" )
-						, texture( c3d_mapPostLight, vtx_texture ).xyz() );
+					auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
+						, texture( c3d_mapLightDiffuse, vtx_texture ).xyz() );
+					auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
+						, texture( c3d_mapLightSpecular, vtx_texture ).xyz() );
 					auto data1 = writer.declLocale( cuT( "data1" )
 						, texture( c3d_mapData1, vtx_texture ) );
 					auto data4 = writer.declLocale( cuT( "data4" )
@@ -192,7 +195,7 @@ namespace castor3d
 						}
 
 						ambient *= diffuse;
-						diffuse = postLight;
+						diffuse = lightDiffuse;
 					}
 					FI;
 
@@ -215,7 +218,7 @@ namespace castor3d
 					}
 					FI;
 
-					pxl_fragColor = vec4( diffuse + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0 );
 
 					if ( fogType != FogType::eDisabled )
 					{
@@ -246,7 +249,8 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
 			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
 			auto c3d_mapSsao = writer.declUniform< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao );
-			auto c3d_mapPostLight = writer.declUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
+			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
+			auto c3d_mapLightSpecular = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightSpecular" ) );
 			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance );
 			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
 			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
@@ -268,8 +272,10 @@ namespace castor3d
 				{
 					auto ambient = writer.declLocale( cuT( "ambient" )
 						, vec3( 0.0_f ) );
-					auto light = writer.declLocale( cuT( "light" )
-						, texture( c3d_mapPostLight, vtx_texture ).xyz() );
+					auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
+						, texture( c3d_mapLightDiffuse, vtx_texture ).xyz() );
+					auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
+						, texture( c3d_mapLightSpecular, vtx_texture ).xyz() );
 					auto data1 = writer.declLocale( cuT( "data1" )
 						, texture( c3d_mapData1, vtx_texture ) );
 					auto data4 = writer.declLocale( cuT( "data4" )
@@ -343,7 +349,7 @@ namespace castor3d
 					}
 					FI;
 
-					pxl_fragColor = vec4( light + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( lightDiffuse + lightSpecular + emissive + ambient, 1.0 );
 
 					if ( fogType != FogType::eDisabled )
 					{
@@ -369,26 +375,28 @@ namespace castor3d
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
 
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapReflection" ), ShaderType::ePixel )->setValue( 0u );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapRefraction" ), ShaderType::ePixel )->setValue( 1u );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( 2u );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 ), ShaderType::ePixel )->setValue( 3u );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData2 ), ShaderType::ePixel )->setValue( 4u );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData3 ), ShaderType::ePixel )->setValue( 5u );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 ), ShaderType::ePixel )->setValue( 6u );
+			auto index = 0u;
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapReflection" ), ShaderType::ePixel )->setValue( index++ );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapRefraction" ), ShaderType::ePixel )->setValue( index++ );
+			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( index++ );
+			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 ), ShaderType::ePixel )->setValue( index++ );
+			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData2 ), ShaderType::ePixel )->setValue( index++ );
+			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData3 ), ShaderType::ePixel )->setValue( index++ );
+			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 ), ShaderType::ePixel )->setValue( index++ );
 
 			if ( hasSsao )
 			{
-				program->createUniform< UniformType::eSampler >( cuT( "c3d_mapSsao" ), ShaderType::ePixel )->setValue( 7u );
+				program->createUniform< UniformType::eSampler >( cuT( "c3d_mapSsao" ), ShaderType::ePixel )->setValue( index++ );
 			}
 
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->setValue( 8u );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapLightDiffuse" ), ShaderType::ePixel )->setValue( index++ );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapLightSpecular" ), ShaderType::ePixel )->setValue( index++ );
 
 			if ( isPbr )
 			{
-				program->createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel )->setValue( 9u );
-				program->createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel )->setValue( 10u );
-				program->createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->setValue( 11u );
+				program->createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel )->setValue( index++ );
+				program->createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel )->setValue( index++ );
+				program->createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->setValue( index++ );
 			}
 
 			program->setSource( ShaderType::eVertex, vtx );
@@ -497,7 +505,8 @@ namespace castor3d
 	}
 
 	void CombinePass::render( GeometryPassResult const & gp
-		, TextureUnit const & light
+		, TextureUnit const & lightDiffuse
+		, TextureUnit const & lightSpecular
 		, TextureUnit const & reflection
 		, TextureUnit const & refraction
 		, Fog const & fog
@@ -545,20 +554,26 @@ namespace castor3d
 		{
 			ssao->getSampler()->bind( index );
 			ssao->getTexture()->bind( index );
+			++index;
 		}
 
+		lightDiffuse.getTexture()->bind( index );
+		lightDiffuse.getSampler()->bind( index );
 		++index;
-		light.getTexture()->bind( index );
-		light.getSampler()->bind( index );
+		lightSpecular.getTexture()->bind( index );
+		lightSpecular.getSampler()->bind( index );
 
 		m_programs[size_t( fog.getType() )].render( *m_vertexBuffer );
 
-		light.getTexture()->unbind( index );
-		light.getSampler()->unbind( index );
+		lightSpecular.getTexture()->unbind( index );
+		lightSpecular.getSampler()->unbind( index );
 		--index;
+		lightDiffuse.getTexture()->unbind( index );
+		lightDiffuse.getSampler()->unbind( index );
 
 		if ( m_ssaoEnabled )
 		{
+			--index;
 			ssao->getSampler()->unbind( index );
 			ssao->getTexture()->unbind( index );
 		}
@@ -590,7 +605,8 @@ namespace castor3d
 	}
 
 	void CombinePass::render( GeometryPassResult const & gp
-		, TextureUnit const & light
+		, TextureUnit const & lightDiffuse
+		, TextureUnit const & lightSpecular
 		, TextureUnit const & reflection
 		, TextureUnit const & refraction
 		, IblTextures const & ibl
@@ -638,11 +654,14 @@ namespace castor3d
 		{
 			ssao->getSampler()->bind( index );
 			ssao->getTexture()->bind( index );
+			++index;
 		}
 
+		lightDiffuse.getTexture()->bind( index );
+		lightDiffuse.getSampler()->bind( index );
 		++index;
-		light.getTexture()->bind( index );
-		light.getSampler()->bind( index );
+		lightSpecular.getTexture()->bind( index );
+		lightSpecular.getSampler()->bind( index );
 		++index;
 		ibl.getIrradiance().getTexture()->bind( index );
 		ibl.getIrradiance().getSampler()->bind( index );
@@ -664,12 +683,15 @@ namespace castor3d
 		ibl.getIrradiance().getSampler()->unbind( index );
 		ibl.getIrradiance().getTexture()->unbind( index );
 		--index;
-		light.getSampler()->unbind( index );
-		light.getTexture()->unbind( index );
+		lightSpecular.getSampler()->unbind( index );
+		lightSpecular.getTexture()->unbind( index );
 		--index;
+		lightDiffuse.getSampler()->unbind( index );
+		lightDiffuse.getTexture()->unbind( index );
 
 		if ( m_ssaoEnabled )
 		{
+			--index;
 			ssao->getSampler()->unbind( index );
 			ssao->getTexture()->unbind( index );
 		}

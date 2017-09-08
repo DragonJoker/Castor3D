@@ -1,4 +1,4 @@
-﻿#include "PointLight.hpp"
+#include "PointLight.hpp"
 
 #include "Render/Viewport.hpp"
 #include "Technique/Opaque/LightPass.hpp"
@@ -53,6 +53,7 @@ namespace castor3d
 
 	PointLight::PointLight( Light & p_light )
 		: LightCategory{ LightType::ePoint, p_light }
+		, m_farPlane{ 1.0f }
 	{
 	}
 
@@ -175,7 +176,7 @@ namespace castor3d
 		auto pos = getLight().getParent()->getDerivedPosition();
 		Point4r position{ pos[0], pos[1], pos[2], float( m_shadowMapIndex ) };
 		doCopyComponent( position, p_index, p_offset, p_texture );
-		doCopyComponent( m_attenuation, p_index, p_offset, p_texture );
+		doCopyComponent( m_attenuation, m_farPlane, p_index, p_offset, p_texture );
 	}
 
 	void PointLight::setAttenuation( Point3f const & p_attenuation )

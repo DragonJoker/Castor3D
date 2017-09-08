@@ -535,7 +535,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs
-		auto pxl_v4FragColor( writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -560,7 +560,7 @@ namespace castor3d
 					, *materials );
 			}
 
-			pxl_v4FragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );
+			pxl_fragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );
 		} );
 
 		return writer.finalise();

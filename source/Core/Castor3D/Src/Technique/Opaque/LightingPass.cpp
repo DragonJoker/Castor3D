@@ -34,6 +34,28 @@ using namespace castor3d;
 
 namespace castor3d
 {
+	namespace
+	{
+		TextureUnit doCreateTexture( Engine & engine
+			, Size const & size
+			, uint32_t index )
+		{
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite
+				, PixelFormat::eRGB16F32F
+				, size );
+			texture->getImage().initialiseSource();
+
+			TextureUnit result{ engine };
+			result.setIndex( index );
+			result.setTexture( texture );
+			result.setSampler( engine.getLightsSampler() );
+			result.initialise();
+			return result;
+		}
+	}
+
 	LightingPass::LightingPass( Engine & engine
 		, Size const & size
 		, Scene const & scene
@@ -42,7 +64,8 @@ namespace castor3d
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo )
 		: m_size{ size }
-		, m_result{ engine }
+		, m_diffuse{ doCreateTexture( engine, size, 0u ) }
+		, m_specular{ doCreateTexture( engine, size, 1u ) }
 		, m_frameBuffer{ engine.getRenderSystem()->createFrameBuffer() }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Lighting" ) ) }
 	{
@@ -51,24 +74,18 @@ namespace castor3d
 
 		if ( result )
 		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eRGBA16F32F
-				, size );
-			texture->getImage().initialiseSource();
-
-			m_result.setIndex( 0u );
-			m_result.setTexture( texture );
-			m_result.setSampler( engine.getLightsSampler() );
-			m_result.initialise();
-
-			m_resultAttach = m_frameBuffer->createAttachment( texture );
+			m_diffuseAttach = m_frameBuffer->createAttachment( m_diffuse.getTexture() );
+			m_specularAttach = m_frameBuffer->createAttachment( m_specular.getTexture() );
 
 			m_frameBuffer->bind();
 			m_frameBuffer->attach( AttachmentPoint::eColour
-				, m_resultAttach
-				, texture->getType() );
+				, 0u
+				, m_diffuseAttach
+				, TextureType::eTwoDimensions );
+			m_frameBuffer->attach( AttachmentPoint::eColour
+				, 1u
+				, m_specularAttach
+				, TextureType::eTwoDimensions );
 			ENSURE( m_frameBuffer->isComplete() );
 			m_frameBuffer->setDrawBuffers();
 			m_frameBuffer->unbind();
@@ -119,8 +136,10 @@ namespace castor3d
 		m_frameBuffer->detachAll();
 		m_frameBuffer->unbind();
 		m_frameBuffer->cleanup();
-		m_resultAttach.reset();
-		m_result.cleanup();
+		m_diffuseAttach.reset();
+		m_specularAttach.reset();
+		m_diffuse.cleanup();
+		m_specular.cleanup();
 
 		for ( auto & lightPass : m_lightPass )
 		{

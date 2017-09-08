@@ -415,89 +415,108 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto v3Normal = writer.declLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
-			auto v3Ambient = writer.declLocale( cuT( "v3Ambient" ), c3d_ambientLight.xyz() );
-			auto v3Diffuse = writer.declLocale( cuT( "v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-			auto v3Specular = writer.declLocale( cuT( "v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto fMatShininess = writer.declLocale( cuT( "fMatShininess" ), materials.getShininess( vtx_material ) );
-			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
-			auto diffuse = writer.declLocale( cuT( "diffuse" ), utils.removeGamma(gamma, materials.getDiffuse( vtx_material ) ) );
-			auto emissive = writer.declLocale( cuT( "emissive" ), diffuse * materials.getEmissive( vtx_material ) );
-			auto worldEye = writer.declLocale( cuT( "worldEye" ), vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
-			auto envAmbient = writer.declLocale( cuT( "envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
-			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
-			auto texCoord = writer.declLocale( cuT( "texCoord" ), vtx_texture );
+			auto normal = writer.declLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto ambient = writer.declLocale( cuT( "ambient" )
+				, c3d_ambientLight.xyz() );
+			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
+				, materials.getSpecular( vtx_material ) );
+			auto matShininess = writer.declLocale( cuT( "matShininess" )
+				, materials.getShininess( vtx_material ) );
+			auto matGamma = writer.declLocale( cuT( "matGamma" )
+				, materials.getGamma( vtx_material ) );
+			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
+				, utils.removeGamma( matGamma, materials.getDiffuse( vtx_material ) ) );
+			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
+				, matDiffuse * materials.getEmissive( vtx_material ) );
+			auto worldEye = writer.declLocale( cuT( "worldEye" )
+				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
+			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
+				, vec3( 1.0_f ) );
+			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" )
+				, vec3( 1.0_f ) );
+			auto texCoord = writer.declLocale( cuT( "texCoord" )
+				, vtx_texture );
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = -writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
 			shader::legacy::computePreLightingMapContributions( writer
-				, v3Normal
-				, fMatShininess
+				, normal
+				, matShininess
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			shader::OutputComponents output{ v3Diffuse, v3Specular };
-			lighting->computeCombinedLighting( worldEye
-				, fMatShininess
-				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_position, v3Normal )
-				, output );
 			shader::legacy::computePostLightingMapContributions( writer
-				, diffuse
-				, v3Specular
-				, emissive
-				, gamma
+				, matDiffuse
+				, matSpecular
+				, matEmissive
+				, matGamma
 				, textureFlags
 				, programFlags
 				, sceneFlags );
+			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
+				, vec3( 0.0_f ) );
+			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
+				, vec3( 0.0_f ) );
+			shader::OutputComponents output{ lightDiffuse, lightSpecular };
+			lighting->computeCombinedLighting( worldEye
+				, matShininess
+				, c3d_shadowReceiver
+				, shader::FragmentInput( vtx_position, normal )
+				, output );
 
 			auto colour = writer.declLocale< Vec4 >( cuT( "colour" ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
-				auto incident = writer.declLocale( cuT( "i" ), normalize( vtx_position - c3d_cameraPosition ) );
-				auto reflectedColour = writer.declLocale( cuT( "reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
-				auto refractedColour = writer.declLocale( cuT( "refractedColour" ), diffuse / 2.0 );
+				auto incident = writer.declLocale( cuT( "i" )
+					, normalize( vtx_position - c3d_cameraPosition ) );
+				auto reflectedColour = writer.declLocale( cuT( "reflectedColour" )
+					, vec3( 0.0_f, 0, 0 ) );
+				auto refractedColour = writer.declLocale( cuT( "refractedColour" )
+					, matDiffuse / 2.0 );
 
 				if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
 				{
 					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, v3Normal ) );
+						, reflect( incident, normal ) );
 					reflectedColour = texture( c3d_mapEnvironment, reflected ).xyz() * length( pxl_v4Accumulation.xyz() );
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
 					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, v3Normal, materials.getRefractionRatio( vtx_material ) ) );
-					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz() * diffuse / length( diffuse );
+						, refract( incident, normal, materials.getRefractionRatio( vtx_material ) ) );
+					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz() * matDiffuse / length( matDiffuse );
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
 					&& !checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					colour.xyz() = reflectedColour * diffuse / length( diffuse );
+					colour.xyz() = reflectedColour * matDiffuse / length( matDiffuse );
 				}
 				else
 				{
 					auto refFactor = writer.declLocale( cuT( "refFactor" )
-						, c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( incident, v3Normal ), c3d_fresnelPower ) );
+						, c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( incident, normal ), c3d_fresnelPower ) );
 					colour.xyz() = mix( refractedColour, reflectedColour, refFactor );
 				}
 			}
 			else
 			{
-				colour.xyz() = writer.paren( v3Ambient + v3Diffuse + emissive ) * diffuse
-					+ v3Specular * materials.getSpecular( vtx_material );
+				colour.xyz() = writer.paren( ambient + lightDiffuse + matEmissive ) * matDiffuse
+					+ lightSpecular * matSpecular;
 			}
 
-			auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, materials.getOpacity( vtx_material ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
@@ -506,7 +525,8 @@ namespace castor3d
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
-				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
+					, writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( colour, length( wvPosition ), wvPosition.y() );
 			}
 
@@ -633,18 +653,28 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto normal = writer.declLocale( cuT( "normal" ), normalize( vtx_normal ) );
-			auto ambient = writer.declLocale( cuT( "ambient" ), c3d_ambientLight.xyz() );
-			auto diffuse = writer.declLocale( cuT( "diffuse" ), vec3( 0.0_f ) );
-			auto metalness = writer.declLocale( cuT( "metallic" ), materials.getMetallic( vtx_material ) );
-			auto roughness = writer.declLocale( cuT( "roughness" ), materials.getRoughness( vtx_material ) );
-			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
-			auto albedo = writer.declLocale( cuT( "albedo" ), utils.removeGamma( gamma, materials.getAlbedo( vtx_material ) ) );
-			auto emissive = writer.declLocale( cuT( "emissive" ), albedo * materials.getEmissive( vtx_material ) );
-			auto worldEye = writer.declLocale( cuT( "worldEye" ), vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
-			auto envAmbient = writer.declLocale( cuT( "envAmbient" ), vec3( 1.0_f ) );
-			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" ), vec3( 1.0_f ) );
-			auto texCoord = writer.declLocale( cuT( "texCoord" ), vtx_texture );
+			auto normal = writer.declLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto ambient = writer.declLocale( cuT( "ambient" )
+				, c3d_ambientLight.xyz() );
+			auto matMetallic = writer.declLocale( cuT( "matMetallic" )
+				, materials.getMetallic( vtx_material ) );
+			auto matRoughness = writer.declLocale( cuT( "matRoughness" )
+				, materials.getRoughness( vtx_material ) );
+			auto matGamma = writer.declLocale( cuT( "matGamma" )
+				, materials.getGamma( vtx_material ) );
+			auto matAlbedo = writer.declLocale( cuT( "matAlbedo" )
+				, utils.removeGamma( matGamma, materials.getAlbedo( vtx_material ) ) );
+			auto matEmissive = writer.declLocale( cuT( "emissive" )
+				, matAlbedo * materials.getEmissive( vtx_material ) );
+			auto worldEye = writer.declLocale( cuT( "worldEye" )
+				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
+			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
+				, vec3( 1.0_f ) );
+			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" )
+				, vec3( 1.0_f ) );
+			auto texCoord = writer.declLocale( cuT( "texCoord" )
+				, vtx_texture );
 			auto occlusion = writer.declLocale( cuT( "occlusion" )
 				, 1.0_f );
 
@@ -656,44 +686,52 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = -writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
 			shader::pbr::mr::computePreLightingMapContributions( writer
 				, normal
-				, metalness
-				, roughness
+				, matMetallic
+				, matRoughness
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			diffuse = lighting->computeCombinedLighting( worldEye
-				, albedo
-				, metalness
-				, roughness
+			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
+				, vec3( 0.0_f ) );
+			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
+				, vec3( 0.0_f ) );
+			shader::OutputComponents output{ lightDiffuse, lightSpecular };
+			lighting->computeCombinedLighting( worldEye
+				, matAlbedo
+				, matMetallic
+				, matRoughness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_position, normal ) );
+				, shader::FragmentInput( vtx_position, normal )
+				, output );
 			shader::pbr::mr::computePostLightingMapContributions( writer
-				, albedo
-				, emissive
-				, gamma
+				, matAlbedo
+				, matEmissive
+				, matGamma
 				, textureFlags
 				, programFlags
 				, sceneFlags );
 
 			ambient *= occlusion * utils.computeMetallicIBL( normal
 				, vtx_position
-				, albedo
-				, metalness
-				, roughness
+				, matAlbedo
+				, matMetallic
+				, matRoughness
 				, c3d_cameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, ( albedo * ambient ) + emissive );
+				, lightDiffuse + lightSpecular + matEmissive + ambient );
 
-			auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, materials.getOpacity( vtx_material ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
@@ -823,18 +861,28 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto normal = writer.declLocale( cuT( "normal" ), normalize( vtx_normal ) );
-			auto ambient = writer.declLocale( cuT( "ambient" ), c3d_ambientLight.xyz() );
-			auto light = writer.declLocale( cuT( "light" ), vec3( 0.0_f ) );
-			auto specular = writer.declLocale( cuT( "specular" ), materials.getSpecular( vtx_material ) );
-			auto glossiness = writer.declLocale( cuT( "glossiness" ), materials.getGlossiness( vtx_material ) );
-			auto gamma = writer.declLocale( cuT( "gamma" ), materials.getGamma( vtx_material ) );
-			auto diffuse = writer.declLocale( cuT( "diffuse" ), utils.removeGamma(gamma, materials.getDiffuse( vtx_material ) ) );
-			auto emissive = writer.declLocale( cuT( "emissive" ), diffuse * materials.getEmissive( vtx_material ) );
-			auto worldEye = writer.declLocale( cuT( "worldEye" ), vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
-			auto envAmbient = writer.declLocale( cuT( "envAmbient" ), vec3( 1.0_f ) );
-			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" ), vec3( 1.0_f ) );
-			auto texCoord = writer.declLocale( cuT( "texCoord" ), vtx_texture );
+			auto normal = writer.declLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto ambient = writer.declLocale( cuT( "ambient" )
+				, c3d_ambientLight.xyz() );
+			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
+				, materials.getSpecular( vtx_material ) );
+			auto matGlossiness = writer.declLocale( cuT( "matGlossiness" )
+				, materials.getGlossiness( vtx_material ) );
+			auto matGamma = writer.declLocale( cuT( "matGamma" )
+				, materials.getGamma( vtx_material ) );
+			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
+				, utils.removeGamma( matGamma, materials.getDiffuse( vtx_material ) ) );
+			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
+				, matDiffuse * materials.getEmissive( vtx_material ) );
+			auto worldEye = writer.declLocale( cuT( "worldEye" )
+				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
+			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
+				, vec3( 1.0_f ) );
+			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" )
+				, vec3( 1.0_f ) );
+			auto texCoord = writer.declLocale( cuT( "texCoord" )
+				, vtx_texture );
 			auto occlusion = writer.declLocale( cuT( "occlusion" )
 				, 1.0_f );
 
@@ -846,42 +894,49 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.declLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = -writer.declLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
 			shader::pbr::sg::computePreLightingMapContributions( writer
 				, normal
-				, specular
-				, glossiness
+				, matSpecular
+				, matGlossiness
 				, textureFlags
 				, programFlags
 				, sceneFlags );
-			light = lighting->computeCombinedLighting( worldEye
-				, diffuse
-				, specular
-				, glossiness
-				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_position, normal ) );
 			shader::pbr::sg::computePostLightingMapContributions( writer
-				, diffuse
-				, emissive
-				, gamma
+				, matDiffuse
+				, matEmissive
+				, matGamma
 				, textureFlags
 				, programFlags
 				, sceneFlags );
+			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
+				, vec3( 0.0_f ) );
+			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
+				, vec3( 0.0_f ) );
+			shader::OutputComponents output{ lightDiffuse, lightSpecular };
+			lighting->computeCombinedLighting( worldEye
+				, matDiffuse
+				, matSpecular
+				, matGlossiness
+				, c3d_shadowReceiver
+				, shader::FragmentInput( vtx_position, normal )
+				, output );
 
 			ambient *= occlusion * utils.computeSpecularIBL( normal
 				, vtx_position
-				, diffuse
-				, specular
-				, glossiness
+				, matDiffuse
+				, matSpecular
+				, matGlossiness
 				, c3d_cameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, ( diffuse * ambient ) + emissive );
+				, ( lightDiffuse * ambient ) + lightSpecular + matEmissive );
 
 			auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
 
