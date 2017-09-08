@@ -233,7 +233,7 @@ namespace castor3d
 			, InInt{ refraction }
 			, InInt{ envMapIndex }
 			, OutFloat{ encoded } );
-		writer << Endi{};
+		writer << endi;
 	}
 
 	void decodeMaterial( glsl::GlslWriter & writer
@@ -251,7 +251,7 @@ namespace castor3d
 			, OutInt{ reflection }
 			, OutInt{ refraction }
 			, OutInt{ envMapIndex } );
-		writer << Endi{};
+		writer << endi;
 	}
 
 	void decodeReceiver( glsl::GlslWriter & writer
@@ -263,7 +263,7 @@ namespace castor3d
 			, cuT( "decodeReceiver" )
 			, InInt{ encoded }
 			, OutInt{ receiver } );
-		writer << Endi{};
+		writer << endi;
 	}
 
 	//************************************************************************************************
@@ -485,7 +485,8 @@ namespace castor3d
 		}
 
 		// Shader outputs
-		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
 		auto lighting = shader::legacy::createLightingModel( writer
@@ -520,9 +521,9 @@ namespace castor3d
 				, data2.w() );
 			auto specular = writer.declLocale( cuT( "specular" )
 				, data3.xyz() );
-			auto lightSpecular = writer.declLocale( cuT( "v3Specular" )
+			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
 				, vec3( 0.0_f ) );
-			auto lightDiffuse = writer.declLocale( cuT( "v3Diffuse" )
+			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition );
@@ -572,8 +573,8 @@ namespace castor3d
 				break;
 			}
 
-			pxl_v4FragColor = vec4( lightDiffuse * diffuse
-				+ lightSpecular * specular, 1.0 );
+			pxl_diffuse = lightDiffuse * diffuse;
+			pxl_specular = lightSpecular * specular;
 		} );
 
 		return writer.finalise();
@@ -604,7 +605,8 @@ namespace castor3d
 		}
 
 		// Shader outputs
-		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
 		auto lighting = shader::pbr::mr::createLightingModel( writer
@@ -639,7 +641,9 @@ namespace castor3d
 			decodeReceiver( writer, flags, shadowReceiver );
 			auto albedo = writer.declLocale( cuT( "albedo" )
 				, data2.xyz() );
-			auto diffuse = writer.declLocale( cuT( "diffuse" )
+			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
+				, vec3( 0.0_f ) );
+			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition );
@@ -648,49 +652,55 @@ namespace castor3d
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 
+			shader::OutputComponents output{ lightDiffuse, lightSpecular };
+
 			switch ( type )
 			{
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					diffuse = lighting->computeOneDirectionalLight( light
+					lighting->computeOneDirectionalLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					diffuse = lighting->computeOnePointLight( light
+					lighting->computeOnePointLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-					diffuse = lighting->computeOneSpotLight( light
+					lighting->computeOneSpotLight( light
 						, eye
 						, albedo
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
 				}
 				break;
 			}
 
-			pxl_v4FragColor = vec4( diffuse, 1.0 );
+			pxl_diffuse = lightDiffuse;
+			pxl_specular = lightSpecular;
 		} );
 
 		return writer.finalise();
@@ -721,7 +731,8 @@ namespace castor3d
 		}
 
 		// Shader outputs
-		auto pxl_v4FragColor = writer.declFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
 		auto lighting = shader::pbr::sg::createLightingModel( writer
@@ -756,7 +767,9 @@ namespace castor3d
 			decodeReceiver( writer, flags, shadowReceiver );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
-			auto litten = writer.declLocale( cuT( "litten" )
+			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
+				, vec3( 0.0_f ) );
+			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition );
@@ -765,49 +778,55 @@ namespace castor3d
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 
+			shader::OutputComponents output{ lightDiffuse, lightSpecular };
+
 			switch ( type )
 			{
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					litten = lighting->computeOneDirectionalLight( light
+					lighting->computeOneDirectionalLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					litten = lighting->computeOnePointLight( light
+					lighting->computeOnePointLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-					litten = lighting->computeOneSpotLight( light
+					lighting->computeOneSpotLight( light
 						, eye
 						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal ) );
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
 				}
 				break;
 			}
 
-			pxl_v4FragColor = vec4( litten, 1.0 );
+			pxl_diffuse = lightDiffuse;
+			pxl_specular = lightSpecular;
 		} );
 
 		return writer.finalise();

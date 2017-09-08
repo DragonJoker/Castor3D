@@ -564,7 +564,7 @@ namespace castor3d
 				, p_shadowFactor
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
-			m_writer << Endi{};
+			m_writer << endi;
 		}
 	}
 }

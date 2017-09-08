@@ -146,27 +146,29 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the combination on given framebuffer.
-		 *\param[in]	gp			The geometry pass result.
-		 *\param[in]	lp		The light pas result.
-		 *\param[in]	camera		The viewing camera.
-		 *\param[in]	invViewProj	The inverse view projection matrix.
-		 *\param[in]	invView		The inverse view matrix.
-		 *\param[in]	invProj		The inverse projection matrix.
-		 *\param[in]	fog			The fog.
-		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\param[in]	gp				The geometry pass result.
+		 *\param[in]	lightDiffuse	The light pass diffuse result.
+		 *\param[in]	lightSpecular	The light pass specular result.
+		 *\param[in]	reflection		The reflection pass result.
+		 *\param[in]	refraction		The refraction pass result.
+		 *\param[in]	fog				The fog.
+		 *\param[in]	frameBuffer		The target framebuffer.
+		 *\param[out]	info			Receives the render informations.
 		 *\~french
 		 *\brief		Dessine la combinaison sur le tampon d'image donné.
-		 *\param[in]	gp			Le résultat de la geometry pass.
-		 *\param[in]	lp		Le résultat de la light pass.
-		 *\param[in]	camera		La caméra.
-		 *\param[in]	invViewProj	La matrice vue projection inversée.
-		 *\param[in]	invView		La matrice vue inversée.
-		 *\param[in]	invProj		La matrice projection inversée.
-		 *\param[in]	fog			Le brouillard.
-		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\param[in]	gp				Le résultat de la geometry pass.
+		 *\param[in]	lightDiffuse	Le résultat diffus de la light pass.
+		 *\param[in]	lightSpecular	Le résultat spéculaire de la light pass.
+		 *\param[in]	reflection		Le résultat de la passe de réflexion.
+		 *\param[in]	refraction		Le résultat de la passe de réfraction.
+		 *\param[in]	ibl				Les textures d'IBL.
+		 *\param[in]	fog				Le brouillard.
+		 *\param[in]	frameBuffer		Le tampon d'image cible.
+		 *\param[out]	info			Reçoit les informations de rendu.
 		 */
 		void render( GeometryPassResult const & gp
-			, TextureUnit const & light
+			, TextureUnit const & lightDiffuse
+			, TextureUnit const & lightSpecular
 			, TextureUnit const & reflection
 			, TextureUnit const & refraction
 			, Fog const & fog
@@ -175,27 +177,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the combination on given framebuffer.
-		 *\param[in]	gp			The geometry pass result.
-		 *\param[in]	lp			The light pas result.
-		 *\param[in]	camera		The viewing camera.
-		 *\param[in]	invViewProj	The inverse view projection matrix.
-		 *\param[in]	invView		The inverse view matrix.
-		 *\param[in]	invProj		The inverse projection matrix.
-		 *\param[in]	fog			The fog.
-		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\param[in]	gp				The geometry pass result.
+		 *\param[in]	lightDiffuse	The light pass diffuse result.
+		 *\param[in]	lightSpecular	The light pass specular result.
+		 *\param[in]	reflection		The reflection pass result.
+		 *\param[in]	refraction		The refraction pass result.
+		 *\param[in]	ibl				The IBL textures.
+		 *\param[in]	fog				The fog.
+		 *\param[in]	frameBuffer		The target framebuffer.
+		 *\param[out]	info			Receives the render informations.
 		 *\~french
 		 *\brief		Dessine la combinaison sur le tampon d'image donné.
-		 *\param[in]	gp			Le résultat de la geometry pass.
-		 *\param[in]	lp			Le résultat de la light pass.
-		 *\param[in]	camera		La caméra.
-		 *\param[in]	invViewProj	La matrice vue projection inversée.
-		 *\param[in]	invView		La matrice vue inversée.
-		 *\param[in]	invProj		La matrice projection inversée.
-		 *\param[in]	fog			Le brouillard.
-		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\param[in]	gp				Le résultat de la geometry pass.
+		 *\param[in]	lightDiffuse	Le résultat diffus de la light pass.
+		 *\param[in]	lightSpecular	Le résultat spéculaire de la light pass.
+		 *\param[in]	reflection		Le résultat de la passe de réflexion.
+		 *\param[in]	refraction		Le résultat de la passe de réfraction.
+		 *\param[in]	ibl				Les textures d'IBL.
+		 *\param[in]	fog				Le brouillard.
+		 *\param[in]	frameBuffer		Le tampon d'image cible.
+		 *\param[out]	info			Reçoit les informations de rendu.
 		 */
 		void render( GeometryPassResult const & gp
-			, TextureUnit const & light
+			, TextureUnit const & lightDiffuse
+			, TextureUnit const & lightSpecular
 			, TextureUnit const & reflection
 			, TextureUnit const & refraction
 			, IblTextures const & ibl

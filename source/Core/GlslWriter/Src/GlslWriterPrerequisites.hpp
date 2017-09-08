@@ -233,6 +233,9 @@ namespace glsl
 	{
 	};
 
+	static Endi endi;
+	static Endl endl;
+
 	GlslWriter_API void writeLine( GlslWriter & p_writer, castor::String const & p_line );
 	GlslWriter_API void registerName( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
 	GlslWriter_API void checkNameExists( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
