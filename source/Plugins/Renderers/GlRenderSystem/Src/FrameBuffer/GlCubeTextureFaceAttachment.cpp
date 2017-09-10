@@ -1,4 +1,4 @@
-#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
+﻿#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
@@ -17,6 +17,7 @@ namespace GlRender
 		, Holder( p_gl )
 		, m_glFace{ p_gl.get( p_face ) }
 		, m_mipLevel{ p_mipLevel }
+		, m_face{ p_face }
 	{
 	}
 

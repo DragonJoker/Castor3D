@@ -195,7 +195,7 @@ namespace castor3d
 						}
 
 						ambient *= diffuse;
-						diffuse = lightDiffuse;
+						diffuse *= lightDiffuse;
 					}
 					FI;
 
@@ -298,6 +298,10 @@ namespace castor3d
 						, reflection
 						, refraction
 						, envMapIndex );
+					auto data2 = writer.declLocale( cuT( "data2" )
+						, texture( c3d_mapData2, vtx_texture ) );
+					auto albedo = writer.declLocale( cuT( "albedo" )
+						, data2.rgb() );
 					auto data3 = writer.declLocale( cuT( "data3" )
 						, texture( c3d_mapData3, vtx_texture ) );
 					auto occlusion = writer.declLocale( cuT( "occlusion" )
@@ -349,7 +353,7 @@ namespace castor3d
 					}
 					FI;
 
-					pxl_fragColor = vec4( lightDiffuse + lightSpecular + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0 );
 
 					if ( fogType != FogType::eDisabled )
 					{

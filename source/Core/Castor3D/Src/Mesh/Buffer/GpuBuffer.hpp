@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -167,16 +167,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer storage.
-		 *\param[in]	count	The buffer elements count.
-		 *\param[in]	type	Buffer access type.
-		 *\param[in]	nature	Buffer access nature.
+		 *\param[in]	numLevels		The allocator maximum tree size.
+		 *\param[in]	minBlockSize	The minimum size for a block.
+		 *\param[in]	type			Buffer access type.
+		 *\param[in]	nature			Buffer access nature.
 		 *\~french
 		 *\brief		Initialise le stockage GPU du tampon.
-		 *\param[in]	count	Le nombre d'éléments du tampon.
-		 *\param[in]	type	Type d'accès du tampon.
-		 *\param[in]	nature	Nature d'accès du tampon.
+		 *\param[in]	numLevels		La taille maximale de l'arbre de l'allocateur.
+		 *\param[in]	minBlockSize	La taille minimale d'un bloc.
+		 *\param[in]	type			Type d'accès du tampon.
+		 *\param[in]	nature			Nature d'accès du tampon.
 		 */
-		C3D_API void initialiseStorage( uint32_t level
+		C3D_API void initialiseStorage( uint32_t numLevels
 			, uint32_t minBlockSize
 			, BufferAccessType type
 			, BufferAccessNature nature );

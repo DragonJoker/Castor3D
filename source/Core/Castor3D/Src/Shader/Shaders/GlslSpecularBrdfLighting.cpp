@@ -582,7 +582,7 @@ namespace castor3d
 
 					kD *= 1.0_f - length( specular );
 
-					output.m_diffuse = shadowFactor * m_writer.paren( m_writer.paren( kD * diffuse / PI ) * radiance * NdotL );
+					output.m_diffuse = shadowFactor * m_writer.paren( radiance * NdotL * kD / PI );
 					output.m_specular = shadowFactor * m_writer.paren( specReflectance * radiance * NdotL );
 				}
 				, InLight( &m_writer, cuT( "light" ) )

@@ -511,8 +511,9 @@ namespace castor3d
 			}
 			else
 			{
-				colour.xyz() = writer.paren( ambient + lightDiffuse + matEmissive ) * matDiffuse
-					+ lightSpecular * matSpecular;
+				colour.xyz() = writer.paren( ambient + lightDiffuse ) * matDiffuse
+					+ lightSpecular * matSpecular
+					+ matEmissive;
 			}
 
 			auto alpha = writer.declLocale( cuT( "alpha" )
@@ -728,7 +729,7 @@ namespace castor3d
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, lightDiffuse + lightSpecular + matEmissive + ambient );
+				, lightDiffuse * matAlbedo + lightSpecular + matEmissive + ambient );
 
 			auto alpha = writer.declLocale( cuT( "alpha" )
 				, materials.getOpacity( vtx_material ) );
@@ -936,7 +937,7 @@ namespace castor3d
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, ( lightDiffuse * ambient ) + lightSpecular + matEmissive );
+				, lightDiffuse * matDiffuse + lightSpecular + matEmissive + ambient );
 
 			auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
 

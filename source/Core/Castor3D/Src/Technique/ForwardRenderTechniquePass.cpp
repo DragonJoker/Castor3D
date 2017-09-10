@@ -318,8 +318,9 @@ namespace castor3d
 				, shader::FragmentInput( vtx_position, normal )
 				, output );
 
-			pxl_fragColor.xyz() = writer.paren( ambient + lightDiffuse + matEmissive ) * matDiffuse
-				+ lightSpecular * materials.getSpecular( vtx_material );
+			pxl_fragColor.xyz() = writer.paren( ambient + lightDiffuse ) * matDiffuse
+				+ lightSpecular * materials.getSpecular( vtx_material )
+				+ matEmissive;
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
@@ -555,7 +556,7 @@ namespace castor3d
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
-			pxl_fragColor.xyz() = lightDiffuse + lightSpecular + matEmissive + ambient;
+			pxl_fragColor.xyz() = lightDiffuse * matAlbedo + lightSpecular + matEmissive + ambient;
 
 			if ( !m_opaque )
 			{
@@ -753,7 +754,7 @@ namespace castor3d
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
-			pxl_fragColor.xyz() = lightDiffuse + lightSpecular + matEmissive + ambient;
+			pxl_fragColor.xyz() = lightDiffuse * matDiffuse + lightSpecular + matEmissive + ambient;
 
 			if ( !m_opaque )
 			{

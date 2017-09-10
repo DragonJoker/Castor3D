@@ -1,4 +1,4 @@
-﻿#include "GpuBufferPool.hpp"
+#include "GpuBufferPool.hpp"
 
 #include "Render/RenderSystem.hpp"
 
@@ -74,7 +74,19 @@ namespace castor3d
 			{
 				buffer = getRenderSystem()->doCreateBuffer( type );
 				buffer->create();
-				buffer->initialiseStorage( 20u
+				uint32_t level = 20u;
+				uint64_t maxSize = ( 1u << level ) * 96;
+
+				while ( size > maxSize && level <= 24 )
+				{
+					++level;
+					maxSize = ( 1u << level ) * 96;
+				}
+
+				REQUIRE( maxSize < std::numeric_limits< uint32_t >::max() );
+				REQUIRE( maxSize >= size );
+
+				buffer->initialiseStorage( level
 					, 96u
 					, accessType
 					, accessNature );

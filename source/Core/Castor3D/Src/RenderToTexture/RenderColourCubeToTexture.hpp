@@ -48,14 +48,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_context	The Context.
-		 *\param[in]	p_matrixUbo	The UBO containing matrix data.
+		 *\param[in]	matrixUbo	The UBO containing matrix data.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_context	Le Context.
-		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
+		 *\param[in]	matrixUbo	L'UBO contenant les données de matrices.
 		 */
 		C3D_API explicit RenderColourCubeToTexture( Context & p_context
-			, MatrixUbo & p_matrixUbo );
+			, MatrixUbo & matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -80,50 +80,65 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture cube donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void render( castor::Position const & p_position
-			, castor::Size const & p_size
-			, TextureLayout const & p_texture );
+		C3D_API void render( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
+		/**
+		 *\~english
+		 *\brief		Renders a face from the given cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	face	The face.
+		 *\~french
+		 *\brief		Rend une face de la texture cube donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	face	La face.
+		 */
+		C3D_API void renderFace( castor::Size const & size
+			, TextureLayout const & texture
+			, CubeMapFace face );
 
 	protected:
 		/**
 		 *\~english
 		 *\brief		Renders the wanted face of given cube texture.
-		 *\param[in]	p_position			The render viewport position.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_face				The cube face.
-		 *\param[in]	p_uvMult			The UV multiplier.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	position		The render viewport position.
+		 *\param[in]	size			The render viewport size.
+		 *\param[in]	texture			The texture.
+		 *\param[in]	face			The cube face.
+		 *\param[in]	uvMult			The UV multiplier.
+		 *\param[in]	pipeline		The render pipeline.
+		 *\param[in]	matrixUbo		The uniform buffer receiving matrices.
+		 *\param[in]	geometryBuffers	The geometry buffers used to render the texture.
 		 *\~french
 		 *\brief		Dessine la face voulue de la texture cube donnée.
-		 *\param[in]	p_position			La position du viewport de rendu.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_face				La face du cube.
-		 *\param[in]	p_uvMult			Le multiplicateur d'UV.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	position		La position du viewport de rendu.
+		 *\param[in]	size			La taille du viewport de rendu.
+		 *\param[in]	texture			La texture.
+		 *\param[in]	face			La face du cube.
+		 *\param[in]	uvMult			Le multiplicateur d'UV.
+		 *\param[in]	pipeline		Le pipeline de rendu.
+		 *\param[in]	matrixUbo		Le tampon d'uniformes recevant les matrices.
+		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void doRender( castor::Position const & p_position
-			, castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, castor::Point3f const & p_face
-			, castor::Point2f const & p_uvMult
-			, RenderPipeline & p_pipeline
-			, MatrixUbo & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void doRender( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture
+			, CubeMapFace face
+			, castor::Point2f const & uvMult
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo
+			, GeometryBuffers const & geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Creates the render a 2D texture shader program.

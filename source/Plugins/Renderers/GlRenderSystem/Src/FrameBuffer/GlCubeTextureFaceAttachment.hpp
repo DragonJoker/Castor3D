@@ -116,6 +116,7 @@ namespace GlRender
 		GlAttachmentPoint m_glAttachmentPoint{ GlAttachmentPoint::eNone };
 		GlFramebufferStatus m_glStatus{ GlFramebufferStatus::eIncompleteMissingAttachment };
 		uint32_t m_mipLevel;
+		castor3d::CubeMapFace m_face;
 	};
 }
 

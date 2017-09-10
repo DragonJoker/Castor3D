@@ -470,17 +470,37 @@ namespace castor3d
 		 *\param[in]	texture	La texture.
 		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderEquiToCube( castor::Size const & size
-			, TextureLayout const & p_2dTexture
-			, TextureLayoutSPtr p_cubeTexture
+		inline void renderEquiToCube( castor::Size const & size
+			, TextureLayout const & texture
+			, TextureLayoutSPtr cubeTexture
 			, FrameBufferSPtr p_fbo
 			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs )
 		{
 			m_cube.render( size
-				, p_2dTexture
-				, p_cubeTexture
+				, texture
+				, cubeTexture
 				, p_fbo
 				, p_attachs );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	face	The face index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	face	L'index de la face.
+		 */
+		inline void renderCubeFace( castor::Size const & size
+			, TextureLayoutSPtr texture
+			, CubeMapFace face )
+		{
+			m_colourCube.renderFace( size
+				, *texture
+				, face );
 		}
 		/**
 		 *\~english
@@ -512,65 +532,6 @@ namespace castor3d
 		{
 			return *m_window;
 		}
-
-	protected:
-		/**
-		 *\~english
-		 *\brief		Renders the wanted face of given cube texture.
-		 *\param[in]	position		The render viewport position.
-		 *\param[in]	size			The render viewport size.
-		 *\param[in]	texture			The texture.
-		 *\param[in]	face			The cube face.
-		 *\param[in]	pipeline		The render pipeline.
-		 *\param[in]	matrixUbo		The uniform buffer receiving matrices.
-		 *\param[in]	geometryBuffers	The geometry buffers used to render the texture.
-		 *\~french
-		 *\brief		Dessine la face voulue de la texture cube donnée.
-		 *\param[in]	position		La position du viewport de rendu.
-		 *\param[in]	size			La taille du viewport de rendu.
-		 *\param[in]	texture			La texture.
-		 *\param[in]	face			La face du cube.
-		 *\param[in]	pipeline		Le pipeline de rendu.
-		 *\param[in]	matrixUbo		Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 */
-		C3D_API void doRenderTextureFace( castor::Position const & position
-			, castor::Size const & size
-			, TextureLayout const & texture
-			, CubeMapFace face
-			, RenderPipeline & pipeline
-			, MatrixUbo & matrixUbo
-			, GeometryBuffers const & geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Renders the wanted face of wanted layer of given cube texture array.
-		 *\param[in]	position		The render viewport position.
-		 *\param[in]	size			The render viewport size.
-		 *\param[in]	texture			The texture.
-		 *\param[in]	face			The cube face.
-		 *\param[in]	pipeline		The render pipeline.
-		 *\param[in]	matrixUbo		The uniform buffer receiving matrices.
-		 *\param[in]	geometryBuffers	The geometry buffers used to render the texture.
-		 *\param[in]	index			The layer index.
-		 *\~french
-		 *\brief		Dessine la face voulue de la couche voulue du tableau de textures cube donné.
-		 *\param[in]	position		La position du viewport de rendu.
-		 *\param[in]	size			La taille du viewport de rendu.
-		 *\param[in]	texture			La texture.
-		 *\param[in]	face			La face du cube.
-		 *\param[in]	pipeline		Le pipeline de rendu.
-		 *\param[in]	matrixUbo		Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 *\param[in]	index			L'index de la couche.
-		 */
-		C3D_API void doRenderTextureFace( castor::Position const & position
-			, castor::Size const & size
-			, TextureLayout const & texture
-			, CubeMapFace face
-			, RenderPipeline & pipeline
-			, MatrixUbo & matrixUbo
-			, GeometryBuffers const & geometryBuffers
-			, uint32_t index );
 		/**
 		 *\~english
 		 *\return		\p true if initialised, false if not

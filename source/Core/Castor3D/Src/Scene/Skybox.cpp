@@ -384,12 +384,39 @@ namespace castor3d
 		fbo->unbind();
 
 		// Render the equirectangular texture to the cube faces.
-		renderSystem.getCurrentContext()->RenderEquiToCube( m_equiSize
+		renderSystem.getCurrentContext()->renderEquiToCube( m_equiSize
 			, *m_equiTexture
 			, m_texture
 			, fbo
 			, attachs );
+/*
+		static String const FaceName[6u]
+		{
+			cuT( "PosX" ),
+			cuT( "NegX" ),
+			cuT( "NegY" ),
+			cuT( "PosY" ),
+			cuT( "NegZ" ),
+			cuT( "PosZ" ),
+		};
 
+		auto buffer = PxBufferBase::create( m_equiSize
+			, PixelFormat::eRGB32F );
+		fbo->bind();
+
+		for ( uint32_t face = 0u; face < 6; ++face )
+		{
+			attachs[face]->attach( AttachmentPoint::eColour, 0u );
+			attachs[face]->download( Position{}
+				, *buffer );
+			Image image{ FaceName[face], *buffer };
+			Image::BinaryWriter writer;
+			writer( image
+				, getEngine()->getDataDirectory() / ( cuT( "CubeMap_" ) + FaceName[face] + cuT( ".hdr" ) ) );
+		}
+
+		fbo->unbind();
+*/
 		// Cleanup the one shot FBO and attaches
 		fbo->bind();
 		fbo->detachAll();
