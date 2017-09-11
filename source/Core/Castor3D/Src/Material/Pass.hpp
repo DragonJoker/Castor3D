@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PASS_H___
 #define ___C3D_PASS_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "SubsurfaceScattering.hpp"
 
 #include <Design/OwnedBy.hpp>
 #include <Design/Signal.hpp>
@@ -510,6 +510,39 @@ namespace castor3d
 		{
 			m_alphaValue = value;
 		}
+		/**
+		 *\~english
+		 *\return		\p true if the pass has subsurface scattering extended informations.
+		 *\~french
+		 *\return		\p true si la passe a des informations étendues pour le subsurface scattering.
+		 */
+		inline bool hasSubsurfaceScattering()const
+		{
+			return m_subsurfaceScattering != nullptr;
+		}
+		/**
+		 *\~english
+		 *\return		The subsurface scattering extended informations.
+		 *\~french
+		 *\return		Les informations étendues pour le subsurface scattering.
+		 */
+		inline SubsurfaceScattering const & getSubsurfaceScattering()const
+		{
+			REQUIRE( m_subsurfaceScattering );
+			return *m_subsurfaceScattering;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the subsurface scattering extended informations.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit les informations étendues pour le subsurface scattering.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setSubsurfaceScattering( SubsurfaceScatteringUPtr && value )
+		{
+			m_subsurfaceScattering = std::move( value );
+		}
 
 	protected:
 		/**
@@ -660,6 +693,9 @@ namespace castor3d
 		//!\~english	Tells if the pass' diffuse needs gamma correction.
 		//!\~french		Dit si la diffuse de la passe a besoin de correction gamma.
 		bool m_needsGammaCorrection{ false };
+		//!\~english	The subsurface scattering extended informations.
+		//!\~french		Les informations étendus pour le subsurface scattering.
+		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 	};
 }
 

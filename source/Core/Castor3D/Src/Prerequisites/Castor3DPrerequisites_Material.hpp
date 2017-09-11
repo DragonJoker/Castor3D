@@ -451,6 +451,9 @@ namespace castor3d
 		//!\~english Opacity map
 		//!\~french Map d'opacité
 		eOpacity = 0x0004,
+		//!\~english Transmittance map.
+		//!\~french Map de tramsmission de lumière.
+		eTransmittance = eOpacity,
 		//!\~english Specular map
 		//!\~french Map de spéculaire
 		eSpecular = 0x0008,
@@ -497,6 +500,7 @@ namespace castor3d
 	class MetallicRoughnessPbrPass;
 	class SpecularGlossinessPbrPass;
 	class Sampler;
+	class SubsurfaceScattering;
 
 	DECLARE_SMART_PTR( TextureImage );
 	DECLARE_SMART_PTR( TextureLayout );
@@ -508,6 +512,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( MetallicRoughnessPbrPass );
 	DECLARE_SMART_PTR( SpecularGlossinessPbrPass );
 	DECLARE_SMART_PTR( Sampler );
+	DECLARE_SMART_PTR( SubsurfaceScattering );
 
 	//! Material pointer array
 	DECLARE_VECTOR( MaterialSPtr, MaterialPtr );

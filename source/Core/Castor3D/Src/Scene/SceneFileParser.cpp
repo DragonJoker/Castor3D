@@ -81,6 +81,7 @@ void SceneFileContext::initialise()
 	strName.clear();
 	strName2.clear();
 	mapScenes.clear();
+	subsurfaceScattering.reset();
 }
 
 //****************************************************************************************************
@@ -551,6 +552,7 @@ void SceneFileParser::doInitialiseParser( TextFile & file )
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "colour_blend_mode" ), parserPassColourBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
@@ -678,6 +680,10 @@ void SceneFileParser::doInitialiseParser( TextFile & file )
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "radius" ), parserSsaoRadius, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "bias" ), parserSsaoBias, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), parserSsaoEnd );
+
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "distance_based_transmittance" ), parserSubsurfaceScatteringDistanceBasedTransmittance, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "transmittance_coefficients" ), parserSubsurfaceScatteringTransittanceCoefficients, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "}" ), parserSubsurfaceScatteringEnd );
 
 	for ( auto const & it : getEngine()->getAdditionalParsers() )
 	{

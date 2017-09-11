@@ -101,4 +101,61 @@ namespace castor3d
 	{
 		CASTOR_EXCEPTION( "This pass buffer can't hold specular/glossiness pass data" );
 	}
+
+	void PassBuffer::doVisitExtended( Pass const & pass
+		, ExtendedData & data )
+	{
+		auto index = pass.getId () - 1;
+		
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+		
+		if ( pass.hasSubsurfaceScattering() )
+		{
+			data.sssInfo[index].r = 1.0f;
+			doVisit( pass.getSubsurfaceScattering()
+				, index
+				, data);
+		}
+		else
+		{
+			data.sssInfo[index].r = 0.0f;
+		}
+
+#else
+		
+		if ( pass.hasSubsurfaceScattering() )
+		{
+			data.sssInfo.r = 1.0f;
+			doVisit( pass.getSubsurfaceScattering()
+				, index
+				, data);
+		}
+		else
+		{
+			data.sssInfo.r = 0.0f;
+		}
+
+#endif
+	}
+
+	void PassBuffer::doVisit( SubsurfaceScattering const & subsurfaceScattering
+		, uint32_t index
+		, ExtendedData & data )
+	{
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
+		data.transmittance[index].r = subsurfaceScattering.getTransmittanceCoefficients()[0];
+		data.transmittance[index].g = subsurfaceScattering.getTransmittanceCoefficients()[1];
+		data.transmittance[index].b = subsurfaceScattering.getTransmittanceCoefficients()[2];
+		data.transmittance[index].a = subsurfaceScattering.isDistanceBasedTransmittanceEnabled() ? 1.0f : 0.0f;
+
+#else
+
+		data.transmittance.r = subsurfaceScattering.getTransmittanceCoefficients()[0];
+		data.transmittance.g = subsurfaceScattering.getTransmittanceCoefficients()[1];
+		data.transmittance.b = subsurfaceScattering.getTransmittanceCoefficients()[2];
+		data.transmittance.a = subsurfaceScattering.isDistanceBasedTransmittanceEnabled() ? 1.0f : 0.0f;
+
+#endif
+	}
 }

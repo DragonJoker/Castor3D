@@ -183,6 +183,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserPassColourBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( parserPassAlphaFunc )
 	DECLARE_ATTRIBUTE_PARSER( parserPassRefractionRatio )
+	DECLARE_ATTRIBUTE_PARSER( parserPassSubsurfaceScattering )
 	DECLARE_ATTRIBUTE_PARSER( parserPassEnd )
 
 	// Texture Unit Parsers
@@ -309,6 +310,11 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoBias )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnd )
+
+	//SubsurfaceScattering parsers
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringDistanceBasedTransmittance )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransittanceCoefficients )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringEnd )
 }
 
 #endif

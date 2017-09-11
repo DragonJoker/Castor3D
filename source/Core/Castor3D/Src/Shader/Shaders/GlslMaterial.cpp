@@ -115,6 +115,8 @@ namespace castor3d
 				material.declMember< Vec4 >( cuT( "m_specShin" ) );
 				material.declMember< Vec4 >( cuT( "m_common" ) );
 				material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
+				material.declMember< Vec4 >( cuT( "m_sssInfo" ) );
+				material.declMember< Vec4 >( cuT( "m_transmittance" ) );
 				material.end();
 			}
 
@@ -182,6 +184,8 @@ namespace castor3d
 				material.declMember< Vec4 >( cuT( "m_metDiv" ) );
 				material.declMember< Vec4 >( cuT( "m_common" ) );
 				material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
+				material.declMember< Vec4 >( cuT( "m_sssInfo" ) );
+				material.declMember< Vec4 >( cuT( "m_transmittance" ) );
 				material.end();
 			}
 
@@ -244,6 +248,8 @@ namespace castor3d
 				material.declMember< Vec4 >( cuT( "m_specGloss" ) );
 				material.declMember< Vec4 >( cuT( "m_common" ) );
 				material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
+				material.declMember< Vec4 >( cuT( "m_sssInfo" ) );
+				material.declMember< Vec4 >( cuT( "m_transmittance" ) );
 				material.end();
 			}
 
@@ -502,6 +508,8 @@ namespace castor3d
 			materials.declMember< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
 			materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
 			materials.declMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+			materials.declMember< Vec4 >( cuT( "m_sssInfo" ), MaxMaterialsCount );
+			materials.declMember< Vec4 >( cuT( "m_transmittance" ), MaxMaterialsCount );
 			materials.end();
 		}
 
@@ -543,6 +551,8 @@ namespace castor3d
 			materials.declMember< Vec4 >( cuT( "c3d_matMetDiv" ), MaxMaterialsCount );
 			materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
 			materials.declMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+			materials.declMember< Vec4 >( cuT( "m_sssInfo" ), MaxMaterialsCount );
+			materials.declMember< Vec4 >( cuT( "m_transmittance" ), MaxMaterialsCount );
 			materials.end();
 		}
 
@@ -584,6 +594,8 @@ namespace castor3d
 			materials.declMember< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
 			materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
 			materials.declMember< Vec4 >( cuT( "c3d_matReflRer" ), MaxMaterialsCount );
+			materials.declMember< Vec4 >( cuT( "m_sssInfo" ), MaxMaterialsCount );
+			materials.declMember< Vec4 >( cuT( "m_transmittance" ), MaxMaterialsCount );
 			materials.end();
 		}
 

@@ -67,7 +67,6 @@ namespace castor3d
 		C3D_API void visit( LegacyPass const & data )override;
 
 	public:
-
 #if GLSL_MATERIALS_STRUCT_OF_ARRAY
 
 		struct PassesData
@@ -76,6 +75,7 @@ namespace castor3d
 			castor::ArrayView< RgbaColour > specShin;
 			castor::ArrayView< RgbaColour > common;
 			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
 		};
 
 #else
@@ -86,6 +86,7 @@ namespace castor3d
 			RgbaColour specShin;
 			RgbaColour common;
 			RgbaColour reflRefr;
+			ExtendedData extended;
 		};
 		using PassesData = castor::ArrayView< PassData >;
 

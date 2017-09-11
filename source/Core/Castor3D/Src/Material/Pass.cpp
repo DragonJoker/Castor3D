@@ -144,8 +144,13 @@ namespace castor3d
 		{
 			for ( auto unit : pass )
 			{
-				result = TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.getType() }( *unit, file );
+				result &= TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.getType() }( *unit, file );
 			}
+		}
+
+		if ( result && pass.hasSubsurfaceScattering() )
+		{
+			result = SubsurfaceScattering::TextWriter{ m_tabs + cuT( "\t" ) }( pass.getSubsurfaceScattering(), file );
 		}
 
 		return result;

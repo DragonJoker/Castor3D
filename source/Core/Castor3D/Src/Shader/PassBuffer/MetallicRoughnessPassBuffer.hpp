@@ -80,6 +80,7 @@ namespace castor3d
 			castor::ArrayView< RgbaColour > metDiv;
 			castor::ArrayView< RgbaColour > common;
 			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
 		};
 
 #else
@@ -90,6 +91,7 @@ namespace castor3d
 			RgbaColour metDiv;
 			RgbaColour common;
 			RgbaColour reflRefr;
+			ExtendedData extended;
 		};
 		using PassesData = castor::ArrayView< PassData >;
 
