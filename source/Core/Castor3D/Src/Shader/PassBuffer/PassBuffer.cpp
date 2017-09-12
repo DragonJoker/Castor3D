@@ -1,13 +1,9 @@
-﻿#include "PassBuffer.hpp"
+#include "PassBuffer.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Render/RenderNode/PassRenderNode.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -20,16 +16,9 @@ namespace castor3d
 	PassBuffer::PassBuffer( Engine & engine
 		, uint32_t count
 		, uint32_t size )
-		: m_buffer{ engine }
+		: m_buffer{ engine, count * size }
 		, m_passCount{ count }
 	{
-		m_buffer.resize( size * count );
-		m_buffer.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-	}
-
-	PassBuffer::~PassBuffer()
-	{
-		m_buffer.cleanup();
 	}
 
 	uint32_t PassBuffer::addPass( Pass & pass )
@@ -77,14 +66,13 @@ namespace castor3d
 				p_pass->accept( *this );
 			} );
 
-			m_buffer.upload();
-			m_buffer.bindTo( 0u );
+			m_buffer.update();
 		}
 	}
 
 	void PassBuffer::bind()const
 	{
-		m_buffer.bindTo( 0u );
+		m_buffer.bind( 0u );
 	}
 
 	void PassBuffer::visit( LegacyPass const & pass )

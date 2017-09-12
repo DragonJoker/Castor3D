@@ -1,4 +1,4 @@
-﻿#include "MetallicRoughnessPassBuffer.hpp"
+#include "MetallicRoughnessPassBuffer.hpp"
 
 #include "Material/LegacyPass.hpp"
 #include "Material/MetallicRoughnessPbrPass.hpp"
@@ -11,10 +11,9 @@ namespace castor3d
 	{
 #if GLSL_MATERIALS_STRUCT_OF_ARRAY
 
-		MetallicRoughnessPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		MetallicRoughnessPassBuffer::PassesData doBindData( uint8_t * data
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
 			auto albRough = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
 			data += sizeof( PassBuffer::RgbaColour ) * count;
@@ -44,10 +43,9 @@ namespace castor3d
 
 #else
 
-		MetallicRoughnessPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		MetallicRoughnessPassBuffer::PassesData doBindData( uint8_t * data
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
 			return makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data )
 				, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data ) + count );
 		}
@@ -60,7 +58,7 @@ namespace castor3d
 	MetallicRoughnessPassBuffer::MetallicRoughnessPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer, count ) }
+		, m_data{ doBindData( m_buffer.ptr(), count ) }
 	{
 	}
 

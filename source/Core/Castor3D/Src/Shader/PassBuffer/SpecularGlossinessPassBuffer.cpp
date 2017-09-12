@@ -1,4 +1,4 @@
-﻿#include "SpecularGlossinessPassBuffer.hpp"
+#include "SpecularGlossinessPassBuffer.hpp"
 
 #include "Material/LegacyPass.hpp"
 #include "Material/SpecularGlossinessPbrPass.hpp"
@@ -11,10 +11,9 @@ namespace castor3d
 	{
 #if GLSL_MATERIALS_STRUCT_OF_ARRAY
 
-		SpecularGlossinessPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		SpecularGlossinessPassBuffer::PassesData doBindData( uint8_t * data
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
 			auto diffDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
 			data += sizeof( PassBuffer::RgbaColour ) * count;
@@ -44,10 +43,9 @@ namespace castor3d
 
 #else
 
-		SpecularGlossinessPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		SpecularGlossinessPassBuffer::PassesData doBindData( uint8_t * data
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
 			return makeArrayView( reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( data )
 				, reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( data ) + count );
 		}
@@ -60,7 +58,7 @@ namespace castor3d
 	SpecularGlossinessPassBuffer::SpecularGlossinessPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer, count ) }
+		, m_data{ doBindData( m_buffer.ptr(), count ) }
 	{
 	}
 

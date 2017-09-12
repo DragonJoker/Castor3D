@@ -43,12 +43,11 @@ namespace castor3d
 
 #else
 
-		LegacyPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		LegacyPassBuffer::PassesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
-			return makeArrayView( reinterpret_cast< LegacyPassBuffer::PassData * >( data )
-				, reinterpret_cast< LegacyPassBuffer::PassData * >( data ) + count );
+			return makeArrayView( reinterpret_cast< LegacyPassBuffer::PassData * >( buffer )
+				, reinterpret_cast< LegacyPassBuffer::PassData * >( buffer ) + count );
 		}
 
 #endif
@@ -59,7 +58,7 @@ namespace castor3d
 	LegacyPassBuffer::LegacyPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer, count ) }
+		, m_data{ doBindData( m_buffer.ptr(), count ) }
 	{
 	}
 

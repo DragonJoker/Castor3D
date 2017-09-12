@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -375,7 +375,6 @@ namespace castor3d
 	class UniformBufferBinding;
 	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
-	class PassBuffer;
 	class BillboardUbo;
 	class MatrixUbo;
 	class ModelUbo;
@@ -383,6 +382,7 @@ namespace castor3d
 	class MorphingUbo;
 	class SceneUbo;
 	class SkinningUbo;
+	class PassBuffer;
 	template< UniformType Type >
 	class TUniform;
 	template< UniformType Type >
