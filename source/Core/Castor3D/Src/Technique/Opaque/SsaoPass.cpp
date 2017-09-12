@@ -137,7 +137,7 @@ namespace castor3d
 			result.setSampler( sampler );
 			result.setTexture( texture );
 			result.initialise();
-			result.setIndex( 2u );
+			result.setIndex( MinTextureIndex + 2u );
 			return result;
 		}
 
@@ -307,9 +307,9 @@ namespace castor3d
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->setValue( 0 );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->setValue( 1 );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->setValue( 2 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->setValue( MinTextureIndex + 0 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->setValue( MinTextureIndex + 1 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->setValue( MinTextureIndex + 2 );
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
 			program->initialise();
@@ -324,7 +324,7 @@ namespace castor3d
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->setValue( 0 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->setValue( MinTextureIndex + 0 );
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
 			program->initialise();
@@ -383,7 +383,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( ssaoResult );
 			unit.setSampler( sampler );
-			unit.setIndex( 0u );
+			unit.setIndex( MinTextureIndex );
 			unit.initialise();
 			return unit;
 		}
@@ -481,7 +481,7 @@ namespace castor3d
 			, PixelFormat::eA8R8G8B8 ) );
 		m_ssaoResult.setTexture( ssaoResult );
 		m_ssaoResult.setSampler( sampler );
-		m_ssaoResult.setIndex( 0u );
+		m_ssaoResult.setIndex( MinTextureIndex );
 		m_ssaoResult.initialise();
 
 		m_ssaoFbo = renderSystem.createFrameBuffer();
@@ -590,18 +590,19 @@ namespace castor3d
 		m_ssaoConfig.bindTo( 8u );
 		m_ssaoFbo->bind( FrameBufferTarget::eDraw );
 		m_ssaoFbo->clear( BufferComponent::eColour );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( 0u );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( 1u );
+		auto index = MinTextureIndex;
+		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
 		m_ssaoNoise.bind();
 		m_ssaoPipeline->apply();
 		m_ssaoGeometryBuffers->draw( 6u, 0u );
 		m_ssaoNoise.unbind();
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( 1u );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( 0u );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index-- );
+		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( index-- );
 		m_ssaoFbo->unbind();
 		m_ssaoTimer->stop();
 	}

@@ -219,7 +219,7 @@ namespace Bloom
 			result = doInitialiseCombineProgram();
 		}
 
-		uint32_t index = 0;
+		uint32_t index = MinTextureIndex;
 
 		for ( auto & surface : m_hiPassSurfaces )
 		{
@@ -232,7 +232,7 @@ namespace Bloom
 		}
 
 		size = m_renderTarget.getSize();
-		index = 0;
+		index = MinTextureIndex;
 
 		for ( auto & surface : m_blurSurfaces )
 		{
@@ -259,7 +259,6 @@ namespace Bloom
 	{
 		m_matrixUbo.getUbo().cleanup();
 		m_blur.reset();
-		m_hiPassMapDiffuse.reset();
 
 		m_vertexBuffer->cleanup();
 		m_vertexBuffer.reset();
@@ -350,7 +349,6 @@ namespace Bloom
 		auto source = &m_hiPassSurfaces[0];
 		source->m_fbo->bind( FrameBufferTarget::eDraw );
 		source->m_fbo->clear( BufferComponent::eColour );
-		m_hiPassMapDiffuse->setValue( 0 );
 		getRenderSystem()->getCurrentContext()->renderTexture( source->m_size
 			, p_origin
 			, *m_hiPassPipeline
@@ -394,8 +392,8 @@ namespace Bloom
 		texture1.bind();
 		texture2.bind();
 		texture3.bind();
-		p_origin.bind( 4 );
-		m_linearSampler->bind( 4 );
+		p_origin.bind( MinTextureIndex + 4 );
+		m_linearSampler->bind( MinTextureIndex + 4 );
 
 		m_geometryBuffers->draw( uint32_t( m_vertices.size() ), 0u );
 
@@ -403,8 +401,8 @@ namespace Bloom
 		texture1.unbind();
 		texture2.unbind();
 		texture3.unbind();
-		p_origin.unbind( 4 );
-		m_linearSampler->unbind( 4 );
+		p_origin.unbind( MinTextureIndex + 4 );
+		m_linearSampler->unbind( MinTextureIndex + 4 );
 
 		m_blurSurfaces[0].m_fbo->unbind();
 
@@ -457,8 +455,8 @@ namespace Bloom
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		m_hiPassMapDiffuse = program->createUniform < UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel );
+		program->createUniform < UniformType::eSampler >( ShaderProgram::MapDiffuse
+			, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, hipass );
 		bool result = program->initialise();
@@ -490,15 +488,15 @@ namespace Bloom
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass0
-			, ShaderType::ePixel )->setValue( 0 );
+			, ShaderType::ePixel )->setValue( MinTextureIndex + 0 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass1
-			, ShaderType::ePixel )->setValue( 1 );
+			, ShaderType::ePixel )->setValue( MinTextureIndex + 1 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass2
-			, ShaderType::ePixel )->setValue( 2 );
+			, ShaderType::ePixel )->setValue( MinTextureIndex + 2 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass3
-			, ShaderType::ePixel )->setValue( 3 );
+			, ShaderType::ePixel )->setValue( MinTextureIndex + 3 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapScene
-			, ShaderType::ePixel )->setValue( 4 );
+			, ShaderType::ePixel )->setValue( MinTextureIndex + 4 );
 
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, combine );

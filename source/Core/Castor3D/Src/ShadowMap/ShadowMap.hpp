@@ -276,8 +276,7 @@ namespace castor3d
 		void doApplyAlphaFunc( glsl::GlslWriter & writer
 			, ComparisonFunc alphaFunc
 			, glsl::Float const & alpha
-			, glsl::Int const & material
-			, shader::Materials const & materials )const;
+			, glsl::Float const & alphaRef )const;
 
 	protected:
 		//!\~english	The frame buffer.

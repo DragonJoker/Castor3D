@@ -409,21 +409,18 @@ namespace castor3d
 		 *\param[in]	writer		The GLSL writer.
 		 *\param		alphaFunc	The alpha function.
 		 *\param[in]	alpha		The alpha value.
-		 *\param[in]	material	The material index.
-		 *\param[in]	materials	The materials.
+		 *\param[in]	alphaRef	The alpha comparison reference value.
 		 *\~french
 		 *\brief		Ecrit la fonction d'opacité en GLSL.
 		 *\param[in]	writer		Le writer GLSL.
 		 *\param		alphaFunc	La fonction d'opacité.
 		 *\param[in]	alpha		La valeur d'opacité.
-		 *\param[in]	material	L'indice du matériau.
-		 *\param[in]	materials	Les matériaux.
+		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
 		 */
 		C3D_API void doApplyAlphaFunc( glsl::GlslWriter & writer
 			, ComparisonFunc alphaFunc
 			, glsl::Float const & alpha
-			, glsl::Int const & material
-			, shader::Materials const & materials )const;
+			, glsl::Float const & alphaRef )const;
 		/**
 		 *\~english
 		 *\brief		Creates a render node.

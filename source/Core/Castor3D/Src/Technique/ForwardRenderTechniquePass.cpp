@@ -266,16 +266,18 @@ namespace castor3d
 				, normalize( vtx_normal ) );
 			auto ambient = writer.declLocale( cuT( "ambient" )
 				, c3d_ambientLight.xyz() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( vtx_material ) );
 			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
-				, materials.getSpecular( vtx_material ) );
+				, material.m_specular() );
 			auto matShininess = writer.declLocale( cuT( "matShininess" )
-				, materials.getShininess( vtx_material ) );
+				, material.m_shininess() );
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
-				, materials.getGamma( vtx_material ) );
+				, material.m_gamma() );
 			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
-				, utils.removeGamma( matGamma, materials.getDiffuse( vtx_material ) ) );
+				, utils.removeGamma( matGamma, material.m_diffuse() ) );
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, matDiffuse * materials.getEmissive( vtx_material ) );
+				, matDiffuse * material.m_emissive() );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
 				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
@@ -319,7 +321,7 @@ namespace castor3d
 				, output );
 
 			pxl_fragColor.xyz() = writer.paren( ambient + lightDiffuse ) * matDiffuse
-				+ lightSpecular * materials.getSpecular( vtx_material )
+				+ lightSpecular * material.m_specular()
 				+ matEmissive;
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
@@ -342,7 +344,7 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
 					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, materials.getRefractionRatio( vtx_material ) ) );
+						, refract( incident, normal, material.m_refractionRatio() ) );
 					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz() * matDiffuse / length( matDiffuse );
 				}
 
@@ -362,7 +364,7 @@ namespace castor3d
 			if ( !m_opaque )
 			{
 				auto alpha = writer.declLocale( cuT( "alpha" )
-					, materials.getOpacity( vtx_material ) );
+					, material.m_opacity() );
 
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -380,18 +382,16 @@ namespace castor3d
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
-						, vtx_material
-						, materials );
+						, material.m_alphaRef() );
 				}
 				else
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, materials.getOpacity( vtx_material ) );
+						, material.m_opacity() );
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
-						, vtx_material
-						, materials );
+						, material.m_alphaRef() );
 				}
 			}
 
@@ -486,16 +486,18 @@ namespace castor3d
 				, normalize( vtx_normal ) );
 			auto ambient = writer.declLocale( cuT( "ambient" )
 				, c3d_ambientLight.xyz() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( vtx_material ) );
 			auto matMetallic = writer.declLocale( cuT( "matMetallic" )
-				, materials.getMetallic( vtx_material ) );
+				, material.m_metallic() );
 			auto matRoughness = writer.declLocale( cuT( "matRoughness" )
-				, materials.getRoughness( vtx_material ) );
+				, material.m_roughness() );
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
-				, materials.getGamma( vtx_material ) );
+				, material.m_gamma() );
 			auto matAlbedo = writer.declLocale( cuT( "matAlbedo" )
-				, utils.removeGamma( matGamma, materials.getAlbedo( vtx_material ) ) );
+				, utils.removeGamma( matGamma, material.m_albedo() ) );
 			auto matEmissive = writer.declLocale( cuT( "emissive" )
-				, matAlbedo * materials.getEmissive( vtx_material ) );
+				, matAlbedo * material.m_emissive() );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
 				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
@@ -560,7 +562,8 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
 
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -578,18 +581,16 @@ namespace castor3d
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
-						, vtx_material
-						, materials );
+						, material.m_alphaRef() );
 				}
 				else
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, materials.getOpacity( vtx_material ) );
+						, material.m_opacity() );
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
-						, vtx_material
-						, materials );
+						, material.m_alphaRef() );
 				}
 			}
 
@@ -684,16 +685,18 @@ namespace castor3d
 				, normalize( vtx_normal ) );
 			auto ambient = writer.declLocale( cuT( "ambient" )
 				, c3d_ambientLight.xyz() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( vtx_material ) );
 			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
-				, materials.getSpecular( vtx_material ) );
+				, material.m_specular() );
 			auto matGlossiness = writer.declLocale( cuT( "matGlossiness" )
-				, materials.getGlossiness( vtx_material ) );
+				, material.m_glossiness() );
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
-				, materials.getGamma( vtx_material ) );
+				, material.m_gamma() );
 			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
-				, utils.removeGamma( matGamma, materials.getDiffuse( vtx_material ) ) );
+				, utils.removeGamma( matGamma, material.m_diffuse() ) );
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, matDiffuse * materials.getEmissive( vtx_material ) );
+				, matDiffuse * material.m_emissive() );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
 				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
@@ -758,7 +761,8 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" ), materials.getOpacity( vtx_material ) );
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
 
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -776,18 +780,16 @@ namespace castor3d
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
-						, vtx_material
-						, materials );
+						, material.m_alphaRef() );
 				}
 				else
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, materials.getOpacity( vtx_material ) );
+						, material.m_opacity() );
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
-						, vtx_material
-						, materials );
+						, material.m_alphaRef() );
 				}
 			}
 

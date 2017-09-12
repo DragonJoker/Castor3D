@@ -33,7 +33,7 @@ namespace castor3d
 	inline uint32_t doFillShaderShadowMaps( RenderPipeline & p_pipeline
 		, ShadowMapLightTypeArray & shadowMaps )
 	{
-		uint32_t index = p_pipeline.getTexturesCount() + Pass::MinTextureIndex;
+		uint32_t index = p_pipeline.getTexturesCount() + MinTextureIndex;
 
 		if ( getShadowType( p_pipeline.getFlags().m_sceneFlags ) != ShadowType::eNone )
 		{

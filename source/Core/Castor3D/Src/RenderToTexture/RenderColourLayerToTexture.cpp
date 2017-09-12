@@ -151,11 +151,11 @@ namespace castor3d
 		p_pipeline.apply();
 		m_layerIndexUniform->update();
 
-		p_texture.bind( 0u );
-		m_sampler->bind( 0u );
+		p_texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		p_texture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		p_texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderColourLayerToTexture::doCreateProgram()
@@ -210,7 +210,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_layerIndexUniform = program->createUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
 		program->initialise();
 		return program;

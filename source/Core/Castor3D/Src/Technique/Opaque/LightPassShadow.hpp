@@ -323,7 +323,7 @@ namespace castor3d
 				: my_program_type( engine, vtx, pxl )
 			{
 				this->m_program->template createUniform< UniformType::eSampler >( my_traits::getName()
-					, ShaderType::ePixel )->setValue( int( DsTexture::eCount ) );
+					, ShaderType::ePixel )->setValue( MinTextureIndex + int( DsTexture::eCount ) );
 			}
 		};
 

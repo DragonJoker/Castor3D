@@ -196,11 +196,11 @@ namespace castor3d
 		matrixUbo.update( m_viewport.getProjection() );
 		pipeline.apply();
 
-		texture.bind( 0u );
-		m_sampler->bind( 0u );
+		texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		texture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderColourCubeToTexture::doCreateProgram()
@@ -262,7 +262,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( 0u );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
 		program->initialise();
 		return program;

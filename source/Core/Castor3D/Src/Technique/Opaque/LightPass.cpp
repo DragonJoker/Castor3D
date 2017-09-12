@@ -284,7 +284,7 @@ namespace castor3d
 
 		for ( int i = 0; i < int( DsTexture::eCount ); i++ )
 		{
-			m_program->createUniform< UniformType::eSampler >( getTextureName( DsTexture( i ) ), ShaderType::ePixel )->setValue( i );
+			m_program->createUniform< UniformType::eSampler >( getTextureName( DsTexture( i ) ), ShaderType::ePixel )->setValue( MinTextureIndex + i );
 		}
 	}
 

@@ -541,23 +541,23 @@ namespace castor3d
 		{
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
+				auto material = materials->getBaseMaterial( vtx_material );
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 				doApplyAlphaFunc( writer
 					, alphaFunc
 					, alpha
-					, vtx_material
-					, *materials );
+					, material->m_alphaRef() );
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
+				auto material = materials->getBaseMaterial( vtx_material );
 				auto alpha = writer.declLocale( cuT( "alpha" )
-					, materials->getOpacity( vtx_material ) );
+					, material->m_opacity() );
 				doApplyAlphaFunc( writer
 					, alphaFunc
 					, alpha
-					, vtx_material
-					, *materials );
+					, material->m_alphaRef() );
 			}
 
 			pxl_fragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );

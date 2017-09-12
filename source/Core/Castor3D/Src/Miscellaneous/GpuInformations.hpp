@@ -344,6 +344,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The SSBO support status.
+		 *\~french
+		 *\return		Le statut du support des SSBO.
+		 */
+		inline bool hasShaderStorageBuffers()const
+		{
+			return hasFeature( GpuFeature::eShaderStorageBuffers );
+		}
+		/**
+		 *\~english
 		 *\brief		Checks support for given shader model.
 		 *\param[in]	p_model	The shader model.
 		 *\return		\p false if the given model is not supported by current API.

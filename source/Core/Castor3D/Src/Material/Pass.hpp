@@ -643,11 +643,6 @@ namespace castor3d
 		virtual void doSetOpacity( float value ) = 0;
 
 	public:
-		static uint32_t constexpr PassBufferIndex = 0u;
-		static uint32_t constexpr LightBufferIndex = 1u;
-		static uint32_t constexpr MinTextureIndex = 2u;
-
-	public:
 		OnChanged onChanged;
 
 	private:

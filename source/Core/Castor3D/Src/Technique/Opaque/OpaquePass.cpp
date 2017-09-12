@@ -254,16 +254,18 @@ namespace castor3d
 		{
 			auto normal = writer.declLocale( cuT( "normal" )
 				, normalize( vtx_normal ) );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( vtx_material ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
-				, materials.getDiffuse( vtx_material ) );
+				, material.m_diffuse() );
 			auto specular = writer.declLocale( cuT( "specular" )
-				, materials.getSpecular( vtx_material ) );
+				, material.m_specular() );
 			auto matShininess = writer.declLocale( cuT( "matShininess" )
-				, materials.getShininess( vtx_material ) );
+				, material.m_shininess() );
 			auto emissive = writer.declLocale( cuT( "emissive" )
-				, diffuse * materials.getEmissive( vtx_material ) );
+				, diffuse * material.m_emissive() );
 			auto gamma = writer.declLocale( cuT( "gamma" )
-				, materials.getGamma( vtx_material ) );
+				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, vtx_texture );
 
@@ -303,13 +305,19 @@ namespace castor3d
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
 						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, material.m_alphaRef() );
 				}
 				else
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, materials.getOpacity( vtx_material ) );
-					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+						, material.m_opacity() );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, material.m_alphaRef() );
 				}
 			}
 
@@ -324,7 +332,7 @@ namespace castor3d
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( diffuse, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
-			out_c3dOutput4 = vec4( emissive, materials.getRefractionRatio( vtx_material ) );
+			out_c3dOutput4 = vec4( emissive, material.m_refractionRatio() );
 		} );
 
 		return writer.finalise();
@@ -402,16 +410,18 @@ namespace castor3d
 		{
 			auto normal = writer.declLocale( cuT( "normal" )
 				, normalize( vtx_normal ) );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( vtx_material ) );
 			auto matAlbedo = writer.declLocale( cuT( "matAlbedo" )
-				, materials.getAlbedo( vtx_material ) );
+				, material.m_albedo() );
 			auto matRoughness = writer.declLocale( cuT( "matRoughness" )
-				, materials.getRoughness( vtx_material ) );
+				, material.m_roughness() );
 			auto matMetallic = writer.declLocale( cuT( "matMetallic" )
-				, materials.getMetallic( vtx_material ) );
+				, material.m_metallic() );
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, matAlbedo * materials.getEmissive( vtx_material ) );
+				, matAlbedo * material.m_emissive() );
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
-				, materials.getGamma( vtx_material ) );
+				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, vtx_texture );
 
@@ -451,13 +461,19 @@ namespace castor3d
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
 						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, material.m_alphaRef() );
 				}
 				else
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, materials.getOpacity( vtx_material ) );
-					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+						, material.m_opacity() );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, material.m_alphaRef() );
 				}
 			}
 
@@ -472,7 +488,7 @@ namespace castor3d
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
 			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
-			out_c3dOutput4 = vec4( matEmissive, materials.getRefractionRatio( vtx_material ) );
+			out_c3dOutput4 = vec4( matEmissive, material.m_refractionRatio() );
 		} );
 
 		return writer.finalise();
@@ -548,13 +564,22 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto normal = writer.declLocale( cuT( "normal" ), normalize( vtx_normal ) );
-			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" ), materials.getDiffuse( vtx_material ) );
-			auto matGlossiness = writer.declLocale( cuT( "matGlossiness" ), materials.getGlossiness( vtx_material ) );
-			auto matSpecular = writer.declLocale( cuT( "matSpecular" ), materials.getSpecular( vtx_material ) );
-			auto matEmissive = writer.declLocale( cuT( "matEmissive" ), matDiffuse * materials.getEmissive( vtx_material ) );
-			auto matGamma = writer.declLocale( cuT( "matGamma" ), materials.getGamma( vtx_material ) );
-			auto texCoord = writer.declLocale( cuT( "texCoord" ), vtx_texture );
+			auto normal = writer.declLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( vtx_material ) );
+			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
+				, material.m_diffuse() );
+			auto matGlossiness = writer.declLocale( cuT( "matGlossiness" )
+				, material.m_glossiness() );
+			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
+				, material.m_specular() );
+			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
+				, matDiffuse * material.m_emissive() );
+			auto matGamma = writer.declLocale( cuT( "matGamma" )
+				, material.m_gamma() );
+			auto texCoord = writer.declLocale( cuT( "texCoord" )
+				, vtx_texture );
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
@@ -592,13 +617,19 @@ namespace castor3d
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
 						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, material.m_alphaRef() );
 				}
 				else
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, materials.getOpacity( vtx_material ) );
-					doApplyAlphaFunc( writer, alphaFunc, alpha, vtx_material, materials );
+						, material.m_opacity() );
+					doApplyAlphaFunc( writer
+						, alphaFunc
+						, alpha
+						, material.m_alphaRef() );
 				}
 			}
 
@@ -613,7 +644,7 @@ namespace castor3d
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( matDiffuse, matGlossiness );
 			out_c3dOutput3 = vec4( matSpecular, ambientOcclusion );
-			out_c3dOutput4 = vec4( matEmissive, materials.getRefractionRatio( vtx_material ) );
+			out_c3dOutput4 = vec4( matEmissive, material.m_refractionRatio() );
 		} );
 
 		return writer.finalise();

@@ -75,6 +75,7 @@ namespace castor3d
 			auto pxl = doCreate();
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 			result = program->initialise();
 		}
 

@@ -115,13 +115,11 @@ namespace castor3d
 		std::vector< float > m_kernel;
 
 		castor3d::RenderPipelineUPtr m_blurXPipeline;
-		castor3d::PushUniform1sSPtr m_blurXMapDiffuse;
 		castor3d::UniformBuffer m_blurXUbo;
 		castor3d::Uniform1uiSPtr m_blurXCoeffCount;
 		castor3d::Uniform1fSPtr m_blurXCoeffs;
 
 		castor3d::RenderPipelineUPtr m_blurYPipeline;
-		castor3d::PushUniform1sSPtr m_blurYMapDiffuse;
 		castor3d::UniformBuffer m_blurYUbo;
 		castor3d::Uniform1uiSPtr m_blurYCoeffCount;
 		castor3d::Uniform1fSPtr m_blurYCoeffs;

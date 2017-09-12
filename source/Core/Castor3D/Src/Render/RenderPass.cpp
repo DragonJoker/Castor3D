@@ -682,15 +682,14 @@ namespace castor3d
 	void RenderPass::doApplyAlphaFunc( glsl::GlslWriter & writer
 		, ComparisonFunc alphaFunc
 		, glsl::Float const & alpha
-		, glsl::Int const & material
-		, shader::Materials const & materials )const
+		, glsl::Float const & alphaRef )const
 	{
 		using namespace glsl;
 
 		switch ( alphaFunc )
 		{
 		case ComparisonFunc::eLess:
-			IF( writer, alpha >= materials.getAlphaRef( material ) )
+			IF( writer, alpha >= alphaRef )
 			{
 				writer.discard();
 			}
@@ -698,7 +697,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eLEqual:
-			IF( writer, alpha > materials.getAlphaRef( material ) )
+			IF( writer, alpha > alphaRef )
 			{
 				writer.discard();
 			}
@@ -706,7 +705,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eEqual:
-			IF( writer, alpha != materials.getAlphaRef( material ) )
+			IF( writer, alpha != alphaRef )
 			{
 				writer.discard();
 			}
@@ -714,7 +713,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eNEqual:
-			IF( writer, alpha == materials.getAlphaRef( material ) )
+			IF( writer, alpha == alphaRef )
 			{
 				writer.discard();
 			}
@@ -722,7 +721,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eGEqual:
-			IF( writer, alpha < materials.getAlphaRef( material ) )
+			IF( writer, alpha < alphaRef )
 			{
 				writer.discard();
 			}
@@ -730,7 +729,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eGreater:
-			IF( writer, alpha <= materials.getAlphaRef( material ) )
+			IF( writer, alpha <= alphaRef )
 			{
 				writer.discard();
 			}

@@ -379,7 +379,7 @@ namespace castor3d
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
 
-			auto index = 0u;
+			auto index = MinTextureIndex;
 			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapReflection" ), ShaderType::ePixel )->setValue( index++ );
 			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapRefraction" ), ShaderType::ePixel )->setValue( index++ );
 			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( index++ );
@@ -531,7 +531,7 @@ namespace castor3d
 		frameBuffer.clear( BufferComponent::eColour );
 
 		m_viewport.apply();
-		uint32_t index{ 0u };
+		uint32_t index{ MinTextureIndex };
 		reflection.getTexture()->bind( index );
 		reflection.getSampler()->bind( index );
 		++index;
@@ -603,7 +603,7 @@ namespace castor3d
 		--index;
 		reflection.getTexture()->bind( index );
 		reflection.getSampler()->bind( index );
-		ENSURE( index == 0u );
+		ENSURE( index == MinTextureIndex );
 
 		m_timer->stop();
 	}
@@ -631,7 +631,7 @@ namespace castor3d
 		frameBuffer.setDrawBuffers();
 
 		m_viewport.apply();
-		uint32_t index{ 0u };
+		uint32_t index{ MinTextureIndex };
 		reflection.getTexture()->bind( index );
 		reflection.getSampler()->bind( index );
 		++index;
@@ -721,7 +721,7 @@ namespace castor3d
 		--index;
 		reflection.getTexture()->unbind( index );
 		reflection.getSampler()->unbind( index );
-		ENSURE( index == 0u );
+		ENSURE( index == MinTextureIndex );
 
 		m_timer->stop();
 	}

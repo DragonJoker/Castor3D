@@ -429,6 +429,8 @@ namespace castor3d
 
 	void RenderTechnique::doRenderShadowMaps()
 	{
+		getEngine()->getMaterialCache().getPassBuffer().bind();
+
 		for ( auto & array : m_activeShadowMaps )
 		{
 			for ( auto & shadowMap : array )
@@ -442,6 +444,7 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & maps = scene.getEnvironmentMaps();
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 		for ( auto & map : maps )
 		{
@@ -453,6 +456,7 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if DEBUG_FORWARD_RENDERING
 
@@ -490,6 +494,7 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if USE_WEIGHTED_BLEND
 #	if !DEBUG_FORWARD_RENDERING

@@ -176,11 +176,11 @@ namespace castor3d
 		p_matrixUbo.update( m_viewport.getProjection() );
 		p_pipeline.apply();
 
-		p_texture.bind( 0u );
-		m_sampler->bind( 0u );
+		p_texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		p_texture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		p_texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderDepthCubeToTexture::doCreateProgram()
@@ -244,7 +244,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( 0u );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
 		m_uvUniform = program->createUniform< UniformType::eVec2f >( cuT( "c3d_v2UvMult" ), ShaderType::ePixel );
 		program->initialise();

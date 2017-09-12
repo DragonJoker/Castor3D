@@ -98,9 +98,8 @@ namespace castor3d
 #endif
 
 	private:
-		static constexpr uint32_t DataSize = ( sizeof( RgbColour ) * 2 )
-			+ ( sizeof( float ) * 7 )
-			+ ( sizeof( int ) * 2 );
+		static constexpr uint32_t DataSize = ( sizeof( RgbaColour ) * 4 )
+			+ ( PassBuffer::ExtendedDataSize );
 
 	private:
 		//!\~english	The specular/glossiness PBR passes data.

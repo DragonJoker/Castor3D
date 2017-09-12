@@ -147,6 +147,8 @@ namespace castor3d
 			RgbaColour transmittance;
 		};
 
+		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 2;
+
 #endif
 
 	protected:

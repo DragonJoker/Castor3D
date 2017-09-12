@@ -72,7 +72,7 @@ namespace castor3d
 
 	void PassBuffer::bind()const
 	{
-		m_buffer.bind( 0u );
+		m_buffer.bind( PassBufferIndex );
 	}
 
 	void PassBuffer::visit( LegacyPass const & pass )

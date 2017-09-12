@@ -180,9 +180,9 @@ namespace castor3d
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eDepth ), ShaderType::ePixel )->setValue( 0u );
-			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eAccumulation ), ShaderType::ePixel )->setValue( 1u );
-			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eRevealage ), ShaderType::ePixel )->setValue( 2u );
+			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eDepth ), ShaderType::ePixel )->setValue( MinTextureIndex + 0u );
+			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eAccumulation ), ShaderType::ePixel )->setValue( MinTextureIndex + 1u );
+			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eRevealage ), ShaderType::ePixel )->setValue( MinTextureIndex + 2u );
 
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
@@ -301,19 +301,20 @@ namespace castor3d
 		auto & program = m_programs[size_t( p_fog.getType() )];
 
 		m_viewport.apply();
-		p_r[size_t( WbTexture::eDepth )]->getTexture()->bind( 0u );
-		p_r[size_t( WbTexture::eDepth )]->getSampler()->bind( 0u );
-		p_r[size_t( WbTexture::eAccumulation )]->getTexture()->bind( 1u );
-		p_r[size_t( WbTexture::eAccumulation )]->getSampler()->bind( 1u );
-		p_r[size_t( WbTexture::eRevealage )]->getTexture()->bind( 2u );
-		p_r[size_t( WbTexture::eRevealage )]->getSampler()->bind( 2u );
+		auto index = MinTextureIndex;
+		p_r[size_t( WbTexture::eDepth )]->getTexture()->bind( index );
+		p_r[size_t( WbTexture::eDepth )]->getSampler()->bind( index++ );
+		p_r[size_t( WbTexture::eAccumulation )]->getTexture()->bind( index );
+		p_r[size_t( WbTexture::eAccumulation )]->getSampler()->bind( index++ );
+		p_r[size_t( WbTexture::eRevealage )]->getTexture()->bind( index );
+		p_r[size_t( WbTexture::eRevealage )]->getSampler()->bind( index );
 		program.render( *m_vertexBuffer );
-		p_r[size_t( WbTexture::eRevealage )]->getTexture()->unbind( 2u );
-		p_r[size_t( WbTexture::eRevealage )]->getSampler()->unbind( 2u );
-		p_r[size_t( WbTexture::eAccumulation )]->getTexture()->unbind( 1u );
-		p_r[size_t( WbTexture::eAccumulation )]->getSampler()->unbind( 1u );
-		p_r[size_t( WbTexture::eDepth )]->getTexture()->unbind( 0u );
-		p_r[size_t( WbTexture::eDepth )]->getSampler()->unbind( 0u );
+		p_r[size_t( WbTexture::eRevealage )]->getTexture()->unbind( index );
+		p_r[size_t( WbTexture::eRevealage )]->getSampler()->unbind( index-- );
+		p_r[size_t( WbTexture::eAccumulation )]->getTexture()->unbind( index );
+		p_r[size_t( WbTexture::eAccumulation )]->getSampler()->unbind( index-- );
+		p_r[size_t( WbTexture::eDepth )]->getTexture()->unbind( index );
+		p_r[size_t( WbTexture::eDepth )]->getSampler()->unbind( index );
 	}
 
 	//*********************************************************************************************

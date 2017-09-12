@@ -326,14 +326,12 @@ namespace castor3d
 		m_blurXUbo.cleanup();
 		m_blurXCoeffCount.reset();
 		m_blurXCoeffs.reset();
-		m_blurXMapDiffuse.reset();
 		m_blurYPipeline->cleanup();
 		m_blurYPipeline.reset();
 
 		m_blurYUbo.cleanup();
 		m_blurYCoeffCount.reset();
 		m_blurYCoeffs.reset();
-		m_blurYMapDiffuse.reset();
 		m_blurXPipeline->cleanup();
 		m_blurXPipeline.reset();
 
@@ -391,8 +389,8 @@ namespace castor3d
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		m_blurXMapDiffuse = program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
+			, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_blurXCoeffCount->setValue( uint32_t( m_kernel.size() ) );
 		m_blurXCoeffs->setValues( m_kernel );
 
@@ -428,8 +426,8 @@ namespace castor3d
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		m_blurYMapDiffuse = program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
+			, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_blurYCoeffCount->setValue( uint32_t( m_kernel.size() ) );
 		m_blurYCoeffs->setValues( m_kernel );
 

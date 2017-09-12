@@ -161,8 +161,8 @@ namespace castor3d
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
 		};
 		REQUIRE( p_dstTexture->getDimensions() == m_size );
-		p_srcTexture.bind( 0u );
-		m_sampler->bind( 0u );
+		p_srcTexture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		REQUIRE( m_frameBuffer->isComplete() );
 
@@ -202,8 +202,8 @@ namespace castor3d
 		}
 
 		m_frameBuffer->unbind();
-		m_sampler->unbind( 0u );
-		p_srcTexture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		p_srcTexture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr EnvironmentPrefilter::doCreateProgram()
@@ -410,7 +410,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}

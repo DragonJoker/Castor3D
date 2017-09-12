@@ -79,7 +79,10 @@ namespace castor3d
 
 	glsl::GlslWriter RenderSystem::createGlslWriter()
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion(), m_gpuInformations.hasConstantsBuffers(), m_gpuInformations.hasTextureBuffers() } };
+		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
+			, m_gpuInformations.hasConstantsBuffers()
+			, m_gpuInformations.hasTextureBuffers()
+			, m_gpuInformations.hasShaderStorageBuffers() } };
 	}
 
 	void RenderSystem::setCurrentContext( Context * p_context )

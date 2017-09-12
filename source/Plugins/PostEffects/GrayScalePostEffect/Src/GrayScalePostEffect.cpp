@@ -129,7 +129,7 @@ namespace GrayScale
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		m_mapDiffuse = program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, fragment );
 		program->initialise();
@@ -142,12 +142,14 @@ namespace GrayScale
 		m_pipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate ), std::move( rsstate ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		return m_surface.initialise( m_renderTarget, size, 0, m_sampler );
+		return m_surface.initialise( m_renderTarget
+			, size
+			, MinTextureIndex
+			, m_sampler );
 	}
 
 	void GrayScalePostEffect::cleanup()
 	{
-		m_mapDiffuse.reset();
 		m_surface.cleanup();
 	}
 
@@ -160,7 +162,6 @@ namespace GrayScale
 			m_surface.m_fbo->bind( FrameBufferTarget::eDraw );
 			auto texture = std::static_pointer_cast< TextureAttachment >( attach )->getTexture();
 			m_surface.m_fbo->clear( BufferComponent::eColour );
-			m_mapDiffuse->setValue( 0 );
 			getRenderSystem()->getCurrentContext()->renderTexture( 
 				m_surface.m_size
 				, *texture

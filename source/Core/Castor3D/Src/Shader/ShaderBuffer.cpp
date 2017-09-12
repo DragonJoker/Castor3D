@@ -29,13 +29,13 @@ namespace castor3d
 		}
 
 		TextureUnit doGetTbo( Engine & engine
-			, uint32_t size )
+			, uint32_t size
+			, ShaderStorageBuffer * ssbo )
 		{
 			TextureUnit tbo{ engine };
 			auto & info = engine.getRenderSystem()->getGpuInformations();
 
-			if ( !info.hasFeature( GpuFeature::eShaderStorageBuffers )
-				&& info.hasFeature( GpuFeature::eTextureBuffers ) )
+			if ( !ssbo )
 			{
 				auto texture = engine.getRenderSystem()->createTexture( TextureType::eBuffer
 					, AccessType::eWrite
@@ -48,6 +48,7 @@ namespace castor3d
 				tbo.setSampler( sampler );
 				tbo.setTexture( texture );
 				tbo.setIndex( 0u );
+				tbo.initialise();
 			}
 
 			return tbo;
@@ -71,7 +72,7 @@ namespace castor3d
 	ShaderBuffer::ShaderBuffer( Engine & engine
 		, uint32_t size )
 		: m_ssbo{ doGetSsbo( engine, size ) }
-		, m_tbo{ doGetTbo( engine, size ) }
+		, m_tbo{ doGetTbo( engine, size, m_ssbo.get() ) }
 		, m_buffer{ doGetBuffer( m_tbo ) }
 	{
 	}
@@ -79,7 +80,12 @@ namespace castor3d
 	ShaderBuffer::~ShaderBuffer()
 	{
 		m_tbo.cleanup();
-		m_ssbo.reset();
+
+		if ( m_ssbo )
+		{
+			m_ssbo->cleanup();
+			m_ssbo.reset();
+		}
 	}
 
 	void ShaderBuffer::update()

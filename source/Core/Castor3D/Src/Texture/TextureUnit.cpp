@@ -211,9 +211,9 @@ namespace castor3d
 				&& sampler
 				&& sampler->getInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eNearest )
 			{
-				m_texture->bind( 0u );
+				m_texture->bind( MinTextureIndex );
 				m_texture->generateMipmaps();
-				m_texture->unbind( 0u );
+				m_texture->unbind( MinTextureIndex );
 			}
 		}
 

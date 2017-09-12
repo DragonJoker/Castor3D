@@ -41,6 +41,7 @@ namespace glsl
 		uint32_t m_shaderLanguageVersion;
 		bool m_hasConstantsBuffers;
 		bool m_hasTextureBuffers;
+		bool m_hasShaderStorageBuffers;
 	};
 
 	class GlslWriter
@@ -61,14 +62,19 @@ namespace glsl
 			return m_config.m_shaderLanguageVersion;
 		}
 
-		inline uint32_t hasConstantsBuffers()const
+		inline bool hasConstantsBuffers()const
 		{
 			return m_config.m_hasConstantsBuffers;
 		}
 
-		inline uint32_t hasTextureBuffers()const
+		inline bool hasTextureBuffers()const
 		{
 			return m_config.m_hasTextureBuffers;
+		}
+
+		inline bool hasShaderStorageBuffers()const
+		{
+			return m_config.m_hasShaderStorageBuffers;
 		}
 
 		inline bool hasTexelFetch()const

@@ -133,7 +133,7 @@ namespace castor3d
 		m_viewport.apply();
 		p_fbo->bind( FrameBufferTarget::eDraw );
 		p_fbo->clear( BufferComponent::eColour | BufferComponent::eDepth );
-		p_2dTexture.bind( 0u );
+		p_2dTexture.bind( MinTextureIndex );
 
 		for ( uint32_t i = 0; i < 6; ++i )
 		{
@@ -142,12 +142,12 @@ namespace castor3d
 			m_matrixUbo.update( views[i], projection );
 			m_pipeline->apply();
 
-			m_sampler->bind( 0u );
+			m_sampler->bind( MinTextureIndex );
 			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-			m_sampler->unbind( 0u );
+			m_sampler->unbind( MinTextureIndex );
 		}
 
-		p_2dTexture.unbind( 0u );
+		p_2dTexture.unbind( MinTextureIndex );
 		p_fbo->unbind();
 	}
 
@@ -211,7 +211,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}

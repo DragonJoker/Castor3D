@@ -151,7 +151,7 @@ namespace castor3d
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eLighting ) )
 		{
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel )->setValue( Pass::LightBufferIndex );
+			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel )->setValue( LightBufferIndex );
 		}
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )

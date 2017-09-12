@@ -143,9 +143,9 @@ namespace castor3d
 		texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
 		m_prefilteredEnvironment.initialise();
 		m_prefilteredEnvironment.getSampler()->initialise();
-		texture->bind( 0u );
+		texture->bind( MinTextureIndex );
 		texture->generateMipmaps();
-		texture->unbind( 0u );
+		texture->unbind( MinTextureIndex );
 
 		texture = m_prefilteredBrdf.getTexture();
 		texture->getImage().initialiseSource();

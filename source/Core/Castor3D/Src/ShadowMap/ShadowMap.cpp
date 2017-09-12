@@ -252,45 +252,48 @@ namespace castor3d
 	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
 		, TextureChannels const & textureFlags
 		, ComparisonFunc alphaFunc
-		, glsl::Int const & material
+		, glsl::Int const & materialIndex
 		, shader::Materials const & materials )const
 	{
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
 			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
 			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
+			auto material = materials.getBaseMaterial( materialIndex );
 			auto alpha = writer.declLocale( cuT( "alpha" )
 				, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+				, material->m_alphaRef() );
 			doApplyAlphaFunc( writer
 				, alphaFunc
 				, alpha
-				, material
-				, materials );
+				, alphaRef );
 		}
 		else if ( alphaFunc != ComparisonFunc::eAlways )
 		{
+			auto material = materials.getBaseMaterial( materialIndex );
 			auto alpha = writer.declLocale( cuT( "alpha" )
-				, materials.getOpacity( material ) );
+				, material->m_opacity() );
+			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+				, material->m_alphaRef() );
 			doApplyAlphaFunc( writer
 				, alphaFunc
 				, alpha
-				, material
-				, materials );
+				, alphaRef );
 		}
 	}
 
 	void ShadowMap::doApplyAlphaFunc( glsl::GlslWriter & writer
 		, ComparisonFunc alphaFunc
 		, glsl::Float const & alpha
-		, glsl::Int const & material
-		, shader::Materials const & materials )const
+		, glsl::Float const & alphaRef )const
 	{
 		using namespace glsl;
 
 		switch ( alphaFunc )
 		{
 		case ComparisonFunc::eLess:
-			IF( writer, alpha >= materials.getAlphaRef( material ) )
+			IF( writer, alpha >= alphaRef )
 			{
 				writer.discard();
 			}
@@ -298,7 +301,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eLEqual:
-			IF( writer, alpha > materials.getAlphaRef( material ) )
+			IF( writer, alpha > alphaRef )
 			{
 				writer.discard();
 			}
@@ -306,7 +309,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eEqual:
-			IF( writer, alpha != materials.getAlphaRef( material ) )
+			IF( writer, alpha != alphaRef )
 			{
 				writer.discard();
 			}
@@ -314,7 +317,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eNEqual:
-			IF( writer, alpha == materials.getAlphaRef( material ) )
+			IF( writer, alpha == alphaRef )
 			{
 				writer.discard();
 			}
@@ -322,7 +325,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eGEqual:
-			IF( writer, alpha < materials.getAlphaRef( material ) )
+			IF( writer, alpha < alphaRef )
 			{
 				writer.discard();
 			}
@@ -330,7 +333,7 @@ namespace castor3d
 			break;
 
 		case ComparisonFunc::eGreater:
-			IF( writer, alpha <= materials.getAlphaRef( material ) )
+			IF( writer, alpha <= alphaRef )
 			{
 				writer.discard();
 			}

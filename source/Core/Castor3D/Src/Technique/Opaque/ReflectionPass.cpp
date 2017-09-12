@@ -599,13 +599,13 @@ namespace castor3d
 			result->createObject( ShaderType::ePixel );
 			result->setSource( ShaderType::eVertex, vtx );
 			result->setSource( ShaderType::ePixel, pxl );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( 0u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 ), ShaderType::ePixel )->setValue( 1u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData2 ), ShaderType::ePixel )->setValue( 2u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData3 ), ShaderType::ePixel )->setValue( 3u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 ), ShaderType::ePixel )->setValue( 4u );
-			result->createUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->setValue( 5u );
-			int c = int( c_environmentStart );
+			int c = int( MinTextureIndex );
+			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( c++ );
+			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 ), ShaderType::ePixel )->setValue( c++ );
+			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData2 ), ShaderType::ePixel )->setValue( c++ );
+			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData3 ), ShaderType::ePixel )->setValue( c++ );
+			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 ), ShaderType::ePixel )->setValue( c++ );
+			result->createUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->setValue( c++ );
 
 			if ( isPbr )
 			{
@@ -785,98 +785,90 @@ namespace castor3d
 		m_viewport.apply();
 		m_configUbo.update( p_scene.getHdrConfig() );
 		auto & maps = p_scene.getEnvironmentMaps();
-		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( 0u );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( 1u );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->bind( 2u );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->bind( 2u );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->bind( 3u );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->bind( 3u );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( 4u );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( 4u );
-		lp.getTexture()->bind( 5u );
-		lp.getSampler()->bind( 5u );
+
+		auto index = MinTextureIndex;
+		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData2 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData2 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData3 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData3 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index++ );
+		lp.getTexture()->bind( index );
+		lp.getSampler()->bind( index++ );
 
 		if ( p_scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 			|| p_scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
-			auto index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 			auto & skyboxIbl = p_scene.getSkybox().getIbl();
 			skyboxIbl.getPrefilteredBrdf().getTexture()->bind( index );
-			skyboxIbl.getPrefilteredBrdf().getSampler()->bind( index );
-			++index;
+			skyboxIbl.getPrefilteredBrdf().getSampler()->bind( index++ );
 			skyboxIbl.getIrradiance().getTexture()->bind( index );
-			skyboxIbl.getIrradiance().getSampler()->bind( index );
-			++index;
+			skyboxIbl.getIrradiance().getSampler()->bind( index++ );
 			skyboxIbl.getPrefilteredEnvironment().getTexture()->bind( index );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index );
-			++index;
+			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index++ );
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index );
-				++index;
+				map.get().getTexture().getSampler()->bind( index++ );
 			}
 
 			auto program = p_scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 				? 2u
 				: 1u;
 			m_programs[program].render( *m_vertexBuffer );
-			index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 			skyboxIbl.getPrefilteredBrdf().getTexture()->unbind( index );
-			skyboxIbl.getPrefilteredBrdf().getSampler()->unbind( index );
-			++index;
+			skyboxIbl.getPrefilteredBrdf().getSampler()->unbind( index++ );
 			skyboxIbl.getIrradiance().getTexture()->unbind( index );
-			skyboxIbl.getIrradiance().getSampler()->unbind( index );
-			++index;
+			skyboxIbl.getIrradiance().getSampler()->unbind( index++ );
 			skyboxIbl.getPrefilteredEnvironment().getTexture()->unbind( index );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index );
-			++index;
+			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index++ );
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->unbind( index );
-				map.get().getTexture().getSampler()->unbind( index );
-				++index;
+				map.get().getTexture().getSampler()->unbind( index++ );
 			}
 		}
 		else
 		{
-			auto index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index );
-				++index;
+				map.get().getTexture().getSampler()->bind( index++ );
 			}
 
 			m_programs[0].render( *m_vertexBuffer );
-			index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->unbind( index );
-				map.get().getTexture().getSampler()->unbind( index );
-				++index;
+				map.get().getTexture().getSampler()->unbind( index++ );
 			}
 		}
 
-		lp.getTexture()->unbind( 5u );
-		lp.getSampler()->unbind( 5u );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( 4u );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( 4u );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->unbind( 3u );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->unbind( 3u );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->unbind( 2u );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( 2u );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( 1u );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( 0u );
-		m_frameBuffer->unbind();
+		index = MinTextureIndex;
+		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData2 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData3 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData3 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index++ );
+		lp.getTexture()->unbind( index );
+		lp.getSampler()->unbind( index++ );
 		m_timer->stop();
 	}
 }

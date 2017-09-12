@@ -220,11 +220,11 @@ namespace castor3d
 			m_modelMatrixUbo.update( m_mtxModel );
 			m_configUbo.update( scene.getHdrConfig() );
 			m_pipeline->apply();
-			m_texture->bind( 0 );
-			sampler->bind( 0 );
+			m_texture->bind( MinTextureIndex );
+			sampler->bind( MinTextureIndex );
 			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-			sampler->unbind( 0 );
-			m_texture->unbind( 0 );
+			sampler->unbind( MinTextureIndex );
+			m_texture->unbind( MinTextureIndex );
 		}
 	}
 
@@ -304,6 +304,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
+		program->createUniform< UniformType::eSampler >( cuT( "skybox" ), ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return *program;
 	}
@@ -329,9 +330,9 @@ namespace castor3d
 		if ( result )
 		{
 			auto sampler = m_sampler.lock();
-			m_texture->bind( 0 );
+			m_texture->bind( MinTextureIndex );
 			m_texture->generateMipmaps();
-			m_texture->unbind( 0 );
+			m_texture->unbind( MinTextureIndex );
 		}
 
 		return result;

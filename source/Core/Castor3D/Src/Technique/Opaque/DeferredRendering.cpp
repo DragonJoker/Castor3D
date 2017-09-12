@@ -78,7 +78,7 @@ namespace castor3d
 				texture->getImage().initialiseSource();
 
 				m_geometryPassResult[i] = std::make_unique< TextureUnit >( engine );
-				m_geometryPassResult[i]->setIndex( i );
+				m_geometryPassResult[i]->setIndex( MinTextureIndex + i );
 				m_geometryPassResult[i]->setTexture( texture );
 				m_geometryPassResult[i]->setSampler( doCreateSampler( engine, getTextureName( DsTexture( i ) ) ) );
 				m_geometryPassResult[i]->initialise();

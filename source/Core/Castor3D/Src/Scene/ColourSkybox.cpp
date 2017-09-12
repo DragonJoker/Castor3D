@@ -87,14 +87,14 @@ namespace castor3d
 			std::memcpy( pxData, &m_colour->green().value(), sizeof( float ) );
 			pxData += sizeof( float );
 			std::memcpy( pxData, &m_colour->blue().value(), sizeof( float ) );
-			m_texture->bind( 0u );
+			m_texture->bind( MinTextureIndex );
 			doUpdateTextureImage( 0u, pixel );
 			doUpdateTextureImage( 1u, pixel );
 			doUpdateTextureImage( 2u, pixel );
 			doUpdateTextureImage( 3u, pixel );
 			doUpdateTextureImage( 4u, pixel );
 			doUpdateTextureImage( 5u, pixel );
-			m_texture->unbind( 0u );
+			m_texture->unbind( MinTextureIndex );
 			m_ibl->update( *m_texture );
 			m_colour.reset();
 		}

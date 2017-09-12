@@ -515,17 +515,17 @@ namespace castor3d
 
 		if ( textureVariable )
 		{
-			textureVariable->setValue( Pass::LightBufferIndex );
+			textureVariable->setValue( LightBufferIndex );
 		}
 
 		m_overlayUbo.update( pass.getId() );
 		node.m_pipeline.apply();
 		pass.bindTextures();
-		texture.bind( Pass::LightBufferIndex );
-		sampler.bind( Pass::LightBufferIndex );
+		texture.bind( LightBufferIndex );
+		sampler.bind( LightBufferIndex );
 		geometryBuffers.draw( count, 0u );
-		sampler.unbind( Pass::LightBufferIndex );
-		texture.unbind( Pass::LightBufferIndex );
+		sampler.unbind( LightBufferIndex );
+		texture.unbind( LightBufferIndex );
 		pass.unbindTextures();
 	}
 
@@ -664,8 +664,9 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto diffuse = writer.declLocale( cuT( "diffuse" ), materials->getDiffuse( c3d_materialIndex ) );
-				auto alpha = writer.declLocale( cuT( "alpha" ), materials->getOpacity( c3d_materialIndex ) );
+				auto material = materials->getBaseMaterial( c3d_materialIndex );
+				auto diffuse = writer.declLocale( cuT( "diffuse" ), material->m_diffuse() );
+				auto alpha = writer.declLocale( cuT( "alpha" ), material->m_opacity() );
 
 				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
@@ -690,10 +691,10 @@ namespace castor3d
 
 		if ( checkFlag( textureFlags, TextureChannel::eText ) )
 		{
-			program->createUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->setValue( Pass::LightBufferIndex );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->setValue( LightBufferIndex );
 		}
 
-		auto index = Pass::MinTextureIndex;
+		auto index = MinTextureIndex;
 
 		if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 		{
