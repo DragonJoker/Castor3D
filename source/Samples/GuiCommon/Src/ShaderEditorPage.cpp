@@ -57,26 +57,35 @@ namespace GuiCommon
 			{
 				auto & technique = *it->second->getRenderTarget()->getTechnique();
 				auto textureFlags = p_pass.getTextureFlags();
-				auto programFlags = p_pass.getProgramFlags();
+				auto passFlags = p_pass.getPassFlags();
 				auto sceneFlags = p_scene.getFlags();
+				ProgramFlags programFlags;
 				RenderPipelineRPtr pipeline;
 
 				if ( p_pass.hasAlphaBlending())
 				{
-					technique.getTransparentPass().updateFlags( textureFlags, programFlags, sceneFlags );
+					technique.getTransparentPass().updateFlags( passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags );
 					pipeline = technique.getTransparentPass().getPipelineBack( p_pass.getColourBlendMode()
 						, p_pass.getAlphaBlendMode()
 						, p_pass.getAlphaFunc()
+						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags );
 				}
 				else
 				{
-					technique.getOpaquePass().updateFlags( textureFlags, programFlags, sceneFlags );
+					technique.getOpaquePass().updateFlags( passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags );
 					pipeline = technique.getOpaquePass().getPipelineBack( p_pass.getColourBlendMode()
 						, p_pass.getAlphaBlendMode()
 						, p_pass.getAlphaFunc()
+						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags );

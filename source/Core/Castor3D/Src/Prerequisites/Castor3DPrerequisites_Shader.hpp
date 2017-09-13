@@ -156,42 +156,30 @@ namespace castor3d
 		//!\~english	Program using per-vertex animations.
 		//!\~french		Programme utilisant les animations par sommet.
 		eMorphing = 0x0008,
-		//!\~english	Program used in transparent pipeline.
-		//!\~french		Programme utilisé dans le pipeline des objets transparents.
-		eAlphaBlending = 0x0010,
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
-		ePicking = 0x0020,
+		ePicking = 0x0010,
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
-		eLighting = 0x0040,
+		eLighting = 0x0020,
 		//!\~english	Shader for spherical billboards.
 		//\~french		Shader pour les billboards sphériques.
-		eSpherical = 0x0080,
+		eSpherical = 0x0040,
 		//!\~english	Shader for fixed size billboards.
 		//\~french		Shader pour les billboards à dimensions fixes.
-		eFixedSize = 0x0100,
+		eFixedSize = 0x0080,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x0200,
+		eShadowMapDirectional = 0x0100,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x0400,
+		eShadowMapSpot = 0x0200,
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x0800,
+		eShadowMapPoint = 0x0400,
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x1000,
-		//!\~english	Shader using alpha test.
-		//\~french		Shader utilisant un test alpha.
-		eAlphaTest = 0x2000,
-		//!\~english	Shader for Metallic/Roughness PBR material (if not set, will use legacy material code).
-		//\~french		Shader pour un matériau PBR Metallic/Roughness (si non défini, utilisera le code de matériau traditionnel).
-		ePbrMetallicRoughness = 0x4000,
-		//!\~english	Shader for Specular/Glossiness PBR material (if not set, will use legacy material code).
-		//\~french		Shader pour un matériau PBR Specular/Glossiness (si non défini, utilisera le code de matériau traditionnel).
-		ePbrSpecularGlossiness = 0x8000,
+		eEnvironmentMapping = 0x0800,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
 	/**

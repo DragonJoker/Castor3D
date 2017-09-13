@@ -24,6 +24,7 @@
 
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 #include "Shader/Shaders/GlslPhongLighting.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
@@ -165,10 +166,12 @@ namespace castor3d
 				, Int const & reflection
 				, Int const & refraction
 				, Int const & envMapIndex
+				, Int const & materialId
 				, Float encoded )
 			{
 				auto flags = writer.declLocale( cuT( "flags" )
-					, writer.paren( receiver << 7 )
+					, writer.paren( materialId << 24 )
+						+ writer.paren( receiver << 7 )
 						+ writer.paren( refraction << 6 )
 						+ writer.paren( reflection << 5 )
 						+ writer.paren( envMapIndex ) );
@@ -177,6 +180,7 @@ namespace castor3d
 			, InInt{ &writer, cuT( "reflection" ) }
 			, InInt{ &writer, cuT( "refraction" ) }
 			, InInt{ &writer, cuT( "envMapIndex" ) }
+			, InInt{ &writer, cuT( "materialId" ) }
 			, OutFloat{ &writer, cuT( "encoded" ) } );
 	}
 	
@@ -402,12 +406,12 @@ namespace castor3d
 	{
 		SceneFlags sceneFlags{ scene.getFlags() };
 
-		if ( checkFlag( sceneFlags, SceneFlag::ePbrMetallicRoughness ) )
+		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
 		{
 			m_program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
 				, doGetPbrMRPixelShaderSource( sceneFlags, type ) );
 		}
-		else if ( checkFlag( sceneFlags, SceneFlag::ePbrSpecularGlossiness ) )
+		else if ( scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
 			m_program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
 				, doGetPbrSGPixelShaderSource( sceneFlags, type ) );
@@ -730,10 +734,6 @@ namespace castor3d
 			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
 		}
 
-		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
-
 		// Utility functions
 		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, type
@@ -743,6 +743,12 @@ namespace castor3d
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
+		shader::SpecularGlossinessMaterial materials{ writer };
+		materials.declare();
+
+		// Shader outputs
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -823,6 +829,10 @@ namespace castor3d
 						, output );
 				}
 				break;
+			}
+
+			if ( checkFlag( passFlags, PassFlag::eSubsurfaceScattering ) )
+			{
 			}
 
 			pxl_diffuse = lightDiffuse;

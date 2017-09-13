@@ -20,35 +20,35 @@ using namespace castor;
 
 namespace castor3d
 {
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & p_name
-		, Scene & p_scene
-		, Camera * p_camera
-		, bool p_environment
-		, SceneNode const * p_ignored
-		, SsaoConfig const & p_config )
-		: RenderTechniquePass{ p_name
-			, p_scene
-			, p_camera
-			, p_environment
-			, p_ignored
-			, p_config }
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
+		, Scene & scene
+		, Camera * camera
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config )
+		: RenderTechniquePass{ name
+			, scene
+			, camera
+			, environment
+			, ignored
+			, config }
 	{
 	}
 
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & p_name
-		, Scene & p_scene
-		, Camera * p_camera
-		, bool p_oit
-		, bool p_environment
-		, SceneNode const * p_ignored
-		, SsaoConfig const & p_config )
-		: RenderTechniquePass{ p_name
-			, p_scene
-			, p_camera
-			, p_oit
-			, p_environment
-			, p_ignored
-			, p_config }
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
+		, Scene & scene
+		, Camera * camera
+		, bool oit
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config )
+		: RenderTechniquePass{ name
+			, scene
+			, camera
+			, oit
+			, environment
+			, ignored
+			, config }
 	{
 	}
 
@@ -64,7 +64,8 @@ namespace castor3d
 		m_scene.getLightCache().unbindLights();
 	}
 
-	glsl::Shader ForwardRenderTechniquePass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -77,17 +78,28 @@ namespace castor3d
 		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
 		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
 		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( ShaderProgram::Material, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer );
@@ -111,10 +123,14 @@ namespace castor3d
 
 		std::function< void() > main = [&]()
 		{
-			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto v4Normal = writer.declLocale( cuT( "v4Normal" ), vec4( normal, 0.0 ) );
-			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto v3Texture = writer.declLocale( cuT( "v3Texture" ), texture );
+			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
+				, vec4( position.xyz(), 1.0 ) );
+			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
+				, vec4( normal, 0.0 ) );
+			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
+				, vec4( tangent, 0.0 ) );
+			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
+				, texture );
 			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -143,7 +159,8 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				auto time = writer.declLocale( cuT( "time" )
+					, 1.0_f - c3d_time );
 				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
 				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
 				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
@@ -171,7 +188,8 @@ namespace castor3d
 			vtx_instance = gl_InstanceID;
 			gl_Position = c3d_mtxProjection * v4Vertex;
 
-			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			auto tbn = writer.declLocale( cuT( "tbn" )
+				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 		};
@@ -180,7 +198,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader ForwardRenderTechniquePass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -397,7 +416,8 @@ namespace castor3d
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
-				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
+					, writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_fragColor, length( wvPosition ), wvPosition.y() );
 			}
 		} );
@@ -405,7 +425,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader ForwardRenderTechniquePass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -596,7 +617,8 @@ namespace castor3d
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
-				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
+					, writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_fragColor, length( wvPosition ), wvPosition.y() );
 			}
 		} );
@@ -604,7 +626,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader ForwardRenderTechniquePass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ForwardRenderTechniquePass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -795,7 +818,8 @@ namespace castor3d
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
-				auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
+					, writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_fragColor, length( wvPosition ), wvPosition.y() );
 			}
 		} );

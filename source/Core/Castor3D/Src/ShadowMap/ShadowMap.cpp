@@ -88,51 +88,60 @@ namespace castor3d
 		m_geometryBuffers.clear();
 	}
 
-	void ShadowMap::updateFlags( TextureChannels & textureFlags
+	void ShadowMap::updateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( programFlags, ProgramFlag::eAlphaBlending );
+		remFlag( passFlags, PassFlag::eAlphaBlending );
 		remFlag( textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
 			& ~uint16_t( TextureChannel::eOpacity ) ) );
-		doUpdateFlags( textureFlags
+		doUpdateFlags( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMap::getVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		return doGetVertexShaderSource( textureFlags
+		return doGetVertexShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, invertNormals );
 	}
 
-	glsl::Shader ShadowMap::getGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return doGetGeometryShaderSource( textureFlags
+		return doGetGeometryShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMap::getPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader ShadowMap::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -221,7 +230,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader ShadowMap::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
@@ -229,15 +239,15 @@ namespace castor3d
 	}
 
 	std::unique_ptr< shader::Materials > ShadowMap::doCreateMaterials( glsl::GlslWriter & writer
-		, ProgramFlags const & programFlags )const
+		, PassFlags const & passFlags )const
 	{
 		std::unique_ptr< shader::Materials > result;
 
-		if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
+		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
 		{
 			result = std::make_unique< shader::PbrMRMaterials >( writer );
 		}
-		else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+		else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
 		{
 			result = std::make_unique< shader::PbrSGMaterials >( writer );
 		}

@@ -160,13 +160,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		C3D_API void doUpdateFlags( TextureChannels & textureFlags
+		C3D_API void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**

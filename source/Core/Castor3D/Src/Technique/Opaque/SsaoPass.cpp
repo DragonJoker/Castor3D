@@ -368,46 +368,6 @@ namespace castor3d
 
 			return sampler;
 		}
-
-		TextureUnit doCreateTexture( Engine & engine
-			, Size const & size
-			, String const & name )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, WrapMode::eClampToEdge );
-			auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite );
-			ssaoResult->setSource( PxBufferBase::create( size
-				, PixelFormat::eL32F ) );
-			TextureUnit unit{ engine };
-			unit.setTexture( ssaoResult );
-			unit.setSampler( sampler );
-			unit.setIndex( MinTextureIndex );
-			unit.initialise();
-			return unit;
-		}
-
-		FrameBufferSPtr doCreateFbo( Engine & engine
-			, Size const & size )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto fbo = renderSystem.createFrameBuffer();
-			fbo->initialise();
-			return fbo;
-		}
-
-		TextureAttachmentSPtr doCreateAttach( FrameBuffer & p_fbo
-			, TextureUnit const & unit )
-		{
-			auto attach = p_fbo.createAttachment( unit.getTexture() );
-			p_fbo.bind();
-			p_fbo.attach( AttachmentPoint::eColour, 0u, attach, unit.getTexture()->getType() );
-			p_fbo.setDrawBuffer( attach );
-			ENSURE( p_fbo.isComplete() );
-			p_fbo.unbind();
-			return attach;
-		}
 	}
 
 	//*********************************************************************************************

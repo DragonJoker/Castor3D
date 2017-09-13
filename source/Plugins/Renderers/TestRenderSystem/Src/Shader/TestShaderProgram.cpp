@@ -41,7 +41,7 @@ namespace TestRender
 		return result;
 	}
 
-	bool TestShaderProgram::Link()
+	bool TestShaderProgram::link()
 	{
 		m_status = ProgramStatus::eLinked;
 		return true;

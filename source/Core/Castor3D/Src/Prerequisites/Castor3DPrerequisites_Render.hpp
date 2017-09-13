@@ -518,6 +518,7 @@ namespace castor3d
 	{
 		BlendMode m_colourBlendMode;
 		BlendMode m_alphaBlendMode;
+		PassFlags m_passFlags;
 		TextureChannels m_textureFlags;
 		ProgramFlags m_programFlags;
 		SceneFlags m_sceneFlags;

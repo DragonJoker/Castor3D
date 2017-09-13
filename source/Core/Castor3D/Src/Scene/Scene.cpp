@@ -1051,29 +1051,10 @@ namespace castor3d
 		{
 			switch ( m_shadow.getFilterType() )
 			{
-			case ShadowType::eRaw:
-				result |= SceneFlag::eShadowFilterRaw;
-				break;
-
-			case ShadowType::ePoisson:
-				result |= SceneFlag::eShadowFilterPoisson;
-				break;
-
-			case ShadowType::eStratifiedPoisson:
-				result |= SceneFlag::eShadowFilterStratifiedPoisson;
+			case ShadowType::ePCF:
+				result |= SceneFlag::eShadowFilterPcf;
 				break;
 			}
-		}
-
-		switch ( getMaterialsType() )
-		{
-		case MaterialType::ePbrMetallicRoughness:
-			result |= SceneFlag::ePbrMetallicRoughness;
-			break;
-
-		case MaterialType::ePbrSpecularGlossiness:
-			result |= SceneFlag::ePbrSpecularGlossiness;
-			break;
 		}
 
 		return result;

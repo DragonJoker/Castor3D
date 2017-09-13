@@ -470,47 +470,55 @@ namespace castor3d
 	{
 	}
 
-	glsl::Shader PickingPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
 		return glsl::Shader{};
 	}
 
-	glsl::Shader PickingPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -523,7 +531,8 @@ namespace castor3d
 		auto c3d_iDrawIndex( uboPicking.declMember< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( uboPicking.declMember< UInt >( NodeIndex ) );
 		uboPicking.end();
-		auto materials = doCreateMaterials( writer, programFlags );
+		auto materials = doCreateMaterials( writer
+			, passFlags );
 		materials->declare();
 
 		// Fragment Intputs
@@ -566,12 +575,13 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	void PickingPass::doUpdateFlags( TextureChannels & textureFlags
+	void PickingPass::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( programFlags, ProgramFlag::eAlphaBlending );
+		remFlag( passFlags, PassFlag::eAlphaBlending );
 		remFlag( textureFlags, TextureChannel::eAll );
 
 		addFlag( programFlags, ProgramFlag::ePicking );

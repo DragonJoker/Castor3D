@@ -135,14 +135,16 @@ namespace castor3d
 		m_depthBuffer.reset();
 	}
 
-	void ShadowMapSpot::doUpdateFlags( TextureChannels & textureFlags
+	void ShadowMapSpot::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		addFlag( programFlags, ProgramFlag::eShadowMapSpot );
 	}
 
-	glsl::Shader ShadowMapSpot::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapSpot::doGetPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -157,7 +159,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto materials = doCreateMaterials( writer, programFlags );
+		auto materials = doCreateMaterials( writer, passFlags );
 		materials->declare();
 
 		// Fragment Outputs

@@ -55,7 +55,7 @@ namespace GlRender
 		return result;
 	}
 
-	bool GlShaderProgram::Link()
+	bool GlShaderProgram::link()
 	{
 		doBindTransformLayout();
 		ENSURE( getGlName() != GlInvalidIndex );
@@ -73,7 +73,7 @@ namespace GlRender
 		{
 			if ( !m_linkerLog.empty() )
 			{
-				Logger::logWarning( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+				Logger::logWarning( cuT( "GlShaderProgram::link - " ) + m_linkerLog );
 			}
 
 			result = doLink();
@@ -82,12 +82,12 @@ namespace GlRender
 		{
 			if ( !m_linkerLog.empty() )
 			{
-				Logger::logError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+				Logger::logError( cuT( "GlShaderProgram::link - " ) + m_linkerLog );
 			}
 
 			if ( attached != int( m_activeShaders.size() ) )
 			{
-				Logger::logError( cuT( "GlShaderProgram::Link - The linked shaders count doesn't match the active shaders count." ) );
+				Logger::logError( cuT( "GlShaderProgram::link - The linked shaders count doesn't match the active shaders count." ) );
 			}
 
 			m_status = ProgramStatus::eError;

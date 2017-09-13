@@ -238,7 +238,7 @@ namespace castor3d
 		Logger::logInfo( StringStream() << cuT( "Destroying TextureUnit " ) << index );
 		auto it = m_textureUnits.begin();
 		m_textureUnits.erase( it + index );
-		uint32_t i = 0u;
+		uint32_t i = MinTextureIndex;
 
 		for ( it = m_textureUnits.begin(); it != m_textureUnits.end(); ++it )
 		{
@@ -267,7 +267,7 @@ namespace castor3d
 		{
 			for ( auto unit : m_textureUnits )
 			{
-				unit->setIndex( 0u );
+				unit->setIndex( MinTextureIndex );
 			}
 
 			uint32_t index = MinTextureIndex;
@@ -353,30 +353,40 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	ProgramFlags Pass::getProgramFlags()const
+	PassFlags Pass::getPassFlags()const
 	{
-		ProgramFlags result;
+		PassFlags result;
 
 		if ( hasAlphaBlending()
 			&& !checkFlag( getTextureFlags(), TextureChannel::eRefraction ) )
 		{
-			result |= ProgramFlag::eAlphaBlending;
+			result |= PassFlag::eAlphaBlending;
 		}
 
 		if ( getAlphaFunc() != ComparisonFunc::eAlways )
 		{
-			result |= ProgramFlag::eAlphaTest;
+			result |= PassFlag::eAlphaTest;
 		}
 
 		switch ( getType() )
 		{
 		case MaterialType::ePbrMetallicRoughness:
-			result |= ProgramFlag::ePbrMetallicRoughness;
+			result |= PassFlag::ePbrMetallicRoughness;
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			result |= ProgramFlag::ePbrSpecularGlossiness;
+			result |= PassFlag::ePbrSpecularGlossiness;
 			break;
+		}
+
+		if ( hasSubsurfaceScattering() )
+		{
+			result |= PassFlag::eSubsurfaceScattering;
+
+			if ( getSubsurfaceScattering().isDistanceBasedTransmittanceEnabled() )
+			{
+				result |= PassFlag::eDistanceBasedTransmittance;
+			}
 		}
 
 		return result;

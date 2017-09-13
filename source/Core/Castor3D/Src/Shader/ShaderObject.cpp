@@ -206,7 +206,7 @@ namespace castor3d
 			StringStream source;
 			source << format::LinePrefix();
 			source << getSource();
-			Logger::logInfo( source.str() );
+			Logger::logWarning( source.str() );
 		}
 		else if ( m_status == ShaderStatus::eError )
 		{
@@ -214,7 +214,7 @@ namespace castor3d
 			StringStream source;
 			source << format::LinePrefix();
 			source << getSource();
-			Logger::logInfo( source.str() );
+			Logger::logWarning( source.str() );
 			m_status = ShaderStatus::eNotCompiled;
 		}
 

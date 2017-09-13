@@ -39,11 +39,13 @@ namespace castor3d
 		RenderPass::doRender( nodes.m_billboardNodes.m_backCulled, camera );
 	}
 
-	void ShadowMapPass::doUpdateFlags( TextureChannels & textureFlags
+	void ShadowMapPass::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
-		m_shadowMap.updateFlags( textureFlags
+		m_shadowMap.updateFlags( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 	}
@@ -109,54 +111,64 @@ namespace castor3d
 		doPreparePipeline( program, flags );
 	}
 
-	glsl::Shader ShadowMapPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		return m_shadowMap.getVertexShaderSource( textureFlags
+		return m_shadowMap.getVertexShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, invertNormals );
 	}
 
-	glsl::Shader ShadowMapPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return m_shadowMap.getGeometryShaderSource( textureFlags
+		return m_shadowMap.getGeometryShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMapPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return m_shadowMap.getPixelShaderSource( textureFlags
+		return m_shadowMap.getPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader ShadowMapPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return m_shadowMap.getPixelShaderSource( textureFlags
+		return m_shadowMap.getPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader ShadowMapPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return m_shadowMap.getPixelShaderSource( textureFlags
+		return m_shadowMap.getPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );

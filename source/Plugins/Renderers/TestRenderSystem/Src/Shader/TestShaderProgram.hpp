@@ -43,25 +43,25 @@ namespace TestRender
 		 */
 		virtual ~TestShaderProgram();
 		/**
-		 *\copydoc		castor3d::ShaderProgram::Initialise
+		 *\copydoc		castor3d::ShaderProgram::initialise
 		 */
 		bool initialise()override;
 		/**
-		 *\copydoc		castor3d::ShaderProgram::Cleanup
+		 *\copydoc		castor3d::ShaderProgram::cleanup
 		 */
 		void cleanup()override;
 		/**
-		 *\copydoc		castor3d::ShaderProgram::Bind
+		 *\copydoc		castor3d::ShaderProgram::bind
 		 */
 		void bind()const override;
 		/**
-		 *\copydoc		castor3d::ShaderProgram::Unbind
+		 *\copydoc		castor3d::ShaderProgram::unbind
 		 */
 		void unbind()const override;
 		/**
-		 *\copydoc		castor3d::ShaderProgram::Link
+		 *\copydoc		castor3d::ShaderProgram::link
 		 */
-		bool Link()override;
+		bool link()override;
 		/**
 		 *\copydoc		castor3d::ShaderProgram::getLayout
 		 */

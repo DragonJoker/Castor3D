@@ -43,6 +43,7 @@ namespace castor3d
 		}
 
 		inline void doUpdateProgram( ShaderProgram & program
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
@@ -58,8 +59,8 @@ namespace castor3d
 					, ShaderType::ePixel, shader::PointShadowMapCount );
 			}
 
-			if ( ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness )
-					|| checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+			if ( ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness )
+					|| checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
 				&& checkFlag( programFlags, ProgramFlag::eLighting ) )
 			{
 				program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
@@ -253,7 +254,8 @@ namespace castor3d
 		queues.push_back( m_renderQueue );
 	}
 
-	void RenderTechniquePass::doUpdateFlags( TextureChannels & textureFlags
+	void RenderTechniquePass::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
@@ -265,7 +267,8 @@ namespace castor3d
 		}
 	}
 
-	glsl::Shader RenderTechniquePass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderTechniquePass::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
@@ -285,6 +288,7 @@ namespace castor3d
 		if ( it == m_frontPipelines.end() )
 		{
 			doUpdateProgram( program
+				, flags.m_passFlags
 				, flags.m_textureFlags
 				, flags.m_programFlags
 				, flags.m_sceneFlags );
@@ -341,6 +345,7 @@ namespace castor3d
 		if ( it == m_backPipelines.end() )
 		{
 			doUpdateProgram( program
+				, flags.m_passFlags
 				, flags.m_textureFlags
 				, flags.m_programFlags
 				, flags.m_sceneFlags );

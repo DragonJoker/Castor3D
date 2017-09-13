@@ -87,13 +87,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
 		 */
-		void doUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
-		glsl::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;

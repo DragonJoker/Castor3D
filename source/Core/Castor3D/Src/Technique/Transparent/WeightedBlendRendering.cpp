@@ -38,7 +38,7 @@ namespace castor3d
 				texture->getImage().initialiseSource();
 
 				m_weightedBlendPassResult[i] = std::make_unique< TextureUnit >( m_engine );
-				m_weightedBlendPassResult[i]->setIndex( i );
+				m_weightedBlendPassResult[i]->setIndex( MinTextureIndex + i );
 				m_weightedBlendPassResult[i]->setTexture( texture );
 				m_weightedBlendPassResult[i]->setSampler( m_engine.getLightsSampler() );
 				m_weightedBlendPassResult[i]->initialise();

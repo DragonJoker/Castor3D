@@ -612,37 +612,61 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed.value() } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed.value() } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed.value() } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed.value() } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ m_camSpeed.value(), 0.0_r, 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ m_camSpeed.value(), 0.0_r, 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ -m_camSpeed.value(), 0.0_r, 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ -m_camSpeed.value(), 0.0_r, 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, m_camSpeed.value(), 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, m_camSpeed.value(), 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, -m_camSpeed.value(), 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, -m_camSpeed.value(), 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
@@ -777,8 +801,11 @@ namespace CastorViewer
 				break;
 
 			case 'L':
-				m_currentNode = m_lightsNode;
-				m_currentState = &doAddNodeState( m_currentNode );
+				if ( m_lightsNode )
+				{
+					m_currentNode = m_lightsNode;
+					m_currentState = &doAddNodeState( m_currentNode );
+				}
 				break;
 			}
 		}
@@ -1112,7 +1139,10 @@ namespace CastorViewer
 				m_camSpeed /= CAM_SPEED_INC;
 			}
 
-			m_currentState->setMaxSpeed( m_camSpeed.value() );
+			if ( m_currentState )
+			{
+				m_currentState->setMaxSpeed( m_camSpeed.value() );
+			}
 		}
 
 		p_event.Skip();

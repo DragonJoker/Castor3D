@@ -19,7 +19,7 @@
 #if !defined( NDEBUG )
 #	define DISPLAY_DEBUG 1
 #else
-#	define DISPLAY_DEBUG 0
+#	define DISPLAY_DEBUG 1
 #endif
 
 using namespace castor;

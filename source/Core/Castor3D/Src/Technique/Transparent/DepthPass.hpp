@@ -102,7 +102,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		void doUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
@@ -122,41 +123,47 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;

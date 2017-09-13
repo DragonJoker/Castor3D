@@ -722,7 +722,7 @@ namespace castor3d
 				, size );
 			texture->getImage().initialiseSource();
 
-			m_reflection.setIndex( 0u );
+			m_reflection.setIndex( MinTextureIndex + 0u );
 			m_reflection.setTexture( texture );
 			m_reflection.setSampler( engine.getLightsSampler() );
 			result = m_reflection.initialise();
@@ -736,7 +736,7 @@ namespace castor3d
 				, size );
 			texture->getImage().initialiseSource();
 
-			m_refraction.setIndex( 1u );
+			m_refraction.setIndex( MinTextureIndex + 1u );
 			m_refraction.setTexture( texture );
 			m_refraction.setSampler( engine.getLightsSampler() );
 			result = m_refraction.initialise();

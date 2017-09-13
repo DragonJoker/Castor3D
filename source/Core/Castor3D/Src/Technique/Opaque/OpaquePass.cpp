@@ -48,15 +48,17 @@ namespace castor3d
 		doRender( info, shadowMaps );
 	}
 
-	void OpaquePass::doUpdateFlags( TextureChannels & textureFlags
+	void OpaquePass::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+		remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
 	}
 
-	glsl::Shader OpaquePass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -188,7 +190,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader OpaquePass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -338,7 +341,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader OpaquePass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -494,7 +498,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader OpaquePass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader OpaquePass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const

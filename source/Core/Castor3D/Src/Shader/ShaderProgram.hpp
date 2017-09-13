@@ -407,7 +407,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Link tous les objets du programme.
 		 */
-		C3D_API virtual bool Link() = 0;
+		C3D_API virtual bool link() = 0;
 		/**
 		 *\~english
 		 *\return		The program vertex layout.

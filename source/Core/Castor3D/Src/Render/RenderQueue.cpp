@@ -100,6 +100,7 @@ namespace castor3d
 
 		template< typename CreatorFunc, typename NodesType, typename ... Params >
 		void doAddNode( RenderPass & p_renderPass
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -113,6 +114,7 @@ namespace castor3d
 				auto pipeline = p_renderPass.getPipelineFront( p_pass.getColourBlendMode()
 					, p_pass.getAlphaBlendMode()
 					, p_pass.getAlphaFunc()
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags );
@@ -127,6 +129,7 @@ namespace castor3d
 			auto pipeline = p_renderPass.getPipelineBack( p_pass.getColourBlendMode()
 				, p_pass.getAlphaBlendMode()
 				, p_pass.getAlphaFunc()
+				, passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags );
@@ -139,6 +142,7 @@ namespace castor3d
 		}
 
 		void doAddSkinningNode( RenderPass & p_renderPass
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -157,6 +161,7 @@ namespace castor3d
 					auto pipeline = p_renderPass.getPipelineFront( p_pass.getColourBlendMode()
 						, p_pass.getAlphaBlendMode()
 						, p_pass.getAlphaFunc()
+						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags );
@@ -171,6 +176,7 @@ namespace castor3d
 				auto pipeline = p_renderPass.getPipelineBack( p_pass.getColourBlendMode()
 					, p_pass.getAlphaBlendMode()
 					, p_pass.getAlphaFunc()
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags );
@@ -184,6 +190,7 @@ namespace castor3d
 			else
 			{
 				doAddNode( p_renderPass
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags
@@ -200,6 +207,7 @@ namespace castor3d
 		}
 
 		void doAddMorphingNode( RenderPass & p_renderPass
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -210,6 +218,7 @@ namespace castor3d
 			, SceneRenderNodes::MorphingNodesMap & p_animated )
 		{
 			doAddNode( p_renderPass
+				, passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
@@ -225,6 +234,7 @@ namespace castor3d
 		}
 
 		void doAddStaticNode( RenderPass & p_renderPass
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -242,6 +252,7 @@ namespace castor3d
 					auto pipeline = p_renderPass.getPipelineFront( p_pass.getColourBlendMode()
 						, p_pass.getAlphaBlendMode()
 						, p_pass.getAlphaFunc()
+						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags );
@@ -256,6 +267,7 @@ namespace castor3d
 				auto pipeline = p_renderPass.getPipelineBack( p_pass.getColourBlendMode()
 					, p_pass.getAlphaBlendMode()
 					, p_pass.getAlphaFunc()
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags );
@@ -269,6 +281,7 @@ namespace castor3d
 			else
 			{
 				doAddNode( p_renderPass
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags
@@ -284,6 +297,7 @@ namespace castor3d
 		}
 
 		void doAddBillboardNode( RenderPass & p_renderPass
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -292,6 +306,7 @@ namespace castor3d
 			, SceneRenderNodes::BillboardNodesMap & p_nodes )
 		{
 			doAddNode( p_renderPass
+				, passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
@@ -347,19 +362,11 @@ namespace castor3d
 							{
 								auto programFlags = submesh->getProgramFlags();
 								auto sceneFlags = p_scene.getFlags();
+								auto passFlags = pass->getPassFlags();
 								remFlag( programFlags, ProgramFlag::eSkinning );
 								remFlag( programFlags, ProgramFlag::eMorphing );
 								auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Skeleton" ) ) );
 								auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Mesh" ) ) );
-
-								if ( material->getType() == MaterialType::ePbrMetallicRoughness )
-								{
-									addFlag( programFlags, ProgramFlag::ePbrMetallicRoughness );
-								}
-								else if ( material->getType() == MaterialType::ePbrSpecularGlossiness )
-								{
-									addFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness );
-								}
 
 								if ( skeleton && submesh->hasBoneData() )
 								{
@@ -374,7 +381,7 @@ namespace castor3d
 								if ( !shadows
 									|| !primitive.second->isShadowReceiver() )
 								{
-									remFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+									remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
 								}
 
 								pass->prepareTextures();
@@ -392,18 +399,17 @@ namespace castor3d
 									remFlag( programFlags, ProgramFlag::eInstantiation );
 								}
 
-								addFlags( programFlags, pass->getProgramFlags() );
-
 								auto textureFlags = pass->getTextureFlags();
 								p_renderPass.preparePipeline( pass->getColourBlendMode()
 									, pass->getAlphaBlendMode()
 									, pass->getAlphaFunc()
+									, passFlags
 									, textureFlags
 									, programFlags
 									, sceneFlags
 									, pass->IsTwoSided() );
 
-								if ( checkFlag( programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
+								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != p_opaque )
 								{
 									if ( !isShadowMapProgram( programFlags )
 										|| primitive.second->isShadowCaster() )
@@ -411,6 +417,7 @@ namespace castor3d
 										if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 										{
 											doAddSkinningNode( p_renderPass
+												, passFlags
 												, textureFlags
 												, programFlags
 												, sceneFlags
@@ -424,6 +431,7 @@ namespace castor3d
 										else if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 										{
 											doAddMorphingNode( p_renderPass
+												, passFlags
 												, textureFlags
 												, programFlags
 												, sceneFlags
@@ -436,6 +444,7 @@ namespace castor3d
 										else
 										{
 											doAddStaticNode( p_renderPass
+												, passFlags
 												, textureFlags
 												, programFlags
 												, sceneFlags
@@ -466,34 +475,30 @@ namespace castor3d
 				p_pass.prepareTextures();
 				auto programFlags = p_billboard.getProgramFlags();
 				auto sceneFlags = p_scene.getFlags();
+				auto passFlags = p_pass.getPassFlags();
 				addFlag( programFlags, ProgramFlag::eBillboards );
-
-				if ( p_pass.hasAlphaBlending() )
-				{
-					addFlag( programFlags, ProgramFlag::eAlphaBlending );
-				}
 
 				if ( !shadows
 					|| !p_billboard.isShadowReceiver() )
 				{
-					remFlag( sceneFlags, SceneFlag::eShadowFilterRaw );
-					remFlag( sceneFlags, SceneFlag::eShadowFilterPoisson );
-					remFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+					remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
 				}
 
 				auto textureFlags = p_pass.getTextureFlags();
 				p_renderPass.preparePipeline( p_pass.getColourBlendMode()
 					, p_pass.getAlphaBlendMode()
 					, p_pass.getAlphaFunc()
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags
 					, p_pass.IsTwoSided() );
 
-				if ( checkFlag( programFlags, ProgramFlag::eAlphaBlending ) != p_opaque
+				if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != p_opaque
 					&& !isShadowMapProgram( programFlags ) )
 				{
 					doAddBillboardNode( p_renderPass
+						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags

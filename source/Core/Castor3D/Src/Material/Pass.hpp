@@ -204,11 +204,11 @@ namespace castor3d
 		C3D_API void setOpacity( float value );
 		/**
 		 *\~english
-		 *\return		The program flags combination.
+		 *\return		The pass flags combination.
 		 *\~french
-		 *\return		La combinaison d'indicateurs de programme.
+		 *\return		La combinaison d'indicateurs de passe.
 		 */
-		C3D_API ProgramFlags getProgramFlags()const;
+		C3D_API PassFlags getPassFlags()const;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass

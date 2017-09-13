@@ -30,30 +30,31 @@ namespace castor3d
 
 	namespace
 	{
-		inline void doUpdateProgram( ShaderProgram & p_program
+		inline void doUpdateProgram( ShaderProgram & program
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
 			if ( getShadowType( sceneFlags ) != ShadowType::eNone
-				&& !p_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+				&& !program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
+				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
-				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
+				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
 					, ShaderType::ePixel, shader::SpotShadowMapCount );
-				p_program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
+				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
 					, ShaderType::ePixel, shader::PointShadowMapCount );
 			}
 
-			if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness )
-				|| checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+			if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness )
+				|| checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
 			{
-				p_program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
+				program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
 					, ShaderType::ePixel );
-				p_program.createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
+				program.createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
 					, ShaderType::ePixel );
-				p_program.createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
+				program.createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
 					, ShaderType::ePixel );
 			}
 		}
@@ -74,7 +75,7 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	String getTextureName( WbTexture p_texture )
+	String getTextureName( WbTexture texture )
 	{
 		static std::array< String, size_t( WbTexture::eCount ) > Values
 		{
@@ -85,10 +86,10 @@ namespace castor3d
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
-	PixelFormat getTextureFormat( WbTexture p_texture )
+	PixelFormat getTextureFormat( WbTexture texture )
 	{
 		static std::array< PixelFormat, size_t( WbTexture::eCount ) > Values
 		{
@@ -99,10 +100,10 @@ namespace castor3d
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
-	AttachmentPoint getTextureAttachmentPoint( WbTexture p_texture )
+	AttachmentPoint getTextureAttachmentPoint( WbTexture texture )
 	{
 		static std::array< AttachmentPoint, size_t( WbTexture::eCount ) > Values
 		{
@@ -113,10 +114,10 @@ namespace castor3d
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
-	uint32_t getTextureAttachmentIndex( WbTexture p_texture )
+	uint32_t getTextureAttachmentIndex( WbTexture texture )
 	{
 		static std::array< uint32_t, size_t( WbTexture::eCount ) > Values
 		{
@@ -127,21 +128,21 @@ namespace castor3d
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
 	//************************************************************************************************
 
-	TransparentPass::TransparentPass( Scene & p_scene
-		, Camera * p_camera
-		, SsaoConfig const & p_config )
+	TransparentPass::TransparentPass( Scene & scene
+		, Camera * camera
+		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "weighted_blend_transparent" )
-			, p_scene
-			, p_camera
+			, scene
+			, camera
 			, true
 			, false
 			, nullptr
-			, p_config }
+			, config }
 	{
 	}
 
@@ -149,80 +150,84 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::render( RenderInfo & p_info
+	void TransparentPass::render( RenderInfo & info
 		, ShadowMapLightTypeArray & shadowMaps )
 	{
 		m_scene.getLightCache().bindLights();
-		doRender( p_info, shadowMaps );
+		doRender( info, shadowMaps );
 		m_scene.getLightCache().unbindLights();
 	}
 
-	void TransparentPass::doPrepareFrontPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
+	void TransparentPass::doPrepareFrontPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
-		auto it = m_frontPipelines.find( p_flags );
+		auto it = m_frontPipelines.find( flags );
 
 		if ( it == m_frontPipelines.end() )
 		{
-			doUpdateProgram( p_program
-				, p_flags.m_textureFlags
-				, p_flags.m_programFlags
-				, p_flags.m_sceneFlags );
+			doUpdateProgram( program
+				, flags.m_passFlags
+				, flags.m_textureFlags
+				, flags.m_programFlags
+				, flags.m_sceneFlags );
 
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
 			dsState.setDepthMask( WritingMask::eZero );
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eFront );
-			auto & pipeline = *m_frontPipelines.emplace( p_flags
+			auto & pipeline = *m_frontPipelines.emplace( flags
 				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
 					, std::move( rsState )
 					, doCreateBlendState()
 					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
+					, program
+					, flags ) ).first->second;
 
 			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, p_flags]()
+				, [this, &pipeline, flags]()
 			{
-				doCompletePipeline( p_flags, pipeline );
+				doCompletePipeline( flags, pipeline );
 			} ) );
 		}
 	}
 
-	void TransparentPass::doPrepareBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void TransparentPass::doPrepareBackPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
-		auto it = m_backPipelines.find( p_flags );
+		auto it = m_backPipelines.find( flags );
 
 		if ( it == m_backPipelines.end() )
 		{
-			doUpdateProgram( p_program
-				, p_flags.m_textureFlags
-				, p_flags.m_programFlags
-				, p_flags.m_sceneFlags );
+			doUpdateProgram( program
+				, flags.m_passFlags
+				, flags.m_textureFlags
+				, flags.m_programFlags
+				, flags.m_sceneFlags );
 
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
 			dsState.setDepthMask( WritingMask::eZero );
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eBack );
-			auto & pipeline = *m_backPipelines.emplace( p_flags
+			auto & pipeline = *m_backPipelines.emplace( flags
 				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
 					, std::move( rsState )
 					, doCreateBlendState()
 					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
+					, program
+					, flags ) ).first->second;
 
 			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, p_flags]()
+				, [this, &pipeline, flags]()
 			{
-				doCompletePipeline( p_flags, pipeline );
+				doCompletePipeline( flags, pipeline );
 			} ) );
 		}
 	}
 
-	glsl::Shader TransparentPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -235,17 +240,28 @@ namespace castor3d
 		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
 		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
 		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( ShaderProgram::Material, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer );
@@ -339,7 +355,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader TransparentPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -572,7 +589,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader TransparentPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -782,7 +800,8 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	glsl::Shader TransparentPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader TransparentPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -991,34 +1010,34 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	void TransparentPass::doUpdatePipeline( RenderPipeline & p_pipeline )const
+	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
 		auto & scene = *m_camera->getScene();
 		m_sceneUbo.update( scene, *m_camera, true );
 	}
 
-	void TransparentPass::doCompletePipeline( PipelineFlags const & p_flags
-		, RenderPipeline & p_pipeline )
+	void TransparentPass::doCompletePipeline( PipelineFlags const & flags
+		, RenderPipeline & pipeline )
 	{
-		p_pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-		p_pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-		p_pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
-		p_pipeline.addUniformBuffer( m_modelUbo.getUbo() );
+		pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
+		pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
+		pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
+		pipeline.addUniformBuffer( m_modelUbo.getUbo() );
 
-		if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+		if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
 		{
-			p_pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
+			pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
 		}
 
-		if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-			&& !checkFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+			&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
 		{
-			p_pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
+			pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
 		}
 
-		if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+		if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
 		{
-			p_pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
+			pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
 		}
 	}
 }

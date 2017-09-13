@@ -98,8 +98,8 @@ namespace castor3d
 		p_node.m_pass.bindTextures();
 		auto index = doFillShaderShadowMaps( p_pipeline, shadowMaps );
 
-		if ( ( checkFlag( p_pipeline.getFlags().m_programFlags, ProgramFlag::ePbrMetallicRoughness )
-				|| checkFlag( p_pipeline.getFlags().m_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+		if ( ( checkFlag( p_pipeline.getFlags().m_passFlags, PassFlag::ePbrMetallicRoughness )
+				|| checkFlag( p_pipeline.getFlags().m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
 			&& checkFlag( p_pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			index = doFillShaderPbrMaps( p_pipeline

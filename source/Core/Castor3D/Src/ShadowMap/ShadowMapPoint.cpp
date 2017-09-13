@@ -162,14 +162,16 @@ namespace castor3d
 		m_shadowMap.cleanup();
 	}
 
-	void ShadowMapPoint::doUpdateFlags( TextureChannels & textureFlags
+	void ShadowMapPoint::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		addFlag( programFlags, ProgramFlag::eShadowMapPoint );
 	}
 
-	glsl::Shader ShadowMapPoint::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPoint::doGetPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -189,7 +191,7 @@ namespace castor3d
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
-		auto materials = doCreateMaterials( writer, programFlags );
+		auto materials = doCreateMaterials( writer, passFlags );
 		materials->declare();
 
 		// Fragment Outputs

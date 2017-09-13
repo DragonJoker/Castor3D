@@ -442,6 +442,10 @@ namespace castor3d
 					if ( !shader->compile() && shader->getStatus() == ShaderStatus::eError )
 					{
 						Logger::logError( cuT( "ShaderProgram::Initialise - COMPILER ERROR" ) );
+						StringStream source;
+						source << format::LinePrefix();
+						source << shader->getSource();
+						Logger::logWarning( source.str() );
 						shader->destroy();
 						m_status = ProgramStatus::eError;
 					}
@@ -453,24 +457,27 @@ namespace castor3d
 				}
 			}
 
-			if ( !Link() )
+			if ( m_status != ProgramStatus::eError )
 			{
-				Logger::logError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
-
-				for ( auto shader : m_activeShaders )
+				if ( !link() )
 				{
-					StringStream source;
-					source << format::LinePrefix();
-					source << shader->getSource();
-					Logger::logDebug( source.str() );
-					shader->destroy();
-				}
+					Logger::logError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
 
-				m_status = ProgramStatus::eError;
-			}
-			else
-			{
-				Logger::logDebug( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+					for ( auto shader : m_activeShaders )
+					{
+						StringStream source;
+						source << format::LinePrefix();
+						source << shader->getSource();
+						Logger::logWarning( source.str() );
+						shader->destroy();
+					}
+
+					m_status = ProgramStatus::eError;
+				}
+				else
+				{
+					Logger::logDebug( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+				}
 			}
 		}
 

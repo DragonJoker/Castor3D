@@ -73,34 +73,39 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		void doUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;

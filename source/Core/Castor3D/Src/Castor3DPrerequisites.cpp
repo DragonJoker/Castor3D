@@ -585,50 +585,42 @@ namespace castor3d
 		}
 	}
 
-	bool isShadowMapProgram( ProgramFlags const & p_flags )
+	bool isShadowMapProgram( ProgramFlags const & flags )
 	{
-		return checkFlag( p_flags, ProgramFlag::eShadowMapDirectional )
-			|| checkFlag( p_flags, ProgramFlag::eShadowMapSpot )
-			|| checkFlag( p_flags, ProgramFlag::eShadowMapPoint );
+		return checkFlag( flags, ProgramFlag::eShadowMapDirectional )
+			|| checkFlag( flags, ProgramFlag::eShadowMapSpot )
+			|| checkFlag( flags, ProgramFlag::eShadowMapPoint );
 	}
 
-	ShadowType getShadowType( SceneFlags const & p_flags )
+	ShadowType getShadowType( SceneFlags const & flags )
 	{
-		auto shadow = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eShadowFilterStratifiedPoisson ) );
+		ShadowType result = ShadowType::eNone;
 
-		switch ( shadow )
+		if ( checkFlag( flags, SceneFlag::eShadowFilterPcf ) )
 		{
-		case SceneFlag::eShadowFilterRaw:
-			return ShadowType::eRaw;
-
-		case SceneFlag::eShadowFilterPoisson:
-			return ShadowType::ePoisson;
-
-		case SceneFlag::eShadowFilterStratifiedPoisson:
-			return ShadowType::eStratifiedPoisson;
-
-		default:
-			return ShadowType::eNone;
+			result = ShadowType::ePCF;
 		}
+
+		return result;
 	}
 
-	FogType getFogType( SceneFlags const & p_flags )
+	FogType getFogType( SceneFlags const & flags )
 	{
-		auto fog = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eFogSquaredExponential ) );
+		FogType result = FogType::eDisabled;
 
-		switch ( fog )
+		if ( checkFlag( flags, SceneFlag::eFogLinear) )
 		{
-		case SceneFlag::eFogLinear:
-			return FogType::eLinear;
-
-		case SceneFlag::eFogExponential:
-			return FogType::eExponential;
-
-		case SceneFlag::eFogSquaredExponential:
-			return FogType::eSquaredExponential;
-
-		default:
-			return FogType::eDisabled;
+			result = FogType::eLinear;
 		}
+		else if ( checkFlag( flags, SceneFlag::eFogExponential) )
+		{
+			result = FogType::eExponential;
+		}
+		else if ( checkFlag( flags, SceneFlag::eFogSquaredExponential ) )
+		{
+			result = FogType::eSquaredExponential;
+		}
+
+		return result;
 	}
 }

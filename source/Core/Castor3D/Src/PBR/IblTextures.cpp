@@ -44,7 +44,7 @@ namespace castor3d
 			TextureUnit result{ engine };
 			result.setTexture( texture );
 			result.setSampler( sampler );
-			result.setIndex( 7u );
+			result.setIndex( MinTextureIndex + 6u );
 			return result;
 		}
 
@@ -77,7 +77,7 @@ namespace castor3d
 			TextureUnit result{ engine };
 			result.setTexture( texture );
 			result.setSampler( sampler );
-			result.setIndex( 8u );
+			result.setIndex( MinTextureIndex + 7u );
 			return result;
 		}
 
@@ -109,7 +109,7 @@ namespace castor3d
 			TextureUnit result{ engine };
 			result.setTexture( texture );
 			result.setSampler( sampler );
-			result.setIndex( 9u );
+			result.setIndex( MinTextureIndex + 8u );
 			return result;
 		}
 	}

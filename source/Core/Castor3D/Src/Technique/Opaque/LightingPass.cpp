@@ -64,8 +64,8 @@ namespace castor3d
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo )
 		: m_size{ size }
-		, m_diffuse{ doCreateTexture( engine, size, 0u ) }
-		, m_specular{ doCreateTexture( engine, size, 1u ) }
+		, m_diffuse{ doCreateTexture( engine, size, MinTextureIndex + 0u ) }
+		, m_specular{ doCreateTexture( engine, size, MinTextureIndex + 1u ) }
 		, m_frameBuffer{ engine.getRenderSystem()->createFrameBuffer() }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Lighting" ) ) }
 	{

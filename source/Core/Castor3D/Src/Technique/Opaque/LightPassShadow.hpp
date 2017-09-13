@@ -115,15 +115,6 @@ namespace castor3d
 		{
 			return *light.getDirectionalLight();
 		}
-
-		static void debugDisplay( castor::Position const & position
-			, TextureUnit & shadowMap )
-		{
-			castor::Size size{ 256u, 256u };
-			shadowMap.getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
-				, size
-				, *shadowMap.getTexture() );
-		}
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -187,15 +178,6 @@ namespace castor3d
 		{
 			return *light.getPointLight();
 		}
-
-		static void debugDisplay( castor::Position const & position
-			, TextureUnit & shadowMap )
-		{
-			castor::Size size{ 128u, 128u };
-			shadowMap.getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
-				, size
-				, *shadowMap.getTexture() );
-		}
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -258,15 +240,6 @@ namespace castor3d
 		static light_type const & getTypedLight( Light const & light )
 		{
 			return *light.getSpotLight();
-		}
-
-		static void debugDisplay( castor::Position const & position
-			, TextureUnit & shadowMap )
-		{
-			castor::Size size{ 256u, 256u };
-			shadowMap.getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
-				, size
-				, *shadowMap.getTexture() );
 		}
 	};
 	/*!
@@ -380,14 +353,13 @@ namespace castor3d
 			my_pass_type::doUpdate( size
 				, light
 				, camera );
-			shadowMapTexture.setIndex( uint32_t( DsTexture::eCount ) );
+			shadowMapTexture.setIndex( MinTextureIndex + uint32_t( DsTexture::eCount ) );
 			shadowMapTexture.bind();
 			this->m_program->bind( light );
 			my_pass_type::doRender( size
 				, gp
 				, light.getColour()
 				, first );
-
 			shadowMapTexture.unbind();
 		}
 
