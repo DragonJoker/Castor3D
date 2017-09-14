@@ -29,6 +29,7 @@
 #include "Shader/Shaders/GlslPhongLighting.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -302,7 +303,7 @@ namespace castor3d
 	{
 		using namespace glsl;
 		writer << writeFunctionCall< Void >( &writer
-			, cuT( "decodeReceiver" )
+			, cuT( "decodeReceiverAndID" )
 			, InInt{ encoded }
 			, OutInt{ receiver }
 			, OutInt{ materialId } );
@@ -659,7 +660,11 @@ namespace castor3d
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
-		declareDecodeReceiver( writer );
+		declareDecodeReceiverAndID ( writer );
+		shader::PbrMRMaterials materials{ writer };
+		materials.declare();
+		shader::SubsurfaceScattering sss{ writer };
+		sss.declare();
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -681,7 +686,12 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer, flags, shadowReceiver );
+			auto materialId = writer.declLocale( cuT( "materialId" )
+				, 0_i );
+			decodeReceiverAndID( writer
+				, flags
+				, shadowReceiver
+				, materialId );
 			auto albedo = writer.declLocale( cuT( "albedo" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -694,6 +704,10 @@ namespace castor3d
 				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
+			auto translucency = writer.declLocale( cuT( "translucency" )
+				, data4.w() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( materialId ) );
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
@@ -710,6 +724,16 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						lightDiffuse += translucency * material.m_backLitCoefficient() * lighting->computeOneDirectionalLightBackLit( light
+							, eye
+							, albedo
+							, metallic
+							, roughness
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 
@@ -724,6 +748,16 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						lightDiffuse += translucency * material.m_backLitCoefficient() * lighting->computeOnePointLightBackLit( light
+							, eye
+							, albedo
+							, metallic
+							, roughness
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 
@@ -738,6 +772,16 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						lightDiffuse += translucency * material.m_backLitCoefficient() * lighting->computeOneSpotLightBackLit( light
+							, eye
+							, albedo
+							, metallic
+							, roughness
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 			}

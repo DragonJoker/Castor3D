@@ -67,6 +67,21 @@ namespace castor3d
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_reflRefr" ) ).w();
 		}
+
+		Int BaseMaterial::m_subsurfaceScatteringEnabled()
+		{
+			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_sssInfo" ) ).r() );
+		}
+
+		Int BaseMaterial::m_distanceBasedTransmission()
+		{
+			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_transmittance" ) ).a() );
+		}
+
+		Vec3 BaseMaterial::m_backLitCoefficient()
+		{
+			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_transmittance" ) ).rgb();
+		}
 		
 		Vec4 BaseMaterial::m_common()
 		{

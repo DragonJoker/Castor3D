@@ -336,7 +336,7 @@ namespace castor3d
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( diffuse, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
-			out_c3dOutput4 = vec4( emissive, material.m_refractionRatio() );
+			out_c3dOutput4 = vec4( emissive, 1.0_f - material.m_opacity() );
 		} );
 
 		return writer.finalise();
@@ -379,7 +379,7 @@ namespace castor3d
 		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) && ( alphaFunc != ComparisonFunc::eAlways || checkFlag( passFlags, PassFlag::eSubsurfaceScattering ) ) ) );
 		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
@@ -460,13 +460,15 @@ namespace castor3d
 				, c3d_envMapIndex
 				, vtx_material
 				, flags );
+			
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, material.m_opacity() );
 
 			if ( alphaFunc != ComparisonFunc::eAlways )
 			{
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
@@ -474,12 +476,17 @@ namespace castor3d
 				}
 				else
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
 					doApplyAlphaFunc( writer
 						, alphaFunc
 						, alpha
 						, material.m_alphaRef() );
+				}
+			}
+			else if ( checkFlag( passFlags, PassFlag::eSubsurfaceScattering ) )
+			{
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
 				}
 			}
 
@@ -494,7 +501,7 @@ namespace castor3d
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
 			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
-			out_c3dOutput4 = vec4( matEmissive, material.m_refractionRatio() );
+			out_c3dOutput4 = vec4( matEmissive, 1.0_f - alpha );
 		} );
 
 		return writer.finalise();
@@ -652,7 +659,7 @@ namespace castor3d
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( matDiffuse, matGlossiness );
 			out_c3dOutput3 = vec4( matSpecular, ambientOcclusion );
-			out_c3dOutput4 = vec4( matEmissive, material.m_refractionRatio() );
+			out_c3dOutput4 = vec4( matEmissive, 1.0_f - material.m_opacity() );
 		} );
 
 		return writer.finalise();

@@ -103,6 +103,9 @@ namespace castor3d
 			doDeclareComputeDirectionalLight();
 			doDeclareComputePointLight();
 			doDeclareComputeSpotLight();
+			doDeclareComputeDirectionalLightBackLit();
+			doDeclareComputePointLightBackLit();
+			doDeclareComputeSpotLightBackLit();
 		}
 
 		void LightingModel::declareDirectionalModel()
@@ -116,6 +119,7 @@ namespace castor3d
 			doDeclareDirectionalLight();
 			doDeclareModel();
 			doDeclareComputeDirectionalLight();
+			doDeclareComputeDirectionalLightBackLit();
 		}
 
 		void LightingModel::declarePointModel()
@@ -129,6 +133,7 @@ namespace castor3d
 			doDeclarePointLight();
 			doDeclareModel();
 			doDeclareComputeOnePointLight();
+			doDeclareComputeOnePointLightBackLit();
 		}
 
 		void LightingModel::declareSpotModel()
@@ -142,6 +147,7 @@ namespace castor3d
 			doDeclareSpotLight();
 			doDeclareModel();
 			doDeclareComputeOneSpotLight();
+			doDeclareComputeOneSpotLightBackLit();
 		}
 
 		DirectionalLight LightingModel::getDirectionalLight( Int const & index )

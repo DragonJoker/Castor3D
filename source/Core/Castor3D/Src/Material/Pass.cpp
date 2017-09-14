@@ -133,7 +133,8 @@ namespace castor3d
 					+ string::toString( pass.getAlphaValue() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Pass >::checkError( result, "Pass alpha function" );
 			}
-			else if ( pass.getAlphaBlendMode() != BlendMode::eNoBlend )
+			else if ( pass.hasAlphaBlending()
+				&& pass.getAlphaBlendMode() != BlendMode::eNoBlend )
 			{
 				result = file.writeText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( pass.getAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Pass >::checkError( result, "Pass alpha blend mode" );
@@ -258,7 +259,8 @@ namespace castor3d
 	bool Pass::hasAlphaBlending()const
 	{
 		return ( checkFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f )
-			&& getAlphaFunc() == ComparisonFunc::eAlways;
+			&& getAlphaFunc() == ComparisonFunc::eAlways
+			&& !hasSubsurfaceScattering();
 	}
 
 	void Pass::prepareTextures()

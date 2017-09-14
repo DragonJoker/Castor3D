@@ -90,6 +90,12 @@ namespace castor3d
 			void doDeclareComputeSpotLight()override;
 			void doDeclareComputeOnePointLight()override;
 			void doDeclareComputeOneSpotLight()override;
+			void doDeclareComputeDirectionalLightBackLit()override;
+			void doDeclareComputePointLightBackLit()override;
+			void doDeclareComputeSpotLightBackLit()override;
+			void doDeclareComputeOneDirectionalLightBackLit()override;
+			void doDeclareComputeOnePointLightBackLit ()override;
+			void doDeclareComputeOneSpotLightBackLit ()override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye
@@ -101,10 +107,19 @@ namespace castor3d
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
 
+			glsl::Vec3 doComputeLightBackLit( Light const & light
+				, glsl::Vec3 const & worldEye
+				, glsl::Vec3 const & direction
+				, glsl::Vec3 const & diffuse
+				, glsl::Vec3 const & specular
+				, glsl::Float const & glossiness
+				, FragmentInput const & fragmentIn );
+
 			void doDeclareDistribution();
 			void doDeclareGeometry();
 			void doDeclareFresnelShlick();
 			void doDeclareComputeLight();
+			void doDeclareComputeLightBackLit();
 
 		public:
 			C3D_API static const castor::String Name;
@@ -187,6 +202,56 @@ namespace castor3d
 				, glsl::InFloat
 				, FragmentInput
 				, OutputComponents & > m_computeLight;
+			glsl::Function< glsl::Vec3
+				, DirectionalLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, FragmentInput > m_computeDirectionalBackLit;
+			glsl::Function< glsl::Vec3
+				, PointLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, FragmentInput > m_computePointBackLit;
+			glsl::Function< glsl::Vec3
+				, SpotLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, FragmentInput > m_computeSpotBackLit;
+			glsl::Function< glsl::Vec3
+				, DirectionalLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, FragmentInput > m_computeOneDirectionalBackLit;
+			glsl::Function< glsl::Vec3
+				, PointLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, FragmentInput > m_computeOnePointBackLit;
+			glsl::Function< glsl::Vec3
+				, SpotLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, FragmentInput > m_computeOneSpotBackLit;
+			glsl::Function< glsl::Vec3
+				, InLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, FragmentInput > m_computeLightBackLit;
 		};
 	}
 }

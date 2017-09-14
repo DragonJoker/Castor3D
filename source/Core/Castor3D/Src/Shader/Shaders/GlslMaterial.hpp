@@ -64,7 +64,7 @@ namespace castor3d
 			C3D_API glsl::Float m_exposure();
 			C3D_API glsl::Int m_subsurfaceScatteringEnabled();
 			C3D_API glsl::Int m_distanceBasedTransmission();
-			C3D_API glsl::Int m_backLitCoefficient();
+			C3D_API glsl::Vec3 m_backLitCoefficient();
 
 		protected:
 			C3D_API glsl::Vec4 m_common();

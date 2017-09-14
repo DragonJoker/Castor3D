@@ -1,23 +1,24 @@
 #include "ReflectionPass.hpp"
 
-#include <Engine.hpp>
+#include "Engine.hpp"
 
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Render/RenderPassTimer.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Skybox.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
-#include <Shader/Ubos/SceneUbo.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureImage.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
+#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Render/RenderPassTimer.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureImage.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -117,13 +118,16 @@ namespace castor3d
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			// Shader outputs
-			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
-			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
+			shader::LegacyMaterials materials{ writer };
+			materials.declare();
 
 			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			declareDecodeMaterial( writer );
+
+			// Shader outputs
+			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -158,6 +162,8 @@ namespace castor3d
 				}
 				FI;
 
+				auto material = writer.declLocale( cuT( "material" )
+					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
 				auto position = writer.declLocale( cuT( "position" )
@@ -181,7 +187,7 @@ namespace castor3d
 				IF( writer, refraction != 0_i )
 				{
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 					auto subRatio = writer.declLocale( cuT( "subRatio" )
 						, 1.0_f - ratio );
 					auto addRatio = writer.declLocale( cuT( "addRatio" )
@@ -231,15 +237,18 @@ namespace castor3d
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			// Shader outputs
-			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
-			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
+			shader::PbrMRMaterials materials{ writer };
+			materials.declare();
 
 			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareFresnelSchlick();
 			utils.declareComputeMetallicIBL();
 			declareDecodeMaterial( writer );
+
+			// Shader outputs
+			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -266,6 +275,8 @@ namespace castor3d
 					, envMapIndex
 					, materialId );
 
+				auto material = writer.declLocale( cuT( "material" )
+					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
 				auto data2 = writer.declLocale( cuT( "data2" )
@@ -316,7 +327,7 @@ namespace castor3d
 					FI;
 
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, refraction != 0_i )
 					{
@@ -419,15 +430,18 @@ namespace castor3d
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			// Shader outputs
-			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
-			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
-
+			shader::PbrSGMaterials materials{ writer };
+			materials.declare();
+			
 			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareFresnelSchlick();
 			utils.declareComputeSpecularIBL();
 			declareDecodeMaterial( writer );
+
+			// Shader outputs
+			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -454,6 +468,8 @@ namespace castor3d
 					, envMapIndex
 					, materialId );
 
+				auto material = writer.declLocale( cuT( "material" )
+					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
 				auto data2 = writer.declLocale( cuT( "data2" )
@@ -504,7 +520,7 @@ namespace castor3d
 					FI;
 
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, refraction != 0_i )
 					{

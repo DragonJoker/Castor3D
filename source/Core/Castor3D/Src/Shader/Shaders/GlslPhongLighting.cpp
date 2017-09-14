@@ -151,6 +151,7 @@ namespace castor3d
 		void PhongLightingModel::doDeclareModel()
 		{
 			doDeclareComputeLight();
+			doDeclareComputeLightBackLit();
 		}
 
 		void PhongLightingModel::doDeclareComputeDirectionalLight()
@@ -448,6 +449,210 @@ namespace castor3d
 				, FragmentInput{ m_writer }
 				, output );
 		}
+		
+		void PhongLightingModel::doDeclareComputeDirectionalLightBackLit()
+		{
+			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
+				, [this]( DirectionalLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( light.m_direction().xyz() ) );
+					m_writer.returnStmt( doComputeLightBackLit( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, shininess
+						, fragmentIn ) );
+				}
+				, DirectionalLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, FragmentInput{ m_writer } );
+		}
+
+		void PhongLightingModel::doDeclareComputePointLightBackLit()
+		{
+			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
+				, [this]( PointLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
+						, fragmentIn.m_vertex - light.m_position().xyz() );
+					auto distance = m_writer.declLocale( cuT( "distance" )
+						, length( lightToVertex ) );
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( lightToVertex ) );
+					auto backLit = m_writer.declLocale( cuT( "backLit" )
+						, doComputeLightBackLit( light.m_lightBase()
+							, worldEye
+							, lightDirection
+							, shininess
+							, fragmentIn ) );
+					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
+						, light.m_attenuation().x()
+						+ light.m_attenuation().y() * distance
+						+ light.m_attenuation().z() * distance * distance );
+					m_writer.returnStmt( backLit / attenuation );
+				}
+				, PointLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, FragmentInput{ m_writer } );
+		}
+
+		void PhongLightingModel::doDeclareComputeSpotLightBackLit()
+		{
+			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
+				, [this]( SpotLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
+						, fragmentIn.m_vertex - light.m_position().xyz() );
+					auto distance = m_writer.declLocale( cuT( "distance" )
+						, length( lightToVertex ) );
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( lightToVertex ) );
+					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
+						, dot( lightDirection, light.m_direction() ) );
+					auto backLit = m_writer.declLocale( cuT( "backLit" )
+						, vec3( 0.0_f ) );
+
+					IF( m_writer, spotFactor > light.m_cutOff() )
+					{
+						backLit = doComputeLightBackLit( light.m_lightBase()
+							, worldEye
+							, lightDirection
+							, shininess
+							, fragmentIn );
+						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
+							, light.m_attenuation().x()
+							+ light.m_attenuation().y() * distance
+							+ light.m_attenuation().z() * distance * distance );
+						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
+						backLit = spotFactor * backLit / attenuation;
+					}
+					FI;
+
+					m_writer.returnStmt( backLit );
+				}
+				, SpotLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, FragmentInput{ m_writer } );
+		}
+	
+		void PhongLightingModel::doDeclareComputeOneDirectionalLightBackLit()
+		{
+			m_computeOneDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
+				, [this]( DirectionalLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( light.m_direction().xyz() ) );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+						, 1.0_f );
+
+					m_writer.returnStmt( doComputeLightBackLit( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, shininess
+						, fragmentIn ) );
+				}
+				, DirectionalLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, FragmentInput{ m_writer } );
+		}
+
+		void PhongLightingModel::doDeclareComputeOnePointLightBackLit()
+		{
+			m_computeOnePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
+				, [this]( PointLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
+						, fragmentIn.m_vertex - light.m_position().xyz() );
+					auto distance = m_writer.declLocale( cuT( "distance" )
+						, length( lightToVertex ) );
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( lightToVertex ) );
+
+					auto backLit = m_writer.declLocale( cuT( "backLit" )
+						, doComputeLightBackLit( light.m_lightBase()
+							, worldEye
+							, lightDirection
+							, shininess
+							, fragmentIn ) );
+					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
+						, light.m_attenuation().x()
+						+ light.m_attenuation().y() * distance
+						+ light.m_attenuation().z() * distance * distance );
+					m_writer.returnStmt( backLit / attenuation );
+				}
+				, PointLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, FragmentInput{ m_writer } );
+		}
+
+		void PhongLightingModel::doDeclareComputeOneSpotLightBackLit()
+		{
+			OutputComponents output{ m_writer };
+			m_computeOneSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
+				, [this]( SpotLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
+						, fragmentIn.m_vertex - light.m_position().xyz() );
+					auto distance = m_writer.declLocale( cuT( "distance" )
+						, length( lightToVertex ) );
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( lightToVertex ) );
+					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
+						, dot( lightDirection, light.m_direction() ) );
+					auto backLit = m_writer.declLocale( cuT( "backLit" )
+						, vec3( 0.0_f ) );
+
+					IF( m_writer, spotFactor > light.m_cutOff() )
+					{
+						backLit = doComputeLightBackLit( light.m_lightBase()
+							, worldEye
+							, lightDirection
+							, shininess
+							, fragmentIn );
+						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
+							, light.m_attenuation().x()
+							+ light.m_attenuation().y() * distance
+							+ light.m_attenuation().z() * distance * distance );
+						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
+						backLit = spotFactor * backLit / attenuation;
+					}
+					FI;
+
+					m_writer.returnStmt( backLit );
+				}
+				, SpotLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, FragmentInput{ m_writer } );
+		}
 
 		void PhongLightingModel::doDeclareComputeLight()
 		{
@@ -501,6 +706,54 @@ namespace castor3d
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
 			m_writer << endi;
+		}
+
+		void PhongLightingModel::doDeclareComputeLightBackLit()
+		{
+			m_computeLightBackLit = m_writer.implementFunction< Vec3 >( cuT( "doComputeLightBackLit" )
+				, [this]( Light const & light
+					, Vec3 const & worldEye
+					, Vec3 const & lightDirection
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					auto diffuseFactor = m_writer.declLocale( cuT( "diffuseFactor" )
+						, dot( fragmentIn.m_normal, -lightDirection ) );
+					auto backLit = m_writer.declLocale( cuT( "backLit" )
+						, vec3( 0.0_f ) );
+
+					IF( m_writer, diffuseFactor > 0.0_f )
+					{
+						auto vertexToEye = m_writer.declLocale( cuT( "vertexToEye" )
+							, normalize( worldEye - fragmentIn.m_vertex ) );
+						auto lightReflect = m_writer.declLocale( cuT( "lightReflect" )
+							, normalize( reflect( lightDirection, fragmentIn.m_normal ) ) );
+						auto specularFactor = m_writer.declLocale( cuT( "specularFactor" )
+							, max( dot( vertexToEye, lightReflect ), 0.0 ) );
+						backLit = light.m_colour() * light.m_intensity().x() * diffuseFactor;
+					}
+					FI;
+
+					m_writer.returnStmt( backLit );
+				}
+				, InLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InVec3( &m_writer, cuT( "lightDirection" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, FragmentInput{ m_writer } );
+		}
+
+		Vec3 PhongLightingModel::doComputeLightBackLit( Light const & light
+			, Vec3 const & worldEye
+			, Vec3 const & lightDirection
+			, Float const & shininess
+			, FragmentInput const & fragmentIn )
+		{
+			return m_computeLightBackLit( light
+				, worldEye
+				, lightDirection
+				, shininess
+				, FragmentInput{ fragmentIn } );
 		}
 	}
 }
