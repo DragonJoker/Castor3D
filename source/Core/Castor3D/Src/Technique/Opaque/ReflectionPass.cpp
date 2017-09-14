@@ -1,4 +1,4 @@
-﻿#include "ReflectionPass.hpp"
+#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -105,7 +105,6 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			UBO_HDR_CONFIG( writer );
 			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
 			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
 			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
@@ -141,12 +140,15 @@ namespace castor3d
 					, 0_i );
 				auto refraction = writer.declLocale( cuT( "refraction" )
 					, 0_i );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, 0_i );
 				decodeMaterial( writer
 					, flags
 					, receiver
 					, reflection
 					, refraction
-					, envMapIndex );
+					, envMapIndex
+					, materialId );
 				auto postLight = writer.declLocale( cuT( "postLight" )
 					, texture( c3d_mapPostLight, vtx_texture ).xyz() );
 
@@ -215,7 +217,6 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			UBO_HDR_CONFIG( writer );
 			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
 			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
 			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
@@ -255,12 +256,15 @@ namespace castor3d
 					, 0_i );
 				auto refraction = writer.declLocale( cuT( "refraction" )
 					, 0_i );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, 0_i );
 				decodeMaterial( writer
 					, flags
 					, receiver
 					, reflection
 					, refraction
-					, envMapIndex );
+					, envMapIndex
+					, materialId );
 
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
@@ -401,7 +405,6 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			UBO_HDR_CONFIG( writer );
 			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
 			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
 			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
@@ -441,12 +444,15 @@ namespace castor3d
 					, 0_i );
 				auto refraction = writer.declLocale( cuT( "refraction" )
 					, 0_i );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, 0_i );
 				decodeMaterial( writer
 					, flags
 					, receiver
 					, reflection
 					, refraction
-					, envMapIndex );
+					, envMapIndex
+					, materialId );
 
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
@@ -646,7 +652,7 @@ namespace castor3d
 			result->addUniformBuffer( matrixUbo.getUbo() );
 			result->addUniformBuffer( sceneUbo.getUbo() );
 			result->addUniformBuffer( gpInfoUbo.getUbo() );
-			result->addUniformBuffer( configUbo.getUbo() );
+			//result->addUniformBuffer( configUbo.getUbo() );
 			return result;
 		}
 	}
@@ -783,7 +789,7 @@ namespace castor3d
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->clear( BufferComponent::eColour );
 		m_viewport.apply();
-		m_configUbo.update( p_scene.getHdrConfig() );
+		//m_configUbo.update( p_scene.getHdrConfig() );
 		auto & maps = p_scene.getEnvironmentMaps();
 
 		auto index = MinTextureIndex;

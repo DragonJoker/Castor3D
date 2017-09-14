@@ -161,7 +161,7 @@ namespace castor3d
 	{
 		using namespace glsl;
 		using glsl::operator<<;
-		auto encodeMaterial = writer.implementFunction< Void >( cuT( "encodeMaterial" )
+		writer.implementFunction< Void >( cuT( "encodeMaterial" )
 			, [&]( Int const & receiver
 				, Int const & reflection
 				, Int const & refraction
@@ -170,7 +170,7 @@ namespace castor3d
 				, Float encoded )
 			{
 				auto flags = writer.declLocale( cuT( "flags" )
-					, writer.paren( materialId << 24 )
+					, writer.paren( materialId << 8 )
 						+ writer.paren( receiver << 7 )
 						+ writer.paren( refraction << 6 )
 						+ writer.paren( reflection << 5 )
@@ -187,14 +187,17 @@ namespace castor3d
 	void declareDecodeMaterial( glsl::GlslWriter & writer )
 	{
 		using namespace glsl;
-		auto decodeMaterial = writer.implementFunction< Void >( cuT( "decodeMaterial" )
+		writer.implementFunction< Void >( cuT( "decodeMaterial" )
 			, [&]( Float const & encoded
 				, Int receiver
 				, Int reflection
 				, Int refraction
-				, Int envMapIndex )
+				, Int envMapIndex
+				, Int materialId )
 			{
 				auto flags = writer.declLocale( cuT( "flags" ), writer.cast< Int >( encoded ) );
+				materialId = flags >> 8;
+				flags -= writer.paren( materialId << 8 );
 				receiver = flags >> 7;
 				flags -= writer.paren( receiver << 7 );
 				refraction = flags >> 6;
@@ -206,13 +209,14 @@ namespace castor3d
 			, OutInt{ &writer, cuT( "receiver" ) }
 			, OutInt{ &writer, cuT( "reflection" ) }
 			, OutInt{ &writer, cuT( "refraction" ) }
-			, OutInt{ &writer, cuT( "envMapIndex" ) } );
+			, OutInt{ &writer, cuT( "envMapIndex" ) }
+			, OutInt{ &writer, cuT( "materialId" ) } );
 	}
 
 	void declareDecodeReceiver( glsl::GlslWriter & writer )
 	{
 		using namespace glsl;
-		auto decodeReceiver = writer.implementFunction< Void >( cuT( "decodeReceiver" )
+		writer.implementFunction< Void >( cuT( "decodeReceiver" )
 			, [&]( Int const & encoded
 				, Int receiver )
 			{
@@ -222,11 +226,29 @@ namespace castor3d
 			, OutInt{ &writer, cuT( "receiver" ) } );
 	}
 
+	void declareDecodeReceiverAndID( glsl::GlslWriter & writer )
+	{
+		using namespace glsl;
+		writer.implementFunction< Void >( cuT( "decodeReceiverAndID" )
+			, [&]( Int const & encoded
+				, Int receiver
+				, Int materialId )
+			{
+				auto flags = writer.declLocale( cuT( "flags" ), encoded );
+				materialId = flags >> 8;
+				flags -= writer.paren( materialId << 8 );
+				receiver = flags >> 7;
+			}, InInt{ &writer, cuT( "encoded" ) }
+			, OutInt{ &writer, cuT( "receiver" ) }
+			, OutInt{ &writer, cuT( "materialId" ) } );
+	}
+
 	void encodeMaterial( glsl::GlslWriter & writer
 		, glsl::Int const & receiver
 		, glsl::Int const & reflection
 		, glsl::Int const & refraction
 		, glsl::Int const & envMapIndex
+		, glsl::Int const & materialId
 		, glsl::Float const & encoded )
 	{
 		using namespace glsl;
@@ -236,6 +258,7 @@ namespace castor3d
 			, InInt{ reflection }
 			, InInt{ refraction }
 			, InInt{ envMapIndex }
+			, InInt{ materialId }
 			, OutFloat{ encoded } );
 		writer << endi;
 	}
@@ -245,7 +268,8 @@ namespace castor3d
 		, glsl::Int const & receiver
 		, glsl::Int const & reflection
 		, glsl::Int const & refraction
-		, glsl::Int const & envMapIndex )
+		, glsl::Int const & envMapIndex
+		, glsl::Int const & materialId )
 	{
 		using namespace glsl;
 		writer << writeFunctionCall< Void >( &writer
@@ -254,7 +278,8 @@ namespace castor3d
 			, OutInt{ receiver }
 			, OutInt{ reflection }
 			, OutInt{ refraction }
-			, OutInt{ envMapIndex } );
+			, OutInt{ envMapIndex }
+			, OutInt{ materialId } );
 		writer << endi;
 	}
 
@@ -267,6 +292,20 @@ namespace castor3d
 			, cuT( "decodeReceiver" )
 			, InInt{ encoded }
 			, OutInt{ receiver } );
+		writer << endi;
+	}
+
+	void decodeReceiverAndID( glsl::GlslWriter & writer
+		, glsl::Int & encoded
+		, glsl::Int const & receiver
+		, glsl::Int const & materialId )
+	{
+		using namespace glsl;
+		writer << writeFunctionCall< Void >( &writer
+			, cuT( "decodeReceiver" )
+			, InInt{ encoded }
+			, OutInt{ receiver }
+			, OutInt{ materialId } );
 		writer << endi;
 	}
 
@@ -742,13 +781,14 @@ namespace castor3d
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
-		declareDecodeReceiver( writer );
-		shader::SpecularGlossinessMaterial materials{ writer };
+		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
+		declareDecodeReceiverAndID( writer );
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
 		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_backLit = writer.declFragData< Vec3 >( cuT( "pxl_backLit" ), 1 );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -770,7 +810,12 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer, flags, shadowReceiver );
+			auto materialId = writer.declLocale( cuT( "materialId" )
+				, 0_i );
+			decodeReceiverAndID( writer
+				, flags
+				, shadowReceiver
+				, materialId );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -831,9 +876,13 @@ namespace castor3d
 				break;
 			}
 
-			if ( checkFlag( passFlags, PassFlag::eSubsurfaceScattering ) )
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( materialId ) );
+
+			IF( writer, "material." )
 			{
 			}
+			FI;
 
 			pxl_diffuse = lightDiffuse;
 			pxl_specular = lightSpecular;

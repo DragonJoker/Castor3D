@@ -260,7 +260,7 @@ namespace castor3d
 		 */
 		inline void removeFeature( GpuFeature p_feature )
 		{
-			m_features |= uint32_t( p_feature );
+			m_features &= ~uint32_t( p_feature );
 		}
 		/**
 		 *\~english

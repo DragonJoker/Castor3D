@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -165,12 +165,15 @@ namespace castor3d
 						, 0_i );
 					auto refraction = writer.declLocale( cuT( "refraction" )
 						, 0_i );
+					auto materialId = writer.declLocale( cuT( "materialId" )
+						, 0_i );
 					decodeMaterial( writer
 						, flags
 						, receiver
 						, reflection
 						, refraction
-						, envMapIndex );
+						, envMapIndex
+						, materialId );
 					auto data2 = writer.declLocale( cuT( "data2" )
 						, texture( c3d_mapData2, vtx_texture ) );
 					auto data3 = writer.declLocale( cuT( "data3" )
@@ -292,12 +295,15 @@ namespace castor3d
 						, 0_i );
 					auto refraction = writer.declLocale( cuT( "refraction" )
 						, 0_i );
+					auto materialId = writer.declLocale( cuT( "materialId" )
+						, 0_i );
 					decodeMaterial( writer
 						, flags
 						, receiver
 						, reflection
 						, refraction
-						, envMapIndex );
+						, envMapIndex
+						, materialId );
 					auto data2 = writer.declLocale( cuT( "data2" )
 						, texture( c3d_mapData2, vtx_texture ) );
 					auto albedo = writer.declLocale( cuT( "albedo" )

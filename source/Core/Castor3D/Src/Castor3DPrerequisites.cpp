@@ -1,4 +1,4 @@
-﻿#include "Castor3DPrerequisites.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -169,6 +169,8 @@ namespace castor3d
 					specular *= texture( c3d_mapSpecular, texCoord.xy() ).xyz();
 				}
 
+				emissive *= diffuse;
+
 				if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 				{
 					auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
@@ -278,6 +280,8 @@ namespace castor3d
 							, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
 					}
 
+					p_emissive *= p_albedo;
+
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{
 						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
@@ -383,6 +387,8 @@ namespace castor3d
 							, p_gamma
 							, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
 					}
+
+					p_emissive *= p_diffuse;
 
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{

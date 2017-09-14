@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -62,6 +62,9 @@ namespace castor3d
 			C3D_API glsl::Int m_hasRefraction();
 			C3D_API glsl::Int m_hasReflection();
 			C3D_API glsl::Float m_exposure();
+			C3D_API glsl::Int m_subsurfaceScatteringEnabled();
+			C3D_API glsl::Int m_distanceBasedTransmission();
+			C3D_API glsl::Int m_backLitCoefficient();
 
 		protected:
 			C3D_API glsl::Vec4 m_common();

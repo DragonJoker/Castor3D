@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -266,7 +266,7 @@ namespace castor3d
 			auto matShininess = writer.declLocale( cuT( "matShininess" )
 				, material.m_shininess() );
 			auto emissive = writer.declLocale( cuT( "emissive" )
-				, diffuse * material.m_emissive() );
+				, vec3( material.m_emissive() ) );
 			auto gamma = writer.declLocale( cuT( "gamma" )
 				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
@@ -300,6 +300,7 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
+				, vtx_material
 				, flags );
 
 			if ( alphaFunc != ComparisonFunc::eAlways )
@@ -423,7 +424,7 @@ namespace castor3d
 			auto matMetallic = writer.declLocale( cuT( "matMetallic" )
 				, material.m_metallic() );
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, matAlbedo * material.m_emissive() );
+				, vec3( material.m_emissive() ) );
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
 				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
@@ -457,6 +458,7 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
+				, vtx_material
 				, flags );
 
 			if ( alphaFunc != ComparisonFunc::eAlways )
@@ -580,7 +582,7 @@ namespace castor3d
 			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
 				, material.m_specular() );
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, matDiffuse * material.m_emissive() );
+				, vec3( material.m_emissive() ) );
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
 				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
@@ -614,6 +616,7 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
+				, vtx_material
 				, flags );
 
 			if ( alphaFunc != ComparisonFunc::eAlways )

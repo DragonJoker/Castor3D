@@ -1,4 +1,4 @@
-﻿#include "ForwardRenderTechniquePass.hpp"
+#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -296,7 +296,7 @@ namespace castor3d
 			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
 				, utils.removeGamma( matGamma, material.m_diffuse() ) );
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, matDiffuse * material.m_emissive() );
+				, vec3( material.m_emissive() ) );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
 				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
@@ -518,7 +518,7 @@ namespace castor3d
 			auto matAlbedo = writer.declLocale( cuT( "matAlbedo" )
 				, utils.removeGamma( matGamma, material.m_albedo() ) );
 			auto matEmissive = writer.declLocale( cuT( "emissive" )
-				, matAlbedo * material.m_emissive() );
+				, vec3( material.m_emissive() ) );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
 				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
@@ -719,7 +719,7 @@ namespace castor3d
 			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
 				, utils.removeGamma( matGamma, material.m_diffuse() ) );
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, matDiffuse * material.m_emissive() );
+				, vec3( material.m_emissive() ) );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
 				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" )

@@ -1,4 +1,4 @@
-﻿#include "Skybox.hpp"
+#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -218,7 +218,12 @@ namespace castor3d
 			m_matrixUbo.update( camera.getView()
 				, camera.getViewport().getProjection() );
 			m_modelMatrixUbo.update( m_mtxModel );
-			m_configUbo.update( scene.getHdrConfig() );
+
+			if ( !m_hdr )
+			{
+				m_configUbo.update( scene.getHdrConfig() );
+			}
+
 			m_pipeline->apply();
 			m_texture->bind( MinTextureIndex );
 			sampler->bind( MinTextureIndex );
@@ -456,7 +461,12 @@ namespace castor3d
 			, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 		m_pipeline->addUniformBuffer( m_modelMatrixUbo.getUbo() );
-		m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
+
+		if ( !m_hdr )
+		{
+			m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
+		}
+
 		m_geometryBuffers = getEngine()->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, m_pipeline->getProgram() );
 		return m_geometryBuffers->initialise( { *m_vertexBuffer }, nullptr );
 	}

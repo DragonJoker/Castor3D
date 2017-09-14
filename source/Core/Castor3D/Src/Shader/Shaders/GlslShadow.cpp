@@ -20,7 +20,7 @@ namespace castor3d
 		{
 			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2D >( MapShadowDirectional );
 			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2D >( MapShadowSpot, SpotShadowMapCount );
-			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCube >( MapShadowPoint, PointShadowMapCount );
+			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -37,6 +37,7 @@ namespace castor3d
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
 			doDeclareGetLightSpacePosition();
+			//doDeclarePcfSample2D();
 			doDeclareComputeDirectionalShadow();
 		}
 
@@ -268,7 +269,7 @@ namespace castor3d
 				, Float const & farPlane
 				, Int const & index )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint, PointShadowMapCount );
+					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
@@ -353,7 +354,7 @@ namespace castor3d
 					, Vec3 const & normal
 					, Float const & farPlane )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint );
+					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
