@@ -36,21 +36,41 @@ namespace castor3d
 		public:
 			C3D_API SubsurfaceScattering( glsl::GlslWriter & writer );
 			C3D_API void declare();
-			C3D_API void declareDirectional();
-			C3D_API void declarePoint();
-			C3D_API void declareSpot();
-			C3D_API glsl::Float computeLightDist( shader::DirectionalLight const & light
-				, glsl::Vec3 const & position )const;
-			C3D_API glsl::Float computeLightDist( shader::PointLight const & light
-				, glsl::Vec3 const & position )const;
-			C3D_API glsl::Float computeLightDist( shader::SpotLight const & light
-				, glsl::Vec3 const & position )const;
-			C3D_API glsl::Float computeOneLightDist( shader::DirectionalLight const & light
-				, glsl::Vec3 const & position )const;
-			C3D_API glsl::Float computeOneLightDist( shader::PointLight const & light
-				, glsl::Vec3 const & position )const;
-			C3D_API glsl::Float computeOneLightDist( shader::SpotLight const & light
-				, glsl::Vec3 const & position )const;
+			C3D_API void declare( LightType type );
+			C3D_API glsl::Vec3 compute( shader::MetallicBrdfLightingModel const & lighting
+				, shader::MetallicRoughnessMaterial const & material
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency );
+			C3D_API glsl::Vec3 compute( shader::SpecularBrdfLightingModel const & lighting
+				, shader::SpecularGlossinessMaterial const & material
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency );
+			C3D_API glsl::Vec3 compute( shader::PhongLightingModel const & lighting
+				, shader::LegacyMaterial const & material
+				, shader::DirectionalLight const & light
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Float const & shininess );
+			C3D_API glsl::Vec3 compute( shader::PhongLightingModel const & lighting
+				, shader::LegacyMaterial const & material
+				, shader::PointLight const & light
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Float const & shininess );
+			C3D_API glsl::Vec3 compute( shader::PhongLightingModel const & lighting
+				, shader::LegacyMaterial const & material
+				, shader::SpotLight const & light
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Float const & shininess );
 
 		private:
 			void doDeclareGetTransformedPosition();
@@ -60,6 +80,19 @@ namespace castor3d
 			void doDeclareComputeOneDirectionalLightDist();
 			void doDeclareComputeOnePointLightDist();
 			void doDeclareComputeOneSpotLightDist();
+			
+			glsl::Float doComputeLightDist( shader::DirectionalLight const & light
+				, glsl::Vec3 const & position )const;
+			glsl::Float doComputeLightDist( shader::PointLight const & light
+				, glsl::Vec3 const & position )const;
+			glsl::Float doComputeLightDist( shader::SpotLight const & light
+				, glsl::Vec3 const & position )const;
+			glsl::Float doComputeOneLightDist( shader::DirectionalLight const & light
+				, glsl::Vec3 const & position )const;
+			glsl::Float doComputeOneLightDist( shader::PointLight const & light
+				, glsl::Vec3 const & position )const;
+			glsl::Float doComputeOneLightDist( shader::SpotLight const & light
+				, glsl::Vec3 const & position )const;
 
 		private:
 			glsl::GlslWriter & m_writer;

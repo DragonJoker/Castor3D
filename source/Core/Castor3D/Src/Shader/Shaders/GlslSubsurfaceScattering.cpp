@@ -1,7 +1,11 @@
 #include "GlslSubsurfaceScattering.hpp"
 
 #include "GlslLight.hpp"
+#include "GlslPhongLighting.hpp"
+#include "GlslMetallicBrdfLighting.hpp"
+#include "GlslSpecularBrdfLighting.hpp"
 #include "GlslShadow.hpp"
+#include "GlslMaterial.hpp"
 
 using namespace castor;
 using namespace glsl;
@@ -23,55 +27,115 @@ namespace castor3d
 			doDeclareComputeSpotLightDist();
 		}
 
-		void SubsurfaceScattering::declareDirectional()
+		void SubsurfaceScattering::declare( LightType type )
 		{
 			doDeclareGetTransformedPosition();
-			doDeclareComputeOneDirectionalLightDist();
-		}
 
-		void SubsurfaceScattering::declarePoint()
+			switch ( type )
+			{
+			case LightType::eDirectional:
+				doDeclareComputeOneDirectionalLightDist();
+				break;
+
+			case LightType::ePoint:
+				doDeclareComputePointLightDist();
+				break;
+
+			case LightType::eSpot:
+				doDeclareComputeSpotLightDist();
+				break;
+			}
+		}
+		
+		Vec3 SubsurfaceScattering::compute (PhongLightingModel const & lighting
+			, LegacyMaterial const & material
+			, DirectionalLight const & light
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Float const & shininess )
 		{
-			doDeclareGetTransformedPosition();
-			doDeclareComputeOnePointLightDist();
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				auto factor = m_writer.declLocale( cuT( "factor" )
+					, 1.0_f );
+
+				if ( m_shadows && shadowType != ShadowType::eNone )
+				{
+					IF( m_writer, material.m_distanceBasedTransmission() != 0_i )
+					{
+						factor = glsl::min( 1.0_f, doComputeOneLightDist( light, position) );
+					}
+					FI;
+				}
+
+				result = factor * translucency * material.m_backLitCoefficient() * lighting.computeDirectionalLightBackLit( light
+					, eye
+					, shininess
+					, shader::FragmentInput(position, -normal) );
+			}
+			FI;
+
+			return result;
 		}
 
-		void SubsurfaceScattering::declareSpot()
+		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
+			, LegacyMaterial const & material
+			, PointLight const & light
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Float const & shininess )
 		{
-			doDeclareGetTransformedPosition();
-			doDeclareComputeOneSpotLightDist();
 		}
 
-		Float SubsurfaceScattering::computeLightDist( DirectionalLight const & light
+		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
+			, LegacyMaterial const & material
+			, SpotLight const & light
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Float const & shininess )
+		{
+		}
+
+		Float SubsurfaceScattering::doComputeLightDist( DirectionalLight const & light
 			, Vec3 const & position )const
 		{
 			return m_computeDirectionalLightDist( light, position );
 		}
 
-		Float SubsurfaceScattering::computeLightDist( PointLight const & light
+		Float SubsurfaceScattering::doComputeLightDist( PointLight const & light
 			, Vec3 const & position )const
 		{
 			return m_computePointLightDist( light, position );
 		}
 
-		Float SubsurfaceScattering::computeLightDist( SpotLight const & light
+		Float SubsurfaceScattering::doComputeLightDist( SpotLight const & light
 			, Vec3 const & position )const
 		{
 			return m_computeSpotLightDist( light, position );
 		}
 
-		Float SubsurfaceScattering::computeOneLightDist( DirectionalLight const & light
+		Float SubsurfaceScattering::doComputeOneLightDist( DirectionalLight const & light
 			, Vec3 const & position )const
 		{
 			return m_computeOneDirectionalLightDist( light, position );
 		}
 
-		Float SubsurfaceScattering::computeOneLightDist( PointLight const & light
+		Float SubsurfaceScattering::doComputeOneLightDist( PointLight const & light
 			, Vec3 const & position )const
 		{
 			return m_computeOnePointLightDist( light, position );
 		}
 
-		Float SubsurfaceScattering::computeOneLightDist( SpotLight const & light
+		Float SubsurfaceScattering::doComputeOneLightDist( SpotLight const & light
 			, Vec3 const & position )const
 		{
 			return m_computeOneSpotLightDist( light, position );

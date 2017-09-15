@@ -547,22 +547,8 @@ namespace castor3d
 
 		if ( m_shadows && shadowType != ShadowType::eNone )
 		{
-			switch ( type )
-			{
-			case LightType::eDirectional:
-				sss.declareDirectional();
-				break;
-
-			case LightType::ePoint:
-				sss.declarePoint();
-				break;
-
-			case LightType::eSpot:
-				sss.declareSpot();
-				break;
-			}
+			sss.declare( type );
 		}
-
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -578,11 +564,11 @@ namespace castor3d
 				, texture( c3d_mapData4, texCoord ) );
 			auto flags = writer.declLocale( cuT( "flags" )
 				, writer.cast< Int >( data1.w() ) );
-			auto iShadowReceiver = writer.declLocale( cuT( "iShadowReceiver" )
+			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
 			auto materialId = writer.declLocale( cuT( "materialId" )
 				, 0_i );
-			decodeReceiverAndID( writer, flags, iShadowReceiver, materialId );
+			decodeReceiverAndID( writer, flags, shadowReceiver, materialId );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto shininess = writer.declLocale( cuT( "shininess" )
@@ -614,29 +600,16 @@ namespace castor3d
 					lighting->computeDirectionalLight( light
 						, eye
 						, shininess
-						, iShadowReceiver
+						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-					{
-						auto factor = writer.declLocale( cuT( "factor" )
-							, 1.0_f );
-
-						if ( m_shadows && shadowType != ShadowType::eNone )
-						{
-							IF( writer, material.m_distanceBasedTransmission() != 0_i )
-							{
-								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
-							}
-							FI;
-						}
-
-						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeDirectionalLightBackLit( light
-							, eye
-							, shininess
-							, shader::FragmentInput( wsPosition, -wsNormal ) );
-					}
-					FI;
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, wsPosition
+						, wsNormal
+						, eye
+						, shininess );
 				}
 				break;
 
@@ -646,9 +619,16 @@ namespace castor3d
 					lighting->computeOnePointLight( light
 						, eye
 						, shininess
-						, iShadowReceiver
+						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, wsPosition
+						, wsNormal
+						, eye
+						, shininess );
 					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 					{
 						auto factor = writer.declLocale( cuT( "factor" )
@@ -678,29 +658,16 @@ namespace castor3d
 					lighting->computeOneSpotLight( light
 						, eye
 						, shininess
-						, iShadowReceiver
+						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-					{
-						auto factor = writer.declLocale( cuT( "factor" )
-							, 1.0_f );
-
-						if ( m_shadows && shadowType != ShadowType::eNone )
-						{
-							IF( writer, material.m_distanceBasedTransmission() != 0_i )
-							{
-								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
-							}
-							FI;
-						}
-
-						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeSpotLightBackLit( light
-							, eye
-							, shininess
-							, shader::FragmentInput( wsPosition, -wsNormal ) );
-					}
-					FI;
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, wsPosition
+						, wsNormal
+						, eye
+						, shininess );
 				}
 				break;
 			}
@@ -755,20 +722,7 @@ namespace castor3d
 
 		if ( m_shadows && shadowType != ShadowType::eNone )
 		{
-			switch ( type )
-			{
-			case LightType::eDirectional:
-				sss.declareDirectional();
-				break;
-
-			case LightType::ePoint:
-				sss.declarePoint();
-				break;
-
-			case LightType::eSpot:
-				sss.declareSpot();
-				break;
-			}
+			sss.declare( type );
 		}
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
@@ -973,20 +927,7 @@ namespace castor3d
 
 		if ( m_shadows && shadowType != ShadowType::eNone )
 		{
-			switch ( type )
-			{
-			case LightType::eDirectional:
-				sss.declareDirectional();
-				break;
-
-			case LightType::ePoint:
-				sss.declarePoint();
-				break;
-
-			case LightType::eSpot:
-				sss.declareSpot();
-				break;
-			}
+			sss.declare( type );
 		}
 
 		// Shader outputs
