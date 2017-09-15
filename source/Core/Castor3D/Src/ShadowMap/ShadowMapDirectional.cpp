@@ -1,4 +1,4 @@
-﻿#include "ShadowMapDirectional.hpp"
+#include "ShadowMapDirectional.hpp"
 
 #include "Engine.hpp"
 

@@ -177,7 +177,52 @@ namespace castor3d
 				, parentOutput );
 			m_writer << endi;
 		}
+		
 
+		Vec3 SpecularBrdfLightingModel::computeDirectionalLightBackLit( DirectionalLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, FragmentInput const & fragmentIn )
+		{
+			return m_computeDirectionalBackLit( DirectionalLight{ light }
+				, worldEye
+				, diffuse
+				, specular
+				, glossiness
+				, FragmentInput{ fragmentIn } );
+		}
+
+		Vec3 SpecularBrdfLightingModel::computePointLightBackLit( PointLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, FragmentInput const & fragmentIn )
+		{
+			return m_computePointBackLit( PointLight{ light }
+				, worldEye
+				, diffuse
+				, specular
+				, glossiness
+				, FragmentInput{ fragmentIn } );
+		}
+
+		Vec3 SpecularBrdfLightingModel::computeSpotLightBackLit( SpotLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, FragmentInput const & fragmentIn )
+		{
+			return m_computeSpotBackLit( SpotLight{ light }
+				, worldEye
+				, diffuse
+				, specular
+				, glossiness
+				, FragmentInput{ fragmentIn } );
+		}
 		void SpecularBrdfLightingModel::doDeclareModel()
 		{
 			doDeclareDistribution();
@@ -594,129 +639,6 @@ namespace castor3d
 		{
 			OutputComponents output{ m_writer };
 			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
-				, [this]( SpotLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & diffuse
-					, Vec3 const & specular
-					, Float const & glossiness
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_vertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
-						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( lightToVertex ) );
-					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
-						, dot( lightDirection, -light.m_direction() ) );
-					auto backLit = m_writer.declLocale( cuT( "backLit" )
-						, vec3( 0.0_f ) );
-
-					IF( m_writer, spotFactor > light.m_cutOff() )
-					{
-						backLit = doComputeLightBackLit( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, diffuse
-							, specular
-							, glossiness
-							, fragmentIn );
-						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, light.m_attenuation().x()
-							+ light.m_attenuation().y() * distance
-							+ light.m_attenuation().z() * distance * distance );
-						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
-						backLit = spotFactor * backLit / attenuation;
-					}
-					FI;
-
-					m_writer.returnStmt( backLit );
-				}
-				, SpotLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void SpecularBrdfLightingModel::doDeclareComputeOneDirectionalLightBackLit ()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOneDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
-				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & diffuse
-					, Vec3 const & specular
-					, Float const & glossiness
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( -light.m_direction().xyz() ) );
-
-					m_writer.returnStmt( doComputeLightBackLit( light.m_lightBase()
-						, worldEye
-						, lightDirection
-						, diffuse
-						, specular
-						, glossiness
-						, fragmentIn ) );
-				}
-				, DirectionalLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void SpecularBrdfLightingModel::doDeclareComputeOnePointLightBackLit ()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOnePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
-				, [this]( PointLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & diffuse
-					, Vec3 const & specular
-					, Float const & glossiness
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_vertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
-						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( lightToVertex ) );
-
-					auto backLit = m_writer.declLocale( cuT( "backLit" )
-						, doComputeLightBackLit( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, diffuse
-							, specular
-							, glossiness
-							, fragmentIn ) );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, light.m_attenuation().x()
-						+ light.m_attenuation().y() * distance
-						+ light.m_attenuation().z() * distance * distance );
-					m_writer.returnStmt( backLit / attenuation );
-				}
-				, PointLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void SpecularBrdfLightingModel::doDeclareComputeOneSpotLightBackLit()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOneSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse

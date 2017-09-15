@@ -20,7 +20,7 @@ namespace castor3d
 		{
 			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2D >( MapShadowDirectional );
 			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2D >( MapShadowSpot, SpotShadowMapCount );
-			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
+			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCube >( MapShadowPoint, PointShadowMapCount );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -37,7 +37,6 @@ namespace castor3d
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
 			doDeclareGetLightSpacePosition();
-			//doDeclarePcfSample2D();
 			doDeclareComputeDirectionalShadow();
 		}
 

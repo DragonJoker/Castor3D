@@ -540,7 +540,29 @@ namespace castor3d
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
-		declareDecodeReceiver( writer );
+		declareDecodeReceiverAndID( writer );
+		shader::LegacyMaterials materials{ writer };
+		materials.declare();
+		shader::SubsurfaceScattering sss{ writer };
+
+		if ( m_shadows && shadowType != ShadowType::eNone )
+		{
+			switch ( type )
+			{
+			case LightType::eDirectional:
+				sss.declareDirectional();
+				break;
+
+			case LightType::ePoint:
+				sss.declarePoint();
+				break;
+
+			case LightType::eSpot:
+				sss.declareSpot();
+				break;
+			}
+		}
+
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -558,7 +580,9 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto iShadowReceiver = writer.declLocale( cuT( "iShadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer, flags, iShadowReceiver );
+			auto materialId = writer.declLocale( cuT( "materialId" )
+				, 0_i );
+			decodeReceiverAndID( writer, flags, iShadowReceiver, materialId );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto shininess = writer.declLocale( cuT( "shininess" )
@@ -575,6 +599,10 @@ namespace castor3d
 				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
+			auto translucency = writer.declLocale( cuT( "translucency" )
+				, data4.w() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( materialId ) );
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
@@ -589,6 +617,26 @@ namespace castor3d
 						, iShadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeDirectionalLightBackLit( light
+							, eye
+							, shininess
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 
@@ -601,6 +649,26 @@ namespace castor3d
 						, iShadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computePointLightBackLit( light
+							, eye
+							, shininess
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 
@@ -613,6 +681,26 @@ namespace castor3d
 						, iShadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeSpotLightBackLit( light
+							, eye
+							, shininess
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 			}
@@ -655,7 +743,7 @@ namespace castor3d
 		// Utility functions
 		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, type
-			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
+			, m_shadows ? shadowType : ShadowType::eNone );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
@@ -664,7 +752,24 @@ namespace castor3d
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare();
 		shader::SubsurfaceScattering sss{ writer };
-		sss.declare();
+
+		if ( m_shadows && shadowType != ShadowType::eNone )
+		{
+			switch ( type )
+			{
+			case LightType::eDirectional:
+				sss.declareDirectional();
+				break;
+
+			case LightType::ePoint:
+				sss.declarePoint();
+				break;
+
+			case LightType::eSpot:
+				sss.declareSpot();
+				break;
+			}
+		}
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -726,7 +831,19 @@ namespace castor3d
 						, output );
 					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 					{
-						lightDiffuse += translucency * material.m_backLitCoefficient() * lighting->computeOneDirectionalLightBackLit( light
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeDirectionalLightBackLit( light
 							, eye
 							, albedo
 							, metallic
@@ -750,7 +867,19 @@ namespace castor3d
 						, output );
 					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 					{
-						lightDiffuse += translucency * material.m_backLitCoefficient() * lighting->computeOnePointLightBackLit( light
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computePointLightBackLit( light
 							, eye
 							, albedo
 							, metallic
@@ -774,7 +903,19 @@ namespace castor3d
 						, output );
 					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 					{
-						lightDiffuse += translucency * material.m_backLitCoefficient() * lighting->computeOneSpotLightBackLit( light
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeSpotLightBackLit( light
 							, eye
 							, albedo
 							, metallic
@@ -828,6 +969,25 @@ namespace castor3d
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 		declareDecodeReceiverAndID( writer );
+		shader::SubsurfaceScattering sss{ writer };
+
+		if ( m_shadows && shadowType != ShadowType::eNone )
+		{
+			switch ( type )
+			{
+			case LightType::eDirectional:
+				sss.declareDirectional();
+				break;
+
+			case LightType::ePoint:
+				sss.declarePoint();
+				break;
+
+			case LightType::eSpot:
+				sss.declareSpot();
+				break;
+			}
+		}
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
@@ -872,6 +1032,10 @@ namespace castor3d
 				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
+			auto translucency = writer.declLocale( cuT( "translucency" )
+				, data4.w() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( materialId ) );
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
@@ -888,6 +1052,28 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeDirectionalLightBackLit( light
+							, eye
+							, diffuse
+							, specular
+							, glossiness
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 
@@ -902,6 +1088,28 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computePointLightBackLit( light
+							, eye
+							, diffuse
+							, specular
+							, glossiness
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;;
 				}
 				break;
 
@@ -916,17 +1124,31 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					IF( writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+					{
+						auto factor = writer.declLocale( cuT( "factor" )
+							, 1.0_f );
+
+						if ( m_shadows && shadowType != ShadowType::eNone )
+						{
+							IF( writer, material.m_distanceBasedTransmission() != 0_i )
+							{
+								factor = glsl::min( 1.0_f, sss.computeOneLightDist( light, wsPosition ) );
+							}
+							FI;
+						}
+
+						lightDiffuse += factor * translucency * material.m_backLitCoefficient() * lighting->computeSpotLightBackLit( light
+							, eye
+							, diffuse
+							, specular
+							, glossiness
+							, shader::FragmentInput( wsPosition, -wsNormal ) );
+					}
+					FI;
 				}
 				break;
 			}
-
-			auto material = writer.declLocale( cuT( "material" )
-				, materials.getMaterial( materialId ) );
-
-			IF( writer, "material." )
-			{
-			}
-			FI;
 
 			pxl_diffuse = lightDiffuse;
 			pxl_specular = lightSpecular;

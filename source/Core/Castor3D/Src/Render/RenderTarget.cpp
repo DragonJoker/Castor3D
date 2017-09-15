@@ -1,4 +1,4 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -19,7 +19,7 @@
 #if !defined( NDEBUG )
 #	define DISPLAY_DEBUG 1
 #else
-#	define DISPLAY_DEBUG 1
+#	define DISPLAY_DEBUG 0
 #endif
 
 using namespace castor;

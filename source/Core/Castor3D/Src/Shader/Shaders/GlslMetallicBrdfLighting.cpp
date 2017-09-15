@@ -178,14 +178,14 @@ namespace castor3d
 			m_writer << Endi();
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeOneDirectionalLightBackLit( DirectionalLight const & light
+		Vec3 MetallicBrdfLightingModel::computeDirectionalLightBackLit( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, FragmentInput const & fragmentIn )
 		{
-			return m_computeOneDirectionalBackLit( DirectionalLight{ light }
+			return m_computeDirectionalBackLit( DirectionalLight{ light }
 				, worldEye
 				, albedo
 				, metallic
@@ -193,14 +193,14 @@ namespace castor3d
 				, FragmentInput{ fragmentIn } );
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeOnePointLightBackLit( PointLight const & light
+		Vec3 MetallicBrdfLightingModel::computePointLightBackLit( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, FragmentInput const & fragmentIn )
 		{
-			return m_computeOnePointBackLit( PointLight{ light }
+			return m_computePointBackLit( PointLight{ light }
 				, worldEye
 				, albedo
 				, metallic
@@ -208,14 +208,14 @@ namespace castor3d
 				, FragmentInput{ fragmentIn } );
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeOneSpotLightBackLit( SpotLight const & light
+		Vec3 MetallicBrdfLightingModel::computeSpotLightBackLit( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
 			, FragmentInput const & fragmentIn )
 		{
-			return m_computeOneSpotBackLit( SpotLight{ light }
+			return m_computeSpotBackLit( SpotLight{ light }
 				, worldEye
 				, albedo
 				, metallic
@@ -627,129 +627,6 @@ namespace castor3d
 		{
 			OutputComponents output{ m_writer };
 			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
-				, [this]( SpotLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & albedo
-					, Float const & metallic
-					, Float const & roughness
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_vertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
-						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( lightToVertex ) );
-					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
-						, dot( lightDirection, -light.m_direction() ) );
-					auto backLit = m_writer.declLocale( cuT( "backLit" )
-						, vec3( 0.0_f ) );
-
-					IF( m_writer, spotFactor > light.m_cutOff() )
-					{
-						backLit = doComputeLightBackLit( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, albedo
-							, metallic
-							, roughness
-							, fragmentIn );
-						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, light.m_attenuation().x()
-							+ light.m_attenuation().y() * distance
-							+ light.m_attenuation().z() * distance * distance );
-						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
-						backLit = spotFactor * backLit / attenuation;
-					}
-					FI;
-
-					m_writer.returnStmt( backLit );
-				}
-				, SpotLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "albedo" ) )
-				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void MetallicBrdfLightingModel::doDeclareComputeOneDirectionalLightBackLit ()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOneDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
-				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & albedo
-					, Float const & metallic
-					, Float const & roughness
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( -light.m_direction().xyz() ) );
-
-					m_writer.returnStmt( doComputeLightBackLit( light.m_lightBase()
-						, worldEye
-						, lightDirection
-						, albedo
-						, metallic
-						, roughness
-						, fragmentIn ) );
-				}
-				, DirectionalLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "albedo" ) )
-				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void MetallicBrdfLightingModel::doDeclareComputeOnePointLightBackLit ()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOnePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
-				, [this]( PointLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & albedo
-					, Float const & metallic
-					, Float const & roughness
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_vertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
-						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( lightToVertex ) );
-
-					auto backLit = m_writer.declLocale( cuT( "backLit" )
-						, doComputeLightBackLit( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, albedo
-							, metallic
-							, roughness
-							, fragmentIn ) );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, light.m_attenuation().x()
-						+ light.m_attenuation().y() * distance
-						+ light.m_attenuation().z() * distance * distance );
-					m_writer.returnStmt( backLit / attenuation );
-				}
-				, PointLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "albedo" ) )
-				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void MetallicBrdfLightingModel::doDeclareComputeOneSpotLightBackLit()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOneSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo

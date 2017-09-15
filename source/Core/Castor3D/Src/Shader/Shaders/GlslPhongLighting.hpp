@@ -70,6 +70,18 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
+			C3D_API glsl::Vec3 computeDirectionalLightBackLit( DirectionalLight const & light
+				, glsl::Vec3 const & worldEye
+				, glsl::Float const & shininess
+				, FragmentInput const & fragmentIn );
+			C3D_API glsl::Vec3 computePointLightBackLit( PointLight const & light
+				, glsl::Vec3 const & worldEye
+				, glsl::Float const & shininess
+				, FragmentInput const & fragmentIn );
+			C3D_API glsl::Vec3 computeSpotLightBackLit( SpotLight const & light
+				, glsl::Vec3 const & worldEye
+				, glsl::Float const & shininess
+				, FragmentInput const & fragmentIn );
 
 		protected:
 			void doDeclareModel();
@@ -81,9 +93,6 @@ namespace castor3d
 			void doDeclareComputeDirectionalLightBackLit()override;
 			void doDeclareComputePointLightBackLit()override;
 			void doDeclareComputeSpotLightBackLit()override;
-			void doDeclareComputeOneDirectionalLightBackLit()override;
-			void doDeclareComputeOnePointLightBackLit ()override;
-			void doDeclareComputeOneSpotLightBackLit ()override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye
@@ -167,21 +176,6 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InFloat
 				, FragmentInput > m_computeSpotBackLit;
-			glsl::Function< glsl::Vec3
-				, DirectionalLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, FragmentInput > m_computeOneDirectionalBackLit;
-			glsl::Function< glsl::Vec3
-				, PointLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, FragmentInput > m_computeOnePointBackLit;
-			glsl::Function< glsl::Vec3
-				, SpotLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, FragmentInput > m_computeOneSpotBackLit;
 		};
 	}
 }

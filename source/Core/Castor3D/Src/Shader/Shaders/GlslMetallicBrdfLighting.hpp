@@ -82,19 +82,19 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
-			C3D_API glsl::Vec3 computeOneDirectionalLightBackLit( DirectionalLight const & light
+			C3D_API glsl::Vec3 computeDirectionalLightBackLit( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
 				, glsl::Float const & roughness
 				, FragmentInput const & fragmentIn );
-			C3D_API glsl::Vec3 computeOnePointLightBackLit( PointLight const & light
+			C3D_API glsl::Vec3 computePointLightBackLit( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
 				, glsl::Float const & roughness
 				, FragmentInput const & fragmentIn );
-			C3D_API glsl::Vec3 computeOneSpotLightBackLit( SpotLight const & light
+			C3D_API glsl::Vec3 computeSpotLightBackLit( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
@@ -111,9 +111,6 @@ namespace castor3d
 			void doDeclareComputeDirectionalLightBackLit()override;
 			void doDeclareComputePointLightBackLit()override;
 			void doDeclareComputeSpotLightBackLit()override;
-			void doDeclareComputeOneDirectionalLightBackLit()override;
-			void doDeclareComputeOnePointLightBackLit ()override;
-			void doDeclareComputeOneSpotLightBackLit ()override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye
@@ -241,27 +238,6 @@ namespace castor3d
 				, glsl::InFloat
 				, glsl::InFloat
 				, FragmentInput > m_computeSpotBackLit;
-			glsl::Function< glsl::Vec3
-				, DirectionalLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InFloat
-				, FragmentInput > m_computeOneDirectionalBackLit;
-			glsl::Function< glsl::Vec3
-				, PointLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InFloat
-				, FragmentInput > m_computeOnePointBackLit;
-			glsl::Function< glsl::Vec3
-				, SpotLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InFloat
-				, FragmentInput > m_computeOneSpotBackLit;
 			glsl::Function< glsl::Vec3
 				, InLight
 				, glsl::InVec3
