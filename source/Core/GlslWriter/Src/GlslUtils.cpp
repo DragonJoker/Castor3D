@@ -63,11 +63,9 @@ namespace glsl
 	{
 		m_calcWSPosition = m_writer.implementFunction< Vec3 >( cuT( "calcWSPosition" )
 			, [&]( Vec2 const & uv
+				, Float const & depth
 				, Mat4 const & invViewProj )
 			{
-				auto c3d_mapDepth = m_writer.getBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
-				auto depth = m_writer.declLocale( cuT( "depth" )
-					, texture( c3d_mapDepth, uv, 0.0_f ).x() );
 				auto csPosition = m_writer.declLocale( cuT( "psPosition" )
 					, vec3( uv * 2.0f - 1.0f, depth * 2.0 - 1.0 ) );
 				auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
@@ -76,6 +74,7 @@ namespace glsl
 				m_writer.returnStmt( wsPosition.xyz() );
 			}
 			, InVec2{ &m_writer, cuT( "uv" ) }
+			, InFloat{ &m_writer, cuT( "depth" ) }
 			, InMat4{ &m_writer, cuT( "invViewProj" ) } );
 	}
 
@@ -301,9 +300,12 @@ namespace glsl
 	}
 
 	Vec3 Utils::calcWSPosition( Vec2 const & uv
+		, Float const & depth
 		, Mat4 const & invViewProj )
 	{
-		return m_calcWSPosition( uv, invViewProj );
+		return m_calcWSPosition( uv
+			, depth
+			, invViewProj );
 	}
 
 	Vec3 Utils::applyGamma( Float const & gamma

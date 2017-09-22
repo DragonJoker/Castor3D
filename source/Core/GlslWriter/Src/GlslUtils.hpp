@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -48,6 +48,7 @@ namespace glsl
 		GlslWriter_API Float calcVSDepth( Vec2 const & uv
 			, Mat4 const & proj );
 		GlslWriter_API Vec3 calcWSPosition( Vec2 const & uv
+			, Float const & depth
 			, Mat4 const & invViewProj );
 		GlslWriter_API Vec3 applyGamma( Float const & gamma
 			, Vec3 const & HDR );
@@ -87,7 +88,7 @@ namespace glsl
 		Function< Vec2 > m_calcTexCoord;
 		Function< Vec3, InVec2, InMat4 > m_calcVSPosition;
 		Function< Float, InVec2, InMat4 > m_calcVSDepth;
-		Function< Vec3, InVec2, InMat4 > m_calcWSPosition;
+		Function< Vec3, InVec2, InFloat, InMat4 > m_calcWSPosition;
 		Function< Vec3, InFloat, InVec3 > m_applyGamma;
 		Function< Vec3, InFloat, InVec3 > m_removeGamma;
 		Function< Vec3, InVec2, InVec3, InVec3 > m_getMapNormal;

@@ -166,8 +166,10 @@ namespace castor3d
 					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, normalize( data1.xyz() ) );
 				auto incident = writer.declLocale( cuT( "incident" )
@@ -291,8 +293,10 @@ namespace castor3d
 					, data3.g() );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_cameraPosition ) );
 
@@ -484,8 +488,10 @@ namespace castor3d
 					, data2.w() );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_cameraPosition ) );
 
