@@ -1,4 +1,4 @@
-#include "Engine.hpp"
+﻿#include "Engine.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
 
@@ -69,6 +69,12 @@ namespace castor3d
 				m_clean( resource );
 			}
 		}
+	}
+
+	template< typename ResourceType, typename CacheType, EventType EventType >
+	inline bool CacheView< ResourceType, CacheType, EventType >::isEmpty()const
+	{
+		return m_createdElements.empty();
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >

@@ -1,4 +1,4 @@
-﻿#include "Scene.hpp"
+#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -45,6 +45,33 @@ namespace castor3d
 				, std::move( initialise )
 				, std::move( clean )
 				, cache );
+		}
+
+		template< typename ObjType, typename ViewType >
+		bool writeView( ViewType const & view
+			, String const & elemsName
+			, String const & tabs
+			, TextFile & file )
+		{
+			bool result = true;
+
+			if ( !view.isEmpty() )
+			{
+				result = file.writeText( cuT( "\n" ) + tabs + cuT( "\t// " ) + elemsName + cuT( "\n" ) ) > 0;
+
+					if ( result )
+					{
+						Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+
+						for ( auto const & name : view )
+						{
+							auto elem = view.find( name );
+							result &= ObjType::TextWriter( tabs + cuT( "\t" ) )( *elem, file );
+						}
+					}
+			}
+
+			return result;
 		}
 	}
 
@@ -177,221 +204,197 @@ namespace castor3d
 			}
 		}
 
-		if ( result )
-		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Skybox\n" ) ) > 0;
-		}
-
 		if ( result && scene.hasSkybox() )
 		{
-			Logger::logInfo( cuT( "Scene::write - Skybox" ) );
-			result = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( scene.getSkybox(), file );
-		}
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Skybox\n" ) ) > 0;
 
-		if ( result )
-		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Fonts\n" ) ) > 0;
-		}
-
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Fonts" ) );
-
-			for ( auto const & name : scene.getFontView() )
+			if ( result )
 			{
-				auto font = scene.getFontView().find( name );
-				result &= Font::TextWriter( m_tabs + cuT( "\t" ) )( *font, file );
+				Logger::logInfo( cuT( "Scene::write - Skybox" ) );
+				result = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( scene.getSkybox(), file );
 			}
 		}
 
 		if ( result )
 		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Samplers\n" ) ) > 0;
+			result = writeView< Font >( scene.getFontView()
+				, cuT( "Fonts" )
+				, m_tabs
+				, file );
 		}
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Scene::write - Samplers" ) );
-
-			for ( auto const & name : scene.getSamplerView() )
-			{
-				auto sampler = scene.getSamplerView().find( name );
-				result &= Sampler::TextWriter( m_tabs + cuT( "\t" ) )( *sampler, file );
-			}
+			result = writeView< Sampler >( scene.getSamplerView()
+				, cuT( "Samplers" )
+				, m_tabs
+				, file );
 		}
 
 		if ( result )
 		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Materials\n" ) ) > 0;
+			result = writeView< Material >( scene.getMaterialView()
+				, cuT( "Materials" )
+				, m_tabs
+				, file );
 		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Materials" ) );
-
-			for ( auto const & name : scene.getMaterialView() )
-			{
-				auto material = scene.getMaterialView().find( name );
-				result &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *material, file );
-			}
-		}
-
-		if ( result )
+		if ( result && !scene.getOverlayView().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Overlays\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Overlays" ) );
-
-			for ( auto const & name : scene.getOverlayView() )
+			if ( result )
 			{
-				auto overlay = scene.getOverlayView().find( name );
+				Logger::logInfo( cuT( "Scene::write - Overlays" ) );
 
-				if ( !overlay->getParent() )
+				for ( auto const & name : scene.getOverlayView() )
 				{
-					result &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay, file );
+					auto overlay = scene.getOverlayView().find( name );
+
+					if ( !overlay->getParent() )
+					{
+						result &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay, file );
+					}
 				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getMeshCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Meshes\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Meshes" ) );
-			auto lock = makeUniqueLock( scene.getMeshCache() );
-
-			for ( auto const & it : scene.getMeshCache() )
+			if ( result )
 			{
-				if ( result )
+				Logger::logInfo( cuT( "Scene::write - Meshes" ) );
+				auto lock = makeUniqueLock( scene.getMeshCache() );
+
+				for ( auto const & it : scene.getMeshCache() )
 				{
-					result = Mesh::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					if ( result )
+					{
+						result = Mesh::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
 				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getCameraRootNode()->getChildren().empty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras nodes\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Cameras nodes" ) );
-
-			for ( auto const & it : scene.getCameraRootNode()->getChildren() )
+			if ( result )
 			{
-				if ( result
-					&& it.first.find( cuT( "_REye" ) ) == String::npos
-					&& it.first.find( cuT( "_LEye" ) ) == String::npos )
+				Logger::logInfo( cuT( "Scene::write - Cameras nodes" ) );
+
+				for ( auto const & it : scene.getCameraRootNode()->getChildren() )
 				{
-					result = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+					if ( result
+						&& it.first.find( cuT( "_REye" ) ) == String::npos
+						&& it.first.find( cuT( "_LEye" ) ) == String::npos )
+					{
+						result = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+					}
 				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getCameraCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Cameras" ) );
-			auto lock = makeUniqueLock( scene.getCameraCache() );
-
-			for ( auto const & it : scene.getCameraCache() )
+			if ( result )
 			{
-				if ( result
-					&& it.first.find( cuT( "_REye" ) ) == String::npos
-					&& it.first.find( cuT( "_LEye" ) ) == String::npos )
+				Logger::logInfo( cuT( "Scene::write - Cameras" ) );
+				auto lock = makeUniqueLock( scene.getCameraCache() );
+
+				for ( auto const & it : scene.getCameraCache() )
 				{
-					result = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					if ( result
+						&& it.first.find( cuT( "_REye" ) ) == String::npos
+						&& it.first.find( cuT( "_LEye" ) ) == String::npos )
+					{
+						result = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
 				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getObjectRootNode()->getChildren().empty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Objects nodes\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Objects nodes" ) );
-
-			for ( auto const & it : scene.getObjectRootNode()->getChildren() )
+			if ( result )
 			{
-				result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+				Logger::logInfo( cuT( "Scene::write - Objects nodes" ) );
+
+				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
+				{
+					result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getLightCache() .isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Lights\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Lights" ) );
-			auto lock = makeUniqueLock( scene.getLightCache() );
-
-			for ( auto const & it : scene.getLightCache() )
+			if ( result )
 			{
-				result &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				Logger::logInfo( cuT( "Scene::write - Lights" ) );
+				auto lock = makeUniqueLock( scene.getLightCache() );
+
+				for ( auto const & it : scene.getLightCache() )
+				{
+					result &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getGeometryCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Geometries\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Geometries" ) );
-			auto lock = makeUniqueLock( scene.getGeometryCache() );
-
-			for ( auto const & it : scene.getGeometryCache() )
+			if ( result )
 			{
-				result &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				Logger::logInfo( cuT( "Scene::write - Geometries" ) );
+				auto lock = makeUniqueLock( scene.getGeometryCache() );
+
+				for ( auto const & it : scene.getGeometryCache() )
+				{
+					result &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getParticleSystemCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Particle systems\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Particle systems" ) );
-			auto lock = makeUniqueLock( scene.getParticleSystemCache() );
-
-			for ( auto const & it : scene.getParticleSystemCache() )
+			if ( result )
 			{
-				result &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				Logger::logInfo( cuT( "Scene::write - Particle systems" ) );
+				auto lock = makeUniqueLock( scene.getParticleSystemCache() );
+
+				for ( auto const & it : scene.getParticleSystemCache() )
+				{
+					result &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
 			}
 		}
 
-		if ( result )
+		if ( result && !scene.getAnimatedObjectGroupCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Animated object groups\n" ) ) > 0;
-		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Animated object groups" ) );
-			auto lock = makeUniqueLock( scene.getAnimatedObjectGroupCache() );
-
-			for ( auto const & it : scene.getAnimatedObjectGroupCache() )
+			if ( result )
 			{
-				result &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				Logger::logInfo( cuT( "Scene::write - Animated object groups" ) );
+				auto lock = makeUniqueLock( scene.getAnimatedObjectGroupCache() );
+
+				for ( auto const & it : scene.getAnimatedObjectGroupCache() )
+				{
+					result &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
 			}
 		}
 

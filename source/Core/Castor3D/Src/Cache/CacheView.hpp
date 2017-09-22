@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -116,6 +116,13 @@ namespace castor3d
 		 *\brief		Supprime du cache les éléments créés via cette vue.
 		 */
 		inline void clear();
+		/**
+		 *\~english
+		 *\return		\p true if the view is empty.
+		 *\~french
+		 *\return		\p true si la vue est vide.
+		 */
+		inline bool isEmpty()const;
 		/**
 		 *\~english
 		 *\param[in]	p_name	The object name.

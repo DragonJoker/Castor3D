@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si le cache est vide.
 		 */
-		inline bool isEmpty()
+		inline bool isEmpty()const
 		{
 			return m_elements.empty();
 		}
