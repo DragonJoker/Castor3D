@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -226,19 +226,19 @@ namespace castor3d
 			, castor::Matrix4x4r const & transformations )const;
 		/**
 		 *\~english
-		 *\brief		Checks if given SphereBox is in the view frustum
-		 *\param[in]	box				The SphereBox
-		 *\param[in]	transformations	The SphereBox transformations matrix
-		 *\return		\p false if the SphereBox is completely out of the view frustum
+		 *\brief		Checks if given SphereBox is in the view frustum.
+		 *\param[in]	box			The SphereBox.
+		 *\param[in]	position	The position for the SphereBox.
+		 *\return		\p false if the SphereBox is completely out of the view frustum.
 		 *\~french
 		 *\brief
-		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue
-		 *\param[in]	box				La SphereBox
-		 *\param[in]	transformations	La SphereBox de transformations de la CubeBox
-		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue
+		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue.
+		 *\param[in]	box			La SphereBox.
+		 *\param[in]	position	La position de la SphereBox.
+		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue.
 		 */
 		C3D_API bool isVisible( castor::SphereBox const & box
-			, castor::Matrix4x4r const & transformations )const;
+			, castor::Point3r const & position )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum

@@ -1,4 +1,4 @@
-﻿#include "Frustum.hpp"
+#include "Frustum.hpp"
 
 #include "Render/Viewport.hpp"
 
@@ -11,45 +11,49 @@ namespace castor3d
 {
 	namespace
 	{
-		Point3r getVertexP( Point3r const & p_min, Point3r const & p_max, Point3r const & p_normal )
+		Point3r getVertexP( Point3r const & min
+			, Point3r const & max
+			, Point3r const & normal )
 		{
-			Point3r result{ p_min };
+			Point3r result{ min };
 
-			if ( p_normal[0] >= 0 )
+			if ( normal[0] >= 0 )
 			{
-				result[0] = p_max[0];
+				result[0] = max[0];
 			}
 
-			if ( p_normal[1] >= 0 )
+			if ( normal[1] >= 0 )
 			{
-				result[1] = p_max[1];
+				result[1] = max[1];
 			}
 
-			if ( p_normal[2] >= 0 )
+			if ( normal[2] >= 0 )
 			{
-				result[2] = p_max[2];
+				result[2] = max[2];
 			}
 
 			return result;
 		}
 
-		Point3r getVertexN( Point3r const & p_min, Point3r const & p_max, Point3r const & p_normal )
+		Point3r getVertexN( Point3r const & min
+			, Point3r const & max
+			, Point3r const & normal )
 		{
-			Point3r result{ p_max };
+			Point3r result{ max };
 
-			if ( p_normal[0] >= 0 )
+			if ( normal[0] >= 0 )
 			{
-				result[0] = p_min[0];
+				result[0] = min[0];
 			}
 
-			if ( p_normal[1] >= 0 )
+			if ( normal[1] >= 0 )
 			{
-				result[1] = p_min[1];
+				result[1] = min[1];
 			}
 
-			if ( p_normal[2] >= 0 )
+			if ( normal[2] >= 0 )
 			{
-				result[2] = p_min[2];
+				result[2] = min[2];
 			}
 
 			return result;
@@ -58,12 +62,46 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	Frustum::Frustum( Viewport & p_viewport )
-		: m_viewport{ p_viewport }
+	Frustum::Frustum( Viewport & viewport )
+		: m_viewport{ viewport }
 	{
 	}
 
-	void Frustum::update( Point3r const & p_position, Point3r const & p_x, Point3r const & p_y, Point3r const & p_z )
+	void Frustum::update( Matrix4x4r const & projection
+		, Matrix4x4r const & view )
+	{
+		auto const viewProjection = projection * view;
+
+		m_planes[size_t( FrustumPlane::eNear )].set( Point3r{ viewProjection[2][0]
+				, viewProjection[2][1]
+				, viewProjection[2][2] }
+			, viewProjection[2][3] );
+		m_planes[size_t( FrustumPlane::eFar )].set( Point3r{ viewProjection[3][0] - viewProjection[2][0]
+				, viewProjection[3][1] - viewProjection[2][1]
+				, viewProjection[3][2] - viewProjection[2][2] }
+			, viewProjection[3][3] - viewProjection[2][3] );
+		m_planes[size_t( FrustumPlane::eLeft )].set( Point3r{ viewProjection[3][0] + viewProjection[0][0]
+				, viewProjection[3][1] + viewProjection[0][1]
+				, viewProjection[3][2] + viewProjection[0][2] }
+			, viewProjection[3][3] + viewProjection[0][3] );
+		m_planes[size_t( FrustumPlane::eRight )].set( Point3r{ viewProjection[3][0] - viewProjection[0][0]
+				, viewProjection[3][1] - viewProjection[0][1]
+				, viewProjection[3][2] - viewProjection[0][2] }
+			, viewProjection[3][3] - viewProjection[0][3] );
+		m_planes[size_t( FrustumPlane::eTop )].set( Point3r{ viewProjection[3][0] - viewProjection[1][0]
+				, viewProjection[3][1] - viewProjection[1][1]
+				, viewProjection[3][2] - viewProjection[1][2] }
+			, viewProjection[3][3] - viewProjection[1][3] );
+		m_planes[size_t( FrustumPlane::eBottom )].set( Point3r{ viewProjection[3][0] + viewProjection[1][0]
+				, viewProjection[3][1] + viewProjection[1][1]
+				, viewProjection[3][2] + viewProjection[1][2] }
+			, viewProjection[3][3] + viewProjection[1][3] );
+	}
+
+	void Frustum::update( Point3r const & position
+		, Point3r const & x
+		, Point3r const & y
+		, Point3r const & z )
 	{
 		// Retrieve near and far planes' dimensions
 		real farHeight{ 0.0_r };
@@ -88,21 +126,31 @@ namespace castor3d
 		}
 
 		// Compute planes' points
-		// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
-		Point3r rn{ p_x * nearWidth / 2 };
-		Point3r rf{ p_x * farWidth / 2 };
-		Point3r tn{ p_y * nearHeight / 2 };
-		Point3r tf{ p_y * farHeight / 2 };
-		Point3r nc{ p_position + p_z * m_viewport.getNear() };
-		Point3r ntl{ nc + tn - rn };
+		// N => Near
+		// F => Far
+		// C => Center
+		// T => Top
+		// L => Left
+		// R => Right
+		// B => Bottom
+		Point3r rn{ x * nearWidth / 2 };
+		Point3r ln{ -rn };
+		Point3r rf{ x * farWidth / 2 };
+		Point3r lf{ -rf };
+		Point3r tn{ y * nearHeight / 2 };
+		Point3r bn{ -tn };
+		Point3r tf{ y * farHeight / 2 };
+		Point3r bf{ -tf };
+		Point3r nc{ position + z * m_viewport.getNear() };
+		Point3r ntl{ nc + tn + ln };
 		Point3r ntr{ nc + tn + rn };
-		Point3r nbl{ nc - tn - rn };
-		Point3r nbr{ nc - tn + rn };
-		Point3r fc{ p_position + p_z * m_viewport.getFar() };
-		Point3r ftl{ fc + tf - rf };
+		Point3r nbl{ nc + bn + ln };
+		Point3r nbr{ nc + bn + rn };
+		Point3r fc{ position + z * m_viewport.getFar() };
+		Point3r ftl{ fc + tf + lf };
 		Point3r ftr{ fc + tf + rf };
-		Point3r fbl{ fc - tf - rf };
-		Point3r fbr{ fc - tf + rf };
+		Point3r fbl{ fc + bf + lf };
+		Point3r fbr{ fc + bf + rf };
 
 		// Fill planes
 		m_planes[size_t( FrustumPlane::eNear )].set( ntl, ntr, nbr );
@@ -113,22 +161,23 @@ namespace castor3d
 		m_planes[size_t( FrustumPlane::eBottom )].set( nbl, nbr, fbr );
 	}
 
-	bool Frustum::isVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const
+	bool Frustum::isVisible( CubeBox const & box
+		, Matrix4x4r const & transformations )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		Point3r corners[8];
-		corners[0] = p_box.getMin();
-		corners[1] = p_box.getMax();
+		corners[0] = box.getMin();
+		corners[1] = box.getMax();
 
 		// Express object box in world coordinates
-		corners[2] = p_transformations * Point3r{ corners[0][0], corners[1][1], corners[0][2] };
-		corners[3] = p_transformations * Point3r{ corners[1][0], corners[1][1], corners[0][2] };
-		corners[4] = p_transformations * Point3r{ corners[1][0], corners[0][1], corners[0][2] };
-		corners[5] = p_transformations * Point3r{ corners[0][0], corners[1][1], corners[1][2] };
-		corners[6] = p_transformations * Point3r{ corners[0][0], corners[0][1], corners[1][2] };
-		corners[7] = p_transformations * Point3r{ corners[1][0], corners[0][1], corners[1][2] };
-		corners[0] = p_transformations * corners[0];
-		corners[1] = p_transformations * corners[1];
+		corners[2] = transformations * Point3r{ corners[0][0], corners[1][1], corners[0][2] };
+		corners[3] = transformations * Point3r{ corners[1][0], corners[1][1], corners[0][2] };
+		corners[4] = transformations * Point3r{ corners[1][0], corners[0][1], corners[0][2] };
+		corners[5] = transformations * Point3r{ corners[0][0], corners[1][1], corners[1][2] };
+		corners[6] = transformations * Point3r{ corners[0][0], corners[0][1], corners[1][2] };
+		corners[7] = transformations * Point3r{ corners[1][0], corners[0][1], corners[1][2] };
+		corners[0] = transformations * corners[0];
+		corners[1] = transformations * corners[1];
 
 		// Retrieve axis aligned box boundaries
 		Point3r min( corners[0] );
@@ -169,40 +218,59 @@ namespace castor3d
 		return result != Intersection::eOut;
 	}
 
-	bool Frustum::isVisible( castor::SphereBox const & p_box, castor::Matrix4x4r const & m_transformations )const
+	bool Frustum::isVisible( castor::SphereBox const & box
+		, castor::Point3r const & position )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		Intersection result{ Intersection::eIn };
-		Point3r center = p_box.getCenter() + Point3r{ m_transformations[3][0], m_transformations[3][1], m_transformations[3][2] };
+		Point3r center = box.getCenter() + position;
+		auto radius = box.getRadius() * 20;
 
-		for ( auto & plane : m_planes )
+		auto it = std::find_if( m_planes.begin()
+			, m_planes.end()
+			, [&center, &radius]( auto const & plane )
+			{
+				return plane.distance( center ) < -radius;
+			} );
+
+		bool result = it == m_planes.end();
+
+#if !defined( NDEBUG )
+
+		if ( !result )
 		{
-			float distance = plane.distance( center );
-
-			if ( distance < -( p_box.getRadius() ) )
-			{
-				return false;
-			}
-
-			if ( distance < p_box.getRadius() )
-			{
-				result = Intersection::eIntersect;
-			}
+			auto dist = ( *it ).distance( center );
+			std::clog << "dist: " << dist << ", radius: " << radius / 2.0f << std::endl;
 		}
 
-		return result != Intersection::eOut;
+#endif
+
+		//result = true;
+		return result;
 	}
 
-	bool Frustum::isVisible( Point3r const & p_point )const
+	bool Frustum::isVisible( Point3r const & point )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		auto it = std::find_if( m_planes.begin()
 			, m_planes.end()
-			, [&p_point]( auto const & p_plane )
+			, [&point]( auto const & p_plane )
 		{
-			return p_plane.distance( p_point ) < 0;
+			return p_plane.distance( point ) < 0;
 		} );
 
-		return it == m_planes.end();
+		bool result = it == m_planes.end();
+
+#if !defined( NDEBUG )
+
+		if ( !result )
+		{
+			auto dist = ( *it ).distance( point );
+			std::clog << dist << std::endl;
+		}
+
+#endif
+
+		//result = true;
+		return result;
 	}
 }

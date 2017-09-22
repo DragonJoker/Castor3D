@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+﻿#include "Camera.hpp"
 
 #include "Engine.hpp"
 
@@ -118,10 +118,8 @@ namespace castor3d
 				Point3r up{ 0.0_r, 1.0_r, 0.0_r };
 				orientation.transform( right, right );
 				orientation.transform( up, up );
-				Point3r front{ right ^ up };
-				up = front ^ right;
-
-				m_frustum.update( position, right, up, front );
+				Point3r front{ point::cross( right, up ) };
+				up = point::cross( front, right );
 
 				// Update view matrix
 				matrix::lookAt( m_view, position, position + front, up );
@@ -131,6 +129,8 @@ namespace castor3d
 					matrix::scale( m_view, Point3f{ -1.0f, 1.0f, 1.0f } );
 				}
 
+				//m_frustum.update( position, right, up, front );
+				m_frustum.update( m_viewport.getProjection(), getView() );
 				m_nodeChanged = false;
 			}
 		}
@@ -179,10 +179,10 @@ namespace castor3d
 	}
 
 	bool Camera::isVisible( castor::SphereBox const & box
-		, castor::Matrix4x4r const & transformations )const
+		, castor::Point3r const & position )const
 	{
 		return m_frustum.isVisible( box
-			, transformations );
+			, position );
 	}
 
 	bool Camera::isVisible( Point3r const & point )const

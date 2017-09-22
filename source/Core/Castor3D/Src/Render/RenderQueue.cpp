@@ -1,4 +1,4 @@
-﻿#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -551,7 +551,7 @@ namespace castor3d
 			{
 				if ( node.m_sceneNode.isDisplayable()
 					 && node.m_sceneNode.isVisible()
-					 && p_camera.isVisible( node.m_data.getCollisionSphere(), node.m_sceneNode.getDerivedTransformationMatrix() ) )
+					 && p_camera.isVisible( node.m_data.getCollisionSphere(), node.m_sceneNode.getDerivedPosition() ) )
 				{
 					doAddRenderNode( p_pass, p_pipeline, node, p_submesh, p_outputNodes );
 				}
@@ -569,7 +569,7 @@ namespace castor3d
 				{
 					if ( node.m_sceneNode.isDisplayable()
 						 && node.m_sceneNode.isVisible()
-						 && p_camera.isVisible( node.m_data.getCollisionSphere(), node.m_sceneNode.getDerivedTransformationMatrix() ) )
+						 && p_camera.isVisible( node.m_data.getCollisionSphere(), node.m_sceneNode.getDerivedPosition() ) )
 					{
 						doAddRenderNode( *pipelines.first, node, p_outputNodes );
 					}
