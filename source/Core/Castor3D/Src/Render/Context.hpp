@@ -473,14 +473,16 @@ namespace castor3d
 		inline void renderEquiToCube( castor::Size const & size
 			, TextureLayout const & texture
 			, TextureLayoutSPtr cubeTexture
-			, FrameBufferSPtr p_fbo
-			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs )
+			, FrameBufferSPtr fbo
+			, std::array< FrameBufferAttachmentSPtr, 6 > const & attachs
+			, HdrConfig const & hdrConfig )
 		{
 			m_cube.render( size
 				, texture
 				, cubeTexture
-				, p_fbo
-				, p_attachs );
+				, fbo
+				, attachs
+				, hdrConfig );
 		}
 		/**
 		 *\~english

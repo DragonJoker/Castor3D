@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Render/Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -97,7 +98,8 @@ namespace castor3d
 			, TextureLayout const & texture
 			, TextureLayoutSPtr cubeTexture
 			, FrameBufferSPtr fbo
-			, std::array< FrameBufferAttachmentSPtr, 6 > const & attachs );
+			, std::array< FrameBufferAttachmentSPtr, 6 > const & attachs
+			, HdrConfig const & hdrConfig );
 
 	private:
 		/**
@@ -137,6 +139,12 @@ namespace castor3d
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;
+		//!\~english	The HDR configuration UBO.
+		//!\~french		L'UBO de configuration HDR.
+		HdrConfigUbo m_configUbo;
+		//!\~english	The dummy HDR configuration.
+		//!\~french		La configuration HDR dummy.
+		HdrConfig m_dummy;
 	};
 }
 

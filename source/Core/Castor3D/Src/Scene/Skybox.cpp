@@ -394,7 +394,8 @@ namespace castor3d
 			, *m_equiTexture
 			, m_texture
 			, fbo
-			, attachs );
+			, attachs
+			, m_scene->getHdrConfig() );
 /*
 		static String const FaceName[6u]
 		{
