@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -39,6 +39,11 @@ SOFTWARE.
 
 namespace Phong
 {
+	struct Plane
+	{
+		castor::PlaneEquation plane;
+		castor::Point3r point;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
@@ -47,11 +52,11 @@ namespace Phong
 	*/
 	struct Patch
 	{
-		Patch( castor::PlaneEquation< double > const & p_p1, castor::PlaneEquation< double > const & p_p2, castor::PlaneEquation< double > const & p_p3 );
+		Patch( Plane const & p_p1, Plane const & p_p2, Plane const & p_p3 );
 
-		castor::PlaneEquation< double > const & pi;
-		castor::PlaneEquation< double > const & pj;
-		castor::PlaneEquation< double > const & pk;
+		Plane const & pi;
+		Plane const & pj;
+		Plane const & pk;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -81,8 +86,15 @@ namespace Phong
 		 *\copydoc		castor3d::Subdivider::doSubdivide
 		 */
 		void doSubdivide()override;
-		void doComputeFaces( double u0, double v0, double u2, double v2, int p_occurences, Patch const & p_patch );
-		castor3d::BufferElementGroupSPtr doComputePoint( double u, double v, Patch const & p_patch );
+		void doComputeFaces( castor::real u0
+			, castor::real v0
+			, castor::real u2
+			, castor::real v2
+			, int p_occurences
+			, Patch const & p_patch );
+		castor3d::BufferElementGroupSPtr doComputePoint( castor::real u
+			, castor::real v
+			, Patch const & p_patch );
 
 	public:
 		static castor::String const Name;

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -39,6 +39,11 @@ SOFTWARE.
 
 namespace PnTriangles
 {
+	struct Plane
+	{
+		castor::PlaneEquation plane;
+		castor::Point3r point;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
@@ -47,18 +52,18 @@ namespace PnTriangles
 	*/
 	struct Patch
 	{
-		Patch( castor::PlaneEquation< double > const & p_p1, castor::PlaneEquation< double > const & p_p2, castor::PlaneEquation< double > const & p_p3 );
+		Patch( Plane const & p_p1, Plane const & p_p2, Plane const & p_p3 );
 
-		castor::Point3d b300;
-		castor::Point3d b030;
-		castor::Point3d b003;
-		castor::Point3d b201;
-		castor::Point3d b210;
-		castor::Point3d b120;
-		castor::Point3d b021;
-		castor::Point3d b102;
-		castor::Point3d b012;
-		castor::Point3d b111;
+		castor::Point3r b300;
+		castor::Point3r b030;
+		castor::Point3r b003;
+		castor::Point3r b201;
+		castor::Point3r b210;
+		castor::Point3r b120;
+		castor::Point3r b021;
+		castor::Point3r b102;
+		castor::Point3r b012;
+		castor::Point3r b111;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -66,7 +71,8 @@ namespace PnTriangles
 	\~english
 	\brief		Subdivider using PN Triangles subdivision algorithm
 	*/
-	class Subdivider : public castor3d::Subdivider
+	class Subdivider
+		: public castor3d::Subdivider
 	{
 	public:
 		Subdivider();

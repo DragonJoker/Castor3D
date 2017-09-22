@@ -319,8 +319,8 @@ namespace castor
 		{
 			// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
 			Point< T, 3 > f( point::getNormalised( p_center - p_eye ) );
-			Point< T, 3 > s( point::getNormalised( f ^ p_up ) );
-			Point< T, 3 > u( s ^ f );
+			Point< T, 3 > s( point::getNormalised( castor::point::cross( f, p_up ) ) );
+			Point< T, 3 > u( castor::point::cross( s, f ) );
 			p_matrix.setIdentity();
 			p_matrix[0][0] = s[0];
 			p_matrix[0][1] = u[0];

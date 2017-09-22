@@ -1695,7 +1695,7 @@ namespace castor3d
 			Point3r direction;
 			p_params[0]->get( direction );
 			Point3r up{ 0, 1, 0 };
-			Point3r right{ direction ^ up };
+			Point3r right{ point::cross( direction, up ) };
 			parsingContext->pSceneNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
 		}
 	}
@@ -2988,6 +2988,25 @@ namespace castor3d
 					{
 						buffer = PxBufferBase::create( buffer->dimensions()
 							, PF::getPFWithoutAlpha( buffer->format() )
+							, buffer->constPtr()
+							, buffer->format() );
+					}
+					else if ( channels == cuT( "r" ) )
+					{
+						auto format = ( buffer->format() == PixelFormat::eR8G8B8
+							|| buffer->format() == PixelFormat::eA8R8G8B8 )
+							? PixelFormat::eL8
+							: ( buffer->format() == PixelFormat::eRGB16F
+								|| buffer->format() == PixelFormat::eRGBA16F
+								|| buffer->format() == PixelFormat::eRGB16F32F
+								|| buffer->format() == PixelFormat::eRGBA16F32F )
+								? PixelFormat::eL16F32F
+								: ( buffer->format() == PixelFormat::eRGB32F
+									|| buffer->format() == PixelFormat::eRGBA32F )
+									? PixelFormat::eL32F
+									: buffer->format();
+						buffer = PxBufferBase::create( buffer->dimensions()
+							, format
 							, buffer->constPtr()
 							, buffer->format() );
 					}

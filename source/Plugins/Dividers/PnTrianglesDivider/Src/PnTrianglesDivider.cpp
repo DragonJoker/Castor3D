@@ -1,4 +1,4 @@
-#include "PnTrianglesDivider.hpp"
+﻿#include "PnTrianglesDivider.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -7,7 +7,7 @@ namespace PnTriangles
 {
 	namespace
 	{
-		Point3d barycenter( double u, double v, Point3d const & p1, Point3d const & p2, Point3d const & p3 )
+		Point3r barycenter( real u, real v, Point3r const & p1, Point3r const & p2, Point3r const & p3 )
 		{
 			double w = 1.0 - u - v;
 			ENSURE( u + v + w == 1 );
@@ -15,19 +15,19 @@ namespace PnTriangles
 		}
 	}
 
-	Patch::Patch( PlaneEquation< double >const & p_p1, PlaneEquation< double >const & p_p2, PlaneEquation< double >const & p_p3 )
+	Patch::Patch( Plane const & p_p1, Plane const & p_p2, Plane const & p_p3 )
 	{
-		b300 = barycenter( 3 / 3.0, 0 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() );
-		b030 = barycenter( 0 / 3.0, 3 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() );
-		b003 = barycenter( 0 / 3.0, 0 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() );
-		b201 = p_p1.project( barycenter( 2 / 3.0, 0 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() ) );
-		b210 = p_p1.project( barycenter( 2 / 3.0, 1 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() ) );
-		b120 = p_p2.project( barycenter( 1 / 3.0, 2 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() ) );
-		b021 = p_p2.project( barycenter( 0 / 3.0, 2 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() ) );
-		b102 = p_p3.project( barycenter( 1 / 3.0, 0 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() ) );
-		b012 = p_p3.project( barycenter( 0 / 3.0, 1 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() ) );
-		Point3d e = ( b210 + b120 + b021 + b012 + b102 + b201 ) / double( 6.0 );
-		b111 = e + ( e - barycenter( 1 / 3.0, 1 / 3.0, p_p1.getPoint(), p_p2.getPoint(), p_p3.getPoint() ) ) / double( 2.0 );
+		b300 = barycenter( 3 / 3.0_r, 0 / 3.0_r, p_p1.point, p_p2.point, p_p3.point );
+		b030 = barycenter( 0 / 3.0_r, 3 / 3.0_r, p_p1.point, p_p2.point, p_p3.point );
+		b003 = barycenter( 0 / 3.0_r, 0 / 3.0_r, p_p1.point, p_p2.point, p_p3.point );
+		b201 = p_p1.plane.project( barycenter( 2 / 3.0_r, 0 / 3.0_r, p_p1.point, p_p2.point, p_p3.point ) );
+		b210 = p_p1.plane.project( barycenter( 2 / 3.0_r, 1 / 3.0_r, p_p1.point, p_p2.point, p_p3.point ) );
+		b120 = p_p2.plane.project( barycenter( 1 / 3.0_r, 2 / 3.0_r, p_p1.point, p_p2.point, p_p3.point ) );
+		b021 = p_p2.plane.project( barycenter( 0 / 3.0_r, 2 / 3.0_r, p_p1.point, p_p2.point, p_p3.point ) );
+		b102 = p_p3.plane.project( barycenter( 1 / 3.0_r, 0 / 3.0_r, p_p1.point, p_p2.point, p_p3.point ) );
+		b012 = p_p3.plane.project( barycenter( 0 / 3.0_r, 1 / 3.0_r, p_p1.point, p_p2.point, p_p3.point ) );
+		Point3r e = ( b210 + b120 + b021 + b012 + b102 + b201 ) / 6.0_r;
+		b111 = e + ( e - barycenter( 1 / 3.0_r, 1 / 3.0_r, p_p1.point, p_p2.point, p_p3.point ) ) / 2.0_r;
 	}
 
 	String const Subdivider::Name = cuT( "PN-Triangles Divider" );
@@ -79,7 +79,7 @@ namespace PnTriangles
 	{
 		auto facesArray = m_submesh->getFaces();
 		m_submesh->clearFaces();
-		std::map< uint32_t, castor::PlaneEquation< double > > posnml;
+		std::map< uint32_t, Plane > posnml;
 		uint32_t i = 0;
 
 		for ( auto const & point : m_submesh->getPoints() )
@@ -87,7 +87,7 @@ namespace PnTriangles
 			Point3r position, normal;
 			castor3d::Vertex::getPosition( point, position );
 			castor3d::Vertex::getNormal( point, normal );
-			posnml.insert( std::make_pair( i++, castor::PlaneEquation< double >( Point3d( normal[0], normal[1], normal[2] ), Point3d( position[0], position[1], position[2] ) ) ) );
+			posnml.emplace( i++, Plane{ castor::PlaneEquation( normal, position ), position } );
 		}
 
 		for ( auto const & face : facesArray )
@@ -131,15 +131,15 @@ namespace PnTriangles
 		double w3 = double( w2 * w );
 
 		Point3r point = Point3r( p_patch.b300 * w3
-								   + p_patch.b030 * u3
-								   + p_patch.b003 * v3
-								   + p_patch.b210 * 3.0 * w2 * u
-								   + p_patch.b120 * 3.0 * w * u2
-								   + p_patch.b201 * 3.0 * w2 * v
-								   + p_patch.b021 * 3.0 * u2 * v
-								   + p_patch.b102 * 3.0 * w * v2
-								   + p_patch.b012 * 3.0 * u * v2
-								   + p_patch.b111 * 6.0 * w * u * v );
+			+ p_patch.b030 * u3
+			+ p_patch.b003 * v3
+			+ p_patch.b210 * 3.0 * w2 * u
+			+ p_patch.b120 * 3.0 * w * u2
+			+ p_patch.b201 * 3.0 * w2 * v
+			+ p_patch.b021 * 3.0 * u2 * v
+			+ p_patch.b102 * 3.0 * w * v2
+			+ p_patch.b012 * 3.0 * u * v2
+			+ p_patch.b111 * 6.0 * w * u * v );
 
 		return doTryAddPoint( point );
 	}

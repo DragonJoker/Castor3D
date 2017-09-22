@@ -286,7 +286,6 @@ namespace castor
 	class ParserParameterBase;
 	template< PixelFormat FT >
 	class Pixel;
-	template< typename T >
 	class PlaneEquation;
 	template< typename T, uint32_t Count >
 	class Point;

@@ -1,4 +1,4 @@
-#include "PointOperators.hpp"
+﻿#include "PointOperators.hpp"
 #include <cstring>
 #include <numeric>
 
@@ -264,46 +264,46 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline bool operator==( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
 		bool result = ( Count == _Count );
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = p_ptA[i] == p_ptB[i];
+			result = lhs[i] == rhs[i];
 		}
 
 		return result;
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator!=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline bool operator!=( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return !( p_ptA == p_ptB );
+		return !( lhs == rhs );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator+( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator+( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::add( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::add( lhs, rhs );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator-( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator-( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::sub( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::sub( lhs, rhs );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator*( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator*( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::mul( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::mul( lhs, rhs );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator/( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator/( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, Count >::div( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, Count >::div( lhs, rhs );
 	}
 
 	template <typename T, uint32_t Count, typename U>
@@ -342,16 +342,6 @@ namespace castor
 		return PtOperators< T, T, Count, Count >::div( p_pt, p_coord );
 	}
 
-	template< typename T, typename U >
-	inline Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB )
-	{
-		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
-	}
-
 	namespace point
 	{
 		namespace
@@ -359,13 +349,13 @@ namespace castor
 			template< typename T, uint32_t Count >
 			struct Computedot
 			{
-				static T calc( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+				static T calc( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs )
 				{
 					T tReturn{};
 
 					for ( uint32_t i = 0; i < Count; i++ )
 					{
-						tReturn += p_ptA[i] * p_ptB[i];
+						tReturn += lhs[i] * rhs[i];
 					}
 
 					return tReturn;
@@ -375,49 +365,59 @@ namespace castor
 			template< typename T >
 			struct Computedot< T, 2 >
 			{
-				static T calc( Coords< T, 2 > const & p_ptA, Coords< T, 2 > const & p_ptB )
+				static T calc( Coords< T, 2 > const & lhs, Coords< T, 2 > const & rhs )
 				{
-					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] );
+					return ( lhs[0] * rhs[0] ) + ( lhs[1] * rhs[1] );
 				}
 			};
 
 			template< typename T >
 			struct Computedot< T, 3 >
 			{
-				static T calc( Coords< T, 3 > const & p_ptA, Coords< T, 3 > const & p_ptB )
+				static T calc( Coords< T, 3 > const & lhs, Coords< T, 3 > const & rhs )
 				{
-					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] ) + ( p_ptA[2] * p_ptB[2] );
+					return ( lhs[0] * rhs[0] ) + ( lhs[1] * rhs[1] ) + ( lhs[2] * rhs[2] );
 				}
 			};
 
 			template< typename T >
 			struct Computedot< T, 4 >
 			{
-				static T calc( Coords< T, 4 > const & p_ptA, Coords< T, 4 > const & p_ptB )
+				static T calc( Coords< T, 4 > const & lhs, Coords< T, 4 > const & rhs )
 				{
-					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] ) + ( p_ptA[2] * p_ptB[2] ) + ( p_ptA[3] * p_ptB[3] );
+					return ( lhs[0] * rhs[0] ) + ( lhs[1] * rhs[1] ) + ( lhs[2] * rhs[2] ) + ( lhs[3] * rhs[3] );
 				}
 			};
 		}
 
 		template< typename T, uint32_t Count >
-		T dot( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+		T dot( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs )
 		{
-			return Computedot< T, Count >::calc( p_ptA, p_ptB );
+			return Computedot< T, Count >::calc( lhs, rhs );
+		}
+
+		template< typename T, typename U >
+		Point< T, 3 > cross( Coords< T, 3 > const & lhs, Coords< U, 3 > const & rhs )
+		{
+			return Point< T, 3 >(
+				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
+				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
+				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
+				);
 		}
 
 		template< typename T, uint32_t Count >
-		double cosTheta( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+		double cosTheta( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs )
 		{
-			double result = double( length( p_ptA ) * length( p_ptB ) );
+			double result = double( length( lhs ) * length( rhs ) );
 
 			if ( result != 0 )
 			{
-				result = dot( p_ptA, p_ptB ) / result;
+				result = dot( lhs, rhs ) / result;
 			}
 			else
 			{
-				result = dot( p_ptA, p_ptB );
+				result = dot( lhs, rhs );
 			}
 
 			return result;

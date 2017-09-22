@@ -1,4 +1,4 @@
-﻿#include "SubmeshUtils.hpp"
+#include "SubmeshUtils.hpp"
 
 #include "Submesh.hpp"
 #include "Vertex.hpp"
@@ -81,7 +81,7 @@ namespace castor3d
 				vec3m1 = pt3 - pt1;
 				tex2m1 = uv2 - uv1;
 				tex3m1 = uv3 - uv1;
-				vFaceNormal = -( vec3m1 ^ vec2m1 );
+				vFaceNormal = -point::cross( vec3m1, vec2m1 );
 				vFaceTangent = ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] );
 				Vertex::getNormal( pVtx1, coord ) += vFaceNormal;
 				Vertex::getNormal( pVtx2, coord ) += vFaceNormal;
@@ -108,7 +108,7 @@ namespace castor3d
 				vec3m1 = pt3 - pt1;
 				tex2m1 = uv2 - uv1;
 				tex3m1 = uv3 - uv1;
-				vFaceNormal = vec3m1 ^ vec2m1;
+				vFaceNormal = point::cross( vec3m1, vec2m1 );
 				vFaceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
 				Vertex::getNormal( pVtx1, coord ) += vFaceNormal;
 				Vertex::getNormal( pVtx2, coord ) += vFaceNormal;
@@ -149,7 +149,7 @@ namespace castor3d
 		Vertex::getPosition( pVtx3, pt3 );
 		vec2m1 = pt2 - pt1;
 		vec3m1 = pt3 - pt1;
-		vFaceNormal = point::getNormalised( vec2m1 ^ vec3m1 );
+		vFaceNormal = point::getNormalised( point::cross( vec2m1, vec3m1 ) );
 		Vertex::setNormal( pVtx1, vFaceNormal );
 		Vertex::setNormal( pVtx2, vFaceNormal );
 		Vertex::setNormal( pVtx3, vFaceNormal );
@@ -246,7 +246,7 @@ namespace castor3d
 			Vertex::getNormal( points[i], normal );
 			Point3r tangent = point::getNormalised( value );
 			tangent -= normal * point::dot( tangent, normal );
-			Point3r bitangent = normal ^ tangent;
+			Point3r bitangent = point::cross( normal, tangent );
 			Vertex::setTangent( points[i], tangent );
 			Vertex::setBitangent( points[i], bitangent );
 			i++;
@@ -261,7 +261,7 @@ namespace castor3d
 			Point3r bitangent;
 			Vertex::getNormal( point, normal );
 			Vertex::getBitangent( point, bitangent );
-			Point3r tangent = normal ^ bitangent;
+			Point3r tangent = point::cross( normal, bitangent );
 			Vertex::setTangent( point, tangent );
 		}
 	}
@@ -274,7 +274,7 @@ namespace castor3d
 			Point3r tangent;
 			Vertex::getNormal( point, normal );
 			Vertex::getTangent( point, tangent );
-			Point3r bitangent = tangent ^ normal;
+			Point3r bitangent = point::cross( tangent, normal );
 			Vertex::setBitangent( point, bitangent );
 		}
 	}

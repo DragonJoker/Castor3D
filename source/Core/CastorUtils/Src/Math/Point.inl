@@ -1,4 +1,4 @@
-#include "PointOperators.hpp"
+﻿#include "PointOperators.hpp"
 #include <cstring>
 
 namespace castor
@@ -337,50 +337,41 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline bool operator==( Point< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
 		bool result = ( Count == _Count );
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = p_ptA[i] == p_ptB[i];
+			result = lhs[i] == rhs[i];
 		}
 
 		return result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator!=( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline bool operator!=( Point< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return !( p_ptA == p_ptB );
+		return !( lhs == rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator+( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator+( Point< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::add( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::add( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator-( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator-( Point< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::sub( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::sub( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator*( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator*( Point< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::mul( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::mul( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator/( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator/( Point< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::div( p_ptA, p_ptB );
-	}
-	template< typename T, typename U >
-	inline Point< T, 3 > operator^( Point< T, 3 > const & p_ptA, Point< U, 3 > const & p_ptB )
-	{
-		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
+		return PtOperators< T, U, Count, _Count >::div( lhs, rhs );
 	}
 	template <typename T, uint32_t Count, typename U>
 	inline Point< T, Count > operator+( Point< T, Count > const & p_pt, U const * p_coords )
@@ -414,97 +405,78 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator==( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline bool operator==( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
 		bool result = ( Count == _Count );
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = p_ptA[i] == p_ptB[i];
+			result = lhs[i] == rhs[i];
 		}
 
 		return result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator!=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline bool operator!=( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return !( p_ptA == p_ptB );
+		return !( lhs == rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator+( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator+( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::add( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::add( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator-( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator-( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::sub( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::sub( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator*( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator*( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::mul( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::mul( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator/( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator/( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::div( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::div( lhs, rhs );
 	}
-	template< typename T, typename U >
-	inline Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Point< U, 3 > const & p_ptB )
-	{
-		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
-	}
-
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator==( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline bool operator==( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
 		bool result = ( Count == _Count );
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = p_ptA[i] == p_ptB[i];
+			result = lhs[i] == rhs[i];
 		}
 
 		return result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator!=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline bool operator!=( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return !( p_ptA == p_ptB );
+		return !( lhs == rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator+( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator+( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::add( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::add( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator-( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator-( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::sub( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::sub( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator*( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator*( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::mul( p_ptA, p_ptB );
+		return PtOperators< T, U, Count, _Count >::mul( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline Point< T, Count > operator/( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline Point< T, Count > operator/( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs )
 	{
-		return PtOperators< T, U, Count, _Count >::div( p_ptA, p_ptB );
-	}
-	template< typename T, typename U >
-	inline Point< T, 3 > operator^( Point< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB )
-	{
-		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
+		return PtOperators< T, U, Count, _Count >::div( lhs, rhs );
 	}
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > operator-( Point< T, Count > const & p_pt )
@@ -552,30 +524,40 @@ namespace castor
 		}
 
 		template< typename T, typename U, uint32_t Count >
-		T dot( Point< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
+		T dot( Point< T, Count > const & lhs, Point< U, Count > const & rhs )
 		{
 			T result{};
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				result += T( p_ptA[i] * p_ptB[i] );
+				result += T( lhs[i] * rhs[i] );
 			}
 
 			return result;
 		}
 
-		template< typename T, uint32_t Count >
-		double cosTheta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		template< typename T, typename U >
+		Point< T, 3 > cross( Point< T, 3 > const & lhs, Point< U, 3 > const & rhs )
 		{
-			double result = double( length( p_ptA ) * length( p_ptB ) );
+			return Point< T, 3 >(
+				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
+				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
+				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
+				);
+		}
+
+		template< typename T, uint32_t Count >
+		double cosTheta( Point< T, Count > const & lhs, Point< T, Count > const & rhs )
+		{
+			double result = double( length( lhs ) * length( rhs ) );
 
 			if ( result != 0 )
 			{
-				result = dot( p_ptA, p_ptB ) / result;
+				result = dot( lhs, rhs ) / result;
 			}
 			else
 			{
-				result = dot( p_ptA, p_ptB );
+				result = dot( lhs, rhs );
 			}
 
 			return result;
@@ -671,120 +653,160 @@ namespace castor
 		}
 
 		template< typename T, typename U, uint32_t Count >
-		T dot( Point< T, Count > const & p_ptA, Coords< U, Count > const & p_ptB )
+		T dot( Point< T, Count > const & lhs, Coords< U, Count > const & rhs )
 		{
 			T result = T();
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				result += T( p_ptA[i] * p_ptB[i] );
+				result += T( lhs[i] * rhs[i] );
 			}
 
 			return result;
 		}
 
-		template< typename T, uint32_t Count >
-		double cosTheta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+		template< typename T, typename U >
+		Point< T, 3 > cross( Point< T, 3 > const & lhs, Coords< U, 3 > const & rhs )
 		{
-			double result = double( length( p_ptA ) * length( p_ptB ) );
+			return Point< T, 3 >(
+				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
+				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
+				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
+				);
+		}
+
+		template< typename T, uint32_t Count >
+		double cosTheta( Point< T, Count > const & lhs, Coords< T, Count > const & rhs )
+		{
+			double result = double( length( lhs ) * length( rhs ) );
 
 			if ( result != 0 )
 			{
-				result = dot( p_ptA, p_ptB ) / result;
+				result = dot( lhs, rhs ) / result;
 			}
 			else
 			{
-				result = dot( p_ptA, p_ptB );
+				result = dot( lhs, rhs );
 			}
 
 			return result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
-		T dot( Coords< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
+		T dot( Coords< T, Count > const & lhs, Point< U, Count > const & rhs )
 		{
 			T result{};
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				result += T( p_ptA[i] * p_ptB[i] );
+				result += T( lhs[i] * rhs[i] );
 			}
 
 			return result;
 		}
 
-		template< typename T, uint32_t Count >
-		double cosTheta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		template< typename T, typename U >
+		Point< T, 3 > cross( Coords< T, 3 > const & lhs, Point< U, 3 > const & rhs )
 		{
-			double result = double( length( p_ptA ) * length( p_ptB ) );
+			return Point< T, 3 >(
+				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
+				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
+				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
+				);
+		}
+
+		template< typename T, uint32_t Count >
+		double cosTheta( Coords< T, Count > const & lhs, Point< T, Count > const & rhs )
+		{
+			double result = double( length( lhs ) * length( rhs ) );
 
 			if ( result != 0 )
 			{
-				result = dot( p_ptA, p_ptB ) / result;
+				result = dot( lhs, rhs ) / result;
 			}
 			else
 			{
-				result = dot( p_ptA, p_ptB );
+				result = dot( lhs, rhs );
 			}
 
 			return result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
-		T dot( Point< T, Count > const & p_ptA, Coords< U const, Count > const & p_ptB )
+		T dot( Point< T, Count > const & lhs, Coords< U const, Count > const & rhs )
 		{
 			T result = T();
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				result += T( p_ptA[i] * p_ptB[i] );
+				result += T( lhs[i] * rhs[i] );
 			}
 
 			return result;
 		}
 
-		template< typename T, uint32_t Count >
-		double cosTheta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB )
+		template< typename T, typename U >
+		Point< T, 3 > cross( Point< T, 3 > const & lhs, Coords< U const, 3 > const & rhs )
 		{
-			double result = double( length( p_ptA ) * length( p_ptB ) );
+			return Point< T, 3 >(
+				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
+				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
+				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
+				);
+		}
+
+		template< typename T, uint32_t Count >
+		double cosTheta( Point< T, Count > const & lhs, Coords< T const, Count > const & rhs )
+		{
+			double result = double( length( lhs ) * length( rhs ) );
 
 			if ( result != 0 )
 			{
-				result = dot( p_ptA, p_ptB ) / result;
+				result = dot( lhs, rhs ) / result;
 			}
 			else
 			{
-				result = dot( p_ptA, p_ptB );
+				result = dot( lhs, rhs );
 			}
 
 			return result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
-		T dot( Coords< T const, Count > const & p_ptA, Point< U, Count > const & p_ptB )
+		T dot( Coords< T const, Count > const & lhs, Point< U, Count > const & rhs )
 		{
 			T result{};
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				result += T( p_ptA[i] * p_ptB[i] );
+				result += T( lhs[i] * rhs[i] );
 			}
 
 			return result;
 		}
 
-		template< typename T, uint32_t Count >
-		double cosTheta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		template< typename T, typename U >
+		Point< T, 3 > cross( Coords< T const, 3 > const & lhs, Point< U, 3 > const & rhs )
 		{
-			double result = double( length( p_ptA ) * length( p_ptB ) );
+			return Point< T, 3 >(
+				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
+				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
+				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
+				);
+		}
+
+		template< typename T, uint32_t Count >
+		double cosTheta( Coords< T const, Count > const & lhs, Point< T, Count > const & rhs )
+		{
+			double result = double( length( lhs ) * length( rhs ) );
 
 			if ( result != 0 )
 			{
-				result = dot( p_ptA, p_ptB ) / result;
+				result = dot( lhs, rhs ) / result;
 			}
 			else
 			{
-				result = dot( p_ptA, p_ptB );
+				result = dot( lhs, rhs );
 			}
 
 			return result;

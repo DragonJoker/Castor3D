@@ -1,4 +1,4 @@
-#include "Viewport.hpp"
+﻿#include "Viewport.hpp"
 
 #include "Engine.hpp"
 
@@ -303,10 +303,10 @@ namespace castor3d
 		, Point3r const & up )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
-		Point3r f( point::getNormalised( center - eye ) );
-		Point3r u( point::getNormalised( up ) );
-		Point3r s( point::getNormalised( f ^ u ) );
-		u = s ^ f;
+		Point3r f{ point::getNormalised( center - eye ) };
+		Point3r u{ point::getNormalised( up ) };
+		Point3r s{ point::getNormalised( point::cross( f, u ) ) };
+		u = point::cross( s, f );
 		m_projection.setIdentity();
 		m_projection[0][0] = s[0];
 		m_projection[0][1] = u[0];

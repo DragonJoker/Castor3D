@@ -225,40 +225,40 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_point	The Point object to copy
+		 *\param[in]	point	The Point object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_point	L'objet Point à copier
+		 *\param[in]	point	L'objet Point à copier
 		 */
 		template< typename U >
-		explicit Point( Point< U, Count > const & p_point );
+		explicit Point( Point< U, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_point	The Point object to copy
+		 *\param[in]	point	The Point object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_point	L'objet Point à copier
+		 *\param[in]	point	L'objet Point à copier
 		 */
-		Point( Point< T, Count > const & p_point );
+		Point( Point< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
-		 *\param[in]	p_point	The Point object to move
+		 *\param[in]	point	The Point object to move
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_point	L'objet Point à déplacer
+		 *\param[in]	point	L'objet Point à déplacer
 		 */
-		Point( Point< T, Count > && p_point );
+		Point( Point< T, Count > && point );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_point	The Point object to copy
+		 *\param[in]	point	The Point object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_point	L'objet Point à copier
+		 *\param[in]	point	L'objet Point à copier
 		 */
-		Point( Coords< T, Count > const & p_point );
+		Point( Coords< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -658,80 +658,69 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have same dimensions and same values
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator==( Point< T, Count > const & lhs, Point< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Difference operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have different dimensions or at least one different value
 	 *\~french
 	 *\brief		Opérateur d'inégalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont des dimensions différentes ou au moins une valeur différente
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator!=( Point< T, Count > const & p_ptA, Point< U, _Count >	const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator!=( Point< T, Count > const & lhs, Point< U, _Count >	const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition operator
-	 *\param[in]	p_ptA, p_ptB	The points to add
+	 *\param[in]	lhs, rhs	The points to add
 	 *\return		The addition result
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_ptA, p_ptB	Les points à additionner
+	 *\param[in]	lhs, rhs	Les points à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator+( Point< T, Count > const & p_ptA, Point< U, _Count >	const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator+( Point< T, Count > const & lhs, Point< U, _Count >	const & rhs );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to subtract
+	 *\param[in]	lhs, rhs	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_ptA, p_ptB	Les points à soustraire
+	 *\param[in]	lhs, rhs	Les points à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator-( Point< T, Count > const & p_ptA, Point< U, _Count >	const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator-( Point< T, Count > const & lhs, Point< U, _Count >	const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\param[in]	lhs, rhs	The points to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
+	 *\param[in]	lhs, rhs	Les points à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator*( Point< T, Count > const & p_ptA, Point< U, _Count >	const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator*( Point< T, Count > const & lhs, Point< U, _Count >	const & rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_ptA, p_ptB	The points to divide
+	 *\param[in]	lhs, rhs	The points to divide
 	 *\return		The division result
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_ptA, p_ptB	Les points à diviser
+	 *\param[in]	lhs, rhs	Les points à diviser
 	 *\return		Le résultat de la division
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator/( Point< T, Count > const & p_ptA, Point< U, _Count >	const & p_ptB );
-	/**
-	 *\~english
-	 *\brief		Vectorial product operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
-	 *\return		The vectorial product
-	 *\~french
-	 *\brief		Opérateur de produit vectoriel
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
-	 *\return		Le résultat du produit vectoriel
-	 */
-	template< typename T, typename U > Point< T, 3 > operator^( Point< T, 3 > const & p_ptA,  Point< U, 3 > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator/( Point< T, Count > const & lhs, Point< U, _Count >	const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition operator
@@ -813,157 +802,135 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have same dimensions and same values
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator==( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator==( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Difference operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have different dimensions or at least one different value
 	 *\~french
 	 *\brief		Opérateur d'inégalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont des dimensions différentes ou au moins une valeur différente
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator!=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator!=( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition operator
-	 *\param[in]	p_ptA, p_ptB	The points to add
+	 *\param[in]	lhs, rhs	The points to add
 	 *\return		The addition result
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_ptA, p_ptB	Les points à additionner
+	 *\param[in]	lhs, rhs	Les points à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator+( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator+( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to subtract
+	 *\param[in]	lhs, rhs	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_ptA, p_ptB	Les points à soustraire
+	 *\param[in]	lhs, rhs	Les points à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator-( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator-( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\param[in]	lhs, rhs	The points to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
+	 *\param[in]	lhs, rhs	Les points à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator*( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator*( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_ptA, p_ptB	The points to divide
+	 *\param[in]	lhs, rhs	The points to divide
 	 *\return		The division result
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_ptA, p_ptB	Les points à diviser
+	 *\param[in]	lhs, rhs	Les points à diviser
 	 *\return		Le résultat de la division
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator/( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
-	/**
-	 *\~english
-	 *\brief		Vectorial product operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
-	 *\return		The vectorial product
-	 *\~french
-	 *\brief		Opérateur de produit vectoriel
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
-	 *\return		Le résultat du produit vectoriel
-	 */
-	template< typename T, typename U > Point< T, 3 > operator^( Point< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator/( Point< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have same dimensions and same values
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator==( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator==( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Difference operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have different dimensions or at least one different value
 	 *\~french
 	 *\brief		Opérateur d'inégalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont des dimensions différentes ou au moins une valeur différente
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator!=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator!=( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition operator
-	 *\param[in]	p_ptA, p_ptB	The points to add
+	 *\param[in]	lhs, rhs	The points to add
 	 *\return		The addition result
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_ptA, p_ptB	Les points à additionner
+	 *\param[in]	lhs, rhs	Les points à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator+( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator+( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to subtract
+	 *\param[in]	lhs, rhs	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_ptA, p_ptB	Les points à soustraire
+	 *\param[in]	lhs, rhs	Les points à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator-( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator-( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\param[in]	lhs, rhs	The points to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
+	 *\param[in]	lhs, rhs	Les points à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator* ( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count > Point< T, Count > operator* ( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_ptA, p_ptB	The points to divide
+	 *\param[in]	lhs, rhs	The points to divide
 	 *\return		The division result
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_ptA, p_ptB	Les points à diviser
+	 *\param[in]	lhs, rhs	Les points à diviser
 	 *\return		Le résultat de la division
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator/( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
-	/**
-	 *\~english
-	 *\brief		Vectorial product operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
-	 *\return		The vectorial product
-	 *\~french
-	 *\brief		Opérateur de produit vectoriel
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
-	 *\return		Le résultat du produit vectoriel
-	 */
-	template< typename T, typename U > Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Point< U, 3 > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator/( Coords< T, Count > const & lhs, Point< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Negation operator
@@ -987,113 +954,124 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Negates every value of a point's data
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\~french
 		 *\brief		Négative chaque donnée du point donné
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 		 */
-		template< typename T, uint32_t Count > static void negate( Point< T, Count > & p_point );
+		template< typename T, uint32_t Count > static void negate( Point< T, Count > & point );
 		/**
 		 *\~english
 		 *\brief		Normalises the point
 		 *\remarks		A point is normalised when it's length equals 1.0
 						<br />So each data is divided by the point's length
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\~french
 		 *\brief		Normalise le point
 		 *\remarks		Un point est normalisé quand sa longueur vaut 1.0
 						<br />Chaque donnée est donc divisée par la longueur du point
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 						*/
-		template< typename T, uint32_t Count > static void normalise( Point< T, Count > & p_point );
+		template< typename T, uint32_t Count > static void normalise( Point< T, Count > & point );
 		/**
 		 *\~english
 		 *\brief		Returns the normalised form of a point
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\~french
 		 *\brief		Retourne la forme normalisée d'un point
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 		 */
-		template< typename T, uint32_t Count > static Point< T, Count > getNormalised( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static Point< T, Count > getNormalised( Point< T, Count > const & point );
 		/**
 		 *\~english
-		 *\brief		Computes the scalar product of 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\brief		Computes the dot product of 2 points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The scalar product
 		 *\~french
 		 *\brief		Calcule le produit scalaire entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & lhs, Point< T, Count > const & rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the cross product of 2 points.
+		 *\param[in]	lhs, rhs	The points.
+		 *\return		The resulting vector.
+		 *\~french
+		 *\brief		Calcule le produit vectoriel entre 2 points.
+		 *\param[in]	lhs, rhs	Les points.
+		 *\return		Le vecteur résultant.
+		 */
+		template< typename T, typename U > static Point< T, 3 > cross( Point< T, 3 > const & lhs, Point< T, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The cosine
 		 *\~french
 		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & lhs, Point< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian length of the vector
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\return		The squared Euclidian distance
 		 *\~french
 		 *\brief		Calcule le carré de la longueur Euclidienne du vecteur
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 		 *\return		Le carré de la norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double lengthSquared( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double lengthSquared( Point< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian length of the vector
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\return		The Euclidian distance
 		 *\~french
 		 *\brief		Calcule la longueur Euclidienne du vecteur
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 		 *\return		La norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double length( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double length( Point< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the Manhattan length of the vector
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\return		The Manhattan distance
 		 *\~french
 		 *\brief		Calcule la longueur de Manhattan du vecteur
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 		 *\return		La distance de Manhattan
 		 */
-		template< typename T, uint32_t Count > static double lengthManhattan( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double lengthManhattan( Point< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski length of the vector
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\param[in]	p_dOrder	The Minkowski order
 		 *\return		The Minkowski distance
 		 *\~french
 		 *\brief		Calcule la longueur de Minkowski du vecteur
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 		 *\param[in]	p_dOrder	L'ordre Minkownski
 		 *\return		La distance de Minkowski
 		 */
-		template< typename T, uint32_t Count > static double lengthMinkowski( Point< T, Count > const & p_point, double p_dOrder );
+		template< typename T, uint32_t Count > static double lengthMinkowski( Point< T, Count > const & point, double p_dOrder );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev length of the vector
-		 *\param[in]	p_point	The point
+		 *\param[in]	point	The point
 		 *\return		The Chebychev distance
 		 *\~french
 		 *\brief		Calcule la longueur de Chebychev du vecteur
-		 *\param[in]	p_point	Le point
+		 *\param[in]	point	Le point
 		 *\return		La distance de Chebychev
 		 */
-		template< typename T, uint32_t Count > static double lengthChebychev( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double lengthChebychev( Point< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian distance between two points.
@@ -1153,92 +1131,136 @@ namespace castor
 		template< typename T, uint32_t Count > static double distanceChebychev( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs );
 		/**
 		 *\~english
-		 *\brief		Computes the scalar product of 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\brief		Computes the dot product of 2 points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The scalar product
 		 *\~french
 		 *\brief		Calcule le produit scalaire entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, typename U, uint32_t Count > static T dot( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Coords< T, Count > const & lhs, Point< T, Count > const & rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the cross product of 2 points.
+		 *\param[in]	lhs, rhs	The points.
+		 *\return		The resulting vector.
+		 *\~french
+		 *\brief		Calcule le produit vectoriel entre 2 points.
+		 *\param[in]	lhs, rhs	Les points.
+		 *\return		Le vecteur résultant.
+		 */
+		template< typename T, typename U > static Point< T, 3 > cross( Coords< T, 3 > const & lhs, Point< T, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The cosine
 		 *\~french
 		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cosTheta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Coords< T, Count > const & lhs, Point< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The scalar product
 		 *\~french
 		 *\brief		Calcule le produit scalaire entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the cross product of 2 points.
+		 *\param[in]	lhs, rhs	The points.
+		 *\return		The resulting vector.
+		 *\~french
+		 *\brief		Calcule le produit vectoriel entre 2 points.
+		 *\param[in]	lhs, rhs	Les points.
+		 *\return		Le vecteur résultant.
+		 */
+		template< typename T, typename U > static Point< T, 3 > cross( Point< T, 3 > const & lhs, Coords< T, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The cosine
 		 *\~french
 		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & lhs, Coords< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The scalar product
 		 *\~french
 		 *\brief		Calcule le produit scalaire entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, typename U, uint32_t Count > static T dot( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Coords< T const, Count > const & lhs, Point< T, Count > const & rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the cross product of 2 points.
+		 *\param[in]	lhs, rhs	The points.
+		 *\return		The resulting vector.
+		 *\~french
+		 *\brief		Calcule le produit vectoriel entre 2 points.
+		 *\param[in]	lhs, rhs	Les points.
+		 *\return		Le vecteur résultant.
+		 */
+		template< typename T, typename U > static Point< T, 3 > cross( Coords< T const, 3 > const & lhs, Point< T, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The cosine
 		 *\~french
 		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cosTheta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Coords< T const, Count > const & lhs, Point< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The scalar product
 		 *\~french
 		 *\brief		Calcule le produit scalaire entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & lhs, Coords< T const, Count > const & rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the cross product of 2 points.
+		 *\param[in]	lhs, rhs	The points.
+		 *\return		The resulting vector.
+		 *\~french
+		 *\brief		Calcule le produit vectoriel entre 2 points.
+		 *\param[in]	lhs, rhs	Les points.
+		 *\return		Le vecteur résultant.
+		 */
+		template< typename T, typename U > static Point< T, 3 > cross( Point< T, 3 > const & lhs, Coords< T const, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The cosine
 		 *\~french
 		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & lhs, Coords< T const, Count > const & rhs );
 	}
 }
 /**
