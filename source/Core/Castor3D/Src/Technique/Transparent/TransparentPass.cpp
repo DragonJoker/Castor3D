@@ -1,4 +1,4 @@
-﻿#include "TransparentPass.hpp"
+#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -392,13 +392,20 @@ namespace castor3d
 			auto c3d_sLights = writer.declUniform< Sampler1D >( ShaderProgram::Lights );
 		}
 
-		auto c3d_mapDiffuse( writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
-		auto c3d_mapSpecular( writer.declUniform< Sampler2D >( ShaderProgram::MapSpecular, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( writer.declUniform< Sampler2D >( ShaderProgram::MapGloss, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
+		auto c3d_mapDiffuse( writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse
+			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
+		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
+			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+		auto c3d_mapSpecular( writer.declUniform< Sampler2D >( ShaderProgram::MapSpecular
+			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
+		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive
+			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
+		auto c3d_mapGloss( writer.declUniform< Sampler2D >( ShaderProgram::MapGloss
+			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
 		auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" )
 			, checkFlag( textureFlags, TextureChannel::eReflection ) || checkFlag( textureFlags, TextureChannel::eRefraction )
 			, 0.10_f );
@@ -411,8 +418,8 @@ namespace castor3d
 		auto c3d_mapEnvironment( writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment
 			, checkFlag( textureFlags, TextureChannel::eReflection )
 			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
-
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" ), checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
+			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -840,9 +847,9 @@ namespace castor3d
 		auto c3d_mapDiffuse( writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse
 			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ) );
 		auto c3d_mapSpecular( writer.declUniform< Sampler2D >( ShaderProgram::MapSpecular
-			, checkFlag( textureFlags, TextureChannel::eMetallic ) ) );
+			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
 		auto c3d_mapGlossiness( writer.declUniform< Sampler2D >( ShaderProgram::MapGloss
-			, checkFlag( textureFlags, TextureChannel::eRoughness ) ) );
+			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
 		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
