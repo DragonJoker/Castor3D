@@ -150,17 +150,17 @@ namespace castor3d
 			doDeclareComputeSpotLightBackLit();
 		}
 
-		DirectionalLight LightingModel::getDirectionalLight( Int const & index )
+		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const
 		{
 			return m_getDirectionalLight( index );
 		}
 
-		PointLight LightingModel::getPointLight( Int const & index )
+		PointLight LightingModel::getPointLight( Int const & index )const
 		{
 			return m_getPointLight( index );
 		}
 
-		SpotLight LightingModel::getSpotLight( Int const & index )
+		SpotLight LightingModel::getSpotLight( Int const & index )const
 		{
 			return m_getSpotLight( index );
 		}
@@ -452,7 +452,7 @@ namespace castor3d
 				, InInt{ &m_writer, cuT( "index" ) } );
 		}
 
-		Light LightingModel::getBaseLight( Type const & p_value )
+		Light LightingModel::getBaseLight( Type const & p_value )const
 		{
 			return writeFunctionCall< Light >( &m_writer, cuT( "getBaseLight" ), p_value );
 		}

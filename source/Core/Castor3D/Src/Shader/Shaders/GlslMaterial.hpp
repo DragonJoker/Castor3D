@@ -53,24 +53,24 @@ namespace castor3d
 				, castor::String const & name = castor::String() );
 
 		public:
-			C3D_API virtual glsl::Vec3 m_diffuse() = 0;
-			C3D_API glsl::Float m_opacity();
-			C3D_API glsl::Float m_emissive();
-			C3D_API glsl::Float m_alphaRef();
-			C3D_API glsl::Float m_gamma();
-			C3D_API glsl::Float m_refractionRatio();
-			C3D_API glsl::Int m_hasRefraction();
-			C3D_API glsl::Int m_hasReflection();
-			C3D_API glsl::Float m_exposure();
-			C3D_API glsl::Int m_subsurfaceScatteringEnabled();
-			C3D_API glsl::Int m_distanceBasedTransmission();
-			C3D_API glsl::Vec3 m_backLitCoefficient();
+			C3D_API virtual glsl::Vec3 m_diffuse()const = 0;
+			C3D_API glsl::Float m_opacity()const;
+			C3D_API glsl::Float m_emissive()const;
+			C3D_API glsl::Float m_alphaRef()const;
+			C3D_API glsl::Float m_gamma()const;
+			C3D_API glsl::Float m_refractionRatio()const;
+			C3D_API glsl::Int m_hasRefraction()const;
+			C3D_API glsl::Int m_hasReflection()const;
+			C3D_API glsl::Float m_exposure()const;
+			C3D_API glsl::Int m_subsurfaceScatteringEnabled()const;
+			C3D_API glsl::Int m_distanceBasedTransmission()const;
+			C3D_API glsl::Vec3 m_backLitCoefficient()const;
 
 		protected:
-			C3D_API glsl::Vec4 m_common();
-			C3D_API glsl::Vec4 m_reflRefr();
-			C3D_API glsl::Vec4 m_sssInfo();
-			C3D_API glsl::Vec4 m_transmittance();
+			C3D_API glsl::Vec4 m_common()const;
+			C3D_API glsl::Vec4 m_reflRefr()const;
+			C3D_API glsl::Vec4 m_sssInfo()const;
+			C3D_API glsl::Vec4 m_transmittance()const;
 		};
 
 		DECLARE_SMART_PTR( BaseMaterial );
@@ -85,10 +85,10 @@ namespace castor3d
 				, castor::String const & name = castor::String() );
 			C3D_API LegacyMaterial & operator=( LegacyMaterial const & rhs );
 			C3D_API static void declare( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 m_diffuse()override;
-			C3D_API glsl::Float m_ambient();
-			C3D_API glsl::Vec3 m_specular();
-			C3D_API glsl::Float m_shininess();
+			C3D_API glsl::Vec3 m_diffuse()const override;
+			C3D_API glsl::Float m_ambient()const;
+			C3D_API glsl::Vec3 m_specular()const;
+			C3D_API glsl::Float m_shininess()const;
 
 			template< typename T >
 			LegacyMaterial & operator=( T const & rhs )
@@ -99,8 +99,8 @@ namespace castor3d
 			}
 
 		protected:
-			C3D_API glsl::Vec4 m_diffAmb();
-			C3D_API glsl::Vec4 m_specShin();
+			C3D_API glsl::Vec4 m_diffAmb()const;
+			C3D_API glsl::Vec4 m_specShin()const;
 		};
 
 		struct MetallicRoughnessMaterial
@@ -113,10 +113,10 @@ namespace castor3d
 				, castor::String const & name = castor::String() );
 			C3D_API MetallicRoughnessMaterial & operator=( MetallicRoughnessMaterial const & rhs );
 			C3D_API static void declare( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 m_diffuse()override;
-			C3D_API glsl::Vec3 m_albedo();
-			C3D_API glsl::Float m_roughness();
-			C3D_API glsl::Float m_metallic();
+			C3D_API glsl::Vec3 m_diffuse()const override;
+			C3D_API glsl::Vec3 m_albedo()const;
+			C3D_API glsl::Float m_roughness()const;
+			C3D_API glsl::Float m_metallic()const;
 
 			template< typename T >
 			MetallicRoughnessMaterial & operator=( T const & rhs )
@@ -127,8 +127,8 @@ namespace castor3d
 			}
 
 		protected:
-			C3D_API glsl::Vec4 m_albRough();
-			C3D_API glsl::Vec4 m_metDiv();
+			C3D_API glsl::Vec4 m_albRough()const;
+			C3D_API glsl::Vec4 m_metDiv()const;
 		};
 
 		struct SpecularGlossinessMaterial
@@ -141,9 +141,9 @@ namespace castor3d
 				, castor::String const & name = castor::String() );
 			C3D_API SpecularGlossinessMaterial & operator=( SpecularGlossinessMaterial const & rhs );
 			C3D_API static void declare( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 m_diffuse()override;
-			C3D_API glsl::Vec3 m_specular();
-			C3D_API glsl::Float m_glossiness();
+			C3D_API glsl::Vec3 m_diffuse()const override;
+			C3D_API glsl::Vec3 m_specular()const;
+			C3D_API glsl::Float m_glossiness()const;
 
 			template< typename T >
 			SpecularGlossinessMaterial & operator=( T const & rhs )
@@ -154,8 +154,8 @@ namespace castor3d
 			}
 
 		protected:
-			C3D_API glsl::Vec4 m_diffDiv();
-			C3D_API glsl::Vec4 m_specGloss();
+			C3D_API glsl::Vec4 m_diffDiv()const;
+			C3D_API glsl::Vec4 m_specGloss()const;
 		};
 
 		class Materials
@@ -166,9 +166,6 @@ namespace castor3d
 		public:
 			C3D_API virtual void declare() = 0;
 			C3D_API virtual BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const = 0;
-			//C3D_API virtual glsl::Vec3 getDiffuse( glsl::Int const & index )const = 0;
-			//C3D_API virtual glsl::Float getAlphaRef( glsl::Int const & index )const = 0;
-			//C3D_API virtual glsl::Float getOpacity( glsl::Int const & index )const = 0;
 
 		protected:
 			glsl::GlslWriter & m_writer;
@@ -182,9 +179,6 @@ namespace castor3d
 			C3D_API void declare()override;
 			C3D_API LegacyMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
-			//C3D_API glsl::Vec3 getDiffuse( glsl::Int const & index )const override;
-			//C3D_API glsl::Float getAlphaRef( glsl::Int const & index )const override;
-			//C3D_API glsl::Float getOpacity( glsl::Int const & index )const override;
 
 		private:
 			glsl::Function< LegacyMaterial, glsl::InInt > m_getMaterial;
@@ -198,9 +192,6 @@ namespace castor3d
 			C3D_API void declare()override;
 			C3D_API MetallicRoughnessMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
-			//C3D_API glsl::Vec3 getDiffuse( glsl::Int const & index )const override;
-			//C3D_API glsl::Float getAlphaRef( glsl::Int const & index )const override;
-			//C3D_API glsl::Float getOpacity( glsl::Int const & index )const override;
 
 		private:
 			glsl::Function< MetallicRoughnessMaterial, glsl::InInt > m_getMaterial;
@@ -214,9 +205,6 @@ namespace castor3d
 			C3D_API void declare()override;
 			C3D_API SpecularGlossinessMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
-			//C3D_API glsl::Vec3 getDiffuse( glsl::Int const & index )const override;
-			//C3D_API glsl::Float getAlphaRef( glsl::Int const & index )const override;
-			//C3D_API glsl::Float getOpacity( glsl::Int const & index )const override;
 
 		private:
 			glsl::Function< SpecularGlossinessMaterial, glsl::InInt > m_getMaterial;

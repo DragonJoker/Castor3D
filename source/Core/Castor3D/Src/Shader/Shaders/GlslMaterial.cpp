@@ -1,4 +1,4 @@
-﻿#include "GlslMaterial.hpp"
+#include "GlslMaterial.hpp"
 
 #include "GlslSource.hpp"
 
@@ -28,77 +28,77 @@ namespace castor3d
 		{
 		}
 
-		Float BaseMaterial::m_opacity()
+		Float BaseMaterial::m_opacity()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_common" ) ).x();
 		}
 
-		Float BaseMaterial::m_emissive()
+		Float BaseMaterial::m_emissive()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_common" ) ).y();
 		}
 
-		Float BaseMaterial::m_alphaRef()
+		Float BaseMaterial::m_alphaRef()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_common" ) ).z();
 		}
 
-		Float BaseMaterial::m_gamma()
+		Float BaseMaterial::m_gamma()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_common" ) ).w();
 		}
 
-		Float BaseMaterial::m_refractionRatio()
+		Float BaseMaterial::m_refractionRatio()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_reflRefr" ) ).x();
 		}
 
-		Int BaseMaterial::m_hasRefraction()
+		Int BaseMaterial::m_hasRefraction()const
 		{
 			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_reflRefr" ) ).y() );
 		}
 
-		Int BaseMaterial::m_hasReflection()
+		Int BaseMaterial::m_hasReflection()const
 		{
 			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_reflRefr" ) ).z() );
 		}
 
-		Float BaseMaterial::m_exposure()
+		Float BaseMaterial::m_exposure()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_reflRefr" ) ).w();
 		}
 
-		Int BaseMaterial::m_subsurfaceScatteringEnabled()
+		Int BaseMaterial::m_subsurfaceScatteringEnabled()const
 		{
 			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_sssInfo" ) ).r() );
 		}
 
-		Int BaseMaterial::m_distanceBasedTransmission()
+		Int BaseMaterial::m_distanceBasedTransmission()const
 		{
 			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_transmittance" ) ).a() );
 		}
 
-		Vec3 BaseMaterial::m_backLitCoefficient()
+		Vec3 BaseMaterial::m_backLitCoefficient()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_transmittance" ) ).rgb();
 		}
 		
-		Vec4 BaseMaterial::m_common()
+		Vec4 BaseMaterial::m_common()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_common" ) );
 		}
 
-		Vec4 BaseMaterial::m_reflRefr()
+		Vec4 BaseMaterial::m_reflRefr()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_reflRefr" ) );
 		}
 
-		Vec4 BaseMaterial::m_sssInfo()
+		Vec4 BaseMaterial::m_sssInfo()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_sssInfo" ) );
 		}
 
-		Vec4 BaseMaterial::m_transmittance()
+		Vec4 BaseMaterial::m_transmittance()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_transmittance" ) );
 		}
@@ -142,32 +142,32 @@ namespace castor3d
 			material.end();
 		}
 
-		Vec3 LegacyMaterial::m_diffuse()
+		Vec3 LegacyMaterial::m_diffuse()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_diffAmb" ) ).rgb();
 		}
 
-		Float LegacyMaterial::m_ambient()
+		Float LegacyMaterial::m_ambient()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_diffAmb" ) ).a();
 		}
 
-		Vec3 LegacyMaterial::m_specular()
+		Vec3 LegacyMaterial::m_specular()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specShin" ) ).rgb();
 		}
 
-		Float LegacyMaterial::m_shininess()
+		Float LegacyMaterial::m_shininess()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specShin" ) ).a();
 		}
 
-		Vec4 LegacyMaterial::m_diffAmb()
+		Vec4 LegacyMaterial::m_diffAmb()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_diffAmb" ) );
 		}
 
-		Vec4 LegacyMaterial::m_specShin()
+		Vec4 LegacyMaterial::m_specShin()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specShin" ) );
 		}
@@ -211,32 +211,32 @@ namespace castor3d
 			material.end();
 		}
 		
-		Vec3 MetallicRoughnessMaterial::m_diffuse()
+		Vec3 MetallicRoughnessMaterial::m_diffuse()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_albRough" ) ).rgb();
 		}
 
-		Vec3 MetallicRoughnessMaterial::m_albedo()
+		Vec3 MetallicRoughnessMaterial::m_albedo()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_albRough" ) ).rgb();
 		}
 
-		Float MetallicRoughnessMaterial::m_roughness()
+		Float MetallicRoughnessMaterial::m_roughness()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_albRough" ) ).a();
 		}
 
-		Float MetallicRoughnessMaterial::m_metallic()
+		Float MetallicRoughnessMaterial::m_metallic()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_metDiv" ) ).r();
 		}
 
-		Vec4 MetallicRoughnessMaterial::m_albRough()
+		Vec4 MetallicRoughnessMaterial::m_albRough()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_albRough" ) );
 		}
 
-		Vec4 MetallicRoughnessMaterial::m_metDiv()
+		Vec4 MetallicRoughnessMaterial::m_metDiv()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_metDiv" ) );
 		}
@@ -280,27 +280,27 @@ namespace castor3d
 			material.end();
 		}
 
-		Vec3 SpecularGlossinessMaterial::m_diffuse()
+		Vec3 SpecularGlossinessMaterial::m_diffuse()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_diffDiv" ) ).rgb();
 		}
 
-		Vec3 SpecularGlossinessMaterial::m_specular()
+		Vec3 SpecularGlossinessMaterial::m_specular()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specGloss" ) ).rgb();
 		}
 
-		Float SpecularGlossinessMaterial::m_glossiness()
+		Float SpecularGlossinessMaterial::m_glossiness()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specGloss" ) ).a();
 		}
 
-		Vec4 SpecularGlossinessMaterial::m_diffDiv()
+		Vec4 SpecularGlossinessMaterial::m_diffDiv()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_diffDiv" ) );
 		}
 
-		Vec4 SpecularGlossinessMaterial::m_specGloss()
+		Vec4 SpecularGlossinessMaterial::m_specGloss()const
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specGloss" ) );
 		}

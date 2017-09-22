@@ -24,7 +24,7 @@ namespace castor3d
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
 			auto begin = m_writer.declLocale( cuT( "begin" )
@@ -85,7 +85,7 @@ namespace castor3d
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeDirectional( DirectionalLight{ light }
 				, worldEye
@@ -105,7 +105,7 @@ namespace castor3d
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computePoint( PointLight{ light }
 				, worldEye
@@ -125,7 +125,7 @@ namespace castor3d
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeSpot( SpotLight{ light }
 				, worldEye
@@ -145,7 +145,7 @@ namespace castor3d
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeOnePoint( PointLight{ light }
 				, worldEye
@@ -165,7 +165,7 @@ namespace castor3d
 			, Float const & glossiness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeOneSpot( SpotLight{ light }
 				, worldEye
@@ -181,46 +181,34 @@ namespace castor3d
 
 		Vec3 SpecularBrdfLightingModel::computeDirectionalLightBackLit( DirectionalLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & diffuse
 			, Vec3 const & specular
-			, Float const & glossiness
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computeDirectionalBackLit( DirectionalLight{ light }
 				, worldEye
-				, diffuse
 				, specular
-				, glossiness
 				, FragmentInput{ fragmentIn } );
 		}
 
 		Vec3 SpecularBrdfLightingModel::computePointLightBackLit( PointLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & diffuse
 			, Vec3 const & specular
-			, Float const & glossiness
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computePointBackLit( PointLight{ light }
 				, worldEye
-				, diffuse
 				, specular
-				, glossiness
 				, FragmentInput{ fragmentIn } );
 		}
 
 		Vec3 SpecularBrdfLightingModel::computeSpotLightBackLit( SpotLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & diffuse
 			, Vec3 const & specular
-			, Float const & glossiness
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computeSpotBackLit( SpotLight{ light }
 				, worldEye
-				, diffuse
 				, specular
-				, glossiness
 				, FragmentInput{ fragmentIn } );
 		}
 		void SpecularBrdfLightingModel::doDeclareModel()
@@ -571,9 +559,7 @@ namespace castor3d
 			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
-					, Float const & glossiness
 					, FragmentInput const & fragmentIn )
 				{
 					PbrMRMaterials materials{ m_writer };
@@ -583,16 +569,12 @@ namespace castor3d
 					m_writer.returnStmt( doComputeLightBackLit( light.m_lightBase()
 						, worldEye
 						, lightDirection
-						, diffuse
 						, specular
-						, glossiness
 						, fragmentIn ) );
 				}
 				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
 				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -602,9 +584,7 @@ namespace castor3d
 			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
-					, Float const & glossiness
 					, FragmentInput const & fragmentIn )
 				{
 					PbrMRMaterials materials{ m_writer };
@@ -619,9 +599,7 @@ namespace castor3d
 						, doComputeLightBackLit( light.m_lightBase()
 							, worldEye
 							, lightDirection
-							, diffuse
 							, specular
-							, glossiness
 							, fragmentIn ) );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 						, light.m_attenuation().x() + light.m_attenuation().y() * distance + light.m_attenuation().z() * distance * distance );
@@ -629,9 +607,7 @@ namespace castor3d
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
 				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -641,9 +617,7 @@ namespace castor3d
 			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
-					, Float const & glossiness
 					, FragmentInput const & fragmentIn )
 				{
 					PbrMRMaterials materials{ m_writer };
@@ -663,9 +637,7 @@ namespace castor3d
 						backLit = doComputeLightBackLit( light.m_lightBase()
 							, worldEye
 							, lightDirection
-							, diffuse
 							, specular
-							, glossiness
 							, fragmentIn );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 							, light.m_attenuation().x()
@@ -680,9 +652,7 @@ namespace castor3d
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
 				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -770,13 +740,9 @@ namespace castor3d
 				, [this]( Light const & light
 					, Vec3 const & worldEye
 					, Vec3 const & direction
-					, Vec3 const & diffuse
 					, Vec3 const & specular
-					, Float const & glossiness
 					, FragmentInput const & fragmentIn )
 				{
-					auto roughness = m_writer.declLocale( cuT( "roughness" )
-						, 1.0_f - glossiness );
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
 					auto L = m_writer.declLocale( cuT( "L" )
@@ -812,9 +778,7 @@ namespace castor3d
 				, InLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InVec3( &m_writer, cuT( "direction" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
 				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -926,17 +890,13 @@ namespace castor3d
 		Vec3 SpecularBrdfLightingModel::doComputeLightBackLit( Light const & light
 			, Vec3 const & worldEye
 			, Vec3 const & direction
-			, Vec3 const & diffuse
 			, Vec3 const & specular
-			, Float const & glossiness
 			, FragmentInput const & fragmentIn )
 		{
 			return m_computeLightBackLit( light
 				, worldEye
 				, direction
-				, diffuse
 				, specular
-				, glossiness
 				, FragmentInput{ fragmentIn } );
 		}
 

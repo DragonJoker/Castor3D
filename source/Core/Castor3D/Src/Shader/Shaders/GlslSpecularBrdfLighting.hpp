@@ -41,7 +41,7 @@ namespace castor3d
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
+				, OutputComponents & output )const;
 			C3D_API void computeDirectionalLight( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
@@ -49,7 +49,7 @@ namespace castor3d
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
+				, OutputComponents & output )const;
 			C3D_API void computePointLight( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
@@ -57,7 +57,7 @@ namespace castor3d
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
+				, OutputComponents & output )const;
 			C3D_API void computeSpotLight( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
@@ -65,7 +65,7 @@ namespace castor3d
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
+				, OutputComponents & output )const;
 			C3D_API void computeOnePointLight( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
@@ -73,7 +73,7 @@ namespace castor3d
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
+				, OutputComponents & output )const;
 			C3D_API void computeOneSpotLight( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
@@ -81,25 +81,19 @@ namespace castor3d
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
+				, OutputComponents & output )const;
 			C3D_API glsl::Vec3 computeDirectionalLightBackLit( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, FragmentInput const & fragmentIn );
+				, FragmentInput const & fragmentIn )const;
 			C3D_API glsl::Vec3 computePointLightBackLit( PointLight const & light
 				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, FragmentInput const & fragmentIn );
+				, FragmentInput const & fragmentIn )const;
 			C3D_API glsl::Vec3 computeSpotLightBackLit( SpotLight const & light
 				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, FragmentInput const & fragmentIn );
+				, FragmentInput const & fragmentIn )const;
 
 		protected:
 			void doDeclareModel();
@@ -125,9 +119,7 @@ namespace castor3d
 			glsl::Vec3 doComputeLightBackLit( Light const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & direction
-				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
 				, FragmentInput const & fragmentIn );
 
 			void doDeclareDistribution();
@@ -221,30 +213,22 @@ namespace castor3d
 				, DirectionalLight
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
 				, FragmentInput > m_computeDirectionalBackLit;
 			glsl::Function< glsl::Vec3
 				, PointLight
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
 				, FragmentInput > m_computePointBackLit;
 			glsl::Function< glsl::Vec3
 				, SpotLight
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
 				, FragmentInput > m_computeSpotBackLit;
 			glsl::Function< glsl::Vec3
 				, InLight
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
 				, FragmentInput > m_computeLightBackLit;
 		};
 	}

@@ -67,12 +67,12 @@ namespace castor3d
 			C3D_API void declarePointModel();
 			C3D_API void declareSpotModel();
 			// Calls
-			C3D_API DirectionalLight getDirectionalLight( glsl::Int const & index );
-			C3D_API PointLight getPointLight( glsl::Int const & index );
-			C3D_API SpotLight getSpotLight( glsl::Int const & index );
+			C3D_API DirectionalLight getDirectionalLight( glsl::Int const & index )const;
+			C3D_API PointLight getPointLight( glsl::Int const & index )const;
+			C3D_API SpotLight getSpotLight( glsl::Int const & index )const;
 
 		protected:
-			C3D_API Light getBaseLight( glsl::Type const & value );
+			C3D_API Light getBaseLight( glsl::Type const & value )const;
 			C3D_API void doDeclareLight();
 			C3D_API void doDeclareDirectionalLight();
 			C3D_API void doDeclarePointLight();

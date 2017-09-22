@@ -22,7 +22,7 @@ namespace castor3d
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
 			auto begin = m_writer.declLocale( cuT( "begin" ), 0_i );
@@ -73,7 +73,7 @@ namespace castor3d
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeDirectional( DirectionalLight{ light }
 				, worldEye
@@ -89,7 +89,7 @@ namespace castor3d
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computePoint( PointLight{ light }
 				, worldEye
@@ -105,7 +105,7 @@ namespace castor3d
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeSpot( SpotLight{ light }
 				, worldEye
@@ -121,7 +121,7 @@ namespace castor3d
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeOnePoint( PointLight{ light }
 				, worldEye
@@ -137,7 +137,7 @@ namespace castor3d
 			, Float const & shininess
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeOneSpot( SpotLight{ light }
 				, worldEye
@@ -150,34 +150,28 @@ namespace castor3d
 
 		Vec3 PhongLightingModel::computeDirectionalLightBackLit( DirectionalLight const & light
 			, Vec3 const & worldEye
-			, Float const & shininess
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computeDirectionalBackLit( DirectionalLight{ light }
 				, worldEye
-				, shininess
 				, FragmentInput{ fragmentIn } );
 		}
 
 		Vec3 PhongLightingModel::computePointLightBackLit( PointLight const & light
 			, Vec3 const & worldEye
-			, Float const & shininess
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computePointBackLit( PointLight{ light }
 				, worldEye
-				, shininess
 				, FragmentInput{ fragmentIn } );
 		}
 
 		Vec3 PhongLightingModel::computeSpotLightBackLit( SpotLight const & light
 			, Vec3 const & worldEye
-			, Float const & shininess
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computeSpotBackLit( SpotLight{ light }
 				, worldEye
-				, shininess
 				, FragmentInput{ fragmentIn } );
 		}
 
@@ -488,7 +482,6 @@ namespace castor3d
 			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, Float const & shininess
 					, FragmentInput const & fragmentIn )
 				{
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
@@ -496,12 +489,10 @@ namespace castor3d
 					m_writer.returnStmt( doComputeLightBackLit( light.m_lightBase()
 						, worldEye
 						, lightDirection
-						, shininess
 						, fragmentIn ) );
 				}
 				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InFloat( &m_writer, cuT( "shininess" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -510,7 +501,6 @@ namespace castor3d
 			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
-					, Float const & shininess
 					, FragmentInput const & fragmentIn )
 				{
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
@@ -523,7 +513,6 @@ namespace castor3d
 						, doComputeLightBackLit( light.m_lightBase()
 							, worldEye
 							, lightDirection
-							, shininess
 							, fragmentIn ) );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 						, light.m_attenuation().x()
@@ -533,7 +522,6 @@ namespace castor3d
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InFloat( &m_writer, cuT( "shininess" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -542,7 +530,6 @@ namespace castor3d
 			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
-					, Float const & shininess
 					, FragmentInput const & fragmentIn )
 				{
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
@@ -561,7 +548,6 @@ namespace castor3d
 						backLit = doComputeLightBackLit( light.m_lightBase()
 							, worldEye
 							, lightDirection
-							, shininess
 							, fragmentIn );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 							, light.m_attenuation().x()
@@ -576,7 +562,6 @@ namespace castor3d
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InFloat( &m_writer, cuT( "shininess" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -640,7 +625,6 @@ namespace castor3d
 				, [this]( Light const & light
 					, Vec3 const & worldEye
 					, Vec3 const & lightDirection
-					, Float const & shininess
 					, FragmentInput const & fragmentIn )
 				{
 					auto diffuseFactor = m_writer.declLocale( cuT( "diffuseFactor" )
@@ -665,20 +649,17 @@ namespace castor3d
 				, InLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InVec3( &m_writer, cuT( "lightDirection" ) )
-				, InFloat( &m_writer, cuT( "shininess" ) )
 				, FragmentInput{ m_writer } );
 		}
 
 		Vec3 PhongLightingModel::doComputeLightBackLit( Light const & light
 			, Vec3 const & worldEye
 			, Vec3 const & lightDirection
-			, Float const & shininess
 			, FragmentInput const & fragmentIn )
 		{
 			return m_computeLightBackLit( light
 				, worldEye
 				, lightDirection
-				, shininess
 				, FragmentInput{ fragmentIn } );
 		}
 	}

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -34,89 +34,249 @@ namespace castor3d
 		class SubsurfaceScattering
 		{
 		public:
-			C3D_API SubsurfaceScattering( glsl::GlslWriter & writer );
+			C3D_API SubsurfaceScattering( glsl::GlslWriter & writer
+				, bool shadowMap );
 			C3D_API void declare();
 			C3D_API void declare( LightType type );
-			C3D_API glsl::Vec3 compute( shader::MetallicBrdfLightingModel const & lighting
-				, shader::MetallicRoughnessMaterial const & material
-				, glsl::Vec3 const & position
-				, glsl::Vec3 const & normal
-				, glsl::Float const & translucency );
-			C3D_API glsl::Vec3 compute( shader::SpecularBrdfLightingModel const & lighting
-				, shader::SpecularGlossinessMaterial const & material
-				, glsl::Vec3 const & position
-				, glsl::Vec3 const & normal
-				, glsl::Float const & translucency );
+
 			C3D_API glsl::Vec3 compute( shader::PhongLightingModel const & lighting
 				, shader::LegacyMaterial const & material
 				, shader::DirectionalLight const & light
+				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
-				, glsl::Vec3 const & eye
-				, glsl::Float const & shininess );
+				, glsl::Vec3 const & eye )const;
 			C3D_API glsl::Vec3 compute( shader::PhongLightingModel const & lighting
 				, shader::LegacyMaterial const & material
 				, shader::PointLight const & light
+				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
-				, glsl::Vec3 const & eye
-				, glsl::Float const & shininess );
+				, glsl::Vec3 const & eye )const;
 			C3D_API glsl::Vec3 compute( shader::PhongLightingModel const & lighting
 				, shader::LegacyMaterial const & material
 				, shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye )const;
+
+			C3D_API glsl::Vec3 compute( shader::MetallicBrdfLightingModel const & lighting
+				, shader::MetallicRoughnessMaterial const & material
+				, shader::DirectionalLight const & light
+				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye
-				, glsl::Float const & shininess );
+				, glsl::Vec3 const & albedo
+				, glsl::Float const & metallic )const;
+			C3D_API glsl::Vec3 compute( shader::MetallicBrdfLightingModel const & lighting
+				, shader::MetallicRoughnessMaterial const & material
+				, shader::PointLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & albedo
+				, glsl::Float const & metallic )const;
+			C3D_API glsl::Vec3 compute( shader::MetallicBrdfLightingModel const & lighting
+				, shader::MetallicRoughnessMaterial const & material
+				, shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & albedo
+				, glsl::Float const & metallic )const;
+
+			C3D_API glsl::Vec3 compute( shader::SpecularBrdfLightingModel const & lighting
+				, shader::SpecularGlossinessMaterial const & material
+				, shader::DirectionalLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & specular )const;
+			C3D_API glsl::Vec3 compute( shader::SpecularBrdfLightingModel const & lighting
+				, shader::SpecularGlossinessMaterial const & material
+				, shader::PointLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & specular )const;
+			C3D_API glsl::Vec3 compute( shader::SpecularBrdfLightingModel const & lighting
+				, shader::SpecularGlossinessMaterial const & material
+				, shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & specular )const;
+
+			C3D_API glsl::Vec3 computeOne( shader::PhongLightingModel const & lighting
+				, shader::LegacyMaterial const & material
+				, shader::DirectionalLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye )const;
+			C3D_API glsl::Vec3 computeOne( shader::PhongLightingModel const & lighting
+				, shader::LegacyMaterial const & material
+				, shader::PointLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye )const;
+			C3D_API glsl::Vec3 computeOne( shader::PhongLightingModel const & lighting
+				, shader::LegacyMaterial const & material
+				, shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye )const;
+
+			C3D_API glsl::Vec3 computeOne( shader::MetallicBrdfLightingModel const & lighting
+				, shader::MetallicRoughnessMaterial const & material
+				, shader::DirectionalLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & albedo
+				, glsl::Float const & metallic )const;
+			C3D_API glsl::Vec3 computeOne( shader::MetallicBrdfLightingModel const & lighting
+				, shader::MetallicRoughnessMaterial const & material
+				, shader::PointLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & albedo
+				, glsl::Float const & metallic )const;
+			C3D_API glsl::Vec3 computeOne( shader::MetallicBrdfLightingModel const & lighting
+				, shader::MetallicRoughnessMaterial const & material
+				, shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & albedo
+				, glsl::Float const & metallic )const;
+
+			C3D_API glsl::Vec3 computeOne( shader::SpecularBrdfLightingModel const & lighting
+				, shader::SpecularGlossinessMaterial const & material
+				, shader::DirectionalLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & specular )const;
+			C3D_API glsl::Vec3 computeOne( shader::SpecularBrdfLightingModel const & lighting
+				, shader::SpecularGlossinessMaterial const & material
+				, shader::PointLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & specular )const;
+			C3D_API glsl::Vec3 computeOne( shader::SpecularBrdfLightingModel const & lighting
+				, shader::SpecularGlossinessMaterial const & material
+				, shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Vec3 const & position
+				, glsl::Vec3 const & normal
+				, glsl::Float const & translucency
+				, glsl::Vec3 const & eye
+				, glsl::Vec3 const & specular )const;
 
 		private:
 			void doDeclareGetTransformedPosition();
 			void doDeclareComputeDirectionalLightDist();
 			void doDeclareComputePointLightDist();
 			void doDeclareComputeSpotLightDist();
-			void doDeclareComputeOneDirectionalLightDist();
 			void doDeclareComputeOnePointLightDist();
 			void doDeclareComputeOneSpotLightDist();
 			
-			glsl::Float doComputeLightDist( shader::DirectionalLight const & light
+			glsl::Vec3 doComputeLightDist( shader::DirectionalLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Int const & distanceBasedTransmission
+				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position )const;
-			glsl::Float doComputeLightDist( shader::PointLight const & light
+			glsl::Vec3 doComputeLightDist( shader::PointLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Int const & distanceBasedTransmission
+				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position )const;
-			glsl::Float doComputeLightDist( shader::SpotLight const & light
+			glsl::Vec3 doComputeLightDist( shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Int const & distanceBasedTransmission
+				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position )const;
-			glsl::Float doComputeOneLightDist( shader::DirectionalLight const & light
+			glsl::Vec3 doComputeOneLightDist( shader::PointLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Int const & distanceBasedTransmission
+				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position )const;
-			glsl::Float doComputeOneLightDist( shader::PointLight const & light
-				, glsl::Vec3 const & position )const;
-			glsl::Float doComputeOneLightDist( shader::SpotLight const & light
+			glsl::Vec3 doComputeOneLightDist( shader::SpotLight const & light
+				, glsl::Vec2 const & uv
+				, glsl::Int const & distanceBasedTransmission
+				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position )const;
 
 		private:
 			glsl::GlslWriter & m_writer;
+			bool m_shadowMap;
 
 			glsl::Function< glsl::Vec3
 				, glsl::InVec3
 				, glsl::InMat4 > m_getTransformedPosition;
-			glsl::Function< glsl::Float
+			glsl::Function< glsl::Vec3
 				, glsl::InParam< shader::DirectionalLight >
+				, glsl::InVec2
+				, glsl::InInt
+				, glsl::InVec3
 				, glsl::InVec3 > m_computeDirectionalLightDist;
-			glsl::Function< glsl::Float
+			glsl::Function< glsl::Vec3
 				, glsl::InParam< shader::PointLight >
+				, glsl::InVec2
+				, glsl::InInt
+				, glsl::InVec3
 				, glsl::InVec3 > m_computePointLightDist;
-			glsl::Function< glsl::Float
+			glsl::Function< glsl::Vec3
 				, glsl::InParam< shader::SpotLight >
+				, glsl::InVec2
+				, glsl::InInt
+				, glsl::InVec3
 				, glsl::InVec3 > m_computeSpotLightDist;
-			glsl::Function< glsl::Float
-				, glsl::InParam< shader::DirectionalLight >
-				, glsl::InVec3 > m_computeOneDirectionalLightDist;
-			glsl::Function< glsl::Float
+			glsl::Function< glsl::Vec3
 				, glsl::InParam< shader::PointLight >
+				, glsl::InVec2
+				, glsl::InInt
+				, glsl::InVec3
 				, glsl::InVec3 > m_computeOnePointLightDist;
-			glsl::Function< glsl::Float
+			glsl::Function< glsl::Vec3
 				, glsl::InParam< shader::SpotLight >
+				, glsl::InVec2
+				, glsl::InInt
+				, glsl::InVec3
 				, glsl::InVec3 > m_computeOneSpotLightDist;
 		};
 	}

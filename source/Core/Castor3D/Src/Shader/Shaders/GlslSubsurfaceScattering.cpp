@@ -1,4 +1,4 @@
-#include "GlslSubsurfaceScattering.hpp"
+﻿#include "GlslSubsurfaceScattering.hpp"
 
 #include "GlslLight.hpp"
 #include "GlslPhongLighting.hpp"
@@ -14,8 +14,10 @@ namespace castor3d
 {
 	namespace shader
 	{
-		SubsurfaceScattering::SubsurfaceScattering( GlslWriter & writer )
+		SubsurfaceScattering::SubsurfaceScattering( GlslWriter & writer
+			, bool shadowMap )
 			: m_writer{ writer }
+			, m_shadowMap{ shadowMap }
 		{
 		}
 
@@ -29,54 +31,50 @@ namespace castor3d
 
 		void SubsurfaceScattering::declare( LightType type )
 		{
-			doDeclareGetTransformedPosition();
+			if ( m_shadowMap )
+			{
+				doDeclareGetTransformedPosition();
+			}
 
 			switch ( type )
 			{
 			case LightType::eDirectional:
-				doDeclareComputeOneDirectionalLightDist();
+				doDeclareComputeDirectionalLightDist();
 				break;
 
 			case LightType::ePoint:
-				doDeclareComputePointLightDist();
+				doDeclareComputeOnePointLightDist();
 				break;
 
 			case LightType::eSpot:
-				doDeclareComputeSpotLightDist();
+				doDeclareComputeOneSpotLightDist();
 				break;
 			}
 		}
 		
-		Vec3 SubsurfaceScattering::compute (PhongLightingModel const & lighting
+		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
 			, LegacyMaterial const & material
 			, DirectionalLight const & light
+			, Vec2 const & uv
 			, Vec3 const & position
 			, Vec3 const & normal
 			, Float const & translucency
-			, Vec3 const & eye
-			, Float const & shininess )
+			, Vec3 const & eye )const
 		{
 			auto result = m_writer.declLocale( cuT( "result" )
 				, vec3( 0.0_f ) );
 
 			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 			{
-				auto factor = m_writer.declLocale( cuT( "factor" )
-					, 1.0_f );
-
-				if ( m_shadows && shadowType != ShadowType::eNone )
-				{
-					IF( m_writer, material.m_distanceBasedTransmission() != 0_i )
-					{
-						factor = glsl::min( 1.0_f, doComputeOneLightDist( light, position) );
-					}
-					FI;
-				}
-
-				result = factor * translucency * material.m_backLitCoefficient() * lighting.computeDirectionalLightBackLit( light
-					, eye
-					, shininess
-					, shader::FragmentInput(position, -normal) );
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeDirectionalLightBackLit( light
+						, eye
+						, shader::FragmentInput( position, -normal ) );
 			}
 			FI;
 
@@ -86,74 +84,609 @@ namespace castor3d
 		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
 			, LegacyMaterial const & material
 			, PointLight const & light
+			, Vec2 const & uv
 			, Vec3 const & position
 			, Vec3 const & normal
 			, Float const & translucency
-			, Vec3 const & eye
-			, Float const & shininess )
+			, Vec3 const & eye )const
 		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computePointLightBackLit( light
+						, eye
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
 		}
 
 		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
 			, LegacyMaterial const & material
 			, SpotLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeSpotLightBackLit( light
+						, eye
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::compute( MetallicBrdfLightingModel const & lighting
+			, MetallicRoughnessMaterial const & material
+			, DirectionalLight const & light
+			, Vec2 const & uv
 			, Vec3 const & position
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye
-			, Float const & shininess )
+			, Vec3 const & albedo
+			, Float const & metallic )const
 		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeDirectionalLightBackLit( light
+						, eye
+						, albedo
+						, metallic
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
 		}
 
-		Float SubsurfaceScattering::doComputeLightDist( DirectionalLight const & light
-			, Vec3 const & position )const
+		Vec3 SubsurfaceScattering::compute( MetallicBrdfLightingModel const & lighting
+			, MetallicRoughnessMaterial const & material
+			, PointLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & albedo
+			, Float const & metallic )const
 		{
-			return m_computeDirectionalLightDist( light, position );
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computePointLightBackLit( light
+						, eye
+						, albedo
+						, metallic
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
 		}
 
-		Float SubsurfaceScattering::doComputeLightDist( PointLight const & light
-			, Vec3 const & position )const
+		Vec3 SubsurfaceScattering::compute( MetallicBrdfLightingModel const & lighting
+			, MetallicRoughnessMaterial const & material
+			, SpotLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & albedo
+			, Float const & metallic )const
 		{
-			return m_computePointLightDist( light, position );
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeSpotLightBackLit( light
+						, eye
+						, albedo
+						, metallic
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
 		}
 
-		Float SubsurfaceScattering::doComputeLightDist( SpotLight const & light
-			, Vec3 const & position )const
+		Vec3 SubsurfaceScattering::compute( SpecularBrdfLightingModel const & lighting
+			, SpecularGlossinessMaterial const & material
+			, DirectionalLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & specular )const
 		{
-			return m_computeSpotLightDist( light, position );
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeDirectionalLightBackLit( light
+						, eye
+						, specular
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
 		}
 
-		Float SubsurfaceScattering::doComputeOneLightDist( DirectionalLight const & light
-			, Vec3 const & position )const
+		Vec3 SubsurfaceScattering::compute( SpecularBrdfLightingModel const & lighting
+			, SpecularGlossinessMaterial const & material
+			, PointLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & specular )const
 		{
-			return m_computeOneDirectionalLightDist( light, position );
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computePointLightBackLit( light
+						, eye
+						, specular
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
 		}
 
-		Float SubsurfaceScattering::doComputeOneLightDist( PointLight const & light
-			, Vec3 const & position )const
+		Vec3 SubsurfaceScattering::compute( SpecularBrdfLightingModel const & lighting
+			, SpecularGlossinessMaterial const & material
+			, SpotLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & specular )const
 		{
-			return m_computeOnePointLightDist( light, position );
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeSpotLightBackLit( light
+						, eye
+						, specular
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+		
+		Vec3 SubsurfaceScattering::computeOne( PhongLightingModel const & lighting
+			, LegacyMaterial const & material
+			, DirectionalLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeDirectionalLightBackLit( light
+						, eye
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
 		}
 
-		Float SubsurfaceScattering::doComputeOneLightDist( SpotLight const & light
+		Vec3 SubsurfaceScattering::computeOne( PhongLightingModel const & lighting
+			, LegacyMaterial const & material
+			, PointLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeOneLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computePointLightBackLit( light
+						, eye
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::computeOne( PhongLightingModel const & lighting
+			, LegacyMaterial const & material
+			, SpotLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeOneLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeSpotLightBackLit( light
+						, eye
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::computeOne( MetallicBrdfLightingModel const & lighting
+			, MetallicRoughnessMaterial const & material
+			, DirectionalLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & albedo
+			, Float const & metallic )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeDirectionalLightBackLit( light
+						, eye
+						, albedo
+						, metallic
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::computeOne( MetallicBrdfLightingModel const & lighting
+			, MetallicRoughnessMaterial const & material
+			, PointLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & albedo
+			, Float const & metallic )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeOneLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computePointLightBackLit( light
+						, eye
+						, albedo
+						, metallic
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::computeOne( MetallicBrdfLightingModel const & lighting
+			, MetallicRoughnessMaterial const & material
+			, SpotLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & albedo
+			, Float const & metallic )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeOneLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeSpotLightBackLit( light
+						, eye
+						, albedo
+						, metallic
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::computeOne( SpecularBrdfLightingModel const & lighting
+			, SpecularGlossinessMaterial const & material
+			, DirectionalLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & specular )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeDirectionalLightBackLit( light
+						, eye
+						, specular
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::computeOne( SpecularBrdfLightingModel const & lighting
+			, SpecularGlossinessMaterial const & material
+			, PointLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & specular )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeOneLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computePointLightBackLit( light
+						, eye
+						, specular
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::computeOne( SpecularBrdfLightingModel const & lighting
+			, SpecularGlossinessMaterial const & material
+			, SpotLight const & light
+			, Vec2 const & uv
+			, Vec3 const & position
+			, Vec3 const & normal
+			, Float const & translucency
+			, Vec3 const & eye
+			, Vec3 const & specular )const
+		{
+			auto result = m_writer.declLocale( cuT( "result" )
+				, vec3( 0.0_f ) );
+
+			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
+			{
+				result = doComputeOneLightDist( light
+						, uv
+						, material.m_distanceBasedTransmission()
+						, material.m_backLitCoefficient()
+						, position )
+					* translucency
+					* lighting.computeSpotLightBackLit( light
+						, eye
+						, specular
+						, shader::FragmentInput( position, -normal ) );
+			}
+			FI;
+
+			return result;
+		}
+
+		Vec3 SubsurfaceScattering::doComputeLightDist( DirectionalLight const & light
+			, Vec2 const & uv
+			, glsl::Int const & distanceBasedTransmission
+			, Vec3 const & coefficient
 			, Vec3 const & position )const
 		{
-			return m_computeOneSpotLightDist( light, position );
+			return m_computeDirectionalLightDist( light
+				, uv
+				, distanceBasedTransmission
+				, coefficient
+				, position );
+		}
+
+		Vec3 SubsurfaceScattering::doComputeLightDist( PointLight const & light
+			, Vec2 const & uv
+			, glsl::Int const & distanceBasedTransmission
+			, Vec3 const & coefficient
+			, Vec3 const & position )const
+		{
+			return m_computePointLightDist( light
+				, uv
+				, distanceBasedTransmission
+				, coefficient
+				, position );
+		}
+
+		Vec3 SubsurfaceScattering::doComputeLightDist( SpotLight const & light
+			, Vec2 const & uv
+			, glsl::Int const & distanceBasedTransmission
+			, Vec3 const & coefficient
+			, Vec3 const & position )const
+		{
+			return m_computeSpotLightDist( light
+				, uv
+				, distanceBasedTransmission
+				, coefficient
+				, position );
+		}
+
+		Vec3 SubsurfaceScattering::doComputeOneLightDist( PointLight const & light
+			, Vec2 const & uv
+			, glsl::Int const & distanceBasedTransmission
+			, Vec3 const & coefficient
+			, Vec3 const & position )const
+		{
+			return m_computeOnePointLightDist( light
+				, uv
+				, distanceBasedTransmission
+				, coefficient
+				, position );
+		}
+
+		Vec3 SubsurfaceScattering::doComputeOneLightDist( SpotLight const & light
+			, Vec2 const & uv
+			, glsl::Int const & distanceBasedTransmission
+			, Vec3 const & coefficient
+			, Vec3 const & position )const
+		{
+			return m_computeOneSpotLightDist( light
+				, uv
+				, distanceBasedTransmission
+				, coefficient
+				, position );
 		}
 		
 		void SubsurfaceScattering::doDeclareGetTransformedPosition()
 		{
-			m_getTransformedPosition = m_writer.implementFunction< Vec3 >( cuT( "getLightSpacePosition" )
+			m_getTransformedPosition = m_writer.implementFunction< Vec3 >( cuT( "getTransformedPosition" )
 				, [this]( Vec3 const & position
 					, Mat4 const & transform )
 				{
-					auto transformed = m_writer.declLocale( cuT( "transformedPosition" )
+					auto transformed = m_writer.declLocale( cuT( "transformed" )
 						, transform * vec4( position, 1.0_f ) );
 					// Perspective divide (result in range [-1,1]).
 					transformed.xyz() = transformed.xyz() / transformed.w();
 					// Now put the position in range [0,1].
-					transformed.xyz() = m_writer.paren( transformed.xyz() * Float( 0.5 ) ) + Float( 0.5 );
-					m_writer.returnStmt( transformed.xyz() );
+					m_writer.returnStmt( m_writer.paren( transformed.xyz() * 0.5_f ) + vec3( 0.5_f ) );
 				}
 				, InVec3( &m_writer, cuT( "position" ) )
 				, InMat4( &m_writer, cuT( "transform" ) ) );
@@ -161,109 +694,229 @@ namespace castor3d
 
 		void SubsurfaceScattering::doDeclareComputeDirectionalLightDist()
 		{
-			m_computeDirectionalLightDist = m_writer.implementFunction< Float >( cuT( "computeDirectionalLightDist" )
+			m_computeDirectionalLightDist = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightDist" )
 				, [this]( DirectionalLight const & light
+					, Vec2 const & uv
+					, Int const & distanceBasedTransmission
+					, Vec3 const & coefficient
 					, Vec3 const & position )
 				{
-					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
-					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getTransformedPosition( position, light.m_transform() ) );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-						, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).r() );
-					m_writer.returnStmt( 1.0_f / glsl::abs( lightSpaceDepth - position.z() ) );
-					//m_writer.returnStmt( glsl::exp( 1.0_f / glsl::abs( lightSpaceDepth - position.z() ) ) );
+					auto factor = m_writer.declLocale( cuT( "factor" )
+						, coefficient );
+
+					if ( m_shadowMap )
+					{
+						IF( m_writer, distanceBasedTransmission != 0_i )
+						{
+							auto c3d_mtxInvViewProj = m_writer.getBuiltin< Mat4 >( cuT( "c3d_mtxInvViewProj" ) );
+							auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
+
+							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
+								, m_getTransformedPosition( position, light.m_transform() ) );
+							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
+								, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).r() );
+							auto occluder = m_writer.declLocale( cuT( "occluder" )
+								, writeFunctionCall< Vec3 >( &m_writer
+									, cuT( "calcWSPosition" )
+									, uv
+									, lightSpaceDepth
+									, inverse( light.m_transform() ) ) );
+							auto distance = m_writer.declLocale( cuT( "distance" )
+								, glsl::distance( occluder, position ) );
+							factor = exp( -coefficient * distance );
+						}
+						FI;
+					}
+
+					m_writer.returnStmt( factor );
 				}
 				, InParam< DirectionalLight >{ &m_writer, cuT( "light" ) }
+				, InVec2{ &m_writer, cuT( "uv" ) }
+				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
+				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) } );
 		}
 
 		void SubsurfaceScattering::doDeclareComputePointLightDist()
 		{
-			m_computePointLightDist = m_writer.implementFunction< Float >( cuT( "computePointLightDist" )
+			m_computePointLightDist = m_writer.implementFunction< Vec3 >( cuT( "computePointLightDist" )
 				, [this]( PointLight const & light
+					, Vec2 const & uv
+					, Int const & distanceBasedTransmission
+					, Vec3 const & coefficient
 					, Vec3 const & position )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapShadowPoint, PointShadowMapCount );
-					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
-						, position - light.m_position() );
-					auto direction = m_writer.declLocale( cuT( "direction" )
-						, vertexToLight );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-						, texture( c3d_mapShadowPoint[light.m_index()], direction ).r() );
-					m_writer.returnStmt( glsl::exp( 1.0_f / glsl::abs( lightSpaceDepth - position.z() ) ) );
+					auto factor = m_writer.declLocale( cuT( "factor" )
+						, coefficient );
+
+					if ( m_shadowMap )
+					{
+						IF( m_writer, distanceBasedTransmission != 0_i )
+						{
+							auto c3d_mtxInvViewProj = m_writer.getBuiltin< Mat4 >( cuT( "c3d_mtxInvViewProj" ) );
+							auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapShadowPoint, PointShadowMapCount );
+
+							auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
+								, position - light.m_position() );
+							auto direction = m_writer.declLocale( cuT( "direction" )
+								, vertexToLight );
+							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
+								, texture( c3d_mapShadowPoint[light.m_index()], direction ).r() );
+							auto occluder = m_writer.declLocale( cuT( "occluder" )
+								, writeFunctionCall< Vec3 >( &m_writer
+									, cuT( "calcWSPosition" )
+									, uv
+									, lightSpaceDepth
+									, c3d_mtxInvViewProj ) );
+							auto distance = m_writer.declLocale( cuT( "distance" )
+								, glsl::distance( occluder, position ) );
+							factor = exp( -coefficient * distance );
+						}
+						FI;
+					}
+
+					m_writer.returnStmt( factor );
 				}
 				, InParam< PointLight >{ &m_writer, cuT( "light" ) }
+				, InVec2{ &m_writer, cuT( "uv" ) }
+				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
+				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) } );
 		}
 
 		void SubsurfaceScattering::doDeclareComputeSpotLightDist()
 		{
-			m_computeSpotLightDist = m_writer.implementFunction< Float >( cuT( "computeSpotLightDist" )
+			m_computeSpotLightDist = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightDist" )
 				, [this]( SpotLight const & light
+					, Vec2 const & uv
+					, Int const & distanceBasedTransmission
+					, Vec3 const & coefficient
 					, Vec3 const & position )
 				{
-					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot, SpotShadowMapCount );
-					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getTransformedPosition( position, light.m_transform() ) );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-						, texture( c3d_mapShadowSpot[light.m_index()], lightSpacePosition.xy() ).r() );
-					m_writer.returnStmt( glsl::exp( 1.0_f / glsl::abs( lightSpaceDepth - position.z() ) ) );
+					auto factor = m_writer.declLocale( cuT( "factor" )
+						, coefficient );
+
+					if ( m_shadowMap )
+					{
+						IF( m_writer, distanceBasedTransmission != 0_i )
+						{
+							auto c3d_mtxInvViewProj = m_writer.getBuiltin< Mat4 >( cuT( "c3d_mtxInvViewProj" ) );
+							auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot, SpotShadowMapCount );
+
+							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
+								, m_getTransformedPosition( position, light.m_transform() ) );
+							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
+								, texture( c3d_mapShadowSpot[light.m_index()], lightSpacePosition.xy() ).r() );
+							auto occluder = m_writer.declLocale( cuT( "occluder" )
+								, writeFunctionCall< Vec3 >( &m_writer
+									, cuT( "calcWSPosition" )
+									, uv
+									, lightSpaceDepth
+									, inverse( light.m_transform() ) ) );
+							auto distance = m_writer.declLocale( cuT( "distance" )
+								, glsl::distance( occluder, position ) );
+							factor = exp( -coefficient * distance );
+						}
+						FI;
+					}
+
+					m_writer.returnStmt( factor );
 				}
 				, InParam< SpotLight >{ &m_writer, cuT( "light" ) }
-				, InVec3{ &m_writer, cuT( "position" ) } );
-		}
-
-		void SubsurfaceScattering::doDeclareComputeOneDirectionalLightDist()
-		{
-			m_computeOneDirectionalLightDist = m_writer.implementFunction< Float >( cuT( "computeOneDirectionalLightDist" )
-				, [this]( DirectionalLight const & light
-					, Vec3 const & position )
-				{
-					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
-					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getTransformedPosition( position, light.m_transform() ) );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-						, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).r() );
-					m_writer.returnStmt( 1.0_f / glsl::pow( glsl::abs( lightSpaceDepth - position.z() ), 2.0_f ) );
-					//m_writer.returnStmt( glsl::exp( 1.0_f / glsl::abs( lightSpaceDepth - position.z() ) ) );
-				}
-				, InParam< DirectionalLight >{ &m_writer, cuT( "light" ) }
+				, InVec2{ &m_writer, cuT( "uv" ) }
+				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
+				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) } );
 		}
 
 		void SubsurfaceScattering::doDeclareComputeOnePointLightDist()
 		{
-			m_computeOnePointLightDist = m_writer.implementFunction< Float >( cuT( "computeOnePointLightDist" )
+			m_computeOnePointLightDist = m_writer.implementFunction< Vec3 >( cuT( "computeOnePointLightDist" )
 				, [this]( PointLight const & light
+					, Vec2 const & uv
+					, Int const & distanceBasedTransmission
+					, Vec3 const & coefficient
 					, Vec3 const & position )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapShadowPoint );
-					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
-						, position - light.m_position() );
-					auto direction = m_writer.declLocale( cuT( "direction" )
-						, vertexToLight );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-						, texture( c3d_mapShadowPoint, direction ).r() );
-					m_writer.returnStmt( glsl::exp( 1.0_f / glsl::abs( lightSpaceDepth - position.z() ) ) );
+					auto factor = m_writer.declLocale( cuT( "factor" )
+						, coefficient );
+
+					if ( m_shadowMap )
+					{
+						IF( m_writer, distanceBasedTransmission != 0_i )
+						{
+							auto c3d_mtxInvViewProj = m_writer.getBuiltin< Mat4 >( cuT( "c3d_mtxInvViewProj" ) );
+							auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapShadowPoint );
+
+							auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
+								, position - light.m_position() );
+							auto direction = m_writer.declLocale( cuT( "direction" )
+								, vertexToLight );
+							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
+								, texture( c3d_mapShadowPoint, direction ).r() );
+							auto occluder = m_writer.declLocale( cuT( "occluder" )
+								, writeFunctionCall< Vec3 >( &m_writer
+									, cuT( "calcWSPosition" )
+									, uv
+									, lightSpaceDepth
+									, c3d_mtxInvViewProj ) );
+							auto distance = m_writer.declLocale( cuT( "distance" )
+								, glsl::distance( occluder, position ) );
+							factor = exp( -coefficient * distance );
+						}
+						FI;
+					}
+
+					m_writer.returnStmt( factor );
 				}
 				, InParam< PointLight >{ &m_writer, cuT( "light" ) }
+				, InVec2{ &m_writer, cuT( "uv" ) }
+				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
+				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) } );
 		}
 
 		void SubsurfaceScattering::doDeclareComputeOneSpotLightDist()
 		{
-			m_computeOneSpotLightDist = m_writer.implementFunction< Float >( cuT( "computeOneSpotLightDist" )
+			m_computeOneSpotLightDist = m_writer.implementFunction< Vec3 >( cuT( "computeOneSpotLightDist" )
 				, [this]( SpotLight const & light
+					, Vec2 const & uv
+					, Int const & distanceBasedTransmission
+					, Vec3 const & coefficient
 					, Vec3 const & position )
 				{
-					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
-					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getTransformedPosition( position, light.m_transform() ) );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-						, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).r() );
-					m_writer.returnStmt( glsl::exp( 1.0_f / glsl::abs( lightSpaceDepth - position.z() ) ) );
+					auto factor = m_writer.declLocale( cuT( "factor" )
+						, coefficient );
+
+					if ( m_shadowMap )
+					{
+						IF( m_writer, distanceBasedTransmission != 0_i )
+						{
+							auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
+
+							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
+								, m_getTransformedPosition( position, light.m_transform() ) );
+							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
+								, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).r() );
+							auto occluder = m_writer.declLocale( cuT( "occluder" )
+								, writeFunctionCall< Vec3 >( &m_writer
+									, cuT( "calcWSPosition" )
+									, uv
+									, lightSpaceDepth
+									, inverse( light.m_transform() ) ) );
+							auto distance = m_writer.declLocale( cuT( "distance" )
+								, glsl::distance( occluder, position ) );
+							factor = exp( -coefficient * distance );
+						}
+						FI;
+					}
+
+					m_writer.returnStmt( factor );
 				}
 				, InParam< SpotLight >{ &m_writer, cuT( "light" ) }
+				, InVec2{ &m_writer, cuT( "uv" ) }
+				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
+				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) } );
 		}
 	}

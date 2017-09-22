@@ -24,7 +24,7 @@ namespace castor3d
 			, Float const & roughness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
 			auto begin = m_writer.declLocale( cuT( "begin" )
@@ -85,7 +85,7 @@ namespace castor3d
 			, Float const & roughness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeDirectional( DirectionalLight{ light }
 				, worldEye
@@ -105,7 +105,7 @@ namespace castor3d
 			, Float const & roughness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computePoint( PointLight{ light }
 				, worldEye
@@ -125,7 +125,7 @@ namespace castor3d
 			, Float const & roughness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeSpot( SpotLight{ light }
 				, worldEye
@@ -145,7 +145,7 @@ namespace castor3d
 			, Float const & roughness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeOnePoint( PointLight{ light }
 				, worldEye
@@ -165,7 +165,7 @@ namespace castor3d
 			, Float const & roughness
 			, Int const & receivesShadows
 			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
+			, OutputComponents & parentOutput )const
 		{
 			m_writer << m_computeOneSpot( SpotLight{ light }
 				, worldEye
@@ -182,14 +182,12 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
-			, Float const & roughness
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computeDirectionalBackLit( DirectionalLight{ light }
 				, worldEye
 				, albedo
 				, metallic
-				, roughness
 				, FragmentInput{ fragmentIn } );
 		}
 
@@ -197,14 +195,12 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
-			, Float const & roughness
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computePointBackLit( PointLight{ light }
 				, worldEye
 				, albedo
 				, metallic
-				, roughness
 				, FragmentInput{ fragmentIn } );
 		}
 
@@ -212,14 +208,12 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
-			, Float const & roughness
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computeSpotBackLit( SpotLight{ light }
 				, worldEye
 				, albedo
 				, metallic
-				, roughness
 				, FragmentInput{ fragmentIn } );
 		}
 
@@ -561,7 +555,6 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
-					, Float const & roughness
 					, FragmentInput const & fragmentIn )
 				{
 					PbrMRMaterials materials{ m_writer };
@@ -573,14 +566,12 @@ namespace castor3d
 						, lightDirection
 						, albedo
 						, metallic
-						, roughness
 						, fragmentIn ) );
 				}
 				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InVec3( &m_writer, cuT( "albedo" ) )
 				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -592,7 +583,6 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
-					, Float const & roughness
 					, FragmentInput const & fragmentIn )
 				{
 					PbrMRMaterials materials{ m_writer };
@@ -609,7 +599,6 @@ namespace castor3d
 							, lightDirection
 							, albedo
 							, metallic
-							, roughness
 							, fragmentIn ) );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 						, light.m_attenuation().x() + light.m_attenuation().y() * distance + light.m_attenuation().z() * distance * distance );
@@ -619,7 +608,6 @@ namespace castor3d
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InVec3( &m_writer, cuT( "albedo" ) )
 				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -631,7 +619,6 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
-					, Float const & roughness
 					, FragmentInput const & fragmentIn )
 				{
 					PbrMRMaterials materials{ m_writer };
@@ -653,7 +640,6 @@ namespace castor3d
 							, lightDirection
 							, albedo
 							, metallic
-							, roughness
 							, fragmentIn );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
 							, light.m_attenuation().x()
@@ -670,7 +656,6 @@ namespace castor3d
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InVec3( &m_writer, cuT( "albedo" ) )
 				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -758,7 +743,6 @@ namespace castor3d
 					, Vec3 const & direction
 					, Vec3 const & albedo
 					, Float const & metallic
-					, Float const & roughness
 					, FragmentInput const & fragmentIn )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
@@ -798,7 +782,6 @@ namespace castor3d
 				, InVec3( &m_writer, cuT( "direction" ) )
 				, InVec3( &m_writer, cuT( "albedo" ) )
 				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
 				, FragmentInput{ m_writer } );
 		}
 
@@ -893,7 +876,7 @@ namespace castor3d
 			, Float const & roughness
 			, Float const & shadowFactor
 			, FragmentInput const & fragmentIn
-			, OutputComponents & output )
+			, OutputComponents & output )const
 		{
 			m_writer << m_computeLight( light
 				, worldEye
@@ -912,15 +895,13 @@ namespace castor3d
 			, Vec3 const & direction
 			, Vec3 const & albedo
 			, Float const & metallic
-			, Float const & roughness
-			, FragmentInput const & fragmentIn )
+			, FragmentInput const & fragmentIn )const
 		{
 			return m_computeLightBackLit( light
 				, worldEye
 				, direction
 				, albedo
 				, metallic
-				, roughness
 				, FragmentInput{ fragmentIn } );
 		}
 
