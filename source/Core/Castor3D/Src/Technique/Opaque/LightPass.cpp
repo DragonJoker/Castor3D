@@ -1,4 +1,4 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -539,7 +539,7 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeOneDirectionalLight( light
+					lighting->computeDirectionalLight( light
 						, eye
 						, shininess
 						, iShadowReceiver
@@ -659,7 +659,7 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeOneDirectionalLight( light
+					lighting->computeDirectionalLight( light
 						, eye
 						, albedo
 						, metallic
@@ -785,7 +785,7 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeOneDirectionalLight( light
+					lighting->computeDirectionalLight( light
 						, eye
 						, diffuse
 						, specular

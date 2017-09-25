@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -32,6 +32,8 @@ SOFTWARE.
 #include "RenderToTexture/RenderDepthLayerCubeToTexture.hpp"
 #include "RenderToTexture/RenderDepthLayerToTexture.hpp"
 #include "RenderToTexture/RenderDepthToTexture.hpp"
+#include "RenderToTexture/RenderVarianceToTexture.hpp"
+#include "RenderToTexture/RenderVarianceCubeToTexture.hpp"
 
 #include "Shader/Ubos/MatrixUbo.hpp"
 
@@ -264,6 +266,34 @@ namespace castor3d
 			, castor::Size const & size
 			, TextureLayout const & texture
 			, uint32_t index );
+		/**
+		 *\~english
+		 *\brief		Renders the given variance 2D texture to the currently draw-bound frame buffer.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\~french
+		 *\brief		Rend la texture 2D de variance donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 */
+		C3D_API void renderVariance( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
+		/**
+		 *\~english
+		 *\brief		Renders the given variance cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\~french
+		 *\brief		Rend la texture cube de variance donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 */
+		C3D_API void renderVarianceCube( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture.
@@ -628,6 +658,12 @@ namespace castor3d
 		//!\~english	The pipeline used to render a layer from a cube depth texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'une texture cube de profondeur dans le tampon d'image actuellement activé en dessin.
 		RenderDepthLayerCubeToTexture m_depthLayerCube;
+		//!\~english	The pipeline used to render a variance texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture de variance dans le tampon d'image actuellement activé en dessin.
+		RenderVarianceToTexture m_variance;
+		//!\~english	The pipeline used to render a variance texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture de variance dans le tampon d'image actuellement activé en dessin.
+		RenderVarianceCubeToTexture m_varianceCube;
 		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
 		RenderColourToCube m_cube;

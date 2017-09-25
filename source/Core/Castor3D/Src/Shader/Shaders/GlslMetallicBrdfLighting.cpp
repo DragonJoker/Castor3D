@@ -1,4 +1,4 @@
-﻿#include "GlslMetallicBrdfLighting.hpp"
+#include "GlslMetallicBrdfLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -128,26 +128,6 @@ namespace castor3d
 			, OutputComponents & parentOutput )
 		{
 			m_writer << m_computeSpot( SpotLight{ light }
-				, worldEye
-				, albedo
-				, metallic
-				, roughness
-				, receivesShadows
-				, FragmentInput{ fragmentIn }
-				, parentOutput );
-			m_writer << Endi();
-		}
-
-		void MetallicBrdfLightingModel::computeOneDirectionalLight( DirectionalLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & albedo
-			, Float const & metallic
-			, Float const & roughness
-			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
-		{
-			m_writer << m_computeOneDirectional( DirectionalLight{ light }
 				, worldEye
 				, albedo
 				, metallic
@@ -385,61 +365,6 @@ namespace castor3d
 					FI;
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "albedo" ) )
-				, InFloat( &m_writer, cuT( "metallic" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer }
-				, output );
-		}
-
-		void MetallicBrdfLightingModel::doDeclareComputeOneDirectionalLight()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOneDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
-				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & albedo
-					, Float const & metallic
-					, Float const & roughness
-					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
-					, OutputComponents & parentOutput )
-				{
-					OutputComponents output
-					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
-					};
-					PbrMRMaterials materials{ m_writer };
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( -light.m_direction().xyz() ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-						, 1.0_f );
-
-					if ( m_shadows != ShadowType::eNone )
-					{
-						shadowFactor = 1.0_f - min( m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeDirectionalShadow( light.m_transform()
-								, fragmentIn.m_vertex
-								, -lightDirection
-								, fragmentIn.m_normal ) );
-					}
-
-					doComputeLight( light.m_lightBase()
-						, worldEye
-						, lightDirection
-						, albedo
-						, metallic
-						, roughness
-						, shadowFactor
-						, fragmentIn
-						, output );
-					parentOutput.m_diffuse += output.m_diffuse;
-					parentOutput.m_specular += output.m_specular;
-				}
-				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InVec3( &m_writer, cuT( "albedo" ) )
 				, InFloat( &m_writer, cuT( "metallic" ) )

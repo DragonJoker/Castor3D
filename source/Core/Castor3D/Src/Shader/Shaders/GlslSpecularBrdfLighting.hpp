@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -66,14 +66,6 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
-			C3D_API void computeOneDirectionalLight( DirectionalLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
-				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
 			C3D_API void computeOnePointLight( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
@@ -96,7 +88,6 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOneDirectionalLight()override;
 			void doDeclareComputeOnePointLight()override;
 			void doDeclareComputeOneSpotLight()override;
 
@@ -168,15 +159,6 @@ namespace castor3d
 				, glsl::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeSpot;
-			glsl::Function< glsl::Void
-				, DirectionalLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
-				, FragmentInput
-				, OutputComponents & > m_computeOneDirectional;
 			glsl::Function< glsl::Void
 				, PointLight
 				, glsl::InVec3

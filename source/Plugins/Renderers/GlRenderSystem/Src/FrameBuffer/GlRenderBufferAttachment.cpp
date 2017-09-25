@@ -64,6 +64,7 @@ namespace GlRender
 		{
 			getOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, uiGlName );
 			m_glStatus = GlFramebufferStatus( getOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
+			REQUIRE( m_glStatus == GlFramebufferStatus::eComplete );
 
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{

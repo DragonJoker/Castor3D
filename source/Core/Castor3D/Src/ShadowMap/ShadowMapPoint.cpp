@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPoint.hpp"
+#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -56,9 +56,10 @@ namespace castor3d
 				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
-				sampler->setComparisonMode( ComparisonMode::eRefToTexture );
-				sampler->setComparisonFunc( ComparisonFunc::eLEqual );
+				//sampler->setComparisonMode( ComparisonMode::eRefToTexture );
+				//sampler->setComparisonFunc( ComparisonFunc::eLEqual );
 			}
+
 			TextureUnit unit{ engine };
 			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
 				, AccessType::eNone
@@ -178,7 +179,7 @@ namespace castor3d
 
 		// Fragment Intputs
 		Ubo shadowMap{ writer, ShadowMapUbo, 8u };
-		auto c3d_v3WordLightPosition( shadowMap.declMember< Vec3 >( WorldLightPosition ) );
+		auto c3d_wordLightPosition( shadowMap.declMember< Vec3 >( WorldLightPosition ) );
 		auto c3d_farPlane( shadowMap.declMember< Float >( FarPlane ) );
 		shadowMap.end();
 
@@ -192,7 +193,7 @@ namespace castor3d
 		materials->declare();
 
 		// Fragment Outputs
-		auto pxl_fFragColor = writer.declFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
+		auto pxl_depth = writer.declFragData< Float >( cuT( "pxl_depth" ), 0u );
 
 		auto main = [&]()
 		{
@@ -202,8 +203,9 @@ namespace castor3d
 				, vtx_material
 				, *materials );
 
-			auto distance = writer.declLocale( cuT( "distance" ), length( vtx_position - c3d_v3WordLightPosition ) );
-			pxl_fFragColor = distance / c3d_farPlane;
+			auto depth = writer.declLocale( cuT( "depth" )
+				, length( vtx_position - c3d_wordLightPosition ) );
+			pxl_depth = depth / c3d_farPlane;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

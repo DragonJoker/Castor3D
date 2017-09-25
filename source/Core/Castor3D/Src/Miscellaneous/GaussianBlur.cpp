@@ -1,4 +1,4 @@
-﻿#include "GaussianBlur.hpp"
+#include "GaussianBlur.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"

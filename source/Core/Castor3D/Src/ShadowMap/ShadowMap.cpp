@@ -1,4 +1,4 @@
-﻿#include "ShadowMap.hpp"
+#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -53,9 +53,10 @@ namespace castor3d
 				doInitialise();
 			}
 
-			m_frameBuffer->bind();
-			m_frameBuffer->setDrawBuffers( FrameBuffer::AttachArray{} );
-			m_frameBuffer->unbind();
+			m_blur = std::make_unique< GaussianBlur >( *getEngine()
+				, m_shadowMap.getTexture()->getDimensions()
+				, m_shadowMap.getTexture()->getPixelFormat()
+				, 3u );
 		}
 
 		return result;
@@ -168,6 +169,7 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_position4 = writer.declOutput< Vec3 >( cuT( "vtx_position4" ) );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );

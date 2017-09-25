@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPass.hpp"
+#include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"

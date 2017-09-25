@@ -1,4 +1,4 @@
-#include "Context.hpp"
+﻿#include "Context.hpp"
 
 #include "Engine.hpp"
 
@@ -32,6 +32,8 @@ namespace castor3d
 		, m_depthCube{ *this, m_matrixUbo }
 		, m_depthLayer{ *this, m_matrixUbo }
 		, m_depthLayerCube{ *this, m_matrixUbo }
+		, m_variance{ *this, m_matrixUbo }
+		, m_varianceCube{ *this, m_matrixUbo }
 		, m_cube{ *this, m_matrixUbo }
 	{
 	}
@@ -56,6 +58,8 @@ namespace castor3d
 			m_depthCube.initialise();
 			m_depthLayer.initialise();
 			m_depthLayerCube.initialise();
+			m_variance.initialise();
+			m_varianceCube.initialise();
 			m_cube.initialise();
 
 			doEndCurrent();
@@ -78,6 +82,8 @@ namespace castor3d
 		m_depthCube.cleanup();
 		m_depthLayer.cleanup();
 		m_depthLayerCube.cleanup();
+		m_variance.cleanup();
+		m_varianceCube.cleanup();
 		m_cube.cleanup();
 
 		if ( getRenderSystem()->getMainContext().get() == this )
@@ -190,6 +196,24 @@ namespace castor3d
 		, TextureLayout const & texture )
 	{
 		m_depth.render( position
+			, size
+			, texture );
+	}
+
+	void Context::renderVariance( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
+	{
+		m_variance.render( position
+			, size
+			, texture );
+	}
+
+	void Context::renderVarianceCube( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
+	{
+		m_varianceCube.render( position
 			, size
 			, texture );
 	}
