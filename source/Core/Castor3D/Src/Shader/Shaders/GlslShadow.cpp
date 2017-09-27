@@ -268,7 +268,7 @@ namespace castor3d
 				, Float const & farPlane
 				, Int const & index )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
+					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint, PointShadowMapCount );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
@@ -353,7 +353,7 @@ namespace castor3d
 					, Vec3 const & normal
 					, Float const & farPlane )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint );
+					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
