@@ -58,12 +58,6 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
-			C3D_API void computeOneDirectionalLight( DirectionalLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Float const & shininess
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
 			C3D_API void computeOnePointLight( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Float const & shininess
@@ -82,7 +76,6 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOneDirectionalLight()override;
 			void doDeclareComputeOnePointLight()override;
 			void doDeclareComputeOneSpotLight()override;
 
@@ -126,13 +119,6 @@ namespace castor3d
 				, glsl::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeSpot;
-			glsl::Function< glsl::Void
-				, DirectionalLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
-				, FragmentInput
-				, OutputComponents & > m_computeOneDirectional;
 			glsl::Function< glsl::Void
 				, PointLight
 				, glsl::InVec3

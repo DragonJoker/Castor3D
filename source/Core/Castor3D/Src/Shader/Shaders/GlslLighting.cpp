@@ -1,4 +1,4 @@
-﻿#include "GlslLighting.hpp"
+#include "GlslLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -115,7 +115,7 @@ namespace castor3d
 			doDeclareLight();
 			doDeclareDirectionalLight();
 			doDeclareModel();
-			doDeclareComputeOneDirectionalLight();
+			doDeclareComputeDirectionalLight();
 		}
 
 		void LightingModel::declarePointModel()
@@ -144,25 +144,19 @@ namespace castor3d
 			doDeclareComputeOneSpotLight();
 		}
 
-		DirectionalLight LightingModel::getDirectionalLight( Type const & p_value )
+		DirectionalLight LightingModel::getDirectionalLight( Int const & index )
 		{
-			return writeFunctionCall< DirectionalLight >( &m_writer
-				, cuT( "getDirectionalLight" )
-				, p_value );
+			return m_getDirectionalLight( index );
 		}
 
-		PointLight LightingModel::getPointLight( Type const & p_value )
+		PointLight LightingModel::getPointLight( Int const & index )
 		{
-			return writeFunctionCall< PointLight >( &m_writer
-				, cuT( "getPointLight" )
-				, p_value );
+			return m_getPointLight( index );
 		}
 
-		SpotLight LightingModel::getSpotLight( Type const & p_value )
+		SpotLight LightingModel::getSpotLight( Int const & index )
 		{
-			return writeFunctionCall< SpotLight >( &m_writer
-				, cuT( "getSpotLight" )
-				, p_value );
+			return m_getSpotLight( index );
 		}
 
 		void LightingModel::doDeclareLight()
@@ -212,7 +206,7 @@ namespace castor3d
 		{
 			auto get = [this]( Int const & index )
 			{
-				auto lightReturn = m_writer.declLocale< Light >( cuT( "lightReturn" ) );
+				auto result = m_writer.declLocale< Light >( cuT( "result" ) );
 
 				if ( m_writer.hasTexelFetch() )
 				{
@@ -220,15 +214,15 @@ namespace castor3d
 					{
 						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						lightReturn.m_colour() = texelFetch( c3d_sLights, offset++ ).rgb();
-						lightReturn.m_intensity() = texelFetch( c3d_sLights, offset++ ).rg();
+						result.m_colour() = texelFetch( c3d_sLights, offset++ ).rgb();
+						result.m_intensity() = texelFetch( c3d_sLights, offset++ ).rg();
 					}
 					else
 					{
 						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						lightReturn.m_colour() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-						lightReturn.m_intensity() = texelFetch( c3d_sLights, offset++, 0 ).rg();
+						result.m_colour() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+						result.m_intensity() = texelFetch( c3d_sLights, offset++, 0 ).rg();
 					}
 				}
 				else
@@ -238,215 +232,218 @@ namespace castor3d
 					auto offset = m_writer.declLocale( cuT( "offset" ), 0.0_f );
 					auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
 					auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
-					lightReturn.m_colour() = texture( c3d_sLights, factor + offset + decal ).rgb();
+					result.m_colour() = texture( c3d_sLights, factor + offset + decal ).rgb();
 					offset += mult;
-					lightReturn.m_intensity() = texture( c3d_sLights, factor + offset + decal ).rg();
+					result.m_intensity() = texture( c3d_sLights, factor + offset + decal ).rg();
 					offset += mult;
 				}
 
-				m_writer.returnStmt( lightReturn );
+				m_writer.returnStmt( result );
 			};
 			m_writer.implementFunction< Light >( cuT( "getBaseLight" ), get, Int( &m_writer, cuT( "index" ) ) );
 		}
 
 		void LightingModel::doDeclareGetDirectionalLight()
 		{
-			auto get = [this]( Int const & index )
-			{
-				DirectionalLight lightReturn = m_writer.declLocale< DirectionalLight >( cuT( "lightReturn" ) );
-				lightReturn.m_lightBase() = getBaseLight( index );
-
-				if ( m_writer.hasTexelFetch() )
+			m_getDirectionalLight = m_writer.implementFunction< DirectionalLight >( cuT( "getDirectionalLight" )
+				, [this]( Int const & index )
 				{
-					if ( m_writer.hasTextureBuffers() )
+					DirectionalLight result = m_writer.declLocale< DirectionalLight >( cuT( "result" ) );
+					result.m_lightBase() = getBaseLight( index );
+
+					if ( m_writer.hasTexelFetch() )
 					{
-						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-						lightReturn.m_direction() = texelFetch( c3d_sLights, offset++ ).rgb();
-						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
-						auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
-						auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
-						auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
-						lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+						if ( m_writer.hasTextureBuffers() )
+						{
+							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
+							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+							result.m_direction() = texelFetch( c3d_sLights, offset++ ).rgb();
+							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
+							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
+							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
+							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+						}
+						else
+						{
+							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
+							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+							result.m_direction() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+						}
 					}
 					else
 					{
 						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-						lightReturn.m_direction() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+						auto factor = m_writer.declLocale( cuT( "factor" ), Float( LightComponentsOffset ) * index );
+						auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
+						auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
+						auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
+						result.m_direction() = texture( c3d_sLights, factor + offset + decal ).rgb();
+						offset += mult;
+						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
 					}
-				}
-				else
-				{
-					auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-					auto factor = m_writer.declLocale( cuT( "factor" ), Float( LightComponentsOffset ) * index );
-					auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
-					auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
-					auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
-					lightReturn.m_direction() = texture( c3d_sLights, factor + offset + decal ).rgb();
-					offset += mult;
-					auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
-				}
 
-				m_writer.returnStmt( lightReturn );
-			};
-			m_writer.implementFunction< DirectionalLight >( cuT( "getDirectionalLight" ), get, Int( &m_writer, cuT( "index" ) ) );
+					m_writer.returnStmt( result );
+				}
+				, InInt{ &m_writer, cuT( "index" ) } );
 		}
 
 		void LightingModel::doDeclareGetPointLight()
 		{
-			auto get = [this]( Int const & index )
-			{
-				PointLight lightReturn = m_writer.declLocale< PointLight >( cuT( "lightReturn" ) );
-				lightReturn.m_lightBase() = getBaseLight( index );
-
-				if ( m_writer.hasTexelFetch() )
+			m_getPointLight = m_writer.implementFunction< PointLight >( cuT( "getPointLight" )
+				, [this]( Int const & index )
 				{
-					if ( m_writer.hasTextureBuffers() )
+					PointLight result = m_writer.declLocale< PointLight >( cuT( "result" ) );
+					result.m_lightBase() = getBaseLight( index );
+
+					if ( m_writer.hasTexelFetch() )
 					{
-						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
-						lightReturn.m_position() = v4PosIndex.rgb();
-						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
-						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
-						lightReturn.m_farPlane() = v4AttFarPlane.a();
+						if ( m_writer.hasTextureBuffers() )
+						{
+							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
+							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_position() = v4PosIndex.rgb();
+							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_attenuation() = v4AttFarPlane.rgb();
+							result.m_farPlane() = v4AttFarPlane.a();
+						}
+						else
+						{
+							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
+							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_position() = v4PosIndex.rgb();
+							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_attenuation() = v4AttFarPlane.rgb();
+							result.m_farPlane() = v4AttFarPlane.a();
+						}
 					}
 					else
 					{
 						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						lightReturn.m_position() = v4PosIndex.rgb();
-						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
-						lightReturn.m_farPlane() = v4AttFarPlane.a();
+						auto factor = m_writer.declLocale( cuT( "factor" ), Float( LightComponentsOffset ) * index );
+						auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
+						auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
+						auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
+						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texture( c3d_sLights, factor + offset + decal ) );
+						result.m_position() = v4PosIndex.rgb();
+						result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+						offset += mult;
+						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
+						result.m_attenuation() = v4AttFarPlane.rgb();
+						result.m_farPlane() = v4AttFarPlane.a();
+						offset += mult;
 					}
-				}
-				else
-				{
-					auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-					auto factor = m_writer.declLocale( cuT( "factor" ), Float( LightComponentsOffset ) * index );
-					auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
-					auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
-					auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
-					auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texture( c3d_sLights, factor + offset + decal ) );
-					lightReturn.m_position() = v4PosIndex.rgb();
-					lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-					offset += mult;
-					auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
-					lightReturn.m_attenuation() = v4AttFarPlane.rgb();
-					lightReturn.m_farPlane() = v4AttFarPlane.a();
-					offset += mult;
-				}
 
-				m_writer.returnStmt( lightReturn );
-			};
-			m_writer.implementFunction< PointLight >( cuT( "getPointLight" ), get, Int( &m_writer, cuT( "index" ) ) );
+					m_writer.returnStmt( result );
+				}
+				, InInt{ &m_writer, cuT( "index" ) } );
 		}
 
 		void LightingModel::doDeclareGetSpotLight()
 		{
-			auto get = [this]( Int const & index )
-			{
-				SpotLight lightReturn = m_writer.declLocale< SpotLight >( cuT( "lightReturn" ) );
-				lightReturn.m_lightBase() = getBaseLight( index );
-
-				if ( m_writer.hasTexelFetch() )
+			m_getSpotLight = m_writer.implementFunction< SpotLight >( cuT( "getSpotLight" )
+				, [this]( Int const & index )
 				{
-					if ( m_writer.hasTextureBuffers() )
+					SpotLight result = m_writer.declLocale< SpotLight >( cuT( "result" ) );
+					result.m_lightBase() = getBaseLight( index );
+
+					if ( m_writer.hasTexelFetch() )
 					{
-						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
-						lightReturn.m_position() = v4PosIndex.rgb();
-						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
-						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
-						lightReturn.m_farPlane() = v4AttFarPlane.a();
-						lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
-						auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++ ).rg() );
-						lightReturn.m_exponent() = v2Spot.x();
-						lightReturn.m_cutOff() = v2Spot.y();
-						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
-						auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
-						auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
-						auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
-						lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+						if ( m_writer.hasTextureBuffers() )
+						{
+							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
+							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_position() = v4PosIndex.rgb();
+							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_attenuation() = v4AttFarPlane.rgb();
+							result.m_farPlane() = v4AttFarPlane.a();
+							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
+							auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++ ).rg() );
+							result.m_exponent() = v2Spot.x();
+							result.m_cutOff() = v2Spot.y();
+							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
+							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
+							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
+							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+						}
+						else
+						{
+							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
+							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_position() = v4PosIndex.rgb();
+							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_attenuation() = v4AttFarPlane.rgb();
+							result.m_farPlane() = v4AttFarPlane.a();
+							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
+							auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
+							result.m_exponent() = v2Spot.x();
+							result.m_cutOff() = v2Spot.y();
+							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+							result.m_index() = m_writer.cast< Int >( texelFetch( c3d_sLights, offset++, 0 ).r() );
+						}
 					}
 					else
 					{
 						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						lightReturn.m_position() = v4PosIndex.rgb();
-						lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						lightReturn.m_attenuation() = v4AttFarPlane.rgb();
-						lightReturn.m_farPlane() = v4AttFarPlane.a();
-						lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
-						auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
-						lightReturn.m_exponent() = v2Spot.x();
-						lightReturn.m_cutOff() = v2Spot.y();
-						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
-						lightReturn.m_index() = m_writer.cast< Int >( texelFetch( c3d_sLights, offset++, 0 ).r() );
+						auto factor = m_writer.declLocale( cuT( "factor" ), Float( LightComponentsOffset ) * index );
+						auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
+						auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
+						auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
+						auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texture( c3d_sLights, factor + offset + decal ) );
+						result.m_position() = v4PosIndex.rgb();
+						result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+						offset += mult;
+						auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
+						result.m_attenuation() = v4AttFarPlane.rgb();
+						result.m_farPlane() = v4AttFarPlane.a();
+						offset += mult;
+						result.m_direction() = normalize( texture( c3d_sLights, factor + offset + decal ).rgb() );
+						offset += mult;
+						auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texture( c3d_sLights, factor + offset + decal ).rg() );
+						result.m_exponent() = v2Spot.x();
+						result.m_cutOff() = v2Spot.y();
+						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texture( c3d_sLights, factor + offset + decal ) );
+						offset += mult;
+						result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+						result.m_index() = m_writer.cast< Int >( texture( c3d_sLights, offset + decal ).r() );
+						offset += mult;
 					}
-				}
-				else
-				{
-					auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-					auto factor = m_writer.declLocale( cuT( "factor" ), Float( LightComponentsOffset ) * index );
-					auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
-					auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
-					auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
-					auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texture( c3d_sLights, factor + offset + decal ) );
-					lightReturn.m_position() = v4PosIndex.rgb();
-					lightReturn.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
-					offset += mult;
-					auto v4AttFarPlane = m_writer.declLocale( cuT( "v4AttFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
-					lightReturn.m_attenuation() = v4AttFarPlane.rgb();
-					lightReturn.m_farPlane() = v4AttFarPlane.a();
-					offset += mult;
-					lightReturn.m_direction() = normalize( texture( c3d_sLights, factor + offset + decal ).rgb() );
-					offset += mult;
-					auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texture( c3d_sLights, factor + offset + decal ).rg() );
-					lightReturn.m_exponent() = v2Spot.x();
-					lightReturn.m_cutOff() = v2Spot.y();
-					auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texture( c3d_sLights, factor + offset + decal ) );
-					offset += mult;
-					lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
-					lightReturn.m_index() = m_writer.cast< Int >( texture( c3d_sLights, offset + decal ).r() );
-					offset += mult;
-				}
 
-				m_writer.returnStmt( lightReturn );
-			};
-			m_writer.implementFunction< SpotLight >( cuT( "getSpotLight" ), get, Int( &m_writer, cuT( "index" ) ) );
+					m_writer.returnStmt( result );
+				}
+				, InInt{ &m_writer, cuT( "index" ) } );
 		}
 
 		Light LightingModel::getBaseLight( Type const & p_value )

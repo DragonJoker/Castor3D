@@ -225,7 +225,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto c3d_mapDiffuse = writer.declUniform< SamplerCubeArray >( ShaderProgram::MapDiffuse );
-			auto c3d_v3Face = writer.declUniform< Vec3 >( cuT( "c3d_v3Face" ) );
+			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
 			auto c3d_iIndex = writer.declUniform< Int >( cuT( "c3d_iIndex" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -236,11 +236,11 @@ namespace castor3d
 			{
 				auto mapCoord = writer.declLocale( cuT( "mapCoord" ), vtx_texture * 2.0_f - 1.0_f );
 				auto uv = writer.declLocale< Vec3 >( cuT( "uv" )
-					, writer.ternary( c3d_v3Face.x() != 0.0_f
-						, vec3( c3d_v3Face.x(), mapCoord )
-						, writer.ternary( c3d_v3Face.y() != 0.0_f
-							, vec3( mapCoord.x(), c3d_v3Face.y(), mapCoord.y() )
-							, vec3( mapCoord, c3d_v3Face.z() ) ) ) );
+					, writer.ternary( c3d_face.x() != 0.0_f
+						, vec3( c3d_face.x(), mapCoord )
+						, writer.ternary( c3d_face.y() != 0.0_f
+							, vec3( mapCoord.x(), c3d_face.y(), mapCoord.y() )
+							, vec3( mapCoord, c3d_face.z() ) ) ) );
 				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec4( uv, writer.cast< Float >( c3d_iIndex ) ) ).xyz(), 1.0 );
 			} );
 			pxl = writer.finalise();
@@ -253,7 +253,7 @@ namespace castor3d
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
 		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( 0u );
-		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_v3Face" ), ShaderType::ePixel );
+		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
 		m_layerIndexUniform = program->createUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
 		program->initialise();
 		return program;

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,8 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_ShadowMapPoint_H___
 #define ___C3D_ShadowMapPoint_H___
 
-#include <ShadowMap/ShadowMap.hpp>
-#include <Render/Viewport.hpp>
+#include "Render/Viewport.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 
 namespace castor3d
 {

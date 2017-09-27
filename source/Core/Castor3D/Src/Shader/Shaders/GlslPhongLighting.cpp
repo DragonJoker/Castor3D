@@ -1,4 +1,4 @@
-﻿#include "GlslPhongLighting.hpp"
+#include "GlslPhongLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -113,22 +113,6 @@ namespace castor3d
 				, receivesShadows
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
-			m_writer << Endi();
-		}
-
-		void PhongLightingModel::computeOneDirectionalLight( DirectionalLight const & light
-			, Vec3 const & worldEye
-			, Float const & shininess
-			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )
-		{
-			m_writer << m_computeOneDirectional( DirectionalLight{ light }
-				, worldEye
-				, shininess
-				, receivesShadows
-				, FragmentInput{ fragmentIn }
-			, parentOutput );
 			m_writer << Endi();
 		}
 
@@ -339,54 +323,6 @@ namespace castor3d
 					FI;
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InFloat( &m_writer, cuT( "shininess" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
-				, FragmentInput{ m_writer }
-				, output );
-		}
-	
-		void PhongLightingModel::doDeclareComputeOneDirectionalLight()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOneDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
-				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
-					, Float const & shininess
-					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
-					, OutputComponents & parentOutput )
-				{
-					OutputComponents output
-					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
-					};
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( light.m_direction().xyz() ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-						, 1.0_f );
-
-					if ( m_shadows != ShadowType::eNone )
-					{
-						shadowFactor = 1.0_f - min( receivesShadows
-							, m_shadowModel->computeDirectionalShadow( light.m_transform()
-								, fragmentIn.m_vertex
-								, lightDirection
-								, fragmentIn.m_normal ) );
-					}
-
-					doComputeLight( light.m_lightBase()
-						, worldEye
-						, lightDirection
-						, shininess
-						, shadowFactor
-						, fragmentIn
-						, output );
-					parentOutput.m_diffuse += output.m_diffuse;
-					parentOutput.m_specular += output.m_specular;
-				}
-				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InFloat( &m_writer, cuT( "shininess" ) )
 				, InInt( &m_writer, cuT( "receivesShadows" ) )

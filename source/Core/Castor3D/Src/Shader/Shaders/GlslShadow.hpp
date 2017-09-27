@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -70,14 +70,13 @@ namespace castor3d
 		private:
 			void doDeclareGetRandom();
 			void doDeclareGetShadowOffset();
+			void doDeclareChebyshevUpperBound();
 			void doDeclareGetLightSpacePosition();
 			void doDeclareComputeDirectionalShadow();
 			void doDeclareComputeSpotShadow();
 			void doDeclareComputePointShadow();
 			void doDeclareComputeOneSpotShadow();
 			void doDeclareComputeOnePointShadow();
-			void doDeclarePcfSample2D();
-			void doDeclarePcfSampleCube();
 
 		private:
 			glsl::GlslWriter & m_writer;
@@ -86,6 +85,11 @@ namespace castor3d
 			glsl::Function< glsl::Float
 				, glsl::InVec3
 				, glsl::InVec3 > m_getShadowOffset;
+			glsl::Function < glsl::Float
+				, glsl::InVec2
+				, glsl::InFloat
+				, glsl::InFloat
+				, glsl::InFloat > m_chebyshevUpperBound;
 			glsl::Function< glsl::Vec3
 				, glsl::InMat4
 				, glsl::InVec3
@@ -118,14 +122,6 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InFloat > m_computeOnePoint;
-			glsl::Function< glsl::Float
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InParam< glsl::Sampler2DShadow > > m_sample2D;
-			glsl::Function< glsl::Float
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InParam< glsl::SamplerCubeShadow > > m_sampleCube;
 		};
 	}
 }

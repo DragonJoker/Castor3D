@@ -1,4 +1,4 @@
-﻿#include "GlslShadow.hpp"
+#include "GlslShadow.hpp"
 
 using namespace castor;
 using namespace glsl;
@@ -18,14 +18,13 @@ namespace castor3d
 
 		void Shadow::declare( ShadowType type )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2DShadow >( MapShadowDirectional );
-			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2DShadow >( MapShadowSpot, SpotShadowMapCount );
-			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
+			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2D >( MapShadowDirectional );
+			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2D >( MapShadowSpot, SpotShadowMapCount );
+			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCube >( MapShadowPoint, PointShadowMapCount );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
+			doDeclareChebyshevUpperBound();
 			doDeclareGetLightSpacePosition();
-			doDeclarePcfSample2D();
-			doDeclarePcfSampleCube();
 			doDeclareComputeDirectionalShadow();
 			doDeclareComputeSpotShadow();
 			doDeclareComputePointShadow();
@@ -33,30 +32,30 @@ namespace castor3d
 
 		void Shadow::declareDirectional( ShadowType type )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2DShadow >( MapShadowDirectional );
+			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2D >( MapShadowDirectional );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
+			doDeclareChebyshevUpperBound();
 			doDeclareGetLightSpacePosition();
-			doDeclarePcfSample2D();
 			doDeclareComputeDirectionalShadow();
 		}
 
 		void Shadow::declarePoint( ShadowType type )
 		{
-			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCubeShadow >( MapShadowPoint );
+			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCube >( MapShadowPoint );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
-			doDeclarePcfSampleCube();
+			doDeclareChebyshevUpperBound();
 			doDeclareComputeOnePointShadow();
 		}
 
 		void Shadow::declareSpot( ShadowType type )
 		{
-			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2DShadow >( MapShadowSpot );
+			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2D >( MapShadowSpot );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
+			doDeclareChebyshevUpperBound();
 			doDeclareGetLightSpacePosition();
-			doDeclarePcfSample2D();
 			doDeclareComputeOneSpotShadow();
 		}
 
@@ -140,11 +139,37 @@ namespace castor3d
 					auto cosAlpha = m_writer.declLocale( cuT( "cosAlpha" )
 						, clamp( dot( normal, lightDirection ), 0.0_f, 1.0_f ) );
 					auto offsetScale = m_writer.declLocale( cuT( "offsetScale" )
-						, sqrt( 1.0_f - cosAlpha * cosAlpha ) ); // sin( acos( l_cosAlpha ) )
+						, sqrt( 1.0_f - cosAlpha * cosAlpha ) );
 					m_writer.returnStmt( offsetScale );
 				}
 				, InVec3( &m_writer, cuT( "normal" ) )
 				, InVec3( &m_writer, cuT( "lightDirection" ) ) );
+		}
+
+		void Shadow::doDeclareChebyshevUpperBound()
+		{
+			m_chebyshevUpperBound = m_writer.implementFunction< Float >( cuT( "chebyshevUpperBound" )
+				, [this]( Vec2 const & moments
+					, Float const & distance
+					, Float const & varianceFactor
+					, Float const & lightBleedingAmount )
+				{
+					auto smoothX = m_writer.declLocale( cuT( "smoothX" )
+						, smoothstep( distance - 0.01_f, distance, moments.x() ) );
+					auto variance = m_writer.declLocale( cuT( "variance" )
+						, glsl::max( moments.y() - m_writer.paren( moments.x() * moments.x() ), varianceFactor ) );
+					auto d = m_writer.declLocale( cuT( "d" )
+						, distance - moments.x() );
+					variance /= variance + d * d;
+					variance = clamp( m_writer.paren( variance - lightBleedingAmount ) / m_writer.paren( 1.0_f - lightBleedingAmount )
+						, 0.0_f
+						, 1.0_f );
+					m_writer.returnStmt( variance );
+				}
+				, InVec2{ &m_writer, cuT( "moments" ) }
+				, InFloat{ &m_writer, cuT( "distance" ) }
+				, InFloat{ &m_writer, cuT( "varianceFactor" ) }
+				, InFloat{ &m_writer, cuT( "lightBleedingAmount" ) } );
 		}
 
 		void Shadow::doDeclareGetLightSpacePosition()
@@ -155,10 +180,8 @@ namespace castor3d
 					, Vec3 const & lightDirection
 					, Vec3 const & normal )
 				{
-					// Offset the vertex position along its normal.
-					auto offset = m_writer.declLocale( cuT( "offset" ), m_getShadowOffset( normal, lightDirection ) * 2.0_f );
-					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" ), worldSpacePosition + m_writer.paren( normal * offset ) );
-					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" ), lightMatrix * vec4( worldSpace, 1.0_f ) );
+					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
+						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
 					// Perspective divide (result in range [-1,1]).
 					lightSpacePosition.xyz() = lightSpacePosition.xyz() / lightSpacePosition.w();
 					// Now put the position in range [0,1].
@@ -179,12 +202,23 @@ namespace castor3d
 					, Vec3 const & lightDirection
 					, Vec3 const & normal )
 				{
-					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
+					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-					m_writer.returnStmt( m_sample2D( lightSpacePosition
-						, 0.0003_f
-						, c3d_mapShadowDirectional ) );
+					auto moments = m_writer.declLocale( cuT( "moments" )
+						, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).xy() );
+
+					IF( m_writer, lightSpacePosition.z() <= moments.x() )
+					{
+						m_writer.returnStmt( 0.0_f );
+					}
+					FI;
+
+					m_writer.returnStmt( 1.0_f - m_chebyshevUpperBound( moments
+						, lightSpacePosition.z()
+						//, -0.0001_f
+						, 0.0000002_f
+						, 0.02_f ) );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -201,12 +235,22 @@ namespace castor3d
 					, Vec3 const & normal
 					, Int const & index )
 				{
-					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot, SpotShadowMapCount );
+					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot, SpotShadowMapCount );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-					m_writer.returnStmt( m_sample2D( lightSpacePosition
-						, 0.002_f
-						, c3d_mapShadowSpot[index] ) );
+					auto moments = m_writer.declLocale( cuT( "moments" )
+						, texture( c3d_mapShadowSpot[index], lightSpacePosition.xy() ).xy() );
+
+					IF( m_writer, lightSpacePosition.z() <= moments.x() )
+					{
+						m_writer.returnStmt( 1.0_f );
+					}
+					FI;
+
+					m_writer.returnStmt( m_chebyshevUpperBound( moments
+						, lightSpacePosition.z()
+						, 0.0000002_f
+						, 0.01_f ) );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -224,17 +268,44 @@ namespace castor3d
 				, Float const & farPlane
 				, Int const & index )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
+					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint, PointShadowMapCount );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
-					auto offset = m_writer.declLocale( cuT( "offset" )
+					auto bias = m_writer.declLocale( cuT( "bias" )
 						, m_getShadowOffset( normal, vertexToLight ) );
 					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, worldSpacePosition + m_writer.paren( normal * offset ) );
+						, worldSpacePosition + m_writer.paren( normal * bias ) );
 					vertexToLight = worldSpace - lightPosition;
-					m_writer.returnStmt( m_sampleCube( vertexToLight
-						, length( vertexToLight ) / farPlane
-						, c3d_mapShadowPoint[index] ) );
+					auto depth = m_writer.declLocale( cuT( "depth" )
+						, length( vertexToLight ) / farPlane );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+						, 0.0_f );
+					auto samples = m_writer.declLocale( cuT( "samples" )
+						, 4.0_f );
+					auto offset = m_writer.declLocale( cuT( "offset" )
+						, 20.0_f * depth );
+					auto numSamplesUsed = m_writer.declLocale( cuT( "numSamplesUsed" )
+						, 0.0_f );
+
+					FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
+					{
+						FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
+						{
+							FOR( m_writer, Float, z, -offset, "z < offset", "z += offset / (samples * 0.5)" )
+							{
+								auto lightDepth = m_writer.declLocale( cuT( "lightDepth" )
+									, texture( c3d_mapShadowPoint[index]
+										, vertexToLight + vec3( x, y, z ) ).x() );
+								shadowFactor += m_writer.ternary( lightDepth > depth, 0.0_f, 1.0_f );
+								numSamplesUsed += 1.0_f;
+							}
+							ROF;
+						}
+						ROF;
+					}
+					ROF;
+
+					m_writer.returnStmt( shadowFactor / numSamplesUsed );
 				}
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 				, InVec3( &m_writer, cuT( "lightPosition" ) )
@@ -251,12 +322,22 @@ namespace castor3d
 					, Vec3 const & lightDirection
 					, Vec3 const & normal )
 				{
-					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot );
+					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-					m_writer.returnStmt( m_sample2D( lightSpacePosition
-						, 0.002_f
-						, c3d_mapShadowSpot ) );
+					auto moments = m_writer.declLocale( cuT( "moments" )
+						, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).xy() );
+
+					IF( m_writer, lightSpacePosition.z() <= moments.x() )
+					{
+						m_writer.returnStmt( 0.0_f );
+					}
+					FI;
+
+					m_writer.returnStmt( 1.0_f - m_chebyshevUpperBound( moments
+						, lightSpacePosition.z()
+						, 0.0000002_f
+						, 0.01_f ) );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -272,65 +353,16 @@ namespace castor3d
 					, Vec3 const & normal
 					, Float const & farPlane )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCubeShadow >( MapShadowPoint );
+					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
-					auto offset = m_writer.declLocale( cuT( "offset" )
+					auto bias = m_writer.declLocale( cuT( "bias" )
 						, m_getShadowOffset( normal, vertexToLight ) );
 					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, worldSpacePosition + m_writer.paren( normal * offset ) );
+						, worldSpacePosition + m_writer.paren( normal * bias ) );
 					vertexToLight = worldSpace - lightPosition;
-					m_writer.returnStmt( m_sampleCube( vertexToLight
-						, length( vertexToLight ) / farPlane
-						, c3d_mapShadowPoint ) );
-				}
-				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
-				, InVec3( &m_writer, cuT( "lightPosition" ) )
-				, InVec3( &m_writer, cuT( "normal" ) )
-				, InFloat( &m_writer, cuT( "farPlane" ) ) );
-		}
-
-		void Shadow::doDeclarePcfSample2D()
-		{
-			m_sample2D = m_writer.implementFunction< Float >( cuT( "pcfSample2D" )
-				, [&]( Vec3 const & coords
-					, Float const & shadowStep
-					, Sampler2DShadow const & shadowMap )
-				{
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-						, 0.0_f );
-					auto samples = m_writer.declLocale( cuT( "samples" )
-						, 4.0_f );
-					auto offset = m_writer.declLocale( cuT( "offset" )
-						, shadowStep * 1.5 );
-					auto numSamplesUsed = m_writer.declLocale( cuT( "numSamplesUsed" )
-						, 0.0_f );
-
-					FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
-					{
-						FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
-						{
-							shadowFactor += 1.0_f - texture( shadowMap, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
-							numSamplesUsed += 1.0_f;
-						}
-						ROF;
-					}
-					ROF;
-
-					m_writer.returnStmt( shadowFactor / numSamplesUsed );
-				}
-				, InVec3{ &m_writer, cuT( "coords" ) }
-				, InFloat{ &m_writer, cuT( "shadowStep" ) }
-				, InParam< Sampler2DShadow >{ &m_writer, cuT( "shadowMap" ) } );
-		}
-
-		void Shadow::doDeclarePcfSampleCube()
-		{
-			m_sampleCube = m_writer.implementFunction< Float >( cuT( "pcfSampleCube" )
-				, [&]( Vec3 const & direction
-					, Float const & depth
-					, SamplerCubeShadow const & shadowMap )
-				{
+					auto depth = m_writer.declLocale( cuT( "depth" )
+						, length( vertexToLight ) / farPlane );
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 0.0_f );
 					auto samples = m_writer.declLocale( cuT( "samples" )
@@ -346,7 +378,10 @@ namespace castor3d
 						{
 							FOR( m_writer, Float, z, -offset, "z < offset", "z += offset / (samples * 0.5)" )
 							{
-								shadowFactor += 1.0_f - texture( shadowMap, vec4( direction + vec3( x, y, z ), depth ) );
+								auto lightDepth = m_writer.declLocale( cuT( "lightDepth" )
+									, texture( c3d_mapShadowPoint
+										, vertexToLight + vec3( x, y, z ) ).x() );
+								shadowFactor += m_writer.ternary( lightDepth > depth, 0.0_f, 1.0_f );
 								numSamplesUsed += 1.0_f;
 							}
 							ROF;
@@ -357,9 +392,10 @@ namespace castor3d
 
 					m_writer.returnStmt( shadowFactor / numSamplesUsed );
 				}
-				, InVec3{ &m_writer, cuT( "direction" ) }
-				, InFloat{ &m_writer, cuT( "depth" ) }
-				, InParam< SamplerCubeShadow >{ &m_writer, cuT( "shadowMap" ) } );
+				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
+				, InVec3( &m_writer, cuT( "lightPosition" ) )
+				, InVec3( &m_writer, cuT( "normal" ) )
+				, InFloat( &m_writer, cuT( "farPlane" ) ) );
 		}
 	}
 }

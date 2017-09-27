@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_ShadowMap_H___
 
 #include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Miscellaneous/GaussianBlur.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -291,6 +292,9 @@ namespace castor3d
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
 		TextureUnit m_shadowMap;
+		//!\~english	The Gaussian blur pass.
+		//!\~french		La passe de flou Gaussien.
+		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }
 
