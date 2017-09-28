@@ -332,7 +332,7 @@ namespace glsl
 	{\
 		Type Name( &Writer, cuT( #Name ) );\
 		Name.m_value << Type().m_type << cuT( #Name ) << cuT( " = " ) << cuT( #Init );\
-		( Writer ).forStmt( std::move( Name ), Expr( &( Writer ), castor::String( Cond ) ), Expr( &( Writer ), castor::String( Incr ) ), [&]()
+		( Writer ).forStmt( std::move( Name ), glsl::Expr( &( Writer ), castor::String( Cond ) ), glsl::Expr( &( Writer ), castor::String( Incr ) ), [&]()
 
 #define ROF\
 	 );\
@@ -340,20 +340,20 @@ namespace glsl
 
 #define WHILE( Writer, Cond )\
 	{\
-		( Writer ).whileStmt( Expr( &( Writer ), castor::String( Cond ) ), [&]()
+		( Writer ).whileStmt( glsl::Expr( &( Writer ), castor::String( Cond ) ), [&]()
 
 #define ELIHW\
 	 );\
 	}
 
 #define IF( Writer, Condition )\
-	( Writer ).ifStmt( Expr( &( Writer ), castor::String( Condition ) ), [&]()
+	( Writer ).ifStmt( glsl::Expr( &( Writer ), castor::String( Condition ) ), [&]()
 
 #define ELSE\
  ).elseStmt( [&]()
 
 #define ELSEIF( Writer, Condition )\
- ).elseIfStmt( Expr( &( Writer ), castor::String( Condition ) ), [&]()
+ ).elseIfStmt( glsl::Expr( &( Writer ), castor::String( Condition ) ), [&]()
 
 #define FI\
  );

@@ -178,6 +178,7 @@ namespace castor3d
 			Struct lightDecl = m_writer.getStruct( cuT( "DirectionalLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
 			lightDecl.declMember< Vec3 >( cuT( "m_direction" ) );
+			lightDecl.declMember< Float >( cuT( "m_farPlane" ) );
 			lightDecl.declMember< Mat4 >( cuT( "m_transform" ) );
 			lightDecl.end();
 		}
@@ -263,7 +264,9 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++ ).rgb();
+							auto v4DirFarPlane = m_writer.declLocale( cuT( "v4DirFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_direction() = v4DirFarPlane.rgb();
+							result.m_farPlane() = v4DirFarPlane.a();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
@@ -274,7 +277,9 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+							auto v4DirFarPlane = m_writer.declLocale( cuT( "v4DirFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_direction() = v4DirFarPlane.rgb();
+							result.m_farPlane() = v4DirFarPlane.a();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
@@ -289,7 +294,9 @@ namespace castor3d
 						auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
 						auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
 						auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
-						result.m_direction() = texture( c3d_sLights, factor + offset + decal ).rgb();
+						auto v4DirFarPlane = m_writer.declLocale( cuT( "v4DirFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
+						result.m_direction() = v4DirFarPlane.rgb();
+						result.m_farPlane() = v4DirFarPlane.a();
 						offset += mult;
 						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
 						offset += mult;

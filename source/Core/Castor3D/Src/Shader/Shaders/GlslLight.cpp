@@ -81,6 +81,11 @@ namespace castor3d
 			return Vec3( m_writer, String( *this ) + cuT( ".m_direction" ) );
 		}
 
+		Float DirectionalLight::m_farPlane()const
+		{
+			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
+		}
+
 		Mat4 DirectionalLight::m_transform()const
 		{
 			return Mat4( m_writer, String( *this ) + cuT( ".m_transform" ) );

@@ -1,4 +1,4 @@
-﻿#include "DirectionalLight.hpp"
+#include "DirectionalLight.hpp"
 
 #include "Render/Viewport.hpp"
 
@@ -57,6 +57,7 @@ namespace castor3d
 		orientation.transform( up, up );
 		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
 		m_lightSpace = p_viewport.getProjection() * m_lightSpace;
+		m_farPlane = p_viewport.getFar() - p_viewport.getNear();
 	}
 
 	void DirectionalLight::updateNode( SceneNode const & p_node )
@@ -67,7 +68,7 @@ namespace castor3d
 
 	void DirectionalLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		doCopyComponent( m_direction, p_index, p_offset, p_texture );
+		doCopyComponent( m_direction, m_farPlane, p_index, p_offset, p_texture );
 		doCopyComponent( m_lightSpace, p_index, p_offset, p_texture );
 	}
 }

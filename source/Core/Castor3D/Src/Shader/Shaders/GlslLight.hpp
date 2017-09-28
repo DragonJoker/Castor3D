@@ -59,6 +59,7 @@ namespace castor3d
 			C3D_API DirectionalLight & operator=( DirectionalLight const & rhs );
 			C3D_API Light m_lightBase()const;
 			C3D_API glsl::Vec3 m_direction()const;
+			C3D_API glsl::Float m_farPlane()const;
 			C3D_API glsl::Mat4 m_transform()const;
 
 			template< typename T >

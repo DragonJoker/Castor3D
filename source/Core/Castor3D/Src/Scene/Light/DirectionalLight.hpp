@@ -163,6 +163,9 @@ namespace castor3d
 		//!\~english	The light source space transformation matrix.
 		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
 		mutable castor::Matrix4x4f m_lightSpace;
+		//!\~english	The far plane position for the light.
+		//!\~french		La position du plan lointain de la lumière.
+		float m_farPlane;
 	};
 }
 
