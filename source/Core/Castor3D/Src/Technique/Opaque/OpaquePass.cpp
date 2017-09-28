@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -379,7 +379,7 @@ namespace castor3d
 		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && ( alphaFunc != ComparisonFunc::eAlways || checkFlag( passFlags, PassFlag::eSubsurfaceScattering ) ) ) );
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion

@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -14,6 +14,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Fog.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
@@ -361,7 +362,11 @@ namespace castor3d
 					}
 					FI;
 
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
 					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0 );
+#else
+					pxl_fragColor = vec4( lightDiffuse, 1.0 );
+#endif
 
 					if ( fogType != FogType::eDisabled )
 					{

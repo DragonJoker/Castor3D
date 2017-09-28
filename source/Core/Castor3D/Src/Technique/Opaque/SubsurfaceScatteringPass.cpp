@@ -1,4 +1,4 @@
-﻿#include "SubsurfaceScatteringPass.hpp"
+#include "SubsurfaceScatteringPass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -13,6 +13,9 @@
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
+#include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
+#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
 #include "Shader/Uniform/Uniform.hpp"
@@ -26,8 +29,6 @@
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
 
 #include <random>
 
@@ -284,6 +285,7 @@ namespace castor3d
 					, data4.w() );
 				auto material = materials->getBaseMaterial( materialId );
 
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
 				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
 				{
 					pxl_fragColor = original;
@@ -296,6 +298,9 @@ namespace castor3d
 						+ blur3 * c3d_blurWeights[2];
 				}
 				FI;
+#else
+				pxl_fragColor = original;
+#endif
 			} );
 			return writer.finalise();
 		}

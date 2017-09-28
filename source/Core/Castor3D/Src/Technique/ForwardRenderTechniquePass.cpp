@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -382,15 +382,19 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, material.m_opacity() );
-
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				IF( writer, material.m_subsurfaceScatteringEnabled() == 0 )
 				{
-					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-				}
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, material.m_opacity() );
 
-				pxl_fragColor.a() = alpha;
+					if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+					{
+						alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+					}
+
+					pxl_fragColor.a() = alpha;
+				}
+				FI;
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
@@ -583,15 +587,19 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, material.m_opacity() );
-
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				IF( writer, material.m_subsurfaceScatteringEnabled() == 0 )
 				{
-					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-				}
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, material.m_opacity() );
 
-				pxl_fragColor.a() = alpha;
+					if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+					{
+						alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+					}
+
+					pxl_fragColor.a() = alpha;
+				}
+				FI;
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
@@ -784,15 +792,19 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, material.m_opacity() );
-
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				IF( writer, material.m_subsurfaceScatteringEnabled() == 0 )
 				{
-					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-				}
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, material.m_opacity() );
 
-				pxl_fragColor.a() = alpha;
+					if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+					{
+						alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+					}
+
+					pxl_fragColor.a() = alpha;
+				}
+				FI;
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{

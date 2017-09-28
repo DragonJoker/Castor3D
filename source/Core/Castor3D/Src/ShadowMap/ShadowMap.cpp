@@ -1,4 +1,4 @@
-#include "ShadowMap.hpp"
+﻿#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -244,19 +244,26 @@ namespace castor3d
 		, glsl::Int const & materialIndex
 		, shader::Materials const & materials )const
 	{
+		using namespace glsl;
+
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
 			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
 			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
 			auto material = materials.getBaseMaterial( materialIndex );
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
-				, material->m_alphaRef() );
-			shader::applyAlphaFunc( writer
-				, alphaFunc
-				, alpha
-				, alphaRef );
+
+			IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+					, material->m_alphaRef() );
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, alphaRef );
+			}
+			FI;
 		}
 		else if ( alphaFunc != ComparisonFunc::eAlways )
 		{

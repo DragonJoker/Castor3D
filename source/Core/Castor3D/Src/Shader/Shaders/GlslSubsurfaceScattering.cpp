@@ -41,6 +41,9 @@ namespace castor3d
 			case LightType::eSpot:
 				doDeclareComputeSpotLightDist();
 				break;
+
+			default:
+				CASTOR_EXCEPTION( "Unsupported light type for transmittance processing" );
 			}
 		}
 		
@@ -49,7 +52,6 @@ namespace castor3d
 			, DirectionalLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye )const
@@ -64,7 +66,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computeDirectionalLightBackLit( light
 						, eye
@@ -80,7 +82,6 @@ namespace castor3d
 			, PointLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye )const
@@ -95,7 +96,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computePointLightBackLit( light
 						, eye
@@ -111,7 +112,6 @@ namespace castor3d
 			, SpotLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye )const
@@ -126,7 +126,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computeSpotLightBackLit( light
 						, eye
@@ -142,7 +142,6 @@ namespace castor3d
 			, DirectionalLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye
@@ -159,13 +158,16 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
 					* translucency
 					* lighting.computeDirectionalLightBackLit( light
 						, eye
 						, albedo
 						, metallic
-						, shader::FragmentInput( position, -normal ) );
+						, shader::FragmentInput( position, -normal ) )
+#endif
+					;
 			}
 			FI;
 
@@ -177,7 +179,6 @@ namespace castor3d
 			, PointLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye
@@ -194,7 +195,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computePointLightBackLit( light
 						, eye
@@ -212,7 +213,6 @@ namespace castor3d
 			, SpotLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye
@@ -229,7 +229,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computeSpotLightBackLit( light
 						, eye
@@ -247,7 +247,6 @@ namespace castor3d
 			, DirectionalLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye
@@ -263,7 +262,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computeDirectionalLightBackLit( light
 						, eye
@@ -280,7 +279,6 @@ namespace castor3d
 			, PointLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye
@@ -296,7 +294,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computePointLightBackLit( light
 						, eye
@@ -313,7 +311,6 @@ namespace castor3d
 			, SpotLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
-			, Mat4 const & viewMatrix
 			, Vec3 const & normal
 			, Float const & translucency
 			, Vec3 const & eye
@@ -329,7 +326,7 @@ namespace castor3d
 						, material.m_distanceBasedTransmission()
 						, material.m_backLitCoefficient()
 						, position
-						, viewMatrix )
+						, normal )
 					* translucency
 					* lighting.computeSpotLightBackLit( light
 						, eye
@@ -346,14 +343,14 @@ namespace castor3d
 			, glsl::Int const & distanceBasedTransmission
 			, Vec3 const & coefficient
 			, Vec3 const & position
-			, Mat4 const & viewMatrix )const
+			, Vec3 const & normal )const
 		{
 			return m_computeDirectionalLightDist( light
 				, uv
 				, distanceBasedTransmission
 				, coefficient
 				, position
-				, viewMatrix );
+				, normal );
 		}
 
 		Vec3 SubsurfaceScattering::doComputeLightDist( PointLight const & light
@@ -361,14 +358,14 @@ namespace castor3d
 			, glsl::Int const & distanceBasedTransmission
 			, Vec3 const & coefficient
 			, Vec3 const & position
-			, Mat4 const & viewMatrix )const
+			, Vec3 const & normal )const
 		{
 			return m_computePointLightDist( light
 				, uv
 				, distanceBasedTransmission
 				, coefficient
 				, position
-				, viewMatrix );
+				, normal );
 		}
 
 		Vec3 SubsurfaceScattering::doComputeLightDist( SpotLight const & light
@@ -376,14 +373,14 @@ namespace castor3d
 			, glsl::Int const & distanceBasedTransmission
 			, Vec3 const & coefficient
 			, Vec3 const & position
-			, Mat4 const & viewMatrix )const
+			, Vec3 const & normal )const
 		{
 			return m_computeSpotLightDist( light
 				, uv
 				, distanceBasedTransmission
 				, coefficient
 				, position
-				, viewMatrix );
+				, normal );
 		}
 		
 		void SubsurfaceScattering::doDeclareGetTransformedPosition()
@@ -397,7 +394,7 @@ namespace castor3d
 					// Perspective divide (result in range [-1,1]).
 					transformed.xyz() = transformed.xyz() / transformed.w();
 					// Now put the position in range [0,1].
-					m_writer.returnStmt( m_writer.paren( transformed.xyz() * 0.5_f ) + vec3( 0.5_f ) );
+					m_writer.returnStmt( m_writer.paren( transformed.xyz() * 0.5_f ) + 0.5_f );
 				}
 				, InVec3( &m_writer, cuT( "position" ) )
 				, InMat4( &m_writer, cuT( "transform" ) ) );
@@ -411,7 +408,7 @@ namespace castor3d
 					, Int const & distanceBasedTransmission
 					, Vec3 const & coefficient
 					, Vec3 const & position
-					, Mat4 const & viewMatrix )
+					, Vec3 const & normal )
 				{
 					auto factor = m_writer.declLocale( cuT( "factor" )
 						, coefficient );
@@ -432,9 +429,9 @@ namespace castor3d
 									, uv
 									, lightSpaceDepth
 									, inverse( light.m_transform() ) ) );
-							auto distance = m_writer.declLocale( cuT( "distance" )
-								, glsl::distance( viewMatrix * occluder, position ) );
-							factor = coefficient * exp( -distance );
+							//auto distance = m_writer.declLocale( cuT( "distance" )
+							//	, glsl::distance( viewMatrix * occluder, position ) );
+							//factor = coefficient * exp( -distance );
 						}
 						FI;
 					}
@@ -446,7 +443,7 @@ namespace castor3d
 				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
 				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) }
-				, InMat4{ &m_writer, cuT( "viewMatrix" ) } );
+				, InVec3{ &m_writer, cuT( "normal" ) } );
 		}
 
 		void SubsurfaceScattering::doDeclareComputePointLightDist()
@@ -457,7 +454,7 @@ namespace castor3d
 					, Int const & distanceBasedTransmission
 					, Vec3 const & coefficient
 					, Vec3 const & position
-					, Mat4 const & viewMatrix )
+					, Vec3 const & normal )
 				{
 					auto factor = m_writer.declLocale( cuT( "factor" )
 						, coefficient );
@@ -481,9 +478,9 @@ namespace castor3d
 									, uv
 									, lightSpaceDepth
 									, c3d_mtxInvViewProj ) );
-							auto distance = m_writer.declLocale( cuT( "distance" )
-								, glsl::distance( viewMatrix * occluder, position ) );
-							factor = coefficient * exp( -distance );
+							//auto distance = m_writer.declLocale( cuT( "distance" )
+							//	, glsl::distance( vec3( viewMatrix * vec4( occluder, 1.0_f ) ), position ) );
+							//factor = coefficient * exp( -distance );
 						}
 						FI;
 					}
@@ -495,7 +492,7 @@ namespace castor3d
 				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
 				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) }
-				, InMat4{ &m_writer, cuT( "viewMatrix" ) } );
+				, InVec3{ &m_writer, cuT( "normal" ) } );
 		}
 
 		void SubsurfaceScattering::doDeclareComputeSpotLightDist()
@@ -506,7 +503,7 @@ namespace castor3d
 					, Int const & distanceBasedTransmission
 					, Vec3 const & coefficient
 					, Vec3 const & position
-					, Mat4 const & viewMatrix )
+					, Vec3 const & normal )
 				{
 					auto factor = m_writer.declLocale( cuT( "factor" )
 						, coefficient );
@@ -521,15 +518,26 @@ namespace castor3d
 								, m_getTransformedPosition( position, light.m_transform() ) );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
 								, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).r() );
-							auto occluder = m_writer.declLocale( cuT( "occluder" )
-								, writeFunctionCall< Vec3 >( &m_writer
-									, cuT( "calcWSPosition" )
-									, uv
-									, lightSpaceDepth
-									, inverse( light.m_transform() ) ) );
+							//auto occluder = m_writer.declLocale( cuT( "occluder" )
+							//	, writeFunctionCall< Vec3 >( &m_writer
+							//		, cuT( "calcWSPosition" )
+							//		, uv
+							//		, lightSpaceDepth
+							//		, inverse( light.m_transform() ) ) );
+							//auto distance = m_writer.declLocale( cuT( "distance" )
+							//	, glsl::distance( vec3( viewMatrix * vec4( occluder, 1.0_f ) ), position ) );
+							//factor = coefficient * exp( -distance );
+							lightSpaceDepth *= light.m_farPlane();
 							auto distance = m_writer.declLocale( cuT( "distance" )
-								, glsl::distance( viewMatrix * occluder, position ) );
-							factor = coefficient * exp( -distance );
+								, abs( lightSpaceDepth - lightSpacePosition.z() ) );
+							distance = -distance * distance;
+							factor = vec3( 0.233_f, 0.455, 0.649 ) * exp( distance / 0.0064 )
+								+ vec3( 0.1_f, 0.336, 0.344 ) * exp( distance / 0.0484 )
+								+ vec3( 0.118_f, 0.198, 0.0 )   * exp( distance / 0.187 )
+								+ vec3( 0.113_f, 0.007, 0.007 ) * exp( distance / 0.567 )
+								+ vec3( 0.358_f, 0.004, 0.0 )   * exp( distance / 1.99 )
+								+ vec3( 0.078_f, 0.0, 0.0 )   * exp( distance / 7.41 );
+							factor = factor * clamp( 0.3_f + dot( light.m_direction(), -normal ), 0.0_f, 1.0_f );
 						}
 						FI;
 					}
@@ -541,7 +549,7 @@ namespace castor3d
 				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
 				, InVec3{ &m_writer, cuT( "coefficient" ) }
 				, InVec3{ &m_writer, cuT( "position" ) }
-				, InMat4{ &m_writer, cuT( "viewMatrix" ) } );
+				, InVec3{ &m_writer, cuT( "normal" ) } );
 		}
 	}
 }

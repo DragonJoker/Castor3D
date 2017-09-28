@@ -602,14 +602,6 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
-						, material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency
-						, eye );
 				}
 				break;
 
@@ -622,7 +614,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
+					lightDiffuse += sss.compute( *lighting
 						, material
 						, light
 						, texCoord
@@ -642,7 +634,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
+					lightDiffuse += sss.compute( *lighting
 						, material
 						, light
 						, texCoord
@@ -764,16 +756,6 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
-						, material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
 				}
 				break;
 
@@ -788,7 +770,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
+					lightDiffuse += sss.compute( *lighting
 						, material
 						, light
 						, texCoord
@@ -804,6 +786,7 @@ namespace castor3d
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
 					lighting->computeOneSpotLight( light
 						, eye
 						, albedo
@@ -812,7 +795,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
+					lightDiffuse += sss.compute( *lighting
 						, material
 						, light
 						, texCoord
@@ -822,6 +805,18 @@ namespace castor3d
 						, eye
 						, albedo
 						, metallic );
+#else
+					lightDiffuse = sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#endif
 				}
 				break;
 			}
@@ -937,15 +932,6 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
-						, material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency
-						, eye
-						, specular );
 				}
 				break;
 
@@ -960,7 +946,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
+					lightDiffuse += sss.compute( *lighting
 						, material
 						, light
 						, texCoord
@@ -983,7 +969,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.computeOne( *lighting
+					lightDiffuse += sss.compute( *lighting
 						, material
 						, light
 						, texCoord

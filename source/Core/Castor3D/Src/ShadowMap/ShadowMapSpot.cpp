@@ -1,4 +1,4 @@
-#include "ShadowMapSpot.hpp"
+﻿#include "ShadowMapSpot.hpp"
 
 #include "Engine.hpp"
 
@@ -176,7 +176,7 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, gl_FragCoord.z() );
 			pxl_depth.x() = depth;
-			pxl_depth.y() = depth * depth;
+			pxl_depth.y() = pxl_depth.x() * pxl_depth.x();
 
 			auto dx = writer.declLocale( cuT( "dx" )
 				, dFdx( depth ) );

@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include <GlslIntrinsics.hpp>
 
+#define C3D_DEBUG_SSS_TRANSMITTANCE 0
+
 namespace castor3d
 {
 	namespace shader
@@ -43,7 +45,6 @@ namespace castor3d
 				, shader::DirectionalLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye )const;
@@ -52,7 +53,6 @@ namespace castor3d
 				, shader::PointLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye )const;
@@ -61,7 +61,6 @@ namespace castor3d
 				, shader::SpotLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye )const;
@@ -71,7 +70,6 @@ namespace castor3d
 				, shader::DirectionalLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye
@@ -82,7 +80,6 @@ namespace castor3d
 				, shader::PointLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye
@@ -93,7 +90,6 @@ namespace castor3d
 				, shader::SpotLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye
@@ -105,7 +101,6 @@ namespace castor3d
 				, shader::DirectionalLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye
@@ -115,7 +110,6 @@ namespace castor3d
 				, shader::PointLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye
@@ -125,7 +119,6 @@ namespace castor3d
 				, shader::SpotLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix
 				, glsl::Vec3 const & normal
 				, glsl::Float const & translucency
 				, glsl::Vec3 const & eye
@@ -142,19 +135,19 @@ namespace castor3d
 				, glsl::Int const & distanceBasedTransmission
 				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix )const;
+				, glsl::Vec3 const & normal )const;
 			glsl::Vec3 doComputeLightDist( shader::PointLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Int const & distanceBasedTransmission
 				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix )const;
+				, glsl::Vec3 const & normal )const;
 			glsl::Vec3 doComputeLightDist( shader::SpotLight const & light
 				, glsl::Vec2 const & uv
 				, glsl::Int const & distanceBasedTransmission
 				, glsl::Vec3 const & coefficient
 				, glsl::Vec3 const & position
-				, glsl::Mat4 const & viewMatrix )const;
+				, glsl::Vec3 const & normal )const;
 
 		private:
 			glsl::GlslWriter & m_writer;
@@ -169,21 +162,21 @@ namespace castor3d
 				, glsl::InInt
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InMat4 > m_computeDirectionalLightDist;
+				, glsl::InVec3 > m_computeDirectionalLightDist;
 			glsl::Function< glsl::Vec3
 				, glsl::InParam< shader::PointLight >
 				, glsl::InVec2
 				, glsl::InInt
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InMat4 > m_computePointLightDist;
+				, glsl::InVec3 > m_computePointLightDist;
 			glsl::Function< glsl::Vec3
 				, glsl::InParam< shader::SpotLight >
 				, glsl::InVec2
 				, glsl::InInt
 				, glsl::InVec3
 				, glsl::InVec3
-				, glsl::InMat4 > m_computeSpotLightDist;
+				, glsl::InVec3 > m_computeSpotLightDist;
 		};
 	}
 }
