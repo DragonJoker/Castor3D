@@ -54,8 +54,6 @@ namespace castor3d
 													 || ( lhs.m_passFlags == rhs.m_passFlags
 														  && lhs.m_sceneFlags < rhs.m_sceneFlags ) ) ) ) ) ) ) ) );
 	}
-	using ShadowMapRefArray = std::vector< std::reference_wrapper< ShadowMap > >;
-	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -400,36 +398,6 @@ namespace castor3d
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Creates the appropriate GLSL materials buffer.
-		 *\param[in]	writer		The GLSL writer.
-		 *\param		passFlags	The pass flags.
-		 *\~french
-		 *\brief		Crée le tampon de matériaux GLSL approprié.
-		 *\param[in]	writer		Le writer GLSL.
-		 *\param		passFlags	Les indicateurs de passe.
-		 */
-		C3D_API std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
-			, PassFlags const & passFlags )const;
-		/**
-		 *\~english
-		 *\brief		Writes the alpha function in GLSL.
-		 *\param[in]	writer		The GLSL writer.
-		 *\param		alphaFunc	The alpha function.
-		 *\param[in]	alpha		The alpha value.
-		 *\param[in]	alphaRef	The alpha comparison reference value.
-		 *\~french
-		 *\brief		Ecrit la fonction d'opacité en GLSL.
-		 *\param[in]	writer		Le writer GLSL.
-		 *\param		alphaFunc	La fonction d'opacité.
-		 *\param[in]	alpha		La valeur d'opacité.
-		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
-		 */
-		C3D_API void doApplyAlphaFunc( glsl::GlslWriter & writer
-			, ComparisonFunc alphaFunc
-			, glsl::Float const & alpha
-			, glsl::Float const & alphaRef )const;
 		/**
 		 *\~english
 		 *\brief		Creates a render node.

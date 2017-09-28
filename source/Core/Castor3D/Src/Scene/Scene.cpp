@@ -66,7 +66,7 @@ namespace castor3d
 						for ( auto const & name : view )
 						{
 							auto elem = view.find( name );
-							result &= ObjType::TextWriter( tabs + cuT( "\t" ) )( *elem, file );
+							result &= typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
 						}
 					}
 			}

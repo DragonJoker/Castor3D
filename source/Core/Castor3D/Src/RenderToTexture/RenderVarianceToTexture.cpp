@@ -167,13 +167,13 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDiffuse, vtx_texture.xy() ).x() );
 				depth = 1.0_f - writer.paren( 1.0_f - depth ) * 25.0f;
-				plx_v4FragColor = vec4( vec3( depth ), 1.0 );
+				pxl_fragColor = vec4( vec3( depth ), 1.0 );
 			} );
 			pxl = writer.finalise();
 		}
@@ -225,13 +225,13 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDiffuse, vtx_texture.xy() ).y() );
 				//depth = 1.0_f - writer.paren( 1.0_f - depth ) * 25.0f;
-				plx_v4FragColor = vec4( vec3( glsl::sqrt( depth ) ), 1.0 );
+				pxl_fragColor = vec4( vec3( glsl::sqrt( depth ) ), 1.0 );
 			} );
 			pxl = writer.finalise();
 		}

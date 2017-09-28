@@ -28,11 +28,9 @@ namespace glsl
 	{
 		m_calcVSPosition = m_writer.implementFunction< Vec3 >( cuT( "calcVSPosition" )
 			, [&]( Vec2 const & uv
+				, Float const & depth
 				, Mat4 const & invProj )
 			{
-				auto c3d_mapDepth = m_writer.getBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
-				auto depth = m_writer.declLocale( cuT( "texCoord" )
-					, texture( c3d_mapDepth, uv, 0.0_f ).x() );
 				auto csPosition = m_writer.declLocale( cuT( "psPosition" )
 					, vec3( uv * 2.0f - 1.0f, depth * 2.0 - 1.0 ) );
 				auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
@@ -41,22 +39,8 @@ namespace glsl
 				m_writer.returnStmt( vsPosition.xyz() );
 			}
 			, InVec2{ &m_writer, cuT( "uv" ) }
+			, InFloat{ &m_writer, cuT( "depth" ) }
 			, InMat4{ &m_writer, cuT( "invProj" ) } );
-	}
-
-	void Utils::declareCalcVSDepth()
-	{
-		m_calcVSDepth = m_writer.implementFunction< Float >( cuT( "calcVSDepth" )
-			, [&]( Vec2 const & uv
-				, Mat4 const & projection )
-			{
-				auto c3d_mapDepth = m_writer.getBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
-				auto depth = m_writer.declLocale( cuT( "depth" )
-					, texture( c3d_mapDepth, uv ).r() );
-				m_writer.returnStmt( projection[3][2] / m_writer.paren( depth * 2.0_f - 1.0_f - projection[2][2] ) );
-			}
-			, InVec2{ &m_writer, cuT( "uv" ) }
-			, InMat4{ &m_writer, cuT( "projection" ) } );
 	}
 
 	void Utils::declareCalcWSPosition()
@@ -106,21 +90,17 @@ namespace glsl
 	{
 		m_lineariseDepth = m_writer.implementFunction< Float >( cuT( "lineariseDepth" )
 			, [&]( Float const & depth
-				, Mat4 const & invProj )
+				, Float const & nearPlane
+				, Float const & farPlane )
 			{
-				auto c3d_cameraNearPlane = m_writer.getBuiltin< Float >( cuT( "c3d_cameraNearPlane" ) );
-				auto c3d_cameraFarPlane = m_writer.getBuiltin< Float >( cuT( "c3d_cameraFarPlane" ) );
 				auto z = m_writer.declLocale( cuT( "z" )
-					, depth *2.0_f - 1.0_f );
-				auto unprojected = m_writer.declLocale( cuT( "unprojected" )
-					, invProj * vec4( 0.0_f, 0.0_f, z, 1.0_f ) );
-				z = unprojected.z() / unprojected.w();
-				m_writer.returnStmt( m_writer.paren( z - c3d_cameraNearPlane )
-					/ m_writer.paren( c3d_cameraFarPlane - c3d_cameraNearPlane ) );
-
+					, depth * 2.0_f - 1.0_f );
+				z *= m_writer.paren( farPlane - nearPlane );
+				m_writer.returnStmt( 2.0 * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
 			}
 			, InFloat{ &m_writer, cuT( "depth" ) }
-			, InMat4{ &m_writer, cuT( "invProj" ) } );
+			, InFloat{ &m_writer, cuT( "nearPlane" ) }
+			, InFloat{ &m_writer, cuT( "farPlane" ) } );
 	}
 
 	void Utils::declareGetMapNormal()
@@ -288,15 +268,12 @@ namespace glsl
 	}
 
 	Vec3 Utils::calcVSPosition( Vec2 const & uv
+		, Float const & depth
 		, Mat4 const & invProj )
 	{
-		return m_calcVSPosition( uv, invProj );
-	}
-
-	Float Utils::calcVSDepth( Vec2 const & uv
-		, Mat4 const & projection )
-	{
-		return m_calcVSDepth( uv, projection );
+		return m_calcVSPosition( uv
+			, depth
+			, invProj );
 	}
 
 	Vec3 Utils::calcWSPosition( Vec2 const & uv
@@ -331,16 +308,22 @@ namespace glsl
 			, position );
 	}
 
-	Float Utils::lineariseDepth( Float const & depth, Mat4 const & invProj )
+	Float Utils::lineariseDepth( Float const & depth
+		, Float const & nearPlane
+		, Float const & farPlane )
 	{
-		return m_lineariseDepth( depth, invProj );
+		return m_lineariseDepth( depth
+			, nearPlane
+			, farPlane );
 	}
 
 	Vec3 Utils::fresnelSchlick( Float const & product
 		, Vec3 const & f0
 		, Float const & roughness )
 	{
-		return m_fresnelSchlick( product, f0, roughness );
+		return m_fresnelSchlick( product
+			, f0
+			, roughness );
 	}
 
 	Vec3 Utils::computeMetallicIBL( Vec3 const & normal

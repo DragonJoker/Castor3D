@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "Cache/MaterialCache.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
@@ -531,7 +531,7 @@ namespace castor3d
 		auto c3d_iDrawIndex( uboPicking.declMember< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( uboPicking.declMember< UInt >( NodeIndex ) );
 		uboPicking.end();
-		auto materials = doCreateMaterials( writer
+		auto materials = shader::createMaterials( writer
 			, passFlags );
 		materials->declare();
 
@@ -553,7 +553,7 @@ namespace castor3d
 				auto material = materials->getBaseMaterial( vtx_material );
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-				doApplyAlphaFunc( writer
+				shader::applyAlphaFunc( writer
 					, alphaFunc
 					, alpha
 					, material->m_alphaRef() );
@@ -563,7 +563,7 @@ namespace castor3d
 				auto material = materials->getBaseMaterial( vtx_material );
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, material->m_opacity() );
-				doApplyAlphaFunc( writer
+				shader::applyAlphaFunc( writer
 					, alphaFunc
 					, alpha
 					, material->m_alphaRef() );

@@ -175,7 +175,7 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec2 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec2 >( cuT( "pxl_FragColor" ) );
 
 			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
 				, [&]( UInt const & p_bits )
@@ -338,7 +338,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					plx_v4FragColor.xy() = integrateBRDF( vtx_texture.x(), vtx_texture.y() );
+					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), vtx_texture.y() );
 				} );
 
 			pxl = writer.finalise();

@@ -238,27 +238,6 @@ namespace castor3d
 		return glsl::Shader{};
 	}
 
-	std::unique_ptr< shader::Materials > ShadowMap::doCreateMaterials( glsl::GlslWriter & writer
-		, PassFlags const & passFlags )const
-	{
-		std::unique_ptr< shader::Materials > result;
-
-		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
-		{
-			result = std::make_unique< shader::PbrMRMaterials >( writer );
-		}
-		else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
-		{
-			result = std::make_unique< shader::PbrSGMaterials >( writer );
-		}
-		else
-		{
-			result = std::make_unique< shader::LegacyMaterials >( writer );
-		}
-
-		return result;
-	}
-
 	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
 		, TextureChannels const & textureFlags
 		, ComparisonFunc alphaFunc
@@ -274,7 +253,7 @@ namespace castor3d
 				, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
 				, material->m_alphaRef() );
-			doApplyAlphaFunc( writer
+			shader::applyAlphaFunc( writer
 				, alphaFunc
 				, alpha
 				, alphaRef );
@@ -286,77 +265,10 @@ namespace castor3d
 				, material->m_opacity() );
 			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
 				, material->m_alphaRef() );
-			doApplyAlphaFunc( writer
+			shader::applyAlphaFunc( writer
 				, alphaFunc
 				, alpha
 				, alphaRef );
-		}
-	}
-
-	void ShadowMap::doApplyAlphaFunc( glsl::GlslWriter & writer
-		, ComparisonFunc alphaFunc
-		, glsl::Float const & alpha
-		, glsl::Float const & alphaRef )const
-	{
-		using namespace glsl;
-
-		switch ( alphaFunc )
-		{
-		case ComparisonFunc::eLess:
-			IF( writer, alpha >= alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eLEqual:
-			IF( writer, alpha > alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eEqual:
-			IF( writer, alpha != alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eNEqual:
-			IF( writer, alpha == alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGEqual:
-			IF( writer, alpha < alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGreater:
-			IF( writer, alpha <= alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		default:
-			IF( writer, alpha <= 0.2 )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
 		}
 	}
 }

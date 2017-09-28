@@ -102,7 +102,7 @@ namespace castor3d
 			data.sssInfo[index].r = 1.0f;
 			doVisit( pass.getSubsurfaceScattering()
 				, index
-				, data);
+				, data );
 		}
 		else
 		{
@@ -116,7 +116,7 @@ namespace castor3d
 			data.sssInfo.r = 1.0f;
 			doVisit( pass.getSubsurfaceScattering()
 				, index
-				, data);
+				, data );
 		}
 		else
 		{
@@ -143,6 +143,8 @@ namespace castor3d
 		data.transmittance.g = subsurfaceScattering.getTransmittanceCoefficients()[1];
 		data.transmittance.b = subsurfaceScattering.getTransmittanceCoefficients()[2];
 		data.transmittance.a = subsurfaceScattering.isDistanceBasedTransmittanceEnabled() ? 1.0f : 0.0f;
+		data.sssInfo.g = subsurfaceScattering.getGaussianWidth();
+		data.sssInfo.b = subsurfaceScattering.getStrength();
 
 #endif
 	}

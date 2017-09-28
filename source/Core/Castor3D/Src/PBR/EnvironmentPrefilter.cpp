@@ -247,7 +247,7 @@ namespace castor3d
 			config.end();
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			auto distributionGGX = writer.implementFunction< Float >( cuT( "DistributionGGX" )
 				, [&]( Vec3 const & p_N
@@ -398,7 +398,7 @@ namespace castor3d
 				ROF;
 
 				prefilteredColor = prefilteredColor / totalWeight;
-				plx_v4FragColor = vec4( prefilteredColor, 1.0 );
+				pxl_fragColor = vec4( prefilteredColor, 1.0 );
 			} );
 
 			pxl = writer.finalise();

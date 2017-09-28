@@ -58,7 +58,7 @@ namespace HaarmPieterDuiker
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			auto log10 = writer.implementFunction< Vec3 >( cuT( "log10" )
 				, [&]( Vec3 const & p_in )
@@ -84,10 +84,10 @@ namespace HaarmPieterDuiker
 				auto padding = writer.declLocale( cuT( "Padding" ), Float( 0.5 ) / filmLutWidth );
 
 				//  apply response lookup and color grading for target display
-				plx_v4FragColor.r() = mix( padding, 1.0f - padding, logColor.r() );
-				plx_v4FragColor.g() = mix( padding, 1.0f - padding, logColor.g() );
-				plx_v4FragColor.b() = mix( padding, 1.0f - padding, logColor.b() );
-				plx_v4FragColor.a() = 1.0f;
+				pxl_fragColor.r() = mix( padding, 1.0f - padding, logColor.r() );
+				pxl_fragColor.g() = mix( padding, 1.0f - padding, logColor.g() );
+				pxl_fragColor.b() = mix( padding, 1.0f - padding, logColor.b() );
+				pxl_fragColor.a() = 1.0f;
 			} );
 
 			pxl = writer.finalise();

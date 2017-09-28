@@ -213,7 +213,7 @@ namespace castor3d
 			utils.declareRemoveGamma();
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			auto sampleSphericalMap = writer.implementFunction< Vec2 >( cuT( "SampleSphericalMap" ), [&]( Vec3 const & v )
 			{
@@ -226,8 +226,8 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( uv.x(), 1.0_r - uv.y() ) ).rgb(), 1.0_f );
-				plx_v4FragColor = vec4( utils.removeGamma( c3d_gamma, plx_v4FragColor.xyz() ), plx_v4FragColor.w() );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec2( uv.x(), 1.0_r - uv.y() ) ).rgb(), 1.0_f );
+				pxl_fragColor = vec4( utils.removeGamma( c3d_gamma, pxl_fragColor.xyz() ), pxl_fragColor.w() );
 			} );
 
 			pxl = writer.finalise();

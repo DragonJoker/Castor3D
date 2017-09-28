@@ -684,6 +684,8 @@ namespace castor3d
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
+	using ShadowMapRefArray = std::vector< std::reference_wrapper< ShadowMap > >;
+	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 
 	//@}
 }

@@ -562,7 +562,9 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" ), 1.0_f - depth );
 
 			// (10)
-			auto depth = utils.lineariseDepth( gl_FragCoord.z(), c3d_mtxInvProjection );
+			auto depth = utils.lineariseDepth( gl_FragCoord.z()
+				, c3d_cameraNearPlane
+				, c3d_cameraFarPlane );
 			auto weight = writer.declLocale( cuT( "weight" )
 				, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
 
@@ -773,7 +775,9 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" ), 1.0_f - depth );
 
 			// (10)
-			auto depth = utils.lineariseDepth( gl_FragCoord.z(), c3d_mtxInvProjection );
+			auto depth = utils.lineariseDepth( gl_FragCoord.z()
+				, c3d_cameraNearPlane
+				, c3d_cameraFarPlane );
 			auto weight = writer.declLocale( cuT( "weight" )
 				, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
 
@@ -983,7 +987,9 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" ), 1.0_f - depth );
 
 			// (10)
-			auto depth = utils.lineariseDepth( gl_FragCoord.z(), c3d_mtxInvProjection );
+			auto depth = utils.lineariseDepth( gl_FragCoord.z()
+				, c3d_cameraNearPlane
+				, c3d_cameraFarPlane );
 			auto weight = writer.declLocale( cuT( "weight" )
 				, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
 

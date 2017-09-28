@@ -188,7 +188,6 @@ namespace castor3d
 			glsl::Utils utils{ writer };
 			utils.declareCalcTexCoord();
 			utils.declareCalcVSPosition();
-			utils.declareCalcVSDepth();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -199,7 +198,9 @@ namespace castor3d
 					auto texCoord = writer.declLocale( cuT( "texCoord" ), utils.calcTexCoord() );
 
 					auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-						, utils.calcVSPosition( texCoord, c3d_mtxInvProj ) );
+						, utils.calcVSPosition( texCoord
+							, texture( c3d_mapDepth, texCoord ).r()
+							, c3d_mtxInvProj ) );
 					auto vsNormal = writer.declLocale( cuT( "vsNormal" )
 						, normalize( writer.paren( c3d_mtxInvView * vec4( texture( c3d_mapNormal, texCoord ).xyz(), 1.0_f ) ).xyz() ) );
 
@@ -225,7 +226,9 @@ namespace castor3d
 						offset.xyz() = offset.xyz() / offset.w();      // perspective divide
 						offset.xyz() = offset.xyz() * 0.5 + 0.5;         // transform to range 0.0 - 1.0 
 						auto sampleDepth = writer.declLocale( cuT( "sampleDepth" )
-							, utils.calcVSPosition( offset.xy(), c3d_mtxInvProj ).z() );
+							, utils.calcVSPosition( offset.xy()
+								, texture( c3d_mapDepth, offset.xy() ).r()
+								, c3d_mtxInvProj ).z() );
 						auto rangeCheck = writer.declLocale( cuT( "rangeCheck" )
 							, smoothstep( 0.0_f, 1.0_f, c3d_radius / glsl::abs( vsPosition.z() - sampleDepth ) ) );
 						occlusion += writer.ternary( sampleDepth >= samplePos.z() + c3d_bias, 1.0_f, 0.0_f ) * rangeCheck;

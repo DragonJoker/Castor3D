@@ -105,15 +105,15 @@ namespace Bloom
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = texture( c3d_mapPass0, vtx_texture );
-				plx_v4FragColor += texture( c3d_mapPass1, vtx_texture );
-				plx_v4FragColor += texture( c3d_mapPass2, vtx_texture );
-				plx_v4FragColor += texture( c3d_mapPass3, vtx_texture );
-				plx_v4FragColor += texture( c3d_mapScene, vtx_texture );
+				pxl_fragColor = texture( c3d_mapPass0, vtx_texture );
+				pxl_fragColor += texture( c3d_mapPass1, vtx_texture );
+				pxl_fragColor += texture( c3d_mapPass2, vtx_texture );
+				pxl_fragColor += texture( c3d_mapPass3, vtx_texture );
+				pxl_fragColor += texture( c3d_mapScene, vtx_texture );
 			} );
 			return writer.finalise();
 		}

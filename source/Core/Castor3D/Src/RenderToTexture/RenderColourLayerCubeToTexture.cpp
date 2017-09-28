@@ -230,7 +230,7 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -241,7 +241,7 @@ namespace castor3d
 						, writer.ternary( c3d_face.y() != 0.0_f
 							, vec3( mapCoord.x(), c3d_face.y(), mapCoord.y() )
 							, vec3( mapCoord, c3d_face.z() ) ) ) );
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec4( uv, writer.cast< Float >( c3d_iIndex ) ) ).xyz(), 1.0 );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec4( uv, writer.cast< Float >( c3d_iIndex ) ) ).xyz(), 1.0 );
 			} );
 			pxl = writer.finalise();
 		}

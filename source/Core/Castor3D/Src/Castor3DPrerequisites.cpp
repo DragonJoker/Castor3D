@@ -1,4 +1,4 @@
-#include "Castor3DPrerequisites.hpp"
+﻿#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -438,6 +438,94 @@ namespace castor3d
 					return result;
 				}
 			}
+		}
+
+		void applyAlphaFunc( glsl::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, glsl::Float const & alpha
+			, glsl::Float const & alphaRef )
+		{
+			using namespace glsl;
+
+			switch ( alphaFunc )
+			{
+			case ComparisonFunc::eLess:
+				IF( writer, alpha >= alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eLEqual:
+				IF( writer, alpha > alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eEqual:
+				IF( writer, alpha != alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eNEqual:
+				IF( writer, alpha == alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eGEqual:
+				IF( writer, alpha < alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eGreater:
+				IF( writer, alpha <= alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			default:
+				IF( writer, alpha <= 0.2 )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+			}
+		}
+
+		std::unique_ptr< Materials > createMaterials( glsl::GlslWriter & writer
+			, PassFlags const & passFlags )
+		{
+			std::unique_ptr< Materials > result;
+
+			if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
+			{
+				result = std::make_unique< PbrMRMaterials >( writer );
+			}
+			else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
+			{
+				result = std::make_unique< PbrSGMaterials >( writer );
+			}
+			else
+			{
+				result = std::make_unique< LegacyMaterials >( writer );
+			}
+
+			return result;
 		}
 
 		ParallaxShadowFunction declareParallaxShadowFunc( glsl::GlslWriter & writer

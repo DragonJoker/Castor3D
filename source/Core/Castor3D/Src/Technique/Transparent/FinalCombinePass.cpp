@@ -1,4 +1,4 @@
-﻿#include "FinalCombinePass.hpp"
+#include "FinalCombinePass.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -164,7 +164,10 @@ namespace castor3d
 
 					if ( p_fogType != FogType::eDisabled )
 					{
-						auto position = writer.declLocale( cuT( "position" ), utils.calcVSPosition( vtx_texture, c3d_mtxInvProj ) );
+						auto position = writer.declLocale( cuT( "position" )
+							, utils.calcVSPosition( vtx_texture
+								, texture( c3d_mapDepth, vtx_texture ).r()
+								, c3d_mtxInvProj ) );
 						fog.applyFog( pxl_fragColor, length( position ), position.z() );
 					}
 				} );

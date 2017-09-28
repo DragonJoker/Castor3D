@@ -1,4 +1,4 @@
-#include "ShadowMapPoint.hpp"
+﻿#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -189,7 +189,7 @@ namespace castor3d
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
-		auto materials = doCreateMaterials( writer, passFlags );
+		auto materials = shader::createMaterials( writer, passFlags );
 		materials->declare();
 
 		// Fragment Outputs

@@ -75,25 +75,47 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\return		The Gaussian filters count.
+		 *\return		The Gaussian filter width.
 		 *\~french
-		 *\return		Le nombre de filtres Gaussiens.
+		 *\return		La largeur du filtre Gaussien.
 		 */
-		inline uint32_t getGaussianCount()const
+		inline float getGaussianWidth()const
 		{
-			return m_gaussianCount;
+			return m_gaussianWidth;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the Gaussian filters count.
+		 *\brief		Sets the Gaussian filter width.
 		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit le nombre de filtres Gaussiens.
+		 *\brief		Définit la largeur du filtre Gaussien.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setGaussianCount( uint32_t const & value )
+		inline void setGaussianWidth( float const & value )
 		{
-			m_gaussianCount = value;
+			m_gaussianWidth = value;
+		}
+		/**
+		 *\~english
+		 *\return		The scattering strength.
+		 *\~french
+		 *\return		La force du scattering.
+		 */
+		inline float getStrength()const
+		{
+			return m_strength;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the scattering strength.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit la force du scattering.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setStrength( float const & value )
+		{
+			m_strength = value;
 		}
 		/**
 		 *\~english
@@ -141,9 +163,12 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The Gaussian filter count.
-		//!\~french		Le nombre de filtres Gaussiens.
-		uint32_t m_gaussianCount{ 1u };
+		//!\~english	The Gaussian filter width.
+		//!\~french		La largeur du filtre Gaussien.
+		float m_gaussianWidth{ 1.0f };
+		//!\~english	The scattering strength.
+		//!\~french		La force du scattering.
+		float m_strength{ 1.0f };
 		//!\~english	The radius of the largest Gaussian.
 		//!\~french		Le rayon du plus large filtre Gaussien.
 		float m_subsurfaceRadius{ 1.0f };

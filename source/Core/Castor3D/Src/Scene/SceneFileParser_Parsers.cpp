@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -4641,6 +4641,48 @@ namespace castor3d
 			Point3f value;
 			p_params[0]->get( value );
 			parsingContext->subsurfaceScattering->setTransmittanceCoefficients( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringStrength )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			float value;
+			p_params[0]->get( value );
+			parsingContext->subsurfaceScattering->setStrength( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringGaussianWidth )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			float value;
+			p_params[0]->get( value );
+			parsingContext->subsurfaceScattering->setGaussianWidth( value );
 		}
 	}
 	END_ATTRIBUTE()

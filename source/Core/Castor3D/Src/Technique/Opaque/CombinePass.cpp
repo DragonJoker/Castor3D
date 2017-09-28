@@ -1,4 +1,4 @@
-#include "CombinePass.hpp"
+﻿#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -226,7 +226,9 @@ namespace castor3d
 					if ( fogType != FogType::eDisabled )
 					{
 						auto position = writer.declLocale( cuT( "position" )
-							, utils.calcVSPosition( vtx_texture, c3d_mtxInvProj ) );
+							, utils.calcVSPosition( vtx_texture
+								, texture( c3d_mapDepth, vtx_texture ).r()
+								, c3d_mtxInvProj ) );
 						fog.applyFog( pxl_fragColor, length( position ), position.z() );
 					}
 				} );
@@ -364,7 +366,9 @@ namespace castor3d
 					if ( fogType != FogType::eDisabled )
 					{
 						auto position = writer.declLocale( cuT( "position" )
-							, utils.calcVSPosition( vtx_texture, c3d_mtxInvProj ) );
+							, utils.calcVSPosition( vtx_texture
+								, texture( c3d_mapDepth, vtx_texture ).r()
+								, c3d_mtxInvProj ) );
 						fog.applyFog( pxl_fragColor, length( position ), position.z() );
 					}
 				} );

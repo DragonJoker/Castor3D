@@ -1,4 +1,4 @@
-﻿#include "RenderPass.hpp"
+#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -707,95 +707,6 @@ namespace castor3d
 			, programFlags
 			, sceneFlags );
 	}
-
-	void RenderPass::doApplyAlphaFunc( glsl::GlslWriter & writer
-		, ComparisonFunc alphaFunc
-		, glsl::Float const & alpha
-		, glsl::Float const & alphaRef )const
-	{
-		using namespace glsl;
-
-		switch ( alphaFunc )
-		{
-		case ComparisonFunc::eLess:
-			IF( writer, alpha >= alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eLEqual:
-			IF( writer, alpha > alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eEqual:
-			IF( writer, alpha != alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eNEqual:
-			IF( writer, alpha == alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGEqual:
-			IF( writer, alpha < alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGreater:
-			IF( writer, alpha <= alphaRef )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		default:
-			IF( writer, alpha <= 0.2 )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-		}
-	}
-
-	std::unique_ptr< shader::Materials > RenderPass::doCreateMaterials( glsl::GlslWriter & writer
-		, PassFlags const & passFlags )const
-	{
-		std::unique_ptr< shader::Materials > result;
-
-		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
-		{
-			result = std::make_unique< shader::PbrMRMaterials >( writer );
-		}
-		else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
-		{
-			result = std::make_unique< shader::PbrSGMaterials >( writer );
-		}
-		else
-		{
-			result = std::make_unique< shader::LegacyMaterials >( writer );
-		}
-
-		return result;
-	}
-
 
 	PassRenderNode RenderPass::doCreatePassRenderNode( Pass & pass
 		, RenderPipeline & pipeline )

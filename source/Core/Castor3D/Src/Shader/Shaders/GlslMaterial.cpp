@@ -82,6 +82,16 @@ namespace castor3d
 		{
 			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_transmittance" ) ).rgb();
 		}
+
+		Float BaseMaterial::m_gaussianWidth()const
+		{
+			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_sssInfo" ) ).g() );
+		}
+
+		Float BaseMaterial::m_subsurfaceScatteringStrength()const
+		{
+			return m_writer->cast< Int >( Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_sssInfo" ) ).b() );
+		}
 		
 		Vec4 BaseMaterial::m_common()const
 		{
@@ -373,7 +383,7 @@ namespace castor3d
 			}
 			else
 			{
-				return std::make_unique< LegacyMaterial > (m_getMaterial( index ) );
+				return std::make_unique< LegacyMaterial >( m_getMaterial( index ) );
 			}
 		}
 

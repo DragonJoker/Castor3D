@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -33,7 +33,6 @@ namespace glsl
 		GlslWriter_API Utils( GlslWriter & writer );
 		GlslWriter_API void declareCalcTexCoord();
 		GlslWriter_API void declareCalcVSPosition();
-		GlslWriter_API void declareCalcVSDepth();
 		GlslWriter_API void declareCalcWSPosition();
 		GlslWriter_API void declareApplyGamma();
 		GlslWriter_API void declareRemoveGamma();
@@ -44,9 +43,8 @@ namespace glsl
 		GlslWriter_API void declareComputeSpecularIBL();
 		GlslWriter_API Vec2 calcTexCoord();
 		GlslWriter_API Vec3 calcVSPosition( Vec2 const & uv
+			, Float const & depth
 			, Mat4 const & invProj );
-		GlslWriter_API Float calcVSDepth( Vec2 const & uv
-			, Mat4 const & proj );
 		GlslWriter_API Vec3 calcWSPosition( Vec2 const & uv
 			, Float const & depth
 			, Mat4 const & invViewProj );
@@ -58,7 +56,8 @@ namespace glsl
 			, Vec3 const & normal
 			, Vec3 const & position );
 		GlslWriter_API Float lineariseDepth( Float const & depth
-			, Mat4 const & invProj );
+			, Float const & nearPlane
+			, Float const & farPlane );
 		GlslWriter_API Vec3 fresnelSchlick( Float const & product
 			, Vec3 const & f0
 			, Float const & roughness );
@@ -86,16 +85,52 @@ namespace glsl
 	private:
 		GlslWriter & m_writer;
 		Function< Vec2 > m_calcTexCoord;
-		Function< Vec3, InVec2, InMat4 > m_calcVSPosition;
-		Function< Float, InVec2, InMat4 > m_calcVSDepth;
-		Function< Vec3, InVec2, InFloat, InMat4 > m_calcWSPosition;
-		Function< Vec3, InFloat, InVec3 > m_applyGamma;
-		Function< Vec3, InFloat, InVec3 > m_removeGamma;
-		Function< Vec3, InVec2, InVec3, InVec3 > m_getMapNormal;
-		Function< Float, InFloat, InMat4 > m_lineariseDepth;
-		Function< Vec3, InFloat, InVec3, InFloat > m_fresnelSchlick;
-		Function< Vec3, InVec3, InVec3, InVec3, InFloat, InFloat, InVec3, InParam< SamplerCube >, InParam< SamplerCube >, InParam< Sampler2D > > m_computeMetallicIBL;
-		Function< Vec3, InVec3, InVec3, InVec3, InVec3, InFloat, InVec3, InParam< SamplerCube >, InParam< SamplerCube >, InParam< Sampler2D > > m_computeSpecularIBL;
+		Function< Vec3
+			, InVec2
+			, InFloat
+			, InMat4 > m_calcVSPosition;
+		Function< Vec3
+			, InVec2
+			, InFloat
+			, InMat4 > m_calcWSPosition;
+		Function< Vec3
+			, InFloat
+			, InVec3 > m_applyGamma;
+		Function< Vec3
+			, InFloat
+			, InVec3 > m_removeGamma;
+		Function< Vec3
+			, InVec2
+			, InVec3
+			, InVec3 > m_getMapNormal;
+		Function< Float
+			, InFloat
+			, InFloat
+			, InFloat > m_lineariseDepth;
+		Function< Vec3
+			, InFloat
+			, InVec3
+			, InFloat > m_fresnelSchlick;
+		Function< Vec3
+			, InVec3
+			, InVec3
+			, InVec3
+			, InFloat
+			, InFloat
+			, InVec3
+			, InParam< SamplerCube >
+			, InParam< SamplerCube >
+			, InParam< Sampler2D > > m_computeMetallicIBL;
+		Function< Vec3
+			, InVec3
+			, InVec3
+			, InVec3
+			, InVec3
+			, InFloat
+			, InVec3
+			, InParam< SamplerCube >
+			, InParam< SamplerCube >
+			, InParam< Sampler2D > > m_computeSpecularIBL;
 	};
 }
 

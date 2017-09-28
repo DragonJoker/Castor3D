@@ -141,7 +141,34 @@ namespace castor
 		uint32_t height = FreeImage_GetHeight( fiImage );
 		Size size( width, height );
 
-		if ( type == FIC_RGBALPHA )
+		if ( type == FIC_PALETTE )
+		{
+			if ( FreeImage_IsTransparent( fiImage ) )
+			{
+				ePF = PixelFormat::eA8R8G8B8;
+				FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
+				FreeImage_Unload( fiImage );
+				fiImage = dib;
+
+				if ( !fiImage )
+				{
+					LOADER_ERROR( "Can't convert image to 32 bits with alpha : " + string::stringCast< char >( p_path ) );
+				}
+			}
+			else
+			{
+				ePF = PixelFormat::eR8G8B8;
+				FIBITMAP * dib = FreeImage_ConvertTo24Bits( fiImage );
+				FreeImage_Unload( fiImage );
+				fiImage = dib;
+
+				if ( !fiImage )
+				{
+					LOADER_ERROR( "Can't convert image to 24 bits : " + string::stringCast< char >( p_path ) );
+				}
+			}
+		}
+		else if ( type == FIC_RGBALPHA )
 		{
 			ePF = PixelFormat::eA8R8G8B8;
 			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );

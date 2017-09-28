@@ -226,7 +226,7 @@ namespace castor3d
 			auto c3d_mapDiffuse = writer.declUniform< SamplerCube >( ShaderProgram::MapDiffuse );
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -270,7 +270,7 @@ namespace castor3d
 				ROF;
 
 				irradiance = irradiance * PI * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
-				plx_v4FragColor = vec4( irradiance, 1.0 );
+				pxl_fragColor = vec4( irradiance, 1.0 );
 			} );
 
 			pxl = writer.finalise();

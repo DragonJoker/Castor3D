@@ -87,7 +87,7 @@ namespace fxaa
 			UBO_FXAA( writer );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 #define FXAA_REDUCE_MIN	( 1.0 / 128.0 )
 
@@ -150,7 +150,7 @@ namespace fxaa
 					auto lumaB = writer.declLocale( cuT( "lumaB" )
 						, dot( rgbB, luma ) );
 
-					plx_v4FragColor = vec4( writer.ternary( Type{ cuT( "lumaB < lumaMin || lumaB > lumaMax" ) }, rgbA, rgbB ), 1.0_f );
+					pxl_fragColor = vec4( writer.ternary( Type{ cuT( "lumaB < lumaMin || lumaB > lumaMax" ) }, rgbA, rgbB ), 1.0_f );
 				} );
 
 			return writer.finalise();

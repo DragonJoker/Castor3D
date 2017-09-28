@@ -10,8 +10,6 @@
 
 using namespace castor;
 
-#define DISPLAY_SHADOW_MAPS 0
-
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -110,6 +108,10 @@ namespace castor3d
 				, m_depthAttach
 				, m_sceneUbo
 				, m_gpInfoUbo );
+			m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
+				, m_gpInfoUbo
+				, m_sceneUbo
+				, m_size );
 			m_reflection = std::make_unique< ReflectionPass >( engine
 				, m_size
 				, m_sceneUbo
@@ -145,6 +147,7 @@ namespace castor3d
 		m_geometryPassFrameBuffer.reset();
 		m_combinePass.reset();
 		m_reflection.reset();
+		m_subsurfaceScattering.reset();
 		m_lightingPass.reset();
 		m_sceneUbo.getUbo().cleanup();
 	}
@@ -178,9 +181,10 @@ namespace castor3d
 			, camera
 			, m_geometryPassResult
 			, info );
-
+		m_subsurfaceScattering->render( m_geometryPassResult
+			, m_lightingPass->getDiffuse() );
 		m_reflection->render( m_geometryPassResult
-			, m_lightingPass->getDiffuse()
+			, m_subsurfaceScattering->getResult()
 			, scene
 			, info );
 
@@ -188,7 +192,7 @@ namespace castor3d
 			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
 			m_combinePass->render( m_geometryPassResult
-				, m_lightingPass->getDiffuse()
+				, m_subsurfaceScattering->getResult()
 				, m_lightingPass->getSpecular()
 				, m_reflection->getReflection()
 				, m_reflection->getRefraction()
@@ -200,7 +204,7 @@ namespace castor3d
 		else
 		{
 			m_combinePass->render( m_geometryPassResult
-				, m_lightingPass->getDiffuse()
+				, m_subsurfaceScattering->getResult()
 				, m_lightingPass->getSpecular()
 				, m_reflection->getReflection()
 				, m_reflection->getRefraction()
@@ -233,6 +237,8 @@ namespace castor3d
 		{
 			context.renderTexture( Position{ width * ( index++ ), 0 }, size, m_combinePass->getSsao() );
 		}
+
+		m_subsurfaceScattering->debugDisplay( m_size );
 	}
 
 	void DeferredRendering::blitDepthInto( FrameBuffer & fbo )

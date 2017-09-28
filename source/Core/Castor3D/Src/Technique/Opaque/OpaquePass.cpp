@@ -309,7 +309,7 @@ namespace castor3d
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
 						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					doApplyAlphaFunc( writer
+					shader::applyAlphaFunc( writer
 						, alphaFunc
 						, alpha
 						, material.m_alphaRef() );
@@ -318,7 +318,7 @@ namespace castor3d
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
 						, material.m_opacity() );
-					doApplyAlphaFunc( writer
+					shader::applyAlphaFunc( writer
 						, alphaFunc
 						, alpha
 						, material.m_alphaRef() );
@@ -469,14 +469,14 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
 					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
-					doApplyAlphaFunc( writer
+					shader::applyAlphaFunc( writer
 						, alphaFunc
 						, alpha
 						, material.m_alphaRef() );
 				}
 				else
 				{
-					doApplyAlphaFunc( writer
+					shader::applyAlphaFunc( writer
 						, alphaFunc
 						, alpha
 						, material.m_alphaRef() );
@@ -632,7 +632,7 @@ namespace castor3d
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
 						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					doApplyAlphaFunc( writer
+					shader::applyAlphaFunc( writer
 						, alphaFunc
 						, alpha
 						, material.m_alphaRef() );
@@ -641,7 +641,7 @@ namespace castor3d
 				{
 					auto alpha = writer.declLocale( cuT( "alpha" )
 						, material.m_opacity() );
-					doApplyAlphaFunc( writer
+					shader::applyAlphaFunc( writer
 						, alphaFunc
 						, alpha
 						, material.m_alphaRef() );

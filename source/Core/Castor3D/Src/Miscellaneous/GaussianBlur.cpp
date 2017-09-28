@@ -102,24 +102,24 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				plx_v4FragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
+				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
 				FOR( writer, Int, i, 1, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 
-				gl_FragDepth = plx_v4FragColor.r();
+				gl_FragDepth = pxl_fragColor.r();
 			} );
 			return writer.finalise();
 		}
@@ -139,24 +139,24 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				plx_v4FragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
+				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
 				FOR( writer, Int, i, 1, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 
-				gl_FragDepth = plx_v4FragColor.r();
+				gl_FragDepth = pxl_fragColor.r();
 			} );
 			return writer.finalise();
 		}

@@ -384,7 +384,7 @@ namespace castor3d
 						, c3d_mapPrefiltered
 						, c3d_mapBrdf );
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, ratio != 0.0_f )
 					{
@@ -581,7 +581,7 @@ namespace castor3d
 						, c3d_mapPrefiltered
 						, c3d_mapBrdf );
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, ratio != 0.0_f )
 					{

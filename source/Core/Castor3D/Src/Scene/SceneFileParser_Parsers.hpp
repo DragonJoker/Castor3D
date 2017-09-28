@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -314,6 +314,8 @@ namespace castor3d
 	//SubsurfaceScattering parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringDistanceBasedTransmittance )
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransittanceCoefficients )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringStrength )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringGaussianWidth )
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringEnd )
 }
 

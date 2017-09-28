@@ -1,4 +1,4 @@
-﻿#include "RenderTechnique.hpp"
+#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -35,6 +35,7 @@ using namespace castor;
 #define DISPLAY_DEBUG_DEFERRED_BUFFERS 1
 #define DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS 1
 #define DISPLAY_DEBUG_IBL_BUFFERS 0
+#define DISPLAY_DEBUG_SHADOW_MAPS 0
 
 #define USE_WEIGHTED_BLEND 1
 #define DEBUG_FORWARD_RENDERING 0
@@ -349,6 +350,8 @@ namespace castor3d
 			//map.get().debugDisplay( size, index++ );
 		}
 
+#if DISPLAY_DEBUG_SHADOW_MAPS
+
 		index = 0u;
 
 		for ( auto & maps : m_activeShadowMaps )
@@ -358,6 +361,8 @@ namespace castor3d
 				map.get().debugDisplay( size, index++ );
 			}
 		}
+
+#endif
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps()

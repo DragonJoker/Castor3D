@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -844,6 +844,36 @@ namespace castor3d
 					, ShadowType shadows );
 			}
 		}
+		/**
+		 *\~english
+		 *\brief		Creates the appropriate GLSL materials buffer.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		passFlags	The pass flags.
+		 *\~french
+		 *\brief		Crée le tampon de matériaux GLSL approprié.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		passFlags	Les indicateurs de passe.
+		 */
+		C3D_API std::unique_ptr< Materials > createMaterials( glsl::GlslWriter & writer
+			, PassFlags const & passFlags );
+		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	alpha		The alpha value.
+		 *\param[in]	alphaRef	The alpha comparison reference value.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	alpha		La valeur d'opacité.
+		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
+		 */
+		C3D_API void applyAlphaFunc( glsl::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, glsl::Float const & alpha
+			, glsl::Float const & alphaRef );
 
 		using ParallaxFunction = glsl::Function< glsl::Vec2, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Vec3 > >;
 		using ParallaxShadowFunction = glsl::Function< glsl::Float, glsl::InParam< glsl::Vec3 >, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Float > >;

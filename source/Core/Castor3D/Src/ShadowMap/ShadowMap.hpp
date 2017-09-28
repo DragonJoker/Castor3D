@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -215,11 +215,6 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateMaterials
-		 */
-		C3D_API std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
-			, PassFlags const & passFlags )const;
-		/**
 		 *\~english
 		 *\brief		Discards materials with alpha blend or alpha func, if needed.
 		 *\param[in]	writer			The GLSL writer.
@@ -240,13 +235,6 @@ namespace castor3d
 			, ComparisonFunc alphaFunc
 			, glsl::Int const & material
 			, shader::Materials const & materials )const;
-		/**
-		 *\copydoc		castor3d::RenderPass::doApplyAlphaFunc
-		 */
-		void doApplyAlphaFunc( glsl::GlslWriter & writer
-			, ComparisonFunc alphaFunc
-			, glsl::Float const & alpha
-			, glsl::Float const & alphaRef )const;
 
 	protected:
 		//!\~english	The frame buffer.
