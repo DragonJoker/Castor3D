@@ -512,11 +512,6 @@ namespace glsl
 		return writeFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
 	}
 
-	Float fract( Type const & p_value )
-	{
-		return writeFunctionCall< Float >( p_value.m_writer, cuT( "fract" ), p_value );
-	}
-
 	Optional< Int > textureSize( Optional< Sampler1D > const & p_sampler, Int const p_lod )
 	{
 		return writeOptionalFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
@@ -905,10 +900,5 @@ namespace glsl
 	Optional< Float > tan( Optional< Type > const & p_value )
 	{
 		return writeOptionalFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
-	}
-
-	Optional< Float > fract( Optional< Type > const & p_value )
-	{
-		return writeOptionalFunctionCall< Float >( p_value.m_writer, cuT( "fract" ), p_value );
 	}
 }

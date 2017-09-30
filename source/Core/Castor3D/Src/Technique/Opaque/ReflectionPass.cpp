@@ -199,7 +199,7 @@ namespace castor3d
 					auto product = writer.declLocale( cuT( "product" )
 						, max( 0.0_f, dot( -incident, normal ) ) );
 					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 					auto refracted = writer.declLocale( cuT( "refracted" )
 						, refract( incident, normal, ratio ) );
 					pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
@@ -344,7 +344,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
@@ -362,7 +362,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = -refracted.y();
@@ -397,7 +397,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = -refracted.y();
@@ -539,7 +539,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
@@ -559,7 +559,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = -refracted.y();
@@ -596,7 +596,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refract" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = writer.ternary( envMapIndex != 0_i, refracted.y(), -refracted.y() );

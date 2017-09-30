@@ -859,7 +859,7 @@ namespace castor3d
 					, Vec3 const & f0 )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					m_writer.returnStmt( f0 + m_writer.paren( vec3( 1.0_f ) - f0 ) * pow( 1.0_f - product, 5.0 ) );
+					m_writer.returnStmt( f0 + m_writer.paren( vec3( 1.0_f ) - f0 ) * pow( 1.0_f - product, 5.0_f ) );
 				}
 				, InFloat( &m_writer, cuT( "product" ) )
 				, InVec3( &m_writer, cuT( "f0" ) ) );

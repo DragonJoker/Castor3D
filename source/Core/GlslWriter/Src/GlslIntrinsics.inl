@@ -1,4 +1,4 @@
-namespace glsl
+﻿namespace glsl
 {
 	//***********************************************************************************************
 
@@ -264,12 +264,6 @@ namespace glsl
 		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "sqrt" ), p_value, p_values... );
 	}
 
-	template< typename ... Values >
-	inline Float pow( Type const & p_value, Values const & ... p_values )
-	{
-		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "pow" ), p_value, p_values... );
-	}
-
 	template< typename Value, typename ... Values >
 	inline Value cross( Value const & p_value, Values const & ... p_values )
 	{
@@ -304,6 +298,18 @@ namespace glsl
 	inline Value reflect( Type const & p_value, Values const & ... p_values )
 	{
 		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "reflect" ), p_value, p_values... );
+	}
+
+	template< typename Value >
+	inline Value pow( Value const & x, Value const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "pow" ), x, y );
+	}
+
+	template< typename Value >
+	inline Value pow( Value const & x, Optional< Value > const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "pow" ), x, y );
 	}
 
 	template< typename Value >
@@ -388,6 +394,42 @@ namespace glsl
 	inline Value sign( Value const & p_value )
 	{
 		return writeFunctionCall< Value >( p_value.m_writer, cuT( "sign" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value mod( Value const & x, Value const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "mod" ), x, y );
+	}
+
+	template< typename Value >
+	inline Value mod( Value const & x, Float const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "mod" ), x, y );
+	}
+
+	template< typename Value >
+	inline Value fract( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "fract" ), value );
+	}
+
+	template< typename Value >
+	inline Value floor( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "floor" ), value );
+	}
+
+	template< typename Value >
+	inline Value trunc( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "trunc" ), value );
+	}
+
+	template< typename Value >
+	inline Value round( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "round" ), value );
 	}
 
 	template< typename Value >

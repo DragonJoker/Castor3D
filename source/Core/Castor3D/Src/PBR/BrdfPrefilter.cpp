@@ -1,4 +1,4 @@
-﻿#include "BrdfPrefilter.hpp"
+#include "BrdfPrefilter.hpp"
 
 #include "Engine.hpp"
 
@@ -319,7 +319,7 @@ namespace castor3d
 							auto G_Vis = writer.declLocale( cuT( "G_Vis" )
 								, writer.paren( G * VdotH ) / writer.paren( NdotH * p_NdotV ) );
 							auto Fc = writer.declLocale( cuT( "Fc" )
-								, pow( 1.0 - VdotH, 5.0 ) );
+								, pow( 1.0 - VdotH, 5.0_f ) );
 
 							A += writer.paren( 1.0_f - Fc ) * G_Vis;
 							B += Fc * G_Vis;

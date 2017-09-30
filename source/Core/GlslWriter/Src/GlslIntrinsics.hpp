@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -135,13 +135,14 @@ namespace glsl
 	template< typename ... Values > inline Float dot( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Float inversesqrt( Expr const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Float sqrt( Expr const & p_value, Values const & ... p_values );
-	template< typename ... Values > inline Float pow( Expr const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value cross( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value clamp( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value min( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value max( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value mix( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value reflect( Type const & p_value, Values const & ... p_values );
+	template< typename Value > inline Value pow( Value const & x, Value const & y );
+	template< typename Value > inline Value pow( Value const & x, Optional< Value > const & y );
 	template< typename Value > inline Value neg( Value const & p_value );
 	template< typename Value > inline Value log( Value const & p_value );
 	template< typename Value > inline Value exp( Value const & p_value );
@@ -169,6 +170,12 @@ namespace glsl
 	template< typename Value > inline Value dFdxFine( Value const & p_value );
 	template< typename Value > inline Value dFdyFine( Value const & p_value );
 	template< typename Value > inline Value sign( Value const & p_value );
+	template< typename Value > inline Value mod( Value const & x, Value const & y );
+	template< typename Value > inline Value mod( Value const & x, Float const & y );
+	template< typename Value > inline Value fract( Value const & p_value );
+	template< typename Value > inline Value floor( Value const & value );
+	template< typename Value > inline Value trunc( Value const & value );
+	template< typename Value > inline Value round( Value const & value );
 	GlslWriter_API Int textureSize( Sampler1D const & p_sampler, Int const p_lod );
 	GlslWriter_API IVec2 textureSize( Sampler2D const & p_sampler, Int const & p_lod );
 	GlslWriter_API IVec3 textureSize( Sampler3D const & p_sampler, Int const & p_lod );
@@ -251,7 +258,6 @@ namespace glsl
 	GlslWriter_API Float cos( Type const & p_value );
 	GlslWriter_API Float sin( Type const & p_value );
 	GlslWriter_API Float tan( Type const & p_value );
-	GlslWriter_API Float fract( Type const & p_value );
 	GlslWriter_API Optional< Int > textureSize( Optional< Sampler1D > const & p_sampler, Int const p_lod );
 	GlslWriter_API Optional< IVec2 > textureSize( Optional< Sampler2D > const & p_sampler, Int const & p_lod );
 	GlslWriter_API Optional< IVec3 > textureSize( Optional< Sampler3D > const & p_sampler, Int const & p_lod );
@@ -330,7 +336,6 @@ namespace glsl
 	GlslWriter_API Optional< Float > cos( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > sin( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > tan( Optional< Type > const & p_value );
-	GlslWriter_API Optional< Float > fract( Optional< Type > const & p_value );
 }
 
 #include "GlslIntrinsics.inl"
