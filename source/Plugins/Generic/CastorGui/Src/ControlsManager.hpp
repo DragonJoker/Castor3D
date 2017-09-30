@@ -239,15 +239,27 @@ namespace CastorGui
 		*/
 		void doRemoveControl( uint32_t p_id );
 		/**
+		*\return
+		*	The controls by z-index.
+		*/
+		std::vector< ControlSPtr > doGetControlsByZIndex()const;
+		/**
+		*\return
+		*	The controls by ID.
+		*/
+		std::map< uint32_t, ControlWPtr > doGetControlsById()const;
+		/**
 		 *\copydoc		castor3d::FrameListener::doFlush
 		 */
 		virtual void doFlush();
 
 	private:
-		//! The mutex used to protect the controls array.
-		mutable std::mutex m_mutexControls;
+		//! The mutex used to protect the controls by z-index.
+		mutable std::mutex m_mutexControlsByZIndex;
 		//! The controls array
 		mutable std::vector< ControlSPtr > m_controlsByZIndex;
+		//! The mutex used to protect the controls by ID.
+		mutable std::mutex m_mutexControlsById;
 		//! The controls map, sorted by ID
 		std::map< uint32_t, ControlWPtr > m_controlsById;
 		//! Tells the controls array has changed

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -37,6 +37,7 @@ SOFTWARE.
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Uniform/PushUniform.hpp"
 #include "Texture/TextureUnit.hpp"
+#include "Texture/Sampler.hpp"
 
 #include "Shader/Shaders/GlslShadow.hpp"
 
@@ -115,6 +116,40 @@ namespace castor3d
 		{
 			return *light.getDirectionalLight();
 		}
+		/**
+		 *\~english
+		 *\brief		Binds the shadow map's linear depth map.
+		 *\param[in]	shadowMap	The shadow mapping pass.
+		 *\param[in]	index		The binding index.
+		 *\~french
+		 *\brief		Active la texture profondur linéaire de la shadow map.
+		 *\param[in]	shadowMap	La passe de shadow maping.
+		 *\param[in]	index		L'indice d'activation.
+		 */
+		static void bindLinear( ShadowMap const & pass
+			, uint32_t index )
+		{
+			auto & unit = static_cast< ShadowMapDirectional const & >( pass ).getLinear();
+			unit.getTexture()->bind( index );
+			unit.getSampler()->bind( index );
+		}
+		/**
+		 *\~english
+		 *\brief		Uninds the shadow map's linear depth map.
+		 *\param[in]	shadowMap	The shadow mapping pass.
+		 *\param[in]	index		The binding index.
+		 *\~french
+		 *\brief		Désctive la texture profondur linéaire de la shadow map.
+		 *\param[in]	shadowMap	La passe de shadow maping.
+		 *\param[in]	index		L'indice d'activation.
+		 */
+		static void unbindLinear( ShadowMap const & pass
+			, uint32_t index )
+		{
+			auto & unit = static_cast< ShadowMapDirectional const & >( pass ).getLinear();
+			unit.getTexture()->unbind( index );
+			unit.getSampler()->unbind( index );
+		}
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -178,6 +213,34 @@ namespace castor3d
 		{
 			return *light.getPointLight();
 		}
+		/**
+		 *\~english
+		 *\brief		Binds the shadow map's linear depth map.
+		 *\param[in]	shadowMap	The shadow mapping pass.
+		 *\param[in]	index		The binding index.
+		 *\~french
+		 *\brief		Active la texture profondur linéaire de la shadow map.
+		 *\param[in]	shadowMap	La passe de shadow maping.
+		 *\param[in]	index		L'indice d'activation.
+		 */
+		static void bindLinear( ShadowMap const & pass
+			, uint32_t index )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Uninds the shadow map's linear depth map.
+		 *\param[in]	shadowMap	The shadow mapping pass.
+		 *\param[in]	index		The binding index.
+		 *\~french
+		 *\brief		Désctive la texture profondur linéaire de la shadow map.
+		 *\param[in]	shadowMap	La passe de shadow maping.
+		 *\param[in]	index		L'indice d'activation.
+		 */
+		static void unbindLinear( ShadowMap const & pass
+			, uint32_t index )
+		{
+		}
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -240,6 +303,40 @@ namespace castor3d
 		static light_type const & getTypedLight( Light const & light )
 		{
 			return *light.getSpotLight();
+		}
+		/**
+		 *\~english
+		 *\brief		Binds the shadow map's linear depth map.
+		 *\param[in]	shadowMap	The shadow mapping pass.
+		 *\param[in]	index		The binding index.
+		 *\~french
+		 *\brief		Active la texture profondur linéaire de la shadow map.
+		 *\param[in]	shadowMap	La passe de shadow maping.
+		 *\param[in]	index		L'indice d'activation.
+		 */
+		static void bindLinear( ShadowMap const & pass
+			, uint32_t index )
+		{
+			auto & unit = static_cast< ShadowMapSpot const & >( pass ).getLinear();
+			unit.getTexture()->bind( index );
+			unit.getSampler()->bind( index );
+		}
+		/**
+		 *\~english
+		 *\brief		Uninds the shadow map's linear depth map.
+		 *\param[in]	shadowMap	The shadow mapping pass.
+		 *\param[in]	index		The binding index.
+		 *\~french
+		 *\brief		Désctive la texture profondur linéaire de la shadow map.
+		 *\param[in]	shadowMap	La passe de shadow maping.
+		 *\param[in]	index		L'indice d'activation.
+		 */
+		static void unbindLinear( ShadowMap const & pass
+			, uint32_t index )
+		{
+			auto & unit = static_cast< ShadowMapSpot const & >( pass ).getLinear();
+			unit.getTexture()->unbind( index );
+			unit.getSampler()->unbind( index );
 		}
 	};
 	/*!
@@ -355,11 +452,15 @@ namespace castor3d
 				, camera );
 			shadowMapTexture.setIndex( MinTextureIndex + uint32_t( DsTexture::eCount ) );
 			shadowMapTexture.bind();
+			my_traits::bindLinear( *shadowMapOpt
+				, MinTextureIndex + uint32_t( DsTexture::eCount ) + 1 );
 			this->m_program->bind( light );
 			my_pass_type::doRender( size
 				, gp
 				, light.getColour()
 				, first );
+			my_traits::unbindLinear( *shadowMapOpt
+				, MinTextureIndex + uint32_t( DsTexture::eCount ) + 1 );
 			shadowMapTexture.unbind();
 		}
 

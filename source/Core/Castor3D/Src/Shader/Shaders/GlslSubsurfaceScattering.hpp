@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <GlslIntrinsics.hpp>
 
-#define C3D_DEBUG_SSS_TRANSMITTANCE 0
+#define C3D_DEBUG_SSS_TRANSMITTANCE 1
 
 namespace castor3d
 {
@@ -35,6 +35,10 @@ namespace castor3d
 	{
 		class SubsurfaceScattering
 		{
+		public:
+			C3D_API static castor::String const MapDepthDirectional;
+			C3D_API static castor::String const MapDepthSpot;
+
 		public:
 			C3D_API SubsurfaceScattering( glsl::GlslWriter & writer
 				, bool shadowMap );

@@ -1,4 +1,4 @@
-﻿#include "ShadowMap.hpp"
+#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -178,7 +178,7 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_position4 = writer.declOutput< Vec3 >( cuT( "vtx_position4" ) );
+		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
@@ -223,7 +223,9 @@ namespace castor3d
 			v4Vertex = mtxModel * v4Vertex;
 			vtx_position = v4Vertex.xyz();
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * c3d_mtxView * v4Vertex;
+			v4Vertex = c3d_mtxView * v4Vertex;
+			vtx_viewPosition = v4Vertex.xyz();
+			gl_Position = c3d_mtxProjection * v4Vertex;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

@@ -145,6 +145,16 @@ namespace castor3d
 		{
 			return m_lightSpace;
 		}
+		/**
+		 *\~english
+		 *\return		The far plane position for the light.
+		 *\~french
+		 *\return		La position du plan lointain de la lumière.
+		 */
+		inline float getFarPlane()const
+		{
+			return m_farPlane;
+		}
 
 	private:
 		/**

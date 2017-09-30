@@ -20,7 +20,7 @@ namespace CastorGui
 {
 	ControlsManager::ControlsManager( Engine & engine )
 		: UserInputListener{ engine, PLUGIN_NAME }
-		, m_changed{ true }
+		, m_changed{ false }
 	{
 	}
 
@@ -45,16 +45,16 @@ namespace CastorGui
 
 	bool ControlsManager::fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )
 	{
-		auto lock = makeUniqueLock( m_mutexControls );
-		auto it = std::find_if( std::begin( m_controlsByZIndex )
-			, std::end( m_controlsByZIndex )
+		auto controls = doGetControlsByZIndex();
+		auto it = std::find_if( std::begin( controls )
+			, std::end( controls )
 			, [&p_overlay]( ControlSPtr p_control )
 		{
 			return p_control->getName() == p_overlay;
 		} );
 		bool result = false;
 
-		if ( it != std::end( m_controlsByZIndex ) )
+		if ( it != std::end( controls ) )
 		{
 			auto material = getEngine()->getMaterialCache().find( p_material );
 
@@ -75,16 +75,16 @@ namespace CastorGui
 
 	bool ControlsManager::fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )
 	{
-		auto lock = makeUniqueLock( m_mutexControls );
-		auto it = std::find_if( std::begin( m_controlsByZIndex )
-			, std::end( m_controlsByZIndex )
+		auto controls = doGetControlsByZIndex();
+		auto it = std::find_if( std::begin( controls )
+			, std::end( controls )
 			, [&p_overlay]( ControlSPtr p_control )
 		{
 			return p_control->getName() == p_overlay;
 		} );
 		bool result = false;
 
-		if ( it != std::end( m_controlsByZIndex ) )
+		if ( it != std::end( controls ) )
 		{
 			auto control = *it;
 			m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
@@ -113,8 +113,7 @@ namespace CastorGui
 	void ControlsManager::addControl( ControlSPtr p_control )
 	{
 		doAddHandler( p_control );
-
-		auto lock = makeUniqueLock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControlsById );
 
 		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
 		{
@@ -127,16 +126,15 @@ namespace CastorGui
 
 	void ControlsManager::removeControl( uint32_t p_id )
 	{
-		auto lock = makeUniqueLock( m_mutexControls );
 		doRemoveControl( p_id );
 	}
 
 	ControlSPtr ControlsManager::getControl( uint32_t p_id )
 	{
-		auto lock = makeUniqueLock( m_mutexControls );
-		auto it = m_controlsById.find( p_id );
+		auto controls = doGetControlsById();
+		auto it = controls.find( p_id );
 
-		if ( it == m_controlsById.end() )
+		if ( it == controls.end() )
 		{
 			CASTOR_EXCEPTION( "This control does not exist in the manager" );
 		}
@@ -258,11 +256,11 @@ namespace CastorGui
 			doUpdate();
 		}
 
-		auto lock = makeUniqueLock( m_mutexControls );
+		auto controls = doGetControlsByZIndex();
 		EventHandlerSPtr result;
-		auto it = m_controlsByZIndex.rbegin();
+		auto it = controls.rbegin();
 
-		while ( !result && it != m_controlsByZIndex.rend() )
+		while ( !result && it != controls.rend() )
 		{
 			ControlSPtr control = *it;
 
@@ -284,7 +282,7 @@ namespace CastorGui
 
 	void ControlsManager::doUpdate()const
 	{
-		auto lock = makeUniqueLock( m_mutexControls );
+		auto lock = makeUniqueLock( m_mutexControlsByZIndex );
 		{
 			auto handlers = doGetHandlers();
 			m_controlsByZIndex.clear();
@@ -312,7 +310,7 @@ namespace CastorGui
 	{
 		EventHandlerSPtr handler;
 		{
-			auto lock = makeUniqueLock( m_mutexControls );
+			auto lock = makeUniqueLock( m_mutexControlsById );
 			auto it = m_controlsById.find( p_id );
 
 			if ( it == m_controlsById.end() )
@@ -326,5 +324,17 @@ namespace CastorGui
 
 		m_changed = true;
 		doRemoveHandler( handler );
+	}
+
+	std::vector< ControlSPtr > ControlsManager::doGetControlsByZIndex()const
+	{
+		auto lock = makeUniqueLock( m_mutexControlsByZIndex );
+		return m_controlsByZIndex;
+	}
+
+	std::map< uint32_t, ControlWPtr > ControlsManager::doGetControlsById()const
+	{
+		auto lock = makeUniqueLock( m_mutexControlsById );
+		return m_controlsById;
 	}
 }

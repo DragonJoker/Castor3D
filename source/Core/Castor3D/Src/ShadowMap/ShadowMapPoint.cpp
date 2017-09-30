@@ -33,10 +33,6 @@ namespace castor3d
 {
 	namespace
 	{
-		static String const ShadowMapUbo = cuT( "ShadowMap" );
-		static String const WorldLightPosition = cuT( "c3d_worldLightPosition" );
-		static String const FarPlane = cuT( "c3d_farPlane" );
-
 		TextureUnit doInitialisePoint( Engine & engine
 			, Size const & size )
 		{
@@ -79,7 +75,7 @@ namespace castor3d
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
-			, doInitialisePoint( engine, Size{ 1024, 1024 } )
+			, doInitialisePoint( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, std::make_shared< ShadowMapPassPoint >( engine, scene, *this ) }
 	{
 	}
@@ -178,9 +174,9 @@ namespace castor3d
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Fragment Intputs
-		Ubo shadowMap{ writer, ShadowMapUbo, 8u };
-		auto c3d_wordLightPosition( shadowMap.declMember< Vec3 >( WorldLightPosition ) );
-		auto c3d_farPlane( shadowMap.declMember< Float >( FarPlane ) );
+		Ubo shadowMap{ writer, ShadowMapPassPoint::ShadowMapUbo, ShadowMapPassPoint::UboBindingPoint };
+		auto c3d_wordLightPosition( shadowMap.declMember< Vec3 >( ShadowMapPassPoint::WorldLightPosition ) );
+		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassPoint::FarPlane ) );
 		shadowMap.end();
 
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
