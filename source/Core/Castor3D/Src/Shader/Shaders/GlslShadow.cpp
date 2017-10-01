@@ -185,7 +185,7 @@ namespace castor3d
 					// Perspective divide (result in range [-1,1]).
 					lightSpacePosition.xyz() = lightSpacePosition.xyz() / lightSpacePosition.w();
 					// Now put the position in range [0,1].
-					lightSpacePosition.xyz() = m_writer.paren( lightSpacePosition.xyz() * Float( 0.5 ) ) + Float( 0.5 );
+					lightSpacePosition.xyz() = lightSpacePosition.xyz();
 					m_writer.returnStmt( lightSpacePosition.xyz() );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )

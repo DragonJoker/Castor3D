@@ -1,4 +1,4 @@
-#include "GlslMetallicBrdfLighting.hpp"
+﻿#include "GlslMetallicBrdfLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -18,7 +18,7 @@ namespace castor3d
 		{
 		}
 
-		void MetallicBrdfLightingModel::computeCombinedLighting( Vec3 const & worldEye
+		void MetallicBrdfLightingModel::computeCombined( Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
 			, Float const & roughness
@@ -34,14 +34,15 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				computeDirectionalLight( getDirectionalLight( i )
+				m_writer << m_computeDirectional( getDirectionalLight( i )
 					, worldEye
 					, albedo
 					, metallic
 					, roughness
 					, receivesShadows
-					, fragmentIn
+					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				m_writer << endi;
 			}
 			ROF;
 
@@ -50,14 +51,15 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				computePointLight( getPointLight( i )
+				m_writer << m_computePoint( getPointLight( i )
 					, worldEye
 					, albedo
 					, metallic
 					, roughness
 					, receivesShadows
-					, fragmentIn
+					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				m_writer << endi;
 			}
 			ROF;
 
@@ -66,19 +68,20 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				computeSpotLight( getSpotLight( i )
+				m_writer << m_computeSpot( getSpotLight( i )
 					, worldEye
 					, albedo
 					, metallic
 					, roughness
 					, receivesShadows
-					, fragmentIn
+					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				m_writer << endi;
 			}
 			ROF;
 		}
 
-		void MetallicBrdfLightingModel::computeDirectionalLight( DirectionalLight const & light
+		void MetallicBrdfLightingModel::compute( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
@@ -95,50 +98,10 @@ namespace castor3d
 				, receivesShadows
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
-			m_writer << Endi();
+			m_writer << endi;
 		}
 
-		void MetallicBrdfLightingModel::computePointLight( PointLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & albedo
-			, Float const & metallic
-			, Float const & roughness
-			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )const
-		{
-			m_writer << m_computePoint( PointLight{ light }
-				, worldEye
-				, albedo
-				, metallic
-				, roughness
-				, receivesShadows
-				, FragmentInput{ fragmentIn }
-				, parentOutput );
-			m_writer << Endi();
-		}
-
-		void MetallicBrdfLightingModel::computeSpotLight( SpotLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & albedo
-			, Float const & metallic
-			, Float const & roughness
-			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )const
-		{
-			m_writer << m_computeSpot( SpotLight{ light }
-				, worldEye
-				, albedo
-				, metallic
-				, roughness
-				, receivesShadows
-				, FragmentInput{ fragmentIn }
-				, parentOutput );
-			m_writer << Endi();
-		}
-
-		void MetallicBrdfLightingModel::computeOnePointLight( PointLight const & light
+		void MetallicBrdfLightingModel::compute( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
@@ -158,7 +121,7 @@ namespace castor3d
 			m_writer << Endi();
 		}
 
-		void MetallicBrdfLightingModel::computeOneSpotLight( SpotLight const & light
+		void MetallicBrdfLightingModel::compute( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
@@ -178,7 +141,7 @@ namespace castor3d
 			m_writer << Endi();
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeDirectionalLightBackLit( DirectionalLight const & light
+		Vec3 MetallicBrdfLightingModel::computeBackLit( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
@@ -191,7 +154,7 @@ namespace castor3d
 				, FragmentInput{ fragmentIn } );
 		}
 
-		Vec3 MetallicBrdfLightingModel::computePointLightBackLit( PointLight const & light
+		Vec3 MetallicBrdfLightingModel::computeBackLit( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
@@ -204,7 +167,7 @@ namespace castor3d
 				, FragmentInput{ fragmentIn } );
 		}
 
-		Vec3 MetallicBrdfLightingModel::computeSpotLightBackLit( SpotLight const & light
+		Vec3 MetallicBrdfLightingModel::computeBackLit( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic
@@ -550,7 +513,7 @@ namespace castor3d
 		void MetallicBrdfLightingModel::doDeclareComputeDirectionalLightBackLit()
 		{
 			OutputComponents output{ m_writer };
-			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
+			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
@@ -578,7 +541,7 @@ namespace castor3d
 		void MetallicBrdfLightingModel::doDeclareComputePointLightBackLit()
 		{
 			OutputComponents output{ m_writer };
-			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
+			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
@@ -614,7 +577,7 @@ namespace castor3d
 		void MetallicBrdfLightingModel::doDeclareComputeSpotLightBackLit()
 		{
 			OutputComponents output{ m_writer };
-			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
+			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo

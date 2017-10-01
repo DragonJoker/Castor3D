@@ -1,4 +1,4 @@
-﻿#include "OverlayRenderer.hpp"
+#include "OverlayRenderer.hpp"
 
 #include "Engine.hpp"
 
@@ -653,11 +653,16 @@ namespace castor3d
 			UBO_OVERLAY( writer );
 
 			// Shader inputs
-			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" ), checkFlag( textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapText = writer.declUniform< Sampler2D >( ShaderProgram::MapText, checkFlag( textureFlags, TextureChannel::eText ) );
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapOpacity = writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) );
+			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" )
+				, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
+				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapText = writer.declUniform< Sampler2D >( ShaderProgram::MapText
+				, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse
+				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapOpacity = writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+				, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
@@ -665,8 +670,10 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto material = materials->getBaseMaterial( c3d_materialIndex );
-				auto diffuse = writer.declLocale( cuT( "diffuse" ), material->m_diffuse() );
-				auto alpha = writer.declLocale( cuT( "alpha" ), material->m_opacity() );
+				auto diffuse = writer.declLocale( cuT( "diffuse" )
+					, material->m_diffuse() );
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material->m_opacity() );
 
 				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{

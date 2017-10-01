@@ -596,19 +596,27 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeDirectionalLight( light
+					lighting->compute( light
 						, eye
 						, shininess
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					lighting->computeOnePointLight( light
+					lighting->compute( light
 						, eye
 						, shininess
 						, shadowReceiver
@@ -628,7 +636,7 @@ namespace castor3d
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-					lighting->computeOneSpotLight( light
+					lighting->compute( light
 						, eye
 						, shininess
 						, shadowReceiver
@@ -748,21 +756,8 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeDirectionalLight( light
-						, eye
-						, albedo
-						, metallic
-						, roughness
-						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
-						, output );
-				}
-				break;
-
-			case LightType::ePoint:
-				{
-					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					lighting->computeOnePointLight( light
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
+					lighting->compute( light
 						, eye
 						, albedo
 						, metallic
@@ -780,6 +775,55 @@ namespace castor3d
 						, eye
 						, albedo
 						, metallic );
+#else
+					lightDiffuse = sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#endif
+				}
+				break;
+
+			case LightType::ePoint:
+				{
+					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
+					lighting->compute( light
+						, eye
+						, albedo
+						, metallic
+						, roughness
+						, shadowReceiver
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#else
+					lightDiffuse = sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#endif
 				}
 				break;
 
@@ -787,7 +831,7 @@ namespace castor3d
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
 #if !C3D_DEBUG_SSS_TRANSMITTANCE
-					lighting->computeOneSpotLight( light
+					lighting->compute( light
 						, eye
 						, albedo
 						, metallic
@@ -795,16 +839,16 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.compute( *lighting
-						, material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
+					//lightDiffuse += sss.compute( *lighting
+					//	, material
+					//	, light
+					//	, texCoord
+					//	, wsPosition
+					//	, wsNormal
+					//	, translucency
+					//	, eye
+					//	, albedo
+					//	, metallic );
 #else
 					lightDiffuse = sss.compute( *lighting
 						, material
@@ -924,7 +968,7 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeDirectionalLight( light
+					lighting->compute( light
 						, eye
 						, diffuse
 						, specular
@@ -932,13 +976,22 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, specular );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					lighting->computeOnePointLight( light
+					lighting->compute( light
 						, eye
 						, diffuse
 						, specular
@@ -961,7 +1014,7 @@ namespace castor3d
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-					lighting->computeOneSpotLight( light
+					lighting->compute( light
 						, eye
 						, diffuse
 						, specular

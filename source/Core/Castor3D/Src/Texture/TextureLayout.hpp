@@ -320,7 +320,7 @@ namespace castor3d
 		 */
 		inline uint32_t getHeight()const
 		{
-			return m_size.getHeight() / getDepth();
+			return m_size.getHeight();
 		}
 		/**
 		 *\~english
@@ -330,9 +330,9 @@ namespace castor3d
 		 *\brief		Récupère les dimensions de l'image de la texture
 		 *\return		Les dimensions de l'image
 		 */
-		inline castor::Size getDimensions()const
+		inline castor::Size const & getDimensions()const
 		{
-			return castor::Size{ getWidth(), getHeight() };
+			return m_size;
 		}
 		/**
 		 *\~english

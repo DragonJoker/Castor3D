@@ -1,4 +1,4 @@
-#include "SpotLight.hpp"
+﻿#include "SpotLight.hpp"
 
 #include "Render/Viewport.hpp"
 #include "Technique/Opaque/LightPass.hpp"
@@ -161,6 +161,15 @@ namespace castor3d
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{
+		static const Matrix4x4r biasTransform{ []()
+		{
+			Matrix4x4r result;
+			matrix::setTransform( result
+				, Point3r{ 0.5, 0.5, 0.5 }
+				, Point3r{ 0.5, 0.5, 0.5 }
+				, Quaternion::identity() );
+			return result;
+		}() };
 		auto node = getLight().getParent();
 		node->update();
 		auto orientation = node->getDerivedOrientation();
@@ -168,7 +177,7 @@ namespace castor3d
 		Point3f up{ 0, 1, 0 };
 		orientation.transform( up, up );
 		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
-		m_lightSpace = p_viewport.getProjection() * m_lightSpace;
+		m_lightSpace = biasTransform * p_viewport.getProjection() * m_lightSpace;
 		m_shadowMapIndex = p_index;
 
 		if ( m_attenuation.isDirty()

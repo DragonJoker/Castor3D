@@ -1,4 +1,4 @@
-#include "TextureImage.hpp"
+﻿#include "TextureImage.hpp"
 
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
@@ -103,14 +103,14 @@ namespace castor3d
 				{
 					String name{ relative.getFileName() };
 
-					if ( m_engine.getImageCache().has( name ) )
+					if ( m_engine.getImageCache().has( relative ) )
 					{
-						auto image = m_engine.getImageCache().find( name );
+						auto image = m_engine.getImageCache().find( relative );
 						m_buffer = image->getPixels();
 					}
 					else
 					{
-						auto image = m_engine.getImageCache().add( name, folder / relative );
+						auto image = m_engine.getImageCache().add( relative, folder / relative );
 						auto buffer = image->getPixels();
 						Size size{ buffer->dimensions() };
 						uint32_t depth{ 1u };
@@ -328,7 +328,6 @@ namespace castor3d
 			result |= adjustedSize != size;
 		}
 
-		size[1] *= depth;
 		return result;
 	}
 
@@ -382,9 +381,21 @@ namespace castor3d
 
 	void TextureImage::initialiseSource()
 	{
-		m_source = std::make_unique< Dynamic2DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
-			, Size{ getOwner()->getWidth(), getOwner()->getHeight() }
-			, getOwner()->getPixelFormat() );
+		if ( getOwner()->getType() == TextureType::eThreeDimensions )
+		{
+			m_source = std::make_unique< Dynamic3DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
+				, Point3ui{ getOwner()->getWidth()
+					, getOwner()->getHeight()
+					, getOwner()->getDepth() }
+				, getOwner()->getPixelFormat() );
+		}
+		else
+		{
+			m_source = std::make_unique< Dynamic2DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
+				, Size{ getOwner()->getWidth(), getOwner()->getHeight() }
+				, getOwner()->getPixelFormat() );
+		}
+
 		getOwner()->doUpdateFromFirstImage( m_source->getDimensions(), m_source->getPixelFormat() );
 	}
 

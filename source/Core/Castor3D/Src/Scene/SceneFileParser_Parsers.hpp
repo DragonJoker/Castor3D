@@ -184,6 +184,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserPassAlphaFunc )
 	DECLARE_ATTRIBUTE_PARSER( parserPassRefractionRatio )
 	DECLARE_ATTRIBUTE_PARSER( parserPassSubsurfaceScattering )
+	DECLARE_ATTRIBUTE_PARSER( parserPassParallaxOcclusion )
 	DECLARE_ATTRIBUTE_PARSER( parserPassEnd )
 
 	// Texture Unit Parsers

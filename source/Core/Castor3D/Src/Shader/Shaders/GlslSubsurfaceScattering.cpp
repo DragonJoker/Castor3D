@@ -1,4 +1,4 @@
-#include "GlslSubsurfaceScattering.hpp"
+﻿#include "GlslSubsurfaceScattering.hpp"
 
 #include "GlslLight.hpp"
 #include "GlslPhongLighting.hpp"
@@ -14,9 +14,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		castor::String const SubsurfaceScattering::MapDepthDirectional = cuT( "c3d_mapDepthDirectional" );
-		castor::String const SubsurfaceScattering::MapDepthSpot = cuT( "c3d_mapDepthPoint" );
-
 		SubsurfaceScattering::SubsurfaceScattering( GlslWriter & writer
 			, bool shadowMap )
 			: m_writer{ writer }
@@ -35,7 +32,6 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 			{
-				auto c3d_mapDepthDirectional = m_writer.declUniform< Sampler2D >( MapDepthDirectional );
 				doDeclareComputeDirectionalLightDist();
 				break;
 			}
@@ -48,7 +44,6 @@ namespace castor3d
 
 			case LightType::eSpot:
 			{
-				auto c3d_mapDepthSpot = m_writer.declUniform< Sampler2D >( MapDepthSpot );
 				doDeclareComputeSpotLightDist();
 				break;
 			}
@@ -79,7 +74,7 @@ namespace castor3d
 						, position
 						, normal )
 					* translucency
-					* lighting.computeDirectionalLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, shader::FragmentInput( position, -normal ) );
 			}
@@ -109,7 +104,7 @@ namespace castor3d
 						, position
 						, normal )
 					* translucency
-					* lighting.computePointLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, shader::FragmentInput( position, -normal ) );
 			}
@@ -139,7 +134,7 @@ namespace castor3d
 						, position
 						, normal )
 					* translucency
-					* lighting.computeSpotLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, shader::FragmentInput( position, -normal ) );
 			}
@@ -172,7 +167,7 @@ namespace castor3d
 						, normal )
 #if !C3D_DEBUG_SSS_TRANSMITTANCE
 					* translucency
-					* lighting.computeDirectionalLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, albedo
 						, metallic
@@ -209,7 +204,7 @@ namespace castor3d
 						, normal )
 #if !C3D_DEBUG_SSS_TRANSMITTANCE
 					* translucency
-					* lighting.computePointLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, albedo
 						, metallic
@@ -246,7 +241,7 @@ namespace castor3d
 						, normal )
 #if !C3D_DEBUG_SSS_TRANSMITTANCE
 					* translucency
-					* lighting.computeSpotLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, albedo
 						, metallic
@@ -281,7 +276,7 @@ namespace castor3d
 						, position
 						, normal )
 					* translucency
-					* lighting.computeDirectionalLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, specular
 						, shader::FragmentInput( position, -normal ) );
@@ -313,7 +308,7 @@ namespace castor3d
 						, position
 						, normal )
 					* translucency
-					* lighting.computePointLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, specular
 						, shader::FragmentInput( position, -normal ) );
@@ -345,7 +340,7 @@ namespace castor3d
 						, position
 						, normal )
 					* translucency
-					* lighting.computeSpotLightBackLit( light
+					* lighting.computeBackLit( light
 						, eye
 						, specular
 						, shader::FragmentInput( position, -normal ) );
@@ -434,12 +429,12 @@ namespace castor3d
 					{
 						IF( m_writer, distanceBasedTransmission != 0_i )
 						{
-							auto c3d_mapDepthDirectional = m_writer.getBuiltin< Sampler2D >( MapDepthDirectional );
+							auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
 
 							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 								, m_getTransformedPosition( position, light.m_transform() ) );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).r() );
+								, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).r() );
 							auto occluder = m_writer.declLocale( cuT( "occluder" )
 								, writeFunctionCall< Vec3 >( &m_writer
 									, cuT( "calcWSPosition" )
@@ -529,12 +524,12 @@ namespace castor3d
 					{
 						IF( m_writer, distanceBasedTransmission != 0_i )
 						{
-							auto c3d_mapDepthSpot = m_writer.getBuiltin< Sampler2D >( MapDepthSpot );
+							auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
 
 							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 								, m_getTransformedPosition( position, light.m_transform() ) );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapDepthSpot, lightSpacePosition.xy() ).r() );
+								, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).r() );
 							auto occluder = m_writer.declLocale( cuT( "occluder" )
 								, writeFunctionCall< Vec3 >( &m_writer
 									, cuT( "calcWSPosition" )
@@ -544,6 +539,9 @@ namespace castor3d
 							auto distance = m_writer.declLocale( cuT( "distance" )
 								, glsl::distance( occluder, position ) );
 							factor = coefficient * exp( -distance );
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
+							factor = vec3( occluder / light.m_farPlane() );
+#endif
 							//lightSpaceDepth *= light.m_farPlane();
 							//auto distance = m_writer.declLocale( cuT( "distance" )
 							//	, abs( lightSpaceDepth - lightSpacePosition.z() ) );

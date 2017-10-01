@@ -183,6 +183,11 @@ namespace castor3d
 			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapHeight, ShaderType::ePixel );
 		}
 
+		if ( checkFlag( textureFlags, TextureChannel::eTransmittance ) )
+		{
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapTransmittance, ShaderType::ePixel );
+		}
+
 		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
 		{
 			if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )

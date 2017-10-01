@@ -1,4 +1,4 @@
-﻿#include "ShaderProgram.hpp"
+#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -128,6 +128,7 @@ namespace castor3d
 	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
 	const String ShaderProgram::MapEnvironment = cuT( "c3d_mapEnvironment" );
 	const String ShaderProgram::MapAmbientOcclusion = cuT( "c3d_mapAmbientOcclusion" );
+	const String ShaderProgram::MapTransmittance = cuT( "c3d_mapTransmittance" );
 	const String ShaderProgram::MapIrradiance = cuT( "c3d_mapIrradiance" );
 	const String ShaderProgram::MapPrefiltered = cuT( "c3d_mapPrefiltered" );
 	const String ShaderProgram::MapBrdf = cuT( "c3d_mapBrdf" );

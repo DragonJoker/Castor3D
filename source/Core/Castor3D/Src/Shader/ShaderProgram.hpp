@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -661,6 +661,9 @@ namespace castor3d
 		//!\~english	Name of the ambient occlusion texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture d'occlusion ambiante.
 		C3D_API static const castor::String MapAmbientOcclusion;
+		//!\~english	Name of the transmittance texture frame variable.
+		//!\~french		Nom de la frame variable contenant texture de transmission.
+		C3D_API static const castor::String MapTransmittance;
 		//!\~english	Name of the environment texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture d'environnement.
 		C3D_API static const castor::String MapEnvironment;

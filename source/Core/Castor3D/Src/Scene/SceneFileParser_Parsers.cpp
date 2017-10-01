@@ -2932,6 +2932,23 @@ namespace castor3d
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSubsurfaceScattering )
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserPassParallaxOcclusion )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pass )
+		{
+			PARSING_ERROR( cuT( "No Pass initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool value = false;
+			p_params[0]->get( value );
+			parsingContext->pass->setParallaxOcclusion( value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPassEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

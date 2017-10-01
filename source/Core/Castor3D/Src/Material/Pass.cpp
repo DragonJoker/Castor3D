@@ -60,6 +60,10 @@ namespace castor3d
 				result << cuT( "Ambient Occlusion" );
 				break;
 
+			case TextureChannel::eTransmittance:
+				result << cuT( "Transmittance" );
+				break;
+
 			default:
 				break;
 			}
@@ -139,6 +143,11 @@ namespace castor3d
 				result = file.writeText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( pass.getAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Pass >::checkError( result, "Pass alpha blend mode" );
 			}
+		}
+
+		if ( result && pass.hasParallaxOcclusion() )
+		{
+			result = file.writeText( m_tabs + cuT( "\tparallax_occlusion true\n" ) ) > 0;
 		}
 
 		if ( result )
@@ -259,8 +268,7 @@ namespace castor3d
 	bool Pass::hasAlphaBlending()const
 	{
 		return ( checkFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f )
-			&& getAlphaFunc() == ComparisonFunc::eAlways
-			&& !hasSubsurfaceScattering();
+			&& getAlphaFunc() == ComparisonFunc::eAlways;
 	}
 
 	void Pass::prepareTextures()
@@ -285,6 +293,7 @@ namespace castor3d
 			doPrepareTexture( TextureChannel::eHeight, index );
 
 			doPrepareTexture( TextureChannel::eAmbientOcclusion, index );
+			doPrepareTexture( TextureChannel::eTransmittance, index );
 
 			doReduceTexture( TextureChannel::eSpecular
 				, getType() == MaterialType::ePbrMetallicRoughness
@@ -295,6 +304,8 @@ namespace castor3d
 			doReduceTexture( TextureChannel::eHeight
 				, PixelFormat::eL8 );
 			doReduceTexture( TextureChannel::eAmbientOcclusion
+				, PixelFormat::eL8 );
+			doReduceTexture( TextureChannel::eTransmittance
 				, PixelFormat::eL8 );
 
 			doPrepareOpacity( opacitySource, opacityImage, index );
@@ -389,6 +400,11 @@ namespace castor3d
 			{
 				result |= PassFlag::eDistanceBasedTransmittance;
 			}
+		}
+
+		if ( hasParallaxOcclusion() )
+		{
+			result |= PassFlag::eParallaxOcclusionMapping;
 		}
 
 		return result;

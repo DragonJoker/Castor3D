@@ -35,14 +35,14 @@ namespace castor3d
 		public:
 			C3D_API MetallicBrdfLightingModel( ShadowType shadows
 				, glsl::GlslWriter & writer );
-			C3D_API void computeCombinedLighting( glsl::Vec3 const & worldEye
+			C3D_API void computeCombined( glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
 				, glsl::Float const & roughness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computeDirectionalLight( DirectionalLight const & light
+			C3D_API void compute( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
@@ -50,7 +50,7 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computePointLight( PointLight const & light
+			C3D_API void compute( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
@@ -58,7 +58,7 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computeSpotLight( SpotLight const & light
+			C3D_API void compute( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
@@ -66,33 +66,17 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computeOnePointLight( PointLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & albedo
-				, glsl::Float const & metallic
-				, glsl::Float const & roughness
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output )const;
-			C3D_API void computeOneSpotLight( SpotLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & albedo
-				, glsl::Float const & metallic
-				, glsl::Float const & roughness
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output )const;
-			C3D_API glsl::Vec3 computeDirectionalLightBackLit( DirectionalLight const & light
+			C3D_API glsl::Vec3 computeBackLit( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
 				, FragmentInput const & fragmentIn )const;
-			C3D_API glsl::Vec3 computePointLightBackLit( PointLight const & light
+			C3D_API glsl::Vec3 computeBackLit( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
 				, FragmentInput const & fragmentIn )const;
-			C3D_API glsl::Vec3 computeSpotLightBackLit( SpotLight const & light
+			C3D_API glsl::Vec3 computeBackLit( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic

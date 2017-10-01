@@ -1,4 +1,4 @@
-#include "GlslSpecularBrdfLighting.hpp"
+﻿#include "GlslSpecularBrdfLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -18,7 +18,7 @@ namespace castor3d
 		{
 		}
 
-		void SpecularBrdfLightingModel::computeCombinedLighting( Vec3 const & worldEye
+		void SpecularBrdfLightingModel::computeCombined( Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
@@ -34,14 +34,15 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				computeDirectionalLight( getDirectionalLight( i )
+				m_writer << m_computeDirectional( getDirectionalLight( i )
 					, worldEye
 					, diffuse
 					, specular
 					, glossiness
 					, receivesShadows
-					, fragmentIn
+					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				m_writer << endi;
 			}
 			ROF;
 
@@ -50,14 +51,15 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				computePointLight( getPointLight( i )
+				m_writer << m_computePoint( getPointLight( i )
 					, worldEye
 					, diffuse
 					, specular
 					, glossiness
 					, receivesShadows
-					, fragmentIn
+					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				m_writer << endi;
 			}
 			ROF;
 
@@ -66,19 +68,20 @@ namespace castor3d
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
-				computeSpotLight( getSpotLight( i )
+				m_writer << m_computeSpot( getSpotLight( i )
 					, worldEye
 					, diffuse
 					, specular
 					, glossiness
 					, receivesShadows
-					, fragmentIn
+					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				m_writer << endi;
 			}
 			ROF;
 		}
 
-		void SpecularBrdfLightingModel::computeDirectionalLight( DirectionalLight const & light
+		void SpecularBrdfLightingModel::compute( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
@@ -98,47 +101,7 @@ namespace castor3d
 			m_writer << endi;
 		}
 
-		void SpecularBrdfLightingModel::computePointLight( PointLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & diffuse
-			, Vec3 const & specular
-			, Float const & glossiness
-			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )const
-		{
-			m_writer << m_computePoint( PointLight{ light }
-				, worldEye
-				, diffuse
-				, specular
-				, glossiness
-				, receivesShadows
-				, FragmentInput{ fragmentIn }
-				, parentOutput );
-			m_writer << endi;
-		}
-
-		void SpecularBrdfLightingModel::computeSpotLight( SpotLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & diffuse
-			, Vec3 const & specular
-			, Float const & glossiness
-			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
-			, OutputComponents & parentOutput )const
-		{
-			m_writer << m_computeSpot( SpotLight{ light }
-				, worldEye
-				, diffuse
-				, specular
-				, glossiness
-				, receivesShadows
-				, FragmentInput{ fragmentIn }
-				, parentOutput );
-			m_writer << endi;
-		}
-
-		void SpecularBrdfLightingModel::computeOnePointLight( PointLight const & light
+		void SpecularBrdfLightingModel::compute( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
@@ -158,7 +121,7 @@ namespace castor3d
 			m_writer << endi;
 		}
 
-		void SpecularBrdfLightingModel::computeOneSpotLight( SpotLight const & light
+		void SpecularBrdfLightingModel::compute( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & diffuse
 			, Vec3 const & specular
@@ -179,7 +142,7 @@ namespace castor3d
 		}
 		
 
-		Vec3 SpecularBrdfLightingModel::computeDirectionalLightBackLit( DirectionalLight const & light
+		Vec3 SpecularBrdfLightingModel::computeBackLit( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & specular
 			, FragmentInput const & fragmentIn )const
@@ -190,7 +153,7 @@ namespace castor3d
 				, FragmentInput{ fragmentIn } );
 		}
 
-		Vec3 SpecularBrdfLightingModel::computePointLightBackLit( PointLight const & light
+		Vec3 SpecularBrdfLightingModel::computeBackLit( PointLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & specular
 			, FragmentInput const & fragmentIn )const
@@ -201,7 +164,7 @@ namespace castor3d
 				, FragmentInput{ fragmentIn } );
 		}
 
-		Vec3 SpecularBrdfLightingModel::computeSpotLightBackLit( SpotLight const & light
+		Vec3 SpecularBrdfLightingModel::computeBackLit( SpotLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & specular
 			, FragmentInput const & fragmentIn )const
@@ -556,7 +519,7 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputeDirectionalLightBackLit()
 		{
 			OutputComponents output{ m_writer };
-			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightBackLit" )
+			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & specular
@@ -581,7 +544,7 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputePointLightBackLit()
 		{
 			OutputComponents output{ m_writer };
-			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computePointLightBackLit" )
+			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & specular
@@ -614,7 +577,7 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputeSpotLightBackLit()
 		{
 			OutputComponents output{ m_writer };
-			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightBackLit" )
+			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & specular

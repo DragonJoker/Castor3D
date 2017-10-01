@@ -230,6 +230,8 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
+		auto c3d_mapTransmittance( writer.declUniform< Sampler2D >( ShaderProgram::MapTransmittance
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
 		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( writer.declUniform< Sampler2D >( ShaderProgram::MapGloss
@@ -273,7 +275,8 @@ namespace castor3d
 				, vtx_texture );
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
-				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+				&& checkFlag( textureFlags, TextureChannel::eNormal )
+				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 			{
 				auto viewDir = writer.declLocale( cuT( "viewDir" )
 					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
@@ -285,7 +288,8 @@ namespace castor3d
 				, matShininess
 				, textureFlags
 				, programFlags
-				, sceneFlags );
+				, sceneFlags
+				, passFlags );
 			shader::legacy::computePostLightingMapContributions( writer
 				, diffuse
 				, specular
@@ -305,24 +309,18 @@ namespace castor3d
 
 			if ( alphaFunc != ComparisonFunc::eAlways )
 			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
 				}
-				else
-				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
-				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
 			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
@@ -333,10 +331,18 @@ namespace castor3d
 				ambientOcclusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
 			}
 
+			auto transmittance = writer.declLocale( cuT( "transmittance" )
+				, 0.0_f );
+
+			if ( checkFlag( textureFlags, TextureChannel::eTransmittance ) )
+			{
+				transmittance = texture( c3d_mapTransmittance, texCoord.xy() ).r();
+			}
+
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( diffuse, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
-			out_c3dOutput4 = vec4( emissive, 1.0_f - material.m_opacity() );
+			out_c3dOutput4 = vec4( emissive, transmittance );
 		} );
 
 		return writer.finalise();
@@ -379,11 +385,13 @@ namespace castor3d
 		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
+		auto c3d_mapTransmittance( writer.declUniform< Sampler2D >( ShaderProgram::MapTransmittance
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
 		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapEnvironment( writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment
@@ -431,7 +439,8 @@ namespace castor3d
 				, vtx_texture );
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
-				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+				&& checkFlag( textureFlags, TextureChannel::eNormal )
+				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 			{
 				auto viewDir = writer.declLocale( cuT( "viewDir" )
 					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
@@ -444,7 +453,8 @@ namespace castor3d
 				, matRoughness
 				, textureFlags
 				, programFlags
-				, sceneFlags );
+				, sceneFlags
+				, passFlags );
 			shader::pbr::mr::computePostLightingMapContributions( writer
 				, matAlbedo
 				, matEmissive
@@ -461,33 +471,20 @@ namespace castor3d
 				, vtx_material
 				, flags );
 			
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material.m_opacity() );
-
 			if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-				{
-					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
-				}
-				else
-				{
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
-				}
-			}
-			else if ( checkFlag( passFlags, PassFlag::eSubsurfaceScattering ) )
-			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
 					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
 				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
 			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
@@ -498,10 +495,18 @@ namespace castor3d
 				ambientOcclusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
 			}
 
+			auto transmittance = writer.declLocale( cuT( "transmittance" )
+				, 0.0_f );
+
+			if ( checkFlag( textureFlags, TextureChannel::eTransmittance ) )
+			{
+				transmittance = texture( c3d_mapTransmittance, texCoord.xy() ).r();
+			}
+
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
 			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
-			out_c3dOutput4 = vec4( matEmissive, 1.0_f - alpha );
+			out_c3dOutput4 = vec4( matEmissive, transmittance );
 		} );
 
 		return writer.finalise();
@@ -549,6 +554,8 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
+		auto c3d_mapTransmittance( writer.declUniform< Sampler2D >( ShaderProgram::MapTransmittance
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
 		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapEnvironment( writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment
@@ -596,7 +603,8 @@ namespace castor3d
 				, vtx_texture );
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
-				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+				&& checkFlag( textureFlags, TextureChannel::eNormal )
+				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 			{
 				auto viewDir = writer.declLocale( cuT( "viewDir" )
 					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
@@ -609,7 +617,8 @@ namespace castor3d
 				, matGlossiness
 				, textureFlags
 				, programFlags
-				, sceneFlags );
+				, sceneFlags
+				, passFlags );
 			shader::pbr::sg::computePostLightingMapContributions( writer
 				, matDiffuse
 				, matEmissive
@@ -628,24 +637,18 @@ namespace castor3d
 
 			if ( alphaFunc != ComparisonFunc::eAlways )
 			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
 				}
-				else
-				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
-				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
 			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
@@ -656,10 +659,18 @@ namespace castor3d
 				ambientOcclusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
 			}
 
+			auto transmittance = writer.declLocale( cuT( "transmittance" )
+				, 0.0_f );
+
+			if ( checkFlag( textureFlags, TextureChannel::eTransmittance ) )
+			{
+				transmittance = texture( c3d_mapTransmittance, texCoord.xy() ).r();
+			}
+
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( matDiffuse, matGlossiness );
 			out_c3dOutput3 = vec4( matSpecular, ambientOcclusion );
-			out_c3dOutput4 = vec4( matEmissive, 1.0_f - material.m_opacity() );
+			out_c3dOutput4 = vec4( matEmissive, transmittance );
 		} );
 
 		return writer.finalise();

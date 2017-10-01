@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -35,48 +35,36 @@ namespace castor3d
 		public:
 			C3D_API PhongLightingModel( ShadowType shadows
 				, glsl::GlslWriter & writer );
-			C3D_API void computeCombinedLighting( glsl::Vec3 const & worldEye
+			C3D_API void computeCombined( glsl::Vec3 const & worldEye
 				, glsl::Float const & shininess
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computeDirectionalLight( DirectionalLight const & light
+			C3D_API void compute( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Float const & shininess
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computePointLight( PointLight const & light
+			C3D_API void compute( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Float const & shininess
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computeSpotLight( SpotLight const & light
+			C3D_API void compute( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Float const & shininess
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API void computeOnePointLight( PointLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Float const & shininess
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output )const;
-			C3D_API void computeOneSpotLight( SpotLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Float const & shininess
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output )const;
-			C3D_API glsl::Vec3 computeDirectionalLightBackLit( DirectionalLight const & light
+			C3D_API glsl::Vec3 computeBackLit( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
 				, FragmentInput const & fragmentIn )const;
-			C3D_API glsl::Vec3 computePointLightBackLit( PointLight const & light
+			C3D_API glsl::Vec3 computeBackLit( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, FragmentInput const & fragmentIn )const;
-			C3D_API glsl::Vec3 computeSpotLightBackLit( SpotLight const & light
+			C3D_API glsl::Vec3 computeBackLit( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, FragmentInput const & fragmentIn )const;
 

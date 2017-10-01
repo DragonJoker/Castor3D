@@ -307,7 +307,8 @@ namespace castor3d
 				, vtx_texture );
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
-				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+				&& checkFlag( textureFlags, TextureChannel::eNormal )
+				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 			{
 				auto viewDir = -writer.declLocale( cuT( "viewDir" )
 					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
@@ -319,7 +320,8 @@ namespace castor3d
 				, matShininess
 				, textureFlags
 				, programFlags
-				, sceneFlags );
+				, sceneFlags
+				, passFlags );
 			shader::legacy::computePostLightingMapContributions( writer
 				, matDiffuse
 				, matSpecular
@@ -333,7 +335,7 @@ namespace castor3d
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
-			lighting->computeCombinedLighting( worldEye
+			lighting->computeCombined( worldEye
 				, matShininess
 				, c3d_shadowReceiver
 				, shader::FragmentInput( vtx_position, normal )
@@ -382,40 +384,30 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				IF( writer, material.m_subsurfaceScatteringEnabled() == 0 )
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-
-					if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-					{
-						alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-					}
-
-					pxl_fragColor.a() = alpha;
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
-				FI;
+
+				pxl_fragColor.a() = alpha;
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
-				else
-				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
-				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
@@ -540,7 +532,8 @@ namespace castor3d
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
-				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+				&& checkFlag( textureFlags, TextureChannel::eNormal )
+				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 			{
 				auto viewDir = -writer.declLocale( cuT( "viewDir" )
 					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
@@ -553,7 +546,8 @@ namespace castor3d
 				, matRoughness
 				, textureFlags
 				, programFlags
-				, sceneFlags );
+				, sceneFlags
+				, passFlags );
 			shader::pbr::mr::computePostLightingMapContributions( writer
 				, matAlbedo
 				, matEmissive
@@ -566,7 +560,7 @@ namespace castor3d
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
-			lighting->computeCombinedLighting( worldEye
+			lighting->computeCombined( worldEye
 				, matAlbedo
 				, matMetallic
 				, matRoughness
@@ -587,40 +581,30 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				IF( writer, material.m_subsurfaceScatteringEnabled() == 0 )
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-
-					if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-					{
-						alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-					}
-
-					pxl_fragColor.a() = alpha;
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
-				FI;
+
+				pxl_fragColor.a() = alpha;
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
-				else
-				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
-				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
@@ -745,7 +729,8 @@ namespace castor3d
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
-				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
+				&& checkFlag( textureFlags, TextureChannel::eNormal )
+				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 			{
 				auto viewDir = -writer.declLocale( cuT( "viewDir" )
 					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
@@ -758,7 +743,8 @@ namespace castor3d
 				, matGlossiness
 				, textureFlags
 				, programFlags
-				, sceneFlags );
+				, sceneFlags
+				, passFlags );
 			shader::pbr::sg::computePostLightingMapContributions( writer
 				, matDiffuse
 				, matEmissive
@@ -771,7 +757,7 @@ namespace castor3d
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
-			lighting->computeCombinedLighting( worldEye
+			lighting->computeCombined( worldEye
 				, matDiffuse
 				, matSpecular
 				, matGlossiness
@@ -792,40 +778,30 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				IF( writer, material.m_subsurfaceScatteringEnabled() == 0 )
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-
-					if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-					{
-						alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-					}
-
-					pxl_fragColor.a() = alpha;
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
-				FI;
+
+				pxl_fragColor.a() = alpha;
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, texture( c3d_mapOpacity, texCoord.xy() ).r() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
-				else
-				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material.m_opacity() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material.m_alphaRef() );
-				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
 			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )

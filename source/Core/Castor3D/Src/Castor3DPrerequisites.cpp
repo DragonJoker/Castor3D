@@ -118,7 +118,8 @@ namespace castor3d
 				, glsl::Float & shininess
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
-				, SceneFlags const & sceneFlags )
+				, SceneFlags const & sceneFlags
+				, PassFlags const & passFlags )
 			{
 				using namespace glsl;
 				auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
@@ -129,10 +130,19 @@ namespace castor3d
 					auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 					auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 					auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-
-					auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), normal ) );
 					auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
 					v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+
+					if ( checkFlag( textureFlags, TextureChannel::eHeight )
+						&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+					{
+						auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+						v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+							, v3MapNormal
+							, texture( c3d_mapHeight, texCoord.xy() ).r() );
+					}
+
+					auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), normal ) );
 					normal = normalize( tbn * v3MapNormal );
 				}
 
@@ -230,7 +240,8 @@ namespace castor3d
 					, glsl::Float & p_roughness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
-					, SceneFlags const & sceneFlags )
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags )
 				{
 					using namespace glsl;
 					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
@@ -241,10 +252,19 @@ namespace castor3d
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+						v3MapNormal = normalize( v3MapNormal * 2.0_f - 1.0_f );
+
+						if ( checkFlag( textureFlags, TextureChannel::eHeight )
+							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+						{
+							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+							v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+								, v3MapNormal
+								, texture( c3d_mapHeight, texCoord.xy() ).r() );
+						}
 
 						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
-						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
-						v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
 						p_normal = normalize( tbn * v3MapNormal );
 					}
 
@@ -338,7 +358,8 @@ namespace castor3d
 					, glsl::Float & p_glossiness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
-					, SceneFlags const & sceneFlags )
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags )
 				{
 					using namespace glsl;
 					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
@@ -349,10 +370,19 @@ namespace castor3d
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-
-						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
 						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
 						v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+
+						if ( checkFlag( textureFlags, TextureChannel::eHeight )
+							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+						{
+							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+							v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+								, v3MapNormal
+								, texture( c3d_mapHeight, texCoord.xy() ).r() );
+						}
+
+						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
 						p_normal = normalize( tbn * v3MapNormal );
 					}
 

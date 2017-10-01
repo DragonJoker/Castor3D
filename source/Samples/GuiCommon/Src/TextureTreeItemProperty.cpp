@@ -33,6 +33,8 @@ namespace GuiCommon
 		static wxString PROPERTY_CHANNEL_ALBEDO = _( "Albedo" );
 		static wxString PROPERTY_CHANNEL_ROUGHNESS = _( "Roughness" );
 		static wxString PROPERTY_CHANNEL_METALLIC = _( "Metallic" );
+		static wxString PROPERTY_CHANNEL_AMBIENT_OCCLUSION = _( "Ambient occlusion" );
+		static wxString PROPERTY_CHANNEL_TRANSMITTANCE = _( "Transmittance" );
 	}
 
 	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable
@@ -57,6 +59,8 @@ namespace GuiCommon
 		PROPERTY_CHANNEL_ALBEDO = _( "Albedo" );
 		PROPERTY_CHANNEL_ROUGHNESS = _( "Roughness" );
 		PROPERTY_CHANNEL_METALLIC = _( "Metallic" );
+		PROPERTY_CHANNEL_AMBIENT_OCCLUSION = _( "Ambient occlusion" );
+		PROPERTY_CHANNEL_TRANSMITTANCE = _( "Transmittance" );
 
 		CreateTreeItemMenu();
 	}
@@ -74,7 +78,8 @@ namespace GuiCommon
 			wxPGChoices choices;
 			wxString selected;
 
-			if ( m_materialType == MaterialType::eLegacy )
+			if ( m_materialType == MaterialType::eLegacy
+				|| m_materialType == MaterialType::ePbrSpecularGlossiness)
 			{
 				choices.Add( PROPERTY_CHANNEL_DIFFUSE );
 				choices.Add( PROPERTY_CHANNEL_NORMAL );
@@ -85,6 +90,8 @@ namespace GuiCommon
 				choices.Add( PROPERTY_CHANNEL_GLOSS );
 				choices.Add( PROPERTY_CHANNEL_REFLECTION );
 				choices.Add( PROPERTY_CHANNEL_REFRACTION );
+				choices.Add( PROPERTY_CHANNEL_AMBIENT_OCCLUSION );
+				choices.Add( PROPERTY_CHANNEL_TRANSMITTANCE );
 
 				switch ( unit->getChannel() )
 				{
@@ -123,6 +130,14 @@ namespace GuiCommon
 				case TextureChannel::eRefraction:
 					selected = PROPERTY_CHANNEL_REFRACTION;
 					break;
+
+				case TextureChannel::eAmbientOcclusion:
+					selected = PROPERTY_CHANNEL_AMBIENT_OCCLUSION;
+					break;
+
+				case TextureChannel::eTransmittance:
+					selected = PROPERTY_CHANNEL_TRANSMITTANCE;
+					break;
 				}
 			}
 			else
@@ -136,6 +151,8 @@ namespace GuiCommon
 				choices.Add( PROPERTY_CHANNEL_METALLIC );
 				choices.Add( PROPERTY_CHANNEL_REFLECTION );
 				choices.Add( PROPERTY_CHANNEL_REFRACTION );
+				choices.Add( PROPERTY_CHANNEL_AMBIENT_OCCLUSION );
+				choices.Add( PROPERTY_CHANNEL_TRANSMITTANCE );
 
 				switch ( unit->getChannel() )
 				{
@@ -174,6 +191,14 @@ namespace GuiCommon
 				case TextureChannel::eRefraction:
 					selected = PROPERTY_CHANNEL_REFRACTION;
 					break;
+
+				case TextureChannel::eAmbientOcclusion:
+					selected = PROPERTY_CHANNEL_AMBIENT_OCCLUSION;
+					break;
+
+				case TextureChannel::eTransmittance:
+					selected = PROPERTY_CHANNEL_TRANSMITTANCE;
+					break;
 				}
 			}
 
@@ -205,60 +230,57 @@ namespace GuiCommon
 				{
 					OnChannelChange( TextureChannel::eDiffuse );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
 				{
 					OnChannelChange( TextureChannel::eNormal );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
 				{
 					OnChannelChange( TextureChannel::eOpacity );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 				{
 					OnChannelChange( TextureChannel::eSpecular );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
 				{
 					OnChannelChange( TextureChannel::eEmissive );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
 				{
 					OnChannelChange( TextureChannel::eHeight );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 				{
 					OnChannelChange( TextureChannel::eGloss );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_REFLECTION )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_REFLECTION )
 				{
 					OnChannelChange( TextureChannel::eReflection );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_REFRACTION )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_REFRACTION )
 				{
 					OnChannelChange( TextureChannel::eRefraction );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_ALBEDO )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_ALBEDO )
 				{
 					OnChannelChange( TextureChannel::eAlbedo );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_ROUGHNESS )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_ROUGHNESS )
 				{
 					OnChannelChange( TextureChannel::eRoughness );
 				}
-
-				if ( property->GetValueAsString() == PROPERTY_CHANNEL_METALLIC )
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_METALLIC )
 				{
 					OnChannelChange( TextureChannel::eMetallic );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_AMBIENT_OCCLUSION )
+				{
+					OnChannelChange( TextureChannel::eAmbientOcclusion );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_CHANNEL_TRANSMITTANCE )
+				{
+					OnChannelChange( TextureChannel::eTransmittance );
 				}
 			}
 			else if ( property->GetName() == PROPERTY_TEXTURE_IMAGE )

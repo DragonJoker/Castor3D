@@ -74,16 +74,6 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
 		void debugDisplay( castor::Size const & size, uint32_t index )override;
-		/**
-		 *\~english
-		 *\return		The linear depth map.
-		 *\~french
-		 *\return		La texture de profondeur linéaire.
-		 */
-		TextureUnit const & getLinear()const
-		{
-			return m_linear;
-		}
 
 	private:
 		/**
@@ -120,12 +110,6 @@ namespace castor3d
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
 		RenderBufferAttachmentSPtr m_depthAttach;
-		//!\~english	The linear depth buffer.
-		//!\~french		Le tampon de profondeur linéaire.
-		TextureUnit m_linear;
-		//!\~english	The attach between linear depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur linéaire et le tampon principal.
-		TextureAttachmentSPtr m_linearAttach;
 	};
 }
 

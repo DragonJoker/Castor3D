@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "Cache/MaterialCache.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
@@ -548,35 +548,24 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
+			auto material = materials->getBaseMaterial( vtx_material );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, material->m_opacity() );
+
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto material = materials->getBaseMaterial( vtx_material );
-
-				IF( writer, material->m_subsurfaceScatteringEnabled() == 0 )
-				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material->m_alphaRef() );
-				}
-				FI;
+				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material->m_alphaRef() );
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto material = materials->getBaseMaterial( vtx_material );
-
-				IF( writer, material->m_subsurfaceScatteringEnabled() == 0 )
-				{
-					auto alpha = writer.declLocale( cuT( "alpha" )
-						, material->m_opacity() );
-					shader::applyAlphaFunc( writer
-						, alphaFunc
-						, alpha
-						, material->m_alphaRef() );
-				}
-				FI;
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material->m_alphaRef() );
 			}
 
 			pxl_fragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );

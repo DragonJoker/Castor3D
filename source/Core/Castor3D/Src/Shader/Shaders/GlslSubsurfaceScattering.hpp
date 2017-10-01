@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <GlslIntrinsics.hpp>
 
-#define C3D_DEBUG_SSS_TRANSMITTANCE 1
+#define C3D_DEBUG_SSS_TRANSMITTANCE 0
 
 namespace castor3d
 {

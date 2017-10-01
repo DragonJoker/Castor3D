@@ -55,32 +55,12 @@ namespace castor3d
 							result = file.writeText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
 							break;
 
-						case TextureChannel::eNormal:
-							result = file.writeText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
-							break;
-
-						case TextureChannel::eOpacity:
-							result = file.writeText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
-							break;
-
 						case TextureChannel::eSpecular:
 							result = file.writeText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
 							break;
 
-						case TextureChannel::eEmissive:
-							result = file.writeText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
-							break;
-
-						case TextureChannel::eHeight:
-							result = file.writeText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
-							break;
-
 						case TextureChannel::eGloss:
 							result = file.writeText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
-							break;
-
-						case TextureChannel::eAmbientOcclusion:
-							result = file.writeText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
 							break;
 
 						default:
@@ -95,37 +75,44 @@ namespace castor3d
 							result = file.writeText( m_tabs + cuT( "\tchannel albedo\n" ) ) > 0;
 							break;
 
-						case TextureChannel::eNormal:
-							result = file.writeText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
-							break;
-
-						case TextureChannel::eOpacity:
-							result = file.writeText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
-							break;
-
 						case TextureChannel::eMetallic:
 							result = file.writeText( m_tabs + cuT( "\tchannel metallic\n" ) ) > 0;
-							break;
-
-						case TextureChannel::eEmissive:
-							result = file.writeText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
-							break;
-
-						case TextureChannel::eHeight:
-							result = file.writeText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 							break;
 
 						case TextureChannel::eRoughness:
 							result = file.writeText( m_tabs + cuT( "\tchannel roughness\n" ) ) > 0;
 							break;
 
-						case TextureChannel::eAmbientOcclusion:
-							result = file.writeText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
-							break;
-
 						default:
 							break;
 						}
+						break;
+					}
+
+					switch ( unit.getChannel() )
+					{
+					case TextureChannel::eNormal:
+						result = file.writeText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+						break;
+
+					case TextureChannel::eOpacity:
+						result = file.writeText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
+						break;
+
+					case TextureChannel::eEmissive:
+						result = file.writeText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+						break;
+
+					case TextureChannel::eHeight:
+						result = file.writeText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+						break;
+
+					case TextureChannel::eAmbientOcclusion:
+						result = file.writeText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
+						break;
+
+					case TextureChannel::eTransmittance:
+						result = file.writeText( m_tabs + cuT( "\tchannel transmittance\n" ) ) > 0;
 						break;
 					}
 
