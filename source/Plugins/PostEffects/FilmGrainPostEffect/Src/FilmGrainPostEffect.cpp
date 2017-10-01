@@ -1,6 +1,13 @@
 ﻿#include "FilmGrainPostEffect.hpp"
 
-#include "Noise.hpp"
+#include "XpmLoader.hpp"
+
+#include "NoiseLayer1.xpm"
+#include "NoiseLayer2.xpm"
+#include "NoiseLayer3.xpm"
+#include "NoiseLayer4.xpm"
+#include "NoiseLayer5.xpm"
+#include "NoiseLayer6.xpm"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -72,86 +79,13 @@ namespace film_grain
 			return writer.finalise();
 		}
 
-		glsl::Shader getNoiseProgram( RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			auto permute = writer.implementFunction< Vec3 >( cuT( "permute" )
-				, [&]( Vec3 const & x )
-				{
-					writer.returnStmt( mod( ( ( x * 34.0 ) + 1.0 ) * x, 289.0_f ) );
-				}
-				, InVec3{ &writer, cuT( "x" ) } );
-
-			auto snoise = writer.implementFunction< Vec3 >( cuT( "snoise" )
-				, [&]( Vec2 const & v )
-				{
-					auto C = writer.declLocale( cuT( "C" )
-						, vec4( 0.211324865405187_f
-							, 0.366025403784439_f
-							, -0.577350269189626_f
-							, 0.024390243902439_f ) );
-					auto i = writer.declLocale( cuT( "i" )
-						, floor( v + dot( v, C.yy() ) ) );
-					auto x0 = writer.declLocale( cuT( "x0" )
-						, v - i + dot( i, C.xx() ) );
-					auto i1 = writer.declLocale( cuT( "i1" )
-						, writer.ternary( x0.x() > x0.y()
-							, vec2( 1.0_f, 0.0 )
-							, vec2( 0.0_f, 1.0 ) ) );
-					auto x12 = writer.declLocale( cuT( "x12" )
-						, vec4( x0.xy(), x0.xy() ) + C.xxzz() );
-					x12.xy() -= i1;
-					i = mod( i, 289.0 );
-					auto p = writer.declLocale( cuT( "p" )
-						, permute( permute( vec3( 0.0_f, i1.y(), 1.0 ) + i.y() )
-							+ i.x() + vec3( 0.0_f, i1.x(), 1.0 ) ) );
-					auto m = writer.declLocale( cuT( "m" )
-						, max( vec3( 0.5_f ) - vec3( dot( x0, x0 ), dot( x12.xy(), x12.xy() ), dot( x12.zw(), x12.zw() ) )
-							, vec3( 0.0_f ) ) );
-					m = m * m;
-					m = m * m;
-					auto x = writer.declLocale( cuT( "x" )
-						, 2.0_f * fract( p * C.www() ) - 1.0 );
-					auto h = writer.declLocale( cuT( "h" )
-						, abs( x ) - 0.5 );
-					auto ox = writer.declLocale( cuT( "ox" )
-						, floor( x + 0.5 ) );
-					auto a0 = writer.declLocale( cuT( "a0" )
-						, x - ox );
-					m *= vec3( 1.79284291400159_f ) - 0.85373472095314_f * ( a0 * a0 + h * h );
-					auto g = writer.declLocale( cuT( "g" )
-						, vec3( a0.x() * x0.x() + h.x() * x0.y()
-							, a0.yz() * x12.xz() + h.yz() * x12.yw() ) );
-					writer.returnStmt( vec3( 130.0_f ) * dot( m, g ) );
-				}
-				, InVec2{ &writer, cuT( "v" ) } );
-
-			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-
-			// Shader outputs
-			auto plx_fragColor = writer.declFragData< Float >( cuT( "plx_fragColor" ), 0 );
-
-			writer.implementFunction< Void >( cuT( "main" )
-				, [&]()
-				{
-					plx_fragColor = snoise( vtx_texture ).r();
-				} );
-
-			return writer.finalise();
-		}
-
 		glsl::Shader getFragmentProgram( RenderSystem * renderSystem )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			glsl::Ubo filmGrain{ writer
-				, FilmGrainUbo
-				, BindingPoint };
+			glsl::Ubo filmGrain{ writer, FilmGrainUbo, BindingPoint };
 			auto c3d_pixelSize = filmGrain.declMember< Vec2 >( PixelSize );
 			auto c3d_noiseIntensity = filmGrain.declMember< Float >( NoiseIntensity );
 			auto c3d_exposure = filmGrain.declMember< Float >( Exposure );
@@ -211,9 +145,15 @@ namespace film_grain
 					, texture( c3d_srcTex, vtx_texture ).xyz() );
 				colour = addNoise( colour, vtx_texture );
 				plx_fragColor = vec4( colour, 1.0 );
-				plx_fragColor = texture( c3d_noiseTex, vec3( vtx_texture, 0.0 ) );
+				//plx_fragColor = vec4( texture( c3d_srcTex, vtx_texture ).xyz(), 1.0 );
 			} );
 			return writer.finalise();
+		}
+
+		template< typename T, size_t N >
+		inline size_t getCountOf( T const( &p_data )[N] )
+		{
+			return N;
 		}
 	}
 
@@ -232,6 +172,11 @@ namespace film_grain
 		, m_surface{ *renderSystem.getEngine() }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_noise{ *renderSystem.getEngine() }
+		, m_configUbo{ FilmGrainUbo, renderSystem, BindingPoint }
+		, m_pixelSize{ *m_configUbo.createUniform< UniformType::eVec2f >( PixelSize ) }
+		, m_noiseIntensity{ *m_configUbo.createUniform< UniformType::eFloat >( NoiseIntensity ) }
+		, m_exposure{ *m_configUbo.createUniform< UniformType::eFloat >( Exposure ) }
+		, m_time{ *m_configUbo.createUniform< UniformType::eFloat >( Time ) }
 	{
 		String name = cuT( "FilmGrain2D" );
 
@@ -294,10 +239,10 @@ namespace film_grain
 		program->createObject( ShaderType::ePixel );
 		m_mapSrc = program->createUniform< UniformType::eSampler >( SrcTex
 			, ShaderType::ePixel );
-		m_mapSrc->setValue( 0 );
+		m_mapSrc->setValue( MinTextureIndex + 0 );
 		m_mapNoise = program->createUniform< UniformType::eSampler >( NoiseTex
 			, ShaderType::ePixel );
-		m_mapNoise->setValue( 1 );
+		m_mapNoise->setValue( MinTextureIndex + 1 );
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, fragment );
 		program->initialise();
@@ -314,10 +259,15 @@ namespace film_grain
 			, *program
 			, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		m_pipeline->addUniformBuffer( m_configUbo );
 		result = m_surface.initialise( m_renderTarget
 			, size
-			, 0
+			, MinTextureIndex
 			, m_sampler2D );
+
+		m_pixelSize.setValue( Point2f{ size.getWidth(), size.getHeight() } );
+		m_noiseIntensity.setValue( 1.0f );
+		m_exposure.setValue( 1.0f );
 
 		doGenerateNoiseTexture();
 
@@ -331,10 +281,14 @@ namespace film_grain
 		m_noise.cleanup();
 		m_surface.cleanup();
 		m_matrixUbo.getUbo().cleanup();
+		m_configUbo.cleanup();
 	}
 
 	bool PostEffect::apply( FrameBuffer & framebuffer )
 	{
+		m_time.setValue( float( m_timer.getElapsed().count() ) / 6.0f );
+		m_configUbo.update();
+		m_configUbo.bindTo( BindingPoint );
 		auto attach = framebuffer.getAttachment( AttachmentPoint::eColour, 0 );
 		REQUIRE( attach && attach->getAttachmentType() == AttachmentType::eTexture );
 
@@ -365,72 +319,31 @@ namespace film_grain
 
 	void PostEffect::doGenerateNoiseTexture()
 	{
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
 		auto texture = getRenderSystem()->createTexture( TextureType::eThreeDimensions
-			, AccessType::eNone
-			, AccessType::eRead | AccessType::eWrite
-			, PixelFormat::eL32F
+			, AccessType::eWrite
+			, AccessType::eRead
+			, PixelFormat::eR8G8B8
 			, Point3ui{ 512u, 512u, 6u } );
 
-		for ( auto & image : *texture )
+		XpmLoader loader;
+		std::array< PxBufferBaseSPtr, 6u > buffers
 		{
-			image->initialiseSource();
+			loader.loadImage( NoiseLayer1_xpm, getCountOf( NoiseLayer1_xpm ) ),
+			loader.loadImage( NoiseLayer2_xpm, getCountOf( NoiseLayer2_xpm ) ),
+			loader.loadImage( NoiseLayer3_xpm, getCountOf( NoiseLayer3_xpm ) ),
+			loader.loadImage( NoiseLayer4_xpm, getCountOf( NoiseLayer4_xpm ) ),
+			loader.loadImage( NoiseLayer5_xpm, getCountOf( NoiseLayer5_xpm ) ),
+			loader.loadImage( NoiseLayer6_xpm, getCountOf( NoiseLayer6_xpm ) ),
+		};
+
+		for ( uint32_t i = 0u; i < 6u; ++i )
+		{
+			texture->getImage( i ).initialiseSource( buffers[i] );
 		}
 
 		m_noise.setTexture( texture );
 		m_noise.setSampler( m_sampler3D );
-		m_noise.setIndex( 1u );
+		m_noise.setIndex( MinTextureIndex + 1u );
 		m_noise.initialise();
-
-		auto vertex = getVertexProgram( getRenderSystem() );
-		auto fragment = getNoiseProgram( getRenderSystem() );
-		ShaderProgramSPtr program = getRenderSystem()->createShaderProgram();
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vertex );
-		program->setSource( ShaderType::ePixel, fragment );
-		program->initialise();
-
-		DepthStencilState dsstate;
-		dsstate.setDepthTest( false );
-		dsstate.setDepthMask( WritingMask::eZero );
-		RasteriserState rsstate;
-		rsstate.setCulledFaces( Culling::eBack );
-		RenderPipelineSPtr noisePipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
-			, std::move( rsstate )
-			, BlendState{}
-			, MultisampleState{}
-			, *program
-			, PipelineFlags{} );
-		noisePipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-
-		m_surface.m_fbo->bind( FrameBufferTarget::eDraw );
-		auto attach = m_surface.m_fbo->createAttachment( texture );
-		attach->setTarget( TextureType::eThreeDimensions );
-
-		for ( uint32_t i = 0u; i < 6u; ++i )
-		{
-			attach->setLayer( i );
-			attach->attach( AttachmentPoint::eColour );
-			REQUIRE( m_surface.m_fbo->isComplete() );
-			m_surface.m_fbo->setDrawBuffer( attach );
-			getRenderSystem()->getCurrentContext()->renderTexture(
-				m_surface.m_size
-				, *texture
-				, *noisePipeline
-				, m_matrixUbo );
-			attach->detach();
-		}
-
-		m_surface.m_fbo->attach( AttachmentPoint::eColour
-			, 0
-			, m_surface.m_colourAttach
-			, m_surface.m_colourTexture.getType() );
-		REQUIRE( m_surface.m_fbo->isComplete() );
-		m_surface.m_fbo->setDrawBuffer( m_surface.m_colourAttach );
-		m_surface.m_fbo->unbind();
-
-		attach.reset();
-		noisePipeline->cleanup();
 	}
 }

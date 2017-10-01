@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,6 +28,7 @@ SOFTWARE.
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
 
 namespace film_grain
 {
@@ -78,6 +79,12 @@ namespace film_grain
 		castor3d::MatrixUbo m_matrixUbo;
 		PostEffectSurface m_surface;
 		castor3d::TextureUnit m_noise;
+		castor3d::UniformBuffer m_configUbo;
+		castor3d::Uniform2f & m_pixelSize;
+		castor3d::Uniform1f & m_noiseIntensity;
+		castor3d::Uniform1f & m_exposure;
+		castor3d::Uniform1f & m_time;
+		castor::PreciseTimer m_timer;
 	};
 }
 
