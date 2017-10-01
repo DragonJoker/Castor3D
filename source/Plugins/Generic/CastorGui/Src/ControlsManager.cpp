@@ -1,4 +1,4 @@
-#include "ControlsManager.hpp"
+﻿#include "ControlsManager.hpp"
 
 #include "CtrlControl.hpp"
 #include "CtrlButton.hpp"
@@ -329,12 +329,26 @@ namespace CastorGui
 	std::vector< ControlSPtr > ControlsManager::doGetControlsByZIndex()const
 	{
 		auto lock = makeUniqueLock( m_mutexControlsByZIndex );
-		return m_controlsByZIndex;
+		std::vector< ControlSPtr > result;
+
+		if ( !m_controlsByZIndex.empty() )
+		{
+			result = m_controlsByZIndex;
+		}
+
+		return result;
 	}
 
 	std::map< uint32_t, ControlWPtr > ControlsManager::doGetControlsById()const
 	{
 		auto lock = makeUniqueLock( m_mutexControlsById );
-		return m_controlsById;
+		std::map< uint32_t, ControlWPtr > result;
+
+		if ( !m_controlsById.empty() )
+		{
+			result = m_controlsById;
+		}
+
+		return result;
 	}
 }
