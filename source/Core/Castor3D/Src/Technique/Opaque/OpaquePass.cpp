@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -43,9 +43,12 @@ namespace castor3d
 	}
 
 	void OpaquePass::render( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps )
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter )
 	{
-		doRender( info, shadowMaps );
+		doRender( info
+			, shadowMaps
+			, jitter );
 	}
 
 	void OpaquePass::doUpdateFlags( PassFlags & passFlags
@@ -104,6 +107,8 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -161,7 +166,9 @@ namespace castor3d
 			vtx_texture = tex;
 			p = mtxModel * p;
 			vtx_position = p.xyz();
-			p = c3d_mtxView * p;
+			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
+				, c3d_prvView * p );
+			p = c3d_curView * p;
 			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
 				, transpose( inverse( mat3( mtxModel ) ) ) );
 
@@ -178,12 +185,27 @@ namespace castor3d
 			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * p;
+			gl_Position = c3d_projection * p;
+			prvVertex = c3d_projection * prvVertex;
+			// Convert the jitter from non-homogeneous coordiantes to homogeneous
+			// coordinates and add it:
+			// (note that for providing the jitter in non-homogeneous projection space,
+			//  pixel coordinates (screen space) need to multiplied by two in the C++
+			//  code)
+			gl_Position.xy() -= c3d_curJitter * gl_Position.w();
+			prvVertex.xy() -= c3d_prvJitter * gl_Position.w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
+			vtx_curPosition = gl_Position.xyw();
+			vtx_prvPosition = prvVertex.xyw();
+			// Positions in projection space are in [-1, 1] range, while texture
+			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
+			// the scale (and flip the y axis):
+			vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
+			vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
@@ -209,6 +231,8 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -249,6 +273,7 @@ namespace castor3d
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), index++ ) );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
@@ -343,6 +368,12 @@ namespace castor3d
 			out_c3dOutput2 = vec4( diffuse, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
 			out_c3dOutput4 = vec4( emissive, transmittance );
+
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -367,6 +398,8 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -408,6 +441,7 @@ namespace castor3d
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), index++ ) );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
@@ -507,6 +541,12 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
 			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
+
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -528,6 +568,8 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -572,6 +614,7 @@ namespace castor3d
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), index++ ) );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
@@ -671,6 +714,12 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matDiffuse, matGlossiness );
 			out_c3dOutput3 = vec4( matSpecular, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
+
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();

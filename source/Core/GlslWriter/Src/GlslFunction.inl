@@ -1,5 +1,20 @@
 namespace glsl
 {
+	namespace details
+	{
+		template< typename T >
+		struct RemoveOptional
+		{
+			using Type = T;
+		};
+
+		template< typename T >
+		struct RemoveOptional< Optional< T > >
+		{
+			using Type = T;
+		};
+	}
+
 	//***********************************************************************************************
 
 	template< typename Return, typename Param, typename ... Params >
@@ -36,9 +51,17 @@ namespace glsl
 	}
 
 	template< typename Return, typename OptType, typename ... Params >
-	inline Optional< Return > writeOptionalFunctionCall( GlslWriter * p_writer, castor::String const & p_name, Optional< OptType > const & p_param, Params const & ... p_params )
+	inline Optional< typename details::RemoveOptional< Return >::Type > writeFunctionCall( GlslWriter * p_writer
+		, castor::String const & p_name
+		, Optional< OptType > const & p_param
+		, Params const & ... p_params )
 	{
-		return Optional< Return >( writeFunctionCall< Return >( p_writer, p_name, p_param, p_params... ), p_param.isEnabled() );
+		using NonOptionalReturn = typename details::RemoveOptional< Return >::Type;
+		return Optional< NonOptionalReturn >( writeFunctionCall< NonOptionalReturn >( p_writer
+				, p_name
+				, static_cast< OptType const & >( p_param )
+				, p_params... )
+			, p_param.isEnabled() );
 	}
 
 	//***********************************************************************************************

@@ -73,18 +73,22 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Initialises the surface.
-			 *\param[in]	p_renderTarget	The render target to which is attached this effect.
-			 *\param[in]	p_size			The surface size.
-			 *\param[in]	p_index			The surface index.
-			 *\param[in]	p_sampler		The surface sampler.
+			 *\param[in]	renderTarget	The render target to which is attached this effect.
+			 *\param[in]	size			The surface size.
+			 *\param[in]	index			The surface index.
+			 *\param[in]	sampler			The surface sampler.
 			 *\~french
 			 *\brief		Initialise la surface.
-			 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
-			 *\param[in]	p_size			Les dimensions de la surface.
-			 *\param[in]	p_index			L'index de la surface.
-			 *\param[in]	p_sampler		L'échantillonneur de la surface.
+			 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+			 *\param[in]	size			Les dimensions de la surface.
+			 *\param[in]	index			L'index de la surface.
+			 *\param[in]	sampler			L'échantillonneur de la surface.
 			 */
-			C3D_API bool initialise( castor3d::RenderTarget & p_renderTarget, castor::Size const & p_size, uint32_t p_index, castor3d::SamplerSPtr p_sampler );
+			C3D_API bool initialise( castor3d::RenderTarget & renderTarget
+				, castor::Size const & size
+				, uint32_t index
+				, castor3d::SamplerSPtr sampler
+				, castor::PixelFormat format = castor::PixelFormat::eRGBA32F );
 			/**
 			 *\~english
 			 *\brief		Cleans up the surface.
@@ -111,18 +115,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name			The effect name.
-		 *\param[in]	p_renderTarget	The render target to which is attached this effect.
+		 *\param[in]	name			The effect name.
+		 *\param[in]	renderTarget	The render target to which is attached this effect.
 		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	p_params		The optional parameters.
+		 *\param[in]	parameters		The optional parameters.
+		 *\param[in]	postToneMapping	Tells if the effect applies after tone mapping.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name			Le nom de l'effet.
-		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	name			Le nom de l'effet.
+		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	p_params		Les paramètres optionnels.
+		 *\param[in]	parameters		Les paramètres optionnels.
+		 *\param[in]	postToneMapping	Dit si l'effet s'applique après le mappage de tons.
 		 */
-		C3D_API PostEffect( castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_params );
+		C3D_API PostEffect( castor::String const & name
+			, RenderTarget & renderTarget
+			, RenderSystem & renderSystem
+			, Parameters const & parameters
+			, bool postToneMapping = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -166,6 +176,16 @@ namespace castor3d
 		 *\return			\p true si tout s'est bien passé.
 		 */
 		C3D_API virtual bool apply( FrameBuffer & p_framebuffer ) = 0;
+		/**
+		 *\~english
+		 *\return		\p true if the effect applies after tone mapping.
+		 *\~french
+		 *\brief		\p true si l'effet s'applique après le mappage de tons.
+		 */
+		inline bool isAfterToneMapping()const
+		{
+			return m_postToneMapping;
+		}
 
 	private:
 		/**
@@ -182,6 +202,9 @@ namespace castor3d
 		//!\~english	The render target to which this effect is attached.
 		//!\~french		La cible de rendu à laquelle est attachée cet effet.
 		RenderTarget & m_renderTarget;
+		//!\~english	Tells if the effect applies after tone mapping.
+		//!\~french		Dit si l'effet s'applique après le mappage de tons.
+		bool m_postToneMapping{ false };
 	};
 }
 

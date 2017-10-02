@@ -1,4 +1,4 @@
-#include "GlslIntrinsics.hpp"
+﻿#include "GlslIntrinsics.hpp"
 
 using namespace castor;
 
@@ -165,6 +165,66 @@ namespace glsl
 	IVec3 textureSize( SamplerCubeArrayShadow const & p_sampler, Int const & p_lod )
 	{
 		return writeFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Vec4 textureGather( Sampler2D const & sampler, Vec2 const & value )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value );
+	}
+
+	Vec4 textureGather( Sampler2DArray const & sampler, Vec3 const & value )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value );
+	}
+
+	Vec4 textureGather( SamplerCube const & sampler, Vec3 const & value )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value );
+	}
+
+	Vec4 textureGather( SamplerCubeArray const & sampler, Vec4 const & value )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value );
+	}
+
+	Vec4 textureGather( Sampler2D const & sampler, Vec2 const & value, Int const & comp )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, comp );
+	}
+
+	Vec4 textureGather( Sampler2DArray const & sampler, Vec3 const & value, Int const & comp )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, comp );
+	}
+
+	Vec4 textureGather( SamplerCube const & sampler, Vec3 const & value, Int const & comp )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, comp );
+	}
+
+	Vec4 textureGather( SamplerCubeArray const & sampler, Vec4 const & value, Int const & comp )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, comp );
+	}
+
+	Vec4 textureGather( Sampler2DShadow const & sampler, Vec3 const & value, Float const & refZ )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, refZ );
+	}
+
+	Vec4 textureGather( Sampler2DArrayShadow const & sampler, Vec3 const & value, Float const & refZ )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, refZ );
+	}
+
+	Vec4 textureGather( SamplerCubeShadow const & sampler, Vec3 const & value, Float const & refZ )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, refZ );
+	}
+
+	Vec4 textureGather( SamplerCubeArrayShadow const & sampler, Vec4 const & value, Float const & refZ )
+	{
+		return writeFunctionCall< Vec4 >( sampler.m_writer, cuT( "textureGather" ), sampler, value, refZ );
 	}
 
 	Vec4 texture( Sampler1D const & p_sampler, Float const & p_value )
@@ -514,67 +574,67 @@ namespace glsl
 
 	Optional< Int > textureSize( Optional< Sampler1D > const & p_sampler, Int const p_lod )
 	{
-		return writeOptionalFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec2 > textureSize( Optional< Sampler2D > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec3 > textureSize( Optional< Sampler3D > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec2 > textureSize( Optional< SamplerCube > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec2 > textureSize( Optional< Sampler1DArray > const & p_sampler, Int const p_lod )
 	{
-		return writeOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec3 > textureSize( Optional< Sampler2DArray > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec3 > textureSize( Optional< SamplerCubeArray > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< Int > textureSize( Optional< Sampler1DShadow > const & p_sampler, Int const p_lod )
 	{
-		return writeOptionalFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec2 > textureSize( Optional< Sampler2DShadow > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec2 > textureSize( Optional< SamplerCubeShadow > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec2 > textureSize( Optional< Sampler1DArrayShadow > const & p_sampler, Int const p_lod )
 	{
-		return writeOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec3 > textureSize( Optional< Sampler2DArrayShadow > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< IVec3 > textureSize( Optional< SamplerCubeArrayShadow > const & p_sampler, Int const & p_lod )
 	{
-		return writeOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+		return writeFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< Vec4 > texture( Optional< Sampler1D > const & p_sampler, Float const & p_value )
@@ -864,41 +924,41 @@ namespace glsl
 
 	Optional< Vec2 > reflect( Optional< Vec2 > const & p_a, Type const & p_b )
 	{
-		return writeOptionalFunctionCall< Vec2 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		return writeFunctionCall< Vec2 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
 	}
 
 	Optional< Vec3 > reflect( Optional< Vec3 > const & p_a, Type const & p_b )
 	{
-		return writeOptionalFunctionCall< Vec3 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		return writeFunctionCall< Vec3 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
 	}
 
 	Optional< Vec4 > reflect( Optional< Vec4 > const & p_a, Type const & p_b )
 	{
-		return writeOptionalFunctionCall< Vec4 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		return writeFunctionCall< Vec4 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
 	}
 
 	Optional< Float > length( Optional< Type > const & p_value )
 	{
-		return writeOptionalFunctionCall< Float >( p_value.m_writer, cuT( "length" ), p_value );
+		return writeFunctionCall< Float >( p_value.m_writer, cuT( "length" ), p_value );
 	}
 
 	Optional< Float > radians( Optional< Type > const & p_value )
 	{
-		return writeOptionalFunctionCall< Float >( p_value.m_writer, cuT( "radians" ), p_value );
+		return writeFunctionCall< Float >( p_value.m_writer, cuT( "radians" ), p_value );
 	}
 
 	Optional< Float > cos( Optional< Type > const & p_value )
 	{
-		return writeOptionalFunctionCall< Float >( p_value.m_writer, cuT( "cos" ), p_value );
+		return writeFunctionCall< Float >( p_value.m_writer, cuT( "cos" ), p_value );
 	}
 
 	Optional< Float > sin( Optional< Type > const & p_value )
 	{
-		return writeOptionalFunctionCall< Float >( p_value.m_writer, cuT( "sin" ), p_value );
+		return writeFunctionCall< Float >( p_value.m_writer, cuT( "sin" ), p_value );
 	}
 
 	Optional< Float > tan( Optional< Type > const & p_value )
 	{
-		return writeOptionalFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
+		return writeFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
 	}
 }

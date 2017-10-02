@@ -106,13 +106,16 @@ namespace castor3d
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	shadowMaps	The shadow maps.
+		 *\param[out]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	shadowMaps	Les textures d'ombres.
+		 *\param[out]	jitter		La valeur de jittering.
 		 */
 		C3D_API virtual void render( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps ) = 0;
+			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter ) = 0;
 
 	protected:
 		/**
@@ -120,13 +123,16 @@ namespace castor3d
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	shadowMaps	The shadow maps.
+		 *\param[out]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	shadowMaps	Les textures d'ombres.
+		 *\param[out]	jitter		La valeur de jittering.
 		 */
 		C3D_API void doRender( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps );
+			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter = castor::Point2r{} );
 		/**
 		 *\~english
 		 *\brief			Renders render nodes.
@@ -144,6 +150,7 @@ namespace castor3d
 		C3D_API void doRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter
 			, RenderInfo & info )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise

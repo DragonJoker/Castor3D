@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -90,6 +90,12 @@ namespace glsl
 		inline void registerUbo( castor::String const & p_name, Ubo::Info const & p_info )
 		{
 			m_shader.registerUbo( p_name, p_info );
+		}
+
+		inline void registerConstant( castor::String const & p_name, TypeName p_type )
+		{
+			registerName( p_name, p_type );
+			m_shader.registerConstant( p_name, p_type );
 		}
 
 		inline void registerUniform( castor::String const & p_name, TypeName p_type )
@@ -255,6 +261,8 @@ namespace glsl
 		template< typename ExprType > ExprType paren( ExprType const p_expr );
 		template< typename ExprType > ExprType ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right );
 		template< typename T > inline T cast( Type const & p_from );
+		template< typename T > inline T declConstant( castor::String const & name, T const & rhs );
+		template< typename T > inline Optional< T > declConstant( castor::String const & name, T const & rhs, bool enabled );
 		template< typename T > inline T declAttribute( castor::String const & p_name );
 		template< typename T > inline T declOutput( castor::String const & p_name );
 		template< typename T > inline T declInput( castor::String const & p_name );
@@ -283,6 +291,7 @@ namespace glsl
 		template< typename T > inline Optional< T > declOutput( castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > declInput( castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > declLocale( castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< T > declLocale( castor::String const & p_name, Optional< T > const & p_rhs );
 		template< typename T > inline Optional< T > declLocale( castor::String const & p_name, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< T > declBuiltin( castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > getBuiltin( castor::String const & p_name, bool p_enabled );

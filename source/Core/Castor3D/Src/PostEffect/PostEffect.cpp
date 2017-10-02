@@ -1,4 +1,4 @@
-#include "PostEffect.hpp"
+﻿#include "PostEffect.hpp"
 
 #include "Engine.hpp"
 
@@ -18,19 +18,23 @@ namespace castor3d
 	{
 	}
 
-	bool PostEffect::PostEffectSurface::initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
+	bool PostEffect::PostEffectSurface::initialise( RenderTarget & renderTarget
+		, Size const & size
+		, uint32_t index
+		, SamplerSPtr sampler
+		, PixelFormat format )
 	{
-		m_size = p_size;
-		m_colourTexture.setIndex( p_index );
+		m_size = size;
+		m_colourTexture.setIndex( index );
 
-		m_fbo = p_renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
-		auto colourTexture = p_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+		m_fbo = renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
+		auto colourTexture = renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
-			, PixelFormat::eRGBA32F
-			, p_size );
+			, format
+			, size );
 
-		m_colourTexture.setSampler( p_sampler );
+		m_colourTexture.setSampler( sampler );
 		colourTexture->getImage().initialiseSource();
 		m_colourAttach = m_fbo->createAttachment( colourTexture );
 
@@ -43,6 +47,7 @@ namespace castor3d
 		m_fbo->attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->getType() );
 		m_fbo->setDrawBuffer( m_colourAttach );
 		bool result = m_fbo->isComplete();
+		REQUIRE( result );
 		m_fbo->unbind();
 
 		return result;
@@ -64,10 +69,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	PostEffect::PostEffect( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & CU_PARAM_UNUSED( p_param ) )
+	PostEffect::PostEffect( String const & name
+		, RenderTarget & renderTarget
+		, RenderSystem & renderSystem
+		, Parameters const & CU_PARAM_UNUSED( parameters )
+		, bool postToneMapping )
 		: OwnedBy< RenderSystem >{ renderSystem }
-		, Named{ p_name }
-		, m_renderTarget{ p_renderTarget }
+		, Named{ name }
+		, m_renderTarget{ renderTarget }
+		, m_postToneMapping{ postToneMapping }
 	{
 	}
 

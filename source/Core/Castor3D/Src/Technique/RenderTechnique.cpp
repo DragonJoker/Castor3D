@@ -1,4 +1,4 @@
-#include "RenderTechnique.hpp"
+﻿#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -296,7 +296,9 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechnique::render( RenderInfo & info )
+	void RenderTechnique::render( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		scene.getLightCache().updateLights();
@@ -305,12 +307,19 @@ namespace castor3d
 		camera.resize( m_size );
 		camera.update();
 
+		// Update part
 		doRenderEnvironmentMaps();
 		doRenderShadowMaps();
-		doRenderOpaque( info );
-		scene.renderBackground( getSize(), camera );
 		doUpdateParticles( info );
-		doRenderTransparent( info );
+
+		// Render part
+		doRenderOpaque( jitter
+			, velocity
+			, info );
+		scene.renderBackground( getSize(), camera );
+		doRenderTransparent( jitter
+			, velocity
+			, info );
 		doApplyPostEffects();
 
 		m_renderSystem.popScene();
@@ -457,7 +466,9 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechnique::doRenderOpaque( RenderInfo & info )
+	void RenderTechnique::doRenderOpaque( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
@@ -478,7 +489,9 @@ namespace castor3d
 		m_deferredRendering->render( info
 			, scene
 			, camera
-			, m_activeShadowMaps );
+			, m_activeShadowMaps
+			, jitter
+			, velocity );
 
 #endif
 	}
@@ -495,7 +508,9 @@ namespace castor3d
 		m_particleTimer->stop();
 	}
 
-	void RenderTechnique::doRenderTransparent( RenderInfo & info )
+	void RenderTechnique::doRenderTransparent( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
@@ -511,7 +526,9 @@ namespace castor3d
 		m_weightedBlendRendering->render( info
 			, scene
 			, camera
-			, m_activeShadowMaps );
+			, m_activeShadowMaps
+			, jitter
+			, velocity );
 
 #else
 

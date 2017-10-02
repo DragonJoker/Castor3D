@@ -223,9 +223,9 @@ namespace castor3d
 			v4Vertex = mtxModel * v4Vertex;
 			vtx_position = v4Vertex.xyz();
 			vtx_instance = gl_InstanceID;
-			v4Vertex = c3d_mtxView * v4Vertex;
+			v4Vertex = c3d_curView * v4Vertex;
 			vtx_viewPosition = v4Vertex.xyz();
-			gl_Position = c3d_mtxProjection * v4Vertex;
+			gl_Position = c3d_projection * v4Vertex;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

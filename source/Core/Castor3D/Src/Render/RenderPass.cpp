@@ -1324,7 +1324,7 @@ namespace castor3d
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
 			vtx_position = v4Vertex.xyz();
-			v4Vertex = c3d_mtxView * v4Vertex;
+			v4Vertex = c3d_curView * v4Vertex;
 			mtxModel = transpose( inverse( mtxModel ) );
 
 			if ( invertNormals )
@@ -1340,7 +1340,7 @@ namespace castor3d
 			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * v4Vertex;
+			gl_Position = c3d_projection * v4Vertex;
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );

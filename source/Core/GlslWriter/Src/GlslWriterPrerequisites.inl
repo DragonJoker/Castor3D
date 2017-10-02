@@ -1,4 +1,4 @@
-namespace glsl
+﻿namespace glsl
 {
 	template<>
 	struct name_of< Boolean >
@@ -223,6 +223,12 @@ namespace glsl
 	};
 
 	template< typename T >
+	struct name_of< Optional< T > >
+	{
+		static TypeName const value = name_of< T >::value;
+	};
+
+	template< typename T >
 	struct name_of< OutParam< T > >
 	{
 		static TypeName const value = name_of< T >::value;
@@ -232,6 +238,12 @@ namespace glsl
 	struct name_of< InOutParam< T > >
 	{
 		static TypeName const value = name_of< T >::value;
+	};
+
+	template< typename T >
+	struct type_of< Optional< T > >
+	{
+		using type = T;
 	};
 
 	template< typename T >

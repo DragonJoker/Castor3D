@@ -536,12 +536,12 @@ namespace castor3d
 									, uv
 									, lightSpaceDepth
 									, inverse( light.m_transform() ) ) );
+#if C3D_DEBUG_SSS_TRANSMITTANCE
+							factor = vec3( occluder / light.m_farPlane() );
+#else
 							auto distance = m_writer.declLocale( cuT( "distance" )
 								, glsl::distance( occluder, position ) );
 							factor = coefficient * exp( -distance );
-#if !C3D_DEBUG_SSS_TRANSMITTANCE
-							factor = vec3( occluder / light.m_farPlane() );
-#endif
 							//lightSpaceDepth *= light.m_farPlane();
 							//auto distance = m_writer.declLocale( cuT( "distance" )
 							//	, abs( lightSpaceDepth - lightSpacePosition.z() ) );
@@ -553,6 +553,7 @@ namespace castor3d
 							//	+ vec3( 0.358_f, 0.004, 0.0 )   * exp( distance / 1.99 )
 							//	+ vec3( 0.078_f, 0.0, 0.0 )   * exp( distance / 7.41 );
 							//factor = factor * clamp( 0.3_f + dot( light.m_direction(), -normal ), 0.0_f, 1.0_f );
+#endif
 						}
 						FI;
 					}

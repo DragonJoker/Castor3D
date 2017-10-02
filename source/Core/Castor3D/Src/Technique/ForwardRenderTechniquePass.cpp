@@ -1,4 +1,4 @@
-﻿#include "ForwardRenderTechniquePass.hpp"
+#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -57,10 +57,13 @@ namespace castor3d
 	}
 
 	void ForwardRenderTechniquePass::render( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps )
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter )
 	{
 		m_scene.getLightCache().bindLights();
-		doRender( info, shadowMaps );
+		doRender( info
+			, shadowMaps
+			, jitter );
 		m_scene.getLightCache().unbindLights();
 	}
 
@@ -111,6 +114,8 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -123,7 +128,7 @@ namespace castor3d
 
 		std::function< void() > main = [&]()
 		{
-			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
+			auto curVertex = writer.declLocale( cuT( "curVertex" )
 				, vec4( position.xyz(), 1.0 ) );
 			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
 				, vec4( normal, 0.0 ) );
@@ -161,16 +166,18 @@ namespace castor3d
 			{
 				auto time = writer.declLocale( cuT( "time" )
 					, 1.0_f - c3d_time );
-				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				curVertex = vec4( curVertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
 				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
 				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
 				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
 			vtx_texture = v3Texture;
-			v4Vertex = mtxModel * v4Vertex;
-			vtx_position = v4Vertex.xyz();
-			v4Vertex = c3d_mtxView * v4Vertex;
+			curVertex = mtxModel * curVertex;
+			vtx_position = curVertex.xyz();
+			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
+				, c3d_prvView * curVertex );
+			curVertex = c3d_curView * curVertex;
 			mtxModel = transpose( inverse( mtxModel ) );
 
 			if ( invertNormals )
@@ -186,12 +193,27 @@ namespace castor3d
 			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * v4Vertex;
+			gl_Position = c3d_projection * curVertex;
+			prvVertex = c3d_projection * prvVertex;
+			// Convert the jitter from non-homogeneous coordiantes to homogeneous
+			// coordinates and add it:
+			// (note that for providing the jitter in non-homogeneous projection space,
+			//  pixel coordinates (screen space) need to multiplied by two in the C++
+			//  code)
+			gl_Position.xy() -= c3d_curJitter * gl_Position.w();
+			prvVertex.xy() -= c3d_prvJitter * gl_Position.w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
+			vtx_curPosition = gl_Position.xyw();
+			vtx_prvPosition = prvVertex.xyw();
+			// Positions in projection space are in [-1, 1] range, while texture
+			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
+			// the scale (and flip the y axis):
+			vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
+			vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
@@ -214,6 +236,8 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -278,6 +302,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 1 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -413,9 +438,15 @@ namespace castor3d
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
-					, writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+					, writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_fragColor, length( wvPosition ), wvPosition.y() );
 			}
+
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -437,6 +468,8 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -496,6 +529,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 1 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -610,9 +644,15 @@ namespace castor3d
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
-					, writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+					, writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_fragColor, length( wvPosition ), wvPosition.y() );
 			}
+
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -634,6 +674,8 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -693,6 +735,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 1 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -807,9 +850,15 @@ namespace castor3d
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
 				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
-					, writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+					, writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
 				fog.applyFog( pxl_fragColor, length( wvPosition ), wvPosition.y() );
 			}
+
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();

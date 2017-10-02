@@ -1,4 +1,4 @@
-#include "RenderTarget.hpp"
+﻿#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -110,11 +110,14 @@ namespace castor3d
 	bool RenderTarget::TargetFbo::initialise( uint32_t index, Size const & size )
 	{
 		m_frameBuffer = m_renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
+		m_frameBuffer->initialise();
+
 		SamplerSPtr sampler = m_renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_renderTarget.m_index ) );
 		auto colourTexture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
-			, m_renderTarget.getPixelFormat(), size );
+			, m_renderTarget.getPixelFormat()
+			, size );
 		m_colourAttach = m_frameBuffer->createAttachment( colourTexture );
 		m_colourTexture.setTexture( colourTexture );
 		m_colourTexture.setSampler( sampler );
@@ -122,12 +125,12 @@ namespace castor3d
 		m_colourTexture.getTexture()->getImage().initialiseSource();
 		Size dimensions = m_colourTexture.getTexture()->getDimensions();
 		m_colourTexture.getTexture()->initialise();
-		m_frameBuffer->initialise();
 
 		m_frameBuffer->bind();
 		m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.getTexture()->getType() );
-		m_frameBuffer->setDrawBuffer( m_colourAttach );
+		m_frameBuffer->setDrawBuffers();
 		bool result = m_frameBuffer->isComplete();
+		REQUIRE( result );
 		m_frameBuffer->unbind();
 
 		return result;
@@ -141,7 +144,6 @@ namespace castor3d
 		m_frameBuffer->cleanup();
 		m_colourTexture.cleanup();
 		m_colourAttach.reset();
-		m_colourTexture.setTexture( nullptr );
 		m_frameBuffer.reset();
 	}
 
@@ -159,6 +161,7 @@ namespace castor3d
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
 		, m_frameBuffer{ *this }
+		, m_velocityTexture{ engine }
 	{
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" ), *getEngine(), Parameters{} );
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
@@ -198,12 +201,26 @@ namespace castor3d
 			m_size = m_frameBuffer.m_colourTexture.getTexture()->getDimensions();
 			m_renderTechnique->initialise( index );
 
+			auto velocityTexture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+				, AccessType::eRead
+				, AccessType::eRead | AccessType::eWrite
+				, PixelFormat::eAL16F32F
+				, m_size );
+			m_velocityTexture.setTexture( velocityTexture );
+			m_velocityTexture.getTexture()->getImage().initialiseSource();
+			m_velocityTexture.getTexture()->initialise();
+
 			for ( auto effect : m_postEffects )
 			{
 				effect->initialise();
 			}
 
 			m_initialised = m_toneMapping->initialise();
+
+			for ( auto effect : m_postPostEffects )
+			{
+				effect->initialise();
+			}
 		}
 	}
 
@@ -211,6 +228,11 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
+			for ( auto effect : m_postPostEffects )
+			{
+				effect->cleanup();
+			}
+
 			m_toneMapping->cleanup();
 			m_toneMapping.reset();
 
@@ -220,11 +242,16 @@ namespace castor3d
 			}
 
 			m_postEffects.clear();
+			m_postPostEffects.clear();
 			m_initialised = false;
-			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
+
+			m_velocityTexture.cleanup();
+			m_velocityTexture.setTexture( nullptr );
+
 			m_renderTechnique->cleanup();
 			m_frameBuffer.cleanup();
 			m_renderTechnique.reset();
+			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
 		}
 	}
 
@@ -282,6 +309,18 @@ namespace castor3d
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name, *getEngine(), parameters );
 	}
 
+	void RenderTarget::addPostEffect( PostEffectSPtr effect )
+	{
+		if ( effect->isAfterToneMapping() )
+		{
+			m_postPostEffects.push_back( effect );
+		}
+		else
+		{
+			m_postEffects.push_back( effect );
+		}
+	}
+
 	void RenderTarget::setSize( Size const & size )
 	{
 		m_size = size;
@@ -301,15 +340,26 @@ namespace castor3d
 
 		// Render the scene through the RenderTechnique.
 		getEngine()->getMaterialCache().getPassBuffer().bind();
-		m_renderTechnique->render( info );
+		m_renderTechnique->render( m_jitter
+			, m_velocityTexture
+			, info );
 
 		// Then draw the render's result to the RenderTarget's frame buffer.
 		fbo.m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		fbo.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_toneMapping->setConfig( scene->getHdrConfig() );
-		m_toneMapping->apply( getSize(), m_renderTechnique->getResult(), info );
+		m_toneMapping->apply( getSize()
+			, m_renderTechnique->getResult()
+			, info );
+		fbo.m_frameBuffer->unbind();
+
+		for ( auto & effect : m_postPostEffects )
+		{
+			effect->apply( *fbo.m_frameBuffer );
+		}
 
 		// We also render overlays.
+		fbo.m_frameBuffer->bind();
 		getEngine()->getMaterialCache().getPassBuffer().bind();
 		getEngine()->getOverlayCache().render( *scene, m_size );
 

@@ -250,6 +250,15 @@ namespace castor3d
 			, RenderBufferAttachmentSPtr renderBuffer );
 		/**
 		 *\~english
+		 *\brief		Detaches an attach from this frame buffer.
+		 *\param[in]	attach	The attach.
+		 *\~french
+		 *\brief		Détache une atache de ce tampon d'image.
+		 *\param[in]	attach	L'attache.
+		 */
+		C3D_API void detach( FrameBufferAttachmentSPtr attach );
+		/**
+		 *\~english
 		 *\brief		Retrieves a buffer attached at given attachment point and index.
 		 *\param[in]	point	The attachment point.
 		 *\param[in]	index	The attachment index.

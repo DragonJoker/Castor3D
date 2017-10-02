@@ -193,7 +193,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_position = position;
-				gl_Position = writer.paren( c3d_mtxProjection * c3d_mtxView * vec4( vtx_position, 1.0 ) );
+				gl_Position = writer.paren( c3d_projection * c3d_curView * vec4( vtx_position, 1.0 ) );
 			} );
 
 			vtx = writer.finalise();

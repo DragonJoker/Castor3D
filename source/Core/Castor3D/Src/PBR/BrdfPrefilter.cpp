@@ -159,7 +159,7 @@ namespace castor3d
 			std::function< void() > main = [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );

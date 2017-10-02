@@ -152,7 +152,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();
 		}
@@ -210,7 +210,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();
 		}

@@ -41,6 +41,11 @@ namespace glsl
 			m_ubos.emplace( p_name, p_info );
 		}
 
+		inline void registerConstant( castor::String const & p_name, TypeName p_type )
+		{
+			m_constants.emplace( p_name, p_type );
+		}
+
 		inline void registerUniform( castor::String const & p_name, TypeName p_type )
 		{
 			m_uniforms.emplace( p_name, p_type );
@@ -100,6 +105,7 @@ namespace glsl
 		castor::String m_source;
 		std::map< castor::String, Ssbo::Info > m_ssbos;
 		std::map< castor::String, Ubo::Info > m_ubos;
+		std::map< castor::String, TypeName > m_constants;
 		std::map< castor::String, TypeName > m_uniforms;
 		std::map< castor::String, TypeName > m_inputs;
 		std::map< castor::String, TypeName > m_outputs;

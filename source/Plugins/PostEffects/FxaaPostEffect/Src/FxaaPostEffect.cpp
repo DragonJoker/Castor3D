@@ -67,7 +67,7 @@ namespace fxaa
 					auto invTargetSize = writer.declLocale( cuT( "invTargetSize" )
 						, vec2( 1.0 / c3d_renderSize.x(), 1.0 / c3d_renderSize.y() ) );
 					vtx_texture = position;
-					gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - writer.paren( invTargetSize * writer.paren( 0.5 + c3d_subpixShift ) );
 				} );

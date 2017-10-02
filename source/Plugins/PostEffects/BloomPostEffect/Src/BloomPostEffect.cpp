@@ -1,4 +1,4 @@
-﻿#include "BloomPostEffect.hpp"
+#include "BloomPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -55,7 +55,7 @@ namespace Bloom
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}

@@ -1,4 +1,4 @@
-namespace glsl
+﻿namespace glsl
 {
 	//***********************************************************************************************
 
@@ -123,6 +123,34 @@ namespace glsl
 		T result;
 		result.m_value << castor::string::trim( result.m_type ) << cuT( "( " ) << castor::String( p_from ) << cuT( " )" );
 		return result;
+	}
+
+	template< typename T >
+	inline T GlslWriter::declConstant( castor::String const & name
+		, T const & rhs )
+	{
+		using type = typename type_of< T >::type;
+		registerConstant( name, name_of< T >::value );
+		*this << "#define " << name << " ";
+		m_stream << castor::String( rhs ) << std::endl;
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline Optional< T > GlslWriter::declConstant( castor::String const & name
+		, T const & rhs
+		, bool enabled )
+	{
+		using type = typename type_of< T >::type;
+		registerConstant( name, name_of< T >::value );
+
+		if ( enabled )
+		{
+			*this << "#define " << name << " ";
+			m_stream << castor::String( rhs ) << std::endl;
+		}
+
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
@@ -427,6 +455,20 @@ namespace glsl
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
+	}
+
+	template< typename T >
+	inline Optional< T > GlslWriter::declLocale( castor::String const & p_name, Optional< T > const & p_rhs )
+	{
+		using type = typename type_of< T >::type;
+		registerName( p_name, name_of< T >::value );
+
+		if ( p_rhs.isEnabled() )
+		{
+			m_stream << type().m_type << p_name << cuT( " = " ) << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		}
+
+		return Optional< T >( this, p_name, p_rhs.isEnabled() );
 	}
 
 	template< typename T >

@@ -1,4 +1,4 @@
-#include "ShaderCache.hpp"
+﻿#include "ShaderCache.hpp"
 
 #include "Engine.hpp"
 
@@ -396,8 +396,8 @@ namespace castor3d
 					auto toCamera = writer.declLocale( cuT( "toCamera" ), c3d_cameraPosition - bbcenter );
 					toCamera.y() = 0.0_f;
 					toCamera = normalize( toCamera );
-					auto right = writer.declLocale( cuT( "right" ), vec3( c3d_mtxView[0][0], c3d_mtxView[1][0], c3d_mtxView[2][0] ) );
-					auto up = writer.declLocale( cuT( "up" ), vec3( c3d_mtxView[0][1], c3d_mtxView[1][1], c3d_mtxView[2][1] ) );
+					auto right = writer.declLocale( cuT( "right" ), vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
+					auto up = writer.declLocale( cuT( "up" ), vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
 
 					if ( !checkFlag( programFlags, ProgramFlag::eSpherical ) )
 					{
@@ -425,8 +425,8 @@ namespace castor3d
 
 					vtx_texture = vec3( texture, 0.0 );
 					vtx_instance = gl_InstanceID;
-					auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
-					gl_Position = c3d_mtxProjection * vec4( wvPosition, 1.0 );
+					auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
+					gl_Position = c3d_projection * vec4( wvPosition, 1.0 );
 				} );
 
 				strVtxShader = writer.finalise();

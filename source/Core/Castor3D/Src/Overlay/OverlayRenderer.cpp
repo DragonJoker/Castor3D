@@ -621,7 +621,7 @@ namespace castor3d
 					vtx_texture = texture;
 				}
 
-				gl_Position = c3d_mtxProjection * vec4( c3d_position.x() + position.x(), c3d_position.y() + position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( c3d_position.x() + position.x(), c3d_position.y() + position.y(), 0.0, 1.0 );
 			} );
 
 			strVs = writer.finalise();

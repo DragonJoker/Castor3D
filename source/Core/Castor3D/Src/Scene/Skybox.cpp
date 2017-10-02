@@ -260,7 +260,7 @@ namespace castor3d
 
 			std::function< void() > main = [&]()
 			{
-				gl_Position = writer.paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 				vtx_texture = position;
 			};
 

@@ -208,8 +208,8 @@ namespace castor3d
 			{
 				vtx_position = position;
 				auto view = writer.declLocale( cuT( "normal" )
-					, mat4( mat3( c3d_mtxView ) ) );
-				gl_Position = writer.paren( c3d_mtxProjection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+					, mat4( mat3( c3d_curView ) ) );
+				gl_Position = writer.paren( c3d_projection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );

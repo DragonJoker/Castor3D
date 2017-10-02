@@ -74,7 +74,7 @@ namespace film_grain
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
@@ -145,7 +145,6 @@ namespace film_grain
 					, texture( c3d_srcTex, vtx_texture ).xyz() );
 				colour = addNoise( colour, vtx_texture );
 				plx_fragColor = vec4( colour, 1.0 );
-				//plx_fragColor = vec4( texture( c3d_srcTex, vtx_texture ).xyz(), 1.0 );
 			} );
 			return writer.finalise();
 		}

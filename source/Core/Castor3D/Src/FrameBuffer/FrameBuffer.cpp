@@ -83,6 +83,12 @@ namespace castor3d
 		attach( point, 0, p_renderBuffer );
 	}
 
+	void FrameBuffer::detach( FrameBufferAttachmentSPtr attach )
+	{
+		doDetach( attach->getAttachmentPoint()
+			, attach->getAttachmentIndex() );
+	}
+
 	FrameBufferAttachmentSPtr FrameBuffer::getAttachment( AttachmentPoint point
 		, uint8_t index )
 	{

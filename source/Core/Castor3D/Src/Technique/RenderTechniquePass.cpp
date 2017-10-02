@@ -191,17 +191,20 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doRender( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps )
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter )
 	{
 		doRenderNodes( m_renderQueue.getRenderNodes()
 			, *m_camera
 			, shadowMaps
+			, jitter
 			, info );
 	}
 
 	void RenderTechniquePass::doRenderNodes( SceneRenderNodes & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter
 		, RenderInfo & info )const
 	{
 		if ( !nodes.m_staticNodes.m_backCulled.empty()
@@ -213,7 +216,8 @@ namespace castor3d
 		{
 			m_timer->start();
 			m_matrixUbo.update( camera.getView()
-				, camera.getViewport().getProjection() );
+				, camera.getViewport().getProjection()
+				, Point2r{ jitter[0] * 2.0f / camera.getWidth(), jitter[1] * 2.0f / camera.getHeight() } );
 			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, shadowMaps );
 			RenderPass::doRender( nodes.m_staticNodes.m_frontCulled, camera, shadowMaps );
 			RenderPass::doRender( nodes.m_skinnedNodes.m_frontCulled, camera, shadowMaps );

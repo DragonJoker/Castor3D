@@ -155,18 +155,31 @@ namespace castor3d
 	void DeferredRendering::render( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter
+		, TextureUnit const & velocity )
 	{
 		m_engine.setPerObjectLighting( false );
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
 		camera.apply();
+		
 		m_geometryPassFrameBuffer->bind( FrameBufferTarget::eDraw );
+
+		auto velocityAttach = m_geometryPassFrameBuffer->createAttachment( velocity.getTexture() );
+		m_geometryPassFrameBuffer->attach( AttachmentPoint::eColour
+			, getTextureAttachmentIndex( DsTexture::eMax ) + 1u
+			, velocityAttach
+			, velocity.getType() );
+		REQUIRE( m_geometryPassFrameBuffer->isComplete() );
 		m_geometryPassTexAttachs[size_t( DsTexture::eDepth )]->attach( AttachmentPoint::eDepth );
+		m_geometryPassFrameBuffer->setDrawBuffers();
 		m_geometryPassFrameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass.render( info
-			, shadowMaps );
+			, shadowMaps
+			, jitter );
+		m_geometryPassFrameBuffer->detach( velocityAttach );
 		m_geometryPassFrameBuffer->unbind();
 
 		blitDepthInto( m_frameBuffer );

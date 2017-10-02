@@ -258,12 +258,6 @@
 		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "inversesqrt" ), p_value, p_values... );
 	}
 
-	template< typename ... Values >
-	inline Float sqrt( Type const & p_value, Values const & ... p_values )
-	{
-		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "sqrt" ), p_value, p_values... );
-	}
-
 	template< typename Value, typename ... Values >
 	inline Value cross( Value const & p_value, Values const & ... p_values )
 	{
@@ -298,6 +292,12 @@
 	inline Value reflect( Type const & p_value, Values const & ... p_values )
 	{
 		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "reflect" ), p_value, p_values... );
+	}
+
+	template< typename Value >
+	inline Value sqrt( Value const & value )
+	{
+		return writeFunctionCall< Value, Value >( value.m_writer, cuT( "sqrt" ), value );
 	}
 
 	template< typename Value >
@@ -433,6 +433,18 @@
 	}
 
 	template< typename Value >
+	inline Value step( Value const & edge, Value const & x )
+	{
+		return writeFunctionCall< Value >( edge.m_writer, cuT( "step" ), edge, x );
+	}
+
+	template< typename Value >
+	inline Value step( Value const & edge, Float const & x )
+	{
+		return writeFunctionCall< Value >( edge.m_writer, cuT( "step" ), edge, x );
+	}
+
+	template< typename Value >
 	inline Value neg( Value const & p_value )
 	{
 		return writeFunctionCall< Value >( p_value.m_writer, cuT( "-" ), p_value );
@@ -508,6 +520,12 @@
 	inline Value acos( Value const & p_value )
 	{
 		return writeFunctionCall< Value >( p_value.m_writer, cuT( "acos" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
 	}
 
 	//***********************************************************************************************
