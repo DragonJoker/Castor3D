@@ -20,31 +20,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GLSL_SAMPLER_H___
-#define ___GLSL_SAMPLER_H___
+#ifndef ___Smaa_Parsers_H___
+#define ___Smaa_Parsers_H___
 
-#include "GlslWriter.hpp"
+#include <Castor3DPrerequisites.hpp>
 
-namespace glsl
+#include <FileParser/FileParser.hpp>
+#include <FileParser/FileParserContext.hpp>
+
+namespace smaa
 {
-	template< SamplerType ST >
-	struct SamplerT
-		: public Type
+	enum class SmaaSection
+		: uint32_t
 	{
-		inline SamplerT();
-		inline SamplerT( GlslWriter * writer
-			, castor::String const & name = castor::String() );
-		inline SamplerT( GlslWriter * writer
-			, uint32_t bind
-			, castor::String const & name );
-		template< typename T > inline SamplerT & operator=( T const & rhs );
-		inline operator uint32_t();
-
-	private:
-		uint32_t m_binding{ 0u };
+		eRoot = MAKE_SECTION_NAME( 'S', 'M', 'A', 'A' ),
 	};
-}
 
-#include "GlslSampler.inl"
+	DECLARE_ATTRIBUTE_PARSER( parserSmaa )
+	DECLARE_ATTRIBUTE_PARSER( parserMode )
+	DECLARE_ATTRIBUTE_PARSER( parserPreset )
+	DECLARE_ATTRIBUTE_PARSER( parserThreshold )
+	DECLARE_ATTRIBUTE_PARSER( parserMaxSearchSteps )
+	DECLARE_ATTRIBUTE_PARSER( parserMaxSearchStepsDiag )
+	DECLARE_ATTRIBUTE_PARSER( parserCornerRounding )
+	DECLARE_ATTRIBUTE_PARSER( parserSmaaEnd )
+}
 
 #endif

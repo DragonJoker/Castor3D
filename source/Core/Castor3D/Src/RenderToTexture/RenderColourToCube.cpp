@@ -207,7 +207,7 @@ namespace castor3d
 			// Inputs
 			UBO_HDR_CONFIG( writer );
 			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 
 			glsl::Utils utils{ writer };
 			utils.declareRemoveGamma();

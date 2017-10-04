@@ -1,4 +1,4 @@
-﻿#include "Pass.hpp"
+#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -280,19 +280,18 @@ namespace castor3d
 				unit->setIndex( MinTextureIndex );
 			}
 
-			uint32_t index = MinTextureIndex;
 			TextureUnitSPtr opacitySource;
 			PxBufferBaseSPtr opacityImage;
 
-			doPrepareTexture( TextureChannel::eDiffuse, index, opacitySource, opacityImage );
-			doPrepareTexture( TextureChannel::eSpecular, index, opacitySource, opacityImage );
-			doPrepareTexture( TextureChannel::eEmissive, index, opacitySource, opacityImage );
-
-			doPrepareTexture( TextureChannel::eNormal, index );
+			uint32_t index = MinTextureIndex;
+			doPrepareTexture( TextureChannel::eDiffuse, index );
+			doPrepareTexture( TextureChannel::eSpecular, index );
 			doPrepareTexture( TextureChannel::eGloss, index );
+			doPrepareTexture( TextureChannel::eNormal, index );
+			doPrepareOpacity( opacitySource, opacityImage, index );
 			doPrepareTexture( TextureChannel::eHeight, index );
-
 			doPrepareTexture( TextureChannel::eAmbientOcclusion, index );
+			doPrepareTexture( TextureChannel::eEmissive, index );
 			doPrepareTexture( TextureChannel::eTransmittance, index );
 
 			doReduceTexture( TextureChannel::eSpecular
@@ -307,8 +306,6 @@ namespace castor3d
 				, PixelFormat::eL8 );
 			doReduceTexture( TextureChannel::eTransmittance
 				, PixelFormat::eL8 );
-
-			doPrepareOpacity( opacitySource, opacityImage, index );
 
 			auto unit = getTextureUnit( TextureChannel::eDiffuse );
 

@@ -15,9 +15,10 @@ namespace castor3d
 	namespace
 	{
 		template< typename CharType, typename PrefixType >
-		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & Prefix )
+		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream
+			, format::BasePrefixer< CharType, PrefixType > const & prefix )
 		{
-			format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+			auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
 
 			if ( !sbuf )
 			{
@@ -31,13 +32,15 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	ShaderProgram::TextWriter::TextWriter( String const & p_tabs, String const & p_name )
-		: castor::TextWriter< ShaderProgram >{ p_tabs }
-		, m_name{ p_name }
+	ShaderProgram::TextWriter::TextWriter( String const & tabs
+		, String const & name )
+		: castor::TextWriter< ShaderProgram >{ tabs }
+		, m_name{ name }
 	{
 	}
 
-	bool ShaderProgram::TextWriter::operator()( ShaderProgram const & p_shaderProgram, TextFile & p_file )
+	bool ShaderProgram::TextWriter::operator()( ShaderProgram const & shaderProgram
+		, TextFile & file )
 	{
 		bool result = false;
 		bool hasFile = false;
@@ -46,9 +49,9 @@ namespace castor3d
 
 		while ( i < uint8_t( ShaderType::eCount ) && !hasFile )
 		{
-			if ( p_shaderProgram.hasObject( ShaderType( i ) ) )
+			if ( shaderProgram.hasObject( ShaderType( i ) ) )
 			{
-				hasFile = !p_shaderProgram.getFile( ShaderType( i ) ).empty();
+				hasFile = !shaderProgram.getFile( ShaderType( i ) ).empty();
 			}
 
 			++i;
@@ -58,21 +61,21 @@ namespace castor3d
 		{
 			auto tabs = m_tabs + cuT( "\t" );
 			ShaderObjectSPtr object;
-			result = p_file.writeText( cuT( "\n" ) + m_tabs + m_name + cuT( "\n" ) ) > 0
-					   && p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			result = file.writeText( cuT( "\n" ) + m_tabs + m_name + cuT( "\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			checkError( result, "Shader program" );
 
 			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ) && result; i++ )
 			{
-				if ( p_shaderProgram.hasObject( ShaderType( i ) ) )
+				if ( shaderProgram.hasObject( ShaderType( i ) ) )
 				{
-					result = ShaderObject::TextWriter( tabs )( *p_shaderProgram.m_shaders[i], p_file );
+					result = ShaderObject::TextWriter( tabs )( *shaderProgram.m_shaders[i], file );
 				}
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 		else
@@ -145,20 +148,20 @@ namespace castor3d
 	{
 	}
 
-	ShaderObjectSPtr ShaderProgram::createObject( ShaderType p_type )
+	ShaderObjectSPtr ShaderProgram::createObject( ShaderType type )
 	{
 		ShaderObjectSPtr result;
-		REQUIRE( p_type > ShaderType::eNone && p_type < ShaderType::eCount );
+		REQUIRE( type > ShaderType::eNone && type < ShaderType::eCount );
 
-		if ( p_type > ShaderType::eNone && p_type < ShaderType::eCount )
+		if ( type > ShaderType::eNone && type < ShaderType::eCount )
 		{
-			result = doCreateObject( p_type );
-			m_shaders[size_t( p_type )] = result;
+			result = doCreateObject( type );
+			m_shaders[size_t( type )] = result;
 			size_t i = size_t( ShaderModel::eModel1 );
 
 			if ( !m_file.empty() )
 			{
-				m_shaders[size_t( p_type )]->setFile( m_file );
+				m_shaders[size_t( type )]->setFile( m_file );
 			}
 		}
 
@@ -181,16 +184,16 @@ namespace castor3d
 		m_file.clear();
 	}
 
-	void ShaderProgram::setFile( Path const & p_path )
+	void ShaderProgram::setFile( Path const & path )
 	{
-		m_file = p_path;
+		m_file = path;
 		uint8_t i = uint8_t( ShaderType::eVertex );
 
 		for ( auto shader : m_shaders )
 		{
 			if ( shader && getRenderSystem()->getGpuInformations().hasShaderType( ShaderType( i++ ) ) )
 			{
-				shader->setFile( p_path );
+				shader->setFile( path );
 			}
 		}
 
@@ -202,38 +205,38 @@ namespace castor3d
 		m_status = ProgramStatus::eNotLinked;
 	}
 
-	void ShaderProgram::setInputType( ShaderType p_target, Topology p_topology )
+	void ShaderProgram::setInputType( ShaderType target, Topology topology )
 	{
-		REQUIRE( m_shaders[size_t( p_target )] && p_target == ShaderType::eGeometry );
-		if ( m_shaders[size_t( p_target )] )
+		REQUIRE( m_shaders[size_t( target )] && target == ShaderType::eGeometry );
+		if ( m_shaders[size_t( target )] )
 		{
-			m_shaders[size_t( p_target )]->setInputType( p_topology );
+			m_shaders[size_t( target )]->setInputType( topology );
 		}
 	}
 
-	void ShaderProgram::setOutputType( ShaderType p_target, Topology p_topology )
+	void ShaderProgram::setOutputType( ShaderType target, Topology topology )
 	{
-		REQUIRE( m_shaders[size_t( p_target )] && p_target == ShaderType::eGeometry );
-		if ( m_shaders[size_t( p_target )] )
+		REQUIRE( m_shaders[size_t( target )] && target == ShaderType::eGeometry );
+		if ( m_shaders[size_t( target )] )
 		{
-			m_shaders[size_t( p_target )]->setOutputType( p_topology );
+			m_shaders[size_t( target )]->setOutputType( topology );
 		}
 	}
 
-	void ShaderProgram::setOutputVtxCount( ShaderType p_target, uint8_t p_count )
+	void ShaderProgram::setOutputVtxCount( ShaderType target, uint8_t count )
 	{
-		REQUIRE( m_shaders[size_t( p_target )] && p_target == ShaderType::eGeometry );
-		if ( m_shaders[size_t( p_target )] )
+		REQUIRE( m_shaders[size_t( target )] && target == ShaderType::eGeometry );
+		if ( m_shaders[size_t( target )] )
 		{
-			m_shaders[size_t( p_target )]->setOutputVtxCount( p_count );
+			m_shaders[size_t( target )]->setOutputVtxCount( count );
 		}
 	}
 
-	void ShaderProgram::setFile( ShaderType p_target, Path const & p_pathFile )
+	void ShaderProgram::setFile( ShaderType target, Path const & pathFile )
 	{
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			m_shaders[size_t( p_target )]->setFile( p_pathFile );
+			m_shaders[size_t( target )]->setFile( pathFile );
 		}
 		else
 		{
@@ -243,37 +246,37 @@ namespace castor3d
 		resetToCompile();
 	}
 
-	Path ShaderProgram::getFile( ShaderType p_target )const
+	Path ShaderProgram::getFile( ShaderType target )const
 	{
-		REQUIRE( m_shaders[size_t( p_target )] );
+		REQUIRE( m_shaders[size_t( target )] );
 		Path pathReturn;
 
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			pathReturn = m_shaders[size_t( p_target )]->getFile();
+			pathReturn = m_shaders[size_t( target )]->getFile();
 		}
 
 		return pathReturn;
 	}
 
-	bool ShaderProgram::hasFile( ShaderType p_target )const
+	bool ShaderProgram::hasFile( ShaderType target )const
 	{
-		REQUIRE( m_shaders[size_t( p_target )] );
+		REQUIRE( m_shaders[size_t( target )] );
 		bool result = false;
 
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			result = m_shaders[size_t( p_target )]->hasFile();
+			result = m_shaders[size_t( target )]->hasFile();
 		}
 
 		return result;
 	}
 
-	void ShaderProgram::setSource( ShaderType p_target, String const & p_source )
+	void ShaderProgram::setSource( ShaderType target, String const & source )
 	{
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			m_shaders[size_t( p_target )]->setSource( p_source );
+			m_shaders[size_t( target )]->setSource( source );
 		}
 		else
 		{
@@ -283,11 +286,11 @@ namespace castor3d
 		resetToCompile();
 	}
 
-	void ShaderProgram::setSource( ShaderType p_target, glsl::Shader const & p_source )
+	void ShaderProgram::setSource( ShaderType target, glsl::Shader const & source )
 	{
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			m_shaders[size_t( p_target )]->setSource( p_source );
+			m_shaders[size_t( target )]->setSource( source );
 		}
 		else
 		{
@@ -297,101 +300,94 @@ namespace castor3d
 		resetToCompile();
 	}
 
-	String ShaderProgram::getSource( ShaderType p_target )const
+	String ShaderProgram::getSource( ShaderType target )const
 	{
-		REQUIRE( m_shaders[size_t( p_target )] );
+		REQUIRE( m_shaders[size_t( target )] );
 		String strReturn;
 
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			strReturn = m_shaders[size_t( p_target )]->getSource();
+			strReturn = m_shaders[size_t( target )]->getSource();
 		}
 
 		return strReturn;
 	}
 
-	bool ShaderProgram::hasSource( ShaderType p_target )const
+	bool ShaderProgram::hasSource( ShaderType target )const
 	{
-		REQUIRE( m_shaders[size_t( p_target )] );
+		REQUIRE( m_shaders[size_t( target )] );
 		bool result = false;
 
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			result = m_shaders[size_t( p_target )]->hasSource();
+			result = m_shaders[size_t( target )]->hasSource();
 		}
 
 		return result;
 	}
 
-	bool ShaderProgram::hasObject( ShaderType p_target )const
+	bool ShaderProgram::hasObject( ShaderType target )const
 	{
-		return m_shaders[size_t( p_target )] && m_shaders[size_t( p_target )]->hasSource();
+		return m_shaders[size_t( target )] && m_shaders[size_t( target )]->hasSource();
 	}
 
-	ShaderStatus ShaderProgram::getObjectStatus( ShaderType p_target )const
+	ShaderStatus ShaderProgram::getObjectStatus( ShaderType target )const
 	{
-		REQUIRE( m_shaders[size_t( p_target )] );
+		REQUIRE( m_shaders[size_t( target )] );
 		ShaderStatus result = ShaderStatus::edontExist;
 
-		if ( m_shaders[size_t( p_target )] )
+		if ( m_shaders[size_t( target )] )
 		{
-			result = m_shaders[size_t( p_target )]->getStatus();
+			result = m_shaders[size_t( target )]->getStatus();
 		}
 
 		return result;
 	}
 
-	PushUniformSPtr ShaderProgram::createUniform( UniformType p_type, String const & p_name, ShaderType p_shader, int p_iNbOcc )
+	PushUniformSPtr ShaderProgram::createUniform( UniformType type
+		, String const & name
+		, ShaderType shader
+		, int nbOccurences )
 	{
-		REQUIRE( m_shaders[size_t( p_shader )] );
-		PushUniformSPtr result = findUniform( p_type, p_name, p_shader );
-
-		if ( !result )
-		{
-			result = doCreateUniform( p_type, p_iNbOcc );
-			result->getBaseUniform().setName( p_name );
-
-			if ( m_shaders[size_t( p_shader )] )
-			{
-				m_shaders[size_t( p_shader )]->addUniform( result );
-			}
-		}
-
-		return result;
-	}
-
-	PushUniformSPtr ShaderProgram::findUniform( UniformType p_type, castor::String const & p_name, ShaderType p_shader )const
-	{
-		REQUIRE( m_shaders[size_t( p_shader )] );
+		REQUIRE( m_shaders[size_t( shader )] );
 		PushUniformSPtr result;
 
-		if ( m_shaders[size_t( p_shader )] )
+		if ( m_shaders[size_t( shader )] )
 		{
-			result = m_shaders[size_t( p_shader )]->findUniform( p_name );
-
-			if ( result && result->getBaseUniform().getFullType() != p_type )
-			{
-				Logger::logError( cuT( "Frame variable named " ) + p_name + cuT( " exists but with a different type" ) );
-				result.reset();
-			}
+			result = m_shaders[size_t( shader )]->createUniform( type, name, nbOccurences );
 		}
 
 		return result;
 	}
 
-	AtomicCounterBuffer & ShaderProgram::createAtomicCounterBuffer( String const & p_name, ShaderTypeFlags const & p_shaderMask )
+	PushUniformSPtr ShaderProgram::findUniform( UniformType type
+		, castor::String const & name
+		, ShaderType shader )const
 	{
-		auto it = m_atomicCounterBuffersByName.find( p_name );
+		REQUIRE( m_shaders[size_t( shader )] );
+		PushUniformSPtr result;
+
+		if ( m_shaders[size_t( shader )] )
+		{
+			result = m_shaders[size_t( shader )]->findUniform( type, name );
+		}
+
+		return result;
+	}
+
+	AtomicCounterBuffer & ShaderProgram::createAtomicCounterBuffer( String const & name, ShaderTypeFlags const & shaderMask )
+	{
+		auto it = m_atomicCounterBuffersByName.find( name );
 
 		if ( it == m_atomicCounterBuffersByName.end() )
 		{
-			auto ssbo = std::make_shared< AtomicCounterBuffer >( p_name, *this );
+			auto ssbo = std::make_shared< AtomicCounterBuffer >( name, *this );
 			m_listAtomicCounterBuffers.push_back( ssbo );
-			it = m_atomicCounterBuffersByName.insert( { p_name, ssbo } ).first;
+			it = m_atomicCounterBuffersByName.insert( { name, ssbo } ).first;
 
 			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
 			{
-				if ( checkFlag( p_shaderMask, uint8_t( 0x01 << i ) ) )
+				if ( checkFlag( shaderMask, uint8_t( 0x01 << i ) ) )
 				{
 					REQUIRE( m_shaders[i] );
 					m_atomicCounterBuffers[i].push_back( ssbo );
@@ -402,10 +398,10 @@ namespace castor3d
 		return *it->second.lock();
 	}
 
-	AtomicCounterBufferSPtr ShaderProgram::findAtomicCounterBuffer( castor::String const & p_name )const
+	AtomicCounterBufferSPtr ShaderProgram::findAtomicCounterBuffer( castor::String const & name )const
 	{
 		AtomicCounterBufferSPtr buffer;
-		auto it = m_atomicCounterBuffersByName.find( p_name );
+		auto it = m_atomicCounterBuffersByName.find( name );
 
 		if ( it != m_atomicCounterBuffersByName.end() )
 		{
@@ -415,16 +411,16 @@ namespace castor3d
 		return buffer;
 	}
 
-	PushUniformList & ShaderProgram::getUniforms( ShaderType p_type )
+	PushUniformList & ShaderProgram::getUniforms( ShaderType type )
 	{
-		REQUIRE( m_shaders[size_t( p_type )] );
-		return m_shaders[size_t( p_type )]->getUniforms();
+		REQUIRE( m_shaders[size_t( type )] );
+		return m_shaders[size_t( type )]->getUniforms();
 	}
 
-	PushUniformList const & ShaderProgram::getUniforms( ShaderType p_type )const
+	PushUniformList const & ShaderProgram::getUniforms( ShaderType type )const
 	{
-		REQUIRE( m_shaders[size_t( p_type )] );
-		return m_shaders[size_t( p_type )]->getUniforms();
+		REQUIRE( m_shaders[size_t( type )] );
+		return m_shaders[size_t( type )]->getUniforms();
 	}
 
 	bool ShaderProgram::doInitialise()

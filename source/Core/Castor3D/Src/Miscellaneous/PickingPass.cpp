@@ -540,7 +540,7 @@ namespace castor3d
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs

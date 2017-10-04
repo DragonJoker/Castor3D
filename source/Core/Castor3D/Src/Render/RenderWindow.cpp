@@ -1,4 +1,4 @@
-﻿#include "RenderWindow.hpp"
+#include "RenderWindow.hpp"
 
 #include "FrameBuffer/BackBuffers.hpp"
 #include "Render/RenderLoop.hpp"
@@ -170,7 +170,7 @@ namespace castor3d
 				}
 				else
 				{
-					doRender( WindowBuffer::eBack, target->getVelocity() );
+					doRender( WindowBuffer::eBack, target->getTexture() );
 				}
 			}
 

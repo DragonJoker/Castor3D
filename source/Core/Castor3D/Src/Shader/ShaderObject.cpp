@@ -1,4 +1,4 @@
-#include "ShaderObject.hpp"
+﻿#include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "UniformBuffer.hpp"
 
@@ -23,6 +23,145 @@ namespace castor3d
 			}
 
 			return stream;
+		}
+
+		UniformType doGetUniformType( glsl::TypeName glslType )
+		{
+			UniformType result;
+
+			switch ( glslType )
+			{
+			case glsl::TypeName::eBool:
+				result = UniformType::eBool;
+				break;
+
+			case glsl::TypeName::eInt:
+				result = UniformType::eInt;
+				break;
+
+			case glsl::TypeName::eUInt:
+				result = UniformType::eUInt;
+				break;
+
+			case glsl::TypeName::eFloat:
+				result = UniformType::eFloat;
+				break;
+
+			case glsl::TypeName::eVec2B:
+				result = UniformType::eVec2b;
+				break;
+
+			case glsl::TypeName::eVec3B:
+				result = UniformType::eVec3b;
+				break;
+
+			case glsl::TypeName::eVec4B:
+				result = UniformType::eVec4b;
+				break;
+
+			case glsl::TypeName::eVec2I:
+				result = UniformType::eVec2i;
+				break;
+
+			case glsl::TypeName::eVec3I:
+				result = UniformType::eVec3i;
+				break;
+
+			case glsl::TypeName::eVec4I:
+				result = UniformType::eVec4i;
+				break;
+
+			case glsl::TypeName::eVec2F:
+				result = UniformType::eVec2f;
+				break;
+
+			case glsl::TypeName::eVec3F:
+				result = UniformType::eVec3f;
+				break;
+
+			case glsl::TypeName::eVec4F:
+				result = UniformType::eVec4f;
+				break;
+
+			case glsl::TypeName::eMat2x2B:
+				result = UniformType::eMat2x2b;
+				break;
+
+			case glsl::TypeName::eMat3x3B:
+				result = UniformType::eMat3x3b;
+				break;
+
+			case glsl::TypeName::eMat4x4B:
+				result = UniformType::eMat4x4b;
+				break;
+
+			case glsl::TypeName::eMat2x2I:
+				result = UniformType::eMat2x2i;
+				break;
+
+			case glsl::TypeName::eMat3x3I:
+				result = UniformType::eMat3x3i;
+				break;
+
+			case glsl::TypeName::eMat4x4I:
+				result = UniformType::eMat4x4i;
+				break;
+
+			case glsl::TypeName::eMat2x2F:
+				result = UniformType::eMat2x2f;
+				break;
+
+			case glsl::TypeName::eMat3x3F:
+				result = UniformType::eMat3x3f;
+				break;
+
+			case glsl::TypeName::eMat4x4F:
+				result = UniformType::eMat4x4f;
+				break;
+
+			case glsl::TypeName::eSamplerBuffer:
+			case glsl::TypeName::eSampler1D:
+			case glsl::TypeName::eSampler2D:
+			case glsl::TypeName::eSampler3D:
+			case glsl::TypeName::eSamplerCube:
+			case glsl::TypeName::eSampler2DRect:
+			case glsl::TypeName::eSampler1DArray:
+			case glsl::TypeName::eSampler2DArray:
+			case glsl::TypeName::eSamplerCubeArray:
+			case glsl::TypeName::eSampler1DShadow:
+			case glsl::TypeName::eSampler2DShadow:
+			case glsl::TypeName::eSamplerCubeShadow:
+			case glsl::TypeName::eSampler2DRectShadow:
+			case glsl::TypeName::eSampler1DArrayShadow:
+			case glsl::TypeName::eSampler2DArrayShadow:
+			case glsl::TypeName::eSamplerCubeArrayShadow:
+				result = UniformType::eSampler;
+				break;
+
+			default:
+				{
+					auto castorType = static_cast< shader::TypeName >( glslType );
+
+					switch ( castorType )
+					{
+					case shader::TypeName::eLight:
+					case shader::TypeName::eDirectionalLight:
+					case shader::TypeName::ePointLight:
+					case shader::TypeName::eSpotLight:
+					case shader::TypeName::eMaterial:
+					case shader::TypeName::eLegacyMaterial:
+					case shader::TypeName::eMetallicRoughnessMaterial:
+					case shader::TypeName::eSpecularGlossinessMaterial:
+						result = UniformType::eCount;
+						break;
+
+					default:
+						FAILURE( "Unuspported GLSL type" );
+					}
+				}
+			}
+
+			return result;
 		}
 	}
 
@@ -89,7 +228,7 @@ namespace castor3d
 		cuT( "compute_program" ),
 	};
 
-	ShaderObject::ShaderObject( ShaderProgram * p_parent, ShaderType p_type )
+	ShaderObject::ShaderObject( ShaderProgram & p_parent, ShaderType p_type )
 		: m_type( p_type )
 		, m_parent( p_parent )
 	{
@@ -153,6 +292,7 @@ namespace castor3d
 	void ShaderObject::setSource( glsl::Shader const & p_source )
 	{
 		m_source = p_source;
+		doFillVariables();
 	}
 
 	bool ShaderObject::hasSource()const
@@ -160,23 +300,38 @@ namespace castor3d
 		return !m_source.getSource().empty();
 	}
 
-	void ShaderObject::addUniform( PushUniformSPtr p_variable )
+	PushUniformSPtr ShaderObject::createUniform( UniformType type
+		, String const & name
+		, int nbOccurences )
 	{
-		if ( p_variable )
+		PushUniformSPtr result = findUniform( type, name );
+
+		if ( !result )
 		{
-			m_listUniforms.push_back( p_variable );
-			m_mapUniforms.insert( std::make_pair( p_variable->getBaseUniform().getName(), p_variable ) );
+			result = doCreateUniform( type, nbOccurences );
+			result->getBaseUniform().setName( name );
+			doAddUniform( result );
 		}
+
+		return result;
 	}
 
-	PushUniformSPtr ShaderObject::findUniform( castor::String const & p_name )const
+	PushUniformSPtr ShaderObject::findUniform( UniformType type
+		, castor::String const & name )const
 	{
 		PushUniformSPtr result;
-		auto it = m_mapUniforms.find( p_name );
+		auto it = m_mapUniforms.find( name );
 
 		if ( it != m_mapUniforms.end() )
 		{
 			result = it->second.lock();
+
+			if ( result && result->getBaseUniform().getFullType() != type )
+			{
+				Logger::logError( cuT( "Frame variable named " ) + name + cuT( " exists but with a different type" ) );
+				FAILURE( "Variable exists with different type." );
+				result.reset();
+			}
 		}
 
 		return result;
@@ -186,6 +341,15 @@ namespace castor3d
 	{
 		clearContainer( m_mapUniforms );
 		clearContainer( m_listUniforms );
+	}
+
+	void ShaderObject::doAddUniform( PushUniformSPtr variable )
+	{
+		if ( variable )
+		{
+			m_listUniforms.push_back( variable );
+			m_mapUniforms.insert( std::make_pair( variable->getBaseUniform().getName(), variable ) );
+		}
 	}
 
 	bool ShaderObject::doCheckErrors()
@@ -219,5 +383,24 @@ namespace castor3d
 		}
 
 		return m_status != ShaderStatus::eError;
+	}
+
+	void ShaderObject::doFillVariables()
+	{
+		for ( auto & uniform : m_source.getUniforms() )
+		{
+			auto uniformType = doGetUniformType( uniform.second.m_type );
+
+			if ( uniformType != UniformType::eCount )
+			{
+				createUniform( doGetUniformType( uniform.second.m_type ), uniform.first )->getBaseUniform().setChanged( false );
+			}
+		}
+
+		for ( auto & sampler : m_source.getSamplers() )
+		{
+			auto samplerUniform = createUniform< UniformType::eSampler >( sampler.first, sampler.second.m_count );
+			samplerUniform->setValue( sampler.second.m_binding );
+		}
 	}
 }

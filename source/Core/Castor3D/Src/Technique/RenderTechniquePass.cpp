@@ -215,9 +215,12 @@ namespace castor3d
 			|| !nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			m_timer->start();
+			auto jitterProjSpace = jitter * 2;
+			jitterProjSpace[0] /= camera.getWidth();
+			jitterProjSpace[1] /= camera.getHeight();
 			m_matrixUbo.update( camera.getView()
 				, camera.getViewport().getProjection()
-				, Point2r{ jitter[0] * 2.0f / camera.getWidth(), jitter[1] * 2.0f / camera.getHeight() } );
+				, jitterProjSpace );
 			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, shadowMaps );
 			RenderPass::doRender( nodes.m_staticNodes.m_frontCulled, camera, shadowMaps );
 			RenderPass::doRender( nodes.m_skinnedNodes.m_frontCulled, camera, shadowMaps );

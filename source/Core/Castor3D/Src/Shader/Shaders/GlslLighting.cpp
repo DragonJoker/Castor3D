@@ -84,11 +84,11 @@ namespace castor3d
 		{
 		}
 
-		void LightingModel::declareModel()
+		void LightingModel::declareModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declare( m_shadows );
+				m_shadowModel->declare( m_shadows, index );
 			}
 
 			doDeclareLight();
@@ -108,11 +108,11 @@ namespace castor3d
 			doDeclareComputeSpotLightBackLit();
 		}
 
-		void LightingModel::declareDirectionalModel()
+		void LightingModel::declareDirectionalModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareDirectional( m_shadows );
+				m_shadowModel->declareDirectional( m_shadows, index );
 			}
 
 			doDeclareLight();
@@ -122,11 +122,11 @@ namespace castor3d
 			doDeclareComputeDirectionalLightBackLit();
 		}
 
-		void LightingModel::declarePointModel()
+		void LightingModel::declarePointModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declarePoint( m_shadows );
+				m_shadowModel->declarePoint( m_shadows, index );
 			}
 
 			doDeclareLight();
@@ -136,11 +136,11 @@ namespace castor3d
 			doDeclareComputePointLightBackLit();
 		}
 
-		void LightingModel::declareSpotModel()
+		void LightingModel::declareSpotModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareSpot( m_shadows );
+				m_shadowModel->declareSpot( m_shadows, index );
 			}
 
 			doDeclareLight();

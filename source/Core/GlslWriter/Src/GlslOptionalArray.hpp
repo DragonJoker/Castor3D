@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,14 +31,54 @@ namespace glsl
 	struct Optional< Array< TypeT > >
 		: public Array< TypeT >
 	{
-		Optional( GlslWriter * p_writer, castor::String const & p_name, uint32_t p_dimension , bool p_enabled );
-		Optional( Array< TypeT > const & p_other, bool p_enabled );
-		template< typename T > Optional( castor::String const & p_name, uint32_t p_dimension, T const & p_rhs, bool p_enabled );
-		inline Optional< Array< TypeT > > operator=( Optional< Array< TypeT > > const & p_rhs );
-		template< typename T > inline Optional< Array< TypeT > > operator=( T const & p_rhs );
+		Optional( GlslWriter * writer
+			, castor::String const & name
+			, uint32_t dimension
+			, bool enabled );
+		Optional( Array< TypeT > const & other, bool enabled );
+		template< typename T >
+		Optional( castor::String const & name
+			, uint32_t dimension
+			, T const & rhs
+			, bool enabled );
+
+		inline Optional< Array< TypeT > > operator=( Optional< Array< TypeT > > const & rhs );
+		template< typename T >
+		inline Optional< Array< TypeT > > operator=( T const & rhs );
 		inline bool isEnabled()const;
 
-		inline operator Optional< Array< TypeT > >()const;
+		inline operator Optional< Array< Type > >()const;
+
+	private:
+		bool m_enabled;
+	};
+
+	template< SamplerType ST >
+	struct Optional< Array< SamplerT< ST > > >
+		: public Array< SamplerT< ST > >
+	{
+		Optional( GlslWriter * writer
+			, castor::String const & name
+			, uint32_t dimension
+			, bool enabled );
+		Optional( GlslWriter * writer
+			, uint32_t binding
+			, castor::String const & name
+			, uint32_t dimension
+			, bool enabled );
+		Optional( Array< SamplerT< ST > > const & other, bool enabled );
+		template< typename T >
+		Optional( castor::String const & name
+			, uint32_t dimension
+			, T const & rhs
+			, bool enabled );
+
+		inline Optional< Array< SamplerT< ST > > > operator=( Optional< Array< SamplerT< ST > > > const & rhs );
+		template< typename T >
+		inline Optional< Array< SamplerT< ST > > > operator=( T const & rhs );
+		inline bool isEnabled()const;
+
+		inline operator Optional< Array< Type > >()const;
 
 	private:
 		bool m_enabled;

@@ -93,10 +93,6 @@ namespace GlRender
 		 */
 		castor3d::ShaderObjectSPtr doCreateObject( castor3d::ShaderType p_type )override;
 		/**
-		 *\copydoc		castor3d::ShaderProgram::doCreateVariable
-		 */
-		std::shared_ptr< castor3d::PushUniform > doCreateUniform( castor3d::UniformType p_type, int p_occurences )override;
-		/**
 		 *\copydoc		castor3d::ShaderProgram::doRetrieveLinkerLog
 		 */
 		castor::String doRetrieveLinkerLog();

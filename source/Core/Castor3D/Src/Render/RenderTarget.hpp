@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -478,6 +478,9 @@ namespace castor3d
 		//!\~english	The post effects applying after tone mapping.
 		//!\~french		Les effets post rendu s'appliquant après le mappage de tons.
 		PostEffectPtrArray m_postPostEffects;
+		//!\~english	The post effect timer.
+		//!\~french		Le timer d'effets post-rendu.
+		RenderPassTimerSPtr m_postPostFxTimer;
 		//!\~english	The SSAO configuration.
 		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;

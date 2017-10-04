@@ -1,4 +1,4 @@
-﻿#include "RadianceComputer.hpp"
+#include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
 
@@ -223,7 +223,7 @@ namespace castor3d
 
 			// Inputs
 			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
-			auto c3d_mapDiffuse = writer.declUniform< SamplerCube >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 
 			// Outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );

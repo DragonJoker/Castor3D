@@ -90,7 +90,7 @@ namespace castor3d
 		 *\param[in]	p_parent	programme parent
 		 *\param[in]	p_type		Type de shader
 		 */
-		C3D_API ShaderObject( ShaderProgram * p_parent, ShaderType p_type );
+		C3D_API ShaderObject( ShaderProgram & p_parent, ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -206,29 +206,75 @@ namespace castor3d
 		C3D_API virtual bool compile();
 		/**
 		 *\~english
-		 *\brief		adds a uniform variable to pass to the shader objects
-		 *\param[in]	p_variable	The variable to pass
+		 *\brief		Creates a variable.
+		 *\param[in]	type	The variable type.
+		 *\param[in]	name	The variable name.
+		 *\param[in]	nbOcc	The array dimension.
+		 *\return		The created variable, nullptr if failed.
 		 *\~french
-		 *\brief		Crée une variable uniform à donner aux ShaderObjects
-		 *\param[in]	p_variable	La variable à donner
+		 *\brief		Crée une variable
+		 *\param[in]	type	Le type de variable.
+		 *\param[in]	name	Le nom de la variable.
+		 *\param[in]	nbOcc	Les dimensions du tableau.
+		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API virtual void addUniform( PushUniformSPtr p_variable );
+		C3D_API PushUniformSPtr createUniform( UniformType type
+			, castor::String const & name
+			, int nbOcc = 1 );
 		/**
 		 *\~english
-		 *\brief		Finds a variable
-		 *\return		The found variable, nullptr if failed
+		 *\brief		Creates a variable.
+		 *\param[in]	name	The variable name.
+		 *\param[in]	nbOcc	The array dimension.
+		 *\return		The created variable, nullptr if failed.
 		 *\~french
-		 *\brief		Trouve une variable
-		 *\return		La variable trouvé, nullptr en cas d'échec
+		 *\brief		Crée une variable.
+		 *\param[in]	name	Le nom de la variable.
+		 *\param[in]	nbOcc	Les dimensions du tableau.
+		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API PushUniformSPtr findUniform( castor::String const & p_name )const;
+		template< UniformType Type >
+		inline std::shared_ptr< TPushUniform< Type > > createUniform( castor::String const & name
+			, int nbOcc = 1 )
+		{
+			return std::static_pointer_cast< TPushUniform< Type > >( createUniform( Type, name, nbOcc ) );
+		}
+		/**
+		 *\~english
+		 *\brief		Finds a variable.
+		 *\param[in]	type	The variable type.
+		 *\param[in]	name	The variable name.
+		 *\return		The found variable, nullptr if failed.
+		 *\~french
+		 *\brief		Trouve une variable.
+		 *\param[in]	type	Le type de variable.
+		 *\param[in]	name	Le nom de la variable.
+		 *\return		La variable trouvée, nullptr en cas d'échec.
+		 */
+		C3D_API PushUniformSPtr findUniform( UniformType type
+			, castor::String const & name )const;
+		/**
+		 *\~english
+		 *\brief		Looks for a variable.
+		 *\param[in]	name	The variable name.
+		 *\return		The found variable, nullptr if failed.
+		 *\~french
+		 *\brief		Cherche une variable.
+		 *\param[in]	name	Le nom de la variable.
+		 *\return		La variable trouvé, nullptr en cas d'échec.
+		 */
+		template< UniformType Type >
+		inline std::shared_ptr< TPushUniform< Type > > findUniform( castor::String const & name )const
+		{
+			return std::static_pointer_cast< TPushUniform< Type > >( findUniform( Type, name ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Removes all frame variables
 		 *\~french
 		 *\brief		Vide la liste de frame variables
 		 */
-		C3D_API virtual void flushUniforms();
+		C3D_API void flushUniforms();
 		/**
 		 *\~english
 		 *\return		The frame variables bound to this shader.
@@ -380,12 +426,21 @@ namespace castor3d
 		 *\brief		Récupère le parent de l'objet
 		 *\return		Le parent
 		 */
-		inline ShaderProgram * getParent()const
+		inline ShaderProgram const & getParent()const
 		{
 			return m_parent;
 		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		adds a uniform variable to pass to the shader objects
+		 *\param[in]	p_variable	The variable to pass
+		 *\~french
+		 *\brief		Crée une variable uniform à donner aux ShaderObjects
+		 *\param[in]	p_variable	La variable à donner
+		 */
+		C3D_API void doAddUniform( PushUniformSPtr p_variable );
 		/**
 		 *\~english
 		 *\brief		Checks for compiler errors.
@@ -402,6 +457,22 @@ namespace castor3d
 		 *\return		Les messages du compilateur.
 		 */
 		virtual castor::String doRetrieveCompilerLog() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a texture frame variable.
+		 *\param[in]	type			The variable type.
+		 *\param[in]	nbOccurences	The array dimension.
+		 *\return		The created variable, nullptr if failed.
+		 *\~french
+		 *\brief		Crée une variable de frame texture.
+		 *\param[in]	type			Le type de variable.
+		 *\param[in]	nbOccurences	Les dimensions du tableau.
+		 *\return		La variable créée, nullptr en cas d'échec.
+		 */
+		virtual PushUniformSPtr doCreateUniform( UniformType type, int nbOccurences ) = 0;
+
+	private:
+		void doFillVariables();
 
 	protected:
 		//!<\~english	The shader type.
@@ -409,7 +480,7 @@ namespace castor3d
 		ShaderType m_type;
 		//!\~english	The parent shader program.
 		//!\~french		Le programme parent.
-		ShaderProgram * m_parent{ nullptr };
+		ShaderProgram & m_parent;
 		//!<\~english	The shader compile status.
 		//!\~french		Le statut de compilation du shader.
 		ShaderStatus m_status{ ShaderStatus::eNotCompiled };

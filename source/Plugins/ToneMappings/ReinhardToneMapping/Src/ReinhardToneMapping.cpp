@@ -54,7 +54,7 @@ namespace Reinhard
 			auto c3d_fExposure = config.declMember< Float >( HdrConfigUbo::Exposure );
 			auto c3d_fGamma = config.declMember< Float >( HdrConfigUbo::Gamma );
 			config.end();
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs

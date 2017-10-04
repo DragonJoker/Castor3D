@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -130,6 +130,9 @@ namespace glsl
 	template< typename ... Values > inline IVec2 ivec2( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline IVec3 ivec3( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline IVec4 ivec4( Type const & p_value, Values const & ... p_values );
+	template< typename ... Values > inline BVec2 bvec2( Type const & p_value, Values const & ... p_values );
+	template< typename ... Values > inline BVec3 bvec3( Type const & p_value, Values const & ... p_values );
+	template< typename ... Values > inline BVec4 bvec4( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Mat3 mat3( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Mat4 mat4( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Float dot( Type const & p_value, Values const & ... p_values );

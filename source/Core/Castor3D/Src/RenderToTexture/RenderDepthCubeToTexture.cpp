@@ -1,4 +1,4 @@
-﻿#include "RenderDepthCubeToTexture.hpp"
+#include "RenderDepthCubeToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -215,7 +215,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declUniform< SamplerCube >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
 			auto c3d_v2UvMult = writer.declUniform< Vec2 >( cuT( "c3d_v2UvMult" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );

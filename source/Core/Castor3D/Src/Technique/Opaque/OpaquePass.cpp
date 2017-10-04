@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -242,25 +242,36 @@ namespace castor3d
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 
-		auto c3d_mapDiffuse( writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse
+		auto index = MinTextureIndex;
+		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
+			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
-			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapSpecular( writer.declUniform< Sampler2D >( ShaderProgram::MapSpecular
+		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( ShaderProgram::MapSpecular
+			, checkFlag( textureFlags, TextureChannel::eSpecular ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive
-			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
-			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
-		auto c3d_mapTransmittance( writer.declUniform< Sampler2D >( ShaderProgram::MapTransmittance
-			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
-			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( writer.declUniform< Sampler2D >( ShaderProgram::MapGloss
+		auto c3d_mapGloss( writer.declSampler< Sampler2D >( ShaderProgram::MapGloss
+			, checkFlag( textureFlags, TextureChannel::eGloss ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapEnvironment( writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment
+		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
+			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
+		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
+		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
+			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
+		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
+			, checkFlag( textureFlags, TextureChannel::eReflection ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eReflection ) ) );
 		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
@@ -268,7 +279,7 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		uint32_t index = 0;
+		index = 0u;
 		auto out_c3dOutput1 = writer.declFragData< Vec4 >( OpaquePass::Output1, index++ );
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
@@ -409,34 +420,46 @@ namespace castor3d
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 
-		auto c3d_mapAlbedo( writer.declUniform< Sampler2D >( ShaderProgram::MapAlbedo
+		auto index = MinTextureIndex;
+		auto c3d_mapAlbedo( writer.declSampler< Sampler2D >( ShaderProgram::MapAlbedo
+			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ) );
-		auto c3d_mapRoughness( writer.declUniform< Sampler2D >( ShaderProgram::MapRoughness
+		auto c3d_mapRoughness( writer.declSampler< Sampler2D >( ShaderProgram::MapRoughness
+			, checkFlag( textureFlags, TextureChannel::eRoughness ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eRoughness ) ) );
-		auto c3d_mapMetallic( writer.declUniform< Sampler2D >( ShaderProgram::MapMetallic
+		auto c3d_mapMetallic( writer.declSampler< Sampler2D >( ShaderProgram::MapMetallic
+			, checkFlag( textureFlags, TextureChannel::eMetallic ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eMetallic ) ) );
-		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
+		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
+			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
-		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
+		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
-		auto c3d_mapTransmittance( writer.declUniform< Sampler2D >( ShaderProgram::MapTransmittance
-			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive
+		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
+			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapEnvironment( writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
+		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
+			, ( checkFlag( textureFlags, TextureChannel::eReflection )
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eReflection )
-			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		uint32_t index = 0;
+		index = 0u;
 		auto out_c3dOutput1 = writer.declFragData< Vec4 >( OpaquePass::Output1, index++ );
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
@@ -582,34 +605,46 @@ namespace castor3d
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 
-		auto c3d_mapDiffuse( writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse
+		auto index = MinTextureIndex;
+		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
+			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapSpecular( writer.declUniform< Sampler2D >( ShaderProgram::MapSpecular
+		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( ShaderProgram::MapSpecular
+			, checkFlag( textureFlags, TextureChannel::eSpecular ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapGlossiness( writer.declUniform< Sampler2D >( ShaderProgram::MapGloss
+		auto c3d_mapGlossiness( writer.declSampler< Sampler2D >( ShaderProgram::MapGloss
+			, checkFlag( textureFlags, TextureChannel::eGloss ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapNormal( writer.declUniform< Sampler2D >( ShaderProgram::MapNormal
+		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
+			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
-		auto c3d_mapHeight( writer.declUniform< Sampler2D >( ShaderProgram::MapHeight
+		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
-		auto c3d_mapTransmittance( writer.declUniform< Sampler2D >( ShaderProgram::MapTransmittance
-			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_mapEmissive( writer.declUniform< Sampler2D >( ShaderProgram::MapEmissive
+		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
+			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapEnvironment( writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
+		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
+			, ( checkFlag( textureFlags, TextureChannel::eReflection )
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eReflection )
-			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		uint32_t index = 0;
+		index = 0u;
 		auto out_c3dOutput1 = writer.declFragData< Vec4 >( OpaquePass::Output1, index++ );
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );

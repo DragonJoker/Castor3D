@@ -1,4 +1,4 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -167,6 +167,10 @@ namespace castor3d
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
 		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+
+		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) );
+		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -207,8 +211,11 @@ namespace castor3d
 				, PixelFormat::eAL16F32F
 				, m_size );
 			m_velocityTexture.setTexture( velocityTexture );
+			m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
 			m_velocityTexture.getTexture()->getImage().initialiseSource();
 			m_velocityTexture.getTexture()->initialise();
+
+			m_postPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "sRGB Post effects" ), cuT( "sRGB Post effects" ) );
 
 			for ( auto effect : m_postEffects )
 			{
@@ -228,6 +235,8 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
+			m_initialised = false;
+
 			for ( auto effect : m_postPostEffects )
 			{
 				effect->cleanup();
@@ -243,7 +252,8 @@ namespace castor3d
 
 			m_postEffects.clear();
 			m_postPostEffects.clear();
-			m_initialised = false;
+
+			m_postPostFxTimer.reset();
 
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
@@ -352,11 +362,14 @@ namespace castor3d
 			, m_renderTechnique->getResult()
 			, info );
 		fbo.m_frameBuffer->unbind();
+		m_postPostFxTimer->start();
 
 		for ( auto & effect : m_postPostEffects )
 		{
 			effect->apply( *fbo.m_frameBuffer );
 		}
+
+		m_postPostFxTimer->stop();
 
 		// We also render overlays.
 		fbo.m_frameBuffer->bind();

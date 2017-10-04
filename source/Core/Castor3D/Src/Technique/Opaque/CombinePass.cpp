@@ -118,16 +118,17 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapReflection = writer.declUniform< Sampler2D >( cuT( "c3d_mapReflection" ) );
-			auto c3d_mapRefraction = writer.declUniform< Sampler2D >( cuT( "c3d_mapRefraction" ) );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapSsao = writer.declUniform< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao );
-			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
-			auto c3d_mapLightSpecular = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightSpecular" ) );
+			auto index = MinTextureIndex;
+			auto c3d_mapReflection = writer.declSampler< Sampler2D >( cuT( "c3d_mapReflection" ), index++ );
+			auto c3d_mapRefraction = writer.declSampler< Sampler2D >( cuT( "c3d_mapRefraction" ), index++ );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
+			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++ );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			glsl::Utils utils{ writer };
@@ -247,19 +248,20 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapReflection = writer.declUniform< Sampler2D >( cuT( "c3d_mapReflection" ) );
-			auto c3d_mapRefraction = writer.declUniform< Sampler2D >( cuT( "c3d_mapRefraction" ) );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapSsao = writer.declUniform< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao );
-			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
-			auto c3d_mapLightSpecular = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightSpecular" ) );
-			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance );
-			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
-			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
+			auto index = MinTextureIndex;
+			auto c3d_mapReflection = writer.declSampler< Sampler2D >( cuT( "c3d_mapReflection" ), index++ );
+			auto c3d_mapRefraction = writer.declSampler< Sampler2D >( cuT( "c3d_mapRefraction" ), index++ );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
+			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++ );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++ );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			glsl::Utils utils{ writer };

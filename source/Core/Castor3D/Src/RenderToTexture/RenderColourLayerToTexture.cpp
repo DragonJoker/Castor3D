@@ -1,4 +1,4 @@
-﻿#include "RenderColourLayerToTexture.hpp"
+#include "RenderColourLayerToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -190,7 +190,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2DArray >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2DArray >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_iIndex = writer.declUniform< Int >( cuT( "c3d_iIndex" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 

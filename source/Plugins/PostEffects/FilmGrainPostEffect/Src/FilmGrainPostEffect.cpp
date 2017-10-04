@@ -1,4 +1,4 @@
-﻿#include "FilmGrainPostEffect.hpp"
+#include "FilmGrainPostEffect.hpp"
 
 #include "XpmLoader.hpp"
 
@@ -92,8 +92,8 @@ namespace film_grain
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_srcTex = writer.declUniform< Sampler2D >( SrcTex );
-			auto c3d_noiseTex = writer.declUniform< Sampler3D >( NoiseTex );
+			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, MinTextureIndex + 0u );
+			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, MinTextureIndex + 1u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs

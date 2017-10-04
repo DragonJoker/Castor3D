@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -201,6 +201,17 @@ namespace castor3d
 		{
 			REQUIRE( m_frameBuffer.m_colourTexture );
 			return *m_frameBuffer.m_colourTexture;
+		}
+		/**
+		 *\~english
+		 *\return		The depth texture holding the render's result.
+		 *\~french
+		 *\return		La texture de profondeurs contenant le résultat du rendu.
+		 */
+		inline TextureLayout const & getDepth()const
+		{
+			REQUIRE( m_frameBuffer.m_colourTexture );
+			return *m_frameBuffer.m_depthBuffer;
 		}
 		/**
 		 *\~english

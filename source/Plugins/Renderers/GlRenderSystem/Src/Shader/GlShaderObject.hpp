@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,7 +42,7 @@ namespace GlRender
 		/**
 		 * Constructor
 		 */
-		GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, castor3d::ShaderType p_type );
+		GlShaderObject( OpenGl & p_gl, GlShaderProgram & p_parent, castor3d::ShaderType p_type );
 		/**
 		 * Destructor
 		 */
@@ -73,6 +73,11 @@ namespace GlRender
 		 *\copydoc		castor3d::ShaderObject::doRetrieveCompilerLog
 		 */
 		virtual castor::String doRetrieveCompilerLog();
+		/**
+		 *\copydoc		castor3d::ShaderProgram::doCreateVariable
+		 */
+		std::shared_ptr< castor3d::PushUniform > doCreateUniform( castor3d::UniformType type
+			, int occurences )override;
 
 	protected:
 		GlShaderProgram * m_shaderProgram;

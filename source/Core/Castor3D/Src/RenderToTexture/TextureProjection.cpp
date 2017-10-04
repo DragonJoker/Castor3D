@@ -1,4 +1,4 @@
-﻿#include "TextureProjection.hpp"
+#include "TextureProjection.hpp"
 
 #include "Engine.hpp"
 
@@ -132,7 +132,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ) );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 

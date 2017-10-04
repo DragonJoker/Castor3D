@@ -1,4 +1,4 @@
-#include "GlslShadow.hpp"
+﻿#include "GlslShadow.hpp"
 
 using namespace castor;
 using namespace glsl;
@@ -16,11 +16,14 @@ namespace castor3d
 		{
 		}
 
-		void Shadow::declare( ShadowType type )
+		void Shadow::declare( ShadowType type
+			, uint32_t & index )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2D >( MapShadowDirectional );
-			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2D >( MapShadowSpot, SpotShadowMapCount );
-			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCube >( MapShadowPoint, PointShadowMapCount );
+			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++ );
+			auto c3d_mapShadowSpot = m_writer.declSampler< Sampler2D >( MapShadowSpot, index, SpotShadowMapCount );
+			index += SpotShadowMapCount;
+			auto c3d_mapShadowPoint = m_writer.declSampler< SamplerCube >( MapShadowPoint, index, PointShadowMapCount );
+			index += PointShadowMapCount;
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -30,9 +33,10 @@ namespace castor3d
 			doDeclareComputePointShadow();
 		}
 
-		void Shadow::declareDirectional( ShadowType type )
+		void Shadow::declareDirectional( ShadowType type
+			, uint32_t & index )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declUniform< Sampler2D >( MapShadowDirectional );
+			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -40,18 +44,20 @@ namespace castor3d
 			doDeclareComputeDirectionalShadow();
 		}
 
-		void Shadow::declarePoint( ShadowType type )
+		void Shadow::declarePoint( ShadowType type
+			, uint32_t & index )
 		{
-			auto c3d_mapShadowPoint = m_writer.declUniform< SamplerCube >( MapShadowPoint );
+			auto c3d_mapShadowPoint = m_writer.declSampler< SamplerCube >( MapShadowPoint, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
 			doDeclareComputeOnePointShadow();
 		}
 
-		void Shadow::declareSpot( ShadowType type )
+		void Shadow::declareSpot( ShadowType type
+			, uint32_t & index )
 		{
-			auto c3d_mapShadowSpot = m_writer.declUniform< Sampler2D >( MapShadowSpot );
+			auto c3d_mapShadowSpot = m_writer.declSampler< Sampler2D >( MapShadowSpot, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();

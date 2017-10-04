@@ -8,24 +8,24 @@
 	};
 
 	template< typename T >
-	inline GlslWriter & operator<<( GlslWriter & p_stream, Outputgetter< T > const & p_in )
+	inline GlslWriter & operator<<( GlslWriter & stream, Outputgetter< T > const & in )
 	{
-		p_stream << Out();
-		return p_stream;
+		stream << Out();
+		return stream;
 	}
 
 	template<>
-	inline GlslWriter & operator<<( GlslWriter & p_stream, Outputgetter< Int > const & p_in )
+	inline GlslWriter & operator<<( GlslWriter & stream, Outputgetter< Int > const & in )
 	{
-		p_stream << "flat " << Out();
-		return p_stream;
+		stream << "flat " << Out();
+		return stream;
 	}
 
 	template<>
-	inline GlslWriter & operator<<( GlslWriter & p_stream, Outputgetter< UInt > const & p_in )
+	inline GlslWriter & operator<<( GlslWriter & stream, Outputgetter< UInt > const & in )
 	{
-		p_stream << "flat " << Out();
-		return p_stream;
+		stream << "flat " << Out();
+		return stream;
 	}
 
 	//***********************************************************************************************
@@ -36,92 +36,98 @@
 	};
 
 	template< typename T >
-	inline GlslWriter & operator<<( GlslWriter & p_stream, Inputgetter< T > const & p_in )
+	inline GlslWriter & operator<<( GlslWriter & stream, Inputgetter< T > const & in )
 	{
-		p_stream << In();
-		return p_stream;
+		stream << In();
+		return stream;
 	}
 
 	template<>
-	inline GlslWriter & operator<<( GlslWriter & p_stream, Inputgetter< Int > const & p_in )
+	inline GlslWriter & operator<<( GlslWriter & stream, Inputgetter< Int > const & in )
 	{
-		p_stream << "flat " << In();
-		return p_stream;
+		stream << "flat " << In();
+		return stream;
 	}
 
 	template<>
-	inline GlslWriter & operator<<( GlslWriter & p_stream, Inputgetter< UInt > const & p_in )
+	inline GlslWriter & operator<<( GlslWriter & stream, Inputgetter< UInt > const & in )
 	{
-		p_stream << "flat " << In();
-		return p_stream;
+		stream << "flat " << In();
+		return stream;
 	}
 
 
 	//***********************************************************************************************
 
 	template< typename T >
-	void writeAssign( GlslWriter * p_writer, Type const & p_lhs, T const & p_rhs )
+	void writeAssign( GlslWriter * writer, Type const & lhs, T const & rhs )
 	{
-		p_writer->writeAssign( p_lhs, p_rhs );
+		writer->writeAssign( lhs, rhs );
 	}
 
 	template< typename T1, typename T2 >
-	void writeAssign( GlslWriter * p_writer, Optional< T1 > const & p_lhs, T2 const & p_rhs )
+	void writeAssign( GlslWriter * writer, Optional< T1 > const & lhs, T2 const & rhs )
 	{
-		p_writer->writeAssign( p_lhs, p_rhs );
+		writer->writeAssign( lhs, rhs );
 	}
 
 	//***********************************************************************************************
 
 	template< typename T >
-	void GlslWriter::writeAssign( Type const & p_lhs, Optional< T > const & p_rhs )
+	void GlslWriter::writeAssign( Type const & lhs, Optional< T > const & rhs )
 	{
-		if ( p_rhs.isEnabled() )
+		if ( rhs.isEnabled() )
 		{
-			m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << castor::String( lhs ) << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
 		}
 	}
 
 	template< typename RetType, typename FuncType, typename ... Params >
-	inline Function< RetType, Params... > GlslWriter::implementFunction( castor::String const & p_name, FuncType p_function, Params && ... p_params )
+	inline Function< RetType, Params... > GlslWriter::implementFunction( castor::String const & name
+		, FuncType function
+		, Params && ... params )
 	{
 		m_stream << std::endl;
-		writeFunctionHeader< RetType >( *this, p_name, p_params... );
+		writeFunctionHeader< RetType >( *this, name, params... );
 		{
 			IndentBlock block( *this );
-			p_function( std::forward < Params && > ( p_params )... );
+			function( std::forward < Params && > ( params )... );
 		}
 		m_stream << std::endl;
-		return Function< RetType, Params... >{ this, p_name };
+		return Function< RetType, Params... >{ this, name };
 	}
 
 	template< typename RetType >
-	inline void GlslWriter::returnStmt( RetType const & p_return )
+	inline void GlslWriter::returnStmt( RetType const & result )
 	{
-		m_stream << cuT( "return " ) << castor::String( p_return ) << cuT( ";" ) << std::endl;
+		m_stream << cuT( "return " ) << castor::String( result ) << cuT( ";" ) << std::endl;
 	}
 
 	template< typename ExprType >
-	ExprType GlslWriter::paren( ExprType const p_expr )
+	ExprType GlslWriter::paren( ExprType const expr )
 	{
 		ExprType result( this );
-		result.m_value << cuT( "( " ) << castor::String( p_expr ) << cuT( " )" );
+		result.m_value << cuT( "( " ) << castor::String( expr ) << cuT( " )" );
 		return result;
 	}
 
 	template< typename ExprType >
-	ExprType GlslWriter::ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right )
+	ExprType GlslWriter::ternary( Type const & condition
+		, ExprType const & left
+		, ExprType const & right )
 	{
 		ExprType result( this );
-		result.m_value << cuT( "( ( " ) << toString( p_condition ) << cuT( " ) ? " ) << toString( p_left ) << cuT( " : " ) << toString( p_right ) << cuT( " )" );
+		result.m_value << cuT( "( ( " ) << toString( condition ) << cuT( " ) " )
+			<< cuT( "? " ) << toString( left ) << cuT( " " )
+			<< cuT( ": " ) << toString( right ) << cuT( " )" );
 		return result;
 	}
 
 	template< typename T >
-	inline T GlslWriter::cast( Type const & p_from )
+	inline T GlslWriter::cast( Type const & from )
 	{
 		T result;
-		result.m_value << castor::string::trim( result.m_type ) << cuT( "( " ) << castor::String( p_from ) << cuT( " )" );
+		result.m_value << castor::string::trim( result.m_type ) << cuT( "( " ) << castor::String( from ) << cuT( " )" );
 		return result;
 	}
 
@@ -129,8 +135,8 @@
 	inline T GlslWriter::declConstant( castor::String const & name
 		, T const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		registerConstant( name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerConstant( name, TypeTraits< Type >::TypeEnum );
 		*this << "#define " << name << " ";
 		m_stream << castor::String( rhs ) << std::endl;
 		return T( this, name );
@@ -141,8 +147,8 @@
 		, T const & rhs
 		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerConstant( name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerConstant( name, TypeTraits< Type >::TypeEnum );
 
 		if ( enabled )
 		{
@@ -154,257 +160,327 @@
 	}
 
 	template< typename T >
-	inline T GlslWriter::declAttribute( castor::String const & p_name )
+	inline T GlslWriter::declSampler( castor::String const & name
+		, uint32_t binding )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
-		*this << Attribute() << type().m_type << p_name << cuT( ";" ) << Endl();
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 1u );
+		*this << "layout( binding = " << binding << " ) uniform " << TypeTraits< Type >::Name << " " << name << ";" << endl;
+		return T( this, binding, name );
+	}
+
+	template< typename T >
+	inline Optional< T > GlslWriter::declSampler( castor::String const & name
+		, uint32_t binding
+		, bool enabled )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 1u );
+
+		if ( enabled )
+		{
+			*this << "layout( binding = " << toString( binding ) << " ) uniform " << TypeTraits< Type >::Name << " " << name << ";" << endl;
+		}
+
+		return Optional< T >( this, binding, name, enabled );
+	}
+
+	template< typename T >
+	inline Array< T > GlslWriter::declSampler( castor::String const & name
+		, uint32_t binding
+		, uint32_t dimension )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, dimension );
+		*this << "layout( binding = " << binding << " ) uniform " << TypeTraits< Type >::Name << " " << name << "[" << dimension << "];" << endl;
+		return Array< T >( this, binding, name, dimension );
+	}
+
+	template< typename T >
+	inline Optional< Array< T > > GlslWriter::declSampler( castor::String const & name
+		, uint32_t binding
+		, uint32_t dimension
+		, bool enabled )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, dimension );
+
+		if ( enabled )
+		{
+			*this << "layout( binding = " << binding << " ) uniform " << TypeTraits< Type >::Name << " " << name << "[" << dimension << "];" << endl;
+		}
+
+		return Optional< Array< T > >( this, binding, name, dimension, enabled );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declAttribute( castor::String const & name )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
+		*this << Attribute() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
 
 		if ( std::is_same< T, Mat4 >::value )
 		{
 			m_attributeIndex += 3;
-		}
-
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::declOutput( castor::String const & p_name )
-	{
-		using type = typename type_of< T >::type;
-		registerOutput( p_name, name_of< T >::value );
-		*this << Outputgetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::declInput( castor::String const & p_name )
-	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
-		*this << Inputgetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::declLocale( castor::String const & p_name )
-	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
-		*this << type().m_type << p_name << cuT( ";" ) << Endl();
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::declLocale( castor::String const & p_name, T const & p_rhs )
-	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
-		m_stream << type().m_type << p_name << cuT( " = " ) << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
-		T result( this, p_name );
-		return result;
-	}
-
-	template< typename T >
-	inline T GlslWriter::declBuiltin( castor::String const & p_name )
-	{
-		registerName( p_name, name_of< T >::value );
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::getBuiltin( castor::String const & p_name )
-	{
-		checkNameExists( p_name, name_of< T >::value );
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::declUniform( castor::String const & p_name )
-	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type().m_type << p_name << cuT( ";" ) << Endl();
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::declUniform( castor::String const & p_name, T const & p_rhs )
-	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type().m_type << p_name << cuT( " = " );
-		m_stream << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
-		return T( this, p_name );
-	}
-
-	template< typename T >
-	inline T GlslWriter::declFragData( castor::String const & p_name, uint32_t p_index )
-	{
-		using type = typename type_of< T >::type;
-		registerOutput( p_name, name_of< T >::value );
-		castor::String name;
-
-		if ( m_keywords->hasNamedFragData() )
-		{
-			*this << Layout { int( p_index ) } << Outputgetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
-			name = p_name;
-		}
-		else
-		{
-			name = m_keywords->getFragData( p_index );
 		}
 
 		return T( this, name );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declAttribute( castor::String const & p_name, uint32_t p_dimension )
+	inline T GlslWriter::declOutput( castor::String const & name )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
-		*this << Attribute() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		using Type = typename TypeOf< T >::Type;
+		registerOutput( name, TypeTraits< Type >::TypeEnum );
+		*this << Outputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declInput( castor::String const & name )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
+		*this << Inputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declLocale( castor::String const & name )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
+		*this << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declLocale( castor::String const & name
+		, T const & rhs )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
+		m_stream << TypeTraits< Type >::Name << " " << name << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
+		T result( this, name );
+		return result;
+	}
+
+	template< typename T >
+	inline T GlslWriter::declBuiltin( castor::String const & name )
+	{
+		registerName( name, TypeTraits< T >::TypeEnum );
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::getBuiltin( castor::String const & name )
+	{
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declUniform( castor::String const & name )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, 1u );
+		*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declUniform( castor::String const & name
+		, T const & rhs )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, 1u );
+		*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( " = " );
+		m_stream << castor::String( rhs ) << cuT( ";" ) << std::endl;
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declFragData( castor::String const & name
+		, uint32_t index )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerOutput( name, TypeTraits< Type >::TypeEnum );
+		castor::String realName;
+
+		if ( m_keywords->hasNamedFragData() )
+		{
+			*this << Layout { int( index ) } << Outputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
+			realName = name;
+		}
+		else
+		{
+			realName = m_keywords->getFragData( index );
+		}
+
+		return T( this, realName );
+	}
+
+	template< typename T >
+	inline Array< T > GlslWriter::declAttribute( castor::String const & name
+		, uint32_t dimension )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
+		*this << Attribute() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "];" ) << endl;
 
 		if ( std::is_same< T, Mat4 >::value )
 		{
 			m_attributeIndex += 3;
 		}
 
-		return Array< T >( this, p_name, p_dimension );
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declOutput( castor::String const & p_name, uint32_t p_dimension )
+	inline Array< T > GlslWriter::declOutput( castor::String const & name
+		, uint32_t dimension )
 	{
-		using type = typename type_of< T >::type;
-		registerOutput( p_name, name_of< T >::value );
-		*this << Outputgetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
-		return Array< T >( this, p_name, p_dimension );
+		using Type = typename TypeOf< T >::Type;
+		registerOutput( name, TypeTraits< Type >::TypeEnum );
+		*this << Outputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "];" ) << endl;
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declOutputArray( castor::String const & p_name )
+	inline Array< T > GlslWriter::declOutputArray( castor::String const & name )
 	{
-		using type = typename type_of< T >::type;
-		registerOutput( p_name, name_of< T >::value );
-		*this << Outputgetter< T >() << type().m_type << p_name << cuT( "[];" ) << Endl();
-		return Array< T >( this, p_name, 32u );
+		using Type = typename TypeOf< T >::Type;
+		registerOutput( name, TypeTraits< Type >::TypeEnum );
+		*this << Outputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[];" ) << endl;
+		return Array< T >( this, name, 32u );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declInput( castor::String const & p_name, uint32_t p_dimension )
+	inline Array< T > GlslWriter::declInput( castor::String const & name
+		, uint32_t dimension )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
-		*this << Inputgetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
-		return Array< T >( this, p_name, p_dimension );
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
+		*this << Inputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "];" ) << endl;
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declInputArray( castor::String const & p_name )
+	inline Array< T > GlslWriter::declInputArray( castor::String const & name )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
-		*this << Inputgetter< T >() << type().m_type << p_name << cuT( "[];" ) << Endl();
-		return Array< T >( this, p_name, 32u );
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
+		*this << Inputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[];" ) << endl;
+		return Array< T >( this, name, 32u );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declLocale( castor::String const & p_name, uint32_t p_dimension )
+	inline Array< T > GlslWriter::declLocale( castor::String const & name
+		, uint32_t dimension )
 	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
-		*this << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
-		return Array< T >( this, p_name, p_dimension );
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
+		*this << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( ";" ) << endl;
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declLocale( castor::String const & p_name, uint32_t p_dimension, T const & p_rhs )
+	inline Array< T > GlslWriter::declLocale( castor::String const & name
+		, uint32_t dimension
+		, T const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
-		m_stream << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
-		return Array< T >( this, p_name );
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
+		m_stream << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
+		return Array< T >( this, name );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declBuiltin( castor::String const & p_name, uint32_t p_dimension )
+	inline Array< T > GlslWriter::declBuiltin( castor::String const & name
+		, uint32_t dimension )
 	{
-		registerName( p_name, name_of< T >::value );
-		return Array< T >( this, p_name, p_dimension );
+		registerName( name, TypeTraits< Type >::TypeEnum );
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declBuiltinArray( castor::String const & p_name )
+	inline Array< T > GlslWriter::declBuiltinArray( castor::String const & name )
 	{
-		registerName( p_name, name_of< T >::value );
-		return Array< T >( this, p_name, 0xFFFFFFFF );
+		registerName( name, TypeTraits< T >::TypeEnum );
+		return Array< T >( this, name, 0xFFFFFFFF );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::getBuiltin( castor::String const & p_name, uint32_t p_dimension )
+	inline Array< T > GlslWriter::getBuiltin( castor::String const & name
+		, uint32_t dimension )
 	{
-		checkNameExists( p_name, name_of< T >::value );
-		return Array< T >( this, p_name, p_dimension );
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::getBuiltinArray( castor::String const & p_name )
+	inline Array< T > GlslWriter::getBuiltinArray( castor::String const & name )
 	{
-		checkNameExists( p_name, name_of< T >::value );
-		return Array< T >( this, p_name, 0xFFFFFFFF );
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return Array< T >( this, name, 0xFFFFFFFF );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declUniform( castor::String const & p_name, uint32_t p_dimension )
+	inline Array< T > GlslWriter::declUniform( castor::String const & name
+		, uint32_t dimension )
 	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
-		return Array< T >( this, p_name, p_dimension );
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, dimension );
+		*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "];" ) << endl;
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declUniformArray( castor::String const & p_name )
+	inline Array< T > GlslWriter::declUniformArray( castor::String const & name )
 	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type().m_type << p_name << cuT( "[];" ) << Endl();
-		return Array< T >( this, p_name, 0xFFFFFFFF );
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, 0xFFFFFFFFu );
+		*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( "[];" ) << endl;
+		return Array< T >( this, name, 0xFFFFFFFF );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declUniform( castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs )
+	inline Array< T > GlslWriter::declUniform( castor::String const & name
+		, uint32_t dimension
+		, std::vector< T > const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		if ( p_rhs.size() != p_dimension )
+		using Type = typename TypeOf< T >::Type;
+
+		if ( rhs.size() != dimension )
 		{
 			CASTOR_EXCEPTION( "Given parameters count doesn't match the array dimensions" );
 		}
 		
-		registerUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type().m_type << cuT( "[]( " );
+		registerUniform( name, TypeTraits< Type >::TypeEnum, dimension );
+		*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "] = " ) << TypeTraits< Type >::Name << " " << cuT( "[]( " );
 		castor::String sep;
 
-		for ( auto const & value : p_rhs )
+		for ( auto const & value : rhs )
 		{
-			*this << sep << castor::String( value ) << Endl();
+			*this << sep << castor::String( value ) << endl;
 			sep = cuT( "\t, " );
 		}
 
-		*this << cuT( ");" ) << Endl();
-		return Array< T >( this, p_name, p_dimension );
+		*this << cuT( ");" ) << endl;
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declAttribute( castor::String const & p_name, bool p_enabled )
+	inline Optional< T > GlslWriter::declAttribute( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Attribute() << type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Attribute() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
 
 			if ( std::is_same< T, Mat4 >::value )
 			{
@@ -412,131 +488,144 @@
 			}
 		}
 
-		return Optional< T >( this, p_name, p_enabled );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declOutput( castor::String const & p_name, bool p_enabled )
+	inline Optional< T > GlslWriter::declOutput( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerOutput( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerOutput( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Outputgetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Outputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
 		}
 
-		return Optional< T >( this, p_name, p_enabled );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declInput( castor::String const & p_name, bool p_enabled )
+	inline Optional< T > GlslWriter::declInput( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Inputgetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Inputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
 		}
 
-		return Optional< T >( this, p_name, p_enabled );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declLocale( castor::String const & p_name, bool p_enabled )
+	inline Optional< T > GlslWriter::declLocale( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
 		}
 
-		return Optional< T >( this, p_name, p_enabled );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declLocale( castor::String const & p_name, Optional< T > const & p_rhs )
+	inline Optional< T > GlslWriter::declLocale( castor::String const & name
+		, Optional< T > const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_rhs.isEnabled() )
+		if ( rhs.isEnabled() )
 		{
-			m_stream << type().m_type << p_name << cuT( " = " ) << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << TypeTraits< Type >::Name << " " << name << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
 		}
 
-		return Optional< T >( this, p_name, p_rhs.isEnabled() );
+		return Optional< T >( this, name, rhs.isEnabled() );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declLocale( castor::String const & p_name, bool p_enabled, T const & p_rhs )
+	inline Optional< T > GlslWriter::declLocale( castor::String const & name
+		, bool enabled
+		, T const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			m_stream << type().m_type << p_name << cuT( " = " ) << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << TypeTraits< Type >::Name << " " << name << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
 		}
 
-		return Optional< T >( this, p_name, p_enabled );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declBuiltin( castor::String const & p_name, bool p_enabled )
+	inline Optional< T > GlslWriter::declBuiltin( castor::String const & name
+		, bool enabled )
 	{
-		registerName( p_name, name_of< T >::value );
-		return Optional< T >( this, p_name, p_enabled );
+		registerName( name, TypeTraits< T >::TypeEnum );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::getBuiltin( castor::String const & p_name, bool p_enabled )
+	inline Optional< T > GlslWriter::getBuiltin( castor::String const & name
+		, bool enabled )
 	{
-		checkNameExists( p_name, name_of< T >::value );
-		return Optional< T >( this, p_name, p_enabled );
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declUniform( castor::String const & p_name, bool p_enabled )
+	inline Optional< T > GlslWriter::declUniform( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, 1u );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Uniform() << type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( ";" ) << endl;
 		}
 
-		return Optional< T >( this, p_name, p_enabled );
+		return Optional< T >( this, name, enabled );
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::declUniform( castor::String const & p_name, bool p_enabled, T const & p_rhs )
+	inline Optional< T > GlslWriter::declUniform( castor::String const & name
+		, bool enabled
+		, T const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, 1u );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Uniform() << type().m_type << p_name << cuT( " = " );
-			m_stream << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( " = " );
+			m_stream << castor::String( rhs ) << cuT( ";" ) << std::endl;
 		}
 
-		return Optional< T >( this, p_name, p_enabled );
+		return Optional< T >( this, name, enabled );
 	}
 	
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declAttribute( castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declAttribute( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerAttribute( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerAttribute( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Attribute() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << Attribute() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( ";" ) << endl;
 
 			if ( std::is_same< T, Mat4 >::value )
 			{
@@ -544,174 +633,197 @@
 			}
 		}
 
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 	
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declOutput( castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declOutput( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerOutput( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerOutput( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Outputgetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << Outputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( ";" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 	
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declOutputArray( castor::String const & p_name, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declOutputArray( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerOutput( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerOutput( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Outputgetter< T >() << type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
+			*this << Outputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[]" ) << cuT( ";" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
+		return Optional< Array< T > >( this, name, 0xFFFFFFFF, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declInput( castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declInput( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Inputgetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << Inputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( ";" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declInputArray( castor::String const & p_name, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declInputArray( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerInput( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerInput( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Inputgetter< T >() << type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
+			*this << Inputgetter< T >() << TypeTraits< Type >::Name << " " << name << cuT( "[]" ) << cuT( ";" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
+		return Optional< Array< T > >( this, name, 0xFFFFFFFF, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declLocale( castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declLocale( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( ";" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declLocale( castor::String const & p_name, uint32_t p_dimension, bool p_enabled, T const & p_rhs )
+	inline Optional< Array< T > > GlslWriter::declLocale( castor::String const & name
+		, uint32_t dimension
+		, bool enabled
+		, T const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		registerName( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerName( name, TypeTraits< Type >::TypeEnum );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			m_stream << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declBuiltin( castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declBuiltin( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
 	{
-		registerName( p_name, name_of< T >::value );
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		registerName( name, TypeTraits< T >::TypeEnum );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declBuiltinArray( castor::String const & p_name, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declBuiltinArray( castor::String const & name
+		, bool enabled )
 	{
-		registerName( p_name, name_of< T >::value );
-		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
+		registerName( name, TypeTraits< T >::TypeEnum );
+		return Optional< Array< T > >( this, name, 0xFFFFFFFF, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::getBuiltin( castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::getBuiltin( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
 	{
-		checkNameExists( p_name, name_of< T >::value );
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::getBuiltinArray( castor::String const & p_name, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::getBuiltinArray( castor::String const & name
+		, bool enabled )
 	{
-		checkNameExists( p_name, name_of< T >::value );
-		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return Optional< Array< T > >( this, name, 0xFFFFFFFF, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declUniform( castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declUniform( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, dimension );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+			*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "];" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declUniformArray( castor::String const & p_name, bool p_enabled )
+	inline Optional< Array< T > > GlslWriter::declUniformArray( castor::String const & name
+		, bool enabled )
 	{
-		using type = typename type_of< T >::type;
-		registerUniform( p_name, name_of< T >::value );
+		using Type = typename TypeOf< T >::Type;
+		registerUniform( name, TypeTraits< Type >::TypeEnum, 0xFFFFFFFFu );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Uniform() << type().m_type << p_name << cuT( "[];" ) << Endl();
+			*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( "[];" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
+		return Optional< Array< T > >( this, name, 0xFFFFFFFF, enabled );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declUniform( castor::String const & p_name, uint32_t p_dimension, bool p_enabled, std::vector< T > const & p_rhs )
+	inline Optional< Array< T > > GlslWriter::declUniform( castor::String const & name
+		, uint32_t dimension
+		, bool enabled
+		, std::vector< T > const & rhs )
 	{
-		using type = typename type_of< T >::type;
-		if ( p_rhs.size() != p_dimension )
+		using Type = typename TypeOf< T >::Type;
+		if ( rhs.size() != dimension )
 		{
 			CASTOR_EXCEPTION( "Given parameters count doesn't match the array dimensions" );
 		}
 
-		registerUniform( p_name, name_of< T >::value );
+		registerUniform( name, TypeTraits< Type >::TypeEnum, dimension );
 
-		if ( p_enabled )
+		if ( enabled )
 		{
-			*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type().m_type << cuT( "[]( " );
+			*this << Uniform() << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "] = " ) << TypeTraits< Type >::Name << " " << cuT( "[]( " );
 			castor::String sep;
 
-			for ( auto const & value : p_rhs )
+			for ( auto const & value : rhs )
 			{
-				*this << sep << castor::String( value ) << Endl();
+				*this << sep << castor::String( value ) << endl;
 				sep = cuT( "\t, " );
 			}
 
-			*this << cuT( ");" ) << Endl();
+			*this << cuT( ");" ) << endl;
 		}
 
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+		return Optional< Array< T > >( this, name, dimension, enabled );
 	}
 }

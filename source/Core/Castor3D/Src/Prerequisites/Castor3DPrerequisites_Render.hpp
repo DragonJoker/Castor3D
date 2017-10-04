@@ -135,7 +135,7 @@ namespace castor3d
 	template< Topology Topo >
 	struct TopologyNamer
 	{
-		static castor::String const Name;
+		C3D_API static castor::String const Name;
 	};
 	/**
 	 *\~english

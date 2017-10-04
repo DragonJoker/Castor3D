@@ -27,6 +27,7 @@
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/RasteriserState.hpp>
+#include <Technique/RenderTechnique.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -41,36 +42,6 @@ namespace smaa
 {
 	namespace
 	{
-		/*
-		auto c3d_pixelSize = writer.declConstant( constants::PixelSize
-			, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
-		auto c3d_threshold = writer.declConstant( constants::Threshold
-			, Float( threshold ) );
-		auto c3d_predicationThreshold = writer.declConstant( constants::PredicationThreshold
-			, Float( predicationThreshold ) );
-		auto c3d_predicationScale = writer.declConstant( constants::PredicationScale
-			, Float( predicationScale ) );
-		auto c3d_predicationStrength = writer.declConstant( constants::PredicationStrength
-			, Float( predicationStrength ) );
-		auto c3d_maxSearchSteps = writer.declConstant( constants::MaxSearchSteps
-			, Int( maxSearchSteps ) );
-		auto c3d_maxSearchStepsDiag = writer.declConstant( constants::MaxSearchStepsDiag
-			, Int( maxSearchStepsDiag ) );
-		auto c3d_subsampleIndices = writer.declConstant( constants::SubsampleIndices
-			, ivec4( subsampleIndices[0], subsampleIndices[1], subsampleIndices[2], subsampleIndices[3] ) );
-		auto c3d_areaTexPixelSize = writer.declConstant( constants::AreaTexPixelSize
-			, vec2( 1.0_f / 160.0_f, 1.0_f / 560.0_f ) );
-		auto c3d_areaTexSubtexSize = writer.declConstant( constants::AreaTexSubtexSize
-			, 1.0_f / 7.0_f );
-		auto c3d_areaTexMaxDistance = writer.declConstant< Int >( constants::AreaTexMaxDistance
-			, 16_i );
-		auto c3d_areaTexMaxDistanceDiag = writer.declConstant< Int >( constants::AreaTexMaxDistanceDiag
-			, 20_i );
-		auto c3d_maxSearchStepsDiag = writer.declConstant( SmaaUbo::MaxSearchStepsDiag
-			, Int( maxSearchStepsDiag ) );
-		auto c3d_cornerRounding = writer.declConstant( SmaaUbo::CornerRounding
-			, Int( cornerRounding ) );
-			*/
 		glsl::Shader doGetEdgeDetectionVP( castor3d::RenderSystem * renderSystem
 			, Point2f const & pixelSize )
 		{
@@ -126,8 +97,8 @@ namespace smaa
 				, Float( predicationStrength ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 3u );
-			auto c3d_colourTex = writer.declUniform< Sampler2D >( cuT( "c3d_colourTex" ) );
-			auto c3d_predicationTex = writer.declUniform< Sampler2D >( cuT( "c3d_predicationTex" ) );
+			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), castor3d::MinTextureIndex + 0u );
+			auto c3d_predicationTex = writer.declSampler< Sampler2D >( cuT( "c3d_predicationTex" ), castor3d::MinTextureIndex + 1u, predication );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
@@ -135,29 +106,34 @@ namespace smaa
 			/**
 			* Gathers current pixel, and the top-left neighbors.
 			*/
-			auto gatherNeighbours = writer.implementFunction< Vec3 >( cuT( "gatherNeighbours" )
-				, [&]()
-				{
-					writer.returnStmt( textureGather( c3d_predicationTex
-						, vtx_texture + c3d_pixelSize * vec2( -0.5_f, -0.5 ) ).grb() );
-				} );
+			Function< Vec2 > calculatePredicatedThreshold;
 
-			/**
-			* Adjusts the threshold by means of predication.
-			*/
-			auto calculatePredicatedThreshold = writer.implementFunction< Vec2 >( cuT( "calculatePredicatedThreshold" )
-				, [&]()
-				{
-					auto neighbours = writer.declLocale( cuT( "neighbours" )
-						, gatherNeighbours() );
-					auto delta = writer.declLocale( cuT( "delta" )
-						, abs( neighbours.xx() - neighbours.yz() ) );
-					auto edges = writer.declLocale( cuT( "edges" )
-						, step( vec2( c3d_predicationThreshold ), delta ) );
-					writer.returnStmt( c3d_predicationScale
-						* c3d_threshold
-						* ( vec2( 1.0_f ) - c3d_predicationStrength * edges ) );
-				} );
+			if ( predication )
+			{
+				auto gatherNeighbours = writer.implementFunction< Vec3 >( cuT( "gatherNeighbours" )
+					, [&]()
+					{
+						writer.returnStmt( textureGather( c3d_predicationTex
+							, vtx_texture + c3d_pixelSize * vec2( -0.5_f, -0.5 ) ).grb() );
+					} );
+
+				/**
+				* Adjusts the threshold by means of predication.
+				*/
+				calculatePredicatedThreshold = writer.implementFunction< Vec2 >( cuT( "calculatePredicatedThreshold" )
+					, [&]()
+					{
+						auto neighbours = writer.declLocale( cuT( "neighbours" )
+							, gatherNeighbours() );
+						auto delta = writer.declLocale( cuT( "delta" )
+							, abs( neighbours.xx() - neighbours.yz() ) );
+						auto edges = writer.declLocale( cuT( "edges" )
+							, step( vec2( c3d_predicationThreshold ), delta ) );
+						writer.returnStmt( c3d_predicationScale
+							* c3d_threshold
+							* writer.paren( vec2( 1.0_f ) - c3d_predicationStrength * edges ) );
+					} );
+			}
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -291,9 +267,9 @@ namespace smaa
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto vtx_pixcoord = writer.declInput< Vec2 >( cuT( "vtx_pixcoord" ) );
 			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 3u );
-			auto c3d_edgesTex = writer.declUniform< Sampler2D >( cuT( "c3d_edgesTex" ) );
-			auto c3d_areaTex = writer.declUniform< Sampler2D >( cuT( "c3d_areaTex" ) );
-			auto c3d_searchTex = writer.declUniform< Sampler2D >( cuT( "c3d_searchTex" ) );
+			auto c3d_edgesTex = writer.declSampler< Sampler2D >( cuT( "c3d_edgesTex" ), castor3d::MinTextureIndex + 0u );
+			auto c3d_areaTex = writer.declSampler< Sampler2D >( cuT( "c3d_areaTex" ), castor3d::MinTextureIndex + 1u );
+			auto c3d_searchTex = writer.declSampler< Sampler2D >( cuT( "c3d_searchTex" ), castor3d::MinTextureIndex + 2u );
 			auto c3d_subsampleIndices = writer.declUniform< IVec4 >( constants::SubsampleIndices );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
@@ -309,12 +285,20 @@ namespace smaa
 				, 16_i );
 			auto c3d_areaTexMaxDistanceDiag = writer.declConstant< Int >( constants::AreaTexMaxDistanceDiag
 				, 20_i );
+			auto c3d_searchTexSize = writer.declConstant( cuT( "c3d_searchTexSize" )
+				, vec2( 66.0_f, 33.0_f ) );
+			auto c3d_searchTexPackedSize = writer.declConstant( cuT( "c3d_searchTexPackedSize" )
+				, vec2( 64.0_f, 16.0_f ) );
+			auto c3d_cornerRoundingNorm = writer.declConstant( cuT( "c3d_cornerRoundingNorm" )
+				, writer.cast< Float >( c3d_cornerRounding ) / 100.0_f );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
 
 			//-----------------------------------------------------------------------------
 			// Diagonal Search Functions
+
+#if 0
 
 			/**
 			* These functions allows to perform diagonal pattern searches.
@@ -324,6 +308,7 @@ namespace smaa
 					, Vec2 const & dir
 					, Float const & c )
 				{
+
 					texcoord += dir * c3d_pixelSize;
 					auto e = writer.declLocale( cuT( "e" )
 						, vec2( 0.0_f ) );
@@ -395,7 +380,7 @@ namespace smaa
 						, writer.cast< Float >( c3d_areaTexMaxDistanceDiag ) * e + dist );
 
 					// We do a scale and bias for mapping to texel space:
-					texcoord = c3d_areaTexPixelSize * texcoord + ( 0.5_f * c3d_areaTexPixelSize );
+					texcoord = c3d_areaTexPixelSize * texcoord + writer.paren( 0.5_f * c3d_areaTexPixelSize );
 
 					// Diagonal areas are on the second half of the texture:
 					texcoord.x() += 0.5_f;
@@ -626,34 +611,6 @@ namespace smaa
 				, InVec2{ &writer, cuT( "texcoord" ) }
 				, InFloat{ &writer, cuT( "end" ) } );
 
-			/**
-			* Ok, we have the distance and both crossing edges. So, what are the areas
-			* at each side of current edge?
-			*/
-			auto area = writer.implementFunction< Vec2 >( cuT( "area" )
-				, [&]( Vec2 const & dist
-					, Float const & e1
-					, Float const & e2
-					, Float const & offset )
-				{
-					// Rounding prevents precision errors of bilinear filtering:
-					auto texcoord = writer.declLocale( cuT( "texcoord" )
-						, writer.cast< Float >( c3d_areaTexMaxDistance ) * round( 4.0_f * vec2( e1, e2 ) ) + dist );
-
-					// We do a scale and bias for mapping to texel space:
-					texcoord = c3d_areaTexPixelSize * texcoord + ( 0.5_f * c3d_areaTexPixelSize );
-
-					// Move to proper place, according to the subpixel offset:
-					texcoord.y() += c3d_areaTexSubtexSize * offset;
-
-					// Do it!
-					writer.returnStmt( texture( c3d_areaTex, texcoord, 0.0_f ).rg() );
-				}
-				, InVec2{ &writer, cuT( "dist" ) }
-				, InFloat{ &writer, cuT( "e1" ) }
-				, InFloat{ &writer, cuT( "e2" ) }
-				, InFloat{ &writer, cuT( "offset" ) } );
-
 			//-----------------------------------------------------------------------------
 			// Corner Detection Functions
 			
@@ -676,7 +633,7 @@ namespace smaa
 
 						IF( writer, left )
 						{
-							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 - e )
+							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 ) - e
 								, vec2( 0.0_f )
 								, vec2( 1.0_f ) );
 						}
@@ -687,7 +644,7 @@ namespace smaa
 
 						IF( writer, "!left" )
 						{
-							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 - e )
+							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 ) - e
 								, vec2( 0.0_f )
 								, vec2( 1.0_f ) );
 						}
@@ -717,7 +674,7 @@ namespace smaa
 
 						IF( writer, left )
 						{
-							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 - e )
+							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 ) - e
 								, vec2( 0.0_f )
 								, vec2( 1.0_f ) );
 						}
@@ -728,7 +685,7 @@ namespace smaa
 
 						IF( writer, "!left" )
 						{
-							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 - e )
+							weights *= clamp( vec2( writer.cast< Float >( c3d_cornerRounding ) / 100.0 + 1.0 ) - e
 								, vec2( 0.0_f )
 								, vec2( 1.0_f ) );
 						}
@@ -739,6 +696,470 @@ namespace smaa
 				, InVec2{ &writer, cuT( "texcoord" ) }
 				, InVec2{ &writer, cuT( "d" ) } );
 
+#else
+
+			/**
+			* Allows to decode two binary values from a bilinear-filtered access.
+			*/
+			auto decodeDiagBilinearAccess2 = writer.implementFunction< Vec2 >( cuT( "decodeDiagBilinearAccess2" )
+				, [&]( Vec2 const & e )
+				{
+					// Bilinear access for fetching 'e' have a 0.25 offset, and we are
+					// interested in the R and G edges:
+					//
+					// +---G---+-------+
+					// |   x o R   x   |
+					// +-------+-------+
+					//
+					// Then, if one of these edge is enabled:
+					//   Red:   (0.75 * X + 0.25 * 1) => 0.25 or 1.0
+					//   Green: (0.75 * 1 + 0.25 * X) => 0.75 or 1.0
+					//
+					// This function will unpack the values (mad + mul + round):
+					// wolframalpha.com: round(x * abs(5 * x - 5 * 0.75)) plot 0 to 1
+					e.r() = e.r() * abs( 5.0_f * e.r() - 5.0 * 0.75 );
+					writer.returnStmt( round( e ) );
+				}
+				, InVec2{ &writer, cuT( "e" ) } );
+
+			auto decodeDiagBilinearAccess4 = writer.implementFunction< Vec4 >( cuT( "decodeDiagBilinearAccess4" )
+				, [&]( Vec4 const & e )
+			{
+				e.rb() = e.rb() * abs( 5.0_f * e.rb() - vec2( 5.0_f ) * 0.75 );
+				return round( e );
+			}
+			, InVec4{ &writer, cuT( "e" ) } );
+
+			/**
+			* These functions allows to perform diagonal pattern searches.
+			*/
+			auto searchDiag1 = writer.implementFunction< Vec2 >( cuT( "searchDiag1" )
+				, [&]( Vec2 texcoord
+					, Vec2 const & dir
+					, Vec2 & e )
+				{
+					auto coord = writer.declLocale( cuT( "coord" )
+						, vec4( texcoord, -1.0, 1.0 ) );
+					auto t = writer.declLocale( cuT( "t" )
+						, vec3( c3d_pixelSize, 1.0 ) );
+					WHILE( writer
+						, "coord.z < float( c3d_maxSearchStepsDiag - 1 ) "
+							"&& coord.w > 0.9" )
+					{
+						coord.xyz() = fma( t, vec3( dir, 1.0 ), coord.xyz() );
+						e = texture( c3d_edgesTex, coord.xy() ).rg();
+						coord.w() = dot( e, vec2( 0.5_f, 0.5 ) );
+					}
+					ELIHW;
+
+					writer.returnStmt( coord.zw() );
+				}
+				, InVec2{ &writer, cuT( "texcoord" ) }
+				, InVec2{ &writer, cuT( "dir" ) }
+				, OutVec2{ &writer, cuT( "e" ) } );
+
+			auto searchDiag2 = writer.implementFunction< Vec2 >( cuT( "searchDiag2" )
+				, [&]( Vec2 texcoord
+					, Vec2 const & dir
+					, Vec2 & e )
+				{
+					auto coord = writer.declLocale( cuT( "coord" )
+						, vec4( texcoord, -1.0, 1.0 ) );
+					coord.x() += 0.25_f * c3d_pixelSize.x();
+					auto t = writer.declLocale( cuT( "t" )
+						, vec3( c3d_pixelSize, 1.0 ) );
+					WHILE( writer
+						, "coord.z < float( c3d_maxSearchStepsDiag - 1 ) "
+							"&& coord.w > 0.9" )
+					{
+						coord.xyz() = fma( t, vec3( dir, 1.0 ), coord.xyz() );
+						e = texture( c3d_edgesTex, coord.xy() ).rg();
+						e = decodeDiagBilinearAccess2( e );
+						coord.w() = dot( e, vec2( 0.5_f, 0.5 ) );
+					}
+					ELIHW;
+
+					writer.returnStmt( coord.zw() );
+				}
+				, InVec2{ &writer, cuT( "texcoord" ) }
+				, InVec2{ &writer, cuT( "dir" ) }
+				, OutVec2{ &writer, cuT( "e" ) } );
+
+			/**
+			* Similar to SMAAArea, this calculates the area corresponding to a certain
+			* diagonal distance and crossing edges 'e'.
+			*/
+			auto areaDiag = writer.implementFunction< Vec2 >( cuT( "areaDiag" )
+				, [&]( Vec2 const & dist
+					, Vec2 const & e
+					, Float const & offset )
+				{
+					auto texcoord = writer.declLocale( cuT( "texcoord" )
+						, fma( vec2( writer.cast< Float >( c3d_areaTexMaxDistanceDiag ) ), e, dist ) );
+
+					// We do a scale and bias for mapping to texel space:
+					texcoord = fma( c3d_areaTexPixelSize, texcoord, 0.5_f * c3d_areaTexPixelSize );
+
+					// Diagonal areas are on the second half of the texture:
+					texcoord.x() += 0.5_f;
+
+					// Move to proper place, according to the subpixel offset:
+					texcoord.y() += c3d_areaTexSubtexSize * offset;
+
+					// Do it!
+					writer.returnStmt( texture( c3d_areaTex, texcoord, 0.0_f ).rg() );
+				}
+				, InVec2{ &writer, cuT( "dist" ) }
+				, InVec2{ &writer, cuT( "e" ) }
+				, InFloat{ &writer, cuT( "offset" ) } );
+
+			auto movc2 = writer.implementFunction< Void >( cuT( "movc2" )
+				, [&]( BVec2 const & cond
+					, Vec2 & variable
+					, Vec2 const & value )
+				{
+					IF( writer, cond.x() )
+					{
+						variable.x() = value.x();
+					}
+					FI;
+					IF( writer, cond.y() )
+					{
+						variable.y() = value.y();
+					}
+					FI;
+				}
+				, InBVec2{ &writer, cuT( "cond" ) }
+				, InOutVec2{ &writer, cuT( "variable" ) }
+				, InVec2{ &writer, cuT( "value" ) } );
+
+			auto movc4 = writer.implementFunction< Void >( cuT( "movc2" )
+				, [&]( BVec4 const & cond
+					, Vec4 & variable
+					, Vec4 const & value )
+				{
+					movc2( cond.xy(), variable.xy(), value.xy() );
+					movc2( cond.zw(), variable.zw(), value.zw() );
+				}
+				, InBVec4{ &writer, cuT( "cond" ) }
+				, InOutVec4{ &writer, cuT( "variable" ) }
+				, InVec4{ &writer, cuT( "value" ) } );
+
+			/**
+			* This searches for diagonal patterns and returns the corresponding weights.
+			*/
+			auto calculateDiagWeights = writer.implementFunction< Vec2 >( cuT( "calculateDiagWeights" )
+				, [&]( Vec2 const & e )
+				{
+					auto weights = writer.declLocale( cuT( "weights" )
+						, vec2( 0.0_f ) );
+
+					auto d = writer.declLocale< Vec4 >( cuT( "d" ) );
+					auto end = writer.declLocale< Vec2 >( cuT( "end" ) );
+
+					IF( writer, e.r() > 0.0_f )
+					{
+						d.xz() = searchDiag1( vtx_texture, vec2( -1.0_f, 1.0 ), end );
+						d.x() += writer.cast< Float >( end.y() > 0.9_f );
+					}
+					ELSE
+					{
+						d.xz() = vec2( 0.0_f, 0.0 );
+					}
+					FI;
+
+					d.yw() = searchDiag1( vtx_texture, vec2( 1.0_f, -11.0 ), end );
+
+					IF( writer, d.r() + d.g() > 2.0_f ) // d.r + d.g + 1 > 3
+					{
+						// Fetch the crossing edges:
+						auto coords = writer.declLocale( cuT( "coords" )
+							, fma( vec4( -d.r() + 0.25_f, d.r(), d.g(), -d.g() - 0.25_f )
+								, vec4( c3d_pixelSize, c3d_pixelSize )
+								, vec4( vtx_texture, vtx_texture ) ) );
+
+						auto c = writer.declLocale< Vec4 >( cuT( "c" ) );
+						c.xy() = textureLodOffset( c3d_edgesTex, coords.xy(), 0.0_f, ivec2( -1_i, 0 ) ).rg();
+						c.zw() = textureLodOffset( c3d_edgesTex, coords.zw(), 0.0_f, ivec2( 1_i, 0 ) ).rg();
+						c.yxwz() = decodeDiagBilinearAccess4( c.xyzw() );
+
+						// Merge crossing edges at each side into a single value:
+						auto cc = writer.declLocale( cuT( "cc" )
+							, fma( vec2( 2.0_f ), c.xz(), c.yw() ) );
+
+						// Remove the crossing edge if we didn't found the end of the line:
+						movc2( bvec2( step( 0.9_f, d.zw() ) ), cc, vec2( 0.0_f ) );
+
+						// Fetch the areas for this line:
+						weights += areaDiag( d.xy(), cc, writer.cast< Float >( c3d_subsampleIndices.z() ) );
+					}
+					FI;
+
+					// Search for the line ends:
+					d.xz() = searchDiag2( vtx_texture, vec2( -1.0_f, -1.0 ), end );
+
+					IF( writer, textureLodOffset( c3d_edgesTex, vtx_texture, 0.0_f, ivec2( 1_i, 0 ) ).r() > 0.0 )
+					{
+						d.yw() = searchDiag2( vtx_texture, vec2( 1.0_f, 1.0 ), end );
+						d.y() += writer.cast< Float >( end.y() > 0.9_f );
+					}
+					ELSE
+					{
+						d.yw() = vec2( 0.0_f, 0.0 );
+					}
+					FI;
+
+					IF( writer, d.r() + d.g() > 2.0_f )
+					{ // d.r + d.g + 1 > 3
+						auto coords = writer.declLocale( cuT( "coords" )
+							, fma( vec4( -d.r(), -d.r(), d.g(), d.g() )
+								, vec4( c3d_pixelSize, c3d_pixelSize )
+								, vec4( vtx_texture, vtx_texture ) ) );
+
+						auto c = writer.declLocale< Vec4 >( cuT( "c" ) );
+						c.x() = textureLodOffset( c3d_edgesTex, coords.xy(), 0.0_f, ivec2( -1_i, 0 ) ).g();
+						c.y() = textureLodOffset( c3d_edgesTex, coords.xy(), 0.0_f, ivec2( 0_i, -1 ) ).r();
+						c.zw() = textureLodOffset( c3d_edgesTex, coords.zw(), 0.0_f, ivec2( 1_i, 0 ) ).gr();
+						auto cc = writer.declLocale( cuT( "cc" )
+							, fma( vec2( 2.0_f )
+								, c.xz()
+								, c.yw() ) );
+						movc2( bvec2( step( 0.9_f, d.zw() ) ), cc, vec2( 0.0_f ) );
+
+						weights += areaDiag( d.xy(), cc, writer.cast< Float >( c3d_subsampleIndices.w() ) ).gr();
+					}
+					FI;
+
+					writer.returnStmt( weights );
+				}
+				, InVec2{ &writer, cuT( "e" ) } );
+
+			//-----------------------------------------------------------------------------
+			// Horizontal/Vertical Search Functions
+
+			/**
+			* This allows to determine how much length should we add in the last step
+			* of the searches. It takes the bilinearly interpolated edge (see
+			* @PSEUDO_GATHER4), and adds 0, 1 or 2, depending on which edges and
+			* crossing edges are active.
+			*/
+			auto searchLength = writer.implementFunction< Float >( cuT( "searchLength" )
+				, [&]( Vec2 const e
+					, Float const & offset )
+				{
+					// The texture is flipped vertically, with left and right cases taking half
+					// of the space horizontally:
+					auto scale = writer.declLocale( cuT( "scale" )
+						, c3d_searchTexSize * vec2( 0.5_f, -1.0 ) );
+					auto bias = writer.declLocale( cuT( "bias" )
+						, c3d_searchTexSize * vec2( offset, 1.0 ) );
+
+					// Scale and bias to access texel centers:
+					scale += vec2( -1.0_f, 1.0 );
+					bias += vec2( 0.5_f, -0.5 );
+
+					// Convert from pixel coordinates to texcoords:
+					// (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
+					scale *= vec2( 1.0_f ) / c3d_searchTexPackedSize;
+					bias *= vec2( 1.0_f ) / c3d_searchTexPackedSize;
+
+					// Lookup the search texture:
+					return texture( c3d_searchTex, fma( scale, e, bias ), 0.0_f ).r();
+				}
+				, InVec2{ &writer, cuT( "e" ) }
+				, InFloat{ &writer, cuT( "offset" ) } );
+
+			/**
+			* Horizontal/vertical search functions for the 2nd pass.
+			*/
+			auto searchXLeft = writer.implementFunction< Float >( cuT( "searchXLeft" )
+				, [&]( Vec2 texcoord
+					, Float const & end )
+				{
+					/**
+					* @PSEUDO_GATHER4
+					* This texcoord has been offset by (-0.25, -0.125) in the vertex shader to
+					* sample between edge, thus fetching four edges in a row.
+					* Sampling with different offsets in each direction allows to disambiguate
+					* which edges are active from the four fetched ones.
+					*/
+					auto e = writer.declLocale( cuT( "e" )
+						, vec2( 0.0_f, 1.0 ) );
+
+					WHILE( writer, "texcoord.x > end "
+						"&& e.g > 0.8281"// Is there some edge not activated?
+						"&& e.r == 0.0" )// Or is there a crossing edge that breaks the line?
+					{
+						e = texture( c3d_edgesTex, texcoord, 0.0_f ).rg();
+						texcoord = fma( vec2( 2.0_f, 0.0 ), c3d_pixelSize, texcoord );
+					}
+					ELIHW;
+
+					auto offset = writer.declLocale( cuT( "offset" )
+						, fma( -255.0_f / 127.0_f, searchLength( e, 0.0_f ), 3.25_f ) );
+					writer.returnStmt( fma( c3d_pixelSize.x(), offset, texcoord.x() ) );
+				}
+				, InVec2{ &writer, cuT( "texcoord" ) }
+				, InFloat{ &writer, cuT( "end" ) } );
+
+			auto searchXRight = writer.implementFunction< Float >( cuT( "searchXRight" )
+				, [&]( Vec2 texcoord
+					, Float const & end )
+				{
+					auto e = writer.declLocale( cuT( "e" )
+						, vec2( 0.0_f, 1.0 ) );
+
+					WHILE( writer, "texcoord.x < end "
+						"&& e.g > 0.8281"// Is there some edge not activated?
+						"&& e.r == 0.0" )// Or is there a crossing edge that breaks the line?
+					{
+						e = texture( c3d_edgesTex, texcoord, 0.0_f ).rg();
+						texcoord = fma( vec2( 2.0_f, 0.0 ), c3d_pixelSize, texcoord );
+					}
+					ELIHW;
+
+					auto offset = writer.declLocale( cuT( "offset" )
+						, fma( -255.0_f / 127.0_f, searchLength( e, 0.5_f ), 3.25_f ) );
+					writer.returnStmt( fma( -c3d_pixelSize.x(), offset, texcoord.x() ) );
+				}
+				, InVec2{ &writer, cuT( "texcoord" ) }
+				, InFloat{ &writer, cuT( "end" ) } );
+			
+			auto searchYUp = writer.implementFunction< Float >( cuT( "searchYUp" )
+				, [&]( Vec2 texcoord
+					, Float const & end )
+				{
+					auto e = writer.declLocale( cuT( "e" )
+						, vec2( 1.0_f, 0.0 ) );
+
+					WHILE( writer, "texcoord.y > end "
+						"&& e.r > 0.8281"// Is there some edge not activated?
+						"&& e.g == 0.0" )// Or is there a crossing edge that breaks the line?
+					{
+						e = texture( c3d_edgesTex, texcoord, 0.0_f ).rg();
+						texcoord = fma( vec2( 0.0_f, 2.0 ), c3d_pixelSize, texcoord );
+					}
+					ELIHW;
+
+					auto offset = writer.declLocale( cuT( "offset" )
+						, fma( -255.0_f / 127.0_f, searchLength( e, 0.0_f ), 3.25_f ) );
+					writer.returnStmt( fma( c3d_pixelSize.y(), offset, texcoord.y() ) );
+				}
+				, InVec2{ &writer, cuT( "texcoord" ) }
+				, InFloat{ &writer, cuT( "end" ) } );
+
+			auto searchYDown = writer.implementFunction< Float >( cuT( "searchYDown" )
+				, [&]( Vec2 texcoord
+					, Float const & end )
+				{
+					auto e = writer.declLocale( cuT( "e" )
+						, vec2( 1.0_f, 0.0 ) );
+
+					WHILE( writer, "texcoord.y < end "
+						"&& e.r > 0.8281"// Is there some edge not activated?
+						"&& e.g == 0.0" )// Or is there a crossing edge that breaks the line?
+					{
+						e = texture( c3d_edgesTex, texcoord, 0.0_f ).rg();
+						texcoord = fma( vec2( 0.0_f, 2.0 ), c3d_pixelSize, texcoord );
+					}
+					ELIHW;
+
+					auto offset = writer.declLocale( cuT( "offset" )
+						, fma( -255.0_f / 127.0_f, searchLength( e, 0.5_f ), 3.25_f ) );
+					writer.returnStmt( fma( -c3d_pixelSize.y(), offset, texcoord.y() ) );
+				}
+				, InVec2{ &writer, cuT( "texcoord" ) }
+				, InFloat{ &writer, cuT( "end" ) } );
+
+			//-----------------------------------------------------------------------------
+			// Corner Detection Functions
+			
+			auto detectHorizontalCornerPattern = writer.implementFunction< Void >( cuT( "detectHorizontalCornerPattern" )
+				, [&]( Vec2 & weights
+					, Vec4 const & texcoord
+					, Vec2 const & d )
+				{
+					if ( cornerRounding < 100 )
+					{
+						auto leftRight = writer.declLocale( cuT( "leftRight" )
+							, step( d.xy(), d.yx() ) );
+						auto rounding = writer.declLocale( cuT( "rounding" )
+							, writer.paren( 1.0 - c3d_cornerRoundingNorm ) * leftRight );
+
+						rounding /= leftRight.x() + leftRight.y(); // Reduce blending for pixels in the center of a line.
+
+						auto factor = writer.declLocale( cuT( "factor" )
+							, vec2( 1.0_f, 1.0 ) );
+						factor.x() -= rounding.x() * textureLodOffset( c3d_edgesTex, texcoord.xy(), 0.0_f, ivec2( 0_i, 1 ) ).r();
+						factor.x() -= rounding.y() * textureLodOffset( c3d_edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, 1 ) ).r();
+						factor.y() -= rounding.x() * textureLodOffset( c3d_edgesTex, texcoord.xy(), 0.0_f, ivec2( 0_i, -2 ) ).r();
+						factor.y() -= rounding.y() * textureLodOffset( c3d_edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, -2 ) ).r();
+
+						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
+					}
+				}
+				, InOutVec2{ &writer, cuT( "weights" ) }
+				, InVec4{ &writer, cuT( "texcoord" ) }
+				, InVec2{ &writer, cuT( "d" ) } );
+			
+			auto detectVerticalCornerPattern = writer.implementFunction< Void >( cuT( "detectVerticalCornerPattern" )
+				, [&]( Vec2 & weights
+					, Vec4 const & texcoord
+					, Vec2 const & d )
+				{
+					if ( cornerRounding < 100 )
+					{
+						auto leftRight = writer.declLocale( cuT( "leftRight" )
+							, step( d.xy(), d.yx() ) );
+						auto rounding = writer.declLocale( cuT( "rounding" )
+							, writer.paren( 1.0 - c3d_cornerRoundingNorm ) * leftRight );
+
+						rounding /= leftRight.x() + leftRight.y(); // Reduce blending for pixels in the center of a line.
+
+						auto factor = writer.declLocale( cuT( "factor" )
+							, vec2( 1.0_f, 1.0 ) );
+						factor.x() -= rounding.x() * textureLodOffset( c3d_edgesTex, texcoord.xy(), 0.0_f, ivec2( 1_i, 0 ) ).g();
+						factor.x() -= rounding.y() * textureLodOffset( c3d_edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, 1 ) ).g();
+						factor.y() -= rounding.x() * textureLodOffset( c3d_edgesTex, texcoord.xy(), 0.0_f, ivec2( -2_i, 0 ) ).g();
+						factor.y() -= rounding.y() * textureLodOffset( c3d_edgesTex, texcoord.zw(), 0.0_f, ivec2( -2_i, 1 ) ).g();
+
+						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
+					}
+				}
+				, InOutVec2{ &writer, cuT( "weights" ) }
+				, InVec4{ &writer, cuT( "texcoord" ) }
+				, InVec2{ &writer, cuT( "d" ) } );
+
+#endif
+
+			/**
+			* Ok, we have the distance and both crossing edges. So, what are the areas
+			* at each side of current edge?
+			*/
+			auto area = writer.implementFunction< Vec2 >( cuT( "area" )
+				, [&]( Vec2 const & dist
+					, Float const & e1
+					, Float const & e2
+					, Float const & offset )
+				{
+					// Rounding prevents precision errors of bilinear filtering:
+					auto texcoord = writer.declLocale( cuT( "texcoord" )
+						, fma( vec2( writer.cast< Float >( c3d_areaTexMaxDistance ) ), round( 4.0_f * vec2( e1, e2 ) ), dist ) );
+
+					// We do a scale and bias for mapping to texel space:
+					texcoord = fma( c3d_areaTexPixelSize, texcoord, 0.5_f * c3d_areaTexPixelSize );
+
+					// Move to proper place, according to the subpixel offset:
+					texcoord.y() = fma( c3d_areaTexSubtexSize, offset, texcoord.y() );
+
+					// Do it!
+					writer.returnStmt( texture( c3d_areaTex, texcoord, 0.0_f ).rg() );
+				}
+				, InVec2{ &writer, cuT( "dist" ) }
+				, InFloat{ &writer, cuT( "e1" ) }
+				, InFloat{ &writer, cuT( "e2" ) }
+				, InFloat{ &writer, cuT( "offset" ) } );
+
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
@@ -747,6 +1168,8 @@ namespace smaa
 
 					auto e = writer.declLocale( cuT( "e" )
 						, texture( c3d_edgesTex, vtx_texture ).rg() );
+
+#if 0
 
 					IF( writer, e.g() > 0.0 )
 					{ // Edge at north
@@ -886,6 +1309,149 @@ namespace smaa
 					FI;
 
 					pxl_fragColour = weights;
+
+#else
+
+					IF( writer, e.g() > 0.0 )
+					{ // Edge at north
+						if ( maxSearchStepsDiag > 0 )
+						{
+							// Diagonals have both north and west edges, so searching for them in
+							// one of the boundaries is enough.
+							weights.rg() = calculateDiagWeights( e );
+
+							// We give priority to diagonals, so if we find a diagonal we skip 
+							// horizontal/vertical processing.
+							IF( writer, weights.r() == -weights.g() )
+							{
+								auto d = writer.declLocale< Vec2 >( cuT( "d" ) );
+
+								// Find the distance to the left:
+								auto coords = writer.declLocale< Vec3 >( cuT( "coords" ) );
+								coords.x() = searchXLeft( vtx_offset[0].xy(), vtx_offset[2].x() );
+								coords.y() = vtx_offset[1].y(); // vtx_offset[1].y() = vtx_texture.y() - 0.25_f * c3d_pixelSize.y() (@CROSSING_OFFSET)
+								d.x() = coords.x();
+
+								// Now fetch the left crossing edges, two at a time using bilinear
+								// filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to
+								// discern what value each edge has:
+								auto e1 = writer.declLocale( cuT( "e1" )
+									, texture( c3d_edgesTex, coords.xy(), 0.0_f ).r() );
+
+								// Find the distance to the right:
+								coords.z() = searchXRight( vtx_offset[0].zw(), vtx_offset[2].y() );
+								d.y() = coords.z();
+
+								// We want the distances to be in pixel units (doing this here allow to
+								// better interleave arithmetic and memory accesses):
+								d = abs( round( fma( c3d_pixelSize.zz(), d, -vtx_pixcoord.xx() ) ) );
+
+								// SMAAArea below needs a sqrt, as the areas texture is compressed 
+								// quadratically:
+								auto sqrt_d = writer.declLocale( cuT( "sqrt_d" )
+									, sqrt( abs( d ) ) );
+
+								// Fetch the right crossing edges:
+								auto e2 = writer.declLocale( cuT( "e2" )
+									, textureLodOffset( c3d_edgesTex, coords, 0.0_f, ivec2( 1_i, 0 ) ).r() );
+
+								// Ok, we know how this pattern looks like, now it is time for getting
+								// the actual area:
+								weights.rg() = area( sqrt_d, e1, e2, writer.cast< Float >( c3d_subsampleIndices.y() ) );
+
+								// Fix corners:
+								detectHorizontalCornerPattern( weights.rg(), vec4( vtx_texture, vtx_texture ), d );
+							}
+							ELSE
+							{
+								e.r() = 0.0_f; // Skip vertical processing.
+							}
+							FI;
+						}
+						else
+						{
+							auto d = writer.declLocale< Vec2 >( cuT( "d" ) );
+
+							// Find the distance to the left:
+							auto coords = writer.declLocale< Vec2 >( cuT( "coords" ) );
+							coords.x() = searchXLeft( vtx_offset[0].xy(), vtx_offset[2].x() );
+							coords.y() = vtx_offset[1].y(); // vtx_offset[1].y() = vtx_texture.y() - 0.25_f * c3d_pixelSize.y() (@CROSSING_OFFSET)
+							d.x() = coords.x();
+
+							// Now fetch the left crossing edges, two at a time using bilinear
+							// filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to
+							// discern what value each edge has:
+							auto e1 = writer.declLocale( cuT( "e1" )
+								, texture( c3d_edgesTex, coords, 0.0_f ).r() );
+
+							// Find the distance to the right:
+							coords.x() = searchXRight( vtx_offset[0].zw(), vtx_offset[2].y() );
+							d.y() = coords.x();
+
+							// We want the distances to be in pixel units (doing this here allow to
+							// better interleave arithmetic and memory accesses):
+							d = d / c3d_pixelSize.x() - vtx_pixcoord.x();
+
+							// SMAAArea below needs a sqrt, as the areas texture is compressed 
+							// quadratically:
+							auto sqrt_d = writer.declLocale( cuT( "sqrt_d" )
+								, sqrt( abs( d ) ) );
+
+							// Fetch the right crossing edges:
+							auto e2 = writer.declLocale( cuT( "e2" )
+								, textureLodOffset( c3d_edgesTex, coords, 0.0_f, ivec2( 1_i, 0 ) ).r() );
+
+							// Ok, we know how this pattern looks like, now it is time for getting
+							// the actual area:
+							weights.rg() = area( sqrt_d, e1, e2, writer.cast< Float >( c3d_subsampleIndices.y() ) );
+
+							// Fix corners:
+							detectHorizontalCornerPattern( weights.rg(), vtx_texture, d );
+						}
+					}
+					FI;
+
+					IF( writer, e.r() > 0.0_f )
+					{ // Edge at west
+						auto d = writer.declLocale< Vec2 >( cuT( "d" ) );
+
+						// Find the distance to the top:
+						auto coords = writer.declLocale< Vec2 >( cuT( "coords" ) );
+						coords.y() = searchYUp( vtx_offset[1].xy(), vtx_offset[2].z() );
+						coords.x() = vtx_offset[0].x(); // vtx_offset[1].x() = vtx_texture.x() - 0.25 * c3d_pixelSize.x();
+						d.x() = coords.y();
+
+						// Fetch the top crossing edges:
+						auto e1 = writer.declLocale( cuT( "e1" )
+							, texture( c3d_edgesTex, coords, 0.0_f ).g() );
+
+						// Find the distance to the bottom:
+						coords.y() = searchYDown( vtx_offset[1].zw(), vtx_offset[2].w() );
+						d.y() = coords.y();
+
+						// We want the distances to be in pixel units:
+						d = d / c3d_pixelSize.y() - vtx_pixcoord.y();
+
+						// SMAAArea below needs a sqrt, as the areas texture is compressed 
+						// quadratically:
+						auto sqrt_d = writer.declLocale( cuT( "sqrt_d" )
+							, sqrt( abs( d ) ) );
+
+						// Fetch the bottom crossing edges:
+						auto e2 = writer.declLocale( cuT( "e2" )
+							, textureLodOffset( c3d_edgesTex, coords, 0.0_f, ivec2( 0_i, 1 ) ).g() );
+
+						// Get the area for this direction:
+						weights.ba() = area( sqrt_d, e1, e2, writer.cast< Float >( c3d_subsampleIndices.x() ) );
+
+						// Fix corners:
+						detectVerticalCornerPattern( weights.ba(), vtx_texture, d );
+					}
+					FI;
+
+					pxl_fragColour = weights;
+
+#endif
 				} );
 			return writer.finalise();
 		}
@@ -930,13 +1496,46 @@ namespace smaa
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 2u );
-			auto c3d_colourTex = writer.declUniform< Sampler2D >( cuT( "c3d_colourTex" ) );
-			auto c3d_blendTex = writer.declUniform< Sampler2D >( cuT( "c3d_blendTex" ) );
+			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), castor3d::MinTextureIndex + 0u );
+			auto c3d_blendTex = writer.declSampler< Sampler2D >( cuT( "c3d_blendTex" ), castor3d::MinTextureIndex + 1u );
+			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), castor3d::MinTextureIndex + 2u, reprojection );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+
+			auto movc2 = writer.implementFunction< Void >( cuT( "movc2" )
+				, [&]( BVec2 const & cond
+					, Vec2 & variable
+					, Vec2 const & value )
+				{
+					IF( writer, cond.x() )
+					{
+						variable.x() = value.x();
+					}
+					FI;
+					IF( writer, cond.y() )
+					{
+						variable.y() = value.y();
+					}
+					FI;
+				}
+				, InBVec2{ &writer, cuT( "cond" ) }
+				, InOutVec2{ &writer, cuT( "variable" ) }
+				, InVec2{ &writer, cuT( "value" ) } );
+
+			auto movc4 = writer.implementFunction< Void >( cuT( "movc2" )
+				, [&]( BVec4 const & cond
+					, Vec4 & variable
+					, Vec4 const & value )
+				{
+					movc2( cond.xy(), variable.xy(), value.xy() );
+					movc2( cond.zw(), variable.zw(), value.zw() );
+				}
+				, InBVec4{ &writer, cuT( "cond" ) }
+				, InOutVec4{ &writer, cuT( "variable" ) }
+				, InVec4{ &writer, cuT( "value" ) } );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -950,12 +1549,23 @@ namespace smaa
 					a.w() = texture( c3d_blendTex, vtx_offset[1].xy() ).a();
 
 					// Is there any blending weight with a value greater than 0.0?
-					IF( writer, dot( a, vec4( 1.0_f, 1.0, 1.0, 1.0 ) ) < 1e-5_f )
+					IF( writer, dot( a, vec4( 1.0_f ) ) < 1e-5_f )
 					{
 						pxl_fragColour = texture( c3d_colourTex, texcoord, 0.0_f );
+
+						if ( reprojection )
+						{
+							auto velocity = writer.declLocale( cuT( "velocity" )
+								, texture( c3d_velocityTex, texcoord ).rg() );
+
+							// Pack velocity into the alpha channel:
+							pxl_fragColour.a() = sqrt( 5.0_f * length( velocity ) );
+						}
 					}
 					ELSE
 					{
+#if 0
+
 						auto color = writer.declLocale( cuT( "color" )
 							, vec4( 0.0_f, 0.0, 0.0, 0.0 ) );
 
@@ -1013,8 +1623,131 @@ namespace smaa
 							texcoord += offset * c3d_pixelSize;
 							pxl_fragColour = texture( c3d_colourTex, texcoord, 0.0_f );
 						}
+
+#else
+						auto h = writer.declLocale( cuT( "h" )
+							, max( a.x(), a.z() ) > max( a.y(), a.w() ) );
+
+						// Calculate the blending offsets:
+						auto blendingOffset = writer.declLocale( cuT( "blendingOffset" )
+							, vec4( 0.0_f, a.y(), 0.0_f, a.w() ) );
+						auto blendingWeight = writer.declLocale( cuT( "blendingWeight" )
+							, a.yw() );
+						movc4( bvec4( h, h, h, h )
+							, blendingOffset
+							, vec4( a.x(), 0.0, a.z(), 0.0 ) );
+						movc2( bvec2( h, h )
+							, blendingWeight
+							, a.xz() );
+						blendingWeight /= dot( blendingWeight, vec2( 1.0_f, 1.0 ) );
+
+						// Calculate the texture coordinates:
+						auto blendingCoord = writer.declLocale( cuT( "blendingCoord" )
+							, fma( blendingOffset
+								, vec4( c3d_pixelSize.xy(), -c3d_pixelSize.xy() )
+								, vec4( texcoord.xy(), texcoord.xy() ) ) );
+
+						// We exploit bilinear filtering to mix current pixel with the chosen
+						// neighbor:
+						pxl_fragColour = blendingWeight.x() * texture( c3d_colourTex, blendingCoord.xy(), 0.0_f );
+						pxl_fragColour += blendingWeight.y() * texture( c3d_colourTex, blendingCoord.zw(), 0.0_f );
+
+						if ( reprojection )
+						{
+							// Antialias velocity for proper reprojection in a later stage:
+							auto velocity = writer.declLocale( cuT( "velocity" )
+								, blendingWeight.x() * texture( c3d_velocityTex, blendingCoord.xy() ).rg() );
+							velocity += blendingWeight.y() * texture( c3d_velocityTex, blendingCoord.zw() ).rg();
+
+							// Pack velocity into the alpha channel:
+							pxl_fragColour.a() = sqrt( 5.0_f * length( velocity ) );
+						}
+#endif
 					}
 					FI;
+				} );
+			return writer.finalise();
+		}
+
+		glsl::Shader doGetReprojectVP( castor3d::RenderSystem * renderSystem
+			, Point2f const & pixelSize )
+		{
+			using namespace glsl;
+			GlslWriter writer = renderSystem->createGlslWriter();
+
+			// Shader inputs
+			UBO_MATRIX( writer );
+			auto position = writer.declAttribute< Vec4 >( castor3d::ShaderProgram::Position );
+			auto texture = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Texture );
+
+			// Shader outputs
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			writer.implementFunction< void >( cuT( "main" )
+				, [&]()
+				{
+					gl_Position = c3d_projection * position;
+					vtx_texture = texture;
+				} );
+			return writer.finalise();
+		}
+
+		glsl::Shader doGetReprojectFP( castor3d::RenderSystem * renderSystem
+			, Point2f const & pixelSize
+			, bool reprojection )
+		{
+			using namespace glsl;
+			GlslWriter writer = renderSystem->createGlslWriter();
+
+			// Shader inputs
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_currentColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_currentColourTex" ), castor3d::MinTextureIndex + 0u );
+			auto c3d_previousColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_previousColourTex" ), castor3d::MinTextureIndex + 1u );
+			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), castor3d::MinTextureIndex + 2u, reprojection );
+			auto c3d_reprojectionWeightScale = writer.declConstant( cuT( "c3d_reprojectionWeightScale" )
+				, 30.0_f
+				, reprojection );
+
+			// Shader outputs
+			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+
+			writer.implementFunction< void >( cuT( "main" )
+				, [&]()
+				{
+					if ( reprojection )
+					{
+						// Velocity is assumed to be calculated for motion blur, so we need to
+						// inverse it for reprojection:
+						auto velocity = writer.declLocale( cuT( "velocity" )
+							, -texture( c3d_velocityTex, vtx_texture ).rg() );
+
+						// Fetch current pixel:
+						auto current = writer.declLocale( cuT( "current" )
+							, texture( c3d_currentColourTex, vtx_texture ) );
+
+						// Reproject current coordinates and fetch previous pixel:
+						auto previous = writer.declLocale( cuT( "previous" )
+							, texture( c3d_previousColourTex, vtx_texture + velocity ) );
+
+						// Attenuate the previous pixel if the velocity is different:
+						auto delta = writer.declLocale( cuT( "delta" )
+							, abs( current.a() * current.a() - previous.a() * previous.a() ) / 5.0 );
+						auto weight = writer.declLocale( cuT( "weight" )
+							, 0.5_f * clamp( 1.0_f - writer.paren( sqrt( delta ) * c3d_reprojectionWeightScale ), 0.0_f, 1.0_f ) );
+
+						// Blend the pixels according to the calculated weight:
+						pxl_fragColour = mix( current, previous, weight );
+					}
+					else
+					{
+						// Just blend the pixels:
+						auto current = writer.declLocale( cuT( "current" )
+							, texture( c3d_currentColourTex, vtx_texture ) );
+						auto previous = writer.declLocale( cuT( "previous" )
+							, texture( c3d_previousColourTex, vtx_texture ) );
+						pxl_fragColour = mix( current, previous, 0.5 );
+					}
 				} );
 			return writer.finalise();
 		}
@@ -1036,6 +1769,9 @@ namespace smaa
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_areaTex{ *renderSystem.getEngine() }
 		, m_searchTex{ *renderSystem.getEngine() }
+		, m_edgeDetectionSurface{ *renderSystem.getEngine() }
+		, m_blendingWeightCalculationSurface{ *renderSystem.getEngine() }
+		, m_reprojectSurface{ *renderSystem.getEngine() }
 	{
 		String preset;
 
@@ -1048,29 +1784,36 @@ namespace smaa
 		{
 			m_smaaThreshold = 0.15f;
 			m_smaaMaxSearchSteps = 4;
-			m_smaaMaxSearchStepsDiags = 0;
+			m_smaaMaxSearchStepsDiag = 0;
 			m_smaaCornerRounding = 100;
 		}
 		else if ( preset == cuT( "medium" ) )
 		{
 			m_smaaThreshold = 0.1f;
 			m_smaaMaxSearchSteps = 8;
-			m_smaaMaxSearchStepsDiags = 0;
+			m_smaaMaxSearchStepsDiag = 0;
 			m_smaaCornerRounding = 100;
 		}
 		else if ( preset == cuT( "high" ) )
 		{
 			m_smaaThreshold = 0.1f;
 			m_smaaMaxSearchSteps = 16;
-			m_smaaMaxSearchStepsDiags = 8;
+			m_smaaMaxSearchStepsDiag = 8;
 			m_smaaCornerRounding = 25;
 		}
 		else if ( preset == cuT( "ultra" ) )
 		{
 			m_smaaThreshold = 0.05f;
 			m_smaaMaxSearchSteps = 32;
-			m_smaaMaxSearchStepsDiags = 16;
+			m_smaaMaxSearchStepsDiag = 16;
 			m_smaaCornerRounding = 25;
+		}
+		else if ( preset == cuT( "custom" ) )
+		{
+			parameters.get( cuT( "threshold" ), m_smaaThreshold );
+			parameters.get( cuT( "maxSearchSteps" ), m_smaaMaxSearchSteps );
+			parameters.get( cuT( "maxSearchStepsDiag" ), m_smaaMaxSearchStepsDiag );
+			parameters.get( cuT( "cornerRounding" ), m_smaaCornerRounding );
 		}
 
 		String mode;
@@ -1079,15 +1822,15 @@ namespace smaa
 		{
 			if ( mode == cuT( "T2X" ) )
 			{
-				m_mode = Mode::SMAA_T2X;
+				m_mode = Mode::eT2X;
 			}
 			else if ( mode == cuT( "S2X" ) )
 			{
-				m_mode = Mode::SMAA_S2X;
+				m_mode = Mode::eS2X;
 			}
 			else if ( mode == cuT( "4X" ) )
 			{
-				m_mode = Mode::SMAA_4X;
+				m_mode = Mode::e4X;
 			}
 		}
 
@@ -1144,6 +1887,12 @@ namespace smaa
 		doInitialiseEdgeDetection();
 		doInitialiseBlendingWeightCalculation();
 		doInitialiseNeighbourhoodBlending();
+
+		if ( m_mode == Mode::eT2X )
+		{
+			doInitialiseReproject();
+		}
+
 		return true;
 	}
 
@@ -1151,19 +1900,18 @@ namespace smaa
 	{
 		m_matrixUbo.getUbo().cleanup();
 
-		for ( auto & surface : m_edgeDetectionSurface )
-		{
-			surface.cleanup();
-		}
+		m_edgeDetectionSurface.cleanup();
+		m_blendingWeightCalculationSurface.cleanup();
 
 		for ( auto & surface : m_neighbourhoodBlendingSurface )
 		{
 			surface.cleanup();
 		}
 
-		for ( auto & surface : m_blendingWeightCalculationSurface )
+		if ( m_reprojectPipeline )
 		{
-			surface.cleanup();
+			m_reprojectSurface.cleanup();
+			m_reprojectPipeline->cleanup();
 		}
 
 		m_edgeDetectionPipeline->cleanup();
@@ -1176,39 +1924,41 @@ namespace smaa
 	bool PostEffect::apply( castor3d::FrameBuffer & framebuffer )
 	{
 		auto prvIndex = m_subsampleIndex;
-		auto curIndex = ( m_subsampleIndex + 1 ) % 2u;
-		auto attach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
-		REQUIRE( attach && attach->getAttachmentType() == castor3d::AttachmentType::eTexture );
-		auto texture = std::static_pointer_cast< castor3d::TextureAttachment >( attach )->getTexture();
+		auto curIndex = ( m_subsampleIndex + 1 ) % uint32_t( m_jitters.size() );
+		auto colourAttach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
+		REQUIRE( colourAttach && colourAttach->getAttachmentType() == castor3d::AttachmentType::eTexture );
+		auto texture = std::static_pointer_cast< castor3d::TextureAttachment >( colourAttach )->getTexture();
+		castor3d::TextureLayoutSPtr result;
 
 		switch ( m_mode )
 		{
-		case Mode::SMAA_1X:
-			doEdgesDetectionPass( prvIndex, curIndex, *texture );
-			doBlendingWeightsCalculationPass( prvIndex, curIndex );
-			doNeighbourhoodBlendingPass( prvIndex, curIndex, *texture );
+		case Mode::e1X:
+			doMainPass( prvIndex, curIndex, *texture, nullptr );
+			result = m_neighbourhoodBlendingSurface[curIndex].m_colourTexture.getTexture();
 			break;
 
-		case Mode::SMAA_T2X:
-			doEdgesDetectionPass( prvIndex, curIndex, *texture );
-			doBlendingWeightsCalculationPass( prvIndex, curIndex );
-			doNeighbourhoodBlendingPass( prvIndex, curIndex, *texture );
+		case Mode::eT2X:
+			doMainPass( prvIndex, curIndex, *texture, &m_renderTarget.getTechnique()->getDepth() );
 			doReproject( prvIndex, curIndex, *texture );
+			result = m_reprojectSurface.m_colourTexture.getTexture();
 			break;
 
-		case Mode::SMAA_S2X:
+		case Mode::eS2X:
 			break;
 
-		case Mode::SMAA_4X:
+		case Mode::e4X:
 			break;
 		}
 
-		framebuffer.bind( castor3d::FrameBufferTarget::eDraw );
-		getRenderSystem()->getCurrentContext()->renderTexture( texture->getDimensions()
-			, *m_neighbourhoodBlendingSurface[curIndex].m_colourTexture.getTexture() );
-		framebuffer.unbind();
-		m_subsampleIndex = curIndex;
-		m_renderTarget.setJitter( m_jitters[m_subsampleIndex] );
+		if ( result )
+		{
+			framebuffer.bind( castor3d::FrameBufferTarget::eDraw );
+			getRenderSystem()->getCurrentContext()->renderTexture( texture->getDimensions()
+				, *result );
+			framebuffer.unbind();
+			m_subsampleIndex = curIndex;
+			m_renderTarget.setJitter( m_jitters[m_subsampleIndex] );
+		}
 
 		return true;
 	}
@@ -1222,13 +1972,13 @@ namespace smaa
 	{
 		switch ( m_mode )
 		{
-		case Mode::SMAA_1X:
+		case Mode::e1X:
 			m_smaaSubsampleIndices[0] = Point4i{ 0, 0, 0, 0 };
 			m_maxSubsampleIndices = 1u;
 			break;
 
-		case Mode::SMAA_T2X:
-		case Mode::SMAA_S2X:
+		case Mode::eT2X:
+		case Mode::eS2X:
 			/***
 			* Sample positions (bottom-to-top y axis):
 			*   _______
@@ -1243,7 +1993,7 @@ namespace smaa
 			//  blending is reversed: positive numbers point to the right)
 			break;
 
-		case Mode::SMAA_4X:
+		case Mode::e4X:
 			/***
 			* Sample positions (bottom-to-top y axis):
 			*   ________
@@ -1261,17 +2011,17 @@ namespace smaa
 		}
 		switch ( m_mode )
 		{
-		case Mode::SMAA_1X:
-		case Mode::SMAA_S2X:
+		case Mode::e1X:
+		case Mode::eS2X:
 			m_jitters.emplace_back( 0.0, 0.0 );
 			break;
 
-		case Mode::SMAA_T2X:
+		case Mode::eT2X:
 			m_jitters.emplace_back( 0.25, -0.25 );
 			m_jitters.emplace_back( -0.25, 0.25 );
 			break;
 
-		case Mode::SMAA_4X:
+		case Mode::e4X:
 			m_jitters.emplace_back( 0.125, -0.125 );
 			m_jitters.emplace_back( -0.125, 0.125 );
 			break;
@@ -1288,15 +2038,13 @@ namespace smaa
 		auto fragment = doGetEdgeDetectionFP( getRenderSystem()
 			, pixelSize
 			, m_smaaThreshold
-			, false
+			, m_mode == Mode::eT2X
 			, m_smaaPredicationThreshold
 			, m_smaaPredicationScale
 			, m_smaaPredicationStrength );
 		auto program = cache.getNewProgram( false );
 		program->createObject( castor3d::ShaderType::eVertex );
 		program->createObject( castor3d::ShaderType::ePixel );
-		program->createUniform< castor3d::UniformType::eSampler >( cuT( "c3d_colourTex" )
-			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex );
 		program->setSource( castor3d::ShaderType::eVertex, vertex );
 		program->setSource( castor3d::ShaderType::ePixel, fragment );
 		program->initialise();
@@ -1314,14 +2062,10 @@ namespace smaa
 			, castor3d::PipelineFlags{} );
 		m_edgeDetectionPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		for ( uint32_t i = 0; i < m_maxSubsampleIndices; ++i )
-		{
-			m_edgeDetectionSurface.emplace_back( *getRenderSystem()->getEngine() );
-			m_edgeDetectionSurface.back().initialise( m_renderTarget
-				, m_renderTarget.getSize()
-				, castor3d::MinTextureIndex
-				, m_pointSampler );
-		}
+		m_edgeDetectionSurface.initialise( m_renderTarget
+			, m_renderTarget.getSize()
+			, castor3d::MinTextureIndex
+			, m_linearSampler );
 	}
 
 	void PostEffect::doInitialiseBlendingWeightCalculation()
@@ -1361,16 +2105,10 @@ namespace smaa
 		auto fragment = doBlendingWeightCalculationFP( getRenderSystem()
 			, pixelSize
 			, m_smaaCornerRounding
-			, m_smaaMaxSearchStepsDiags );
+			, m_smaaMaxSearchStepsDiag );
 		auto program = cache.getNewProgram( false );
 		program->createObject( castor3d::ShaderType::eVertex );
 		program->createObject( castor3d::ShaderType::ePixel );
-		program->createUniform< castor3d::UniformType::eSampler >( cuT( "c3d_edgesTex" )
-			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex + 0u );
-		program->createUniform< castor3d::UniformType::eSampler >( cuT( "c3d_areaTex" )
-			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex + 1u );
-		program->createUniform< castor3d::UniformType::eSampler >( cuT( "c3d_searchTex" )
-			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex + 2u );
 		program->setSource( castor3d::ShaderType::eVertex, vertex );
 		program->setSource( castor3d::ShaderType::ePixel, fragment );
 		program->initialise();
@@ -1388,14 +2126,10 @@ namespace smaa
 			, castor3d::PipelineFlags{} );
 		m_blendingWeightCalculationPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		for ( uint32_t i = 0; i < m_maxSubsampleIndices; ++i )
-		{
-			m_blendingWeightCalculationSurface.emplace_back( *getRenderSystem()->getEngine() );
-			m_blendingWeightCalculationSurface.back().initialise( m_renderTarget
-				, m_renderTarget.getSize()
-				, castor3d::MinTextureIndex + 1
-				, m_pointSampler );
-		}
+		m_blendingWeightCalculationSurface.initialise( m_renderTarget
+			, m_renderTarget.getSize()
+			, castor3d::MinTextureIndex + 1
+			, m_linearSampler );
 	}
 
 	void PostEffect::doInitialiseNeighbourhoodBlending()
@@ -1407,18 +2141,14 @@ namespace smaa
 			, pixelSize );
 		auto fragment = doGetNeighbourhoodBlendingFP( getRenderSystem()
 			, pixelSize
-			, false );
+			, m_mode == Mode::eT2X );
 		auto program = cache.getNewProgram( false );
 		program->createObject( castor3d::ShaderType::eVertex );
 		program->createObject( castor3d::ShaderType::ePixel );
-		program->createUniform< castor3d::UniformType::eSampler >( cuT( "c3d_colourTex" )
-			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex );
-		program->createUniform< castor3d::UniformType::eSampler >( cuT( "c3d_blendTex" )
-			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex + 1 );
-		m_subsampleIndicesUniform = program->createUniform< castor3d::UniformType::eVec4i >( constants::SubsampleIndices
-			, castor3d::ShaderType::ePixel );
 		program->setSource( castor3d::ShaderType::eVertex, vertex );
 		program->setSource( castor3d::ShaderType::ePixel, fragment );
+		m_subsampleIndicesUniform = program->createUniform< castor3d::UniformType::eVec4i >( constants::SubsampleIndices
+			, castor3d::ShaderType::ePixel );
 		program->initialise();
 
 		castor3d::DepthStencilState dsstate;
@@ -1439,36 +2169,89 @@ namespace smaa
 			m_neighbourhoodBlendingSurface.emplace_back( *getRenderSystem()->getEngine() );
 			m_neighbourhoodBlendingSurface.back().initialise( m_renderTarget
 				, m_renderTarget.getSize()
-				, castor3d::MinTextureIndex
-				, m_pointSampler );
+				, castor3d::MinTextureIndex + 1u
+				, m_linearSampler );
 		}
+	}
+
+	void PostEffect::doInitialiseReproject()
+	{
+		auto size = m_renderTarget.getSize();
+		auto pixelSize = Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
+		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
+		auto vertex = doGetReprojectVP( getRenderSystem()
+			, pixelSize );
+		auto fragment = doGetReprojectFP( getRenderSystem()
+			, pixelSize
+			, m_mode == Mode::eT2X );
+		auto program = cache.getNewProgram( false );
+		program->createObject( castor3d::ShaderType::eVertex );
+		program->createObject( castor3d::ShaderType::ePixel );
+		program->setSource( castor3d::ShaderType::eVertex, vertex );
+		program->setSource( castor3d::ShaderType::ePixel, fragment );
+		program->initialise();
+
+		castor3d::DepthStencilState dsstate;
+		dsstate.setDepthTest( false );
+		dsstate.setDepthMask( castor3d::WritingMask::eZero );
+		castor3d::RasteriserState rsstate;
+		rsstate.setCulledFaces( castor3d::Culling::eBack );
+		m_reprojectPipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
+			, std::move( rsstate )
+			, castor3d::BlendState{}
+			, castor3d::MultisampleState{}
+			, *program
+			, castor3d::PipelineFlags{} );
+		m_reprojectPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+
+		m_reprojectSurface.initialise( m_renderTarget
+			, m_renderTarget.getSize()
+			, castor3d::MinTextureIndex + 1
+			, m_linearSampler );
 	}
 
 	void PostEffect::doEdgesDetectionPass( uint32_t prvIndex
 		, uint32_t curIndex
-		, castor3d::TextureLayout const & gammaSrc )
+		, castor3d::TextureLayout const & gammaSrc
+		, castor3d::TextureLayout const * depthStencil )
 	{
-		auto & surface = m_edgeDetectionSurface[curIndex];
+		auto & surface = m_edgeDetectionSurface;
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
 		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
-		getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
-			, gammaSrc
-			, *m_edgeDetectionPipeline
-			, m_matrixUbo );
+
+		if ( !depthStencil )
+		{
+			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
+				, gammaSrc
+				, *m_edgeDetectionPipeline
+				, m_matrixUbo );
+		}
+		else
+		{
+			depthStencil->bind( castor3d::MinTextureIndex + 1u );
+			m_linearSampler->bind( castor3d::MinTextureIndex + 1u );
+			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
+				, gammaSrc
+				, *m_edgeDetectionPipeline
+				, m_matrixUbo );
+			m_linearSampler->unbind( castor3d::MinTextureIndex + 1u );
+			depthStencil->unbind( castor3d::MinTextureIndex + 1u );
+		}
+
 		surface.m_fbo->unbind();
 	}
 
 	void PostEffect::doBlendingWeightsCalculationPass( uint32_t prvIndex
 		, uint32_t curIndex )
 	{
-		auto & surface = m_blendingWeightCalculationSurface[curIndex];
+		auto & surface = m_blendingWeightCalculationSurface;
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
 		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
 		m_subsampleIndicesUniform->setValue( m_smaaSubsampleIndices[m_subsampleIndex] );
 		m_areaTex.bind();
 		m_searchTex.bind();
 		getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
-			, *m_edgeDetectionSurface[curIndex].m_colourTexture.getTexture()
+			, *m_edgeDetectionSurface.m_colourTexture.getTexture()
 			, *m_blendingWeightCalculationPipeline
 			, m_matrixUbo );
 		m_areaTex.unbind();
@@ -1483,18 +2266,70 @@ namespace smaa
 		auto & surface = m_neighbourhoodBlendingSurface[curIndex];
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
 		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
-		m_blendingWeightCalculationSurface[curIndex].m_colourTexture.bind();
-		getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
-			, gammaSrc
-			, *m_neighbourhoodBlendingPipeline
-			, m_matrixUbo );
-		m_blendingWeightCalculationSurface[curIndex].m_colourTexture.unbind();
+		m_blendingWeightCalculationSurface.m_colourTexture.bind();
+
+		if ( m_mode == Mode::eT2X )
+		{
+			m_renderTarget.getVelocity().getTexture()->bind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->bind( castor3d::MinTextureIndex + 2u );
+			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
+				, gammaSrc
+				, *m_neighbourhoodBlendingPipeline
+				, m_matrixUbo );
+			m_renderTarget.getVelocity().getTexture()->unbind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->unbind( castor3d::MinTextureIndex + 2u );
+		}
+		else
+		{
+			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
+				, gammaSrc
+				, *m_neighbourhoodBlendingPipeline
+				, m_matrixUbo );
+		}
+
+		m_blendingWeightCalculationSurface.m_colourTexture.unbind();
 		surface.m_fbo->unbind();
+	}
+
+	void PostEffect::doMainPass( uint32_t prvIndex
+		, uint32_t curIndex
+		, castor3d::TextureLayout const & gammaSrc
+		, castor3d::TextureLayout const * depthStencil )
+	{
+		doEdgesDetectionPass( prvIndex, curIndex, gammaSrc, depthStencil );
+		doBlendingWeightsCalculationPass( prvIndex, curIndex );
+		doNeighbourhoodBlendingPass( prvIndex, curIndex, gammaSrc );
 	}
 
 	void PostEffect::doReproject( uint32_t prvIndex
 		, uint32_t curIndex
 		, castor3d::TextureLayout const & gammaSrc )
 	{
+		auto & surface = m_reprojectSurface;
+		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
+		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
+		m_neighbourhoodBlendingSurface[prvIndex].m_colourTexture.bind();
+
+		if ( m_mode == Mode::eT2X )
+		{
+			m_renderTarget.getVelocity().getTexture()->bind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->bind( castor3d::MinTextureIndex + 2u );
+			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
+				, *m_neighbourhoodBlendingSurface[curIndex].m_colourTexture.getTexture()
+				, *m_reprojectPipeline
+				, m_matrixUbo );
+			m_renderTarget.getVelocity().getTexture()->unbind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->unbind( castor3d::MinTextureIndex + 2u );
+		}
+		else
+		{
+			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
+				, *m_neighbourhoodBlendingSurface[curIndex].m_colourTexture.getTexture()
+				, *m_reprojectPipeline
+				, m_matrixUbo );
+		}
+
+		m_neighbourhoodBlendingSurface[prvIndex].m_colourTexture.unbind();
+		surface.m_fbo->unbind();
 	}
 }

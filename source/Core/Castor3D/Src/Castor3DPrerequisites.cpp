@@ -1,4 +1,4 @@
-﻿#include "Castor3DPrerequisites.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -18,6 +18,19 @@ IMPLEMENT_EXPORTED_OWNED_BY( castor3d::RenderSystem, RenderSystem )
 IMPLEMENT_EXPORTED_OWNED_BY( castor3d::Scene, Scene )
 
 using namespace castor;
+
+namespace glsl
+{
+	String const TypeTraits< castor3d::shader::Light >::Name = cuT( "Light" );
+	String const TypeTraits< castor3d::shader::DirectionalLight >::Name = cuT( "DirectionalLight" );
+	String const TypeTraits< castor3d::shader::PointLight >::Name = cuT( "PointLight" );
+	String const TypeTraits< castor3d::shader::SpotLight >::Name = cuT( "SpotLight" );
+	String const TypeTraits< castor3d::shader::BaseMaterial >::Name = cuT( "BaseMaterial" );
+	String const TypeTraits< castor3d::shader::LegacyMaterial >::Name = cuT( "LegacyMaterial" );
+	String const TypeTraits< castor3d::shader::MetallicRoughnessMaterial >::Name = cuT( "MetallicRoughnessMaterial" );
+	String const TypeTraits< castor3d::shader::SpecularGlossinessMaterial >::Name = cuT( "SpecularGlossinessMaterial" );
+}
+
 using namespace glsl;
 
 namespace castor3d
@@ -191,33 +204,35 @@ namespace castor3d
 			}
 
 			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, ShadowType shadows )
+				, ShadowType shadows
+				, uint32_t & index )
 			{
 				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
-				result->declareModel();
+				result->declareModel( index );
 				return result;
 			}
 
 			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
 				, LightType lightType
-				, ShadowType shadows )
+				, ShadowType shadows
+				, uint32_t & index )
 			{
 				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
 
 				switch ( lightType )
 				{
 				case LightType::eDirectional:
-					result->declareDirectionalModel();
+					result->declareDirectionalModel( index );
 					writer.declUniform< DirectionalLight >( cuT( "light" ) );
 					break;
 
 				case LightType::ePoint:
-					result->declarePointModel();
+					result->declarePointModel( index );
 					writer.declUniform< PointLight >( cuT( "light" ) );
 					break;
 
 				case LightType::eSpot:
-					result->declareSpotModel();
+					result->declareSpotModel( index );
 					writer.declUniform< SpotLight >( cuT( "light" ) );
 					break;
 
@@ -312,33 +327,35 @@ namespace castor3d
 				}
 
 				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
-					result->declareModel();
+					result->declareModel( index );
 					return result;
 				}
 
 				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType lightType
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel();
+						result->declareDirectionalModel( index );
 						writer.declUniform< DirectionalLight >( cuT( "light" ) );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel();
+						result->declarePointModel( index );
 						writer.declUniform< PointLight >( cuT( "light" ) );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel();
+						result->declareSpotModel( index );
 						writer.declUniform< SpotLight >( cuT( "light" ) );
 						break;
 
@@ -430,33 +447,35 @@ namespace castor3d
 				}
 
 				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
-					result->declareModel();
+					result->declareModel( index );
 					return result;
 				}
 
 				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType lightType
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel();
+						result->declareDirectionalModel( index );
 						writer.declUniform< DirectionalLight >( cuT( "light" ) );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel();
+						result->declarePointModel( index );
 						writer.declUniform< PointLight >( cuT( "light" ) );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel();
+						result->declareSpotModel( index );
 						writer.declUniform< SpotLight >( cuT( "light" ) );
 						break;
 

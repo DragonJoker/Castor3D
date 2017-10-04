@@ -112,9 +112,10 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( WbTexture::eDepth ) );
-			auto c3d_mapAccumulation = writer.declUniform< Sampler2D >( getTextureName( WbTexture::eAccumulation ) );
-			auto c3d_mapRevealage = writer.declUniform< Sampler2D >( getTextureName( WbTexture::eRevealage ) );
+			auto index = MinTextureIndex;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( WbTexture::eDepth ), index++ );
+			auto c3d_mapAccumulation = writer.declSampler< Sampler2D >( getTextureName( WbTexture::eAccumulation ), index++ );
+			auto c3d_mapRevealage = writer.declSampler< Sampler2D >( getTextureName( WbTexture::eRevealage ), index++ );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 

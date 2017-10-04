@@ -275,7 +275,7 @@ namespace castor3d
 			// Inputs
 			UBO_HDR_CONFIG( writer );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-			auto skybox = writer.declUniform< SamplerCube >( cuT( "skybox" ) );
+			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), MinTextureIndex );
 			glsl::Utils utils{ writer };
 
 			if ( !m_hdr )

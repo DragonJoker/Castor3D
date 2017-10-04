@@ -173,9 +173,10 @@ namespace castor3d
 			// Shader inputs
 			UBO_MATRIX( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
-			auto c3d_mapNormal = writer.declUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
-			auto c3d_mapNoise = writer.declUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
+			auto index = MinTextureIndex;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), index++ );
+			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), index++ );
+			auto c3d_mapNoise = writer.declSampler< Sampler2D >( cuT( "c3d_mapNoise" ), index++ );
 
 			Ubo ssaoConfig{ writer, cuT( "SsaoConfig" ), 8u };
 			auto c3d_kernel = ssaoConfig.declMember< Vec3 >( cuT( "c3d_kernel" ), 64u );
@@ -274,7 +275,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto c3d_mapColour = writer.declUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
+			auto c3d_mapColour = writer.declSampler< Sampler2D >( cuT( "c3d_mapColour" ), MinTextureIndex );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );

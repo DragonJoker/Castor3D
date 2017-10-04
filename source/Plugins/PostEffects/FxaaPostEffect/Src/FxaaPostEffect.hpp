@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -79,7 +79,6 @@ namespace fxaa
 		static castor::String Name;
 
 	private:
-		castor3d::PushUniform1sSPtr m_mapDiffuse;
 		castor3d::SamplerSPtr m_sampler;
 		castor3d::RenderPipelineSPtr m_pipeline;
 		PostEffectSurface m_surface;

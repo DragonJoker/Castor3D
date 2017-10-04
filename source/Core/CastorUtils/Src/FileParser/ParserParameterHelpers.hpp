@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -898,6 +898,196 @@ namespace castor
 	*/
 	template<>
 	struct HasBaseParameterType< ParameterType::eBitwiseOred64BitsCheckedText >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	*/
+	template< ParameterType Type >
+	struct IsArithmeticType
+		: public std::false_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt8.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt8.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt8 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt16.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt16.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt16 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt32.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt32.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt32 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt64.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt64.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt64 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt8.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt8.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt8 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt16.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt16.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt16 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt32.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt32.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt32 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt64.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt64.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt64 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eFloat.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eFloat.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eFloat >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eDouble.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eDouble.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eDouble >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eLongDouble.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eLongDouble.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eLongDouble >
 		: public std::true_type
 	{
 	};

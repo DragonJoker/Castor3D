@@ -567,6 +567,24 @@
 	}
 
 	template< typename ... Values >
+	inline BVec2 bvec2( Type const & p_value, Values const & ... p_values )
+	{
+		return writeFunctionCall< BVec2, Type, Values... >( p_value.m_writer, cuT( "bvec2" ), p_value, p_values... );
+	}
+
+	template< typename ... Values >
+	inline BVec3 bvec3( Type const & p_value, Values const & ... p_values )
+	{
+		return writeFunctionCall< BVec3, Type, Values... >( p_value.m_writer, cuT( "bvec3" ), p_value, p_values... );
+	}
+
+	template< typename ... Values >
+	inline BVec4 bvec4( Type const & p_value, Values const & ... p_values )
+	{
+		return writeFunctionCall< BVec4, Type, Values... >( p_value.m_writer, cuT( "bvec4" ), p_value, p_values... );
+	}
+
+	template< typename ... Values >
 	inline Mat3 mat3( Type const & p_value, Values const & ... p_values )
 	{
 		return writeFunctionCall< Mat3, Type, Values... >( p_value.m_writer, cuT( "mat3" ), p_value, p_values... );

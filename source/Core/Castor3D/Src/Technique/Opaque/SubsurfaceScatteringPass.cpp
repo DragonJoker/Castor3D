@@ -1,4 +1,4 @@
-#include "SubsurfaceScatteringPass.hpp"
+﻿#include "SubsurfaceScatteringPass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -125,10 +125,11 @@ namespace castor3d
 			auto o = writer.declUniform( cuT( "o" )
 				, 6u
 				, std::vector< Float >{ { -1.0, -0.6667, -0.3333, 0.3333, 0.6667, 1.0 } } );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
+			auto index = MinTextureIndex;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			auto materials = shader::createMaterials( writer
@@ -224,13 +225,14 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
-			auto c3d_mapBlur1 = writer.declUniform< Sampler2D >( cuT( "c3d_mapBlur1" ) );
-			auto c3d_mapBlur2 = writer.declUniform< Sampler2D >( cuT( "c3d_mapBlur2" ) );
-			auto c3d_mapBlur3 = writer.declUniform< Sampler2D >( cuT( "c3d_mapBlur3" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto index = MinTextureIndex;
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
+			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), index++ );
+			auto c3d_mapBlur2 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur2" ), index++ );
+			auto c3d_mapBlur3 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur3" ), index++ );
 			auto c3d_originalWeight = writer.declUniform< Vec4 >( cuT( "c3d_originalWeight" )
 				, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
 			auto c3d_blurWeights = writer.declUniform< Vec4 >( cuT( "c3d_blurWeights" )
@@ -315,16 +317,6 @@ namespace castor3d
 			ShaderProgramSPtr program = cache.getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-			auto index = MinTextureIndex;
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapLightDiffuse" )
-				, ShaderType::ePixel )->setValue( index++ );
-
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
 			program->initialise();
@@ -341,20 +333,6 @@ namespace castor3d
 			ShaderProgramSPtr program = cache.getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-			auto index = MinTextureIndex;
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapLightDiffuse" )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapBlur1" )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapBlur2" )
-				, ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapBlur3" )
-				, ShaderType::ePixel )->setValue( index++ );
-
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
 			program->initialise();

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -742,7 +742,7 @@ namespace castor3d
 			eSpecularGlossinessMaterial,
 		};
 
-		static constexpr uint32_t SpotShadowMapCount = 20u;
+		static constexpr uint32_t SpotShadowMapCount = 16u;
 		static constexpr uint32_t PointShadowMapCount = 6u;
 		static constexpr int BaseLightComponentsCount = 2;
 		static constexpr int MaxLightComponentsCount = 14;
@@ -784,11 +784,13 @@ namespace castor3d
 				, SceneFlags const & sceneFlags );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, ShadowType shadows );
+				, ShadowType shadows
+				, uint32_t & index );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
 				, LightType light
-				, ShadowType shadows );
+				, ShadowType shadows
+				, uint32_t & index );
 		}
 
 		namespace pbr
@@ -813,11 +815,13 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 			}
 
 			namespace sg
@@ -840,11 +844,13 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 			}
 		}
 		/**
@@ -864,8 +870,8 @@ namespace castor3d
 		 *\brief		Writes the alpha function in GLSL.
 		 *\param[in]	writer		The GLSL writer.
 		 *\param		alphaFunc	The alpha function.
-		 *\param[in]	alpha		The alpha value.
-		 *\param[in]	alphaRef	The alpha comparison reference value.
+		 *\param[in]	alpha		The alpha TypeEnum.
+		 *\param[in]	alphaRef	The alpha comparison reference TypeEnum.
 		 *\~french
 		 *\brief		Ecrit la fonction d'opacité en GLSL.
 		 *\param[in]	writer		Le writer GLSL.
@@ -896,51 +902,59 @@ namespace castor3d
 namespace glsl
 {
 	template<>
-	struct name_of< castor3d::shader::Light >
+	struct TypeTraits< castor3d::shader::Light >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::DirectionalLight >
+	struct TypeTraits< castor3d::shader::DirectionalLight >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eDirectionalLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eDirectionalLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::PointLight >
+	struct TypeTraits< castor3d::shader::PointLight >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::ePointLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::ePointLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::SpotLight >
+	struct TypeTraits< castor3d::shader::SpotLight >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eSpotLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eSpotLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::BaseMaterial >
+	struct TypeTraits< castor3d::shader::BaseMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eMaterial );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::LegacyMaterial >
+	struct TypeTraits< castor3d::shader::LegacyMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eLegacyMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eLegacyMaterial );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::MetallicRoughnessMaterial >
+	struct TypeTraits< castor3d::shader::MetallicRoughnessMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eMetallicRoughnessMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eMetallicRoughnessMaterial );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::SpecularGlossinessMaterial >
+	struct TypeTraits< castor3d::shader::SpecularGlossinessMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eSpecularGlossinessMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eSpecularGlossinessMaterial );
+		C3D_API static castor::String const Name;
 	};
 }
 

@@ -39,10 +39,19 @@ namespace smaa
 	public:
 		enum class Mode
 		{
-			SMAA_1X,
-			SMAA_T2X,
-			SMAA_S2X,
-			SMAA_4X
+			e1X,
+			eT2X,
+			eS2X,
+			e4X
+		};
+
+		enum class Preset
+		{
+			eLow,
+			eMedium,
+			eHigh,
+			eUltra,
+			eCustom
 		};
 
 	public:
@@ -76,15 +85,21 @@ namespace smaa
 		void doInitialiseEdgeDetection();
 		void doInitialiseBlendingWeightCalculation();
 		void doInitialiseNeighbourhoodBlending();
+		void doInitialiseReproject();
 
 		void doEdgesDetectionPass( uint32_t prvIndex
 			, uint32_t curIndex
-			, castor3d::TextureLayout const & gammaSrc );
+			, castor3d::TextureLayout const & gammaSrc
+			, castor3d::TextureLayout const * depthStencil );
 		void doBlendingWeightsCalculationPass( uint32_t prvIndex
 			, uint32_t curIndex );
 		void doNeighbourhoodBlendingPass( uint32_t prvIndex
 			, uint32_t curIndex
 			, castor3d::TextureLayout const & gammaSrc );
+		void doMainPass( uint32_t prvIndex
+			, uint32_t curIndex
+			, castor3d::TextureLayout const & gammaSrc
+			, castor3d::TextureLayout const * depthStencil );
 		void doReproject( uint32_t prvIndex
 			, uint32_t curIndex
 			, castor3d::TextureLayout const & gammaSrc );
@@ -96,27 +111,30 @@ namespace smaa
 	private:
 		castor3d::SamplerSPtr m_pointSampler;
 		castor3d::SamplerSPtr m_linearSampler;
-		Mode m_mode{ Mode::SMAA_1X };
+		Mode m_mode{ Mode::e1X };
 		uint32_t m_subsampleIndex{ 0u };
 
 		// Edge detection.
-		std::vector< PostEffectSurface > m_edgeDetectionSurface;
+		PostEffectSurface m_edgeDetectionSurface;
 		castor3d::RenderPipelineSPtr m_edgeDetectionPipeline;
 		// Blending weight calculation.
 		castor3d::TextureUnit m_areaTex;
 		castor3d::TextureUnit m_searchTex;
-		std::vector< PostEffectSurface > m_blendingWeightCalculationSurface;
+		PostEffectSurface m_blendingWeightCalculationSurface;
 		castor3d::RenderPipelineSPtr m_blendingWeightCalculationPipeline;
 		castor3d::PushUniform4iSPtr m_subsampleIndicesUniform;
 		// Neighbourhood blending.
 		std::vector< PostEffectSurface > m_neighbourhoodBlendingSurface;
 		castor3d::RenderPipelineSPtr m_neighbourhoodBlendingPipeline;
+		// Reproject
+		PostEffectSurface m_reprojectSurface;
+		castor3d::RenderPipelineSPtr m_reprojectPipeline;
 
 		// Common.
 		castor3d::MatrixUbo m_matrixUbo;
 		float m_smaaThreshold{ 0.1f };
 		int m_smaaMaxSearchSteps{ 16 };
-		int m_smaaMaxSearchStepsDiags{ 8 };
+		int m_smaaMaxSearchStepsDiag{ 8 };
 		int m_smaaCornerRounding{ 25 };
 		float m_smaaPredicationThreshold{ 0.01f };
 		float m_smaaPredicationScale{ 1.0f };
