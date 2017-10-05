@@ -1,4 +1,4 @@
-#include "ReflectionPass.hpp"
+﻿#include "ReflectionPass.hpp"
 
 #include "Engine.hpp"
 
@@ -157,7 +157,7 @@ namespace castor3d
 				auto postLight = writer.declLocale( cuT( "postLight" )
 					, texture( c3d_mapPostLight, vtx_texture ).xyz() );
 
-				IF( writer, "envMapIndex < 1 || ( reflection + refraction == 0 )" )
+				IF( writer, envMapIndex < 1_i || writer.paren( reflection + refraction ) == 0_i )
 				{
 					writer.discard();
 				}
@@ -209,7 +209,7 @@ namespace castor3d
 				}
 				FI;
 
-				IF( writer, cuT( "reflection != 0 && refraction == 0" ) )
+				IF( writer, reflection != 0_i && refraction == 0_i )
 				{
 					pxl_reflection *= diffuse / length( diffuse );
 				}
@@ -630,27 +630,6 @@ namespace castor3d
 			result->createObject( ShaderType::ePixel );
 			result->setSource( ShaderType::eVertex, vtx );
 			result->setSource( ShaderType::ePixel, pxl );
-			int c = int( MinTextureIndex );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( c++ );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 ), ShaderType::ePixel )->setValue( c++ );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData2 ), ShaderType::ePixel )->setValue( c++ );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData3 ), ShaderType::ePixel )->setValue( c++ );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 ), ShaderType::ePixel )->setValue( c++ );
-			result->createUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->setValue( c++ );
-
-			if ( isPbr )
-			{
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->setValue( c++ );
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel )->setValue( c++ );
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel )->setValue( c++ );
-			}
-
-			result->createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, c_environmentCount )->setValues(
-			{
-				c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7,
-				c + 8, c + 9, c + 10, c + 11, c + 12, c + 13, c + 14, c + 15,
-			} );
-
 			result->initialise();
 			return result;
 		}
