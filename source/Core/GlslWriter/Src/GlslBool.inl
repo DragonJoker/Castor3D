@@ -1,33 +1,33 @@
-namespace glsl
+﻿namespace glsl
 {
 	inline Boolean::Boolean()
 		: Type( cuT( "bool " ) )
 	{
 	}
 
-	inline Boolean::Boolean( bool p_value )
+	inline Boolean::Boolean( bool value )
 		: Type( cuT( "bool " ) )
 	{
-		m_value << p_value;
+		m_value << value;
 	}
 
-	inline Boolean::Boolean( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( cuT( "bool " ), p_writer, p_name )
+	inline Boolean::Boolean( GlslWriter * writer
+		, castor::String const & name )
+		: Type( cuT( "bool " ), writer, name )
 	{
 	}
 
 	template< typename T >
-	inline Boolean & Boolean::operator=( T const & p_rhs )
+	inline Boolean & Boolean::operator=( T const & rhs )
 	{
-		updateWriter( p_rhs );
-		writeAssign( m_writer, *this, p_rhs );
+		updateWriter( rhs );
+		writeAssign( m_writer, *this, rhs );
 		return *this;
 	}
 
-	template< typename T >
-	inline Boolean & Boolean::operator=( int p_rhs )
+	inline Boolean & Boolean::operator=( int rhs )
 	{
-		writeAssign( m_writer, *this, p_rhs );
+		writeAssign( m_writer, *this, rhs );
 		return *this;
 	}
 

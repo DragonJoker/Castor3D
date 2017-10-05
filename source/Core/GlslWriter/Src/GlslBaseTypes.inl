@@ -259,6 +259,13 @@ namespace glsl
 		return result;
 	}
 
+	inline Int operator~( Int const & expr )
+	{
+		Int result( expr.m_writer );
+		result.m_value << cuT( "~( " ) << castor::String( expr ) << cuT( " )" );
+		return result;
+	}
+
 	//*****************************************************************************************
 
 	UInt::UInt()
@@ -513,6 +520,13 @@ namespace glsl
 	{
 		UInt result( p_value.m_writer );
 		result.m_value << castor::String( p_value ) << " | " << castor::String( i );
+		return result;
+	}
+
+	inline UInt operator~( UInt const & expr )
+	{
+		Int result( expr.m_writer );
+		result.m_value << cuT( "~( " ) << castor::String( expr ) << cuT( " )" );
 		return result;
 	}
 
