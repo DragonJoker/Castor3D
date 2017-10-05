@@ -200,13 +200,13 @@ namespace castor3d
 			{
 				auto flags = writer.declLocale( cuT( "flags" ), writer.cast< Int >( encoded ) );
 				materialId = flags >> 8;
-				flags -= writer.paren( materialId << 8 );
+				flags &= ~writer.paren( materialId << 8 );
 				receiver = flags >> 7;
-				flags -= writer.paren( receiver << 7 );
+				flags &= ~writer.paren( receiver << 7 );
 				refraction = flags >> 6;
-				flags -= writer.paren( refraction << 6 );
+				flags &= ~writer.paren( refraction << 6 );
 				reflection = flags >> 5;
-				flags -= writer.paren( reflection << 5 );
+				flags &= ~writer.paren( reflection << 5 );
 				envMapIndex = flags;
 			}, InFloat{ &writer, cuT( "encoded" ) }
 			, OutInt{ &writer, cuT( "receiver" ) }

@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -277,7 +277,7 @@ namespace castor3d
 		{
 			for ( auto unit : m_textureUnits )
 			{
-				unit->setIndex( MinTextureIndex );
+				unit->setIndex( 0u );
 			}
 
 			TextureUnitSPtr opacitySource;

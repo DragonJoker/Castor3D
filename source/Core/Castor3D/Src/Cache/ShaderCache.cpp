@@ -1,4 +1,4 @@
-﻿#include "ShaderCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Engine.hpp"
 
@@ -382,6 +382,8 @@ namespace castor3d
 
 				// Shader outputs
 				auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+				auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
+				auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 				auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
 				auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ) );
 				auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -425,8 +427,14 @@ namespace castor3d
 
 					vtx_texture = vec3( texture, 0.0 );
 					vtx_instance = gl_InstanceID;
-					auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
-					gl_Position = c3d_projection * vec4( wvPosition, 1.0 );
+					auto curPosition = writer.declLocale( cuT( "curPosition" )
+						, writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
+					auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+						, writer.paren( c3d_prvView * vec4( vtx_position, 1.0 ) ) );
+					gl_Position = c3d_projection * vec4( curPosition, 1.0 );
+					prvPosition = c3d_projection * prvPosition;
+					vtx_curPosition = gl_Position.xyw();
+					vtx_prvPosition = prvPosition.xyw();
 				} );
 
 				strVtxShader = writer.finalise();

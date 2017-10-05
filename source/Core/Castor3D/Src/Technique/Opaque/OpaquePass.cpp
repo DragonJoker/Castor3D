@@ -270,9 +270,6 @@ namespace castor3d
 		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
-			, checkFlag( textureFlags, TextureChannel::eReflection ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eReflection ) ) );
 		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -448,11 +445,6 @@ namespace castor3d
 		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
-			, ( checkFlag( textureFlags, TextureChannel::eReflection )
-				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eReflection )
-				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
 
@@ -633,11 +625,6 @@ namespace castor3d
 		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
-			, ( checkFlag( textureFlags, TextureChannel::eReflection )
-				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eReflection )
-				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
 

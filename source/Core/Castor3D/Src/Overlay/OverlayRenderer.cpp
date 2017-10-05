@@ -658,10 +658,13 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapText = writer.declSampler< Sampler2D >( ShaderProgram::MapText
+				, LightBufferIndex + 0u
 				, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
+				, LightBufferIndex + 1u
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapOpacity = writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+				, LightBufferIndex + 2u
 				, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
