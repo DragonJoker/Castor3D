@@ -82,10 +82,6 @@ namespace TestRender
 		 *\copydoc		castor3d::ShaderProgram::doCreateObject
 		 */
 		castor3d::ShaderObjectSPtr doCreateObject( castor3d::ShaderType p_type )override;
-		/**
-		 *\copydoc		castor3d::ShaderProgram::doCreateUniform
-		 */
-		std::shared_ptr< castor3d::PushUniform > doCreateUniform( castor3d::UniformType p_type, int p_occurences )override;
 
 	private:
 		TestProgramInputLayout m_layout;

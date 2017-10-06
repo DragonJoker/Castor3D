@@ -1,4 +1,4 @@
-﻿#include "GlPassBufferTest.hpp"
+#include "GlPassBufferTest.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -68,17 +68,19 @@ namespace Testing
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out_c3dOutput1 = vec4( materials.getDiffuse( 0_i )
-						, materials.getEmissive( 0_i ) );
-					out_c3dOutput2 = vec4( materials.getSpecular( 0_i )
-						, materials.getAmbient( 0_i ) );
-					out_c3dOutput3 = vec4( materials.getShininess( 0_i )
-						, materials.getAlphaRef( 0_i )
-						, materials.getExposure( 0_i )
-						, materials.getGamma( 0_i ) );
-					out_c3dOutput4 = vec4( materials.getReflection( 0_i )
-						, materials.getRefraction( 0_i )
-						, materials.getRefractionRatio( 0_i )
+					auto material = writer.declLocale( cuT( "material" )
+						, materials.getMaterial( 0_i ) );
+					out_c3dOutput1 = vec4( material.m_diffuse()
+						, material.m_emissive() );
+					out_c3dOutput2 = vec4( material.m_specular()
+						, material.m_ambient() );
+					out_c3dOutput3 = vec4( material.m_shininess()
+						, material.m_alphaRef()
+						, material.m_exposure()
+						, material.m_gamma() );
+					out_c3dOutput4 = vec4( material.m_hasReflection()
+						, material.m_hasRefraction()
+						, material.m_refractionRatio()
 						, 0.0_f );
 					out_c3dOutput1 = vec4( 1.0_f );
 					out_c3dOutput2 = vec4( 1.0_f );
@@ -102,19 +104,21 @@ namespace Testing
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out_c3dOutput1 = vec4( materials.getDiffuse( 0_i )
-						, materials.getEmissive( 0_i ) );
-					out_c3dOutput2 = vec4( materials.getRoughness( 0_i )
-						, materials.getMetallic( 0_i )
+					auto material = writer.declLocale( cuT( "material" )
+						, materials.getMaterial( 0_i ) );
+					out_c3dOutput1 = vec4( material.m_albedo()
+						, material.m_emissive() );
+					out_c3dOutput2 = vec4( material.m_roughness()
+						, material.m_metallic()
 						, 0.0_f
 						, 0.0_f );
 					out_c3dOutput3 = vec4( 0.0_f
-						, materials.getAlphaRef( 0_i )
-						, materials.getExposure( 0_i )
-						, materials.getGamma( 0_i ) );
-					out_c3dOutput4 = vec4( materials.getReflection( 0_i )
-						, materials.getRefraction( 0_i )
-						, materials.getRefractionRatio( 0_i )
+						, material.m_alphaRef()
+						, material.m_exposure()
+						, material.m_gamma() );
+					out_c3dOutput4 = vec4( material.m_hasReflection()
+						, material.m_hasRefraction()
+						, material.m_refractionRatio()
 						, 0.0_f );
 				} );
 			return writer.finalise();
@@ -134,17 +138,19 @@ namespace Testing
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out_c3dOutput1 = vec4( materials.getDiffuse( 0_i )
-						, materials.getEmissive( 0_i ) );
-					out_c3dOutput2 = vec4( materials.getSpecular( 0_i )
-						, materials.getGlossiness( 0_i ) );
+					auto material = writer.declLocale( cuT( "material" )
+						, materials.getMaterial( 0_i ) );
+					out_c3dOutput1 = vec4( material.m_diffuse()
+						, material.m_emissive() );
+					out_c3dOutput2 = vec4( material.m_specular()
+						, material.m_glossiness() );
 					out_c3dOutput3 = vec4( 0.0_f
-						, materials.getAlphaRef( 0_i )
-						, materials.getExposure( 0_i )
-						, materials.getGamma( 0_i ) );
-					out_c3dOutput4 = vec4( materials.getReflection( 0_i )
-						, materials.getRefraction( 0_i )
-						, materials.getRefractionRatio( 0_i )
+						, material.m_alphaRef()
+						, material.m_exposure()
+						, material.m_gamma() );
+					out_c3dOutput4 = vec4( material.m_hasReflection()
+						, material.m_hasRefraction()
+						, material.m_refractionRatio()
 						, 0.0_f );
 				} );
 			return writer.finalise();
