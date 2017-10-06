@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -141,10 +141,12 @@ namespace smaa
 		float m_smaaPredicationStrength{ 0.6f };
 		std::array< castor::Point4i, 4u > m_smaaSubsampleIndices
 		{
-			castor::Point4i{ 0, 0, 0, 0 },
-			castor::Point4i{ 0, 0, 0, 0 },
-			castor::Point4i{ 0, 0, 0, 0 },
-			castor::Point4i{ 0, 0, 0, 0 }
+			{
+				castor::Point4i{ 0, 0, 0, 0 },
+				castor::Point4i{ 0, 0, 0, 0 },
+				castor::Point4i{ 0, 0, 0, 0 },
+				castor::Point4i{ 0, 0, 0, 0 }
+			}
 		};
 		uint32_t m_maxSubsampleIndices{ 1u };
 		std::vector< castor::Point2r > m_jitters;
