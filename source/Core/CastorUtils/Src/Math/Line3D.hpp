@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "CastorUtils.hpp"
 
+#include <cmath>
+
 namespace castor
 {
 	/*!
