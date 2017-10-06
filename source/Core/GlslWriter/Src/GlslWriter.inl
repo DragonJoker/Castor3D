@@ -400,7 +400,7 @@
 	inline Array< T > GlslWriter::declBuiltin( castor::String const & name
 		, uint32_t dimension )
 	{
-		registerName( name, TypeTraits< Type >::TypeEnum );
+		registerName( name, TypeTraits< T >::TypeEnum );
 		return Array< T >( this, name, dimension );
 	}
 

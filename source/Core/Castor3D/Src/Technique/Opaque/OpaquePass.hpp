@@ -120,6 +120,7 @@ namespace castor3d
 		static castor::String const Output2;
 		static castor::String const Output3;
 		static castor::String const Output4;
+		static castor::String const Output5;
 	};
 }
 

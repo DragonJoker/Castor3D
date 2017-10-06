@@ -42,7 +42,7 @@ namespace smaa
 		extern const castor::String AreaTexMaxDistance;
 		extern const castor::String AreaTexMaxDistanceDiag;
 		extern const castor::String CornerRounding;
-	};
+	}
 }
 
 #endif

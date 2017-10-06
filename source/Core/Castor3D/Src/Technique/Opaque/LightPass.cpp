@@ -50,6 +50,7 @@ namespace castor3d
 				cuT( "c3d_mapData2" ),
 				cuT( "c3d_mapData3" ),
 				cuT( "c3d_mapData4" ),
+				cuT( "c3d_mapData5" ),
 			}
 		};
 
@@ -62,6 +63,7 @@ namespace castor3d
 		{
 			{
 				PixelFormat::eD24S8,
+				PixelFormat::eRGBA32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
@@ -82,6 +84,7 @@ namespace castor3d
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
+				AttachmentPoint::eColour,
 			}
 		};
 
@@ -98,6 +101,7 @@ namespace castor3d
 				1,
 				2,
 				3,
+				4,
 			}
 		};
 
@@ -160,6 +164,16 @@ namespace castor3d
 		return std::min( max, getMaxDistance( light, attenuation ) );
 	}
 
+	uint32_t constexpr ReceiverMask		= 0x00000080u;
+	uint32_t constexpr RefractionMask	= 0x00000040u;
+	uint32_t constexpr ReflectionMask	= 0x00000020u;
+	uint32_t constexpr EnvMapIndexMask	= 0x0000001Fu;
+
+	uint32_t constexpr ReceiverOffset	= 7u;
+	uint32_t constexpr RefractionOffset	= 6u;
+	uint32_t constexpr ReflectionOffset = 5u;
+	uint32_t constexpr EnvMapIndexOffset= 0u;
+
 	void declareEncodeMaterial( glsl::GlslWriter & writer )
 	{
 		using namespace glsl;
@@ -169,21 +183,19 @@ namespace castor3d
 				, Int const & reflection
 				, Int const & refraction
 				, Int const & envMapIndex
-				, Int const & materialId
 				, Float encoded )
 			{
 				auto flags = writer.declLocale( cuT( "flags" )
-					, writer.paren( materialId << 8 )
-						+ writer.paren( receiver << 7 )
-						+ writer.paren( refraction << 6 )
-						+ writer.paren( reflection << 5 )
-						+ writer.paren( envMapIndex ) );
+					, 0_ui
+					+ writer.paren( writer.paren( writer.cast< UInt >( receiver )		<< UInt( ReceiverOffset ) )		& UInt( ReceiverMask ) )
+					+ writer.paren( writer.paren( writer.cast< UInt >( refraction )		<< UInt( RefractionOffset ) )	& UInt( RefractionMask ) )
+					+ writer.paren( writer.paren( writer.cast< UInt >( reflection )		<< UInt( ReflectionOffset ) )	& UInt( ReflectionMask ) )
+					+ writer.paren( writer.paren( writer.cast< UInt >( envMapIndex )	<< UInt( EnvMapIndexOffset ) )	& UInt( EnvMapIndexMask ) ) );
 				encoded = writer.cast< Float >( flags );
 			}, InInt{ &writer, cuT( "receiver" ) }
 			, InInt{ &writer, cuT( "reflection" ) }
 			, InInt{ &writer, cuT( "refraction" ) }
 			, InInt{ &writer, cuT( "envMapIndex" ) }
-			, InInt{ &writer, cuT( "materialId" ) }
 			, OutFloat{ &writer, cuT( "encoded" ) } );
 	}
 	
@@ -195,25 +207,19 @@ namespace castor3d
 				, Int receiver
 				, Int reflection
 				, Int refraction
-				, Int envMapIndex
-				, Int materialId )
+				, Int envMapIndex )
 			{
-				auto flags = writer.declLocale( cuT( "flags" ), writer.cast< Int >( encoded ) );
-				materialId = flags >> 8;
-				flags &= ~writer.paren( materialId << 8 );
-				receiver = flags >> 7;
-				flags &= ~writer.paren( receiver << 7 );
-				refraction = flags >> 6;
-				flags &= ~writer.paren( refraction << 6 );
-				reflection = flags >> 5;
-				flags &= ~writer.paren( reflection << 5 );
-				envMapIndex = flags;
+				auto flags = writer.declLocale( cuT( "flags" )
+					, writer.cast< UInt >( encoded ) );
+				receiver	= writer.cast< Int >( writer.paren( flags & UInt( ReceiverMask ) )		>> UInt( ReceiverOffset ) );
+				refraction	= writer.cast< Int >( writer.paren( flags & UInt( RefractionMask ) )	>> UInt( RefractionOffset ) );
+				reflection	= writer.cast< Int >( writer.paren( flags & UInt( ReflectionMask ) )	>> UInt( ReflectionOffset ) );
+				envMapIndex	= writer.cast< Int >( writer.paren( flags & UInt( EnvMapIndexMask ) )	>> UInt( EnvMapIndexOffset ) );
 			}, InFloat{ &writer, cuT( "encoded" ) }
 			, OutInt{ &writer, cuT( "receiver" ) }
 			, OutInt{ &writer, cuT( "reflection" ) }
 			, OutInt{ &writer, cuT( "refraction" ) }
-			, OutInt{ &writer, cuT( "envMapIndex" ) }
-			, OutInt{ &writer, cuT( "materialId" ) } );
+			, OutInt{ &writer, cuT( "envMapIndex" ) } );
 	}
 
 	void declareDecodeReceiver( glsl::GlslWriter & writer )
@@ -223,27 +229,9 @@ namespace castor3d
 			, [&]( Int const & encoded
 				, Int receiver )
 			{
-				auto flags = writer.declLocale( cuT( "flags" ), encoded );
-				receiver = flags >> 7;
+				receiver = writer.paren( encoded & ReceiverMask ) >> ReceiverOffset;
 			}, InInt{ &writer, cuT( "encoded" ) }
 			, OutInt{ &writer, cuT( "receiver" ) } );
-	}
-
-	void declareDecodeReceiverAndID( glsl::GlslWriter & writer )
-	{
-		using namespace glsl;
-		writer.implementFunction< Void >( cuT( "decodeReceiverAndID" )
-			, [&]( Int const & encoded
-				, Int receiver
-				, Int materialId )
-			{
-				auto flags = writer.declLocale( cuT( "flags" ), encoded );
-				materialId = flags >> 8;
-				flags -= writer.paren( materialId << 8 );
-				receiver = flags >> 7;
-			}, InInt{ &writer, cuT( "encoded" ) }
-			, OutInt{ &writer, cuT( "receiver" ) }
-			, OutInt{ &writer, cuT( "materialId" ) } );
 	}
 
 	void encodeMaterial( glsl::GlslWriter & writer
@@ -251,7 +239,6 @@ namespace castor3d
 		, glsl::Int const & reflection
 		, glsl::Int const & refraction
 		, glsl::Int const & envMapIndex
-		, glsl::Int const & materialId
 		, glsl::Float const & encoded )
 	{
 		using namespace glsl;
@@ -261,7 +248,6 @@ namespace castor3d
 			, InInt{ reflection }
 			, InInt{ refraction }
 			, InInt{ envMapIndex }
-			, InInt{ materialId }
 			, OutFloat{ encoded } );
 		writer << endi;
 	}
@@ -271,8 +257,7 @@ namespace castor3d
 		, glsl::Int const & receiver
 		, glsl::Int const & reflection
 		, glsl::Int const & refraction
-		, glsl::Int const & envMapIndex
-		, glsl::Int const & materialId )
+		, glsl::Int const & envMapIndex )
 	{
 		using namespace glsl;
 		writer << writeFunctionCall< Void >( &writer
@@ -281,8 +266,7 @@ namespace castor3d
 			, OutInt{ receiver }
 			, OutInt{ reflection }
 			, OutInt{ refraction }
-			, OutInt{ envMapIndex }
-			, OutInt{ materialId } );
+			, OutInt{ envMapIndex } );
 		writer << endi;
 	}
 
@@ -295,20 +279,6 @@ namespace castor3d
 			, cuT( "decodeReceiver" )
 			, InInt{ encoded }
 			, OutInt{ receiver } );
-		writer << endi;
-	}
-
-	void decodeReceiverAndID( glsl::GlslWriter & writer
-		, glsl::Int & encoded
-		, glsl::Int const & receiver
-		, glsl::Int const & materialId )
-	{
-		using namespace glsl;
-		writer << writeFunctionCall< Void >( &writer
-			, cuT( "decodeReceiverAndID" )
-			, InInt{ encoded }
-			, OutInt{ receiver }
-			, OutInt{ materialId } );
 		writer << endi;
 	}
 
@@ -491,6 +461,7 @@ namespace castor3d
 		gp[size_t( DsTexture::eData2 )]->bind();
 		gp[size_t( DsTexture::eData3 )]->bind();
 		gp[size_t( DsTexture::eData4 )]->bind();
+		gp[size_t( DsTexture::eData5 )]->bind();
 
 		m_program->render( size
 			, colour
@@ -498,6 +469,7 @@ namespace castor3d
 			, first
 			, m_offset );
 
+		gp[size_t( DsTexture::eData5 )]->unbind();
 		gp[size_t( DsTexture::eData4 )]->unbind();
 		gp[size_t( DsTexture::eData3 )]->unbind();
 		gp[size_t( DsTexture::eData2 )]->unbind();
@@ -522,6 +494,7 @@ namespace castor3d
 		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
 		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
 		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
@@ -544,7 +517,7 @@ namespace castor3d
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
-		declareDecodeReceiverAndID( writer );
+		declareDecodeReceiver( writer );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare();
 		shader::SubsurfaceScattering sss{ writer
@@ -563,13 +536,15 @@ namespace castor3d
 				, texture( c3d_mapData3, texCoord ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
 				, texture( c3d_mapData4, texCoord ) );
+			auto data5 = writer.declLocale( cuT( "data5" )
+				, texture( c3d_mapData5, texCoord ) );
 			auto flags = writer.declLocale( cuT( "flags" )
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
+			decodeReceiver( writer, flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
-				, 0_i );
-			decodeReceiverAndID( writer, flags, shadowReceiver, materialId );
+				, writer.cast< Int >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto shininess = writer.declLocale( cuT( "shininess" )
@@ -687,6 +662,7 @@ namespace castor3d
 		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
 		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
 		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
@@ -709,7 +685,7 @@ namespace castor3d
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
-		declareDecodeReceiverAndID ( writer );
+		declareDecodeReceiver( writer );
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare();
 		shader::SubsurfaceScattering sss{ writer
@@ -728,6 +704,8 @@ namespace castor3d
 				, texture( c3d_mapData3, texCoord ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
 				, texture( c3d_mapData4, texCoord ) );
+			auto data5 = writer.declLocale( cuT( "data5" )
+				, texture( c3d_mapData5, texCoord ) );
 			auto metallic = writer.declLocale( cuT( "metallic" )
 				, data3.r() );
 			auto roughness = writer.declLocale( cuT( "roughness" )
@@ -736,12 +714,9 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
+			decodeReceiver( writer, flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
-				, 0_i );
-			decodeReceiverAndID( writer
-				, flags
-				, shadowReceiver
-				, materialId );
+				, writer.cast< Int >( data5.z() ) );
 			auto albedo = writer.declLocale( cuT( "albedo" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -933,6 +908,7 @@ namespace castor3d
 		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
 		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
 		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
@@ -953,7 +929,7 @@ namespace castor3d
 		utils.declareCalcWSPosition();
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
-		declareDecodeReceiverAndID( writer );
+		declareDecodeReceiver( writer );
 		shader::SubsurfaceScattering sss{ writer
 			, m_shadows && shadowType != ShadowType::eNone };
 		sss.declare( type );
@@ -975,6 +951,8 @@ namespace castor3d
 				, texture( c3d_mapData3, texCoord ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
 				, texture( c3d_mapData4, texCoord ) );
+			auto data5 = writer.declLocale( cuT( "data5" )
+				, texture( c3d_mapData5, texCoord ) );
 			auto specular = writer.declLocale( cuT( "specular" )
 				, data3.rgb() );
 			auto glossiness = writer.declLocale( cuT( "glossiness" )
@@ -983,12 +961,11 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			auto materialId = writer.declLocale( cuT( "materialId" )
-				, 0_i );
-			decodeReceiverAndID( writer
+			decodeReceiver( writer
 				, flags
-				, shadowReceiver
-				, materialId );
+				, shadowReceiver );
+			auto materialId = writer.declLocale( cuT( "materialId" )
+				, writer.cast< Int >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )

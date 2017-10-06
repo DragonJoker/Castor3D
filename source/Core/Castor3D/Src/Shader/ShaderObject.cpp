@@ -1,4 +1,4 @@
-﻿#include "ShaderObject.hpp"
+#include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "UniformBuffer.hpp"
 
@@ -400,7 +400,10 @@ namespace castor3d
 		for ( auto & sampler : m_source.getSamplers() )
 		{
 			auto samplerUniform = createUniform< UniformType::eSampler >( sampler.first, sampler.second.m_count );
-			samplerUniform->setValue( sampler.second.m_binding );
+			std::vector< int > values;
+			values.resize( sampler.second.m_count );
+			std::iota( values.begin(), values.end(), sampler.second.m_binding );
+			samplerUniform->setValues( values );
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿#include "RenderTechnique.hpp"
+#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -36,6 +36,7 @@ using namespace castor;
 #define DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS 1
 #define DISPLAY_DEBUG_IBL_BUFFERS 0
 #define DISPLAY_DEBUG_SHADOW_MAPS 1
+#define DISPLAY_DEBUG_ENV_MAPS 0
 
 #define USE_WEIGHTED_BLEND 1
 #define DEBUG_FORWARD_RENDERING 0
@@ -332,6 +333,8 @@ namespace castor3d
 
 	void RenderTechnique::debugDisplay( Size const & size )const
 	{
+		uint32_t index = 0u;
+
 #if DISPLAY_DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING
 
 		m_deferredRendering->debugDisplay();
@@ -349,16 +352,16 @@ namespace castor3d
 		m_frameBuffer.m_frameBuffer->unbind();
 
 #endif
+#if DISPLAY_DEBUG_ENV_MAPS
 
-		auto & scene = *m_renderTarget.getScene();
-		auto & maps = scene.getEnvironmentMaps();
-		uint32_t index = 0u;
+		index = 0u;
 
-		for ( auto & map : maps )
+		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
-			//map.get().debugDisplay( size, index++ );
+			map.get().debugDisplay( size, index++ );
 		}
 
+#endif
 #if DISPLAY_DEBUG_SHADOW_MAPS
 
 		index = 0u;

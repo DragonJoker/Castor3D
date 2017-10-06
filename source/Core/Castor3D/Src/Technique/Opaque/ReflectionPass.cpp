@@ -32,7 +32,7 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_environmentStart = 6u;
+		static uint32_t constexpr c_environmentStart = 7u;
 		static uint32_t constexpr c_environmentCount = 16u;
 
 		VertexBufferSPtr doCreateVbo( Engine & engine )
@@ -112,6 +112,7 @@ namespace castor3d
 			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
 			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 			auto c3d_mapPostLight = writer.declSampler< Sampler2D >( cuT( "c3d_mapPostLight" ), index++ );
 			auto c3d_mapEnvironment = writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment, index++, c_environmentCount );
 			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
@@ -145,15 +146,16 @@ namespace castor3d
 					, 0_i );
 				auto refraction = writer.declLocale( cuT( "refraction" )
 					, 0_i );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, 0_i );
 				decodeMaterial( writer
 					, flags
 					, receiver
 					, reflection
 					, refraction
-					, envMapIndex
-					, materialId );
+					, envMapIndex );
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
 				auto postLight = writer.declLocale( cuT( "postLight" )
 					, texture( c3d_mapPostLight, vtx_texture ).xyz() );
 
@@ -232,6 +234,8 @@ namespace castor3d
 			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
 			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
+			auto c3d_mapPostLight = writer.declSampler< Sampler2D >( cuT( "c3d_mapPostLight" ), index++ );
 			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++ );
 			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
 			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
@@ -269,16 +273,17 @@ namespace castor3d
 					, 0_i );
 				auto refraction = writer.declLocale( cuT( "refraction" )
 					, 0_i );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, 0_i );
 				decodeMaterial( writer
 					, flags
 					, receiver
 					, reflection
 					, refraction
-					, envMapIndex
-					, materialId );
+					, envMapIndex );
 
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
@@ -428,6 +433,8 @@ namespace castor3d
 			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
 			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
+			auto c3d_mapPostLight = writer.declSampler< Sampler2D >( cuT( "c3d_mapPostLight" ), index++ );
 			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++ );
 			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
 			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
@@ -465,16 +472,17 @@ namespace castor3d
 					, 0_i );
 				auto refraction = writer.declLocale( cuT( "refraction" )
 					, 0_i );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, 0_i );
 				decodeMaterial( writer
 					, flags
 					, receiver
 					, reflection
 					, refraction
-					, envMapIndex
-					, materialId );
+					, envMapIndex );
 
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
@@ -807,6 +815,8 @@ namespace castor3d
 		gp[size_t( DsTexture::eData3 )]->getSampler()->bind( index++ );
 		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index++ );
 		lp.getTexture()->bind( index );
 		lp.getSampler()->bind( index++ );
 
@@ -877,6 +887,8 @@ namespace castor3d
 		gp[size_t( DsTexture::eData3 )]->getSampler()->unbind( index++ );
 		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index++ );
 		lp.getTexture()->unbind( index );
 		lp.getSampler()->unbind( index++ );
 		m_timer->stop();

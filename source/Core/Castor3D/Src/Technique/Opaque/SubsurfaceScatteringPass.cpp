@@ -1,4 +1,4 @@
-﻿#include "SubsurfaceScatteringPass.hpp"
+#include "SubsurfaceScatteringPass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -127,8 +127,8 @@ namespace castor3d
 				, std::vector< Float >{ { -1.0, -0.6667, -0.3333, 0.3333, 0.6667, 1.0 } } );
 			auto index = MinTextureIndex;
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
-			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -139,7 +139,6 @@ namespace castor3d
 						? PassFlag::ePbrSpecularGlossiness
 						: PassFlag( 0u ) );
 			materials->declare();
-			declareDecodeReceiverAndID( writer );
 
 			glsl::Utils utils{ writer };
 			utils.declareCalcVSPosition();
@@ -149,17 +148,12 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto data1 = writer.declLocale( cuT( "data1" )
-					, texture( c3d_mapData1, vtx_texture ) );
 				auto data4 = writer.declLocale( cuT( "data4" )
 					, texture( c3d_mapData4, vtx_texture ) );
-				auto flags = writer.declLocale( cuT( "flags" )
-					, writer.cast< Int >( data1.w() ) );
-				auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
-					, 0_i );
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
-					, 0_i );
-				decodeReceiverAndID( writer, flags, shadowReceiver, materialId );
+					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
 				auto material = materials->getBaseMaterial( materialId );
@@ -227,8 +221,8 @@ namespace castor3d
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto index = MinTextureIndex;
-			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
 			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), index++ );
 			auto c3d_mapBlur2 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur2" ), index++ );
@@ -257,17 +251,16 @@ namespace castor3d
 						? PassFlag::ePbrSpecularGlossiness
 						: PassFlag( 0u ) );
 			materials->declare();
-			declareDecodeReceiverAndID( writer );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto data1 = writer.declLocale( cuT( "data1" )
-					, texture( c3d_mapData1, vtx_texture ) );
 				auto data4 = writer.declLocale( cuT( "data4" )
 					, texture( c3d_mapData4, vtx_texture ) );
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
 				auto original = writer.declLocale( cuT( "original" )
 					, texture( c3d_mapLightDiffuse, vtx_texture ) );
 				auto blur1 = writer.declLocale( cuT( "blur1" )
@@ -276,13 +269,8 @@ namespace castor3d
 					, texture( c3d_mapBlur2, vtx_texture ) );
 				auto blur3 = writer.declLocale( cuT( "blur3" )
 					, texture( c3d_mapBlur3, vtx_texture ) );
-				auto flags = writer.declLocale( cuT( "flags" )
-					, writer.cast< Int >( data1.w() ) );
-				auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
-					, 0_i );
 				auto materialId = writer.declLocale( cuT( "materialId" )
-					, 0_i );
-				decodeReceiverAndID( writer, flags, shadowReceiver, materialId );
+					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
 				auto material = materials->getBaseMaterial( materialId );
@@ -609,11 +597,11 @@ namespace castor3d
 		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index );
 		++index;
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index );
-		++index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index );
+		++index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index );
 		++index;
 
 		m_blurStep->setValue( direction );
@@ -637,11 +625,11 @@ namespace castor3d
 		m_fbo->unbind();
 
 		--index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index );
+		--index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index );
-		--index;
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index );
 		--index;
 		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( index );
 		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( index );
@@ -651,11 +639,11 @@ namespace castor3d
 		, TextureUnit const & source )const
 	{
 		uint32_t index{ MinTextureIndex };
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index );
-		++index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index );
+		++index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index );
 		++index;
 		source.getTexture()->bind( index );
 		source.getSampler()->bind( index );
@@ -689,10 +677,10 @@ namespace castor3d
 		}
 
 		--index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index );
+		--index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index );
-		--index;
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index );
 	}
 }

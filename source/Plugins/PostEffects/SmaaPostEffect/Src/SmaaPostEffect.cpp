@@ -613,7 +613,7 @@ namespace smaa
 			// Corner Detection Functions
 			
 			auto detectHorizontalCornerPattern = writer.implementFunction< Void >( cuT( "detectHorizontalCornerPattern" )
-				, [&]( Vec2 & weights
+				, [&]( Vec2 weights
 					, Vec2 const & texcoord
 					, Vec2 const & d )
 				{
@@ -654,7 +654,7 @@ namespace smaa
 				, InVec2{ &writer, cuT( "d" ) } );
 			
 			auto detectVerticalCornerPattern = writer.implementFunction< Void >( cuT( "detectVerticalCornerPattern" )
-				, [&]( Vec2 & weights
+				, [&]( Vec2 weights
 					, Vec2 const & texcoord
 					, Vec2 const & d )
 				{
@@ -924,7 +924,7 @@ namespace smaa
 
 			auto movc2 = writer.implementFunction< Void >( cuT( "movc2" )
 				, [&]( BVec2 const & cond
-					, Vec2 & variable
+					, Vec2 variable
 					, Vec2 const & value )
 				{
 					IF( writer, cond.x() )
@@ -944,7 +944,7 @@ namespace smaa
 
 			auto movc4 = writer.implementFunction< Void >( cuT( "movc2" )
 				, [&]( BVec4 const & cond
-					, Vec4 & variable
+					, Vec4 variable
 					, Vec4 const & value )
 				{
 					movc2( cond.xy(), variable.xy(), value.xy() );

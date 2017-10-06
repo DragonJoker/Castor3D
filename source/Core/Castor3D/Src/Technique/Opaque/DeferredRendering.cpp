@@ -1,4 +1,4 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -229,7 +229,7 @@ namespace castor3d
 
 	void DeferredRendering::debugDisplay()const
 	{
-		auto count = 9 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
+		auto count = 10 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		int width = int( m_size.getWidth() ) / count;
 		int height = int( m_size.getHeight() ) / count;
 		int left = int( m_size.getWidth() ) - width;
@@ -241,6 +241,7 @@ namespace castor3d
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData2 )]->getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->getTexture() );
+		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData5 )]->getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getDiffuse().getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getSpecular().getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_reflection->getReflection().getTexture() );

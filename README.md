@@ -70,6 +70,8 @@ Implemented Plug-ins
 ![Sponza](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-small.png)
 ![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-small.png)
 ![Park](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-small.png)
+![Park](http://dragonjoker.github.com/Castor3D/img/Park-PBR-small.png)
+![Park](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
 
 Links
 -----

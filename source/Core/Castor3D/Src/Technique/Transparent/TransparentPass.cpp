@@ -1,4 +1,4 @@
-﻿#include "TransparentPass.hpp"
+#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -30,35 +30,6 @@ namespace castor3d
 
 	namespace
 	{
-		inline void doUpdateProgram( ShaderProgram & program
-			, PassFlags const & passFlags
-			, TextureChannels const & textureFlags
-			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )
-		{
-			if ( getShadowType( sceneFlags ) != ShadowType::eNone
-				&& !program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel ) )
-			{
-				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
-					, ShaderType::ePixel );
-				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
-					, ShaderType::ePixel, shader::SpotShadowMapCount );
-				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
-					, ShaderType::ePixel, shader::PointShadowMapCount );
-			}
-
-			if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness )
-				|| checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
-			{
-				program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
-					, ShaderType::ePixel );
-				program.createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
-					, ShaderType::ePixel );
-				program.createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
-					, ShaderType::ePixel );
-			}
-		}
-
 		BlendState doCreateBlendState()
 		{
 			BlendState bdState;
@@ -168,12 +139,6 @@ namespace castor3d
 
 		if ( it == m_frontPipelines.end() )
 		{
-			doUpdateProgram( program
-				, flags.m_passFlags
-				, flags.m_textureFlags
-				, flags.m_programFlags
-				, flags.m_sceneFlags );
-
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
 			dsState.setDepthMask( WritingMask::eZero );
@@ -202,12 +167,6 @@ namespace castor3d
 
 		if ( it == m_backPipelines.end() )
 		{
-			doUpdateProgram( program
-				, flags.m_passFlags
-				, flags.m_textureFlags
-				, flags.m_programFlags
-				, flags.m_sceneFlags );
-
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
 			dsState.setDepthMask( WritingMask::eZero );

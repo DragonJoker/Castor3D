@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -50,6 +50,7 @@ namespace castor3d
 		eData2,
 		eData3,
 		eData4,
+		eData5,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
 	};
 	/**
@@ -156,22 +157,12 @@ namespace castor3d
 	void declareDecodeReceiver( glsl::GlslWriter & writer );
 	/**
 	 *\~english
-	 *\brief		Declares the GLSL function used to decode the shadow receiver status and the pass ID from a vec4.
-	 *\param[in]	writer	The GLSL writer.
-	 *\~french
-	 *\brief		Déclare la fonction GLSL utilisée pour décoder le statut de receveur d'ombre et l'ID de la passe depuis un vec4.
-	 *\param[in]	writer	Le writer GLSL.
-	 */
-	void declareDecodeReceiverAndID( glsl::GlslWriter & writer );
-	/**
-	 *\~english
 	 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
 	 *\param[in]	writer		The GLSL writer.
 	 *\param[in]	receiver	The shadow receiver status.
 	 *\param[in]	reflection	The reflection status.
 	 *\param[in]	refraction	The refraction status.
 	 *\param[in]	envMapIndex	The environment map index.
-	 *\param[in]	materialId	The pass ID.
 	 *\param[in]	encoded		The variable that will receive the encoded value.
 	 *\~french
 	 *\brief		Appelle la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
@@ -180,7 +171,6 @@ namespace castor3d
 	 *\param[in]	reflection	Le statut de réflexion.
 	 *\param[in]	refraction	Le statut de réfraction.
 	 *\param[in]	envMapIndex	L'indice de la texture environnementale.
-	 *\param[in]	materialId	L'indice de la passe.
 	 *\param[in]	encoded		La variable qui recevra la valeur encodée.
 	 */
 	void encodeMaterial( glsl::GlslWriter & writer
@@ -188,7 +178,6 @@ namespace castor3d
 		, glsl::Int const & reflection
 		, glsl::Int const & refraction
 		, glsl::Int const & envMapIndex
-		, glsl::Int const & materialId
 		, glsl::Float const & encoded );
 	/**
 	 *\~english
@@ -199,7 +188,6 @@ namespace castor3d
 	 *\param[in]	reflection	The variable that contains the reflection status.
 	 *\param[in]	refraction	The variable that contains the refraction status.
 	 *\param[in]	envMapIndex	The variable that contains the environment map index.
-	 *\param[in]	materialId	The variable that contains the pass ID.
 	 *\~french
 	 *\brief		Appelle la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
 	 *\param[in]	writer		Le writer GLSL.
@@ -208,15 +196,13 @@ namespace castor3d
 	 *\param[in]	reflection	La variable qui recevra le statut de réflexion.
 	 *\param[in]	refraction	La variable qui recevra le statut de réfraction.
 	 *\param[in]	envMapIndex	La variable qui recevra l'indice de la texture environnementale.
-	 *\param[in]	materialId	La variable qui recevra l'indice de la passe.
 	 */
 	void decodeMaterial( glsl::GlslWriter & writer
 		, glsl::Float const & encoded
 		, glsl::Int const & receiver
 		, glsl::Int const & reflection
 		, glsl::Int const & refraction
-		, glsl::Int const & envMapIndex
-		, glsl::Int const & materialId );
+		, glsl::Int const & envMapIndex );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
@@ -232,24 +218,6 @@ namespace castor3d
 	void decodeReceiver( glsl::GlslWriter & writer
 		, glsl::Int & encoded
 		, glsl::Int const & receiver );
-	/**
-	 *\~english
-	 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
-	 *\param[in]	writer		The GLSL writer.
-	 *\param[in]	encoded		The encoded value.
-	 *\param[in]	receiver	The variable that contains the shadow receiver status.
-	 *\param[in]	materialId	The variable that contains the pass ID.
-	 *\~french
-	 *\brief		Appelle la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
-	 *\param[in]	writer		Le writer GLSL.
-	 *\param[in]	encoded		La valeur encodée.
-	 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
-	 *\param[in]	materialId	La variable qui recevra l'indice de la passe.
-	 */
-	void decodeReceiverAndID( glsl::GlslWriter & writer
-		, glsl::Int & encoded
-		, glsl::Int const & receiver
-		, glsl::Int const & materialId );
 	//!\~english	The geometry pass result.
 	//!\~french		Le résultat de la geometry pass.
 	using GeometryPassResult = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;

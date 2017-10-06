@@ -25,6 +25,7 @@ namespace castor3d
 	String const OpaquePass::Output2 = cuT( "c3d_output2" );
 	String const OpaquePass::Output3 = cuT( "c3d_output3" );
 	String const OpaquePass::Output4 = cuT( "c3d_output4" );
+	String const OpaquePass::Output5 = cuT( "c3d_output5" );
 
 	OpaquePass::OpaquePass( Scene & scene
 		, Camera * camera
@@ -281,7 +282,7 @@ namespace castor3d
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
-		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), index++ ) );
+		auto out_c3dOutput5 = writer.declFragData< Vec4 >( OpaquePass::Output5, index++ );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
@@ -290,20 +291,8 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto normal = writer.declLocale( cuT( "normal" )
-				, normalize( vtx_normal ) );
 			auto material = writer.declLocale( cuT( "material" )
 				, materials.getMaterial( vtx_material ) );
-			auto diffuse = writer.declLocale( cuT( "diffuse" )
-				, material.m_diffuse() );
-			auto specular = writer.declLocale( cuT( "specular" )
-				, material.m_specular() );
-			auto matShininess = writer.declLocale( cuT( "matShininess" )
-				, material.m_shininess() );
-			auto emissive = writer.declLocale( cuT( "emissive" )
-				, vec3( material.m_emissive() ) );
-			auto gamma = writer.declLocale( cuT( "gamma" )
-				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, vtx_texture );
 
@@ -316,6 +305,34 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
+			if ( alphaFunc != ComparisonFunc::eAlways )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
+				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
+			}
+
+			auto normal = writer.declLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto diffuse = writer.declLocale( cuT( "diffuse" )
+				, material.m_diffuse() );
+			auto specular = writer.declLocale( cuT( "specular" )
+				, material.m_specular() );
+			auto matShininess = writer.declLocale( cuT( "matShininess" )
+				, material.m_shininess() );
+			auto emissive = writer.declLocale( cuT( "emissive" )
+				, vec3( material.m_emissive() ) );
+			auto gamma = writer.declLocale( cuT( "gamma" )
+				, material.m_gamma() );
 			shader::legacy::computePreLightingMapContributions( writer
 				, normal
 				, matShininess
@@ -337,24 +354,7 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
-				, vtx_material
 				, flags );
-
-			if ( alphaFunc != ComparisonFunc::eAlways )
-			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, material.m_opacity() );
-
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-				{
-					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
-				}
-
-				shader::applyAlphaFunc( writer
-					, alphaFunc
-					, alpha
-					, material.m_alphaRef() );
-			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
 				, 1.0_f );
@@ -376,12 +376,13 @@ namespace castor3d
 			out_c3dOutput2 = vec4( diffuse, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
 			out_c3dOutput4 = vec4( emissive, transmittance );
+			out_c3dOutput5.z() = writer.cast< Float >( vtx_material );
 
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			pxl_velocity.xy() = curPosition - prvPosition;
+			out_c3dOutput5.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -456,7 +457,7 @@ namespace castor3d
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
-		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), index++ ) );
+		auto out_c3dOutput5 = writer.declFragData< Vec4 >( OpaquePass::Output5, index++ );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
@@ -470,20 +471,8 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto normal = writer.declLocale( cuT( "normal" )
-				, normalize( vtx_normal ) );
 			auto material = writer.declLocale( cuT( "material" )
 				, materials.getMaterial( vtx_material ) );
-			auto matAlbedo = writer.declLocale( cuT( "matAlbedo" )
-				, material.m_albedo() );
-			auto matRoughness = writer.declLocale( cuT( "matRoughness" )
-				, material.m_roughness() );
-			auto matMetallic = writer.declLocale( cuT( "matMetallic" )
-				, material.m_metallic() );
-			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, vec3( material.m_emissive() ) );
-			auto matGamma = writer.declLocale( cuT( "matGamma" )
-				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, vtx_texture );
 
@@ -496,6 +485,34 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
+			if ( alphaFunc != ComparisonFunc::eAlways )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
+				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
+			}
+
+			auto normal = writer.declLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto matAlbedo = writer.declLocale( cuT( "matAlbedo" )
+				, material.m_albedo() );
+			auto matRoughness = writer.declLocale( cuT( "matRoughness" )
+				, material.m_roughness() );
+			auto matMetallic = writer.declLocale( cuT( "matMetallic" )
+				, material.m_metallic() );
+			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
+				, vec3( material.m_emissive() ) );
+			auto matGamma = writer.declLocale( cuT( "matGamma" )
+				, material.m_gamma() );
 			shader::pbr::mr::computePreLightingMapContributions( writer
 				, normal
 				, matMetallic
@@ -517,25 +534,8 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
-				, vtx_material
 				, flags );
 			
-			if ( alphaFunc != ComparisonFunc::eAlways )
-			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, material.m_opacity() );
-
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-				{
-					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
-				}
-
-				shader::applyAlphaFunc( writer
-					, alphaFunc
-					, alpha
-					, material.m_alphaRef() );
-			}
-
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
 				, 1.0_f );
 
@@ -556,12 +556,13 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
 			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
+			out_c3dOutput5.z() = writer.cast< Float >( vtx_material );
 
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			pxl_velocity.xy() = curPosition - prvPosition;
+			out_c3dOutput5.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -636,7 +637,7 @@ namespace castor3d
 		auto out_c3dOutput2 = writer.declFragData< Vec4 >( OpaquePass::Output2, index++ );
 		auto out_c3dOutput3 = writer.declFragData< Vec4 >( OpaquePass::Output3, index++ );
 		auto out_c3dOutput4 = writer.declFragData< Vec4 >( OpaquePass::Output4, index++ );
-		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), index++ ) );
+		auto out_c3dOutput5 = writer.declFragData< Vec4 >( OpaquePass::Output5, index++ );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 		declareEncodeMaterial( writer );
@@ -650,20 +651,8 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto normal = writer.declLocale( cuT( "normal" )
-				, normalize( vtx_normal ) );
 			auto material = writer.declLocale( cuT( "material" )
 				, materials.getMaterial( vtx_material ) );
-			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
-				, material.m_diffuse() );
-			auto matGlossiness = writer.declLocale( cuT( "matGlossiness" )
-				, material.m_glossiness() );
-			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
-				, material.m_specular() );
-			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
-				, vec3( material.m_emissive() ) );
-			auto matGamma = writer.declLocale( cuT( "matGamma" )
-				, material.m_gamma() );
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, vtx_texture );
 
@@ -675,6 +664,35 @@ namespace castor3d
 					, normalize( vtx_tangentSpaceViewPosition - vtx_tangentSpaceFragPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
+
+			if ( alphaFunc != ComparisonFunc::eAlways )
+			{
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material.m_opacity() );
+
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
+				}
+
+				shader::applyAlphaFunc( writer
+					, alphaFunc
+					, alpha
+					, material.m_alphaRef() );
+			}
+
+			auto normal = writer.declLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
+				, material.m_diffuse() );
+			auto matGlossiness = writer.declLocale( cuT( "matGlossiness" )
+				, material.m_glossiness() );
+			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
+				, material.m_specular() );
+			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
+				, vec3( material.m_emissive() ) );
+			auto matGamma = writer.declLocale( cuT( "matGamma" )
+				, material.m_gamma() );
 
 			shader::pbr::sg::computePreLightingMapContributions( writer
 				, normal
@@ -697,24 +715,7 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, checkFlag( textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
-				, vtx_material
 				, flags );
-
-			if ( alphaFunc != ComparisonFunc::eAlways )
-			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, material.m_opacity() );
-
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-				{
-					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
-				}
-
-				shader::applyAlphaFunc( writer
-					, alphaFunc
-					, alpha
-					, material.m_alphaRef() );
-			}
 
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
 				, 1.0_f );
@@ -736,12 +737,13 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matDiffuse, matGlossiness );
 			out_c3dOutput3 = vec4( matSpecular, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
+			out_c3dOutput5.z() = writer.cast< Float >( vtx_material );
 
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			pxl_velocity.xy() = curPosition - prvPosition;
+			out_c3dOutput5.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
