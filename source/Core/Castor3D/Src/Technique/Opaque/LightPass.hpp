@@ -50,6 +50,7 @@ namespace castor3d
 		eData2,
 		eData3,
 		eData4,
+		eData5,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
 	};
 	/**

@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "Cache/MaterialCache.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
@@ -470,47 +470,55 @@ namespace castor3d
 	{
 	}
 
-	glsl::Shader PickingPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
 		return glsl::Shader{};
 	}
 
-	glsl::Shader PickingPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader PickingPass::doGetPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -523,7 +531,8 @@ namespace castor3d
 		auto c3d_iDrawIndex( uboPicking.declMember< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( uboPicking.declMember< UInt >( NodeIndex ) );
 		uboPicking.end();
-		auto materials = doCreateMaterials( writer, programFlags );
+		auto materials = shader::createMaterials( writer
+			, passFlags );
 		materials->declare();
 
 		// Fragment Intputs
@@ -531,7 +540,7 @@ namespace castor3d
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs
@@ -539,25 +548,24 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
+			auto material = materials->getBaseMaterial( vtx_material );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, material->m_opacity() );
+
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-				doApplyAlphaFunc( writer
+				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+				shader::applyAlphaFunc( writer
 					, alphaFunc
 					, alpha
-					, vtx_material
-					, *materials );
+					, material->m_alphaRef() );
 			}
 			else if ( alphaFunc != ComparisonFunc::eAlways )
 			{
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, materials->getOpacity( vtx_material ) );
-				doApplyAlphaFunc( writer
+				shader::applyAlphaFunc( writer
 					, alphaFunc
 					, alpha
-					, vtx_material
-					, *materials );
+					, material->m_alphaRef() );
 			}
 
 			pxl_fragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );
@@ -566,12 +574,13 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	void PickingPass::doUpdateFlags( TextureChannels & textureFlags
+	void PickingPass::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( programFlags, ProgramFlag::eAlphaBlending );
+		remFlag( passFlags, PassFlag::eAlphaBlending );
 		remFlag( textureFlags, TextureChannel::eAll );
 
 		addFlag( programFlags, ProgramFlag::ePicking );

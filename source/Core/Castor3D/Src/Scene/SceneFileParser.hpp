@@ -31,6 +31,7 @@ SOFTWARE.
 #include "Mesh/Submesh.hpp"
 #include "Scene/Skybox.hpp"
 #include "Miscellaneous/SsaoConfig.hpp"
+#include "Material/SubsurfaceScattering.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -75,6 +76,7 @@ namespace castor3d
 		eParticleSystem = MAKE_SECTION_NAME( 'P', 'L', 'S', 'M' ),
 		eParticle = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' ),
 		eSsao = MAKE_SECTION_NAME( 'S', 'S', 'A', 'O' ),
+		eSubsurfaceScattering = MAKE_SECTION_NAME( 'S', 'S', 'S', 'G' ),
 	};
 	//! The context used into parsing functions
 	/*!
@@ -145,6 +147,7 @@ namespace castor3d
 		SkyboxUPtr pSkybox;
 		ParticleSystemSPtr particleSystem;
 		SsaoConfig ssaoConfig;
+		SubsurfaceScatteringUPtr subsurfaceScattering;
 
 	public:
 		/**

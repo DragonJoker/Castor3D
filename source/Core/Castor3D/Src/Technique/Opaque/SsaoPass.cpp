@@ -137,7 +137,7 @@ namespace castor3d
 			result.setSampler( sampler );
 			result.setTexture( texture );
 			result.initialise();
-			result.setIndex( 2u );
+			result.setIndex( MinTextureIndex + 2u );
 			return result;
 		}
 
@@ -159,7 +159,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position, 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
@@ -173,9 +173,10 @@ namespace castor3d
 			// Shader inputs
 			UBO_MATRIX( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
-			auto c3d_mapNormal = writer.declUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
-			auto c3d_mapNoise = writer.declUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
+			auto index = MinTextureIndex;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), index++ );
+			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), index++ );
+			auto c3d_mapNoise = writer.declSampler< Sampler2D >( cuT( "c3d_mapNoise" ), index++ );
 
 			Ubo ssaoConfig{ writer, cuT( "SsaoConfig" ), 8u };
 			auto c3d_kernel = ssaoConfig.declMember< Vec3 >( cuT( "c3d_kernel" ), 64u );
@@ -188,7 +189,6 @@ namespace castor3d
 			glsl::Utils utils{ writer };
 			utils.declareCalcTexCoord();
 			utils.declareCalcVSPosition();
-			utils.declareCalcVSDepth();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -199,7 +199,9 @@ namespace castor3d
 					auto texCoord = writer.declLocale( cuT( "texCoord" ), utils.calcTexCoord() );
 
 					auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-						, utils.calcVSPosition( texCoord, c3d_mtxInvProj ) );
+						, utils.calcVSPosition( texCoord
+							, texture( c3d_mapDepth, texCoord ).r()
+							, c3d_mtxInvProj ) );
 					auto vsNormal = writer.declLocale( cuT( "vsNormal" )
 						, normalize( writer.paren( c3d_mtxInvView * vec4( texture( c3d_mapNormal, texCoord ).xyz(), 1.0_f ) ).xyz() ) );
 
@@ -225,7 +227,9 @@ namespace castor3d
 						offset.xyz() = offset.xyz() / offset.w();      // perspective divide
 						offset.xyz() = offset.xyz() * 0.5 + 0.5;         // transform to range 0.0 - 1.0 
 						auto sampleDepth = writer.declLocale( cuT( "sampleDepth" )
-							, utils.calcVSPosition( offset.xy(), c3d_mtxInvProj ).z() );
+							, utils.calcVSPosition( offset.xy()
+								, texture( c3d_mapDepth, offset.xy() ).r()
+								, c3d_mtxInvProj ).z() );
 						auto rangeCheck = writer.declLocale( cuT( "rangeCheck" )
 							, smoothstep( 0.0_f, 1.0_f, c3d_radius / glsl::abs( vsPosition.z() - sampleDepth ) ) );
 						occlusion += writer.ternary( sampleDepth >= samplePos.z() + c3d_bias, 1.0_f, 0.0_f ) * rangeCheck;
@@ -258,7 +262,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = texture;
-					gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
@@ -271,7 +275,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto c3d_mapColour = writer.declUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
+			auto c3d_mapColour = writer.declSampler< Sampler2D >( cuT( "c3d_mapColour" ), MinTextureIndex );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -307,9 +311,9 @@ namespace castor3d
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->setValue( 0 );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->setValue( 1 );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->setValue( 2 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->setValue( MinTextureIndex + 0 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->setValue( MinTextureIndex + 1 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->setValue( MinTextureIndex + 2 );
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
 			program->initialise();
@@ -324,7 +328,7 @@ namespace castor3d
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->setValue( 0 );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->setValue( MinTextureIndex + 0 );
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
 			program->initialise();
@@ -367,46 +371,6 @@ namespace castor3d
 			}
 
 			return sampler;
-		}
-
-		TextureUnit doCreateTexture( Engine & engine
-			, Size const & size
-			, String const & name )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, WrapMode::eClampToEdge );
-			auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite );
-			ssaoResult->setSource( PxBufferBase::create( size
-				, PixelFormat::eL32F ) );
-			TextureUnit unit{ engine };
-			unit.setTexture( ssaoResult );
-			unit.setSampler( sampler );
-			unit.setIndex( 0u );
-			unit.initialise();
-			return unit;
-		}
-
-		FrameBufferSPtr doCreateFbo( Engine & engine
-			, Size const & size )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto fbo = renderSystem.createFrameBuffer();
-			fbo->initialise();
-			return fbo;
-		}
-
-		TextureAttachmentSPtr doCreateAttach( FrameBuffer & p_fbo
-			, TextureUnit const & unit )
-		{
-			auto attach = p_fbo.createAttachment( unit.getTexture() );
-			p_fbo.bind();
-			p_fbo.attach( AttachmentPoint::eColour, 0u, attach, unit.getTexture()->getType() );
-			p_fbo.setDrawBuffer( attach );
-			ENSURE( p_fbo.isComplete() );
-			p_fbo.unbind();
-			return attach;
 		}
 	}
 
@@ -481,7 +445,7 @@ namespace castor3d
 			, PixelFormat::eA8R8G8B8 ) );
 		m_ssaoResult.setTexture( ssaoResult );
 		m_ssaoResult.setSampler( sampler );
-		m_ssaoResult.setIndex( 0u );
+		m_ssaoResult.setIndex( MinTextureIndex );
 		m_ssaoResult.initialise();
 
 		m_ssaoFbo = renderSystem.createFrameBuffer();
@@ -590,18 +554,19 @@ namespace castor3d
 		m_ssaoConfig.bindTo( 8u );
 		m_ssaoFbo->bind( FrameBufferTarget::eDraw );
 		m_ssaoFbo->clear( BufferComponent::eColour );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( 0u );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( 1u );
+		auto index = MinTextureIndex;
+		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
 		m_ssaoNoise.bind();
 		m_ssaoPipeline->apply();
 		m_ssaoGeometryBuffers->draw( 6u, 0u );
 		m_ssaoNoise.unbind();
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( 1u );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( 0u );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index-- );
+		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( index-- );
 		m_ssaoFbo->unbind();
 		m_ssaoTimer->stop();
 	}

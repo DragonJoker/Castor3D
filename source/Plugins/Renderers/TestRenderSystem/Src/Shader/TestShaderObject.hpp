@@ -71,6 +71,10 @@ namespace TestRender
 		 *\copydoc		castor3d::ShaderObject::doRetrieveCompilerLog
 		 */
 		castor::String doRetrieveCompilerLog()override;
+		/**
+		 *\copydoc		castor3d::ShaderObject::doCreateUniform
+		 */
+		std::shared_ptr< castor3d::PushUniform > doCreateUniform( castor3d::UniformType p_type, int p_occurences )override;
 	};
 }
 

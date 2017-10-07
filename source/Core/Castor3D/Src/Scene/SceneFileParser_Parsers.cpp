@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -14,6 +14,7 @@
 #include "Material/LegacyPass.hpp"
 #include "Material/MetallicRoughnessPbrPass.hpp"
 #include "Material/SpecularGlossinessPbrPass.hpp"
+#include "Material/SubsurfaceScattering.hpp"
 #include "Mesh/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
@@ -1694,7 +1695,7 @@ namespace castor3d
 			Point3r direction;
 			p_params[0]->get( direction );
 			Point3r up{ 0, 1, 0 };
-			Point3r right{ direction ^ up };
+			Point3r right{ point::cross( direction, up ) };
 			parsingContext->pSceneNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
 		}
 	}
@@ -2916,6 +2917,38 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserPassSubsurfaceScattering )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pass )
+		{
+			PARSING_ERROR( cuT( "No Pass initialised." ) );
+		}
+		else
+		{
+			parsingContext->subsurfaceScattering = std::make_unique< SubsurfaceScattering >();
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eSubsurfaceScattering )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserPassParallaxOcclusion )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pass )
+		{
+			PARSING_ERROR( cuT( "No Pass initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool value = false;
+			p_params[0]->get( value );
+			parsingContext->pass->setParallaxOcclusion( value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPassEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2972,6 +3005,25 @@ namespace castor3d
 					{
 						buffer = PxBufferBase::create( buffer->dimensions()
 							, PF::getPFWithoutAlpha( buffer->format() )
+							, buffer->constPtr()
+							, buffer->format() );
+					}
+					else if ( channels == cuT( "r" ) )
+					{
+						auto format = ( buffer->format() == PixelFormat::eR8G8B8
+							|| buffer->format() == PixelFormat::eA8R8G8B8 )
+							? PixelFormat::eL8
+							: ( buffer->format() == PixelFormat::eRGB16F
+								|| buffer->format() == PixelFormat::eRGBA16F
+								|| buffer->format() == PixelFormat::eRGB16F32F
+								|| buffer->format() == PixelFormat::eRGBA16F32F )
+								? PixelFormat::eL16F32F
+								: ( buffer->format() == PixelFormat::eRGB32F
+									|| buffer->format() == PixelFormat::eRGBA32F )
+									? PixelFormat::eL32F
+									: buffer->format();
+						buffer = PxBufferBase::create( buffer->dimensions()
+							, format
 							, buffer->constPtr()
 							, buffer->format() );
 					}
@@ -4564,6 +4616,105 @@ namespace castor3d
 		else
 		{
 			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringDistanceBasedTransmittance )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			bool value;
+			p_params[0]->get( value );
+			parsingContext->subsurfaceScattering->enableDistanceBasedTransmittance( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransittanceCoefficients )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			Point3f value;
+			p_params[0]->get( value );
+			parsingContext->subsurfaceScattering->setTransmittanceCoefficients( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringStrength )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			float value;
+			p_params[0]->get( value );
+			parsingContext->subsurfaceScattering->setStrength( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringGaussianWidth )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			float value;
+			p_params[0]->get( value );
+			parsingContext->subsurfaceScattering->setGaussianWidth( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringEnd )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else
+		{
+			parsingContext->pass->setSubsurfaceScattering( std::move( parsingContext->subsurfaceScattering ) );
 		}
 	}
 	END_ATTRIBUTE_POP()

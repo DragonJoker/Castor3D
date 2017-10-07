@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -71,6 +71,7 @@ namespace glsl
 	inline Int operator|( Int const & p_value, Int const & i );
 	inline Int operator&( Int const & p_value, UInt const & i );
 	inline Int operator|( Int const & p_value, UInt const & i );
+	inline Int operator~( Int const & expr );
 
 	inline Int operator "" _i( unsigned long long p_value )
 	{
@@ -121,6 +122,7 @@ namespace glsl
 	inline UInt operator|( UInt const & p_value, Int const & i );
 	inline UInt operator&( UInt const & p_value, UInt const & i );
 	inline UInt operator|( UInt const & p_value, UInt const & i );
+	inline UInt operator~( UInt const & expr );
 
 	inline UInt operator "" _ui( unsigned long long p_value )
 	{

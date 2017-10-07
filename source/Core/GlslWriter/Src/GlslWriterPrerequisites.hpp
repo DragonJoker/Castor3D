@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -96,16 +96,39 @@ namespace glsl
 		eSampler2D,
 		eSampler3D,
 		eSamplerCube,
+		eSampler2DRect,
 		eSampler1DArray,
 		eSampler2DArray,
 		eSamplerCubeArray,
 		eSampler1DShadow,
 		eSampler2DShadow,
 		eSamplerCubeShadow,
+		eSampler2DRectShadow,
 		eSampler1DArrayShadow,
 		eSampler2DArrayShadow,
 		eSamplerCubeArrayShadow,
 		CASTOR_SCOPED_ENUM_BOUNDS( eBool )
+	};
+
+	enum class SamplerType
+	{
+		eBuffer,
+		e1D,
+		e2D,
+		e3D,
+		eCube,
+		e2DRect,
+		e1DArray,
+		e2DArray,
+		eCubeArray,
+		e1DShadow,
+		e2DShadow,
+		eCubeShadow,
+		e2DRectShadow,
+		e1DArrayShadow,
+		e2DArrayShadow,
+		eCubeArrayShadow,
+		CASTOR_SCOPED_ENUM_BOUNDS( eBuffer )
 	};
 
 	template< typename T >
@@ -130,6 +153,8 @@ namespace glsl
 	struct Mat3T;
 	template< typename TypeT >
 	struct Mat4T;
+	template< SamplerType T >
+	struct SamplerT;
 
 	struct Expr;
 	struct Type;
@@ -138,21 +163,6 @@ namespace glsl
 	struct Int;
 	struct UInt;
 	struct Float;
-	struct SamplerBuffer;
-	struct Sampler1D;
-	struct Sampler2D;
-	struct Sampler3D;
-	struct Sampler2DRect;
-	struct SamplerCube;
-	struct Sampler1DArray;
-	struct Sampler2DArray;
-	struct SamplerCubeArray;
-	struct Sampler1DShadow;
-	struct Sampler2DShadow;
-	struct SamplerCubeShadow;
-	struct Sampler1DArrayShadow;
-	struct Sampler2DArrayShadow;
-	struct SamplerCubeArrayShadow;
 
 	using Vec2 = Vec2T< Float >;
 	using Vec3 = Vec3T< Float >;
@@ -172,6 +182,23 @@ namespace glsl
 	using BMat2 = Mat2T< Boolean >;
 	using BMat3 = Mat3T< Boolean >;
 	using BMat4 = Mat4T< Boolean >;
+
+	using SamplerBuffer = SamplerT< SamplerType::eBuffer >;
+	using Sampler1D = SamplerT< SamplerType::e1D >;
+	using Sampler2D = SamplerT< SamplerType::e2D >;
+	using Sampler3D = SamplerT< SamplerType::e3D >;
+	using SamplerCube = SamplerT< SamplerType::eCube >;
+	using Sampler2DRect = SamplerT< SamplerType::e2DRect >;
+	using Sampler1DArray = SamplerT< SamplerType::e1DArray >;
+	using Sampler2DArray = SamplerT< SamplerType::e2DArray >;
+	using SamplerCubeArray = SamplerT< SamplerType::eCubeArray >;
+	using Sampler1DShadow = SamplerT< SamplerType::e1DShadow >;
+	using Sampler2DShadow = SamplerT< SamplerType::e2DShadow >;
+	using SamplerCubeShadow = SamplerT< SamplerType::eCubeShadow >;
+	using Sampler2DRectShadow = SamplerT< SamplerType::e2DRectShadow >;
+	using Sampler1DArrayShadow = SamplerT< SamplerType::e1DArrayShadow >;
+	using Sampler2DArrayShadow = SamplerT< SamplerType::e2DArrayShadow >;
+	using SamplerCubeArrayShadow = SamplerT< SamplerType::eCubeArrayShadow >;
 
 	DECLARE_GLSL_PARAMETER( Float );
 	DECLARE_GLSL_PARAMETER( Int );
@@ -195,16 +222,32 @@ namespace glsl
 	DECLARE_GLSL_PARAMETER( BMat2 );
 	DECLARE_GLSL_PARAMETER( BMat3 );
 	DECLARE_GLSL_PARAMETER( BMat4 );
+	DECLARE_GLSL_PARAMETER( SamplerBuffer );
+	DECLARE_GLSL_PARAMETER( Sampler1D );
+	DECLARE_GLSL_PARAMETER( Sampler2D );
+	DECLARE_GLSL_PARAMETER( Sampler3D );
+	DECLARE_GLSL_PARAMETER( SamplerCube );
+	DECLARE_GLSL_PARAMETER( Sampler1DArray );
+	DECLARE_GLSL_PARAMETER( Sampler2DArray );
+	DECLARE_GLSL_PARAMETER( SamplerCubeArray );
+	DECLARE_GLSL_PARAMETER( Sampler1DShadow );
+	DECLARE_GLSL_PARAMETER( Sampler2DShadow );
+	DECLARE_GLSL_PARAMETER( SamplerCubeShadow );
+	DECLARE_GLSL_PARAMETER( Sampler1DArrayShadow );
+	DECLARE_GLSL_PARAMETER( Sampler2DArrayShadow );
+	DECLARE_GLSL_PARAMETER( SamplerCubeArrayShadow );
 
 	template< typename RetT, typename ... ParamsT >
 	struct Function;
 
 	template< typename T >
-	struct name_of;
+	struct TypeTraits;
+	template< SamplerType ST >
+	struct SamplerTypeTraits;
 	template< typename T >
-	struct type_of
+	struct TypeOf
 	{
-		using type = T;
+		using Type = T;
 	};
 
 	struct Endl

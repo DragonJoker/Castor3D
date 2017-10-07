@@ -17,16 +17,18 @@ namespace castor3d
 {
 	namespace
 	{
-		uint64_t MakeKey( TextureChannels const & textureFlags
+		uint64_t makeKey( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc
 			, bool invertNormals )
 		{
-			return ( uint64_t( textureFlags ) << 52 ) // Texture flags on 12 bits
-				   | ( uint64_t( programFlags ) << 36 ) // Program flags on 16 bits
-				   | ( uint64_t( sceneFlags ) << 28 ) // SceneFlags on 8 bits
-				   | ( uint64_t( alphaFunc ) << 20 ) // Alpha func on 8 bits
+			return ( uint64_t( passFlags ) << 56 ) // Pass flags on 8 bits
+				   | ( uint64_t( textureFlags ) << 44 ) // Texture flags on 12 bits
+				   | ( uint64_t( programFlags ) << 28 ) // Program flags on 16 bits
+				   | ( uint64_t( sceneFlags ) << 20 ) // SceneFlags on 8 bits
+				   | ( uint64_t( alphaFunc ) << 12 ) // Alpha func on 8 bits
 				   | ( uint64_t( invertNormals ? 0x01 : 0x00 ) );
 		}
 	}
@@ -67,7 +69,8 @@ namespace castor3d
 		return result;
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::getAutomaticProgram( RenderPass const & p_renderPass
+	ShaderProgramSPtr ShaderProgramCache::getAutomaticProgram( RenderPass const & renderPass
+		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -78,7 +81,8 @@ namespace castor3d
 
 		if ( checkFlag( programFlags, ProgramFlag::eBillboards ) )
 		{
-			uint64_t key = MakeKey( textureFlags
+			uint64_t key = makeKey( passFlags
+				, textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc
@@ -91,7 +95,8 @@ namespace castor3d
 			}
 			else
 			{
-				result = doCreateBillboardProgram( p_renderPass
+				result = doCreateBillboardProgram( renderPass
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags
@@ -100,6 +105,7 @@ namespace castor3d
 				if ( result )
 				{
 					doAddBillboardProgram( result
+						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags
@@ -109,7 +115,8 @@ namespace castor3d
 		}
 		else
 		{
-			uint64_t key = MakeKey( textureFlags
+			uint64_t key = makeKey( passFlags
+				, textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc
@@ -122,7 +129,8 @@ namespace castor3d
 			}
 			else
 			{
-				result = doCreateAutomaticProgram( p_renderPass
+				result = doCreateAutomaticProgram( renderPass
+					, passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags
@@ -132,6 +140,7 @@ namespace castor3d
 				if ( result )
 				{
 					doAddAutomaticProgram( result
+						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags
@@ -144,127 +153,134 @@ namespace castor3d
 		return result;
 	}
 
-	void ShaderProgramCache::createTextureVariables(
-		ShaderProgram & p_shader,
-		TextureChannels const & textureFlags,
-		ProgramFlags const & programFlags )const
+	void ShaderProgramCache::createTextureVariables( ShaderProgram & shader
+		, PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags )const
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eLighting ) )
 		{
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel )->setValue( Pass::LightBufferIndex );
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel )->setValue( LightBufferIndex );
 		}
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
 		{
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapNormal, ShaderType::ePixel );
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapNormal, ShaderType::ePixel );
 		}
 
 		if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 		{
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEmissive, ShaderType::ePixel );
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEmissive, ShaderType::ePixel );
 		}
 
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel );
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel );
 		}
 
 		if ( checkFlag( textureFlags, TextureChannel::eHeight ) )
 		{
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapHeight, ShaderType::ePixel );
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapHeight, ShaderType::ePixel );
 		}
 
-		if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
+		if ( checkFlag( textureFlags, TextureChannel::eTransmittance ) )
+		{
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapTransmittance, ShaderType::ePixel );
+		}
+
+		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
 		{
 			if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapAlbedo, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapAlbedo, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eMetallic ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapMetallic, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapMetallic, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eRoughness ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapRoughness, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapRoughness, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapAmbientOcclusion, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapAmbientOcclusion, ShaderType::ePixel );
 			}
 
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 		}
-		else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+		else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
 		{
 			if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapSpecular, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapSpecular, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapGloss, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapGloss, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapAmbientOcclusion, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapAmbientOcclusion, ShaderType::ePixel );
 			}
 
-			p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+			shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 		}
 		else
 		{
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapSpecular, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapSpecular, ShaderType::ePixel );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 			{
-				p_shader.createUniform< UniformType::eSampler >( ShaderProgram::MapGloss, ShaderType::ePixel );
+				shader.createUniform< UniformType::eSampler >( ShaderProgram::MapGloss, ShaderType::ePixel );
 			}
 		}
 	}
 
-	void ShaderProgramCache::doAddProgram( ShaderProgramSPtr p_program, bool p_initialise )
+	void ShaderProgramCache::doAddProgram( ShaderProgramSPtr program
+		, bool initialise )
 	{
-		m_arrayPrograms.push_back( p_program );
+		m_arrayPrograms.push_back( program );
 
-		if ( p_initialise )
+		if ( initialise )
 		{
 			if ( getEngine()->getRenderSystem()->getCurrentContext() )
 			{
-				p_program->initialise();
+				program->initialise();
 			}
 			else
 			{
-				getEngine()->postEvent( makeInitialiseEvent( *p_program ) );
+				getEngine()->postEvent( makeInitialiseEvent( *program ) );
 			}
 		}
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & p_renderPass
+	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass
+		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -278,9 +294,22 @@ namespace castor3d
 			ShaderTypeFlags matrixUboShaderMask = ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel;
 			result->createObject( ShaderType::eVertex );
 			result->createObject( ShaderType::ePixel );
-			result->setSource( ShaderType::eVertex, p_renderPass.getVertexShaderSource( textureFlags, programFlags, sceneFlags, invertNormals ) );
-			result->setSource( ShaderType::ePixel, p_renderPass.getPixelShaderSource( textureFlags, programFlags, sceneFlags, alphaFunc ) );
-			auto geometry = p_renderPass.getGeometryShaderSource( textureFlags, programFlags, sceneFlags );
+			result->setSource( ShaderType::eVertex
+				, renderPass.getVertexShaderSource( passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags
+					, invertNormals ) );
+			result->setSource( ShaderType::ePixel
+				, renderPass.getPixelShaderSource( passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags
+					, alphaFunc ) );
+			auto geometry = renderPass.getGeometryShaderSource( passFlags
+				, textureFlags
+				, programFlags
+				, sceneFlags );
 
 			if ( !geometry.getSource().empty() )
 			{
@@ -289,20 +318,25 @@ namespace castor3d
 				result->setSource( ShaderType::eGeometry, geometry );
 			}
 
-			createTextureVariables( *result, textureFlags, programFlags );
+			createTextureVariables( *result
+				, passFlags
+				, textureFlags
+				, programFlags );
 		}
 
 		return result;
 	}
 
-	void ShaderProgramCache::doAddAutomaticProgram( ShaderProgramSPtr p_program
+	void ShaderProgramCache::doAddAutomaticProgram( ShaderProgramSPtr program
+		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc
 		, bool invertNormals )
 	{
-		uint64_t key = MakeKey( textureFlags
+		uint64_t key = makeKey( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc
@@ -311,12 +345,13 @@ namespace castor3d
 
 		if ( it == m_mapAutogenerated.end() )
 		{
-			m_mapAutogenerated.insert( { key, p_program } );
-			doAddProgram( p_program, true );
+			m_mapAutogenerated.insert( { key, program } );
+			doAddProgram( program, true );
 		}
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::doCreateBillboardProgram( RenderPass const & p_renderPass
+	ShaderProgramSPtr ShaderProgramCache::doCreateBillboardProgram( RenderPass const & renderPass
+		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -347,6 +382,8 @@ namespace castor3d
 
 				// Shader outputs
 				auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+				auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
+				auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 				auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
 				auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ) );
 				auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -361,8 +398,8 @@ namespace castor3d
 					auto toCamera = writer.declLocale( cuT( "toCamera" ), c3d_cameraPosition - bbcenter );
 					toCamera.y() = 0.0_f;
 					toCamera = normalize( toCamera );
-					auto right = writer.declLocale( cuT( "right" ), vec3( c3d_mtxView[0][0], c3d_mtxView[1][0], c3d_mtxView[2][0] ) );
-					auto up = writer.declLocale( cuT( "up" ), vec3( c3d_mtxView[0][1], c3d_mtxView[1][1], c3d_mtxView[2][1] ) );
+					auto right = writer.declLocale( cuT( "right" ), vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
+					auto up = writer.declLocale( cuT( "up" ), vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
 
 					if ( !checkFlag( programFlags, ProgramFlag::eSpherical ) )
 					{
@@ -390,14 +427,21 @@ namespace castor3d
 
 					vtx_texture = vec3( texture, 0.0 );
 					vtx_instance = gl_InstanceID;
-					auto wvPosition = writer.declLocale( cuT( "wvPosition" ), writer.paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
-					gl_Position = c3d_mtxProjection * vec4( wvPosition, 1.0 );
+					auto curPosition = writer.declLocale( cuT( "curPosition" )
+						, writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
+					auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+						, writer.paren( c3d_prvView * vec4( vtx_position, 1.0 ) ) );
+					gl_Position = c3d_projection * vec4( curPosition, 1.0 );
+					prvPosition = c3d_projection * prvPosition;
+					vtx_curPosition = gl_Position.xyw();
+					vtx_prvPosition = prvPosition.xyw();
 				} );
 
 				strVtxShader = writer.finalise();
 			}
 
-			glsl::Shader strPxlShader = p_renderPass.getPixelShaderSource( textureFlags
+			glsl::Shader strPxlShader = renderPass.getPixelShaderSource( passFlags
+				, textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc );
@@ -407,19 +451,24 @@ namespace castor3d
 			result->setSource( ShaderType::eVertex, strVtxShader );
 			result->setSource( ShaderType::ePixel, strPxlShader );
 
-			createTextureVariables( *result, textureFlags, programFlags );
+			createTextureVariables( *result
+				, passFlags
+				, textureFlags
+				, programFlags );
 		}
 
 		return result;
 	}
 
 	void ShaderProgramCache::doAddBillboardProgram( ShaderProgramSPtr p_program
+		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )
 	{
-		uint64_t key = MakeKey( textureFlags
+		uint64_t key = makeKey( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc

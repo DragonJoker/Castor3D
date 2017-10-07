@@ -1,4 +1,4 @@
-﻿#include "Common/OpenGl.hpp"
+#include "Common/OpenGl.hpp"
 
 #include "Common/GlGetFunction.hpp"
 #include "Render/GlRenderSystem.hpp"
@@ -1005,7 +1005,7 @@ namespace GlRender
 
 		if ( hasExtension( ARB_shader_storage_buffer_object ) )
 		{
-			m_bHasSsbo = true;
+			m_bHasSsbo = getVersion() >= 43;
 			gl_api::getFunction( m_pfnShaderStorageBlockBinding, cuT( "glShaderStorageBlockBinding" ), cuT( "ARB" ) );
 		}
 

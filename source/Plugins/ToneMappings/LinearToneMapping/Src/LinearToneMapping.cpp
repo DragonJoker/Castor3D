@@ -56,11 +56,11 @@ namespace Linear
 			auto c3d_fExposure = config.declMember< Float >( HdrConfigUbo::Exposure );
 			auto c3d_fGamma = config.declMember< Float >( HdrConfigUbo::Gamma );
 			config.end();
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			glsl::Utils utils{ writer };
 			utils.declareApplyGamma();
@@ -69,7 +69,7 @@ namespace Linear
 			{
 				auto hdrColor = writer.declLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				hdrColor *= vec3( c3d_fExposure );
-				plx_v4FragColor = vec4( utils.applyGamma( c3d_fGamma, hdrColor ), 1.0 );
+				pxl_fragColor = vec4( utils.applyGamma( c3d_fGamma, hdrColor ), 1.0 );
 			} );
 
 			pxl = writer.finalise();

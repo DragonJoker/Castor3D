@@ -1,4 +1,4 @@
-﻿#include "MetallicRoughnessPassBuffer.hpp"
+#include "MetallicRoughnessPassBuffer.hpp"
 
 #include "Material/LegacyPass.hpp"
 #include "Material/MetallicRoughnessPbrPass.hpp"
@@ -11,10 +11,9 @@ namespace castor3d
 	{
 #if GLSL_MATERIALS_STRUCT_OF_ARRAY
 
-		MetallicRoughnessPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		MetallicRoughnessPassBuffer::PassesData doBindData( uint8_t * data
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
 			auto albRough = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
 			data += sizeof( PassBuffer::RgbaColour ) * count;
@@ -27,21 +26,26 @@ namespace castor3d
 			auto reflRefr = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
 			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto transmittance = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
 			return
 			{
 				albRough,
 				metDiv,
 				common,
 				reflRefr,
+				{
+					transmittance,
+				},
 			};
 		}
 
 #else
 
-		MetallicRoughnessPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		MetallicRoughnessPassBuffer::PassesData doBindData( uint8_t * data
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
 			return makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data )
 				, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data ) + count );
 		}
@@ -54,7 +58,7 @@ namespace castor3d
 	MetallicRoughnessPassBuffer::MetallicRoughnessPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer, count ) }
+		, m_data{ doBindData( m_buffer.ptr(), count ) }
 	{
 	}
 
@@ -82,6 +86,7 @@ namespace castor3d
 		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data.reflRefr[index].a = 1.0f;
+		doVisitExtended( pass, m_data.extended );
 
 #else
 
@@ -98,6 +103,7 @@ namespace castor3d
 		m_data[index].reflRefr.g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.a = 1.0f;
+		doVisitExtended( pass, m_data[index].extended );
 
 #endif
 	}
@@ -122,6 +128,7 @@ namespace castor3d
 		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data.reflRefr[index].a = 1.0f;
+		doVisitExtended( pass, m_data.extended );
 
 #else
 
@@ -138,6 +145,7 @@ namespace castor3d
 		m_data[index].reflRefr.g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.a = 1.0f;
+		doVisitExtended( pass, m_data[index].extended );
 
 #endif
 	}

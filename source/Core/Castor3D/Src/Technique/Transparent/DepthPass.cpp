@@ -76,7 +76,8 @@ namespace castor3d
 		p_queues.push_back( m_renderQueue );
 	}
 
-	void DepthPass::doUpdateFlags( TextureChannels & textureFlags
+	void DepthPass::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
@@ -121,7 +122,8 @@ namespace castor3d
 	{
 	}
 
-	void DepthPass::doPrepareBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void DepthPass::doPrepareBackPipeline( ShaderProgram & p_program
+		, PipelineFlags const & p_flags )
 	{
 		auto it = m_backPipelines.find( p_flags );
 
@@ -166,7 +168,8 @@ namespace castor3d
 		}
 	}
 
-	glsl::Shader DepthPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -216,55 +219,63 @@ namespace castor3d
 			}
 
 			v4Vertex = mtxModel * v4Vertex;
-			v4Vertex = c3d_mtxView * v4Vertex;
-			gl_Position = c3d_mtxProjection * v4Vertex;
+			v4Vertex = c3d_curView * v4Vertex;
+			gl_Position = c3d_projection * v4Vertex;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
 		return writer.finalise();
 	}
 
-	glsl::Shader DepthPass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
 		return glsl::Shader{};
 	}
 
-	glsl::Shader DepthPass::doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader DepthPass::doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader DepthPass::doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader DepthPass::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader DepthPass::doGetPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const

@@ -42,7 +42,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_Position = c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( vertex, 1.0 );
+				gl_Position = c3d_projection * c3d_curView * c3d_mtxModel * vec4( vertex, 1.0 );
 			} );
 
 			return writer.finalise();

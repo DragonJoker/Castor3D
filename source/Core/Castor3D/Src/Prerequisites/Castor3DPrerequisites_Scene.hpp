@@ -42,15 +42,9 @@ namespace castor3d
 		//!\~english	No shadows at all.
 		//!\~french		Pas d'ombres du tout.
 		eNone,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		eRaw,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		ePoisson,
-		//!\~english	Stratified poisson filtering.
-		//!\~french		Filtrage poisson stratifié.
-		eStratifiedPoisson,
+		//!\~english	PCF filtering.
+		//!\~french		Filtrage PCF.
+		ePCF,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!
@@ -103,21 +97,9 @@ namespace castor3d
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
 		eFogSquaredExponential = 0x003,
-		//!\~english	No filtering.
-		//!\~french		Pas de filtrage.
-		eShadowFilterRaw = 0x004,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		eShadowFilterPoisson = 0x008,
-		//!\~english	Stratified poisson filtering.
-		//!\~french		Filtrage poisson stratifié.
-		eShadowFilterStratifiedPoisson = 0x00C,
-		//!\~english	Metallic/Roughness PBR materials.
-		//\~french		Matériaux PBR Metallic/Roughness.
-		ePbrMetallicRoughness = 0x010,
-		//!\~english	Specular/Glossiness PBR materials.
-		//\~french		Matériaux PBR Specular/Glossiness.
-		ePbrSpecularGlossiness = 0x020,
+		//!\~english	PCF filtering.
+		//!\~french		Filtrage PCF.
+		eShadowFilterPcf = 0x004,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	IMPLEMENT_FLAGS( SceneFlag )

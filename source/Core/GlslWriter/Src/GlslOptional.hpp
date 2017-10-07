@@ -31,11 +31,34 @@ namespace glsl
 	struct Optional
 		: public TypeT
 	{
-		Optional( GlslWriter * p_writer, castor::String const & p_name, bool p_enabled );
-		Optional( TypeT const & p_other, bool p_enabled );
-		template< typename T > Optional( castor::String const & p_name, T const & p_rhs, bool p_enabled );
-		inline Optional< TypeT > operator=( Optional< TypeT > const & p_rhs );
-		template< typename T > inline Optional< TypeT > operator=( T const & p_rhs );
+		Optional( GlslWriter * writer, castor::String const & name, bool enabled );
+		Optional( TypeT const & other, bool enabled );
+		template< typename T >
+		Optional( castor::String const & name, T const & rhs, bool enabled );
+
+		inline Optional< TypeT > operator=( Optional< TypeT > const & rhs );
+		template< typename T >
+		inline Optional< TypeT > operator=( T const & rhs );
+		inline bool isEnabled()const;
+
+		inline operator Optional< Type >()const;
+
+	private:
+		bool m_enabled;
+	};
+
+	template< SamplerType ST >
+	struct Optional< SamplerT< ST > >
+		: public SamplerT< ST >
+	{
+		Optional( GlslWriter * writer, uint32_t binding, castor::String const & name, bool enabled );
+		Optional( SamplerT< ST > const & other, bool enabled );
+		template< typename T >
+		Optional( castor::String const & name, T const & rhs, bool enabled );
+
+		inline Optional< SamplerT< ST > > operator=( Optional< SamplerT< ST > > const & rhs );
+		template< typename T >
+		inline Optional< SamplerT< ST > > operator=( T const & rhs );
 		inline bool isEnabled()const;
 
 		inline operator Optional< Type >()const;

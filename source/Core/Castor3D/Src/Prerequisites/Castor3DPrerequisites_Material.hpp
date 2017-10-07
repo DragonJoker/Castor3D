@@ -52,6 +52,39 @@ namespace castor3d
 	};
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		13/09/2017
+	\version	0.10.0
+	\~english
+	\brief		Pass specific flags.
+	\~french
+	\brief		Indicateurs spécifiques à la passe.
+	*/
+	enum class PassFlag
+		: uint8_t
+	{
+		eAlphaBlending = 0x01,
+		//!\~english	Shader using alpha test.
+		//\~french		Shader utilisant un test alpha.
+		eAlphaTest = 0x02,
+		//!\~english	Shader for Metallic/Roughness PBR material (if not set, will use legacy material code).
+		//\~french		Shader pour un matériau PBR Metallic/Roughness (si non défini, utilisera le code de matériau traditionnel).
+		ePbrMetallicRoughness = 0x04,
+		//!\~english	Shader for Specular/Glossiness PBR material (if not set, will use legacy material code).
+		//\~french		Shader pour un matériau PBR Specular/Glossiness (si non défini, utilisera le code de matériau traditionnel).
+		ePbrSpecularGlossiness = 0x08,
+		//!\~english	Shader for Subsurface Scattering.
+		//\~french		Shader pour le subsurface scattering.
+		eSubsurfaceScattering = 0x10,
+		//!\~english	Shader using distance based transmittance when computing Subsurface Scattering.
+		//\~french		Shader utilisant la transmission basée sur la distance, lors du calcul du Subsurface Scattering.
+		eDistanceBasedTransmittance = 0x20,
+		//!\~english	Shader using parallax occlusion mapping.
+		//\~french		Shader utilisant le parallax occlusion mapping.
+		eParallaxOcclusionMapping = 0x40,
+	};
+	IMPLEMENT_FLAGS( PassFlag )
+	/*!
+	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Alpha functions enumeration
 	\~french
@@ -436,50 +469,53 @@ namespace castor3d
 	enum class TextureChannel
 		: uint16_t
 	{
-		//!\~english Undefined channel.
-		//!\~french Canal indéfini.
+		//!\~english	Undefined channel.
+		//!\~french		Canal indéfini.
 		eUndefined = 0x0000,
-		//!\~english Diffuse map
-		//!\~french Map de diffuse
+		//!\~english	Diffuse map
+		//!\~french		Map de diffuse
 		eDiffuse = 0x0001,
-		//!\~english Diffuse map
-		//!\~french Map de diffuse
+		//!\~english	Diffuse map
+		//!\~french		Map de diffuse
 		eAlbedo = eDiffuse,
-		//!\~english Normal map
-		//!\~french Map de normales
+		//!\~english	Normal map
+		//!\~french		Map de normales
 		eNormal = 0x0002,
-		//!\~english Opacity map
-		//!\~french Map d'opacité
+		//!\~english	Opacity map
+		//!\~french		Map d'opacité
 		eOpacity = 0x0004,
-		//!\~english Specular map
-		//!\~french Map de spéculaire
+		//!\~english	Specular map
+		//!\~french		Map de spéculaire
 		eSpecular = 0x0008,
-		//!\~english Specular map
-		//!\~french Map de spéculaire
+		//!\~english	Specular map
+		//!\~french		Map de spéculaire
 		eRoughness = eSpecular,
-		//!\~english Height map
-		//!\~french Map de hauteur
+		//!\~english	Height map
+		//!\~french		Map de hauteur
 		eHeight = 0x0010,
-		//!\~english Gloss map
-		//!\~french Map de gloss
+		//!\~english	Gloss map
+		//!\~french		Map de gloss
 		eGloss = 0x0020,
-		//!\~english Specular map
-		//!\~french Map de spéculaire
+		//!\~english	Specular map
+		//!\~french		Map de spéculaire
 		eMetallic = eGloss,
-		//!\~english Emissive map
-		//!\~french Map d'émissive
+		//!\~english	Emissive map
+		//!\~french		Map d'émissive
 		eEmissive = 0x040,
-		//!\~english Reflection map
-		//!\~french Map de réflexion
+		//!\~english	Reflection map
+		//!\~french		Map de réflexion
 		eReflection = 0x0080,
-		//!\~english Refraction map
-		//!\~french Map de réfraction
+		//!\~english	Refraction map
+		//!\~french		Map de réfraction
 		eRefraction = 0x0100,
-		//!\~english Ambient occlusion map
-		//!\~french Map d'occlusion ambiante.
+		//!\~english	Ambient occlusion map
+		//!\~french		Map d'occlusion ambiante.
 		eAmbientOcclusion = 0x0200,
-		//!\~english Mask for all the texture channels
-		//!\~french Masque pour les canaux de texture
+		//!\~english	Light transmittance map
+		//!\~french		Map de transmission de lumière.
+		eTransmittance = 0x0400,
+		//!\~english	Mask for all the texture channels
+		//!\~french		Masque pour les canaux de texture
 		eAll = 0x0FFF,
 		//!\~english Not really a texture channel (it is out of TextureChannel::eAll), used to tell we want text overlay shader source
 		//!\~french Pas vraiment un canal de texture (hors de TextureChannel::eAll), utilisé pour dire que nous voulons un shader d'incrustation texte
@@ -497,6 +533,7 @@ namespace castor3d
 	class MetallicRoughnessPbrPass;
 	class SpecularGlossinessPbrPass;
 	class Sampler;
+	class SubsurfaceScattering;
 
 	DECLARE_SMART_PTR( TextureImage );
 	DECLARE_SMART_PTR( TextureLayout );
@@ -508,6 +545,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( MetallicRoughnessPbrPass );
 	DECLARE_SMART_PTR( SpecularGlossinessPbrPass );
 	DECLARE_SMART_PTR( Sampler );
+	DECLARE_SMART_PTR( SubsurfaceScattering );
 
 	//! Material pointer array
 	DECLARE_VECTOR( MaterialSPtr, MaterialPtr );

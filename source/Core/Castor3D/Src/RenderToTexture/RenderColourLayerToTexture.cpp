@@ -1,4 +1,4 @@
-﻿#include "RenderColourLayerToTexture.hpp"
+#include "RenderColourLayerToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -151,11 +151,11 @@ namespace castor3d
 		p_pipeline.apply();
 		m_layerIndexUniform->update();
 
-		p_texture.bind( 0u );
-		m_sampler->bind( 0u );
+		p_texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		p_texture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		p_texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderColourLayerToTexture::doCreateProgram()
@@ -179,7 +179,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();
 		}
@@ -190,16 +190,16 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2DArray >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2DArray >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_iIndex = writer.declUniform< Int >( cuT( "c3d_iIndex" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec3( vtx_texture, c3d_iIndex ) ).xyz(), 1.0 );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec3( vtx_texture, c3d_iIndex ) ).xyz(), 1.0 );
 			} );
 			pxl = writer.finalise();
 		}
@@ -210,7 +210,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_layerIndexUniform = program->createUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
 		program->initialise();
 		return program;

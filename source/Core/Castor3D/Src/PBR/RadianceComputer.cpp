@@ -1,4 +1,4 @@
-﻿#include "RadianceComputer.hpp"
+#include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
 
@@ -169,8 +169,8 @@ namespace castor3d
 
 		m_viewport.apply();
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		p_srcTexture.bind( 0u );
-		m_sampler->bind( 0u );
+		p_srcTexture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 
 		for ( uint32_t i = 0u; i < 6u; ++i )
 		{
@@ -183,8 +183,8 @@ namespace castor3d
 			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
 		}
 
-		m_sampler->unbind( 0u );
-		p_srcTexture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		p_srcTexture.unbind( MinTextureIndex );
 		m_frameBuffer->unbind();
 	}
 
@@ -208,8 +208,8 @@ namespace castor3d
 			{
 				vtx_position = position;
 				auto view = writer.declLocale( cuT( "normal" )
-					, mat4( mat3( c3d_mtxView ) ) );
-				gl_Position = writer.paren( c3d_mtxProjection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+					, mat4( mat3( c3d_curView ) ) );
+				gl_Position = writer.paren( c3d_projection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );
@@ -223,10 +223,10 @@ namespace castor3d
 
 			// Inputs
 			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
-			auto c3d_mapDiffuse = writer.declUniform< SamplerCube >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -270,7 +270,7 @@ namespace castor3d
 				ROF;
 
 				irradiance = irradiance * PI * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
-				plx_v4FragColor = vec4( irradiance, 1.0 );
+				pxl_fragColor = vec4( irradiance, 1.0 );
 			} );
 
 			pxl = writer.finalise();
@@ -282,7 +282,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}

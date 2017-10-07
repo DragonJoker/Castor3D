@@ -73,6 +73,36 @@ namespace Obj
 				}
 			}
 		}
+
+		void doParseVec3( StringArray const & content, Point3rArray & array )
+		{
+			array.resize( content.size() );
+			auto it = array.begin();
+
+			for ( auto & line : content )
+			{
+				std::stringstream stream( line );
+				std::string ident;
+				stream >> ident;
+				stream >> ( *it )[0] >> ( *it )[1] >> ( *it )[2];
+				++it;
+			}
+		}
+
+		void doParseVec2( StringArray const & content, Point2rArray & array )
+		{
+			array.resize( content.size() );
+			auto it = array.begin();
+
+			for ( auto & line : content )
+			{
+				std::stringstream stream( line );
+				std::string ident;
+				stream >> ident;
+				stream >> ( *it )[0] >> ( *it )[1];
+				++it;
+			}
+		}
 	}
 
 	ObjImporter::ObjImporter( Engine & engine )
@@ -169,6 +199,16 @@ namespace Obj
 	void ObjImporter::doReadObjFile( Mesh & mesh )
 	{
 		std::ifstream file( m_fileName.c_str() );
+		file.seekg( 0, std::ios::end );
+		size_t size = file.tellg();
+		file.seekg( 0, std::ios::beg );
+		std::string content;
+		content.resize( size + 1 );
+		file.read( &content[0], size );
+		auto lines = std::count( content.begin(), content.end(), '\n' );
+		content.clear();
+		file.clear();
+		file.seekg( 0, std::ios::beg );
 		std::string line;
 		std::string mtlfile;
 		uint32_t nv = 0u;
@@ -178,6 +218,14 @@ namespace Obj
 		uint32_t ntf = 0u;
 		uint32_t ng = 0u;
 		std::vector< uint32_t > faces;
+		StringArray v;
+		StringArray vt;
+		StringArray vn;
+		StringArray f;
+		v.reserve( lines );
+		vt.reserve( lines );
+		vn.reserve( lines );
+		f.reserve( lines );
 
 		while ( std::getline( file, line ) )
 		{
@@ -188,6 +236,8 @@ namespace Obj
 
 			if ( ident == "v" )
 			{
+				v.push_back( line );
+
 				if ( ntf )
 				{
 					faces.push_back( ntf );
@@ -198,14 +248,17 @@ namespace Obj
 			}
 			else if ( ident == "vt" )
 			{
+				vt.push_back( line );
 				++nvt;
 			}
 			else if ( ident == "vn" )
 			{
+				vn.push_back( line );
 				++nvn;
 			}
 			else if ( ident == "f" )
 			{
+				f.push_back( line );
 				auto count = 0u;
 
 				for ( uint32_t i = 0u; i < 4u; i++ )
@@ -230,6 +283,8 @@ namespace Obj
 			}
 			else if ( ident == "g" || ident == "usemtl" )
 			{
+				f.push_back( line );
+
 				if ( ntf )
 				{
 					faces.push_back( ntf );
@@ -261,44 +316,20 @@ namespace Obj
 		file.clear();
 		file.seekg( 0, std::ios::beg );
 
-		Point3rArray allvtx( nv );
-		Point2rArray alltex( nvt );
-		Point3rArray allnml( nvn );
-		Point3rArray::iterator vtxit = allvtx.begin();
-		Point2rArray::iterator texit = alltex.begin();
-		Point3rArray::iterator nmlit = allnml.begin();
+		Point3rArray allvtx;
+		doParseVec3( v, allvtx );
+		v = StringArray{};
+		Point2rArray alltex;
+		doParseVec2( vt, alltex );
+		vt = StringArray{};
+		Point3rArray allnml;
+		doParseVec3( vn, allnml );
+		vn = StringArray{};
 
-		std::cout << "    Vertex count: " << nv << std::endl;
-		std::cout << "    TexCoord count: " << nvt << std::endl;
-		std::cout << "    Normal count: " << nvn << std::endl;
+		std::cout << "    Vertex count: " << allvtx.size() << std::endl;
+		std::cout << "    TexCoord count: " << alltex.size() << std::endl;
+		std::cout << "    Normal count: " << allnml.size() << std::endl;
 		std::cout << "    Group count: " << faces.size() << std::endl;
-
-		while ( std::getline( file, line ) )
-		{
-			string::trim( line );
-			std::stringstream stream( line );
-			std::string ident;
-			stream >> ident;
-
-			if ( ident == "v" )
-			{
-				stream >> ( *vtxit )[0] >> ( *vtxit )[1] >> ( *vtxit )[2];
-				++vtxit;
-			}
-			else if ( ident == "vt" )
-			{
-				stream >> ( *texit )[0] >> ( *texit )[1];
-				++texit;
-			}
-			else if ( ident == "vn" )
-			{
-				stream >> ( *nmlit )[0] >> ( *nmlit )[1] >> ( *nmlit )[2];
-				++nmlit;
-			}
-		}
-
-		file.clear();
-		file.seekg( 0, std::ios::beg );
 
 		InterleavedVertexArray vertex{ nf * 3 };
 		std::vector< FaceIndices > index{ nf };
@@ -308,7 +339,7 @@ namespace Obj
 		uint32_t vtxIndex{ 0u };
 		std::string mtlname;
 
-		while ( std::getline( file, line ) )
+		for ( auto & line : f )
 		{
 			string::trim( line );
 			std::stringstream stream( line );

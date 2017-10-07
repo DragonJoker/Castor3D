@@ -1,4 +1,4 @@
-﻿#include "RenderColourCubeToTexture.hpp"
+#include "RenderColourCubeToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -96,88 +96,111 @@ namespace castor3d
 		m_viewport.cleanup();
 	}
 
-	void RenderColourCubeToTexture::render( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture )
+	void RenderColourCubeToTexture::render( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
 	{
-		int w = p_size.getWidth();
-		int h = p_size.getHeight();
-		doRender( Position{ p_position.x() + w * 0, p_position.y() + h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ -1, 0, 0 }
+		int w = size.getWidth();
+		int h = size.getHeight();
+		doRender( Position{ position.x() + w * 0, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::eNegativeX
 			, Point2f{ -1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		doRender( Position{ p_position.x() + w * 1, p_position.y() + h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, -1, 0 }
+		doRender( Position{ position.x() + w * 1, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::eNegativeY
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		doRender( Position{ p_position.x() + w * 2, p_position.y() + h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ 1, 0, 0 }
+		doRender( Position{ position.x() + w * 2, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::ePositiveX
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		doRender( Position{ p_position.x() + w * 3, p_position.y() + h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, 1, 0 }
+		doRender( Position{ position.x() + w * 3, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::ePositiveY
 			, Point2f{ 1, -1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		doRender( Position{ p_position.x() + w * 1, p_position.y() + h * 0 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, 0, -1 }
+		doRender( Position{ position.x() + w * 1, position.y() + h * 0 }
+			, size
+			, texture
+			, CubeMapFace::eNegativeZ
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		doRender( Position{ p_position.x() + w * 1, p_position.y() + h * 2 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, 0, 1 }
+		doRender( Position{ position.x() + w * 1, position.y() + h * 2 }
+			, size
+			, texture
+			, CubeMapFace::ePositiveZ
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
 	}
 
-	void RenderColourCubeToTexture::doRender( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, Point3f const & p_face
-		, castor::Point2f const & p_uvMult
-		, RenderPipeline & p_pipeline
-		, MatrixUbo & p_matrixUbo
-		, GeometryBuffers const & p_geometryBuffers )
+	void RenderColourCubeToTexture::renderFace( castor::Size const & size
+		, TextureLayout const & texture
+		, CubeMapFace face )
 	{
-		REQUIRE( p_texture.getType() == TextureType::eCube );
-		m_viewport.setPosition( p_position );
-		m_viewport.resize( p_size );
+		doRender( Position{}
+			, size
+			, texture
+			, face
+			, Point2f{ 1, 1 }
+			, *m_pipeline
+			, m_matrixUbo
+			, *m_geometryBuffers );
+	}
+
+	void RenderColourCubeToTexture::doRender( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, CubeMapFace face
+		, castor::Point2f const & uvMult
+		, RenderPipeline & pipeline
+		, MatrixUbo & matrixUbo
+		, GeometryBuffers const & geometryBuffers )
+	{
+		static Point3f const Face[6u]
+		{
+			Point3f{ 1, 0, 0 },
+			Point3f{ -1, 0, 0 },
+			Point3f{ 0, 1, 0 },
+			Point3f{ 0, -1, 0 },
+			Point3f{ 0, 0, 1 },
+			Point3f{ 0, 0, -1 },
+		};
+		REQUIRE( texture.getType() == TextureType::eCube );
+		m_viewport.setPosition( position );
+		m_viewport.resize( size );
 		m_viewport.update();
 		m_viewport.apply();
 
 		REQUIRE( m_faceUniform );
-		m_faceUniform->setValue( p_face );
+		m_faceUniform->setValue( Face[size_t( face )] );
 
-		p_matrixUbo.update( m_viewport.getProjection() );
-		p_pipeline.apply();
+		matrixUbo.update( m_viewport.getProjection() );
+		pipeline.apply();
 
-		p_texture.bind( 0u );
-		m_sampler->bind( 0u );
-		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		p_texture.unbind( 0u );
+		texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
+		geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
+		m_sampler->unbind( MinTextureIndex );
+		texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderColourCubeToTexture::doCreateProgram()
@@ -201,7 +224,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();
 		}
@@ -212,12 +235,12 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declUniform< SamplerCube >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -228,7 +251,7 @@ namespace castor3d
 						, writer.ternary( c3d_face.y() != 0.0_f
 							, vec3( mapCoord.x(), c3d_face.y(), mapCoord.y() )
 							, vec3( mapCoord, c3d_face.z() ) ) ) );
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, uv ).xyz(), 1.0 );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, uv ).xyz(), 1.0 );
 			} );
 			pxl = writer.finalise();
 		}
@@ -239,7 +262,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( 0u );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
 		program->initialise();
 		return program;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -115,66 +115,32 @@ namespace castor3d
 		 */
 		C3D_API virtual void debugDisplay( castor::Size const & size, uint32_t index ) = 0;
 		/**
-		 *\~english
-		 *\brief			Modifies the given flags to make them match the render pass requirements.
-		 *\param[in,out]	textureFlags	A combination of TextureChannel.
-		 *\param[in,out]	programFlags	A combination of ProgramFlag.
-		 *\param[in,out]	sceneFlags		A combination of SceneFlag.
-		 *\~french
-		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	textureFlags	Une combinaison de TextureChannel.
-		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
-		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
+		 *\copydoc		castor3d::RenderPass::updateFlags
 		 */
-		C3D_API void updateFlags( TextureChannels & textureFlags
+		C3D_API void updateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const;
 		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	programFlags	Bitwise ORed ProgramFlag.
-		 *\param[in]	sceneFlags		Scene related flags.
-		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	programFlags	Combinaison de ProgramFlag.
-		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
-		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
+		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
 		 */
-		C3D_API glsl::Shader getVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
 		/**
-		 *\~english
-		 *\brief		Retrieves the geometry shader source matching the given flags.
-		 *\param[in]	textureFlags	A combination of TextureChannel.
-		 *\param[in]	programFlags	A combination of ProgramFlag.
-		 *\param[in]	sceneFlags		Scene related flags.
-		 *\~french
-		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
-		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		C3D_API glsl::Shader getGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	textureFlags	A combination of TextureChannel.
-		 *\param[in]	programFlags	A combination of ProgramFlag.
-		 *\param[in]	sceneFlags		Scene related flags.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
 		 */
-		C3D_API glsl::Shader getPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
@@ -217,38 +183,37 @@ namespace castor3d
 		 */
 		C3D_API virtual void doCleanup() = 0;
 		/**
-		 *\copydoc		castor3d::ShadowMap::updateFlags
+		 *\copydoc		castor3d::RenderPass::updateFlags
 		 */
-		C3D_API virtual void doUpdateFlags( TextureChannels & textureFlags
+		C3D_API virtual void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const = 0;
 		/**
-		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
+		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
 		/**
-		 *\copydoc		castor3d::ShadowMap::getGeometryShaderSource
+		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
-		 *\copydoc		castor3d::ShadowMap::getPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
 
 	protected:
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateMaterials
-		 */
-		C3D_API std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
-			, ProgramFlags const & programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Discards materials with alpha blend or alpha func, if needed.
@@ -268,14 +233,6 @@ namespace castor3d
 		void doDiscardAlpha( glsl::GlslWriter & writer
 			, TextureChannels const & textureFlags
 			, ComparisonFunc alphaFunc
-			, glsl::Int const & material
-			, shader::Materials const & materials )const;
-		/**
-		 *\copydoc		castor3d::RenderPass::doApplyAlphaFunc
-		 */
-		void doApplyAlphaFunc( glsl::GlslWriter & writer
-			, ComparisonFunc alphaFunc
-			, glsl::Float const & alpha
 			, glsl::Int const & material
 			, shader::Materials const & materials )const;
 

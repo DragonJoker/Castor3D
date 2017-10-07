@@ -366,16 +366,25 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\~brief		Retrieve the handlers in a thread-safe way.
-		 *\return		The handlers.
+		 *\return		The handlers, in a thread-safe way.
 		 *\~french
-		 *\~brief		Récupère les gestionnaires de manière thread-safe.
-		 *\return		The gestionnaires.
+		 *\return		Les gestionnaires, de manière thread-safe.
 		 */
 		inline std::vector< EventHandlerSPtr > doGetHandlers()const
 		{
 			auto lock = castor::makeUniqueLock( m_mutexHandlers );
 			return m_handlers;
+		}
+		/**
+		 *\~english
+		 *\return		\p true if there are handlers.
+		 *\~french
+		 *\return		\p true s'il y a des gestionnaires.
+		 */
+		inline bool doHasHandlers()const
+		{
+			auto lock = castor::makeUniqueLock( m_mutexHandlers );
+			return !m_handlers.empty();
 		}
 		/**
 		 *\~english

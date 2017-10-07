@@ -1,23 +1,24 @@
 ﻿#include "ReflectionPass.hpp"
 
-#include <Engine.hpp>
+#include "Engine.hpp"
 
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Render/RenderPassTimer.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Skybox.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
-#include <Shader/Ubos/SceneUbo.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureImage.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
+#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Render/RenderPassTimer.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureImage.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -31,7 +32,7 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_environmentStart = 6u;
+		static uint32_t constexpr c_environmentStart = 7u;
 		static uint32_t constexpr c_environmentCount = 16u;
 
 		VertexBufferSPtr doCreateVbo( Engine & engine )
@@ -92,7 +93,7 @@ namespace castor3d
 				, [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
@@ -105,26 +106,30 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			UBO_HDR_CONFIG( writer );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapPostLight = writer.declUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
-			auto c3d_mapEnvironment = writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment, c_environmentCount );
+			auto index = MinTextureIndex;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
+			auto c3d_mapPostLight = writer.declSampler< Sampler2D >( cuT( "c3d_mapPostLight" ), index++ );
+			auto c3d_mapEnvironment = writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment, index++, c_environmentCount );
 			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
 			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			// Shader outputs
-			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
-			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
+			shader::LegacyMaterials materials{ writer };
+			materials.declare();
 
 			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			declareDecodeMaterial( writer );
+
+			// Shader outputs
+			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -147,19 +152,27 @@ namespace castor3d
 					, reflection
 					, refraction
 					, envMapIndex );
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
 				auto postLight = writer.declLocale( cuT( "postLight" )
 					, texture( c3d_mapPostLight, vtx_texture ).xyz() );
 
-				IF( writer, "envMapIndex < 1 || ( reflection + refraction == 0 )" )
+				IF( writer, envMapIndex < 1_i || writer.paren( reflection + refraction ) == 0_i )
 				{
 					writer.discard();
 				}
 				FI;
 
+				auto material = writer.declLocale( cuT( "material" )
+					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, normalize( data1.xyz() ) );
 				auto incident = writer.declLocale( cuT( "incident" )
@@ -179,7 +192,7 @@ namespace castor3d
 				IF( writer, refraction != 0_i )
 				{
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 					auto subRatio = writer.declLocale( cuT( "subRatio" )
 						, 1.0_f - ratio );
 					auto addRatio = writer.declLocale( cuT( "addRatio" )
@@ -189,7 +202,7 @@ namespace castor3d
 					auto product = writer.declLocale( cuT( "product" )
 						, max( 0.0_f, dot( -incident, normal ) ) );
 					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+						, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 					auto refracted = writer.declLocale( cuT( "refracted" )
 						, refract( incident, normal, ratio ) );
 					pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
@@ -198,7 +211,7 @@ namespace castor3d
 				}
 				FI;
 
-				IF( writer, cuT( "reflection != 0 && refraction == 0" ) )
+				IF( writer, reflection != 0_i && refraction == 0_i )
 				{
 					pxl_reflection *= diffuse / length( diffuse );
 				}
@@ -215,30 +228,35 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			UBO_HDR_CONFIG( writer );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
-			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance );
-			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
-			auto c3d_mapEnvironment = writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment, c_environmentCount );
+			auto index = MinTextureIndex;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
+			auto c3d_mapPostLight = writer.declSampler< Sampler2D >( cuT( "c3d_mapPostLight" ), index++ );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++ );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
+			auto c3d_mapEnvironment = writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment, index++, c_environmentCount );
 			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
 			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			// Shader outputs
-			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
-			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
+			shader::PbrMRMaterials materials{ writer };
+			materials.declare();
 
 			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareFresnelSchlick();
 			utils.declareComputeMetallicIBL();
 			declareDecodeMaterial( writer );
+
+			// Shader outputs
+			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -262,6 +280,12 @@ namespace castor3d
 					, refraction
 					, envMapIndex );
 
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
+				auto material = writer.declLocale( cuT( "material" )
+					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
 				auto data2 = writer.declLocale( cuT( "data2" )
@@ -276,8 +300,10 @@ namespace castor3d
 					, data3.g() );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_cameraPosition ) );
 
@@ -312,7 +338,7 @@ namespace castor3d
 					FI;
 
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, refraction != 0_i )
 					{
@@ -325,7 +351,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
@@ -343,7 +369,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = -refracted.y();
@@ -365,7 +391,7 @@ namespace castor3d
 						, c3d_mapPrefiltered
 						, c3d_mapBrdf );
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, ratio != 0.0_f )
 					{
@@ -378,7 +404,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = -refracted.y();
@@ -401,30 +427,35 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			UBO_HDR_CONFIG( writer );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
-			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance );
-			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
-			auto c3d_mapEnvironment = writer.declUniform< SamplerCube >( ShaderProgram::MapEnvironment, c_environmentCount );
+			auto index = MinTextureIndex;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
+			auto c3d_mapPostLight = writer.declSampler< Sampler2D >( cuT( "c3d_mapPostLight" ), index++ );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++ );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
+			auto c3d_mapEnvironment = writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment, index++, c_environmentCount );
 			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
 			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
 			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			// Shader outputs
-			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
-			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
-
+			shader::PbrSGMaterials materials{ writer };
+			materials.declare();
+			
 			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareFresnelSchlick();
 			utils.declareComputeSpecularIBL();
 			declareDecodeMaterial( writer );
+
+			// Shader outputs
+			auto pxl_reflection = writer.declFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = writer.declFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -448,6 +479,12 @@ namespace castor3d
 					, refraction
 					, envMapIndex );
 
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, vtx_texture ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
+				auto material = writer.declLocale( cuT( "material" )
+					, materials.getMaterial( materialId ) );
 				pxl_reflection = vec3( 0.0_f );
 				pxl_refraction = vec4( -1.0_f );
 				auto data2 = writer.declLocale( cuT( "data2" )
@@ -462,8 +499,10 @@ namespace castor3d
 					, data2.w() );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_cameraPosition ) );
 
@@ -498,7 +537,7 @@ namespace castor3d
 					FI;
 
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, refraction != 0_i )
 					{
@@ -511,7 +550,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( 1.0_f - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						pxl_refraction.xyz() = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz();
@@ -531,7 +570,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = -refracted.y();
@@ -553,7 +592,7 @@ namespace castor3d
 						, c3d_mapPrefiltered
 						, c3d_mapBrdf );
 					auto ratio = writer.declLocale( cuT( "ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+						, material.m_refractionRatio() );
 
 					IF( writer, ratio != 0.0_f )
 					{
@@ -568,7 +607,7 @@ namespace castor3d
 						auto product = writer.declLocale( cuT( "product" )
 							, max( 0.0_f, dot( -incident, normal ) ) );
 						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0 ) );
+							, reflectance + writer.paren( max( 1.0_f - roughness, reflectance ) - reflectance ) * pow( 1.0_f - product, 5.0_f ) );
 						auto refracted = writer.declLocale( cuT( "refract" )
 							, refract( incident, normal, ratio ) );
 						refracted.y() = writer.ternary( envMapIndex != 0_i, refracted.y(), -refracted.y() );
@@ -599,27 +638,6 @@ namespace castor3d
 			result->createObject( ShaderType::ePixel );
 			result->setSource( ShaderType::eVertex, vtx );
 			result->setSource( ShaderType::ePixel, pxl );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( 0u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 ), ShaderType::ePixel )->setValue( 1u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData2 ), ShaderType::ePixel )->setValue( 2u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData3 ), ShaderType::ePixel )->setValue( 3u );
-			result->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 ), ShaderType::ePixel )->setValue( 4u );
-			result->createUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->setValue( 5u );
-			int c = int( c_environmentStart );
-
-			if ( isPbr )
-			{
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->setValue( c++ );
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel )->setValue( c++ );
-				result->createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel )->setValue( c++ );
-			}
-
-			result->createUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, c_environmentCount )->setValues(
-			{
-				c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7,
-				c + 8, c + 9, c + 10, c + 11, c + 12, c + 13, c + 14, c + 15,
-			} );
-
 			result->initialise();
 			return result;
 		}
@@ -646,7 +664,7 @@ namespace castor3d
 			result->addUniformBuffer( matrixUbo.getUbo() );
 			result->addUniformBuffer( sceneUbo.getUbo() );
 			result->addUniformBuffer( gpInfoUbo.getUbo() );
-			result->addUniformBuffer( configUbo.getUbo() );
+			//result->addUniformBuffer( configUbo.getUbo() );
 			return result;
 		}
 	}
@@ -722,7 +740,7 @@ namespace castor3d
 				, size );
 			texture->getImage().initialiseSource();
 
-			m_reflection.setIndex( 0u );
+			m_reflection.setIndex( MinTextureIndex + 0u );
 			m_reflection.setTexture( texture );
 			m_reflection.setSampler( engine.getLightsSampler() );
 			result = m_reflection.initialise();
@@ -736,7 +754,7 @@ namespace castor3d
 				, size );
 			texture->getImage().initialiseSource();
 
-			m_refraction.setIndex( 1u );
+			m_refraction.setIndex( MinTextureIndex + 1u );
 			m_refraction.setTexture( texture );
 			m_refraction.setSampler( engine.getLightsSampler() );
 			result = m_refraction.initialise();
@@ -783,100 +801,96 @@ namespace castor3d
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->clear( BufferComponent::eColour );
 		m_viewport.apply();
-		m_configUbo.update( p_scene.getHdrConfig() );
+		//m_configUbo.update( p_scene.getHdrConfig() );
 		auto & maps = p_scene.getEnvironmentMaps();
-		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( 0u );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( 1u );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->bind( 2u );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->bind( 2u );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->bind( 3u );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->bind( 3u );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( 4u );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( 4u );
-		lp.getTexture()->bind( 5u );
-		lp.getSampler()->bind( 5u );
+
+		auto index = MinTextureIndex;
+		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData2 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData2 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData3 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData3 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index++ );
+		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index++ );
+		lp.getTexture()->bind( index );
+		lp.getSampler()->bind( index++ );
 
 		if ( p_scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 			|| p_scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
-			auto index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 			auto & skyboxIbl = p_scene.getSkybox().getIbl();
 			skyboxIbl.getPrefilteredBrdf().getTexture()->bind( index );
-			skyboxIbl.getPrefilteredBrdf().getSampler()->bind( index );
-			++index;
+			skyboxIbl.getPrefilteredBrdf().getSampler()->bind( index++ );
 			skyboxIbl.getIrradiance().getTexture()->bind( index );
-			skyboxIbl.getIrradiance().getSampler()->bind( index );
-			++index;
+			skyboxIbl.getIrradiance().getSampler()->bind( index++ );
 			skyboxIbl.getPrefilteredEnvironment().getTexture()->bind( index );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index );
-			++index;
+			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index++ );
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index );
-				++index;
+				map.get().getTexture().getSampler()->bind( index++ );
 			}
 
 			auto program = p_scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 				? 2u
 				: 1u;
 			m_programs[program].render( *m_vertexBuffer );
-			index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 			skyboxIbl.getPrefilteredBrdf().getTexture()->unbind( index );
-			skyboxIbl.getPrefilteredBrdf().getSampler()->unbind( index );
-			++index;
+			skyboxIbl.getPrefilteredBrdf().getSampler()->unbind( index++ );
 			skyboxIbl.getIrradiance().getTexture()->unbind( index );
-			skyboxIbl.getIrradiance().getSampler()->unbind( index );
-			++index;
+			skyboxIbl.getIrradiance().getSampler()->unbind( index++ );
 			skyboxIbl.getPrefilteredEnvironment().getTexture()->unbind( index );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index );
-			++index;
+			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index++ );
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->unbind( index );
-				map.get().getTexture().getSampler()->unbind( index );
-				++index;
+				map.get().getTexture().getSampler()->unbind( index++ );
 			}
 		}
 		else
 		{
-			auto index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index );
-				++index;
+				map.get().getTexture().getSampler()->bind( index++ );
 			}
 
 			m_programs[0].render( *m_vertexBuffer );
-			index = c_environmentStart;
+			index = MinTextureIndex + c_environmentStart;
 
 			for ( auto & map : maps )
 			{
 				map.get().getTexture().getTexture()->unbind( index );
-				map.get().getTexture().getSampler()->unbind( index );
-				++index;
+				map.get().getTexture().getSampler()->unbind( index++ );
 			}
 		}
 
-		lp.getTexture()->unbind( 5u );
-		lp.getSampler()->unbind( 5u );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( 4u );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( 4u );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->unbind( 3u );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->unbind( 3u );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->unbind( 2u );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( 2u );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( 1u );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( 1u );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( 0u );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( 0u );
-		m_frameBuffer->unbind();
+		index = MinTextureIndex;
+		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData2 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData3 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData3 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index++ );
+		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index++ );
+		lp.getTexture()->unbind( index );
+		lp.getSampler()->unbind( index++ );
 		m_timer->stop();
 	}
 }

@@ -1,4 +1,4 @@
-#include "ShadowMapPoint.hpp"
+﻿#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -33,10 +33,6 @@ namespace castor3d
 {
 	namespace
 	{
-		static String const ShadowMapUbo = cuT( "ShadowMap" );
-		static String const WorldLightPosition = cuT( "c3d_worldLightPosition" );
-		static String const FarPlane = cuT( "c3d_farPlane" );
-
 		TextureUnit doInitialisePoint( Engine & engine
 			, Size const & size )
 		{
@@ -56,8 +52,6 @@ namespace castor3d
 				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
-				//sampler->setComparisonMode( ComparisonMode::eRefToTexture );
-				//sampler->setComparisonFunc( ComparisonFunc::eLEqual );
 			}
 
 			TextureUnit unit{ engine };
@@ -81,7 +75,7 @@ namespace castor3d
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
-			, doInitialisePoint( engine, Size{ 1024, 1024 } )
+			, doInitialisePoint( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, std::make_shared< ShadowMapPassPoint >( engine, scene, *this ) }
 	{
 	}
@@ -162,14 +156,16 @@ namespace castor3d
 		m_shadowMap.cleanup();
 	}
 
-	void ShadowMapPoint::doUpdateFlags( TextureChannels & textureFlags
+	void ShadowMapPoint::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		addFlag( programFlags, ProgramFlag::eShadowMapPoint );
 	}
 
-	glsl::Shader ShadowMapPoint::doGetPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMapPoint::doGetPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
@@ -178,18 +174,18 @@ namespace castor3d
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Fragment Intputs
-		Ubo shadowMap{ writer, ShadowMapUbo, 8u };
-		auto c3d_wordLightPosition( shadowMap.declMember< Vec3 >( WorldLightPosition ) );
-		auto c3d_farPlane( shadowMap.declMember< Float >( FarPlane ) );
+		Ubo shadowMap{ writer, ShadowMapPassPoint::ShadowMapUbo, ShadowMapPassPoint::UboBindingPoint };
+		auto c3d_wordLightPosition( shadowMap.declMember< Vec3 >( ShadowMapPassPoint::WorldLightPosition ) );
+		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassPoint::FarPlane ) );
 		shadowMap.end();
 
 		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
-		auto c3d_mapOpacity( writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
-		auto materials = doCreateMaterials( writer, programFlags );
+		auto materials = shader::createMaterials( writer, passFlags );
 		materials->declare();
 
 		// Fragment Outputs

@@ -112,7 +112,7 @@ namespace castor3d
 		m_lightsTexture.setAutoMipmaps( false );
 		m_lightsTexture.setSampler( sampler );
 		m_lightsTexture.setTexture( texture );
-		m_lightsTexture.setIndex( Pass::LightBufferIndex );
+		m_lightsTexture.setIndex( LightBufferIndex );
 		m_scene.getListener().postEvent( makeInitialiseEvent( m_lightsTexture ) );
 		m_lightsBuffer = texture->getImage().getBuffer();
 	}

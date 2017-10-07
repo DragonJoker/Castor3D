@@ -1,4 +1,4 @@
-﻿#include "RenderPass.hpp"
+#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -423,50 +423,58 @@ namespace castor3d
 		doUpdate( queues );
 	}
 
-	glsl::Shader RenderPass::getVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::getVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		return doGetVertexShaderSource( textureFlags
+		return doGetVertexShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, invertNormals );
 	}
 
-	glsl::Shader RenderPass::getGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::getGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return doGetGeometryShaderSource( textureFlags
+		return doGetGeometryShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 	}
 
-	glsl::Shader RenderPass::getPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::getPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
 		glsl::Shader result;
 
-		if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
+		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
 		{
-			result = doGetPbrMRPixelShaderSource( textureFlags
+			result = doGetPbrMRPixelShaderSource( passFlags
+				, textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc );
 		}
-		else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+		else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
 		{
-			result = doGetPbrSGPixelShaderSource( textureFlags
+			result = doGetPbrSGPixelShaderSource( passFlags
+				, textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc );
 		}
 		else
 		{
-			result = doGetLegacyPixelShaderSource( textureFlags
+			result = doGetLegacyPixelShaderSource( passFlags
+				, textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc );
@@ -478,16 +486,18 @@ namespace castor3d
 	void RenderPass::preparePipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, ComparisonFunc alphaFunc
+		, PassFlags & passFlags
 		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags
 		, bool twoSided )
 	{
-		doUpdateFlags( textureFlags
+		doUpdateFlags( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 
-		if ( checkFlag( programFlags, ProgramFlag::eAlphaBlending ) != m_opaque
+		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != m_opaque
 			&& ( !checkFlag( programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( programFlags ) ) )
 		{
@@ -496,7 +506,8 @@ namespace castor3d
 				alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto backProgram = doGetProgram( textureFlags
+			auto backProgram = doGetProgram( passFlags
+				, textureFlags
 				, programFlags
 				, sceneFlags
 				, alphaFunc
@@ -504,22 +515,34 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto frontProgram = doGetProgram( textureFlags
+				auto frontProgram = doGetProgram( passFlags
+					, textureFlags
 					, programFlags
 					, sceneFlags
 					, alphaFunc
 					, true );
-				auto flags = PipelineFlags{ colourBlendMode, alphaBlendMode, textureFlags, programFlags, sceneFlags };
+				auto flags = PipelineFlags{ colourBlendMode
+					, alphaBlendMode
+					, passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags };
 				doPrepareFrontPipeline( *frontProgram, flags );
 				doPrepareBackPipeline( *backProgram, flags );
 			}
 			else
 			{
-				auto flags = PipelineFlags{ colourBlendMode, alphaBlendMode, textureFlags, programFlags, sceneFlags };
+				auto flags = PipelineFlags{ colourBlendMode
+					, alphaBlendMode
+					, passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags };
 
 				if ( twoSided || checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto frontProgram = doGetProgram( textureFlags
+					auto frontProgram = doGetProgram( passFlags
+						, textureFlags
 						, programFlags
 						, sceneFlags
 						, alphaFunc
@@ -535,6 +558,7 @@ namespace castor3d
 	RenderPipeline * RenderPass::getPipelineFront( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, ComparisonFunc alphaFunc
+		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
@@ -544,7 +568,7 @@ namespace castor3d
 			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto it = m_frontPipelines.find( { colourBlendMode, alphaBlendMode, textureFlags, programFlags, sceneFlags } );
+		auto it = m_frontPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != m_frontPipelines.end() )
@@ -558,6 +582,7 @@ namespace castor3d
 	RenderPipeline * RenderPass::getPipelineBack( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, ComparisonFunc alphaFunc
+		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
@@ -567,7 +592,7 @@ namespace castor3d
 			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto it = m_backPipelines.find( { colourBlendMode, alphaBlendMode, textureFlags, programFlags, sceneFlags } );
+		auto it = m_backPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != m_backPipelines.end() )
@@ -672,102 +697,16 @@ namespace castor3d
 		doUpdatePipeline( pipeline );
 	}
 
-	void RenderPass::updateFlags( TextureChannels & textureFlags
+	void RenderPass::updateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
-		doUpdateFlags( textureFlags, programFlags, sceneFlags );
+		doUpdateFlags( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags );
 	}
-
-	void RenderPass::doApplyAlphaFunc( glsl::GlslWriter & writer
-		, ComparisonFunc alphaFunc
-		, glsl::Float const & alpha
-		, glsl::Int const & material
-		, shader::Materials const & materials )const
-	{
-		using namespace glsl;
-
-		switch ( alphaFunc )
-		{
-		case ComparisonFunc::eLess:
-			IF( writer, alpha >= materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eLEqual:
-			IF( writer, alpha > materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eEqual:
-			IF( writer, alpha != materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eNEqual:
-			IF( writer, alpha == materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGEqual:
-			IF( writer, alpha < materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGreater:
-			IF( writer, alpha <= materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		default:
-			IF( writer, alpha <= 0.2 )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-		}
-	}
-
-	std::unique_ptr< shader::Materials > RenderPass::doCreateMaterials( glsl::GlslWriter & writer
-		, ProgramFlags const & programFlags )const
-	{
-		std::unique_ptr< shader::Materials > result;
-
-		if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
-		{
-			result = std::make_unique< shader::PbrMRMaterials >( writer );
-		}
-		else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
-		{
-			result = std::make_unique< shader::PbrSGMaterials >( writer );
-		}
-		else
-		{
-			result = std::make_unique< shader::LegacyMaterials >( writer );
-		}
-
-		return result;
-	}
-
 
 	PassRenderNode RenderPass::doCreatePassRenderNode( Pass & pass
 		, RenderPipeline & pipeline )
@@ -785,13 +724,15 @@ namespace castor3d
 		return SceneRenderNode{};
 	}
 
-	ShaderProgramSPtr RenderPass::doGetProgram( TextureChannels const & textureFlags
+	ShaderProgramSPtr RenderPass::doGetProgram( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc
 		, bool invertNormals )const
 	{
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+			, passFlags
 			, textureFlags
 			, programFlags
 			, sceneFlags
@@ -1279,7 +1220,8 @@ namespace castor3d
 			, info );
 	}
 
-	glsl::Shader RenderPass::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderPass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -1337,10 +1279,14 @@ namespace castor3d
 
 		std::function< void() > main = [&]()
 		{
-			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto v4Normal = writer.declLocale( cuT( "v4Normal" ), vec4( normal, 0.0 ) );
-			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto v3Texture = writer.declLocale( cuT( "v3Texture" ), texture );
+			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
+				, vec4( position.xyz(), 1.0 ) );
+			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
+				, vec4( normal, 0.0 ) );
+			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
+				, vec4( tangent, 0.0 ) );
+			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
+				, texture );
 			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -1367,7 +1313,8 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				auto time = writer.declLocale( cuT( "time" )
+					, 1.0_f - c3d_time );
 				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
 				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
 				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
@@ -1377,7 +1324,7 @@ namespace castor3d
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
 			vtx_position = v4Vertex.xyz();
-			v4Vertex = c3d_mtxView * v4Vertex;
+			v4Vertex = c3d_curView * v4Vertex;
 			mtxModel = transpose( inverse( mtxModel ) );
 
 			if ( invertNormals )
@@ -1393,9 +1340,10 @@ namespace castor3d
 			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * v4Vertex;
+			gl_Position = c3d_projection * v4Vertex;
 
-			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			auto tbn = writer.declLocale( cuT( "tbn" )
+				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 		};

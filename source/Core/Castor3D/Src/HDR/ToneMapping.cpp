@@ -64,7 +64,7 @@ namespace castor3d
 				writer.implementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
-					gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
 
 				vtx = writer.finalise();
@@ -75,6 +75,7 @@ namespace castor3d
 			auto pxl = doCreate();
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 			result = program->initialise();
 		}
 

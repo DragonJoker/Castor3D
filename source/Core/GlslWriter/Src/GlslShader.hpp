@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,67 +28,101 @@ SOFTWARE.
 
 namespace glsl
 {
+	struct UniformInfo
+	{
+		TypeName m_type;
+		uint32_t m_count;
+	};
+
+	struct SamplerInfo
+	{
+		TypeName m_type;
+		uint32_t m_binding;
+		uint32_t m_count;
+	};
+
 	class Shader
 	{
 	public:
-		inline void registerSsbo( castor::String const & p_name, Ssbo::Info const & p_info )
+		inline void registerSsbo( castor::String const & name
+			, Ssbo::Info const & info )
 		{
-			m_ssbos.emplace( p_name, p_info );
+			m_ssbos.emplace( name, info );
 		}
 
-		inline void registerUbo( castor::String const & p_name, Ubo::Info const & p_info )
+		inline void registerUbo( castor::String const & name
+			, Ubo::Info const & info )
 		{
-			m_ubos.emplace( p_name, p_info );
+			m_ubos.emplace( name, info );
 		}
 
-		inline void registerUniform( castor::String const & p_name, TypeName p_type )
+		inline void registerConstant( castor::String const & name
+			, TypeName type )
 		{
-			m_uniforms.emplace( p_name, p_type );
+			m_constants.emplace( name, type );
 		}
 
-		inline void registerAttribute( castor::String const & p_name, TypeName p_type )
+		inline void registerSampler( castor::String const & name
+			, TypeName type
+			, uint32_t binding
+			, uint32_t count )
 		{
-			m_inputs.emplace( p_name, p_type );
+			m_samplers.emplace( name, SamplerInfo{ type, binding, count } );
 		}
 
-		inline void registerInput( castor::String const & p_name, TypeName p_type )
+		inline void registerUniform( castor::String const & name
+			, TypeName type
+			, uint32_t count )
 		{
-			m_inputs.emplace( p_name, p_type );
+			m_uniforms.emplace( name, UniformInfo{ type, count } );
 		}
 
-		inline void registerOutput( castor::String const & p_name, TypeName p_type )
+		inline void registerAttribute( castor::String const & name
+			, TypeName type )
 		{
-			m_outputs.emplace( p_name, p_type );
+			m_inputs.emplace( name, type );
 		}
 
-		inline void setSource( castor::String const & p_src )
+		inline void registerInput( castor::String const & name
+			, TypeName type )
 		{
-			m_source = p_src;
+			m_inputs.emplace( name, type );
 		}
 
-		inline Ssbo::Info const & getSsboInfo( castor::String const & p_name )const
+		inline void registerOutput( castor::String const & name
+			, TypeName type )
 		{
-			return m_ssbos.at( p_name );
+			m_outputs.emplace( name, type );
 		}
 
-		inline Ubo::Info const & getUboInfo( castor::String const & p_name )const
+		inline void setSource( castor::String const & src )
 		{
-			return m_ubos.at( p_name );
+			m_source = src;
 		}
 
-		inline TypeName getInputType( castor::String const & p_name )const
+		inline Ssbo::Info const & getSsboInfo( castor::String const & name )const
 		{
-			return m_inputs.at( p_name );
+			return m_ssbos.at( name );
 		}
 
-		inline TypeName getOutputType( castor::String const & p_name )const
+		inline Ubo::Info const & getUboInfo( castor::String const & name )const
 		{
-			return m_outputs.at( p_name );
+			return m_ubos.at( name );
+		}
+
+		inline TypeName getInputType( castor::String const & name )const
+		{
+			return m_inputs.at( name );
+		}
+
+		inline TypeName getOutputType( castor::String const & name )const
+		{
+			return m_outputs.at( name );
 		}
 		
-		inline TypeName getUniformType( castor::String const & p_name )const
+		inline TypeName getUniformType( castor::String const & name )const
 		{
-			return m_uniforms.at( p_name );
+			return m_uniforms.at( name ).m_type;
 		}
 
 		inline castor::String const & getSource()const
@@ -96,11 +130,33 @@ namespace glsl
 			return m_source;
 		}
 
+		inline std::map< castor::String, Ubo::Info > const & getUbos()const
+		{
+			return m_ubos;
+		}
+
+		inline std::map< castor::String, Ssbo::Info > const & getSsbos()const
+		{
+			return m_ssbos;
+		}
+
+		inline std::map< castor::String, UniformInfo > const & getUniforms()const
+		{
+			return m_uniforms;
+		}
+
+		inline std::map< castor::String, SamplerInfo > const & getSamplers()const
+		{
+			return m_samplers;
+		}
+
 	private:
 		castor::String m_source;
 		std::map< castor::String, Ssbo::Info > m_ssbos;
 		std::map< castor::String, Ubo::Info > m_ubos;
-		std::map< castor::String, TypeName > m_uniforms;
+		std::map< castor::String, TypeName > m_constants;
+		std::map< castor::String, SamplerInfo > m_samplers;
+		std::map< castor::String, UniformInfo > m_uniforms;
 		std::map< castor::String, TypeName > m_inputs;
 		std::map< castor::String, TypeName > m_outputs;
 	};

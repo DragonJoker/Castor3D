@@ -60,7 +60,7 @@ namespace castor3d
 		Intersection result = Intersection::eOut;
 		Point3r e1{ p_pt2 - p_pt1 };
 		Point3r e2{ p_pt1 - p_pt3 };
-		Point3r h( m_direction ^ e2 );
+		Point3r h{ point::cross( m_direction, e2 ) };
 		real a = point::dot( e1, h );
 
 		if ( std::abs( a ) > 0.00001_r )
@@ -71,7 +71,7 @@ namespace castor3d
 
 			if ( u >= 0.0 && u <= 1.0 )
 			{
-				Point3r q( s ^ e1 );
+				Point3r q{ point::cross( s, e1 ) };
 				real v = f * point::dot( m_direction, q );
 
 				if ( v >= 0.0 && u + v <= 1.0 )

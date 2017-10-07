@@ -38,7 +38,7 @@ namespace castor3d
 				texture->getImage().initialiseSource();
 
 				m_weightedBlendPassResult[i] = std::make_unique< TextureUnit >( m_engine );
-				m_weightedBlendPassResult[i]->setIndex( i );
+				m_weightedBlendPassResult[i]->setIndex( MinTextureIndex + i );
 				m_weightedBlendPassResult[i]->setTexture( texture );
 				m_weightedBlendPassResult[i]->setSampler( m_engine.getLightsSampler() );
 				m_weightedBlendPassResult[i]->initialise();
@@ -94,7 +94,9 @@ namespace castor3d
 	void WeightedBlendRendering::render( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter
+		, TextureUnit const & velocity )
 	{
 		static Colour accumClear = Colour::fromPredefined( PredefinedColour::eTransparentBlack );
 		static Colour revealClear = Colour::fromPredefined( PredefinedColour::eOpaqueWhite );
@@ -109,7 +111,9 @@ namespace castor3d
 		m_weightedBlendPassFrameBuffer->bind( FrameBufferTarget::eDraw );
 		m_weightedBlendPassTexAttachs[size_t( WbTexture::eAccumulation )]->clear( accumClear );
 		m_weightedBlendPassTexAttachs[size_t( WbTexture::eRevealage )]->clear( revealClear );
-		m_transparentPass.render( info, shadowMaps );
+		m_transparentPass.render( info
+			, shadowMaps
+			, jitter );
 		m_weightedBlendPassFrameBuffer->unbind();
 
 		m_finalCombinePass->render( m_weightedBlendPassResult

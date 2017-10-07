@@ -1,4 +1,4 @@
-﻿#include "RenderTechnique.hpp"
+#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -35,6 +35,8 @@ using namespace castor;
 #define DISPLAY_DEBUG_DEFERRED_BUFFERS 1
 #define DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS 1
 #define DISPLAY_DEBUG_IBL_BUFFERS 0
+#define DISPLAY_DEBUG_SHADOW_MAPS 1
+#define DISPLAY_DEBUG_ENV_MAPS 0
 
 #define USE_WEIGHTED_BLEND 1
 #define DEBUG_FORWARD_RENDERING 0
@@ -295,7 +297,9 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechnique::render( RenderInfo & info )
+	void RenderTechnique::render( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		scene.getLightCache().updateLights();
@@ -304,12 +308,19 @@ namespace castor3d
 		camera.resize( m_size );
 		camera.update();
 
+		// Update part
 		doRenderEnvironmentMaps();
 		doRenderShadowMaps();
-		doRenderOpaque( info );
-		scene.renderBackground( getSize(), camera );
 		doUpdateParticles( info );
-		doRenderTransparent( info );
+
+		// Render part
+		doRenderOpaque( jitter
+			, velocity
+			, info );
+		scene.renderBackground( getSize(), camera );
+		doRenderTransparent( jitter
+			, velocity
+			, info );
 		doApplyPostEffects();
 
 		m_renderSystem.popScene();
@@ -322,6 +333,8 @@ namespace castor3d
 
 	void RenderTechnique::debugDisplay( Size const & size )const
 	{
+		uint32_t index = 0u;
+
 #if DISPLAY_DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING
 
 		m_deferredRendering->debugDisplay();
@@ -339,15 +352,17 @@ namespace castor3d
 		m_frameBuffer.m_frameBuffer->unbind();
 
 #endif
+#if DISPLAY_DEBUG_ENV_MAPS
 
-		auto & scene = *m_renderTarget.getScene();
-		auto & maps = scene.getEnvironmentMaps();
-		uint32_t index = 0u;
+		index = 0u;
 
-		for ( auto & map : maps )
+		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
-			//map.get().debugDisplay( size, index++ );
+			map.get().debugDisplay( size, index++ );
 		}
+
+#endif
+#if DISPLAY_DEBUG_SHADOW_MAPS
 
 		index = 0u;
 
@@ -358,6 +373,8 @@ namespace castor3d
 				map.get().debugDisplay( size, index++ );
 			}
 		}
+
+#endif
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps()
@@ -429,6 +446,8 @@ namespace castor3d
 
 	void RenderTechnique::doRenderShadowMaps()
 	{
+		getEngine()->getMaterialCache().getPassBuffer().bind();
+
 		for ( auto & array : m_activeShadowMaps )
 		{
 			for ( auto & shadowMap : array )
@@ -442,6 +461,7 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & maps = scene.getEnvironmentMaps();
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 		for ( auto & map : maps )
 		{
@@ -449,10 +469,13 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechnique::doRenderOpaque( RenderInfo & info )
+	void RenderTechnique::doRenderOpaque( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if DEBUG_FORWARD_RENDERING
 
@@ -469,7 +492,9 @@ namespace castor3d
 		m_deferredRendering->render( info
 			, scene
 			, camera
-			, m_activeShadowMaps );
+			, m_activeShadowMaps
+			, jitter
+			, velocity );
 
 #endif
 	}
@@ -486,10 +511,13 @@ namespace castor3d
 		m_particleTimer->stop();
 	}
 
-	void RenderTechnique::doRenderTransparent( RenderInfo & info )
+	void RenderTechnique::doRenderTransparent( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
+		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if USE_WEIGHTED_BLEND
 #	if !DEBUG_FORWARD_RENDERING
@@ -501,7 +529,9 @@ namespace castor3d
 		m_weightedBlendRendering->render( info
 			, scene
 			, camera
-			, m_activeShadowMaps );
+			, m_activeShadowMaps
+			, jitter
+			, velocity );
 
 #else
 

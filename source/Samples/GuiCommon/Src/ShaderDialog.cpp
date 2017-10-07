@@ -87,8 +87,9 @@ namespace GuiCommon
 				if ( technique )
 				{
 					m_shaderProgram = m_scene.getEngine()->getShaderProgramCache().getAutomaticProgram( technique->getOpaquePass()
+						, m_pass.getPassFlags()
 						, m_pass.getTextureFlags()
-						, m_pass.getProgramFlags()
+						, ProgramFlags{}
 						, m_scene.getFlags()
 						, m_pass.getAlphaFunc()
 						, false );

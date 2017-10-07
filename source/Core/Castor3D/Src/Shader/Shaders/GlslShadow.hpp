@@ -40,10 +40,14 @@ namespace castor3d
 
 		public:
 			C3D_API Shadow( glsl::GlslWriter & writer );
-			C3D_API void declare( ShadowType type );
-			C3D_API void declareDirectional( ShadowType type );
-			C3D_API void declarePoint( ShadowType type );
-			C3D_API void declareSpot( ShadowType type );
+			C3D_API void declare( ShadowType type
+				, uint32_t & index );
+			C3D_API void declareDirectional( ShadowType type
+				, uint32_t & index );
+			C3D_API void declarePoint( ShadowType type
+				, uint32_t & index );
+			C3D_API void declareSpot( ShadowType type
+				, uint32_t & index );
 			C3D_API glsl::Float computeDirectionalShadow( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection

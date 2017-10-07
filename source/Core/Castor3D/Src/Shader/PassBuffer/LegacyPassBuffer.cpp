@@ -26,23 +26,28 @@ namespace castor3d
 			auto reflRefr = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
 			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto transmittance = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
 			return
 			{
 				diffAmb,
 				specShin,
 				common,
 				reflRefr,
+				{
+					transmittance,
+				},
 			};
 		}
 
 #else
 
-		LegacyPassBuffer::PassesData doBindData( CpuBuffer< uint8_t > & buffer
+		LegacyPassBuffer::PassesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			auto data = buffer.getData();
-			return makeArrayView( reinterpret_cast< LegacyPassBuffer::PassData * >( data )
-				, reinterpret_cast< LegacyPassBuffer::PassData * >( data ) + count );
+			return makeArrayView( reinterpret_cast< LegacyPassBuffer::PassData * >( buffer )
+				, reinterpret_cast< LegacyPassBuffer::PassData * >( buffer ) + count );
 		}
 
 #endif
@@ -53,7 +58,7 @@ namespace castor3d
 	LegacyPassBuffer::LegacyPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer, count ) }
+		, m_data{ doBindData( m_buffer.ptr(), count ) }
 	{
 	}
 
@@ -84,6 +89,7 @@ namespace castor3d
 		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data.reflRefr[index].a = 1.0f;
+		doVisitExtended( pass, m_data.extended );
 
 #else
 
@@ -103,6 +109,7 @@ namespace castor3d
 		m_data[index].reflRefr.g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.a = 1.0f;
+		doVisitExtended( pass, m_data[index].extended );
 
 #endif
 	}

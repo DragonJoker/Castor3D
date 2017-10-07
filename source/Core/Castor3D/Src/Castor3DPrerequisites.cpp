@@ -1,4 +1,4 @@
-﻿#include "Castor3DPrerequisites.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -18,6 +18,19 @@ IMPLEMENT_EXPORTED_OWNED_BY( castor3d::RenderSystem, RenderSystem )
 IMPLEMENT_EXPORTED_OWNED_BY( castor3d::Scene, Scene )
 
 using namespace castor;
+
+namespace glsl
+{
+	String const TypeTraits< castor3d::shader::Light >::Name = cuT( "Light" );
+	String const TypeTraits< castor3d::shader::DirectionalLight >::Name = cuT( "DirectionalLight" );
+	String const TypeTraits< castor3d::shader::PointLight >::Name = cuT( "PointLight" );
+	String const TypeTraits< castor3d::shader::SpotLight >::Name = cuT( "SpotLight" );
+	String const TypeTraits< castor3d::shader::BaseMaterial >::Name = cuT( "BaseMaterial" );
+	String const TypeTraits< castor3d::shader::LegacyMaterial >::Name = cuT( "LegacyMaterial" );
+	String const TypeTraits< castor3d::shader::MetallicRoughnessMaterial >::Name = cuT( "MetallicRoughnessMaterial" );
+	String const TypeTraits< castor3d::shader::SpecularGlossinessMaterial >::Name = cuT( "SpecularGlossinessMaterial" );
+}
+
 using namespace glsl;
 
 namespace castor3d
@@ -118,7 +131,8 @@ namespace castor3d
 				, glsl::Float & shininess
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
-				, SceneFlags const & sceneFlags )
+				, SceneFlags const & sceneFlags
+				, PassFlags const & passFlags )
 			{
 				using namespace glsl;
 				auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
@@ -129,10 +143,19 @@ namespace castor3d
 					auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 					auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 					auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-
-					auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), normal ) );
 					auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
 					v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+
+					if ( checkFlag( textureFlags, TextureChannel::eHeight )
+						&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+					{
+						auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+						v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+							, v3MapNormal
+							, texture( c3d_mapHeight, texCoord.xy() ).r() );
+					}
+
+					auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), normal ) );
 					normal = normalize( tbn * v3MapNormal );
 				}
 
@@ -169,6 +192,8 @@ namespace castor3d
 					specular *= texture( c3d_mapSpecular, texCoord.xy() ).xyz();
 				}
 
+				emissive *= diffuse;
+
 				if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 				{
 					auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
@@ -179,33 +204,35 @@ namespace castor3d
 			}
 
 			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, ShadowType shadows )
+				, ShadowType shadows
+				, uint32_t & index )
 			{
 				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
-				result->declareModel();
+				result->declareModel( index );
 				return result;
 			}
 
 			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
 				, LightType lightType
-				, ShadowType shadows )
+				, ShadowType shadows
+				, uint32_t & index )
 			{
 				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
 
 				switch ( lightType )
 				{
 				case LightType::eDirectional:
-					result->declareDirectionalModel();
+					result->declareDirectionalModel( index );
 					writer.declUniform< DirectionalLight >( cuT( "light" ) );
 					break;
 
 				case LightType::ePoint:
-					result->declarePointModel();
+					result->declarePointModel( index );
 					writer.declUniform< PointLight >( cuT( "light" ) );
 					break;
 
 				case LightType::eSpot:
-					result->declareSpotModel();
+					result->declareSpotModel( index );
 					writer.declUniform< SpotLight >( cuT( "light" ) );
 					break;
 
@@ -228,7 +255,8 @@ namespace castor3d
 					, glsl::Float & p_roughness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
-					, SceneFlags const & sceneFlags )
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags )
 				{
 					using namespace glsl;
 					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
@@ -239,10 +267,19 @@ namespace castor3d
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+						v3MapNormal = normalize( v3MapNormal * 2.0_f - 1.0_f );
+
+						if ( checkFlag( textureFlags, TextureChannel::eHeight )
+							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+						{
+							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+							v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+								, v3MapNormal
+								, texture( c3d_mapHeight, texCoord.xy() ).r() );
+						}
 
 						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
-						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
-						v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
 						p_normal = normalize( tbn * v3MapNormal );
 					}
 
@@ -278,6 +315,8 @@ namespace castor3d
 							, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
 					}
 
+					p_emissive *= p_albedo;
+
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{
 						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
@@ -288,33 +327,35 @@ namespace castor3d
 				}
 
 				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
-					result->declareModel();
+					result->declareModel( index );
 					return result;
 				}
 
 				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType lightType
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel();
+						result->declareDirectionalModel( index );
 						writer.declUniform< DirectionalLight >( cuT( "light" ) );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel();
+						result->declarePointModel( index );
 						writer.declUniform< PointLight >( cuT( "light" ) );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel();
+						result->declareSpotModel( index );
 						writer.declUniform< SpotLight >( cuT( "light" ) );
 						break;
 
@@ -334,7 +375,8 @@ namespace castor3d
 					, glsl::Float & p_glossiness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
-					, SceneFlags const & sceneFlags )
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags )
 				{
 					using namespace glsl;
 					auto texCoord( writer.getBuiltin< Vec3 >( cuT( "texCoord" ) ) );
@@ -345,10 +387,19 @@ namespace castor3d
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-
-						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
 						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
 						v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+
+						if ( checkFlag( textureFlags, TextureChannel::eHeight )
+							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+						{
+							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+							v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+								, v3MapNormal
+								, texture( c3d_mapHeight, texCoord.xy() ).r() );
+						}
+
+						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
 						p_normal = normalize( tbn * v3MapNormal );
 					}
 
@@ -384,6 +435,8 @@ namespace castor3d
 							, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
 					}
 
+					p_emissive *= p_diffuse;
+
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{
 						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
@@ -394,33 +447,35 @@ namespace castor3d
 				}
 
 				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
-					result->declareModel();
+					result->declareModel( index );
 					return result;
 				}
 
 				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType lightType
-					, ShadowType shadows )
+					, ShadowType shadows
+					, uint32_t & index )
 				{
 					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel();
+						result->declareDirectionalModel( index );
 						writer.declUniform< DirectionalLight >( cuT( "light" ) );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel();
+						result->declarePointModel( index );
 						writer.declUniform< PointLight >( cuT( "light" ) );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel();
+						result->declareSpotModel( index );
 						writer.declUniform< SpotLight >( cuT( "light" ) );
 						break;
 
@@ -432,6 +487,94 @@ namespace castor3d
 					return result;
 				}
 			}
+		}
+
+		void applyAlphaFunc( glsl::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, glsl::Float const & alpha
+			, glsl::Float const & alphaRef )
+		{
+			using namespace glsl;
+
+			switch ( alphaFunc )
+			{
+			case ComparisonFunc::eLess:
+				IF( writer, alpha >= alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eLEqual:
+				IF( writer, alpha > alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eEqual:
+				IF( writer, alpha != alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eNEqual:
+				IF( writer, alpha == alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eGEqual:
+				IF( writer, alpha < alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			case ComparisonFunc::eGreater:
+				IF( writer, alpha <= alphaRef )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+
+			default:
+				IF( writer, alpha <= 0.2 )
+				{
+					writer.discard();
+				}
+				FI;
+				break;
+			}
+		}
+
+		std::unique_ptr< Materials > createMaterials( glsl::GlslWriter & writer
+			, PassFlags const & passFlags )
+		{
+			std::unique_ptr< Materials > result;
+
+			if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
+			{
+				result = std::make_unique< PbrMRMaterials >( writer );
+			}
+			else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
+			{
+				result = std::make_unique< PbrSGMaterials >( writer );
+			}
+			else
+			{
+				result = std::make_unique< LegacyMaterials >( writer );
+			}
+
+			return result;
 		}
 
 		ParallaxShadowFunction declareParallaxShadowFunc( glsl::GlslWriter & writer
@@ -585,50 +728,42 @@ namespace castor3d
 		}
 	}
 
-	bool isShadowMapProgram( ProgramFlags const & p_flags )
+	bool isShadowMapProgram( ProgramFlags const & flags )
 	{
-		return checkFlag( p_flags, ProgramFlag::eShadowMapDirectional )
-			|| checkFlag( p_flags, ProgramFlag::eShadowMapSpot )
-			|| checkFlag( p_flags, ProgramFlag::eShadowMapPoint );
+		return checkFlag( flags, ProgramFlag::eShadowMapDirectional )
+			|| checkFlag( flags, ProgramFlag::eShadowMapSpot )
+			|| checkFlag( flags, ProgramFlag::eShadowMapPoint );
 	}
 
-	ShadowType getShadowType( SceneFlags const & p_flags )
+	ShadowType getShadowType( SceneFlags const & flags )
 	{
-		auto shadow = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eShadowFilterStratifiedPoisson ) );
+		ShadowType result = ShadowType::eNone;
 
-		switch ( shadow )
+		if ( checkFlag( flags, SceneFlag::eShadowFilterPcf ) )
 		{
-		case SceneFlag::eShadowFilterRaw:
-			return ShadowType::eRaw;
-
-		case SceneFlag::eShadowFilterPoisson:
-			return ShadowType::ePoisson;
-
-		case SceneFlag::eShadowFilterStratifiedPoisson:
-			return ShadowType::eStratifiedPoisson;
-
-		default:
-			return ShadowType::eNone;
+			result = ShadowType::ePCF;
 		}
+
+		return result;
 	}
 
-	FogType getFogType( SceneFlags const & p_flags )
+	FogType getFogType( SceneFlags const & flags )
 	{
-		auto fog = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eFogSquaredExponential ) );
+		FogType result = FogType::eDisabled;
 
-		switch ( fog )
+		if ( checkFlag( flags, SceneFlag::eFogLinear) )
 		{
-		case SceneFlag::eFogLinear:
-			return FogType::eLinear;
-
-		case SceneFlag::eFogExponential:
-			return FogType::eExponential;
-
-		case SceneFlag::eFogSquaredExponential:
-			return FogType::eSquaredExponential;
-
-		default:
-			return FogType::eDisabled;
+			result = FogType::eLinear;
 		}
+		else if ( checkFlag( flags, SceneFlag::eFogExponential) )
+		{
+			result = FogType::eExponential;
+		}
+		else if ( checkFlag( flags, SceneFlag::eFogSquaredExponential ) )
+		{
+			result = FogType::eSquaredExponential;
+		}
+
+		return result;
 	}
 }

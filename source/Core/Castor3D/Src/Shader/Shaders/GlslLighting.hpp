@@ -62,17 +62,17 @@ namespace castor3d
 		public:
 			C3D_API LightingModel( ShadowType shadows
 				, glsl::GlslWriter & writer );
-			C3D_API void declareModel();
-			C3D_API void declareDirectionalModel();
-			C3D_API void declarePointModel();
-			C3D_API void declareSpotModel();
+			C3D_API void declareModel( uint32_t & index );
+			C3D_API void declareDirectionalModel( uint32_t & index );
+			C3D_API void declarePointModel( uint32_t & index );
+			C3D_API void declareSpotModel( uint32_t & index );
 			// Calls
-			C3D_API DirectionalLight getDirectionalLight( glsl::Int const & index );
-			C3D_API PointLight getPointLight( glsl::Int const & index );
-			C3D_API SpotLight getSpotLight( glsl::Int const & index );
+			C3D_API DirectionalLight getDirectionalLight( glsl::Int const & index )const;
+			C3D_API PointLight getPointLight( glsl::Int const & index )const;
+			C3D_API SpotLight getSpotLight( glsl::Int const & index )const;
 
 		protected:
-			C3D_API Light getBaseLight( glsl::Type const & value );
+			C3D_API Light getBaseLight( glsl::Type const & value )const;
 			C3D_API void doDeclareLight();
 			C3D_API void doDeclareDirectionalLight();
 			C3D_API void doDeclarePointLight();
@@ -88,6 +88,9 @@ namespace castor3d
 			virtual void doDeclareComputeSpotLight() = 0;
 			virtual void doDeclareComputeOnePointLight() = 0;
 			virtual void doDeclareComputeOneSpotLight() = 0;
+			virtual void doDeclareComputeDirectionalLightBackLit() = 0;
+			virtual void doDeclareComputePointLightBackLit() = 0;
+			virtual void doDeclareComputeSpotLightBackLit() = 0;
 
 		protected:
 			ShadowType m_shadows;

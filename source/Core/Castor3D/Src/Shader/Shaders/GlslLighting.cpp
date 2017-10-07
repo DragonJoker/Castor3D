@@ -84,11 +84,11 @@ namespace castor3d
 		{
 		}
 
-		void LightingModel::declareModel()
+		void LightingModel::declareModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declare( m_shadows );
+				m_shadowModel->declare( m_shadows, index );
 			}
 
 			doDeclareLight();
@@ -103,58 +103,64 @@ namespace castor3d
 			doDeclareComputeDirectionalLight();
 			doDeclareComputePointLight();
 			doDeclareComputeSpotLight();
+			doDeclareComputeDirectionalLightBackLit();
+			doDeclareComputePointLightBackLit();
+			doDeclareComputeSpotLightBackLit();
 		}
 
-		void LightingModel::declareDirectionalModel()
+		void LightingModel::declareDirectionalModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareDirectional( m_shadows );
+				m_shadowModel->declareDirectional( m_shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclareDirectionalLight();
 			doDeclareModel();
 			doDeclareComputeDirectionalLight();
+			doDeclareComputeDirectionalLightBackLit();
 		}
 
-		void LightingModel::declarePointModel()
+		void LightingModel::declarePointModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declarePoint( m_shadows );
+				m_shadowModel->declarePoint( m_shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclarePointLight();
 			doDeclareModel();
 			doDeclareComputeOnePointLight();
+			doDeclareComputePointLightBackLit();
 		}
 
-		void LightingModel::declareSpotModel()
+		void LightingModel::declareSpotModel( uint32_t & index )
 		{
 			if ( m_shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareSpot( m_shadows );
+				m_shadowModel->declareSpot( m_shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclareSpotLight();
 			doDeclareModel();
 			doDeclareComputeOneSpotLight();
+			doDeclareComputeSpotLightBackLit();
 		}
 
-		DirectionalLight LightingModel::getDirectionalLight( Int const & index )
+		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const
 		{
 			return m_getDirectionalLight( index );
 		}
 
-		PointLight LightingModel::getPointLight( Int const & index )
+		PointLight LightingModel::getPointLight( Int const & index )const
 		{
 			return m_getPointLight( index );
 		}
 
-		SpotLight LightingModel::getSpotLight( Int const & index )
+		SpotLight LightingModel::getSpotLight( Int const & index )const
 		{
 			return m_getSpotLight( index );
 		}
@@ -172,6 +178,7 @@ namespace castor3d
 			Struct lightDecl = m_writer.getStruct( cuT( "DirectionalLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
 			lightDecl.declMember< Vec3 >( cuT( "m_direction" ) );
+			lightDecl.declMember< Float >( cuT( "m_farPlane" ) );
 			lightDecl.declMember< Mat4 >( cuT( "m_transform" ) );
 			lightDecl.end();
 		}
@@ -257,7 +264,9 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++ ).rgb();
+							auto v4DirFarPlane = m_writer.declLocale( cuT( "v4DirFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_direction() = v4DirFarPlane.rgb();
+							result.m_farPlane() = v4DirFarPlane.a();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
@@ -268,7 +277,9 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+							auto v4DirFarPlane = m_writer.declLocale( cuT( "v4DirFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_direction() = v4DirFarPlane.rgb();
+							result.m_farPlane() = v4DirFarPlane.a();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
@@ -283,7 +294,9 @@ namespace castor3d
 						auto decal = m_writer.declLocale( cuT( "decal" ), 0.0005_f );
 						auto mult = m_writer.declLocale( cuT( "mult" ), 0.001_f );
 						auto offset = m_writer.declLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
-						result.m_direction() = texture( c3d_sLights, factor + offset + decal ).rgb();
+						auto v4DirFarPlane = m_writer.declLocale( cuT( "v4DirFarPlane" ), texture( c3d_sLights, factor + offset + decal ) );
+						result.m_direction() = v4DirFarPlane.rgb();
+						result.m_farPlane() = v4DirFarPlane.a();
 						offset += mult;
 						auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
 						offset += mult;
@@ -446,7 +459,7 @@ namespace castor3d
 				, InInt{ &m_writer, cuT( "index" ) } );
 		}
 
-		Light LightingModel::getBaseLight( Type const & p_value )
+		Light LightingModel::getBaseLight( Type const & p_value )const
 		{
 			return writeFunctionCall< Light >( &m_writer, cuT( "getBaseLight" ), p_value );
 		}

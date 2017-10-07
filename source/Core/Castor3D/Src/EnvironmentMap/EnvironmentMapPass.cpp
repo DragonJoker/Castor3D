@@ -86,8 +86,8 @@ namespace castor3d
 		RenderInfo info;
 		m_camera->apply();
 		ShadowMapLightTypeArray shadowMaps;
-		m_opaquePass->render( info, shadowMaps );
+		m_opaquePass->render( info, shadowMaps, Point2r{} );
 		scene.renderBackground( getOwner()->getSize(), *m_camera );
-		m_transparentPass->render( info, shadowMaps );
+		m_transparentPass->render( info, shadowMaps, Point2r{} );
 	}
 }

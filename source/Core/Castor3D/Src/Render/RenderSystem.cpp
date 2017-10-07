@@ -1,4 +1,4 @@
-﻿#include "RenderSystem.hpp"
+#include "RenderSystem.hpp"
 
 #include "Render/Context.hpp"
 
@@ -31,6 +31,7 @@ namespace castor3d
 		Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
 		Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
 		Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
+		//m_gpuInformations.removeFeature( GpuFeature::eShaderStorageBuffers );
 	}
 
 	void RenderSystem::cleanup()
@@ -79,7 +80,10 @@ namespace castor3d
 
 	glsl::GlslWriter RenderSystem::createGlslWriter()
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion(), m_gpuInformations.hasConstantsBuffers(), m_gpuInformations.hasTextureBuffers() } };
+		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
+			, m_gpuInformations.hasConstantsBuffers()
+			, m_gpuInformations.hasTextureBuffers()
+			, m_gpuInformations.hasShaderStorageBuffers() } };
 	}
 
 	void RenderSystem::setCurrentContext( Context * p_context )

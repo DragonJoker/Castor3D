@@ -1,4 +1,4 @@
-#include "LightPass.hpp"
+﻿#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -24,13 +24,17 @@
 
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslLight.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 #include "Shader/Shaders/GlslPhongLighting.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
 
 using namespace castor;
 using namespace castor3d;
+
+#define C3D_DISABLE_SSSSS_BACKLIT 1
 
 namespace castor3d
 {
@@ -46,6 +50,7 @@ namespace castor3d
 				cuT( "c3d_mapData2" ),
 				cuT( "c3d_mapData3" ),
 				cuT( "c3d_mapData4" ),
+				cuT( "c3d_mapData5" ),
 			}
 		};
 
@@ -58,6 +63,7 @@ namespace castor3d
 		{
 			{
 				PixelFormat::eD24S8,
+				PixelFormat::eRGBA32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
@@ -78,6 +84,7 @@ namespace castor3d
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
+				AttachmentPoint::eColour,
 			}
 		};
 
@@ -94,6 +101,7 @@ namespace castor3d
 				1,
 				2,
 				3,
+				4,
 			}
 		};
 
@@ -156,11 +164,21 @@ namespace castor3d
 		return std::min( max, getMaxDistance( light, attenuation ) );
 	}
 
+	uint32_t constexpr ReceiverMask		= 0x00000080u;
+	uint32_t constexpr RefractionMask	= 0x00000040u;
+	uint32_t constexpr ReflectionMask	= 0x00000020u;
+	uint32_t constexpr EnvMapIndexMask	= 0x0000001Fu;
+
+	uint32_t constexpr ReceiverOffset	= 7u;
+	uint32_t constexpr RefractionOffset	= 6u;
+	uint32_t constexpr ReflectionOffset = 5u;
+	uint32_t constexpr EnvMapIndexOffset= 0u;
+
 	void declareEncodeMaterial( glsl::GlslWriter & writer )
 	{
 		using namespace glsl;
 		using glsl::operator<<;
-		auto encodeMaterial = writer.implementFunction< Void >( cuT( "encodeMaterial" )
+		writer.implementFunction< Void >( cuT( "encodeMaterial" )
 			, [&]( Int const & receiver
 				, Int const & reflection
 				, Int const & refraction
@@ -168,10 +186,11 @@ namespace castor3d
 				, Float encoded )
 			{
 				auto flags = writer.declLocale( cuT( "flags" )
-					, writer.paren( receiver << 7 )
-						+ writer.paren( refraction << 6 )
-						+ writer.paren( reflection << 5 )
-						+ writer.paren( envMapIndex ) );
+					, 0_ui
+					+ writer.paren( writer.paren( writer.cast< UInt >( receiver )		<< UInt( ReceiverOffset ) )		& UInt( ReceiverMask ) )
+					+ writer.paren( writer.paren( writer.cast< UInt >( refraction )		<< UInt( RefractionOffset ) )	& UInt( RefractionMask ) )
+					+ writer.paren( writer.paren( writer.cast< UInt >( reflection )		<< UInt( ReflectionOffset ) )	& UInt( ReflectionMask ) )
+					+ writer.paren( writer.paren( writer.cast< UInt >( envMapIndex )	<< UInt( EnvMapIndexOffset ) )	& UInt( EnvMapIndexMask ) ) );
 				encoded = writer.cast< Float >( flags );
 			}, InInt{ &writer, cuT( "receiver" ) }
 			, InInt{ &writer, cuT( "reflection" ) }
@@ -183,21 +202,19 @@ namespace castor3d
 	void declareDecodeMaterial( glsl::GlslWriter & writer )
 	{
 		using namespace glsl;
-		auto decodeMaterial = writer.implementFunction< Void >( cuT( "decodeMaterial" )
+		writer.implementFunction< Void >( cuT( "decodeMaterial" )
 			, [&]( Float const & encoded
 				, Int receiver
 				, Int reflection
 				, Int refraction
 				, Int envMapIndex )
 			{
-				auto flags = writer.declLocale( cuT( "flags" ), writer.cast< Int >( encoded ) );
-				receiver = flags >> 7;
-				flags -= writer.paren( receiver << 7 );
-				refraction = flags >> 6;
-				flags -= writer.paren( refraction << 6 );
-				reflection = flags >> 5;
-				flags -= writer.paren( reflection << 5 );
-				envMapIndex = flags;
+				auto flags = writer.declLocale( cuT( "flags" )
+					, writer.cast< UInt >( encoded ) );
+				receiver	= writer.cast< Int >( writer.paren( flags & UInt( ReceiverMask ) )		>> UInt( ReceiverOffset ) );
+				refraction	= writer.cast< Int >( writer.paren( flags & UInt( RefractionMask ) )	>> UInt( RefractionOffset ) );
+				reflection	= writer.cast< Int >( writer.paren( flags & UInt( ReflectionMask ) )	>> UInt( ReflectionOffset ) );
+				envMapIndex	= writer.cast< Int >( writer.paren( flags & UInt( EnvMapIndexMask ) )	>> UInt( EnvMapIndexOffset ) );
 			}, InFloat{ &writer, cuT( "encoded" ) }
 			, OutInt{ &writer, cuT( "receiver" ) }
 			, OutInt{ &writer, cuT( "reflection" ) }
@@ -208,12 +225,11 @@ namespace castor3d
 	void declareDecodeReceiver( glsl::GlslWriter & writer )
 	{
 		using namespace glsl;
-		auto decodeReceiver = writer.implementFunction< Void >( cuT( "decodeReceiver" )
+		writer.implementFunction< Void >( cuT( "decodeReceiver" )
 			, [&]( Int const & encoded
 				, Int receiver )
 			{
-				auto flags = writer.declLocale( cuT( "flags" ), encoded );
-				receiver = flags >> 7;
+				receiver = writer.paren( encoded & ReceiverMask ) >> ReceiverOffset;
 			}, InInt{ &writer, cuT( "encoded" ) }
 			, OutInt{ &writer, cuT( "receiver" ) } );
 	}
@@ -284,7 +300,7 @@ namespace castor3d
 
 		for ( int i = 0; i < int( DsTexture::eCount ); i++ )
 		{
-			m_program->createUniform< UniformType::eSampler >( getTextureName( DsTexture( i ) ), ShaderType::ePixel )->setValue( i );
+			m_program->createUniform< UniformType::eSampler >( getTextureName( DsTexture( i ) ), ShaderType::ePixel )->setValue( MinTextureIndex + i );
 		}
 	}
 
@@ -402,12 +418,12 @@ namespace castor3d
 	{
 		SceneFlags sceneFlags{ scene.getFlags() };
 
-		if ( checkFlag( sceneFlags, SceneFlag::ePbrMetallicRoughness ) )
+		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
 		{
 			m_program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
 				, doGetPbrMRPixelShaderSource( sceneFlags, type ) );
 		}
-		else if ( checkFlag( sceneFlags, SceneFlag::ePbrSpecularGlossiness ) )
+		else if ( scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
 			m_program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
 				, doGetPbrSGPixelShaderSource( sceneFlags, type ) );
@@ -445,6 +461,7 @@ namespace castor3d
 		gp[size_t( DsTexture::eData2 )]->bind();
 		gp[size_t( DsTexture::eData3 )]->bind();
 		gp[size_t( DsTexture::eData4 )]->bind();
+		gp[size_t( DsTexture::eData5 )]->bind();
 
 		m_program->render( size
 			, colour
@@ -452,6 +469,7 @@ namespace castor3d
 			, first
 			, m_offset );
 
+		gp[size_t( DsTexture::eData5 )]->unbind();
 		gp[size_t( DsTexture::eData4 )]->unbind();
 		gp[size_t( DsTexture::eData3 )]->unbind();
 		gp[size_t( DsTexture::eData2 )]->unbind();
@@ -470,11 +488,13 @@ namespace castor3d
 		UBO_MATRIX( writer );
 		UBO_SCENE( writer );
 		UBO_GPINFO( writer );
-		auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-		auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-		auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-		auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-		auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
+		auto index = MinTextureIndex;
+		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
@@ -491,12 +511,18 @@ namespace castor3d
 		// Utility functions
 		auto lighting = shader::legacy::createLightingModel( writer
 			, type
-			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
+			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone
+			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
+		shader::LegacyMaterials materials{ writer };
+		materials.declare();
+		shader::SubsurfaceScattering sss{ writer
+			, m_shadows && shadowType != ShadowType::eNone };
+		sss.declare( type );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -510,11 +536,15 @@ namespace castor3d
 				, texture( c3d_mapData3, texCoord ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
 				, texture( c3d_mapData4, texCoord ) );
+			auto data5 = writer.declLocale( cuT( "data5" )
+				, texture( c3d_mapData5, texCoord ) );
 			auto flags = writer.declLocale( cuT( "flags" )
 				, writer.cast< Int >( data1.w() ) );
-			auto iShadowReceiver = writer.declLocale( cuT( "iShadowReceiver" )
+			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer, flags, iShadowReceiver );
+			decodeReceiver( writer, flags, shadowReceiver );
+			auto materialId = writer.declLocale( cuT( "materialId" )
+				, writer.cast< Int >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto shininess = writer.declLocale( cuT( "shininess" )
@@ -527,10 +557,16 @@ namespace castor3d
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition );
+			auto depth = writer.declLocale( cuT( "depth" )
+				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
+			auto translucency = writer.declLocale( cuT( "translucency" )
+				, data4.w() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( materialId ) );
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
@@ -539,36 +575,66 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeDirectionalLight( light
+					lighting->compute( light
 						, eye
 						, shininess
-						, iShadowReceiver
+						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+#if !C3D_DISABLE_SSSSS_BACKLIT
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye );
+#endif
 				}
 				break;
 
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					lighting->computeOnePointLight( light
+					lighting->compute( light
 						, eye
 						, shininess
-						, iShadowReceiver
+						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+#if !C3D_DISABLE_SSSSS_BACKLIT
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye );
+#endif
 				}
 				break;
 
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-					lighting->computeOneSpotLight( light
+					lighting->compute( light
 						, eye
 						, shininess
-						, iShadowReceiver
+						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+#if !C3D_DISABLE_SSSSS_BACKLIT
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye );
+#endif
 				}
 				break;
 			}
@@ -590,11 +656,13 @@ namespace castor3d
 		UBO_MATRIX( writer );
 		UBO_SCENE( writer );
 		UBO_GPINFO( writer );
-		auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-		auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-		auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-		auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-		auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
+		auto index = MinTextureIndex;
+		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
@@ -611,12 +679,18 @@ namespace castor3d
 		// Utility functions
 		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, type
-			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
+			, m_shadows ? shadowType : ShadowType::eNone
+			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
+		shader::PbrMRMaterials materials{ writer };
+		materials.declare();
+		shader::SubsurfaceScattering sss{ writer
+			, m_shadows && shadowType != ShadowType::eNone };
+		sss.declare( type );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -630,6 +704,8 @@ namespace castor3d
 				, texture( c3d_mapData3, texCoord ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
 				, texture( c3d_mapData4, texCoord ) );
+			auto data5 = writer.declLocale( cuT( "data5" )
+				, texture( c3d_mapData5, texCoord ) );
 			auto metallic = writer.declLocale( cuT( "metallic" )
 				, data3.r() );
 			auto roughness = writer.declLocale( cuT( "roughness" )
@@ -639,6 +715,8 @@ namespace castor3d
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
 			decodeReceiver( writer, flags, shadowReceiver );
+			auto materialId = writer.declLocale( cuT( "materialId" )
+				, writer.cast< Int >( data5.z() ) );
 			auto albedo = writer.declLocale( cuT( "albedo" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -647,10 +725,16 @@ namespace castor3d
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition );
+			auto depth = writer.declLocale( cuT( "depth" )
+				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
+			auto translucency = writer.declLocale( cuT( "translucency" )
+				, data4.w() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( materialId ) );
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
@@ -659,7 +743,9 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeDirectionalLight( light
+#if !C3D_DISABLE_SSSSS_BACKLIT
+#	if !C3D_DEBUG_SSS_TRANSMITTANCE
+					lighting->compute( light
 						, eye
 						, albedo
 						, metallic
@@ -667,13 +753,47 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#	else
+					lightDiffuse = sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#	endif
+#else
+					lighting->compute( light
+						, eye
+						, albedo
+						, metallic
+						, roughness
+						, shadowReceiver
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
+#endif
 				}
 				break;
 
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					lighting->computeOnePointLight( light
+#if !C3D_DISABLE_SSSSS_BACKLIT
+#	if !C3D_DEBUG_SSS_TRANSMITTANCE
+					lighting->compute( light
 						, eye
 						, albedo
 						, metallic
@@ -681,13 +801,47 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#	else
+					lightDiffuse = sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#	endif
+#else
+					lighting->compute( light
+						, eye
+						, albedo
+						, metallic
+						, roughness
+						, shadowReceiver
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
+#endif
 				}
 				break;
 
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-					lighting->computeOneSpotLight( light
+#if !C3D_DISABLE_SSSSS_BACKLIT
+#	if !C3D_DEBUG_SSS_TRANSMITTANCE
+					lighting->compute( light
 						, eye
 						, albedo
 						, metallic
@@ -695,6 +849,38 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#	else
+					lightDiffuse = sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, albedo
+						, metallic );
+#	endif
+#else
+					lighting->compute( light
+						, eye
+						, albedo
+						, metallic
+						, roughness
+						, shadowReceiver
+						, shader::FragmentInput( wsPosition, wsNormal )
+						, output );
+#endif
 				}
 				break;
 			}
@@ -716,11 +902,13 @@ namespace castor3d
 		UBO_MATRIX( writer );
 		UBO_SCENE( writer );
 		UBO_GPINFO( writer );
-		auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-		auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-		auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-		auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-		auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
+		auto index = MinTextureIndex;
+		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
@@ -730,19 +918,26 @@ namespace castor3d
 			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
 		}
 
-		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
-
 		// Utility functions
 		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, type
-			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone );
+			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone
+			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcWSPosition();
+		shader::PbrSGMaterials materials{ writer };
+		materials.declare();
 		declareDecodeReceiver( writer );
+		shader::SubsurfaceScattering sss{ writer
+			, m_shadows && shadowType != ShadowType::eNone };
+		sss.declare( type );
+
+		// Shader outputs
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_backLit = writer.declFragData< Vec3 >( cuT( "pxl_backLit" ), 1 );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -756,6 +951,8 @@ namespace castor3d
 				, texture( c3d_mapData3, texCoord ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
 				, texture( c3d_mapData4, texCoord ) );
+			auto data5 = writer.declLocale( cuT( "data5" )
+				, texture( c3d_mapData5, texCoord ) );
 			auto specular = writer.declLocale( cuT( "specular" )
 				, data3.rgb() );
 			auto glossiness = writer.declLocale( cuT( "glossiness" )
@@ -764,7 +961,11 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer, flags, shadowReceiver );
+			decodeReceiver( writer
+				, flags
+				, shadowReceiver );
+			auto materialId = writer.declLocale( cuT( "materialId" )
+				, writer.cast< Int >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -773,10 +974,16 @@ namespace castor3d
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition );
+			auto depth = writer.declLocale( cuT( "depth" )
+				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( texCoord, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
+			auto translucency = writer.declLocale( cuT( "translucency" )
+				, data4.w() );
+			auto material = writer.declLocale( cuT( "material" )
+				, materials.getMaterial( materialId ) );
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
@@ -785,7 +992,7 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-					lighting->computeDirectionalLight( light
+					lighting->compute( light
 						, eye
 						, diffuse
 						, specular
@@ -793,13 +1000,24 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+#if !C3D_DISABLE_SSSSS_BACKLIT
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, specular );
+#endif
 				}
 				break;
 
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-					lighting->computeOnePointLight( light
+					lighting->compute( light
 						, eye
 						, diffuse
 						, specular
@@ -807,13 +1025,24 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+#if !C3D_DISABLE_SSSSS_BACKLIT
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, specular );
+#endif
 				}
 				break;
 
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-					lighting->computeOneSpotLight( light
+					lighting->compute( light
 						, eye
 						, diffuse
 						, specular
@@ -821,6 +1050,17 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
+#if !C3D_DISABLE_SSSSS_BACKLIT
+					lightDiffuse += sss.compute( *lighting
+						, material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, translucency
+						, eye
+						, specular );
+#endif
 				}
 				break;
 			}

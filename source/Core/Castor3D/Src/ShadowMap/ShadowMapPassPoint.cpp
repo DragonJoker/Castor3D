@@ -3,7 +3,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Scene/BillboardList.hpp"
+#include "Scene/Light/PointLight.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureImage.hpp"
 
@@ -15,10 +15,6 @@ namespace castor3d
 {
 	namespace
 	{
-		static String const ShadowMapUbo = cuT( "ShadowMap" );
-		static String const WorldLightPosition = cuT( "c3d_worldLightPosition" );
-		static String const FarPlane = cuT( "c3d_farPlane" );
-
 		void doUpdateShadowMatrices( Point3r const & p_position
 			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )
 		{
@@ -35,6 +31,10 @@ namespace castor3d
 			};
 		}
 	}
+
+	String const ShadowMapPassPoint::ShadowMapUbo = cuT( "ShadowMap" );
+	String const ShadowMapPassPoint::WorldLightPosition = cuT( "c3d_worldLightPosition" );
+	String const ShadowMapPassPoint::FarPlane = cuT( "c3d_farPlane" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
 		, Scene & scene
@@ -74,7 +74,7 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_shadowConfig.update();
-			m_shadowConfig.bindTo( 8u );
+			m_shadowConfig.bindTo( UboBindingPoint );
 			m_viewport.apply();
 			m_matrixUbo.update( m_matrices[index], m_projection );
 			doRenderNodes( m_renderQueue.getRenderNodes() );

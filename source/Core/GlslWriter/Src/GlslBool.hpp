@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,15 +31,19 @@ namespace glsl
 		: public Type
 	{
 		inline Boolean();
-		inline Boolean( bool p_value );
-		inline Boolean( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
-		template< typename T > inline Boolean & operator=( T const & p_rhs );
-		template< typename T > inline Boolean & operator=( int p_rhs );
+		inline Boolean( bool value );
+		inline Boolean( GlslWriter * writer
+			, castor::String const & name = castor::String() );
+		template< typename T >
+		inline Boolean & operator=( T const & rhs );
+		inline Boolean & operator=( int rhs );
 		inline operator uint32_t();
 	};
 
-	GlslWriter_API Boolean operator==( Type const & p_a, Type const & p_b );
-	GlslWriter_API Boolean operator!=( Type const & p_a, Type const & p_b );
+	GlslWriter_API Boolean operator==( Type const & lhs, Type const & rhs );
+	GlslWriter_API Boolean operator!=( Type const & lhs, Type const & rhs );
+	GlslWriter_API Boolean operator||( Boolean const & lhs, Boolean const & rhs );
+	GlslWriter_API Boolean operator&&( Boolean const & lhs, Boolean const & rhs );
 }
 
 #include "GlslBool.inl"

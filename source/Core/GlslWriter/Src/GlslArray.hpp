@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,8 +31,25 @@ namespace glsl
 	struct Array
 		: public T
 	{
-		Array( GlslWriter * p_writer, const castor::String & p_name, uint32_t p_dimension );
-		template< typename U > T operator[]( U const & p_offset );
+		Array( GlslWriter * writer
+			, const castor::String & name
+			, uint32_t dimension );
+		template< typename U > T operator[]( U const & offset );
+		uint32_t m_dimension;
+	};
+
+	template< SamplerType ST >
+	struct Array< SamplerT< ST > >
+		: public SamplerT< ST >
+	{
+		Array( GlslWriter * writer
+			, const castor::String & name
+			, uint32_t dimension );
+		Array( GlslWriter * writer
+			, uint32_t binding
+			, const castor::String & name
+			, uint32_t dimension );
+		template< typename U > SamplerT< ST > operator[]( U const & offset );
 		uint32_t m_dimension;
 	};
 }

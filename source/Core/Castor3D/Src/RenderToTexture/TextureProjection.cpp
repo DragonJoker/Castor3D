@@ -1,4 +1,4 @@
-﻿#include "TextureProjection.hpp"
+#include "TextureProjection.hpp"
 
 #include "Engine.hpp"
 
@@ -95,11 +95,11 @@ namespace castor3d
 			, p_camera.getViewport().getHeight() } );
 		p_camera.apply();
 		m_pipeline->apply();
-		p_texture.bind( 0 );
-		m_sampler->bind( 0 );
+		p_texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0 );
-		p_texture.unbind( 0 );
+		m_sampler->unbind( MinTextureIndex );
+		p_texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgram & TextureProjection::doInitialiseShader()
@@ -120,7 +120,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_Position = writer.paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 			} );
 
 			vtx = writer.finalise();
@@ -132,7 +132,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ) );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
@@ -153,7 +153,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( 0 );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_sizeUniform = program->createUniform< UniformType::eVec2f >( cuT( "c3d_size" ), ShaderType::ePixel );
 		program->initialise();
 		return *program;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -107,11 +107,14 @@ namespace castor3d
 			bool initialise( uint32_t index, castor::Size const & size );
 			void cleanup();
 
-			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
+			//!\~english	The texture receiving the color render.
+			//!\~french		La texture recevant le rendu couleur.
 			TextureUnit m_colourTexture;
-			//!\~english The frame buffer	\~french Le tampon d'image
+			//!\~english	The frame buffer.
+			//!\~french		Le tampon d'image.
 			FrameBufferSPtr m_frameBuffer;
-			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
+			//!\~english	The attach between the colour texture and main frame buffer.
+			//!\~french		L'attache entre la texture de couleurs et le tampon principal.
 			TextureAttachmentSPtr m_colourAttach;
 
 		private:
@@ -132,9 +135,9 @@ namespace castor3d
 		C3D_API RenderTarget( Engine & engine, TargetType type = TargetType::eWindow );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API ~RenderTarget();
 		/**
@@ -148,20 +151,20 @@ namespace castor3d
 		C3D_API void render( RenderInfo & info );
 		/**
 		 *\~english
-		 *\brief		Initialisation function
-		 *\remarks		Initialises the buffers
-		 *\param[in]	index	The base texture index
+		 *\brief		Initialisation function.
+		 *\remarks		Initialises the buffers.
+		 *\param[in]	index	The base texture index.
 		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\remarks		Initialise les buffers
-		 *\param[in]	index	L'index de texture de base
+		 *\brief		Fonction d'initialisation.
+		 *\remarks		Initialise les buffers.
+		 *\param[in]	index	L'index de texture de base.
 		 */
 		C3D_API void initialise( uint32_t index );
 		/**
 		 *\~english
-		 *\brief		Cleanup function
+		 *\brief		Cleanup function.
 		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\brief		Fonction de nettoyage.
 		 */
 		C3D_API void cleanup();
 		/**
@@ -186,31 +189,29 @@ namespace castor3d
 		C3D_API void addTechniqueParameters( Parameters const & parameters );
 		/**
 		 *\~english
-		 *\brief		Retrieves the ViewportType
-		 *\return		The ViewportType
+		 *\return		The ViewportType.
 		 *\~french
-		 *\brief		Récupère le ViewportType
-		 *\return		Le ViewportType
+		 *\return		Le ViewportType.
 		 */
 		C3D_API ViewportType getViewportType()const;
 		/**
 		 *\~english
-		 *\brief		sets the ViewportType
-		 *\param[in]	value	The new ViewportType
+		 *\brief		sets the ViewportType.
+		 *\param[in]	value	The new ViewportType.
 		 *\~french
-		 *\brief		Définit le ViewportType
-		 *\param[in]	value	Le nouveau ViewportType
+		 *\brief		Définit le ViewportType.
+		 *\param[in]	value	Le nouveau ViewportType.
 		 */
 		C3D_API void setViewportType( ViewportType value );
 		/**
 		 *\~english
-		 *\brief		sets the camera
-		 *\remarks		Defines also LEye and REye cameras
-		 *\param[in]	camera	The new camera
+		 *\brief		sets the camera.
+		 *\remarks		Defines also LEye and REye cameras.
+		 *\param[in]	camera	The new camera.
 		 *\~french
-		 *\brief		Définit la caméra
-		 *\remarks		Définit aussi les caméras des yeux gauche et droit
-		 *\param[in]	camera	La nouvelle caméra
+		 *\brief		Définit la caméra.
+		 *\remarks		Définit aussi les caméras des yeux gauche et droit.
+		 *\param[in]	camera	La nouvelle caméra.
 		 */
 		C3D_API void setCamera( CameraSPtr camera );
 		/**
@@ -227,11 +228,18 @@ namespace castor3d
 			, Parameters const & parameters );
 		/**
 		 *\~english
-		 *\brief		Retrieves the intialisation status
-		 *\return		The intialisation status
+		 *\brief		adds a post effect to the list.
+		 *\param[in]	effect	The effect.
 		 *\~french
-		 *\brief		Récupère le statut de l'initialisation
-		 *\return		Le statut de l'initialisation
+		 *\brief		Ajoute un effet post rendu à la liste.
+		 *\param[in]	effect	L'effet.
+		 */
+		C3D_API void addPostEffect( PostEffectSPtr effect );
+		/**
+		 *\~english
+		 *\return		The intialisation status.
+		 *\~french
+		 *\return		Le statut de l'initialisation.
 		 */
 		inline bool isInitialised()const
 		{
@@ -239,11 +247,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the target size
-		 *\return		The size
+		 *\return		The target's dimensions.
 		 *\~english
-		 *\brief		Récupère les dimensions de la cible
-		 *\return		Les dimensions
+		 *\return		Les dimensions de la cible.
 		 */
 		castor::Size const & getSize()const
 		{
@@ -251,11 +257,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the RenderTechnique
-		 *\return		The RenderTechnique
+		 *\return		The RenderTechnique.
 		 *\~french
-		 *\brief		Récupère la RenderTechnique
-		 *\return		La RenderTechnique
+		 *\return		La RenderTechnique.
 		 */
 		inline RenderTechniqueSPtr getTechnique()const
 		{
@@ -263,11 +267,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the RenderTechnique
-		 *\param[in]	technique	The RenderTechnique
+		 *\brief		Defines the RenderTechnique.
+		 *\param[in]	technique	The RenderTechnique.
 		 *\~french
-		 *\brief		Définit la RenderTechnique
-		 *\param[in]	technique	La RenderTechnique
+		 *\brief		Définit la RenderTechnique.
+		 *\param[in]	technique	La RenderTechnique.
 		 */
 		inline void setTechnique( RenderTechniqueSPtr technique )
 		{
@@ -275,11 +279,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the Scene
-		 *\return		The Scene
+		 *\return		The Scene.
 		 *\~french
-		 *\brief		Récupère la Scene
-		 *\return		La Scene
+		 *\return		La Scene.
 		 */
 		inline SceneSPtr getScene()const
 		{
@@ -287,11 +289,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the Camera
-		 *\return		The Camera
+		 *\return		The Camera.
 		 *\~french
-		 *\brief		Récupère la Camera
-		 *\return		La Camera
+		 *\return		La Camera.
 		 */
 		inline CameraSPtr getCamera()const
 		{
@@ -299,11 +299,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the Scene
-		 *\param[in]	scene	The new Scene
+		 *\brief		Sets the Scene.
+		 *\param[in]	scene	The new Scene.
 		 *\~french
-		 *\brief		Définit la Scene
-		 *\param[in]	scene	La nouvelle Scene
+		 *\brief		Définit la Scene.
+		 *\param[in]	scene	La nouvelle Scene.
 		 */
 		inline void setScene( SceneSPtr scene )
 		{
@@ -311,7 +311,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the SSAO configuration.
+		 *\brief		Sets the SSAO configuration.
 		 *\param[in]	config	The new value.
 		 *\~french
 		 *\brief		Définit la configuration du SSAO.
@@ -323,11 +323,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the frame buffer
-		 *\return		The frame buffer
+		 *\return		The frame buffer.
 		 *\~french
-		 *\brief		Récupère le tampon d'image
-		 *\return		Le tampon d'image
+		 *\return		Le tampon d'image.
 		 */
 		inline FrameBufferSPtr getFrameBuffer()const
 		{
@@ -335,11 +333,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture
-		 *\return		The texture
+		 *\return		The colour texture.
 		 *\~french
-		 *\brief		Récupère la texture
-		 *\return		La texture
+		 *\return		La texture de couleurs.
 		 */
 		inline TextureUnit const & getTexture()const
 		{
@@ -347,11 +343,19 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the window pixel format
-		 *\return		The window pixel format
+		 *\return		The velocity texture.
 		 *\~french
-		 *\brief		Récupère le format des pixels de la fenêtre
-		 *\return		Le format des pixels de la fenêtre
+		 *\return		La texture de vélocités.
+		 */
+		inline TextureUnit const & getVelocity()const
+		{
+			return m_velocityTexture;
+		}
+		/**
+		 *\~english
+		 *\return		The window pixel format.
+		 *\~french
+		 *\return		Le format des pixels de la fenêtre.
 		 */
 		inline castor::PixelFormat getPixelFormat()const
 		{
@@ -359,7 +363,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the window pixel format
+		 *\brief		Sets the window pixel format
 		 *\param[in]	value	The new window pixel format
 		 *\~french
 		 *\brief		Définit le format des pixels de la fenêtre
@@ -371,27 +375,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the target type
-		 *\return		The value
+		 *\return		The target type.
 		 *\~french
-		 *\brief		Récupère le type de cible
-		 *\return		La valeur
+		 *\return		Le type de cible.
 		 */
 		inline TargetType getTargetType()const
 		{
 			return m_type;
-		}
-		/**
-		 *\~english
-		 *\brief		adds a post effect to the list.
-		 *\param[in]	effect	The effect.
-		 *\~french
-		 *\brief		Ajoute un effet post rendu à la liste.
-		 *\param[in]	effect	L'effet.
-		 */
-		inline void addPostEffect( PostEffectSPtr effect )
-		{
-			m_postEffects.push_back( effect );
 		}
 		/**
 		 *\~english
@@ -422,6 +412,18 @@ namespace castor3d
 		inline ToneMappingSPtr getToneMapping()const
 		{
 			return m_toneMapping;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the jittering value.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de jittering.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setJitter( castor::Point2r const & value )
+		{
+			m_jitter = value;
 		}
 
 	private:
@@ -473,9 +475,21 @@ namespace castor3d
 		//!\~english	The tone mapping implementation.
 		//!\~french		L'implémentation de mappage de ton.
 		ToneMappingSPtr m_toneMapping;
+		//!\~english	The post effects applying after tone mapping.
+		//!\~french		Les effets post rendu s'appliquant après le mappage de tons.
+		PostEffectPtrArray m_postPostEffects;
+		//!\~english	The post effect timer.
+		//!\~french		Le timer d'effets post-rendu.
+		RenderPassTimerSPtr m_postPostFxTimer;
 		//!\~english	The SSAO configuration.
 		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
+		//!\~english	The jittering value.
+		//!\~french		La valeur de jittering.
+		castor::Point2r m_jitter;
+		//!\~english	The texture receiving the velocity render.
+		//!\~french		La texture recevant le rendu vélocité.
+		TextureUnit m_velocityTexture;
 	};
 }
 

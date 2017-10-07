@@ -35,53 +35,49 @@ namespace castor3d
 		public:
 			C3D_API SpecularBrdfLightingModel( ShadowType shadows
 				, glsl::GlslWriter & writer );
-			C3D_API void computeCombinedLighting( glsl::Vec3 const & worldEye
+			C3D_API void computeCombined( glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
-			C3D_API void computeDirectionalLight( DirectionalLight const & light
+				, OutputComponents & output )const;
+			C3D_API void compute( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
-			C3D_API void computePointLight( PointLight const & light
+				, OutputComponents & output )const;
+			C3D_API void compute( PointLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
-			C3D_API void computeSpotLight( SpotLight const & light
+				, OutputComponents & output )const;
+			C3D_API void compute( SpotLight const & light
 				, glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
 				, glsl::Float const & glossiness
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
-			C3D_API void computeOnePointLight( PointLight const & light
+				, OutputComponents & output )const;
+			C3D_API glsl::Vec3 computeBackLit( DirectionalLight const & light
 				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
-			C3D_API void computeOneSpotLight( SpotLight const & light
+				, FragmentInput const & fragmentIn )const;
+			C3D_API glsl::Vec3 computeBackLit( PointLight const & light
 				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
+				, FragmentInput const & fragmentIn )const;
+			C3D_API glsl::Vec3 computeBackLit( SpotLight const & light
+				, glsl::Vec3 const & worldEye
+				, glsl::Vec3 const & specular
+				, FragmentInput const & fragmentIn )const;
 
 		protected:
 			void doDeclareModel();
@@ -90,6 +86,9 @@ namespace castor3d
 			void doDeclareComputeSpotLight()override;
 			void doDeclareComputeOnePointLight()override;
 			void doDeclareComputeOneSpotLight()override;
+			void doDeclareComputeDirectionalLightBackLit()override;
+			void doDeclareComputePointLightBackLit()override;
+			void doDeclareComputeSpotLightBackLit()override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye
@@ -101,10 +100,17 @@ namespace castor3d
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
 
+			glsl::Vec3 doComputeLightBackLit( Light const & light
+				, glsl::Vec3 const & worldEye
+				, glsl::Vec3 const & direction
+				, glsl::Vec3 const & specular
+				, FragmentInput const & fragmentIn );
+
 			void doDeclareDistribution();
 			void doDeclareGeometry();
 			void doDeclareFresnelShlick();
 			void doDeclareComputeLight();
+			void doDeclareComputeLightBackLit();
 
 		public:
 			C3D_API static const castor::String Name;
@@ -187,6 +193,27 @@ namespace castor3d
 				, glsl::InFloat
 				, FragmentInput
 				, OutputComponents & > m_computeLight;
+			glsl::Function< glsl::Vec3
+				, DirectionalLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, FragmentInput > m_computeDirectionalBackLit;
+			glsl::Function< glsl::Vec3
+				, PointLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, FragmentInput > m_computePointBackLit;
+			glsl::Function< glsl::Vec3
+				, SpotLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, FragmentInput > m_computeSpotBackLit;
+			glsl::Function< glsl::Vec3
+				, InLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, FragmentInput > m_computeLightBackLit;
 		};
 	}
 }

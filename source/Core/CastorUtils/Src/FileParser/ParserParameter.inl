@@ -3,6 +3,7 @@
 #include "Graphics/PixelFormat.hpp"
 #include "FileParserContext.hpp"
 #include "ParserParameterTypeException.hpp"
+#include "Design/ArrayView.hpp"
 
 namespace castor
 {
@@ -17,21 +18,21 @@ namespace castor
 	//*************************************************************************************************
 
 	/**
-		*\~english
-		*\brief		Parses a vector from a line.
-		*\param[in]	p_params	The line containing the vector.
-		*\param[out]	p_value		Receives the result.
-		*\param[in]	p_count		The elements count.
-		*\return		\p true if OK.
-		*\~french
-		*\brief		Extrait un vecteur à partir d'une ligne.
-		*\param[in]	p_params	La ligne contenant le vecteur.
-		*\param[out]	p_value		Reçoit le résultat.
-		*\param[in]	p_count		Le nombre d'éléments.
-		*\return		\p true si tout s'est bien passé.
-		*/
+	 *\~english
+	 *\brief		Parses a vector from a line.
+	 *\param[in]	params	The line containing the vector.
+	 *\param[out]	value		Receives the result.
+	 *\param[in]	count		The elements count.
+	 *\return		\p true if OK.
+	 *\~french
+	 *\brief		Extrait un vecteur à partir d'une ligne.
+	 *\param[in]	params	La ligne contenant le vecteur.
+	 *\param[out]	value		Reçoit le résultat.
+	 *\param[in]	count		Le nombre d'éléments.
+	 *\return		\p true si tout s'est bien passé.
+	 */
 	template< typename T >
-	inline bool parseValues( String & p_params, size_t p_count, T * p_value )
+	inline bool parseValues( String & params, size_t count, T * value )
 	{
 		bool result = false;
 
@@ -39,7 +40,7 @@ namespace castor
 		{
 			String regexString = RegexFormat< T >::Value;
 
-			for ( size_t i = 1; i < p_count; ++i )
+			for ( size_t i = 1; i < count; ++i )
 			{
 				regexString += String( details::VALUE_SEPARATOR ) + RegexFormat< T >::Value;
 			}
@@ -47,131 +48,168 @@ namespace castor
 			regexString += details::IGNORED_END;
 
 			const Regex regex{ regexString };
-			auto begin = std::begin( p_params );
-			auto end = std::end( p_params );
+			auto begin = std::begin( params );
+			auto end = std::end( params );
 			const SRegexIterator it( begin, end, regex );
 			const SRegexIterator endit;
-			result = it != endit && it->size() >= p_count;
+			result = it != endit && it->size() >= count;
 
 			if ( result )
 			{
-				for ( size_t i = 1; i <= p_count; ++i )
+				for ( size_t i = 1; i <= count; ++i )
 				{
 					std::basic_istringstream< xchar > stream( ( *it )[i] );
-					stream >> p_value[i - 1];
+					stream >> value[i - 1];
 				}
 
-				if ( it->size() > p_count )
+				if ( it->size() > count )
 				{
-					String params;
+					String strParams;
 
-					for ( size_t i = p_count + 1; i < it->size(); ++i )
+					for ( size_t i = count + 1; i < it->size(); ++i )
 					{
 						if ( ( *it )[i].matched )
 						{
-							params += ( *it )[i];
+							strParams += ( *it )[i];
 						}
 					}
 
-					p_params = params;
+					params = strParams;
 				}
 			}
 			else
 			{
-				Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+				Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
 			}
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+			Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 		}
 
 		return result;
 	}
 	/**
-		*\~english
-		*\brief		Parses a vector from a line.
-		*\param[in]	p_params	The line containing the vector.
-		*\param[out]	p_value		Receives the result.
-		*\return		\p true if OK.
-		*\~french
-		*\brief		Extrait un vecteur à partir d'une ligne.
-		*\param[in]	p_params	La ligne contenant le vecteur.
-		*\param[out]	p_value		Reçoit le résultat.
-		*\return		\p true si tout s'est bien passé.
-		*/
-	template< typename T, uint32_t Count >
-	inline bool parseValues( String & p_params, Point< T, Count > & p_value )
+	 *\~english
+	 *\brief		Parses a vector from a line.
+	 *\param[in]	params	The line containing the vector.
+	 *\param[out]	value		Receives the result.
+	 *\param[in]	count		The elements count.
+	 *\return		\p true if OK.
+	 *\~french
+	 *\brief		Extrait un vecteur à partir d'une ligne.
+	 *\param[in]	params	La ligne contenant le vecteur.
+	 *\param[out]	value		Reçoit le résultat.
+	 *\param[in]	count		Le nombre d'éléments.
+	 *\return		\p true si tout s'est bien passé.
+	 */
+	template< typename T >
+	inline bool parseValues( String & params
+		, size_t count
+		, T * values
+		, Range< T > const & range )
 	{
-		return parseValues( p_params, Count, p_value.ptr() );
+		bool result = parseValues( params, count, values );
+
+		if ( result )
+		{
+			for ( auto & value : makeArrayView( values, values + count ) )
+			{
+				if ( value < range.min()
+					|| value > range.max() )
+				{
+					Logger::logWarning( StringStream{} << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.min() << cuT( ", " ) << range.max() << cuT( "]" ) );
+					value = range.clamp( value );
+				}
+			}
+		}
+
+		return result;
 	}
 	/**
-		*\~english
-		*\brief		Parses a vector from a line.
-		*\param[in]	p_params	The line containing the vector.
-		*\param[out]	p_value		Receives the result.
-		*\return		\p true if OK.
-		*\~french
-		*\brief		Extrait un vecteur à partir d'une ligne.
-		*\param[in]	p_params	La ligne contenant le vecteur.
-		*\param[out]	p_value		Reçoit le résultat.
-		*\return		\p true si tout s'est bien passé.
-		*/
+	 *\~english
+	 *\brief		Parses a vector from a line.
+	 *\param[in]	params	The line containing the vector.
+	 *\param[out]	value		Receives the result.
+	 *\return		\p true if OK.
+	 *\~french
+	 *\brief		Extrait un vecteur à partir d'une ligne.
+	 *\param[in]	params	La ligne contenant le vecteur.
+	 *\param[out]	value		Reçoit le résultat.
+	 *\return		\p true si tout s'est bien passé.
+	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & p_params, Coords< T, Count > & p_value )
+	inline bool parseValues( String & params, Point< T, Count > & value )
 	{
-		return parseValues( p_params, Count, p_value.ptr() );
+		return parseValues( params, Count, value.ptr() );
 	}
 	/**
-		*\~english
-		*\brief		Parses a vector from a line.
-		*\param[in]	p_params	The line containing the vector.
-		*\param[out]	p_value		Receives the result.
-		*\return		\p true if OK.
-		*\~french
-		*\brief		Extrait un vecteur à partir d'une ligne.
-		*\param[in]	p_params	La ligne contenant le vecteur.
-		*\param[out]	p_value		Reçoit le résultat.
-		*\return		\p true si tout s'est bien passé.
-		*/
+	 *\~english
+	 *\brief		Parses a vector from a line.
+	 *\param[in]	params	The line containing the vector.
+	 *\param[out]	value		Receives the result.
+	 *\return		\p true if OK.
+	 *\~french
+	 *\brief		Extrait un vecteur à partir d'une ligne.
+	 *\param[in]	params	La ligne contenant le vecteur.
+	 *\param[out]	value		Reçoit le résultat.
+	 *\return		\p true si tout s'est bien passé.
+	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & p_params, Size & p_value )
+	inline bool parseValues( String & params, Coords< T, Count > & value )
 	{
-		return parseValues( p_params, Count, p_value.ptr() );
+		return parseValues( params, Count, value.ptr() );
 	}
 	/**
-		*\~english
-		*\brief		Parses a vector from a line.
-		*\param[in]	p_params	The line containing the vector.
-		*\param[out]	p_value		Receives the result.
-		*\return		\p true if OK.
-		*\~french
-		*\brief		Extrait un vecteur à partir d'une ligne.
-		*\param[in]	p_params	La ligne contenant le vecteur.
-		*\param[out]	p_value		Reçoit le résultat.
-		*\return		\p true si tout s'est bien passé.
-		*/
+	 *\~english
+	 *\brief		Parses a vector from a line.
+	 *\param[in]	params	The line containing the vector.
+	 *\param[out]	value		Receives the result.
+	 *\return		\p true if OK.
+	 *\~french
+	 *\brief		Extrait un vecteur à partir d'une ligne.
+	 *\param[in]	params	La ligne contenant le vecteur.
+	 *\param[out]	value		Reçoit le résultat.
+	 *\return		\p true si tout s'est bien passé.
+	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & p_params, Position & p_value )
+	inline bool parseValues( String & params, Size & value )
 	{
-		return parseValues( p_params, Count, p_value.ptr() );
+		return parseValues( params, Count, value.ptr() );
 	}
 	/**
-		*\~english
-		*\brief		Parses a vector from a line.
-		*\param[in]	p_params	The line containing the vector.
-		*\param[out]	p_value		Receives the result.
-		*\return		\p true if OK.
-		*\~french
-		*\brief		Extrait un vecteur à partir d'une ligne.
-		*\param[in]	p_params	La ligne contenant le vecteur.
-		*\param[out]	p_value		Reçoit le résultat.
-		*\return		\p true si tout s'est bien passé.
-		*/
+	 *\~english
+	 *\brief		Parses a vector from a line.
+	 *\param[in]	params	The line containing the vector.
+	 *\param[out]	value		Receives the result.
+	 *\return		\p true if OK.
+	 *\~french
+	 *\brief		Extrait un vecteur à partir d'une ligne.
+	 *\param[in]	params	La ligne contenant le vecteur.
+	 *\param[out]	value		Reçoit le résultat.
+	 *\return		\p true si tout s'est bien passé.
+	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & p_params, Rectangle & p_value )
+	inline bool parseValues( String & params, Position & value )
 	{
-		return parseValues( p_params, Count, p_value.ptr() );
+		return parseValues( params, Count, value.ptr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Parses a vector from a line.
+	 *\param[in]	params	The line containing the vector.
+	 *\param[out]	value		Receives the result.
+	 *\return		\p true if OK.
+	 *\~french
+	 *\brief		Extrait un vecteur à partir d'une ligne.
+	 *\param[in]	params	La ligne contenant le vecteur.
+	 *\param[out]	value		Reçoit le résultat.
+	 *\return		\p true si tout s'est bien passé.
+	 */
+	template< typename T, uint32_t Count >
+	inline bool parseValues( String & params, Rectangle & value )
+	{
+		return parseValues( params, Count, value.ptr() );
 	}
 
 	//*************************************************************************************************
@@ -192,16 +230,18 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params
+			, ValueType & value
+			, Range< ValueType > const & range )
 		{
-			return parseValues( p_params, 1, &p_value );
+			return parseValues( params, 1, &value, range );
 		}
 	};
 	/*!
@@ -220,16 +260,16 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
-			return parseValues( p_params, p_value );
+			return parseValues( params, value );
 		}
 	};
 	/*!
@@ -248,29 +288,29 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
-			p_value = p_params;
-			p_params.clear();
+			value = params;
+			params.clear();
 
-			if ( !p_value.empty() )
+			if ( !value.empty() )
 			{
-				if ( p_value[0] == cuT( '\"' ) )
+				if ( value[0] == cuT( '\"' ) )
 				{
-					p_value = p_value.substr( 1 );
+					value = value.substr( 1 );
 
-					if ( !p_value.empty() )
+					if ( !value.empty() )
 					{
-						if ( p_value[p_value.size() - 1] == cuT( '\"' ) )
+						if ( value[value.size() - 1] == cuT( '\"' ) )
 						{
-							p_value = p_value.substr( 0, p_value.size() - 1 );
+							value = value.substr( 0, value.size() - 1 );
 						}
 					}
 				}
@@ -295,43 +335,43 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
-			p_value = Path{ p_params };
-			p_params.clear();
+			value = Path{ params };
+			params.clear();
 
-			if ( !p_value.empty() )
+			if ( !value.empty() )
 			{
-				if ( p_value[0] == cuT( '\"' ) )
+				if ( value[0] == cuT( '\"' ) )
 				{
-					p_value = Path{ p_value.substr( 1 ) };
+					value = Path{ value.substr( 1 ) };
 
-					if ( !p_value.empty() )
+					if ( !value.empty() )
 					{
-						std::size_t index = p_value.find( cuT( '\"' ) );
+						std::size_t index = value.find( cuT( '\"' ) );
 
 						if ( index != String::npos )
 						{
-							if ( index != p_value.size() - 1 )
+							if ( index != value.size() - 1 )
 							{
-								p_params = p_value.substr( index + 1 );
-								string::trim( p_params );
+								params = value.substr( index + 1 );
+								string::trim( params );
 							}
 
-							p_value = Path{ p_value.substr( 0, index ) };
+							value = Path{ value.substr( 0, index ) };
 						}
 					}
 				}
 			}
 
-			return !p_value.empty();
+			return !value.empty();
 		}
 	};
 	/*!
@@ -350,27 +390,27 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
-			p_params.clear();
+			StringArray values = string::split( params, cuT( " \t,;" ), 1, false );
+			params.clear();
 
 			if ( !values.empty() )
 			{
-				p_value = string::toLowerCase( values[0] ) == cuT( "true" );
+				value = string::toLowerCase( values[0] ) == cuT( "true" );
 				result = values[0] == cuT( "true" ) || values[0] == cuT( "false" );
 
 				if ( values.size() > 1 )
 				{
-					p_params = values[1];
+					params = values[1];
 				}
 			}
 
@@ -393,27 +433,27 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
-			p_params.clear();
+			StringArray values = string::split( params, cuT( " \t,;" ), 1, false );
+			params.clear();
 
 			if ( values.size() )
 			{
-				p_value = PF::getFormatByName( values[0] );
-				result = p_value != PixelFormat::eCount;
+				value = PF::getFormatByName( values[0] );
+				result = value != PixelFormat::eCount;
 
 				if ( values.size() > 1 )
 				{
-					p_params = values[1];
+					params = values[1];
 				}
 			}
 
@@ -436,24 +476,24 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
 			bool result = false;
 
-			if ( p_params == cuT( "screen_size" ) )
+			if ( params == cuT( "screen_size" ) )
 			{
-				result = castor::System::getScreenSize( 0, p_value );
+				result = castor::System::getScreenSize( 0, value );
 			}
 			else
 			{
-				result = parseValues( p_params, p_value );
+				result = parseValues( params, value );
 			}
 
 			return result;
@@ -475,44 +515,44 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( p_params, cuT( " \t,;" ), 5, false );
+			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
 			if ( values.size() >= size_t( Component::eCount ) )
 			{
-				Point4f value;
-				result = parseValues( p_params, value );
+				Point4f colour;
+				result = parseValues( params, colour );
 
 				if ( result )
 				{
 					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 					{
-						p_value[Component( i )] = value[i];
+						value[Component( i )] = colour[i];
 					}
 				}
 			}
 			else if ( values.size() == 3 )
 			{
-				Point3f value;
-				result = parseValues( p_params, value );
+				Point3f colour;
+				result = parseValues( params, colour );
 
 				if ( result )
 				{
 					for ( uint8_t i = 0; i < 3; i++ )
 					{
-						p_value[Component( i )] = value[i];
+						value[Component( i )] = colour[i];
 					}
 
-					p_value[Component::eAlpha] = 1.0;
+					value[Component::eAlpha] = 1.0;
 				}
 			}
 			else
@@ -523,17 +563,17 @@ namespace castor
 					regexString += details::IGNORED_END;
 
 					const Regex regex{ regexString };
-					auto begin = std::begin( p_params );
-					auto end = std::end( p_params );
+					auto begin = std::begin( params );
+					auto end = std::end( params );
 					const SRegexIterator it( begin, end, regex );
 					const SRegexIterator endit;
 					result = it != endit && it->size() >= 1;
 
 					if ( result )
 					{
-						uint32_t value{ 0u };
+						uint32_t colour{ 0u };
 
-						for ( size_t i = 0; i < it->size() && value == 0u; ++i )
+						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
 						{
 							auto match = ( *it )[i];
 
@@ -547,20 +587,20 @@ namespace castor
 								}
 
 								std::basic_istringstream< xchar > stream{ text };
-								stream >> std::hex >> value;
+								stream >> std::hex >> colour;
 							}
 						}
 
-						p_value = Colour::fromARGB( value );
+						value = Colour::fromARGB( colour );
 					}
 					else
 					{
-						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -585,44 +625,44 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
 		 *\~french
 		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & p_params, ValueType & p_value )
+		static inline bool parse( String & params, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( p_params, cuT( " \t,;" ), 5, false );
+			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
 			if ( values.size() >= size_t( Component::eCount ) )
 			{
-				Point4f value;
-				result = parseValues( p_params, value );
+				Point4f colour;
+				result = parseValues( params, colour );
 
 				if ( result )
 				{
 					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 					{
-						p_value[Component( i )] = value[i];
+						value[Component( i )] = colour[i];
 					}
 				}
 			}
 			else if ( values.size() == 3 )
 			{
-				Point3f value;
-				result = parseValues( p_params, value );
+				Point3f colour;
+				result = parseValues( params, colour );
 
 				if ( result )
 				{
 					for ( uint8_t i = 0; i < 3; i++ )
 					{
-						p_value[Component( i )] = value[i];
+						value[Component( i )] = colour[i];
 					}
 
-					p_value[Component::eAlpha] = 1.0;
+					value[Component::eAlpha] = 1.0;
 				}
 			}
 			else
@@ -633,17 +673,17 @@ namespace castor
 					regexString += details::IGNORED_END;
 
 					const Regex regex{ regexString };
-					auto begin = std::begin( p_params );
-					auto end = std::end( p_params );
+					auto begin = std::begin( params );
+					auto end = std::end( params );
 					const SRegexIterator it( begin, end, regex );
 					const SRegexIterator endit;
 					result = it != endit && it->size() >= 1;
 
 					if ( result )
 					{
-						uint32_t value{ 0u };
+						uint32_t colour{ 0u };
 
-						for ( size_t i = 0; i < it->size() && value == 0u; ++i )
+						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
 						{
 							auto match = ( *it )[i];
 
@@ -657,20 +697,20 @@ namespace castor
 								}
 
 								std::basic_istringstream< xchar > stream{ text };
-								stream >> std::hex >> value;
+								stream >> std::hex >> colour;
 							}
 						}
 
-						p_value = HdrColour::fromARGB( value );
+						value = HdrColour::fromARGB( colour );
 					}
 					else
 					{
-						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -707,18 +747,18 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eName > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eName >::parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eName >::parse( String & params )
 	{
 		Regex regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
-		auto begin = std::begin( p_params );
-		auto end = std::end( p_params );
+		auto begin = std::begin( params );
+		auto end = std::end( params );
 		SRegexIterator it( begin, end, regex );
 		SRegexIterator endit;
 
 		if ( it != endit && it->size() > 2 )
 		{
 			m_value = ( *it )[1];
-			p_params = ( *it )[2];
+			params = ( *it )[2];
 		}
 
 		return !m_value.empty();
@@ -752,11 +792,11 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eCheckedText >::parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eCheckedText >::parse( String & params )
 	{
 		bool result = false;
-		StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
-		p_params.clear();
+		StringArray values = string::split( params, cuT( " \t,;" ), 1, false );
+		params.clear();
 
 		if ( !values.empty() )
 		{
@@ -770,7 +810,7 @@ namespace castor
 
 			if ( values.size() > 1 )
 			{
-				p_params = values[1];
+				params = values[1];
 			}
 		}
 
@@ -805,12 +845,12 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( String & params )
 	{
 		bool result = false;
 		m_value = 0;
-		StringArray parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
-		p_params.clear();
+		StringArray parameters = string::split( params, cuT( " \t,;" ), 1, false );
+		params.clear();
 
 		if ( !parameters.empty() )
 		{
@@ -832,7 +872,7 @@ namespace castor
 
 			if ( parameters.size() > 1 )
 			{
-				p_params = parameters[1];
+				params = parameters[1];
 			}
 		}
 
@@ -867,12 +907,12 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( String & p_params )
+	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( String & params )
 	{
 		bool result = false;
 		m_value = 0;
-		StringArray parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
-		p_params.clear();
+		StringArray parameters = string::split( params, cuT( " \t,;" ), 1, false );
+		params.clear();
 
 		if ( !parameters.empty() )
 		{
@@ -894,7 +934,7 @@ namespace castor
 
 			if ( parameters.size() > 1 )
 			{
-				p_params = parameters[1];
+				params = parameters[1];
 			}
 		}
 
@@ -904,21 +944,21 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename T >
-	T const & ParserParameterBase::get( T & p_value )
+	T const & ParserParameterBase::get( T & value )
 	{
 		static const ParameterType given = ParserValueTyper< T >::Type;
 		static const ParameterType expected = getBaseType();
 
 		if ( given == expected )
 		{
-			p_value = static_cast< ParserParameter< given >* >( this )->m_value;
+			value = static_cast< ParserParameter< given >* >( this )->m_value;
 		}
 		else
 		{
 			throw ParserParameterTypeException< given >( expected );
 		}
 
-		return p_value;
+		return value;
 	}
 
 	//*************************************************************************************************

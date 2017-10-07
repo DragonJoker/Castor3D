@@ -1,4 +1,4 @@
-﻿#include "OverlayRenderer.hpp"
+#include "OverlayRenderer.hpp"
 
 #include "Engine.hpp"
 
@@ -515,17 +515,17 @@ namespace castor3d
 
 		if ( textureVariable )
 		{
-			textureVariable->setValue( Pass::LightBufferIndex );
+			textureVariable->setValue( LightBufferIndex );
 		}
 
 		m_overlayUbo.update( pass.getId() );
 		node.m_pipeline.apply();
 		pass.bindTextures();
-		texture.bind( Pass::LightBufferIndex );
-		sampler.bind( Pass::LightBufferIndex );
+		texture.bind( LightBufferIndex );
+		sampler.bind( LightBufferIndex );
 		geometryBuffers.draw( count, 0u );
-		sampler.unbind( Pass::LightBufferIndex );
-		texture.unbind( Pass::LightBufferIndex );
+		sampler.unbind( LightBufferIndex );
+		texture.unbind( LightBufferIndex );
 		pass.unbindTextures();
 	}
 
@@ -621,7 +621,7 @@ namespace castor3d
 					vtx_texture = texture;
 				}
 
-				gl_Position = c3d_mtxProjection * vec4( c3d_position.x() + position.x(), c3d_position.y() + position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( c3d_position.x() + position.x(), c3d_position.y() + position.y(), 0.0, 1.0 );
 			} );
 
 			strVs = writer.finalise();
@@ -653,19 +653,30 @@ namespace castor3d
 			UBO_OVERLAY( writer );
 
 			// Shader inputs
-			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" ), checkFlag( textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapText = writer.declUniform< Sampler2D >( ShaderProgram::MapText, checkFlag( textureFlags, TextureChannel::eText ) );
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapOpacity = writer.declUniform< Sampler2D >( ShaderProgram::MapOpacity, checkFlag( textureFlags, TextureChannel::eOpacity ) );
+			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" )
+				, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
+				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapText = writer.declSampler< Sampler2D >( ShaderProgram::MapText
+				, LightBufferIndex + 0u
+				, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
+				, LightBufferIndex + 1u
+				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapOpacity = writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+				, LightBufferIndex + 2u
+				, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto diffuse = writer.declLocale( cuT( "diffuse" ), materials->getDiffuse( c3d_materialIndex ) );
-				auto alpha = writer.declLocale( cuT( "alpha" ), materials->getOpacity( c3d_materialIndex ) );
+				auto material = materials->getBaseMaterial( c3d_materialIndex );
+				auto diffuse = writer.declLocale( cuT( "diffuse" )
+					, material->m_diffuse() );
+				auto alpha = writer.declLocale( cuT( "alpha" )
+					, material->m_opacity() );
 
 				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
@@ -690,10 +701,10 @@ namespace castor3d
 
 		if ( checkFlag( textureFlags, TextureChannel::eText ) )
 		{
-			program->createUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->setValue( Pass::LightBufferIndex );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->setValue( LightBufferIndex );
 		}
 
-		auto index = Pass::MinTextureIndex;
+		auto index = MinTextureIndex;
 
 		if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 		{

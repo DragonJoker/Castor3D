@@ -1,4 +1,4 @@
-#include "ShadowMap.hpp"
+﻿#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -88,51 +88,60 @@ namespace castor3d
 		m_geometryBuffers.clear();
 	}
 
-	void ShadowMap::updateFlags( TextureChannels & textureFlags
+	void ShadowMap::updateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( programFlags, ProgramFlag::eAlphaBlending );
+		remFlag( passFlags, PassFlag::eAlphaBlending );
 		remFlag( textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
 			& ~uint16_t( TextureChannel::eOpacity ) ) );
-		doUpdateFlags( textureFlags
+		doUpdateFlags( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMap::getVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		return doGetVertexShaderSource( textureFlags
+		return doGetVertexShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, invertNormals );
 	}
 
-	glsl::Shader ShadowMap::getGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return doGetGeometryShaderSource( textureFlags
+		return doGetGeometryShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMap::getPixelShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::getPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ComparisonFunc alphaFunc )const
 	{
-		return doGetPixelShaderSource( textureFlags
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 	}
 
-	glsl::Shader ShadowMap::doGetVertexShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
@@ -169,7 +178,7 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_position4 = writer.declOutput< Vec3 >( cuT( "vtx_position4" ) );
+		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
@@ -214,136 +223,52 @@ namespace castor3d
 			v4Vertex = mtxModel * v4Vertex;
 			vtx_position = v4Vertex.xyz();
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * c3d_mtxView * v4Vertex;
+			v4Vertex = c3d_curView * v4Vertex;
+			vtx_viewPosition = v4Vertex.xyz();
+			gl_Position = c3d_projection * v4Vertex;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
 		return writer.finalise();
 	}
 
-	glsl::Shader ShadowMap::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader ShadowMap::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
 		return glsl::Shader{};
 	}
 
-	std::unique_ptr< shader::Materials > ShadowMap::doCreateMaterials( glsl::GlslWriter & writer
-		, ProgramFlags const & programFlags )const
-	{
-		std::unique_ptr< shader::Materials > result;
-
-		if ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness ) )
-		{
-			result = std::make_unique< shader::PbrMRMaterials >( writer );
-		}
-		else if ( checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
-		{
-			result = std::make_unique< shader::PbrSGMaterials >( writer );
-		}
-		else
-		{
-			result = std::make_unique< shader::LegacyMaterials >( writer );
-		}
-
-		return result;
-	}
-
 	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
 		, TextureChannels const & textureFlags
 		, ComparisonFunc alphaFunc
-		, glsl::Int const & material
+		, glsl::Int const & materialIndex
 		, shader::Materials const & materials )const
 	{
+		using namespace glsl;
+		auto material = materials.getBaseMaterial( materialIndex );
+		auto alpha = writer.declLocale( cuT( "alpha" )
+			, material->m_opacity() );
+		auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+			, material->m_alphaRef() );
+
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
 			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
 			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
-			doApplyAlphaFunc( writer
+			alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+			shader::applyAlphaFunc( writer
 				, alphaFunc
 				, alpha
-				, material
-				, materials );
+				, alphaRef );
 		}
 		else if ( alphaFunc != ComparisonFunc::eAlways )
 		{
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, materials.getOpacity( material ) );
-			doApplyAlphaFunc( writer
+			shader::applyAlphaFunc( writer
 				, alphaFunc
 				, alpha
-				, material
-				, materials );
-		}
-	}
-
-	void ShadowMap::doApplyAlphaFunc( glsl::GlslWriter & writer
-		, ComparisonFunc alphaFunc
-		, glsl::Float const & alpha
-		, glsl::Int const & material
-		, shader::Materials const & materials )const
-	{
-		using namespace glsl;
-
-		switch ( alphaFunc )
-		{
-		case ComparisonFunc::eLess:
-			IF( writer, alpha >= materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eLEqual:
-			IF( writer, alpha > materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eEqual:
-			IF( writer, alpha != materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eNEqual:
-			IF( writer, alpha == materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGEqual:
-			IF( writer, alpha < materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		case ComparisonFunc::eGreater:
-			IF( writer, alpha <= materials.getAlphaRef( material ) )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
-
-		default:
-			IF( writer, alpha <= 0.2 )
-			{
-				writer.discard();
-			}
-			FI;
-			break;
+				, alphaRef );
 		}
 	}
 }

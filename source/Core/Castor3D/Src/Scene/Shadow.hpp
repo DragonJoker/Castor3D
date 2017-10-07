@@ -79,7 +79,7 @@ namespace castor3d
 	private:
 		//!\~english	The shadows filter type type.
 		//!\~french		Le type de filtrage des ombres.
-		ShadowType m_filterType{ ShadowType::eRaw };
+		ShadowType m_filterType{ ShadowType::ePCF };
 	};
 }
 

@@ -19,7 +19,7 @@ namespace castor3d
 	{
 		Logger::logInfo( m_tabs + cuT( "Writing Material " ) + p_material.getName() );
 		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.writeText( m_tabs + cuT( "{" ) ) > 0;
 		castor::TextWriter< Material >::checkError( result, "Material name" );
 
 		if ( result )

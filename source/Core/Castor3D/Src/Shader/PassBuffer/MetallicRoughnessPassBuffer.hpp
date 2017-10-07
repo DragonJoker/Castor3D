@@ -80,6 +80,7 @@ namespace castor3d
 			castor::ArrayView< RgbaColour > metDiv;
 			castor::ArrayView< RgbaColour > common;
 			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
 		};
 
 #else
@@ -90,15 +91,15 @@ namespace castor3d
 			RgbaColour metDiv;
 			RgbaColour common;
 			RgbaColour reflRefr;
+			ExtendedData extended;
 		};
 		using PassesData = castor::ArrayView< PassData >;
 
 #endif
 
 	private:
-		static constexpr uint32_t DataSize = ( sizeof( RgbColour ) * 1 )
-			+ ( sizeof( float ) * 8 )
-			+ ( sizeof( int ) * 2 );
+		static constexpr uint32_t DataSize = ( sizeof( RgbaColour ) * 4 )
+			+ ( PassBuffer::ExtendedDataSize );
 
 	private:
 		//!\~english	The metallic/roughness PBR passes data.

@@ -260,4 +260,13 @@ namespace castor3d
 			m_render = 0u;
 		}
 	}
+
+	void EnvironmentMap::debugDisplay( castor::Size const & size, uint32_t index )
+	{
+		Size displaySize{ 128u, 128u };
+		Position position{ int32_t( displaySize.getWidth() * 4 * index ), int32_t( displaySize.getHeight() * 4 ) };
+		getEngine()->getRenderSystem()->getCurrentContext()->renderTextureCube( position
+			, displaySize
+			, *m_environmentMap.getTexture() );
+	}
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -183,6 +183,8 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserPassColourBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( parserPassAlphaFunc )
 	DECLARE_ATTRIBUTE_PARSER( parserPassRefractionRatio )
+	DECLARE_ATTRIBUTE_PARSER( parserPassSubsurfaceScattering )
+	DECLARE_ATTRIBUTE_PARSER( parserPassParallaxOcclusion )
 	DECLARE_ATTRIBUTE_PARSER( parserPassEnd )
 
 	// Texture Unit Parsers
@@ -309,6 +311,13 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoBias )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnd )
+
+	//SubsurfaceScattering parsers
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringDistanceBasedTransmittance )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransittanceCoefficients )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringStrength )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringGaussianWidth )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringEnd )
 }
 
 #endif

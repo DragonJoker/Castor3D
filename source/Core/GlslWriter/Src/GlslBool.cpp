@@ -1,20 +1,34 @@
-﻿#include "GlslBool.hpp"
+#include "GlslBool.hpp"
 
 using namespace castor;
 
 namespace glsl
 {
-	Boolean operator==( Type const & p_a, Type const & p_b )
+	Boolean operator==( Type const & lhs, Type const & rhs )
 	{
-		Boolean result( p_a.m_writer );
-		result.m_value << String( p_a ) << cuT( " == " ) << String( p_b );
+		Boolean result( lhs.m_writer );
+		result.m_value << String( lhs ) << cuT( " == " ) << String( rhs );
 		return result;
 	}
 
-	Boolean operator!=( Type const & p_a, Type const & p_b )
+	Boolean operator!=( Type const & lhs, Type const & rhs )
 	{
-		Boolean result( p_a.m_writer );
-		result.m_value << String( p_a ) << cuT( " != " ) << String( p_b );
+		Boolean result( lhs.m_writer );
+		result.m_value << String( lhs ) << cuT( " != " ) << String( rhs );
+		return result;
+	}
+
+	Boolean operator||( Boolean const & lhs, Boolean const & rhs )
+	{
+		Boolean result( lhs.m_writer );
+		result.m_value << String( lhs ) << cuT( " || " ) << String( rhs );
+		return result;
+	}
+
+	Boolean operator&&( Boolean const & lhs, Boolean const & rhs )
+	{
+		Boolean result( lhs.m_writer );
+		result.m_value << String( lhs ) << cuT( " && " ) << String( rhs );
 		return result;
 	}
 }

@@ -135,7 +135,7 @@ namespace castor3d
 	template< Topology Topo >
 	struct TopologyNamer
 	{
-		static castor::String const Name;
+		C3D_API static castor::String const Name;
 	};
 	/**
 	 *\~english
@@ -518,6 +518,7 @@ namespace castor3d
 	{
 		BlendMode m_colourBlendMode;
 		BlendMode m_alphaBlendMode;
+		PassFlags m_passFlags;
 		TextureChannels m_textureFlags;
 		ProgramFlags m_programFlags;
 		SceneFlags m_sceneFlags;
@@ -683,6 +684,8 @@ namespace castor3d
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
+	using ShadowMapRefArray = std::vector< std::reference_wrapper< ShadowMap > >;
+	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 
 	//@}
 }

@@ -67,7 +67,7 @@ namespace fxaa
 					auto invTargetSize = writer.declLocale( cuT( "invTargetSize" )
 						, vec2( 1.0 / c3d_renderSize.x(), 1.0 / c3d_renderSize.y() ) );
 					vtx_texture = position;
-					gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - writer.paren( invTargetSize * writer.paren( 0.5 + c3d_subpixShift ) );
 				} );
@@ -80,14 +80,14 @@ namespace fxaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( castor3d::ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto vtx_posPos = writer.declInput< Vec4 >( PosPos );
 
 			UBO_FXAA( writer );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 #define FXAA_REDUCE_MIN	( 1.0 / 128.0 )
 
@@ -150,7 +150,7 @@ namespace fxaa
 					auto lumaB = writer.declLocale( cuT( "lumaB" )
 						, dot( rgbB, luma ) );
 
-					plx_v4FragColor = vec4( writer.ternary( Type{ cuT( "lumaB < lumaMin || lumaB > lumaMax" ) }, rgbA, rgbB ), 1.0_f );
+					pxl_fragColor = vec4( writer.ternary( Type{ cuT( "lumaB < lumaMin || lumaB > lumaMax" ) }, rgbA, rgbB ), 1.0_f );
 				} );
 
 			return writer.finalise();
@@ -230,8 +230,8 @@ namespace fxaa
 		auto program = cache.getNewProgram( false );
 		program->createObject( castor3d::ShaderType::eVertex );
 		program->createObject( castor3d::ShaderType::ePixel );
-		m_mapDiffuse = program->createUniform< castor3d::UniformType::eSampler >( castor3d::ShaderProgram::MapDiffuse
-			, castor3d::ShaderType::ePixel );
+		program->createUniform< castor3d::UniformType::eSampler >( castor3d::ShaderProgram::MapDiffuse
+			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex );
 		program->setSource( castor3d::ShaderType::eVertex, vertex );
 		program->setSource( castor3d::ShaderType::ePixel, fragment );
 		program->initialise();
@@ -257,7 +257,6 @@ namespace fxaa
 	{
 		m_matrixUbo.getUbo().cleanup();
 		m_fxaaUbo.getUbo().cleanup();
-		m_mapDiffuse.reset();
 		m_surface.cleanup();
 	}
 
@@ -275,7 +274,6 @@ namespace fxaa
 			m_surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
 			auto texture = std::static_pointer_cast< castor3d::TextureAttachment >( attach )->getTexture();
 			m_surface.m_fbo->clear( castor3d::BufferComponent::eColour );
-			m_mapDiffuse->setValue( 0 );
 			getRenderSystem()->getCurrentContext()->renderTexture( m_surface.m_size
 				, *texture
 				, *m_pipeline

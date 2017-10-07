@@ -119,11 +119,11 @@ namespace GlRender
 			break;
 
 		case GlTextureStorageType::e2DArray:
-			storage.getOpenGl().TexSubImage3D( storage.getGlType(), 0, 0, 0, p_image.getIndex(), size.getWidth(), size.getHeight(), p_image.getIndex() + 1, format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			storage.getOpenGl().TexSubImage3D( storage.getGlType(), 0, 0, 0, p_image.getIndex(), size.getWidth(), size.getHeight(), 1, format.Format, format.Type, p_image.getBuffer()->constPtr() );
 			break;
 
 		case GlTextureStorageType::e3D:
-			storage.getOpenGl().TexSubImage3D( storage.getGlType(), 0, 0, 0, p_image.getIndex(), size.getWidth(), size.getHeight(), p_image.getIndex() + 1, format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			storage.getOpenGl().TexSubImage3D( storage.getGlType(), 0, 0, 0, p_image.getIndex(), size.getWidth(), size.getHeight(), 1, format.Format, format.Type, p_image.getBuffer()->constPtr() );
 			break;
 
 		case GlTextureStorageType::eCubeMap:

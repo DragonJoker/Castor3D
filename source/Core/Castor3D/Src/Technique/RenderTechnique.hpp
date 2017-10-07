@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -153,12 +153,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[out]	info	Receives the render informations.
+		 *\param[in]	jitter		The jittering value.
+		 *\param[out]	velocity	Receives the velocity render.
+		 *\param[out]	info		Receives the render informations.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[out]	jitter		La valeur de jittering.
+		 *\param[out]	velocity	Reçoit le rendu des vélocités.
+		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void render( RenderInfo & info );
+		C3D_API void render( castor::Point2r const & jitter
+			, TextureUnit const & velocity
+			, RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
@@ -195,6 +201,17 @@ namespace castor3d
 		{
 			REQUIRE( m_frameBuffer.m_colourTexture );
 			return *m_frameBuffer.m_colourTexture;
+		}
+		/**
+		 *\~english
+		 *\return		The depth texture holding the render's result.
+		 *\~french
+		 *\return		La texture de profondeurs contenant le résultat du rendu.
+		 */
+		inline TextureLayout const & getDepth()const
+		{
+			REQUIRE( m_frameBuffer.m_colourTexture );
+			return *m_frameBuffer.m_depthBuffer;
 		}
 		/**
 		 *\~english
@@ -238,9 +255,13 @@ namespace castor3d
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doRenderShadowMaps();
 		void doRenderEnvironmentMaps();
-		void doRenderOpaque( RenderInfo & info );
+		void doRenderOpaque( castor::Point2r const & jitter
+			, TextureUnit const & velocity
+			, RenderInfo & info );
 		void doUpdateParticles( RenderInfo & info );
-		void doRenderTransparent( RenderInfo & info );
+		void doRenderTransparent( castor::Point2r const & jitter
+			, TextureUnit const & velocity
+			, RenderInfo & info );
 		void doApplyPostEffects();
 
 	private:

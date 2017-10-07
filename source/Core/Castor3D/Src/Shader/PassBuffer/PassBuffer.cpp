@@ -1,13 +1,9 @@
-﻿#include "PassBuffer.hpp"
+#include "PassBuffer.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Render/RenderNode/PassRenderNode.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -20,16 +16,9 @@ namespace castor3d
 	PassBuffer::PassBuffer( Engine & engine
 		, uint32_t count
 		, uint32_t size )
-		: m_buffer{ engine }
+		: m_buffer{ engine, count * size }
 		, m_passCount{ count }
 	{
-		m_buffer.resize( size * count );
-		m_buffer.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-	}
-
-	PassBuffer::~PassBuffer()
-	{
-		m_buffer.cleanup();
 	}
 
 	uint32_t PassBuffer::addPass( Pass & pass )
@@ -77,14 +66,13 @@ namespace castor3d
 				p_pass->accept( *this );
 			} );
 
-			m_buffer.upload();
-			m_buffer.bindTo( 0u );
+			m_buffer.update();
 		}
 	}
 
 	void PassBuffer::bind()const
 	{
-		m_buffer.bindTo( 0u );
+		m_buffer.bind( PassBufferIndex );
 	}
 
 	void PassBuffer::visit( LegacyPass const & pass )
@@ -100,5 +88,64 @@ namespace castor3d
 	void PassBuffer::visit( SpecularGlossinessPbrPass const & pass )
 	{
 		CASTOR_EXCEPTION( "This pass buffer can't hold specular/glossiness pass data" );
+	}
+
+	void PassBuffer::doVisitExtended( Pass const & pass
+		, ExtendedData & data )
+	{
+		auto index = pass.getId () - 1;
+		
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+		
+		if ( pass.hasSubsurfaceScattering() )
+		{
+			data.sssInfo[index].r = 1.0f;
+			doVisit( pass.getSubsurfaceScattering()
+				, index
+				, data );
+		}
+		else
+		{
+			data.sssInfo[index].r = 0.0f;
+		}
+
+#else
+		
+		if ( pass.hasSubsurfaceScattering() )
+		{
+			data.sssInfo.r = 1.0f;
+			doVisit( pass.getSubsurfaceScattering()
+				, index
+				, data );
+		}
+		else
+		{
+			data.sssInfo.r = 0.0f;
+		}
+
+#endif
+	}
+
+	void PassBuffer::doVisit( SubsurfaceScattering const & subsurfaceScattering
+		, uint32_t index
+		, ExtendedData & data )
+	{
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
+		data.transmittance[index].r = subsurfaceScattering.getTransmittanceCoefficients()[0];
+		data.transmittance[index].g = subsurfaceScattering.getTransmittanceCoefficients()[1];
+		data.transmittance[index].b = subsurfaceScattering.getTransmittanceCoefficients()[2];
+		data.transmittance[index].a = subsurfaceScattering.isDistanceBasedTransmittanceEnabled() ? 1.0f : 0.0f;
+
+#else
+
+		data.transmittance.r = subsurfaceScattering.getTransmittanceCoefficients()[0];
+		data.transmittance.g = subsurfaceScattering.getTransmittanceCoefficients()[1];
+		data.transmittance.b = subsurfaceScattering.getTransmittanceCoefficients()[2];
+		data.transmittance.a = subsurfaceScattering.isDistanceBasedTransmittanceEnabled() ? 1.0f : 0.0f;
+		data.sssInfo.g = subsurfaceScattering.getGaussianWidth();
+		data.sssInfo.b = subsurfaceScattering.getStrength();
+
+#endif
 	}
 }

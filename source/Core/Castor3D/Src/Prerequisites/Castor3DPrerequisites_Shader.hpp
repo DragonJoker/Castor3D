@@ -25,6 +25,10 @@ SOFTWARE.
 
 namespace castor3d
 {
+	static uint32_t constexpr PassBufferIndex = 0u;
+	static uint32_t constexpr LightBufferIndex = 1u;
+	static uint32_t constexpr MinTextureIndex = 2u;
+
 	/**@name Shader */
 	//@{
 
@@ -152,42 +156,30 @@ namespace castor3d
 		//!\~english	Program using per-vertex animations.
 		//!\~french		Programme utilisant les animations par sommet.
 		eMorphing = 0x0008,
-		//!\~english	Program used in transparent pipeline.
-		//!\~french		Programme utilisé dans le pipeline des objets transparents.
-		eAlphaBlending = 0x0010,
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
-		ePicking = 0x0020,
+		ePicking = 0x0010,
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
-		eLighting = 0x0040,
+		eLighting = 0x0020,
 		//!\~english	Shader for spherical billboards.
 		//\~french		Shader pour les billboards sphériques.
-		eSpherical = 0x0080,
+		eSpherical = 0x0040,
 		//!\~english	Shader for fixed size billboards.
 		//\~french		Shader pour les billboards à dimensions fixes.
-		eFixedSize = 0x0100,
+		eFixedSize = 0x0080,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x0200,
+		eShadowMapDirectional = 0x0100,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x0400,
+		eShadowMapSpot = 0x0200,
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x0800,
+		eShadowMapPoint = 0x0400,
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x1000,
-		//!\~english	Shader using alpha test.
-		//\~french		Shader utilisant un test alpha.
-		eAlphaTest = 0x2000,
-		//!\~english	Shader for Metallic/Roughness PBR material (if not set, will use legacy material code).
-		//\~french		Shader pour un matériau PBR Metallic/Roughness (si non défini, utilisera le code de matériau traditionnel).
-		ePbrMetallicRoughness = 0x4000,
-		//!\~english	Shader for Specular/Glossiness PBR material (if not set, will use legacy material code).
-		//\~french		Shader pour un matériau PBR Specular/Glossiness (si non défini, utilisera le code de matériau traditionnel).
-		ePbrSpecularGlossiness = 0x8000,
+		eEnvironmentMapping = 0x0800,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
 	/**
@@ -375,7 +367,6 @@ namespace castor3d
 	class UniformBufferBinding;
 	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
-	class PassBuffer;
 	class BillboardUbo;
 	class MatrixUbo;
 	class ModelUbo;
@@ -383,6 +374,7 @@ namespace castor3d
 	class MorphingUbo;
 	class SceneUbo;
 	class SkinningUbo;
+	class PassBuffer;
 	template< UniformType Type >
 	class TUniform;
 	template< UniformType Type >
@@ -750,7 +742,7 @@ namespace castor3d
 			eSpecularGlossinessMaterial,
 		};
 
-		static constexpr uint32_t SpotShadowMapCount = 20u;
+		static constexpr uint32_t SpotShadowMapCount = 16u;
 		static constexpr uint32_t PointShadowMapCount = 6u;
 		static constexpr int BaseLightComponentsCount = 2;
 		static constexpr int MaxLightComponentsCount = 14;
@@ -779,7 +771,8 @@ namespace castor3d
 				, glsl::Float & p_shininess
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
-				, SceneFlags const & sceneFlags );
+				, SceneFlags const & sceneFlags
+				, PassFlags const & passFlags );
 
 			C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
 				, glsl::Vec3 & p_diffuse
@@ -791,11 +784,13 @@ namespace castor3d
 				, SceneFlags const & sceneFlags );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, ShadowType shadows );
+				, ShadowType shadows
+				, uint32_t & index );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
 				, LightType light
-				, ShadowType shadows );
+				, ShadowType shadows
+				, uint32_t & index );
 		}
 
 		namespace pbr
@@ -808,7 +803,8 @@ namespace castor3d
 					, glsl::Float & p_roughness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
-					, SceneFlags const & sceneFlags );
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags );
 
 				C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
 					, glsl::Vec3 & p_albedo
@@ -819,11 +815,13 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 			}
 
 			namespace sg
@@ -834,7 +832,8 @@ namespace castor3d
 					, glsl::Float & glossiness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
-					, SceneFlags const & sceneFlags );
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags );
 
 				C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
 					, glsl::Vec3 & diffuse
@@ -845,13 +844,45 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light
-					, ShadowType shadows );
+					, ShadowType shadows
+					, uint32_t & index );
 			}
 		}
+		/**
+		 *\~english
+		 *\brief		Creates the appropriate GLSL materials buffer.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		passFlags	The pass flags.
+		 *\~french
+		 *\brief		Crée le tampon de matériaux GLSL approprié.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		passFlags	Les indicateurs de passe.
+		 */
+		C3D_API std::unique_ptr< Materials > createMaterials( glsl::GlslWriter & writer
+			, PassFlags const & passFlags );
+		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	alpha		The alpha TypeEnum.
+		 *\param[in]	alphaRef	The alpha comparison reference TypeEnum.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	alpha		La valeur d'opacité.
+		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
+		 */
+		C3D_API void applyAlphaFunc( glsl::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, glsl::Float const & alpha
+			, glsl::Float const & alphaRef );
 
 		using ParallaxFunction = glsl::Function< glsl::Vec2, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Vec3 > >;
 		using ParallaxShadowFunction = glsl::Function< glsl::Float, glsl::InParam< glsl::Vec3 >, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Float > >;
@@ -871,51 +902,59 @@ namespace castor3d
 namespace glsl
 {
 	template<>
-	struct name_of< castor3d::shader::Light >
+	struct TypeTraits< castor3d::shader::Light >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::DirectionalLight >
+	struct TypeTraits< castor3d::shader::DirectionalLight >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eDirectionalLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eDirectionalLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::PointLight >
+	struct TypeTraits< castor3d::shader::PointLight >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::ePointLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::ePointLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::SpotLight >
+	struct TypeTraits< castor3d::shader::SpotLight >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eSpotLight );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eSpotLight );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::BaseMaterial >
+	struct TypeTraits< castor3d::shader::BaseMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eMaterial );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::LegacyMaterial >
+	struct TypeTraits< castor3d::shader::LegacyMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eLegacyMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eLegacyMaterial );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::MetallicRoughnessMaterial >
+	struct TypeTraits< castor3d::shader::MetallicRoughnessMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eMetallicRoughnessMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eMetallicRoughnessMaterial );
+		C3D_API static castor::String const Name;
 	};
 
 	template<>
-	struct name_of< castor3d::shader::SpecularGlossinessMaterial >
+	struct TypeTraits< castor3d::shader::SpecularGlossinessMaterial >
 	{
-		static TypeName const value = TypeName( castor3d::shader::TypeName::eSpecularGlossinessMaterial );
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eSpecularGlossinessMaterial );
+		C3D_API static castor::String const Name;
 	};
 }
 

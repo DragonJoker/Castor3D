@@ -64,5 +64,6 @@ namespace castor3d
 		doGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
 		doGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );
 		doGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eTransmittance, ShaderProgram::MapTransmittance, *this );
 	}
 }

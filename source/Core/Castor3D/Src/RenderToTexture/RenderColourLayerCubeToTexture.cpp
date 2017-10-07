@@ -1,4 +1,4 @@
-﻿#include "RenderColourLayerCubeToTexture.hpp"
+#include "RenderColourLayerCubeToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -185,11 +185,11 @@ namespace castor3d
 		m_faceUniform->update();
 		m_layerIndexUniform->update();
 
-		p_texture.bind( 0u );
-		m_sampler->bind( 0u );
+		p_texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		p_texture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		p_texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderColourLayerCubeToTexture::doCreateProgram()
@@ -213,7 +213,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();
 		}
@@ -224,13 +224,13 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declUniform< SamplerCubeArray >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCubeArray >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
 			auto c3d_iIndex = writer.declUniform< Int >( cuT( "c3d_iIndex" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -241,7 +241,7 @@ namespace castor3d
 						, writer.ternary( c3d_face.y() != 0.0_f
 							, vec3( mapCoord.x(), c3d_face.y(), mapCoord.y() )
 							, vec3( mapCoord, c3d_face.z() ) ) ) );
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec4( uv, writer.cast< Float >( c3d_iIndex ) ) ).xyz(), 1.0 );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec4( uv, writer.cast< Float >( c3d_iIndex ) ) ).xyz(), 1.0 );
 			} );
 			pxl = writer.finalise();
 		}
@@ -252,7 +252,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( 0u );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
 		m_layerIndexUniform = program->createUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
 		program->initialise();

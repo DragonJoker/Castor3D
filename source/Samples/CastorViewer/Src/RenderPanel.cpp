@@ -35,115 +35,129 @@ namespace CastorViewer
 
 	namespace
 	{
-		KeyboardKey ConvertKeyCode( int p_code )
+		KeyboardKey ConvertKeyCode( int code )
 		{
 			KeyboardKey result = KeyboardKey::eNone;
 
-			if ( p_code < 0x20 )
+			if ( code < 0x20 )
 			{
-				switch ( p_code )
+				switch ( code )
 				{
 				case WXK_BACK:
 				case WXK_TAB:
 				case WXK_RETURN:
 				case WXK_ESCAPE:
-					result = KeyboardKey( p_code );
+					result = KeyboardKey( code );
 					break;
 				}
 			}
-			else if ( p_code == 0x7F )
+			else if ( code == 0x7F )
 			{
 				result = KeyboardKey::eDelete;
 			}
-			else if ( p_code > 0xFF )
+			else if ( code > 0xFF )
 			{
-				result = KeyboardKey( p_code + int( KeyboardKey::eStart ) - WXK_START );
+				result = KeyboardKey( code + int( KeyboardKey::eStart ) - WXK_START );
 			}
 			else
 			{
 				// ASCII or extended ASCII character
-				result = KeyboardKey( p_code );
+				result = KeyboardKey( code );
 			}
 
 			return result;
 		}
 
-		TextureUnitSPtr doCloneUnit( PassSPtr p_clone, TextureUnit const & p_source )
+		TextureUnitSPtr doCloneUnit( PassSPtr clone, TextureUnit const & source )
 		{
-			TextureUnitSPtr clone = std::make_shared< TextureUnit >( *p_clone->getOwner()->getEngine() );
+			TextureUnitSPtr result = std::make_shared< TextureUnit >( *clone->getOwner()->getEngine() );
 
-			clone->setAutoMipmaps( p_source.getAutoMipmaps() );
-			clone->setChannel( p_source.getChannel() );
-			clone->setIndex( p_source.getIndex() );
-			clone->setRenderTarget( p_source.getRenderTarget() );
-			clone->setSampler( p_source.getSampler() );
-			clone->setTexture( p_source.getTexture() );
+			result->setAutoMipmaps( source.getAutoMipmaps() );
+			result->setChannel( source.getChannel() );
+			result->setIndex( source.getIndex() );
+			result->setRenderTarget( source.getRenderTarget() );
+			result->setSampler( source.getSampler() );
+			result->setTexture( source.getTexture() );
 
-			return clone;
+			return result;
 		}
 
-		void doClonePass( MaterialSPtr p_clone, Pass const & p_source )
+		SubsurfaceScatteringUPtr doCloneSSSS( PassSPtr clone, SubsurfaceScattering const & source )
 		{
-			PassSPtr clone = p_clone->createPass();
+			return std::make_unique< SubsurfaceScattering >( source );
+		}
 
-			switch ( p_clone->getType() )
+		PassSPtr doClonePass( MaterialSPtr clone, Pass const & source )
+		{
+			PassSPtr result = clone->createPass();
+
+			switch ( result->getType() )
 			{
 			case MaterialType::eLegacy:
 				{
-					auto & source = static_cast< LegacyPass const & >( p_source );
-					auto pass = std::static_pointer_cast< LegacyPass >( clone );
-					pass->setDiffuse( source.getDiffuse() );
-					pass->setSpecular( source.getSpecular() );
-					pass->setEmissive( source.getEmissive() );
-					pass->setShininess( source.getShininess() );
+					auto & legSource = static_cast< LegacyPass const & >( source );
+					auto pass = std::static_pointer_cast< LegacyPass >( result );
+					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setSpecular( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setEmissive( legSource.getEmissive() );
+					pass->setShininess( legSource.getShininess() );
 				}
 				break;
 
 			case MaterialType::ePbrMetallicRoughness:
 				{
-					auto & source = static_cast< MetallicRoughnessPbrPass const & >( p_source );
-					auto pass = std::static_pointer_cast< MetallicRoughnessPbrPass >( clone );
-					pass->setAlbedo( source.getAlbedo() );
-					pass->setRoughness( source.getRoughness() );
-					pass->setMetallic( source.getMetallic() );
+					auto & mrSource = static_cast< MetallicRoughnessPbrPass const & >( source );
+					auto pass = std::static_pointer_cast< MetallicRoughnessPbrPass >( result );
+					pass->setAlbedo( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setRoughness( mrSource.getRoughness() );
+					pass->setMetallic( mrSource.getMetallic() );
 				}
 				break;
 
 			case MaterialType::ePbrSpecularGlossiness:
 				{
-					auto & source = static_cast< SpecularGlossinessPbrPass const & >( p_source );
-					auto pass = std::static_pointer_cast< SpecularGlossinessPbrPass >( clone );
-					pass->setDiffuse( source.getDiffuse() );
-					pass->setGlossiness( source.getGlossiness() );
-					pass->setSpecular( source.getSpecular() );
+					auto & sgSource = static_cast< SpecularGlossinessPbrPass const & >( source );
+					auto pass = std::static_pointer_cast< SpecularGlossinessPbrPass >( result );
+					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setGlossiness( sgSource.getGlossiness() );
+					pass->setSpecular( sgSource.getSpecular() );
 				}
 				break;
 			}
 			
-			clone->setOpacity( p_source.getOpacity() );
-			clone->setRefractionRatio( p_source.getRefractionRatio() );
-			clone->setTwoSided( p_source.IsTwoSided() );
-			clone->setAlphaBlendMode( p_source.getAlphaBlendMode() );
-			clone->setColourBlendMode( p_source.getColourBlendMode() );
-			clone->setAlphaFunc( p_source.getAlphaFunc() );
-			clone->setAlphaValue( p_source.getAlphaValue() );
+			result->setOpacity( source.getOpacity() );
+			result->setRefractionRatio( source.getRefractionRatio() );
+			result->setTwoSided( source.IsTwoSided() );
+			result->setAlphaBlendMode( source.getAlphaBlendMode() );
+			result->setColourBlendMode( source.getColourBlendMode() );
+			result->setAlphaFunc( source.getAlphaFunc() );
+			result->setAlphaValue( source.getAlphaValue() );
 
-			for ( auto const & unit : p_source )
+			for ( auto const & unit : source )
 			{
-				clone->addTextureUnit( doCloneUnit( clone, *unit ) );
+				result->addTextureUnit( doCloneUnit( result, *unit ) );
 			}
+
+			if ( source.hasSubsurfaceScattering() )
+			{
+				result->setSubsurfaceScattering( doCloneSSSS( result, source.getSubsurfaceScattering() ) );
+			}
+
+			return result;
 		}
 
-		MaterialSPtr doCloneMaterial( Material const & p_source )
+		MaterialSPtr doCloneMaterial( Material const & source )
 		{
-			MaterialSPtr clone = std::make_shared< Material >( p_source.getName() + cuT( "_Clone" ), *p_source.getEngine(), p_source.getType() );
+			MaterialSPtr result = std::make_shared< Material >( source.getName() + cuT( "_Clone" )
+				, *source.getEngine()
+				, source.getType() );
 
-			for ( auto const & pass : p_source )
+			for ( auto const & pass : source )
 			{
-				doClonePass( clone, *pass );
+				doClonePass( result, *pass );
 			}
 
-			return clone;
+			return result;
 		}
 
 		void Restore( RenderPanel::SelectedSubmesh & p_selected
@@ -183,40 +197,21 @@ namespace CastorViewer
 			p_selected.m_geometry = p_geometry;
 		}
 
-		void Select( RenderPanel::SelectedSubmesh & p_selected
-			, GeometrySPtr p_geometry )
+		void Select( RenderPanel::SelectedSubmesh & selected
+			, GeometrySPtr geometry )
 		{
-			p_selected.m_selectedMaterial = doCloneMaterial( *p_selected.m_originalMaterial );
+			selected.m_selectedMaterial = doCloneMaterial( *selected.m_originalMaterial );
 
-			switch ( p_selected.m_selectedMaterial->getType() )
-			{
-			case MaterialType::eLegacy:
+			geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+				, [selected]()
 				{
-					auto pass = p_selected.m_selectedMaterial->getTypedPass< MaterialType::eLegacy >( 0u );
-					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
-					pass->setSpecular( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
-				}
-				break;
+					selected.m_selectedMaterial->initialise();
+				} ) );
 
-			case MaterialType::ePbrMetallicRoughness:
+			geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
+				, [selected, geometry]()
 				{
-					auto pass = p_selected.m_selectedMaterial->getTypedPass< MaterialType::ePbrMetallicRoughness >( 0u );
-					pass->setAlbedo( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
-				}
-				break;
-
-			case MaterialType::ePbrSpecularGlossiness:
-				{
-					auto pass = p_selected.m_selectedMaterial->getTypedPass< MaterialType::ePbrSpecularGlossiness >( 0u );
-					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
-				}
-				break;
-			}
-
-			p_geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
-				, [p_selected, p_geometry]()
-				{
-					p_geometry->setMaterial( *p_selected.m_submesh, p_selected.m_selectedMaterial );
+					geometry->setMaterial( *selected.m_submesh, selected.m_selectedMaterial );
 				} ) );
 		}
 	}
@@ -612,37 +607,61 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed.value() } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed.value() } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed.value() } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed.value() } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ m_camSpeed.value(), 0.0_r, 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ m_camSpeed.value(), 0.0_r, 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ -m_camSpeed.value(), 0.0_r, 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ -m_camSpeed.value(), 0.0_r, 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, m_camSpeed.value(), 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, m_camSpeed.value(), 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		m_currentState->addScalarVelocity( Point3r{ 0.0_r, -m_camSpeed.value(), 0.0_r } );
+		if ( m_currentState )
+		{
+			m_currentState->addScalarVelocity( Point3r{ 0.0_r, -m_camSpeed.value(), 0.0_r } );
+		}
+
 		p_event.Skip();
 	}
 
@@ -777,8 +796,11 @@ namespace CastorViewer
 				break;
 
 			case 'L':
-				m_currentNode = m_lightsNode;
-				m_currentState = &doAddNodeState( m_currentNode );
+				if ( m_lightsNode )
+				{
+					m_currentNode = m_lightsNode;
+					m_currentState = &doAddNodeState( m_currentNode );
+				}
 				break;
 			}
 		}
@@ -1112,7 +1134,10 @@ namespace CastorViewer
 				m_camSpeed /= CAM_SPEED_INC;
 			}
 
-			m_currentState->setMaxSpeed( m_camSpeed.value() );
+			if ( m_currentState )
+			{
+				m_currentState->setMaxSpeed( m_camSpeed.value() );
+			}
 		}
 
 		p_event.Skip();

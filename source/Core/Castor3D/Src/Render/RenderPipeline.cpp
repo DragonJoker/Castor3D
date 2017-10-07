@@ -60,8 +60,8 @@ namespace castor3d
 			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint, ShaderType::ePixel );
 			m_environmentMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 
-			if ( ( checkFlag( m_flags.m_programFlags, ProgramFlag::ePbrMetallicRoughness )
-					|| checkFlag( m_flags.m_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+			if ( ( checkFlag( m_flags.m_passFlags, PassFlag::ePbrMetallicRoughness )
+					|| checkFlag( m_flags.m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
 				&& checkFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
 			{
 				m_irradianceMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );

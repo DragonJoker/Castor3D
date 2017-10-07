@@ -1,4 +1,4 @@
-﻿#include "GrayScalePostEffect.hpp"
+#include "GrayScalePostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -55,7 +55,7 @@ namespace GrayScale
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
@@ -66,17 +66,17 @@ namespace GrayScale
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto colour = writer.declLocale( cuT( "colour" ), texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
 				auto average = writer.declLocale( cuT( "average" ), Float( 0.2126f ) * colour.r() + 0.7152f * colour.g() + 0.0722f * colour.b() );
-				plx_v4FragColor = vec4( average, average, average, 1.0 );
+				pxl_fragColor = vec4( average, average, average, 1.0 );
 			} );
 			return writer.finalise();
 		}
@@ -129,7 +129,7 @@ namespace GrayScale
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		m_mapDiffuse = program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, fragment );
 		program->initialise();
@@ -142,12 +142,14 @@ namespace GrayScale
 		m_pipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate ), std::move( rsstate ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		return m_surface.initialise( m_renderTarget, size, 0, m_sampler );
+		return m_surface.initialise( m_renderTarget
+			, size
+			, MinTextureIndex
+			, m_sampler );
 	}
 
 	void GrayScalePostEffect::cleanup()
 	{
-		m_mapDiffuse.reset();
 		m_surface.cleanup();
 	}
 
@@ -160,7 +162,6 @@ namespace GrayScale
 			m_surface.m_fbo->bind( FrameBufferTarget::eDraw );
 			auto texture = std::static_pointer_cast< TextureAttachment >( attach )->getTexture();
 			m_surface.m_fbo->clear( BufferComponent::eColour );
-			m_mapDiffuse->setValue( 0 );
 			getRenderSystem()->getCurrentContext()->renderTexture( 
 				m_surface.m_size
 				, *texture

@@ -260,7 +260,7 @@ namespace castor3d
 		 */
 		inline void removeFeature( GpuFeature p_feature )
 		{
-			m_features |= uint32_t( p_feature );
+			m_features &= ~uint32_t( p_feature );
 		}
 		/**
 		 *\~english
@@ -341,6 +341,16 @@ namespace castor3d
 		inline bool hasTextureBuffers()const
 		{
 			return hasFeature( GpuFeature::eTextureBuffers );
+		}
+		/**
+		 *\~english
+		 *\return		The SSBO support status.
+		 *\~french
+		 *\return		Le statut du support des SSBO.
+		 */
+		inline bool hasShaderStorageBuffers()const
+		{
+			return hasFeature( GpuFeature::eShaderStorageBuffers );
 		}
 		/**
 		 *\~english

@@ -337,7 +337,7 @@ namespace castor3d
 		return result;
 	}
 
-	void Engine::registerParsers( castor::String const & p_name, castor::FileParser::AttributeParsersBySection && p_parsers )
+	void Engine::registerParsers( castor::String const & p_name, castor::FileParser::AttributeParsersBySection const & p_parsers )
 	{
 		auto && it = m_additionalParsers.find( p_name );
 
@@ -346,7 +346,7 @@ namespace castor3d
 			CASTOR_EXCEPTION( "registerParsers - Duplicate entry for " + p_name );
 		}
 
-		m_additionalParsers.insert( std::make_pair( p_name, p_parsers ) );
+		m_additionalParsers.emplace( p_name, p_parsers );
 	}
 
 	void Engine::registerSections( castor::String const & p_name, castor::StrUIntMap const & p_sections )
@@ -358,7 +358,7 @@ namespace castor3d
 			CASTOR_EXCEPTION( "registerSections - Duplicate entry for " + p_name );
 		}
 
-		m_additionalSections.insert( std::make_pair( p_name, p_sections ) );
+		m_additionalSections.emplace( p_name, p_sections );
 	}
 
 	void Engine::unregisterParsers( castor::String const & p_name )

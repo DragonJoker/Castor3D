@@ -80,6 +80,7 @@ namespace castor3d
 			castor::ArrayView< RgbaColour > specGloss;
 			castor::ArrayView< RgbaColour > common;
 			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
 		};
 
 #else
@@ -90,15 +91,15 @@ namespace castor3d
 			RgbaColour specGloss;
 			RgbaColour common;
 			RgbaColour reflRefr;
+			ExtendedData extended;
 		};
 		using PassesData = castor::ArrayView< PassData >;
 
 #endif
 
 	private:
-		static constexpr uint32_t DataSize = ( sizeof( RgbColour ) * 2 )
-			+ ( sizeof( float ) * 7 )
-			+ ( sizeof( int ) * 2 );
+		static constexpr uint32_t DataSize = ( sizeof( RgbaColour ) * 4 )
+			+ ( PassBuffer::ExtendedDataSize );
 
 	private:
 		//!\~english	The specular/glossiness PBR passes data.

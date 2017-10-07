@@ -26,8 +26,7 @@ SOFTWARE.
 #include "Technique/Opaque/CombinePass.hpp"
 #include "Technique/Opaque/LightingPass.hpp"
 #include "Technique/Opaque/ReflectionPass.hpp"
-#include "Technique/Transparent/TransparentPass.hpp"
-#include "Technique/Transparent/FinalCombinePass.hpp"
+#include "Technique/Opaque/SubsurfaceScatteringPass.hpp"
 
 namespace castor3d
 {
@@ -74,7 +73,9 @@ namespace castor3d
 		void render( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
-			, ShadowMapLightTypeArray & shadowMaps );
+			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter
+			, TextureUnit const & velocity );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
@@ -129,6 +130,9 @@ namespace castor3d
 		//!\~english	The reflection pass.
 		//!\~french		La passe de réflexion.
 		std::unique_ptr< ReflectionPass > m_reflection;
+		//!\~english	The reflection pass.
+		//!\~french		La passe de réflexion.
+		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
 		//!\~english	The various textures for deferred shading.
 		//!\~french		Les diverses textures pour le deferred shading.
 		GeometryBufferTextures m_geometryPassResult;

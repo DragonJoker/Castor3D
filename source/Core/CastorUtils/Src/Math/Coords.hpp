@@ -568,80 +568,69 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have same dimensions and same values
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator==( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Difference operator
-	 *\param[in]	p_ptA, p_ptB	The points to compare
+	 *\param[in]	lhs, rhs	The points to compare
 	 *\return		\p true if points have different dimensions or at least one different value
 	 *\~french
 	 *\brief		Opérateur d'inégalité
-	 *\param[in]	p_ptA, p_ptB	Les points à comparer
+	 *\param[in]	lhs, rhs	Les points à comparer
 	 *\return		\p true si les points ont des dimensions différentes ou au moins une valeur différente
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator!=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator!=( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition operator
-	 *\param[in]	p_ptA, p_ptB	The points to add
+	 *\param[in]	lhs, rhs	The points to add
 	 *\return		The addition result
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_ptA, p_ptB	Les points à additionner
+	 *\param[in]	lhs, rhs	Les points à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator+( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator+( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to subtract
+	 *\param[in]	lhs, rhs	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_ptA, p_ptB	Les points à soustraire
+	 *\param[in]	lhs, rhs	Les points à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator-( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator-( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\param[in]	lhs, rhs	The points to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
+	 *\param[in]	lhs, rhs	Les points à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator*( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator*( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_ptA, p_ptB	The points to divide
+	 *\param[in]	lhs, rhs	The points to divide
 	 *\return		The division result
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_ptA, p_ptB	Les points à diviser
+	 *\param[in]	lhs, rhs	Les points à diviser
 	 *\return		Le résultat de la division
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator/( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
-	/**
-	 *\~english
-	 *\brief		Vectorial product operator
-	 *\param[in]	p_ptA, p_ptB	The points to multiply
-	 *\return		The vectorial product
-	 *\~french
-	 *\brief		Opérateur de produit vectoriel
-	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
-	 *\return		Le résultat du produit vectoriel
-	 */
-	template< typename T, typename U > Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator/( Coords< T, Count > const & lhs, Coords< U, _Count > const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition operator
@@ -756,25 +745,36 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The scalar product
 		 *\~french
 		 *\brief		Calcule le produit scalaire entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, uint32_t Count > static T dot( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static T dot( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		/**
+		 *\~english
+		 *\brief		Cross product operator
+		 *\param[in]	lhs, rhs	The points to multiply
+		 *\return		The cross product
+		 *\~french
+		 *\brief		Opérateur de produit vectoriel
+		 *\param[in]	lhs, rhs	Les points à multiplier
+		 *\return		Le résultat du produit vectoriel
+		 */
+		template< typename T, typename U > static Point< T, 3 > cross( Coords< T, 3 > const & lhs, Coords< U, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
-		 *\param[in]	p_ptA, p_ptB	The points
+		 *\param[in]	lhs, rhs	The points
 		 *\return		The cosine
 		 *\~french
 		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
-		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\param[in]	lhs, rhs	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cosTheta( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian length of the vector

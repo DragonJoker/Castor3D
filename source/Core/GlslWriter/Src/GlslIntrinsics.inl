@@ -1,4 +1,4 @@
-namespace glsl
+﻿namespace glsl
 {
 	//***********************************************************************************************
 
@@ -258,18 +258,6 @@ namespace glsl
 		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "inversesqrt" ), p_value, p_values... );
 	}
 
-	template< typename ... Values >
-	inline Float sqrt( Type const & p_value, Values const & ... p_values )
-	{
-		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "sqrt" ), p_value, p_values... );
-	}
-
-	template< typename ... Values >
-	inline Float pow( Type const & p_value, Values const & ... p_values )
-	{
-		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "pow" ), p_value, p_values... );
-	}
-
 	template< typename Value, typename ... Values >
 	inline Value cross( Value const & p_value, Values const & ... p_values )
 	{
@@ -304,6 +292,24 @@ namespace glsl
 	inline Value reflect( Type const & p_value, Values const & ... p_values )
 	{
 		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "reflect" ), p_value, p_values... );
+	}
+
+	template< typename Value >
+	inline Value sqrt( Value const & value )
+	{
+		return writeFunctionCall< Value, Value >( value.m_writer, cuT( "sqrt" ), value );
+	}
+
+	template< typename Value >
+	inline Value pow( Value const & x, Value const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "pow" ), x, y );
+	}
+
+	template< typename Value >
+	inline Value pow( Value const & x, Optional< Value > const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "pow" ), x, y );
 	}
 
 	template< typename Value >
@@ -391,6 +397,54 @@ namespace glsl
 	}
 
 	template< typename Value >
+	inline Value mod( Value const & x, Value const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "mod" ), x, y );
+	}
+
+	template< typename Value >
+	inline Value mod( Value const & x, Float const & y )
+	{
+		return writeFunctionCall< Value >( x.m_writer, cuT( "mod" ), x, y );
+	}
+
+	template< typename Value >
+	inline Value fract( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "fract" ), value );
+	}
+
+	template< typename Value >
+	inline Value floor( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "floor" ), value );
+	}
+
+	template< typename Value >
+	inline Value trunc( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "trunc" ), value );
+	}
+
+	template< typename Value >
+	inline Value round( Value const & value )
+	{
+		return writeFunctionCall< Value >( value.m_writer, cuT( "round" ), value );
+	}
+
+	template< typename Value >
+	inline Value step( Value const & edge, Value const & x )
+	{
+		return writeFunctionCall< Value >( edge.m_writer, cuT( "step" ), edge, x );
+	}
+
+	template< typename Value >
+	inline Value step( Value const & edge, Float const & x )
+	{
+		return writeFunctionCall< Value >( edge.m_writer, cuT( "step" ), edge, x );
+	}
+
+	template< typename Value >
 	inline Value neg( Value const & p_value )
 	{
 		return writeFunctionCall< Value >( p_value.m_writer, cuT( "-" ), p_value );
@@ -468,6 +522,12 @@ namespace glsl
 		return writeFunctionCall< Value >( p_value.m_writer, cuT( "acos" ), p_value );
 	}
 
+	template< typename Value >
+	inline Value fma( Value const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
 	//***********************************************************************************************
 
 	template< typename ... Values >
@@ -504,6 +564,24 @@ namespace glsl
 	inline IVec4 ivec4( Type const & p_value, Values const & ... p_values )
 	{
 		return writeFunctionCall< IVec4, Type, Values... >( p_value.m_writer, cuT( "ivec4" ), p_value, p_values... );
+	}
+
+	template< typename ... Values >
+	inline BVec2 bvec2( Type const & p_value, Values const & ... p_values )
+	{
+		return writeFunctionCall< BVec2, Type, Values... >( p_value.m_writer, cuT( "bvec2" ), p_value, p_values... );
+	}
+
+	template< typename ... Values >
+	inline BVec3 bvec3( Type const & p_value, Values const & ... p_values )
+	{
+		return writeFunctionCall< BVec3, Type, Values... >( p_value.m_writer, cuT( "bvec3" ), p_value, p_values... );
+	}
+
+	template< typename ... Values >
+	inline BVec4 bvec4( Type const & p_value, Values const & ... p_values )
+	{
+		return writeFunctionCall< BVec4, Type, Values... >( p_value.m_writer, cuT( "bvec4" ), p_value, p_values... );
 	}
 
 	template< typename ... Values >

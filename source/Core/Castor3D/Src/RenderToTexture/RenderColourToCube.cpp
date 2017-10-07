@@ -1,4 +1,4 @@
-﻿#include "RenderColourToCube.hpp"
+#include "RenderColourToCube.hpp"
 
 #include "Engine.hpp"
 
@@ -12,6 +12,7 @@
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslUtils.hpp>
 
 using namespace castor;
 
@@ -39,7 +40,10 @@ namespace castor3d
 				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
 			}
 		}
+		, m_configUbo{ *p_context.getRenderSystem()->getEngine() }
 	{
+		m_dummy.setExposure( 1.0f );
+		m_dummy.setGamma( 1.0f );
 		uint32_t i = 0;
 
 		for ( auto & vertex : m_arrayVertex )
@@ -90,6 +94,7 @@ namespace castor3d
 			, program
 			, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
 
 		m_sampler = renderSystem.getEngine()->getSamplerCache().add( cuT( "RenderColourToCube" ) );
 		m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
@@ -101,6 +106,7 @@ namespace castor3d
 
 	void RenderColourToCube::cleanup()
 	{
+		m_configUbo.getUbo().cleanup();
 		m_sampler.reset();
 		m_pipeline->cleanup();
 		m_pipeline.reset();
@@ -115,8 +121,25 @@ namespace castor3d
 		, TextureLayout const & p_2dTexture
 		, TextureLayoutSPtr p_cubeTexture
 		, FrameBufferSPtr p_fbo
-		, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs )
+		, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs
+		, HdrConfig const & hdrConfig )
 	{
+		bool hdr = p_2dTexture.getPixelFormat() == PixelFormat::eRGB16F
+			|| p_2dTexture.getPixelFormat() == PixelFormat::eRGBA16F
+			|| p_2dTexture.getPixelFormat() == PixelFormat::eRGB16F32F
+			|| p_2dTexture.getPixelFormat() == PixelFormat::eRGBA16F32F
+			|| p_2dTexture.getPixelFormat() == PixelFormat::eRGB32F
+			|| p_2dTexture.getPixelFormat() == PixelFormat::eRGBA32F;
+
+		if ( hdr )
+		{
+			m_configUbo.update( m_dummy );
+		}
+		else
+		{
+			m_configUbo.update( hdrConfig );
+		}
+
 		m_sampler->initialise();
 		static Matrix4x4r const projection = matrix::perspective( Angle::fromDegrees( 90.0_r ), 1.0_r, 0.1_r, 10.0_r );
 		static Matrix4x4r const views[] =
@@ -133,7 +156,7 @@ namespace castor3d
 		m_viewport.apply();
 		p_fbo->bind( FrameBufferTarget::eDraw );
 		p_fbo->clear( BufferComponent::eColour | BufferComponent::eDepth );
-		p_2dTexture.bind( 0u );
+		p_2dTexture.bind( MinTextureIndex );
 
 		for ( uint32_t i = 0; i < 6; ++i )
 		{
@@ -142,12 +165,12 @@ namespace castor3d
 			m_matrixUbo.update( views[i], projection );
 			m_pipeline->apply();
 
-			m_sampler->bind( 0u );
+			m_sampler->bind( MinTextureIndex );
 			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-			m_sampler->unbind( 0u );
+			m_sampler->unbind( MinTextureIndex );
 		}
 
-		p_2dTexture.unbind( 0u );
+		p_2dTexture.unbind( MinTextureIndex );
 		p_fbo->unbind();
 	}
 
@@ -170,7 +193,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_position = position;
-				gl_Position = writer.paren( c3d_mtxProjection * c3d_mtxView * vec4( vtx_position, 1.0 ) );
+				gl_Position = writer.paren( c3d_projection * c3d_curView * vec4( vtx_position, 1.0 ) );
 			} );
 
 			vtx = writer.finalise();
@@ -182,11 +205,15 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
+			UBO_HDR_CONFIG( writer );
 			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+
+			glsl::Utils utils{ writer };
+			utils.declareRemoveGamma();
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			auto sampleSphericalMap = writer.implementFunction< Vec2 >( cuT( "SampleSphericalMap" ), [&]( Vec3 const & v )
 			{
@@ -199,7 +226,8 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( uv.x(), 1.0_r - uv.y() ) ).rgb(), 1.0_f );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec2( uv.x(), 1.0_r - uv.y() ) ).rgb(), 1.0_f );
+				pxl_fragColor = vec4( utils.removeGamma( c3d_gamma, pxl_fragColor.xyz() ), pxl_fragColor.w() );
 			} );
 
 			pxl = writer.finalise();
@@ -211,7 +239,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}

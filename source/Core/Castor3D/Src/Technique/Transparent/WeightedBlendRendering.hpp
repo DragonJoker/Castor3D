@@ -69,7 +69,9 @@ namespace castor3d
 		void render( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
-			, ShadowMapLightTypeArray & shadowMaps );
+			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter
+			, TextureUnit const & velocity );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.

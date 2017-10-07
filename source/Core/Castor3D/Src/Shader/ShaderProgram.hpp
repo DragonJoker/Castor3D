@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -286,70 +286,78 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
-		 *\param[in]	p_type		The variable type.
-		 *\param[in]	p_name		The variable name.
-		 *\param[in]	p_shader	The shader type.
-		 *\param[in]	p_nbOcc		The array dimension.
+		 *\param[in]	type	The variable type.
+		 *\param[in]	name	The variable name.
+		 *\param[in]	shader	The shader type.
+		 *\param[in]	nbOcc	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable
-		 *\param[in]	p_type		Le type de variable.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[in]	p_shader	Le type du shader.
-		 *\param[in]	p_nbOcc		Les dimensions du tableau.
+		 *\param[in]	type	Le type de variable.
+		 *\param[in]	name	Le nom de la variable.
+		 *\param[in]	shader	Le type du shader.
+		 *\param[in]	nbOcc	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API PushUniformSPtr createUniform( UniformType p_type, castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 );
+		C3D_API PushUniformSPtr createUniform( UniformType type
+			, castor::String const & name
+			, ShaderType shader
+			, int nbOcc = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
-		 *\param[in]	p_name		The variable name.
-		 *\param[in]	p_shader	The shader type.
-		 *\param[in]	p_nbOcc		The array dimension.
+		 *\param[in]	name	The variable name.
+		 *\param[in]	shader	The shader type.
+		 *\param[in]	nbOcc	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[in]	p_shader	Le type du shader.
-		 *\param[in]	p_nbOcc		Les dimensions du tableau.
+		 *\param[in]	name	Le nom de la variable.
+		 *\param[in]	shader	Le type du shader.
+		 *\param[in]	nbOcc	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< TPushUniform< Type > > createUniform( castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 )
+		inline std::shared_ptr< TPushUniform< Type > > createUniform( castor::String const & name
+			, ShaderType shader
+			, int nbOcc = 1 )
 		{
-			return std::static_pointer_cast< TPushUniform< Type > >( createUniform( Type, p_name, p_shader, p_nbOcc ) );
+			return std::static_pointer_cast< TPushUniform< Type > >( createUniform( Type, name, shader, nbOcc ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Looks for a variable.
-		 *\param[in]	p_type		The variable type.
-		 *\param[in]	p_name		The variable name.
-		 *\param[in]	p_shader	The shader type.
+		 *\param[in]	type	The variable type.
+		 *\param[in]	name	The variable name.
+		 *\param[in]	shader	The shader type.
 		 *\return		The found variable, nullptr if failed.
 		 *\~french
 		 *\brief		Cherche une variable.
-		 *\param[in]	p_type		Le type de variable.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[in]	p_shader	Le type du shader.
+		 *\param[in]	type	Le type de variable.
+		 *\param[in]	name	Le nom de la variable.
+		 *\param[in]	shader	Le type du shader.
 		 *\return		La variable trouvée, nullptr en cas d'échec.
 		 */
-		C3D_API PushUniformSPtr findUniform( UniformType p_type, castor::String const & p_name, ShaderType p_shader )const;
+		C3D_API PushUniformSPtr findUniform( UniformType type
+			, castor::String const & name
+			, ShaderType shader )const;
 		/**
 		 *\~english
 		 *\brief		Looks for a variable.
-		 *\param[in]	p_name		The variable name.
-		 *\param[in]	p_shader	The shader type.
+		 *\param[in]	name	The variable name.
+		 *\param[in]	shader	The shader type.
 		 *\return		The found variable, nullptr if failed.
 		 *\~french
 		 *\brief		Cherche une variable.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[in]	p_shader	Le type du shader.
+		 *\param[in]	name	Le nom de la variable.
+		 *\param[in]	shader	Le type du shader.
 		 *\return		La variable trouvé, nullptr en cas d'échec.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< TPushUniform< Type > > findUniform( castor::String const & p_name, ShaderType p_shader )const
+		inline std::shared_ptr< TPushUniform< Type > > findUniform( castor::String const & name
+			, ShaderType shader )const
 		{
-			return std::static_pointer_cast< TPushUniform< Type > >( findUniform( Type, p_name, p_shader ) );
+			return std::static_pointer_cast< TPushUniform< Type > >( findUniform( Type, name, shader ) );
 		}
 		/**
 		 *\~english
@@ -407,7 +415,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Link tous les objets du programme.
 		 */
-		C3D_API virtual bool Link() = 0;
+		C3D_API virtual bool link() = 0;
 		/**
 		 *\~english
 		 *\return		The program vertex layout.
@@ -542,17 +550,6 @@ namespace castor3d
 		 *\param[in]	p_type	Le shader object concerné.
 		 */
 		virtual ShaderObjectSPtr doCreateObject( ShaderType p_type ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a texture frame variable.
-		 *\param[in]	p_iNbOcc	The array dimension.
-		 *\return		The created variable, nullptr if failed.
-		 *\~french
-		 *\brief		Crée une variable de frame texture.
-		 *\param[in]	p_iNbOcc	Les dimensions du tableau.
-		 *\return		La variable créée, nullptr en cas d'échec.
-		 */
-		virtual PushUniformSPtr doCreateUniform( UniformType p_type, int p_iNbOcc ) = 0;
 
 	public:
 		/**@name Attributes */
@@ -661,6 +658,9 @@ namespace castor3d
 		//!\~english	Name of the ambient occlusion texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture d'occlusion ambiante.
 		C3D_API static const castor::String MapAmbientOcclusion;
+		//!\~english	Name of the transmittance texture frame variable.
+		//!\~french		Nom de la frame variable contenant texture de transmission.
+		C3D_API static const castor::String MapTransmittance;
 		//!\~english	Name of the environment texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture d'environnement.
 		C3D_API static const castor::String MapEnvironment;

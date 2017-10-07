@@ -43,14 +43,15 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_scene		The target object
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	scene		The target object
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_scene		L'objet cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	scene		L'objet cible
 		 */
-		SceneTreeItemProperty( bool p_editable, castor3d::SceneSPtr p_scene );
+		SceneTreeItemProperty( bool editable
+			, castor3d::Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,26 +67,31 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline castor3d::SceneSPtr getScene()
+		inline castor3d::Scene & getScene()
 		{
-			return m_scene.lock();
+			return m_scene;
 		}
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		wxPGProperty * doCreateTextureImageProperty( wxString const & p_name, castor3d::TextureLayoutSPtr p_texture );
+		wxPGProperty * doCreateTextureImageProperty( wxString const & name
+			, castor3d::TextureLayoutSPtr texture );
+		void onDebugOverlaysChange( bool const & value );
+		void onAmbientLightChange( castor::Colour const & value );
+		void onBackgroundColourChange( castor::Colour const & value );
+		void onBackgroundImageChange( castor::String const & value );
 
 	private:
-		castor3d::SceneWPtr m_scene;
+		castor3d::Scene & m_scene;
 	};
 }
 

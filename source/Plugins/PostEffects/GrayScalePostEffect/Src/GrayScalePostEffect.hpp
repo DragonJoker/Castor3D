@@ -65,7 +65,6 @@ namespace GrayScale
 		static castor::String Name;
 
 	private:
-		castor3d::PushUniform1sSPtr m_mapDiffuse;
 		castor3d::SamplerSPtr m_sampler;
 		castor3d::RenderPipelineSPtr m_pipeline;
 		castor3d::MatrixUbo m_matrixUbo;

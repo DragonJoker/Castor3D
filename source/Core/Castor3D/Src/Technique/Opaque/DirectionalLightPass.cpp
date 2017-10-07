@@ -1,4 +1,4 @@
-#include "DirectionalLightPass.hpp"
+﻿#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -35,6 +35,7 @@ namespace castor3d
 		: LightPass::Program{ engine, vtx, pxl }
 		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
+		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_farPlane" ), ShaderType::ePixel ) }
 		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
 	{
 	}
@@ -71,6 +72,7 @@ namespace castor3d
 		auto & directionalLight = *light.getDirectionalLight();
 		m_lightIntensity->setValue( directionalLight.getIntensity() );
 		m_lightDirection->setValue( directionalLight.getDirection() );
+		m_lightFarPlane->setValue( directionalLight.getFarPlane() );
 		m_lightTransform->setValue( directionalLight.getLightSpaceTransform() );
 	}
 
@@ -161,7 +163,7 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			gl_Position = c3d_mtxProjection * vec4( vertex, 0.0, 1.0 );
+			gl_Position = c3d_projection * vec4( vertex, 0.0, 1.0 );
 		} );
 
 		return writer.finalise();

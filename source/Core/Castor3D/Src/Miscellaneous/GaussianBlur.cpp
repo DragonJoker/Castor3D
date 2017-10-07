@@ -82,7 +82,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = position;
-					gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
@@ -98,28 +98,28 @@ namespace castor3d
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
 			config.end();
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				plx_v4FragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
+				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
 				FOR( writer, Int, i, 1, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 
-				gl_FragDepth = plx_v4FragColor.r();
+				gl_FragDepth = pxl_fragColor.r();
 			} );
 			return writer.finalise();
 		}
@@ -135,28 +135,28 @@ namespace castor3d
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
 			config.end();
-			auto c3d_mapDiffuse = writer.declUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = writer.declFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				plx_v4FragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
+				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
 				FOR( writer, Int, i, 1, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					plx_v4FragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 
-				gl_FragDepth = plx_v4FragColor.r();
+				gl_FragDepth = pxl_fragColor.r();
 			} );
 			return writer.finalise();
 		}
@@ -252,7 +252,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
-			unit.setIndex( 0u );
+			unit.setIndex( MinTextureIndex );
 			unit.initialise();
 			return unit;
 		}
@@ -326,14 +326,12 @@ namespace castor3d
 		m_blurXUbo.cleanup();
 		m_blurXCoeffCount.reset();
 		m_blurXCoeffs.reset();
-		m_blurXMapDiffuse.reset();
 		m_blurYPipeline->cleanup();
 		m_blurYPipeline.reset();
 
 		m_blurYUbo.cleanup();
 		m_blurYCoeffCount.reset();
 		m_blurYCoeffs.reset();
-		m_blurYMapDiffuse.reset();
 		m_blurXPipeline->cleanup();
 		m_blurXPipeline.reset();
 
@@ -391,8 +389,8 @@ namespace castor3d
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		m_blurXMapDiffuse = program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
+			, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_blurXCoeffCount->setValue( uint32_t( m_kernel.size() ) );
 		m_blurXCoeffs->setValues( m_kernel );
 
@@ -428,8 +426,8 @@ namespace castor3d
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		m_blurYMapDiffuse = program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
+			, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_blurYCoeffCount->setValue( uint32_t( m_kernel.size() ) );
 		m_blurYCoeffs->setValues( m_kernel );
 

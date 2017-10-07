@@ -130,18 +130,22 @@ namespace glsl
 	template< typename ... Values > inline IVec2 ivec2( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline IVec3 ivec3( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline IVec4 ivec4( Type const & p_value, Values const & ... p_values );
+	template< typename ... Values > inline BVec2 bvec2( Type const & p_value, Values const & ... p_values );
+	template< typename ... Values > inline BVec3 bvec3( Type const & p_value, Values const & ... p_values );
+	template< typename ... Values > inline BVec4 bvec4( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Mat3 mat3( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Mat4 mat4( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Float dot( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Float inversesqrt( Expr const & p_value, Values const & ... p_values );
-	template< typename ... Values > inline Float sqrt( Expr const & p_value, Values const & ... p_values );
-	template< typename ... Values > inline Float pow( Expr const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value cross( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value clamp( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value min( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value max( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value mix( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value reflect( Type const & p_value, Values const & ... p_values );
+	template< typename Value > inline Value sqrt( Value const & value );
+	template< typename Value > inline Value pow( Value const & x, Value const & y );
+	template< typename Value > inline Value pow( Value const & x, Optional< Value > const & y );
 	template< typename Value > inline Value neg( Value const & p_value );
 	template< typename Value > inline Value log( Value const & p_value );
 	template< typename Value > inline Value exp( Value const & p_value );
@@ -154,6 +158,7 @@ namespace glsl
 	template< typename Value > inline Value atan( Value const & p_value );
 	template< typename Value > inline Value asin( Value const & p_value );
 	template< typename Value > inline Value acos( Value const & p_value );
+	template< typename Value > inline Value fma( Value const & a, Value const & b, Value const & c );
 	template< typename Input, typename Output > inline Output neg( Swizzle< Input, Output > const & p_value );
 	template< typename Value > inline Value normalize( Value const & p_value );
 	template< typename Input, typename Output > inline Output normalize( Swizzle< Input, Output > const & p_value );
@@ -169,6 +174,14 @@ namespace glsl
 	template< typename Value > inline Value dFdxFine( Value const & p_value );
 	template< typename Value > inline Value dFdyFine( Value const & p_value );
 	template< typename Value > inline Value sign( Value const & p_value );
+	template< typename Value > inline Value mod( Value const & x, Value const & y );
+	template< typename Value > inline Value mod( Value const & x, Float const & y );
+	template< typename Value > inline Value fract( Value const & p_value );
+	template< typename Value > inline Value floor( Value const & value );
+	template< typename Value > inline Value trunc( Value const & value );
+	template< typename Value > inline Value round( Value const & value );
+	template< typename Value > inline Value step( Value const & edge, Value const & x );
+	template< typename Value > inline Value step( Value const & edge, Float const & x );
 	GlslWriter_API Int textureSize( Sampler1D const & p_sampler, Int const p_lod );
 	GlslWriter_API IVec2 textureSize( Sampler2D const & p_sampler, Int const & p_lod );
 	GlslWriter_API IVec3 textureSize( Sampler3D const & p_sampler, Int const & p_lod );
@@ -182,6 +195,18 @@ namespace glsl
 	GlslWriter_API IVec2 textureSize( Sampler1DArrayShadow const & p_sampler, Int const p_lod );
 	GlslWriter_API IVec3 textureSize( Sampler2DArrayShadow const & p_sampler, Int const & p_lod );
 	GlslWriter_API IVec3 textureSize( SamplerCubeArrayShadow const & p_sampler, Int const & p_lod );
+	GlslWriter_API Vec4 textureGather( Sampler2D const & sampler, Vec2 const & value );
+	GlslWriter_API Vec4 textureGather( Sampler2DArray const & sampler, Vec3 const & value );
+	GlslWriter_API Vec4 textureGather( SamplerCube const & sampler, Vec3 const & value );
+	GlslWriter_API Vec4 textureGather( SamplerCubeArray const & sampler, Vec4 const & value );
+	GlslWriter_API Vec4 textureGather( Sampler2D const & sampler, Vec2 const & value, Int const & comp );
+	GlslWriter_API Vec4 textureGather( Sampler2DArray const & sampler, Vec3 const & value, Int const & comp );
+	GlslWriter_API Vec4 textureGather( SamplerCube const & sampler, Vec3 const & value, Int const & comp );
+	GlslWriter_API Vec4 textureGather( SamplerCubeArray const & sampler, Vec4 const & value, Int const & comp );
+	GlslWriter_API Vec4 textureGather( Sampler2DShadow const & sampler, Vec3 const & value, Float const & refZ );
+	GlslWriter_API Vec4 textureGather( Sampler2DArrayShadow const & sampler, Vec3 const & value, Float const & refZ );
+	GlslWriter_API Vec4 textureGather( SamplerCubeShadow const & sampler, Vec3 const & value, Float const & refZ );
+	GlslWriter_API Vec4 textureGather( SamplerCubeArrayShadow const & sampler, Vec4 const & value, Float const & refZ );
 	GlslWriter_API Vec4 texture( Sampler1D const & p_sampler, Float const & p_value );
 	GlslWriter_API Vec4 texture( Sampler1D const & p_sampler, Float const & p_value, Float const & p_lod );
 	GlslWriter_API Vec4 texture( Sampler2D const & p_sampler, Vec2 const & p_value );
@@ -251,7 +276,6 @@ namespace glsl
 	GlslWriter_API Float cos( Type const & p_value );
 	GlslWriter_API Float sin( Type const & p_value );
 	GlslWriter_API Float tan( Type const & p_value );
-	GlslWriter_API Float fract( Type const & p_value );
 	GlslWriter_API Optional< Int > textureSize( Optional< Sampler1D > const & p_sampler, Int const p_lod );
 	GlslWriter_API Optional< IVec2 > textureSize( Optional< Sampler2D > const & p_sampler, Int const & p_lod );
 	GlslWriter_API Optional< IVec3 > textureSize( Optional< Sampler3D > const & p_sampler, Int const & p_lod );
@@ -330,7 +354,6 @@ namespace glsl
 	GlslWriter_API Optional< Float > cos( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > sin( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > tan( Optional< Type > const & p_value );
-	GlslWriter_API Optional< Float > fract( Optional< Type > const & p_value );
 }
 
 #include "GlslIntrinsics.inl"

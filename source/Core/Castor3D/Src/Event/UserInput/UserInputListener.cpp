@@ -165,31 +165,35 @@ namespace castor3d
 	bool UserInputListener::fireMouseMove( Position const & p_position )
 	{
 		bool result = false;
-		m_mouse.m_position = p_position;
-		auto current = doGetMouseTargetableHandler( p_position );
-		auto last = m_lastMouseTarget.lock();
 
-		if ( current != last )
+		if ( doHasHandlers() )
 		{
-			if ( last )
-			{
-				castor::Logger::logDebug( castor::StringStream() << p_position.x() << "x" << p_position.y() );
-				last->pushEvent( MouseEvent( MouseEventType::eLeave, p_position ) );
-				last.reset();
-				m_lastMouseTarget.reset();
-			}
-		}
+			m_mouse.m_position = p_position;
+			auto current = doGetMouseTargetableHandler( p_position );
+			auto last = m_lastMouseTarget.lock();
 
-		if ( current )
-		{
 			if ( current != last )
 			{
-				current->pushEvent( MouseEvent( MouseEventType::eEnter, p_position ) );
+				if ( last )
+				{
+					castor::Logger::logDebug( castor::StringStream() << p_position.x() << "x" << p_position.y() );
+					last->pushEvent( MouseEvent( MouseEventType::eLeave, p_position ) );
+					last.reset();
+					m_lastMouseTarget.reset();
+				}
 			}
 
-			current->pushEvent( MouseEvent( MouseEventType::eMove, p_position ) );
-			result = true;
-			m_lastMouseTarget = current;
+			if ( current )
+			{
+				if ( current != last )
+				{
+					current->pushEvent( MouseEvent( MouseEventType::eEnter, p_position ) );
+				}
+
+				current->pushEvent( MouseEvent( MouseEventType::eMove, p_position ) );
+				result = true;
+				m_lastMouseTarget = current;
+			}
 		}
 
 		return result;
@@ -198,27 +202,31 @@ namespace castor3d
 	bool UserInputListener::fireMouseButtonPushed( MouseButton p_button )
 	{
 		bool result = false;
-		m_mouse.m_buttons[size_t( p_button )] = true;
-		m_mouse.m_changed = p_button;
-		auto current = doGetMouseTargetableHandler( m_mouse.m_position );
 
-		if ( current )
+		if ( doHasHandlers() )
 		{
-			auto active = m_activeHandler.lock();
+			m_mouse.m_buttons[size_t( p_button )] = true;
+			m_mouse.m_changed = p_button;
+			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
 
-			if ( current != active )
+			if ( current )
 			{
-				if ( active )
+				auto active = m_activeHandler.lock();
+
+				if ( current != active )
 				{
-					active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+					if ( active )
+					{
+						active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+					}
+
+					current->pushEvent( HandlerEvent( HandlerEventType::eActivate, active ) );
 				}
 
-				current->pushEvent( HandlerEvent( HandlerEventType::eActivate, active ) );
+				current->pushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.m_position, p_button ) );
+				result = true;
+				m_activeHandler = current;
 			}
-
-			current->pushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.m_position, p_button ) );
-			result = true;
-			m_activeHandler = current;
 		}
 
 		return result;
@@ -227,26 +235,30 @@ namespace castor3d
 	bool UserInputListener::fireMouseButtonReleased( MouseButton p_button )
 	{
 		bool result = false;
-		m_mouse.m_buttons[size_t( p_button )] = false;
-		m_mouse.m_changed = p_button;
-		auto current = doGetMouseTargetableHandler( m_mouse.m_position );
 
-		if ( current )
+		if ( doHasHandlers() )
 		{
-			current->pushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.m_position, p_button ) );
-			result = true;
-			m_activeHandler = current;
-		}
-		else
-		{
-			auto active = m_activeHandler.lock();
+			m_mouse.m_buttons[size_t( p_button )] = false;
+			m_mouse.m_changed = p_button;
+			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
 
-			if ( active )
+			if ( current )
 			{
-				active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+				current->pushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.m_position, p_button ) );
+				result = true;
+				m_activeHandler = current;
 			}
+			else
+			{
+				auto active = m_activeHandler.lock();
 
-			m_activeHandler.reset();
+				if ( active )
+				{
+					active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+				}
+
+				m_activeHandler.reset();
+			}
 		}
 
 		return result;
@@ -255,13 +267,17 @@ namespace castor3d
 	bool UserInputListener::fireMouseWheel( Position const & p_offsets )
 	{
 		bool result = false;
-		m_mouse.m_wheel += p_offsets;
-		auto current = doGetMouseTargetableHandler( m_mouse.m_position );
 
-		if ( current )
+		if ( doHasHandlers() )
 		{
-			current->pushEvent( MouseEvent( MouseEventType::eWheel, p_offsets ) );
-			result = true;
+			m_mouse.m_wheel += p_offsets;
+			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
+
+			if ( current )
+			{
+				current->pushEvent( MouseEvent( MouseEventType::eWheel, p_offsets ) );
+				result = true;
+			}
 		}
 
 		return result;
@@ -270,27 +286,31 @@ namespace castor3d
 	bool UserInputListener::fireKeydown( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
 		bool result = false;
-		auto active = m_activeHandler.lock();
 
-		if ( active )
+		if ( doHasHandlers() )
 		{
-			if ( p_key == KeyboardKey::eControl )
-			{
-				m_keyboard.m_ctrl = true;
-			}
+			auto active = m_activeHandler.lock();
 
-			if ( p_key == KeyboardKey::eAlt )
+			if ( active )
 			{
-				m_keyboard.m_alt = true;
-			}
+				if ( p_key == KeyboardKey::eControl )
+				{
+					m_keyboard.m_ctrl = true;
+				}
 
-			if ( p_key == KeyboardKey::eShift )
-			{
-				m_keyboard.m_shift = true;
-			}
+				if ( p_key == KeyboardKey::eAlt )
+				{
+					m_keyboard.m_alt = true;
+				}
 
-			active->pushEvent( KeyboardEvent( KeyboardEventType::ePushed, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			result = true;
+				if ( p_key == KeyboardKey::eShift )
+				{
+					m_keyboard.m_shift = true;
+				}
+
+				active->pushEvent( KeyboardEvent( KeyboardEventType::ePushed, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				result = true;
+			}
 		}
 
 		return result;
@@ -299,27 +319,31 @@ namespace castor3d
 	bool UserInputListener::fireKeyUp( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
 		bool result = false;
-		auto active = m_activeHandler.lock();
 
-		if ( active )
+		if ( doHasHandlers() )
 		{
-			if ( p_key == KeyboardKey::eControl )
-			{
-				m_keyboard.m_ctrl = false;
-			}
+			auto active = m_activeHandler.lock();
 
-			if ( p_key == KeyboardKey::eAlt )
+			if ( active )
 			{
-				m_keyboard.m_alt = false;
-			}
+				if ( p_key == KeyboardKey::eControl )
+				{
+					m_keyboard.m_ctrl = false;
+				}
 
-			if ( p_key == KeyboardKey::eShift )
-			{
-				m_keyboard.m_shift = false;
-			}
+				if ( p_key == KeyboardKey::eAlt )
+				{
+					m_keyboard.m_alt = false;
+				}
 
-			active->pushEvent( KeyboardEvent( KeyboardEventType::eReleased, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			result = true;
+				if ( p_key == KeyboardKey::eShift )
+				{
+					m_keyboard.m_shift = false;
+				}
+
+				active->pushEvent( KeyboardEvent( KeyboardEventType::eReleased, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				result = true;
+			}
 		}
 
 		return result;
@@ -328,12 +352,16 @@ namespace castor3d
 	bool UserInputListener::fireChar( KeyboardKey p_key, String const & p_char )
 	{
 		bool result = false;
-		auto active = m_activeHandler.lock();
 
-		if ( active )
+		if ( doHasHandlers() )
 		{
-			active->pushEvent( KeyboardEvent( KeyboardEventType::eChar, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			result = true;
+			auto active = m_activeHandler.lock();
+
+			if ( active )
+			{
+				active->pushEvent( KeyboardEvent( KeyboardEventType::eChar, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				result = true;
+			}
 		}
 
 		return result;
@@ -342,21 +370,25 @@ namespace castor3d
 	bool UserInputListener::fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )
 	{
 		bool result = false;
-		auto & cache = getEngine()->getOverlayCache();
-		auto overlay = cache.find( p_overlay );
 
-		if ( overlay )
+		if ( doHasHandlers() )
 		{
-			auto material = getEngine()->getMaterialCache().find( p_material );
+			auto & cache = getEngine()->getOverlayCache();
+			auto overlay = cache.find( p_overlay );
 
-			if ( material )
+			if ( overlay )
 			{
-				this->m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [overlay, material]()
-					{
-						overlay->setMaterial( material );
-					} ) );
-				result = true;
+				auto material = getEngine()->getMaterialCache().find( p_material );
+
+				if ( material )
+				{
+					this->m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
+						, [overlay, material]()
+						{
+							overlay->setMaterial( material );
+						} ) );
+					result = true;
+				}
 			}
 		}
 		
@@ -366,13 +398,17 @@ namespace castor3d
 	bool UserInputListener::fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )
 	{
 		bool result = false;
-		auto & cache = getEngine()->getOverlayCache();
-		auto overlay = cache.find( p_overlay );
 
-		if ( overlay && overlay->getType() == OverlayType::eText )
+		if ( doHasHandlers() )
 		{
-			overlay->getTextOverlay()->setCaption( p_caption );
-			result = true;
+			auto & cache = getEngine()->getOverlayCache();
+			auto overlay = cache.find( p_overlay );
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setCaption( p_caption );
+				result = true;
+			}
 		}
 
 		return result;

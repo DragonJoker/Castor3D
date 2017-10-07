@@ -1,4 +1,4 @@
-﻿#include "Skybox.hpp"
+#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -218,13 +218,18 @@ namespace castor3d
 			m_matrixUbo.update( camera.getView()
 				, camera.getViewport().getProjection() );
 			m_modelMatrixUbo.update( m_mtxModel );
-			m_configUbo.update( scene.getHdrConfig() );
+
+			if ( !m_hdr )
+			{
+				m_configUbo.update( scene.getHdrConfig() );
+			}
+
 			m_pipeline->apply();
-			m_texture->bind( 0 );
-			sampler->bind( 0 );
+			m_texture->bind( MinTextureIndex );
+			sampler->bind( MinTextureIndex );
 			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-			sampler->unbind( 0 );
-			m_texture->unbind( 0 );
+			sampler->unbind( MinTextureIndex );
+			m_texture->unbind( MinTextureIndex );
 		}
 	}
 
@@ -255,7 +260,7 @@ namespace castor3d
 
 			std::function< void() > main = [&]()
 			{
-				gl_Position = writer.paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 				vtx_texture = position;
 			};
 
@@ -270,7 +275,7 @@ namespace castor3d
 			// Inputs
 			UBO_HDR_CONFIG( writer );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-			auto skybox = writer.declUniform< SamplerCube >( cuT( "skybox" ) );
+			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), MinTextureIndex );
 			glsl::Utils utils{ writer };
 
 			if ( !m_hdr )
@@ -304,6 +309,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
+		program->createUniform< UniformType::eSampler >( cuT( "skybox" ), ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return *program;
 	}
@@ -329,9 +335,9 @@ namespace castor3d
 		if ( result )
 		{
 			auto sampler = m_sampler.lock();
-			m_texture->bind( 0 );
+			m_texture->bind( MinTextureIndex );
 			m_texture->generateMipmaps();
-			m_texture->unbind( 0 );
+			m_texture->unbind( MinTextureIndex );
 		}
 
 		return result;
@@ -384,12 +390,40 @@ namespace castor3d
 		fbo->unbind();
 
 		// Render the equirectangular texture to the cube faces.
-		renderSystem.getCurrentContext()->RenderEquiToCube( m_equiSize
+		renderSystem.getCurrentContext()->renderEquiToCube( m_equiSize
 			, *m_equiTexture
 			, m_texture
 			, fbo
-			, attachs );
+			, attachs
+			, m_scene->getHdrConfig() );
+/*
+		static String const FaceName[6u]
+		{
+			cuT( "PosX" ),
+			cuT( "NegX" ),
+			cuT( "NegY" ),
+			cuT( "PosY" ),
+			cuT( "NegZ" ),
+			cuT( "PosZ" ),
+		};
 
+		auto buffer = PxBufferBase::create( m_equiSize
+			, PixelFormat::eRGB32F );
+		fbo->bind();
+
+		for ( uint32_t face = 0u; face < 6; ++face )
+		{
+			attachs[face]->attach( AttachmentPoint::eColour, 0u );
+			attachs[face]->download( Position{}
+				, *buffer );
+			Image image{ FaceName[face], *buffer };
+			Image::BinaryWriter writer;
+			writer( image
+				, getEngine()->getDataDirectory() / ( cuT( "CubeMap_" ) + FaceName[face] + cuT( ".hdr" ) ) );
+		}
+
+		fbo->unbind();
+*/
 		// Cleanup the one shot FBO and attaches
 		fbo->bind();
 		fbo->detachAll();
@@ -428,7 +462,12 @@ namespace castor3d
 			, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 		m_pipeline->addUniformBuffer( m_modelMatrixUbo.getUbo() );
-		m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
+
+		if ( !m_hdr )
+		{
+			m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
+		}
+
 		m_geometryBuffers = getEngine()->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, m_pipeline->getProgram() );
 		return m_geometryBuffers->initialise( { *m_vertexBuffer }, nullptr );
 	}

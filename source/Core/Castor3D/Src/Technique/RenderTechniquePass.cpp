@@ -43,6 +43,7 @@ namespace castor3d
 		}
 
 		inline void doUpdateProgram( ShaderProgram & program
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
@@ -58,8 +59,8 @@ namespace castor3d
 					, ShaderType::ePixel, shader::PointShadowMapCount );
 			}
 
-			if ( ( checkFlag( programFlags, ProgramFlag::ePbrMetallicRoughness )
-					|| checkFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+			if ( ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness )
+					|| checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
 				&& checkFlag( programFlags, ProgramFlag::eLighting ) )
 			{
 				program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
@@ -190,17 +191,20 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doRender( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps )
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter )
 	{
 		doRenderNodes( m_renderQueue.getRenderNodes()
 			, *m_camera
 			, shadowMaps
+			, jitter
 			, info );
 	}
 
 	void RenderTechniquePass::doRenderNodes( SceneRenderNodes & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter
 		, RenderInfo & info )const
 	{
 		if ( !nodes.m_staticNodes.m_backCulled.empty()
@@ -211,8 +215,12 @@ namespace castor3d
 			|| !nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			m_timer->start();
+			auto jitterProjSpace = jitter * 2;
+			jitterProjSpace[0] /= camera.getWidth();
+			jitterProjSpace[1] /= camera.getHeight();
 			m_matrixUbo.update( camera.getView()
-				, camera.getViewport().getProjection() );
+				, camera.getViewport().getProjection()
+				, jitterProjSpace );
 			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, shadowMaps );
 			RenderPass::doRender( nodes.m_staticNodes.m_frontCulled, camera, shadowMaps );
 			RenderPass::doRender( nodes.m_skinnedNodes.m_frontCulled, camera, shadowMaps );
@@ -253,7 +261,8 @@ namespace castor3d
 		queues.push_back( m_renderQueue );
 	}
 
-	void RenderTechniquePass::doUpdateFlags( TextureChannels & textureFlags
+	void RenderTechniquePass::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
@@ -265,7 +274,8 @@ namespace castor3d
 		}
 	}
 
-	glsl::Shader RenderTechniquePass::doGetGeometryShaderSource( TextureChannels const & textureFlags
+	glsl::Shader RenderTechniquePass::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
@@ -285,6 +295,7 @@ namespace castor3d
 		if ( it == m_frontPipelines.end() )
 		{
 			doUpdateProgram( program
+				, flags.m_passFlags
 				, flags.m_textureFlags
 				, flags.m_programFlags
 				, flags.m_sceneFlags );
@@ -341,6 +352,7 @@ namespace castor3d
 		if ( it == m_backPipelines.end() )
 		{
 			doUpdateProgram( program
+				, flags.m_passFlags
 				, flags.m_textureFlags
 				, flags.m_programFlags
 				, flags.m_sceneFlags );

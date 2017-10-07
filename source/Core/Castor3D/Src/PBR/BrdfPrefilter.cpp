@@ -1,4 +1,4 @@
-﻿#include "BrdfPrefilter.hpp"
+#include "BrdfPrefilter.hpp"
 
 #include "Engine.hpp"
 
@@ -159,7 +159,7 @@ namespace castor3d
 			std::function< void() > main = [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );
@@ -175,7 +175,7 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec2 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec2 >( cuT( "pxl_FragColor" ) );
 
 			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
 				, [&]( UInt const & p_bits )
@@ -319,7 +319,7 @@ namespace castor3d
 							auto G_Vis = writer.declLocale( cuT( "G_Vis" )
 								, writer.paren( G * VdotH ) / writer.paren( NdotH * p_NdotV ) );
 							auto Fc = writer.declLocale( cuT( "Fc" )
-								, pow( 1.0 - VdotH, 5.0 ) );
+								, pow( 1.0 - VdotH, 5.0_f ) );
 
 							A += writer.paren( 1.0_f - Fc ) * G_Vis;
 							B += Fc * G_Vis;
@@ -338,7 +338,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					plx_v4FragColor.xy() = integrateBRDF( vtx_texture.x(), vtx_texture.y() );
+					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), vtx_texture.y() );
 				} );
 
 			pxl = writer.finalise();

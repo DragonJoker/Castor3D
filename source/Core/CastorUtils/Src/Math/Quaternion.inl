@@ -321,8 +321,8 @@ namespace castor
 	Point3f & QuaternionT< T >::transform( Point3f const & p_vector, Point3f & p_result )const
 	{
 		Point3d u( quat.x, quat.y, quat.z );
-		Point3d uv( u ^ p_vector );
-		Point3d uuv( u ^ uv );
+		Point3d uv( castor::point::cross( u, p_vector ) );
+		Point3d uuv( castor::point::cross( u, uv ) );
 		uv *= 2 * quat.w;
 		uuv *= 2;
 		p_result = p_vector + uv + uuv;
@@ -333,8 +333,8 @@ namespace castor
 	Point3d & QuaternionT< T >::transform( Point3d const & p_vector, Point3d & p_result )const
 	{
 		Point3d u( quat.x, quat.y, quat.z );
-		Point3d uv( u ^ p_vector );
-		Point3d uuv( u ^ uv );
+		Point3d uv( castor::point::cross( u, p_vector ) );
+		Point3d uuv( castor::point::cross( u, uv ) );
 		uv *= 2 * quat.w;
 		uuv *= 2;
 		p_result = p_vector + uv + uuv;

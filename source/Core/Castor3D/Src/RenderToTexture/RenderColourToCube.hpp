@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Render/Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -80,24 +81,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the wanted equirectangular 2D texture to given cube texture.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_2dTexture		The 2D texture.
-		 *\param[in]	p_cubeTexture	The cube texture.
-		 *\param[in]	p_fbo			The active FBO
-		 *\param[in]	p_attachs		The cube texture attaches to the active FBO.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		The 2D texture.
+		 *\param[in]	cubeTexture	The cube texture.
+		 *\param[in]	fbo			The active FBO
+		 *\param[in]	attachs		The cube texture attaches to the active FBO.
 		 *\~french
 		 *\brief		Dessine a texture equirectangulaire 2D donnée dans la texture cube donnée.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_2dTexture		La texture 2D.
-		 *\param[in]	p_cubeTexture	La texture cube.
-		 *\param[in]	p_fbo			Le FBO actif.
-		 *\param[in]	p_attachs		Les attaches de la texture cube au FBO actif.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture 2D.
+		 *\param[in]	cubeTexture	La texture cube.
+		 *\param[in]	fbo			Le FBO actif.
+		 *\param[in]	attachs		Les attaches de la texture cube au FBO actif.
 		 */
-		C3D_API void render( castor::Size const & p_size
-			, TextureLayout const & p_2dTexture
-			, TextureLayoutSPtr p_cubeTexture
-			, FrameBufferSPtr p_fbo
-			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs );
+		C3D_API void render( castor::Size const & size
+			, TextureLayout const & texture
+			, TextureLayoutSPtr cubeTexture
+			, FrameBufferSPtr fbo
+			, std::array< FrameBufferAttachmentSPtr, 6 > const & attachs
+			, HdrConfig const & hdrConfig );
 
 	private:
 		/**
@@ -137,6 +139,12 @@ namespace castor3d
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;
+		//!\~english	The HDR configuration UBO.
+		//!\~french		L'UBO de configuration HDR.
+		HdrConfigUbo m_configUbo;
+		//!\~english	The dummy HDR configuration.
+		//!\~french		La configuration HDR dummy.
+		HdrConfig m_dummy;
 	};
 }
 

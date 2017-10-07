@@ -24,7 +24,7 @@ SOFTWARE.
 #define ___C3D_PassBuffer_H___
 
 #include "Material/Pass.hpp"
-#include "Shader/ShaderStorageBuffer.hpp"
+#include "Shader/ShaderBuffer.hpp"
 
 namespace castor3d
 {
@@ -33,9 +33,9 @@ namespace castor3d
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		SSBO holding the Passes data.
+	\brief		ShaderBuffer holding the Passes data.
 	\~french
-	\brief		SSBO contenant les données des Pass.
+	\brief		ShaderBuffer contenant les données des Pass.
 	*/
 	class PassBuffer
 	{
@@ -57,19 +57,10 @@ namespace castor3d
 			, uint32_t size );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~PassBuffer();
-		/**
-		 *\~english
-		 *\brief		adds a pass to the buffer.
-		 *\remarks		sets the pass' ID.
+		 *\brief		Adds a pass to the buffer.
 		 *\param[in]	pass	The pass.
 		 *\~french
 		 *\brief		Ajoute une passe au tampon.
-		 *\remarks		Définit l'ID de la passe.
 		 *\param[in]	pass	La passe.
 		 */
 		C3D_API uint32_t addPass( Pass & pass );
@@ -91,9 +82,9 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Binds the texture buffer.
+		 *\brief		Binds the buffer.
 		 *\~french
-		 *\brief		Active le tampon de texture.
+		 *\brief		Active le tampon.
 		 */
 		C3D_API void bind()const;
 		/**
@@ -140,10 +131,37 @@ namespace castor3d
 			float a;
 		};
 
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
+		struct ExtendedData
+		{
+			castor::ArrayView< RgbaColour > sssInfo;
+			castor::ArrayView< RgbaColour > transmittance;
+		};
+
+#else
+
+		struct ExtendedData
+		{
+			RgbaColour sssInfo;
+			RgbaColour transmittance;
+		};
+
+		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 2;
+
+#endif
+
 	protected:
-		//!\~english	The materials buffer.
-		//!\~french		Le tampon contenant les matériaux.
-		ShaderStorageBuffer m_buffer;
+		C3D_API void doVisitExtended( Pass const & pass
+			, ExtendedData & data );
+		C3D_API void doVisit( SubsurfaceScattering const & subsurfaceScattering
+			, uint32_t index
+			, ExtendedData & data );
+
+	protected:
+		//!\~english	The shader buffer.
+		//!\~french		Le tampon shader.
+		ShaderBuffer m_buffer;
 		//!\~english	The current passes.
 		//!\~french		Les passes actuelles.
 		std::vector< Pass * > m_passes;

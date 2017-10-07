@@ -1,4 +1,4 @@
-﻿#include "EnvironmentPrefilter.hpp"
+#include "EnvironmentPrefilter.hpp"
 
 #include "Engine.hpp"
 
@@ -161,8 +161,8 @@ namespace castor3d
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
 		};
 		REQUIRE( p_dstTexture->getDimensions() == m_size );
-		p_srcTexture.bind( 0u );
-		m_sampler->bind( 0u );
+		p_srcTexture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		REQUIRE( m_frameBuffer->isComplete() );
 
@@ -202,8 +202,8 @@ namespace castor3d
 		}
 
 		m_frameBuffer->unbind();
-		m_sampler->unbind( 0u );
-		p_srcTexture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		p_srcTexture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr EnvironmentPrefilter::doCreateProgram()
@@ -226,8 +226,8 @@ namespace castor3d
 			{
 				vtx_position = position;
 				auto view = writer.declLocale( cuT( "normal" )
-					, mat4( mat3( c3d_mtxView ) ) );
-				gl_Position = writer.paren( c3d_mtxProjection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+					, mat4( mat3( c3d_curView ) ) );
+				gl_Position = writer.paren( c3d_projection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );
@@ -241,13 +241,13 @@ namespace castor3d
 
 			// Inputs
 			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
-			auto c3d_mapDiffuse = writer.declUniform< SamplerCube >( ShaderProgram::MapDiffuse );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			Ubo config{ writer, cuT( "Config" ), 0u };
 			auto c3d_roughness = config.declMember< Float >( cuT( "c3d_roughness" ) );
 			config.end();
 
 			// Outputs
-			auto plx_v4FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			auto distributionGGX = writer.implementFunction< Float >( cuT( "DistributionGGX" )
 				, [&]( Vec3 const & p_N
@@ -398,7 +398,7 @@ namespace castor3d
 				ROF;
 
 				prefilteredColor = prefilteredColor / totalWeight;
-				plx_v4FragColor = vec4( prefilteredColor, 1.0 );
+				pxl_fragColor = vec4( prefilteredColor, 1.0 );
 			} );
 
 			pxl = writer.finalise();
@@ -410,7 +410,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}

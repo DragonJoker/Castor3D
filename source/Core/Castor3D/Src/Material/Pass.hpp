@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PASS_H___
 #define ___C3D_PASS_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "SubsurfaceScattering.hpp"
 
 #include <Design/OwnedBy.hpp>
 #include <Design/Signal.hpp>
@@ -195,7 +195,7 @@ namespace castor3d
 		C3D_API MaterialType getType()const;
 		/**
 		 *\~english
-		 *\brief		sets the global alpha value.
+		 *\brief		Sets the global alpha value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur alpha globale.
@@ -204,11 +204,11 @@ namespace castor3d
 		C3D_API void setOpacity( float value );
 		/**
 		 *\~english
-		 *\return		The program flags combination.
+		 *\return		The pass flags combination.
 		 *\~french
-		 *\return		La combinaison d'indicateurs de programme.
+		 *\return		La combinaison d'indicateurs de passe.
 		 */
-		C3D_API ProgramFlags getProgramFlags()const;
+		C3D_API PassFlags getPassFlags()const;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -247,7 +247,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the two sided status.
+		 *\brief		Sets the two sided status.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'application aux deux faces.
@@ -260,7 +260,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the emissive factor.
+		 *\brief		Sets the emissive factor.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le facteur d'émission.
@@ -273,7 +273,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the refraction ratio.
+		 *\brief		Sets the refraction ratio.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le ratio de réfraction.
@@ -286,7 +286,20 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha blend mode.
+		 *\brief		Sets the parallax occlusion mapping usage.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit l'utilisation du parallax occlusion mapping.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setParallaxOcclusion( bool value )
+		{
+			m_parallaxOcclusion = value;
+			onChanged( *this );
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the alpha blend mode.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le mode de mélange alpha.
@@ -299,7 +312,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the colour blend mode.
+		 *\brief		Sets the colour blend mode.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le mode de mélange couleur.
@@ -455,7 +468,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the pass ID.
+		 *\brief		Sets the pass ID.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief
@@ -478,7 +491,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha function.
+		 *\brief		Sets the alpha function.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la fonction d'alpha.
@@ -500,7 +513,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha reference value.
+		 *\brief		Sets the alpha reference value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de référence pour l'alpha.
@@ -509,6 +522,49 @@ namespace castor3d
 		inline void setAlphaValue( float value )
 		{
 			m_alphaValue = value;
+		}
+		/**
+		 *\~english
+		 *\return		\p true if the pass has subsurface scattering extended informations.
+		 *\~french
+		 *\return		\p true si la passe a des informations étendues pour le subsurface scattering.
+		 */
+		inline bool hasSubsurfaceScattering()const
+		{
+			return m_subsurfaceScattering != nullptr;
+		}
+		/**
+		 *\~english
+		 *\return		\p true if the pass uses parallax occlusion mapping.
+		 *\~french
+		 *\return		\p true si la passe utilise le parallax occlusion mapping.
+		 */
+		inline bool hasParallaxOcclusion()const
+		{
+			return m_parallaxOcclusion;
+		}
+		/**
+		 *\~english
+		 *\return		The subsurface scattering extended informations.
+		 *\~french
+		 *\return		Les informations étendues pour le subsurface scattering.
+		 */
+		inline SubsurfaceScattering const & getSubsurfaceScattering()const
+		{
+			REQUIRE( m_subsurfaceScattering );
+			return *m_subsurfaceScattering;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the subsurface scattering extended informations.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit les informations étendues pour le subsurface scattering.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setSubsurfaceScattering( SubsurfaceScatteringUPtr && value )
+		{
+			m_subsurfaceScattering = std::move( value );
 		}
 
 	protected:
@@ -601,18 +657,13 @@ namespace castor3d
 		virtual void doCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		sets the global alpha value.
+		 *\brief		Sets the global alpha value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur alpha globale.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
 		virtual void doSetOpacity( float value ) = 0;
-
-	public:
-		static uint32_t constexpr PassBufferIndex = 0u;
-		static uint32_t constexpr LightBufferIndex = 1u;
-		static uint32_t constexpr MinTextureIndex = 2u;
 
 	public:
 		OnChanged onChanged;
@@ -660,6 +711,12 @@ namespace castor3d
 		//!\~english	Tells if the pass' diffuse needs gamma correction.
 		//!\~french		Dit si la diffuse de la passe a besoin de correction gamma.
 		bool m_needsGammaCorrection{ false };
+		//!\~english	Tells if the pass uses parallax occlusion mapping.
+		//!\~french		Dit si la passe utilise le parallax occlusion mapping.
+		bool m_parallaxOcclusion{ false };
+		//!\~english	The subsurface scattering extended informations.
+		//!\~french		Les informations étendus pour le subsurface scattering.
+		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 	};
 }
 

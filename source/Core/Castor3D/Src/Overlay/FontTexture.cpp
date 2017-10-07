@@ -37,9 +37,9 @@ namespace castor3d
 	void FontTexture::initialise()
 	{
 		m_texture->initialise();
-		m_texture->bind( 0 );
+		m_texture->bind( MinTextureIndex );
 		m_texture->generateMipmaps();
-		m_texture->unbind( 0 );
+		m_texture->unbind( MinTextureIndex );
 		onChanged( *this );
 	}
 

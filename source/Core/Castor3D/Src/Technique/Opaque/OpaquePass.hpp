@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -67,40 +67,46 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
 		void render( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps )override;
+			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter )override;
 
 	protected:
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
-		void doUpdateFlags( TextureChannels & textureFlags
+		void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const override;
@@ -114,6 +120,7 @@ namespace castor3d
 		static castor::String const Output2;
 		static castor::String const Output3;
 		static castor::String const Output4;
+		static castor::String const Output5;
 	};
 }
 

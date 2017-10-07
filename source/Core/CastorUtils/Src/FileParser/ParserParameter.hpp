@@ -28,6 +28,7 @@ SOFTWARE.
 #include "Graphics/Colour.hpp"
 #include "Data/Path.hpp"
 #include "Math/Point.hpp"
+#include "Math/Range.hpp"
 #include "Graphics/Position.hpp"
 #include "Graphics/Rectangle.hpp"
 #include "Graphics/Size.hpp"
@@ -66,7 +67,7 @@ namespace castor
 	\brief		Parmètre de parseur spécifié.
 	*/
 	template< ParameterType Type >
-	class ParserParameter < Type, typename std::enable_if < !HasBaseParameterType< Type >::value >::type >
+	class ParserParameter < Type, typename std::enable_if < !HasBaseParameterType< Type >::value && !IsArithmeticType< Type >::value >::type >
 		: public ParserParameterBase
 	{
 	public:
@@ -115,6 +116,82 @@ namespace castor
 		//!\~english	The parameter value.
 		//!\~french		La valeur du paramètre.
 		ValueType m_value;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		26/03/2013
+	\version	0.7.0
+	\~english
+	\brief		Specified parser parameter.
+	\~french
+	\brief		Parmètre de parseur spécifié.
+	*/
+	template< ParameterType Type >
+	class ParserParameter < Type, typename std::enable_if < IsArithmeticType< Type >::value >::type >
+		: public ParserParameterBase
+	{
+	public:
+		//!\~english	The parameter value type.
+		//!\~french		Le type de valeur du paramètre.
+		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		inline ParserParameter()
+			: m_range{ makeRange( std::numeric_limits< ValueType >::lowest(), std::numeric_limits< ValueType >::max() ) }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		inline ParserParameter( Range< ValueType > const & range )
+			: m_range{ range }
+		{
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::getType
+		 */
+		inline ParameterType getType()
+		{
+			return ParserParameterHelper< Type >::ParamType;
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::getStrType
+		 */
+		inline xchar const * const getStrType()
+		{
+			return ParserParameterHelper< Type >::StringType;
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::clone
+		 */
+		inline ParserParameterBaseSPtr clone()
+		{
+			return std::make_shared< ParserParameter< Type > >( *this );
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::parse
+		 */
+		inline bool parse( String & p_params )
+		{
+			return ValueParser< Type >::parse( p_params, m_value, m_range );
+		}
+
+	public:
+		//!\~english	The parameter value.
+		//!\~french		La valeur du paramètre.
+		ValueType m_value;
+		//!\~english	The parameter value range.
+		//!\~french		L'intervalle de la valeur du paramètre.
+		Range< ValueType > m_range;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -312,6 +389,34 @@ namespace castor
 	ParserParameterBaseSPtr makeParameter()
 	{
 		return std::make_shared< ParserParameter< Type > >();
+	}
+	/**
+	 *\~english
+	 *\brief		Creates a parameter of given type.
+	 *\return		The created parameter.
+	 *\~french
+	 *\brief		Crée un paramètre du type donné.
+	 *\return		Le paramètre créé.
+	 */
+	template< ParameterType Type, typename T >
+	ParserParameterBaseSPtr makeParameter( Range< T > const & range )
+	{
+		static_assert( Type >= ParameterType::eInt8 && Type <= ParameterType::eLongDouble
+			, "Only for arithmetic types" );
+		static_assert( ( Type == ParameterType::eInt8 && std::is_same< T, int8_t >::value )
+				|| ( Type == ParameterType::eInt16 && std::is_same< T, int16_t >::value )
+				|| ( Type == ParameterType::eInt32 && std::is_same< T, int32_t >::value )
+				|| ( Type == ParameterType::eInt64 && std::is_same< T, int64_t >::value )
+				|| ( Type == ParameterType::eUInt8 && std::is_same< T, uint8_t >::value )
+				|| ( Type == ParameterType::eUInt16 && std::is_same< T, uint16_t >::value )
+				|| ( Type == ParameterType::eUInt32 && std::is_same< T, uint32_t >::value )
+				|| ( Type == ParameterType::eUInt64 && std::is_same< T, uint64_t >::value )
+				|| ( Type == ParameterType::eFloat && std::is_same< T, float >::value )
+				|| ( Type == ParameterType::eDouble && std::is_same< T, double >::value )
+				|| ( Type == ParameterType::eLongDouble && std::is_same< T, long double >::value )
+			, "C type and ParameterType must match." );
+
+		return std::make_shared< ParserParameter< Type > >( range );
 	}
 	/**
 	 *\~english

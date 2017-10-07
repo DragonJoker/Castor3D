@@ -60,6 +60,10 @@ namespace castor3d
 				result << cuT( "Ambient Occlusion" );
 				break;
 
+			case TextureChannel::eTransmittance:
+				result << cuT( "Transmittance" );
+				break;
+
 			default:
 				break;
 			}
@@ -133,19 +137,30 @@ namespace castor3d
 					+ string::toString( pass.getAlphaValue() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Pass >::checkError( result, "Pass alpha function" );
 			}
-			else if ( pass.getAlphaBlendMode() != BlendMode::eNoBlend )
+			else if ( pass.hasAlphaBlending()
+				&& pass.getAlphaBlendMode() != BlendMode::eNoBlend )
 			{
 				result = file.writeText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( pass.getAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Pass >::checkError( result, "Pass alpha blend mode" );
 			}
 		}
 
+		if ( result && pass.hasParallaxOcclusion() )
+		{
+			result = file.writeText( m_tabs + cuT( "\tparallax_occlusion true\n" ) ) > 0;
+		}
+
 		if ( result )
 		{
 			for ( auto unit : pass )
 			{
-				result = TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.getType() }( *unit, file );
+				result &= TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.getType() }( *unit, file );
 			}
+		}
+
+		if ( result && pass.hasSubsurfaceScattering() )
+		{
+			result = SubsurfaceScattering::TextWriter{ m_tabs + cuT( "\t" ) }( pass.getSubsurfaceScattering(), file );
 		}
 
 		return result;
@@ -233,7 +248,7 @@ namespace castor3d
 		Logger::logInfo( StringStream() << cuT( "Destroying TextureUnit " ) << index );
 		auto it = m_textureUnits.begin();
 		m_textureUnits.erase( it + index );
-		uint32_t i = 0u;
+		uint32_t i = MinTextureIndex;
 
 		for ( it = m_textureUnits.begin(); it != m_textureUnits.end(); ++it )
 		{
@@ -265,19 +280,19 @@ namespace castor3d
 				unit->setIndex( 0u );
 			}
 
-			uint32_t index = MinTextureIndex;
 			TextureUnitSPtr opacitySource;
 			PxBufferBaseSPtr opacityImage;
 
-			doPrepareTexture( TextureChannel::eDiffuse, index, opacitySource, opacityImage );
-			doPrepareTexture( TextureChannel::eSpecular, index, opacitySource, opacityImage );
-			doPrepareTexture( TextureChannel::eEmissive, index, opacitySource, opacityImage );
-
-			doPrepareTexture( TextureChannel::eNormal, index );
+			uint32_t index = MinTextureIndex;
+			doPrepareTexture( TextureChannel::eDiffuse, index );
+			doPrepareTexture( TextureChannel::eSpecular, index );
 			doPrepareTexture( TextureChannel::eGloss, index );
+			doPrepareTexture( TextureChannel::eNormal, index );
+			doPrepareOpacity( opacitySource, opacityImage, index );
 			doPrepareTexture( TextureChannel::eHeight, index );
-
 			doPrepareTexture( TextureChannel::eAmbientOcclusion, index );
+			doPrepareTexture( TextureChannel::eEmissive, index );
+			doPrepareTexture( TextureChannel::eTransmittance, index );
 
 			doReduceTexture( TextureChannel::eSpecular
 				, getType() == MaterialType::ePbrMetallicRoughness
@@ -289,8 +304,8 @@ namespace castor3d
 				, PixelFormat::eL8 );
 			doReduceTexture( TextureChannel::eAmbientOcclusion
 				, PixelFormat::eL8 );
-
-			doPrepareOpacity( opacitySource, opacityImage, index );
+			doReduceTexture( TextureChannel::eTransmittance
+				, PixelFormat::eL8 );
 
 			auto unit = getTextureUnit( TextureChannel::eDiffuse );
 
@@ -348,30 +363,45 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	ProgramFlags Pass::getProgramFlags()const
+	PassFlags Pass::getPassFlags()const
 	{
-		ProgramFlags result;
+		PassFlags result;
 
 		if ( hasAlphaBlending()
 			&& !checkFlag( getTextureFlags(), TextureChannel::eRefraction ) )
 		{
-			result |= ProgramFlag::eAlphaBlending;
+			result |= PassFlag::eAlphaBlending;
 		}
 
 		if ( getAlphaFunc() != ComparisonFunc::eAlways )
 		{
-			result |= ProgramFlag::eAlphaTest;
+			result |= PassFlag::eAlphaTest;
 		}
 
 		switch ( getType() )
 		{
 		case MaterialType::ePbrMetallicRoughness:
-			result |= ProgramFlag::ePbrMetallicRoughness;
+			result |= PassFlag::ePbrMetallicRoughness;
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			result |= ProgramFlag::ePbrSpecularGlossiness;
+			result |= PassFlag::ePbrSpecularGlossiness;
 			break;
+		}
+
+		if ( hasSubsurfaceScattering() )
+		{
+			result |= PassFlag::eSubsurfaceScattering;
+
+			if ( getSubsurfaceScattering().isDistanceBasedTransmittanceEnabled() )
+			{
+				result |= PassFlag::eDistanceBasedTransmittance;
+			}
+		}
+
+		if ( hasParallaxOcclusion() )
+		{
+			result |= PassFlag::eParallaxOcclusionMapping;
 		}
 
 		return result;

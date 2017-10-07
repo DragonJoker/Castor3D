@@ -168,7 +168,7 @@ namespace castor3d
 	void TransformFeedbackParticleSystem::setUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_updateProgram = p_program;
-		m_updateProgram->createUniform( UniformType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
+		m_updateProgram->createUniform< UniformType::eSampler >( cuT( "c3d_mapRandom" ), ShaderType::eGeometry )->setValue( MinTextureIndex );
 
 		m_updateProgram->setTransformLayout( m_computed );
 	}
@@ -260,7 +260,7 @@ namespace castor3d
 		{
 			m_randomTexture.setTexture( texture );
 			m_randomTexture.setSampler( sampler );
-			m_randomTexture.setIndex( 0 );
+			m_randomTexture.setIndex( MinTextureIndex );
 			result = m_randomTexture.initialise();
 			texture->generateMipmaps();
 		}

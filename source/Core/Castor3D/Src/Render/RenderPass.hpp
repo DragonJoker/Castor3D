@@ -50,10 +50,10 @@ namespace castor3d
 								   || ( lhs.m_textureFlags == rhs.m_textureFlags
 										&& ( lhs.m_programFlags < rhs.m_programFlags
 											 || ( lhs.m_programFlags == rhs.m_programFlags
-												  && lhs.m_sceneFlags < rhs.m_sceneFlags ) ) ) ) ) ) );
+												  && ( lhs.m_passFlags < rhs.m_passFlags
+													 || ( lhs.m_passFlags == rhs.m_passFlags
+														  && lhs.m_sceneFlags < rhs.m_sceneFlags ) ) ) ) ) ) ) ) );
 	}
-	using ShadowMapRefArray = std::vector< std::reference_wrapper< ShadowMap > >;
-	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -156,7 +156,8 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API glsl::Shader getVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -174,7 +175,8 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API glsl::Shader getPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const;
@@ -190,7 +192,8 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API glsl::Shader getGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API glsl::Shader getGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
@@ -216,6 +219,7 @@ namespace castor3d
 		C3D_API void preparePipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, ComparisonFunc alphaFunc
+			, PassFlags & passFlags
 			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags
@@ -243,6 +247,7 @@ namespace castor3d
 		C3D_API RenderPipeline * getPipelineFront( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, ComparisonFunc alphaFunc
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
@@ -269,6 +274,7 @@ namespace castor3d
 		C3D_API RenderPipeline * getPipelineBack( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, ComparisonFunc alphaFunc
+			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
@@ -376,7 +382,8 @@ namespace castor3d
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
 		 */
-		C3D_API void updateFlags( TextureChannels & textureFlags
+		C3D_API void updateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const;
 		/**
@@ -391,39 +398,6 @@ namespace castor3d
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Creates the appropriate GLSL materials buffer.
-		 *\param[in]	writer			The GLSL writer.
-		 *\param		programFlags	The program flags.
-		 *\~french
-		 *\brief		Crée le tampon de matériaux GLSL approprié.
-		 *\param[in]	writer			Le writer GLSL.
-		 *\param		programFlags	Les indicateurs de programme.
-		 */
-		C3D_API std::unique_ptr< shader::Materials > doCreateMaterials( glsl::GlslWriter & writer
-			, ProgramFlags const & programFlags )const;
-		/**
-		 *\~english
-		 *\brief		Writes the alpha function in GLSL.
-		 *\param[in]	writer		The GLSL writer.
-		 *\param		alphaFunc	The alpha function.
-		 *\param[in]	alpha		The alpha value.
-		 *\param[in]	material	The material index.
-		 *\param[in]	materials	The materials.
-		 *\~french
-		 *\brief		Ecrit la fonction d'opacité en GLSL.
-		 *\param[in]	writer		Le writer GLSL.
-		 *\param		alphaFunc	La fonction d'opacité.
-		 *\param[in]	alpha		La valeur d'opacité.
-		 *\param[in]	material	L'indice du matériau.
-		 *\param[in]	materials	Les matériaux.
-		 */
-		C3D_API void doApplyAlphaFunc( glsl::GlslWriter & writer
-			, ComparisonFunc alphaFunc
-			, glsl::Float const & alpha
-			, glsl::Int const & material
-			, shader::Materials const & materials )const;
 		/**
 		 *\~english
 		 *\brief		Creates a render node.
@@ -468,7 +442,8 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API ShaderProgramSPtr doGetProgram( TextureChannels const & textureFlags
+		C3D_API ShaderProgramSPtr doGetProgram( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc
@@ -1001,7 +976,8 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API virtual glsl::Shader doGetVertexShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, bool invertNormals )const;
@@ -1017,7 +993,8 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual glsl::Shader doGetGeometryShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const = 0;
 		/**
@@ -1034,7 +1011,8 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual glsl::Shader doGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1052,7 +1030,8 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual glsl::Shader doGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1070,7 +1049,8 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual glsl::Shader doGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		C3D_API virtual glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, ComparisonFunc alphaFunc )const = 0;
@@ -1086,7 +1066,8 @@ namespace castor3d
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
 		 */
-		C3D_API virtual void doUpdateFlags( TextureChannels & textureFlags
+		C3D_API virtual void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const = 0;
 		/**

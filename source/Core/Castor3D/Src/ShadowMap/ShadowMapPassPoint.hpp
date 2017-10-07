@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -96,6 +96,13 @@ namespace castor3d
 		 */
 		void doPreparePipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
+
+	public:
+		static castor::String const ShadowMapUbo;
+		static castor::String const WorldLightPosition;
+		static castor::String const FarPlane;
+		static uint32_t constexpr TextureSize = 1024;
+		static uint32_t constexpr UboBindingPoint = 8u;
 
 	private:
 		//!\~english	The connection to light's node changed signal.

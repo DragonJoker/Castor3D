@@ -105,6 +105,17 @@ namespace castor3d
 		C3D_API void render();
 		/**
 		 *\~english
+		 *\brief		Dumps the environment map on screen.
+		 *\param[in]	size	The dump dimensions.
+		 *\param[in]	index	The environment map index (to compute its position).
+		 *\~french
+		 *\brief		Dumpe la texture d'environnement sur l'écran.
+		 *\param[in]	size	Les dimensions d'affichage.
+		 *\param[in]	index	L'indice de la texture d'environnement (pour calculer sa position).
+		 */
+		C3D_API void debugDisplay( castor::Size const & size, uint32_t index );
+		/**
+		 *\~english
 		 *\return		The reflection map.
 		 *\~english
 		 *\return		La texture d'environnement.

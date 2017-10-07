@@ -160,7 +160,7 @@ namespace castor3d
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 *\param[in]	p_parsers	Les analyseurs.
 		 */
-		C3D_API void registerParsers( castor::String const & p_name, castor::FileParser::AttributeParsersBySection && p_parsers );
+		C3D_API void registerParsers( castor::String const & p_name, castor::FileParser::AttributeParsersBySection const & p_parsers );
 		/**
 		 *\~english
 		 *\brief		Registers additional sections for SceneFileParser.

@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -14,6 +14,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Fog.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
@@ -101,7 +102,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = texture;
-					gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position, 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
@@ -117,16 +118,18 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapReflection = writer.declUniform< Sampler2D >( cuT( "c3d_mapReflection" ) );
-			auto c3d_mapRefraction = writer.declUniform< Sampler2D >( cuT( "c3d_mapRefraction" ) );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapSsao = writer.declUniform< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao );
-			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
-			auto c3d_mapLightSpecular = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightSpecular" ) );
+			auto index = MinTextureIndex;
+			auto c3d_mapReflection = writer.declSampler< Sampler2D >( cuT( "c3d_mapReflection" ), index++ );
+			auto c3d_mapRefraction = writer.declSampler< Sampler2D >( cuT( "c3d_mapRefraction" ), index++ );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
+			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
+			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++ );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			glsl::Utils utils{ writer };
@@ -153,6 +156,8 @@ namespace castor3d
 						, texture( c3d_mapData1, vtx_texture ) );
 					auto data4 = writer.declLocale( cuT( "data4" )
 						, texture( c3d_mapData4, vtx_texture ) );
+					auto data5 = writer.declLocale( cuT( "data5" )
+						, texture( c3d_mapData5, vtx_texture ) );
 					auto emissive = writer.declLocale( cuT( "emissive" )
 						, data4.xyz() );
 					auto flags = writer.declLocale( cuT( "flags" )
@@ -171,6 +176,8 @@ namespace castor3d
 						, reflection
 						, refraction
 						, envMapIndex );
+					auto materialId = writer.declLocale( cuT( "materialId" )
+						, writer.cast< Int >( data5.z() ) );
 					auto data2 = writer.declLocale( cuT( "data2" )
 						, texture( c3d_mapData2, vtx_texture ) );
 					auto data3 = writer.declLocale( cuT( "data3" )
@@ -195,7 +202,7 @@ namespace castor3d
 						}
 
 						ambient *= diffuse;
-						diffuse = lightDiffuse;
+						diffuse *= lightDiffuse;
 					}
 					FI;
 
@@ -223,7 +230,9 @@ namespace castor3d
 					if ( fogType != FogType::eDisabled )
 					{
 						auto position = writer.declLocale( cuT( "position" )
-							, utils.calcVSPosition( vtx_texture, c3d_mtxInvProj ) );
+							, utils.calcVSPosition( vtx_texture
+								, texture( c3d_mapDepth, vtx_texture ).r()
+								, c3d_mtxInvProj ) );
 						fog.applyFog( pxl_fragColor, length( position ), position.z() );
 					}
 				} );
@@ -241,19 +250,21 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer );
 			UBO_GPINFO( writer );
-			auto c3d_mapReflection = writer.declUniform< Sampler2D >( cuT( "c3d_mapReflection" ) );
-			auto c3d_mapRefraction = writer.declUniform< Sampler2D >( cuT( "c3d_mapRefraction" ) );
-			auto c3d_mapDepth = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eDepth ) );
-			auto c3d_mapData1 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData1 ) );
-			auto c3d_mapData2 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData2 ) );
-			auto c3d_mapData3 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData3 ) );
-			auto c3d_mapData4 = writer.declUniform< Sampler2D >( getTextureName( DsTexture::eData4 ) );
-			auto c3d_mapSsao = writer.declUniform< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao );
-			auto c3d_mapLightDiffuse = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightDiffuse" ) );
-			auto c3d_mapLightSpecular = writer.declUniform< Sampler2D >( cuT( "c3d_mapLightSpecular" ) );
-			auto c3d_mapIrradiance = writer.declUniform< SamplerCube >( ShaderProgram::MapIrradiance );
-			auto c3d_mapPrefiltered = writer.declUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
-			auto c3d_mapBrdf = writer.declUniform< Sampler2D >( ShaderProgram::MapBrdf );
+			auto index = MinTextureIndex;
+			auto c3d_mapReflection = writer.declSampler< Sampler2D >( cuT( "c3d_mapReflection" ), index++ );
+			auto c3d_mapRefraction = writer.declSampler< Sampler2D >( cuT( "c3d_mapRefraction" ), index++ );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++ );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++ );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
+			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
+			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++ );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++ );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			glsl::Utils utils{ writer };
@@ -280,6 +291,8 @@ namespace castor3d
 						, texture( c3d_mapData1, vtx_texture ) );
 					auto data4 = writer.declLocale( cuT( "data4" )
 						, texture( c3d_mapData4, vtx_texture ) );
+					auto data5 = writer.declLocale( cuT( "data5" )
+						, texture( c3d_mapData5, vtx_texture ) );
 					auto emissive = writer.declLocale( cuT( "emissive" )
 						, data4.xyz() );
 					auto flags = writer.declLocale( cuT( "flags" )
@@ -298,6 +311,12 @@ namespace castor3d
 						, reflection
 						, refraction
 						, envMapIndex );
+					auto materialId = writer.declLocale( cuT( "materialId" )
+						, writer.cast< Int >( data5.z() ) );
+					auto data2 = writer.declLocale( cuT( "data2" )
+						, texture( c3d_mapData2, vtx_texture ) );
+					auto albedo = writer.declLocale( cuT( "albedo" )
+						, data2.rgb() );
 					auto data3 = writer.declLocale( cuT( "data3" )
 						, texture( c3d_mapData3, vtx_texture ) );
 					auto occlusion = writer.declLocale( cuT( "occlusion" )
@@ -349,12 +368,18 @@ namespace castor3d
 					}
 					FI;
 
-					pxl_fragColor = vec4( lightDiffuse + lightSpecular + emissive + ambient, 1.0 );
+#if !C3D_DEBUG_SSS_TRANSMITTANCE
+					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0 );
+#else
+					pxl_fragColor = vec4( lightDiffuse, 1.0 );
+#endif
 
 					if ( fogType != FogType::eDisabled )
 					{
 						auto position = writer.declLocale( cuT( "position" )
-							, utils.calcVSPosition( vtx_texture, c3d_mtxInvProj ) );
+							, utils.calcVSPosition( vtx_texture
+								, texture( c3d_mapDepth, vtx_texture ).r()
+								, c3d_mtxInvProj ) );
 						fog.applyFog( pxl_fragColor, length( position ), position.z() );
 					}
 				} );
@@ -374,31 +399,6 @@ namespace castor3d
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
-
-			auto index = 0u;
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapReflection" ), ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapRefraction" ), ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eDepth ), ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData1 ), ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData2 ), ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData3 ), ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( getTextureName( DsTexture::eData4 ), ShaderType::ePixel )->setValue( index++ );
-
-			if ( hasSsao )
-			{
-				program->createUniform< UniformType::eSampler >( cuT( "c3d_mapSsao" ), ShaderType::ePixel )->setValue( index++ );
-			}
-
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapLightDiffuse" ), ShaderType::ePixel )->setValue( index++ );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapLightSpecular" ), ShaderType::ePixel )->setValue( index++ );
-
-			if ( isPbr )
-			{
-				program->createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel )->setValue( index++ );
-				program->createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel )->setValue( index++ );
-				program->createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->setValue( index++ );
-			}
-
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
 			program->initialise();
@@ -527,7 +527,7 @@ namespace castor3d
 		frameBuffer.clear( BufferComponent::eColour );
 
 		m_viewport.apply();
-		uint32_t index{ 0u };
+		uint32_t index{ MinTextureIndex };
 		reflection.getTexture()->bind( index );
 		reflection.getSampler()->bind( index );
 		++index;
@@ -548,6 +548,9 @@ namespace castor3d
 		++index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index );
+		++index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index );
 		++index;
 
 		if ( m_ssaoEnabled )
@@ -579,6 +582,9 @@ namespace castor3d
 		}
 
 		--index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index );
+		--index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index );
 		--index;
@@ -599,7 +605,7 @@ namespace castor3d
 		--index;
 		reflection.getTexture()->bind( index );
 		reflection.getSampler()->bind( index );
-		ENSURE( index == 0u );
+		ENSURE( index == MinTextureIndex );
 
 		m_timer->stop();
 	}
@@ -627,7 +633,7 @@ namespace castor3d
 		frameBuffer.setDrawBuffers();
 
 		m_viewport.apply();
-		uint32_t index{ 0u };
+		uint32_t index{ MinTextureIndex };
 		reflection.getTexture()->bind( index );
 		reflection.getSampler()->bind( index );
 		++index;
@@ -648,6 +654,9 @@ namespace castor3d
 		++index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index );
+		++index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index );
 		++index;
 
 		if ( m_ssaoEnabled )
@@ -697,6 +706,9 @@ namespace castor3d
 		}
 
 		--index;
+		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( index );
+		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index );
+		--index;
 		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( index );
 		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index );
 		--index;
@@ -717,7 +729,7 @@ namespace castor3d
 		--index;
 		reflection.getTexture()->unbind( index );
 		reflection.getSampler()->unbind( index );
-		ENSURE( index == 0u );
+		ENSURE( index == MinTextureIndex );
 
 		m_timer->stop();
 	}
