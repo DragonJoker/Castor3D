@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -122,17 +122,13 @@ namespace castor3d
 			, ComparisonFunc alphaFunc )const override;
 
 	private:
-		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
-		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
+		using CubeAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		CubeDepthAttachment m_depthAttach;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
+		CubeAttachment m_depthAttach;
 		//!\~english	The attach between colour buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		CubeColourAttachment m_colourAttach;
+		CubeAttachment m_colourAttach;
 	};
 }
 

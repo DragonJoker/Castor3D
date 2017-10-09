@@ -146,12 +146,28 @@ namespace castor
 			result = std::make_shared< PxBuffer< PixelFormat::eB8G8R8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
+		case PixelFormat::eR8G8B8_SRGB:
+			result = std::make_shared< PxBuffer< PixelFormat::eR8G8B8_SRGB > >( p_size, p_buffer, p_eBufferFormat );
+			break;
+
+		case PixelFormat::eB8G8R8_SRGB:
+			result = std::make_shared< PxBuffer< PixelFormat::eB8G8R8_SRGB > >( p_size, p_buffer, p_eBufferFormat );
+			break;
+
 		case PixelFormat::eA8R8G8B8:
 			result = std::make_shared< PxBuffer< PixelFormat::eA8R8G8B8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::eA8B8G8R8:
 			result = std::make_shared< PxBuffer< PixelFormat::eA8B8G8R8 > >( p_size, p_buffer, p_eBufferFormat );
+			break;
+
+		case PixelFormat::eA8R8G8B8_SRGB:
+			result = std::make_shared< PxBuffer< PixelFormat::eA8R8G8B8_SRGB > >( p_size, p_buffer, p_eBufferFormat );
+			break;
+
+		case PixelFormat::eA8B8G8R8_SRGB:
+			result = std::make_shared< PxBuffer< PixelFormat::eA8B8G8R8_SRGB > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::eRGB16F:

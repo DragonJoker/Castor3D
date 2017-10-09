@@ -350,17 +350,21 @@ namespace castor3d
 			, bool first
 			, ShadowMap * shadowMapOpt )override
 		{
-			auto & shadowMapTexture = shadowMapOpt->getTexture();
 			my_pass_type::doUpdate( size
 				, light
 				, camera );
+			auto & shadowMapTexture = shadowMapOpt->getTexture();
+			auto & shadowMapDepth = shadowMapOpt->getDepth();
 			shadowMapTexture.setIndex( MinTextureIndex + uint32_t( DsTexture::eCount ) );
-			shadowMapTexture.bind();
+			shadowMapDepth.setIndex( MinTextureIndex + uint32_t( DsTexture::eCount ) + 1u );
 			this->m_program->bind( light );
+			shadowMapTexture.bind();
+			shadowMapDepth.bind();
 			my_pass_type::doRender( size
 				, gp
 				, light.getColour()
 				, first );
+			shadowMapDepth.unbind();
 			shadowMapTexture.unbind();
 		}
 

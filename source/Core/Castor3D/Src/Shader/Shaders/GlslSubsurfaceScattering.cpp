@@ -429,12 +429,12 @@ namespace castor3d
 					{
 						IF( m_writer, distanceBasedTransmission != 0_i )
 						{
-							auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
+							auto c3d_mapDepthDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapDepthDirectional );
 
 							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 								, m_getTransformedPosition( position, light.m_transform() ) );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).r() );
+								, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).r() );
 							auto occluder = m_writer.declLocale( cuT( "occluder" )
 								, writeFunctionCall< Vec3 >( &m_writer
 									, cuT( "calcWSPosition" )
@@ -476,14 +476,14 @@ namespace castor3d
 						IF( m_writer, distanceBasedTransmission != 0_i )
 						{
 							auto c3d_mtxInvViewProj = m_writer.getBuiltin< Mat4 >( cuT( "c3d_mtxInvViewProj" ) );
-							auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapShadowPoint );
+							auto c3d_mapDepthPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapDepthPoint );
 
 							auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 								, position - light.m_position() );
 							auto direction = m_writer.declLocale( cuT( "direction" )
 								, vertexToLight );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapShadowPoint, direction ).r() );
+								, texture( c3d_mapDepthPoint, direction ).r() );
 							auto occluder = m_writer.declLocale( cuT( "occluder" )
 								, writeFunctionCall< Vec3 >( &m_writer
 									, cuT( "calcWSPosition" )
@@ -524,12 +524,12 @@ namespace castor3d
 					{
 						IF( m_writer, distanceBasedTransmission != 0_i )
 						{
-							auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
+							auto c3d_mapDepthSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapDepthSpot );
 
 							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 								, m_getTransformedPosition( position, light.m_transform() ) );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).r() );
+								, texture( c3d_mapDepthSpot, lightSpacePosition.xy() ).r() );
 							auto occluder = m_writer.declLocale( cuT( "occluder" )
 								, writeFunctionCall< Vec3 >( &m_writer
 									, cuT( "calcWSPosition" )
@@ -537,7 +537,7 @@ namespace castor3d
 									, lightSpaceDepth
 									, inverse( light.m_transform() ) ) );
 #if C3D_DEBUG_SSS_TRANSMITTANCE
-							factor = vec3( occluder / light.m_farPlane() );
+							factor = vec3( lightSpaceDepth );
 #else
 							auto distance = m_writer.declLocale( cuT( "distance" )
 								, glsl::distance( occluder, position ) );

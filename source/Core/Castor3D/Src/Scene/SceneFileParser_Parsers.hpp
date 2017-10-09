@@ -39,6 +39,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserRootTextOverlay )
 	DECLARE_ATTRIBUTE_PARSER( parserRootDebugOverlays )
 	DECLARE_ATTRIBUTE_PARSER( parserRootWindow )
+	DECLARE_ATTRIBUTE_PARSER( parserRootMaterials )
 
 	//Window parsers
 	DECLARE_ATTRIBUTE_PARSER( parserWindowRenderTarget )
@@ -73,7 +74,6 @@ namespace castor3d
 
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSceneInclude )
-	DECLARE_ATTRIBUTE_PARSER( parserSceneMaterials )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneBkColour )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneBkImage )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFont )

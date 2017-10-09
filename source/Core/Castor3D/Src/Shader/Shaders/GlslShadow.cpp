@@ -1,4 +1,4 @@
-﻿#include "GlslShadow.hpp"
+#include "GlslShadow.hpp"
 
 using namespace castor;
 using namespace glsl;
@@ -10,6 +10,9 @@ namespace castor3d
 		castor::String const Shadow::MapShadowDirectional = cuT( "c3d_mapShadowDirectional" );
 		castor::String const Shadow::MapShadowSpot = cuT( "c3d_mapShadowSpot" );
 		castor::String const Shadow::MapShadowPoint = cuT( "c3d_mapShadowPoint" );
+		castor::String const Shadow::MapDepthDirectional = cuT( "c3d_mapDepthDirectional" );
+		castor::String const Shadow::MapDepthSpot = cuT( "c3d_mapDepthSpot" );
+		castor::String const Shadow::MapDepthPoint = cuT( "c3d_mapDepthPoint" );
 
 		Shadow::Shadow( GlslWriter & writer )
 			: m_writer{ writer }
@@ -37,6 +40,7 @@ namespace castor3d
 			, uint32_t & index )
 		{
 			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++ );
+			auto c3d_mapDepthDirectional = m_writer.declSampler< Sampler2D >( MapDepthDirectional, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -48,6 +52,7 @@ namespace castor3d
 			, uint32_t & index )
 		{
 			auto c3d_mapShadowPoint = m_writer.declSampler< SamplerCube >( MapShadowPoint, index++ );
+			auto c3d_mapDepthPoint = m_writer.declSampler< SamplerCube >( MapDepthPoint, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -58,6 +63,7 @@ namespace castor3d
 			, uint32_t & index )
 		{
 			auto c3d_mapShadowSpot = m_writer.declSampler< Sampler2D >( MapShadowSpot, index++ );
+			auto c3d_mapDepthSpot = m_writer.declSampler< Sampler2D >( MapDepthSpot, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();

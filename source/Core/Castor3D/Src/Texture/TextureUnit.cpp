@@ -186,7 +186,7 @@ namespace castor3d
 		if ( target )
 		{
 			target->initialise( getIndex() );
-			m_texture = target->getTexture().getTexture();
+			m_texture = target->getSRgbTexture().getTexture();
 			result = true;
 		}
 		else if ( m_texture )

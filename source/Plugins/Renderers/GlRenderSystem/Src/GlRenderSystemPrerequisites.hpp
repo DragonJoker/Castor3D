@@ -576,6 +576,7 @@ namespace GlRender
 		eDepthClamp = 0x864F,
 		eRasterizerDiscard = 0x8C89,
 		eSeamlessCubeMaps = 0x884F,
+		eFramebufferSRGB = 0x8DB9,
 	};
 
 	enum class GlFramebufferStatus

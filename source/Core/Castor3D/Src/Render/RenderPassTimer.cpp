@@ -1,4 +1,4 @@
-﻿#include "RenderPassTimer.hpp"
+#include "RenderPassTimer.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderLoop.hpp"

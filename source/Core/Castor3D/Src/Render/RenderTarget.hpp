@@ -107,15 +107,21 @@ namespace castor3d
 			bool initialise( uint32_t index, castor::Size const & size );
 			void cleanup();
 
-			//!\~english	The texture receiving the color render.
-			//!\~french		La texture recevant le rendu couleur.
-			TextureUnit m_colourTexture;
+			//!\~english	The texture receiving the color RGB render.
+			//!\~french		La texture recevant le rendu couleur RGB.
+			TextureUnit m_rgbTexture;
+			//!\~english	The texture receiving the color sRGB render.
+			//!\~french		La texture recevant le rendu couleur sRGB.
+			TextureUnit m_srgbTexture;
 			//!\~english	The frame buffer.
 			//!\~french		Le tampon d'image.
 			FrameBufferSPtr m_frameBuffer;
-			//!\~english	The attach between the colour texture and main frame buffer.
-			//!\~french		L'attache entre la texture de couleurs et le tampon principal.
-			TextureAttachmentSPtr m_colourAttach;
+			//!\~english	The attach between the colour RGB texture and main frame buffer.
+			//!\~french		L'attache entre la texture de couleurs RGB et le tampon principal.
+			TextureAttachmentSPtr m_rgbAttach;
+			//!\~english	The attach between the colour sRGB texture and main frame buffer.
+			//!\~french		L'attache entre la texture de couleurs sRGB et le tampon principal.
+			TextureAttachmentSPtr m_srgbAttach;
 
 		private:
 			RenderTarget & m_renderTarget;
@@ -333,13 +339,23 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The colour texture.
+		 *\return		The RGB texture.
 		 *\~french
-		 *\return		La texture de couleurs.
+		 *\return		La texture RGB.
 		 */
-		inline TextureUnit const & getTexture()const
+		inline TextureUnit const & getRgbTexture()const
 		{
-			return m_frameBuffer.m_colourTexture;
+			return m_frameBuffer.m_rgbTexture;
+		}
+		/**
+		 *\~english
+		 *\return		The sRGB texture.
+		 *\~french
+		 *\return		La texture sRGB.
+		 */
+		inline TextureUnit const & getSRgbTexture()const
+		{
+			return m_frameBuffer.m_srgbTexture;
 		}
 		/**
 		 *\~english

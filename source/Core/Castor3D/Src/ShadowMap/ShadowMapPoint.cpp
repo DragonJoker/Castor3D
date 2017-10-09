@@ -33,10 +33,48 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doInitialisePoint( Engine & engine
+		TextureUnit doInitialisePointShadow( Engine & engine
 			, Size const & size )
 		{
-			String const name = cuT( "ShadowMap_Point" );
+			String const name = cuT( "ShadowMap_Point_Shadow" );
+			SamplerSPtr sampler;
+
+			if ( engine.getSamplerCache().has( name ) )
+			{
+				sampler = engine.getSamplerCache().find( name );
+			}
+			else
+			{
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+			}
+
+			TextureUnit unit{ engine };
+			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite
+				, PixelFormat::eL32F
+				, size );
+			unit.setTexture( texture );
+			unit.setSampler( sampler );
+
+			for ( auto & image : *texture )
+			{
+				image->initialiseSource();
+			}
+
+			return unit;
+		}
+
+		TextureUnit doInitialisePointDepth( Engine & engine
+			, Size const & size )
+		{
+			String const name = cuT( "ShadowMap_Point_Depth" );
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -75,7 +113,8 @@ namespace castor3d
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
-			, doInitialisePoint( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
+			, doInitialisePointShadow( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
+			, doInitialisePointDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, std::make_shared< ShadowMapPassPoint >( engine, scene, *this ) }
 	{
 	}
@@ -94,13 +133,13 @@ namespace castor3d
 
 	void ShadowMapPoint::render()
 	{
-		uint32_t face = 0u;
-
-		for ( auto & attach : m_colourAttach )
+		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
 			m_frameBuffer->bind( FrameBufferTarget::eDraw );
-			attach->attach( AttachmentPoint::eColour, 0u );
-			m_frameBuffer->setDrawBuffer( attach );
+			m_colourAttach[face]->attach( AttachmentPoint::eColour, 0u );
+			m_depthAttach[face]->attach( AttachmentPoint::eDepth );
+			REQUIRE( m_frameBuffer->isComplete() );
+			m_frameBuffer->setDrawBuffer( m_colourAttach[face] );
 			m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
 			m_pass->render( face++ );
 			m_frameBuffer->unbind();
@@ -114,6 +153,9 @@ namespace castor3d
 		getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
 			, displaySize
 			, *m_shadowMap.getTexture() );
+		getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
+			, displaySize
+			, *m_depthMap.getTexture() );
 	}
 
 	void ShadowMapPoint::doInitialise()
@@ -121,7 +163,6 @@ namespace castor3d
 		constexpr float component = std::numeric_limits< float >::max();
 		m_frameBuffer->setClearColour( component, component, component, component );
 		auto texture = m_shadowMap.getTexture();
-		texture->initialise();
 		int i = 0;
 
 		for ( auto & attach : m_colourAttach )
@@ -130,30 +171,27 @@ namespace castor3d
 			attach->setTarget( TextureType::eTwoDimensions );
 		}
 
-		m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD32F );
-		m_depthBuffer->create();
-		m_depthBuffer->initialise( texture->getDimensions() );
+		i = 0;
+		texture = m_depthMap.getTexture();
 
-		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-		m_frameBuffer->unbind();
+		for ( auto & attach : m_depthAttach )
+		{
+			attach = m_frameBuffer->createAttachment( texture, CubeMapFace( i++ ) );
+			attach->setTarget( TextureType::eTwoDimensions );
+		}
 	}
 
 	void ShadowMapPoint::doCleanup()
 	{
-		m_depthAttach.reset();
-
 		for ( auto & attach : m_colourAttach )
 		{
 			attach.reset();
 		}
 
-		m_depthBuffer->cleanup();
-		m_depthBuffer->destroy();
-		m_depthBuffer.reset();
-
-		m_shadowMap.cleanup();
+		for ( auto & attach : m_depthAttach )
+		{
+			attach.reset();
+		}
 	}
 
 	void ShadowMapPoint::doUpdateFlags( PassFlags & passFlags

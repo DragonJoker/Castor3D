@@ -48,14 +48,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	shadowMaps	The shadow maps.
+		 *\param[in]	shadowMap	The shadow map.
+		 *\param[in]	depthMap	The depth map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	shadowMaps	Les textures d'ombres.
+		 *\param[in]	shadowMap	La texture d'ombres.
+		 *\param[in]	depthMap	La texture de profondeur.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
+			, TextureUnit && depthMap
 			, ShadowMapPassSPtr pass );
 		/**
 		 *\~english
@@ -146,9 +149,9 @@ namespace castor3d
 			, ComparisonFunc alphaFunc )const;
 		/**
 		 *\~english
-		 *\return		The shadow maps.
+		 *\return		The shadow map.
 		 *\~english
-		 *\return		Les textures d'ombres.
+		 *\return		La texture d'ombres.
 		 */
 		inline TextureUnit & getTexture()
 		{
@@ -156,13 +159,33 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The shadow maps.
+		 *\return		The shadow map.
 		 *\~english
-		 *\return		Les textures d'ombres.
+		 *\return		La texture d'ombres.
 		 */
 		inline TextureUnit const & getTexture()const
 		{
 			return m_shadowMap;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map.
+		 *\~english
+		 *\return		La texture de profondeur.
+		 */
+		inline TextureUnit & getDepth()
+		{
+			return m_depthMap;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map.
+		 *\~english
+		 *\return		La texture de profondeur.
+		 */
+		inline TextureUnit const & getDepth()const
+		{
+			return m_depthMap;
 		}
 
 	private:
@@ -249,6 +272,9 @@ namespace castor3d
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
 		TextureUnit m_shadowMap;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		TextureUnit m_depthMap;
 		//!\~english	The Gaussian blur pass.
 		//!\~french		La passe de flou Gaussien.
 		std::unique_ptr< GaussianBlur > m_blur;

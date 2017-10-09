@@ -1,4 +1,4 @@
-#include "RenderTechnique.hpp"
+﻿#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -264,7 +264,7 @@ namespace castor3d
 			}
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
-			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Post effects" ), cuT( "Post effects" ) );
+			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			ENSURE( m_initialised );
 		}
 

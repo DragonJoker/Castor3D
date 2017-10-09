@@ -125,12 +125,24 @@ namespace castor
 		//!\~english	24 bits 888 BGR.
 		//!\~french		24 bits 888 BGR.
 		eB8G8R8,
+		//!\~english	24 bits 888 RGB in sRGB colour space.
+		//!\~french		24 bits 888 RGB dans l'espace de couleurs sRGB.
+		eR8G8B8_SRGB,
+		//!\~english	24 bits 888 BGR in sRGB colour space.
+		//!\~french		24 bits 888 BGR dans l'espace de couleurs sRGB.
+		eB8G8R8_SRGB,
 		//!\~english	32 bits 8888 ARGB.
 		//!\~french		32 bits 8888 ARGB.
 		eA8R8G8B8,
 		//!\~english	32 bits 8888 ABGR.
 		//!\~french		32 bits 8888 ABGR.
 		eA8B8G8R8,
+		//!\~english	32 bits 8888 ARGB in sRGB colour space.
+		//!\~french		32 bits 8888 sRGB dans l'espace de couleurs sRGB.
+		eA8R8G8B8_SRGB,
+		//!\~english	32 bits 8888 ABGR in sRGB colour space.
+		//!\~french		32 bits 8888 ABGR dans l'espace de couleurs sRGB.
+		eA8B8G8R8_SRGB,
 		//!\~english	Half float RGB.
 		//!\~french		Half float RGB.
 		eRGB16F,

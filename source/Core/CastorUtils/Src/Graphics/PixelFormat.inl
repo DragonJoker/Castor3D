@@ -1,4 +1,4 @@
-﻿#include <cstring>
+#include <cstring>
 #include "UnsupportedFormatException.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 #include "Exception/Assertion.hpp"
@@ -1175,6 +1175,204 @@ namespace castor
 #undef src
 #undef dst
 	};
+	//!\~english	Specialisation for PixelFormat::eR8G8B8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_SRGB
+	template<>
+	struct PixelComponents< PixelFormat::eR8G8B8_SRGB >
+	{
+		struct pixel
+		{
+			uint8_t r;
+			uint8_t g;
+			uint8_t b;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+
+		static inline uint8_t L8( uint8_t const * p_pSrc )
+		{
+			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+		}
+		static inline uint8_t R8( uint8_t const * p_pSrc )
+		{
+			return src.r;
+		}
+		static inline uint8_t G8( uint8_t const * p_pSrc )
+		{
+			return src.g;
+		}
+		static inline uint8_t B8( uint8_t const * p_pSrc )
+		{
+			return src.b;
+		}
+		static inline uint8_t A8( uint8_t const * )
+		{
+			return 0xFF;
+		}
+		static inline float L32F( uint8_t const * p_pSrc )
+		{
+			return L8( p_pSrc ) / 255.0f;
+		}
+		static inline float R32F( uint8_t const * p_pSrc )
+		{
+			return R8( p_pSrc ) / 255.0f;
+		}
+		static inline float G32F( uint8_t const * p_pSrc )
+		{
+			return G8( p_pSrc ) / 255.0f;
+		}
+		static inline float B32F( uint8_t const * p_pSrc )
+		{
+			return B8( p_pSrc ) / 255.0f;
+		}
+		static inline float A32F( uint8_t const * p_pSrc )
+		{
+			return A8( p_pSrc ) / 255.0f;
+		}
+		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			R8( p_pSrc, p_val );
+			G8( p_pSrc, p_val );
+			B8( p_pSrc, p_val );
+		}
+		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.r = p_val;
+		}
+		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.g = p_val;
+		}
+		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.b = p_val;
+		}
+		static inline void A8( uint8_t *, uint8_t )
+		{
+		}
+		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		{
+			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		{
+			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		{
+			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		{
+			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void A32F( uint8_t *, float )
+		{
+		}
+
+#undef src
+#undef dst
+	};
+	//!\~english	Specialisation for PixelFormat::eB8G8R8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_SRGB
+	template<>
+	struct PixelComponents< PixelFormat::eB8G8R8_SRGB >
+	{
+		struct pixel
+		{
+			uint8_t b;
+			uint8_t g;
+			uint8_t r;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+
+		static inline uint8_t L8( uint8_t const * p_pSrc )
+		{
+			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+		}
+		static inline uint8_t R8( uint8_t const * p_pSrc )
+		{
+			return src.r;
+		}
+		static inline uint8_t G8( uint8_t const * p_pSrc )
+		{
+			return src.g;
+		}
+		static inline uint8_t B8( uint8_t const * p_pSrc )
+		{
+			return src.b;
+		}
+		static inline uint8_t A8( uint8_t const * )
+		{
+			return 0xFF;
+		}
+		static inline float L32F( uint8_t const * p_pSrc )
+		{
+			return L8( p_pSrc ) / 255.0f;
+		}
+		static inline float R32F( uint8_t const * p_pSrc )
+		{
+			return R8( p_pSrc ) / 255.0f;
+		}
+		static inline float G32F( uint8_t const * p_pSrc )
+		{
+			return G8( p_pSrc ) / 255.0f;
+		}
+		static inline float B32F( uint8_t const * p_pSrc )
+		{
+			return B8( p_pSrc ) / 255.0f;
+		}
+		static inline float A32F( uint8_t const * p_pSrc )
+		{
+			return A8( p_pSrc ) / 255.0f;
+		}
+		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			R8( p_pSrc, p_val );
+			G8( p_pSrc, p_val );
+			B8( p_pSrc, p_val );
+		}
+		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.r = p_val;
+		}
+		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.g = p_val;
+		}
+		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.b = p_val;
+		}
+		static inline void A8( uint8_t *, uint8_t )
+		{
+		}
+		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		{
+			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		{
+			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		{
+			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		{
+			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void A32F( uint8_t *, float )
+		{
+		}
+
+#undef src
+#undef dst
+	};
 	//!\~english	Specialisation for PixelFormat::eA8R8G8B8
 	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8
 	template<>
@@ -1281,6 +1479,210 @@ namespace castor
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8
 	template<>
 	struct PixelComponents< PixelFormat::eA8B8G8R8 >
+	{
+		struct pixel
+		{
+			uint8_t b;
+			uint8_t g;
+			uint8_t r;
+			uint8_t a;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+
+		static inline uint8_t L8( uint8_t const * p_pSrc )
+		{
+			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+		}
+		static inline uint8_t A8( uint8_t const * p_pSrc )
+		{
+			return src.a;
+		}
+		static inline uint8_t R8( uint8_t const * p_pSrc )
+		{
+			return src.r;
+		}
+		static inline uint8_t G8( uint8_t const * p_pSrc )
+		{
+			return src.g;
+		}
+		static inline uint8_t B8( uint8_t const * p_pSrc )
+		{
+			return src.b;
+		}
+		static inline float L32F( uint8_t const * p_pSrc )
+		{
+			return L8( p_pSrc ) / 255.0f;
+		}
+		static inline float R32F( uint8_t const * p_pSrc )
+		{
+			return R8( p_pSrc ) / 255.0f;
+		}
+		static inline float G32F( uint8_t const * p_pSrc )
+		{
+			return G8( p_pSrc ) / 255.0f;
+		}
+		static inline float B32F( uint8_t const * p_pSrc )
+		{
+			return B8( p_pSrc ) / 255.0f;
+		}
+		static inline float A32F( uint8_t const * p_pSrc )
+		{
+			return A8( p_pSrc ) / 255.0f;
+		}
+		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			R8( p_pSrc, p_val );
+			G8( p_pSrc, p_val );
+			B8( p_pSrc, p_val );
+		}
+		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.a = p_val;
+		}
+		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.r = p_val;
+		}
+		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.g = p_val;
+		}
+		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.b = p_val;
+		}
+		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		{
+			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		{
+			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		{
+			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		{
+			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		{
+			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+
+#undef src
+#undef dst
+	};
+	//!\~english	Specialisation for PixelFormat::eA8R8G8B8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8_SRGB
+	template<>
+	struct PixelComponents< PixelFormat::eA8R8G8B8_SRGB >
+	{
+		struct pixel
+		{
+			uint8_t r;
+			uint8_t g;
+			uint8_t b;
+			uint8_t a;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+
+		static inline uint8_t L8( uint8_t const * p_pSrc )
+		{
+			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+		}
+		static inline uint8_t A8( uint8_t const * p_pSrc )
+		{
+			return src.a;
+		}
+		static inline uint8_t R8( uint8_t const * p_pSrc )
+		{
+			return src.r;
+		}
+		static inline uint8_t G8( uint8_t const * p_pSrc )
+		{
+			return src.g;
+		}
+		static inline uint8_t B8( uint8_t const * p_pSrc )
+		{
+			return src.b;
+		}
+		static inline float L32F( uint8_t const * p_pSrc )
+		{
+			return L8( p_pSrc ) / 255.0f;
+		}
+		static inline float R32F( uint8_t const * p_pSrc )
+		{
+			return R8( p_pSrc ) / 255.0f;
+		}
+		static inline float G32F( uint8_t const * p_pSrc )
+		{
+			return G8( p_pSrc ) / 255.0f;
+		}
+		static inline float B32F( uint8_t const * p_pSrc )
+		{
+			return B8( p_pSrc ) / 255.0f;
+		}
+		static inline float A32F( uint8_t const * p_pSrc )
+		{
+			return A8( p_pSrc ) / 255.0f;
+		}
+		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			R8( p_pSrc, p_val );
+			G8( p_pSrc, p_val );
+			B8( p_pSrc, p_val );
+		}
+		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.a = p_val;
+		}
+		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.r = p_val;
+		}
+		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.g = p_val;
+		}
+		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		{
+			dst.b = p_val;
+		}
+		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		{
+			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		{
+			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		{
+			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		{
+			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		{
+			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+		}
+
+#undef src
+#undef dst
+	};
+	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_SRGB
+	template<>
+	struct PixelComponents< PixelFormat::eA8B8G8R8_SRGB >
 	{
 		struct pixel
 		{
@@ -3204,6 +3606,34 @@ namespace castor
 				p_pDst += PixelDefinitions< PFDst >::Size;
 			}
 		};
+		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8_SRGB
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8_SRGB
+		template< PixelFormat PFSrc, PixelFormat PFDst >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8_SRGB >::type >
+		{
+			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			{
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
+			}
+		};
+		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8_SRGB
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eB8G8R8_SRGB
+		template< PixelFormat PFSrc, PixelFormat PFDst >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8_SRGB >::type >
+		{
+			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			{
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
+			}
+		};
 		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
@@ -3223,6 +3653,36 @@ namespace castor
 		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8 >::type >
+		{
+			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			{
+				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
+			}
+		};
+		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8_SRGB
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8_SRGB
+		template< PixelFormat PFSrc, PixelFormat PFDst >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8R8G8B8_SRGB >::type >
+		{
+			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			{
+				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
+				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
+				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
+				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
+				p_pSrc += PixelDefinitions< PFSrc >::Size;
+				p_pDst += PixelDefinitions< PFDst >::Size;
+			}
+		};
+		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8_SRGB
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8_SRGB
+		template< PixelFormat PFSrc, PixelFormat PFDst >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8_SRGB >::type >
 		{
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
@@ -3777,12 +4237,28 @@ namespace castor
 				PixelConverter< PF, PixelFormat::eB8G8R8 >()( p_pSrc, p_pDst );
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				PixelConverter< PF, PixelFormat::eR8G8B8_SRGB >()( p_pSrc, p_pDst );
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				PixelConverter< PF, PixelFormat::eB8G8R8_SRGB >()( p_pSrc, p_pDst );
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				PixelConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				PixelConverter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrc, p_pDst );
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				PixelConverter< PF, PixelFormat::eA8R8G8B8_SRGB >()( p_pSrc, p_pDst );
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				PixelConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( p_pSrc, p_pDst );
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -3967,12 +4443,28 @@ namespace castor
 				BufferConverter< PF, PixelFormat::eB8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				BufferConverter< PF, PixelFormat::eR8G8B8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				BufferConverter< PF, PixelFormat::eB8G8R8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				BufferConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				BufferConverter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				BufferConverter< PF, PixelFormat::eA8R8G8B8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				BufferConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -4888,6 +5380,78 @@ namespace castor
 
 	//*************************************************************************************************
 
+	//!\~english	Specialisation for PixelFormat::eR8G8B8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_SRGB
+	template<>
+	struct PixelDefinitions< PixelFormat::eR8G8B8_SRGB >
+	{
+		static const uint8_t Size = 3;
+		static const uint8_t Count = 3;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = false;
+		static inline String toString()
+		{
+			return cuT( "24 bits 888 RGB sRGB" );
+		}
+		static inline String toStr()
+		{
+			return cuT( "rgb24_srgb" );
+		}
+		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		{
+			detail::dynamicColourConversion< PixelFormat::eR8G8B8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+		}
+		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		{
+			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+		}
+		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		{
+			detail::PixelConverter< PixelFormat::eR8G8B8_SRGB, PF >()( p_pSrc, p_pDst );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eB8G8R8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_SRGB
+	template<>
+	struct PixelDefinitions< PixelFormat::eB8G8R8_SRGB >
+	{
+		static const uint8_t Size = 3;
+		static const uint8_t Count = 3;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = false;
+		static inline String toString()
+		{
+			return cuT( "24 bits 888 BGR sRGB" );
+		}
+		static inline String toStr()
+		{
+			return cuT( "bgr24_srgb" );
+		}
+		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		{
+			detail::dynamicColourConversion< PixelFormat::eB8G8R8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+		}
+		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		{
+			detail::dynamicColourBufferConversion< PixelFormat::eB8G8R8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+		}
+		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		{
+			detail::PixelConverter< PixelFormat::eB8G8R8_SRGB, PF >()( p_pSrc, p_pDst );
+		}
+	};
+
+	//*************************************************************************************************
+
 	//!\~english	Specialisation for PixelFormat::eA8R8G8B8
 	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8
 	template<>
@@ -4957,6 +5521,80 @@ namespace castor
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
 			detail::PixelConverter< PixelFormat::eA8B8G8R8, PF >()( p_pSrc, p_pDst );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eA8R8G8B8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8_SRGB
+	template<>
+	struct PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >
+	{
+		static const uint8_t Size = 4;
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = false;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR8G8B8_SRGB;
+		static inline String toString()
+		{
+			return cuT( "32 bits 8888 ARGB sRGB" );
+		}
+		static inline String toStr()
+		{
+			return cuT( "argb32_srgb" );
+		}
+		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		{
+			detail::dynamicColourConversion< PixelFormat::eA8R8G8B8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+		}
+		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		{
+			detail::dynamicColourBufferConversion< PixelFormat::eA8R8G8B8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+		}
+		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		{
+			detail::PixelConverter< PixelFormat::eA8R8G8B8_SRGB, PF >()( p_pSrc, p_pDst );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_SRGB
+	template<>
+	struct PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >
+	{
+		static const uint8_t Size = 4;
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = false;
+		static const PixelFormat NoAlphaPF = PixelFormat::eB8G8R8_SRGB;
+		static inline String toString()
+		{
+			return cuT( "32 bits 8888 ABGR sRGB" );
+		}
+		static inline String toStr()
+		{
+			return cuT( "abgr32_srgb" );
+		}
+		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		{
+			detail::dynamicColourConversion< PixelFormat::eA8B8G8R8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+		}
+		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		{
+			detail::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+		}
+		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		{
+			detail::PixelConverter< PixelFormat::eA8B8G8R8_SRGB, PF >()( p_pSrc, p_pDst );
 		}
 	};
 

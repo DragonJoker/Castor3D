@@ -103,31 +103,45 @@ namespace castor3d
 
 	RenderTarget::TargetFbo::TargetFbo( RenderTarget & renderTarget )
 		: m_renderTarget{ renderTarget }
-		, m_colourTexture{ *renderTarget.getEngine() }
+		, m_rgbTexture{ *renderTarget.getEngine() }
+		, m_srgbTexture{ *renderTarget.getEngine() }
 	{
 	}
 
 	bool RenderTarget::TargetFbo::initialise( uint32_t index, Size const & size )
 	{
 		m_frameBuffer = m_renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
+		m_frameBuffer->setSRGB( true );
 		m_frameBuffer->initialise();
 
 		SamplerSPtr sampler = m_renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_renderTarget.m_index ) );
-		auto colourTexture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+		auto rgbTexture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
 			, m_renderTarget.getPixelFormat()
 			, size );
-		m_colourAttach = m_frameBuffer->createAttachment( colourTexture );
-		m_colourTexture.setTexture( colourTexture );
-		m_colourTexture.setSampler( sampler );
-		m_colourTexture.setIndex( index );
-		m_colourTexture.getTexture()->getImage().initialiseSource();
-		Size dimensions = m_colourTexture.getTexture()->getDimensions();
-		m_colourTexture.getTexture()->initialise();
+		m_rgbAttach = m_frameBuffer->createAttachment( rgbTexture );
+		m_rgbTexture.setTexture( rgbTexture );
+		m_rgbTexture.setSampler( sampler );
+		m_rgbTexture.setIndex( index );
+		m_rgbTexture.getTexture()->getImage().initialiseSource();
+		m_rgbTexture.getTexture()->initialise();
+
+		auto srgbTexture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+			, AccessType::eRead
+			, AccessType::eRead | AccessType::eWrite
+			, PixelFormat::eA8R8G8B8_SRGB
+			, size );
+		m_srgbAttach = m_frameBuffer->createAttachment( srgbTexture );
+		m_srgbTexture.setTexture( srgbTexture );
+		m_srgbTexture.setSampler( sampler );
+		m_srgbTexture.setIndex( index );
+		m_srgbTexture.getTexture()->getImage().initialiseSource();
+		m_srgbTexture.getTexture()->initialise();
 
 		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.getTexture()->getType() );
+		m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_rgbAttach, m_rgbTexture.getTexture()->getType() );
+		m_frameBuffer->attach( AttachmentPoint::eColour, 1, m_srgbAttach, m_srgbTexture.getTexture()->getType() );
 		m_frameBuffer->setDrawBuffers();
 		bool result = m_frameBuffer->isComplete();
 		REQUIRE( result );
@@ -142,8 +156,10 @@ namespace castor3d
 		m_frameBuffer->detachAll();
 		m_frameBuffer->unbind();
 		m_frameBuffer->cleanup();
-		m_colourTexture.cleanup();
-		m_colourAttach.reset();
+		m_rgbTexture.cleanup();
+		m_rgbAttach.reset();
+		m_srgbTexture.cleanup();
+		m_srgbAttach.reset();
 		m_frameBuffer.reset();
 	}
 
@@ -202,7 +218,7 @@ namespace castor3d
 				}
 			}
 
-			m_size = m_frameBuffer.m_colourTexture.getTexture()->getDimensions();
+			m_size = m_frameBuffer.m_rgbTexture.getTexture()->getDimensions();
 			m_renderTechnique->initialise( index );
 
 			auto velocityTexture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions

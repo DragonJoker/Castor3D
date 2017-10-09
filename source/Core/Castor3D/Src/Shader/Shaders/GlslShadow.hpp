@@ -37,6 +37,9 @@ namespace castor3d
 			C3D_API static castor::String const MapShadowDirectional;
 			C3D_API static castor::String const MapShadowSpot;
 			C3D_API static castor::String const MapShadowPoint;
+			C3D_API static castor::String const MapDepthDirectional;
+			C3D_API static castor::String const MapDepthSpot;
+			C3D_API static castor::String const MapDepthPoint;
 
 		public:
 			C3D_API Shadow( glsl::GlslWriter & writer );

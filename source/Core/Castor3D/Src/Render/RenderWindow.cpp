@@ -1,4 +1,4 @@
-#include "RenderWindow.hpp"
+﻿#include "RenderWindow.hpp"
 
 #include "FrameBuffer/BackBuffers.hpp"
 #include "Render/RenderLoop.hpp"
@@ -163,6 +163,20 @@ namespace castor3d
 
 			if ( target && target->isInitialised() )
 			{
+				if ( m_toSave )
+				{
+					auto texture = target->getRgbTexture().getTexture();
+					auto buffer = texture->lock( AccessType::eRead );
+
+					if ( buffer )
+					{
+						std::memcpy( m_saveBuffer->ptr(), buffer, m_saveBuffer->size() );
+					}
+
+					texture->unlock( false );
+					m_toSave = false;
+				}
+
 				if ( isUsingStereo() && abs( getIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && engine->getRenderSystem()->getGpuInformations().isStereoAvailable() )
 				{
 					//doRender( WindowBuffer::eBackLeft, target->getTextureLEye() );
@@ -170,7 +184,7 @@ namespace castor3d
 				}
 				else
 				{
-					doRender( WindowBuffer::eBack, target->getTexture() );
+					doRender( WindowBuffer::eBack, target->getSRgbTexture() );
 				}
 			}
 
@@ -348,20 +362,6 @@ namespace castor3d
 	void RenderWindow::doRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture )
 	{
 		auto texture = p_texture.getTexture();
-
-		if ( m_toSave )
-		{
-			auto buffer = texture->lock( AccessType::eRead );
-
-			if ( buffer )
-			{
-				std::memcpy( m_saveBuffer->ptr(), buffer, m_saveBuffer->size() );
-			}
-
-			texture->unlock( false );
-			m_toSave = false;
-		}
-
 		m_backBuffers->bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
 		m_backBuffers->clear( BufferComponent::eColour );
 		m_context->renderTexture( m_size, *texture );

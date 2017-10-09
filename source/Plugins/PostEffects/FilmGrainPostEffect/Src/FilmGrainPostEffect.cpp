@@ -167,7 +167,8 @@ namespace film_grain
 		: castor3d::PostEffect{ PostEffect::Type
 			, renderTarget
 			, renderSystem
-			, params }
+			, params
+			, true }
 		, m_surface{ *renderSystem.getEngine() }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_noise{ *renderSystem.getEngine() }

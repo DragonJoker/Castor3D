@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -98,7 +98,8 @@ namespace smaa
 			, castor3d::TextureLayout const & gammaSrc );
 		void doMainPass( uint32_t prvIndex
 			, uint32_t curIndex
-			, castor3d::TextureLayout const & gammaSrc
+			, castor3d::TextureLayout const & hdrSrc
+			, castor3d::TextureLayout const & srgbSrc
 			, castor3d::TextureLayout const * depthStencil );
 		void doReproject( uint32_t prvIndex
 			, uint32_t curIndex
@@ -113,6 +114,8 @@ namespace smaa
 		castor3d::SamplerSPtr m_linearSampler;
 		Mode m_mode{ Mode::e1X };
 		uint32_t m_subsampleIndex{ 0u };
+		bool m_reprojection{ false };
+		float m_reprojectionWeightScale{ 30.0f };
 
 		// Edge detection.
 		PostEffectSurface m_edgeDetectionSurface;

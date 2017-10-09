@@ -104,12 +104,9 @@ namespace castor3d
 		//!\~english	The attach between variance map and main frame buffer.
 		//!\~french		L'attache entre la texture de variance et le tampon principal.
 		TextureAttachmentSPtr m_varianceAttach;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		RenderBufferAttachmentSPtr m_depthAttach;
+		TextureAttachmentSPtr m_depthAttach;
 	};
 }
 

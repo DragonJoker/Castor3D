@@ -1,4 +1,4 @@
-#include "SceneFileParser_Parsers.hpp"
+﻿#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -154,6 +154,23 @@ namespace castor3d
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eMaterial )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserRootMaterials )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t value;
+			p_params[0]->get( value );
+			parsingContext->m_pParser->getEngine()->setMaterialsType( MaterialType( value ) );
+		}
+	}
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserRootPanelOverlay )
 	{
@@ -773,23 +790,6 @@ namespace castor3d
 			p_params[0]->get( path );
 			SceneFileParser parser{ *parsingContext->m_pParser->getEngine() };
 			parser.parseFile( parsingContext->m_file->getFilePath() / path, parsingContext );
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneMaterials )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !parsingContext->pScene )
-		{
-			PARSING_ERROR( cuT( "No scene initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			uint32_t value;
-			p_params[0]->get( value );
-			parsingContext->pScene->setMaterialsType( MaterialType( value ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -3011,7 +3011,13 @@ namespace castor3d
 					else if ( channels == cuT( "r" ) )
 					{
 						auto format = ( buffer->format() == PixelFormat::eR8G8B8
-							|| buffer->format() == PixelFormat::eA8R8G8B8 )
+							|| buffer->format() == PixelFormat::eB8G8R8
+							|| buffer->format() == PixelFormat::eR8G8B8_SRGB
+							|| buffer->format() == PixelFormat::eB8G8R8_SRGB
+							|| buffer->format() == PixelFormat::eA8R8G8B8
+							|| buffer->format() == PixelFormat::eA8B8G8R8
+							|| buffer->format() == PixelFormat::eA8R8G8B8_SRGB
+							|| buffer->format() == PixelFormat::eA8B8G8R8_SRGB )
 							? PixelFormat::eL8
 							: ( buffer->format() == PixelFormat::eRGB16F
 								|| buffer->format() == PixelFormat::eRGBA16F

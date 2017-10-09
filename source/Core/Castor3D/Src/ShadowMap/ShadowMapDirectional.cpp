@@ -67,12 +67,50 @@ namespace castor3d
 
 			return unit;
 		}
+
+		TextureUnit doInitialiseDepth( Engine & engine, Size const & p_size )
+		{
+			String const name = cuT( "ShadowMap_Directional_Depth" );
+			SamplerSPtr sampler;
+
+			if ( engine.getSamplerCache().has( name ) )
+			{
+				sampler = engine.getSamplerCache().find( name );
+			}
+			else
+			{
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+			}
+
+			auto texture = engine.getRenderSystem()->createTexture(
+				TextureType::eTwoDimensions,
+				AccessType::eNone,
+				AccessType::eRead | AccessType::eWrite,
+				PixelFormat::eD32F, p_size );
+			TextureUnit unit{ engine };
+			unit.setTexture( texture );
+			unit.setSampler( sampler );
+
+			for ( auto & image : *texture )
+			{
+				image->initialiseSource();
+			}
+
+			return unit;
+		}
 	}
 
 	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
 			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
+			, doInitialiseDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
 			, std::make_shared< ShadowMapPassDirectional >( engine, scene, *this ) }
 	{
 	}
@@ -106,20 +144,20 @@ namespace castor3d
 		getEngine()->getRenderSystem()->getCurrentContext()->renderVariance( position
 			, displaySize
 			, *m_shadowMap.getTexture() );
+		position = Position{ int32_t( displaySize.getWidth() * ( 2 + index * 3 ) ), int32_t( displaySize.getHeight() * 3u ) };
+		getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
+			, displaySize
+			, *m_depthMap.getTexture() );
 	}
 
 	void ShadowMapDirectional::doInitialise()
 	{
 		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
 		m_varianceAttach = m_frameBuffer->createAttachment( m_shadowMap.getTexture() );
-
-		m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD32F );
-		m_depthBuffer->create();
-		m_depthBuffer->initialise( m_shadowMap.getTexture()->getDimensions() );
-		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
+		m_depthAttach = m_frameBuffer->createAttachment( m_depthMap.getTexture() );
 
 		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
+		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach, m_depthMap.getTexture()->getType() );
 		m_frameBuffer->attach( AttachmentPoint::eColour, 0u, m_varianceAttach, m_shadowMap.getTexture()->getType() );
 		ENSURE( m_frameBuffer->isComplete() );
 		m_frameBuffer->setDrawBuffers();
@@ -130,10 +168,6 @@ namespace castor3d
 	{
 		m_depthAttach.reset();
 		m_varianceAttach.reset();
-
-		m_depthBuffer->cleanup();
-		m_depthBuffer->destroy();
-		m_depthBuffer.reset();
 	}
 
 	void ShadowMapDirectional::doUpdateFlags( PassFlags & passFlags

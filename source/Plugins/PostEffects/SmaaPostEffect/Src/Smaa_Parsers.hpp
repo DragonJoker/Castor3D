@@ -43,6 +43,8 @@ namespace smaa
 	DECLARE_ATTRIBUTE_PARSER( parserMaxSearchSteps )
 	DECLARE_ATTRIBUTE_PARSER( parserMaxSearchStepsDiag )
 	DECLARE_ATTRIBUTE_PARSER( parserCornerRounding )
+	DECLARE_ATTRIBUTE_PARSER( parserReprojection )
+	DECLARE_ATTRIBUTE_PARSER( parserReprojectionWeightScale )
 	DECLARE_ATTRIBUTE_PARSER( parserSmaaEnd )
 }
 
