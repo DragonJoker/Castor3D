@@ -1,4 +1,4 @@
-#include "SmaaPostEffect.hpp"
+﻿#include "SmaaPostEffect.hpp"
 
 #include "SearchTex.h"
 #include "AreaTex.h"
@@ -1307,13 +1307,10 @@ namespace smaa
 	{
 		auto prvIndex = m_subsampleIndex;
 		auto curIndex = ( m_subsampleIndex + 1 ) % uint32_t( m_jitters.size() );
-		auto rgbAttach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
-		REQUIRE( rgbAttach && rgbAttach->getAttachmentType() == castor3d::AttachmentType::eTexture );
-		auto & rgbTexture = *std::static_pointer_cast< castor3d::TextureAttachment >( rgbAttach )->getTexture();
-		auto srgbAttach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 1 );
+		auto srgbAttach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
 		REQUIRE( srgbAttach && srgbAttach->getAttachmentType() == castor3d::AttachmentType::eTexture );
 		auto & srgbTexture = *std::static_pointer_cast< castor3d::TextureAttachment >( srgbAttach )->getTexture();
-		REQUIRE( srgbTexture.getPixelFormat() == PixelFormat::eA8R8G8B8_SRGB );
+		auto & rgbTexture = m_renderTarget.getTechnique()->getResult();
 		castor3d::TextureLayoutSPtr result;
 
 		switch ( m_mode )
@@ -1339,7 +1336,7 @@ namespace smaa
 		if ( result )
 		{
 			framebuffer.bind( castor3d::FrameBufferTarget::eDraw );
-			getRenderSystem()->getCurrentContext()->renderTexture( rgbTexture.getDimensions()
+			getRenderSystem()->getCurrentContext()->renderTexture( srgbTexture.getDimensions()
 				, *result );
 			framebuffer.unbind();
 			m_subsampleIndex = curIndex;

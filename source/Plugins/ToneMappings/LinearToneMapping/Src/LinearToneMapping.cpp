@@ -1,4 +1,4 @@
-#include "LinearToneMapping.hpp"
+﻿#include "LinearToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -61,7 +61,6 @@ namespace Linear
 
 			// Shader outputs
 			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
-			auto pxl_srgb = writer.declFragData< Vec4 >( cuT( "pxl_srgb" ), 1 );
 
 			glsl::Utils utils{ writer };
 			utils.declareApplyGamma();
@@ -71,7 +70,6 @@ namespace Linear
 				auto hdrColor = writer.declLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				hdrColor *= vec3( c3d_fExposure );
 				pxl_rgb = vec4( utils.applyGamma( c3d_fGamma, hdrColor ), 1.0 );
-				pxl_srgb = pxl_rgb;
 			} );
 
 			pxl = writer.finalise();

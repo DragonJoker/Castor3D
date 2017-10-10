@@ -1,4 +1,4 @@
-#include "HejlBurgessDawsonToneMapping.hpp"
+﻿#include "HejlBurgessDawsonToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -50,7 +50,6 @@ namespace HejlBurgessDawson
 
 			// Shader outputs
 			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
-			auto pxl_srgb = writer.declFragData< Vec4 >( cuT( "pxl_srgb" ), 1 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -59,7 +58,6 @@ namespace HejlBurgessDawson
 				auto x = writer.declLocale( cuT( "x" ), max( hdrColor - 0.004_f, 0.0_f ) );
 				pxl_rgb = vec4( writer.paren( x * writer.paren( 6.2f * x + 0.5f ) )
 					/ writer.paren( x * writer.paren( 6.2f * x + 1.7f ) + 0.06f ), 1.0 );
-				pxl_srgb = pxl_rgb;
 			} );
 
 			pxl = writer.finalise();

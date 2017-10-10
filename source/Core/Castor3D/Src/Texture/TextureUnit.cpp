@@ -1,4 +1,4 @@
-#include "TextureUnit.hpp"
+﻿#include "TextureUnit.hpp"
 
 #include "Engine.hpp"
 
@@ -186,7 +186,7 @@ namespace castor3d
 		if ( target )
 		{
 			target->initialise( getIndex() );
-			m_texture = target->getSRgbTexture().getTexture();
+			m_texture = target->getTexture().getTexture();
 			result = true;
 		}
 		else if ( m_texture )

@@ -1,4 +1,4 @@
-#include "FilmGrainPostEffect.hpp"
+﻿#include "FilmGrainPostEffect.hpp"
 
 #include "XpmLoader.hpp"
 
@@ -168,7 +168,7 @@ namespace film_grain
 			, renderTarget
 			, renderSystem
 			, params
-			, true }
+			, false }
 		, m_surface{ *renderSystem.getEngine() }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_noise{ *renderSystem.getEngine() }

@@ -165,7 +165,7 @@ namespace castor3d
 			{
 				if ( m_toSave )
 				{
-					auto texture = target->getRgbTexture().getTexture();
+					auto texture = target->getTexture().getTexture();
 					auto buffer = texture->lock( AccessType::eRead );
 
 					if ( buffer )
@@ -184,7 +184,7 @@ namespace castor3d
 				}
 				else
 				{
-					doRender( WindowBuffer::eBack, target->getSRgbTexture() );
+					doRender( WindowBuffer::eBack, target->getTexture() );
 				}
 			}
 

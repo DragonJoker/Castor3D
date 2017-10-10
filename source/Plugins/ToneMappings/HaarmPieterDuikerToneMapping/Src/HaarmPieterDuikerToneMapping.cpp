@@ -1,4 +1,4 @@
-#include "HaarmPieterDuikerToneMapping.hpp"
+﻿#include "HaarmPieterDuikerToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -59,7 +59,6 @@ namespace HaarmPieterDuiker
 
 			// Shader outputs
 			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
-			auto pxl_srgb = writer.declFragData< Vec4 >( cuT( "pxl_srgb" ), 1 );
 
 			auto log10 = writer.implementFunction< Vec3 >( cuT( "log10" )
 				, [&]( Vec3 const & p_in )
@@ -89,7 +88,6 @@ namespace HaarmPieterDuiker
 				pxl_rgb.g() = mix( padding, 1.0f - padding, logColor.g() );
 				pxl_rgb.b() = mix( padding, 1.0f - padding, logColor.b() );
 				pxl_rgb.a() = 1.0f;
-				pxl_srgb = pxl_rgb;
 			} );
 
 			pxl = writer.finalise();
