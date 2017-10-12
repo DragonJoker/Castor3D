@@ -310,18 +310,15 @@ namespace castor3d
 			 *\~english
 			 *\brief		Renders the light pass.
 			 *\param[in]	size	The render area dimensions.
-			 *\param[in]	colour	The light colour.
 			 *\param[in]	count	The number of primitives to draw.
 			 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 			 *\~french
 			 *\brief		Dessine la passe d'éclairage.
 			 *\param[in]	size	Les dimensions de la zone de rendu.
-			 *\param[in]	colour	La couleur de la souce lumineuse.
 			 *\param[in]	count	Le nombre de primitives à dessiner.
 			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 			 */
 			void render( castor::Size const & size
-				, castor::Point3f const & colour
 				, uint32_t count
 				, bool first
 				, uint32_t offset )const;
@@ -364,6 +361,12 @@ namespace castor3d
 			//!\~english	The variable containing the light colour.
 			//!\~french		La variable contenant la couleur de la lumière.
 			PushUniform3fSPtr m_lightColour;
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			PushUniform2fSPtr m_lightIntensity;
+			//!\~english	The variable containing the light far plane position.
+			//!\~french		La variable contenant la position du plan lointain de la lumière.
+			PushUniform1fSPtr m_lightFarPlane;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
 
@@ -495,19 +498,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders the light pass on currently bound framebuffer.
 		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	colour	La couleur de la souce lumineuse.
+		 *\param[in]	gp		The geometry pass result.
 		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 		 *\~french
 		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
 		 *\param[in]	size	Les dimensions de la zone de rendu.
 		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	colour	La couleur de la souce lumineuse.
 		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
 		void doRender( castor::Size const & size
 			, GeometryPassResult const & gp
-			, castor::Point3f const & colour
 			, bool first );
 		/**
 		 *\~english

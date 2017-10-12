@@ -406,7 +406,9 @@ namespace castor3d
 					// Perspective divide (result in range [-1,1]).
 					transformed.xyz() = transformed.xyz() / transformed.w();
 					// Now put the position in range [0,1].
-					m_writer.returnStmt( m_writer.paren( transformed.xyz() * 0.5_f ) + 0.5_f );
+					m_writer.returnStmt( glsl::fma( transformed.xyz()
+						, vec3( 0.5_f )
+						, vec3( 0.5_f ) ) );
 				}
 				, InVec3( &m_writer, cuT( "position" ) )
 				, InMat4( &m_writer, cuT( "transform" ) ) );

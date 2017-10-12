@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_DeferredReflectionPass_H___
 
 #include "LightPass.hpp"
+#include "SsaoPass.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
@@ -56,7 +57,8 @@ namespace castor3d
 		ReflectionPass( Engine & engine
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
-			, GpInfoUbo & gpInfoUbo );
+			, GpInfoUbo & gpInfoUbo
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -71,24 +73,11 @@ namespace castor3d
 		 *\brief		Dessine le mapping de réflexion.
 		 */
 		void render( GeometryPassResult & gp
-			, TextureUnit const & lp
+			, TextureUnit const & lightDiffuse
+			, TextureUnit const & lightSpecular
 			, Scene const & scene
+			, FrameBuffer const & frameBuffer
 			, RenderInfo & info );
-
-		inline TextureUnit const & getResult()const
-		{
-			return m_reflection;
-		}
-
-		inline TextureUnit const & getReflection()const
-		{
-			return m_reflection;
-		}
-
-		inline TextureUnit const & getRefraction()const
-		{
-			return m_refraction;
-		}
 
 	private:
 		struct ProgramPipeline
@@ -103,8 +92,9 @@ namespace castor3d
 				, SceneUbo & p_sceneUbo
 				, GpInfoUbo & p_gpInfo
 				, HdrConfigUbo & p_configUbo
-				, bool p_pbr
-				, bool p_isMR );
+				, bool hasSsao
+				, FogType fogType
+				, MaterialType matType );
 			~ProgramPipeline();
 			void render( VertexBuffer const & vbo );
 			//!\~english	The shader program.
@@ -117,24 +107,12 @@ namespace castor3d
 			//!\~french		Le pipeline de rendu.
 			RenderPipelineUPtr m_pipeline;
 		};
+		//!\~english	An array of CombineProgram, one per fog type.
+		//!\~french		Un tableau de CombineProgram, un par type de brouillard.
+		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) * size_t( MaterialType::eCount ) >;
 		//!\~english	The render size.
 		//!\~french		La taille du rendu.
 		castor::Size m_size;
-		//!\~english	The light pass output.
-		//!\~french		La sortie de la passe de lumières.
-		TextureUnit m_reflection;
-		//!\~english	The light pass output.
-		//!\~french		La sortie de la passe de lumières.
-		TextureUnit m_refraction;
-		//!\~english	The target FBO.
-		//!\~french		Le FBO cible.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attachments between reflection result and FBO.
-		//!\~french		Les attaches entre le résultat de la réflexion et le FBO.
-		TextureAttachmentSPtr m_reflectAttach;
-		//!\~english	The attachments between refraction result and FBO.
-		//!\~french		Les attaches entre le résultat de la réfraction et le FBO.
-		TextureAttachmentSPtr m_refractAttach;
 		//!\~english	The render viewport.
 		//!\~french		La viewport du rendu.
 		Viewport m_viewport;
@@ -152,10 +130,16 @@ namespace castor3d
 		HdrConfigUbo m_configUbo;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
-		std::array< ProgramPipeline, 3u > m_programs;
+		ReflectionPrograms m_programs;
 		//!\~english	The render pass timer.
 		//!\~french		Le timer de la passe de rendu.
 		RenderPassTimerSPtr m_timer;
+		//!\~english	Tells if SSAO is to be used in lighting pass.
+		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
+		bool m_ssaoEnabled{ false };
+		//!\~english	The SSAO pass.
+		//!\~french		La passe SSAO.
+		SsaoPass m_ssao;
 	};
 }
 

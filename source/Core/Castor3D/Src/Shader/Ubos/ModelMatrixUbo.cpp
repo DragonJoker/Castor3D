@@ -1,4 +1,4 @@
-﻿#include "ModelMatrixUbo.hpp"
+#include "ModelMatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -26,17 +26,20 @@ namespace castor3d
 	{
 	}
 
-	void ModelMatrixUbo::update( castor::Matrix4x4r const & p_model  )const
+	void ModelMatrixUbo::update( castor::Matrix4x4r const & model )const
 	{
-		m_model.setValue( p_model );
-		m_ubo.update();
-		m_ubo.bindTo( ModelMatrixUbo::BindingPoint );
+		auto normal = Matrix3x3r{ model };
+		normal.invert();
+		normal.transpose();
+		update( model, normal );
 	}
 
-	void ModelMatrixUbo::update( castor::Matrix4x4r const & p_model
-		, castor::Matrix4x4r const & p_normal )const
+	void ModelMatrixUbo::update( castor::Matrix4x4r const & model
+		, castor::Matrix3x3r const & normal )const
 	{
-		m_normal.setValue( p_normal );
-		update( p_model );
+		m_normal.setValue( castor::Matrix4x4r{ normal } );
+		m_model.setValue( model );
+		m_ubo.update();
+		m_ubo.bindTo( ModelMatrixUbo::BindingPoint );
 	}
 }

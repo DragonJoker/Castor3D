@@ -1,4 +1,4 @@
-﻿#include "LightCategory.hpp"
+#include "LightCategory.hpp"
 #include "Light.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
@@ -80,7 +80,7 @@ namespace castor3d
 	{
 		uint32_t offset = 0u;
 		doCopyComponent( getColour(), index, offset, p_texture );
-		doCopyComponent( getIntensity(), index, offset, p_texture );
+		doCopyComponent( getIntensity(), getFarPlane(), index, offset, p_texture );
 		doBind( p_texture, index, offset );
 	}
 
@@ -91,6 +91,18 @@ namespace castor3d
 	{
 		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
 		std::memcpy( dst, component.constPtr(), 2 * sizeof( float ) );
+	}
+
+	void LightCategory::doCopyComponent( Point2f const & components
+		, float component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
+	{
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, components.constPtr(), 2 * sizeof( float ) );
+		dst += 2 * sizeof( float );
+		std::memcpy( dst, &component, sizeof( float ) );
 	}
 
 	void LightCategory::doCopyComponent( Point3f const & component

@@ -1,4 +1,4 @@
-#include "DeferredRendering.hpp"
+﻿#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -115,10 +115,6 @@ namespace castor3d
 			m_reflection = std::make_unique< ReflectionPass >( engine
 				, m_size
 				, m_sceneUbo
-				, m_gpInfoUbo );
-			m_combinePass = std::make_unique< CombinePass >( engine
-				, m_size
-				, m_sceneUbo
 				, m_gpInfoUbo
 				, m_ssaoConfig );
 		}
@@ -145,7 +141,6 @@ namespace castor3d
 		}
 
 		m_geometryPassFrameBuffer.reset();
-		m_combinePass.reset();
 		m_reflection.reset();
 		m_subsurfaceScattering.reset();
 		m_lightingPass.reset();
@@ -198,38 +193,15 @@ namespace castor3d
 			, m_lightingPass->getDiffuse() );
 		m_reflection->render( m_geometryPassResult
 			, m_subsurfaceScattering->getResult()
+			, m_lightingPass->getSpecular()
 			, scene
+			, m_frameBuffer
 			, info );
-
-		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
-			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-		{
-			m_combinePass->render( m_geometryPassResult
-				, m_subsurfaceScattering->getResult()
-				, m_lightingPass->getSpecular()
-				, m_reflection->getReflection()
-				, m_reflection->getRefraction()
-				, scene.getSkybox().getIbl()
-				, scene.getFog()
-				, m_frameBuffer
-				, info );
-		}
-		else
-		{
-			m_combinePass->render( m_geometryPassResult
-				, m_subsurfaceScattering->getResult()
-				, m_lightingPass->getSpecular()
-				, m_reflection->getReflection()
-				, m_reflection->getRefraction()
-				, scene.getFog()
-				, m_frameBuffer
-				, info );
-		}
 	}
 
 	void DeferredRendering::debugDisplay()const
 	{
-		auto count = 10 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
+		auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		int width = int( m_size.getWidth() ) / count;
 		int height = int( m_size.getHeight() ) / count;
 		int left = int( m_size.getWidth() ) - width;
@@ -244,8 +216,6 @@ namespace castor3d
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData5 )]->getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getDiffuse().getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getSpecular().getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_reflection->getReflection().getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_reflection->getRefraction().getTexture() );
 
 		if ( m_ssaoConfig.m_enabled )
 		{

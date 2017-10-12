@@ -1,4 +1,4 @@
-﻿#include "MatrixUbo.hpp"
+#include "MatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"

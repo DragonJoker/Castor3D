@@ -362,7 +362,6 @@ namespace castor3d
 			shadowMapDepth.bind();
 			my_pass_type::doRender( size
 				, gp
-				, light.getColour()
 				, first );
 			shadowMapDepth.unbind();
 			shadowMapTexture.unbind();

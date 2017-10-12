@@ -1,4 +1,4 @@
-﻿#include "GlslLight.hpp"
+#include "GlslLight.hpp"
 
 using namespace castor;
 using namespace glsl;
@@ -44,6 +44,11 @@ namespace castor3d
 			return Vec2( m_writer, String( *this ) + cuT( ".m_intensity" ) );
 		}
 
+		Float Light::m_farPlane()const
+		{
+			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
+		}
+
 		//*********************************************************************************************
 
 		DirectionalLight::DirectionalLight()
@@ -79,11 +84,6 @@ namespace castor3d
 		Vec3 DirectionalLight::m_direction()const
 		{
 			return Vec3( m_writer, String( *this ) + cuT( ".m_direction" ) );
-		}
-
-		Float DirectionalLight::m_farPlane()const
-		{
-			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
 		}
 
 		Mat4 DirectionalLight::m_transform()const
@@ -133,11 +133,6 @@ namespace castor3d
 			return Vec3( m_writer, String( *this ) + cuT( ".m_attenuation" ) );
 		}
 
-		Float PointLight::m_farPlane()const
-		{
-			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
-		}
-
 		Int PointLight::m_index()const
 		{
 			return Int( m_writer, String( *this ) + cuT( ".m_index" ) );
@@ -183,11 +178,6 @@ namespace castor3d
 		Vec3 SpotLight::m_attenuation()const
 		{
 			return Vec3( m_writer, String( *this ) + cuT( ".m_attenuation" ) );
-		}
-
-		Float SpotLight::m_farPlane()const
-		{
-			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
 		}
 
 		Vec3 SpotLight::m_direction()const

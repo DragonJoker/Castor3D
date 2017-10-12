@@ -143,8 +143,12 @@ namespace castor3d
 					auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 					auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 					auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-					auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
-					v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+
+					auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" )
+						, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+					v3MapNormal = normalize( glsl::fma( v3MapNormal
+						, vec3( 2.0_f )
+						, vec3( -1.0_f ) ) );
 
 					if ( checkFlag( textureFlags, TextureChannel::eHeight )
 						&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
@@ -155,7 +159,10 @@ namespace castor3d
 							, texture( c3d_mapHeight, texCoord.xy() ).r() );
 					}
 
-					auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), normal ) );
+					auto tbn = writer.declLocale( cuT( "tbn" )
+						, mat3( normalize( vtx_tangent )
+							, normalize( vtx_bitangent )
+							, normal ) );
 					normal = normalize( tbn * v3MapNormal );
 				}
 
@@ -267,8 +274,12 @@ namespace castor3d
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
-						v3MapNormal = normalize( v3MapNormal * 2.0_f - 1.0_f );
+
+						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" )
+							, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+						v3MapNormal = normalize( glsl::fma( v3MapNormal
+							, vec3( 2.0_f )
+							, vec3( -1.0_f ) ) );
 
 						if ( checkFlag( textureFlags, TextureChannel::eHeight )
 							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
@@ -279,7 +290,10 @@ namespace castor3d
 								, texture( c3d_mapHeight, texCoord.xy() ).r() );
 						}
 
-						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
+						auto tbn = writer.declLocale( cuT( "tbn" )
+							, mat3( normalize( vtx_tangent )
+								, normalize( vtx_bitangent )
+								, p_normal ) );
 						p_normal = normalize( tbn * v3MapNormal );
 					}
 
@@ -387,8 +401,12 @@ namespace castor3d
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
-						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" ), texture( c3d_mapNormal, texCoord.xy() ).xyz() );
-						v3MapNormal = normalize( v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+
+						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" )
+							, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+						v3MapNormal = normalize( glsl::fma( v3MapNormal
+							, vec3( 2.0_f )
+							, vec3( -1.0_f ) ) );
 
 						if ( checkFlag( textureFlags, TextureChannel::eHeight )
 							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
@@ -399,7 +417,10 @@ namespace castor3d
 								, texture( c3d_mapHeight, texCoord.xy() ).r() );
 						}
 
-						auto tbn = writer.declLocale( cuT( "tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
+						auto tbn = writer.declLocale( cuT( "tbn" )
+							, mat3( normalize( vtx_tangent )
+								, normalize( vtx_bitangent )
+								, p_normal ) );
 						p_normal = normalize( tbn * v3MapNormal );
 					}
 
@@ -595,28 +616,38 @@ namespace castor3d
 					, Vec2 const p_initialTexCoord
 					, Float p_initialHeight )
 					{
-						auto shadowMultiplier = writer.declLocale( cuT( "shadowMultiplier" ), 1.0_f );
-						auto minLayers = writer.declLocale( cuT( "minLayers" ), 10.0_f );
-						auto maxLayers = writer.declLocale( cuT( "maxLayers" ), 20.0_f );
+						auto shadowMultiplier = writer.declLocale( cuT( "shadowMultiplier" )
+							, 1.0_f );
+						auto minLayers = writer.declLocale( cuT( "minLayers" )
+							, 10.0_f );
+						auto maxLayers = writer.declLocale( cuT( "maxLayers" )
+							, 20.0_f );
 
 						// calculate lighting only for surface oriented to the light source
 						IF( writer, dot( vec3( 0.0_f, 0, 1 ), p_lightDir ) > 0.0_f )
 						{
 							// calculate initial parameters
-							auto numSamplesUnderSurface = writer.declLocale( cuT( "numSamplesUnderSurface" ), 0.0_f );
+							auto numSamplesUnderSurface = writer.declLocale( cuT( "numSamplesUnderSurface" )
+								, 0.0_f );
 							shadowMultiplier = 0;
 							auto numLayers = writer.declLocale( cuT( "numLayers" )
 								, mix( maxLayers
 									, minLayers
 									, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_lightDir ) ) ) );
-							auto layerHeight = writer.declLocale( cuT( "layerHeight" ), p_initialHeight / numLayers );
-							auto texStep = writer.declLocale( cuT( "deltaTexCoords" ), writer.paren( p_lightDir.xy() * c3d_heightScale ) / p_lightDir.z() / numLayers );
+							auto layerHeight = writer.declLocale( cuT( "layerHeight" )
+								, p_initialHeight / numLayers );
+							auto texStep = writer.declLocale( cuT( "deltaTexCoords" )
+								, writer.paren( p_lightDir.xy() * c3d_heightScale ) / p_lightDir.z() / numLayers );
 
 							// current parameters
-							auto currentLayerHeight = writer.declLocale( cuT( "currentLayerHeight" ), p_initialHeight - layerHeight );
-							auto currentTextureCoords = writer.declLocale( cuT( "currentTextureCoords" ), p_initialTexCoord + texStep );
-							auto heightFromTexture = writer.declLocale( cuT( "heightFromTexture" ), texture( c3d_mapHeight, currentTextureCoords ).r() );
-							auto stepIndex = writer.declLocale( cuT( "stepIndex" ), 1_i );
+							auto currentLayerHeight = writer.declLocale( cuT( "currentLayerHeight" )
+								, p_initialHeight - layerHeight );
+							auto currentTextureCoords = writer.declLocale( cuT( "currentTextureCoords" )
+								, p_initialTexCoord + texStep );
+							auto heightFromTexture = writer.declLocale( cuT( "heightFromTexture" )
+								, texture( c3d_mapHeight, currentTextureCoords ).r() );
+							auto stepIndex = writer.declLocale( cuT( "stepIndex" )
+								, 1_i );
 
 							// while point is below depth 0.0 )
 							WHILE( writer, currentLayerHeight > 0.0_f )
@@ -680,22 +711,30 @@ namespace castor3d
 					[&]( Vec2 const & p_texCoords, Vec3 const & p_viewDir )
 					{
 						// number of depth layers
-						auto minLayers = writer.declLocale( cuT( "minLayers" ), 10.0_f );
-						auto maxLayers = writer.declLocale( cuT( "maxLayers" ), 20.0_f );
+						auto minLayers = writer.declLocale( cuT( "minLayers" )
+							, 10.0_f );
+						auto maxLayers = writer.declLocale( cuT( "maxLayers" )
+							, 20.0_f );
 						auto numLayers = writer.declLocale( cuT( "numLayers" )
 							, mix( maxLayers
 								, minLayers
 								, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_viewDir ) ) ) );
 						// calculate the size of each layer
-						auto layerDepth = writer.declLocale( cuT( "layerDepth" ), Float( 1.0f / numLayers ) );
+						auto layerDepth = writer.declLocale( cuT( "layerDepth" )
+							, Float( 1.0f / numLayers ) );
 						// depth of current layer
-						auto currentLayerDepth = writer.declLocale( cuT( "currentLayerDepth" ), 0.0_f );
+						auto currentLayerDepth = writer.declLocale( cuT( "currentLayerDepth" )
+							, 0.0_f );
 						// the amount to shift the texture coordinates per layer (from vector P)
-						auto p = writer.declLocale( cuT( "p" ), p_viewDir.xy() * c3d_heightScale );
-						auto deltaTexCoords = writer.declLocale( cuT( "deltaTexCoords" ), p / numLayers );
+						auto p = writer.declLocale( cuT( "p" )
+							, p_viewDir.xy() * c3d_heightScale );
+						auto deltaTexCoords = writer.declLocale( cuT( "deltaTexCoords" )
+							, p / numLayers );
 
-						auto currentTexCoords = writer.declLocale( cuT( "currentTexCoords" ), p_texCoords );
-						auto currentDepthMapValue = writer.declLocale( cuT( "currentDepthMapValue" ), texture( c3d_mapHeight, currentTexCoords ).r() );
+						auto currentTexCoords = writer.declLocale( cuT( "currentTexCoords" )
+							, p_texCoords );
+						auto currentDepthMapValue = writer.declLocale( cuT( "currentDepthMapValue" )
+							, texture( c3d_mapHeight, currentTexCoords ).r() );
 
 						WHILE( writer, currentLayerDepth < currentDepthMapValue )
 						{
@@ -709,15 +748,22 @@ namespace castor3d
 						ELIHW;
 
 						// get texture coordinates before collision (reverse operations)
-						auto prevTexCoords = writer.declLocale( cuT( "prevTexCoords" ), currentTexCoords + deltaTexCoords );
+						auto prevTexCoords = writer.declLocale( cuT( "prevTexCoords" )
+							, currentTexCoords + deltaTexCoords );
 
 						// get depth after and before collision for linear interpolation
-						auto afterDepth = writer.declLocale( cuT( "afterDepth" ), currentDepthMapValue - currentLayerDepth );
-						auto beforeDepth = writer.declLocale( cuT( "beforeDepth" ), texture( c3d_mapHeight, prevTexCoords ).r() - currentLayerDepth + layerDepth );
+						auto afterDepth = writer.declLocale( cuT( "afterDepth" )
+							, currentDepthMapValue - currentLayerDepth );
+						auto beforeDepth = writer.declLocale( cuT( "beforeDepth" )
+							, texture( c3d_mapHeight, prevTexCoords ).r() - currentLayerDepth + layerDepth );
 
 						// interpolation of texture coordinates
-						auto weight = writer.declLocale( cuT( "weight" ), afterDepth / writer.paren( afterDepth - beforeDepth ) );
-						auto finalTexCoords = writer.declLocale( cuT( "finalTexCoords" ), prevTexCoords * weight + currentTexCoords * writer.paren( 1.0_f - weight ) );
+						auto weight = writer.declLocale( cuT( "weight" )
+							, vec2( afterDepth / writer.paren( afterDepth - beforeDepth ) ) );
+						auto finalTexCoords = writer.declLocale( cuT( "finalTexCoords" )
+							, glsl::fma( prevTexCoords
+								, weight
+								, currentTexCoords * writer.paren( vec2( 1.0_f ) - weight ) ) );
 
 						writer.returnStmt( finalTexCoords );
 					}, InVec2{ &writer, cuT( "p_texCoords" ) }

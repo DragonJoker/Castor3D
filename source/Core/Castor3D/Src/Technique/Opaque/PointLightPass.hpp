@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -81,17 +81,6 @@ namespace castor3d
 			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
 			void doBind( Light const & light )override;
-
-		private:
-			//!\~english	The variable containing the light position.
-			//!\~french		La variable contenant la position de la lumière.
-			PushUniform3fSPtr m_lightPosition;
-			//!\~english	The variable containing the light attenuation.
-			//!\~french		La variable contenant l'atténuation de la lumière.
-			PushUniform3fSPtr m_lightAttenuation;
-			//!\~english	The variable containing the light far plane position.
-			//!\~french		La variable contenant la position du plan lointain de la lumière.
-			PushUniform1fSPtr m_lightFarPlane;
 		};
 
 	public:

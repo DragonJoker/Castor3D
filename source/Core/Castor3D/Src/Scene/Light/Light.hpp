@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -209,6 +209,16 @@ namespace castor3d
 		inline castor::Point2f const & getIntensity()const
 		{
 			return m_category->getIntensity();
+		}
+		/**
+		 *\~english
+		 *\return		The depth of the far plane.
+		 *\~french
+		 *\return		La profondeur du plan éloigné.
+		 */
+		inline float getFarPlane()const
+		{
+			return m_category->getFarPlane();
 		}
 		/**
 		 *\~english

@@ -83,12 +83,6 @@ namespace castor3d
 			void doBind( Light const & light )override;
 
 		private:
-			//!\~english	The variable containing the light position.
-			//!\~french		La variable contenant la position de la lumière.
-			PushUniform3fSPtr m_lightPosition;
-			//!\~english	The variable containing the light attenuation.
-			//!\~french		La variable contenant l'atténuation de la lumière.
-			PushUniform3fSPtr m_lightAttenuation;
 			//!\~english	The variable containing the light direction.
 			//!\~french		La variable contenant la direction de la lumière.
 			PushUniform3fSPtr m_lightDirection;
@@ -101,9 +95,6 @@ namespace castor3d
 			//!\~english	The variable containing the light space transformation matrix.
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
 			PushUniform4x4fSPtr m_lightTransform;
-			//!\~english	The variable containing the light far plane position.
-			//!\~french		La variable contenant la position du plan lointain de la lumière.
-			PushUniform1fSPtr m_lightFarPlane;
 		};
 
 	public:

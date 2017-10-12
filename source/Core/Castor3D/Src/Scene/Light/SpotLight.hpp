@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -211,16 +211,6 @@ namespace castor3d
 		{
 			return m_cutOff.value();
 		}
-		/**
-		 *\~english
-		 *\return		The far plane position for the light.
-		 *\~french
-		 *\return		La position du plan lointain de la lumière.
-		 */
-		inline float getFarPlane()const
-		{
-			return m_farPlane;
-		}
 
 	private:
 		/**
@@ -236,9 +226,6 @@ namespace castor3d
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
 		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1, 0, 0 } };
-		//!\~english	The far plane position for the light.
-		//!\~french		La position du plan lointain de la lumière.
-		float m_farPlane;
 		//!\~english	The light exponent, id est how much the light is focused.
 		//\~french		L'exposant de la lumièrs, càd à quel point elle est concentrée.
 		float m_exponent{ 1.0f };

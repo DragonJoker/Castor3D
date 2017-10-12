@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -87,7 +87,7 @@ namespace castor3d
 		 *\param[in]	p_projection	La nouvelle matrice normale.
 		 */
 		C3D_API void update( castor::Matrix4x4r const & p_model
-			, castor::Matrix4x4r const & p_normal )const;
+			, castor::Matrix3x3r const & p_normal )const;
 		/**
 		 *\~english
 		 *\name			getters.

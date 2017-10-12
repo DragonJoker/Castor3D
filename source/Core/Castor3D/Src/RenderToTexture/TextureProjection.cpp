@@ -85,7 +85,7 @@ namespace castor3d
 	void TextureProjection::render( TextureLayout const & p_texture
 		, Camera const & p_camera )
 	{
-		static Matrix4x4r const Identity{ 1.0f };
+		static Matrix3x3r const Identity{ 1.0f };
 		auto node = p_camera.getParent();
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 		m_matrixUbo.update( p_camera.getView()

@@ -77,7 +77,7 @@ namespace castor3d
 
 	void DirectionalLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		doCopyComponent( m_direction, m_farPlane, p_index, p_offset, p_texture );
+		doCopyComponent( m_direction, p_index, p_offset, p_texture );
 		doCopyComponent( m_lightSpace, p_index, p_offset, p_texture );
 	}
 }

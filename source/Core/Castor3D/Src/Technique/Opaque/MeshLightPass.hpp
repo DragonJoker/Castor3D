@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -85,9 +85,12 @@ namespace castor3d
 			RenderPipelineUPtr doCreatePipeline( bool blend )override;
 
 		protected:
-			//!\~english	The variable containing the light intensities.
-			//!\~french		La variable contenant les intensités de la lumière.
-			PushUniform2fSPtr m_lightIntensity;
+			//!\~english	The variable containing the light position.
+			//!\~french		La variable contenant la position de la lumière.
+			PushUniform3fSPtr m_lightPosition;
+			//!\~english	The variable containing the light attenuation.
+			//!\~french		La variable contenant l'atténuation de la lumière.
+			PushUniform3fSPtr m_lightAttenuation;
 		};
 
 	public:

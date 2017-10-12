@@ -246,6 +246,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The depth of the far plane.
+		 *\~french
+		 *\return		La profondeur du plan éloigné.
+		 */
+		inline float getFarPlane()const
+		{
+			return m_farPlane;
+		}
+		/**
+		 *\~english
 		 *\return		The colour.
 		 *\~french
 		 *\return		La couleur.
@@ -322,6 +332,27 @@ namespace castor3d
 		 *\param[in]	data		Le tampon de destination.
 		 */
 		void doCopyComponent( castor::Point2f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light PixelComponents values into the buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	component	The last component.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	components	La composante.
+		 *\param[in]	component	La dernière composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
+		 */
+		void doCopyComponent( castor::Point2f const & components
+			, float component
 			, uint32_t index
 			, uint32_t & offset
 			, castor::PxBufferBase & data )const;
@@ -476,6 +507,9 @@ namespace castor3d
 		//!\~english	The cube box for the light volume of effect.
 		//!\~french		La cube box pour le volume d'effet de la lumière.
 		castor::CubeBox m_cubeBox;
+		//!\~english	The far plane's depth.
+		//!\~french		La profondeur du plan éloigné.
+		float m_farPlane{ 1.0f };
 
 	private:
 		//!\~english	The light type.

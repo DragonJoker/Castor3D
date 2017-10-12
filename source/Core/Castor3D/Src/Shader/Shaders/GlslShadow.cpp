@@ -1,4 +1,4 @@
-#include "GlslShadow.hpp"
+﻿#include "GlslShadow.hpp"
 
 using namespace castor;
 using namespace glsl;
@@ -284,9 +284,11 @@ namespace castor3d
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
-						, m_getShadowOffset( normal, vertexToLight ) );
+						, vec3( m_getShadowOffset( normal, vertexToLight ) ) );
 					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, worldSpacePosition + m_writer.paren( normal * bias ) );
+						, glsl::fma( normal
+							, bias
+							, worldSpacePosition ) );
 					vertexToLight = worldSpace - lightPosition;
 					auto depth = m_writer.declLocale( cuT( "depth" )
 						, length( vertexToLight ) / farPlane );
@@ -369,9 +371,11 @@ namespace castor3d
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
-						, m_getShadowOffset( normal, vertexToLight ) );
+						, vec3( m_getShadowOffset( normal, vertexToLight ) ) );
 					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, worldSpacePosition + m_writer.paren( normal * bias ) );
+						, glsl::fma( normal
+							, bias
+							, worldSpacePosition ) );
 					vertexToLight = worldSpace - lightPosition;
 					auto depth = m_writer.declLocale( cuT( "depth" )
 						, length( vertexToLight ) / farPlane );

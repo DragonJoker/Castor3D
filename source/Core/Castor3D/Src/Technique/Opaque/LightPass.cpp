@@ -1,4 +1,4 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -297,6 +297,8 @@ namespace castor3d
 		m_program->setSource( ShaderType::ePixel, pxl );
 
 		m_lightColour = m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel );
+		m_lightIntensity = m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel );
+		m_lightFarPlane = m_program->createUniform< UniformType::eFloat >( cuT( "light.m_lightBase.m_farPlane" ), ShaderType::ePixel );
 
 		for ( int i = 0; i < int( DsTexture::eCount ); i++ )
 		{
@@ -352,16 +354,17 @@ namespace castor3d
 
 	void LightPass::Program::bind( Light const & light )
 	{
+		m_lightColour->setValue( light.getColour() );
+		m_lightIntensity->setValue( light.getIntensity() );
+		m_lightFarPlane->setValue( light.getFarPlane() );
 		doBind( light );
 	}
 
 	void LightPass::Program::render( Size const & size
-		, Point3f const & colour
 		, uint32_t count
 		, bool first
 		, uint32_t offset )const
 	{
-		m_lightColour->setValue( colour );
 
 		if ( first )
 		{
@@ -406,7 +409,6 @@ namespace castor3d
 
 		doRender( size
 			, gp
-			, light.getColour()
 			, first );
 	}
 
@@ -450,7 +452,6 @@ namespace castor3d
 
 	void LightPass::doRender( castor::Size const & size
 		, GeometryPassResult const & gp
-		, Point3f const & colour
 		, bool first )
 	{
 		m_frameBuffer.bind( FrameBufferTarget::eDraw );
@@ -464,7 +465,6 @@ namespace castor3d
 		gp[size_t( DsTexture::eData5 )]->bind();
 
 		m_program->render( size
-			, colour
 			, getCount()
 			, first
 			, m_offset );
