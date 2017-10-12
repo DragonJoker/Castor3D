@@ -279,8 +279,20 @@ namespace castor3d
 			m_frameTimer.getElapsed();
 		}
 
+#if defined( NDEBUG )
+
+		auto total = std::chrono::duration_cast< std::chrono::microseconds >( totalTime );
+		fprintf( stdout
+			, "\r%0.7f ms, %0.7f fps"
+			, total.count() / 1000.0f
+			, ( 1000000.0_r / total.count() ) );
+
+#else
+
 		std::cout << "\rTime: " << std::setw( 7 ) << totalTime;
 		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( totalTime ).count() );
+
+#endif
 	}
 
 	void DebugOverlays::endGpuTask()

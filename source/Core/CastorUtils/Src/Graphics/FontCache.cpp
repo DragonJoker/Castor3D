@@ -69,7 +69,7 @@ namespace castor
 			if ( File::fileExists( p_path ) )
 			{
 				result = std::make_shared< Font >( p_name, p_height, p_path );
-				Logger::logInfo( StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
+				Logger::logDebug( StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
 				Collection< Font, String >::insert( p_name, result );
 
 				if ( m_paths.find( name ) == m_paths.end() )
