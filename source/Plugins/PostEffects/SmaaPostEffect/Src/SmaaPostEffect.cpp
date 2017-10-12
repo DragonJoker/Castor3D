@@ -8,7 +8,8 @@
 #include <Cache/ShaderCache.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/BufferDeclaration.hpp>
@@ -1283,6 +1284,9 @@ namespace smaa
 		m_matrixUbo.getUbo().cleanup();
 
 		m_edgeDetectionSurface.cleanup();
+		m_depthAttach.reset();
+		m_depthBuffer->cleanup();
+		m_depthBuffer.reset();
 		m_blendingWeightCalculationSurface.cleanup();
 
 		for ( auto & surface : m_neighbourhoodBlendingSurface )
@@ -1435,6 +1439,11 @@ namespace smaa
 		castor3d::DepthStencilState dsstate;
 		dsstate.setDepthTest( false );
 		dsstate.setDepthMask( castor3d::WritingMask::eZero );
+		dsstate.setStencilTest( true );
+		dsstate.setStencilReadMask( 0xFFFFFFFFu );
+		dsstate.setStencilFrontRef( 0x00000001u );
+		dsstate.setStencilFrontFunc( castor3d::StencilFunc::eNever );
+		dsstate.setStencilFrontOps( castor3d::StencilOp::eReplace, castor3d::StencilOp::eKeep, castor3d::StencilOp::eKeep );
 		castor3d::RasteriserState rsstate;
 		rsstate.setCulledFaces( castor3d::Culling::eBack );
 		m_edgeDetectionPipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
@@ -1449,6 +1458,19 @@ namespace smaa
 			, m_renderTarget.getSize()
 			, castor3d::MinTextureIndex
 			, m_linearSampler );
+		m_depthBuffer = getRenderSystem()->createTexture( castor3d::TextureType::eTwoDimensions
+			, castor3d::AccessType::eNone
+			, castor3d::AccessType::eRead | castor3d::AccessType::eWrite
+			, PixelFormat::eS8
+			, m_renderTarget.getSize() );
+		m_depthBuffer->initialise();
+		m_depthAttach = m_edgeDetectionSurface.m_fbo->createAttachment( m_depthBuffer );
+
+		m_edgeDetectionSurface.m_fbo->bind();
+		m_edgeDetectionSurface.m_fbo->attach( castor3d::AttachmentPoint::eStencil, 0u, m_depthAttach, m_depthBuffer->getType() );
+		REQUIRE( m_edgeDetectionSurface.m_fbo->isComplete() );
+		m_edgeDetectionSurface.m_fbo->unbind();
+
 	}
 
 	void PostEffect::doInitialiseBlendingWeightCalculation()
@@ -1499,6 +1521,9 @@ namespace smaa
 		castor3d::DepthStencilState dsstate;
 		dsstate.setDepthTest( false );
 		dsstate.setDepthMask( castor3d::WritingMask::eZero );
+		dsstate.setStencilTest( true );
+		dsstate.setStencilReadMask( 0x00000000u );
+		dsstate.setStencilFrontFunc( castor3d::StencilFunc::eEqual );
 		castor3d::RasteriserState rsstate;
 		rsstate.setCulledFaces( castor3d::Culling::eBack );
 		m_blendingWeightCalculationPipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
@@ -1603,7 +1628,7 @@ namespace smaa
 	{
 		auto & surface = m_edgeDetectionSurface;
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
-		surface.m_fbo->clear( castor3d::BufferComponent::eColour | castor3d::BufferComponent::eDepth | castor3d::BufferComponent::eStencil );
+		surface.m_fbo->clear( castor3d::BufferComponent::eColour | castor3d::BufferComponent::eStencil );
 
 		if ( !depthStencil )
 		{
@@ -1632,7 +1657,7 @@ namespace smaa
 	{
 		auto & surface = m_blendingWeightCalculationSurface;
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
-		surface.m_fbo->clear( castor3d::BufferComponent::eColour | castor3d::BufferComponent::eDepth | castor3d::BufferComponent::eStencil );
+		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
 		m_subsampleIndicesUniform->setValue( m_smaaSubsampleIndices[m_subsampleIndex] );
 		m_areaTex.bind();
 		m_searchTex.bind();
@@ -1651,7 +1676,7 @@ namespace smaa
 	{
 		auto & surface = m_neighbourhoodBlendingSurface[curIndex];
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
-		surface.m_fbo->clear( castor3d::BufferComponent::eColour | castor3d::BufferComponent::eDepth | castor3d::BufferComponent::eStencil );
+		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
 		m_blendingWeightCalculationSurface.m_colourTexture.bind();
 
 		if ( m_mode == Mode::eT2X )
@@ -1694,7 +1719,7 @@ namespace smaa
 	{
 		auto & surface = m_reprojectSurface;
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
-		surface.m_fbo->clear( castor3d::BufferComponent::eColour | castor3d::BufferComponent::eDepth | castor3d::BufferComponent::eStencil );
+		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
 		m_neighbourhoodBlendingSurface[prvIndex].m_colourTexture.bind();
 
 		if ( m_mode == Mode::eT2X && m_reprojection )

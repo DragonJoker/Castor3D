@@ -120,6 +120,8 @@ namespace smaa
 		// Edge detection.
 		PostEffectSurface m_edgeDetectionSurface;
 		castor3d::RenderPipelineSPtr m_edgeDetectionPipeline;
+		castor3d::TextureLayoutSPtr m_depthBuffer;
+		castor3d::TextureAttachmentSPtr m_depthAttach;
 		// Blending weight calculation.
 		castor3d::TextureUnit m_areaTex;
 		castor3d::TextureUnit m_searchTex;
