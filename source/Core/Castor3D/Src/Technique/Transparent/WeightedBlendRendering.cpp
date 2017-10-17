@@ -1,4 +1,4 @@
-﻿#include "WeightedBlendRendering.hpp"
+#include "WeightedBlendRendering.hpp"
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -12,14 +12,15 @@ using namespace castor;
 namespace castor3d
 {
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
-		, TransparentPass & p_transparentPass
-		, FrameBuffer & p_frameBuffer
-		, castor::Size const & p_size
+		, TransparentPass & transparentPass
+		, FrameBuffer & frameBuffer
+		, TextureAttachment & depthAttach
+		, castor::Size const & size
 		, Scene const & scene )
 		: m_engine{ engine }
-		, m_transparentPass{ p_transparentPass }
-		, m_frameBuffer{ p_frameBuffer }
-		, m_size{ p_size }
+		, m_transparentPass{ transparentPass }
+		, m_frameBuffer{ frameBuffer }
+		, m_size{ size }
 	{
 		auto & renderSystem = *engine.getRenderSystem();
 		m_weightedBlendPassFrameBuffer = renderSystem.createFrameBuffer();
@@ -28,7 +29,14 @@ namespace castor3d
 
 		if ( result )
 		{
-			for ( uint32_t i = 0; i < uint32_t( WbTexture::eCount ); i++ )
+			m_weightedBlendPassResult[0] = std::make_unique< TextureUnit >( m_engine );
+			m_weightedBlendPassResult[0]->setIndex( MinTextureIndex );
+			m_weightedBlendPassResult[0]->setTexture( depthAttach.getTexture() );
+			m_weightedBlendPassResult[0]->setSampler( m_engine.getLightsSampler() );
+			m_weightedBlendPassResult[0]->initialise();
+			m_weightedBlendPassTexAttachs[0] = m_weightedBlendPassFrameBuffer->createAttachment( depthAttach.getTexture() );
+
+			for ( uint32_t i = uint32_t( WbTexture::eAccumulation ); i < uint32_t( WbTexture::eCount ); i++ )
 			{
 				auto texture = renderSystem.createTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
@@ -82,10 +90,12 @@ namespace castor3d
 			attach.reset();
 		}
 
-		for ( auto & texture : m_weightedBlendPassResult )
+		m_weightedBlendPassResult[0].reset();
+
+		for ( uint32_t i = uint32_t( WbTexture::eAccumulation ); i < uint32_t( WbTexture::eCount ); i++ )
 		{
-			texture->cleanup();
-			texture.reset();
+			m_weightedBlendPassResult[i]->cleanup();
+			m_weightedBlendPassResult[i].reset();
 		}
 
 		m_weightedBlendPassFrameBuffer.reset();

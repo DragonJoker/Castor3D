@@ -27,7 +27,6 @@ SOFTWARE.
 #include "ShadowMap/ShadowMapPoint.hpp"
 #include "ShadowMap/ShadowMapSpot.hpp"
 #include "Technique/RenderTechniquePass.hpp"
-#include "Technique/Transparent/DepthPass.hpp"
 
 namespace castor3d
 {

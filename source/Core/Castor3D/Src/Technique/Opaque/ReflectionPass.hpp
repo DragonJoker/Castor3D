@@ -78,6 +78,16 @@ namespace castor3d
 			, Scene const & scene
 			, FrameBuffer const & frameBuffer
 			, RenderInfo & info );
+		/**
+		 *\~english
+		 *\return		The SSAO texture.
+		 *\~french
+		 *\return		La texture SSAO.
+		 */
+		inline TextureLayout const & getSsao()const
+		{
+			return *m_ssao.getResult().getTexture();
+		}
 
 	private:
 		struct ProgramPipeline

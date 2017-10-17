@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,6 +27,7 @@ SOFTWARE.
 #include "Miscellaneous/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
+#include "Technique/DepthPass.hpp"
 #include "Technique/Opaque/DeferredRendering.hpp"
 #include "Technique/Transparent/WeightedBlendRendering.hpp"
 #include "ShadowMap/ShadowMap.hpp"

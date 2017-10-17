@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -755,7 +755,5 @@ namespace castor3d
 
 	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		auto & scene = *m_camera->getScene();
-		m_sceneUbo.update( scene, *m_camera, false );
 	}
 }

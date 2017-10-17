@@ -20,10 +20,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_DeferredLightingPass_H___
-#define ___C3D_DeferredLightingPass_H___
+#ifndef ___C3D_LightingPass_H___
+#define ___C3D_LightingPass_H___
 
-#include "CombinePass.hpp"
 #include "ReflectionPass.hpp"
 
 namespace castor3d

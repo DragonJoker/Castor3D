@@ -258,6 +258,7 @@ namespace castor3d
 				m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 					, static_cast< TransparentPass & >( *m_transparentPass )
 					, *m_frameBuffer.m_frameBuffer
+					, *m_frameBuffer.m_depthAttach
 					, m_renderTarget.getSize()
 					, *m_renderTarget.getScene() );
 #endif
@@ -520,11 +521,6 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if USE_WEIGHTED_BLEND
-#	if !DEBUG_FORWARD_RENDERING
-
-		m_deferredRendering->blitDepthInto( m_weightedBlendRendering->getFbo() );
-
-#	endif
 
 		m_weightedBlendRendering->render( info
 			, scene

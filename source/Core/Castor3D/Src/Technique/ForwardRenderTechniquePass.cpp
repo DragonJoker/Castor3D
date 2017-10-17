@@ -277,8 +277,8 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
-			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
@@ -422,14 +422,16 @@ namespace castor3d
 				{
 					auto reflected = writer.declLocale( cuT( "reflected" )
 						, reflect( incident, normal ) );
-					reflectedColour = texture( c3d_mapEnvironment, reflected ).xyz() * length( pxl_fragColor.xyz() );
+					reflectedColour = texture( c3d_mapEnvironment, reflected ).xyz()
+						* length( pxl_fragColor.xyz() );
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
 					auto refracted = writer.declLocale( cuT( "refracted" )
 						, refract( incident, normal, material.m_refractionRatio() ) );
-					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz() * matDiffuse / length( matDiffuse );
+					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz()
+						* matDiffuse / length( matDiffuse );
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
@@ -527,8 +529,8 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
-			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
@@ -543,9 +545,9 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
 		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
 			, ( checkFlag( textureFlags, TextureChannel::eReflection )
-			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eReflection )
-			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance
 			, index++ );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered
@@ -754,8 +756,8 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
-			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
@@ -772,7 +774,7 @@ namespace castor3d
 			, ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eReflection )
-			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance
 			, index++ );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered

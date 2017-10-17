@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -47,10 +47,11 @@ namespace castor3d
 		 *\brief		Initialise les données liées au deferred rendering.
 		 */
 		WeightedBlendRendering( Engine & engine
-			, TransparentPass & p_transparentPass
-			, FrameBuffer & p_frameBuffer
-			, castor::Size const & p_size
-			, Scene const & p_scene );
+			, TransparentPass & transparentPass
+			, FrameBuffer & frameBuffer
+			, TextureAttachment & depthAttach
+			, castor::Size const & size
+			, Scene const & scene );
 		/**
 		 *\~english
 		 *\brief		Destroys deferred rendering related stuff.

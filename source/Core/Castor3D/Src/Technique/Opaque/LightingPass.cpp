@@ -1,4 +1,4 @@
-﻿#include "LightingPass.hpp"
+#include "LightingPass.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"

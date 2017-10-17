@@ -196,11 +196,35 @@ namespace castor3d
 					occlusion *= texture( c3d_mapSsao, vtx_texture ).r();
 				}
 
-				IF( writer, envMapIndex > 0_i )
+				IF( writer, envMapIndex > 0_i && writer.paren( reflection != 0_i || refraction != 0_i ) )
 				{
 					envMapIndex = envMapIndex - 1_i;
 
-					IF( writer, reflection != 0_i )
+					IF( writer, reflection != 0_i && refraction != 0_i )
+					{
+						auto reflected = writer.declLocale( cuT( "reflected" )
+							, reflect( incident, normal ) );
+						ambient = occlusion * texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
+						auto ratio = writer.declLocale( cuT( "ratio" )
+							, material.m_refractionRatio() );
+						auto subRatio = writer.declLocale( cuT( "subRatio" )
+							, 1.0_f - ratio );
+						auto addRatio = writer.declLocale( cuT( "addRatio" )
+							, 1.0_f + ratio );
+						auto reflectance = writer.declLocale( cuT( "reflectance" )
+							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+						auto product = writer.declLocale( cuT( "product" )
+							, max( 0.0_f, dot( -incident, normal ) ) );
+						auto fresnel = writer.declLocale( cuT( "fresnel" )
+							, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
+						auto refracted = writer.declLocale( cuT( "refracted" )
+							, refract( incident, normal, ratio ) );
+						ambient = mix( texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse )
+							, ambient * ambient / length( ambient )
+							, fresnel );
+						diffuse = vec3( 0.0_f );
+					}
+					ELSEIF( writer, reflection != 0_i )
 					{
 						auto reflected = writer.declLocale( cuT( "reflected" )
 							, reflect( incident, normal ) );
@@ -208,13 +232,6 @@ namespace castor3d
 						ambient = vec3( 0.0_f );
 					}
 					ELSE
-					{
-						ambient *= occlusion * diffuse;
-						diffuse *= lightDiffuse;
-					}
-					FI;
-
-					IF( writer, refraction != 0_i )
 					{
 						auto ratio = writer.declLocale( cuT( "ratio" )
 							, material.m_refractionRatio() );
@@ -230,20 +247,8 @@ namespace castor3d
 							, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
 						auto refracted = writer.declLocale( cuT( "refracted" )
 							, refract( incident, normal, ratio ) );
-
-						IF( writer, reflection != 0_i )
-						{
-							ambient = mix( texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse )
-								, diffuse * diffuse / length( diffuse )
-								, fresnel );
-							diffuse = vec3( 0.0_f );
-						}
-						ELSE
-						{
-							ambient = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse );
-							diffuse = vec3( 0.0_f );
-						}
-						FI;
+						ambient = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse );
+						diffuse = vec3( 0.0_f );
 					}
 					FI;
 				}

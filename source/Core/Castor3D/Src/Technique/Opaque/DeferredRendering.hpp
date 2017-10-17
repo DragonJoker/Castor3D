@@ -23,7 +23,6 @@ SOFTWARE.
 #ifndef ___C3D_DeferredRendering_H___
 #define ___C3D_DeferredRendering_H___
 
-#include "Technique/Opaque/CombinePass.hpp"
 #include "Technique/Opaque/LightingPass.hpp"
 #include "Technique/Opaque/ReflectionPass.hpp"
 #include "Technique/Opaque/SubsurfaceScatteringPass.hpp"
@@ -51,7 +50,7 @@ namespace castor3d
 		DeferredRendering( Engine & engine
 			, OpaquePass & opaquePass
 			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, TextureAttachment & depthAttach
 			, castor::Size const & size
 			, Scene const & scene
 			, SsaoConfig const & config );
@@ -83,15 +82,6 @@ namespace castor3d
 		 *\brief		Dessine les données de débogage sur l'écran.
 		 */
 		void debugDisplay()const;
-		/**
-		 *\~english
-		 *\brief		Blits the depth and stencil from the geometry pass into given framebuffer.
-		 *\param[out]	p_fbo	The target framebuffer.
-		 *\~french
-		 *\brief		Blitte la profondeur et le stencil de la geometry pass dans le tampon d'image donné.
-		 *\param[out]	p_fbo	Le tampon d'image cible.
-		 */
-		void blitDepthInto( FrameBuffer & fbo );
 
 	private:
 		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
@@ -111,7 +101,7 @@ namespace castor3d
 		FrameBuffer & m_frameBuffer;
 		//!\~english	The target framebuffer's depth attachment.
 		//!\~french		L'attache profondeur du tampon d'image ciblé.
-		FrameBufferAttachment & m_depthAttach;
+		TextureAttachment & m_depthAttach;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
@@ -124,9 +114,6 @@ namespace castor3d
 		//!\~english	The fog pass.
 		//!\~french		La passe de brouillard.
 		std::unique_ptr< LightingPass > m_lightingPass;
-		//!\~english	The combination pass.
-		//!\~french		La passe de combinaison.
-		std::unique_ptr< CombinePass > m_combinePass;
 		//!\~english	The reflection pass.
 		//!\~french		La passe de réflexion.
 		std::unique_ptr< ReflectionPass > m_reflection;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -104,18 +104,28 @@ namespace glsl
 		inline void registerSampler( castor::String const & name
 			, TypeName type
 			, uint32_t binding
-			, uint32_t count )
+			, uint32_t count
+			, bool enabled = true )
 		{
 			registerName( name, type );
-			m_shader.registerSampler( name, type, binding, count );
+
+			if ( enabled )
+			{
+				m_shader.registerSampler( name, type, binding, count );
+			}
 		}
 
 		inline void registerUniform( castor::String const & name
 			, TypeName type
-			, uint32_t count )
+			, uint32_t count
+			, bool enabled = true )
 		{
 			registerName( name, type );
-			m_shader.registerUniform( name, type, count );
+
+			if ( enabled )
+			{
+				m_shader.registerUniform( name, type, count );
+			}
 		}
 
 		inline void registerAttribute( castor::String const & name
