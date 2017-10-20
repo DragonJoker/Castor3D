@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -306,18 +306,20 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxBack )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxEnd )
 
-	//SSAO parsers
+	// SSAO parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnabled )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoBias )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnd )
 
-	//SubsurfaceScattering parsers
-	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringDistanceBasedTransmittance )
-	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransittanceCoefficients )
+	// Subsurface Scattering parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringStrength )
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringGaussianWidth )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransmittanceProfile )
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringEnd )
+
+	// Transmittance Profile parsers
+	DECLARE_ATTRIBUTE_PARSER( parserTransmittanceProfileFactor )
 }
 
 #endif

@@ -4626,48 +4626,6 @@ namespace castor3d
 	}
 	END_ATTRIBUTE_POP()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringDistanceBasedTransmittance )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !parsingContext->subsurfaceScattering )
-		{
-			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
-		}
-		else if ( p_params.empty() )
-		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			bool value;
-			p_params[0]->get( value );
-			parsingContext->subsurfaceScattering->enableDistanceBasedTransmittance( value );
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransittanceCoefficients )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !parsingContext->subsurfaceScattering )
-		{
-			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
-		}
-		else if ( p_params.empty() )
-		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			Point3f value;
-			p_params[0]->get( value );
-			parsingContext->subsurfaceScattering->setTransmittanceCoefficients( value );
-		}
-	}
-	END_ATTRIBUTE()
-
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringStrength )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -4710,6 +4668,17 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransmittanceProfile )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eTransmittanceProfile )
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSubsurfaceScatteringEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -4724,4 +4693,25 @@ namespace castor3d
 		}
 	}
 	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserTransmittanceProfileFactor )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->subsurfaceScattering )
+		{
+			PARSING_ERROR( cuT( "No SubsurfaceScattering initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			Point4f value;
+			p_params[0]->get( value );
+			parsingContext->subsurfaceScattering->addProfileFactor( value );
+		}
+	}
+	END_ATTRIBUTE()
 }

@@ -193,7 +193,7 @@ namespace castor3d
 
 		p_viewport.setPerspective( getCutOff() * 2
 			, p_viewport.getRatio()
-			, 1.0_r
+			, 0.01_r
 			, m_farPlane );
 		p_viewport.update();
 	}

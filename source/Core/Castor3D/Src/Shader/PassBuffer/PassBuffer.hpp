@@ -131,25 +131,13 @@ namespace castor3d
 			float a;
 		};
 
-#if GLSL_MATERIALS_STRUCT_OF_ARRAY
-
-		struct ExtendedData
-		{
-			castor::ArrayView< RgbaColour > sssInfo;
-			castor::ArrayView< RgbaColour > transmittance;
-		};
-
-#else
-
 		struct ExtendedData
 		{
 			RgbaColour sssInfo;
-			RgbaColour transmittance;
+			std::array< RgbaColour, 10u > transmittanceProfile;
 		};
 
 		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 2;
-
-#endif
 
 	protected:
 		C3D_API void doVisitExtended( Pass const & pass

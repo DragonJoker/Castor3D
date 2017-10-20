@@ -50,8 +50,6 @@ SOFTWARE.
 #	define GlslWriter_API
 #endif
 
-#define GLSL_MATERIALS_STRUCT_OF_ARRAY 0
-
 #define DECLARE_GLSL_PARAMETER( TypeName )\
 	using In##TypeName = glsl::InParam< TypeName >;\
 	using Out##TypeName = glsl::OutParam< TypeName >;\

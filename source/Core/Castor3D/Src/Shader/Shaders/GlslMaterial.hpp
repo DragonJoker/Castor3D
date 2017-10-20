@@ -63,16 +63,15 @@ namespace castor3d
 			C3D_API glsl::Int m_hasReflection()const;
 			C3D_API glsl::Float m_exposure()const;
 			C3D_API glsl::Int m_subsurfaceScatteringEnabled()const;
-			C3D_API glsl::Int m_distanceBasedTransmission()const;
-			C3D_API glsl::Vec3 m_backLitCoefficient()const;
 			C3D_API glsl::Float m_gaussianWidth()const;
 			C3D_API glsl::Float m_subsurfaceScatteringStrength()const;
+			C3D_API glsl::Int m_transmittanceProfileSize()const;
+			C3D_API glsl::Array< glsl::Vec4 > m_transmittanceProfile()const;
 
 		protected:
 			C3D_API glsl::Vec4 m_common()const;
 			C3D_API glsl::Vec4 m_reflRefr()const;
 			C3D_API glsl::Vec4 m_sssInfo()const;
-			C3D_API glsl::Vec4 m_transmittance()const;
 		};
 
 		DECLARE_SMART_PTR( BaseMaterial );

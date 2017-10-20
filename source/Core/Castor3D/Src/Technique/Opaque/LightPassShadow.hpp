@@ -81,11 +81,22 @@ namespace castor3d
 		 *\~english
 		 *\return		The shadow map name.
 		 *\~french
-		 *\return		Le nom de la shadow map.
+		 *\return		Le nom de la texture d'ombres.
 		 */
-		static castor::String const & getName()
+		static castor::String const & getShadowMapName()
 		{
 			static castor::String const name = shader::Shadow::MapShadowDirectional;
+			return name;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map name.
+		 *\~french
+		 *\return		Le nom de la texture de profondeur.
+		 */
+		static castor::String const & getDepthMapName()
+		{
+			static castor::String const name = shader::Shadow::MapDepthDirectional;
 			return name;
 		}
 		/**
@@ -144,11 +155,22 @@ namespace castor3d
 		 *\~english
 		 *\return		The shadow map name.
 		 *\~french
-		 *\return		Le nom de la shadow map.
+		 *\return		Le nom de la texture d'ombres.
 		 */
-		static castor::String const & getName()
+		static castor::String const & getShadowMapName()
 		{
 			static castor::String const name = shader::Shadow::MapShadowPoint;
+			return name;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map name.
+		 *\~french
+		 *\return		Le nom de la texture de profondeur.
+		 */
+		static castor::String const & getDepthMapName()
+		{
+			static castor::String const name = shader::Shadow::MapDepthPoint;
 			return name;
 		}
 		/**
@@ -207,11 +229,22 @@ namespace castor3d
 		 *\~english
 		 *\return		The shadow map name.
 		 *\~french
-		 *\return		Le nom de la shadow map.
+		 *\return		Le nom de la texture d'ombres.
 		 */
-		static castor::String const & getName()
+		static castor::String const & getShadowMapName()
 		{
 			static castor::String const name = shader::Shadow::MapShadowSpot;
+			return name;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map name.
+		 *\~french
+		 *\return		Le nom de la texture de profondeur.
+		 */
+		static castor::String const & getDepthMapName()
+		{
+			static castor::String const name = shader::Shadow::MapDepthSpot;
 			return name;
 		}
 		/**
@@ -296,8 +329,28 @@ namespace castor3d
 				, glsl::Shader const & pxl )
 				: my_program_type( engine, vtx, pxl )
 			{
-				this->m_program->template createUniform< UniformType::eSampler >( my_traits::getName()
-					, ShaderType::ePixel )->setValue( MinTextureIndex + int( DsTexture::eCount ) );
+			}
+			/**
+			 *\~english
+			 *\return		The shadow map index from the program.
+			 *\~french
+			 *\return		L'indice de la texture d'ombres, dans le programme.
+			 */
+			inline uint32_t getShadowMapIndex()const
+			{
+				return uint32_t( this->m_program->template findUniform< UniformType::eSampler >( my_traits::getShadowMapName()
+					, ShaderType::ePixel )->getValue() );
+			}
+			/**
+			 *\~english
+			 *\return		The depth map index from the program.
+			 *\~french
+			 *\return		L'indice de la texture de profondeur, dans le programme.
+			 */
+			inline uint32_t getDepthMapIndex()const
+			{
+				return uint32_t( this->m_program->template findUniform< UniformType::eSampler >( my_traits::getDepthMapName()
+					, ShaderType::ePixel )->getValue() );
 			}
 		};
 
@@ -355,8 +408,8 @@ namespace castor3d
 				, camera );
 			auto & shadowMapTexture = shadowMapOpt->getTexture();
 			auto & shadowMapDepth = shadowMapOpt->getDepth();
-			shadowMapTexture.setIndex( MinTextureIndex + uint32_t( DsTexture::eCount ) );
-			shadowMapDepth.setIndex( MinTextureIndex + uint32_t( DsTexture::eCount ) + 1u );
+			shadowMapTexture.setIndex( this->m_shadowMapIndex );
+			shadowMapDepth.setIndex( this->m_depthMapIndex );
 			this->m_program->bind( light );
 			shadowMapTexture.bind();
 			shadowMapDepth.bind();
@@ -374,10 +427,17 @@ namespace castor3d
 		typename LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
 			, glsl::Shader const & pxl )const override
 		{
-			return std::make_unique< LightPassShadow::Program >( this->m_engine
+			auto result = std::make_unique< LightPassShadow::Program >( this->m_engine
 				, vtx
 				, pxl );
+			m_shadowMapIndex = result->getShadowMapIndex();
+			m_depthMapIndex = result->getDepthMapIndex();
+			return result;
 		}
+
+	private:
+		mutable uint32_t m_shadowMapIndex{ 0u };
+		mutable uint32_t m_depthMapIndex{ 0u };
 	};
 	//!\~english	The directional lights light pass with shadows.
 	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.

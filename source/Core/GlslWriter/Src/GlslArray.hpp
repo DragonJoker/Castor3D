@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -35,6 +35,7 @@ namespace glsl
 			, const castor::String & name
 			, uint32_t dimension );
 		template< typename U > T operator[]( U const & offset );
+		template< typename U > T operator[]( U const & offset )const;
 		uint32_t m_dimension;
 	};
 
@@ -50,6 +51,7 @@ namespace glsl
 			, const castor::String & name
 			, uint32_t dimension );
 		template< typename U > SamplerT< ST > operator[]( U const & offset );
+		template< typename U > SamplerT< ST > operator[]( U const & offset )const;
 		uint32_t m_dimension;
 	};
 }

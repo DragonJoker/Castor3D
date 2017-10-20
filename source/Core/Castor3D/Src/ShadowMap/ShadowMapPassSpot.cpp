@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassSpot.hpp"
+#include "ShadowMapPassSpot.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/SpotLight.hpp"

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -71,20 +71,6 @@ namespace castor3d
 		C3D_API void visit( MetallicRoughnessPbrPass const & data )override;
 
 	public:
-
-#if GLSL_MATERIALS_STRUCT_OF_ARRAY
-
-		struct PassesData
-		{
-			castor::ArrayView< RgbaColour > albRough;
-			castor::ArrayView< RgbaColour > metDiv;
-			castor::ArrayView< RgbaColour > common;
-			castor::ArrayView< RgbaColour > reflRefr;
-			ExtendedData extended;
-		};
-
-#else
-
 		struct PassData
 		{
 			RgbaColour albRough;
@@ -94,8 +80,6 @@ namespace castor3d
 			ExtendedData extended;
 		};
 		using PassesData = castor::ArrayView< PassData >;
-
-#endif
 
 	private:
 		static constexpr uint32_t DataSize = ( sizeof( RgbaColour ) * 4 )

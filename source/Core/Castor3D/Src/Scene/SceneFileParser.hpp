@@ -77,6 +77,7 @@ namespace castor3d
 		eParticle = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' ),
 		eSsao = MAKE_SECTION_NAME( 'S', 'S', 'A', 'O' ),
 		eSubsurfaceScattering = MAKE_SECTION_NAME( 'S', 'S', 'S', 'G' ),
+		eTransmittanceProfile = MAKE_SECTION_NAME( 'T', 'R', 'P', 'R' ),
 	};
 	//! The context used into parsing functions
 	/*!

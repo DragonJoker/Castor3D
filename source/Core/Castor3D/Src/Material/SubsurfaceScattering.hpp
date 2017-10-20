@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -91,7 +91,7 @@ namespace castor3d
 		 *\brief		Définit la largeur du filtre Gaussien.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setGaussianWidth( float const & value )
+		inline void setGaussianWidth( float value )
 		{
 			m_gaussianWidth = value;
 		}
@@ -113,53 +113,71 @@ namespace castor3d
 		 *\brief		Définit la force du scattering.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setStrength( float const & value )
+		inline void setStrength( float value )
 		{
 			m_strength = value;
 		}
 		/**
 		 *\~english
-		 *\return		Tells if the back-lit transmittance is enabled.
+		 *\brief		Adds a factor to the transmittance profile.
+		 *\param[in]	value	The value to add.
 		 *\~french
-		 *\return		Dit si la transmission de lumière sur les faces arrières est activée.
+		 *\brief		Ajoute un facteur au profil de transmission.
+		 *\param[in]	value	La valeur à ajouter.
 		 */
-		inline bool isDistanceBasedTransmittanceEnabled()const
+		inline void addProfileFactor( castor::Point4f const & value )
 		{
-			return m_enableDistanceBasedTransmittance;
+			m_profileFactors.push_back( value );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the back-lit transmittance activation status.
-		 *\param[in]	value	The new value.
+		 *\return		The transmmittance profile factors count.
 		 *\~french
-		 *\brief		Définit le statut d'activation de la transmission de lumière par les faces arrières.
-		 *\param[in]	value	La nouvelle valeur.
+		 *\return		Le nombre de facteurs du profil de transmission.
 		 */
-		inline void enableDistanceBasedTransmittance( bool value = true )
+		inline uint32_t getProfileSize()const
 		{
-			m_enableDistanceBasedTransmittance = value;
+			return uint32_t( m_profileFactors.size() );
 		}
 		/**
 		 *\~english
-		 *\return		The colour used to modulate back-lit transmittance.
+		 *\return		The iterator to the beginning of the transmittance profile.
 		 *\~french
-		 *\return		La couleur utilisée pour moduler la lumière transmise par les faces arrières.
+		 *\return		L'itérateur sur le début du profil de transmission.
 		 */
-		inline castor::Point3f const & getTransmittanceCoefficients()const
+		inline auto begin()
 		{
-			return m_transmittanceCoefficients;
+			return m_profileFactors.begin();
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the colour used to modulate back-lit transmittance.
-		 *\param[in]	value	The new value.
+		 *\return		The iterator to the beginning of the transmittance profile.
 		 *\~french
-		 *\brief		Définit la couleur utilisée pour moduler la lumière transmise par les faces arrières.
-		 *\param[in]	value	La nouvelle valeur.
+		 *\return		L'itérateur sur le début du profil de transmission.
 		 */
-		inline void setTransmittanceCoefficients( castor::Point3f const & value )
+		inline auto begin()const
 		{
-			m_transmittanceCoefficients = value;
+			return m_profileFactors.begin();
+		}
+		/**
+		 *\~english
+		 *\return		The iterator to the end of the transmittance profile.
+		 *\~french
+		 *\return		L'itérateur sur la fin du profil de transmission.
+		 */
+		inline auto end()
+		{
+			return m_profileFactors.end();
+		}
+		/**
+		 *\~english
+		 *\return		The iterator to the end of the transmittance profile.
+		 *\~french
+		 *\return		L'itérateur sur la fin du profil de transmission.
+		 */
+		inline auto end()const
+		{
+			return m_profileFactors.end();
 		}
 
 	private:
@@ -181,12 +199,12 @@ namespace castor3d
 		//!\~english	The radius of the largest Gaussian.
 		//!\~french		Le rayon du plus large filtre Gaussien.
 		castor::Point3f m_subsurfaceGaussianExponents{ 1.0f, 1.0f, 1.0f };
-		//!\~english	Tells if the back-lit transmittance is enabled.
-		//!\~french		Dit si la transmission de lumière sur les faces arrières est activée.
-		bool m_enableDistanceBasedTransmittance{ false };
 		//!\~english	The colour used to modulate back-lit transmittance.
 		//!\~french		La couleur utilisée pour moduler la lumière transmise par les faces arrières.
 		castor::Point3f m_transmittanceCoefficients{ 1.0f, 1.0f, 1.0f };
+		//!\~english	The transmittance profile factors.
+		//!\~french		Les facteurs du profil de transmission.
+		castor::Point4fArray m_profileFactors;
 	};
 }
 

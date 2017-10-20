@@ -81,10 +81,9 @@ namespace castor3d
 				sampler = engine.getSamplerCache().add( name );
 				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 			}
 
 			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions

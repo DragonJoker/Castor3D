@@ -18,6 +18,7 @@
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"

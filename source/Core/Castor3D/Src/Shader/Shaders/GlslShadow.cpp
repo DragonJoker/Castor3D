@@ -195,10 +195,7 @@ namespace castor3d
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
 					// Perspective divide (result in range [-1,1]).
-					lightSpacePosition.xyz() = lightSpacePosition.xyz() / lightSpacePosition.w();
-					// Now put the position in range [0,1].
-					lightSpacePosition.xyz() = lightSpacePosition.xyz();
-					m_writer.returnStmt( lightSpacePosition.xyz() );
+					m_writer.returnStmt( lightSpacePosition.xyz() / lightSpacePosition.w() );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
