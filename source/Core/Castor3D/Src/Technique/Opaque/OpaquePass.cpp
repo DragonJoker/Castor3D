@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -135,14 +135,22 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				mtxModel = transform;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else
 			{
 				mtxModel = c3d_mtxModel;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
+				//auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+				//	, mat3( c3d_mtxNormal ) );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
@@ -157,11 +165,11 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto time = writer.declLocale( cuT( "time" )
-					, 1.0_f - c3d_time );
-				p = vec4( p.xyz() * time + position2.xyz() * c3d_time, 1.0 );
-				n = vec4( n.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
-				t = vec4( t.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
-				tex = tex * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+					, vec3( 1.0_f - c3d_time ) );
+				p = vec4( glsl::fma( p.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+				n = vec4( glsl::fma( n.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
+				t = vec4( glsl::fma( t.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
+				tex = glsl::fma( tex, time, texture2 * c3d_time );
 			}
 
 			vtx_texture = tex;
@@ -170,8 +178,7 @@ namespace castor3d
 			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
 				, c3d_prvView * p );
 			p = c3d_curView * p;
-			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-				, transpose( inverse( mat3( mtxModel ) ) ) );
+			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{
@@ -183,7 +190,7 @@ namespace castor3d
 			}
 
 			vtx_tangent = normalize( mtxNormal * t.xyz() );
-			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
+			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
 			gl_Position = c3d_projection * p;
@@ -376,13 +383,12 @@ namespace castor3d
 			out_c3dOutput2 = vec4( diffuse, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
 			out_c3dOutput4 = vec4( emissive, transmittance );
-			out_c3dOutput5.z() = writer.cast< Float >( vtx_material );
 
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			out_c3dOutput5.xy() = curPosition - prvPosition;
+			out_c3dOutput5.xyz() = vec3( curPosition - prvPosition, writer.cast< Float >( vtx_material ) );
 		} );
 
 		return writer.finalise();
@@ -556,13 +562,12 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
 			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
-			out_c3dOutput5.z() = writer.cast< Float >( vtx_material );
 
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			out_c3dOutput5.xy() = curPosition - prvPosition;
+			out_c3dOutput5.xyz() = vec3( curPosition - prvPosition, writer.cast< Float >( vtx_material ) );
 		} );
 
 		return writer.finalise();
@@ -737,13 +742,12 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matDiffuse, matGlossiness );
 			out_c3dOutput3 = vec4( matSpecular, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
-			out_c3dOutput5.z() = writer.cast< Float >( vtx_material );
 
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			out_c3dOutput5.xy() = curPosition - prvPosition;
+			out_c3dOutput5.xyz() = vec3( curPosition - prvPosition, writer.cast< Float >( vtx_material ) );
 		} );
 
 		return writer.finalise();
@@ -751,7 +755,5 @@ namespace castor3d
 
 	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		auto & scene = *m_camera->getScene();
-		m_sceneUbo.update( scene, *m_camera, false );
 	}
 }

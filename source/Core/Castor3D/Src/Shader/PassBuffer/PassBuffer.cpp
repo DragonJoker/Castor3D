@@ -95,25 +95,8 @@ namespace castor3d
 	{
 		auto index = pass.getId () - 1;
 		
-#if GLSL_MATERIALS_STRUCT_OF_ARRAY
-		
 		if ( pass.hasSubsurfaceScattering() )
 		{
-			data.sssInfo[index].r = 1.0f;
-			doVisit( pass.getSubsurfaceScattering()
-				, index
-				, data );
-		}
-		else
-		{
-			data.sssInfo[index].r = 0.0f;
-		}
-
-#else
-		
-		if ( pass.hasSubsurfaceScattering() )
-		{
-			data.sssInfo.r = 1.0f;
 			doVisit( pass.getSubsurfaceScattering()
 				, index
 				, data );
@@ -121,31 +104,30 @@ namespace castor3d
 		else
 		{
 			data.sssInfo.r = 0.0f;
+			data.sssInfo.g = 0.0f;
+			data.sssInfo.b = 0.0f;
+			data.sssInfo.a = 0.0f;
 		}
-
-#endif
 	}
 
 	void PassBuffer::doVisit( SubsurfaceScattering const & subsurfaceScattering
 		, uint32_t index
 		, ExtendedData & data )
 	{
-#if GLSL_MATERIALS_STRUCT_OF_ARRAY
-
-		data.transmittance[index].r = subsurfaceScattering.getTransmittanceCoefficients()[0];
-		data.transmittance[index].g = subsurfaceScattering.getTransmittanceCoefficients()[1];
-		data.transmittance[index].b = subsurfaceScattering.getTransmittanceCoefficients()[2];
-		data.transmittance[index].a = subsurfaceScattering.isDistanceBasedTransmittanceEnabled() ? 1.0f : 0.0f;
-
-#else
-
-		data.transmittance.r = subsurfaceScattering.getTransmittanceCoefficients()[0];
-		data.transmittance.g = subsurfaceScattering.getTransmittanceCoefficients()[1];
-		data.transmittance.b = subsurfaceScattering.getTransmittanceCoefficients()[2];
-		data.transmittance.a = subsurfaceScattering.isDistanceBasedTransmittanceEnabled() ? 1.0f : 0.0f;
+		data.sssInfo.r = 1.0f;
 		data.sssInfo.g = subsurfaceScattering.getGaussianWidth();
 		data.sssInfo.b = subsurfaceScattering.getStrength();
+		data.sssInfo.a = float( subsurfaceScattering.getProfileSize() );
 
-#endif
+		auto i = 0u;
+
+		for ( auto & factor : subsurfaceScattering )
+		{
+			data.transmittanceProfile[i].r = factor[0];
+			data.transmittanceProfile[i].g = factor[1];
+			data.transmittanceProfile[i].b = factor[2];
+			data.transmittanceProfile[i].a = factor[3];
+			++i;
+		}
 	}
 }

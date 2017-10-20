@@ -1,4 +1,4 @@
-﻿#include "Smaa_Parsers.hpp"
+#include "Smaa_Parsers.hpp"
 
 #include "SmaaPostEffect.hpp"
 
@@ -81,6 +81,8 @@ namespace smaa
 		int maxSearchSteps{ 16 };
 		int maxSearchStepsDiag{ 8 };
 		int cornerRounding{ 100 };
+		bool reprojection{ false };
+		float reprojectionWeightScale{ 30.0f };
 	};
 
 	ParserContext & getParserContext( castor::FileParserContextSPtr context )
@@ -189,6 +191,36 @@ namespace smaa
 		}
 	}
 	END_ATTRIBUTE()
+		
+	IMPLEMENT_ATTRIBUTE_PARSER( parserReprojection )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.reprojection );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserReprojectionWeightScale )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.reprojectionWeightScale );
+		}
+	}
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSmaaEnd )
 	{
@@ -205,6 +237,12 @@ namespace smaa
 			parameters.add( cuT( "maxSearchSteps" ), context.maxSearchSteps );
 			parameters.add( cuT( "maxSearchStepsDiag" ), context.maxSearchStepsDiag );
 			parameters.add( cuT( "cornerRounding" ), context.cornerRounding );
+		}
+
+		if ( context.mode == PostEffect::Mode::eT2X )
+		{
+			parameters.add( cuT( "reprojection" ), context.reprojection );
+			parameters.add( cuT( "reprojectionWeightScale" ), context.reprojectionWeightScale );
 		}
 
 		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type

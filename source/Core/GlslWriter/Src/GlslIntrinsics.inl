@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//***********************************************************************************************
 
@@ -524,6 +524,36 @@
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Optional< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Value const & b, Optional< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Optional< Value > const & b, Optional< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Optional< Value > const & b, Optional< Value > const & c )
 	{
 		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
 	}

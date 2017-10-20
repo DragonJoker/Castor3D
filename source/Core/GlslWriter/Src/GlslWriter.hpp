@@ -1,24 +1,5 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+/*
+See LICENSE file in root folder
 */
 #ifndef ___GLSL_WRITER_H___
 #define ___GLSL_WRITER_H___
@@ -104,18 +85,28 @@ namespace glsl
 		inline void registerSampler( castor::String const & name
 			, TypeName type
 			, uint32_t binding
-			, uint32_t count )
+			, uint32_t count
+			, bool enabled = true )
 		{
 			registerName( name, type );
-			m_shader.registerSampler( name, type, binding, count );
+
+			if ( enabled )
+			{
+				m_shader.registerSampler( name, type, binding, count );
+			}
 		}
 
 		inline void registerUniform( castor::String const & name
 			, TypeName type
-			, uint32_t count )
+			, uint32_t count
+			, bool enabled = true )
 		{
 			registerName( name, type );
-			m_shader.registerUniform( name, type, count );
+
+			if ( enabled )
+			{
+				m_shader.registerUniform( name, type, count );
+			}
 		}
 
 		inline void registerAttribute( castor::String const & name

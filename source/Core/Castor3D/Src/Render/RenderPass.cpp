@@ -1,4 +1,4 @@
-#include "RenderPass.hpp"
+﻿#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -1292,14 +1292,20 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				mtxModel = transform;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else
 			{
 				mtxModel = c3d_mtxModel;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, mat3( c3d_mtxNormal ) );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
@@ -1314,30 +1320,30 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto time = writer.declLocale( cuT( "time" )
-					, 1.0_f - c3d_time );
-				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
-				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
-				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
-				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+					, vec3( 1.0_f - c3d_time ) );
+				v4Vertex = vec4( glsl::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+				v4Normal = vec4( glsl::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
+				v4Tangent = vec4( glsl::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
+				v3Texture = glsl::fma( v3Texture, time, texture2 * c3d_time );
 			}
 
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
 			vtx_position = v4Vertex.xyz();
 			v4Vertex = c3d_curView * v4Vertex;
-			mtxModel = transpose( inverse( mtxModel ) );
+			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{
-				vtx_normal = normalize( writer.paren( mtxModel * -v4Normal ).xyz() );
+				vtx_normal = normalize( writer.paren( mtxNormal * -v4Normal.xyz() ) );
 			}
 			else
 			{
-				vtx_normal = normalize( writer.paren( mtxModel * v4Normal ).xyz() );
+				vtx_normal = normalize( writer.paren( mtxNormal * v4Normal.xyz() ) );
 			}
 
-			vtx_tangent = normalize( writer.paren( mtxModel * v4Tangent ).xyz() );
-			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
+			vtx_tangent = normalize( writer.paren( mtxNormal * v4Tangent.xyz() ) );
+			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
 			gl_Position = c3d_projection * v4Vertex;

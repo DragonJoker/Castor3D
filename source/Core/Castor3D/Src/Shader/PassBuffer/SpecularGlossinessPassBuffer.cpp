@@ -71,27 +71,6 @@ namespace castor3d
 		REQUIRE( pass.getId() > 0 );
 		auto index = pass.getId() - 1;
 
-#if GLSL_MATERIALS_STRUCT_OF_ARRAY
-
-		m_data.diffDiv[index].r = pass.getDiffuse().red();
-		m_data.diffDiv[index].g = pass.getDiffuse().green();
-		m_data.diffDiv[index].b = pass.getDiffuse().blue();
-		m_data.specGloss[index].r = pass.getSpecular().red();
-		m_data.specGloss[index].g = pass.getSpecular().green();
-		m_data.specGloss[index].b = pass.getSpecular().blue();
-		m_data.specGloss[index].a = pass.getShininess();
-		m_data.common[index].r = pass.getOpacity();
-		m_data.common[index].g = pass.getEmissive();
-		m_data.common[index].b = pass.getAlphaValue();
-		m_data.common[index].a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data.reflRefr[index].r = pass.getRefractionRatio();
-		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].a = 1.0f;
-		doVisitExtended( pass, m_data.extended );
-
-#else
-
 		m_data[index].diffDiv.r = pass.getDiffuse().red();
 		m_data[index].diffDiv.g = pass.getDiffuse().green();
 		m_data[index].diffDiv.b = pass.getDiffuse().blue();
@@ -108,35 +87,12 @@ namespace castor3d
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.a = 1.0f;
 		doVisitExtended( pass, m_data[index].extended );
-
-#endif
 	}
 
 	void SpecularGlossinessPassBuffer::visit( SpecularGlossinessPbrPass const & pass )
 	{
 		REQUIRE( pass.getId() > 0 );
 		auto index = pass.getId() - 1;
-
-#if GLSL_MATERIALS_STRUCT_OF_ARRAY
-
-		m_data.diffDiv[index].r = pass.getDiffuse().red();
-		m_data.diffDiv[index].g = pass.getDiffuse().green();
-		m_data.diffDiv[index].b = pass.getDiffuse().blue();
-		m_data.specGloss[index].r = pass.getSpecular().red();
-		m_data.specGloss[index].g = pass.getSpecular().green();
-		m_data.specGloss[index].b = pass.getSpecular().blue();
-		m_data.specGloss[index].a = pass.getGlossiness();
-		m_data.common[index].r = pass.getOpacity();
-		m_data.common[index].g = pass.getEmissive();
-		m_data.common[index].b = pass.getAlphaValue();
-		m_data.common[index].a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data.reflRefr[index].r = pass.getRefractionRatio();
-		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].a = 1.0f;
-		doVisitExtended( pass, m_data.extended );
-
-#else
 
 		m_data[index].diffDiv.r = pass.getDiffuse().red();
 		m_data[index].diffDiv.g = pass.getDiffuse().green();
@@ -154,7 +110,5 @@ namespace castor3d
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.a = 1.0f;
 		doVisitExtended( pass, m_data[index].extended );
-
-#endif
 	}
 }

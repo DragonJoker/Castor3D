@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//*********************************************************************************************
 
@@ -14,6 +14,13 @@
 	template< typename T >
 	template< typename U >
 	T Array< T >::operator[]( U const & offset )
+	{
+		return T{ T::m_writer, T::m_name + cuT( "[" ) + toString( offset ) + cuT( "]" ) };
+	}
+
+	template< typename T >
+	template< typename U >
+	T Array< T >::operator[]( U const & offset )const
 	{
 		return T{ T::m_writer, T::m_name + cuT( "[" ) + toString( offset ) + cuT( "]" ) };
 	}
@@ -42,6 +49,13 @@
 	template< SamplerType ST >
 	template< typename T >
 	SamplerT< ST > Array< SamplerT< ST > >::operator[]( T const & offset )
+	{
+		return SamplerT< ST >{ SamplerT< ST >::m_writer, SamplerT< ST >::m_name + cuT( "[" ) + toString( offset ) + cuT( "]" ) };
+	}
+
+	template< SamplerType ST >
+	template< typename T >
+	SamplerT< ST > Array< SamplerT< ST > >::operator[]( T const & offset )const
 	{
 		return SamplerT< ST >{ SamplerT< ST >::m_writer, SamplerT< ST >::m_name + cuT( "[" ) + toString( offset ) + cuT( "]" ) };
 	}

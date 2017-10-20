@@ -18,20 +18,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			if ( result && obj.isDistanceBasedTransmittanceEnabled() )
-			{
-				result = file.writeText( m_tabs + cuT( "\tdistance_based_transmittance true\n" ) ) > 0;
-				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering distance based transmittance enabled" );
-				
-				if ( result )
-				{
-					result = file.writeText( m_tabs + cuT( "\ttransmittance_coefficients " ) ) > 0
-						&& Point3f::TextWriter{ String{} }( obj.getTransmittanceCoefficients(), file ) 
-						&& file.writeText( cuT( "\n" ) ) > 0;
-					castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering transmittance coefficients" );
-				}
-			}
-
 			if ( result )
 			{
 				result = file.writeText( m_tabs + cuT( "\tstrength " )
@@ -46,6 +32,23 @@ namespace castor3d
 					+ string::toString( obj.getGaussianWidth() )
 					+ cuT( "\n" ) ) > 0;
 				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering Gaussian width" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\ttransmittance_profile\n" )
+					+ m_tabs + cuT( "\t{\n" ) ) > 0;
+				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering transmittance profile" );
+
+				for ( auto & factor : obj )
+				{
+					result = file.writeText( m_tabs + cuT( "\t\tfactor " ) ) > 0
+						&& Point4f::TextWriter( String() )( factor, file )
+						&& file.writeText( cuT( "\n" ) ) > 0;
+					castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering transmittance profile factor" );
+				}
+
+				result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			}
 
 			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;

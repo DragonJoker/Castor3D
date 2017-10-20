@@ -1,24 +1,5 @@
 ﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredLightPassShadow_H___
 #define ___C3D_DeferredLightPassShadow_H___
@@ -81,11 +62,22 @@ namespace castor3d
 		 *\~english
 		 *\return		The shadow map name.
 		 *\~french
-		 *\return		Le nom de la shadow map.
+		 *\return		Le nom de la texture d'ombres.
 		 */
-		static castor::String const & getName()
+		static castor::String const & getShadowMapName()
 		{
 			static castor::String const name = shader::Shadow::MapShadowDirectional;
+			return name;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map name.
+		 *\~french
+		 *\return		Le nom de la texture de profondeur.
+		 */
+		static castor::String const & getDepthMapName()
+		{
+			static castor::String const name = shader::Shadow::MapDepthDirectional;
 			return name;
 		}
 		/**
@@ -144,11 +136,22 @@ namespace castor3d
 		 *\~english
 		 *\return		The shadow map name.
 		 *\~french
-		 *\return		Le nom de la shadow map.
+		 *\return		Le nom de la texture d'ombres.
 		 */
-		static castor::String const & getName()
+		static castor::String const & getShadowMapName()
 		{
 			static castor::String const name = shader::Shadow::MapShadowPoint;
+			return name;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map name.
+		 *\~french
+		 *\return		Le nom de la texture de profondeur.
+		 */
+		static castor::String const & getDepthMapName()
+		{
+			static castor::String const name = shader::Shadow::MapDepthPoint;
 			return name;
 		}
 		/**
@@ -207,11 +210,22 @@ namespace castor3d
 		 *\~english
 		 *\return		The shadow map name.
 		 *\~french
-		 *\return		Le nom de la shadow map.
+		 *\return		Le nom de la texture d'ombres.
 		 */
-		static castor::String const & getName()
+		static castor::String const & getShadowMapName()
 		{
 			static castor::String const name = shader::Shadow::MapShadowSpot;
+			return name;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map name.
+		 *\~french
+		 *\return		Le nom de la texture de profondeur.
+		 */
+		static castor::String const & getDepthMapName()
+		{
+			static castor::String const name = shader::Shadow::MapDepthSpot;
 			return name;
 		}
 		/**
@@ -296,8 +310,28 @@ namespace castor3d
 				, glsl::Shader const & pxl )
 				: my_program_type( engine, vtx, pxl )
 			{
-				this->m_program->template createUniform< UniformType::eSampler >( my_traits::getName()
-					, ShaderType::ePixel )->setValue( MinTextureIndex + int( DsTexture::eCount ) );
+			}
+			/**
+			 *\~english
+			 *\return		The shadow map index from the program.
+			 *\~french
+			 *\return		L'indice de la texture d'ombres, dans le programme.
+			 */
+			inline uint32_t getShadowMapIndex()const
+			{
+				return uint32_t( this->m_program->template findUniform< UniformType::eSampler >( my_traits::getShadowMapName()
+					, ShaderType::ePixel )->getValue() );
+			}
+			/**
+			 *\~english
+			 *\return		The depth map index from the program.
+			 *\~french
+			 *\return		L'indice de la texture de profondeur, dans le programme.
+			 */
+			inline uint32_t getDepthMapIndex()const
+			{
+				return uint32_t( this->m_program->template findUniform< UniformType::eSampler >( my_traits::getDepthMapName()
+					, ShaderType::ePixel )->getValue() );
 			}
 		};
 
@@ -350,17 +384,20 @@ namespace castor3d
 			, bool first
 			, ShadowMap * shadowMapOpt )override
 		{
-			auto & shadowMapTexture = shadowMapOpt->getTexture();
 			my_pass_type::doUpdate( size
 				, light
 				, camera );
-			shadowMapTexture.setIndex( MinTextureIndex + uint32_t( DsTexture::eCount ) );
-			shadowMapTexture.bind();
+			auto & shadowMapTexture = shadowMapOpt->getTexture();
+			auto & shadowMapDepth = shadowMapOpt->getDepth();
+			shadowMapTexture.setIndex( this->m_shadowMapIndex );
+			shadowMapDepth.setIndex( this->m_depthMapIndex );
 			this->m_program->bind( light );
+			shadowMapTexture.bind();
+			shadowMapDepth.bind();
 			my_pass_type::doRender( size
 				, gp
-				, light.getColour()
 				, first );
+			shadowMapDepth.unbind();
 			shadowMapTexture.unbind();
 		}
 
@@ -371,10 +408,17 @@ namespace castor3d
 		typename LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
 			, glsl::Shader const & pxl )const override
 		{
-			return std::make_unique< LightPassShadow::Program >( this->m_engine
+			auto result = std::make_unique< LightPassShadow::Program >( this->m_engine
 				, vtx
 				, pxl );
+			m_shadowMapIndex = result->getShadowMapIndex();
+			m_depthMapIndex = result->getDepthMapIndex();
+			return result;
 		}
+
+	private:
+		mutable uint32_t m_shadowMapIndex{ 0u };
+		mutable uint32_t m_depthMapIndex{ 0u };
 	};
 	//!\~english	The directional lights light pass with shadows.
 	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.

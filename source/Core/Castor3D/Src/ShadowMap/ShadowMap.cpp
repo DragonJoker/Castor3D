@@ -21,9 +21,11 @@ namespace castor3d
 {
 	ShadowMap::ShadowMap( Engine & engine
 		, TextureUnit && shadowMap
+		, TextureUnit && depthMap
 		, ShadowMapPassSPtr pass )
 		: OwnedBy< Engine >{ engine }
 		, m_shadowMap{ std::move( shadowMap ) }
+		, m_depthMap{ std::move( depthMap ) }
 		, m_pass{ pass }
 	{
 	}
@@ -39,6 +41,7 @@ namespace castor3d
 		if ( !m_frameBuffer )
 		{
 			m_shadowMap.initialise();
+			m_depthMap.initialise();
 			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
 			result = m_frameBuffer->initialise();
 			auto size = m_shadowMap.getTexture()->getDimensions();
@@ -78,6 +81,7 @@ namespace castor3d
 			m_frameBuffer.reset();
 
 			m_shadowMap.cleanup();
+			m_depthMap.cleanup();
 		}
 
 		for ( auto buffer : m_geometryBuffers )

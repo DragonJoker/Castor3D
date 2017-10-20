@@ -10,6 +10,9 @@ namespace castor3d
 		castor::String const Shadow::MapShadowDirectional = cuT( "c3d_mapShadowDirectional" );
 		castor::String const Shadow::MapShadowSpot = cuT( "c3d_mapShadowSpot" );
 		castor::String const Shadow::MapShadowPoint = cuT( "c3d_mapShadowPoint" );
+		castor::String const Shadow::MapDepthDirectional = cuT( "c3d_mapDepthDirectional" );
+		castor::String const Shadow::MapDepthSpot = cuT( "c3d_mapDepthSpot" );
+		castor::String const Shadow::MapDepthPoint = cuT( "c3d_mapDepthPoint" );
 
 		Shadow::Shadow( GlslWriter & writer )
 			: m_writer{ writer }
@@ -37,6 +40,7 @@ namespace castor3d
 			, uint32_t & index )
 		{
 			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++ );
+			auto c3d_mapDepthDirectional = m_writer.declSampler< Sampler2D >( MapDepthDirectional, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -48,6 +52,7 @@ namespace castor3d
 			, uint32_t & index )
 		{
 			auto c3d_mapShadowPoint = m_writer.declSampler< SamplerCube >( MapShadowPoint, index++ );
+			auto c3d_mapDepthPoint = m_writer.declSampler< SamplerCube >( MapDepthPoint, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -58,6 +63,7 @@ namespace castor3d
 			, uint32_t & index )
 		{
 			auto c3d_mapShadowSpot = m_writer.declSampler< Sampler2D >( MapShadowSpot, index++ );
+			auto c3d_mapDepthSpot = m_writer.declSampler< Sampler2D >( MapDepthSpot, index++ );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -189,10 +195,7 @@ namespace castor3d
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
 					// Perspective divide (result in range [-1,1]).
-					lightSpacePosition.xyz() = lightSpacePosition.xyz() / lightSpacePosition.w();
-					// Now put the position in range [0,1].
-					lightSpacePosition.xyz() = lightSpacePosition.xyz();
-					m_writer.returnStmt( lightSpacePosition.xyz() );
+					m_writer.returnStmt( lightSpacePosition.xyz() / lightSpacePosition.w() );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -278,9 +281,11 @@ namespace castor3d
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
-						, m_getShadowOffset( normal, vertexToLight ) );
+						, vec3( m_getShadowOffset( normal, vertexToLight ) ) );
 					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, worldSpacePosition + m_writer.paren( normal * bias ) );
+						, glsl::fma( normal
+							, bias
+							, worldSpacePosition ) );
 					vertexToLight = worldSpace - lightPosition;
 					auto depth = m_writer.declLocale( cuT( "depth" )
 						, length( vertexToLight ) / farPlane );
@@ -363,9 +368,11 @@ namespace castor3d
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto bias = m_writer.declLocale( cuT( "bias" )
-						, m_getShadowOffset( normal, vertexToLight ) );
+						, vec3( m_getShadowOffset( normal, vertexToLight ) ) );
 					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, worldSpacePosition + m_writer.paren( normal * bias ) );
+						, glsl::fma( normal
+							, bias
+							, worldSpacePosition ) );
 					vertexToLight = worldSpace - lightPosition;
 					auto depth = m_writer.declLocale( cuT( "depth" )
 						, length( vertexToLight ) / farPlane );

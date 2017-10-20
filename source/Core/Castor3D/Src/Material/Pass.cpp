@@ -1,4 +1,4 @@
-﻿#include "Pass.hpp"
+#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -392,11 +392,6 @@ namespace castor3d
 		if ( hasSubsurfaceScattering() )
 		{
 			result |= PassFlag::eSubsurfaceScattering;
-
-			if ( getSubsurfaceScattering().isDistanceBasedTransmittanceEnabled() )
-			{
-				result |= PassFlag::eDistanceBasedTransmittance;
-			}
 		}
 
 		if ( hasParallaxOcclusion() )

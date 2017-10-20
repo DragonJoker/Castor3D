@@ -114,7 +114,9 @@ namespace glsl
 
 				auto mapNormal = m_writer.declLocale( cuT( "mapNormal" )
 					, texture( c3d_mapNormal, uv.xy() ).xyz() );
-				mapNormal = mapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 );
+				mapNormal = glsl::fma( mapNormal
+					, vec3( 2.0_f )
+					, vec3( -1.0_f ) );
 				auto Q1 = m_writer.declLocale( cuT( "Q1" )
 					, dFdx( position ) );
 				auto Q2 = m_writer.declLocale( cuT( "Q2" )
@@ -145,7 +147,9 @@ namespace glsl
 				, Vec3 const & f0
 				, Float const & roughness )
 			{
-				m_writer.returnStmt( f0 + m_writer.paren( max( vec3( 1.0_f - roughness ), f0 ) - f0 ) * pow( 1.0_f - product, 5.0_f ) );
+				m_writer.returnStmt( glsl::fma( max( vec3( 1.0_f - roughness ), f0 ) - f0
+					, vec3( pow( 1.0_f - product, 5.0_f ) )
+					, f0 ) );
 			}
 			, InFloat{ &m_writer, cuT( "product" ) }
 			, InVec3{ &m_writer, cuT( "f0" ) }
@@ -191,9 +195,13 @@ namespace glsl
 				auto envBRDF = m_writer.declLocale( cuT( "envBRDF" )
 					, texture( brdfMap, vec2( NdotV, roughness ) ).rg() );
 				auto specularReflection = m_writer.declLocale( cuT( "specularReflection" )
-					, prefilteredColor * m_writer.paren( kS * envBRDF.x() + envBRDF.y() ) );
+					, prefilteredColor * glsl::fma( kS
+						, vec3( envBRDF.x() )
+						, vec3( envBRDF.y() ) ) );
 
-				m_writer.returnStmt( kD * diffuseReflection + specularReflection );
+				m_writer.returnStmt( glsl::fma( kD
+					, diffuseReflection
+					, specularReflection ) );
 			}
 			, InVec3{ &m_writer, cuT( "normal" ) }
 			, InVec3{ &m_writer, cuT( "position" ) }
@@ -247,9 +255,13 @@ namespace glsl
 				auto envBRDF = m_writer.declLocale( cuT( "envBRDF" )
 					, texture( brdfMap, vec2( NdotV, roughness ) ).rg() );
 				auto specularReflection = m_writer.declLocale( cuT( "specularReflection" )
-					, prefilteredColor * m_writer.paren( kS * envBRDF.x() + envBRDF.y() ) );
+					, prefilteredColor * glsl::fma( kS
+						, vec3( envBRDF.x() )
+						, vec3( envBRDF.y() ) ) );
 
-				m_writer.returnStmt( kD * diffuseReflection + specularReflection );
+				m_writer.returnStmt( glsl::fma( kD
+					, diffuseReflection
+					, specularReflection ) );
 			}
 			, InVec3{ &m_writer, cuT( "normal" ) }
 			, InVec3{ &m_writer, cuT( "position" ) }

@@ -1,4 +1,4 @@
-#include "SubsurfaceScatteringPass.hpp"
+﻿#include "SubsurfaceScatteringPass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -194,7 +194,7 @@ namespace castor3d
 				for ( int i = 0; i < 6; i++ )
 				{
 					// Fetch color and depth for current sample:
-					offset = vtx_texture + o[i] * finalStep;
+					offset = glsl::fma( vec2( o[i] ), finalStep, vtx_texture );
 					color = texture( c3d_mapLightDiffuse, offset, 0.0_f ).rgb();
 					depth = texture( c3d_mapDepth, offset, 0.0_f ).r();
 					depth = utils.calcVSPosition( vtx_texture

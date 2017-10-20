@@ -129,15 +129,16 @@ namespace castor3d
 
 			auto maxComponent = writer.implementFunction< Float >( cuT( "maxComponent" )
 				, [&]( Vec3 const & v )
-			{
-				writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
-			}, InVec3{ &writer, cuT( "v" ) } );
+				{
+					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
+				}
+				, InVec3{ &writer, cuT( "v" ) } );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-				auto coord = writer.declLocale( cuT( "coord" )
-					, ivec2( gl_FragCoord.xy() ) );
+					auto coord = writer.declLocale( cuT( "coord" )
+						, ivec2( gl_FragCoord.xy() ) );
 					auto revealage = writer.declLocale( cuT( "revealage" )
 						, texelFetch( c3d_mapRevealage, coord, 0 ).r() );
 

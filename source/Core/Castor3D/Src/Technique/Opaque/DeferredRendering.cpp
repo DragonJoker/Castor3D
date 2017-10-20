@@ -1,4 +1,4 @@
-#include "DeferredRendering.hpp"
+﻿#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -47,7 +47,7 @@ namespace castor3d
 	DeferredRendering::DeferredRendering( Engine & engine
 		, OpaquePass & opaquePass
 		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, TextureAttachment & depthAttach
 		, Size const & size
 		, Scene const & scene
 		, SsaoConfig const & config )
@@ -66,7 +66,14 @@ namespace castor3d
 
 		if ( result )
 		{
-			for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
+			m_geometryPassResult[0] = std::make_unique< TextureUnit >( engine );
+			m_geometryPassResult[0]->setIndex( MinTextureIndex );
+			m_geometryPassResult[0]->setTexture( m_depthAttach.getTexture() );
+			m_geometryPassResult[0]->setSampler( doCreateSampler( engine, getTextureName( DsTexture::eDepth ) ) );
+			m_geometryPassResult[0]->initialise();
+			m_geometryPassTexAttachs[0] = m_geometryPassFrameBuffer->createAttachment( m_depthAttach.getTexture() );
+
+			for ( uint32_t i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
 			{
 				auto texture = renderSystem.createTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
@@ -115,10 +122,6 @@ namespace castor3d
 			m_reflection = std::make_unique< ReflectionPass >( engine
 				, m_size
 				, m_sceneUbo
-				, m_gpInfoUbo );
-			m_combinePass = std::make_unique< CombinePass >( engine
-				, m_size
-				, m_sceneUbo
 				, m_gpInfoUbo
 				, m_ssaoConfig );
 		}
@@ -138,14 +141,15 @@ namespace castor3d
 			attach.reset();
 		}
 
-		for ( auto & texture : m_geometryPassResult )
+		m_geometryPassResult[0].reset();
+
+		for ( uint32_t i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
 		{
-			texture->cleanup();
-			texture.reset();
+			m_geometryPassResult[i]->cleanup();
+			m_geometryPassResult[i].reset();
 		}
 
 		m_geometryPassFrameBuffer.reset();
-		m_combinePass.reset();
 		m_reflection.reset();
 		m_subsurfaceScattering.reset();
 		m_lightingPass.reset();
@@ -164,9 +168,9 @@ namespace castor3d
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
 		camera.apply();
-		
-		m_geometryPassFrameBuffer->bind( FrameBufferTarget::eDraw );
+		m_sceneUbo.update( scene, camera );
 
+		m_geometryPassFrameBuffer->bind( FrameBufferTarget::eDraw );
 		auto velocityAttach = m_geometryPassFrameBuffer->createAttachment( velocity.getTexture() );
 		m_geometryPassFrameBuffer->attach( AttachmentPoint::eColour
 			, getTextureAttachmentIndex( DsTexture::eMax ) + 1u
@@ -182,9 +186,6 @@ namespace castor3d
 		m_geometryPassFrameBuffer->detach( velocityAttach );
 		m_geometryPassFrameBuffer->unbind();
 
-		blitDepthInto( m_frameBuffer );
-
-		m_sceneUbo.update( scene, camera );
 		m_gpInfoUbo.update( m_size
 			, camera
 			, invViewProj
@@ -198,38 +199,15 @@ namespace castor3d
 			, m_lightingPass->getDiffuse() );
 		m_reflection->render( m_geometryPassResult
 			, m_subsurfaceScattering->getResult()
+			, m_lightingPass->getSpecular()
 			, scene
+			, m_frameBuffer
 			, info );
-
-		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
-			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-		{
-			m_combinePass->render( m_geometryPassResult
-				, m_subsurfaceScattering->getResult()
-				, m_lightingPass->getSpecular()
-				, m_reflection->getReflection()
-				, m_reflection->getRefraction()
-				, scene.getSkybox().getIbl()
-				, scene.getFog()
-				, m_frameBuffer
-				, info );
-		}
-		else
-		{
-			m_combinePass->render( m_geometryPassResult
-				, m_subsurfaceScattering->getResult()
-				, m_lightingPass->getSpecular()
-				, m_reflection->getReflection()
-				, m_reflection->getRefraction()
-				, scene.getFog()
-				, m_frameBuffer
-				, info );
-		}
 	}
 
 	void DeferredRendering::debugDisplay()const
 	{
-		auto count = 10 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
+		auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		int width = int( m_size.getWidth() ) / count;
 		int height = int( m_size.getHeight() ) / count;
 		int left = int( m_size.getWidth() ) - width;
@@ -244,21 +222,12 @@ namespace castor3d
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData5 )]->getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getDiffuse().getTexture() );
 		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getSpecular().getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_reflection->getReflection().getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_reflection->getRefraction().getTexture() );
 
 		if ( m_ssaoConfig.m_enabled )
 		{
-			context.renderTexture( Position{ width * ( index++ ), 0 }, size, m_combinePass->getSsao() );
+			context.renderTexture( Position{ width * ( index++ ), 0 }, size, m_reflection->getSsao() );
 		}
 
 		m_subsurfaceScattering->debugDisplay( m_size );
-	}
-
-	void DeferredRendering::blitDepthInto( FrameBuffer & fbo )
-	{
-		m_geometryPassFrameBuffer->blitInto( fbo
-			, Rectangle{ Position{}, m_size }
-		, BufferComponent::eDepth | BufferComponent::eStencil );
 	}
 }

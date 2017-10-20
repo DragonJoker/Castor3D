@@ -1,4 +1,4 @@
-﻿#include "FrameBuffer/GlFrameBuffer.hpp"
+#include "FrameBuffer/GlFrameBuffer.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlColourRenderBuffer.hpp"
@@ -135,12 +135,23 @@ namespace GlRender
 	void GlFrameBuffer::doBind( FrameBufferTarget p_target )const
 	{
 		m_bindingMode = getOpenGl().get( p_target );
+
+		if ( isSRGB() )
+		{
+			getOpenGl().Enable( GlTweak::eFramebufferSRGB );
+		}
+
 		BindableType::bind();
 	}
 
 	void GlFrameBuffer::doUnbind()const
 	{
 		BindableType::unbind();
+
+		if ( isSRGB() )
+		{
+			getOpenGl().Disable( GlTweak::eFramebufferSRGB );
+		}
 	}
 
 	void GlFrameBuffer::doBlitInto( FrameBuffer const & p_buffer, castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const

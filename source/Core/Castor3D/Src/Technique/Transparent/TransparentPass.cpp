@@ -1,4 +1,4 @@
-#include "TransparentPass.hpp"
+﻿#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -262,34 +262,39 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
-
-				if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-				{
-					vtx_material = material;
-				}
-				else
-				{
-					vtx_material = c3d_materialIndex;
-				}
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				mtxModel = transform;
-				vtx_material = material;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else
 			{
 				mtxModel = c3d_mtxModel;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, mat3( c3d_mtxNormal ) );
+			}
+
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				vtx_material = material;
+			}
+			else
+			{
 				vtx_material = c3d_materialIndex;
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
-				curVertex = vec4( curVertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
-				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_time, 1.0 );
-				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_time, 1.0 );
-				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+				auto time = writer.declLocale( cuT( "time" )
+					, vec3( 1.0_f - c3d_time ) );
+				curVertex = vec4( glsl::fma( curVertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+				v4Normal = vec4( glsl::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
+				v4Tangent = vec4( glsl::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
+				v3Texture = glsl::fma( v3Texture, time, texture2 * c3d_time );
 			}
 
 			vtx_texture = v3Texture;
@@ -298,8 +303,7 @@ namespace castor3d
 			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
 				, c3d_prvView * curVertex );
 			curVertex = c3d_curView * curVertex;
-			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-				, transpose( inverse( mat3( mtxModel ) ) ) );
+			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{
@@ -311,7 +315,7 @@ namespace castor3d
 			}
 
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
-			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
+			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
 			gl_Position = c3d_projection * curVertex;
@@ -536,15 +540,17 @@ namespace castor3d
 				else
 				{
 					auto refFactor = writer.declLocale( cuT( "refFactor" )
-						, c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( incident, normal ), c3d_fresnelPower ) );
+						, glsl::fma( c3d_fresnelScale, pow( 1.0_f + dot( incident, normal ), c3d_fresnelPower ), c3d_fresnelBias ) );
 					colour.xyz() = mix( refractedColour, reflectedColour, refFactor );
 				}
 			}
 			else
 			{
-				colour.xyz() = writer.paren( ambient + lightDiffuse ) * matDiffuse
-					+ lightSpecular * matSpecular
-					+ matEmissive;
+				colour.xyz() = glsl::fma( ambient + lightDiffuse
+					, matDiffuse
+					, glsl::fma( lightSpecular
+						, matSpecular
+						, matEmissive ) );
 			}
 
 			auto alpha = writer.declLocale( cuT( "alpha" )
@@ -788,7 +794,9 @@ namespace castor3d
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, lightDiffuse * matAlbedo + lightSpecular + matEmissive + ambient );
+				, glsl::fma( lightDiffuse
+					, matAlbedo
+					, lightSpecular + matEmissive + ambient ) );
 
 			auto alpha = writer.declLocale( cuT( "alpha" )
 				, material.m_opacity() );
@@ -1023,7 +1031,9 @@ namespace castor3d
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
 			auto colour = writer.declLocale( cuT( "colour" )
-				, lightDiffuse * matDiffuse + lightSpecular + matEmissive + ambient );
+				, glsl::fma( lightDiffuse
+					, matDiffuse
+					, lightSpecular + matEmissive + ambient ) );
 
 			auto alpha = writer.declLocale( cuT( "alpha" ), material.m_opacity() );
 

@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_FILE_PARSER_PARSERS_H___
 #define ___C3D_SCENE_FILE_PARSER_PARSERS_H___
@@ -39,6 +20,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserRootTextOverlay )
 	DECLARE_ATTRIBUTE_PARSER( parserRootDebugOverlays )
 	DECLARE_ATTRIBUTE_PARSER( parserRootWindow )
+	DECLARE_ATTRIBUTE_PARSER( parserRootMaterials )
 
 	//Window parsers
 	DECLARE_ATTRIBUTE_PARSER( parserWindowRenderTarget )
@@ -73,7 +55,6 @@ namespace castor3d
 
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSceneInclude )
-	DECLARE_ATTRIBUTE_PARSER( parserSceneMaterials )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneBkColour )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneBkImage )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFont )
@@ -306,18 +287,20 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxBack )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxEnd )
 
-	//SSAO parsers
+	// SSAO parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnabled )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoBias )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnd )
 
-	//SubsurfaceScattering parsers
-	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringDistanceBasedTransmittance )
-	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransittanceCoefficients )
+	// Subsurface Scattering parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringStrength )
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringGaussianWidth )
+	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringTransmittanceProfile )
 	DECLARE_ATTRIBUTE_PARSER( parserSubsurfaceScatteringEnd )
+
+	// Transmittance Profile parsers
+	DECLARE_ATTRIBUTE_PARSER( parserTransmittanceProfileFactor )
 }
 
 #endif

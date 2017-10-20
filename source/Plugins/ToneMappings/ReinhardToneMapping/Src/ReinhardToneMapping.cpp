@@ -1,4 +1,4 @@
-#include "ReinhardToneMapping.hpp"
+﻿#include "ReinhardToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -58,7 +58,7 @@ namespace Reinhard
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
 
 			glsl::Utils utils{ writer };
 			utils.declareApplyGamma();
@@ -69,7 +69,7 @@ namespace Reinhard
 				// Exposure tone mapping
 				auto mapped = writer.declLocale( cuT( "mapped" ), vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_fExposure ) );
 				// Gamma correction
-				pxl_fragColor = vec4( utils.applyGamma( c3d_fGamma, mapped ), 1.0 );
+				pxl_rgb = vec4( utils.applyGamma( c3d_fGamma, mapped ), 1.0 );
 			} );
 
 			pxl = writer.finalise();

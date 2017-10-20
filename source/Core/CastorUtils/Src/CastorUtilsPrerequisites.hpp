@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_UTILS_PREREQUISITES_H___
 #define ___CASTOR_UTILS_PREREQUISITES_H___
@@ -125,12 +106,24 @@ namespace castor
 		//!\~english	24 bits 888 BGR.
 		//!\~french		24 bits 888 BGR.
 		eB8G8R8,
+		//!\~english	24 bits 888 RGB in sRGB colour space.
+		//!\~french		24 bits 888 RGB dans l'espace de couleurs sRGB.
+		eR8G8B8_SRGB,
+		//!\~english	24 bits 888 BGR in sRGB colour space.
+		//!\~french		24 bits 888 BGR dans l'espace de couleurs sRGB.
+		eB8G8R8_SRGB,
 		//!\~english	32 bits 8888 ARGB.
 		//!\~french		32 bits 8888 ARGB.
 		eA8R8G8B8,
 		//!\~english	32 bits 8888 ABGR.
 		//!\~french		32 bits 8888 ABGR.
 		eA8B8G8R8,
+		//!\~english	32 bits 8888 ARGB in sRGB colour space.
+		//!\~french		32 bits 8888 sRGB dans l'espace de couleurs sRGB.
+		eA8R8G8B8_SRGB,
+		//!\~english	32 bits 8888 ABGR in sRGB colour space.
+		//!\~french		32 bits 8888 ABGR dans l'espace de couleurs sRGB.
+		eA8B8G8R8_SRGB,
 		//!\~english	Half float RGB.
 		//!\~french		Half float RGB.
 		eRGB16F,
@@ -221,11 +214,16 @@ namespace castor
 
 	using String = std::basic_string< xchar >;
 	using Regex = std::basic_regex< xchar >;
-	using SRegexIterator = std::regex_iterator< String::const_iterator >;
+	using RegexIterator = std::regex_iterator< String::const_iterator >;
 	using MatchResults = std::match_results< String::const_iterator >;
 	using StringStream = std::basic_stringstream< xchar >;
+	using OutputStringStream = std::basic_ostringstream< xchar >;
+	using InputStringStream = std::basic_istringstream< xchar >;
 	using OutputStream = std::basic_ostream< xchar >;
+	using InputStream = std::basic_istream< xchar >;
+	using Seconds = std::chrono::seconds;
 	using Milliseconds = std::chrono::milliseconds;
+	using Microseconds = std::chrono::microseconds;
 	using Nanoseconds = std::chrono::nanoseconds;
 
 	/*!
@@ -542,20 +540,20 @@ namespace castor
 		bool m_newLine;
 	};
 	//! The message queue.
-	typedef std::deque< Message > MessageQueue;
+	using MessageQueue = std::deque< Message >;
 	/**
 	 *\~english
-	 *\brief		Logging callback function
-	 *\param[in]	p_pCaller	Pointer to the caller
-	 *\param[in]	p_strLog	The logged text
-	 *\param[in]	p_eLogType	The log type
+	 *\brief		Logging callback function.
+	 *\param[in]	text	The logged text.
+	 *\param[in]	type	The log type.
+	 *\param[in]	newLine	Tells if we add the end line character.
 	 *\~french
-	 *\brief		Fonction de callback de log
-	 *\param[in]	p_pCaller	Pointeur sur l'appelant
-	 *\param[in]	p_strLog	Le texte écrit
-	 *\param[in]	p_eLogType	Le type de log
+	 *\brief		Fonction de callback de log.
+	 *\param[in]	text	Le texte écrit.
+	 *\param[in]	type	Le type de log.
+	 *\param[in]	newLine	Dit si on ajoute le caractère de fin de ligne.
 	 */
-	using LogCallback = std::function< void ( String const & p_strLog, LogType p_eLogType, bool p_newLine ) >;
+	using LogCallback = std::function< void ( String const & text, LogType type, bool newLine ) >;
 
 	/*!
 	\~english
@@ -583,29 +581,29 @@ namespace castor
 	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
 }
 
-constexpr castor::real operator "" _r( long double p_value )
+constexpr castor::real operator "" _r( long double value )
 {
-	return castor::real( p_value );
+	return castor::real( value );
 }
 
-constexpr std::chrono::seconds operator "" _s( unsigned long long p_value )
+constexpr castor::Seconds operator "" _s( unsigned long long value )
 {
-	return std::chrono::seconds( int64_t( p_value ) );
+	return castor::Seconds( int64_t( value ) );
 }
 
-constexpr castor::Milliseconds operator "" _ms( unsigned long long p_value )
+constexpr castor::Milliseconds operator "" _ms( unsigned long long value )
 {
-	return castor::Milliseconds( int64_t( p_value ) );
+	return castor::Milliseconds( int64_t( value ) );
 }
 
-constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value )
+constexpr castor::Microseconds operator "" _us( unsigned long long value )
 {
-	return std::chrono::microseconds( int64_t( p_value ) );
+	return castor::Microseconds( int64_t( value ) );
 }
 
-constexpr castor::Nanoseconds operator "" _ns( unsigned long long p_value )
+constexpr castor::Nanoseconds operator "" _ns( unsigned long long value )
 {
-	return castor::Nanoseconds( int64_t( p_value ) );
+	return castor::Nanoseconds( int64_t( value ) );
 }
 
 #include "Miscellaneous/Debug.hpp"
