@@ -1,4 +1,4 @@
-namespace GuiCommon
+﻿namespace GuiCommon
 {
 	//************************************************************************************************
 
@@ -274,11 +274,29 @@ namespace GuiCommon
 	}
 
 	template< typename T, size_t Count >
-	PointProperty< T, Count >::PointProperty( wxString const( & p_names )[Count], wxString const & label, wxString const & name, castor::Point< T, Count > const & value )
+	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
+		: wxPGProperty( label, name )
+	{
+		castor::Point< T, Count > point{ value };
+		setValueI( point );
+		PointPropertyHelper< T, Count >::addChildren( this, getPointDefaultNames< Count >(), point );
+	}
+
+	template< typename T, size_t Count >
+	PointProperty< T, Count >::PointProperty( wxString const( &p_names )[Count], wxString const & label, wxString const & name, castor::Point< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
 		PointPropertyHelper< T, Count >::addChildren( this, p_names, value );
+	}
+
+	template< typename T, size_t Count >
+	PointProperty< T, Count >::PointProperty( wxString const( &p_names )[Count], wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
+		: wxPGProperty( label, name )
+	{
+		castor::Point< T, Count > point{ value };
+		setValueI( point );
+		PointPropertyHelper< T, Count >::addChildren( this, p_names, point );
 	}
 
 	template< typename T, size_t Count >

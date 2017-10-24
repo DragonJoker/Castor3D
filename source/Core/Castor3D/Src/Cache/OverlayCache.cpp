@@ -144,7 +144,6 @@ namespace castor3d
 	void Cache< Overlay, castor::String >::render( Scene const & p_scene, castor::Size const & p_size )
 	{
 		auto lock = makeUniqueLock( *this );
-		RenderSystem * renderSystem = getEngine()->getRenderSystem();
 
 		if ( m_pRenderer )
 		{

@@ -66,7 +66,6 @@ namespace castor3d
 	void AnimatedSkeleton::fillBuffer( uint8_t * p_buffer )const
 	{
 		Skeleton & skeleton = m_skeleton;
-		uint32_t i{ 0u };
 		auto buffer = p_buffer;
 		auto stride = 16u * sizeof( float );
 

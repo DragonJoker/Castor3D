@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//***********************************************************************************************
 
@@ -175,7 +175,7 @@
 		, bool enabled )
 	{
 		using Type = typename TypeOf< T >::Type;
-		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 1u );
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 1u, enabled );
 
 		if ( enabled )
 		{
@@ -203,7 +203,7 @@
 		, bool enabled )
 	{
 		using Type = typename TypeOf< T >::Type;
-		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, dimension );
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, dimension, enabled );
 
 		if ( enabled )
 		{

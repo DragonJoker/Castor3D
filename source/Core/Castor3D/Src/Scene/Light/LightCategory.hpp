@@ -1,24 +1,5 @@
 ﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_LIGHT_CATEGORY_H___
 #define ___C3D_LIGHT_CATEGORY_H___
@@ -246,6 +227,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The depth of the far plane.
+		 *\~french
+		 *\return		La profondeur du plan éloigné.
+		 */
+		inline float getFarPlane()const
+		{
+			return m_farPlane;
+		}
+		/**
+		 *\~english
 		 *\return		The colour.
 		 *\~french
 		 *\return		La couleur.
@@ -322,6 +313,27 @@ namespace castor3d
 		 *\param[in]	data		Le tampon de destination.
 		 */
 		void doCopyComponent( castor::Point2f const & components
+			, uint32_t index
+			, uint32_t & offset
+			, castor::PxBufferBase & data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light PixelComponents values into the buffer.
+		 *\param[in]	components	The components.
+		 *\param[in]	component	The last component.
+		 *\param[in]	index		The light index.
+		 *\param[in]	offset		The components offset.
+		 *\param[out]	data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	components	La composante.
+		 *\param[in]	component	La dernière composante.
+		 *\param[in]	index		L'indice de la source lumineuse.
+		 *\param[in]	offset		Le décalage de la composante.
+		 *\param[in]	data		Le tampon de destination.
+		 */
+		void doCopyComponent( castor::Point2f const & components
+			, float component
 			, uint32_t index
 			, uint32_t & offset
 			, castor::PxBufferBase & data )const;
@@ -476,6 +488,9 @@ namespace castor3d
 		//!\~english	The cube box for the light volume of effect.
 		//!\~french		La cube box pour le volume d'effet de la lumière.
 		castor::CubeBox m_cubeBox;
+		//!\~english	The far plane's depth.
+		//!\~french		La profondeur du plan éloigné.
+		float m_farPlane{ 1.0f };
 
 	private:
 		//!\~english	The light type.

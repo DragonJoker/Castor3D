@@ -1,4 +1,4 @@
-#include "GaussianBlur.hpp"
+﻿#include "GaussianBlur.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -35,34 +35,6 @@ namespace castor3d
 {
 	namespace
 	{
-		VertexBufferSPtr doCreateVbo( Engine & engine )
-		{
-			auto declaration = BufferDeclaration(
-			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
-			} );
-
-			float data[] =
-			{
-				0, 0,
-				1, 1,
-				0, 1,
-				0, 0,
-				1, 0,
-				1, 1
-			};
-
-			auto & renderSystem = *engine.getRenderSystem();
-			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
-			uint32_t stride = declaration.stride();
-			vertexBuffer->resize( uint32_t( sizeof( data ) ) );
-			uint8_t * buffer = vertexBuffer->getData();
-			std::memcpy( buffer, data, sizeof( data ) );
-			vertexBuffer->initialise( BufferAccessType::eStatic
-				, BufferAccessNature::eDraw );
-			return vertexBuffer;
-		}
-
 		glsl::Shader getVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -97,6 +69,7 @@ namespace castor3d
 			Ubo config{ writer, GaussianBlur::Config, 2u };
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
+			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
@@ -107,7 +80,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
+				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0 ) / c3d_textureSize );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
 				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
@@ -134,6 +107,7 @@ namespace castor3d
 			Ubo config{ writer, GaussianBlur::Config, 2u };
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
+			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
@@ -144,7 +118,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
+				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1 ) / c3d_textureSize );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
 				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
@@ -279,12 +253,12 @@ namespace castor3d
 		}
 
 		TextureAttachmentSPtr doCreateAttach( FrameBuffer & fbo
-			, TextureUnit const & unit
+			, TextureLayoutSPtr texture
 			, AttachmentPoint point )
 		{
-			auto attach = fbo.createAttachment( unit.getTexture() );
+			auto attach = fbo.createAttachment( texture );
 			fbo.bind();
-			fbo.attach( point, 0u, attach, unit.getTexture()->getType() );
+			fbo.attach( point, 0u, attach, texture->getType() );
 			fbo.setDrawBuffer( attach );
 			ENSURE( fbo.isComplete() );
 			fbo.unbind();
@@ -297,6 +271,7 @@ namespace castor3d
 	String const GaussianBlur::Config = cuT( "Config" );
 	String const GaussianBlur::Coefficients = cuT( "c3d_coefficients" );
 	String const GaussianBlur::CoefficientsCount = cuT( "c3d_coefficientsCount" );
+	String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
 
 	GaussianBlur::GaussianBlur( Engine & engine
 		, Size const & textureSize
@@ -308,34 +283,32 @@ namespace castor3d
 		, m_point{ doGetAttachmentPoint( format ) }
 		, m_colour{ doCreateTexture( engine, textureSize, format, cuT( "GaussianBlur" ) ) }
 		, m_fbo{ doCreateFbo( engine, textureSize ) }
-		, m_colourAttach{ doCreateAttach( *m_fbo, m_colour, m_point ) }
+		, m_colourAttach{ doCreateAttach( *m_fbo, m_colour.getTexture(), m_point ) }
 		, m_kernel{ getHalfPascal( kernelSize ) }
-		, m_blurXUbo{ GaussianBlur::Config, *engine.getRenderSystem(), 2u }
-		, m_blurYUbo{ GaussianBlur::Config, *engine.getRenderSystem(), 2u }
-		, m_blurXCoeffCount{ m_blurXUbo.createUniform< UniformType::eUInt >( GaussianBlur::CoefficientsCount ) }
-		, m_blurXCoeffs{ m_blurXUbo.createUniform< UniformType::eFloat >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients ) }
-		, m_blurYCoeffCount{ m_blurYUbo.createUniform< UniformType::eUInt >( GaussianBlur::CoefficientsCount ) }
-		, m_blurYCoeffs{ m_blurYUbo.createUniform< UniformType::eFloat >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients ) }
+		, m_blurUbo{ GaussianBlur::Config, *engine.getRenderSystem(), 2u }
+		, m_blurCoeffCount{ m_blurUbo.createUniform< UniformType::eUInt >( GaussianBlur::CoefficientsCount ) }
+		, m_blurCoeffs{ m_blurUbo.createUniform< UniformType::eFloat >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients ) }
+		, m_blurSize{ m_blurUbo.createUniform< UniformType::eVec2f >( GaussianBlur::TextureSize ) }
 	{
+		m_blurCoeffCount->setValue( uint32_t( m_kernel.size() ) );
+		m_blurCoeffs->setValues( m_kernel );
 		doInitialiseBlurXProgram( engine );
 		doInitialiseBlurYProgram( engine );
 	}
 
 	GaussianBlur::~GaussianBlur()
 	{
-		m_blurXUbo.cleanup();
-		m_blurXCoeffCount.reset();
-		m_blurXCoeffs.reset();
 		m_blurYPipeline->cleanup();
 		m_blurYPipeline.reset();
-
-		m_blurYUbo.cleanup();
-		m_blurYCoeffCount.reset();
-		m_blurYCoeffs.reset();
 		m_blurXPipeline->cleanup();
 		m_blurXPipeline.reset();
 
+		m_blurUbo.cleanup();
+		m_blurCoeffCount.reset();
+		m_blurCoeffs.reset();
+		m_blurSize.reset();
 		m_matrixUbo.getUbo().cleanup();
+
 		m_fbo->bind();
 		m_fbo->detachAll();
 		m_fbo->unbind();
@@ -347,28 +320,54 @@ namespace castor3d
 
 	void GaussianBlur::blur( TextureLayoutSPtr texture )
 	{
-		blur( texture, m_colour.getTexture() );
+		REQUIRE( texture->getType() == m_colour.getTexture()->getType() );
+		REQUIRE( texture->getPixelFormat() == m_colour.getTexture()->getPixelFormat() );
+		doBlur( texture
+			, m_colour.getTexture()
+			, m_colourAttach
+			, *m_blurXPipeline );
+		auto attach = doCreateAttach( *m_fbo
+			, texture
+			, doGetAttachmentPoint( texture->getPixelFormat() ) );
+		doBlur( m_colour.getTexture()
+			, texture
+			, attach
+			, *m_blurYPipeline );
 	}
 
 	void GaussianBlur::blur( TextureLayoutSPtr texture
 		, TextureLayoutSPtr intermediate )
 	{
+		REQUIRE( texture->getType() == intermediate->getType() );
 		REQUIRE( texture->getPixelFormat() == intermediate->getPixelFormat() );
-		doBlur( texture, intermediate, *m_blurXPipeline, m_blurXUbo );
-		doBlur( intermediate, texture, *m_blurYPipeline, m_blurYUbo );
+		auto attachDst = doCreateAttach( *m_fbo
+			, intermediate
+			, doGetAttachmentPoint( intermediate->getPixelFormat() ) );
+		doBlur( texture
+			, intermediate
+			, attachDst
+			, *m_blurXPipeline );
+		auto attachSrc = doCreateAttach( *m_fbo
+			, texture
+			, doGetAttachmentPoint( texture->getPixelFormat() ) );
+		doBlur( intermediate
+			, texture
+			, attachSrc
+			, *m_blurYPipeline );
 	}
 
-	void GaussianBlur::doBlur( TextureLayoutSPtr & source
-		, TextureLayoutSPtr & destination
-		, RenderPipeline & pipeline
-		, UniformBuffer & ubo )
+	void GaussianBlur::doBlur( TextureLayoutSPtr source
+		, TextureLayoutSPtr destination
+		, TextureAttachmentSPtr attach
+		, RenderPipeline & pipeline )
 	{
 		auto context = getEngine()->getRenderSystem()->getCurrentContext();
-		ubo.bindTo( 2u );
+		m_blurSize->setValue( Point2f{ source->getDimensions().getWidth()
+			, source->getDimensions().getHeight() } );
+		m_blurUbo.update();
+		m_blurUbo.bindTo( 2u );
 		m_fbo->bind( FrameBufferTarget::eDraw );
-		auto attach = m_fbo->createAttachment( destination );
-		attach->setLayer( 0u );
-		attach->setTarget( TextureType::eTwoDimensions );
+		attach->setLayer( 0 );
 		attach->attach( m_point, 0u );
 		m_fbo->setDrawBuffer( attach );
 		m_fbo->clear( BufferComponent::eColour );
@@ -389,11 +388,6 @@ namespace castor3d
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel )->setValue( MinTextureIndex );
-		m_blurXCoeffCount->setValue( uint32_t( m_kernel.size() ) );
-		m_blurXCoeffs->setValues( m_kernel );
-
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, blurX );
 		bool result = program->initialise();
@@ -410,7 +404,7 @@ namespace castor3d
 				, *program
 				, PipelineFlags{} );
 			m_blurXPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-			m_blurXPipeline->addUniformBuffer( m_blurXUbo );
+			m_blurXPipeline->addUniformBuffer( m_blurUbo );
 		}
 
 		return result;
@@ -426,11 +420,6 @@ namespace castor3d
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel )->setValue( MinTextureIndex );
-		m_blurYCoeffCount->setValue( uint32_t( m_kernel.size() ) );
-		m_blurYCoeffs->setValues( m_kernel );
-
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, blurY );
 		bool result = program->initialise();
@@ -447,7 +436,7 @@ namespace castor3d
 				, *program
 				, PipelineFlags{} );
 			m_blurYPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-			m_blurYPipeline->addUniformBuffer( m_blurYUbo );
+			m_blurYPipeline->addUniformBuffer( m_blurUbo );
 		}
 
 		return result;

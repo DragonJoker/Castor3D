@@ -1,24 +1,5 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_Context_H___
 #define ___C3D_Context_H___
@@ -483,6 +464,30 @@ namespace castor3d
 				, fbo
 				, attachs
 				, hdrConfig );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	face	The face index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	face	L'index de la face.
+		 */
+		inline void renderCubeFace( castor::Size const & size
+			, TextureLayoutSPtr texture
+			, CubeMapFace face
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo )
+		{
+			m_colourCube.renderFace( size
+				, *texture
+				, face
+				, pipeline
+				, matrixUbo );
 		}
 		/**
 		 *\~english

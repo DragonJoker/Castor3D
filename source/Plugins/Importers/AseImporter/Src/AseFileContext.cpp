@@ -35,7 +35,6 @@ namespace Ase
 		strName.clear();
 		strName2.clear();
 		m_mapMaterials.clear();
-		clearContainer( m_arrayTexCoords );
 		m_arrayTexCoords.clear();
 	}
 }

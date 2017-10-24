@@ -1,4 +1,4 @@
-#include "Config/PlatformConfig.hpp"
+﻿#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
@@ -50,7 +50,6 @@ namespace castor
 			{
 				static std::mutex mutex;
 				auto lock = makeUniqueLock( mutex );
-				static bool SymbolsInitialised = false;
 				const int MaxFnNameLen( 255 );
 
 				std::vector< void * > backTrace( p_toCapture - p_toSkip );
@@ -58,7 +57,7 @@ namespace castor
 
 				::HANDLE process( ::GetCurrentProcess() );
 
-				if ( process != INVALID_HANDLE_VALUE )
+				//if ( process != INVALID_HANDLE_VALUE )
 				{
 					p_stream << "CALL STACK:" << std::endl;
 
@@ -69,13 +68,10 @@ namespace castor
 					{
 						symbol->MaxNameLen = MaxFnNameLen;
 						symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+						::SymSetOptions( SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS );
+						bool symbolsInitialised = ::SymInitialize( process, nullptr, TRUE ) == TRUE;
 
-						if ( !SymbolsInitialised )
-						{
-							SymbolsInitialised = ::SymInitialize( process, nullptr, TRUE ) == TRUE;
-						}
-
-						if ( SymbolsInitialised )
+						if ( symbolsInitialised )
 						{
 							for ( unsigned int i = 0; i < num; ++i )
 							{

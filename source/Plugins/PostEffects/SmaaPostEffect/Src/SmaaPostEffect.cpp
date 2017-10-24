@@ -1,4 +1,4 @@
-#include "SmaaPostEffect.hpp"
+﻿#include "SmaaPostEffect.hpp"
 
 #include "SearchTex.h"
 #include "AreaTex.h"
@@ -8,7 +8,8 @@
 #include <Cache/ShaderCache.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/BufferDeclaration.hpp>
@@ -1070,6 +1071,7 @@ namespace smaa
 
 		glsl::Shader doGetReprojectFP( castor3d::RenderSystem * renderSystem
 			, Point2f const & pixelSize
+			, float reprojectionWeightScale
 			, bool reprojection )
 		{
 			using namespace glsl;
@@ -1081,7 +1083,7 @@ namespace smaa
 			auto c3d_previousColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_previousColourTex" ), castor3d::MinTextureIndex + 1u );
 			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), castor3d::MinTextureIndex + 2u, reprojection );
 			auto c3d_reprojectionWeightScale = writer.declConstant( cuT( "c3d_reprojectionWeightScale" )
-				, 30.0_f
+				, Float( reprojectionWeightScale )
 				, reprojection );
 
 			// Shader outputs
@@ -1209,6 +1211,12 @@ namespace smaa
 			}
 		}
 
+		if ( m_mode == Mode::eT2X )
+		{
+			parameters.get( cuT( "reprojection" ), m_reprojection );
+			parameters.get( cuT( "reprojectionWeightScale" ), m_reprojectionWeightScale );
+		}
+
 		doInitialiseSubsampleIndices();
 		String name = cuT( "SMAA_Point" );
 
@@ -1258,7 +1266,6 @@ namespace smaa
 
 	bool PostEffect::initialise()
 	{
-		bool result = false;
 		doInitialiseEdgeDetection();
 		doInitialiseBlendingWeightCalculation();
 		doInitialiseNeighbourhoodBlending();
@@ -1276,6 +1283,9 @@ namespace smaa
 		m_matrixUbo.getUbo().cleanup();
 
 		m_edgeDetectionSurface.cleanup();
+		m_depthAttach.reset();
+		m_depthBuffer->cleanup();
+		m_depthBuffer.reset();
 		m_blendingWeightCalculationSurface.cleanup();
 
 		for ( auto & surface : m_neighbourhoodBlendingSurface )
@@ -1300,21 +1310,22 @@ namespace smaa
 	{
 		auto prvIndex = m_subsampleIndex;
 		auto curIndex = ( m_subsampleIndex + 1 ) % uint32_t( m_jitters.size() );
-		auto colourAttach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
-		REQUIRE( colourAttach && colourAttach->getAttachmentType() == castor3d::AttachmentType::eTexture );
-		auto texture = std::static_pointer_cast< castor3d::TextureAttachment >( colourAttach )->getTexture();
+		auto srgbAttach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
+		REQUIRE( srgbAttach && srgbAttach->getAttachmentType() == castor3d::AttachmentType::eTexture );
+		auto & srgbTexture = *std::static_pointer_cast< castor3d::TextureAttachment >( srgbAttach )->getTexture();
+		auto & rgbTexture = m_renderTarget.getTechnique()->getResult();
 		castor3d::TextureLayoutSPtr result;
 
 		switch ( m_mode )
 		{
 		case Mode::e1X:
-			doMainPass( prvIndex, curIndex, *texture, nullptr );
+			doMainPass( prvIndex, curIndex, rgbTexture, srgbTexture, nullptr );
 			result = m_neighbourhoodBlendingSurface[curIndex].m_colourTexture.getTexture();
 			break;
 
 		case Mode::eT2X:
-			doMainPass( prvIndex, curIndex, *texture, &m_renderTarget.getTechnique()->getDepth() );
-			doReproject( prvIndex, curIndex, *texture );
+			doMainPass( prvIndex, curIndex, rgbTexture, srgbTexture, &m_renderTarget.getTechnique()->getDepth() );
+			doReproject( prvIndex, curIndex, rgbTexture );
 			result = m_reprojectSurface.m_colourTexture.getTexture();
 			break;
 
@@ -1328,7 +1339,7 @@ namespace smaa
 		if ( result )
 		{
 			framebuffer.bind( castor3d::FrameBufferTarget::eDraw );
-			getRenderSystem()->getCurrentContext()->renderTexture( texture->getDimensions()
+			getRenderSystem()->getCurrentContext()->renderTexture( srgbTexture.getDimensions()
 				, *result );
 			framebuffer.unbind();
 			m_subsampleIndex = curIndex;
@@ -1427,6 +1438,11 @@ namespace smaa
 		castor3d::DepthStencilState dsstate;
 		dsstate.setDepthTest( false );
 		dsstate.setDepthMask( castor3d::WritingMask::eZero );
+		dsstate.setStencilTest( true );
+		dsstate.setStencilReadMask( 0xFFFFFFFFu );
+		dsstate.setStencilFrontRef( 0x00000001u );
+		dsstate.setStencilFrontFunc( castor3d::StencilFunc::eNever );
+		dsstate.setStencilFrontOps( castor3d::StencilOp::eReplace, castor3d::StencilOp::eKeep, castor3d::StencilOp::eKeep );
 		castor3d::RasteriserState rsstate;
 		rsstate.setCulledFaces( castor3d::Culling::eBack );
 		m_edgeDetectionPipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
@@ -1441,6 +1457,19 @@ namespace smaa
 			, m_renderTarget.getSize()
 			, castor3d::MinTextureIndex
 			, m_linearSampler );
+		m_depthBuffer = getRenderSystem()->createTexture( castor3d::TextureType::eTwoDimensions
+			, castor3d::AccessType::eNone
+			, castor3d::AccessType::eRead | castor3d::AccessType::eWrite
+			, PixelFormat::eS8
+			, m_renderTarget.getSize() );
+		m_depthBuffer->initialise();
+		m_depthAttach = m_edgeDetectionSurface.m_fbo->createAttachment( m_depthBuffer );
+
+		m_edgeDetectionSurface.m_fbo->bind();
+		m_edgeDetectionSurface.m_fbo->attach( castor3d::AttachmentPoint::eStencil, 0u, m_depthAttach, m_depthBuffer->getType() );
+		REQUIRE( m_edgeDetectionSurface.m_fbo->isComplete() );
+		m_edgeDetectionSurface.m_fbo->unbind();
+
 	}
 
 	void PostEffect::doInitialiseBlendingWeightCalculation()
@@ -1491,6 +1520,9 @@ namespace smaa
 		castor3d::DepthStencilState dsstate;
 		dsstate.setDepthTest( false );
 		dsstate.setDepthMask( castor3d::WritingMask::eZero );
+		dsstate.setStencilTest( true );
+		dsstate.setStencilReadMask( 0x00000000u );
+		dsstate.setStencilFrontFunc( castor3d::StencilFunc::eEqual );
 		castor3d::RasteriserState rsstate;
 		rsstate.setCulledFaces( castor3d::Culling::eBack );
 		m_blendingWeightCalculationPipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
@@ -1516,7 +1548,7 @@ namespace smaa
 			, pixelSize );
 		auto fragment = doGetNeighbourhoodBlendingFP( getRenderSystem()
 			, pixelSize
-			, false );//m_mode == Mode::eT2X );
+			, m_mode == Mode::eT2X && m_reprojection );
 		auto program = cache.getNewProgram( false );
 		program->createObject( castor3d::ShaderType::eVertex );
 		program->createObject( castor3d::ShaderType::ePixel );
@@ -1545,7 +1577,9 @@ namespace smaa
 			m_neighbourhoodBlendingSurface.back().initialise( m_renderTarget
 				, m_renderTarget.getSize()
 				, castor3d::MinTextureIndex + 1u
-				, m_linearSampler );
+				, m_linearSampler
+				, PixelFormat::eA8R8G8B8_SRGB );
+			m_neighbourhoodBlendingSurface.back().m_fbo->setSRGB( true );
 		}
 	}
 
@@ -1558,7 +1592,8 @@ namespace smaa
 			, pixelSize );
 		auto fragment = doGetReprojectFP( getRenderSystem()
 			, pixelSize
-			, false );// m_mode == Mode::eT2X );
+			, m_reprojectionWeightScale
+			, m_mode == Mode::eT2X && m_reprojection );
 		auto program = cache.getNewProgram( false );
 		program->createObject( castor3d::ShaderType::eVertex );
 		program->createObject( castor3d::ShaderType::ePixel );
@@ -1592,7 +1627,7 @@ namespace smaa
 	{
 		auto & surface = m_edgeDetectionSurface;
 		surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
-		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
+		surface.m_fbo->clear( castor3d::BufferComponent::eColour | castor3d::BufferComponent::eStencil );
 
 		if ( !depthStencil )
 		{
@@ -1668,12 +1703,13 @@ namespace smaa
 
 	void PostEffect::doMainPass( uint32_t prvIndex
 		, uint32_t curIndex
-		, castor3d::TextureLayout const & gammaSrc
+		, castor3d::TextureLayout const & hdrSrc
+		, castor3d::TextureLayout const & srgbSrc
 		, castor3d::TextureLayout const * depthStencil )
 	{
-		doEdgesDetectionPass( prvIndex, curIndex, gammaSrc, depthStencil );
+		doEdgesDetectionPass( prvIndex, curIndex, srgbSrc, depthStencil );
 		doBlendingWeightsCalculationPass( prvIndex, curIndex );
-		doNeighbourhoodBlendingPass( prvIndex, curIndex, gammaSrc );
+		doNeighbourhoodBlendingPass( prvIndex, curIndex, srgbSrc );
 	}
 
 	void PostEffect::doReproject( uint32_t prvIndex
@@ -1685,7 +1721,7 @@ namespace smaa
 		surface.m_fbo->clear( castor3d::BufferComponent::eColour );
 		m_neighbourhoodBlendingSurface[prvIndex].m_colourTexture.bind();
 
-		if ( m_mode == Mode::eT2X )
+		if ( m_mode == Mode::eT2X && m_reprojection )
 		{
 			m_renderTarget.getVelocity().getTexture()->bind( castor3d::MinTextureIndex + 2u );
 			m_renderTarget.getVelocity().getSampler()->bind( castor3d::MinTextureIndex + 2u );

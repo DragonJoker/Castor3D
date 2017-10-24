@@ -39,7 +39,7 @@ namespace castor3d
 		, Point2r const & jitter )const
 	{
 		m_prvView.setValue( m_curView.getValue() );
-		m_prvJitter.setValue( m_curJitter.getValue() );
+		m_prvJitter.setValue( Point2r{ m_curJitter.getValue() } );
 		m_curView.setValue( view );
 		m_projection.setValue( projection );
 		m_invProjection.setValue( projection.getInverse() );

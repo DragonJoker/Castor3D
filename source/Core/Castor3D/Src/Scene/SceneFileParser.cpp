@@ -423,6 +423,7 @@ void SceneFileParser::doInitialiseParser( TextFile & file )
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "sampler" ), parserRootSamplerState, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "window" ), parserRootWindow, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
 
 	addParser( uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), parserWindowRenderTarget );
 	addParser( uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), parserWindowVSync, { makeParameter< ParameterType::eBool >() } );
@@ -453,7 +454,6 @@ void SceneFileParser::doInitialiseParser( TextFile & file )
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), parserSamplerComparisonFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ) } );
 
 	addParser( uint32_t( CSCNSection::eScene ), cuT( "include" ), parserSceneInclude, { makeParameter< ParameterType::ePath >() } );
-	addParser( uint32_t( CSCNSection::eScene ), cuT( "materials" ), parserSceneMaterials, { makeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
 	addParser( uint32_t( CSCNSection::eScene ), cuT( "background_colour" ), parserSceneBkColour, { makeParameter< ParameterType::eColour >() } );
 	addParser( uint32_t( CSCNSection::eScene ), cuT( "background_image" ), parserSceneBkImage, { makeParameter< ParameterType::ePath >() } );
 	addParser( uint32_t( CSCNSection::eScene ), cuT( "font" ), parserSceneFont, { makeParameter< ParameterType::eName >() } );
@@ -683,11 +683,12 @@ void SceneFileParser::doInitialiseParser( TextFile & file )
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "bias" ), parserSsaoBias, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), parserSsaoEnd );
 
-	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "distance_based_transmittance" ), parserSubsurfaceScatteringDistanceBasedTransmittance, { makeParameter< ParameterType::eBool >() } );
-	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "transmittance_coefficients" ), parserSubsurfaceScatteringTransittanceCoefficients, { makeParameter< ParameterType::ePoint3F >() } );
 	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "strength" ), parserSubsurfaceScatteringStrength, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "gaussian_width" ), parserSubsurfaceScatteringGaussianWidth, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "transmittance_profile" ), parserSubsurfaceScatteringTransmittanceProfile );
 	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "}" ), parserSubsurfaceScatteringEnd );
+
+	addParser( uint32_t( CSCNSection::eTransmittanceProfile ), cuT( "factor" ), parserTransmittanceProfileFactor, { makeParameter< ParameterType::ePoint4F >() } );
 
 	for ( auto const & it : getEngine()->getAdditionalParsers() )
 	{

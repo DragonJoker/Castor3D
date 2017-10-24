@@ -165,7 +165,6 @@ namespace Testing
 		CT_REQUIRE( dstParser.parseFile( p_path ) );
 		CT_REQUIRE( dstParser.scenesBegin() != dstParser.scenesEnd() );
 		SceneSPtr scene{ dstParser.scenesBegin()->second };
-		auto & windows = m_engine.getRenderWindowCache();
 		auto window = getWindow( m_engine, scene->getName(), false );
 
 		if ( window )

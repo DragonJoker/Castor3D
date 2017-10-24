@@ -1,4 +1,4 @@
-#include "EnvironmentMap.hpp"
+﻿#include "EnvironmentMap.hpp"
 
 #include "Engine.hpp"
 
@@ -62,7 +62,7 @@ namespace castor3d
 			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eA8R8G8B8
+				, PixelFormat::eRGBA32F
 				, p_size );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
@@ -231,11 +231,12 @@ namespace castor3d
 
 	void EnvironmentMap::render()
 	{
-		uint32_t face = 0u;
 		m_render++;
 
 		if ( m_render == 5u )
 		{
+			uint32_t face = 0u;
+
 			for ( auto & attach : m_colourAttachs )
 			{
 				m_frameBuffer->bind( FrameBufferTarget::eDraw );

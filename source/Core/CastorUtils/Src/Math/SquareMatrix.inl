@@ -1,4 +1,4 @@
-#include "Simd.hpp"
+﻿#include "Simd.hpp"
 
 namespace castor
 {
@@ -9,24 +9,26 @@ namespace castor
 		template< typename Type >
 		struct SqrMtxInverter< Type, 4 >
 		{
-			static inline castor::SquareMatrix< Type, 4 > inverse( castor::SquareMatrix< Type, 4 > const & p_mtx )
+			static inline void inverse( castor::SquareMatrix< Type, 4 > const & input
+				, castor::SquareMatrix< Type, 4 > & result )
 			{
-				Type tS00 = p_mtx[0][0];
-				Type tS01 = p_mtx[0][1];
-				Type tS02 = p_mtx[0][2];
-				Type tS03 = p_mtx[0][3];
-				Type tS10 = p_mtx[1][0];
-				Type tS11 = p_mtx[1][1];
-				Type tS12 = p_mtx[1][2];
-				Type tS13 = p_mtx[1][3];
-				Type tS20 = p_mtx[2][0];
-				Type tS21 = p_mtx[2][1];
-				Type tS22 = p_mtx[2][2];
-				Type tS23 = p_mtx[2][3];
-				Type tS30 = p_mtx[3][0];
-				Type tS31 = p_mtx[3][1];
-				Type tS32 = p_mtx[3][2];
-				Type tS33 = p_mtx[3][3];
+				auto tS0 = input[0];
+				Type tS00 = input[0][0];
+				Type tS01 = input[0][1];
+				Type tS02 = input[0][2];
+				Type tS03 = input[0][3];
+				Type tS10 = input[1][0];
+				Type tS11 = input[1][1];
+				Type tS12 = input[1][2];
+				Type tS13 = input[1][3];
+				Type tS20 = input[2][0];
+				Type tS21 = input[2][1];
+				Type tS22 = input[2][2];
+				Type tS23 = input[2][3];
+				Type tS30 = input[3][0];
+				Type tS31 = input[3][1];
+				Type tS32 = input[3][2];
+				Type tS33 = input[3][3];
 				Type tCoef00 = tS22 * tS33 - tS32 * tS23;
 				Type tCoef02 = tS12 * tS33 - tS32 * tS13;
 				Type tCoef03 = tS12 * tS23 - tS22 * tS13;
@@ -45,74 +47,70 @@ namespace castor
 				Type tCoef20 = tS20 * tS31 - tS30 * tS21;
 				Type tCoef22 = tS10 * tS31 - tS30 * tS11;
 				Type tCoef23 = tS10 * tS21 - tS20 * tS11;
-				castor::SquareMatrix< Type, 4 > mtxInverse = castor::SquareMatrix< Type, 4 >( castor::NoInit() );
-				mtxInverse[0][0] = +1 * ( tS11 * tCoef00 - tS12 * tCoef04 + tS13 * tCoef08 );
-				mtxInverse[0][1] = -1 * ( tS01 * tCoef00 - tS02 * tCoef04 + tS03 * tCoef08 );
-				mtxInverse[0][2] = +1 * ( tS01 * tCoef02 - tS02 * tCoef06 + tS03 * tCoef10 );
-				mtxInverse[0][3] = -1 * ( tS01 * tCoef03 - tS02 * tCoef07 + tS03 * tCoef11 );
-				mtxInverse[1][0] = -1 * ( tS10 * tCoef00 - tS12 * tCoef12 + tS13 * tCoef16 );
-				mtxInverse[1][1] = +1 * ( tS00 * tCoef00 - tS02 * tCoef12 + tS03 * tCoef16 );
-				mtxInverse[1][2] = -1 * ( tS00 * tCoef02 - tS02 * tCoef14 + tS03 * tCoef18 );
-				mtxInverse[1][3] = +1 * ( tS00 * tCoef03 - tS02 * tCoef15 + tS03 * tCoef19 );
-				mtxInverse[2][0] = +1 * ( tS10 * tCoef04 - tS11 * tCoef12 + tS13 * tCoef20 );
-				mtxInverse[2][1] = -1 * ( tS00 * tCoef04 - tS01 * tCoef12 + tS03 * tCoef20 );
-				mtxInverse[2][2] = +1 * ( tS00 * tCoef06 - tS01 * tCoef14 + tS03 * tCoef22 );
-				mtxInverse[2][3] = -1 * ( tS00 * tCoef07 - tS01 * tCoef15 + tS03 * tCoef23 );
-				mtxInverse[3][0] = -1 * ( tS10 * tCoef08 - tS11 * tCoef16 + tS12 * tCoef20 );
-				mtxInverse[3][1] = +1 * ( tS00 * tCoef08 - tS01 * tCoef16 + tS02 * tCoef20 );
-				mtxInverse[3][2] = -1 * ( tS00 * tCoef10 - tS01 * tCoef18 + tS02 * tCoef22 );
-				mtxInverse[3][3] = +1 * ( tS00 * tCoef11 - tS01 * tCoef19 + tS02 * tCoef23 );
-				castor::Point< Type, 4 > ptRow0( mtxInverse[0][0], mtxInverse[1][0], mtxInverse[2][0], mtxInverse[3][0] );
-				Type tDeterminant = castor::point::dot( p_mtx[0], ptRow0 );
-				mtxInverse /= tDeterminant;
-				return mtxInverse;
+				result[0][0] = +1 * ( tS11 * tCoef00 - tS12 * tCoef04 + tS13 * tCoef08 );
+				result[0][1] = -1 * ( tS01 * tCoef00 - tS02 * tCoef04 + tS03 * tCoef08 );
+				result[0][2] = +1 * ( tS01 * tCoef02 - tS02 * tCoef06 + tS03 * tCoef10 );
+				result[0][3] = -1 * ( tS01 * tCoef03 - tS02 * tCoef07 + tS03 * tCoef11 );
+				result[1][0] = -1 * ( tS10 * tCoef00 - tS12 * tCoef12 + tS13 * tCoef16 );
+				result[1][1] = +1 * ( tS00 * tCoef00 - tS02 * tCoef12 + tS03 * tCoef16 );
+				result[1][2] = -1 * ( tS00 * tCoef02 - tS02 * tCoef14 + tS03 * tCoef18 );
+				result[1][3] = +1 * ( tS00 * tCoef03 - tS02 * tCoef15 + tS03 * tCoef19 );
+				result[2][0] = +1 * ( tS10 * tCoef04 - tS11 * tCoef12 + tS13 * tCoef20 );
+				result[2][1] = -1 * ( tS00 * tCoef04 - tS01 * tCoef12 + tS03 * tCoef20 );
+				result[2][2] = +1 * ( tS00 * tCoef06 - tS01 * tCoef14 + tS03 * tCoef22 );
+				result[2][3] = -1 * ( tS00 * tCoef07 - tS01 * tCoef15 + tS03 * tCoef23 );
+				result[3][0] = -1 * ( tS10 * tCoef08 - tS11 * tCoef16 + tS12 * tCoef20 );
+				result[3][1] = +1 * ( tS00 * tCoef08 - tS01 * tCoef16 + tS02 * tCoef20 );
+				result[3][2] = -1 * ( tS00 * tCoef10 - tS01 * tCoef18 + tS02 * tCoef22 );
+				result[3][3] = +1 * ( tS00 * tCoef11 - tS01 * tCoef19 + tS02 * tCoef23 );
+				castor::Point< Type, 4 > ptRow0( result[0][0], result[1][0], result[2][0], result[3][0] );
+				Type determinant = castor::point::dot( tS0, ptRow0 );
+				result /= determinant;
 			}
 		};
 
 		template< typename Type >
 		struct SqrMtxInverter< Type, 3 >
 		{
-			static inline castor::SquareMatrix< Type, 3 > inverse( castor::SquareMatrix< Type, 3 > const & p_mtx )
+			static inline void inverse( castor::SquareMatrix< Type, 3 > const & input
+				, castor::SquareMatrix< Type, 3 > & result )
 			{
-				Type tS00 = p_mtx[0][0];
-				Type tS01 = p_mtx[0][1];
-				Type tS02 = p_mtx[0][2];
-				Type tS10 = p_mtx[1][0];
-				Type tS11 = p_mtx[1][1];
-				Type tS12 = p_mtx[1][2];
-				Type tS20 = p_mtx[2][0];
-				Type tS21 = p_mtx[2][1];
-				Type tS22 = p_mtx[2][2];
-				castor::SquareMatrix< Type, 3 > mtxInverse = castor::SquareMatrix< Type, 3 >( castor::NoInit() );
-				mtxInverse[0][0] = tS11 * tS22 - tS21 * tS12;
-				mtxInverse[0][1] = tS12 * tS20 - tS22 * tS10;
-				mtxInverse[0][2] = tS10 * tS21 - tS20 * tS11;
-				mtxInverse[1][0] = tS02 * tS21 - tS01 * tS22;
-				mtxInverse[1][1] = tS00 * tS22 - tS02 * tS20;
-				mtxInverse[1][2] = tS01 * tS20 - tS00 * tS21;
-				mtxInverse[2][0] = tS12 * tS01 - tS11 * tS02;
-				mtxInverse[2][1] = tS10 * tS02 - tS12 * tS00;
-				mtxInverse[2][2] = tS11 * tS00 - tS10 * tS01;
-				Type tDeterminant = tS00 * ( tS11 * tS22 - tS21 * tS12 )
-									  - tS10 * ( tS01 * tS22 - tS21 * tS02 )
-									  + tS20 * ( tS01 * tS12 - tS11 * tS02 );
-				mtxInverse /= tDeterminant;
-				return mtxInverse;
+				Type tS00 = input[0][0];
+				Type tS01 = input[0][1];
+				Type tS02 = input[0][2];
+				Type tS10 = input[1][0];
+				Type tS11 = input[1][1];
+				Type tS12 = input[1][2];
+				Type tS20 = input[2][0];
+				Type tS21 = input[2][1];
+				Type tS22 = input[2][2];
+				result[0][0] = tS11 * tS22 - tS21 * tS12;
+				result[0][1] = tS12 * tS20 - tS22 * tS10;
+				result[0][2] = tS10 * tS21 - tS20 * tS11;
+				result[1][0] = tS02 * tS21 - tS01 * tS22;
+				result[1][1] = tS00 * tS22 - tS02 * tS20;
+				result[1][2] = tS01 * tS20 - tS00 * tS21;
+				result[2][0] = tS12 * tS01 - tS11 * tS02;
+				result[2][1] = tS10 * tS02 - tS12 * tS00;
+				result[2][2] = tS11 * tS00 - tS10 * tS01;
+				Type determinant = tS00 * ( tS11 * tS22 - tS21 * tS12 )
+					- tS10 * ( tS01 * tS22 - tS21 * tS02 )
+					+ tS20 * ( tS01 * tS12 - tS11 * tS02 );
+				result /= determinant;
 			}
 		};
 
 		template< typename Type >
 		struct SqrMtxInverter< Type, 2 >
 		{
-			static inline castor::SquareMatrix< Type, 2 > inverse( castor::SquareMatrix< Type, 2 > const & p_mtx )
+			static inline void inverse( castor::SquareMatrix< Type, 2 > const & input
+				, castor::SquareMatrix< Type, 2 > & result )
 			{
-				Type tDeterminant = p_mtx[0][0] * p_mtx[1][1] - p_mtx[1][0] * p_mtx[0][1];
-				castor::SquareMatrix< Type, 2 > mtxInverse = castor::SquareMatrix< Type, 2 >( castor::NoInit() );
-				mtxInverse[1][1] = + p_mtx[1][1] / tDeterminant;
-				mtxInverse[0][1] = - p_mtx[0][1] / tDeterminant;
-				mtxInverse[1][0] = - p_mtx[1][0] / tDeterminant;
-				mtxInverse[0][0] = + p_mtx[0][0] / tDeterminant;
-				return mtxInverse;
+				Type determinant = input[0][0] * input[1][1] - input[1][0] * input[0][1];
+				result[1][1] = +input[1][1] / determinant;
+				result[0][1] = -input[0][1] / determinant;
+				result[1][0] = -input[1][0] / determinant;
+				result[0][0] = +input[0][0] / determinant;
 			}
 		};
 		template< typename Type, uint32_t Count > struct SqrMtxOperators;
@@ -341,7 +339,7 @@ namespace castor
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, _Rows > const & p_matrix )
 		: my_matrix_type()
 	{
-		uint32_t count = std::min( Count, _Rows );
+		uint32_t constexpr count = std::min( Count, _Rows );
 
 		for ( uint32_t i = 0; i < count; i++ )
 		{
@@ -438,30 +436,32 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::getInverse()const
 	{
-		return SqrMtxInverter< T, Count >::inverse( *this );
+		SquareMatrix< T, Count > result{ NoInit{} };
+		SqrMtxInverter< T, Count >::inverse( *this, result );
+		return result;
 	}
 	template< typename T, uint32_t Count >
 	inline SquareMatrix < T, Count - 1 > SquareMatrix< T, Count >::getMinor( uint32_t x, uint32_t y )const
 	{
 		SquareMatrix < T, Count - 1 > result;
 		result.setIdentity();
-		uint32_t i = 0, j = 0;
+		uint32_t idst = 0, jdst = 0;
 
-		for ( uint32_t i = 0; i < Count; i++ )
+		for ( uint32_t isrc = 0; isrc < Count; isrc++ )
 		{
-			if ( i != x )
+			if ( isrc != x )
 			{
-				j = 0;
+				jdst = 0;
 
-				for ( uint32_t j = 0; j < Count; j++ )
+				for ( uint32_t jsrc = 0; jsrc < Count; jsrc++ )
 				{
-					if ( j != y )
+					if ( jsrc != y )
 					{
-						result[i][j++] = this->m_columns[i][j];
+						result[idst][jdst++] = this->m_columns[isrc][jsrc];
 					}
 				}
 
-				i++;
+				idst++;
 			}
 		}
 
@@ -475,23 +475,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::invert()
 	{
-		T tDeterminant = getDeterminant();
-
-		if ( tDeterminant != T{} )
-		{
-			SquareMatrix< T, Count > mTmp;
-
-			for ( uint32_t i = 0; i < Count; i++ )
-			{
-				for ( uint32_t j = 0; j < Count; j++ )
-				{
-					mTmp[i][j] = getCofactor( i, j ) / tDeterminant;
-				}
-			}
-
-			std::memcpy( my_matrix_type::ptr(), mTmp.constPtr(), my_matrix_type::size );
-		}
-
+		SqrMtxInverter< T, Count >::inverse( *this, *this );
 		return *this;
 	}
 	template< typename T, uint32_t Count >

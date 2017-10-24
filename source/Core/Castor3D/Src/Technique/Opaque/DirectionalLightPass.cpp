@@ -33,9 +33,7 @@ namespace castor3d
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
-		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
-		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_farPlane" ), ShaderType::ePixel ) }
 		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
 	{
 	}
@@ -70,9 +68,7 @@ namespace castor3d
 	void DirectionalLightPass::Program::doBind( Light const & light )
 	{
 		auto & directionalLight = *light.getDirectionalLight();
-		m_lightIntensity->setValue( directionalLight.getIntensity() );
 		m_lightDirection->setValue( directionalLight.getDirection() );
-		m_lightFarPlane->setValue( directionalLight.getFarPlane() );
 		m_lightTransform->setValue( directionalLight.getLightSpaceTransform() );
 	}
 
@@ -102,7 +98,6 @@ namespace castor3d
 		};
 
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, declaration );
-		uint32_t stride = declaration.stride();
 		m_vertexBuffer->resize( sizeof( data ) );
 		uint8_t * buffer = m_vertexBuffer->getData();
 		std::memcpy( buffer, data, sizeof( data ) );

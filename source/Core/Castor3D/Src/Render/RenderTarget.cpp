@@ -1,4 +1,4 @@
-#include "RenderTarget.hpp"
+﻿#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -113,17 +113,16 @@ namespace castor3d
 		m_frameBuffer->initialise();
 
 		SamplerSPtr sampler = m_renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_renderTarget.m_index ) );
-		auto colourTexture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+		auto texture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
 			, m_renderTarget.getPixelFormat()
 			, size );
-		m_colourAttach = m_frameBuffer->createAttachment( colourTexture );
-		m_colourTexture.setTexture( colourTexture );
+		m_colourAttach = m_frameBuffer->createAttachment( texture );
+		m_colourTexture.setTexture( texture );
 		m_colourTexture.setSampler( sampler );
 		m_colourTexture.setIndex( index );
 		m_colourTexture.getTexture()->getImage().initialiseSource();
-		Size dimensions = m_colourTexture.getTexture()->getDimensions();
 		m_colourTexture.getTexture()->initialise();
 
 		m_frameBuffer->bind();

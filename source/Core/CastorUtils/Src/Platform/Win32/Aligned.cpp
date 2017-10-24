@@ -17,7 +17,7 @@ namespace castor
 {
 	void * alignedAlloc( size_t p_alignment, size_t p_size )
 	{
-		void * mem = nullptr;
+		void * mem;
 		CU_ALIGNED_ALLOC( mem, p_alignment, p_size );
 		return mem;
 	}

@@ -25,7 +25,7 @@ namespace castor3d
 	{
 		struct LightInitialiser
 		{
-			LightInitialiser( LightsMap & p_typeSortedLights )
+			explicit LightInitialiser( LightsMap & p_typeSortedLights )
 				: m_typeSortedLights{ p_typeSortedLights }
 			{
 			}
@@ -48,7 +48,7 @@ namespace castor3d
 
 		struct LightCleaner
 		{
-			LightCleaner( LightsMap & p_typeSortedLights )
+			explicit LightCleaner( LightsMap & p_typeSortedLights )
 				: m_typeSortedLights{ p_typeSortedLights }
 			{
 			}

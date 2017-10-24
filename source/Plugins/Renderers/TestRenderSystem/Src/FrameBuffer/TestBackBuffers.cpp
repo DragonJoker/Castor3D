@@ -37,7 +37,7 @@ namespace TestRender
 	{
 	}
 
-	void TestBackBuffers::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void TestBackBuffers::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )const
 	{
 	}
 

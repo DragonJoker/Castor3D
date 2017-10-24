@@ -397,7 +397,7 @@ namespace C3dSMax
 
 	int SMaxImporter::doGetString( String & p_strString )
 	{
-		char pBuffer[255];
+		char pBuffer[255]{};
 
 		try
 		{

@@ -53,7 +53,7 @@ namespace GuiCommon
 			{
 				OnMaterialChange( String( property->GetValueAsString().c_str() ) );
 			}
-			else if ( property->GetName() == PROPERTY_BILLBOARD_MATERIAL )
+			else if ( property->GetName() == PROPERTY_BILLBOARD_SIZE )
 			{
 				const Size & size = SizeRefFromVariant( property->GetValue() );
 				OnSizeChange( size );

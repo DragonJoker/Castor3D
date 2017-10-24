@@ -1,4 +1,4 @@
-#include "CastorUtilsPixelFormatTest.hpp"
+﻿#include "CastorUtilsPixelFormatTest.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -98,7 +98,6 @@ namespace
 		template< typename CharType >
 		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 		{
-			uint8_t const * data = p_buffer.constPtr();
 			uint32_t width = p_buffer.dimensions().getWidth();
 			uint32_t height = p_buffer.dimensions().getHeight();
 			CharType fill = p_stream.fill( '0' );
@@ -282,7 +281,10 @@ namespace
 	template< PixelFormat PFSrc >
 	struct BufferConverter< PFSrc, PFSrc >
 	{
-		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
+		using PixelBuffer = PxBuffer< PFSrc >;
+		using PixelBufferPtr = std::shared_ptr< PixelBuffer >;
+
+		void operator()( PixelBufferPtr p_source )
 		{
 		}
 	};

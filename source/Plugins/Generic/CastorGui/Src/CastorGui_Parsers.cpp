@@ -1,4 +1,4 @@
-#include "CastorGui_Parsers.hpp"
+﻿#include "CastorGui_Parsers.hpp"
 
 #include "ControlsManager.hpp"
 #include "CtrlButton.hpp"
@@ -157,7 +157,6 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserButton )
 	{
-		ControlsManager & ctrlsManager = getControlsManager( p_context );
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
@@ -436,7 +435,6 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBox )
 	{
-		ControlsManager & ctrlsManager = getControlsManager( p_context );
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
@@ -571,7 +569,6 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserEdit )
 	{
-		ControlsManager & ctrlsManager = getControlsManager( p_context );
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
@@ -645,7 +642,6 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserListBox )
 	{
-		ControlsManager & ctrlsManager = getControlsManager( p_context );
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
@@ -780,7 +776,6 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSlider )
 	{
-		ControlsManager & ctrlsManager = getControlsManager( p_context );
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );

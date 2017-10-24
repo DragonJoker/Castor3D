@@ -43,8 +43,6 @@ namespace GlRender
 
 	void GlFrameBuffer::setDrawBuffers( AttachArray const & p_attaches )const
 	{
-		bool result = false;
-
 		if ( !p_attaches.empty() )
 		{
 			UIntArray arrayAttaches;
@@ -93,7 +91,7 @@ namespace GlRender
 		return getOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) == GlFramebufferStatus::eComplete;
 	}
 
-	void GlFrameBuffer::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void GlFrameBuffer::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )const
 	{
 		doBind( FrameBufferTarget::eRead );
 		getOpenGl().ReadBuffer( GlBufferBinding( uint32_t( getOpenGl().get( getOpenGl().get( p_point ) ) ) + p_index ) );
@@ -102,32 +100,32 @@ namespace GlRender
 		doUnbind();
 	}
 
-	ColourRenderBufferSPtr GlFrameBuffer::createColourRenderBuffer( PixelFormat p_format )
+	ColourRenderBufferSPtr GlFrameBuffer::createColourRenderBuffer( PixelFormat p_format )const
 	{
 		return std::make_shared< GlColourRenderBuffer >( getOpenGl(), p_format );
 	}
 
-	DepthStencilRenderBufferSPtr GlFrameBuffer::createDepthStencilRenderBuffer( PixelFormat p_format )
+	DepthStencilRenderBufferSPtr GlFrameBuffer::createDepthStencilRenderBuffer( PixelFormat p_format )const
 	{
 		return std::make_shared< GlDepthStencilRenderBuffer >( getOpenGl(), p_format );
 	}
 
-	RenderBufferAttachmentSPtr GlFrameBuffer::createAttachment( RenderBufferSPtr p_renderBuffer )
+	RenderBufferAttachmentSPtr GlFrameBuffer::createAttachment( RenderBufferSPtr p_renderBuffer )const
 	{
 		return std::make_shared< GlRenderBufferAttachment >( getOpenGl(), p_renderBuffer );
 	}
 
-	TextureAttachmentSPtr GlFrameBuffer::createAttachment( TextureLayoutSPtr p_texture )
+	TextureAttachmentSPtr GlFrameBuffer::createAttachment( TextureLayoutSPtr p_texture )const
 	{
 		return std::make_shared< GlTextureAttachment >( getOpenGl(), p_texture );
 	}
 
-	TextureAttachmentSPtr GlFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
+	TextureAttachmentSPtr GlFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )const
 	{
 		return std::make_shared< GlCubeTextureFaceAttachment >( getOpenGl(), p_texture, p_face );
 	}
 
-	TextureAttachmentSPtr GlFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )
+	TextureAttachmentSPtr GlFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )const
 	{
 		return std::make_shared< GlCubeTextureFaceAttachment >( getOpenGl(), p_texture, p_face, p_mipLevel );
 	}
@@ -135,12 +133,23 @@ namespace GlRender
 	void GlFrameBuffer::doBind( FrameBufferTarget p_target )const
 	{
 		m_bindingMode = getOpenGl().get( p_target );
+
+		if ( isSRGB() )
+		{
+			getOpenGl().Enable( GlTweak::eFramebufferSRGB );
+		}
+
 		BindableType::bind();
 	}
 
 	void GlFrameBuffer::doUnbind()const
 	{
 		BindableType::unbind();
+
+		if ( isSRGB() )
+		{
+			getOpenGl().Disable( GlTweak::eFramebufferSRGB );
+		}
 	}
 
 	void GlFrameBuffer::doBlitInto( FrameBuffer const & p_buffer, castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const

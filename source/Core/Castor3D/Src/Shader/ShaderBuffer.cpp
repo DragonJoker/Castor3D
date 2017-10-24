@@ -33,7 +33,6 @@ namespace castor3d
 			, ShaderStorageBuffer * ssbo )
 		{
 			TextureUnit tbo{ engine };
-			auto & info = engine.getRenderSystem()->getGpuInformations();
 
 			if ( !ssbo )
 			{

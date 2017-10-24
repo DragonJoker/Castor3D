@@ -557,7 +557,6 @@ namespace castortd
 		auto geometry = m_scene.getGeometryCache().add( name, node, m_mapCubeMesh );
 		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( m_mapNode );
-		uint32_t index{ 0u };
 
 		for ( auto submesh : *geometry->getMesh() )
 		{

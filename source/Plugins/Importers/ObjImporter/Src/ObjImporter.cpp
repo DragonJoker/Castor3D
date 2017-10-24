@@ -1,4 +1,4 @@
-#include "ObjImporter.hpp"
+﻿#include "ObjImporter.hpp"
 
 #include "ObjGroup.hpp"
 
@@ -211,12 +211,8 @@ namespace Obj
 		file.seekg( 0, std::ios::beg );
 		std::string line;
 		std::string mtlfile;
-		uint32_t nv = 0u;
-		uint32_t nvt = 0u;
-		uint32_t nvn = 0u;
 		uint32_t nf = 0u;
 		uint32_t ntf = 0u;
-		uint32_t ng = 0u;
 		std::vector< uint32_t > faces;
 		StringArray v;
 		StringArray vt;
@@ -243,18 +239,14 @@ namespace Obj
 					faces.push_back( ntf );
 					ntf = 0u;
 				}
-
-				++nv;
 			}
 			else if ( ident == "vt" )
 			{
 				vt.push_back( line );
-				++nvt;
 			}
 			else if ( ident == "vn" )
 			{
 				vn.push_back( line );
-				++nvn;
 			}
 			else if ( ident == "f" )
 			{

@@ -1,4 +1,4 @@
-#include "FinalCombinePass.hpp"
+﻿#include "FinalCombinePass.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -56,9 +56,7 @@ namespace castor3d
 				1, 1, 1, 1
 			};
 
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
-			uint32_t stride = declaration.stride();
 			vertexBuffer->resize( uint32_t( sizeof( data ) ) );
 			uint8_t * buffer = vertexBuffer->getData();
 			std::memcpy( buffer, data, sizeof( data ) );
@@ -68,13 +66,13 @@ namespace castor3d
 		}
 
 		GeometryBuffersSPtr doCreateVao( Engine & engine
-			, ShaderProgram & p_program
-			, VertexBuffer & p_vbo )
+			, ShaderProgram & program
+			, VertexBuffer & vbo )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto result = renderSystem.createGeometryBuffers( Topology::eTriangles
-				, p_program );
-			result->initialise( { p_vbo }, nullptr );
+				, program );
+			result->initialise( { vbo }, nullptr );
 			return result;
 		}
 
@@ -103,7 +101,7 @@ namespace castor3d
 		}
 		
 		glsl::Shader doGetPixelProgram( Engine & engine
-			, FogType p_fogType )
+			, FogType fogType )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
@@ -125,19 +123,20 @@ namespace castor3d
 			glsl::Utils utils{ writer };
 			utils.declareCalcVSPosition();
 
-			shader::Fog fog{ p_fogType, writer };
+			shader::Fog fog{ fogType, writer };
 
 			auto maxComponent = writer.implementFunction< Float >( cuT( "maxComponent" )
 				, [&]( Vec3 const & v )
-			{
-				writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
-			}, InVec3{ &writer, cuT( "v" ) } );
+				{
+					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
+				}
+				, InVec3{ &writer, cuT( "v" ) } );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-				auto coord = writer.declLocale( cuT( "coord" )
-					, ivec2( gl_FragCoord.xy() ) );
+					auto coord = writer.declLocale( cuT( "coord" )
+						, ivec2( gl_FragCoord.xy() ) );
 					auto revealage = writer.declLocale( cuT( "revealage" )
 						, texelFetch( c3d_mapRevealage, coord, 0 ).r() );
 
@@ -163,7 +162,7 @@ namespace castor3d
 
 					pxl_fragColor = vec4( averageColor.rgb(), 1.0_f - revealage );
 
-					if ( p_fogType != FogType::eDisabled )
+					if ( fogType != FogType::eDisabled )
 					{
 						auto position = writer.declLocale( cuT( "position" )
 							, utils.calcVSPosition( vtx_texture
@@ -176,11 +175,10 @@ namespace castor3d
 		}
 		
 		ShaderProgramSPtr doCreateProgram( Engine & engine
-			, FogType p_fogType )
+			, FogType fogType )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetPixelProgram( engine, p_fogType );
+			auto pxl = doGetPixelProgram( engine, fogType );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
@@ -195,10 +193,10 @@ namespace castor3d
 		}
 
 		RenderPipelineUPtr doCreateRenderPipeline( Engine & engine
-			, ShaderProgram & p_program
-			, MatrixUbo & p_matrixUbo
-			, SceneUbo & p_sceneUbo
-			, GpInfoUbo & p_gpInfoUbo )
+			, ShaderProgram & program
+			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo )
 		{
 			DepthStencilState dsstate;
 			dsstate.setDepthTest( false );
@@ -213,11 +211,11 @@ namespace castor3d
 				, std::move( rsstate )
 				, std::move( bdState )
 				, MultisampleState{}
-				, p_program
+				, program
 				, PipelineFlags{} );
-			pipeline->addUniformBuffer( p_matrixUbo.getUbo() );
-			pipeline->addUniformBuffer( p_sceneUbo.getUbo() );
-			pipeline->addUniformBuffer( p_gpInfoUbo.getUbo() );
+			pipeline->addUniformBuffer( matrixUbo.getUbo() );
+			pipeline->addUniformBuffer( sceneUbo.getUbo() );
+			pipeline->addUniformBuffer( gpInfoUbo.getUbo() );
 			return pipeline;
 		}
 	}
@@ -225,14 +223,14 @@ namespace castor3d
 	//*********************************************************************************************
 
 	FinalCombineProgram::FinalCombineProgram( Engine & engine
-		, VertexBuffer & p_vbo
-		, MatrixUbo & p_matrixUbo
-		, SceneUbo & p_sceneUbo
-		, GpInfoUbo & p_gpInfoUbo
-		, FogType p_fogType )
-		: m_program{ doCreateProgram( engine, p_fogType ) }
-		, m_geometryBuffers{ doCreateVao( engine, *m_program, p_vbo ) }
-		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfoUbo ) }
+		, VertexBuffer & vbo
+		, MatrixUbo & matrixUbo
+		, SceneUbo & sceneUbo
+		, GpInfoUbo & gpInfoUbo
+		, FogType fogType )
+		: m_program{ doCreateProgram( engine, fogType ) }
+		, m_geometryBuffers{ doCreateVao( engine, *m_program, vbo ) }
+		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, matrixUbo, sceneUbo, gpInfoUbo ) }
 	{
 	}
 
@@ -255,12 +253,13 @@ namespace castor3d
 	//*********************************************************************************************
 
 	FinalCombinePass::FinalCombinePass( Engine & engine
-		, Size const & p_size )
-		: m_size{ p_size }
+		, Size const & size
+		, SceneUbo & sceneUbo )
+		: m_size{ size }
 		, m_viewport{ engine }
 		, m_vertexBuffer{ doCreateVbo( engine ) }
 		, m_matrixUbo{ engine }
-		, m_sceneUbo{ engine }
+		, m_sceneUbo{ sceneUbo }
 		, m_gpInfo{ engine }
 		, m_programs
 		{
@@ -280,29 +279,27 @@ namespace castor3d
 	FinalCombinePass::~FinalCombinePass()
 	{
 		m_matrixUbo.getUbo().cleanup();
-		m_sceneUbo.getUbo().cleanup();
 		m_gpInfo.getUbo().cleanup();
 		m_vertexBuffer->cleanup();
 	}
 
 	void FinalCombinePass::render( WeightedBlendPassResult const & p_r
-		, FrameBuffer const & p_frameBuffer
-		, Camera const & p_camera
-		, Matrix4x4r const & p_invViewProj
-		, Matrix4x4r const & p_invView
-		, Matrix4x4r const & p_invProj
-		, Fog const & p_fog )
+		, FrameBuffer const & frameBuffer
+		, Camera const & camera
+		, Matrix4x4r const & invViewProj
+		, Matrix4x4r const & invView
+		, Matrix4x4r const & invProj
+		, FogType fogType )
 	{
 		m_gpInfo.update( m_size
-			, p_camera
-			, p_invViewProj
-			, p_invView
-			, p_invProj );
-		m_sceneUbo.update( p_camera, p_fog );
-		p_frameBuffer.bind( FrameBufferTarget::eDraw );
-		p_frameBuffer.setDrawBuffers();
+			, camera
+			, invViewProj
+			, invView
+			, invProj );
+		frameBuffer.bind( FrameBufferTarget::eDraw );
+		frameBuffer.setDrawBuffers();
 
-		auto & program = m_programs[size_t( p_fog.getType() )];
+		auto & program = m_programs[size_t( fogType )];
 
 		m_viewport.apply();
 		auto index = MinTextureIndex;

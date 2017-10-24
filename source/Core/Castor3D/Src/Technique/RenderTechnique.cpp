@@ -1,4 +1,4 @@
-#include "RenderTechnique.hpp"
+﻿#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -258,13 +258,14 @@ namespace castor3d
 				m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 					, static_cast< TransparentPass & >( *m_transparentPass )
 					, *m_frameBuffer.m_frameBuffer
+					, *m_frameBuffer.m_depthAttach
 					, m_renderTarget.getSize()
 					, *m_renderTarget.getScene() );
 #endif
 			}
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
-			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Post effects" ), cuT( "Post effects" ) );
+			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			ENSURE( m_initialised );
 		}
 
@@ -354,17 +355,15 @@ namespace castor3d
 #endif
 #if DISPLAY_DEBUG_ENV_MAPS
 
-		index = 0u;
-
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
 			map.get().debugDisplay( size, index++ );
 		}
 
+		index = 0u;
+
 #endif
 #if DISPLAY_DEBUG_SHADOW_MAPS
-
-		index = 0u;
 
 		for ( auto & maps : m_activeShadowMaps )
 		{
@@ -520,11 +519,6 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if USE_WEIGHTED_BLEND
-#	if !DEBUG_FORWARD_RENDERING
-
-		m_deferredRendering->blitDepthInto( m_weightedBlendRendering->getFbo() );
-
-#	endif
 
 		m_weightedBlendRendering->render( info
 			, scene

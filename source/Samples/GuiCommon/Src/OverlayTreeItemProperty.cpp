@@ -175,7 +175,7 @@ namespace GuiCommon
 		wxPGChoices choices{ make_wxArrayString( PROPERTY_OVERLAY_BORDER_POSITION_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_BORDER_POSITION_VALUES ) };
 		wxString selected{ PROPERTY_OVERLAY_BORDER_POSITION_TEXTS[size_t( p_overlay->getBorderPosition() )] };
 
-		Point4i rec = p_overlay->getBorderPixelSize();
+		Point4i rec{ p_overlay->getBorderPixelSize() };
 		p_grid->Append( new RectangleProperty( PROPERTY_OVERLAY_BORDER_SIZE ) )->SetValue( WXVARIANT( rec ) );
 
 		if ( p_overlay->getBorderMaterial() )

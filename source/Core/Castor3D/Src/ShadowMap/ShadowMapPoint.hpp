@@ -1,24 +1,5 @@
 ﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMapPoint_H___
 #define ___C3D_ShadowMapPoint_H___
@@ -122,17 +103,13 @@ namespace castor3d
 			, ComparisonFunc alphaFunc )const override;
 
 	private:
-		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
-		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
+		using CubeAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		CubeDepthAttachment m_depthAttach;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
+		CubeAttachment m_depthAttach;
 		//!\~english	The attach between colour buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		CubeColourAttachment m_colourAttach;
+		CubeAttachment m_colourAttach;
 	};
 }
 

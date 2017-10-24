@@ -69,7 +69,6 @@ namespace castor3d
 
 	SpotLight::SpotLight( Light & p_light )
 		: LightCategory{ LightType::eSpot, p_light }
-		, m_farPlane{ 1.0f }
 	{
 	}
 
@@ -183,7 +182,7 @@ namespace castor3d
 		if ( m_attenuation.isDirty()
 			|| m_cutOff.isDirty() )
 		{
-			auto & data = SpotLight::generateVertices();
+			SpotLight::generateVertices();
 			auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
 			m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
 				, Point3r{ scale[0], scale[0], scale[1] } );
@@ -194,7 +193,7 @@ namespace castor3d
 
 		p_viewport.setPerspective( getCutOff() * 2
 			, p_viewport.getRatio()
-			, 1.0_r
+			, 0.01_r
 			, m_farPlane );
 		p_viewport.update();
 	}
@@ -204,7 +203,7 @@ namespace castor3d
 		auto pos = getLight().getParent()->getDerivedPosition();
 		Point4r position{ pos[0], pos[1], pos[2], float( m_shadowMapIndex ) };
 		doCopyComponent( position, p_index, p_offset, p_texture );
-		doCopyComponent( m_attenuation, m_farPlane, p_index, p_offset, p_texture );
+		doCopyComponent( m_attenuation, p_index, p_offset, p_texture );
 		doCopyComponent( m_direction, p_index, p_offset, p_texture );
 		doCopyComponent( Point2f{ m_exponent, m_cutOff.value().cos() }, p_index, p_offset, p_texture );
 		doCopyComponent( m_lightSpace, p_index, p_offset, p_texture );

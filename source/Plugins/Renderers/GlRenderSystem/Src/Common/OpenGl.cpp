@@ -245,8 +245,12 @@ namespace GlRender
 		PixelFormats[uint32_t( castor::PixelFormat::eR5G6B5 )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB16, GlType::eUnsignedShort565Rev );
 		PixelFormats[uint32_t( castor::PixelFormat::eR8G8B8 )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB8, GlType::eUnsignedByte );
 		PixelFormats[uint32_t( castor::PixelFormat::eB8G8R8 )] = PixelFmt( GlFormat::eBGR, GlInternal::eRGB8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( castor::PixelFormat::eR8G8B8_SRGB )] = PixelFmt( GlFormat::eRGB, GlInternal::eSRGB8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( castor::PixelFormat::eB8G8R8_SRGB )] = PixelFmt( GlFormat::eBGR, GlInternal::eSRGB8, GlType::eUnsignedByte );
 		PixelFormats[uint32_t( castor::PixelFormat::eA8R8G8B8 )] = PixelFmt( GlFormat::eRGBA, GlInternal::eRGBA8, GlType::eUnsignedByte );
 		PixelFormats[uint32_t( castor::PixelFormat::eA8B8G8R8 )] = PixelFmt( GlFormat::eBGRA, GlInternal::eRGBA8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( castor::PixelFormat::eA8R8G8B8_SRGB )] = PixelFmt( GlFormat::eRGBA, GlInternal::eSRGB8A8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( castor::PixelFormat::eA8B8G8R8_SRGB )] = PixelFmt( GlFormat::eBGRA, GlInternal::eSRGB8A8, GlType::eUnsignedByte );
 		PixelFormats[uint32_t( castor::PixelFormat::eRGB16F )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB16F, GlType::eHalfFloat );
 		PixelFormats[uint32_t( castor::PixelFormat::eRGBA16F )] = PixelFmt( GlFormat::eRGBA, GlInternal::eRGBA16F, GlType::eHalfFloat );
 		PixelFormats[uint32_t( castor::PixelFormat::eRGB16F32F )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB16F, GlType::eFloat );
@@ -284,8 +288,12 @@ namespace GlRender
 		Internals[uint32_t( castor::PixelFormat::eR5G6B5 )] = GlInternal::eRGB16UI;
 		Internals[uint32_t( castor::PixelFormat::eR8G8B8 )] = GlInternal::eRGBA32UI;
 		Internals[uint32_t( castor::PixelFormat::eB8G8R8 )] = GlInternal::eRGBA32UI;
+		Internals[uint32_t( castor::PixelFormat::eR8G8B8_SRGB )] = GlInternal::eSRGB8;
+		Internals[uint32_t( castor::PixelFormat::eB8G8R8_SRGB )] = GlInternal::eSRGB8;
 		Internals[uint32_t( castor::PixelFormat::eA8R8G8B8 )] = GlInternal::eRGBA32UI;
 		Internals[uint32_t( castor::PixelFormat::eA8B8G8R8 )] = GlInternal::eRGBA32UI;
+		Internals[uint32_t( castor::PixelFormat::eA8R8G8B8_SRGB )] = GlInternal::eSRGB8A8;
+		Internals[uint32_t( castor::PixelFormat::eA8B8G8R8_SRGB )] = GlInternal::eSRGB8A8;
 		Internals[uint32_t( castor::PixelFormat::eRGB16F )] = GlInternal::eRGBA16F;
 		Internals[uint32_t( castor::PixelFormat::eRGBA16F )] = GlInternal::eRGBA16F;
 		Internals[uint32_t( castor::PixelFormat::eRGB16F32F )] = GlInternal::eRGBA16F;

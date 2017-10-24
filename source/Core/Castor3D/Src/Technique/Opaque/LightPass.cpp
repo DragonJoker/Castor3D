@@ -34,7 +34,7 @@
 using namespace castor;
 using namespace castor3d;
 
-#define C3D_DISABLE_SSSSS_BACKLIT 1
+#define C3D_DISABLE_SSSSS_BACKLIT 0
 
 namespace castor3d
 {
@@ -282,26 +282,31 @@ namespace castor3d
 		writer << endi;
 	}
 
+	namespace
+	{
+		ShaderProgramSPtr doCreateProgram( Engine & engine
+			, glsl::Shader const & vtx
+			, glsl::Shader const & pxl )
+		{
+			auto program = engine.getShaderProgramCache().getNewProgram( false );
+			program->createObject( ShaderType::eVertex );
+			program->createObject( ShaderType::ePixel );
+			program->setSource( ShaderType::eVertex, vtx );
+			program->setSource( ShaderType::ePixel, pxl );
+			return program;
+		}
+	}
+
 	//************************************************************************************************
 
 	LightPass::Program::Program( Engine & engine
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
+		: m_program{ ::doCreateProgram( engine, vtx, pxl ) }
+		, m_lightColour{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel ) }
+		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
+		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_lightBase.m_farPlane" ), ShaderType::ePixel ) }
 	{
-		auto & renderSystem = *engine.getRenderSystem();
-
-		m_program = engine.getShaderProgramCache().getNewProgram( false );
-		m_program->createObject( ShaderType::eVertex );
-		m_program->createObject( ShaderType::ePixel );
-		m_program->setSource( ShaderType::eVertex, vtx );
-		m_program->setSource( ShaderType::ePixel, pxl );
-
-		m_lightColour = m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel );
-
-		for ( int i = 0; i < int( DsTexture::eCount ); i++ )
-		{
-			m_program->createUniform< UniformType::eSampler >( getTextureName( DsTexture( i ) ), ShaderType::ePixel )->setValue( MinTextureIndex + i );
-		}
 	}
 
 	LightPass::Program::~Program()
@@ -352,16 +357,17 @@ namespace castor3d
 
 	void LightPass::Program::bind( Light const & light )
 	{
+		m_lightColour->setValue( light.getColour() );
+		m_lightIntensity->setValue( light.getIntensity() );
+		m_lightFarPlane->setValue( light.getFarPlane() );
 		doBind( light );
 	}
 
 	void LightPass::Program::render( Size const & size
-		, Point3f const & colour
 		, uint32_t count
 		, bool first
 		, uint32_t offset )const
 	{
-		m_lightColour->setValue( colour );
 
 		if ( first )
 		{
@@ -406,7 +412,6 @@ namespace castor3d
 
 		doRender( size
 			, gp
-			, light.getColour()
 			, first );
 	}
 
@@ -450,7 +455,6 @@ namespace castor3d
 
 	void LightPass::doRender( castor::Size const & size
 		, GeometryPassResult const & gp
-		, Point3f const & colour
 		, bool first )
 	{
 		m_frameBuffer.bind( FrameBufferTarget::eDraw );
@@ -464,7 +468,6 @@ namespace castor3d
 		gp[size_t( DsTexture::eData5 )]->bind();
 
 		m_program->render( size
-			, colour
 			, getCount()
 			, first
 			, m_offset );
@@ -582,14 +585,12 @@ namespace castor3d
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_BACKLIT
-					lightDiffuse += sss.compute( *lighting
-						, material
+					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye );
+						, translucency );
 #endif
 				}
 				break;
@@ -604,14 +605,12 @@ namespace castor3d
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_BACKLIT
-					lightDiffuse += sss.compute( *lighting
-						, material
+					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye );
+						, translucency );
 #endif
 				}
 				break;
@@ -626,14 +625,12 @@ namespace castor3d
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_BACKLIT
-					lightDiffuse += sss.compute( *lighting
-						, material
+					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye );
+						, translucency );
 #endif
 				}
 				break;
@@ -731,7 +728,7 @@ namespace castor3d
 				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
-			auto translucency = writer.declLocale( cuT( "translucency" )
+			auto transmittance = writer.declLocale( cuT( "transmittance" )
 				, data4.w() );
 			auto material = writer.declLocale( cuT( "material" )
 				, materials.getMaterial( materialId ) );
@@ -753,27 +750,21 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.compute( *lighting
-						, material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
+					lightDiffuse = fma( lightDiffuse
+						, sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, transmittance )
+						, lightDiffuse );
 #	else
-					lightDiffuse = sss.compute( *lighting
-						, material
+					lightDiffuse = sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
+						, transmittance );
 #	endif
 #else
 					lighting->compute( light
@@ -801,27 +792,21 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.compute( *lighting
-						, material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
+					lightDiffuse = fma( lightDiffuse
+						, sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, transmittance )
+						, lightDiffuse );
 #	else
-					lightDiffuse = sss.compute( *lighting
-						, material
+					lightDiffuse = sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
+						, transmittance );
 #	endif
 #else
 					lighting->compute( light
@@ -849,27 +834,21 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse += sss.compute( *lighting
-						, material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
+					lightDiffuse = fma( lightDiffuse
+						, sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, transmittance )
+						, lightDiffuse );
 #	else
-					lightDiffuse = sss.compute( *lighting
-						, material
+					lightDiffuse = sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye
-						, albedo
-						, metallic );
+						, transmittance );
 #	endif
 #else
 					lighting->compute( light
@@ -1001,15 +980,12 @@ namespace castor3d
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_BACKLIT
-					lightDiffuse += sss.compute( *lighting
-						, material
+					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye
-						, specular );
+						, translucency );
 #endif
 				}
 				break;
@@ -1026,15 +1002,12 @@ namespace castor3d
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_BACKLIT
-					lightDiffuse += sss.compute( *lighting
-						, material
+					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye
-						, specular );
+						, translucency );
 #endif
 				}
 				break;
@@ -1051,15 +1024,12 @@ namespace castor3d
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_BACKLIT
-					lightDiffuse += sss.compute( *lighting
-						, material
+					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
 						, wsPosition
 						, wsNormal
-						, translucency
-						, eye
-						, specular );
+						, translucency );
 #endif
 				}
 				break;

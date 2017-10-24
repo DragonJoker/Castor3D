@@ -1,24 +1,5 @@
 ﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_FRAME_BUFFER_H___
 #define ___C3D_FRAME_BUFFER_H___
@@ -287,6 +268,28 @@ namespace castor3d
 		 *\param[in]	size	Les nouvelles dimensions
 		 */
 		C3D_API void resize( castor::Size const & size );
+		/*
+		 *\~english
+		 *\brief		Sets the sRGB colour space usage status.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit le statut d'utilisation de l'utilisation de l'espace de couleurs sRGB.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setSRGB( bool value )
+		{
+			m_sRGB = value;
+		}
+		/*
+		 *\~english
+		 *\return		\p true if the frame buffer uses sRGB colour space.
+		 *\~french
+		 *\return		\p true si le tampon d'images utilise l'espace de couleurs sRGB.
+		 */
+		inline bool isSRGB()const
+		{
+			return m_sRGB;
+		}
 		/**
 		 *\~english
 		 *\brief		Uses given attachments to this framebuffer for next draw call.
@@ -316,7 +319,7 @@ namespace castor3d
 		 *\brief		Crée un tampon de rendu couleur
 		 *\param[in]	format	Le format de pixels du tampon
 		 */
-		C3D_API virtual ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat format ) = 0;
+		C3D_API virtual ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat format )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a depth/stencil render buffer
@@ -325,7 +328,7 @@ namespace castor3d
 		 *\brief		Crée un tampon de rendu profondeur/stencil
 		 *\param[in]	format	Le format de pixels du tampon
 		 */
-		C3D_API virtual DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat format ) = 0;
+		C3D_API virtual DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat format )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
@@ -336,7 +339,7 @@ namespace castor3d
 		 *\param[in]	renderBuffer	Le tampon de rendu
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer ) = 0;
+		C3D_API virtual RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a texture
@@ -347,7 +350,7 @@ namespace castor3d
 		 *\param[in]	texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture ) = 0;
+		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a cube texture's face.
@@ -361,7 +364,7 @@ namespace castor3d
 		 *\return		L'attache créée
 		 */
 		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture
-			, CubeMapFace face ) = 0;
+			, CubeMapFace face )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a cube texture's face's mipmap.
@@ -378,7 +381,7 @@ namespace castor3d
 		 */
 		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture
 			, CubeMapFace face
-			, uint32_t p_mipLevel ) = 0;
+			, uint32_t p_mipLevel )const = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if the FBO is complete
@@ -402,7 +405,7 @@ namespace castor3d
 		 */
 		C3D_API virtual void downloadBuffer( castor3d::AttachmentPoint point
 			, uint8_t index
-			, castor::PxBufferBaseSPtr buffer ) = 0;
+			, castor::PxBufferBaseSPtr buffer )const = 0;
 
 	protected:
 		/**
@@ -416,7 +419,7 @@ namespace castor3d
 		 *\return		Le format des pixels pour l'attache.
 		 */
 		C3D_API castor::PixelFormat doGetPixelFormat( AttachmentPoint point
-			, uint8_t index );
+			, uint8_t index )const;
 		/**
 		 *\~english
 		 *\brief		Clears the given buffers components.
@@ -503,6 +506,9 @@ namespace castor3d
 		//!\~english	The clear colour alpha PixelComponents.
 		//!\~french		La composante alpha de la couleur de vidage.
 		float m_alphaClear{ 1.0f };
+		//!\~english	Tells that the framebuffer uses sRGB colour space.
+		//!\~french		Dit que le tampon d'images utilise l'espace de couleurs sRGB.
+		bool m_sRGB{ false };
 	};
 }
 

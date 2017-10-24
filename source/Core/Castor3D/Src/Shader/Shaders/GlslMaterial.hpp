@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___GLSL_Materials_H___
 #define ___GLSL_Materials_H___
@@ -45,7 +26,7 @@ namespace castor3d
 			friend class Materials;
 
 		protected:
-			C3D_API BaseMaterial( castor::String const & type );
+			C3D_API explicit BaseMaterial( castor::String const & type );
 			C3D_API BaseMaterial( glsl::GlslWriter * writer
 				, castor::String const & name = castor::String() );
 			C3D_API BaseMaterial( castor::String const & type
@@ -63,16 +44,15 @@ namespace castor3d
 			C3D_API glsl::Int m_hasReflection()const;
 			C3D_API glsl::Float m_exposure()const;
 			C3D_API glsl::Int m_subsurfaceScatteringEnabled()const;
-			C3D_API glsl::Int m_distanceBasedTransmission()const;
-			C3D_API glsl::Vec3 m_backLitCoefficient()const;
 			C3D_API glsl::Float m_gaussianWidth()const;
 			C3D_API glsl::Float m_subsurfaceScatteringStrength()const;
+			C3D_API glsl::Int m_transmittanceProfileSize()const;
+			C3D_API glsl::Array< glsl::Vec4 > m_transmittanceProfile()const;
 
 		protected:
 			C3D_API glsl::Vec4 m_common()const;
 			C3D_API glsl::Vec4 m_reflRefr()const;
 			C3D_API glsl::Vec4 m_sssInfo()const;
-			C3D_API glsl::Vec4 m_transmittance()const;
 		};
 
 		DECLARE_SMART_PTR( BaseMaterial );
@@ -163,7 +143,7 @@ namespace castor3d
 		class Materials
 		{
 		protected:
-			C3D_API Materials( glsl::GlslWriter & writer );
+			C3D_API explicit Materials( glsl::GlslWriter & writer );
 
 		public:
 			C3D_API virtual void declare() = 0;
@@ -177,7 +157,7 @@ namespace castor3d
 			: public Materials
 		{
 		public:
-			C3D_API LegacyMaterials( glsl::GlslWriter & writer );
+			C3D_API explicit LegacyMaterials( glsl::GlslWriter & writer );
 			C3D_API void declare()override;
 			C3D_API LegacyMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
@@ -190,7 +170,7 @@ namespace castor3d
 			: public Materials
 		{
 		public:
-			C3D_API PbrMRMaterials( glsl::GlslWriter & writer );
+			C3D_API explicit PbrMRMaterials( glsl::GlslWriter & writer );
 			C3D_API void declare()override;
 			C3D_API MetallicRoughnessMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
@@ -203,7 +183,7 @@ namespace castor3d
 			: public Materials
 		{
 		public:
-			C3D_API PbrSGMaterials( glsl::GlslWriter & writer );
+			C3D_API explicit PbrSGMaterials( glsl::GlslWriter & writer );
 			C3D_API void declare()override;
 			C3D_API SpecularGlossinessMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;

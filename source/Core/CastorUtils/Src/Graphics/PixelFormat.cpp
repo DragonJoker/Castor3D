@@ -71,6 +71,14 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::NoAlphaPF;
 				break;
 
+			case PixelFormat::eA8R8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8R8G8B8 >::NoAlphaPF;
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::NoAlphaPF;
+				break;
+
 			case PixelFormat::eRGBA16F32F:
 				result = PixelDefinitions< PixelFormat::eRGBA16F32F >::NoAlphaPF;
 				break;
@@ -145,12 +153,28 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eB8G8R8 >::Alpha;
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Alpha;
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::Alpha;
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				result = PixelDefinitions< PixelFormat::eA8R8G8B8 >::Alpha;
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::Alpha;
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::Alpha;
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::Alpha;
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -283,12 +307,28 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eB8G8R8 >::Compressed;
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Compressed;
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::Compressed;
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				result = PixelDefinitions< PixelFormat::eA8R8G8B8 >::Compressed;
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::Compressed;
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::Compressed;
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::Compressed;
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -466,12 +506,28 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eB8G8R8 >::Size;
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Size;
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::Size;
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				result = PixelDefinitions< PixelFormat::eA8R8G8B8 >::Size;
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::Size;
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::Size;
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::Size;
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -604,12 +660,28 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eB8G8R8 >::Count;
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Count;
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::Count;
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				result = PixelDefinitions< PixelFormat::eA8R8G8B8 >::Count;
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::Count;
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::Count;
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::Count;
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -740,12 +812,28 @@ namespace castor
 				PixelDefinitions< PixelFormat::eB8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				PixelDefinitions< PixelFormat::eA8R8G8B8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				PixelDefinitions< PixelFormat::eA8B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -874,12 +962,28 @@ namespace castor
 				PixelDefinitions< PixelFormat::eB8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				PixelDefinitions< PixelFormat::eA8R8G8B8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				PixelDefinitions< PixelFormat::eA8B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eRGB16F:
@@ -1012,12 +1116,28 @@ namespace castor
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eB8G8R8 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
+				case PixelFormat::eR8G8B8_SRGB:
+					result = ( p_strFormat == PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
+					break;
+
+				case PixelFormat::eB8G8R8_SRGB:
+					result = ( p_strFormat == PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
+					break;
+
 				case PixelFormat::eA8R8G8B8:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA8R8G8B8 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
 				case PixelFormat::eA8B8G8R8:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA8B8G8R8 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
+					break;
+
+				case PixelFormat::eA8R8G8B8_SRGB:
+					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
+					break;
+
+				case PixelFormat::eA8B8G8R8_SRGB:
+					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
 				case PixelFormat::eRGB16F:
@@ -1151,12 +1271,28 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eB8G8R8 >::toStr();
 				break;
 
+			case PixelFormat::eR8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::toStr();
+				break;
+
+			case PixelFormat::eB8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::toStr();
+				break;
+
 			case PixelFormat::eA8R8G8B8:
 				result = PixelDefinitions< PixelFormat::eA8R8G8B8 >::toStr();
 				break;
 
 			case PixelFormat::eA8B8G8R8:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::toStr();
+				break;
+
+			case PixelFormat::eA8R8G8B8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >::toStr();
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::toStr();
 				break;
 
 			case PixelFormat::eRGB16F:

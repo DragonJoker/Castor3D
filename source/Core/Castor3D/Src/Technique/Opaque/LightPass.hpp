@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredLightPass_H___
 #define ___C3D_DeferredLightPass_H___
@@ -310,18 +291,15 @@ namespace castor3d
 			 *\~english
 			 *\brief		Renders the light pass.
 			 *\param[in]	size	The render area dimensions.
-			 *\param[in]	colour	The light colour.
 			 *\param[in]	count	The number of primitives to draw.
 			 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 			 *\~french
 			 *\brief		Dessine la passe d'éclairage.
 			 *\param[in]	size	Les dimensions de la zone de rendu.
-			 *\param[in]	colour	La couleur de la souce lumineuse.
 			 *\param[in]	count	Le nombre de primitives à dessiner.
 			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 			 */
 			void render( castor::Size const & size
-				, castor::Point3f const & colour
 				, uint32_t count
 				, bool first
 				, uint32_t offset )const;
@@ -364,6 +342,12 @@ namespace castor3d
 			//!\~english	The variable containing the light colour.
 			//!\~french		La variable contenant la couleur de la lumière.
 			PushUniform3fSPtr m_lightColour;
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			PushUniform2fSPtr m_lightIntensity;
+			//!\~english	The variable containing the light far plane position.
+			//!\~french		La variable contenant la position du plan lointain de la lumière.
+			PushUniform1fSPtr m_lightFarPlane;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
 
@@ -495,19 +479,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders the light pass on currently bound framebuffer.
 		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	colour	La couleur de la souce lumineuse.
+		 *\param[in]	gp		The geometry pass result.
 		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 		 *\~french
 		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
 		 *\param[in]	size	Les dimensions de la zone de rendu.
 		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	colour	La couleur de la souce lumineuse.
 		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
 		void doRender( castor::Size const & size
 			, GeometryPassResult const & gp
-			, castor::Point3f const & colour
 			, bool first );
 		/**
 		 *\~english

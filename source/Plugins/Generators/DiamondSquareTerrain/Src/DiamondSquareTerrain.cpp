@@ -1,4 +1,4 @@
-#include "DiamondSquareTerrain.hpp"
+﻿#include "DiamondSquareTerrain.hpp"
 
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
@@ -15,7 +15,7 @@ namespace diamond_square_terrain
 	{
 		struct Matrix
 		{
-			inline Matrix( uint32_t p_size )
+			inline explicit Matrix( uint32_t p_size )
 				: m_size{ p_size }
 				, m_max{ m_size - 1 }
 			{
@@ -34,11 +34,11 @@ namespace diamond_square_terrain
 
 			inline float & operator()( uint32_t x, uint32_t y )
 			{
-				static float dummy = -1;
 				auto index = getIndex( x, y );
 
 				if ( index >= m_map.size() )
 				{
+					static float dummy = -1;
 					return dummy;
 				}
 
@@ -47,11 +47,11 @@ namespace diamond_square_terrain
 
 			inline float const & operator()( uint32_t x, uint32_t y )const
 			{
-				static float dummy = -1;
 				auto index = getIndex( x, y );
 
 				if ( index >= m_map.size() )
 				{
+					static float dummy = -1;
 					return dummy;
 				}
 

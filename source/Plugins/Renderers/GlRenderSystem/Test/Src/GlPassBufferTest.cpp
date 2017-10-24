@@ -1,4 +1,4 @@
-#include "GlPassBufferTest.hpp"
+﻿#include "GlPassBufferTest.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -159,7 +159,7 @@ namespace Testing
 		struct Result
 		{
 		public:
-			Result( Engine & engine )
+			explicit Result( Engine & engine )
 				: output1{ doCreateTexture( engine ) }
 				, output2{ doCreateTexture( engine ) }
 				, output3{ doCreateTexture( engine ) }

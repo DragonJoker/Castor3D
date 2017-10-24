@@ -1,4 +1,4 @@
-#include "Config/PlatformConfig.hpp"
+﻿#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
@@ -81,7 +81,7 @@ namespace castor
 
 #else
 
-		p_tm = localtime( p_pTime );
+		*p_tm = *localtime( p_pTime );
 
 #endif
 	}

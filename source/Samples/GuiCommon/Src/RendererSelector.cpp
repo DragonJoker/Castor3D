@@ -87,7 +87,7 @@ namespace GuiCommon
 		castor::String result = RENDERER_TYPE_UNDEFINED;
 		uint32_t selected = m_pListRenderers->GetSelection();
 
-		if ( selected >= 0 && selected < m_pListRenderers->GetCount() )
+		if ( selected < m_pListRenderers->GetCount() )
 		{
 			result = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( selected ) )->getRendererType();
 		}

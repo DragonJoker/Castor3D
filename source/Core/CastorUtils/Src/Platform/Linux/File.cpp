@@ -1,4 +1,4 @@
-#include "Config/PlatformConfig.hpp"
+﻿#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_LINUX )
 
@@ -243,7 +243,7 @@ namespace castor
 	{
 		struct FileFunction
 		{
-			FileFunction( PathArray & p_files )
+			explicit FileFunction( PathArray & p_files )
 				: m_files( p_files )
 			{
 			}
@@ -258,7 +258,7 @@ namespace castor
 		{
 			struct DirectoryFunction
 			{
-				DirectoryFunction( PathArray & p_files )
+				explicit DirectoryFunction( PathArray & p_files )
 					: m_files( p_files )
 				{
 				}

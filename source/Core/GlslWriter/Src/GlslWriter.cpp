@@ -1,4 +1,4 @@
-﻿#include "GlslWriter.hpp"
+#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
 
@@ -11,7 +11,12 @@ namespace glsl
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( p_config )
 	{
-		*this << glsl::Version() << Endl();
+		*this << glsl::Version() << endl;
+
+#if !defined( NDEBUG )
+		*this << "#pragma optimize(off)" << endl;
+		*this << "#pragma debug(on)" << endl;
+#endif
 	}
 
 	GlslWriter::GlslWriter( GlslWriter const & p_rhs )

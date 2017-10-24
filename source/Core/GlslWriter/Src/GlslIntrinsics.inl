@@ -528,6 +528,174 @@
 		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
 	}
 
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Optional< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Value const & b, Optional< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Optional< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Value const & b, Optional< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Optional< Value > const & b, Optional< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Optional< Value > const & a, Optional< Value > const & b, Optional< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InParam< Value > const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, InParam< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Value const & b, InParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InParam< Value > const & a, InParam< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InParam< Value > const & a, Value const & b, InParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, InParam< Value > const & b, InParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InParam< Value > const & a, InParam< Value > const & b, InParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( OutParam< Value > const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, OutParam< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Value const & b, OutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( OutParam< Value > const & a, OutParam< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( OutParam< Value > const & a, Value const & b, OutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, OutParam< Value > const & b, OutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( OutParam< Value > const & a, OutParam< Value > const & b, OutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InOutParam< Value > const & a, Value const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, InOutParam< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, Value const & b, InOutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InOutParam< Value > const & a, InOutParam< Value > const & b, Value const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InOutParam< Value > const & a, Value const & b, InOutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( Value const & a, InOutParam< Value > const & b, InOutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
+	template< typename Value >
+	inline Value fma( InOutParam< Value > const & a, InOutParam< Value > const & b, InOutParam< Value > const & c )
+	{
+		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+	}
+
 	//***********************************************************************************************
 
 	template< typename ... Values >

@@ -92,7 +92,6 @@ namespace Loop
 
 	void Subdivider::doDivide()
 	{
-		uint32_t size = uint32_t( m_facesEdges.size() );
 		FaceEdgesPtrArray old;
 		std::swap( old, m_facesEdges );
 

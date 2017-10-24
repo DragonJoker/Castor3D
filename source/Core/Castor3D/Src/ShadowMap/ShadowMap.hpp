@@ -1,30 +1,10 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMap_H___
 #define ___C3D_ShadowMap_H___
 
 #include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Miscellaneous/GaussianBlur.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -48,14 +28,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	shadowMaps	The shadow maps.
+		 *\param[in]	shadowMap	The shadow map.
+		 *\param[in]	depthMap	The depth map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	shadowMaps	Les textures d'ombres.
+		 *\param[in]	shadowMap	La texture d'ombres.
+		 *\param[in]	depthMap	La texture de profondeur.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
+			, TextureUnit && depthMap
 			, ShadowMapPassSPtr pass );
 		/**
 		 *\~english
@@ -146,9 +129,9 @@ namespace castor3d
 			, ComparisonFunc alphaFunc )const;
 		/**
 		 *\~english
-		 *\return		The shadow maps.
+		 *\return		The shadow map.
 		 *\~english
-		 *\return		Les textures d'ombres.
+		 *\return		La texture d'ombres.
 		 */
 		inline TextureUnit & getTexture()
 		{
@@ -156,13 +139,33 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The shadow maps.
+		 *\return		The shadow map.
 		 *\~english
-		 *\return		Les textures d'ombres.
+		 *\return		La texture d'ombres.
 		 */
 		inline TextureUnit const & getTexture()const
 		{
 			return m_shadowMap;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map.
+		 *\~english
+		 *\return		La texture de profondeur.
+		 */
+		inline TextureUnit & getDepth()
+		{
+			return m_depthMap;
+		}
+		/**
+		 *\~english
+		 *\return		The depth map.
+		 *\~english
+		 *\return		La texture de profondeur.
+		 */
+		inline TextureUnit const & getDepth()const
+		{
+			return m_depthMap;
 		}
 
 	private:
@@ -249,9 +252,9 @@ namespace castor3d
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
 		TextureUnit m_shadowMap;
-		//!\~english	The Gaussian blur pass.
-		//!\~french		La passe de flou Gaussien.
-		std::unique_ptr< GaussianBlur > m_blur;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		TextureUnit m_depthMap;
 	};
 }
 

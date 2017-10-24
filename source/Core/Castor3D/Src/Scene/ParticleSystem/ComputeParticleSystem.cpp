@@ -1,4 +1,4 @@
-#include "ComputeParticleSystem.hpp"
+﻿#include "ComputeParticleSystem.hpp"
 
 #include "ParticleSystem.hpp"
 #include "Particle.hpp"
@@ -158,7 +158,7 @@ namespace castor3d
 	{
 		m_updateProgram = p_program;
 
-		auto & atomic = m_updateProgram->createAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
+		m_updateProgram->createAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
 		m_generatedCountBuffer = m_updateProgram->findAtomicCounterBuffer( cuT( "Counters" ) );
 
 		m_randomStorage = std::make_shared< ShaderStorageBuffer >( *m_parent.getScene()->getEngine() );
@@ -204,8 +204,6 @@ namespace castor3d
 
 	bool ComputeParticleSystem::doCreateRandomStorage()
 	{
-		auto & engine = *m_parent.getScene()->getEngine();
-		auto & renderSystem = *engine.getRenderSystem();
 		auto size = uint32_t( 1024u * 4u * sizeof( float ) );
 		m_randomStorage->resize( size );
 		bool result = m_randomStorage->initialise( BufferAccessType::eStatic, BufferAccessNature::eRead );

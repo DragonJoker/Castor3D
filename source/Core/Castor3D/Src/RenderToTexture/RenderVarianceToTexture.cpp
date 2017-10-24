@@ -1,4 +1,4 @@
-﻿#include "RenderVarianceToTexture.hpp"
+#include "RenderVarianceToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -124,11 +124,11 @@ namespace castor3d
 		matrixUbo.update( m_viewport.getProjection() );
 		pipeline.apply();
 
-		texture.bind( 0u );
-		m_sampler->bind( 0u );
+		texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		texture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderVarianceToTexture::doCreateProgramDepth()
@@ -171,7 +171,8 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDiffuse, vtx_texture.xy() ).x() );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, texture( c3d_mapDiffuse, vtx_texture.xy() ).x() );
 				depth = 1.0_f - writer.paren( 1.0_f - depth ) * 25.0f;
 				pxl_fragColor = vec4( vec3( depth ), 1.0 );
 			} );
@@ -184,7 +185,6 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}
@@ -229,8 +229,9 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDiffuse, vtx_texture.xy() ).y() );
-				//depth = 1.0_f - writer.paren( 1.0_f - depth ) * 25.0f;
+				auto depth = writer.declLocale( cuT( "depth" )
+					, glsl::sqrt( texture( c3d_mapDiffuse, vtx_texture.xy() ).y() ) );
+				depth = 1.0_f - writer.paren( 1.0_f - depth ) * 25.0f;
 				pxl_fragColor = vec4( vec3( glsl::sqrt( depth ) ), 1.0 );
 			} );
 			pxl = writer.finalise();
@@ -242,7 +243,6 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}

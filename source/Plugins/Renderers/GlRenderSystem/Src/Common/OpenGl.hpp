@@ -1,24 +1,5 @@
 ﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3DGL_GlObjects___
 #define ___C3DGL_GlObjects___
@@ -70,7 +51,7 @@ namespace GlRender
 
 		using FuncType = std::function< TRet( TParams... ) >;
 
-		inline GlFunction( CFuncType p_function )
+		inline explicit GlFunction( CFuncType p_function )
 			: m_function{ p_function }
 		{
 		}
@@ -90,7 +71,7 @@ namespace GlRender
 		inline GlFunction() = default;
 
 		template< typename FuncT >
-		inline GlFunction( FuncT p_function )
+		inline explicit GlFunction( FuncT p_function )
 			: m_function{ reinterpret_cast< FuncType >( p_function ) }
 		{
 		}
@@ -128,7 +109,7 @@ namespace GlRender
 		: public Holder
 	{
 	public:
-		TexFunctionsBase( OpenGl & p_gl );
+		explicit TexFunctionsBase( OpenGl & p_gl );
 		virtual void GenerateMipmap( GlTexDim p_target )const = 0;
 		virtual void BindTexture( GlTexDim p_target, uint32_t texture )const = 0;
 		virtual void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const = 0;
@@ -147,7 +128,7 @@ namespace GlRender
 		: public TexFunctionsBase
 	{
 	public:
-		TexFunctions( OpenGl & p_gl );
+		explicit TexFunctions( OpenGl & p_gl );
 		inline void BindTexture( GlTexDim p_target, uint32_t texture )const override;
 		inline void GenerateMipmap( GlTexDim p_target )const override;
 		inline void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const override;
@@ -176,7 +157,7 @@ namespace GlRender
 		: public TexFunctionsBase
 	{
 	public:
-		TexFunctionsDSA( OpenGl & p_gl );
+		explicit TexFunctionsDSA( OpenGl & p_gl );
 		inline void BindTexture( GlTexDim /*p_target*/, uint32_t texture )const override
 		{
 			m_uiTexture = texture;
@@ -208,7 +189,7 @@ namespace GlRender
 		: public Holder
 	{
 	public:
-		BufFunctionsBase( OpenGl & p_gl );
+		explicit BufFunctionsBase( OpenGl & p_gl );
 		virtual void BindBuffer( GlBufferTarget target, uint32_t buffer )const = 0;
 		virtual void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const = 0;
 		virtual void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const = 0;
@@ -283,7 +264,7 @@ namespace GlRender
 		: public BufFunctionsBase
 	{
 	public:
-		BufFunctions( OpenGl & p_gl );
+		explicit BufFunctions( OpenGl & p_gl );
 		inline void BindBuffer( GlBufferTarget target, uint32_t buffer )const override;
 		inline void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const override;
 		inline void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
@@ -309,7 +290,7 @@ namespace GlRender
 		: public BufFunctionsBase
 	{
 	public:
-		BufFunctionsDSA( OpenGl & p_gl );
+		explicit BufFunctionsDSA( OpenGl & p_gl );
 		inline void BindBuffer( GlBufferTarget /*target*/, uint32_t buffer )const override
 		{
 			m_uiBuffer = buffer;
@@ -355,7 +336,7 @@ namespace GlRender
 		};
 
 	public:
-		C3D_Gl_API OpenGl( GlRenderSystem & renderSystem );
+		C3D_Gl_API explicit OpenGl( GlRenderSystem & renderSystem );
 		C3D_Gl_API ~OpenGl();
 		C3D_Gl_API bool preInitialise( castor::String const & p_strExtensions );
 		C3D_Gl_API bool initialise();

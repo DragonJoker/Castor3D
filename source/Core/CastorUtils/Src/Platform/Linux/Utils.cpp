@@ -1,4 +1,4 @@
-#include "Config/PlatformConfig.hpp"
+﻿#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_LINUX )
 
@@ -135,7 +135,7 @@ namespace castor
 
 	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
 	{
-		p_tm = localtime( p_pTime );
+		*p_tm = *localtime( p_pTime );
 	}
 }
 

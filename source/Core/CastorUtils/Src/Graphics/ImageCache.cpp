@@ -51,7 +51,7 @@ namespace castor
 			{
 				result = std::make_shared< Image >( p_name, p_path );
 				Collection< Image, String >::insert( p_name, result );
-				castor::Logger::logInfo( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
+				castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 			}
 			else
 			{
@@ -84,7 +84,7 @@ namespace castor
 		{
 			result = std::make_shared< Image >( p_name, p_size, p_format );
 			Collection< Image, String >::insert( p_name, result );
-			castor::Logger::logInfo( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
+			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 		}
 
 		return result;

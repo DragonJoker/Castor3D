@@ -1,4 +1,4 @@
-#include "HaarmPieterDuikerToneMapping.hpp"
+﻿#include "HaarmPieterDuikerToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -58,7 +58,7 @@ namespace HaarmPieterDuiker
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
 
 			auto log10 = writer.implementFunction< Vec3 >( cuT( "log10" )
 				, [&]( Vec3 const & p_in )
@@ -84,10 +84,10 @@ namespace HaarmPieterDuiker
 				auto padding = writer.declLocale( cuT( "Padding" ), Float( 0.5 ) / filmLutWidth );
 
 				//  apply response lookup and color grading for target display
-				pxl_fragColor.r() = mix( padding, 1.0f - padding, logColor.r() );
-				pxl_fragColor.g() = mix( padding, 1.0f - padding, logColor.g() );
-				pxl_fragColor.b() = mix( padding, 1.0f - padding, logColor.b() );
-				pxl_fragColor.a() = 1.0f;
+				pxl_rgb.r() = mix( padding, 1.0f - padding, logColor.r() );
+				pxl_rgb.g() = mix( padding, 1.0f - padding, logColor.g() );
+				pxl_rgb.b() = mix( padding, 1.0f - padding, logColor.b() );
+				pxl_rgb.a() = 1.0f;
 			} );
 
 			pxl = writer.finalise();

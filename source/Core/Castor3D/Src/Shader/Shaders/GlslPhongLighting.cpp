@@ -233,7 +233,7 @@ namespace castor3d
 								, m_shadowModel->computePointShadow( fragmentIn.m_vertex
 									, light.m_position().xyz()
 									, fragmentIn.m_normal
-									, light.m_farPlane()
+									, light.m_lightBase().m_farPlane()
 									, light.m_index() ) );
 						}
 						FI;
@@ -247,9 +247,11 @@ namespace castor3d
 						, fragmentIn
 						, output );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, light.m_attenuation().x()
-						+ light.m_attenuation().y() * distance
-						+ light.m_attenuation().z() * distance * distance );
+						, glsl::fma( light.m_attenuation().z()
+							, distance * distance
+							, glsl::fma( light.m_attenuation().y()
+								, distance
+								, light.m_attenuation().x() ) ) );
 					parentOutput.m_diffuse += output.m_diffuse / attenuation;
 					parentOutput.m_specular += output.m_specular / attenuation;
 				}
@@ -312,10 +314,14 @@ namespace castor3d
 							, fragmentIn
 							, output );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, light.m_attenuation().x()
-							+ light.m_attenuation().y() * distance
-							+ light.m_attenuation().z() * distance * distance );
-						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
+							, glsl::fma( light.m_attenuation().z()
+								, distance * distance
+								, glsl::fma( light.m_attenuation().y()
+									, distance
+									, light.m_attenuation().x() ) ) );
+						spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
+							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
+							, 1.0_f );
 						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
 						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 					}
@@ -360,7 +366,7 @@ namespace castor3d
 							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
 								, light.m_position().xyz()
 								, fragmentIn.m_normal
-								, light.m_farPlane() ) );
+								, light.m_lightBase().m_farPlane() ) );
 					}
 
 					doComputeLight( light.m_lightBase()
@@ -371,9 +377,11 @@ namespace castor3d
 						, fragmentIn
 						, output );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, light.m_attenuation().x()
-						+ light.m_attenuation().y() * distance
-						+ light.m_attenuation().z() * distance * distance );
+						, glsl::fma( light.m_attenuation().z()
+							, distance * distance
+							, glsl::fma( light.m_attenuation().y()
+								, distance
+								, light.m_attenuation().x() ) ) );
 					parentOutput.m_diffuse += output.m_diffuse / attenuation;
 					parentOutput.m_specular += output.m_specular / attenuation;
 				}
@@ -431,10 +439,16 @@ namespace castor3d
 							, fragmentIn
 							, output );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, light.m_attenuation().x()
-							+ light.m_attenuation().y() * distance
-							+ light.m_attenuation().z() * distance * distance );
-						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
+							, glsl::fma( light.m_attenuation().z()
+								, distance * distance
+								, glsl::fma( light.m_attenuation().y()
+									, distance
+									, light.m_attenuation().x() ) ) );
+						spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
+							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
+							, 1.0_f );
+						auto factor = m_writer.declLocale( cuT( "factor" )
+							, vec3( spotFactor ) );
 						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
 						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 					}
@@ -486,9 +500,11 @@ namespace castor3d
 							, lightDirection
 							, fragmentIn ) );
 					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, light.m_attenuation().x()
-						+ light.m_attenuation().y() * distance
-						+ light.m_attenuation().z() * distance * distance );
+						, glsl::fma( light.m_attenuation().z()
+							, distance * distance
+							, glsl::fma( light.m_attenuation().y()
+								, distance
+								, light.m_attenuation().x() ) ) );
 					m_writer.returnStmt( backLit / attenuation );
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
@@ -521,10 +537,14 @@ namespace castor3d
 							, lightDirection
 							, fragmentIn );
 						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, light.m_attenuation().x()
-							+ light.m_attenuation().y() * distance
-							+ light.m_attenuation().z() * distance * distance );
-						spotFactor = m_writer.paren( 1.0_f - m_writer.paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() ) );
+							, glsl::fma( light.m_attenuation().z()
+								, distance * distance
+								, glsl::fma( light.m_attenuation().y()
+									, distance
+									, light.m_attenuation().x() ) ) );
+						spotFactor = glsl::fma( m_writer.paren( 1.0_f - spotFactor )
+							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
+							, 1.0_f );
 						backLit = spotFactor * backLit / attenuation;
 					}
 					FI;

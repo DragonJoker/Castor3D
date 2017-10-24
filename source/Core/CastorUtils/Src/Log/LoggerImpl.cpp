@@ -10,8 +10,8 @@ namespace castor
 	class LoggerImpl;
 
 	LoggerImpl::LoggerImpl( LogType p_level )
+		: m_console{ std::make_unique< ProgramConsole >( p_level < LogType::eInfo ) }
 	{
-		m_console = std::make_unique< ProgramConsole >( p_level < LogType::eInfo );
 	}
 
 	LoggerImpl::~LoggerImpl()

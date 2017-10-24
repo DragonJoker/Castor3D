@@ -50,15 +50,15 @@ namespace castor
 			const Regex regex{ regexString };
 			auto begin = std::begin( params );
 			auto end = std::end( params );
-			const SRegexIterator it( begin, end, regex );
-			const SRegexIterator endit;
+			const RegexIterator it( begin, end, regex );
+			const RegexIterator endit;
 			result = it != endit && it->size() >= count;
 
 			if ( result )
 			{
 				for ( size_t i = 1; i <= count; ++i )
 				{
-					std::basic_istringstream< xchar > stream( ( *it )[i] );
+					InputStringStream stream( ( *it )[i] );
 					stream >> value[i - 1];
 				}
 
@@ -565,8 +565,8 @@ namespace castor
 					const Regex regex{ regexString };
 					auto begin = std::begin( params );
 					auto end = std::end( params );
-					const SRegexIterator it( begin, end, regex );
-					const SRegexIterator endit;
+					const RegexIterator it( begin, end, regex );
+					const RegexIterator endit;
 					result = it != endit && it->size() >= 1;
 
 					if ( result )
@@ -586,7 +586,7 @@ namespace castor
 									text = "FF" + text;
 								}
 
-								std::basic_istringstream< xchar > stream{ text };
+								InputStringStream stream{ text };
 								stream >> std::hex >> colour;
 							}
 						}
@@ -675,8 +675,8 @@ namespace castor
 					const Regex regex{ regexString };
 					auto begin = std::begin( params );
 					auto end = std::end( params );
-					const SRegexIterator it( begin, end, regex );
-					const SRegexIterator endit;
+					const RegexIterator it( begin, end, regex );
+					const RegexIterator endit;
 					result = it != endit && it->size() >= 1;
 
 					if ( result )
@@ -696,7 +696,7 @@ namespace castor
 									text = "FF" + text;
 								}
 
-								std::basic_istringstream< xchar > stream{ text };
+								InputStringStream stream{ text };
 								stream >> std::hex >> colour;
 							}
 						}
@@ -752,8 +752,8 @@ namespace castor
 		Regex regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
 		auto begin = std::begin( params );
 		auto end = std::end( params );
-		SRegexIterator it( begin, end, regex );
-		SRegexIterator endit;
+		RegexIterator it( begin, end, regex );
+		RegexIterator endit;
 
 		if ( it != endit && it->size() > 2 )
 		{

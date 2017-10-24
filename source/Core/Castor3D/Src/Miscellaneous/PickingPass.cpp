@@ -133,8 +133,6 @@ namespace castor3d
 		{
 			uint32_t pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
 			uint32_t nodeIndex{ uint32_t( p_index[1] ) };
-			uint32_t instanceIndex{ uint32_t( p_index[2] ) };
-			uint32_t faceIndex{ uint32_t( p_index[3] ) };
 
 			REQUIRE( p_map.size() > pipelineIndex );
 			auto itPipeline = p_map.begin();
@@ -171,6 +169,8 @@ namespace castor3d
 			if ( itPass != itPipeline->second.end()
 					&& itMesh != itPass->second.end() )
 			{
+				uint32_t instanceIndex{ uint32_t( p_index[2] ) };
+				uint32_t faceIndex{ uint32_t( p_index[3] ) };
 				REQUIRE( !itMesh->second.empty() );
 				auto itNode = itMesh->second.begin() + instanceIndex;
 

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_POINT_PROPERTIES_H___
 #define ___GUICOMMON_POINT_PROPERTIES_H___
@@ -65,8 +46,20 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( PointProperty )
 
 	public:
-		PointProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
-		PointProperty( wxString const( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+		PointProperty( wxString const & label = wxPG_LABEL
+			, wxString const & name = wxPG_LABEL
+			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+		PointProperty( wxString const & label
+			, wxString const & name
+			, castor::Coords< T, Count > const & value );
+		PointProperty( wxString const( & p_names )[Count]
+			, wxString const & label = wxPG_LABEL
+			, wxString const & name = wxPG_LABEL
+			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+		PointProperty( wxString const( & p_names )[Count]
+			, wxString const & label
+			, wxString const & name
+			, castor::Coords< T, Count > const & value );
 		virtual ~PointProperty();
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;

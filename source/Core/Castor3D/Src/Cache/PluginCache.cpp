@@ -1,4 +1,4 @@
-#include "PluginCache.hpp"
+﻿#include "PluginCache.hpp"
 
 #include "Engine.hpp"
 
@@ -23,15 +23,15 @@ namespace castor3d
 	static const String getTypeFunctionABIName = cuT( "getType" );
 
 	PluginCache::Cache( Engine & engine
-						, Producer && p_produce
-						, Initialiser && p_initialise
-						, Cleaner && p_clean
-						, Merger && p_merge )
+		, Producer && produce
+		, Initialiser && initialise
+		, Cleaner && clean
+		, Merger && merge )
 		: MyCacheType( engine
-					   , std::move( p_produce )
-					   , std::move( p_initialise )
-					   , std::move( p_clean )
-					   , std::move( p_merge ) )
+			, std::move( produce )
+			, std::move( initialise )
+			, std::move( clean )
+			, std::move( merge ) )
 	{
 	}
 
@@ -152,7 +152,7 @@ namespace castor3d
 					}
 					catch ( ... )
 					{
-						Logger::logInfo( cuT( "Can't load plug-in : " ) + file );
+						Logger::logWarning( cuT( "Can't load plug-in : " ) + file );
 					}
 				}
 			}
@@ -239,8 +239,6 @@ namespace castor3d
 
 			Version toCheck( 0, 0 );
 			result->getRequiredVersion( toCheck );
-			String strToLog( cuT( "Plug-in [" ) );
-			Logger::logInfo( StringStream() << strToLog << result->getName() << cuT( "] - Required engine version : " ) << toCheck );
 			Version version = getEngine()->getVersion();
 
 			if ( toCheck <= version )
@@ -254,8 +252,7 @@ namespace castor3d
 					auto lockLibraries = makeUniqueLock( m_mutexLibraries );
 					m_libraries[size_t( type )].insert( std::make_pair( p_pathFile, library ) );
 				}
-				strToLog = cuT( "Plug-in [" );
-				Logger::logInfo( strToLog + result->getName() + cuT( "] loaded" ) );
+				Logger::logInfo( StringStream() << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) );
 			}
 			else
 			{

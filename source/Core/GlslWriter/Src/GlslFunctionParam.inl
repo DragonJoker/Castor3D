@@ -81,7 +81,7 @@ namespace glsl
 	InArrayParam< TypeT >::InArrayParam( GlslWriter * writer
 		, castor::String const & name
 		, uint32_t count )
-		: Array< TypeT >( writer, name )
+		: Array< TypeT >( writer, name, count )
 	{
 		TypeT::m_type = cuT( "in " ) + TypeT::m_type + cuT( "[" ) + toString( count ) + cuT( "]" );
 	}
@@ -107,7 +107,7 @@ namespace glsl
 	OutArrayParam< TypeT >::OutArrayParam( GlslWriter * writer
 		, castor::String const & name
 		, uint32_t count )
-		: Array< TypeT >( writer, name )
+		: Array< TypeT >( writer, name, count )
 	{
 		TypeT::m_type = cuT( "out " ) + TypeT::m_type + cuT( "[" ) + toString( count ) + cuT( "]" );
 	}
@@ -133,7 +133,7 @@ namespace glsl
 	InOutArrayParam< TypeT >::InOutArrayParam( GlslWriter * writer
 		, castor::String const & name
 		, uint32_t count )
-		: Array< TypeT >( writer, name )
+		: Array< TypeT >( writer, name, count )
 	{
 		TypeT::m_type = cuT( "inout " ) + TypeT::m_type + cuT( "[" ) + toString( count ) + cuT( "]" );
 	}

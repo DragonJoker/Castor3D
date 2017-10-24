@@ -643,7 +643,6 @@ namespace C3dFbx
 				FbxTakeInfo * takeInfo = p_fbxScene->GetTakeInfo( name );
 				uint64_t start = takeInfo->mLocalTimeSpan.GetStart().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t finish = takeInfo->mLocalTimeSpan.GetStop().GetFrameCount( FbxTime::eFrames24 );
-				uint64_t animationLength = finish - start + 1;
 				SkeletonAnimationObjectSPtr object;
 
 				if ( bone->getParent() )
@@ -852,7 +851,6 @@ namespace C3dFbx
 
 			if ( doRetrieveMeshValues( cuT( "Normals" ), p_fbxMesh, normals, nml ) )
 			{
-				index = 0u;
 				real * buffer{ nml.data() };
 
 				for ( auto & vertex : vertices )
@@ -867,7 +865,6 @@ namespace C3dFbx
 
 			if ( doRetrieveMeshValues( cuT( "Texture UVs" ), p_fbxMesh, uvs, tex ) )
 			{
-				index = 0u;
 				real * buffer{ tex.data() };
 
 				for ( auto & vertex : vertices )
@@ -887,7 +884,6 @@ namespace C3dFbx
 
 				if ( doRetrieveMeshValues( cuT( "Tangents" ), p_fbxMesh, tangents, tan ) )
 				{
-					index = 0u;
 					real * buffer{ tan.data() };
 
 					for ( auto & vertex : vertices )
@@ -902,7 +898,6 @@ namespace C3dFbx
 
 				if ( doRetrieveMeshValues( cuT( "Bitangents" ), p_fbxMesh, bitangents, bit ) )
 				{
-					index = 0u;
 					real * buffer{ bit.data() };
 
 					for ( auto & vertex : vertices )

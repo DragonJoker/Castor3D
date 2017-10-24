@@ -1,4 +1,4 @@
-#include "StcContext.hpp"
+﻿#include "StcContext.hpp"
 #include "LanguageFileParser.hpp"
 #include "LanguageInfo.hpp"
 
@@ -25,7 +25,7 @@ namespace GuiCommon
 
 	StcContext::~StcContext()
 	{
-		castor::clearContainer( m_arrayLanguages );
+		m_arrayLanguages.clear();
 	}
 
 	void StcContext::parseFile( wxString const & p_strFileName )

@@ -14,6 +14,9 @@ namespace castor3d
 {
 	namespace shader
 	{
+		castor::String const SubsurfaceScattering::TransmittanceProfile = cuT( "c3d_transmittanceProfile" );
+		castor::String const SubsurfaceScattering::ProfileFactorsCount = cuT( "c3d_profileFactorsCount" );
+
 		SubsurfaceScattering::SubsurfaceScattering( GlslWriter & writer
 			, bool shadowMap )
 			: m_writer{ writer }
@@ -25,6 +28,8 @@ namespace castor3d
 		{
 			if ( m_shadowMap )
 			{
+				auto c3d_transmittanceProfile = m_writer.declUniform< Vec4 >( SubsurfaceScattering::TransmittanceProfile, 10u );
+				auto c3d_profileFactorsCount = m_writer.declUniform< Int >( SubsurfaceScattering::ProfileFactorsCount );
 				doDeclareGetTransformedPosition();
 			}
 
@@ -32,19 +37,19 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 			{
-				doDeclareComputeDirectionalLightDist();
+				doDeclareComputeDirectionalTransmittance();
 				break;
 			}
 
 			case LightType::ePoint:
 			{
-				doDeclareComputePointLightDist();
+				doDeclareComputePointTransmittance();
 				break;
 			}
 
 			case LightType::eSpot:
 			{
-				doDeclareComputeSpotLightDist();
+				doDeclareComputeSpotTransmittance();
 				break;
 			}
 
@@ -53,346 +58,139 @@ namespace castor3d
 			}
 		}
 		
-		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
-			, LegacyMaterial const & material
+		Vec3 SubsurfaceScattering::compute( BaseMaterial const & material
 			, DirectionalLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
 			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye )const
+			, Float const & translucency )const
 		{
 			auto result = m_writer.declLocale( cuT( "result" )
 				, vec3( 0.0_f ) );
 
 			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, shader::FragmentInput( position, -normal ) );
+				result = doComputeTransmittance( light
+					, uv
+					, material.m_transmittanceProfileSize()
+					, material.m_transmittanceProfile()
+					, material.m_gaussianWidth()
+					, position
+					, normal
+					, translucency );
 			}
 			FI;
 
 			return result;
 		}
 
-		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
-			, LegacyMaterial const & material
+		Vec3 SubsurfaceScattering::compute( BaseMaterial const & material
 			, PointLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
 			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye )const
+			, Float const & translucency )const
 		{
 			auto result = m_writer.declLocale( cuT( "result" )
 				, vec3( 0.0_f ) );
 
 			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, shader::FragmentInput( position, -normal ) );
+				result = doComputeTransmittance( light
+					, uv
+					, material.m_transmittanceProfileSize()
+					, material.m_transmittanceProfile()
+					, material.m_gaussianWidth()
+					, position
+					, normal
+					, translucency );
 			}
 			FI;
 
 			return result;
 		}
 
-		Vec3 SubsurfaceScattering::compute( PhongLightingModel const & lighting
-			, LegacyMaterial const & material
+		Vec3 SubsurfaceScattering::compute( BaseMaterial const & material
 			, SpotLight const & light
 			, Vec2 const & uv
 			, Vec3 const & position
 			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye )const
+			, Float const & translucency )const
 		{
 			auto result = m_writer.declLocale( cuT( "result" )
 				, vec3( 0.0_f ) );
 
 			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, shader::FragmentInput( position, -normal ) );
+				result = doComputeTransmittance( light
+					, uv
+					, material.m_transmittanceProfileSize()
+					, material.m_transmittanceProfile()
+					, material.m_gaussianWidth()
+					, position
+					, normal
+					, translucency );
 			}
 			FI;
 
 			return result;
 		}
 
-		Vec3 SubsurfaceScattering::compute( MetallicBrdfLightingModel const & lighting
-			, MetallicRoughnessMaterial const & material
-			, DirectionalLight const & light
+		Vec3 SubsurfaceScattering::doComputeTransmittance( DirectionalLight const & light
 			, Vec2 const & uv
+			, glsl::Int const & transmittanceProfileSize
+			, glsl::Array< glsl::Vec4 > const & transmittanceProfile
+			, Float const & width
 			, Vec3 const & position
 			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye
-			, Vec3 const & albedo
-			, Float const & metallic )const
+			, Float const & translucency )const
 		{
-			auto result = m_writer.declLocale( cuT( "result" )
-				, vec3( 0.0_f ) );
-
-			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-#if !C3D_DEBUG_SSS_TRANSMITTANCE
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, albedo
-						, metallic
-						, shader::FragmentInput( position, -normal ) )
-#endif
-					;
-			}
-			FI;
-
-			return result;
-		}
-
-		Vec3 SubsurfaceScattering::compute( MetallicBrdfLightingModel const & lighting
-			, MetallicRoughnessMaterial const & material
-			, PointLight const & light
-			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye
-			, Vec3 const & albedo
-			, Float const & metallic )const
-		{
-			auto result = m_writer.declLocale( cuT( "result" )
-				, vec3( 0.0_f ) );
-
-			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-#if !C3D_DEBUG_SSS_TRANSMITTANCE
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, albedo
-						, metallic
-						, shader::FragmentInput( position, -normal ) )
-#endif
-					;
-			}
-			FI;
-
-			return result;
-		}
-
-		Vec3 SubsurfaceScattering::compute( MetallicBrdfLightingModel const & lighting
-			, MetallicRoughnessMaterial const & material
-			, SpotLight const & light
-			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye
-			, Vec3 const & albedo
-			, Float const & metallic )const
-		{
-			auto result = m_writer.declLocale( cuT( "result" )
-				, vec3( 0.0_f ) );
-
-			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-#if !C3D_DEBUG_SSS_TRANSMITTANCE
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, albedo
-						, metallic
-						, shader::FragmentInput( position, -normal ) )
-#endif
-					;
-			}
-			FI;
-
-			return result;
-		}
-
-		Vec3 SubsurfaceScattering::compute( SpecularBrdfLightingModel const & lighting
-			, SpecularGlossinessMaterial const & material
-			, DirectionalLight const & light
-			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye
-			, Vec3 const & specular )const
-		{
-			auto result = m_writer.declLocale( cuT( "result" )
-				, vec3( 0.0_f ) );
-
-			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, specular
-						, shader::FragmentInput( position, -normal ) );
-			}
-			FI;
-
-			return result;
-		}
-
-		Vec3 SubsurfaceScattering::compute( SpecularBrdfLightingModel const & lighting
-			, SpecularGlossinessMaterial const & material
-			, PointLight const & light
-			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye
-			, Vec3 const & specular )const
-		{
-			auto result = m_writer.declLocale( cuT( "result" )
-				, vec3( 0.0_f ) );
-
-			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, specular
-						, shader::FragmentInput( position, -normal ) );
-			}
-			FI;
-
-			return result;
-		}
-
-		Vec3 SubsurfaceScattering::compute( SpecularBrdfLightingModel const & lighting
-			, SpecularGlossinessMaterial const & material
-			, SpotLight const & light
-			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
-			, Float const & translucency
-			, Vec3 const & eye
-			, Vec3 const & specular )const
-		{
-			auto result = m_writer.declLocale( cuT( "result" )
-				, vec3( 0.0_f ) );
-
-			IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
-			{
-				result = doComputeLightDist( light
-						, uv
-						, material.m_distanceBasedTransmission()
-						, material.m_backLitCoefficient()
-						, position
-						, normal )
-					* translucency
-					* lighting.computeBackLit( light
-						, eye
-						, specular
-						, shader::FragmentInput( position, -normal ) );
-			}
-			FI;
-
-			return result;
-		}
-
-		Vec3 SubsurfaceScattering::doComputeLightDist( DirectionalLight const & light
-			, Vec2 const & uv
-			, glsl::Int const & distanceBasedTransmission
-			, Vec3 const & coefficient
-			, Vec3 const & position
-			, Vec3 const & normal )const
-		{
-			return m_computeDirectionalLightDist( light
+			return m_computeDirectionalTransmittance( light
 				, uv
-				, distanceBasedTransmission
-				, coefficient
+				, transmittanceProfileSize
+				, transmittanceProfile
+				, width
 				, position
-				, normal );
+				, normal
+				, translucency );
 		}
 
-		Vec3 SubsurfaceScattering::doComputeLightDist( PointLight const & light
+		Vec3 SubsurfaceScattering::doComputeTransmittance( PointLight const & light
 			, Vec2 const & uv
-			, glsl::Int const & distanceBasedTransmission
-			, Vec3 const & coefficient
+			, glsl::Int const & transmittanceProfileSize
+			, glsl::Array< glsl::Vec4 > const & transmittanceProfile
+			, Float const & width
 			, Vec3 const & position
-			, Vec3 const & normal )const
+			, Vec3 const & normal
+			, Float const & translucency )const
 		{
-			return m_computePointLightDist( light
+			return m_computePointTransmittance( light
 				, uv
-				, distanceBasedTransmission
-				, coefficient
+				, transmittanceProfileSize
+				, transmittanceProfile
+				, width
 				, position
-				, normal );
+				, normal
+				, translucency );
 		}
 
-		Vec3 SubsurfaceScattering::doComputeLightDist( SpotLight const & light
+		Vec3 SubsurfaceScattering::doComputeTransmittance( SpotLight const & light
 			, Vec2 const & uv
-			, glsl::Int const & distanceBasedTransmission
-			, Vec3 const & coefficient
+			, glsl::Int const & transmittanceProfileSize
+			, glsl::Array< glsl::Vec4 > const & transmittanceProfile
+			, Float const & width
 			, Vec3 const & position
-			, Vec3 const & normal )const
+			, Vec3 const & normal
+			, Float const & translucency )const
 		{
-			return m_computeSpotLightDist( light
+			return m_computeSpotTransmittance( light
 				, uv
-				, distanceBasedTransmission
-				, coefficient
+				, transmittanceProfileSize
+				, transmittanceProfile
+				, width
 				, position
-				, normal );
+				, normal
+				, translucency );
 		}
 		
 		void SubsurfaceScattering::doDeclareGetTransformedPosition()
@@ -403,38 +201,38 @@ namespace castor3d
 				{
 					auto transformed = m_writer.declLocale( cuT( "transformed" )
 						, transform * vec4( position, 1.0_f ) );
-					// Perspective divide (result in range [-1,1]).
-					transformed.xyz() = transformed.xyz() / transformed.w();
-					// Now put the position in range [0,1].
-					m_writer.returnStmt( m_writer.paren( transformed.xyz() * 0.5_f ) + 0.5_f );
+					// Perspective divide (result in range [0,1]).
+					m_writer.returnStmt( transformed.xyz() / transformed.w() );
 				}
 				, InVec3( &m_writer, cuT( "position" ) )
 				, InMat4( &m_writer, cuT( "transform" ) ) );
 		}
 
-		void SubsurfaceScattering::doDeclareComputeDirectionalLightDist()
+		void SubsurfaceScattering::doDeclareComputeDirectionalTransmittance()
 		{
-			m_computeDirectionalLightDist = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightDist" )
+			m_computeDirectionalTransmittance = m_writer.implementFunction< Vec3 >( cuT( "computeDirectionalLightDist" )
 				, [this]( DirectionalLight const & light
 					, Vec2 const & uv
-					, Int const & distanceBasedTransmission
-					, Vec3 const & coefficient
+					, glsl::Int const & transmittanceProfileSize
+					, glsl::Array< glsl::Vec4 > const & transmittanceProfile
+					, Float const & width
 					, Vec3 const & position
-					, Vec3 const & normal )
+					, Vec3 const & normal
+					, Float const & translucency )
 				{
 					auto factor = m_writer.declLocale( cuT( "factor" )
-						, coefficient );
+						, vec3( 0.0_f ) );
 
 					if ( m_shadowMap )
 					{
-						IF( m_writer, distanceBasedTransmission != 0_i )
+						IF( m_writer, transmittanceProfileSize > 0_i )
 						{
-							auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
+							auto c3d_mapDepthDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapDepthDirectional );
 
 							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 								, m_getTransformedPosition( position, light.m_transform() ) );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).r() );
+								, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).r() );
 							auto occluder = m_writer.declLocale( cuT( "occluder" )
 								, writeFunctionCall< Vec3 >( &m_writer
 									, cuT( "calcWSPosition" )
@@ -452,38 +250,42 @@ namespace castor3d
 				}
 				, InParam< DirectionalLight >{ &m_writer, cuT( "light" ) }
 				, InVec2{ &m_writer, cuT( "uv" ) }
-				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
-				, InVec3{ &m_writer, cuT( "coefficient" ) }
+				, InInt{ &m_writer, cuT( "transmittanceProfileSize" ) }
+				, InArrayParam< Vec4 >{ &m_writer, cuT( "transmittanceProfile" ), 10u }
+				, InFloat{ &m_writer, cuT( "width" ) }
 				, InVec3{ &m_writer, cuT( "position" ) }
-				, InVec3{ &m_writer, cuT( "normal" ) } );
+				, InVec3{ &m_writer, cuT( "normal" ) }
+				, InFloat{ &m_writer, cuT( "translucency" ) } );
 		}
 
-		void SubsurfaceScattering::doDeclareComputePointLightDist()
+		void SubsurfaceScattering::doDeclareComputePointTransmittance()
 		{
-			m_computePointLightDist = m_writer.implementFunction< Vec3 >( cuT( "computePointLightDist" )
+			m_computePointTransmittance = m_writer.implementFunction< Vec3 >( cuT( "computePointLightDist" )
 				, [this]( PointLight const & light
 					, Vec2 const & uv
-					, Int const & distanceBasedTransmission
-					, Vec3 const & coefficient
+					, glsl::Int const & transmittanceProfileSize
+					, glsl::Array< glsl::Vec4 > const & transmittanceProfile
+					, Float const & width
 					, Vec3 const & position
-					, Vec3 const & normal )
+					, Vec3 const & normal
+					, Float const & translucency )
 				{
 					auto factor = m_writer.declLocale( cuT( "factor" )
-						, coefficient );
+						, vec3( 0.0_f ) );
 
 					if ( m_shadowMap )
 					{
-						IF( m_writer, distanceBasedTransmission != 0_i )
+						IF( m_writer, transmittanceProfileSize > 0_i )
 						{
 							auto c3d_mtxInvViewProj = m_writer.getBuiltin< Mat4 >( cuT( "c3d_mtxInvViewProj" ) );
-							auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapShadowPoint );
+							auto c3d_mapDepthPoint = m_writer.getBuiltin< SamplerCube >( Shadow::MapDepthPoint );
 
 							auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 								, position - light.m_position() );
 							auto direction = m_writer.declLocale( cuT( "direction" )
 								, vertexToLight );
 							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapShadowPoint, direction ).r() );
+								, texture( c3d_mapDepthPoint, direction ).r() );
 							auto occluder = m_writer.declLocale( cuT( "occluder" )
 								, writeFunctionCall< Vec3 >( &m_writer
 									, cuT( "calcWSPosition" )
@@ -501,58 +303,95 @@ namespace castor3d
 				}
 				, InParam< PointLight >{ &m_writer, cuT( "light" ) }
 				, InVec2{ &m_writer, cuT( "uv" ) }
-				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
-				, InVec3{ &m_writer, cuT( "coefficient" ) }
+				, InInt{ &m_writer, cuT( "transmittanceProfileSize" ) }
+				, InArrayParam< Vec4 >{ &m_writer, cuT( "transmittanceProfile" ), 10u }
+				, InFloat{ &m_writer, cuT( "width" ) }
 				, InVec3{ &m_writer, cuT( "position" ) }
-				, InVec3{ &m_writer, cuT( "normal" ) } );
+				, InVec3{ &m_writer, cuT( "normal" ) }
+				, InFloat{ &m_writer, cuT( "translucency" ) } );
 		}
 
-		void SubsurfaceScattering::doDeclareComputeSpotLightDist()
+		void SubsurfaceScattering::doDeclareComputeSpotTransmittance()
 		{
-			m_computeSpotLightDist = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightDist" )
+			m_computeSpotTransmittance = m_writer.implementFunction< Vec3 >( cuT( "computeSpotLightDist" )
 				, [this]( SpotLight const & light
 					, Vec2 const & uv
-					, Int const & distanceBasedTransmission
-					, Vec3 const & coefficient
+					, glsl::Int const & transmittanceProfileSize
+					, glsl::Array< glsl::Vec4 > const & transmittanceProfile
+					, Float const & width
 					, Vec3 const & position
-					, Vec3 const & normal )
+					, Vec3 const & normal
+					, Float const & translucency )
 				{
 					auto factor = m_writer.declLocale( cuT( "factor" )
-						, coefficient );
+						, vec3( 0.0_f ) );
 
 					if ( m_shadowMap )
 					{
-						IF( m_writer, distanceBasedTransmission != 0_i )
+						IF( m_writer, transmittanceProfileSize > 0_i )
 						{
-							auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
+							auto c3d_mapDepthSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapDepthSpot );
+							/**
+							 * Calculate the scale of the effect.
+							 */
+							auto scale = m_writer.declLocale( cuT( "scale" )
+								, 8.25_f * translucency / width );
 
+							/**
+							 * First we shrink the position inwards the surface to avoid artifacts:
+							 * (Note that this can be done once for all the lights)
+							 */
+							auto shrinkedPos = m_writer.declLocale( cuT( "shrinkedPos" )
+								, position - normal * 0.005 );
+
+							/**
+							 * Now we calculate the thickness from the light point of view:
+							 */
 							auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-								, m_getTransformedPosition( position, light.m_transform() ) );
-							auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
-								, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).r() );
-							auto occluder = m_writer.declLocale( cuT( "occluder" )
-								, writeFunctionCall< Vec3 >( &m_writer
-									, cuT( "calcWSPosition" )
-									, uv
-									, lightSpaceDepth
-									, inverse( light.m_transform() ) ) );
-#if C3D_DEBUG_SSS_TRANSMITTANCE
-							factor = vec3( occluder / light.m_farPlane() );
-#else
+								, m_getTransformedPosition( shrinkedPos, light.m_transform() ) );
+							auto lightSpaceDepth = m_writer.declLocale( cuT( "d1" )
+								, texture( c3d_mapDepthSpot, lightSpacePosition.xy() ).r() );
 							auto distance = m_writer.declLocale( cuT( "distance" )
-								, glsl::distance( occluder, position ) );
-							factor = coefficient * exp( -distance );
-							//lightSpaceDepth *= light.m_farPlane();
-							//auto distance = m_writer.declLocale( cuT( "distance" )
-							//	, abs( lightSpaceDepth - lightSpacePosition.z() ) );
+								, scale * glsl::abs( lightSpaceDepth - lightSpacePosition.z() ) * light.m_lightBase().m_farPlane() );
+
+#if C3D_DEBUG_SSS_TRANSMITTANCE
+
+							factor = vec3( -distance * distance );
 							//distance = -distance * distance;
 							//factor = vec3( 0.233_f, 0.455, 0.649 ) * exp( distance / 0.0064 )
 							//	+ vec3( 0.1_f, 0.336, 0.344 ) * exp( distance / 0.0484 )
-							//	+ vec3( 0.118_f, 0.198, 0.0 )   * exp( distance / 0.187 )
+							//	+ vec3( 0.118_f, 0.198, 0.0 ) * exp( distance / 0.187 )
 							//	+ vec3( 0.113_f, 0.007, 0.007 ) * exp( distance / 0.567 )
-							//	+ vec3( 0.358_f, 0.004, 0.0 )   * exp( distance / 1.99 )
-							//	+ vec3( 0.078_f, 0.0, 0.0 )   * exp( distance / 7.41 );
-							//factor = factor * clamp( 0.3_f + dot( light.m_direction(), -normal ), 0.0_f, 1.0_f );
+							//	+ vec3( 0.358_f, 0.004, 0.0 ) * exp( distance / 1.99 )
+							//	+ vec3( 0.078_f, 0.0, 0.0 ) * exp( distance / 7.41 );
+							//factor = factor * clamp( 0.3_f + dot( light.m_direction(), normal )
+							//	, 0.0_f
+							//	, 1.0_f );
+
+#else
+
+							/**
+							 * Armed with the thickness, we can now calculate the color by means of the
+							 * transmittance profile.
+							 */
+							distance = -distance * distance;
+
+							FOR( m_writer, Int, i, 0, "i < transmittanceProfileSize", "++i" )
+							{
+								auto profileFactor = m_writer.declLocale( cuT( "profileFactor" )
+									, transmittanceProfile[i] );
+								factor += profileFactor.rgb() * exp( distance / profileFactor.a() );
+							}
+							ROF;
+
+							/**
+							 * Using the profile, we finally approximate the transmitted lighting from
+							 * the back of the object:
+							 */
+							factor = factor * clamp( 0.3_f + dot( light.m_direction(), -normal )
+								, 0.0_f
+								, 1.0_f );
+
 #endif
 						}
 						FI;
@@ -562,10 +401,12 @@ namespace castor3d
 				}
 				, InParam< SpotLight >{ &m_writer, cuT( "light" ) }
 				, InVec2{ &m_writer, cuT( "uv" ) }
-				, InInt{ &m_writer, cuT( "distanceBasedTransmission" ) }
-				, InVec3{ &m_writer, cuT( "coefficient" ) }
+				, InInt{ &m_writer, cuT( "transmittanceProfileSize" ) }
+				, InArrayParam< Vec4 >{ &m_writer, cuT( "transmittanceProfile" ), 10u }
+				, InFloat{ &m_writer, cuT( "width" ) }
 				, InVec3{ &m_writer, cuT( "position" ) }
-				, InVec3{ &m_writer, cuT( "normal" ) } );
+				, InVec3{ &m_writer, cuT( "normal" ) }
+				, InFloat{ &m_writer, cuT( "translucency" ) } );
 		}
 	}
 }

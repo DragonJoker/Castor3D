@@ -41,11 +41,5 @@ namespace GuiCommon
 
 	void AnimatedObjectGroupTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		auto group = getGroup();
-		wxPGProperty * property = p_event.GetProperty();
-
-		if ( group )
-		{
-		}
 	}
 }

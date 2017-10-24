@@ -1,4 +1,4 @@
-﻿#include "Icosahedron.hpp"
+#include "Icosahedron.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -97,7 +97,6 @@ void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	vertex = Point3r( -Z, -X,  0 );
 	memcpy( vertices[index].m_pos.data(), vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( vertices[index].m_nml.data(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
-	++index;
 	submesh->addPoints( vertices );
 
 	// on construit toutes les faces de l'icosaèdre

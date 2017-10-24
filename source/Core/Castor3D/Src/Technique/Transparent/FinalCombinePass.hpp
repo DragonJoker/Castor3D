@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_FinalCombinePass_H___
 #define ___C3D_FinalCombinePass_H___
@@ -48,27 +29,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	p_vbo		The vertex buffer containing the quad.
-		 *\param[in]	p_matrixUbo	The matrix UBO.
-		 *\param[in]	p_sceneUbo	The scene UBO.
-		 *\param[in]	p_gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	p_fogType	The fog type.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	vbo			The vertex buffer containing the quad.
+		 *\param[in]	matrixUbo	The matrix UBO.
+		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	fogType		The fog type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_vbo		Le tampon de sommets contenant le quad.
-		 *\param[in]	p_matrixUbo	L'UBO des matrices.
-		 *\param[in]	p_sceneUbo	L'UBO de la scène.
-		 *\param[in]	p_gpInfoUbo	L'UBO de la geometry pass.
-		 *\param[in]	p_fogType	Le type de brouillard.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	vbo			Le tampon de sommets contenant le quad.
+		 *\param[in]	matrixUbo	L'UBO des matrices.
+		 *\param[in]	sceneUbo	L'UBO de la scène.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	fogType		Le type de brouillard.
 		 */
 		FinalCombineProgram( Engine & engine
-			, VertexBuffer & p_vbo
-			, MatrixUbo & p_matrixUbo
-			, SceneUbo & p_sceneUbo
-			, GpInfoUbo & p_gpInfoUbo
-			, FogType p_fogType );
+			, VertexBuffer & vbo
+			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo
+			, FogType fogType );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -113,15 +94,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	p_size		The render size.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The render size.
+		 *\param[in]	sceneUbo	The scene UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_size		La taille du rendu.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		La taille du rendu.
+		 *\param[in]	sceneUbo	L'UBO de la scène.
 		 */
 		FinalCombinePass( Engine & engine
-			, castor::Size const & p_size );
+			, castor::Size const & size
+			, SceneUbo & sceneUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -132,30 +116,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the combination on given framebuffer.
-		 *\param[in]	p_r				The weighted blend pass result.
-		 *\param[in]	p_frameBuffer	The target framebuffer.
-		 *\param[in]	p_camera		The viewing camera.
-		 *\param[in]	p_invViewProj	The inverse view projection matrix.
-		 *\param[in]	p_invView		The inverse view matrix.
-		 *\param[in]	p_invProj		The inverse projection matrix.
-		 *\param[in]	p_fog			The fog.
+		 *\param[in]	wbResult	The weighted blend pass result.
+		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	invViewProj	The inverse view projection matrix.
+		 *\param[in]	invView		The inverse view matrix.
+		 *\param[in]	invProj		The inverse projection matrix.
+		 *\param[in]	fog			The fog.
 		 *\~french
 		 *\brief		Dessine la combinaison sur le tampon d'image donné.
-		 *\param[in]	p_r				Le résultat de la passe de weighted blend.
-		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
-		 *\param[in]	p_camera		La caméra.
-		 *\param[in]	p_invViewProj	La matrice vue projection inversée.
-		 *\param[in]	p_invView		La matrice vue inversée.
-		 *\param[in]	p_invProj		La matrice projection inversée.
-		 *\param[in]	p_fog			Le brouillard.
+		 *\param[in]	wbResult	Le résultat de la passe de weighted blend.
+		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\param[in]	camera		La caméra.
+		 *\param[in]	invViewProj	La matrice vue projection inversée.
+		 *\param[in]	invView		La matrice vue inversée.
+		 *\param[in]	invProj		La matrice projection inversée.
+		 *\param[in]	fog			Le brouillard.
 		 */
-		void render( WeightedBlendPassResult const & p_r
-			, FrameBuffer const & p_frameBuffer
-			, Camera const & p_camera
-			, castor::Matrix4x4r const & p_invViewProj
-			, castor::Matrix4x4r const & p_invView
-			, castor::Matrix4x4r const & p_invProj
-			, Fog const & p_fog );
+		void render( WeightedBlendPassResult const & wbResult
+			, FrameBuffer const & frameBuffer
+			, Camera const & camera
+			, castor::Matrix4x4r const & invViewProj
+			, castor::Matrix4x4r const & invView
+			, castor::Matrix4x4r const & invProj
+			, FogType fogType );
 
 	private:
 		//!\~english	The render size.
@@ -172,7 +156,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		//!\~english	The scene uniform buffer.
 		//!\~french		Le tampon d'uniformes contenant les informations de la scène.
-		SceneUbo m_sceneUbo;
+		SceneUbo & m_sceneUbo;
 		//!\~english	The blend pass informations.
 		//!\~french		Les informations de la passe de mélange.
 		GpInfoUbo m_gpInfo;

@@ -42,11 +42,8 @@ namespace castor3d
 		: MeshLightPass::Program{ engine, vtx, pxl }
 		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
 		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
-		, m_lightPosition{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
-		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
 		, m_lightExponent{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_exponent" ), ShaderType::ePixel ) }
 		, m_lightCutOff{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_cutOff" ), ShaderType::ePixel ) }
-		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_farPlane" ), ShaderType::ePixel ) }
 	{
 	}
 
@@ -57,14 +54,12 @@ namespace castor3d
 	void SpotLightPass::Program::doBind( Light const & light )
 	{
 		auto & spotLight = *light.getSpotLight();
-		m_lightIntensity->setValue( spotLight.getIntensity() );
 		m_lightAttenuation->setValue( spotLight.getAttenuation() );
 		m_lightPosition->setValue( light.getParent()->getDerivedPosition() );
 		m_lightExponent->setValue( spotLight.getExponent() );
 		m_lightCutOff->setValue( spotLight.getCutOff().cos() );
 		m_lightDirection->setValue( spotLight.getDirection() );
 		m_lightTransform->setValue( spotLight.getLightSpaceTransform() );
-		m_lightFarPlane->setValue( spotLight.getFarPlane() );
 	}
 
 	//*********************************************************************************************

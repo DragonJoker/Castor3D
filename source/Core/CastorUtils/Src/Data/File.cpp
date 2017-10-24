@@ -194,10 +194,11 @@ namespace castor
 		CHECK_INVARIANTS();
 		REQUIRE( isOk() && checkFlag( m_mode, OpenMode::eRead ) );
 		uint64_t uiReturn = 0;
-		uint64_t uiPrev = 1;
 
 		if ( isOk() )
 		{
+			uint64_t uiPrev = 1;
+
 			while ( uiReturn < p_uiSize && uiPrev != uiReturn )
 			{
 				uiPrev = uiReturn;

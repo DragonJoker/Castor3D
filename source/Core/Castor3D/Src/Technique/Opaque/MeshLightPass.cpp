@@ -1,4 +1,4 @@
-﻿#include "MeshLightPass.hpp"
+#include "MeshLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -25,7 +25,8 @@ namespace castor3d
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
-		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
+		, m_lightPosition{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
+		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
 	{
 	}
 

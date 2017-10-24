@@ -1,4 +1,4 @@
-﻿#include "SceneObjectsList.hpp"
+#include "SceneObjectsList.hpp"
 
 #include "AnimatedObjectGroupTreeItemProperty.hpp"
 #include "AnimatedObjectTreeItemProperty.hpp"
@@ -223,10 +223,11 @@ namespace GuiCommon
 			, eBMP_GEOMETRY
 			, eBMP_GEOMETRY_SEL
 			, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), geometry ) );
-		int count = 0;
 
 		if ( geometry.getMesh() )
 		{
+			int count = 0;
+
 			for ( auto submesh : *geometry.getMesh() )
 			{
 				wxString name = _( "Submesh " );

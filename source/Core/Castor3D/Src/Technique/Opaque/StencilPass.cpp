@@ -1,4 +1,4 @@
-﻿#include "StencilPass.hpp"
+#include "StencilPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -87,7 +87,7 @@ namespace castor3d
 		m_program->setSource( ShaderType::ePixel, doGetPixelShader( engine ) );
 		m_program->initialise();
 
-		m_geometryBuffers = m_program->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, *m_program );
+		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles, *m_program );
 		m_geometryBuffers->initialise( { vbo }, nullptr );
 
 		DepthStencilState dsstate;
@@ -101,7 +101,7 @@ namespace castor3d
 		dsstate.setStencilFrontOps( StencilOp::eKeep, StencilOp::eDecrWrap, StencilOp::eKeep );
 		RasteriserState rsstate;
 		rsstate.setCulledFaces( Culling::eNone );
-		m_pipeline = m_program->getRenderSystem()->createRenderPipeline( std::move( dsstate )
+		m_pipeline = renderSystem.createRenderPipeline( std::move( dsstate )
 			, std::move( rsstate )
 			, BlendState{}
 			, MultisampleState{}

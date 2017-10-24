@@ -256,9 +256,6 @@ namespace castor
 
 				if ( last != '/' && last != '\\' )
 				{
-					std::string outputFileName;
-					int skip = 0;
-
 					error = unzOpenCurrentFile( m_unzip );
 
 					if ( error != UNZ_OK )

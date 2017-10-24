@@ -1,4 +1,4 @@
-#include "SsaoPass.hpp"
+﻿#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -82,9 +82,7 @@ namespace castor3d
 				1, 1, 1, 1
 			};
 
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
-			uint32_t stride = declaration.stride();
 			vertexBuffer->resize( uint32_t( sizeof( data ) ) );
 			uint8_t * buffer = vertexBuffer->getData();
 			std::memcpy( buffer, data, sizeof( data ) );
@@ -208,24 +206,29 @@ namespace castor3d
 					auto randomVec = writer.declLocale( cuT( "randomVec" )
 						, normalize( texture( c3d_mapNoise, texCoord * c3d_noiseScale ).xyz() ) );
 					auto tangent = writer.declLocale( cuT( "tangent" )
-						, normalize( randomVec - vsNormal * dot( randomVec, vsNormal ) ) );
+						, normalize( glsl::fma( -vsNormal, vec3( dot( randomVec, vsNormal ) ), randomVec ) ) );
 					auto bitangent = writer.declLocale( cuT( "bitangent" )
 						, cross( vsNormal, tangent ) );
 					auto tbn = writer.declLocale( cuT( "tbn" )
 						, mat3( tangent, bitangent, vsNormal ) );
-					auto occlusion = writer.declLocale( cuT( "occlusion" ), 0.0_f );
+					auto occlusion = writer.declLocale( cuT( "occlusion" )
+						, 0.0_f );
+					auto radius = writer.declLocale( cuT( "radius" )
+						, vec3( c3d_radius ) );
 
 					FOR( writer, Int, i, 0, cuT( "i < c3d_kernelSize" ), cuT( "++i" ) )
 					{
 						// get sample position
 						auto samplePos = writer.declLocale( cuT( "samplePos" )
-							, tbn * c3d_kernel[i] );                       // From tangent to view-space
-						samplePos = vsPosition + samplePos * c3d_radius;
+							, tbn * c3d_kernel[i] );                                // From tangent to view-space
+						samplePos = glsl::fma( samplePos, radius, vsPosition );
 						auto offset = writer.declLocale( cuT( "offset" )
 							, vec4( samplePos, 1.0 ) );
-						offset = c3d_mtxGProj * offset;                  // from view to clip-space
-						offset.xyz() = offset.xyz() / offset.w();      // perspective divide
-						offset.xyz() = offset.xyz() * 0.5 + 0.5;         // transform to range 0.0 - 1.0 
+						offset = c3d_mtxGProj * offset;                             // from view to clip-space
+						offset.xyz() = offset.xyz() / offset.w();                   // perspective divide
+						offset.xyz() = glsl::fma( offset.xyz()
+							, vec3( 0.5_f )
+							, vec3( 0.5_f ) );                                      // transform to range 0.0 - 1.0 
 						auto sampleDepth = writer.declLocale( cuT( "sampleDepth" )
 							, utils.calcVSPosition( offset.xy()
 								, texture( c3d_mapDepth, offset.xy() ).r()
@@ -262,7 +265,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = texture;
-					gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
@@ -305,7 +308,6 @@ namespace castor3d
 
 		ShaderProgramSPtr doGetSsaoProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetSsaoVertexProgram( engine );
 			auto pxl = doGetSsaoPixelProgram( engine );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
@@ -322,7 +324,6 @@ namespace castor3d
 
 		ShaderProgramSPtr doGetBlurProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetBlurVertexProgram( engine );
 			auto pxl = doGetBlurPixelProgram( engine );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
