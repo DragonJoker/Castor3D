@@ -277,7 +277,7 @@
 	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
-		Point< T, Count > point{ value };
+		castor::Point< T, Count > point{ value };
 		setValueI( point );
 		PointPropertyHelper< T, Count >::addChildren( this, getPointDefaultNames< Count >(), point );
 	}
@@ -294,7 +294,7 @@
 	PointProperty< T, Count >::PointProperty( wxString const( &p_names )[Count], wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
-		Point< T, Count > point{ value };
+		castor::Point< T, Count > point{ value };
 		setValueI( point );
 		PointPropertyHelper< T, Count >::addChildren( this, p_names, point );
 	}
