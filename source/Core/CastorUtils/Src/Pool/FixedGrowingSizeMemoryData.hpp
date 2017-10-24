@@ -146,12 +146,24 @@ namespace castor
 		{
 			m_total += m_step;
 			ptrdiff_t count = m_buffersEnd - m_buffers;
-			m_buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
+			auto buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
+
+			if ( buffers )
+			{
+				m_buffers = buffers;
+			}
+
 			m_buffersEnd = m_buffers + count;
 			m_buffersEnd->m_data = MemoryAllocator::allocate( m_step * sizeof( Object ) );
 			m_buffersEnd->m_end = nullptr;
 			auto buffer = m_buffersEnd->m_data;
-			m_free = reinterpret_cast< Object ** >( realloc( m_free, m_total * sizeof( Object * ) ) );
+			auto freeChunks = reinterpret_cast< Object ** >( realloc( m_free, m_total * sizeof( Object * ) ) );
+
+			if ( freeChunks )
+			{
+				m_free = freeChunks;
+			}
+
 			m_freeEnd = m_free + m_total;
 			m_freeIndex = m_free;
 

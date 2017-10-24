@@ -220,7 +220,6 @@ namespace fxaa
 
 	bool PostEffect::initialise()
 	{
-		bool result = false;
 		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
 		Size size = m_renderTarget.getSize();
 

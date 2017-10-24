@@ -31,7 +31,7 @@ namespace C3dPly
 		/**
 		 * Constructor
 		 */
-		PlyImporter( castor3d::Engine & engine );
+		explicit PlyImporter( castor3d::Engine & engine );
 
 		static castor3d::ImporterUPtr create( castor3d::Engine & engine );
 

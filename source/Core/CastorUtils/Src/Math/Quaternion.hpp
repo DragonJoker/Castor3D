@@ -79,7 +79,7 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextWriter( String const & p_tabs );
+			explicit TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Point2f object into a text file
@@ -99,7 +99,7 @@ namespace castor
 		typedef Coords4< T > BaseType;
 
 	private:
-		QuaternionT( NoInit const & );
+		explicit QuaternionT( NoInit const & );
 		QuaternionT( T p_x, T p_y, T p_z, T p_w );
 
 	public:
@@ -136,7 +136,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_values	Les valeurs du Quaternion
 		 */
-		inline QuaternionT( double const * p_values );
+		inline explicit QuaternionT( double const * p_values );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -145,7 +145,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_values	Les valeurs du Quaternion
 		 */
-		inline QuaternionT( float const * p_values );
+		inline explicit QuaternionT( float const * p_values );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -154,7 +154,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_values	Les valeurs du quaternion
 		 */
-		inline QuaternionT( Point4f const & p_values );
+		inline explicit QuaternionT( Point4f const & p_values );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -163,7 +163,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_values	Les valeurs du quaternion
 		 */
-		inline QuaternionT( Point4d const & p_values );
+		inline explicit QuaternionT( Point4d const & p_values );
 		/**
 		 *\~english
 		 *\brief		Destructor

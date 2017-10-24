@@ -26,7 +26,7 @@ namespace Obj
 		/**
 		 * Constructor
 		 */
-		ObjImporter( castor3d::Engine & engine );
+		explicit ObjImporter( castor3d::Engine & engine );
 
 		static castor3d::ImporterUPtr create( castor3d::Engine & engine );
 

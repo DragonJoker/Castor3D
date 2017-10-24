@@ -18,7 +18,7 @@ namespace Ase
 		: public castor3d::Importer
 	{
 	public:
-		AseImporter( castor3d::Engine & p_engine );
+		explicit AseImporter( castor3d::Engine & p_engine );
 		~AseImporter();
 
 		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );

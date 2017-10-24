@@ -56,7 +56,7 @@ namespace castor
 		: public ConsoleImpl
 	{
 	public:
-		ReleaseConsole( bool p_showConsole )
+		explicit ReleaseConsole( bool p_showConsole )
 		{
 		}
 

@@ -468,7 +468,6 @@ namespace GlRender
 		doApply( m_blState, getOpenGl() );
 		doApply( m_msState, getOpenGl() );
 		m_program.bind();
-		uint32_t count{ 0u };
 
 		for ( auto & binding : m_bindings )
 		{

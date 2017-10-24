@@ -40,7 +40,7 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			BasicPrefixBuffer( std::basic_streambuf< char_type, traits > * sbuf )
+			explicit BasicPrefixBuffer( std::basic_streambuf< char_type, traits > * sbuf )
 				: m_sbuf( sbuf )
 				, m_set( true )
 			{

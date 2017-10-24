@@ -68,7 +68,7 @@ namespace castor
 		 *\brief		Constructeur à partir d'une CubeBox
 		 *\param[in]	p_box	La CubeBox
 		 */
-		CU_API SphereBox( CubeBox const & p_box );
+		CU_API explicit SphereBox( CubeBox const & p_box );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator

@@ -20,7 +20,7 @@ namespace Lwo
 		: public castor3d::Importer
 	{
 	public:
-		LwoImporter( castor3d::Engine & p_engine );
+		explicit LwoImporter( castor3d::Engine & p_engine );
 		virtual ~LwoImporter();
 
 		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );

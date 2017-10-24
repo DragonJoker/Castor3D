@@ -29,7 +29,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	p_function	La fonction.
 		 */
-		ScopeGuard( ScopeExitFuncType const & p_function )
+		explicit ScopeGuard( ScopeExitFuncType const & p_function )
 			: m_function{ p_function }
 		{
 		}

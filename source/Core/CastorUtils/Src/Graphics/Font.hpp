@@ -48,7 +48,7 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API TextWriter( String const & p_tabs );
+			CU_API explicit TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a Font into a text file

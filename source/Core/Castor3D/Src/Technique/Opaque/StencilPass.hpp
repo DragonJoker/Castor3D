@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredStencilPass_H___
@@ -88,7 +88,7 @@ namespace castor3d
 		RenderPipelineUPtr m_pipeline;
 		//!\~english	The vertex buffer used to render the pass.
 		//!\~french		Le tampon de sommets utilisé par le rendu de la passe.
-		VertexBuffer const * m_vbo;
+		VertexBuffer const * m_vbo{ nullptr };
 	};
 }
 

@@ -32,7 +32,7 @@ namespace castor
 			 *\brief		Constructor
 			 *\param[in]	i	The indentation value
 			 */
-			Indent( int i )
+			explicit Indent( int i )
 				: m_indent( i )
 			{
 			}

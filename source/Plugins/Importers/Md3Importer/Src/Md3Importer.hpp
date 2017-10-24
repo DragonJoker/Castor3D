@@ -89,7 +89,7 @@ namespace C3DMd3
 		/**
 		 * Constructor
 		 */
-		Md3Importer( castor3d::Engine & p_engine );
+		explicit Md3Importer( castor3d::Engine & p_engine );
 
 		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );
 

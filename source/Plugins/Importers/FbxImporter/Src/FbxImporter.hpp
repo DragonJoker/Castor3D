@@ -47,7 +47,7 @@ namespace C3dFbx
 		: public castor3d::Importer
 	{
 	public:
-		FbxSdkImporter( castor3d::Engine & p_engine );
+		explicit FbxSdkImporter( castor3d::Engine & p_engine );
 		~FbxSdkImporter();
 
 		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );

@@ -86,7 +86,7 @@ namespace Testing
 		typedef std::function< pointer_type() > getter;
 
 	public:
-		Lazy( std::function< Value() > const & p_expression )
+		explicit Lazy( std::function< Value() > const & p_expression )
 			: m_thunk{ std::make_shared< getter >( [p_expression]()
 			{
 				return std::make_shared< value_type >( p_expression() );

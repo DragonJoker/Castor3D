@@ -288,8 +288,6 @@ namespace castor3d
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
 	{
-		auto & renderSystem = *engine.getRenderSystem();
-
 		m_program = engine.getShaderProgramCache().getNewProgram( false );
 		m_program->createObject( ShaderType::eVertex );
 		m_program->createObject( ShaderType::ePixel );

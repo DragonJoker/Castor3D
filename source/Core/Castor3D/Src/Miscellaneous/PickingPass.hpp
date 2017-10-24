@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PICKING_PASS_H___
@@ -293,7 +293,7 @@ namespace castor3d
 		SubmeshWPtr m_submesh;
 		//!\~english	The picked face index.
 		//!\~french		L'indice de la face sélectionnée.
-		uint32_t m_face;
+		uint32_t m_face{ 0u };
 		//!\~english	The picking data UBO.
 		//!\~french		L'UBO de données de picking.
 		UniformBuffer m_pickingUbo;

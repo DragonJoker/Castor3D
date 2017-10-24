@@ -45,7 +45,7 @@ namespace C3dOgre
 		: public Castor3D::Importer
 	{
 	public:
-		OgreImporter( Castor3D::Engine & p_engine );
+		explicit OgreImporter( Castor3D::Engine & p_engine );
 		~OgreImporter();
 
 		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );

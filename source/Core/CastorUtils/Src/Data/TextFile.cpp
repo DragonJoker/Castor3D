@@ -153,10 +153,10 @@ namespace castor
 		REQUIRE( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t uiReturn = 0;
 		xchar * text = new xchar[std::size_t( p_uiMaxSize )];
-		va_list vaList;
 
 		if ( p_pFormat )
 		{
+			va_list vaList;
 			va_start( vaList, p_pFormat );
 			cvsnprintf( text, std::size_t( p_uiMaxSize ), std::size_t( p_uiMaxSize ), p_pFormat, vaList );
 			va_end( vaList );

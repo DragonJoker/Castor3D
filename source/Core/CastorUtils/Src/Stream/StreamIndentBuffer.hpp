@@ -58,7 +58,7 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			BasicIndentBuffer( std::basic_streambuf< char_type, traits > * sbuf )
+			explicit BasicIndentBuffer( std::basic_streambuf< char_type, traits > * sbuf )
 				: m_sbuf( sbuf )
 				, m_count( 0 )
 				, m_set( true )

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_ChangeTracked_H___
@@ -29,7 +29,7 @@ namespace castor
 		{
 		}
 
-		ChangeTracked( T const & rhs )noexcept
+		explicit ChangeTracked( T const & rhs )noexcept
 			: m_value{ rhs }
 			, m_dirty{ true }
 		{

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_STREAM_BASE_MANIPULATORS_H___
@@ -28,7 +28,7 @@ namespace castor
 		{
 			int m_base;
 
-			BasicBaseManip( int base )
+			explicit BasicBaseManip( int base )
 				: m_base( base )
 			{
 				assert( base >= 2 );

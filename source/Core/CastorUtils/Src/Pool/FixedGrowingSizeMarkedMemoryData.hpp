@@ -183,12 +183,24 @@ namespace castor
 		{
 			m_total += m_step;
 			ptrdiff_t count = m_buffersEnd - m_buffers;
-			m_buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
+			auto buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
+
+			if ( buffers )
+			{
+				m_buffers = buffers;
+			}
+
 			m_buffersEnd = m_buffers + count;
 			m_buffersEnd->m_data = new uint8_t[m_step * ( sizeof( Object ) + 1 )];
 			m_buffersEnd->m_end = nullptr;
 			uint8_t * buffer = m_buffersEnd->m_data;
-			m_free = reinterpret_cast< uint8_t ** >( realloc( m_free, m_total * sizeof( uint8_t * ) ) );
+			auto freeChunks = reinterpret_cast< uint8_t ** >( realloc( m_free, m_total * sizeof( uint8_t * ) ) );
+
+			if ( freeChunks )
+			{
+				m_free = freeChunks;
+			}
+
 			m_freeEnd = m_free + m_total;
 			m_freeIndex = m_free;
 

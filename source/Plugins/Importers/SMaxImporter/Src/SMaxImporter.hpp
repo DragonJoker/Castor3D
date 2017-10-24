@@ -636,7 +636,7 @@ namespace C3dSMax
 		/**
 		 * Constructor
 		 */
-		SMaxImporter( castor3d::Engine & p_engine );
+		explicit SMaxImporter( castor3d::Engine & p_engine );
 
 		static castor3d::ImporterUPtr create( castor3d::Engine & p_engine );
 

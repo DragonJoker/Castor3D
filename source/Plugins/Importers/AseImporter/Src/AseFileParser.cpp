@@ -1,4 +1,4 @@
-﻿#include "AseFileParser.hpp"
+#include "AseFileParser.hpp"
 #include "AseFileContext.hpp"
 #include "AseImporter.hpp"
 
@@ -427,7 +427,6 @@ namespace Ase
 	IMPLEMENT_ATTRIBUTE_PARSER( AseparserMaterialName )
 	{
 		std::shared_ptr< AseFileContext > pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		Engine * pEngine = pContext->scene.getEngine();
 		auto & cache = pContext->scene.getMaterialView();
 		String strName;
 		p_params[0]->get( strName );

@@ -1,4 +1,4 @@
-#include "SsaoPass.hpp"
+﻿#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -82,9 +82,7 @@ namespace castor3d
 				1, 1, 1, 1
 			};
 
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
-			uint32_t stride = declaration.stride();
 			vertexBuffer->resize( uint32_t( sizeof( data ) ) );
 			uint8_t * buffer = vertexBuffer->getData();
 			std::memcpy( buffer, data, sizeof( data ) );
