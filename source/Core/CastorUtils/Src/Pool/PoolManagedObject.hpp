@@ -40,7 +40,7 @@ namespace castor
 		 *\param[in]	p_params	Les paramètre du constructeur de Object.
 		 */
 		template< typename ... Params >
-		PoolManagedObject( Params ... p_params )noexcept
+		explicit PoolManagedObject( Params ... p_params )noexcept
 			: Object( p_params... )
 		{
 		}

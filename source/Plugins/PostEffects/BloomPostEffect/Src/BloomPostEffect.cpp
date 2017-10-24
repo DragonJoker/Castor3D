@@ -209,10 +209,8 @@ namespace Bloom
 
 	bool BloomPostEffect::initialise()
 	{
-		bool result = false;
 		m_viewport.initialise();
-
-		result = doInitialiseHiPassProgram();
+		bool result = doInitialiseHiPassProgram();
 		Size size = m_renderTarget.getSize();
 
 		if ( result )

@@ -1,4 +1,4 @@
-﻿#include "BillboardList.hpp"
+#include "BillboardList.hpp"
 
 #include "Engine.hpp"
 
@@ -212,22 +212,22 @@ namespace castor3d
 						, uint32_t p_offset
 						, uint32_t p_stride )
 						: m_buffer{ p_buffer }
-						  , m_position{ reinterpret_cast< real * >( p_buffer + p_offset ) }
-						  , m_stride{ p_stride }
+						, m_position{ reinterpret_cast< real * >( p_buffer + p_offset ) }
+						, m_stride{ p_stride }
 					{
 					}
 
 					Element( Element const & p_rhs )
 						: m_buffer{ p_rhs.m_buffer }
-						  , m_position{ p_rhs.m_position }
-						  , m_stride{ p_rhs.m_stride }
+						, m_position{ p_rhs.m_position }
+						, m_stride{ p_rhs.m_stride }
 					{
 					}
 
 					Element( Element && p_rhs )
 						: m_buffer{ p_rhs.m_buffer }
-						  , m_position{ std::move( p_rhs.m_position ) }
-						  , m_stride{ p_rhs.m_stride }
+						, m_position{ std::move( p_rhs.m_position ) }
+						, m_stride{ p_rhs.m_stride }
 					{
 						p_rhs.m_buffer = nullptr;
 					}

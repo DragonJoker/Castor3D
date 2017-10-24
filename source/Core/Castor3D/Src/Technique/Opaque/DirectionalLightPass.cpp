@@ -1,4 +1,4 @@
-#include "DirectionalLightPass.hpp"
+﻿#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -99,7 +99,6 @@ namespace castor3d
 		};
 
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, declaration );
-		uint32_t stride = declaration.stride();
 		m_vertexBuffer->resize( sizeof( data ) );
 		uint8_t * buffer = m_vertexBuffer->getData();
 		std::memcpy( buffer, data, sizeof( data ) );

@@ -48,7 +48,7 @@ namespace castor
 		 *\brief		Constructeur spécifié
 		 *\param[in]	p_value	La valeur de la composante
 		 */
-		ColourComponent( float * p_value )
+		explicit ColourComponent( float * p_value )
 			: m_pfComponent( p_value )
 		{
 		}

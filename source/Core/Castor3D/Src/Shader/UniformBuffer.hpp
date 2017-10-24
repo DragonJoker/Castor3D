@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_UniformBuffer_H___
@@ -56,7 +56,7 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API TextWriter( castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a UniformBuffer into a text file.

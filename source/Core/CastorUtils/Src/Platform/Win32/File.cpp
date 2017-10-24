@@ -238,7 +238,7 @@ namespace castor
 	{
 		struct FileFunction
 		{
-			FileFunction( PathArray & p_files )
+			explicit FileFunction( PathArray & p_files )
 				: m_files( p_files )
 			{
 			}
@@ -253,7 +253,7 @@ namespace castor
 		{
 			struct DirectoryFunction
 			{
-				DirectoryFunction( PathArray & p_files )
+				explicit DirectoryFunction( PathArray & p_files )
 					: m_files( p_files )
 				{
 				}

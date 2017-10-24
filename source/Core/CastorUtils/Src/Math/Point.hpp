@@ -159,7 +159,7 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			inline TextWriter( String const & p_tabs );
+			inline explicit TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Point2f object into a text file

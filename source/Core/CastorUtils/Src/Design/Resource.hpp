@@ -34,7 +34,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom
 		 */
-		Resource( String const & p_name );
+		explicit Resource( String const & p_name );
 		/**
 		*\~english
 		*\brief		Destructor

@@ -144,7 +144,6 @@ namespace GuiCommon
 	{
 		m_shaderModel = ShaderModel::eCount;
 		ShaderProgramSPtr program = m_shaderProgram.lock();
-		RenderSystem * renderSystem = program->getRenderSystem();
 		m_shaderModel = program->getRenderSystem()->getGpuInformations().getMaxShaderModel();
 	}
 

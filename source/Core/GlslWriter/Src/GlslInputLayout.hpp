@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_InputLayout_H___
@@ -19,7 +19,7 @@ namespace glsl
 			eTrianglesAdjacency
 		};
 
-		InputLayout( Kind p_kind )
+		explicit InputLayout( Kind p_kind )
 			: m_kind{ p_kind }
 		{
 		}

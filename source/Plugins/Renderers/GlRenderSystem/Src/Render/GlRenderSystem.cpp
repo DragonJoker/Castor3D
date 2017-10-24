@@ -1,4 +1,4 @@
-﻿#include "Render/GlRenderSystem.hpp"
+#include "Render/GlRenderSystem.hpp"
 
 #include "Buffer/GlBuffer.hpp"
 #include "Common/OpenGl.hpp"
@@ -406,7 +406,6 @@ namespace GlRender
 				value = { 0, 0, 0 };
 				getOpenGl().GetIntegerv( GlMax::eSamples, value.data() );
 				m_gpuInformations.setMaxValue( GpuMax::eSamples, value[0] );
-				value = { 0, 0, 0 };
 			}
 		}
 

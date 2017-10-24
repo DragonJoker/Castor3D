@@ -944,6 +944,34 @@ namespace castor3d
 			result->addUniformBuffer( gpInfoUbo.getUbo() );
 			return result;
 		}
+
+		template< typename T >
+		struct Reverse
+		{
+			explicit Reverse( T const & collection )
+				: m_collection{ collection }
+			{
+			}
+
+			auto begin()const
+			{
+				return m_collection.rbegin();
+			}
+
+			auto end()const
+			{
+				return m_collection.rend();
+			}
+
+		private:
+			T const & m_collection;
+		};
+
+		template< typename T >
+		Reverse< T > makeReverse( T const & collection )
+		{
+			return Reverse< T >( collection );
+		}
 	}
 
 	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & engine
@@ -1012,34 +1040,6 @@ namespace castor3d
 		m_viewport.resize( m_size );
 		m_viewport.update();
 		m_matrixUbo.update( m_viewport.getProjection() );
-	}
-
-	template< typename T >
-	struct Reverse
-	{
-		Reverse( T const & collection )
-			: m_collection{ collection }
-		{
-		}
-
-		auto begin()const
-		{
-			return m_collection.rbegin();
-		}
-
-		auto end()const
-		{
-			return m_collection.rend();
-		}
-
-	private:
-		T const & m_collection;
-	};
-
-	template< typename T >
-	Reverse< T > makeReverse( T const & collection )
-	{
-		return Reverse< T >( collection );
 	}
 
 	ReflectionPass::~ReflectionPass()

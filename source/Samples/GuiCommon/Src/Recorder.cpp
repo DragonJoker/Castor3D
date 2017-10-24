@@ -136,12 +136,10 @@ namespace GuiCommon
 
 			virtual bool RecordFrame( PxBufferBaseSPtr p_buffer )
 			{
-				bool result = false;
 				doRecordFrame( p_buffer );
 				m_saved = clock::now();
 				m_recordedCount++;
-				result = true;
-				return result;
+				return true;
 			}
 
 		protected:

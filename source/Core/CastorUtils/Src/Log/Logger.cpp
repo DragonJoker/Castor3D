@@ -19,7 +19,7 @@ namespace castor
 		using int_type = typename std::basic_streambuf< CharType >::int_type;
 		using traits_type = typename std::basic_streambuf< CharType >::traits_type;
 
-		LogStreambuf( std::basic_ostream< CharType > & p_stream )
+		explicit LogStreambuf( std::basic_ostream< CharType > & p_stream )
 			: m_stream( p_stream )
 		{
 			m_old = m_stream.rdbuf( this );

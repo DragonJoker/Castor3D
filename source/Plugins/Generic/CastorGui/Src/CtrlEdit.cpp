@@ -271,12 +271,12 @@ namespace CastorGui
 			}
 			else if ( code == KeyboardKey::eLeft && m_caretIt != m_caption.begin() )
 			{
-				m_caretIt--;
+				--m_caretIt;
 				doUpdateCaption();
 			}
 			else if ( code == KeyboardKey::eRight && m_caretIt != m_caption.end() )
 			{
-				m_caretIt++;
+				++m_caretIt;
 				doUpdateCaption();
 			}
 			else if ( code == KeyboardKey::eHome && m_caretIt != m_caption.begin() )

@@ -14,7 +14,7 @@ namespace CastorViewer
 		: public castor3d::FrameEvent
 	{
 	public:
-		KeyboardEvent( castor3d::RenderWindowSPtr p_window );
+		explicit KeyboardEvent( castor3d::RenderWindowSPtr p_window );
 		virtual ~KeyboardEvent();
 
 		virtual bool apply();

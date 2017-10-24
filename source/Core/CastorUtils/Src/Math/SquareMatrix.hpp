@@ -58,7 +58,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\remarks		Le tampon de la matrice ne sera pas initialisé.
 		 */
-		SquareMatrix( NoInit const & );
+		explicit SquareMatrix( NoInit const & );
 		/**
 		 *\~english
 		 *\brief		Constructor

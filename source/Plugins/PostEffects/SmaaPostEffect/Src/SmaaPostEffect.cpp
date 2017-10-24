@@ -1266,7 +1266,6 @@ namespace smaa
 
 	bool PostEffect::initialise()
 	{
-		bool result = false;
 		doInitialiseEdgeDetection();
 		doInitialiseBlendingWeightCalculation();
 		doInitialiseNeighbourhoodBlending();

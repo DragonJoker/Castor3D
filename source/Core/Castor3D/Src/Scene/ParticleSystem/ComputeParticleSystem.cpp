@@ -158,7 +158,7 @@ namespace castor3d
 	{
 		m_updateProgram = p_program;
 
-		auto & atomic = m_updateProgram->createAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
+		m_updateProgram->createAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
 		m_generatedCountBuffer = m_updateProgram->findAtomicCounterBuffer( cuT( "Counters" ) );
 
 		m_randomStorage = std::make_shared< ShaderStorageBuffer >( *m_parent.getScene()->getEngine() );

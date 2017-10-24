@@ -11,7 +11,7 @@ namespace fxaa
 	class FxaaUbo
 	{
 	public:
-		FxaaUbo( castor3d::Engine & engine );
+		explicit FxaaUbo( castor3d::Engine & engine );
 		~FxaaUbo();
 		void update( castor::Size const & p_size
 			, float p_shift

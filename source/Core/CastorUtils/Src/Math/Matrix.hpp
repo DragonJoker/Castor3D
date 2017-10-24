@@ -100,7 +100,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur, sans initialisation des données.
 		 */
-		Matrix( NoInit const & );
+		explicit Matrix( NoInit const & );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor.

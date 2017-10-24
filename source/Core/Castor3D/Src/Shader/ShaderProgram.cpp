@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+﻿#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -22,7 +22,7 @@ namespace castor3d
 
 			if ( !sbuf )
 			{
-				sbuf = format::installPrefixBuffer< PrefixType >( stream );
+				format::installPrefixBuffer< PrefixType >( stream );
 				stream.register_callback( format::callback< PrefixType, CharType >, 0 );
 			}
 
@@ -45,7 +45,6 @@ namespace castor3d
 		bool result = false;
 		bool hasFile = false;
 		uint8_t i = 0;
-		uint8_t j = 0;
 
 		while ( i < uint8_t( ShaderType::eCount ) && !hasFile )
 		{
@@ -157,7 +156,6 @@ namespace castor3d
 		{
 			result = doCreateObject( type );
 			m_shaders[size_t( type )] = result;
-			size_t i = size_t( ShaderModel::eModel1 );
 
 			if ( !m_file.empty() )
 			{

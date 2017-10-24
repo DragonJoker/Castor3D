@@ -43,8 +43,6 @@ namespace GlRender
 
 	void GlFrameBuffer::setDrawBuffers( AttachArray const & p_attaches )const
 	{
-		bool result = false;
-
 		if ( !p_attaches.empty() )
 		{
 			UIntArray arrayAttaches;

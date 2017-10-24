@@ -73,7 +73,6 @@ namespace castor3d
 
 			if ( curr != m_curr )
 			{
-				uint32_t const size = uint32_t( m_curr->m_buffer.size() * sizeof( InterleavedVertex ) );
 				auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
 				auto & animBuffer = m_animationObject.getSubmesh().getAnimationBuffer();
 				std::memcpy( vertexBuffer.getData(), m_prev->m_buffer.data(), vertexBuffer.getSize() );

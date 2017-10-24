@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_STREAM_PREFIX_H___
@@ -149,11 +149,11 @@ namespace castor
 	template< typename CharType, typename PrefixType >
 	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & Prefix )
 	{
-		format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+		auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
 
 		if ( !sbuf )
 		{
-			sbuf = format::installPrefixBuffer< PrefixType >( stream );
+			format::installPrefixBuffer< PrefixType >( stream );
 			stream.register_callback( format::callback< PrefixType, CharType >, 0 );
 		}
 

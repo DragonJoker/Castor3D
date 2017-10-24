@@ -61,7 +61,14 @@ namespace CastorGui
 		*\param[in]	p_visible		Initial visibility statu
 		*/
 		template< size_t N >
-		ComboBoxCtrl( ControlSPtr p_parent, castor::String const( & p_values )[N], int p_selected, uint32_t p_id, castor::Position const & p_position, castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true )
+		ComboBoxCtrl( ControlSPtr p_parent
+			, castor::String const( & p_values )[N]
+			, int p_selected
+			, uint32_t p_id
+			, castor::Position const & p_position
+			, castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true )
 			: Control( ControlType::eComboBox, p_parent, p_id, p_position, p_size, p_style, p_visible )
 			, m_values( castor::StringArray( &p_values[0], &p_values[N] ) )
 			, m_selected( p_selected )

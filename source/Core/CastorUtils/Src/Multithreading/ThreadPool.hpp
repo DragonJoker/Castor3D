@@ -31,7 +31,7 @@ namespace castor
 		 *\brief		Constructeur, initialise le pool au nombre de threads donné.
 		 *\param[in]	p_count	Le nombre de threads du pool.
 		 */
-		CU_API ThreadPool( size_t p_count );
+		CU_API explicit ThreadPool( size_t p_count );
 		/**
 		 *\~english
 		 *\brief		Destructor.

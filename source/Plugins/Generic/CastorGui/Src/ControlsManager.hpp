@@ -39,7 +39,7 @@ namespace CastorGui
 		*\param[in] engine
 		*	The engine
 		*/
-		C3D_CGui_API ControlsManager( castor3d::Engine & engine );
+		C3D_CGui_API explicit ControlsManager( castor3d::Engine & engine );
 		/**
 		*\brief
 		*	Destructor

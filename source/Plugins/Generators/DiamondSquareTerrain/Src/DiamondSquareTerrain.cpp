@@ -15,7 +15,7 @@ namespace diamond_square_terrain
 	{
 		struct Matrix
 		{
-			inline Matrix( uint32_t p_size )
+			inline explicit Matrix( uint32_t p_size )
 				: m_size{ p_size }
 				, m_max{ m_size - 1 }
 			{

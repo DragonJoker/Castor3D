@@ -12,7 +12,7 @@ namespace Fireworks
 		: public castor3d::CpuParticleSystem
 	{
 	public:
-		ParticleSystem( castor3d::ParticleSystem & p_parent );
+		explicit ParticleSystem( castor3d::ParticleSystem & p_parent );
 		virtual ~ParticleSystem();
 		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & p_parent );
 		void emitParticle( float p_type, castor::Point3f const & p_position, castor::Point3f const & p_velocity, float p_age );

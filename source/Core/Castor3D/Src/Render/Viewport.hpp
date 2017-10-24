@@ -668,7 +668,7 @@ namespace castor3d
 	private:
 		//!\~english	Tells the view frustum's planes need to be updated.
 		//!\~french		Dit que les plans du frustum de vue doivent être mis à jour
-		bool m_modified;
+		bool m_modified{ true };
 		//!\~english	The left viewport plane.
 		//!\~french		Position du plan gauche.
 		castor::GroupChangeTracked< real > m_left;

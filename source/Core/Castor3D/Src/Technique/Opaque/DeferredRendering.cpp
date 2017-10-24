@@ -210,7 +210,6 @@ namespace castor3d
 		auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		int width = int( m_size.getWidth() ) / count;
 		int height = int( m_size.getHeight() ) / count;
-		int left = int( m_size.getWidth() ) - width;
 		auto size = Size( width, height );
 		auto & context = *m_engine.getRenderSystem()->getCurrentContext();
 		auto index = 0;

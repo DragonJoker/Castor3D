@@ -31,7 +31,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom
 		 */
-		NamedBase( T const & p_name )
+		explicit NamedBase( T const & p_name )
 			: m_name( p_name )
 		{
 		}

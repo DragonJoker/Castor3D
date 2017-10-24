@@ -55,14 +55,20 @@ namespace castor
 
 		protected:
 			Backtraced()
+				: m_callStack{ doGetCallStack() }
 			{
-				std::stringstream callStack;
-				callStack << castor::Debug::Backtrace{};
-				m_callStack = callStack.str();
 			}
 
 			~Backtraced()
 			{
+			}
+
+		private:
+			static std::string doGetCallStack()
+			{
+				std::stringstream callStack;
+				callStack << castor::Debug::Backtrace{};
+				return callStack.str();
 			}
 
 		protected:

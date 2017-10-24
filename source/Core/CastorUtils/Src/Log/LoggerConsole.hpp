@@ -73,7 +73,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		ProgramConsole( bool p_showConsole );
+		explicit ProgramConsole( bool p_showConsole );
 		/**
 		 *\~english
 		 *\brief		Destructor.
