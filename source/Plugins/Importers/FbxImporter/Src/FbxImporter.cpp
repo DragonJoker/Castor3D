@@ -851,7 +851,6 @@ namespace C3dFbx
 
 			if ( doRetrieveMeshValues( cuT( "Normals" ), p_fbxMesh, normals, nml ) )
 			{
-				index = 0u;
 				real * buffer{ nml.data() };
 
 				for ( auto & vertex : vertices )
@@ -866,7 +865,6 @@ namespace C3dFbx
 
 			if ( doRetrieveMeshValues( cuT( "Texture UVs" ), p_fbxMesh, uvs, tex ) )
 			{
-				index = 0u;
 				real * buffer{ tex.data() };
 
 				for ( auto & vertex : vertices )
