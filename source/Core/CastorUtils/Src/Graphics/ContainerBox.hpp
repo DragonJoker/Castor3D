@@ -67,7 +67,7 @@ namespace castor
 		 *\brief		Constructeur à partir du centre
 		 *\param[in]	p_ptCenter	Le centre
 		 */
-		ContainerBox( Point< real, Dimension > const & p_ptCenter )
+		explicit ContainerBox( Point< real, Dimension > const & p_ptCenter )
 			:	m_ptCenter( p_ptCenter )
 		{
 		}

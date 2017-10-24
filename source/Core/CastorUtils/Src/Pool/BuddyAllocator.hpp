@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_BuddyAllocator_HPP___
@@ -23,7 +23,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	size	La taille de l'allocateur.
 		 */
-		inline BuddyAllocatorTraits( size_t size )
+		inline explicit BuddyAllocatorTraits( size_t size )
 		{
 			m_memory.resize( size );
 		}

@@ -32,7 +32,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_expectedType	Le type réel du paramètre.
 		 */
-		inline ParserParameterTypeException( ParameterType p_expectedType )
+		inline explicit ParserParameterTypeException( ParameterType p_expectedType )
 			: castor::Exception( "", "", "", 0 )
 		{
 			m_description = "Wrong parameter type in parser: user gave " + string::stringCast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::stringCast< xchar >( getTypeName( p_expectedType ) );

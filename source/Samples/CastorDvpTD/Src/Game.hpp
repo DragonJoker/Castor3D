@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Bullet.hpp"
 #include "EnemySpawner.hpp"
@@ -10,7 +10,7 @@ namespace castortd
 	class Game
 	{
 	public:
-		Game( castor3d::Scene & p_scene );
+		explicit Game( castor3d::Scene & p_scene );
 		~Game();
 
 		void Reset();

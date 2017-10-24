@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_POOL_MANAGED_OBJECT_H___
@@ -64,7 +64,7 @@ namespace castor
 		 *\brief		Constructeur par copie.
 		 *\param[in]	p_rhs	L'autre objet.
 		 */
-		PoolManagedObject( Object const & p_rhs )noexcept
+		explicit PoolManagedObject( Object const & p_rhs )noexcept
 			: Object( p_rhs )
 		{
 		}

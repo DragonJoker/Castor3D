@@ -29,7 +29,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_owner		L'objet propriétaire.
 		 */
-		inline OwnedBy( Owner & p_owner )
+		inline explicit OwnedBy( Owner & p_owner )
 			: m_owner( p_owner )
 		{
 		}
@@ -74,7 +74,7 @@ namespace castor
 		private:\
 			OwnedBy & operator=( OwnedBy< owner > const & p_rhs ) = delete;\
 		public:\
-			OwnedBy( owner & p_owner );\
+			explicit OwnedBy( owner & p_owner );\
 			OwnedBy( OwnedBy< owner > const & p_rhs ) = default;\
 			OwnedBy( OwnedBy< owner > && p_rhs ) = default;\
 			OwnedBy & operator=( OwnedBy< owner > && p_rhs ) = default;\

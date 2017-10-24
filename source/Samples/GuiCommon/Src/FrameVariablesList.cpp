@@ -117,7 +117,6 @@ namespace GuiCommon
 			, new FrameVariableBufferTreeItemProperty( m_program.lock()->getRenderSystem()->getEngine()
 				, m_propertiesHolder->IsEditable()
 				, p_buffer ) );
-		uint32_t index = 0;
 
 		for ( auto variable : p_buffer )
 		{

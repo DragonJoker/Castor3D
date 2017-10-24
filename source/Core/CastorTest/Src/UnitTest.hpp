@@ -1,4 +1,4 @@
-/* See LICENSE file in root folder */
+﻿/* See LICENSE file in root folder */
 #ifndef ___CastorTest_UnitTest___
 #define ___CastorTest_UnitTest___
 
@@ -132,7 +132,7 @@ namespace Testing
 		typedef std::function< pointer_type() > getter;
 
 	public:
-		Lazy( std::function< Value &() > const & p_expression )
+		explicit Lazy( std::function< Value &() > const & p_expression )
 			: m_thunk{ std::make_shared< getter >( [p_expression]()
 			{
 				return std::make_shared< value_type >( std::ref( p_expression() ) );
@@ -177,7 +177,7 @@ namespace Testing
 		typedef std::function< void() > getter;
 
 	public:
-		Lazy( std::function< void() > const & p_expression )
+		explicit Lazy( std::function< void() > const & p_expression )
 			: m_thunk{ std::make_shared< getter >( [p_expression]()
 		{
 			return p_expression();

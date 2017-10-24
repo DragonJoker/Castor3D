@@ -159,7 +159,7 @@ namespace castor3d
 
 		if ( m_attenuation.isDirty() )
 		{
-			auto & data = PointLight::generateVertices();
+			PointLight::generateVertices();
 			auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
 			m_cubeBox.load( Point3r{ -scale, -scale, -scale }
 				, Point3r{ scale, scale, scale } );

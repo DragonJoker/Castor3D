@@ -35,7 +35,7 @@ namespace GuiCommon
 		castor::StringArray arrayWords;
 
 	public:
-		LanguageFileContext( castor::TextFile * p_pFile );
+		explicit LanguageFileContext( castor::TextFile * p_pFile );
 	};
 }
 

@@ -41,7 +41,7 @@ namespace castor
 		 *\brief		Constructeur à partir d'un point cartésien
 		 *\param[in]	p_vertex	Le vertex à convertir
 		 */
-		CU_API SphericalVertex( Point3r const & p_vertex );
+		CU_API explicit SphericalVertex( Point3r const & p_vertex );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -1,4 +1,4 @@
-#include "BillboardList.hpp"
+﻿#include "BillboardList.hpp"
 
 #include "Engine.hpp"
 
@@ -244,6 +244,7 @@ namespace castor3d
 						{
 							m_buffer = p_rhs.m_buffer;
 							m_position = std::move( p_rhs.m_position );
+							m_stride = std::move( p_rhs.m_stride );
 							p_rhs.m_buffer = nullptr;
 						}
 						return *this;

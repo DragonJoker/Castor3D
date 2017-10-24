@@ -1,4 +1,4 @@
-#include "CtrlEdit.hpp"
+﻿#include "CtrlEdit.hpp"
 
 #include "ControlsManager.hpp"
 
@@ -327,7 +327,7 @@ namespace CastorGui
 	{
 		if ( m_caretIt != m_caption.begin() )
 		{
-			m_caretIt--;
+			--m_caretIt;
 			size_t diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
 			String caption( m_caption.cbegin(), m_caretIt.internal() );
 			string::utf8::const_iterator it = m_caretIt;

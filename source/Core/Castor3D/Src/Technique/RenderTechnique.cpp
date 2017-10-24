@@ -355,17 +355,15 @@ namespace castor3d
 #endif
 #if DISPLAY_DEBUG_ENV_MAPS
 
-		index = 0u;
-
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
 			map.get().debugDisplay( size, index++ );
 		}
 
+		index = 0u;
+
 #endif
 #if DISPLAY_DEBUG_SHADOW_MAPS
-
-		index = 0u;
 
 		for ( auto & maps : m_activeShadowMaps )
 		{

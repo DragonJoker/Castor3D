@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_TARGET_CACHE_H___
@@ -33,7 +33,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API RenderTargetCache( Engine & engine );
+		C3D_API explicit RenderTargetCache( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

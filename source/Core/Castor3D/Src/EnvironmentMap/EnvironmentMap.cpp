@@ -231,11 +231,12 @@ namespace castor3d
 
 	void EnvironmentMap::render()
 	{
-		uint32_t face = 0u;
 		m_render++;
 
 		if ( m_render == 5u )
 		{
+			uint32_t face = 0u;
+
 			for ( auto & attach : m_colourAttachs )
 			{
 				m_frameBuffer->bind( FrameBufferTarget::eDraw );

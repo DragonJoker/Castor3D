@@ -33,7 +33,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\remarks		Lance une exception si l'instance est déjà initialisée.
 		 */
-		inline Unique( T * p_this )
+		inline explicit Unique( T * p_this )
 		{
 			if ( !doGetInstance() )
 			{

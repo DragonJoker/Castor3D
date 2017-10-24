@@ -182,7 +182,7 @@ namespace castor3d
 		if ( m_attenuation.isDirty()
 			|| m_cutOff.isDirty() )
 		{
-			auto & data = SpotLight::generateVertices();
+			SpotLight::generateVertices();
 			auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
 			m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
 				, Point3r{ scale[0], scale[0], scale[1] } );

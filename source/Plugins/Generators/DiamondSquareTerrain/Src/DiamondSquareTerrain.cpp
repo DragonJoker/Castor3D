@@ -1,4 +1,4 @@
-#include "DiamondSquareTerrain.hpp"
+﻿#include "DiamondSquareTerrain.hpp"
 
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
@@ -34,11 +34,11 @@ namespace diamond_square_terrain
 
 			inline float & operator()( uint32_t x, uint32_t y )
 			{
-				static float dummy = -1;
 				auto index = getIndex( x, y );
 
 				if ( index >= m_map.size() )
 				{
+					static float dummy = -1;
 					return dummy;
 				}
 

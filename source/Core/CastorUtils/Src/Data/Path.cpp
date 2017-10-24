@@ -226,7 +226,7 @@ namespace castor
 				{
 					// The folder looks like <something>/../<something else> remove the previous folder
 					std::list< String >::iterator itPrv = it;
-					itPrv--;
+					--itPrv;
 					list.erase( it );
 					list.erase( itPrv );
 					it = std::find( list.begin(), list.end(), cuT( ".." ) );

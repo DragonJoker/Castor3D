@@ -503,7 +503,7 @@ namespace castor
 				 *\brief		Constructeur.
 				 *\param[in]	p_it	L'itérateur sur la chaîne.
 				*/
-				inline iterator( std::string::iterator const & p_it );
+				inline explicit iterator( std::string::iterator const & p_it );
 				/**
 				 *\~english
 				 *\brief		Copy constructor.
@@ -709,7 +709,7 @@ namespace castor
 				 *\brief		Constructeur.
 				 *\param[in]	p_it	L'itérateur sur la chaîne.
 				*/
-				inline const_iterator( std::string::const_iterator const & p_it );
+				inline explicit const_iterator( std::string::const_iterator const & p_it );
 				/**
 				 *\~english
 				 *\brief		Copy constructor.

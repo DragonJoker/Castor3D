@@ -1,4 +1,4 @@
-﻿#include "Miscellaneous/GlDebug.hpp"
+#include "Miscellaneous/GlDebug.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Common/GlGetFunction.hpp"
@@ -219,22 +219,22 @@ namespace GlRender
 		static uint32_t constexpr OutOfMemory = 0x0505;
 		static uint32_t constexpr InvalidFramebufferOperation = 0x0506;
 
-		static std::map< uint32_t, String > const Errors
-		{
-			{ InvalidEnum, cuT( "Invalid Enum" ) },
-			{ InvalidValue, cuT( "Invalid Value" ) },
-			{ InvalidOperation, cuT( "Invalid Operation" ) },
-			{ StackOverflow, cuT( "Stack Overflow" ) },
-			{ StackUnderflow, cuT( "Stack Underflow" ) },
-			{ OutOfMemory, cuT( "Out of memory" ) },
-			{ InvalidFramebufferOperation, cuT( "Invalid frame buffer operation" ) },
-		};
-
 		bool result = true;
 		uint32_t errorCode = m_pfnGetError();
 
 		if ( errorCode )
 		{
+			//static std::map< uint32_t, String > const Errors
+			//{
+			//	{ InvalidEnum, cuT( "Invalid Enum" ) },
+			//	{ InvalidValue, cuT( "Invalid Value" ) },
+			//	{ InvalidOperation, cuT( "Invalid Operation" ) },
+			//	{ StackOverflow, cuT( "Stack Overflow" ) },
+			//	{ StackUnderflow, cuT( "Stack Underflow" ) },
+			//	{ OutOfMemory, cuT( "Out of memory" ) },
+			//	{ InvalidFramebufferOperation, cuT( "Invalid frame buffer operation" ) },
+			//};
+
 			//auto it = Errors.find( errorCode );
 			//StringStream error;
 			//l_error << cuT( "OpenGL Error, on function: " ) << p_text << std::endl;

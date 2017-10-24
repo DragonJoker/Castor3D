@@ -143,14 +143,6 @@ namespace GuiCommon
 			clip_width = ( inRect.x + inRect.width ) - tabX;
 		}
 
-		wxPoint clipPoints[6];
-		clipPoints[0] = wxPoint( tabX, tabY + tabHeight - 3 );
-		clipPoints[1] = wxPoint( tabX, tabY + 2 );
-		clipPoints[2] = wxPoint( tabX + 2, tabY );
-		clipPoints[3] = wxPoint( tabX + clip_width - 1, tabY );
-		clipPoints[4] = wxPoint( tabX + clip_width + 1, tabY + 2 );
-		clipPoints[5] = wxPoint( tabX + clip_width + 1, tabY + tabHeight - 3 );
-
 #if !defined(__WXDFB__) && !defined(__WXCOCOA__)
 		// since the above code above doesn't play well with WXDFB or WXCOCOA,
 		// we'll just use a rectangle for the clipping region for now --
@@ -245,7 +237,6 @@ namespace GuiCommon
 			closeButtonWidth = m_activeCloseBmp.GetWidth();
 		}
 
-		int bitmapOffset = 0;
 		textOffset = tabX + 8;
 
 		wxString drawText = auiChopText( dc, caption, tabWidth - ( textOffset - tabX ) - closeButtonWidth );
@@ -273,7 +264,7 @@ namespace GuiCommon
 
 			if ( pane.bitmap.IsOk() )
 			{
-				focusRectBitmap = wxRect( bitmapOffset, drawnTabYOffset + ( drawnTabHeight / 2 ) - ( pane.bitmap.GetHeight() / 2 ), pane.bitmap.GetWidth(), pane.bitmap.GetHeight() );
+				focusRectBitmap = wxRect( 0, drawnTabYOffset + ( drawnTabHeight / 2 ) - ( pane.bitmap.GetHeight() / 2 ), pane.bitmap.GetWidth(), pane.bitmap.GetHeight() );
 			}
 
 			if ( pane.bitmap.IsOk() && drawText.IsEmpty() )

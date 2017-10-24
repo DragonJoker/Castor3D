@@ -35,7 +35,7 @@ namespace castor
 		 *\brief		Constructeur à partir d'un tableau de char
 		 *\param[in]	p_data	Le tableau de char
 		 */
-		explicit CU_API Path( char const * p_data );
+		CU_API explicit Path( char const * p_data );
 		/**
 		 *\~english
 		 *\brief		Constructor from a wchar_t array
@@ -44,7 +44,7 @@ namespace castor
 		 *\brief		Constructeur à partir d'un tableau de wchar_t
 		 *\param[in]	p_data	Le tableau de wchar_t
 		 */
-		explicit CU_API Path( wchar_t const * p_data );
+		CU_API explicit Path( wchar_t const * p_data );
 		/**
 		 *\~english
 		 *\brief		Constructor from a String
@@ -53,7 +53,7 @@ namespace castor
 		 *\brief		Constructeur à partir d'un String
 		 *\param[in]	p_data	Le String
 		 */
-		explicit CU_API Path( String const & p_data );
+		CU_API explicit Path( String const & p_data );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor

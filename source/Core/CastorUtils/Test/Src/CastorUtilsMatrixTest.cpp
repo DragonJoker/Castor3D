@@ -127,7 +127,6 @@ namespace Testing
 	{
 		for ( int i = 0; i < 10; ++i )
 		{
-			char msg[64] = { 0 };
 			Matrix4x4f mtx;
 			glm::mat4 glm;
 			randomInit( mtx.ptr(), &glm[0][0], 16 );
@@ -142,7 +141,6 @@ namespace Testing
 	{
 		for ( int i = 0; i < 10; ++i )
 		{
-			char msg[64] = { 0 };
 			Matrix4x4r mtxA;
 			glm::mat4 glmA;
 			randomInit( mtxA.ptr(), &glmA[0][0], 16 );

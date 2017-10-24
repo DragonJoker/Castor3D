@@ -66,7 +66,7 @@ namespace castor
 		 *\brief		Constructeur, initialise le pool au nombre d'éléments donné.
 		 *\param[in]	p_count	Le compte des objets.
 		 */
-		ObjectPool( size_t p_count )noexcept
+		explicit ObjectPool( size_t p_count )noexcept
 			: m_count( p_count )
 		{
 			MemoryData::initialise( m_count );

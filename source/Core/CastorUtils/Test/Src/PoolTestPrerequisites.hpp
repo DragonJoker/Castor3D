@@ -46,7 +46,7 @@ struct BigObj
 {
 	uint8_t valueG[1024 * 1024];
 
-	inline BigObj( double d, float f )
+	inline explicit BigObj( double d, float f )
 	{
 		valueD = d;
 		valueE = f;
