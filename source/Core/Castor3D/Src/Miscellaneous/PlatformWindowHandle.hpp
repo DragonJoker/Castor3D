@@ -31,7 +31,7 @@ namespace castor3d
 		: public IWindowHandle
 	{
 	public:
-		IMswWindowHandle( HWND p_hWnd )
+		explicit IMswWindowHandle( HWND p_hWnd )
 			: m_hWnd{ p_hWnd }
 		{
 		}

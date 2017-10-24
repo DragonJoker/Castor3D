@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MetallicRoughnessPbrPass_H___
@@ -67,7 +67,7 @@ namespace castor3d
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
 		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API MetallicRoughnessPbrPass( Material & parent );
+		C3D_API explicit MetallicRoughnessPbrPass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.

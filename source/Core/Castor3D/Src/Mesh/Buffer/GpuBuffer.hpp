@@ -28,7 +28,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	size	La taille de l'allocateur.
 		 */
-		inline GpuBufferBuddyAllocatorTraits( size_t size )
+		inline explicit GpuBufferBuddyAllocatorTraits( size_t size )
 			: m_allocatedSize{ size }
 		{
 		}

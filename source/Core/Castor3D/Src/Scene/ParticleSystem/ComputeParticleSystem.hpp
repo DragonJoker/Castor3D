@@ -33,7 +33,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	p_parent	Le système de particules parent.
 		 */
-		C3D_API ComputeParticleSystem( ParticleSystem & p_parent );
+		C3D_API explicit ComputeParticleSystem( ParticleSystem & p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FRUSTUM_H___
@@ -30,7 +30,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	viewport	Le viewport.
 		 */
-		C3D_API Frustum( Viewport & viewport );
+		C3D_API explicit Frustum( Viewport & viewport );
 		/**
 		 *\~english
 		 *\brief		Updates the frustum planes.

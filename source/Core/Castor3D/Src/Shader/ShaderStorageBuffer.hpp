@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_declaration	La déclaration du tampon.
 		 */
-		C3D_API ShaderStorageBuffer( Engine & engine );
+		C3D_API explicit ShaderStorageBuffer( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

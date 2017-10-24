@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SpecularGlossinessPbrPass_H___
@@ -67,7 +67,7 @@ namespace castor3d
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
 		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API SpecularGlossinessPbrPass( Material & parent );
+		C3D_API explicit SpecularGlossinessPbrPass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DIRECTIONAL_LIGHT_H___
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	p_light	La Light parente.
 		 */
-		C3D_API DirectionalLight( Light & p_light );
+		C3D_API explicit DirectionalLight( Light & p_light );
 
 	public:
 		/**

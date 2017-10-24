@@ -44,7 +44,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API PickingPass( Engine & engine );
+		C3D_API explicit PickingPass( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

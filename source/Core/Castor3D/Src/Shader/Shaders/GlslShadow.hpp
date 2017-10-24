@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_SHADOW_H___
@@ -23,7 +23,7 @@ namespace castor3d
 			C3D_API static castor::String const MapDepthPoint;
 
 		public:
-			C3D_API Shadow( glsl::GlslWriter & writer );
+			C3D_API explicit Shadow( glsl::GlslWriter & writer );
 			C3D_API void declare( ShadowType type
 				, uint32_t & index );
 			C3D_API void declareDirectional( ShadowType type

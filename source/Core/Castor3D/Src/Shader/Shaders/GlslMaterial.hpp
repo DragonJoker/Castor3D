@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_Materials_H___
@@ -26,7 +26,7 @@ namespace castor3d
 			friend class Materials;
 
 		protected:
-			C3D_API BaseMaterial( castor::String const & type );
+			C3D_API explicit BaseMaterial( castor::String const & type );
 			C3D_API BaseMaterial( glsl::GlslWriter * writer
 				, castor::String const & name = castor::String() );
 			C3D_API BaseMaterial( castor::String const & type
@@ -143,7 +143,7 @@ namespace castor3d
 		class Materials
 		{
 		protected:
-			C3D_API Materials( glsl::GlslWriter & writer );
+			C3D_API explicit Materials( glsl::GlslWriter & writer );
 
 		public:
 			C3D_API virtual void declare() = 0;
@@ -157,7 +157,7 @@ namespace castor3d
 			: public Materials
 		{
 		public:
-			C3D_API LegacyMaterials( glsl::GlslWriter & writer );
+			C3D_API explicit LegacyMaterials( glsl::GlslWriter & writer );
 			C3D_API void declare()override;
 			C3D_API LegacyMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
@@ -170,7 +170,7 @@ namespace castor3d
 			: public Materials
 		{
 		public:
-			C3D_API PbrMRMaterials( glsl::GlslWriter & writer );
+			C3D_API explicit PbrMRMaterials( glsl::GlslWriter & writer );
 			C3D_API void declare()override;
 			C3D_API MetallicRoughnessMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
@@ -183,7 +183,7 @@ namespace castor3d
 			: public Materials
 		{
 		public:
-			C3D_API PbrSGMaterials( glsl::GlslWriter & writer );
+			C3D_API explicit PbrSGMaterials( glsl::GlslWriter & writer );
 			C3D_API void declare()override;
 			C3D_API SpecularGlossinessMaterial getMaterial( glsl::Int const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;

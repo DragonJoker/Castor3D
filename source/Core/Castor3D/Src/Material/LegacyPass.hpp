@@ -67,7 +67,7 @@ namespace castor3d
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
 		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API LegacyPass( Material & parent );
+		C3D_API explicit LegacyPass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.

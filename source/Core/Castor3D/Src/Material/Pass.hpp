@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PASS_H___
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API Pass( Material & parent );
+		C3D_API explicit Pass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor

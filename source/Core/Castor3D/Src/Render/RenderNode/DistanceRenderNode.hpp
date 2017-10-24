@@ -73,7 +73,7 @@ namespace castor3d
 	struct DistanceRenderNode
 		: public DistanceRenderNodeBase
 	{
-		DistanceRenderNode( NodeType & p_node )
+		explicit DistanceRenderNode( NodeType & p_node )
 			: m_node{ p_node }
 		{
 		}

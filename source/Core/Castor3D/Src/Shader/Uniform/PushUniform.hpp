@@ -30,7 +30,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API PushUniform( ShaderProgram & p_program );
+		C3D_API explicit PushUniform( ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor

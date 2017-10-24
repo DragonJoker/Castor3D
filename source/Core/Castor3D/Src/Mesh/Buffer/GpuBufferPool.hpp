@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GpuBufferPool_HPP___
@@ -39,7 +39,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
-		GpuBufferPool( RenderSystem & renderSystem );
+		explicit GpuBufferPool( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.

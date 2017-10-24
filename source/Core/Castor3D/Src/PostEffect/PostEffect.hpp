@@ -50,7 +50,7 @@ namespace castor3d
 			 *\brief		Constructeur.
 			 *\param[in]	engine	Le moteur.
 			 */
-			C3D_API PostEffectSurface( castor3d::Engine & engine );
+			C3D_API explicit PostEffectSurface( castor3d::Engine & engine );
 			/**
 			 *\~english
 			 *\brief		Initialises the surface.

@@ -41,7 +41,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	p_description	La description des éléments de la particule.
 		 */
-		C3D_API Particle( BufferDeclaration const & p_description );
+		C3D_API explicit Particle( BufferDeclaration const & p_description );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

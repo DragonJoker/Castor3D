@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_Uniform_H___
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 */
-		C3D_API Uniform( uint32_t p_occurences );
+		C3D_API explicit Uniform( uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Destructor.
