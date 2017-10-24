@@ -187,7 +187,7 @@ namespace castor3d
 		FontSPtr font = fontTexture->getFont();
 		std::vector< char32_t > newCaption;
 
-		for ( string::utf8::iterator it = m_currentCaption.begin(); it != m_currentCaption.end(); ++it )
+		for ( string::utf8::iterator it{ m_currentCaption.begin() }; it != m_currentCaption.end(); ++it )
 		{
 			if ( !font->hasGlyphAt( *it ) )
 			{
@@ -382,7 +382,7 @@ namespace castor3d
 			double wordWidth = 0;
 			std::u32string word;
 
-			for ( string::utf8::const_iterator itLine = lineText.begin(); itLine != lineText.end(); ++itLine )
+			for ( string::utf8::const_iterator itLine{ lineText.begin() }; itLine != lineText.end(); ++itLine )
 			{
 				Glyph const & glyph{ font->getGlyphAt( *itLine ) };
 				DisplayableChar character{ Point2d{}, Point2d{ glyph.getAdvance(), glyph.getSize().getHeight() }, glyph };

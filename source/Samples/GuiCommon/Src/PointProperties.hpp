@@ -46,8 +46,20 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( PointProperty )
 
 	public:
-		PointProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
-		PointProperty( wxString const( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+		PointProperty( wxString const & label = wxPG_LABEL
+			, wxString const & name = wxPG_LABEL
+			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+		PointProperty( wxString const & label
+			, wxString const & name
+			, castor::Coords< T, Count > const & value );
+		PointProperty( wxString const( & p_names )[Count]
+			, wxString const & label = wxPG_LABEL
+			, wxString const & name = wxPG_LABEL
+			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+		PointProperty( wxString const( & p_names )[Count]
+			, wxString const & label
+			, wxString const & name
+			, castor::Coords< T, Count > const & value );
 		virtual ~PointProperty();
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;

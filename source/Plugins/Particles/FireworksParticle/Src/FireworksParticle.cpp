@@ -46,7 +46,7 @@ namespace Fireworks
 			{
 				Point3f velocity{ doGetRandomDirection() * 5.0f };
 				velocity[1] = std::max( velocity[1] * 7.0f, 10.0f );
-				p_system.emitParticle( g_shell, p_position, velocity, 0.0f );
+				p_system.emitParticle( g_shell, Point3f{ p_position }, velocity, 0.0f );
 				p_age = 0.0f;
 			}
 
@@ -76,7 +76,7 @@ namespace Fireworks
 			{
 				for ( int i = 1; i < 10; ++i )
 				{
-					p_system.emitParticle( g_secondaryShell, p_position, ( doGetRandomDirection() * 5.0f ) + p_velocity / 2.0f, 0.0f );
+					p_system.emitParticle( g_secondaryShell, Point3f{ p_position }, ( doGetRandomDirection() * 5.0f ) + p_velocity / 2.0f, 0.0f );
 				}
 
 				// Turn this shell to a secondary shell, to decrease the holes in buffer
