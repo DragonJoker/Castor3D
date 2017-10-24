@@ -22,7 +22,7 @@ namespace TestRender
 		 *\para[in]		p_gl			Les APIs OpenGL.
 		 *\param[in]	p_renderBuffer	Le tampon de rendu.
 		 */
-		TestRenderBufferAttachment( castor3d::RenderBufferSPtr p_renderBuffer );
+		explicit TestRenderBufferAttachment( castor3d::RenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.

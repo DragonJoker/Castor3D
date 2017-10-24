@@ -1,4 +1,4 @@
-﻿#include "FrameBuffer/GlBackBuffers.hpp"
+#include "FrameBuffer/GlBackBuffers.hpp"
 
 #include "Common/OpenGl.hpp"
 
@@ -52,7 +52,7 @@ namespace GlRender
 		getOpenGl().ReadBuffer( GlBufferBinding( uint32_t( getOpenGl().get( getOpenGl().get( p_eAttach ) ) ) + p_index ) );
 	}
 
-	void GlBackBuffers::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void GlBackBuffers::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )const
 	{
 		REQUIRE( getOpenGl().hasFbo() );
 		auto mode = getOpenGl().get( FrameBufferTarget::eRead );

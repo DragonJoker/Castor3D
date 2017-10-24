@@ -11,7 +11,7 @@ namespace castor3d
 	class GpInfoUbo
 	{
 	public:
-		GpInfoUbo( Engine & engine );
+		explicit GpInfoUbo( Engine & engine );
 		~GpInfoUbo();
 		void update( castor::Size const & p_size
 			, Camera const & p_camera

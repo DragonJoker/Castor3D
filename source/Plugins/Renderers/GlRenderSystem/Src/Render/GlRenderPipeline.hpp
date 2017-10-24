@@ -47,12 +47,12 @@ namespace GlRender
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
 		GlRenderPipeline( OpenGl & p_gl, GlRenderSystem & renderSystem
-					, castor3d::DepthStencilState && p_dsState
-					, castor3d::RasteriserState && p_rsState
-					, castor3d::BlendState && p_bdState
-					, castor3d::MultisampleState && p_msState
-					, castor3d::ShaderProgram & p_program
-					, castor3d::PipelineFlags const & p_flags );
+			, castor3d::DepthStencilState && p_dsState
+			, castor3d::RasteriserState && p_rsState
+			, castor3d::BlendState && p_bdState
+			, castor3d::MultisampleState && p_msState
+			, castor3d::ShaderProgram & p_program
+			, castor3d::PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Destructor.

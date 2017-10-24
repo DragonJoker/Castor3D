@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GaussianBlur_H___
@@ -73,10 +73,10 @@ namespace castor3d
 			, TextureLayoutSPtr intermediate );
 
 	private:
-		void doBlur( TextureLayoutSPtr & source
-			, TextureLayoutSPtr & destination
-			, RenderPipeline & pipeline
-			, UniformBuffer & ubo );
+		void doBlur( TextureLayoutSPtr source
+			, TextureLayoutSPtr destination
+			, TextureAttachmentSPtr attach
+			, RenderPipeline & pipeline );
 		bool doInitialiseBlurXProgram( Engine & engine );
 		bool doInitialiseBlurYProgram( Engine & engine );
 
@@ -84,6 +84,7 @@ namespace castor3d
 		static castor::String const Config;
 		static castor::String const Coefficients;
 		static castor::String const CoefficientsCount;
+		static castor::String const TextureSize;
 		static constexpr uint32_t MaxCoefficients{ 64u };
 
 	private:
@@ -93,17 +94,15 @@ namespace castor3d
 		TextureUnit m_colour;
 		FrameBufferSPtr m_fbo;
 		TextureAttachmentSPtr m_colourAttach;
+
 		std::vector< float > m_kernel;
+		castor3d::UniformBuffer m_blurUbo;
+		castor3d::Uniform1uiSPtr m_blurCoeffCount;
+		castor3d::Uniform1fSPtr m_blurCoeffs;
+		castor3d::Uniform2fSPtr m_blurSize;
 
 		castor3d::RenderPipelineUPtr m_blurXPipeline;
-		castor3d::UniformBuffer m_blurXUbo;
-		castor3d::Uniform1uiSPtr m_blurXCoeffCount;
-		castor3d::Uniform1fSPtr m_blurXCoeffs;
-
 		castor3d::RenderPipelineUPtr m_blurYPipeline;
-		castor3d::UniformBuffer m_blurYUbo;
-		castor3d::Uniform1uiSPtr m_blurYCoeffCount;
-		castor3d::Uniform1fSPtr m_blurYCoeffs;
 
 
 	};

@@ -58,7 +58,7 @@ namespace castor
 
 				::HANDLE process( ::GetCurrentProcess() );
 
-				if ( process != INVALID_HANDLE_VALUE )
+				//if ( process != INVALID_HANDLE_VALUE )
 				{
 					p_stream << "CALL STACK:" << std::endl;
 

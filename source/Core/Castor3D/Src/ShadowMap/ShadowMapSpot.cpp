@@ -160,10 +160,16 @@ namespace castor3d
 		ENSURE( m_frameBuffer->isComplete() );
 		m_frameBuffer->setDrawBuffers();
 		m_frameBuffer->unbind();
+
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, m_shadowMap.getTexture()->getDimensions()
+			, m_shadowMap.getTexture()->getPixelFormat()
+			, 5u );
 	}
 
 	void ShadowMapSpot::doCleanup()
 	{
+		m_blur.reset();
 		m_depthAttach.reset();
 		m_varianceAttach.reset();
 	}

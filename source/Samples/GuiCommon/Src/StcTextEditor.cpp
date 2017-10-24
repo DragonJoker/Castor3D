@@ -12,7 +12,7 @@ struct LexerStylesAssoc
 {
 	int m_iStyles[eSTC_TYPE_COUNT];
 
-	LexerStylesAssoc( eSTC_LEX p_eLex )
+	explicit LexerStylesAssoc( eSTC_LEX p_eLex )
 	{
 		memset( m_iStyles, 0, sizeof( m_iStyles ) );
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredReflectionPass_H___
@@ -82,7 +82,6 @@ namespace castor3d
 				, MatrixUbo & p_matrixUbo
 				, SceneUbo & p_sceneUbo
 				, GpInfoUbo & p_gpInfo
-				, HdrConfigUbo & p_configUbo
 				, bool hasSsao
 				, FogType fogType
 				, MaterialType matType );
@@ -116,9 +115,6 @@ namespace castor3d
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo & m_gpInfoUbo;
-		//!\~english	The HDR configuration.
-		//!\~french		La configuration HDR.
-		HdrConfigUbo m_configUbo;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
 		ReflectionPrograms m_programs;

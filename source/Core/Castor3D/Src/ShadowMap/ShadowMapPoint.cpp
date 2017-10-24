@@ -58,7 +58,7 @@ namespace castor3d
 			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eL32F
+				, PixelFormat::eAL32F
 				, size );
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -137,11 +137,11 @@ namespace castor3d
 		{
 			m_frameBuffer->bind( FrameBufferTarget::eDraw );
 			m_colourAttach[face]->attach( AttachmentPoint::eColour, 0u );
-			m_depthAttach[face]->attach( AttachmentPoint::eDepth );
+			m_depthAttach[face]->attach( AttachmentPoint::eColour, 1u );
 			REQUIRE( m_frameBuffer->isComplete() );
-			m_frameBuffer->setDrawBuffer( m_colourAttach[face] );
+			m_frameBuffer->setDrawBuffers( { m_colourAttach[face], m_depthAttach[face] } );
 			m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
-			m_pass->render( face++ );
+			m_pass->render( face );
 			m_frameBuffer->unbind();
 		}
 	}
@@ -150,9 +150,10 @@ namespace castor3d
 	{
 		Size displaySize{ 128u, 128u };
 		Position position{ int32_t( displaySize.getWidth() * 4 * index), int32_t( displaySize.getHeight() * 4 ) };
-		getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
+		getEngine()->getRenderSystem()->getCurrentContext()->renderVarianceCube( position
 			, displaySize
 			, *m_shadowMap.getTexture() );
+		position = Position{ int32_t( displaySize.getWidth() * 4 * ( index + 2 ) ), int32_t( displaySize.getHeight() * 4 ) };
 		getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
 			, displaySize
 			, *m_depthMap.getTexture() );
@@ -227,7 +228,8 @@ namespace castor3d
 		materials->declare();
 
 		// Fragment Outputs
-		auto pxl_depth = writer.declFragData< Float >( cuT( "pxl_depth" ), 0u );
+		auto pxl_depth = writer.declFragData< Vec2 >( cuT( "pxl_depth" ), 0u );
+		auto pxl_linear = writer.declFragData< Float >( cuT( "pxl_linear" ), 1u );
 
 		auto main = [&]()
 		{
@@ -239,7 +241,15 @@ namespace castor3d
 
 			auto depth = writer.declLocale( cuT( "depth" )
 				, length( vtx_position - c3d_wordLightPosition ) );
-			pxl_depth = depth / c3d_farPlane;
+			pxl_linear = depth / c3d_farPlane;
+			pxl_depth.x() = pxl_linear;
+			pxl_depth.y() = pxl_linear * pxl_linear;
+
+			auto dx = writer.declLocale( cuT( "dx" )
+				, dFdx( pxl_linear ) );
+			auto dy = writer.declLocale( cuT( "dy" )
+				, dFdy( pxl_linear ) );
+			pxl_depth.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

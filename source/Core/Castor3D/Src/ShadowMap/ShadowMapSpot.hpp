@@ -1,9 +1,10 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMapSpot_H___
 #define ___C3D_ShadowMapSpot_H___
 
+#include "Miscellaneous/GaussianBlur.hpp"
 #include "ShadowMap/ShadowMap.hpp"
 
 namespace castor3d
@@ -88,6 +89,9 @@ namespace castor3d
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
 		TextureAttachmentSPtr m_depthAttach;
+		//!\~english	The Gaussian blur pass.
+		//!\~french		La passe de flou Gaussien.
+		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }
 

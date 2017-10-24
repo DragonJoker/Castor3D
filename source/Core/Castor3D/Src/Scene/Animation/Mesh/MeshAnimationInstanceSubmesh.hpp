@@ -110,7 +110,7 @@ namespace castor3d
 		SubmeshAnimationBufferArray::const_iterator m_curr;
 		//!\~english	The time elapsed since the last keyframe.
 		//!\~french		Le temps écoulé depuis la dernière keyframe.
-		float m_currentFactor;
+		float m_currentFactor{ 0.0f };
 	};
 }
 

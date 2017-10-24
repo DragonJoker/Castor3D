@@ -14,7 +14,7 @@ namespace castor3d
 	{
 		struct FragmentInput
 		{
-			C3D_API FragmentInput( glsl::GlslWriter & writer );
+			C3D_API explicit FragmentInput( glsl::GlslWriter & writer );
 			C3D_API FragmentInput( glsl::InVec3 const & vertex
 				, glsl::InVec3 const & normal );
 			glsl::InVec3 m_vertex;
@@ -23,7 +23,7 @@ namespace castor3d
 
 		struct OutputComponents
 		{
-			C3D_API OutputComponents( glsl::GlslWriter & writer );
+			C3D_API explicit OutputComponents( glsl::GlslWriter & writer );
 			C3D_API OutputComponents( glsl::InOutVec3 const & diffuse
 				, glsl::InOutVec3 const & specular );
 			glsl::InOutVec3 m_diffuse;

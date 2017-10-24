@@ -1,4 +1,4 @@
-﻿#include "TransformFeedbackParticleSystem.hpp"
+#include "TransformFeedbackParticleSystem.hpp"
 
 #include "ParticleSystem.hpp"
 #include "Particle.hpp"
@@ -113,7 +113,6 @@ namespace castor3d
 		m_emitterPosition->setValue( m_parent.getParent()->getDerivedPosition() );
 		m_ubo.update();
 		auto & gbuffers = *m_updateGeometryBuffers[m_vtx];
-		auto & vbuffer = *m_updateVertexBuffers[m_vtx];
 		auto & transform = *m_transformFeedbacks[m_tfb];
 
 		m_updatePipeline->apply();

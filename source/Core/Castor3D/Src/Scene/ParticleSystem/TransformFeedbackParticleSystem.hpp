@@ -33,7 +33,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	p_parent	Le système de particule parent.
 		 */
-		C3D_API TransformFeedbackParticleSystem( ParticleSystem & p_parent );
+		C3D_API explicit TransformFeedbackParticleSystem( ParticleSystem & p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor

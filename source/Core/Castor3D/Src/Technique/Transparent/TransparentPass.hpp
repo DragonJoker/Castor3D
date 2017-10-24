@@ -118,6 +118,16 @@ namespace castor3d
 		void render( RenderInfo & p_info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
+		/**
+		 *\~english
+		 *\return		The Scene UBO.
+		 *\~french
+		 *\return		L'UBO de la scène.
+		 */
+		inline SceneUbo & getSceneUbo()
+		{
+			return m_sceneUbo;
+		}
 
 	private:
 		/**

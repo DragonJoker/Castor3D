@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_IndentBlock_H___
@@ -10,8 +10,8 @@ namespace glsl
 {
 	struct IndentBlock
 	{
-		GlslWriter_API IndentBlock( GlslWriter & p_writter );
-		GlslWriter_API IndentBlock( castor::StringStream & p_stream );
+		GlslWriter_API explicit IndentBlock( GlslWriter & p_writter );
+		GlslWriter_API explicit IndentBlock( castor::StringStream & p_stream );
 		GlslWriter_API ~IndentBlock();
 
 	private:

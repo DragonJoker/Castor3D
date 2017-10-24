@@ -12,7 +12,7 @@ namespace TestRender
 		: public castor3d::Context
 	{
 	public:
-		TestContext( TestRenderSystem & p_renderSystem );
+		explicit TestContext( TestRenderSystem & p_renderSystem );
 		virtual ~TestContext();
 
 	private:

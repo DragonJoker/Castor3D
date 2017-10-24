@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SkinningUbo_H___
@@ -40,7 +40,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API SkinningUbo( Engine & engine );
+		C3D_API explicit SkinningUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

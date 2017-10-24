@@ -51,7 +51,7 @@ namespace GlRender
 
 		using FuncType = std::function< TRet( TParams... ) >;
 
-		inline GlFunction( CFuncType p_function )
+		inline explicit GlFunction( CFuncType p_function )
 			: m_function{ p_function }
 		{
 		}
@@ -71,7 +71,7 @@ namespace GlRender
 		inline GlFunction() = default;
 
 		template< typename FuncT >
-		inline GlFunction( FuncT p_function )
+		inline explicit GlFunction( FuncT p_function )
 			: m_function{ reinterpret_cast< FuncType >( p_function ) }
 		{
 		}
@@ -109,7 +109,7 @@ namespace GlRender
 		: public Holder
 	{
 	public:
-		TexFunctionsBase( OpenGl & p_gl );
+		explicit TexFunctionsBase( OpenGl & p_gl );
 		virtual void GenerateMipmap( GlTexDim p_target )const = 0;
 		virtual void BindTexture( GlTexDim p_target, uint32_t texture )const = 0;
 		virtual void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const = 0;
@@ -128,7 +128,7 @@ namespace GlRender
 		: public TexFunctionsBase
 	{
 	public:
-		TexFunctions( OpenGl & p_gl );
+		explicit TexFunctions( OpenGl & p_gl );
 		inline void BindTexture( GlTexDim p_target, uint32_t texture )const override;
 		inline void GenerateMipmap( GlTexDim p_target )const override;
 		inline void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const override;
@@ -157,7 +157,7 @@ namespace GlRender
 		: public TexFunctionsBase
 	{
 	public:
-		TexFunctionsDSA( OpenGl & p_gl );
+		explicit TexFunctionsDSA( OpenGl & p_gl );
 		inline void BindTexture( GlTexDim /*p_target*/, uint32_t texture )const override
 		{
 			m_uiTexture = texture;
@@ -189,7 +189,7 @@ namespace GlRender
 		: public Holder
 	{
 	public:
-		BufFunctionsBase( OpenGl & p_gl );
+		explicit BufFunctionsBase( OpenGl & p_gl );
 		virtual void BindBuffer( GlBufferTarget target, uint32_t buffer )const = 0;
 		virtual void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const = 0;
 		virtual void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const = 0;
@@ -264,7 +264,7 @@ namespace GlRender
 		: public BufFunctionsBase
 	{
 	public:
-		BufFunctions( OpenGl & p_gl );
+		explicit BufFunctions( OpenGl & p_gl );
 		inline void BindBuffer( GlBufferTarget target, uint32_t buffer )const override;
 		inline void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const override;
 		inline void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
@@ -290,7 +290,7 @@ namespace GlRender
 		: public BufFunctionsBase
 	{
 	public:
-		BufFunctionsDSA( OpenGl & p_gl );
+		explicit BufFunctionsDSA( OpenGl & p_gl );
 		inline void BindBuffer( GlBufferTarget /*target*/, uint32_t buffer )const override
 		{
 			m_uiBuffer = buffer;
@@ -336,7 +336,7 @@ namespace GlRender
 		};
 
 	public:
-		C3D_Gl_API OpenGl( GlRenderSystem & renderSystem );
+		C3D_Gl_API explicit OpenGl( GlRenderSystem & renderSystem );
 		C3D_Gl_API ~OpenGl();
 		C3D_Gl_API bool preInitialise( castor::String const & p_strExtensions );
 		C3D_Gl_API bool initialise();

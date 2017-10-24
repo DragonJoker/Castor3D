@@ -124,7 +124,7 @@ namespace castor3d
 			, texture
 			, Point3f{ 0, 0, 1 }
 			, m_pipelineDepth );
-		/*
+
 		pos = Position{ pos.x() + int32_t( w * 4 )
 			, pos.y() };
 		doRender( pos + Position{ w * 2, h * 1 }
@@ -156,7 +156,7 @@ namespace castor3d
 			, size
 			, texture
 			, Point3f{ 0, 0, 1 }
-			, m_pipelineVariance );*/
+			, m_pipelineVariance );
 	}
 
 	void RenderVarianceCubeToTexture::doRender( Point2i const & position
@@ -177,11 +177,11 @@ namespace castor3d
 		m_matrixUbo.update( m_viewport.getProjection() );
 		pipeline.m_pipeline->apply();
 
-		texture.bind( 0u );
-		m_sampler->bind( 0u );
+		texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
 		pipeline.m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( 0u );
-		texture.unbind( 0u );
+		m_sampler->unbind( MinTextureIndex );
+		texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderVarianceCubeToTexture::doCreateDepthProgram()
@@ -218,7 +218,6 @@ namespace castor3d
 			// Shader inputs
 			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
-			auto c3d_v2UvMult = writer.declUniform< Vec2 >( cuT( "c3d_v2UvMult" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -233,8 +232,7 @@ namespace castor3d
 						, writer.ternary( c3d_face.y() != 0.0_f
 							, vec3( mapCoord.x(), c3d_face.y(), mapCoord.y() )
 							, vec3( mapCoord, c3d_face.z() ) ) ) );
-				auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDiffuse, uv ).x() );
-				pxl_fragColor = vec4( depth, depth, depth, 1.0 );
+				pxl_fragColor = vec4( vec3( texture( c3d_mapDiffuse, uv ).x() ), 1.0 );
 			} );
 			pxl = writer.finalise();
 		}
@@ -245,7 +243,6 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		return program;
 	}
 
@@ -298,7 +295,8 @@ namespace castor3d
 						, writer.ternary( c3d_face.y() != 0.0_f
 							, vec3( mapCoord.x(), c3d_face.y(), mapCoord.y() )
 							, vec3( mapCoord, c3d_face.z() ) ) ) );
-				auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDiffuse, uv ).y() );
+				auto depth = writer.declLocale( cuT( "depth" )
+					, sqrt( texture( c3d_mapDiffuse, uv ).y() ) );
 				pxl_fragColor = vec4( depth, depth, depth, 1.0 );
 			} );
 			pxl = writer.finalise();
@@ -310,7 +308,6 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		return program;
 	}
 

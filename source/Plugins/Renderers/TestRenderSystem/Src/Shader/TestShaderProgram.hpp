@@ -1,4 +1,4 @@
-/* See LICENSE file in root folder */
+﻿/* See LICENSE file in root folder */
 #ifndef ___TRS_SHADER_PROGRAM_H___
 #define ___TRS_SHADER_PROGRAM_H___
 
@@ -16,7 +16,7 @@ namespace TestRender
 		 *\brief		Constructor.
 		 *\param[in]	p_renderSystem	The RenderSystem.
 		 */
-		TestShaderProgram( TestRenderSystem & p_renderSystem );
+		explicit TestShaderProgram( TestRenderSystem & p_renderSystem );
 		/**
 		 *\brief		Destructor.
 		 */

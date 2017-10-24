@@ -88,6 +88,23 @@ namespace castor3d
 		C3D_API void renderFace( castor::Size const & size
 			, TextureLayout const & texture
 			, CubeMapFace face );
+		/**
+		 *\~english
+		 *\brief		Renders a face from the given cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	face	The face.
+		 *\~french
+		 *\brief		Rend une face de la texture cube donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	face	La face.
+		 */
+		C3D_API void renderFace( castor::Size const & size
+			, TextureLayout const & texture
+			, CubeMapFace face
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo );
 
 	protected:
 		/**

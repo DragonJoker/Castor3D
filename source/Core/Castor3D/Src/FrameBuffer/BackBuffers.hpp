@@ -66,28 +66,28 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer )override
+		C3D_API RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer )const override
 		{
 			return nullptr;
 		}
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )const override
 		{
 			return nullptr;
 		}
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face )const override
 		{
 			return nullptr;
 		}
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face, uint32_t mipLevel )override
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face, uint32_t mipLevel )const override
 		{
 			return nullptr;
 		}

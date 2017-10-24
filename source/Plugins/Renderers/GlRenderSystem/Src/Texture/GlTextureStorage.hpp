@@ -32,11 +32,11 @@ namespace GlRender
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
 		GlTextureStorage( OpenGl & p_gl
-						  , GlRenderSystem & renderSystem
-						  , castor3d::TextureStorageType p_type
-						  , castor3d::TextureLayout & p_layout
-						  , castor3d::AccessTypes const & p_cpuAccess
-						  , castor3d::AccessTypes const & p_gpuAccess );
+			, GlRenderSystem & renderSystem
+			, castor3d::TextureStorageType p_type
+			, castor3d::TextureLayout & p_layout
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */

@@ -23,7 +23,7 @@ namespace TestRender
 		 *\brief		Constructor
 		 *\param[in]	p_gl	The OpenGL APIs.
 		 */
-		TestProgramInputLayout( castor3d::RenderSystem & p_renderSystem );
+		explicit TestProgramInputLayout( castor3d::RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.

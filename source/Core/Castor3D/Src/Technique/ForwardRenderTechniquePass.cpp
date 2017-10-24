@@ -449,7 +449,7 @@ namespace castor3d
 				}
 			}
 
-			if ( !m_opaque )
+			if ( !m_opaque && alphaFunc != ComparisonFunc::eAlways )
 			{
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -676,7 +676,7 @@ namespace castor3d
 				, matAlbedo
 				, lightSpecular + matEmissive + ambient );
 
-			if ( !m_opaque )
+			if ( !m_opaque && alphaFunc != ComparisonFunc::eAlways )
 			{
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{

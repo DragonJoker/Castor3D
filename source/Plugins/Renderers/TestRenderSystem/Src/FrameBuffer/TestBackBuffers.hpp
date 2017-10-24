@@ -1,4 +1,4 @@
-/* See LICENSE file in root folder */
+﻿/* See LICENSE file in root folder */
 #ifndef ___TRS_BACK_BUFFERS_H___
 #define ___TRS_BACK_BUFFERS_H___
 
@@ -22,7 +22,7 @@ namespace TestRender
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\para[in]		engine	Le moteur.
 		 */
-		TestBackBuffers( castor3d::Engine & engine );
+		explicit TestBackBuffers( castor3d::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -45,7 +45,7 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::downloadBuffer
 		 */
-		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )override;
+		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )const override;
 		/**
 		 *\copydoc		castor3d::BackBuffers::Bind
 		 */
@@ -57,14 +57,14 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::CreateColourRenderBuffer
 		 */
-		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )override
+		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )const override
 		{
 			return nullptr;
 		}
 		/**
 		 *\copydoc		castor3d::FrameBuffer::CreateDepthStencilRenderBuffer
 		 */
-		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )override
+		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )const override
 		{
 			return nullptr;
 		}

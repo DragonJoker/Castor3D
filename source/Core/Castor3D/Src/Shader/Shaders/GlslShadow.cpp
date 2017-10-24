@@ -1,4 +1,4 @@
-﻿#include "GlslShadow.hpp"
+#include "GlslShadow.hpp"
 
 using namespace castor;
 using namespace glsl;
@@ -166,8 +166,6 @@ namespace castor3d
 					, Float const & varianceFactor
 					, Float const & lightBleedingAmount )
 				{
-					auto smoothX = m_writer.declLocale( cuT( "smoothX" )
-						, smoothstep( distance - 0.01_f, distance, moments.x() ) );
 					auto variance = m_writer.declLocale( cuT( "variance" )
 						, glsl::max( moments.y() - m_writer.paren( moments.x() * moments.x() ), varianceFactor ) );
 					auto d = m_writer.declLocale( cuT( "d" )
@@ -225,7 +223,6 @@ namespace castor3d
 
 					m_writer.returnStmt( 1.0_f - m_chebyshevUpperBound( moments
 						, lightSpacePosition.z()
-						//, -0.0001_f
 						, 0.0000002_f
 						, 0.02_f ) );
 				}
@@ -258,7 +255,7 @@ namespace castor3d
 
 					m_writer.returnStmt( m_chebyshevUpperBound( moments
 						, lightSpacePosition.z()
-						, 0.0000002_f
+						, 0.0000004_f
 						, 0.01_f ) );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
@@ -280,13 +277,6 @@ namespace castor3d
 					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint, PointShadowMapCount );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
-					auto bias = m_writer.declLocale( cuT( "bias" )
-						, vec3( m_getShadowOffset( normal, vertexToLight ) ) );
-					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, glsl::fma( normal
-							, bias
-							, worldSpacePosition ) );
-					vertexToLight = worldSpace - lightPosition;
 					auto depth = m_writer.declLocale( cuT( "depth" )
 						, length( vertexToLight ) / farPlane );
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
@@ -304,10 +294,15 @@ namespace castor3d
 						{
 							FOR( m_writer, Float, z, -offset, "z < offset", "z += offset / (samples * 0.5)" )
 							{
-								auto lightDepth = m_writer.declLocale( cuT( "lightDepth" )
+								auto moments = m_writer.declLocale( cuT( "moments" )
 									, texture( c3d_mapShadowPoint[index]
-										, vertexToLight + vec3( x, y, z ) ).x() );
-								shadowFactor += m_writer.ternary( lightDepth > depth, 0.0_f, 1.0_f );
+										, vertexToLight + vec3( x, y, z ) ).xy() );
+								shadowFactor += m_writer.ternary( depth <= moments.x()
+									, 0.0_f
+									, 1.0_f - m_chebyshevUpperBound( moments
+										, depth
+										, 0.00000002_f
+										, 0.01_f ) );
 								numSamplesUsed += 1.0_f;
 							}
 							ROF;
@@ -347,7 +342,7 @@ namespace castor3d
 
 					m_writer.returnStmt( 1.0_f - m_chebyshevUpperBound( moments
 						, lightSpacePosition.z()
-						, 0.0000002_f
+						, 0.0000004_f
 						, 0.01_f ) );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
@@ -367,13 +362,6 @@ namespace castor3d
 					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
-					auto bias = m_writer.declLocale( cuT( "bias" )
-						, vec3( m_getShadowOffset( normal, vertexToLight ) ) );
-					auto worldSpace = m_writer.declLocale( cuT( "worldSpace" )
-						, glsl::fma( normal
-							, bias
-							, worldSpacePosition ) );
-					vertexToLight = worldSpace - lightPosition;
 					auto depth = m_writer.declLocale( cuT( "depth" )
 						, length( vertexToLight ) / farPlane );
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
@@ -391,10 +379,15 @@ namespace castor3d
 						{
 							FOR( m_writer, Float, z, -offset, "z < offset", "z += offset / (samples * 0.5)" )
 							{
-								auto lightDepth = m_writer.declLocale( cuT( "lightDepth" )
+								auto moments = m_writer.declLocale( cuT( "moments" )
 									, texture( c3d_mapShadowPoint
-										, vertexToLight + vec3( x, y, z ) ).x() );
-								shadowFactor += m_writer.ternary( lightDepth > depth, 0.0_f, 1.0_f );
+										, vertexToLight + vec3( x, y, z ) ).xy() );
+								shadowFactor += m_writer.ternary( depth <= moments.x()
+									, 0.0_f
+									, 1.0_f - m_chebyshevUpperBound( moments
+										, depth
+										, 0.00000002_f
+										, 0.01_f ) );
 								numSamplesUsed += 1.0_f;
 							}
 							ROF;

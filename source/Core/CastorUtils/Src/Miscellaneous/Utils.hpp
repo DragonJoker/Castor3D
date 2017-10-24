@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_SYSTEM_UTILS___
@@ -47,7 +47,7 @@ namespace castor
 	/**
 	 *\see			localtime
 	 */
-	void getLocaltime( std::tm * p_tm, time_t const * p_pTime );
+	void getLocaltime( std::tm *& p_tm, time_t const * p_pTime );
 }
 
 #endif

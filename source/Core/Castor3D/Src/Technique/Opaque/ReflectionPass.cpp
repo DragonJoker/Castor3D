@@ -925,8 +925,7 @@ namespace castor3d
 			, ShaderProgram & program
 			, MatrixUbo & matrixUbo
 			, SceneUbo & sceneUbo
-			, GpInfoUbo & gpInfoUbo
-			, HdrConfigUbo & configUbo )
+			, GpInfoUbo & gpInfoUbo )
 		{
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eNone );
@@ -943,7 +942,6 @@ namespace castor3d
 			result->addUniformBuffer( matrixUbo.getUbo() );
 			result->addUniformBuffer( sceneUbo.getUbo() );
 			result->addUniformBuffer( gpInfoUbo.getUbo() );
-			//result->addUniformBuffer( configUbo.getUbo() );
 			return result;
 		}
 	}
@@ -953,13 +951,12 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
-		, HdrConfigUbo & configUbo
 		, bool hasSsao
 		, FogType fogType
 		, MaterialType matType )
 		: m_program{ doCreateProgram( engine, fogType, hasSsao, matType ) }
 		, m_geometryBuffers{ doCreateVao( engine, *m_program, vbo ) }
-		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, matrixUbo, sceneUbo, gpInfoUbo, configUbo ) }
+		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, matrixUbo, sceneUbo, gpInfoUbo ) }
 	{
 	}
 
@@ -989,22 +986,21 @@ namespace castor3d
 		, m_vertexBuffer{ doCreateVbo( engine ) }
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_configUbo{ engine }
 		, m_programs
 		{
 			{
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eDisabled, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eLinear, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eExponential, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrSpecularGlossiness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::eLegacy },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::eLegacy },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::eLegacy },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::eLegacy },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrMetallicRoughness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrMetallicRoughness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrMetallicRoughness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrMetallicRoughness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrSpecularGlossiness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrSpecularGlossiness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrSpecularGlossiness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrSpecularGlossiness },
 			}
 		}
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
@@ -1048,7 +1044,6 @@ namespace castor3d
 
 	ReflectionPass::~ReflectionPass()
 	{
-		m_configUbo.getUbo().cleanup();
 		m_matrixUbo.getUbo().cleanup();
 		m_vertexBuffer->cleanup();
 	}
@@ -1099,6 +1094,9 @@ namespace castor3d
 		lightDiffuse.getSampler()->bind( index++ );
 		lightSpecular.getTexture()->bind( index );
 		lightSpecular.getSampler()->bind( index++ );
+		auto program = size_t( scene.getMaterialsType() )
+			* size_t( FogType::eCount )
+			+ size_t( scene.getFog().getType() );
 
 		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
@@ -1117,9 +1115,6 @@ namespace castor3d
 				map.get().getTexture().getSampler()->bind( index++ );
 			}
 
-			auto program = size_t( scene.getMaterialsType() )
-				* size_t( FogType::eCount )
-				+ size_t( scene.getFog().getType() );
 			m_programs[program].render( *m_vertexBuffer );
 
 			for ( auto & map : makeReverse( maps ) )
@@ -1143,7 +1138,7 @@ namespace castor3d
 				map.get().getTexture().getSampler()->bind( index++ );
 			}
 
-			m_programs[0].render( *m_vertexBuffer );
+			m_programs[program].render( *m_vertexBuffer );
 
 			for ( auto & map : makeReverse( maps ) )
 			{

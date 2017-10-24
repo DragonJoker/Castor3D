@@ -1,4 +1,4 @@
-﻿#include "FrameBuffer.hpp"
+#include "FrameBuffer.hpp"
 #include "RenderBufferAttachment.hpp"
 #include "TextureAttachment.hpp"
 #include "RenderBuffer.hpp"
@@ -169,7 +169,7 @@ namespace castor3d
 	}
 
 	PixelFormat FrameBuffer::doGetPixelFormat( AttachmentPoint point
-		, uint8_t index )
+		, uint8_t index )const
 	{
 		PixelFormat result = PixelFormat::eCount;
 

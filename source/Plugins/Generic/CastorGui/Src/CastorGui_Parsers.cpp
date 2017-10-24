@@ -157,7 +157,6 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserButton )
 	{
-		ControlsManager & ctrlsManager = getControlsManager( p_context );
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );

@@ -41,14 +41,13 @@ namespace TestRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		TestRenderPipeline(
-			TestRenderSystem & p_renderSystem,
-			castor3d::DepthStencilState && p_dsState,
-			castor3d::RasteriserState && p_rsState,
-			castor3d::BlendState && p_bdState,
-			castor3d::MultisampleState && p_msState,
-			castor3d::ShaderProgram & p_program,
-			castor3d::PipelineFlags const & p_flags );
+		TestRenderPipeline( TestRenderSystem & p_renderSystem
+			, castor3d::DepthStencilState && p_dsState
+			, castor3d::RasteriserState && p_rsState
+			, castor3d::BlendState && p_bdState
+			, castor3d::MultisampleState && p_msState
+			, castor3d::ShaderProgram & p_program
+			, castor3d::PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Destructor.

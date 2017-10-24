@@ -1,4 +1,4 @@
-﻿#include "Torus.hpp"
+#include "Torus.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -126,8 +126,6 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 
 		submesh.addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
 		submesh.addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
-		uiPrv++;
-		uiCur++;
 		submesh.computeTangentsFromNormals();
 	}
 

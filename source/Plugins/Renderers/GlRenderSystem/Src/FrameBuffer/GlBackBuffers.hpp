@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GL_BACK_BUFFERS_H___
@@ -50,7 +50,7 @@ namespace GlRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::downloadBuffer
 		 */
-		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )override;
+		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )const override;
 		/**
 		 *\copydoc		castor3d::BackBuffers::bind
 		 */
@@ -62,14 +62,14 @@ namespace GlRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createColourRenderBuffer
 		 */
-		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )override
+		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )const override
 		{
 			return nullptr;
 		}
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createDepthStencilRenderBuffer
 		 */
-		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )override
+		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )const override
 		{
 			return nullptr;
 		}

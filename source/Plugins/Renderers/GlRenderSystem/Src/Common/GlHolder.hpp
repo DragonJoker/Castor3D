@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___GL_HOLDER_H___
@@ -26,7 +26,7 @@ namespace GlRender
 		@param[in] p_openGl
 			The OpenGl instance
 		*/
-		inline Holder( OpenGl & p_openGl )
+		inline explicit Holder( OpenGl & p_openGl )
 			: m_openGl( p_openGl )
 		{
 		}
@@ -41,16 +41,7 @@ namespace GlRender
 		@return
 			The instance
 		*/
-		inline OpenGl const & getOpenGl()const
-		{
-			return m_openGl;
-		}
-
-		/** Retrieves the OpenGl instance
-		@return
-			The instance
-		*/
-		inline OpenGl & getOpenGl()
+		inline OpenGl & getOpenGl()const
 		{
 			return m_openGl;
 		}

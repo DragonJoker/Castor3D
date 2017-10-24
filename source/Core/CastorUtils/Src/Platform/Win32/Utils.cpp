@@ -73,7 +73,7 @@ namespace castor
 		}
 	}
 
-	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
+	void getLocaltime( std::tm *& p_tm, time_t const * p_pTime )
 	{
 #	if defined( CASTOR_COMPILER_MSVC )
 

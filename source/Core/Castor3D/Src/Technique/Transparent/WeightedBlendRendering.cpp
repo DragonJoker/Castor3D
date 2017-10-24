@@ -1,4 +1,4 @@
-#include "WeightedBlendRendering.hpp"
+﻿#include "WeightedBlendRendering.hpp"
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -72,7 +72,8 @@ namespace castor3d
 		if ( result )
 		{
 			m_finalCombinePass = std::make_unique< FinalCombinePass >( *renderSystem.getEngine()
-				, m_size );
+				, m_size
+				, m_transparentPass.getSceneUbo() );
 		}
 
 		ENSURE( result );
@@ -108,6 +109,7 @@ namespace castor3d
 		, Point2r const & jitter
 		, TextureUnit const & velocity )
 	{
+		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
 		static Colour accumClear = Colour::fromPredefined( PredefinedColour::eTransparentBlack );
 		static Colour revealClear = Colour::fromPredefined( PredefinedColour::eOpaqueWhite );
 		auto invView = camera.getView().getInverse().getTransposed();
@@ -132,7 +134,7 @@ namespace castor3d
 			, invViewProj
 			, invView
 			, invProj
-			, scene.getFog() );
+			, scene.getFog().getType() );
 	}
 
 	void WeightedBlendRendering::debugDisplay()

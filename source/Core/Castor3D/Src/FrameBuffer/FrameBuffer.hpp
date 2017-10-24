@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FRAME_BUFFER_H___
@@ -319,7 +319,7 @@ namespace castor3d
 		 *\brief		Crée un tampon de rendu couleur
 		 *\param[in]	format	Le format de pixels du tampon
 		 */
-		C3D_API virtual ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat format ) = 0;
+		C3D_API virtual ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat format )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a depth/stencil render buffer
@@ -328,7 +328,7 @@ namespace castor3d
 		 *\brief		Crée un tampon de rendu profondeur/stencil
 		 *\param[in]	format	Le format de pixels du tampon
 		 */
-		C3D_API virtual DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat format ) = 0;
+		C3D_API virtual DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat format )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
@@ -339,7 +339,7 @@ namespace castor3d
 		 *\param[in]	renderBuffer	Le tampon de rendu
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer ) = 0;
+		C3D_API virtual RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a texture
@@ -350,7 +350,7 @@ namespace castor3d
 		 *\param[in]	texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture ) = 0;
+		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a cube texture's face.
@@ -364,7 +364,7 @@ namespace castor3d
 		 *\return		L'attache créée
 		 */
 		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture
-			, CubeMapFace face ) = 0;
+			, CubeMapFace face )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a cube texture's face's mipmap.
@@ -381,7 +381,7 @@ namespace castor3d
 		 */
 		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture
 			, CubeMapFace face
-			, uint32_t p_mipLevel ) = 0;
+			, uint32_t p_mipLevel )const = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if the FBO is complete
@@ -405,7 +405,7 @@ namespace castor3d
 		 */
 		C3D_API virtual void downloadBuffer( castor3d::AttachmentPoint point
 			, uint8_t index
-			, castor::PxBufferBaseSPtr buffer ) = 0;
+			, castor::PxBufferBaseSPtr buffer )const = 0;
 
 	protected:
 		/**
@@ -419,7 +419,7 @@ namespace castor3d
 		 *\return		Le format des pixels pour l'attache.
 		 */
 		C3D_API castor::PixelFormat doGetPixelFormat( AttachmentPoint point
-			, uint8_t index );
+			, uint8_t index )const;
 		/**
 		 *\~english
 		 *\brief		Clears the given buffers components.

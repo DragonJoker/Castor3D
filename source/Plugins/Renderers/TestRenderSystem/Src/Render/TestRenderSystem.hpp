@@ -12,7 +12,7 @@ namespace TestRender
 		: public castor3d::RenderSystem
 	{
 	public:
-		TestRenderSystem( castor3d::Engine & engine );
+		explicit TestRenderSystem( castor3d::Engine & engine );
 		virtual ~TestRenderSystem();
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );

@@ -22,7 +22,7 @@ namespace TestRender
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
 		 */
-		TestTextureAttachment( castor3d::TextureLayoutSPtr p_texture );
+		explicit TestTextureAttachment( castor3d::TextureLayoutSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor.

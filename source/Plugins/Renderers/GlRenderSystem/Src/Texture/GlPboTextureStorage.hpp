@@ -20,7 +20,7 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 */
-		GlPboTextureStorageTraits( castor3d::TextureStorage & p_storage );
+		explicit GlPboTextureStorageTraits( castor3d::TextureStorage & p_storage );
 		/**
 		 *\brief		Destructor.
 		 */

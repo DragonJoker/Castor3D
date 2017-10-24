@@ -1,4 +1,4 @@
-﻿#include "GlslPhongLighting.hpp"
+#include "GlslPhongLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -319,7 +319,7 @@ namespace castor3d
 								, glsl::fma( light.m_attenuation().y()
 									, distance
 									, light.m_attenuation().x() ) ) );
-						spotFactor = glsl::fma( m_writer.paren( 1.0_f - spotFactor )
+						spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
 							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
 							, 1.0_f );
 						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
@@ -444,9 +444,11 @@ namespace castor3d
 								, glsl::fma( light.m_attenuation().y()
 									, distance
 									, light.m_attenuation().x() ) ) );
-						spotFactor = glsl::fma( m_writer.paren( 1.0_f - spotFactor )
+						spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
 							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
 							, 1.0_f );
+						auto factor = m_writer.declLocale( cuT( "factor" )
+							, vec3( spotFactor ) );
 						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
 						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 					}

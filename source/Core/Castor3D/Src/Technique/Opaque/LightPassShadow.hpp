@@ -319,8 +319,9 @@ namespace castor3d
 			 */
 			inline uint32_t getShadowMapIndex()const
 			{
-				return uint32_t( this->m_program->template findUniform< UniformType::eSampler >( my_traits::getShadowMapName()
-					, ShaderType::ePixel )->getValue() );
+				auto uniform = this->m_program->template findUniform< UniformType::eSampler >( my_traits::getShadowMapName()
+					, ShaderType::ePixel );
+				return uint32_t( uniform ? uniform->getValue() : ~0 );
 			}
 			/**
 			 *\~english
@@ -330,8 +331,9 @@ namespace castor3d
 			 */
 			inline uint32_t getDepthMapIndex()const
 			{
-				return uint32_t( this->m_program->template findUniform< UniformType::eSampler >( my_traits::getDepthMapName()
-					, ShaderType::ePixel )->getValue() );
+				auto uniform = this->m_program->template findUniform< UniformType::eSampler >( my_traits::getDepthMapName()
+					, ShaderType::ePixel );
+				return uint32_t( uniform ? uniform->getValue() : ~0 );
 			}
 		};
 

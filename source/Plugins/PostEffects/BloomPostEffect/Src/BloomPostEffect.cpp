@@ -1,4 +1,4 @@
-#include "BloomPostEffect.hpp"
+﻿#include "BloomPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>

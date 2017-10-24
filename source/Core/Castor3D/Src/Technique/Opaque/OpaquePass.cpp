@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -381,6 +381,7 @@ namespace castor3d
 
 			out_c3dOutput1 = vec4( normal, flags );
 			out_c3dOutput2 = vec4( diffuse, matShininess );
+			out_c3dOutput2 = vec4( c3d_cameraPosition, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
 			out_c3dOutput4 = vec4( emissive, transmittance );
 

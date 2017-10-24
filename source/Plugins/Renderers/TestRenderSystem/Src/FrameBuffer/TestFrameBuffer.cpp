@@ -42,36 +42,36 @@ namespace TestRender
 		return true;
 	}
 
-	void TestFrameBuffer::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void TestFrameBuffer::downloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )const
 	{
 	}
 
-	ColourRenderBufferSPtr TestFrameBuffer::createColourRenderBuffer( PixelFormat p_format )
+	ColourRenderBufferSPtr TestFrameBuffer::createColourRenderBuffer( PixelFormat p_format )const
 	{
 		return std::make_shared< TestColourRenderBuffer >( p_format );
 	}
 
-	DepthStencilRenderBufferSPtr TestFrameBuffer::createDepthStencilRenderBuffer( PixelFormat p_format )
+	DepthStencilRenderBufferSPtr TestFrameBuffer::createDepthStencilRenderBuffer( PixelFormat p_format )const
 	{
 		return std::make_shared< TestDepthStencilRenderBuffer >( p_format );
 	}
 
-	RenderBufferAttachmentSPtr TestFrameBuffer::createAttachment( RenderBufferSPtr p_renderBuffer )
+	RenderBufferAttachmentSPtr TestFrameBuffer::createAttachment( RenderBufferSPtr p_renderBuffer )const
 	{
 		return std::make_shared< TestRenderBufferAttachment >( p_renderBuffer );
 	}
 
-	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture )
+	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture )const
 	{
 		return std::make_shared< TestTextureAttachment >( p_texture );
 	}
 
-	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
+	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )const
 	{
 		return std::make_shared< TestCubeTextureFaceAttachment >( p_texture, p_face );
 	}
 
-	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )
+	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )const
 	{
 		return std::make_shared< TestCubeTextureFaceAttachment >( p_texture, p_face, p_mipLevel );
 	}

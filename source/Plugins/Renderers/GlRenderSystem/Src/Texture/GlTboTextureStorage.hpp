@@ -21,7 +21,7 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 */
-		GlTboTextureStorageTraits( castor3d::TextureStorage & p_storage );
+		explicit GlTboTextureStorageTraits( castor3d::TextureStorage & p_storage );
 		/**
 		 *\brief		Destructor.
 		 */

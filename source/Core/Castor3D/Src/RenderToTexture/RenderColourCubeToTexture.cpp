@@ -1,4 +1,4 @@
-#include "RenderColourCubeToTexture.hpp"
+﻿#include "RenderColourCubeToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -166,6 +166,22 @@ namespace castor3d
 			, *m_geometryBuffers );
 	}
 
+	void RenderColourCubeToTexture::renderFace( castor::Size const & size
+		, TextureLayout const & texture
+		, CubeMapFace face
+		, RenderPipeline & pipeline
+		, MatrixUbo & matrixUbo )
+	{
+		doRender( Position{}
+			, size
+			, texture
+			, face
+			, Point2f{ 1, 1 }
+			, pipeline
+			, matrixUbo
+			, *m_geometryBuffers );
+	}
+
 	void RenderColourCubeToTexture::doRender( Position const & position
 		, Size const & size
 		, TextureLayout const & texture
@@ -262,7 +278,6 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
 		program->initialise();
 		return program;

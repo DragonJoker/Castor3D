@@ -13,8 +13,8 @@ namespace TestRender
 		: public castor3d::TPushUniform< Type >
 	{
 	public:
-		TestPushUniform( TestShaderProgram & p_program, uint32_t p_occurences );
-		TestPushUniform(  );
+		explicit TestPushUniform( TestShaderProgram & p_program, uint32_t p_occurences );
+		TestPushUniform();
 		virtual ~TestPushUniform();
 
 	private:

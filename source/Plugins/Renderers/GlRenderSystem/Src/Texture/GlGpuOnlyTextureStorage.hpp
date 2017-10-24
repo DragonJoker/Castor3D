@@ -22,7 +22,7 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 */
-		GlGpuOnlyTextureStorageTraits( castor3d::TextureStorage & p_storage );
+		explicit GlGpuOnlyTextureStorageTraits( castor3d::TextureStorage & p_storage );
 		/**
 		 *\brief		Destructor.
 		 */

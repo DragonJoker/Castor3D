@@ -34,7 +34,7 @@ namespace GlRender
 			{
 			}
 
-			Binding( uint32_t p_name )
+			explicit Binding( uint32_t p_name )
 				: m_name{ p_name }
 			{
 				castor::StringStream stream;
@@ -53,7 +53,7 @@ namespace GlRender
 		};
 
 	public:
-		GlDebug( GlRenderSystem & renderSystem );
+		explicit GlDebug( GlRenderSystem & renderSystem );
 		~GlDebug();
 		void initialise();
 		void cleanup();

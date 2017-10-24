@@ -26,11 +26,10 @@ namespace TestRender
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 */
-		TestTexture(
-			TestRenderSystem & p_renderSystem,
-			castor3d::TextureType p_type,
-			castor3d::AccessTypes const & p_cpuAccess,
-			castor3d::AccessTypes const & p_gpuAccess );
+		TestTexture( TestRenderSystem & p_renderSystem
+			, castor3d::TextureType p_type
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
@@ -41,13 +40,12 @@ namespace TestRender
 		 *\param[in]	p_format		The texture format.
 		 *\param[in]	p_size			The texture dimensions.
 		 */
-		TestTexture(
-			TestRenderSystem & p_renderSystem,
-			castor3d::TextureType p_type,
-			castor3d::AccessTypes const & p_cpuAccess,
-			castor3d::AccessTypes const & p_gpuAccess,
-			castor::PixelFormat p_format,
-			castor::Size const & p_size );
+		TestTexture( TestRenderSystem & p_renderSystem
+			, castor3d::TextureType p_type
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess
+			, castor::PixelFormat p_format
+			, castor::Size const & p_size );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
@@ -58,13 +56,12 @@ namespace TestRender
 		 *\param[in]	p_format		The texture format.
 		 *\param[in]	p_size			The texture dimensions.
 		 */
-		TestTexture(
-			TestRenderSystem & p_renderSystem,
-			castor3d::TextureType p_type,
-			castor3d::AccessTypes const & p_cpuAccess,
-			castor3d::AccessTypes const & p_gpuAccess,
-			castor::PixelFormat p_format,
-			castor::Point3ui const & p_size );
+		TestTexture( TestRenderSystem & p_renderSystem
+			, castor3d::TextureType p_type
+			, castor3d::AccessTypes const & p_cpuAccess
+			, castor3d::AccessTypes const & p_gpuAccess
+			, castor::PixelFormat p_format
+			, castor::Point3ui const & p_size );
 		/**
 		 *\brief		Destructor.
 		 */

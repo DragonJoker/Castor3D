@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_Context_H___
@@ -464,6 +464,30 @@ namespace castor3d
 				, fbo
 				, attachs
 				, hdrConfig );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	face	The face index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	face	L'index de la face.
+		 */
+		inline void renderCubeFace( castor::Size const & size
+			, TextureLayoutSPtr texture
+			, CubeMapFace face
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo )
+		{
+			m_colourCube.renderFace( size
+				, *texture
+				, face
+				, pipeline
+				, matrixUbo );
 		}
 		/**
 		 *\~english

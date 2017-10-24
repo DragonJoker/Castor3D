@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GL_FRAME_BUFFER_H___
@@ -66,31 +66,31 @@ namespace GlRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::downloadBuffer
 		 */
-		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )override;
+		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createColourRenderBuffer
 		 */
-		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )override;
+		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createDepthStencilRenderBuffer
 		 */
-		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )override;
+		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		castor3d::RenderBufferAttachmentSPtr createAttachment( castor3d::RenderBufferSPtr p_renderBuffer )override;
+		castor3d::RenderBufferAttachmentSPtr createAttachment( castor3d::RenderBufferSPtr p_renderBuffer )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture )override;
+		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture, castor3d::CubeMapFace p_face )override;
+		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture, castor3d::CubeMapFace p_face )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
-		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture, castor3d::CubeMapFace p_face, uint32_t p_mipLevel )override;
+		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture, castor3d::CubeMapFace p_face, uint32_t p_mipLevel )const override;
 
 	public:
 		using BindableType::getGlName;

@@ -16,7 +16,7 @@ namespace GlRender
 		: public castor3d::RenderSystem
 	{
 	public:
-		GlRenderSystem( castor3d::Engine & engine );
+		explicit GlRenderSystem( castor3d::Engine & engine );
 		virtual ~GlRenderSystem();
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
