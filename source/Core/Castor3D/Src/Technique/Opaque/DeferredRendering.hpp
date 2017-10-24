@@ -86,9 +86,6 @@ namespace castor3d
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
-		//!\~english	The uniform buffer containing the scene data.
-		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		SceneUbo m_sceneUbo;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo m_gpInfoUbo;

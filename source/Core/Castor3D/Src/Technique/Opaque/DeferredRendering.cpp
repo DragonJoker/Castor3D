@@ -57,7 +57,6 @@ namespace castor3d
 		, m_frameBuffer{ frameBuffer }
 		, m_depthAttach{ depthAttach }
 		, m_size{ size }
-		, m_sceneUbo{ engine }
 		, m_gpInfoUbo{ engine }
 	{
 		auto & renderSystem = *engine.getRenderSystem();
@@ -113,15 +112,15 @@ namespace castor3d
 				, scene
 				, m_opaquePass
 				, m_depthAttach
-				, m_sceneUbo
+				, m_opaquePass.getSceneUbo()
 				, m_gpInfoUbo );
 			m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
 				, m_gpInfoUbo
-				, m_sceneUbo
+				, m_opaquePass.getSceneUbo()
 				, m_size );
 			m_reflection = std::make_unique< ReflectionPass >( engine
 				, m_size
-				, m_sceneUbo
+				, m_opaquePass.getSceneUbo()
 				, m_gpInfoUbo
 				, m_ssaoConfig );
 		}
@@ -153,7 +152,6 @@ namespace castor3d
 		m_reflection.reset();
 		m_subsurfaceScattering.reset();
 		m_lightingPass.reset();
-		m_sceneUbo.getUbo().cleanup();
 	}
 
 	void DeferredRendering::render( RenderInfo & info
@@ -168,7 +166,7 @@ namespace castor3d
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
 		camera.apply();
-		m_sceneUbo.update( scene, camera );
+		m_opaquePass.getSceneUbo().update( scene, camera );
 
 		m_geometryPassFrameBuffer->bind( FrameBufferTarget::eDraw );
 		auto velocityAttach = m_geometryPassFrameBuffer->createAttachment( velocity.getTexture() );

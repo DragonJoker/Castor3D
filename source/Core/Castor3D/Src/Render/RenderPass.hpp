@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RENDER_PASS_H___
@@ -376,6 +376,16 @@ namespace castor3d
 		inline bool isOrderIndependent()const
 		{
 			return m_oit;
+		}
+		/**
+		 *\~english
+		 *\return		The Scene UBO.
+		 *\~french
+		 *\return		L'UBO de la scène.
+		 */
+		inline SceneUbo & getSceneUbo()
+		{
+			return m_sceneUbo;
 		}
 
 	protected:

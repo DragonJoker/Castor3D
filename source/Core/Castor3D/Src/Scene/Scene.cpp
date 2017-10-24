@@ -142,7 +142,13 @@ namespace castor3d
 		if ( scene.getEngine()->getRenderLoop().hasDebugOverlays() )
 		{
 			result = file.writeText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene debug overlays" );
+			castor::TextWriter< Scene >::checkError( result, "Debug overlays" );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "materials " ) + MaterialTypes.find( scene.getMaterialsType() )->second + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Materials type" );
 		}
 
 		if ( result )
@@ -164,13 +170,6 @@ namespace castor3d
 				&& Colour::TextWriter( String() )( scene.getBackgroundColour(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
-		}
-
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Materials type" ) );
-			result = file.writeText( m_tabs + cuT( "\tmaterials " ) + MaterialTypes.find( scene.getMaterialsType() )->second + cuT( "\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene materials type" );
 		}
 
 		if ( result && scene.getBackgroundImage() )
