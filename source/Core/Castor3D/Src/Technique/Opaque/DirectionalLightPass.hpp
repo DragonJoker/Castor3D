@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredDirectionalLightPass_H___
@@ -68,9 +68,6 @@ namespace castor3d
 			void doBind( Light const & light )override;
 
 		private:
-			//!\~english	The variable containing the light intensities.
-			//!\~french		La variable contenant les intensités de la lumière.
-			PushUniform2fSPtr m_lightIntensity;
 			//!\~english	The variable containing the light direction.
 			//!\~french		La variable contenant la direction de la lumière.
 			PushUniform3fSPtr m_lightDirection;

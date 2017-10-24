@@ -33,7 +33,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TextWriter( String const & p_tabs )
+		explicit TextWriter( String const & p_tabs )
 			: m_tabs{ p_tabs }
 		{
 		}

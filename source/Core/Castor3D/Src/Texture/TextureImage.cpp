@@ -1,4 +1,4 @@
-﻿#include "TextureImage.hpp"
+#include "TextureImage.hpp"
 
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
@@ -16,7 +16,7 @@ namespace castor3d
 			: public TextureSource
 		{
 		public:
-			StaticTextureSource( Engine & engine )
+			explicit StaticTextureSource( Engine & engine )
 				: TextureSource{ engine }
 			{
 			}

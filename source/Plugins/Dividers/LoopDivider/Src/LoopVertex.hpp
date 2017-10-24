@@ -22,7 +22,7 @@ namespace Loop
 		EdgePtrUIntMap m_mapEdges;
 
 	public:
-		Vertex( castor3d::BufferElementGroupSPtr p_point );
+		explicit Vertex( castor3d::BufferElementGroupSPtr p_point );
 		~Vertex();
 
 		bool hasEdge( uint32_t p_index );

@@ -132,7 +132,11 @@ namespace GlRender
 		@param[in] p_validator
 			The validation function
 		*/
-		inline Object( OpenGl & p_openGl, const char * p_typeName, CreateFunction p_creator, DestroyFunction p_destroyer, ValidatorFunction p_validator )
+		inline Object( OpenGl & p_openGl
+			, const char * p_typeName
+			, CreateFunction const & p_creator
+			, DestroyFunction const & p_destroyer
+			, ValidatorFunction const & p_validator )
 			: Holder( p_openGl )
 			, m_creator( p_creator )
 			, m_destroyer( p_destroyer )

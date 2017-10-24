@@ -42,7 +42,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	p_pFile	Le fichier en cours de traitement
 		 */
-		CU_API FileParserContext( TextFile * p_pFile );
+		CU_API explicit FileParserContext( TextFile * p_pFile );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_GroupChangeTracked_H___
@@ -23,7 +23,7 @@ namespace castor
 	class GroupChangeTracked
 	{
 	public:
-		GroupChangeTracked( bool & dirty )noexcept
+		explicit GroupChangeTracked( bool & dirty )noexcept
 			: m_value{}
 			, m_dirty{ dirty }
 		{

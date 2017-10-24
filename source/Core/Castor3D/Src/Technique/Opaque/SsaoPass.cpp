@@ -308,7 +308,6 @@ namespace castor3d
 
 		ShaderProgramSPtr doGetSsaoProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetSsaoVertexProgram( engine );
 			auto pxl = doGetSsaoPixelProgram( engine );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
@@ -325,7 +324,6 @@ namespace castor3d
 
 		ShaderProgramSPtr doGetBlurProgram( Engine & engine )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetBlurVertexProgram( engine );
 			auto pxl = doGetBlurPixelProgram( engine );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );

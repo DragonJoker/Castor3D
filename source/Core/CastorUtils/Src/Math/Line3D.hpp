@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_LINE_3D_H___
@@ -98,8 +98,6 @@ namespace castor
 			:	m_origin( std::move( p_line.m_origin ) )
 			,	m_slope( std::move( p_line.m_slope ) )
 		{
-			p_line.m_origin = Point< T, 3 >();
-			p_line.m_slope = Point< T, 3 >();
 		}
 		/**
 		 *\~english

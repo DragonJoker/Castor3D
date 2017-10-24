@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredMeshLightPass_H___
@@ -180,7 +180,7 @@ namespace castor3d
 		LightType m_type;
 		//!\~english	The vertex count.
 		//!\~french		Le nombre de sommets.
-		uint32_t m_count;
+		uint32_t m_count{ 0u };
 	};
 }
 

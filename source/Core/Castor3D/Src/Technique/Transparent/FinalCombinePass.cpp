@@ -177,7 +177,6 @@ namespace castor3d
 		ShaderProgramSPtr doCreateProgram( Engine & engine
 			, FogType fogType )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetPixelProgram( engine, fogType );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );

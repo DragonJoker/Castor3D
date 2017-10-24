@@ -269,7 +269,6 @@ namespace GlRender
 	bool GlContextImpl::doSelectStereoPixelFormat( PixelFormat p_colour )
 	{
 		bool result = false;
-		GlRenderSystem * renderSystem = static_cast< GlRenderSystem * >( m_context->getRenderSystem() );
 		PIXELFORMATDESCRIPTOR pfd = { 0 };
 		pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
 		int iPixelFormat = ::DescribePixelFormat( m_hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &pfd );

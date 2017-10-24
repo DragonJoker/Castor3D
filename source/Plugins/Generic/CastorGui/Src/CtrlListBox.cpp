@@ -431,10 +431,9 @@ namespace CastorGui
 	{
 		if ( p_event.getButton() == MouseButton::eLeft )
 		{
-			int index = -1;
-
 			if ( m_selectedItem.lock() != p_control )
 			{
+				int index = -1;
 				auto it = m_items.begin();
 				int i = 0;
 
@@ -451,10 +450,6 @@ namespace CastorGui
 
 				setSelected( index );
 				m_signals[size_t( ListBoxEvent::eSelected )]( m_selected );
-			}
-			else
-			{
-				index = m_selected;
 			}
 		}
 	}

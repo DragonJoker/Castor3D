@@ -1,4 +1,4 @@
-#include "Miscellaneous/GlDebug.hpp"
+﻿#include "Miscellaneous/GlDebug.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Common/GlGetFunction.hpp"
@@ -211,19 +211,19 @@ namespace GlRender
 
 	bool GlDebug::doGlCheckError( String const & p_text )const
 	{
-		static uint32_t constexpr InvalidEnum = 0x0500;
-		static uint32_t constexpr InvalidValue = 0x0501;
-		static uint32_t constexpr InvalidOperation = 0x0502;
-		static uint32_t constexpr StackOverflow = 0x0503;
-		static uint32_t constexpr StackUnderflow = 0x0504;
-		static uint32_t constexpr OutOfMemory = 0x0505;
-		static uint32_t constexpr InvalidFramebufferOperation = 0x0506;
-
 		bool result = true;
 		uint32_t errorCode = m_pfnGetError();
 
 		if ( errorCode )
 		{
+			//static uint32_t constexpr InvalidEnum = 0x0500;
+			//static uint32_t constexpr InvalidValue = 0x0501;
+			//static uint32_t constexpr InvalidOperation = 0x0502;
+			//static uint32_t constexpr StackOverflow = 0x0503;
+			//static uint32_t constexpr StackUnderflow = 0x0504;
+			//static uint32_t constexpr OutOfMemory = 0x0505;
+			//static uint32_t constexpr InvalidFramebufferOperation = 0x0506;
+
 			//static std::map< uint32_t, String > const Errors
 			//{
 			//	{ InvalidEnum, cuT( "Invalid Enum" ) },
@@ -258,8 +258,8 @@ namespace GlRender
 
 			//l_error << Debug::Backtrace{ 20, 4 };
 			//Logger::logError( error );
+			//errorCode = m_pfnGetError();
 			result = false;
-			errorCode = m_pfnGetError();
 		}
 
 		return result;

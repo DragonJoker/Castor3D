@@ -339,8 +339,8 @@ namespace castor3d
 
 	void ShaderObject::flushUniforms()
 	{
-		clearContainer( m_mapUniforms );
-		clearContainer( m_listUniforms );
+		m_mapUniforms.clear();
+		m_listUniforms.clear();
 	}
 
 	void ShaderObject::doAddUniform( PushUniformSPtr variable )

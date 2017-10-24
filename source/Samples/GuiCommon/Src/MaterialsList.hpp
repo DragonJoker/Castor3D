@@ -41,9 +41,9 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		castor3d::Engine * m_engine;
-		castor3d::Scene * m_scene;
-		PropertiesHolder * m_propertiesHolder;
+		castor3d::Engine * m_engine{ nullptr };
+		castor3d::Scene * m_scene{ nullptr };
+		PropertiesHolder * m_propertiesHolder{ nullptr };
 	};
 }
 

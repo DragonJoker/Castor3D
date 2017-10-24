@@ -33,7 +33,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		LoggerImpl( LogType p_level );
+		explicit LoggerImpl( LogType p_level );
 		/**
 		 *\~english
 		 *\brief		Destructor

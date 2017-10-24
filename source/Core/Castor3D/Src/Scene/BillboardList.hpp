@@ -41,8 +41,8 @@ namespace castor3d
 		 *\param[in]	p_vertexBuffer	Le tampon de sommets.
 		 */
 		C3D_API BillboardBase( Scene & p_scene
-							   , SceneNodeSPtr p_node
-							   , VertexBufferSPtr p_vertexBuffer );
+			, SceneNodeSPtr p_node
+			, VertexBufferSPtr p_vertexBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -411,8 +411,8 @@ namespace castor3d
 		 *\param[in]	p_parent	Le noeud de scène parent.
 		 */
 		C3D_API BillboardList( castor::String const & p_name
-							   , Scene & p_scene
-							   , SceneNodeSPtr p_parent );
+			, Scene & p_scene
+			, SceneNodeSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -545,15 +545,6 @@ namespace castor3d
 		//!\~english	The positions list.
 		//!\~french		La liste des positions.
 		castor::Point3rArray m_arrayPositions;
-		//!\~english	The material.
-		//!\~french		Le matériau.
-		MaterialWPtr m_material;
-		//!\~english	The billboards dimensions.
-		//!\~french		Les dimensions des billboards.
-		castor::Size m_dimensions;
-		//!\~english	The billboard type.
-		//!\~french		Le type de billboard.
-		BillboardType m_billboardType;
 	};
 }
 

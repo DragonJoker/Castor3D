@@ -1,4 +1,4 @@
-/* See LICENSE file in root folder */
+﻿/* See LICENSE file in root folder */
 #ifndef ___TEST_PREREQUISITES_H___
 #define ___TEST_PREREQUISITES_H___
 
@@ -44,7 +44,7 @@ struct Obj
 struct BigObj
 	: public Obj
 {
-	uint8_t valueG[1024 * 1024];
+	uint8_t valueG[1024 * 1024]{};
 
 	inline explicit BigObj( double d, float f )
 	{

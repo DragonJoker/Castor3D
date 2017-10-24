@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_POINT_H___
@@ -239,7 +239,7 @@ namespace castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	point	L'objet Point à copier
 		 */
-		Point( Coords< T, Count > const & point );
+		explicit Point( Coords< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Constructor

@@ -282,21 +282,31 @@ namespace castor3d
 		writer << endi;
 	}
 
+	namespace
+	{
+		ShaderProgramSPtr doCreateProgram( Engine & engine
+			, glsl::Shader const & vtx
+			, glsl::Shader const & pxl )
+		{
+			auto program = engine.getShaderProgramCache().getNewProgram( false );
+			program->createObject( ShaderType::eVertex );
+			program->createObject( ShaderType::ePixel );
+			program->setSource( ShaderType::eVertex, vtx );
+			program->setSource( ShaderType::ePixel, pxl );
+			return program;
+		}
+	}
+
 	//************************************************************************************************
 
 	LightPass::Program::Program( Engine & engine
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
+		: m_program{ ::doCreateProgram( engine, vtx, pxl ) }
+		, m_lightColour{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel ) }
+		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
+		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_lightBase.m_farPlane" ), ShaderType::ePixel ) }
 	{
-		m_program = engine.getShaderProgramCache().getNewProgram( false );
-		m_program->createObject( ShaderType::eVertex );
-		m_program->createObject( ShaderType::ePixel );
-		m_program->setSource( ShaderType::eVertex, vtx );
-		m_program->setSource( ShaderType::ePixel, pxl );
-
-		m_lightColour = m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel );
-		m_lightIntensity = m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel );
-		m_lightFarPlane = m_program->createUniform< UniformType::eFloat >( cuT( "light.m_lightBase.m_farPlane" ), ShaderType::ePixel );
 	}
 
 	LightPass::Program::~Program()

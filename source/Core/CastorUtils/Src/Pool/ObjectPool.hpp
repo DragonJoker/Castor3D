@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_OBJECT_POOL_H___
@@ -178,7 +178,7 @@ namespace castor
 		 *\brief		Constructeur, initialise le pool au nombre d'éléments donné.
 		 *\param[in]	p_count	Le compte des objets.
 		 */
-		AlignedObjectPool( size_t p_count )noexcept
+		explicit AlignedObjectPool( size_t p_count )noexcept
 			: m_count( p_count )
 		{
 			MemoryData::initialise( m_count );

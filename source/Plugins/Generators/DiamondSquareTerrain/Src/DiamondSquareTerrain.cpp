@@ -47,11 +47,11 @@ namespace diamond_square_terrain
 
 			inline float const & operator()( uint32_t x, uint32_t y )const
 			{
-				static float dummy = -1;
 				auto index = getIndex( x, y );
 
 				if ( index >= m_map.size() )
 				{
+					static float dummy = -1;
 					return dummy;
 				}
 
