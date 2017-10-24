@@ -39,7 +39,6 @@ namespace GuiCommon
 		, wxPoint const & p_ptPos
 		, wxSize const & p_size )
 		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
-		, m_engine( nullptr )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
 		wxBusyCursor wait;

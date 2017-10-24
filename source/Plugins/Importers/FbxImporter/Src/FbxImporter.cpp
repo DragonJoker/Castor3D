@@ -886,7 +886,6 @@ namespace C3dFbx
 
 				if ( doRetrieveMeshValues( cuT( "Tangents" ), p_fbxMesh, tangents, tan ) )
 				{
-					index = 0u;
 					real * buffer{ tan.data() };
 
 					for ( auto & vertex : vertices )
