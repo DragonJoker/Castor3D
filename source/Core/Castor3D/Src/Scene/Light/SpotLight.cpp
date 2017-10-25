@@ -1,4 +1,4 @@
-﻿#include "SpotLight.hpp"
+#include "SpotLight.hpp"
 
 #include "Render/Viewport.hpp"
 #include "Technique/Opaque/LightPass.hpp"
@@ -193,7 +193,7 @@ namespace castor3d
 
 		p_viewport.setPerspective( getCutOff() * 2
 			, p_viewport.getRatio()
-			, 0.01_r
+			, 0.5_r
 			, m_farPlane );
 		p_viewport.update();
 	}
