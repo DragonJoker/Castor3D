@@ -50,22 +50,22 @@ namespace castor3d
 		C3D_API ~OverlayUbo();
 		/**
 		 *\~english
-		 *\brief		sets the overlay position value.
-		 *\param[in]	p_value	The new value.
+		 *\brief		Sets the overlay position value.
+		 *\param[in]	position	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de la position de l'incrustation.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	position	La nouvelle valeur.
 		 */
-		C3D_API void setPosition( castor::Position const & p_position );
+		C3D_API void setPosition( castor::Position const & position );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
+		 *\param[in]	materialIndex	The overlay's material index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
+		 *\param[in]	materialIndex	L'index du matériau de l'incrustation.
 		 */
-		C3D_API void update( int p_materialIndex )const;
+		C3D_API void update( int materialIndex )const;
 		/**
 		 *\~english
 		 *\name			getters.

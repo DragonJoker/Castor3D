@@ -28,54 +28,54 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	p_name			The technique name.
-		 *\param[in]	p_scene			The scene for this technique.
-		 *\param[in]	p_camera		The camera for this technique (may be null).
-		 *\param[in]	p_environment	Pass used for an environment map rendering.
-		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
-		 *\param[in]	p_config		The SSAO configuration.
+		 *\param[in]	name		The technique name.
+		 *\param[in]	scene		The scene for this technique.
+		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	environment	Pass used for an environment map rendering.
+		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	p_name			Le nom de la technique.
-		 *\param[in]	p_scene			La scène pour cette technique.
-		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
-		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	p_config		La configuration du SSAO.
+		 *\param[in]	name		Le nom de la technique.
+		 *\param[in]	scene		La scène pour cette technique.
+		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API ForwardRenderTechniquePass( castor::String const & p_name
-			, Scene & p_scene
-			, Camera * p_camera
-			, bool p_environment
-			, SceneNode const * p_ignored
-			, SsaoConfig const & p_config );
+		C3D_API ForwardRenderTechniquePass( castor::String const & name
+			, Scene & scene
+			, Camera * camera
+			, bool environment
+			, SceneNode const * ignored
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	p_name			The technique name.
-		 *\param[in]	p_scene			The scene for this technique.
-		 *\param[in]	p_camera		The camera for this technique (may be null).
-		 *\param[in]	p_oit			The OIT status.
-		 *\param[in]	p_environment	Pass used for an environment map rendering.
-		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
-		 *\param[in]	p_config		The SSAO configuration.
+		 *\param[in]	name		The technique name.
+		 *\param[in]	scene		The scene for this technique.
+		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	oit			The OIT status.
+		 *\param[in]	environment	Pass used for an environment map rendering.
+		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	p_name			Le nom de la technique.
-		 *\param[in]	p_scene			La scène pour cette technique.
-		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
-		 *\param[in]	p_oit			Le statut d'OIT.
-		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	p_config		La configuration du SSAO.
+		 *\param[in]	name		Le nom de la technique.
+		 *\param[in]	scene		La scène pour cette technique.
+		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	oit			Le statut d'OIT.
+		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API ForwardRenderTechniquePass( castor::String const & p_name
-			, Scene & p_scene
-			, Camera * p_camera
-			, bool p_oit
-			, bool p_environment
-			, SceneNode const * p_ignored
-			, SsaoConfig const & p_config );
+		C3D_API ForwardRenderTechniquePass( castor::String const & name
+			, Scene & scene
+			, Camera * camera
+			, bool oit
+			, bool environment
+			, SceneNode const * ignored
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -86,7 +86,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		C3D_API void render( RenderInfo & p_info
+		C3D_API void render( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
 

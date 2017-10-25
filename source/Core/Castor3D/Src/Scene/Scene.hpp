@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_H___
@@ -90,11 +90,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	name		The scene name
+		 *\param[in]	name	The scene name
 		 *\param[in]	engine	The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	name		Le nom de la scène
+		 *\param[in]	name	Le nom de la scène
 		 *\param[in]	engine	Le moteur
 		 */
 		C3D_API Scene( castor::String const & name, Engine & engine );
@@ -122,11 +122,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the scene background (skybox or image).
-		 *\param[in]	size		The target dimensions.
+		 *\param[in]	size	The target dimensions.
 		 *\param[in]	camera	The current camera.
 		 *\~french
 		 *\brief		Rend l'arrière plan de la scène (skybox ou image).
-		 *\param[in]	size		Les dimensions de la cible.
+		 *\param[in]	size	Les dimensions de la cible.
 		 *\param[in]	camera	La caméra courante.
 		 */
 		C3D_API void renderBackground( castor::Size const & size, Camera const & camera );
@@ -139,18 +139,18 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		sets the background image for the scene
-		 *\param[in]	folder	The folder containing the image.
+		 *\brief		Sets the background image for the scene
+		 *\param[in]	folder		The folder containing the image.
 		 *\param[in]	relative	The image file path, relative to \p folder.
 		 *\~french
 		 *\brief		Définit l'image de fond pour la scène
-		 *\param[in]	folder	Le dossier contenant l'image.
+		 *\param[in]	folder		Le dossier contenant l'image.
 		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à \p folder.
 		 */
 		C3D_API bool setBackground( castor::Path const & folder, castor::Path const & relative );
 		/**
 		 *\~english
-		 *\brief		sets the skybox for the scene.
+		 *\brief		Sets the skybox for the scene.
 		 *\param[in]	skybox	The skybox.
 		 *\~french
 		 *\brief		Définit la skybox de la scène.
@@ -278,7 +278,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the background colour
+		 *\brief		Sets the background colour
 		 *\param[in]	value	The new colour
 		 *\~french
 		 *\brief		Définit la couleur du fond
@@ -290,11 +290,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the background colour
-		 *\return		The colour
+		 *\return		The background colour
 		 *\~french
-		 *\brief		Récupère la couleur du fond
-		 *\return		La couleur
+		 *\return		La couleur du fond
 		 */
 		inline castor::Colour const & getBackgroundColour()const
 		{
@@ -302,11 +300,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the root node
-		 *\return		The value
+		 *\return		The root node
 		 *\~french
-		 *\brief		Récupère le node racine
-		 *\return		La valeur
+		 *\return		Le node racine
 		 */
 		inline SceneNodeSPtr getRootNode()const
 		{
@@ -314,11 +310,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the cameras root node
-		 *\return		The value
+		 *\return		The cameras root node.
 		 *\~french
-		 *\brief		Récupère le node racine des caméras
-		 *\return		La valeur
+		 *\return		Le node racine des caméras.
 		 */
 		inline SceneNodeSPtr getCameraRootNode()const
 		{
@@ -326,11 +320,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the objects root node
-		 *\return		The value
+		 *\return		The objects root node
 		 *\~french
-		 *\brief		Récupère le node racine des objets
-		 *\return		La valeur
+		 *\return		Le node racine des objets.
 		 */
 		inline SceneNodeSPtr getObjectRootNode()const
 		{
@@ -338,11 +330,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the scene background image
-		 *\return		The value
+		 *\return		The scene background image.
 		 *\~french
-		 *\brief		Récupère l'image de fond de la scène
-		 *\return		La valeur
+		 *\return		L'image de fond de la scène.
 		 */
 		inline TextureLayoutSPtr getBackgroundImage()const
 		{
@@ -350,11 +340,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the scene change status
-		 *\return		The value
+		 *\return		The scene change status.
 		 *\~french
-		 *\brief		Récupère le statut de changement de la scène
-		 *\return		La valeur
+		 *\return		Le statut de changement de la scène.
 		 */
 		inline bool hasChanged()const
 		{
@@ -362,7 +350,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the scene changed status to \p true.
+		 *\brief		Sets the scene changed status to \p true.
 		 *\~french
 		 *\brief		Définit le statut de changement de la scène to \p true.
 		 */
@@ -383,11 +371,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the ambient light colour.
-		 *\param[in]	p_value	The new value.
+		 *\brief		Sets the ambient light colour.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur de la lumière ambiante.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
 		inline void setAmbientLight( castor::Colour const & value )
 		{
@@ -455,7 +443,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the materials type.
+		 *\brief		Sets the materials type.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le type des matériaux.
@@ -499,7 +487,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the exposure value.
+		 *\brief		Sets the exposure value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'exposition.
@@ -511,7 +499,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the gamma correction value.
+		 *\brief		Sets the gamma correction value.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de la correction gamma.

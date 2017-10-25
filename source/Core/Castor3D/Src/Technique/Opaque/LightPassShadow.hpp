@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredLightPassShadow_H___
@@ -364,20 +364,7 @@ namespace castor3d
 		{
 		}
 		/**
-		 *\~english
-		 *\brief		Renders the light pass on currently bound framebuffer.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	gp		The geometry pass result.
-		 *\param[in]	light	The light.
-		 *\param[in]	camera	The viewing camera.
-		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
-		 *\~french
-		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	light	La source lumineuse.
-		 *\param[in]	camera	La caméra.
-		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+		 *\copydoc		castor3d::LightPass::render
 		 */
 		void render( castor::Size const & size
 			, GeometryPassResult const & gp

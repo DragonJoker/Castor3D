@@ -11,7 +11,7 @@ namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.1
+	\version	0.10.0
 	\date		09/02/2010
 	\~english
 	\brief		ShaderBuffer holding the Passes data.
@@ -97,13 +97,24 @@ namespace castor3d
 		C3D_API virtual void visit( SpecularGlossinessPbrPass const & pass );
 
 	public:
+		/*!
+		\~english
+		\brief		3 components colour.
+		\~french
+		\brief		Couleur à 3 composantes.
+		*/
 		struct RgbColour
 		{
 			float r;
 			float g;
 			float b;
 		};
-
+		/*!
+		\~english
+		\brief		4 components colour.
+		\~french
+		\brief		Couleur à 4 composantes.
+		*/
 		struct RgbaColour
 		{
 			float r;
@@ -111,13 +122,23 @@ namespace castor3d
 			float b;
 			float a;
 		};
-
+		/*!
+		\~english
+		\brief		Common passes extended data.
+		\~french
+		\brief		Données étendues communes aux passes.
+		*/
 		struct ExtendedData
 		{
+			//!\~english	The Subsurface Scattering informations.
+			//!\~french		Les informations de Subsurface Scattering.
 			RgbaColour sssInfo;
+			//!\~english	The luminosity transmittance profile data.
+			//!\~french		Les données du profil de transmission de luminosité.
 			std::array< RgbaColour, 10u > transmittanceProfile;
 		};
-
+		//!\~english	Extended data size.
+		//!\~french		La taille des données étendues.
 		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 2;
 
 	protected:

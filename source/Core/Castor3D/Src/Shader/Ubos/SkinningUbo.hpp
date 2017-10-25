@@ -51,38 +51,38 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
+		 *\param[in]	skeleton	The overlay's material index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
+		 *\param[in]	skeleton	L'index du matériau de l'incrustation.
 		 */
-		C3D_API void update( AnimatedSkeleton const & p_skeleton )const;
+		C3D_API void update( AnimatedSkeleton const & skeleton )const;
 		/**
 		 *\~english
 		 *\brief		Declares the GLSL variables needed to compute skinning in vertex shader.
-		 *\param[in]	p_writer	The GLSL writer.
-		 *\param[in]	p_flags		The program flags.
+		 *\param[in]	writer	The GLSL writer.
+		 *\param[in]	flags	The program flags.
 		 *\~french
 		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
-		 *\param[in]	p_writer	Le GLSL writer.
-		 *\param[in]	p_flags		Les indicateurs du programme.
+		 *\param[in]	writer	Le GLSL writer.
+		 *\param[in]	flags	Les indicateurs du programme.
 		 */
-		C3D_API static void declare( glsl::GlslWriter & p_writer
-			, ProgramFlags const & p_flags );
+		C3D_API static void declare( glsl::GlslWriter & writer
+			, ProgramFlags const & flags );
 		/**
 		 *\~english
 		 *\brief		Computes skinning transformation in vertex shader.
-		 *\param[in]	p_writer	The GLSL writer.
-		 *\param[in]	p_flags		The program flags.
+		 *\param[in]	writer	The GLSL writer.
+		 *\param[in]	flags	The program flags.
 		 *\return		The resulting matrix.
 		 *\~french
 		 *\brief		Effectue le calcul de la transformation du skinning dans le vertex shader.
-		 *\param[in]	p_writer	Le GLSL writer.
-		 *\param[in]	p_flags		Les indicateurs du programme.
+		 *\param[in]	writer	Le GLSL writer.
+		 *\param[in]	flags	Les indicateurs du programme.
 		 *\return		La matrice résultat.
 		 */
-		C3D_API static glsl::Mat4 computeTransform( glsl::GlslWriter & p_writer
-			, ProgramFlags const & p_flags );
+		C3D_API static glsl::Mat4 computeTransform( glsl::GlslWriter & writer
+			, ProgramFlags const & flags );
 		/**
 		 *\~english
 		 *\name			getters.

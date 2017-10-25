@@ -24,8 +24,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	transparentPass	The transparent nodes render pass.
+		 *\param[in]	frameBuffer		The target frame buffer.
+		 *\param[in]	depthAttach		The attach between depth buffer and the frame buffer.
+		 *\param[in]	size			The render dimensions.
+		 *\param[in]	scene			The rendered scene.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	transparentPass	La passe de rendu des noeuds transparents.
+		 *\param[in]	frameBuffer		Le tampon d'image cible.
+		 *\param[in]	depthAttach		L'attache entre le tampon de profondeur et le tampon d'image.
+		 *\param[in]	size			Les dimensions du rendu.
+		 *\param[in]	scene			La scène rendue.
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
@@ -43,10 +55,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
-		 *\param[out]	info	Receives the render informations.
+		 *\param[out]	info		Receives the render informations.
+		 *\param[out]	scene		The rendered scene.
+		 *\param[out]	camera		The viewer camera.
+		 *\param[out]	shadowMaps	The shadow maps.
+		 *\param[out]	jitter		The jittering value.
+		 *\param[out]	velocity	The velocity texture.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[out]	scene		La scène rendue.
+		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
+		 *\param[out]	shadowMaps	Les textures d'ombres.
+		 *\param[out]	jitter		La valeur de jittering.
+		 *\param[out]	velocity	La texture de vélocité.
 		 */
 		void render( RenderInfo & info
 			, Scene const & scene

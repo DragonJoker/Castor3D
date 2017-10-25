@@ -6,22 +6,11 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		LegacyPassBuffer::PassesData doBindData( uint8_t * buffer
-			, uint32_t count )
-		{
-			return makeArrayView( reinterpret_cast< LegacyPassBuffer::PassData * >( buffer )
-				, reinterpret_cast< LegacyPassBuffer::PassData * >( buffer ) + count );
-		}
-	}
-
-	//*********************************************************************************************
-
 	LegacyPassBuffer::LegacyPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer.ptr(), count ) }
+		, m_data{ makeArrayView( reinterpret_cast< LegacyPassBuffer::PassData * >( m_buffer.ptr() )
+			, reinterpret_cast< LegacyPassBuffer::PassData * >( m_buffer.ptr() ) + count ) }
 	{
 	}
 

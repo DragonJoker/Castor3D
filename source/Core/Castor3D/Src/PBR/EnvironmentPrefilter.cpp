@@ -21,7 +21,7 @@ using namespace castor;
 namespace castor3d
 {
 	EnvironmentPrefilter::EnvironmentPrefilter( Engine & engine
-		, castor::Size const & p_size )
+		, castor::Size const & size )
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }
 		, m_viewport{ engine }
@@ -42,7 +42,7 @@ namespace castor3d
 				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
 			}
 		}
-		, m_size{ p_size }
+		, m_size{ size }
 		, m_configUbo{ cuT( "Config" )
 			, *engine.getRenderSystem()
 			, 10u }
@@ -148,8 +148,8 @@ namespace castor3d
 		}
 	}
 
-	void EnvironmentPrefilter::render( TextureLayout const & p_srcTexture
-		, TextureLayoutSPtr p_dstTexture )
+	void EnvironmentPrefilter::render( TextureLayout const & srcTexture
+		, TextureLayoutSPtr dstTexture )
 	{
 		static Matrix4x4r const views[] =
 		{
@@ -160,8 +160,8 @@ namespace castor3d
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
 		};
-		REQUIRE( p_dstTexture->getDimensions() == m_size );
-		p_srcTexture.bind( MinTextureIndex );
+		REQUIRE( dstTexture->getDimensions() == m_size );
+		srcTexture.bind( MinTextureIndex );
 		m_sampler->bind( MinTextureIndex );
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		REQUIRE( m_frameBuffer->isComplete() );
@@ -173,12 +173,12 @@ namespace castor3d
 			std::array< FrameBufferAttachmentSPtr, 6 > attachs
 			{
 				{
-					m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::ePositiveX, mip ),
-					m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::eNegativeX, mip ),
-					m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::ePositiveY, mip ),
-					m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::eNegativeY, mip ),
-					m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::ePositiveZ, mip ),
-					m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::eNegativeZ, mip ),
+					m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveX, mip ),
+					m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeX, mip ),
+					m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveY, mip ),
+					m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeY, mip ),
+					m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveZ, mip ),
+					m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeZ, mip ),
 				}
 			};
 
@@ -203,7 +203,7 @@ namespace castor3d
 
 		m_frameBuffer->unbind();
 		m_sampler->unbind( MinTextureIndex );
-		p_srcTexture.unbind( MinTextureIndex );
+		srcTexture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr EnvironmentPrefilter::doCreateProgram()

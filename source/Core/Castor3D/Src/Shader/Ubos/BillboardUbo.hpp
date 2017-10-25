@@ -51,23 +51,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_dimensions	The billboard dimensions.
-		 *\param[in]	p_window		The window dimensions.
+		 *\param[in]	dimensions	The billboard dimensions.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_dimensions	Les dimensions du billboard.
-		 *\param[in]	p_window		Les dimensions de la fenêtre.
+		 *\param[in]	dimensions	Les dimensions du billboard.
 		 */
-		C3D_API void update( castor::Size const & p_dimensions )const;
+		C3D_API void update( castor::Size const & dimensions )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_window		The window dimensions.
+		 *\param[in]	window	The window dimensions.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_window		Les dimensions de la fenêtre.
+		 *\param[in]	window	Les dimensions de la fenêtre.
 		 */
-		C3D_API void setWindowSize( castor::Size const & p_window )const;
+		C3D_API void setWindowSize( castor::Size const & window )const;
 		/**
 		 *\~english
 		 *\name			getters.

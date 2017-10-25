@@ -114,6 +114,8 @@ namespace castor3d
 		C3D_API void doRender( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter = castor::Point2r{} );
+
+	private:
 		/**
 		 *\~english
 		 *\brief			Renders render nodes.

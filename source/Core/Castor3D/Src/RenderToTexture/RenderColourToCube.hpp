@@ -29,15 +29,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The Context.
-		 *\param[in]	p_matrixUbo	The UBO containing matrix data.
+		 *\param[in]	context		The Context.
+		 *\param[in]	matrixUbo	The UBO containing matrix data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le Context.
-		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
+		 *\param[in]	context		Le Context.
+		 *\param[in]	matrixUbo	L'UBO contenant les données de matrices.
 		 */
-		C3D_API explicit RenderColourToCube( Context & p_context
-			, MatrixUbo & p_matrixUbo );
+		C3D_API explicit RenderColourToCube( Context & context
+			, MatrixUbo & matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -67,6 +67,7 @@ namespace castor3d
 		 *\param[in]	cubeTexture	The cube texture.
 		 *\param[in]	fbo			The active FBO
 		 *\param[in]	attachs		The cube texture attaches to the active FBO.
+		 *\param[in]	hdrConfig	The HDR configuration.
 		 *\~french
 		 *\brief		Dessine a texture equirectangulaire 2D donnée dans la texture cube donnée.
 		 *\param[in]	size		La taille du viewport de rendu.
@@ -74,6 +75,7 @@ namespace castor3d
 		 *\param[in]	cubeTexture	La texture cube.
 		 *\param[in]	fbo			Le FBO actif.
 		 *\param[in]	attachs		Les attaches de la texture cube au FBO actif.
+		 *\param[in]	hdrConfig	La configuration HDR.
 		 */
 		C3D_API void render( castor::Size const & size
 			, TextureLayout const & texture

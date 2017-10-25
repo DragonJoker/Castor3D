@@ -64,11 +64,13 @@ namespace castor3d
 		 *\param[in]	scene	The scene.
 		 *\param[in]	camera	The viewing camera.
 		 *\param[in]	gp		The geometry pass result.
+		 *\param[out]	info	The render infos.
 		 *\~french
 		 *\brief		Dessine les passes d'éclairage sur le tampon d'image donné.
 		 *\param[in]	scene	La scène.
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	gp		Le résultat de la geometry pass.
+		 *\param[out]	info	Les informations de rendu.
 		 */
 		bool render( Scene const & scene
 			, Camera const & camera
@@ -98,12 +100,12 @@ namespace castor3d
 	private:
 		/**
 		 *\~english
-		 *\brief		Renders the light passes for a light sources type on currently bound framebuffer.
+		 *\brief			Renders the light passes for a light sources type on currently bound framebuffer.
 		 *\param[in]		scene	The scene.
 		 *\param[in]		camera	The viewing camera.
 		 *\param[in]		type	The light sources type.
 		 *\param[in]		gp		The geometry pass result.
-		 *\param[in]		first	Tells if this is the first light pass (\p true) or not (\p false).
+		 *\param[in,out]	first	Tells if this is the first light pass (\p true) or not (\p false).
 		 *\~french
 		 *\brief			Dessine les passes d'éclairage d'un type de source sur le tampon d'image donné.
 		 *\param[in]		scene	La scène.

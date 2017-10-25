@@ -30,12 +30,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	count	The maximum number of elements.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	buffer		The shader buffer.
+		 *\param[in]	elementID	The ID for the next element to add.
+		 *\param[in]	count		The maximum number of elements.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	count	Le nombre maximal d'éléments.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	buffer		Le tampon shader.
+		 *\param[in]	elementID	L'ID du prochain élément à ajouter.
+		 *\param[in]	count		Le nombre maximal d'éléments.
 		 */
 		C3D_API StructuredShaderBuffer( Engine & engine
 			, ShaderBuffer & buffer

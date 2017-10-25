@@ -114,11 +114,11 @@ namespace castor3d
 		 */
 		C3D_API void renderSyncFrame()override;
 		/**
-		 *\copydoc		castor3d::RenderLoop::Pause
+		 *\copydoc		castor3d::RenderLoop::pause
 		 */
 		C3D_API void pause()override;
 		/**
-		 *\copydoc		castor3d::RenderLoop::Resume
+		 *\copydoc		castor3d::RenderLoop::resume
 		 */
 		C3D_API void resume()override;
 		/**

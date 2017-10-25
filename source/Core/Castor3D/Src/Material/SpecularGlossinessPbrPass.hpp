@@ -76,7 +76,7 @@ namespace castor3d
 		 */
 		C3D_API ~SpecularGlossinessPbrPass();
 		/**
-		 *\copydoc		castor3d::Pass::Accept
+		 *\copydoc		castor3d::Pass::accept
 		 */
 		C3D_API void accept( PassBuffer & buffer )const override;
 		/**

@@ -430,7 +430,7 @@ namespace castor3d
 		 *\~english
 		 *\return		\p true if gamma correction is needed for this pass.
 		 *\~french
-		 *\return		\pt true si la correction gamma doit être appliquée à cette passe.
+		 *\return		\p true si la correction gamma doit être appliquée à cette passe.
 		 */
 		inline bool needsGammaCorrection()const
 		{

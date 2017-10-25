@@ -42,15 +42,15 @@ namespace castor3d
 		 */
 		C3D_API ~TransformFeedbackParticleSystem();
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::Initialise
+		 *\copydoc		castor3d::ParticleSystemImpl::initialise
 		 */
 		C3D_API bool initialise()override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::Cleanup
+		 *\copydoc		castor3d::ParticleSystemImpl::cleanup
 		 */
 		C3D_API void cleanup()override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::Update
+		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
 		C3D_API uint32_t update( castor::Milliseconds const & p_time
 			, castor::Milliseconds const & p_total )override;

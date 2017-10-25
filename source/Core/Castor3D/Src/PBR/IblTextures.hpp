@@ -27,12 +27,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_scene	The scene.
+		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_scene	La scène.
+		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit IblTextures( Scene & p_scene );
+		C3D_API explicit IblTextures( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -43,12 +43,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
-		 *\param[in]	p_source	The source environment map.
+		 *\param[in]	source	The source environment map.
 		 *\~french
 		 *\brief		Met à jour les textures d'environnement.
-		 *\param[in]	p_source	La texture d'environnement source.
+		 *\param[in]	source	La texture d'environnement source.
 		 */
-		C3D_API void update( TextureLayout const & p_source );
+		C3D_API void update( TextureLayout const & source );
 		/**
 		 *\~english
 		 *\brief		Displays the maps.

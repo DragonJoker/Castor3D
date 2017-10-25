@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LegacyPassBuffer_H___
@@ -12,7 +12,7 @@ namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.1
+	\version	0.10.0
 	\date		09/02/2010
 	\~english
 	\brief		SSBO holding the LegacyPasses data.
@@ -43,11 +43,17 @@ namespace castor3d
 		 */
 		C3D_API ~LegacyPassBuffer();
 		/**
-		 *\copydoc		castor3d::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::visit
 		 */
-		C3D_API void visit( LegacyPass const & data )override;
+		C3D_API void visit( LegacyPass const & pass )override;
 
 	public:
+		/*!
+		\~english
+		\brief		Holds a Legacy pass data.
+		\~french
+		\brief		Contient les données d'une passe Legacy.
+		*/
 		struct PassData
 		{
 			RgbaColour diffAmb;

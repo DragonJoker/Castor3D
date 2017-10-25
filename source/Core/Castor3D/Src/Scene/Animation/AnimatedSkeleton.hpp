@@ -86,7 +86,7 @@ namespace castor3d
 		 */
 		C3D_API void fillBuffer( uint8_t * p_buffer )const;
 		/**
-		 *\copydoc		castor3d::AnimatedObject::Update
+		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & p_tslf )override;
 		/**

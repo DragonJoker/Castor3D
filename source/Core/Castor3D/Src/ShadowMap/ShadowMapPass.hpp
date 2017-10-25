@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SHADOW_MAP_PASS_H___
@@ -91,6 +91,8 @@ namespace castor3d
 		 */
 		void doRenderNodes( SceneRenderNodes & nodes
 			, Camera const & camera );
+
+	private:
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
@@ -98,8 +100,6 @@ namespace castor3d
 			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
-
-	private:
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.

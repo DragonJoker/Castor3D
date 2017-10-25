@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_EnvironmentMapPass_H___
@@ -48,11 +48,21 @@ namespace castor3d
 		 */
 		C3D_API ~EnvironmentMapPass();
 		/**
-		 *\copydoc		castor3d::RenderPass::doInitialise
+		 *\~english
+		 *\brief		Initialises the pass.
+		 *\param		size	The pass needed dimensions.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Initialise la passe.
+		 *\param		size	Les dimensions voulues pour la passe.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool initialise( castor::Size const & p_size );
+		bool initialise( castor::Size const & size );
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::doCleanup
+		 *\~english
+		 *\brief		Cleans up the pass.
+		 *\~french
+		 *\brief		Nettoie la passe.
 		 */
 		void cleanup();
 		/**

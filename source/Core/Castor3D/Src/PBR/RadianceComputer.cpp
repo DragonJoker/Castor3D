@@ -21,7 +21,7 @@ using namespace castor;
 namespace castor3d
 {
 	RadianceComputer::RadianceComputer( Engine & engine
-		, castor::Size const & p_size )
+		, castor::Size const & size )
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }
 		, m_viewport{ engine }
@@ -42,7 +42,7 @@ namespace castor3d
 				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
 			}
 		}
-		, m_size{ p_size }
+		, m_size{ size }
 	{
 		uint32_t i = 0;
 
@@ -142,8 +142,8 @@ namespace castor3d
 		}
 	}
 
-	void RadianceComputer::render( TextureLayout const & p_srcTexture
-		, TextureLayoutSPtr p_dstTexture )
+	void RadianceComputer::render( TextureLayout const & srcTexture
+		, TextureLayoutSPtr dstTexture )
 	{
 		static Matrix4x4r const views[] =
 		{
@@ -158,18 +158,18 @@ namespace castor3d
 		std::array< FrameBufferAttachmentSPtr, 6 > attachs
 		{
 			{
-				m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::ePositiveX ),
-				m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::eNegativeX ),
-				m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::ePositiveY ),
-				m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::eNegativeY ),
-				m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::ePositiveZ ),
-				m_frameBuffer->createAttachment( p_dstTexture, CubeMapFace::eNegativeZ ),
+				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveX ),
+				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeX ),
+				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveY ),
+				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeY ),
+				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveZ ),
+				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeZ ),
 			}
 		};
 
 		m_viewport.apply();
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		p_srcTexture.bind( MinTextureIndex );
+		srcTexture.bind( MinTextureIndex );
 		m_sampler->bind( MinTextureIndex );
 
 		for ( uint32_t i = 0u; i < 6u; ++i )
@@ -184,7 +184,7 @@ namespace castor3d
 		}
 
 		m_sampler->unbind( MinTextureIndex );
-		p_srcTexture.unbind( MinTextureIndex );
+		srcTexture.unbind( MinTextureIndex );
 		m_frameBuffer->unbind();
 	}
 

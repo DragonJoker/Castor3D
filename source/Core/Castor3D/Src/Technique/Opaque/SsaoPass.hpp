@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredSsaoPass_H___
@@ -29,14 +29,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	config	The SSAO configuration.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The render area dimensions.
+		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	config	La configuration du SSAO.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		Les dimensions de la zone de rendu.
+		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
 		 */
 		SsaoPass( Engine & engine
 			, castor::Size const & size

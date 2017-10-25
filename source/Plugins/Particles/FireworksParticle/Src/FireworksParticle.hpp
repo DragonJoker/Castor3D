@@ -17,7 +17,7 @@ namespace Fireworks
 		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & p_parent );
 		void emitParticle( float p_type, castor::Point3f const & p_position, castor::Point3f const & p_velocity, float p_age );
 		/**
-		 *\copydoc		castor3d::CpuParticleSystem::Update
+		 *\copydoc		castor3d::CpuParticleSystem::update
 		 */
 		uint32_t update( castor::Milliseconds const & p_time
 			, castor::Milliseconds const & p_totalTime )override;

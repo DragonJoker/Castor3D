@@ -126,14 +126,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	programFlags	Combinaison de ProgramFlag.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
@@ -145,12 +147,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	alphaFunc		The alpha test function.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -164,11 +168,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -183,6 +189,7 @@ namespace castor3d
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.
 		 *\param[in]	alphaFunc		The alpha test function.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
@@ -192,6 +199,7 @@ namespace castor3d
 		 *\param[in]	colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -211,6 +219,7 @@ namespace castor3d
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.
 		 *\param[in]	alphaFunc		The alpha test function.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
@@ -220,6 +229,7 @@ namespace castor3d
 		 *\param[in]	colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -238,6 +248,7 @@ namespace castor3d
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.
 		 *\param[in]	alphaFunc		The alpha test function.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
@@ -247,6 +258,7 @@ namespace castor3d
 		 *\param[in]	colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -354,11 +366,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	passFlags		A combination of PassFlag.
 		 *\param[in,out]	textureFlags	A combination of TextureChannel.
 		 *\param[in,out]	programFlags	A combination of ProgramFlag.
 		 *\param[in,out]	sceneFlags		A combination of SceneFlag.
 		 *\~french
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
 		 *\param[in,out]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
@@ -420,6 +434,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader program matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
@@ -427,6 +442,7 @@ namespace castor3d
 		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le programme shader correspondant aux flags donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -551,11 +567,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
-		 *\param		camera	The viewing camera.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
-		 *\param		camera	La caméra regardant la scène.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
 		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
@@ -563,12 +579,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param		camera		The viewing camera.
+		 *\param[in]	camera		The viewing camera.
 		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param		camera		La caméra regardant la scène.
+		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
@@ -578,13 +594,13 @@ namespace castor3d
 		 *\~english
 		 *\brief			Renders instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
-		 *\param			camera		The viewing camera.
+		 *\param[in]		camera		The viewing camera.
 		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
-		 *\param			camera		La caméra regardant la scène.
+		 *\param[in]		camera		La caméra regardant la scène.
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
@@ -617,11 +633,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
-		 *\param		camera	The viewing camera.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
-		 *\param		camera	La caméra regardant la scène.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
 		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
@@ -629,12 +645,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param		camera		The viewing camera.
+		 *\param[in]	camera		The viewing camera.
 		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param		camera		La caméra regardant la scène.
+		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
@@ -644,13 +660,13 @@ namespace castor3d
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
-		 *\param			camera		The viewing camera.
+		 *\param[in]		camera		The viewing camera.
 		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
-		 *\param			camera		La caméra regardant la scène.
+		 *\param[in]		camera		La caméra regardant la scène.
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
@@ -683,11 +699,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
-		 *\param		camera	The viewing camera.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
-		 *\param		camera	La caméra regardant la scène.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
 		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
@@ -695,12 +711,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param		camera		The viewing camera.
+		 *\param[in]	camera		The viewing camera.
 		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param		camera		La caméra regardant la scène.
+		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
@@ -710,13 +726,13 @@ namespace castor3d
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
-		 *\param			camera		The viewing camera.
+		 *\param[in]		camera		The viewing camera.
 		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
-		 *\param			camera		La caméra regardant la scène.
+		 *\param[in]		camera		La caméra regardant la scène.
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
@@ -749,11 +765,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
-		 *\param		camera	The viewing camera.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
-		 *\param		camera	La caméra regardant la scène.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
 		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
@@ -761,12 +777,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param		camera		The viewing camera.
+		 *\param[in]	camera		The viewing camera.
 		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param		camera		La caméra regardant la scène.
+		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
@@ -776,13 +792,13 @@ namespace castor3d
 		 *\~english
 		 *\brief			Renders instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
-		 *\param			camera		The viewing camera.
+		 *\param[in]		camera		The viewing camera.
 		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
-		 *\param			camera		La caméra regardant la scène.
+		 *\param[in]		camera		La caméra regardant la scène.
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
@@ -815,11 +831,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
-		 *\param		camera	The viewing camera.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
-		 *\param		camera	La caméra regardant la scène.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
 		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
@@ -827,12 +843,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	nodes		The render nodes.
-		 *\param		camera		The viewing camera.
+		 *\param[in]	camera		The viewing camera.
 		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param		camera		La caméra regardant la scène.
+		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
@@ -842,13 +858,13 @@ namespace castor3d
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
 		 *\param[in]		nodes		The render nodes.
-		 *\param			camera		The viewing camera.
+		 *\param[in]		camera		The viewing camera.
 		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
 		 *\param[in]		nodes		Les noeuds de rendu.
-		 *\param			camera		La caméra regardant la scène.
+		 *\param[in]		camera		La caméra regardant la scène.
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
@@ -881,11 +897,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders billboards.
 		 *\param[in]	nodes	The render nodes.
-		 *\param		camera	The viewing camera.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des billboards.
 		 *\param[in]	nodes	Les noeuds de rendu.
-		 *\param		camera	La caméra regardant la scène.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
 		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
 			, Camera const & camera )const;
@@ -893,12 +909,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders billboards.
 		 *\param[in]	nodes		The render nodes.
-		 *\param		camera		The viewing camera.
+		 *\param[in]	camera		The viewing camera.
 		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des billboards.
 		 *\param[in]	nodes		Les noeuds de rendu.
-		 *\param		camera		La caméra regardant la scène.
+		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
@@ -908,13 +924,13 @@ namespace castor3d
 		 *\~english
 		 *\brief			Renders billboards.
 		 *\param[in]		nodes		The render nodes.
-		 *\param			camera		The viewing camera.
+		 *\param[in]		camera		The viewing camera.
 		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des billboards.
 		 *\param[in]		nodes		Les noeuds de rendu.
-		 *\param			camera		La caméra regardant la scène.
+		 *\param[in]		camera		La caméra regardant la scène.
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
@@ -956,14 +972,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	programFlags	Combinaison de ProgramFlag.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
@@ -975,11 +993,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader correspondant aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -991,12 +1011,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	alphaFunc		The alpha test function.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -1010,12 +1032,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	alphaFunc		The alpha test function.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -1029,12 +1053,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	alphaFunc		The alpha test function.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -1048,11 +1074,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	passFlags		A combination of PassFlag.
 		 *\param[in,out]	textureFlags	A combination of TextureChannel.
 		 *\param[in,out]	programFlags	A combination of ProgramFlag.
 		 *\param[in,out]	sceneFlags		A combination of SceneFlag.
 		 *\~french
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
 		 *\param[in,out]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
@@ -1072,17 +1100,25 @@ namespace castor3d
 		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline  )const = 0;
 		/**
 		 *\~english
-		 *\brief		Prepares the pipeline, culling front faces.
+		 *\brief			Prepares the pipeline, culling front faces.
+		 *\param[in,out]	program	The program, and updates it if needed.
+		 *\param[in]		flags	The pipeline flags.
 		 *\~french
-		 *\brief		Prépare le pipeline de rendu, en supprimant les faces avant.
+		 *\brief			Prépare le pipeline de rendu, en supprimant les faces avant.
+		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
+		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareFrontPipeline( ShaderProgram & program
 			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\~english
-		 *\brief		Prepares the pipeline, culling back faces.
+		 *\brief			Prepares the pipeline, culling back faces.
+		 *\param[in,out]	program	The program, and updates it if needed.
+		 *\param[in]		flags	The pipeline flags.
 		 *\~french
-		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 *\brief			Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
+		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareBackPipeline( ShaderProgram & program
 			, PipelineFlags const & flags ) = 0;

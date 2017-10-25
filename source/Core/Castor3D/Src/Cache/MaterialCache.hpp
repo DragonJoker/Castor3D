@@ -133,13 +133,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an element.
-		 *\param[in]	name			The element name.
-		 *\param[in]	p_parameters	The other constructor parameters.
+		 *\param[in]	name	The element name.
+		 *\param[in]	type	The material type.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un élément.
-		 *\param[in]	name			Le nom d'élément.
-		 *\param[in]	p_parameters	Les autres paramètres de construction.
+		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	type	Le type de matéeiau.
 		 *\return		L'élément créé.
 		 */
 		C3D_API MaterialSPtr add( Key const & name, MaterialType type );

@@ -83,7 +83,7 @@ namespace castor3d
 		inline RenderPipeline & getPipeline()override
 		{
 			return m_node.m_pipeline;
-		};
+		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::getPassNode
 		 */
@@ -92,27 +92,21 @@ namespace castor3d
 			return m_node.m_passNode;
 		}
 		/**
-		 *\~english
-		 *\return		The instance's scene node.
-		 *\~french
-		 *\return		Le noeud de scène de l'instance.
+		 *\copydoc		DistanceRenderNodeBase::getSceneNode
 		 */
 		inline SceneNode & getSceneNode()override
 		{
 			return details::getParentNode( m_node.m_instance );
 		}
 		/**
-		 *\~english
-		 *\return		The instance's model UBO.
-		 *\~french
-		 *\return		L'UBO de modèle de l'instance.
+		 *\copydoc		DistanceRenderNodeBase::getModelUbo
 		 */
 		inline ModelUbo & getModelUbo()override
 		{
 			return m_node.m_modelUbo;
 		}
 		/**
-		 *\copydoc		DistanceRenderNodeBase::Render
+		 *\copydoc		DistanceRenderNodeBase::render
 		 */
 		inline void render()override
 		{

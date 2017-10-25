@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BrdfPrefilter_H___
@@ -29,13 +29,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The Context.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	size	The render size.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le Context.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	size	La taille du rendu.
 		 */
 		C3D_API explicit BrdfPrefilter( Engine & engine
-			, castor::Size const & p_size );
+			, castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -46,12 +48,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Computes the convoluted BRDF.
-		 *\param[in]	p_dstTexture	The cube texture destination.
+		 *\param[in]	dstTexture	The cube texture destination.
 		 *\~french
 		 *\brief		Calcule le BRDF circonvolu.
-		 *\param[in]	p_dstTexture	La texture cube destination.
+		 *\param[in]	dstTexture	La texture cube destination.
 		 */
-		C3D_API void render( TextureLayoutSPtr p_dstTexture );
+		C3D_API void render( TextureLayoutSPtr dstTexture );
 
 	private:
 		/**

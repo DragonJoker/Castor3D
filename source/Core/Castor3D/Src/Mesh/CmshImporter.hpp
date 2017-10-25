@@ -44,11 +44,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		C3D_API bool doImportScene( Scene & p_scene )override;
+		C3D_API bool doImportScene( Scene & scene )override;
 		/**
 		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		C3D_API bool doImportMesh( Mesh & p_mesh )override;
+		C3D_API bool doImportMesh( Mesh & mesh )override;
 
 	public:
 		static castor::String const Type;

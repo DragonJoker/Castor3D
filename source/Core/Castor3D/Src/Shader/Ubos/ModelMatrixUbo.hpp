@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ModelMatrixUbo_H___
@@ -51,24 +51,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_model			The new model matrix.
+		 *\param[in]	model	The new model matrix.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_model			La nouvelle matrice modèle.
+		 *\param[in]	model	La nouvelle matrice modèle.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & p_model )const;
+		C3D_API void update( castor::Matrix4x4r const & model )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_model			The new model matrix.
-		 *\param[in]	p_projection	The new normal matrix.
+		 *\param[in]	model	The new model matrix.
+		 *\param[in]	normal	The new normal matrix.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_model			La nouvelle matrice modèle.
-		 *\param[in]	p_projection	La nouvelle matrice normale.
+		 *\param[in]	model	La nouvelle matrice modèle.
+		 *\param[in]	normal	La nouvelle matrice normale.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & p_model
-			, castor::Matrix3x3r const & p_normal )const;
+		C3D_API void update( castor::Matrix4x4r const & model
+			, castor::Matrix3x3r const & normal )const;
 		/**
 		 *\~english
 		 *\name			getters.

@@ -41,22 +41,22 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( castor::String const & p_tabs, DirectionalLight const * p_category = nullptr );
+			C3D_API TextWriter( castor::String const & tabs, DirectionalLight const * category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
-			 *\param[in]	p_file	The file to save the cameras in
-			 *\param[in]	p_light	The light to save
+			 *\param[in]	file	The file to save the cameras in
+			 *\param[in]	light	The light to save
 			 *\~french
 			 *\brief		Ecrit une lumière dans un fichier texte
-			 *\param[in]	p_file	Le fichier
-			 *\param[in]	p_light	La lumière
+			 *\param[in]	file	Le fichier
+			 *\param[in]	light	La lumière
 			 */
-			C3D_API bool operator()( DirectionalLight const & p_light, castor::TextFile & p_file );
+			C3D_API bool operator()( DirectionalLight const & light, castor::TextFile & file );
 			/**
 			 *\copydoc		castor3d::LightCategory::TextWriter::writeInto
 			 */
-			C3D_API bool writeInto( castor::TextFile & p_file )override;
+			C3D_API bool writeInto( castor::TextFile & file )override;
 
 		private:
 			DirectionalLight const * m_category;
@@ -69,12 +69,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_light	The parent Light.
+		 *\param[in]	light	The parent Light.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_light	La Light parente.
+		 *\param[in]	light	La Light parente.
 		 */
-		C3D_API explicit DirectionalLight( Light & p_light );
+		C3D_API explicit DirectionalLight( Light & light );
 
 	public:
 		/**
@@ -92,19 +92,19 @@ namespace castor3d
 		 *\brief		Fonction de création utilisée par Factory.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategoryUPtr create( Light & p_light );
+		C3D_API static LightCategoryUPtr create( Light & light );
 		/**
-		 *\copydoc		castor3d::LightCategory::Update
+		 *\copydoc		castor3d::LightCategory::update
 		 */
-		C3D_API void update( castor::Point3r const & p_target
-			, Viewport & p_viewport
-			, int32_t p_index = -1 )override;
+		C3D_API void update( castor::Point3r const & target
+			, Viewport & viewport
+			, int32_t index = -1 )override;
 		/**
 		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */
-		C3D_API std::unique_ptr < LightCategory::TextWriter > createTextWriter( castor::String const & p_tabs )override
+		C3D_API std::unique_ptr < LightCategory::TextWriter > createTextWriter( castor::String const & tabs )override
 		{
-			return std::make_unique< TextWriter >( p_tabs, this );
+			return std::make_unique< TextWriter >( tabs, this );
 		}
 		/**
 		 *\~english
@@ -131,11 +131,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightCategory::updateNode
 		 */
-		C3D_API void updateNode( SceneNode const & p_node )override;
+		C3D_API void updateNode( SceneNode const & node )override;
 		/**
 		 *\copydoc		castor::LightCategory::doBind
 		 */
-		C3D_API void doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const override;
+		C3D_API void doBind( castor::PxBufferBase & texture
+			, uint32_t index
+			, uint32_t & offset )const override;
 
 	private:
 		//!\~english	The light source direction.

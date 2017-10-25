@@ -67,11 +67,9 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		gets buffer declaration
-		 *\return		The buffer declaration
+		 *\return		The buffer declaration.
 		 *\~french
-		 *\brief		Récupère la déclaration du tampon
-		 *\return		La déclaration du tampon
+		 *\return		La déclaration du tampon.
 		 */
 		inline BufferDeclaration const & getDeclaration()const
 		{
@@ -79,11 +77,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Link all elements to this buffer
-		 *\param[in]	p_begin, p_end	The elements array iterators
+		 *\brief		Link all elements to this buffer.
+		 *\param[in]	begin, end	The elements array iterators.
 		 *\~french
-		 *\brief		Lie tous les éméents à ce tampon
-		 *\param[in]	p_begin, p_end	Les itérateurs du tableau d'éléments
+		 *\brief		Lie tous les éméents à ce tampon.
+		 *\param[in]	begin, end	Les itérateurs du tableau d'éléments.
 		 */
 		template< typename ItType >
 		inline void linkCoords( ItType begin, ItType end )

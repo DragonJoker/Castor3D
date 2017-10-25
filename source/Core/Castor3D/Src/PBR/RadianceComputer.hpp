@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RadianceComputer_H___
@@ -29,13 +29,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The Context.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	size	The render size.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le Context.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	size	La taille du rendu.
 		 */
 		C3D_API explicit RadianceComputer( Engine & engine
-			, castor::Size const & p_size );
+			, castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -46,17 +48,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the wanted equirectangular 2D texture to given cube texture.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_srcTexture	The cube texture source.
-		 *\param[in]	p_dstTexture	The cube texture destination.
+		 *\param[in]	srcTexture	The cube texture source.
+		 *\param[in]	dstTexture	The cube texture destination.
 		 *\~french
 		 *\brief		Dessine a texture equirectangulaire 2D donnée dans la texture cube donnée.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_srcTexture	La texture cube source.
-		 *\param[in]	p_dstTexture	La texture cube destination.
+		 *\param[in]	srcTexture	La texture cube source.
+		 *\param[in]	dstTexture	La texture cube destination.
 		 */
-		C3D_API void render( TextureLayout const & p_srcTexture
-			, TextureLayoutSPtr p_dstTexture );
+		C3D_API void render( TextureLayout const & srcTexture
+			, TextureLayoutSPtr dstTexture );
 
 	private:
 		/**

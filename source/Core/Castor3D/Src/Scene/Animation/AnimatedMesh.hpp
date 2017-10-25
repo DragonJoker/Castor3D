@@ -68,7 +68,7 @@ namespace castor3d
 		 */
 		C3D_API AnimatedMesh & operator=( AnimatedMesh const & p_rhs ) = delete;
 		/**
-		 *\copydoc		castor3d::AnimatedObject::Update
+		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & p_tslf )override;
 		/**

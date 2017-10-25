@@ -44,32 +44,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a render target of given type
-		 *\param[in]	p_type	The render target type
+		 *\param[in]	type	The render target type
 		 *\return		The render target
 		 *\~french
 		 *\brief		Crée une cible de rendu du type voulu
-		 *\param[in]	p_type	Le type de cible de rendu
+		 *\param[in]	type	Le type de cible de rendu
 		 *\return		La cible de rendu
 		 */
-		C3D_API RenderTargetSPtr add( TargetType p_type );
+		C3D_API RenderTargetSPtr add( TargetType type );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
-		 *\param[in]	p_target	The render target
+		 *\param[in]	target	The render target
 		 *\~french
 		 *\brief		Enlève une cible de rendu de la boucle de rendu
-		 *\param[in]	p_target	La cible de rendu
+		 *\param[in]	target	La cible de rendu
 		 */
-		C3D_API void remove( RenderTargetSPtr p_target );
+		C3D_API void remove( RenderTargetSPtr target );
 		/**
 		 *\~english
 		 *\brief			Renders into the render targets.
-		 *\param[in,out]	p_vtxCount	Receives the render informations.
+		 *\param[in,out]	info	Receives the render informations.
 		 *\~french
 		 *\brief			Dessine dans les cibles de rendu.
-		 *\param[in,out]	p_vtxCount	Reçoit les informations de rendu.
+		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void render( RenderInfo & p_info );
+		C3D_API void render( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.

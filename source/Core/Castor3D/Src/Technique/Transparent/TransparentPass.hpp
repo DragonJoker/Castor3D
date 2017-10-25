@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredTransparentPass_H___
@@ -34,47 +34,47 @@ namespace castor3d
 	/**
 	 *\~english
 	 *\brief		Retrieve the name for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère le nom pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	castor::String getTextureName( WbTexture p_texture );
+	castor::String getTextureName( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the pixel format for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère le format de pixels pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	castor::PixelFormat getTextureFormat( WbTexture p_texture );
+	castor::PixelFormat getTextureFormat( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment point for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère le point d'attache pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	AttachmentPoint getTextureAttachmentPoint( WbTexture p_texture );
+	AttachmentPoint getTextureAttachmentPoint( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	uint32_t getTextureAttachmentIndex( WbTexture p_texture );
+	uint32_t getTextureAttachmentIndex( WbTexture texture );
 
 	class RenderTechnique;
 	/*!
@@ -93,18 +93,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_scene		The scene for this technique.
-		 *\param[in]	p_camera	The camera for this technique (may be null).
-		 *\param[in]	p_config	The SSAO configuration.
+		 *\param[in]	scene	The scene for this technique.
+		 *\param[in]	camera	The camera for this technique (may be null).
+		 *\param[in]	config	The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_scene		La scène pour cette technique.
-		 *\param[in]	p_camera	La caméra pour cette technique (peut être nulle).
-		 *\param[in]	p_config	La configuration du SSAO.
+		 *\param[in]	scene	La scène pour cette technique.
+		 *\param[in]	camera	La caméra pour cette technique (peut être nulle).
+		 *\param[in]	config	La configuration du SSAO.
 		 */
-		TransparentPass( Scene & p_scene
-			, Camera * p_camera
-			, SsaoConfig const & p_config );
+		TransparentPass( Scene & scene
+			, Camera * camera
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -115,7 +115,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		void render( RenderInfo & p_info
+		void render( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
 
@@ -123,13 +123,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( ShaderProgram & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPrepareFrontPipeline( ShaderProgram & program
+			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( ShaderProgram & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPrepareBackPipeline( ShaderProgram & program
+			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -165,9 +165,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		void doUpdatePipeline( RenderPipeline & p_pipeline )const override;
-		void doCompletePipeline( PipelineFlags const & p_flags
-			, RenderPipeline & p_pipeline );
+		void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		void doCompletePipeline( PipelineFlags const & flags
+			, RenderPipeline & pipeline );
 	};
 }
 

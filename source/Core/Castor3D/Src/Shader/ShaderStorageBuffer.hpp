@@ -27,12 +27,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	p_declaration	The buffer declaration.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_declaration	La déclaration du tampon.
+		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit ShaderStorageBuffer( Engine & engine );
 		/**

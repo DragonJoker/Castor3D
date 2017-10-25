@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SHADER_OBJECT_H___
@@ -43,18 +43,18 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderObject into a text file
-			 *\param[in]		p_shaderObject	The ShaderObject
-			 *\param[in,out]	p_file			The file
+			 *\param[in]		shaderObject	The ShaderObject
+			 *\param[in,out]	file			The file
 			 *\~french
 			 *\brief			Ecrit un ShaderObject dans un fichier texte
-			 *\param[in]		p_shaderObject	Le ShaderObject
-			 *\param[in,out]	p_file			Le fichier
+			 *\param[in]		shaderObject	Le ShaderObject
+			 *\param[in,out]	file			Le fichier
 			 */
-			C3D_API bool operator()( ShaderObject const & p_shaderObject, castor::TextFile & p_file )override;
+			C3D_API bool operator()( ShaderObject const & shaderObject, castor::TextFile & file )override;
 		};
 
 	private:
@@ -64,14 +64,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_parent	Parent program
-		 *\param[in]	p_type		Shader type
+		 *\param[in]	parent	Parent program
+		 *\param[in]	type	Shader type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_parent	programme parent
-		 *\param[in]	p_type		Type de shader
+		 *\param[in]	parent	programme parent
+		 *\param[in]	type	Type de shader
 		 */
-		C3D_API ShaderObject( ShaderProgram & p_parent, ShaderType p_type );
+		C3D_API ShaderObject( ShaderProgram & parent, ShaderType type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,25 +103,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Attaches this shader to the given program
-		 *\param[in]	p_program	The program
+		 *\param[in]	program	The program
 		 *\~french
 		 *\brief		Attache ce shader au programme donné
-		 *\param[in]	p_program	Le programme
+		 *\param[in]	program	Le programme
 		 */
-		C3D_API virtual void attachTo( ShaderProgram & p_program ) = 0;
+		C3D_API virtual void attachTo( ShaderProgram & program ) = 0;
 		/**
 		 *\~english
-		 *\brief		sets the shader file for given model
+		 *\brief		Sets the shader file for given model
 		 *\remarks		The loaded file will be the one of the highest supported profile
-		 *\param[in]	p_eModel	The shader model
-		 *\param[in]	p_pathFile	The file name
+		 *\param[in]	pathFile	The file name
 		 *\~french
 		 *\brief		Définit le fichier du shader pour le modèle donné
 		 *\remarks		Le fichier chargé sera celui du plus haut profil supporté
-		 *\param[in]	p_eModel	Le modèle de shader
-		 *\param[in]	p_pathFile	Le nom du fichier
+		 *\param[in]	pathFile	Le nom du fichier
 		 */
-		C3D_API void setFile( castor::Path const & p_pathFile );
+		C3D_API void setFile( castor::Path const & pathFile );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file, whatever model it is
@@ -133,26 +131,26 @@ namespace castor3d
 		C3D_API bool hasFile()const;
 		/**
 		 *\~english
-		 *\brief		sets the shader source for given model
+		 *\brief		Sets the shader source for given model
 		 *\remarks		The loaded source will be the one of the highest supported profile
-		 *\param[in]	p_source	The source code
+		 *\param[in]	source	The source code
 		 *\~french
 		 *\brief		Définit la source du shader pour le modèle donné
 		 *\remarks		La source chargée sera celle du plus haut profil supporté
-		 *\param[in]	p_source	Le code de la source
+		 *\param[in]	source	Le code de la source
 		 */
-		C3D_API void setSource( castor::String const & p_source );
+		C3D_API void setSource( castor::String const & source );
 		/**
 		 *\~english
-		 *\brief		sets the shader source for given model
+		 *\brief		Sets the shader source for given model
 		 *\remarks		The loaded source will be the one of the highest supported profile
-		 *\param[in]	p_source	The source code
+		 *\param[in]	source	The source code
 		 *\~french
 		 *\brief		Définit la source du shader pour le modèle donné
 		 *\remarks		La source chargée sera celle du plus haut profil supporté
-		 *\param[in]	p_source	Le code de la source
+		 *\param[in]	source	Le code de la source
 		 */
-		C3D_API void setSource( glsl::Shader const & p_source );
+		C3D_API void setSource( glsl::Shader const & source );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
@@ -271,7 +269,6 @@ namespace castor3d
 		 *\return		The frame variables bound to this shader.
 		 *\~french
 		 *\return		Les variables de frame liées à ce shader.
-		 *\return		La liste
 		 */
 		inline PushUniformList const & getUniforms()const
 		{
@@ -289,12 +286,10 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader file for given model
-		 *\param[in]	p_eModel	The shader model
+		 *\brief		Retrieves the shader file.
 		 *\return		The file name
 		 *\~french
-		 *\brief		Récupère le fichier du shader pour le modèle donné
-		 *\param[in]	p_eModel	Le modèle de shader
+		 *\brief		Récupère le fichier du shader.
 		 *\return		Le nom du fichier
 		 */
 		inline castor::Path const & getFile()const
@@ -323,15 +318,15 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the input primitives type
-		 *\param[in]	p_topology	The input primitives type
+		 *\brief		Sets the input primitives type
+		 *\param[in]	topology	The input primitives type
 		 *\~french
 		 *\brief		Définit le type des primitives en entrée
-		 *\param[in]	p_topology	Le type des primitives en entrée
+		 *\param[in]	topology	Le type des primitives en entrée
 		 */
-		inline void setInputType( Topology p_topology )
+		inline void setInputType( Topology topology )
 		{
-			m_inputType = p_topology;
+			m_inputType = topology;
 		}
 		/**
 		 *\~english
@@ -345,15 +340,15 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the output primitives type
-		 *\param[in]	p_topology	The primitives type
+		 *\brief		Sets the output primitives type
+		 *\param[in]	topology	The primitives type
 		 *\~french
 		 *\brief		Définit le type des primitives en sortie
-		 *\param[in]	p_topology	Le type des primitives
+		 *\param[in]	topology	Le type des primitives
 		 */
-		inline void setOutputType( Topology p_topology )
+		inline void setOutputType( Topology topology )
 		{
-			m_outputType = p_topology;
+			m_outputType = topology;
 		}
 		/**
 		 *\~english
@@ -367,15 +362,15 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the output vertex count
-		 *\param[in]	p_count	The count
+		 *\brief		Sets the output vertex count
+		 *\param[in]	count	The count
 		 *\~french
 		 *\brief		Définit le nombre de vertices générés
-		 *\param[in]	p_count	Le compte
+		 *\param[in]	count	Le compte
 		 */
-		void setOutputVtxCount( uint8_t p_count )
+		void setOutputVtxCount( uint8_t count )
 		{
-			m_outputVtxCount = p_count;
+			m_outputVtxCount = count;
 		}
 		/**
 		 *\~english
@@ -415,13 +410,13 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\brief		adds a uniform variable to pass to the shader objects
-		 *\param[in]	p_variable	The variable to pass
+		 *\brief		Adds a uniform variable to pass to the shader objects
+		 *\param[in]	variable	The variable to pass
 		 *\~french
 		 *\brief		Crée une variable uniform à donner aux ShaderObjects
-		 *\param[in]	p_variable	La variable à donner
+		 *\param[in]	variable	La variable à donner
 		 */
-		C3D_API void doAddUniform( PushUniformSPtr p_variable );
+		C3D_API void doAddUniform( PushUniformSPtr variable );
 		/**
 		 *\~english
 		 *\brief		Checks for compiler errors.

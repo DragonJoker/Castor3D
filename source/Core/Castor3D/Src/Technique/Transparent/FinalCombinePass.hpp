@@ -22,10 +22,10 @@ namespace castor3d
 	*/
 	struct FinalCombineProgram
 	{
-		FinalCombineProgram( FinalCombineProgram const & p_rhs ) = delete;
-		FinalCombineProgram & operator=( FinalCombineProgram const & p_rhs ) = delete;
-		FinalCombineProgram( FinalCombineProgram && p_rhs ) = default;
-		FinalCombineProgram & operator=( FinalCombineProgram && p_rhs ) = default;
+		FinalCombineProgram( FinalCombineProgram const & rhs ) = delete;
+		FinalCombineProgram & operator=( FinalCombineProgram const & rhs ) = delete;
+		FinalCombineProgram( FinalCombineProgram && rhs ) = default;
+		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -122,7 +122,7 @@ namespace castor3d
 		 *\param[in]	invViewProj	The inverse view projection matrix.
 		 *\param[in]	invView		The inverse view matrix.
 		 *\param[in]	invProj		The inverse projection matrix.
-		 *\param[in]	fog			The fog.
+		 *\param[in]	fogType		The fog type.
 		 *\~french
 		 *\brief		Dessine la combinaison sur le tampon d'image donné.
 		 *\param[in]	wbResult	Le résultat de la passe de weighted blend.
@@ -131,7 +131,7 @@ namespace castor3d
 		 *\param[in]	invViewProj	La matrice vue projection inversée.
 		 *\param[in]	invView		La matrice vue inversée.
 		 *\param[in]	invProj		La matrice projection inversée.
-		 *\param[in]	fog			Le brouillard.
+		 *\param[in]	fogType		Le type de brouillard.
 		 */
 		void render( WeightedBlendPassResult const & wbResult
 			, FrameBuffer const & frameBuffer

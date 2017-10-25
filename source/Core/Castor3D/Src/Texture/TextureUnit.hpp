@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_TEXTURE_UNIT_H___
@@ -169,10 +169,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the unit index.
-		 *\param[in]	p_index	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit l'index de l'unité.
-		 *\param[in]	p_index	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
 		inline void setIndex( uint32_t value )
 		{
@@ -286,13 +286,13 @@ namespace castor3d
 	/**
 	 *\~english
 	 *\brief			Stream operator.
-	 *\param[in,out]	p_streamOut	The stream receiving texture's data.
-	 *\param[in]		p_texture	The input texture.
+	 *\param[in,out]	streamOut	The stream receiving texture's data.
+	 *\param[in]		texture		The input texture.
 	 *\return			A reference to the stream.
 	 *\~french
 	 *\brief			Opérateur de flux.
-	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la texture.
-	 *\param[in]		p_texture	La texture.
+	 *\param[in,out]	streamOut	Le flux qui reçoit les données de la texture.
+	 *\param[in]		texture		La texture.
 	 *\return			Une référence sur le flux.
 	 */
 	inline std::ostream & operator<<( std::ostream & streamOut, TextureUnitSPtr const & texture )

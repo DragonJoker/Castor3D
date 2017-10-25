@@ -30,15 +30,15 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	textureSize	The render area dimensions.
-		 *\param[in]	format		The pixel format for the textures to blur.
-		 *\param[in]	kernelSize	The kernel coefficients count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
+		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
+		 *\param[in]	sceneUbo	L'UBO de la scène.
 		 *\param[in]	textureSize	Les dimensions de la zone de rendu.
-		 *\param[in]	format		Le format de pixel des textures à flouter.
-		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API SubsurfaceScatteringPass( Engine & engine
 			, GpInfoUbo & gpInfoUbo

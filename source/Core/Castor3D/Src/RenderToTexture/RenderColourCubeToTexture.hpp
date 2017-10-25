@@ -28,14 +28,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The Context.
+		 *\param[in]	context		The Context.
 		 *\param[in]	matrixUbo	The UBO containing matrix data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le Context.
+		 *\param[in]	context		Le Context.
 		 *\param[in]	matrixUbo	L'UBO contenant les données de matrices.
 		 */
-		C3D_API explicit RenderColourCubeToTexture( Context & p_context
+		C3D_API explicit RenderColourCubeToTexture( Context & context
 			, MatrixUbo & matrixUbo );
 		/**
 		 *\~english
@@ -91,14 +91,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders a face from the given cube texture to the currently draw-bound frame buffer.
-		 *\param[in]	size	The render viewport size.
-		 *\param[in]	texture	The texture.
-		 *\param[in]	face	The face.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	face		The face.
+		 *\param[in]	pipeline	The render pipeline.
+		 *\param[in]	matrixUbo	The uniform buffer receiving matrices.
 		 *\~french
 		 *\brief		Rend une face de la texture cube donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	size	La taille du viewport de rendu.
-		 *\param[in]	texture	La texture.
-		 *\param[in]	face	La face.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	face		La face.
+		 *\param[in]	pipeline	Le pipeline de rendu.
+		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
 		C3D_API void renderFace( castor::Size const & size
 			, TextureLayout const & texture

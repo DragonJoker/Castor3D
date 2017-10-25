@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SpecularGlossinessPassBuffer_H___
@@ -12,7 +12,7 @@ namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.1
+	\version	0.10.0
 	\date		09/02/2010
 	\~english
 	\brief		SSBO holding the SpecularGlossinessPbrPasses data.
@@ -27,11 +27,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	count	The max passes count.
+		 *\param[in]	size	The max passes count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	count	Le nombre maximal de passes.
+		 *\param[in]	size	Le nombre maximal de passes.
 		 */
 		C3D_API SpecularGlossinessPassBuffer( Engine & engine
 			, uint32_t size );
@@ -43,15 +43,15 @@ namespace castor3d
 		 */
 		C3D_API ~SpecularGlossinessPassBuffer();
 		/**
-		 *\copydoc		castor3d::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::visit
 		 */
-		C3D_API void visit( LegacyPass const & data )override;
+		C3D_API void visit( LegacyPass const & pass )override;
 		/**
-		 *\copydoc		castor3d::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::visit
 		 */
 		C3D_API void visit( SpecularGlossinessPbrPass const & pass )override;
 
-	public:
+	private:
 		struct PassData
 		{
 			RgbaColour diffDiv;

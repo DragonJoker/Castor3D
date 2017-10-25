@@ -40,11 +40,11 @@ namespace castor3d
 		 */
 		C3D_API virtual ~CpuParticleSystem();
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::Initialise
+		 *\copydoc		castor3d::ParticleSystemImpl::initialise
 		 */
 		C3D_API bool initialise()override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::Cleanup
+		 *\copydoc		castor3d::ParticleSystemImpl::cleanup
 		 */
 		C3D_API void cleanup()override;
 		/**

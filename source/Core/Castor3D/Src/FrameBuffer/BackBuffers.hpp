@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BACK_BUFFERS_H___
@@ -64,37 +64,37 @@ namespace castor3d
 		 */
 		C3D_API virtual void bind( WindowBuffer buffer, FrameBufferTarget target )const = 0;
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment
+		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::RenderBufferSPtr)
 		 */
 		C3D_API RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment
+		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::TextureLayoutSPtr)
 		 */
 		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment
+		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::TextureLayoutSPtr,castor3d::CubeMapFace)
 		 */
 		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment
+		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::TextureLayoutSPtr,castor3d::CubeMapFace,uint32_t)
 		 */
 		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face, uint32_t mipLevel )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::doBind
+		 *\copydoc		castor3d::FrameBuffer::isComplete
 		 */
-		C3D_API virtual bool isComplete()const
+		C3D_API bool isComplete()const override
 		{
 			return true;
 		}

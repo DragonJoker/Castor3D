@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredOpaquePass_H___
@@ -51,7 +51,7 @@ namespace castor3d
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
 
-	protected:
+	private:
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */

@@ -7,22 +7,11 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		MetallicRoughnessPassBuffer::PassesData doBindData( uint8_t * data
-			, uint32_t count )
-		{
-			return makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data )
-				, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data ) + count );
-		}
-	}
-
-	//*********************************************************************************************
-
 	MetallicRoughnessPassBuffer::MetallicRoughnessPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer.ptr(), count ) }
+		, m_data{ makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.ptr() )
+			, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.ptr() ) + count ) }
 	{
 	}
 

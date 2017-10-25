@@ -116,13 +116,13 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	IblTextures::IblTextures( Scene & p_scene )
-		: OwnedBy< Scene >{ p_scene }
-		, m_radianceTexture{ doCreateRadianceTexture( *p_scene.getEngine() ) }
-		, m_prefilteredEnvironment{ doCreatePrefilteredTexture( *p_scene.getEngine() ) }
-		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *p_scene.getEngine() ) }
-		, m_radianceComputer{ *p_scene.getEngine(), m_radianceTexture.getTexture()->getDimensions() }
-		, m_environmentPrefilter{ *p_scene.getEngine(), m_prefilteredEnvironment.getTexture()->getDimensions() }
+	IblTextures::IblTextures( Scene & scene )
+		: OwnedBy< Scene >{ scene }
+		, m_radianceTexture{ doCreateRadianceTexture( *scene.getEngine() ) }
+		, m_prefilteredEnvironment{ doCreatePrefilteredTexture( *scene.getEngine() ) }
+		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine() ) }
+		, m_radianceComputer{ *scene.getEngine(), m_radianceTexture.getTexture()->getDimensions() }
+		, m_environmentPrefilter{ *scene.getEngine(), m_prefilteredEnvironment.getTexture()->getDimensions() }
 	{
 		auto texture = m_radianceTexture.getTexture();
 		texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
@@ -152,7 +152,7 @@ namespace castor3d
 		m_prefilteredBrdf.initialise();
 		m_prefilteredBrdf.getSampler()->initialise();
 
-		BrdfPrefilter filter{ *p_scene.getEngine(), m_prefilteredBrdf.getTexture()->getDimensions() };
+		BrdfPrefilter filter{ *scene.getEngine(), m_prefilteredBrdf.getTexture()->getDimensions() };
 		filter.render( m_prefilteredBrdf.getTexture() );
 	}
 
@@ -163,10 +163,10 @@ namespace castor3d
 		m_prefilteredBrdf.cleanup();
 	}
 
-	void IblTextures::update( TextureLayout const & p_source )
+	void IblTextures::update( TextureLayout const & source )
 	{
-		m_radianceComputer.render( p_source, m_radianceTexture.getTexture() );
-		m_environmentPrefilter.render( p_source, m_prefilteredEnvironment.getTexture() );
+		m_radianceComputer.render( source, m_radianceTexture.getTexture() );
+		m_environmentPrefilter.render( source, m_prefilteredEnvironment.getTexture() );
 	}
 
 	void IblTextures::debugDisplay( Size const & renderSize )const

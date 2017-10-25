@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_SIGNAL_H___
@@ -268,10 +268,10 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Emits the signal, calls every connected function.
-		 *\param[in]	p_params	The functions parameters.
+		 *\param[in]	params	The functions parameters.
 		 *\~french
 		 *\brief		Emet le signal, appelant toutes les fonctions connectées.
-		 *\param[in]	p_params	Les paramètres des fonctions.
+		 *\param[in]	params	Les paramètres des fonctions.
 		 */
 		template< typename ... Params >
 		void operator()( Params && ... params )const

@@ -23,7 +23,7 @@ using namespace castor;
 namespace castor3d
 {
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
-		, castor::Size const & p_size )
+		, castor::Size const & size )
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }
 		, m_viewport{ engine }
@@ -44,7 +44,7 @@ namespace castor3d
 				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 }
 			}
 		}
-		, m_size{ p_size }
+		, m_size{ size }
 	{
 		uint32_t i = 0;
 
@@ -123,11 +123,11 @@ namespace castor3d
 		}
 	}
 
-	void BrdfPrefilter::render( TextureLayoutSPtr p_dstTexture )
+	void BrdfPrefilter::render( TextureLayoutSPtr dstTexture )
 	{
 		m_viewport.apply();
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		auto attach = m_frameBuffer->createAttachment( p_dstTexture );
+		auto attach = m_frameBuffer->createAttachment( dstTexture );
 		attach->setLayer( 0 );
 		attach->setTarget( TextureType::eTwoDimensions );
 		attach->attach( AttachmentPoint::eColour, 0u );

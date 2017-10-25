@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMap_H___
@@ -30,11 +30,13 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	shadowMap	The shadow map.
 		 *\param[in]	depthMap	The depth map.
+		 *\param[in]	pass		The pass used to render map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	shadowMap	La texture d'ombres.
 		 *\param[in]	depthMap	La texture de profondeur.
+		 *\param[in]	pass		La passe utilisée pour rendre cette texture.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
@@ -68,12 +70,14 @@ namespace castor3d
 		 *\param[in]	camera	The viewer camera.
 		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\param[out]	light	The light source.
+		 *\param[out]	index	The map index.
 		 *\~french
 		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[in]	camera	La caméra de l'observateur.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 *\param[out]	light	La source lumineuse.
+		 *\param[out]	index	L'indice de la texture.
 		 */
 		C3D_API virtual void update( Camera const & camera
 			, RenderQueueArray & queues

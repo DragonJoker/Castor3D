@@ -265,12 +265,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the given variance cube texture to the currently draw-bound frame buffer.
-		 *\param[in]	size	The render viewport size.
-		 *\param[in]	texture	The texture.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture cube de variance donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	size	La taille du viewport de rendu.
-		 *\param[in]	texture	La texture.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
 		 */
 		C3D_API void renderVarianceCube( castor::Position const & position
 			, castor::Size const & size
@@ -441,15 +443,21 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
-		 *\param[in]	size	The render viewport size.
-		 *\param[in]	texture	The texture.
-		 *\param[in]	index	The layer index.
+		 *\brief		Renders an equirectangular texture into a cube texture.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The equirectangular texture.
+		 *\param[in]	cubeTexture	The cube texture.
+		 *\param[in]	fbo			The framebuffer used during render.
+		 *\param[in]	attachs		The framebuffer attaches for the cube texture.
+		 *\param[in]	hdrConfig	The HDR configuration.
 		 *\~french
-		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	size	La taille du viewport de rendu.
-		 *\param[in]	texture	La texture.
-		 *\param[in]	index	L'index de la couche.
+		 *\brief		Rend une texture équirectangulaire dans une texture cube.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture équirectangulaire.
+		 *\param[in]	cubeTexture	La texture cube.
+		 *\param[in]	fbo			Le tampon d'image utilisé lors du rendu.
+		 *\param[in]	attachs		Les attaches entre le tampon d'images et la texture cube.
+		 *\param[in]	hdrConfig	La configuration HDR.
 		 */
 		inline void renderEquiToCube( castor::Size const & size
 			, TextureLayout const & texture
@@ -467,15 +475,19 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
-		 *\param[in]	size	The render viewport size.
-		 *\param[in]	texture	The texture.
-		 *\param[in]	face	The face index.
+		 *\brief		Renders the wanted face of given cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	face		The face index.
+		 *\param[in]	pipeline	The pipleline used to render the texture.
+		 *\param[in]	matrixUbo	The uniform buffer receiving matrices.
 		 *\~french
-		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	size	La taille du viewport de rendu.
-		 *\param[in]	texture	La texture.
-		 *\param[in]	face	L'index de la face.
+		 *\brief		Rend la face voulue de la texture cube donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	face		L'index de la face.
+		 *\param[in]	pipeline	Le pipeline utilisé pour dessiner la texture.
+		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
 		inline void renderCubeFace( castor::Size const & size
 			, TextureLayoutSPtr texture
@@ -491,12 +503,12 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
+		 *\brief		Renders the wanted face of given cube texture to the currently draw-bound frame buffer.
 		 *\param[in]	size	The render viewport size.
 		 *\param[in]	texture	The texture.
 		 *\param[in]	face	The face index.
 		 *\~french
-		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\brief		Rend la face voulue de la texture cube donnée dans le tampon d'image actuellement activé en dessin.
 		 *\param[in]	size	La taille du viewport de rendu.
 		 *\param[in]	texture	La texture.
 		 *\param[in]	face	L'index de la face.

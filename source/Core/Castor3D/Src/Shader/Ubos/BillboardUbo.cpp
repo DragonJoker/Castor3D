@@ -1,4 +1,4 @@
-﻿#include "BillboardUbo.hpp"
+#include "BillboardUbo.hpp"
 
 #include "Engine.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -24,15 +24,15 @@ namespace castor3d
 	{
 	}
 
-	void BillboardUbo::update( Size const & p_dimensions )const
+	void BillboardUbo::update( Size const & dimensions )const
 	{
-		m_dimensions.setValue( Point2i( p_dimensions[0], p_dimensions[1] ) );
+		m_dimensions.setValue( Point2i( dimensions[0], dimensions[1] ) );
 		m_ubo.update();
 		m_ubo.bindTo( BillboardUbo::BindingPoint );
 	}
 
-	void BillboardUbo::setWindowSize( Size const & p_window )const
+	void BillboardUbo::setWindowSize( Size const & window )const
 	{
-		m_windowSize.setValue( Point2i( p_window[0], p_window[1] ) );
+		m_windowSize.setValue( Point2i( window[0], window[1] ) );
 	}
 }

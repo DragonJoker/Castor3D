@@ -58,12 +58,14 @@ namespace castor3d
 			 *\param[in]	size			The surface size.
 			 *\param[in]	index			The surface index.
 			 *\param[in]	sampler			The surface sampler.
+			 *\param[in]	format			The surface pixel format.
 			 *\~french
 			 *\brief		Initialise la surface.
 			 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 			 *\param[in]	size			Les dimensions de la surface.
 			 *\param[in]	index			L'index de la surface.
 			 *\param[in]	sampler			L'échantillonneur de la surface.
+			 *\param[in]	format			Le format des pixels de la surface.
 			 */
 			C3D_API bool initialise( castor3d::RenderTarget & renderTarget
 				, castor::Size const & size
@@ -124,12 +126,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.
-		 *\param[in]	p_file	The file.
+		 *\param[in]	file	The file.
 		 *\~french
 		 *\brief		Ecrit l'effet dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
+		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API bool writeInto( castor::TextFile & p_file );
+		C3D_API bool writeInto( castor::TextFile & file );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -149,14 +151,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Render function, applies the effect to the given framebuffer.
-		 *\param[in,out]	p_framebuffer	The framebuffer.
+		 *\param[in,out]	framebuffer	The framebuffer.
 		 *\return			\p true if ok.
 		 *\~french
 		 *\brief			Fonction de rendu, applique l'effet au tampon d'image donné.
-		 *\param[in,out]	p_framebuffer	Le tampon d'image.
+		 *\param[in,out]	framebuffer	Le tampon d'image.
 		 *\return			\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool apply( FrameBuffer & p_framebuffer ) = 0;
+		C3D_API virtual bool apply( FrameBuffer & framebuffer ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the effect applies after tone mapping.
@@ -172,12 +174,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.
-		 *\param[in]	p_file	The file.
+		 *\param[in]	file	The file.
 		 *\~french
 		 *\brief		Ecrit l'effet dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
+		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API virtual bool doWriteInto( castor::TextFile & p_file ) = 0;
+		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
 
 	protected:
 		//!\~english	The render target to which this effect is attached.

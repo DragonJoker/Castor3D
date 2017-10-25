@@ -7,58 +7,11 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-#if GLSL_MATERIALS_STRUCT_OF_ARRAY
-
-		SpecularGlossinessPassBuffer::PassesData doBindData( uint8_t * data
-			, uint32_t count )
-		{
-			auto diffDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
-			data += sizeof( PassBuffer::RgbaColour ) * count;
-			auto specGloss = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
-			data += sizeof( PassBuffer::RgbaColour ) * count;
-			auto common = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
-			data += sizeof( PassBuffer::RgbaColour ) * count;
-			auto reflRefr = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
-			data += sizeof( PassBuffer::RgbaColour ) * count;
-			auto transmittance = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
-			data += sizeof( PassBuffer::RgbaColour ) * count;
-			return
-			{
-				diffDiv,
-				specGloss,
-				common,
-				reflRefr,
-				{
-					transmittance,
-				},
-			};
-		}
-
-#else
-
-		SpecularGlossinessPassBuffer::PassesData doBindData( uint8_t * data
-			, uint32_t count )
-		{
-			return makeArrayView( reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( data )
-				, reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( data ) + count );
-		}
-
-#endif
-	}
-
-	//*********************************************************************************************
-
 	SpecularGlossinessPassBuffer::SpecularGlossinessPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ doBindData( m_buffer.ptr(), count ) }
+		, m_data{ makeArrayView( reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( m_buffer.ptr() )
+			, reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( m_buffer.ptr() ) + count ) }
 	{
 	}
 

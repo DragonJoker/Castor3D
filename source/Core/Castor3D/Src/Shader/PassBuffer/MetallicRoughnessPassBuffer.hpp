@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MetallicRoughnessPassBuffer_H___
@@ -12,7 +12,7 @@ namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.1
+	\version	0.10.0
 	\date		09/02/2010
 	\~english
 	\brief		SSBO holding the Passes data.
@@ -43,15 +43,15 @@ namespace castor3d
 		 */
 		C3D_API ~MetallicRoughnessPassBuffer();
 		/**
-		 *\copydoc		castor3d::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::visit
 		 */
-		C3D_API void visit( LegacyPass const & data )override;
+		C3D_API void visit( LegacyPass const & pass )override;
 		/**
-		 *\copydoc		castor3d::PassBuffer::Visit
+		 *\copydoc		castor3d::PassBuffer::visit
 		 */
-		C3D_API void visit( MetallicRoughnessPbrPass const & data )override;
+		C3D_API void visit( MetallicRoughnessPbrPass const & pass )override;
 
-	public:
+	private:
 		struct PassData
 		{
 			RgbaColour albRough;

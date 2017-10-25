@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredLightPass_H___
@@ -293,11 +293,13 @@ namespace castor3d
 			 *\param[in]	size	The render area dimensions.
 			 *\param[in]	count	The number of primitives to draw.
 			 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
+			 *\param[in]	offset	The VBO offset.
 			 *\~french
 			 *\brief		Dessine la passe d'éclairage.
 			 *\param[in]	size	Les dimensions de la zone de rendu.
 			 *\param[in]	count	Le nombre de primitives à dessiner.
 			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+			 *\param[in]	offset	L'offset dans le VBO.
 			 */
 			void render( castor::Size const & size
 				, uint32_t count
@@ -381,18 +383,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the light pass on currently bound framebuffer.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	gp		The geometry pass result.
-		 *\param[in]	light	The light.
-		 *\param[in]	camera	The viewing camera.
-		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	gp				The geometry pass result.
+		 *\param[in]	light			The light.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	first			Tells if this is the first light pass (\p true) or not (\p false).
+		 *\param[in]	shadowMapOpt	Optional shadow maps.
 		 *\~french
 		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	light	La source lumineuse.
-		 *\param[in]	camera	La caméra.
-		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	gp				Le résultat de la geometry pass.
+		 *\param[in]	light			La source lumineuse.
+		 *\param[in]	camera			La caméra.
+		 *\param[in]	first			Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+		 *\param[in]	shadowMapOpt	Les textures d'ombres optionnelles.
 		 */
 		virtual void render( castor::Size const & size
 			, GeometryPassResult const & gp
@@ -435,16 +439,14 @@ namespace castor3d
 		 *\brief		Initialises the light pass.
 		 *\param[in]	scene			The scene.
 		 *\param[in]	type			The light source type.
-		 *\param[in]	vtx				The vertex shader source.
-		 *\param[in]	pxl				The fragment shader source.
+		 *\param[in]	vbo				The VBO.
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	modelMatrixUbo	The optional model matrix UBO.
 		 *\~french
 		 *\brief		Initialise la passe d'éclairage.
 		 *\param[in]	scene			La scène.
 		 *\param[in]	type			Le type de source lumineuse.
-		 *\param[in]	vtx				Le source du vertex shader.
-		 *\param[in]	pxl				Le source du fagment shader.
+		 *\param[in]	vbo				Le VBO.
 		 *\param[in]	sceneUbo		L'UBO de scène.
 		 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 		 */

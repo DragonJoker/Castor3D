@@ -23,9 +23,9 @@ namespace castor3d
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\~english
-	\brief		The overlay renderer
+	\brief		The overlay renderer.
 	\~french
-	\brief		Le renderer d'incrustation
+	\brief		Le renderer d'incrustation.
 	*/
 	class OverlayRenderer
 		: public castor::OwnedBy< RenderSystem >
@@ -33,53 +33,59 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		C3D_API explicit OverlayRenderer( RenderSystem & renderSystem );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API ~OverlayRenderer();
 		/**
 		 *\~english
-		 *\brief		Initialises the buffers
+		 *\brief		Initialises the buffers.
 		 *\~french
-		 *\brief		Initialise les tampons
+		 *\brief		Initialise les tampons.
 		 */
 		C3D_API void initialise();
 		/**
 		 *\~english
-		 *\brief		Flushes the renderer
+		 *\brief		Flushes the renderer.
 		 *\~french
-		 *\brief		Nettoie le renderer
+		 *\brief		Nettoie le renderer.
 		 */
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Function to draw a PanelOverlay
+		 *\brief		Function to draw a PanelOverlay.
+		 *\param[in]	overlay	The overlay to draw.
 		 *\~french
-		 *\brief		Fonction de dessin d'un PanelOverlay
+		 *\brief		Fonction de dessin d'un PanelOverlay.
+		 *\param[in]	overlay	L'incrustation à dessiner.
 		 */
-		C3D_API void drawPanel( PanelOverlay & panelOverlay );
+		C3D_API void drawPanel( PanelOverlay & overlay );
 		/**
 		 *\~english
-		 *\brief		Function to draw a BorderPanelOverlay
+		 *\brief		Function to draw a BorderPanelOverlay.
+		 *\param[in]	overlay	The overlay to draw.
 		 *\~french
-		 *\brief		Fonction de dessin d'un BorderPanelOverlay
+		 *\brief		Fonction de dessin d'un BorderPanelOverlay.
+		 *\param[in]	overlay	L'incrustation à dessiner.
 		 */
-		C3D_API void drawBorderPanel( BorderPanelOverlay & borderPanelOverlay );
+		C3D_API void drawBorderPanel( BorderPanelOverlay & overlay );
 		/**
 		 *\~english
-		 *\brief		Function to draw a TextOverlay
+		 *\brief		Function to draw a TextOverlay.
+		 *\param[in]	overlay	The overlay to draw.
 		 *\~french
-		 *\brief		Fonction de dessin d'un TextOverlay
+		 *\brief		Fonction de dessin d'un TextOverlay.
+		 *\param[in]	overlay	L'incrustation à dessiner.
 		 */
-		C3D_API void drawText( TextOverlay & textOverlay );
+		C3D_API void drawText( TextOverlay & overlay );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays rendering.
@@ -91,16 +97,16 @@ namespace castor3d
 		C3D_API void beginRender( Viewport const & viewport );
 		/**
 		 *\~english
-		 *\brief		Ends the overlays rendering
+		 *\brief		Ends the overlays rendering.
 		 *\~french
-		 *\brief		Termine le rendu des incrustations
+		 *\brief		Termine le rendu des incrustations.
 		 */
 		C3D_API void endRender();
 		/**
 		 *\~english
-		 *\return		The current render target size
+		 *\return		The current render target size.
 		 *\~french
-		 *\return		Les dimensions de la cible du rendu courant
+		 *\return		Les dimensions de la cible du rendu courant.
 		 */
 		castor::Size const & getSize()const
 		{
@@ -217,11 +223,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Function to draw an overlay.
 		 *\param[in]	material		The material.
+		 *\param[in]	vertexBuffer	The overlay vertex buffers.
 		 *\param[in]	geometryBuffers	The overlay geometry buffers.
 		 *\param[in]	count			The vertex count.
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation.
 		 *\param[in]	material		Le matériau.
+		 *\param[in]	vertexBuffer	Le tampon de sommets de l'incrustation.
 		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
 		 *\param[in]	count			Le nombre de sommets.
 		 */
@@ -233,11 +241,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Function to draw an overlay.
 		 *\param[in]	pass			The pass.
+		 *\param[in]	vertexBuffer	The overlay vertex buffers.
 		 *\param[in]	geometryBuffers	The overlay geometry buffers.
 		 *\param[in]	count			The vertex count.
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation.
 		 *\param[in]	pass			La passe.
+		 *\param[in]	vertexBuffer	Le tampon de sommets de l'incrustation.
 		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
 		 *\param[in]	count			Le nombre de sommets.
 		 */
@@ -249,6 +259,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Function to draw a text overlay.
 		 *\param[in]	pass			The pass.
+		 *\param[in]	vertexBuffer	The overlay vertex buffers.
 		 *\param[in]	geometryBuffers	The overlay geometry buffers.
 		 *\param[in]	texture			The font texture.
 		 *\param[in]	sampler			The texture sampler.
@@ -256,6 +267,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation texte.
 		 *\param[in]	pass			La passe.
+		 *\param[in]	vertexBuffer	Le tampon de sommets de l'incrustation.
 		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
 		 *\param[in]	texture			La texture de polices.
 		 *\param[in]	sampler			L'échantillonneur de la texture.

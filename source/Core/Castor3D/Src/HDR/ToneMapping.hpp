@@ -90,10 +90,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the HDR config for the tone mapping.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	config	The new value.
 		 *\~french
 		 *\brief		Définit la configuration HDR pour le mappage de tons.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	config	La nouvelle valeur.
 		 */
 		C3D_API void setConfig( HdrConfig const & config );
 		/**
