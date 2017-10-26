@@ -1,4 +1,4 @@
-#include "RadianceComputer.hpp"
+﻿#include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
 
@@ -154,7 +154,7 @@ namespace castor3d
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
 		};
-		REQUIRE( p_dstTexture->getDimensions() == m_size );
+		REQUIRE( dstTexture->getDimensions() == m_size );
 		std::array< FrameBufferAttachmentSPtr, 6 > attachs
 		{
 			{

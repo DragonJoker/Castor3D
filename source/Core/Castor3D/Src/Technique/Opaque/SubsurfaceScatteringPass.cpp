@@ -1,4 +1,4 @@
-﻿#include "SubsurfaceScatteringPass.hpp"
+#include "SubsurfaceScatteringPass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -15,7 +15,7 @@
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
-#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
+#include "Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
 #include "Shader/Uniform/Uniform.hpp"

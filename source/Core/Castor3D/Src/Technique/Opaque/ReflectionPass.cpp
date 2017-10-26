@@ -1,4 +1,4 @@
-﻿#include "ReflectionPass.hpp"
+#include "ReflectionPass.hpp"
 
 #include "Engine.hpp"
 
@@ -18,7 +18,7 @@
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
+#include "Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
