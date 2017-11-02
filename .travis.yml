@@ -45,7 +45,7 @@ script:
   - mkdir -p build
   - cp ./travis/build.sh ./build
   - cd build
-  - ./build.sh
+  - sh ./build.sh
 
 branches:
   only:
