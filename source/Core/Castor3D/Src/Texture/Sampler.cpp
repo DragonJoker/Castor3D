@@ -122,7 +122,7 @@ namespace castor3d
 			if ( result )
 			{
 				result = p_file.print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
-						   && Colour::TextWriter( String() )( p_sampler.getBorderColour(), p_file )
+						   && RgbaColour::TextWriter( String() )( p_sampler.getBorderColour(), p_file )
 						   && p_file.writeText( cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler border colour" );
 			}

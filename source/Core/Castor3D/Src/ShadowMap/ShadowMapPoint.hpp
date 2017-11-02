@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMapPoint_H___
@@ -106,7 +106,7 @@ namespace castor3d
 		using CubeAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		CubeAttachment m_depthAttach;
+		CubeAttachment m_linearAttach;
 		//!\~english	The attach between colour buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
 		CubeAttachment m_colourAttach;

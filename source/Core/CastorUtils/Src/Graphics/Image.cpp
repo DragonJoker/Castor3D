@@ -82,7 +82,22 @@ namespace castor
 	CHECK_INVARIANT( m_buffer->count() > 0 );
 	END_INVARIANT_BLOCK()
 
-	Image & Image::fill( Colour const & p_clrColour )
+	Image & Image::fill( RgbColour const & p_clrColour )
+	{
+		CHECK_INVARIANTS();
+		setPixel( 0, 0, p_clrColour );
+		uint32_t uiBpp = PF::getBytesPerPixel( getPixelFormat() );
+
+		for ( uint32_t i = uiBpp; i < m_buffer->size(); i += uiBpp )
+		{
+			memcpy( &m_buffer->ptr()[i], &m_buffer->constPtr()[0], uiBpp );
+		}
+
+		CHECK_INVARIANTS();
+		return * this;
+	}
+
+	Image & Image::fill( RgbaColour const & p_clrColour )
 	{
 		CHECK_INVARIANTS();
 		setPixel( 0, 0, p_clrColour );
@@ -108,7 +123,7 @@ namespace castor
 		return * this;
 	}
 
-	Image & Image::setPixel( uint32_t x, uint32_t y, Colour const & p_clrColour )
+	Image & Image::setPixel( uint32_t x, uint32_t y, RgbColour const & p_clrColour )
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < getWidth() && y < getHeight() );
@@ -116,6 +131,18 @@ namespace castor
 		uint8_t const * pSrc = ptComponents.constPtr();
 		uint8_t * pDst = &( *m_buffer->getAt( x, y ) );
 		PF::convertPixel( PixelFormat::eA8R8G8B8, pSrc, getPixelFormat(), pDst );
+		CHECK_INVARIANTS();
+		return * this;
+	}
+
+	Image & Image::setPixel( uint32_t x, uint32_t y, RgbaColour const & p_clrColour )
+	{
+		CHECK_INVARIANTS();
+		REQUIRE( x < getWidth() && y < getHeight() );
+		Point3ub ptComponents = toBGRByte( p_clrColour );
+		uint8_t const * pSrc = ptComponents.constPtr();
+		uint8_t * pDst = &( *m_buffer->getAt( x, y ) );
+		PF::convertPixel( PixelFormat::eR8G8B8, pSrc, getPixelFormat(), pDst );
 		CHECK_INVARIANTS();
 		return * this;
 	}
@@ -130,7 +157,7 @@ namespace castor
 		CHECK_INVARIANTS();
 	}
 
-	Colour Image::getPixel( uint32_t x, uint32_t y )const
+	RgbaColour Image::getPixel( uint32_t x, uint32_t y )const
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < getWidth() && y < getHeight() );
@@ -139,7 +166,7 @@ namespace castor
 		uint8_t * pDst = ptComponents.ptr();
 		PF::convertPixel( getPixelFormat(), pSrc, PixelFormat::eA8R8G8B8, pDst );
 		CHECK_INVARIANTS();
-		return Colour::fromBGRA( ptComponents );
+		return RgbaColour::fromBGRA( ptComponents );
 	}
 
 	Image & Image::copyImage( Image const & p_src )

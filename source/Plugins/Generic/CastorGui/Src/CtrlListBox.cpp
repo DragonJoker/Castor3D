@@ -314,11 +314,10 @@ namespace CastorGui
 
 		if ( !material )
 		{
-			Colour colour = getMaterialColour( *getBackgroundMaterial()->getPass( 0u ) );
+			RgbColour colour = getMaterialColour( *getBackgroundMaterial()->getPass( 0u ) );
 			colour.red() = std::min( 1.0f, float( colour.red() ) / 2.0f );
 			colour.green() = std::min( 1.0f, float( colour.green() ) / 2.0f );
 			colour.blue() = std::min( 1.0f, float( colour.blue() ) / 2.0f );
-			colour.alpha() = 1.0f;
 			setHighlightedItemBackgroundMaterial( CreateMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
 		}
 
@@ -369,15 +368,13 @@ namespace CastorGui
 	void ListBoxCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
 	{
 		int i = 0;
-		Colour colour = getMaterialColour( *p_material->getPass( 0u ) );
+		RgbColour colour = getMaterialColour( *p_material->getPass( 0u ) );
 		setItemBackgroundMaterial( p_material );
 		colour.red() = std::min( 1.0f, colour.red() / 2.0f );
 		colour.green() = std::min( 1.0f, colour.green() / 2.0f );
 		colour.blue() = std::min( 1.0f, colour.blue() / 2.0f );
-		colour.alpha() = 1.0f;
 		setHighlightedItemBackgroundMaterial( CreateMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
 
-		colour.alpha() = 0.0;
 		setMaterialColour( *p_material->getPass( 0u ), colour );
 
 		for ( auto item : m_items )

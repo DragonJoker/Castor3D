@@ -25,7 +25,7 @@ namespace Ase
 		/**
 		 * Constructor
 		 */
-		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, castor::TextFile * p_pFile, castor3d::Scene & p_scene, castor3d::Mesh * p_mesh );
+		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, castor3d::Scene & p_scene, castor3d::Mesh * p_mesh );
 		/**
 		 * Initialises all members
 		 */

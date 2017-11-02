@@ -69,7 +69,7 @@ namespace castor3d
 		, m_frameBuffer{ engine.getRenderSystem()->createFrameBuffer() }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Lighting" ) ) }
 	{
-		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eTransparentBlack ) );
+		m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack ) );
 		bool result = m_frameBuffer->initialise();
 
 		if ( result )

@@ -369,28 +369,54 @@ namespace castor
 	/*!
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Colour.
+	\remarks	Specialisation for castor::RgbColour.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Colour.
+	\remarks	Spécialisation pour castor::RgbColour.
 	*/
 	template<>
-	struct ParserValueTyper< Colour >
+	struct ParserValueTyper< RgbColour >
 	{
-		static const ParameterType Type = ParameterType::eColour;
+		static const ParameterType Type = ParameterType::eRgbColour;
 	};
 	/*!
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::HdrColour.
+	\remarks	Specialisation for castor::RgbaColour.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::HdrColour.
+	\remarks	Spécialisation pour castor::RgbaColour.
 	*/
 	template<>
-	struct ParserValueTyper< HdrColour >
+	struct ParserValueTyper< RgbaColour >
 	{
-		static const ParameterType Type = ParameterType::eHdrColour;
+		static const ParameterType Type = ParameterType::eRgbaColour;
+	};
+	/*!
+	\~english
+	\brief		Retrieves parameter type from c++ type.
+	\remarks	Specialisation for castor::HdrRgbColour.
+	\~french
+	\brief		Récupère le type de paramètre à partir du type C++.
+	\remarks	Spécialisation pour castor::HdrRgbColour.
+	*/
+	template<>
+	struct ParserValueTyper< HdrRgbColour >
+	{
+		static const ParameterType Type = ParameterType::eHdrRgbColour;
+	};
+	/*!
+	\~english
+	\brief		Retrieves parameter type from c++ type.
+	\remarks	Specialisation for castor::HdrRgbaColour.
+	\~french
+	\brief		Récupère le type de paramètre à partir du type C++.
+	\remarks	Spécialisation pour castor::HdrRgbaColour.
+	*/
+	template<>
+	struct ParserValueTyper< HdrRgbaColour >
+	{
+		static const ParameterType Type = ParameterType::eHdrRgbaColour;
 	};
 }
 

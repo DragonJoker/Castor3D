@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMap_H___
@@ -29,18 +29,18 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
 		 *\param[in]	shadowMap	The shadow map.
-		 *\param[in]	depthMap	The depth map.
+		 *\param[in]	linearMap	The linear depth map.
 		 *\param[in]	pass		The pass used to render map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	shadowMap	La texture d'ombres.
-		 *\param[in]	depthMap	La texture de profondeur.
+		 *\param[in]	linearMap	La texture de profondeur linéaire.
 		 *\param[in]	pass		La passe utilisée pour rendre cette texture.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
-			, TextureUnit && depthMap
+			, TextureUnit && linearMap
 			, ShadowMapPassSPtr pass );
 		/**
 		 *\~english
@@ -153,23 +153,23 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The depth map.
+		 *\return		The linear depth map.
 		 *\~english
-		 *\return		La texture de profondeur.
+		 *\return		La texture de profondeur linéaire.
 		 */
 		inline TextureUnit & getDepth()
 		{
-			return m_depthMap;
+			return m_linearMap;
 		}
 		/**
 		 *\~english
-		 *\return		The depth map.
+		 *\return		The linear depth map.
 		 *\~english
-		 *\return		La texture de profondeur.
+		 *\return		La texture de profondeur linéaire.
 		 */
 		inline TextureUnit const & getDepth()const
 		{
-			return m_depthMap;
+			return m_linearMap;
 		}
 
 	private:
@@ -256,9 +256,9 @@ namespace castor3d
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
 		TextureUnit m_shadowMap;
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
-		TextureUnit m_depthMap;
+		//!\~english	The linear depth texture.
+		//!\~french		La texture de profondeur linéaire.
+		TextureUnit m_linearMap;
 	};
 }
 

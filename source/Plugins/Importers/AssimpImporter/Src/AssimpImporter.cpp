@@ -1,4 +1,4 @@
-﻿#include "AssimpImporter.hpp"
+#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -230,14 +230,12 @@ namespace C3dAssimp
 
 			pass.setOpacity( opacity );
 			pass.setTwoSided( twoSided != 0 );
-			pass.setDiffuse( Colour::fromComponents( diffuse.r
+			pass.setDiffuse( RgbColour::fromComponents( diffuse.r
 				, diffuse.g
-				, diffuse.b
-				, 1 ) );
-			pass.setSpecular( Colour::fromComponents( specular.r * shininessStrength
+				, diffuse.b ) );
+			pass.setSpecular( RgbColour::fromComponents( specular.r * shininessStrength
 				, specular.g * shininessStrength
-				, specular.b * shininessStrength
-				, 1 ) );
+				, specular.b * shininessStrength ) );
 			pass.setEmissive( float( point::length( Point3f{ emissive.r
 				, emissive.g
 				, emissive.b } ) ) );

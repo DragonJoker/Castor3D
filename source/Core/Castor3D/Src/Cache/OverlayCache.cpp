@@ -194,13 +194,6 @@ namespace castor3d
 		return result;
 	}
 
-	bool Cache< Overlay, castor::String >::read( castor::TextFile & p_file )
-	{
-		auto lock = makeUniqueLock( *this );
-		SceneFileParser parser( *getEngine() );
-		return parser.parseFile( p_file );
-	}
-
 	FontTextureSPtr Cache< Overlay, castor::String >::getFontTexture( castor::String const & p_name )
 	{
 		auto it = m_fontTextures.find( p_name );

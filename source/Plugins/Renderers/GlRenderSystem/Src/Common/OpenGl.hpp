@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3DGL_GlObjects___
@@ -415,7 +415,7 @@ namespace GlRender
 		//@{
 
 		inline void ClearColor( float red, float green, float blue, float alpha )const;
-		inline void ClearColor( castor::Colour const & p_colour )const;
+		inline void ClearColor( castor::RgbaColour const & p_colour )const;
 		inline void ClearDepth( double value )const;
 		inline void Clear( uint32_t mask )const;
 		inline void Enable( GlTweak mode )const;
@@ -440,7 +440,7 @@ namespace GlRender
 		inline void StencilMaskSeparate( GlFace p_eFacing, uint32_t p_uiMask )const;
 		inline void Hint( GlHint p_eHint, GlHintValue p_eValue )const;
 		inline void PolygonOffset( float p_fFactor, float p_fUnits )const;
-		inline void BlendColor( castor::Colour const & p_clrFactors )const;
+		inline void BlendColor( castor::RgbaColour const & p_clrFactors )const;
 		inline void SampleCoverage( float fValue, bool invert )const;
 		inline void Viewport( int x, int y, int width, int height )const;
 

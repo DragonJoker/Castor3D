@@ -84,14 +84,13 @@ namespace castor3d
 		else
 		{
 			Path path;
-			path = p_context->m_file->getFilePath() / p_params[0]->get( path );
+			path = p_context->m_file.getPath() / p_params[0]->get( path );
 
 			if ( File::fileExists( path ) )
 			{
-				TextFile fileMat( path, File::OpenMode::eRead, File::EncodingMode::eASCII );
 				Logger::logInfo( cuT( "Loading materials file : " ) + path );
 
-				if ( parsingContext->m_pParser->getEngine()->getMaterialCache().read( fileMat ) )
+				if ( parsingContext->m_pParser->getEngine()->getMaterialCache().read( path ) )
 				{
 					Logger::logInfo( cuT( "Materials read" ) );
 				}
@@ -718,7 +717,7 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour colour;
+			RgbaColour colour;
 			p_params[0]->get( colour );
 			parsingContext->pSampler->setBorderColour( colour );
 		}
@@ -789,7 +788,7 @@ namespace castor3d
 			Path path;
 			p_params[0]->get( path );
 			SceneFileParser parser{ *parsingContext->m_pParser->getEngine() };
-			parser.parseFile( parsingContext->m_file->getFilePath() / path, parsingContext );
+			parser.parseFile( parsingContext->m_file.getPath() / path, parsingContext );
 		}
 	}
 	END_ATTRIBUTE()
@@ -804,7 +803,7 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour clrBackground;
+			RgbColour clrBackground;
 			p_params[0]->get( clrBackground );
 			parsingContext->pScene->setBackgroundColour( clrBackground );
 		}
@@ -822,7 +821,7 @@ namespace castor3d
 		else if ( !p_params.empty() )
 		{
 			Path path;
-			parsingContext->pScene->setBackground( p_context->m_file->getFilePath(), p_params[0]->get( path ) );
+			parsingContext->pScene->setBackground( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -980,7 +979,7 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour clColour;
+			RgbColour clColour;
 			p_params[0]->get( clColour );
 			parsingContext->pScene->setAmbientLight( clColour );
 		}
@@ -991,7 +990,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		Path path;
-		Path pathFile = p_context->m_file->getFilePath() / p_params[0]->get( path );
+		Path pathFile = p_context->m_file.getPath() / p_params[0]->get( path );
 
 		Engine * engine = parsingContext->m_pParser->getEngine();
 		auto extension = string::lowerCase( pathFile.getExtension() );
@@ -1960,7 +1959,7 @@ namespace castor3d
 		else
 		{
 			Path path;
-			Path pathFile = p_context->m_file->getFilePath() / p_params[0]->get( path );
+			Path pathFile = p_context->m_file.getPath() / p_params[0]->get( path );
 			Parameters parameters;
 
 			if ( p_params.size() > 1 )
@@ -2025,7 +2024,7 @@ namespace castor3d
 			real timeIndex;
 			p_params[1]->get( timeIndex );
 			Path path;
-			Path pathFile = p_context->m_file->getFilePath() / p_params[0]->get( path );
+			Path pathFile = p_context->m_file.getPath() / p_params[0]->get( path );
 			Parameters parameters;
 
 			if ( p_params.size() > 2 )
@@ -2619,13 +2618,13 @@ namespace castor3d
 		{
 			if ( parsingContext->legacyPass )
 			{
-				Colour crColour;
+				RgbColour crColour;
 				p_params[0]->get( crColour );
 				parsingContext->legacyPass->setDiffuse( crColour );
 			}
 			else
 			{
-				Colour crColour;
+				RgbColour crColour;
 				p_params[0]->get( crColour );
 				parsingContext->pbrSGPass->setDiffuse( crColour );
 			}
@@ -2646,13 +2645,13 @@ namespace castor3d
 		{
 			if ( parsingContext->legacyPass )
 			{
-				Colour crColour;
+				RgbColour crColour;
 				p_params[0]->get( crColour );
 				parsingContext->legacyPass->setSpecular( crColour );
 			}
 			else
 			{
-				Colour crColour;
+				RgbColour crColour;
 				p_params[0]->get( crColour );
 				parsingContext->pbrSGPass->setSpecular( crColour );
 			}
@@ -2721,7 +2720,7 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour value;
+			RgbColour value;
 			p_params[0]->get( value );
 			parsingContext->pbrMRPass->setAlbedo( value );
 		}
@@ -2979,9 +2978,9 @@ namespace castor3d
 			Path relative;
 			p_params[0]->get( relative );
 
-			if ( File::fileExists( p_context->m_file->getFilePath() / relative ) )
+			if ( File::fileExists( p_context->m_file.getPath() / relative ) )
 			{
-				folder = p_context->m_file->getFilePath();
+				folder = p_context->m_file.getPath();
 			}
 			else if ( !File::fileExists( relative ) )
 			{
@@ -3284,7 +3283,7 @@ namespace castor3d
 				Path path;
 				p_params[0]->get( uiModel );
 				p_params[1]->get( path );
-				parsingContext->pShaderProgram->setFile( parsingContext->eShaderObject, p_context->m_file->getFilePath() / path );
+				parsingContext->pShaderProgram->setFile( parsingContext->eShaderObject, p_context->m_file.getPath() / path );
 			}
 			else
 			{
@@ -3535,11 +3534,11 @@ namespace castor3d
 		{
 			if ( parsingContext->pScene )
 			{
-				parsingContext->pScene->getFontView().add( parsingContext->strName, parsingContext->iInt16, p_context->m_file->getFilePath() / parsingContext->path );
+				parsingContext->pScene->getFontView().add( parsingContext->strName, parsingContext->iInt16, p_context->m_file.getPath() / parsingContext->path );
 			}
 			else
 			{
-				parsingContext->m_pParser->getEngine()->getFontCache().add( parsingContext->strName, parsingContext->iInt16, p_context->m_file->getFilePath() / parsingContext->path );
+				parsingContext->m_pParser->getEngine()->getFontCache().add( parsingContext->strName, parsingContext->iInt16, p_context->m_file.getPath() / parsingContext->path );
 			}
 		}
 	}
@@ -4400,7 +4399,7 @@ namespace castor3d
 		else
 		{
 			Path path;
-			Path filePath = p_context->m_file->getFilePath();
+			Path filePath = p_context->m_file.getPath();
 			p_params[0]->get( path );
 
 			if ( File::fileExists( filePath / path ) )
@@ -4429,7 +4428,7 @@ namespace castor3d
 		if ( parsingContext->pSkybox )
 		{
 			Path path;
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( p_context->m_file->getFilePath(), p_params[0]->get( path ) );
+			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4445,8 +4444,8 @@ namespace castor3d
 		if ( parsingContext->pSkybox )
 		{
 			Path path;
-			path = p_context->m_file->getFilePath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( p_context->m_file->getFilePath(), p_params[0]->get( path ) );
+			path = p_context->m_file.getPath() / p_params[0]->get( path );
+			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4462,8 +4461,8 @@ namespace castor3d
 		if ( parsingContext->pSkybox )
 		{
 			Path path;
-			path = p_context->m_file->getFilePath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( p_context->m_file->getFilePath(), p_params[0]->get( path ) );
+			path = p_context->m_file.getPath() / p_params[0]->get( path );
+			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4479,8 +4478,8 @@ namespace castor3d
 		if ( parsingContext->pSkybox )
 		{
 			Path path;
-			path = p_context->m_file->getFilePath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( p_context->m_file->getFilePath(), p_params[0]->get( path ) );
+			path = p_context->m_file.getPath() / p_params[0]->get( path );
+			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4496,8 +4495,8 @@ namespace castor3d
 		if ( parsingContext->pSkybox )
 		{
 			Path path;
-			path = p_context->m_file->getFilePath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( p_context->m_file->getFilePath(), p_params[0]->get( path ) );
+			path = p_context->m_file.getPath() / p_params[0]->get( path );
+			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4513,8 +4512,8 @@ namespace castor3d
 		if ( parsingContext->pSkybox )
 		{
 			Path path;
-			path = p_context->m_file->getFilePath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( p_context->m_file->getFilePath(), p_params[0]->get( path ) );
+			path = p_context->m_file.getPath() / p_params[0]->get( path );
+			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{

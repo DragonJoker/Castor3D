@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <GlslIntrinsics.hpp>
 
-#define C3D_DEBUG_SSS_TRANSMITTANCE 0
+#define C3D_DEBUG_SSS_TRANSMITTANCE 1
 
 namespace castor3d
 {
@@ -56,7 +56,8 @@ namespace castor3d
 				, glsl::Vec3 const & worldNormal
 				, glsl::Float const & transmittance
 				, glsl::Vec3 const & lightVector
-				, glsl::Float const & lightFarPlane )const;
+				, glsl::Float const & lightFarPlane
+				, glsl::Vec3 const & lightAttenuation )const;
 
 		private:
 			glsl::GlslWriter & m_writer;
@@ -74,7 +75,8 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InFloat
 				, glsl::InVec3
-				, glsl::InFloat > m_compute;
+				, glsl::InFloat
+				, glsl::InVec3 > m_compute;
 		};
 	}
 }

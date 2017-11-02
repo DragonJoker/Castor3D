@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_FILE_PARSER_H___
@@ -60,15 +60,38 @@ namespace castor3d
 		eSubsurfaceScattering = MAKE_SECTION_NAME( 'S', 'S', 'S', 'G' ),
 		eTransmittanceProfile = MAKE_SECTION_NAME( 'T', 'R', 'P', 'R' ),
 	};
-	//! The context used into parsing functions
 	/*!
-	While parsing a scene file, the context holds the important data retrieved
-	\author Sylvain DOREMUS
-	\date 25/08/2010
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		25/08/2010
+	\~english
+	\brief		The context used into parsing functions.
+	\~french
+	\brief		Le contexte utilisé lors de l'analyse des fonctions.
 	*/
 	class SceneFileContext
 		: public castor::FileParserContext
 	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	path	The file access path.
+		 *\param[in]	parser	The parser.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\param[in]	parser	L'analyseur.
+		 */
+		C3D_API SceneFileContext( castor::Path const & path, SceneFileParser * parser );
+		/**
+		 *\~english
+		 *\brief		Initialises all variables.
+		 *\~french
+		 *\brief		Initialise toutes les variables.
+		 */
+		C3D_API void initialise();
+
 	public:
 		SceneSPtr pScene;
 		RenderWindowSPtr pWindow;
@@ -130,22 +153,17 @@ namespace castor3d
 		ParticleSystemSPtr particleSystem;
 		SsaoConfig ssaoConfig;
 		SubsurfaceScatteringUPtr subsurfaceScattering;
-
-	public:
-		/**
-		 * Constructor
-		 */
-		C3D_API SceneFileContext( SceneFileParser * p_pParser, castor::TextFile * p_pFile );
-		/**
-		 * Initialises all variables
-		 */
-		C3D_API void initialise();
 	};
-	//! ESCN file parser
 	/*!
-	Reads ESCN files and extracts all 3D data from it
-	\author Sylvain DOREMUS
-	\date 25/08/2010
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		25/08/2010
+	\~english
+	\brief		CSCN file parser.
+	\remarks	Reads CSCN files and extracts all 3D data from it.
+	\~french
+	\brief		Analyseur de fichiers CSCN.
+	\remarks	Lit les fichiers CSCN et en extrait toutes les données 3D.
 	*/
 	class SceneFileParser
 		: public castor::FileParser
@@ -153,36 +171,52 @@ namespace castor3d
 	{
 	public:
 		/**
-		 * Constructor
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit SceneFileParser( Engine & engine );
 		/**
-		 * Destructor
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
 		 */
 		C3D_API ~SceneFileParser();
 		/**
-		 * Retrieves the render window defined by the scene
+		 *\~english
+		 *\return		The render window defined by the scene.
+		 *\~french
+		 *\return		La fenêtre de rendu définie par la scène.
 		 */
 		C3D_API RenderWindowSPtr getRenderWindow();
 		/**
-		 * Parses the given file (expecting it to be in ESCN file format)
-		 *\param[in,out]	p_file	The file
-		 *\return	the parsed scene
+		 *\~english
+		 *\brief		Parses the given file (expecting it to be in CSCN file format).
+		 *\param[in]	path	The file access path.
+		 *\return		\p false if any problem occured.
+		 *\~english
+		 *\french		Analyse le fichier donné (s'attend à recevoir un fichier CSCN).
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\return		\p false si un problème est survenu.
 		 */
-		C3D_API bool parseFile( castor::TextFile & p_file );
+		C3D_API bool parseFile( castor::Path const & path );
 		/**
-		 * Parses the given file (expecting it to be in ESCN file format)
-		 *\param[in]	p_pathFile	The file path
-		 *\return	true if successful, false if not
+		 *\~english
+		 *\brief		Parses the given file (expecting it to be in CSCN file format), using an external context.
+		 *\param[in]	path	The file access path.
+		 *\param[in]	context	The context.
+		 *\return		\p false if any problem occured.
+		 *\~english
+		 *\french		Analyse le fichier donné (s'attend à recevoir un fichier CSCN), en utilisant un contexte externe.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\param[in]	context	Le contexte.
+		 *\return		\p false si un problème est survenu.
 		 */
-		C3D_API bool parseFile( castor::Path const & p_pathFile );
-		/**
-		 * Parses the given file (expecting it to be in ESCN file format), using an external context
-		 *\param[in]	p_pathFile	The file path.
-		 *\param[in]	p_context	The context.
-		 *\return		true if successful, false if not.
-		 */
-		C3D_API bool parseFile( castor::Path const & p_pathFile, SceneFileContextSPtr p_context );
+		C3D_API bool parseFile( castor::Path const & path, SceneFileContextSPtr context );
 
 		inline ScenePtrStrMap::iterator scenesBegin()
 		{
@@ -198,15 +232,15 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API virtual void doInitialiseParser( castor::TextFile & p_file );
-		C3D_API virtual void doCleanupParser();
-		C3D_API virtual bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( p_line ) )
+		C3D_API void doInitialiseParser( castor::Path const & path )override;
+		C3D_API void doCleanupParser()override;
+		C3D_API bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( line ) )override
 		{
 			return false;
 		}
-		C3D_API virtual bool doDiscardParser( castor::String const & p_line );
-		C3D_API virtual void doValidate();
-		C3D_API virtual castor::String doGetSectionName( uint32_t p_section );
+		C3D_API bool doDiscardParser( castor::String const & line )override;
+		C3D_API void doValidate()override;
+		C3D_API castor::String doGetSectionName( uint32_t section )override;
 
 	private:
 		castor::String m_strSceneFilePath;

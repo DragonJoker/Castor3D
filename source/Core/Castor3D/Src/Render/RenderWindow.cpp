@@ -1,4 +1,4 @@
-﻿#include "RenderWindow.hpp"
+#include "RenderWindow.hpp"
 
 #include "FrameBuffer/BackBuffers.hpp"
 #include "Render/RenderLoop.hpp"
@@ -91,11 +91,11 @@ namespace castor3d
 
 				if ( scene )
 				{
-					m_backBuffers->setClearColour( scene->getBackgroundColour() );
+					m_backBuffers->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
 				}
 				else
 				{
-					m_backBuffers->setClearColour( Colour::fromComponents( 0.5, 0.5, 0.5, 1.0 ) );
+					m_backBuffers->setClearColour( RgbaColour::fromComponents( 0.5, 0.5, 0.5, 1.0 ) );
 				}
 
 				if ( target )

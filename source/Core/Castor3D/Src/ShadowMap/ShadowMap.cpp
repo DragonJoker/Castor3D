@@ -21,11 +21,11 @@ namespace castor3d
 {
 	ShadowMap::ShadowMap( Engine & engine
 		, TextureUnit && shadowMap
-		, TextureUnit && depthMap
+		, TextureUnit && linearMap
 		, ShadowMapPassSPtr pass )
 		: OwnedBy< Engine >{ engine }
 		, m_shadowMap{ std::move( shadowMap ) }
-		, m_depthMap{ std::move( depthMap ) }
+		, m_linearMap{ std::move( linearMap ) }
 		, m_pass{ pass }
 	{
 	}
@@ -41,7 +41,7 @@ namespace castor3d
 		if ( !m_frameBuffer )
 		{
 			m_shadowMap.initialise();
-			m_depthMap.initialise();
+			m_linearMap.initialise();
 			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
 			result = m_frameBuffer->initialise();
 			auto size = m_shadowMap.getTexture()->getDimensions();
@@ -76,7 +76,7 @@ namespace castor3d
 			m_frameBuffer.reset();
 
 			m_shadowMap.cleanup();
-			m_depthMap.cleanup();
+			m_linearMap.cleanup();
 		}
 
 		for ( auto buffer : m_geometryBuffers )
@@ -176,7 +176,7 @@ namespace castor3d
 		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
-		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
@@ -220,7 +220,7 @@ namespace castor3d
 
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
-			vtx_position = v4Vertex.xyz();
+			vtx_worldPosition = v4Vertex.xyz();
 			vtx_instance = gl_InstanceID;
 			v4Vertex = c3d_curView * v4Vertex;
 			vtx_viewPosition = v4Vertex.xyz();
@@ -246,14 +246,15 @@ namespace castor3d
 		, shader::Materials const & materials )const
 	{
 		using namespace glsl;
-		auto material = materials.getBaseMaterial( materialIndex );
-		auto alpha = writer.declLocale( cuT( "alpha" )
-			, material->m_opacity() );
-		auto alphaRef = writer.declLocale( cuT( "alphaRef" )
-			, material->m_alphaRef() );
 
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
+			auto material = materials.getBaseMaterial( materialIndex );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, material->m_opacity() );
+			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+				, material->m_alphaRef() );
+
 			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
 			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
 			alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
@@ -264,6 +265,12 @@ namespace castor3d
 		}
 		else if ( alphaFunc != ComparisonFunc::eAlways )
 		{
+			auto material = materials.getBaseMaterial( materialIndex );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, material->m_opacity() );
+			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+				, material->m_alphaRef() );
+
 			shader::applyAlphaFunc( writer
 				, alphaFunc
 				, alpha

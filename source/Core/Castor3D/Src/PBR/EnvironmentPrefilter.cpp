@@ -219,12 +219,12 @@ namespace castor3d
 			UBO_MATRIX( writer );
 
 			// Outputs
-			auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			std::function< void() > main = [&]()
 			{
-				vtx_position = position;
+				vtx_worldPosition = position;
 				auto view = writer.declLocale( cuT( "normal" )
 					, mat4( mat3( c3d_curView ) ) );
 				gl_Position = writer.paren( c3d_projection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
@@ -240,7 +240,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			Ubo config{ writer, cuT( "Config" ), 0u };
 			auto c3d_roughness = config.declMember< Float >( cuT( "c3d_roughness" ) );
@@ -345,7 +345,7 @@ namespace castor3d
 				auto constexpr PI = 3.1415926535897932384626433832795028841968;
 				// From https://learnopengl.com/#!PBR/Lighting
 				auto N = writer.declLocale( cuT( "N" )
-					, normalize( vtx_position ) );
+					, normalize( vtx_worldPosition ) );
 				auto R = writer.declLocale( cuT( "R" )
 					, N );
 				auto V = writer.declLocale( cuT( "V" )

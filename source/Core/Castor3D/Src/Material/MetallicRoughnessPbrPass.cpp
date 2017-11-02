@@ -38,8 +38,8 @@ namespace castor3d
 		if ( result )
 		{
 			result = file.print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( pass.getAlbedo(), file )
-					   && file.writeText( cuT( "\n" ) ) > 0;
+				&& RgbColour::TextWriter( String() )( pass.getAlbedo(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass albedo" );
 		}
 
@@ -76,7 +76,7 @@ namespace castor3d
 
 	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent )
 		: Pass{ parent }
-		, m_albedo{ Colour::fromRGBA( 0xFFFFFFFF ) }
+		, m_albedo{ RgbColour::fromRGBA( 0xFFFFFFFF ) }
 	{
 	}
 
@@ -99,6 +99,5 @@ namespace castor3d
 
 	void MetallicRoughnessPbrPass::doSetOpacity( float value )
 	{
-		m_albedo.alpha() = value;
 	}
 }

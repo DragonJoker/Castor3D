@@ -20,7 +20,7 @@ using namespace castor3d;
 
 namespace CastorGui
 {
-	void setMaterialColour( Pass & pass, Colour const & colour )
+	void setMaterialColour( Pass & pass, RgbColour const & colour )
 	{
 		switch ( pass.getType() )
 		{
@@ -38,9 +38,9 @@ namespace CastorGui
 		}
 	}
 
-	Colour getMaterialColour( Pass const & pass )
+	RgbColour getMaterialColour( Pass const & pass )
 	{
-		Colour result;
+		RgbColour result;
 
 		switch ( pass.getType() )
 		{
@@ -60,7 +60,7 @@ namespace CastorGui
 		return result;
 	}
 
-	MaterialSPtr CreateMaterial( Engine & engine, String const & p_name, Colour const & p_colour )
+	MaterialSPtr CreateMaterial( Engine & engine, String const & p_name, RgbColour const & p_colour )
 	{
 		auto & cache = engine.getMaterialCache();
 		MaterialSPtr result;

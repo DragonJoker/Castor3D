@@ -167,7 +167,7 @@ namespace castor3d
 		{
 			Logger::logInfo( cuT( "Scene::write - Background colour" ) );
 			result = file.print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( scene.getBackgroundColour(), file )
+				&& RgbColour::TextWriter( String() )( scene.getBackgroundColour(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
 		}
@@ -184,7 +184,7 @@ namespace castor3d
 		{
 			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );
 			result = file.print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( scene.getAmbientLight(), file )
+				&& RgbColour::TextWriter( String() )( scene.getAmbientLight(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene ambient light" );
 		}

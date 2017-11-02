@@ -48,7 +48,7 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::FrameBufferAttachment::doClear
 		 */
-		void doClear( castor::Colour const & p_colour )const override;
+		void doClear( castor::RgbaColour const & p_colour )const override;
 		/**
 		 *\copydoc		castor3d::FrameBufferAttachment::doClear
 		 */

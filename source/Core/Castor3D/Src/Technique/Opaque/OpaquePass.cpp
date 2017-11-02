@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -107,7 +107,7 @@ namespace castor3d
 		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
-		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -174,7 +174,7 @@ namespace castor3d
 
 			vtx_texture = tex;
 			p = mtxModel * p;
-			vtx_position = p.xyz();
+			vtx_worldPosition = p.xyz();
 			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
 				, c3d_prvView * p );
 			p = c3d_curView * p;
@@ -205,7 +205,7 @@ namespace castor3d
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = tbn * vtx_position;
+			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 			vtx_curPosition = gl_Position.xyw();
 			vtx_prvPosition = prvVertex.xyw();
@@ -238,7 +238,7 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Inputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -412,7 +412,7 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Inputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -588,7 +588,7 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Inputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );

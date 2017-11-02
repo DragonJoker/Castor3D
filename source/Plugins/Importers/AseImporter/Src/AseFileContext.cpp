@@ -5,8 +5,8 @@ using namespace castor;
 
 namespace Ase
 {
-	AseFileContext::AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, TextFile * p_pFile, Scene & p_scene, Mesh * p_mesh )
-		: FileParserContext{ p_pFile }
+	AseFileContext::AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, Scene & p_scene, Mesh * p_mesh )
+		: FileParserContext{}
 		, m_pParser{ p_pParser }
 		, m_importer{ p_importer }
 		, scene{ p_scene }

@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MetallicRoughnessPbrPass_H___
@@ -99,7 +99,7 @@ namespace castor3d
 		 *\brief		Définit la couleur d'albédo.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAlbedo( castor::Colour const & value )
+		inline void setAlbedo( castor::RgbColour const & value )
 		{
 			m_albedo = value;
 			onChanged( *this );
@@ -136,7 +136,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur.
 		 */
-		inline castor::Colour const & getAlbedo()const
+		inline castor::RgbColour const & getAlbedo()const
 		{
 			return m_albedo;
 		}
@@ -178,7 +178,7 @@ namespace castor3d
 	private:
 		//!\~english	The albedo colour.
 		//!\~french		La couleur d'albédo.
-		castor::Colour m_albedo;
+		castor::RgbColour m_albedo;
 		//!\~english	The roughness.
 		//!\~french		La rugosité.
 		float m_roughness{ 1.0 };

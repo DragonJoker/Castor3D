@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_PARSER_PARAMETER_BASE_H___
@@ -51,8 +51,10 @@ namespace castor
 		eSize,
 		ePosition,
 		eRectangle,
-		eColour,
-		eHdrColour,
+		eRgbColour,
+		eRgbaColour,
+		eHdrRgbColour,
+		eHdrRgbaColour,
 		CASTOR_SCOPED_ENUM_BOUNDS( eText )
 	};
 	/*!

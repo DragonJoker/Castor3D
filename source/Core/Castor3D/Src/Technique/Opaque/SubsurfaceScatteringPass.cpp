@@ -1,4 +1,4 @@
-#include "SubsurfaceScatteringPass.hpp"
+﻿#include "SubsurfaceScatteringPass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -483,7 +483,7 @@ namespace castor3d
 		m_viewport.update();
 		m_matrixUbo.update( m_viewport.getProjection() );
 		m_blurCorrection->setValue( 1.0f );
-		m_fbo->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
+		m_fbo->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 
 		for ( size_t i{ 0u }; i < m_blurResultsAttaches.size(); ++i )
 		{

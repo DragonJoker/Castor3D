@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_H___
@@ -284,7 +284,7 @@ namespace castor3d
 		 *\brief		Définit la couleur du fond
 		 *\param[in]	value	La nouvelle couleur
 		 */
-		inline void setBackgroundColour( castor::Colour const & value )
+		inline void setBackgroundColour( castor::RgbColour const & value )
 		{
 			m_backgroundColour = value;
 		}
@@ -294,7 +294,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur du fond
 		 */
-		inline castor::Colour const & getBackgroundColour()const
+		inline castor::RgbColour const & getBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}
@@ -365,7 +365,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur de la lumière ambiante
 		 */
-		inline castor::Colour const & getAmbientLight()const
+		inline castor::RgbColour const & getAmbientLight()const
 		{
 			return m_ambientLight;
 		}
@@ -377,7 +377,7 @@ namespace castor3d
 		 *\brief		Définit la couleur de la lumière ambiante.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAmbientLight( castor::Colour const & value )
+		inline void setAmbientLight( castor::RgbColour const & value )
 		{
 			m_ambientLight = value;
 		}
@@ -579,10 +579,10 @@ namespace castor3d
 		bool m_changed{ false };
 		//!\~english	Ambient light color
 		//!\~french		Couleur de la lumière ambiante
-		castor::Colour m_ambientLight;
+		castor::RgbColour m_ambientLight;
 		//!\~english	The scene background colour
 		//!\~french		La couleur de fond de la scène
-		castor::Colour m_backgroundColour;
+		castor::RgbColour m_backgroundColour;
 		//!\~english	The background image
 		//!\~french		L'image de fond
 		TextureLayoutSPtr m_backgroundImage;

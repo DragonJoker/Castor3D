@@ -1,4 +1,4 @@
-#include "GlslSssTransmittance.hpp"
+﻿#include "GlslSssTransmittance.hpp"
 
 #include "GlslLight.hpp"
 #include "GlslPhongLighting.hpp"
@@ -69,7 +69,8 @@ namespace castor3d
 						, normal
 						, translucency
 						, light.m_direction()
-						, light.m_lightBase().m_farPlane() );
+						, light.m_lightBase().m_farPlane()
+						, vec3( 1.0_f, 0.0_f, 0.0_f ) );
 				}
 				FI;
 			}
@@ -120,7 +121,8 @@ namespace castor3d
 						, normal
 						, translucency
 						, normalize( -vertexToLight )
-						, light.m_lightBase().m_farPlane() );
+						, light.m_lightBase().m_farPlane()
+						, light.m_attenuation() );
 				}
 				FI;
 			}
@@ -161,7 +163,8 @@ namespace castor3d
 						, normal
 						, translucency
 						, normalize( light.m_position() - position )
-						, light.m_lightBase().m_farPlane() );
+						, light.m_lightBase().m_farPlane()
+						, light.m_attenuation() );
 				}
 				FI;
 			}
@@ -177,7 +180,8 @@ namespace castor3d
 			, Vec3 const & worldNormal
 			, Float const & transmittance
 			, Vec3 const & lightVector
-			, Float const & lightFarPlane )const
+			, Float const & lightFarPlane
+			, Vec3 const & lightAttenuation )const
 		{
 			return m_compute( lightSpaceDepth
 				, transmittanceProfileSize
@@ -187,7 +191,8 @@ namespace castor3d
 				, worldNormal
 				, transmittance
 				, lightVector
-				, lightFarPlane );
+				, lightFarPlane
+				, lightAttenuation );
 		}
 		
 		void SssTransmittance::doDeclareGetTransformedPosition()
@@ -216,7 +221,8 @@ namespace castor3d
 					, Vec3 const & worldNormal
 					, Float const & translucency
 					, Vec3 const & lightVector
-					, Float const & lightFarPlane )
+					, Float const & lightFarPlane
+					, Vec3 const & lightAttenuation )
 				{
 					auto factor = m_writer.declLocale( cuT( "factor" )
 						, vec3( 0.0_f ) );
@@ -239,20 +245,22 @@ namespace castor3d
 
 #if C3D_DEBUG_SSS_TRANSMITTANCE
 
-							//factor = vec3( -distance * distance );
-							d = -d * d;
+							auto dd = m_writer.declLocale( cuT( "dd" )
+								, -d * d );
 
 							FOR( m_writer, Int, i, 0, "i < transmittanceProfileSize", "++i" )
 							{
 								auto profileFactor = m_writer.declLocale( cuT( "profileFactor" )
 									, transmittanceProfile[i] );
-								factor += profileFactor.rgb() * exp( d / profileFactor.a() );
+								factor += profileFactor.rgb() * exp( dd / profileFactor.a() );
 							}
 							ROF;
 
-							factor *= clamp( 0.3_f + dot( lightVector, -normal )
-								, 0.0_f
-								, 1.0_f );
+							factor = factor
+								* scale
+								* clamp( 0.3_f + dot( lightVector, -worldNormal )
+									, 0.0_f
+									, 1.0_f );
 
 #else
 
@@ -260,16 +268,16 @@ namespace castor3d
 							 * Armed with the thickness, we can now calculate the color by means of the
 							 * transmittance profile.
 							 */
-							d = -d * d;
+							auto dd = m_writer.declLocale( cuT( "dd" )
+								, -d * d );
 
 							FOR( m_writer, Int, i, 0, "i < transmittanceProfileSize", "++i" )
 							{
 								auto profileFactor = m_writer.declLocale( cuT( "profileFactor" )
 									, transmittanceProfile[i] );
-								factor += profileFactor.rgb() * exp( d / profileFactor.a() );
+								factor += profileFactor.rgb() * exp( dd / profileFactor.a() );
 							}
 							ROF;
-
 							/**
 							 * Using the profile, we finally approximate the transmitted lighting from
 							 * the back of the object:
@@ -295,7 +303,8 @@ namespace castor3d
 				, InVec3{ &m_writer, cuT( "worldNormal" ) }
 				, InFloat{ &m_writer, cuT( "transmittance" ) }
 				, InVec3{ &m_writer, cuT( "lightVector" ) }
-				, InFloat{ &m_writer, cuT( "lightFarPlane" ) } );
+				, InFloat{ &m_writer, cuT( "lightFarPlane" ) }
+				, InVec3{ &m_writer, cuT( "lightAttenuation" ) } );
 		}
 	}
 }

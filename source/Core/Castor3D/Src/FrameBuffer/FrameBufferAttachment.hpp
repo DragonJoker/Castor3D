@@ -88,7 +88,7 @@ namespace castor3d
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_colour	La couleur de vidage.
 		 */
-		C3D_API void clear( castor::Colour const & p_colour )const;
+		C3D_API void clear( castor::RgbaColour const & p_colour )const;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
@@ -191,7 +191,7 @@ namespace castor3d
 		 *\brief		Vide le tampon de l'attache.
 		 *\param[in]	p_colour	La couleur de vidage.
 		 */
-		C3D_API virtual void doClear( castor::Colour const & p_colour )const = 0;
+		C3D_API virtual void doClear( castor::RgbaColour const & p_colour )const = 0;
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.

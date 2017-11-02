@@ -1,4 +1,4 @@
-#include "Miscellaneous/Utils.hpp"
+﻿#include "Miscellaneous/Utils.hpp"
 #include "Log/Logger.hpp"
 #include "Graphics/PixelFormat.hpp"
 #include "FileParserContext.hpp"
@@ -509,7 +509,7 @@ namespace castor
 	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eColour >::type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eRgbColour >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -527,39 +527,24 @@ namespace castor
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
-			if ( values.size() >= size_t( Component::eCount ) )
-			{
-				Point4f colour;
-				result = parseValues( params, colour );
-
-				if ( result )
-				{
-					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
-					{
-						value[Component( i )] = colour[i];
-					}
-				}
-			}
-			else if ( values.size() == 3 )
+			if ( values.size() >= size_t( RgbComponent::eCount ) )
 			{
 				Point3f colour;
 				result = parseValues( params, colour );
 
 				if ( result )
 				{
-					for ( uint8_t i = 0; i < 3; i++ )
+					for ( uint8_t i = 0; i < size_t( RgbComponent::eCount ); i++ )
 					{
-						value[Component( i )] = colour[i];
+						value[RgbComponent( i )] = colour[i];
 					}
-
-					value[Component::eAlpha] = 1.0;
 				}
 			}
 			else
 			{
 				try
 				{
-					String regexString = RegexFormat< Colour >::Value;
+					String regexString = RegexFormat< RgbColour >::Value;
 					regexString += details::IGNORED_END;
 
 					const Regex regex{ regexString };
@@ -591,7 +576,7 @@ namespace castor
 							}
 						}
 
-						value = Colour::fromARGB( colour );
+						value = RgbColour::fromARGB( colour );
 					}
 					else
 					{
@@ -619,7 +604,7 @@ namespace castor
 	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eHdrColour >::type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eRgbaColour >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -637,39 +622,39 @@ namespace castor
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
-			if ( values.size() >= size_t( Component::eCount ) )
+			if ( values.size() >= size_t( RgbaComponent::eCount ) )
 			{
 				Point4f colour;
 				result = parseValues( params, colour );
 
 				if ( result )
 				{
-					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
+					for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 					{
-						value[Component( i )] = colour[i];
+						value[RgbaComponent( i )] = colour[i];
 					}
 				}
 			}
-			else if ( values.size() == 3 )
+			else if ( values.size() == size_t( RgbComponent::eCount ) )
 			{
 				Point3f colour;
 				result = parseValues( params, colour );
 
 				if ( result )
 				{
-					for ( uint8_t i = 0; i < 3; i++ )
+					for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 					{
-						value[Component( i )] = colour[i];
+						value[RgbaComponent( i )] = colour[i];
 					}
 
-					value[Component::eAlpha] = 1.0;
+					value[RgbaComponent::eAlpha] = 1.0;
 				}
 			}
 			else
 			{
 				try
 				{
-					String regexString = RegexFormat< HdrColour >::Value;
+					String regexString = RegexFormat< RgbaColour >::Value;
 					regexString += details::IGNORED_END;
 
 					const Regex regex{ regexString };
@@ -701,7 +686,212 @@ namespace castor
 							}
 						}
 
-						value = HdrColour::fromARGB( colour );
+						value = RgbaColour::fromARGB( colour );
+					}
+					else
+					{
+						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
+					}
+				}
+				catch ( std::exception & p_exc )
+				{
+					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+				}
+
+				return result;
+			}
+
+			return result;
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ValueParser specialisation for ParameterType::eColour.
+	\~french
+	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
+	*/
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eHdrRgbColour >::type >
+	{
+		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+		/**
+		 *\~english
+		 *\brief		Parses a value from a line.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
+		 *\~french
+		 *\brief		Extrait une valeur à partir d'une ligne.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
+		 */
+		static inline bool parse( String & params, ValueType & value )
+		{
+			bool result = false;
+			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
+
+			if ( values.size() >= size_t( RgbComponent::eCount ) )
+			{
+				Point4f colour;
+				result = parseValues( params, colour );
+
+				if ( result )
+				{
+					for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
+					{
+						value[RgbComponent( i )] = colour[i];
+					}
+				}
+			}
+			else
+			{
+				try
+				{
+					String regexString = RegexFormat< HdrRgbColour >::Value;
+					regexString += details::IGNORED_END;
+
+					const Regex regex{ regexString };
+					auto begin = std::begin( params );
+					auto end = std::end( params );
+					const RegexIterator it( begin, end, regex );
+					const RegexIterator endit;
+					result = it != endit && it->size() >= 1;
+
+					if ( result )
+					{
+						uint32_t colour{ 0u };
+
+						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
+						{
+							auto match = ( *it )[i];
+
+							if ( match.matched )
+							{
+								String text = match;
+
+								if ( text.size() == 6 )
+								{
+									text = "FF" + text;
+								}
+
+								InputStringStream stream{ text };
+								stream >> std::hex >> colour;
+							}
+						}
+
+						value = HdrRgbColour::fromARGB( colour );
+					}
+					else
+					{
+						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
+					}
+				}
+				catch ( std::exception & p_exc )
+				{
+					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+				}
+
+				return result;
+			}
+
+			return result;
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ValueParser specialisation for ParameterType::eColour.
+	\~french
+	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
+	*/
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eHdrRgbaColour >::type >
+	{
+		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+		/**
+		 *\~english
+		 *\brief		Parses a value from a line.
+		 *\param[in]	params	The line containing the value.
+		 *\param[out]	value		Receives the result.
+		 *\~french
+		 *\brief		Extrait une valeur à partir d'une ligne.
+		 *\param[in]	params	La ligne contenant la valeur.
+		 *\param[out]	value		Reçoit le résultat.
+		 */
+		static inline bool parse( String & params, ValueType & value )
+		{
+			bool result = false;
+			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
+
+			if ( values.size() >= size_t( RgbaComponent::eCount ) )
+			{
+				Point4f colour;
+				result = parseValues( params, colour );
+
+				if ( result )
+				{
+					for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
+					{
+						value[RgbaComponent( i )] = colour[i];
+					}
+				}
+			}
+			else if ( values.size() == size_t( RgbComponent::eCount ) )
+			{
+				Point3f colour;
+				result = parseValues( params, colour );
+
+				if ( result )
+				{
+					for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
+					{
+						value[RgbaComponent( i )] = colour[i];
+					}
+
+					value[RgbaComponent::eAlpha] = 1.0;
+				}
+			}
+			else
+			{
+				try
+				{
+					String regexString = RegexFormat< HdrRgbaColour >::Value;
+					regexString += details::IGNORED_END;
+
+					const Regex regex{ regexString };
+					auto begin = std::begin( params );
+					auto end = std::end( params );
+					const RegexIterator it( begin, end, regex );
+					const RegexIterator endit;
+					result = it != endit && it->size() >= 1;
+
+					if ( result )
+					{
+						uint32_t colour{ 0u };
+
+						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
+						{
+							auto match = ( *it )[i];
+
+							if ( match.matched )
+							{
+								String text = match;
+
+								if ( text.size() == 6 )
+								{
+									text = "FF" + text;
+								}
+
+								InputStringStream stream{ text };
+								stream >> std::hex >> colour;
+							}
+						}
+
+						value = HdrRgbaColour::fromARGB( colour );
 					}
 					else
 					{

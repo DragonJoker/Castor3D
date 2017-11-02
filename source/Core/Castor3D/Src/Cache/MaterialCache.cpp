@@ -200,11 +200,11 @@ namespace castor3d
 		return result;
 	}
 
-	bool MaterialCache::read( TextFile & file )
+	bool MaterialCache::read( Path const & path )
 	{
 		auto lock = makeUniqueLock( m_elements );
 		SceneFileParser parser( *getEngine() );
-		parser.parseFile( file );
+		parser.parseFile( path );
 		return true;
 	}
 }

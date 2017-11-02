@@ -1,4 +1,4 @@
-﻿#include "TransparentPass.hpp"
+#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -234,7 +234,8 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Outputs
-		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
+		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -299,10 +300,11 @@ namespace castor3d
 
 			vtx_texture = v3Texture;
 			curVertex = mtxModel * curVertex;
-			vtx_position = curVertex.xyz();
+			vtx_worldPosition = curVertex.xyz();
 			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
 				, c3d_prvView * curVertex );
 			curVertex = c3d_curView * curVertex;
+			vtx_viewPosition = curVertex.xyz();
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
@@ -329,7 +331,7 @@ namespace castor3d
 			prvVertex.xy() -= c3d_prvJitter * gl_Position.w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = tbn * vtx_position;
+			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 			vtx_curPosition = gl_Position.xyw();
 			vtx_prvPosition = prvVertex.xyw();
@@ -359,7 +361,8 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Intputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
+		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -503,16 +506,16 @@ namespace castor3d
 			lighting->computeCombined( worldEye
 				, matShininess
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_position, normal )
+				, shader::FragmentInput( vtx_worldPosition, normal )
 				, output );
 
-			auto colour = writer.declLocale< Vec4 >( cuT( "colour" ) );
+			auto colour = writer.declLocale< Vec3 >( cuT( "colour" ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
 				auto incident = writer.declLocale( cuT( "i" )
-					, normalize( vtx_position - c3d_cameraPosition ) );
+					, normalize( vtx_worldPosition - c3d_cameraPosition ) );
 				auto reflectedColour = writer.declLocale( cuT( "reflectedColour" )
 					, vec3( 0.0_f, 0, 0 ) );
 				auto refractedColour = writer.declLocale( cuT( "refractedColour" )
@@ -535,18 +538,18 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
 					&& !checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					colour.xyz() = reflectedColour * matDiffuse / length( matDiffuse );
+					colour = reflectedColour * matDiffuse / length( matDiffuse );
 				}
 				else
 				{
 					auto refFactor = writer.declLocale( cuT( "refFactor" )
 						, glsl::fma( c3d_fresnelScale, pow( 1.0_f + dot( incident, normal ), c3d_fresnelPower ), c3d_fresnelBias ) );
-					colour.xyz() = mix( refractedColour, reflectedColour, refFactor );
+					colour = mix( refractedColour, reflectedColour, refFactor );
 				}
 			}
 			else
 			{
-				colour.xyz() = glsl::fma( ambient + lightDiffuse
+				colour = glsl::fma( ambient + lightDiffuse
 					, matDiffuse
 					, glsl::fma( lightSpecular
 						, matSpecular
@@ -559,13 +562,6 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-			}
-
-			if ( getFogType( sceneFlags ) != FogType::eDisabled )
-			{
-				auto wvPosition = writer.declLocale( cuT( "wvPosition" )
-					, writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
-				fog.applyFog( colour, length( wvPosition ), wvPosition.y() );
 			}
 
 			//// Naive
@@ -602,7 +598,7 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" )
 			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
 
-			pxl_accumulation = vec4( colour.xyz() * alpha, alpha ) * weight;
+			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
 		} );
 
@@ -624,7 +620,8 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Intputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
+		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -694,7 +691,6 @@ namespace castor3d
 		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, getShadowType( sceneFlags )
 			, index );
-		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
@@ -774,8 +770,9 @@ namespace castor3d
 				, matMetallic
 				, matRoughness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_position, normal )
+				, shader::FragmentInput( vtx_worldPosition, normal )
 				, output );
+
 			shader::pbr::mr::computePostLightingMapContributions( writer
 				, matAlbedo
 				, matEmissive
@@ -785,7 +782,7 @@ namespace castor3d
 				, sceneFlags );
 
 			ambient *= occlusion * utils.computeMetallicIBL( normal
-				, vtx_position
+				, vtx_worldPosition
 				, matAlbedo
 				, matMetallic
 				, matRoughness
@@ -862,7 +859,8 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Intputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
+		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -931,7 +929,6 @@ namespace castor3d
 		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, getShadowType( sceneFlags )
 			, index );
-		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
@@ -1018,11 +1015,11 @@ namespace castor3d
 				, matSpecular
 				, matGlossiness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_position, normal )
+				, shader::FragmentInput( vtx_worldPosition, normal )
 				, output );
 
 			ambient *= occlusion * utils.computeSpecularIBL( normal
-				, vtx_position
+				, vtx_worldPosition
 				, matDiffuse
 				, matSpecular
 				, matGlossiness

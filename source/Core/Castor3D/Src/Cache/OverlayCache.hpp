@@ -183,17 +183,6 @@ namespace castor3d
 		C3D_API bool write( castor::TextFile & p_file )const;
 		/**
 		 *\~english
-		 *\brief		Reads overlays from a text file
-		 *\param[in]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Lit les overlays à partir d'un fichier texte
-		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool read( castor::TextFile & p_file );
-		/**
-		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.
 		 *\param[in]	p_name	The font name.
 		 *\return		The FontTexture if it exist, nullptr if not.

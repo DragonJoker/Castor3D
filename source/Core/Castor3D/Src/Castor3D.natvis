@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
   <Type Name="castor3d::TUniform&lt;*&gt;">
@@ -8,7 +8,8 @@
       <Item Name="count">m_occurences</Item>
       <Item Name="changed">m_changed</Item>
       <Item Name="stride">m_stride</Item>
-      <Item Name="values">m_typedValues</Item>
+      <Item Condition="m_occurences > 1" Name="values">m_typedValues</Item>
+      <Item Condition="m_occurences == 1" Name="value">m_typedValues[0]</Item>
     </Expand>
   </Type>
 
