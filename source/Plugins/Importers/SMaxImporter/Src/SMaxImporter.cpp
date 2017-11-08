@@ -227,9 +227,9 @@ namespace C3dSMax
 	{
 		SMaxChunk currentChunk;
 		MaterialSPtr pMaterial;
-		Colour crDiffuse( Colour::fromRGB( 0 ) );
-		Colour crAmbient( Colour::fromRGB( 0 ) );
-		Colour crSpecular( Colour::fromRGB( 0 ) );
+		RgbColour crDiffuse( RgbColour::fromRGB( 0 ) );
+		RgbColour crAmbient( RgbColour::fromRGB( 0 ) );
+		RgbColour crSpecular( RgbColour::fromRGB( 0 ) );
 		String strMatName;
 		std::map< TextureChannel, Path > strTextures;
 		bool ok = true;
@@ -419,7 +419,7 @@ namespace C3dSMax
 		return int( strlen( pBuffer ) + 1 );
 	}
 
-	void SMaxImporter::doReadColorChunk( SMaxChunk * p_chunk, Colour & p_colour )
+	void SMaxImporter::doReadColorChunk( SMaxChunk * p_chunk, RgbColour & p_colour )
 	{
 		SMaxChunk tempChunk;
 
@@ -636,7 +636,7 @@ namespace C3dSMax
 				pV3 = p_submesh.getPoint( uiV3 );
 				p_submesh.addFace( uiV1, uiV2, uiV3 );
 
-				if ( m_arrayTexVerts.size() )
+				if ( !m_arrayTexVerts.empty() )
 				{
 					Vertex::setTexCoord( pV1, m_arrayTexVerts[( uiV1 * 2 ) + 0], m_arrayTexVerts[( uiV1 * 2 ) + 1] );
 					Vertex::setTexCoord( pV2, m_arrayTexVerts[( uiV2 * 2 ) + 0], m_arrayTexVerts[( uiV2 * 2 ) + 1] );
@@ -670,7 +670,7 @@ namespace C3dSMax
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logWarning( std::stringstream() << "Exception caught when loading uv indices: " << exc.what() );
+			Logger::logWarning( std::stringstream() << "Exception caught when loading UV indices: " << exc.what() );
 			p_chunk->m_ulBytesRead = p_chunk->m_ulLength;
 		}
 		catch ( ... )
@@ -684,7 +684,7 @@ namespace C3dSMax
 	{
 		try
 		{
-			float * pTmp = NULL;
+			float * pTmp = nullptr;
 			std::vector< float > pVertex;
 			uint16_t usNumOfVerts = 0;
 			p_chunk->m_ulBytesRead += uint32_t( m_pFile->read( usNumOfVerts ) );

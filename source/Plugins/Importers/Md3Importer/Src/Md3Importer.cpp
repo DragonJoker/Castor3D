@@ -32,14 +32,14 @@ namespace C3DMd3
 {
 	Md3Importer::Md3Importer( Engine & p_engine )
 		: Importer( p_engine )
-		, m_skins( NULL )
-		, m_texCoords( NULL )
-		, m_triangles( NULL )
-		, m_bones( NULL )
-		, m_pFile( NULL )
-		, m_links( NULL )
-		, m_vertices( NULL )
-		, m_tags( NULL )
+		, m_skins( nullptr )
+		, m_texCoords( nullptr )
+		, m_triangles( nullptr )
+		, m_bones( nullptr )
+		, m_pFile( nullptr )
+		, m_links( nullptr )
+		, m_vertices( nullptr )
+		, m_tags( nullptr )
 		, m_numOfTags( 0 )
 	{
 		memset( &m_header, 0, sizeof( Md3Header ) );

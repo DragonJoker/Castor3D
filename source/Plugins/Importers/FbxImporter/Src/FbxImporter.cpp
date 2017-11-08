@@ -766,7 +766,7 @@ namespace C3dFbx
 			auto lambert = static_cast< FbxSurfaceLambert * >( p_lambert );
 			//p_pass.setAlpha( float( lambert->TransparencyFactor ) );
 			FbxDouble3 diffuse = lambert->Diffuse;
-			p_pass.setDiffuse( Colour::fromRGB( { float( diffuse[0] ), float( diffuse[1] ), float( diffuse[2] ) } ) * lambert->DiffuseFactor );
+			p_pass.setDiffuse( RgbColour::fromRGB( { float( diffuse[0] ), float( diffuse[1] ), float( diffuse[2] ) } ) * lambert->DiffuseFactor );
 			FbxDouble3 emissive = lambert->Emissive;
 			p_pass.setEmissive( float( point::length( Point3f{ float( emissive[0] ), float( emissive[1] ), float( emissive[2] ) } ) * lambert->EmissiveFactor ) );
 
@@ -800,7 +800,7 @@ namespace C3dFbx
 					parseLambert( phong, *pass );
 					pass->setShininess( float( phong->Shininess ) );
 					FbxDouble3 specular = phong->Specular;
-					pass->setSpecular( Colour::fromRGB( { float( specular[0] ), float( specular[1] ), float( specular[2] ) } ) * phong->SpecularFactor );
+					pass->setSpecular( RgbColour::fromRGB( { float( specular[0] ), float( specular[1] ), float( specular[2] ) } ) * phong->SpecularFactor );
 					doLoadTexture( p_scene, phong->Specular, *pass, TextureChannel::eSpecular );
 					doLoadTexture( p_scene, phong->Shininess, *pass, TextureChannel::eGloss );
 				}
