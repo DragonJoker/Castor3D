@@ -1168,6 +1168,8 @@ namespace castor3d
 		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( index );
 		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( --index );
 		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index );
+		frameBuffer.unbind();
+
 		m_timer->stop();
 	}
 }

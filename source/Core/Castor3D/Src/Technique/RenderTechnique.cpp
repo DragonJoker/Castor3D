@@ -323,7 +323,12 @@ namespace castor3d
 		doRenderOpaque( jitter
 			, velocity
 			, info );
+
+		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->setDrawBuffers();
 		scene.renderBackground( getSize(), camera );
+		m_frameBuffer.m_frameBuffer->unbind();
+
 		doRenderTransparent( jitter
 			, velocity
 			, info );

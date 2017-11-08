@@ -109,9 +109,10 @@ namespace castor3d
 		, Point2r const & jitter
 		, TextureUnit const & velocity )
 	{
-		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
 		static RgbaColour accumClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack );
 		static RgbaColour revealClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite );
+
+		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();

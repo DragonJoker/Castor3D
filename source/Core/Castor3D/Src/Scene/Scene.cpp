@@ -10,6 +10,7 @@
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
+#include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "ParticleSystem/ParticleSystem.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
@@ -1151,8 +1152,12 @@ namespace castor3d
 			{
 				auto material = cache.find( matName );
 				m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
-				m_hasTransparentObjects |= material->hasAlphaBlending();
-				m_hasOpaqueObjects |= !material->hasAlphaBlending();
+
+				for ( auto & pass : *material )
+				{
+					m_hasTransparentObjects |= pass->hasAlphaBlending();
+					m_hasOpaqueObjects |= !pass->hasAlphaBlending();
+				}
 			}
 
 			cache.unlock();

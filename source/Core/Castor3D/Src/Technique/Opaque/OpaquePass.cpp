@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -122,13 +122,13 @@ namespace castor3d
 
 		std::function< void() > main = [&]()
 		{
-			auto p = writer.declLocale( cuT( "p" )
+			auto v4Position = writer.declLocale( cuT( "v4Position" )
 				, vec4( position.xyz(), 1.0 ) );
-			auto n = writer.declLocale( cuT( "n" )
+			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
 				, vec4( normal, 0.0 ) );
-			auto t = writer.declLocale( cuT( "t" )
+			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
 				, vec4( tangent, 0.0 ) );
-			auto tex = writer.declLocale( cuT( "tex" )
+			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 				, texture );
 			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
@@ -164,36 +164,34 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" )
-					, vec3( 1.0_f - c3d_time ) );
-				p = vec4( glsl::fma( p.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
-				n = vec4( glsl::fma( n.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
-				t = vec4( glsl::fma( t.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
-				tex = glsl::fma( tex, time, texture2 * c3d_time );
+				v4Position = vec4( glsl::mix( v4Position.xyz(), position2.xyz(), c3d_time ), 1.0 );
+				v4Normal = vec4( glsl::mix( v4Normal.xyz(), normal2.xyz(), c3d_time ), 1.0 );
+				v4Tangent = vec4( glsl::mix( v4Tangent.xyz(), tangent2.xyz(), c3d_time ), 1.0 );
+				v3Texture = glsl::mix( v3Texture, texture2, c3d_time );
 			}
 
-			vtx_texture = tex;
-			p = mtxModel * p;
-			vtx_worldPosition = p.xyz();
+			vtx_texture = v3Texture;
+			v4Position = mtxModel * v4Position;
+			vtx_worldPosition = v4Position.xyz();
 			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
-				, c3d_prvView * p );
-			p = c3d_curView * p;
+				, c3d_prvView * v4Position );
+			v4Position = c3d_curView * v4Position;
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{
-				vtx_normal = normalize( mtxNormal * -n.xyz() );
+				vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( mtxNormal * n.xyz() );
+				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
 			}
 
-			vtx_tangent = normalize( mtxNormal * t.xyz() );
+			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * p;
+			gl_Position = c3d_projection * v4Position;
 			prvVertex = c3d_projection * prvVertex;
 			// Convert the jitter from non-homogeneous coordiantes to homogeneous
 			// coordinates and add it:
