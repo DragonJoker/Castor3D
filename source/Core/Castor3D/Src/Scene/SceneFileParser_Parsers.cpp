@@ -1288,7 +1288,7 @@ namespace castor3d
 		}
 		else
 		{
-			p_params[0]->get( parsingContext->size );
+			p_params[0]->get( parsingContext->point2f );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1305,7 +1305,7 @@ namespace castor3d
 		{
 			PARSING_ERROR( cuT( "particles_count has not been specified." ) );
 		}
-		else if ( parsingContext->size.getWidth() == 0 || parsingContext->size.getHeight() == 0 )
+		else if ( parsingContext->point2f[0] == 0 || parsingContext->point2f[1] == 0 )
 		{
 			PARSING_ERROR( cuT( "one PixelComponents of the particles dimensions is 0." ) );
 		}
@@ -1318,7 +1318,7 @@ namespace castor3d
 
 			parsingContext->particleSystem = parsingContext->pScene->getParticleSystemCache().add( parsingContext->strName, parsingContext->pSceneNode, parsingContext->uiUInt32 );
 			parsingContext->particleSystem->setMaterial( parsingContext->pMaterial );
-			parsingContext->particleSystem->setDimensions( parsingContext->size );
+			parsingContext->particleSystem->setDimensions( parsingContext->point2f );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticle )
@@ -4226,7 +4226,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBillboardDimensions )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Size dimensions;
+		Point2f dimensions;
 		p_params[0]->get( dimensions );
 		parsingContext->pBillboards->setDimensions( dimensions );
 	}

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_FILE_PARSER_H___
@@ -126,6 +126,7 @@ namespace castor3d
 		castor::String strName2;
 		castor::Path path;
 		castor::Size size;
+		castor::Point2f point2f;
 		uint8_t uiUInt8;
 		uint16_t uiUInt16;
 		uint32_t uiUInt32;

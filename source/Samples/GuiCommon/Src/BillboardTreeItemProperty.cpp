@@ -6,7 +6,7 @@
 #include <Scene/Scene.hpp>
 
 #include "AdditionalProperties.hpp"
-#include "SizeProperties.hpp"
+#include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;
@@ -39,7 +39,7 @@ namespace GuiCommon
 	void BillboardTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_BILLBOARD + wxString( m_billboard.getName() ) ) );
-		p_grid->Append( new SizeProperty( PROPERTY_BILLBOARD_SIZE ) )->SetValue( WXVARIANT( m_billboard.getDimensions() ) );
+		p_grid->Append( new Point2fProperty( PROPERTY_BILLBOARD_SIZE ) )->SetValue( WXVARIANT( m_billboard.getDimensions() ) );
 		p_grid->Append( doCreateMaterialProperty( PROPERTY_BILLBOARD_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_billboard.getMaterial()->getName() ) ) );
 	}
 
@@ -55,7 +55,7 @@ namespace GuiCommon
 			}
 			else if ( property->GetName() == PROPERTY_BILLBOARD_SIZE )
 			{
-				const Size & size = SizeRefFromVariant( property->GetValue() );
+				const Point2f & size = Point2fRefFromVariant( property->GetValue() );
 				OnSizeChange( size );
 			}
 		}
@@ -76,7 +76,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void BillboardTreeItemProperty::OnSizeChange( castor::Size const & p_size )
+	void BillboardTreeItemProperty::OnSizeChange( castor::Point2f const & p_size )
 	{
 		doApplyChange( [p_size, this]()
 		{

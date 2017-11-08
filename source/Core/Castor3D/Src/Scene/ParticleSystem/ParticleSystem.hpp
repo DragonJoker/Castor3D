@@ -123,7 +123,7 @@ namespace castor3d
 		 *\brief		Definit les dimensions des particules.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		C3D_API void setDimensions( castor::Size const & p_value );
+		C3D_API void setDimensions( castor::Point2f const & p_value );
 		/**
 		 *\~english
 		 *\brief		sets the particles type name.
@@ -146,7 +146,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions des billboards.
 		 */
-		C3D_API castor::Size const & getDimensions()const;
+		C3D_API castor::Point2f const & getDimensions()const;
 		/**
 		 *\~english
 		 *\brief		adds a particle variable.
@@ -257,7 +257,7 @@ namespace castor3d
 		BillboardBaseSPtr m_particlesBillboard;
 		//!\~english	The billboards dimensions.
 		//!\~french		Les dimensions des billboards.
-		castor::Size m_dimensions;
+		castor::Point2f m_dimensions;
 		//!\~english	The Material.
 		//!\~french		Le Material.
 		MaterialWPtr m_material;
