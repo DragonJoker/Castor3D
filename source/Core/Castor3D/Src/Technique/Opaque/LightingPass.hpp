@@ -98,27 +98,12 @@ namespace castor3d
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief			Renders the light passes for a light sources type on currently bound framebuffer.
-		 *\param[in]		scene	The scene.
-		 *\param[in]		camera	The viewing camera.
-		 *\param[in]		type	The light sources type.
-		 *\param[in]		gp		The geometry pass result.
-		 *\param[in,out]	first	Tells if this is the first light pass (\p true) or not (\p false).
-		 *\~french
-		 *\brief			Dessine les passes d'éclairage d'un type de source sur le tampon d'image donné.
-		 *\param[in]		scene	La scène.
-		 *\param[in]		camera	La caméra.
-		 *\param[in]		type	Le type de sources lumineuse.
-		 *\param[in]		gp		Le résultat de la geometry pass.
-		 *\param[in,out]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
-		 */
 		void doRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
 			, GeometryPassResult const & gp
-			, bool & first );
+			, bool & first
+			, RenderInfo & info );
 
 	private:
 		castor::Size const m_size;

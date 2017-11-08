@@ -1,4 +1,4 @@
-#include "DebugOverlays.hpp"
+﻿#include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
 #include "Overlay/PanelOverlay.hpp"
@@ -60,6 +60,8 @@ namespace castor3d
 		m_debugObjectCount = getTextOverlay( cache, cuT( "DebugPanel-ObjectCount-Value" ) );
 		m_debugVisibleObjectCount = getTextOverlay( cache, cuT( "DebugPanel-VisibleObjectCount-Value" ) );
 		m_debugParticlesCount = getTextOverlay( cache, cuT( "DebugPanel-ParticlesCount-Value" ) );
+		m_debugLightCount = getTextOverlay( cache, cuT( "DebugPanel-LightCount-Value" ) );
+		m_debugVisibleLightCount = getTextOverlay( cache, cuT( "DebugPanel-VisibleLightCount-Value" ) );
 		m_debugTime = getTextOverlay( cache, cuT( "DebugPanel-DebugTime-Value" ) );
 		m_externTime = getTextOverlay( cache, cuT( "DebugPanel-ExternalTime-Value" ) );
 
@@ -132,10 +134,14 @@ namespace castor3d
 					, OverlayType::ePanel
 					, nullptr
 					, nullptr )->getPanelOverlay();
-				overlays.m_title = cache.add( baseName + cuT( "_Title" )
+				overlays.m_titlePanel = cache.add( baseName + cuT( "_Title" )
+					, OverlayType::ePanel
+					, nullptr
+					, overlays.m_panel->getOverlay().shared_from_this() )->getPanelOverlay();
+				overlays.m_title = cache.add( baseName + cuT( "_TitleText" )
 					, OverlayType::eText
 					, nullptr
-					, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+					, overlays.m_titlePanel->getOverlay().shared_from_this() )->getTextOverlay();
 				overlays.m_cpuName = cache.add( baseName + cuT( "_CPUName" )
 					, OverlayType::eText
 					, nullptr
@@ -152,19 +158,21 @@ namespace castor3d
 					, OverlayType::eText
 					, nullptr
 					, overlays.m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-				overlays.m_panel->setPixelPosition( Position{ 400, int32_t( 60 * ( m_renderPasses.size() - 1 ) ) } );
+				overlays.m_panel->setPixelPosition( Position{ 400, int32_t( 40 * ( m_renderPasses.size() - 1 ) ) } );
+				overlays.m_titlePanel->setPixelPosition( Position{ 0, 0 } );
 				overlays.m_title->setPixelPosition( Position{ 10, 0 } );
 				overlays.m_cpuName->setPixelPosition( Position{ 10, 20 } );
-				overlays.m_gpuName->setPixelPosition( Position{ 10, 40 } );
-				overlays.m_cpuValue->setPixelPosition( Position{ 110, 20 } );
-				overlays.m_gpuValue->setPixelPosition( Position{ 110, 40 } );
+				overlays.m_cpuValue->setPixelPosition( Position{ 45, 20 } );
+				overlays.m_gpuName->setPixelPosition( Position{ 130, 20 } );
+				overlays.m_gpuValue->setPixelPosition( Position{ 165, 20 } );
 
-				overlays.m_panel->setPixelSize( Size{ 250, 60 } );
+				overlays.m_panel->setPixelSize( Size{ 250, 40 } );
+				overlays.m_titlePanel->setPixelSize( Size{ 250, 20 } );
 				overlays.m_title->setPixelSize( Size{ 230, 20 } );
-				overlays.m_cpuName->setPixelSize( Size{ 100, 20 } );
-				overlays.m_gpuName->setPixelSize( Size{ 100, 20 } );
-				overlays.m_cpuValue->setPixelSize( Size{ 130, 20 } );
-				overlays.m_gpuValue->setPixelSize( Size{ 130, 20 } );
+				overlays.m_cpuName->setPixelSize( Size{ 30, 20 } );
+				overlays.m_cpuValue->setPixelSize( Size{ 75, 20 } );
+				overlays.m_gpuName->setPixelSize( Size{ 30, 20 } );
+				overlays.m_gpuValue->setPixelSize( Size{ 75, 20 } );
 
 				overlays.m_title->setFont( cuT( "Arial20" ) );
 				overlays.m_cpuName->setFont( cuT( "Arial10" ) );
@@ -173,11 +181,12 @@ namespace castor3d
 				overlays.m_gpuValue->setFont( cuT( "Arial10" ) );
 
 				overlays.m_title->setCaption( timer.getName() );
-				overlays.m_cpuName->setCaption( cuT( "CPU Time:" ) );
-				overlays.m_gpuName->setCaption( cuT( "GPU Time:" ) );
+				overlays.m_cpuName->setCaption( cuT( "CPU:" ) );
+				overlays.m_gpuName->setCaption( cuT( "GPU:" ) );
 
 				auto & materials = getEngine()->getMaterialCache();
 				overlays.m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
+				overlays.m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 				overlays.m_title->setMaterial( materials.find( cuT( "White" ) ) );
 				overlays.m_cpuName->setMaterial( materials.find( cuT( "White" ) ) );
 				overlays.m_gpuName->setMaterial( materials.find( cuT( "White" ) ) );
@@ -185,6 +194,7 @@ namespace castor3d
 				overlays.m_gpuValue->setMaterial( materials.find( cuT( "White" ) ) );
 
 				overlays.m_panel->setVisible( m_visible );
+				overlays.m_titlePanel->setVisible( true );
 				overlays.m_title->setVisible( true );
 				overlays.m_cpuName->setVisible( true );
 				overlays.m_gpuName->setVisible( true );
@@ -222,6 +232,7 @@ namespace castor3d
 					cache.remove( overlays.m_gpuValue->getOverlayName() );
 					cache.remove( overlays.m_cpuValue->getOverlayName() );
 					cache.remove( overlays.m_title->getOverlayName() );
+					cache.remove( overlays.m_titlePanel->getOverlayName() );
 					cache.remove( overlays.m_panel->getOverlayName() );
 					m_renderPasses.erase( itC );
 				}
@@ -245,6 +256,8 @@ namespace castor3d
 			m_debugObjectCount->setCaption( string::toString( info.m_totalObjectsCount ) );
 			m_debugVisibleObjectCount->setCaption( string::toString( info.m_visibleObjectsCount ) );
 			m_debugParticlesCount->setCaption( string::toString( info.m_particlesCount ) );
+			m_debugLightCount->setCaption( string::toString( info.m_totalLightsCount ) );
+			m_debugVisibleLightCount->setCaption( string::toString( info.m_visibleLightsCount ) );
 
 			auto time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
 			m_debugAverageFps->setCaption( StringStream() << std::setprecision( 4 ) << 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( time ).count() << cuT( " fps" ) );

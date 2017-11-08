@@ -124,6 +124,7 @@ namespace castor3d
 		{
 			std::vector< std::reference_wrapper< RenderPassTimer const > > m_timers;
 			PanelOverlaySPtr m_panel;
+			PanelOverlaySPtr m_titlePanel;
 			TextOverlaySPtr m_title;
 			TextOverlaySPtr m_cpuName;
 			TextOverlaySPtr m_cpuValue;
@@ -189,6 +190,12 @@ namespace castor3d
 		//!\~english	The particles count value overlay.
 		//!\~french		L'incrustation contenant la valeur du nombre de particules.
 		TextOverlaySPtr m_debugParticlesCount;
+		//!\~english	The lights count value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre de lumières.
+		TextOverlaySPtr m_debugLightCount;
+		//!\~english	The visible lights count value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre de lumières visibles.
+		TextOverlaySPtr m_debugVisibleLightCount;
 		//!\~english	The render passes overlays.
 		//!\~french		Les incrustations des passes de rendu.
 		RenderPassOverlaysArray m_renderPasses;

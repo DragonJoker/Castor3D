@@ -173,17 +173,20 @@ namespace castor3d
 				, camera
 				, LightType::eDirectional
 				, gp
-				, first );
+				, first
+				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
-				, first );
+				, first
+				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
-				, first );
+				, first
+				, info );
 			first = false;
 			m_timer->stop();
 		}
@@ -195,7 +198,8 @@ namespace castor3d
 		, Camera const & camera
 		, LightType p_type
 		, GeometryPassResult const & gp
-		, bool & p_first )
+		, bool & p_first
+		, RenderInfo & info )
 	{
 		auto & cache = scene.getLightCache();
 
@@ -206,26 +210,33 @@ namespace castor3d
 
 			for ( auto & light : cache.getLights( p_type ) )
 			{
-				if ( light->isShadowProducer() && light->getShadowMap() )
+				if ( light->getLightType() == LightType::eDirectional
+					|| camera.isVisible( light->getCubeBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 				{
-					lightPassShadow.render( m_size
-						, gp
-						, *light
-						, camera
-						, p_first
-						, light->getShadowMap() );
-				}
-				else
-				{
-					lightPass.render( m_size
-						, gp
-						, *light
-						, camera
-						, p_first
-						, nullptr );
+					if ( light->isShadowProducer() && light->getShadowMap() )
+					{
+						lightPassShadow.render( m_size
+							, gp
+							, *light
+							, camera
+							, p_first
+							, light->getShadowMap() );
+					}
+					else
+					{
+						lightPass.render( m_size
+							, gp
+							, *light
+							, camera
+							, p_first
+							, nullptr );
+					}
+
+					p_first = false;
+					info.m_visibleLightsCount++;
 				}
 
-				p_first = false;
+				info.m_totalLightsCount++;
 			}
 		}
 	}
