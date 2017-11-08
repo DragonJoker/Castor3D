@@ -139,7 +139,7 @@ namespace castor3d
 		 *\brief		Definit les dimensios des billboards
 		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void setDimensions( castor::Size const & p_value )
+		inline void setDimensions( castor::Point2f const & p_value )
 		{
 			m_dimensions = p_value;
 		}
@@ -149,7 +149,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions des billboards.
 		 */
-		inline castor::Size const & getDimensions()const
+		inline castor::Point2f const & getDimensions()const
 		{
 			return m_dimensions;
 		}
@@ -316,7 +316,7 @@ namespace castor3d
 		MaterialWPtr m_material;
 		//!\~english	The billboards dimensions.
 		//!\~french		Les dimensions des billboards.
-		castor::Size m_dimensions;
+		castor::Point2f m_dimensions;
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
 		castor::Point3r m_cameraPosition;

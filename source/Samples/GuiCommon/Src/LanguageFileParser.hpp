@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_LANGUAGE_FILE_PARSER_H___
@@ -50,7 +50,7 @@ namespace GuiCommon
 		//@}
 
 	private:
-		virtual void doInitialiseParser( castor::TextFile & p_file );
+		virtual void doInitialiseParser( castor::Path const & path );
 		virtual void doCleanupParser();
 		virtual bool doDiscardParser( castor::String const & p_line );
 		virtual bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( p_line ) )

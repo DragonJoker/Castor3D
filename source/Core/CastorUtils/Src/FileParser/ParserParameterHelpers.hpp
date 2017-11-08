@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_PARSER_PARAMETER_HELPERS_H___
@@ -177,12 +177,12 @@ namespace castor
 	\version	0.8.0
 	\date		16/02/2016
 	\~english
-	\brief		RegexFormat specialisation for Colour.
+	\brief		RegexFormat specialisation for RgbColour.
 	\~french
-	\brief		Spécialisation de RegexFormat pour Colour.
+	\brief		Spécialisation de RegexFormat pour RgbColour.
 	*/
 	template<>
-	struct RegexFormat< Colour >
+	struct RegexFormat< RgbColour >
 	{
 		CU_API static xchar const * const Value;
 	};
@@ -191,12 +191,40 @@ namespace castor
 	\version	0.8.0
 	\date		16/02/2016
 	\~english
-	\brief		RegexFormat specialisation for Colour.
+	\brief		RegexFormat specialisation for RgbaColour.
 	\~french
-	\brief		Spécialisation de RegexFormat pour Colour.
+	\brief		Spécialisation de RegexFormat pour RgbaColour.
 	*/
 	template<>
-	struct RegexFormat< HdrColour >
+	struct RegexFormat< RgbaColour >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for HdrRgbColour.
+	\~french
+	\brief		Spécialisation de RegexFormat pour HdrRgbColour.
+	*/
+	template<>
+	struct RegexFormat< HdrRgbColour >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for HdrRgbaColour.
+	\~french
+	\brief		Spécialisation de RegexFormat pour HdrRgbaColour.
+	*/
+	template<>
+	struct RegexFormat< HdrRgbaColour >
 	{
 		CU_API static xchar const * const Value;
 	};
@@ -785,12 +813,30 @@ namespace castor
 	\~french
 	\brief		Specialisation de ParserParameterHelper pour ParameterType::eColour.
 	*/
-	template<> struct ParserParameterHelper< ParameterType::eColour >
+	template<> struct ParserParameterHelper< ParameterType::eRgbColour >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
-		using ValueType = Colour;
+		using ValueType = RgbColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eColour;
+		CU_API static const ParameterType ParamType = ParameterType::eRgbColour;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::eColour.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::eColour.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::eRgbaColour >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = RgbaColour;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::eRgbaColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -803,12 +849,30 @@ namespace castor
 	\~french
 	\brief		Specialisation de ParserParameterHelper pour ParameterType::eHdrColour.
 	*/
-	template<> struct ParserParameterHelper< ParameterType::eHdrColour >
+	template<> struct ParserParameterHelper< ParameterType::eHdrRgbColour >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
-		using ValueType = HdrColour;
+		using ValueType = HdrRgbColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eHdrColour;
+		CU_API static const ParameterType ParamType = ParameterType::eHdrRgbColour;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::eHdrColour.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::eHdrColour.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::eHdrRgbaColour >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = HdrRgbaColour;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::eHdrRgbaColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};

@@ -67,8 +67,8 @@ namespace GuiCommon
 		wxPGProperty * doCreateTextureImageProperty( wxString const & name
 			, castor3d::TextureLayoutSPtr texture );
 		void onDebugOverlaysChange( bool const & value );
-		void onAmbientLightChange( castor::Colour const & value );
-		void onBackgroundColourChange( castor::Colour const & value );
+		void onAmbientLightChange( castor::RgbColour const & value );
+		void onBackgroundColourChange( castor::RgbColour const & value );
 		void onBackgroundImageChange( castor::String const & value );
 
 	private:

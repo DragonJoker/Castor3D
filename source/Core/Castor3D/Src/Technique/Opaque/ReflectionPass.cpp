@@ -1,4 +1,4 @@
-﻿#include "ReflectionPass.hpp"
+#include "ReflectionPass.hpp"
 
 #include "Engine.hpp"
 
@@ -18,7 +18,7 @@
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
+#include "Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -1168,6 +1168,8 @@ namespace castor3d
 		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( index );
 		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( --index );
 		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index );
+		frameBuffer.unbind();
+
 		m_timer->stop();
 	}
 }

@@ -15,7 +15,7 @@
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
-#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
+#include "Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
 #include "Shader/Uniform/Uniform.hpp"
@@ -483,7 +483,7 @@ namespace castor3d
 		m_viewport.update();
 		m_matrixUbo.update( m_viewport.getProjection() );
 		m_blurCorrection->setValue( 1.0f );
-		m_fbo->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
+		m_fbo->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 
 		for ( size_t i{ 0u }; i < m_blurResultsAttaches.size(); ++i )
 		{

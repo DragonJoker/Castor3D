@@ -1,4 +1,4 @@
-﻿#include "BillboardList.hpp"
+#include "BillboardList.hpp"
 
 #include "Engine.hpp"
 
@@ -40,7 +40,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.getDimensions().getWidth(), p_obj.getDimensions().getHeight() ) > 0;
+			result = p_file.print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.getDimensions()[0], p_obj.getDimensions()[1] ) > 0;
 			MovableObject::TextWriter::checkError( result, "BillboardList dimensions" );
 		}
 

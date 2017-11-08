@@ -60,4 +60,10 @@ namespace castor3d
 		m_timerQuery[m_queryIndex]->getInfos( QueryInfo::eResult, time );
 		m_gpuTime = Nanoseconds( time );
 	}
+
+	void RenderPassTimer::reset()
+	{
+		m_cpuTime = 0_ns;
+		m_gpuTime = 0_ns;
+	}
 }

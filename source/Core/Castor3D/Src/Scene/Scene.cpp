@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+﻿#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -10,6 +10,7 @@
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
+#include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "ParticleSystem/ParticleSystem.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
@@ -167,7 +168,7 @@ namespace castor3d
 		{
 			Logger::logInfo( cuT( "Scene::write - Background colour" ) );
 			result = file.print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( scene.getBackgroundColour(), file )
+				&& RgbColour::TextWriter( String() )( scene.getBackgroundColour(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
 		}
@@ -184,7 +185,7 @@ namespace castor3d
 		{
 			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );
 			result = file.print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( scene.getAmbientLight(), file )
+				&& RgbColour::TextWriter( String() )( scene.getAmbientLight(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene ambient light" );
 		}
@@ -682,8 +683,21 @@ namespace castor3d
 			, mergeResource );
 
 		m_materialCacheView = makeCacheView< Material, EventType::ePreRender >( getName()
-			, eventInitialise
-			, eventClean
+			, [this]( MaterialSPtr element )
+			{
+				this->getListener().postEvent( makeInitialiseEvent( *element ) );
+				this->m_materialsListeners.emplace( element
+					, element->onChanged.connect( std::bind( &Scene::onMaterialChanged
+						, this
+						, std::placeholders::_1 ) ) );
+				m_dirtyMaterials = true;
+			}
+			, [this]( MaterialSPtr element )
+			{
+				m_dirtyMaterials = true;
+				this->m_materialsListeners.erase( element );
+				this->getListener().postEvent( makeCleanupEvent( *element ) );
+			}
 			, getEngine()->getMaterialCache() );
 		m_samplerCacheView = makeCacheView< Sampler, EventType::ePreRender >( getName()
 			, eventInitialise
@@ -873,64 +887,9 @@ namespace castor3d
 	void Scene::update()
 	{
 		m_rootNode->update();
-		std::vector< std::reference_wrapper< AnimatedObjectGroup > > groups;
-
-		m_animatedObjectGroupCache->forEach( [&groups]( AnimatedObjectGroup & group )
-		{
-			groups.push_back( group );
-		} );
-
-		if ( groups.size() > m_animationUpdater.getCount() )
-		{
-			for ( auto & group : groups )
-			{
-				m_animationUpdater.pushJob( [&group]()
-				{
-					group.get().update();
-				} );
-			}
-
-			m_animationUpdater.waitAll( Milliseconds::max() );
-		}
-		else
-		{
-			for ( auto & group : groups )
-			{
-				group.get().update();
-			}
-		}
-
-		if ( !m_skybox
-			&& !m_backgroundImage
-			&& getMaterialsType() == MaterialType::eLegacy )
-		{
-			m_skybox = std::make_unique< Skybox >( *getEngine() );
-			m_skybox->setScene( *this );
-			Size size{ 16, 16 };
-			constexpr PixelFormat format{ PixelFormat::eR8G8B8 };
-			UbPixel pixel{ true };
-			uint8_t c;
-			pixel.set< format >( { { m_backgroundColour.red().convertTo( c )
-				, m_backgroundColour.green().convertTo( c )
-				, m_backgroundColour.blue().convertTo( c ) } } );
-			auto buffer = PxBufferBase::create( size, format );
-			auto data = buffer->ptr();
-
-			for ( uint32_t i = 0u; i < 256; ++i )
-			{
-				std::memcpy( data, pixel.constPtr(), 3 );
-				data += 3;
-			}
-
-			m_skybox->getTexture().getImage( 0u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 1u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 2u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 3u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 4u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 5u ).initialiseSource( buffer );
-			getListener().postEvent( makeInitialiseEvent( *m_skybox ) );
-		}
-
+		doUpdateAnimations();
+		doUpdateNoSkybox();
+		doUpdateMaterials();
 		m_changed = false;
 	}
 
@@ -1113,5 +1072,101 @@ namespace castor3d
 		}
 
 		return m_backgroundColourSkybox;
+	}
+
+	void Scene::doUpdateAnimations()
+	{
+		std::vector< std::reference_wrapper< AnimatedObjectGroup > > groups;
+
+		m_animatedObjectGroupCache->forEach( [&groups]( AnimatedObjectGroup & group )
+		{
+			groups.push_back( group );
+		} );
+
+		if ( groups.size() > m_animationUpdater.getCount() )
+		{
+			for ( auto & group : groups )
+			{
+				m_animationUpdater.pushJob( [&group]()
+				{
+					group.get().update();
+				} );
+			}
+
+			m_animationUpdater.waitAll( Milliseconds::max() );
+		}
+		else
+		{
+			for ( auto & group : groups )
+			{
+				group.get().update();
+			}
+		}
+	}
+
+	void Scene::doUpdateNoSkybox()
+	{
+		if ( !m_skybox
+			&& !m_backgroundImage
+			&& getMaterialsType() == MaterialType::eLegacy )
+		{
+			m_skybox = std::make_unique< Skybox >( *getEngine() );
+			m_skybox->setScene( *this );
+			Size size{ 16, 16 };
+			constexpr PixelFormat format{ PixelFormat::eR8G8B8 };
+			UbPixel pixel{ true };
+			uint8_t c;
+			pixel.set< format >( { { m_backgroundColour.red().convertTo( c )
+				, m_backgroundColour.green().convertTo( c )
+				, m_backgroundColour.blue().convertTo( c ) } } );
+			auto buffer = PxBufferBase::create( size, format );
+			auto data = buffer->ptr();
+
+			for ( uint32_t i = 0u; i < 256; ++i )
+			{
+				std::memcpy( data, pixel.constPtr(), 3 );
+				data += 3;
+			}
+
+			m_skybox->getTexture().getImage( 0u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 1u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 2u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 3u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 4u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 5u ).initialiseSource( buffer );
+			getListener().postEvent( makeInitialiseEvent( *m_skybox ) );
+		}
+	}
+
+	void Scene::doUpdateMaterials()
+	{
+		if ( m_dirtyMaterials )
+		{
+			auto & cache = getEngine()->getMaterialCache();
+			cache.lock();
+			m_needsSubsurfaceScattering = false;
+			m_hasTransparentObjects = false;
+			m_hasOpaqueObjects = false;
+
+			for ( auto & matName : *m_materialCacheView )
+			{
+				auto material = cache.find( matName );
+				m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
+
+				for ( auto & pass : *material )
+				{
+					m_hasTransparentObjects |= pass->hasAlphaBlending();
+					m_hasOpaqueObjects |= !pass->hasAlphaBlending();
+				}
+			}
+
+			cache.unlock();
+			m_dirtyMaterials = false;
+		}
+	}
+
+	void Scene::onMaterialChanged( Material const & material )
+	{
+		m_dirtyMaterials = true;
 	}
 }

@@ -1,4 +1,4 @@
-﻿#include "WeightedBlendRendering.hpp"
+#include "WeightedBlendRendering.hpp"
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -24,7 +24,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *engine.getRenderSystem();
 		m_weightedBlendPassFrameBuffer = renderSystem.createFrameBuffer();
-		m_weightedBlendPassFrameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
+		m_weightedBlendPassFrameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 		bool result = m_weightedBlendPassFrameBuffer->initialise();
 
 		if ( result )
@@ -109,9 +109,10 @@ namespace castor3d
 		, Point2r const & jitter
 		, TextureUnit const & velocity )
 	{
+		static RgbaColour accumClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack );
+		static RgbaColour revealClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite );
+
 		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
-		static Colour accumClear = Colour::fromPredefined( PredefinedColour::eTransparentBlack );
-		static Colour revealClear = Colour::fromPredefined( PredefinedColour::eOpaqueWhite );
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();

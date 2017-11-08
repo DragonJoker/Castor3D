@@ -1,4 +1,4 @@
-﻿#include "GlPassBufferTest.hpp"
+#include "GlPassBufferTest.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -177,7 +177,7 @@ namespace Testing
 				fbo->attach( AttachmentPoint::eColour, 2u, output3Attach, TextureType::eTwoDimensions );
 				fbo->attach( AttachmentPoint::eColour, 3u, output4Attach, TextureType::eTwoDimensions );
 				fbo->unbind();
-				fbo->setClearColour( Colour::fromComponents( 0.0f, 0.0f, 0.0f, 0.0f ) );
+				fbo->setClearColour( RgbaColour::fromComponents( 0.0f, 0.0f, 0.0f, 0.0f ) );
 			}
 
 			~Result()
@@ -342,8 +342,8 @@ namespace Testing
 		auto material = m_engine.getMaterialCache().create( cuT( "Test" ), MaterialType::eLegacy );
 		material->createPass();
 		auto pass = material->getTypedPass< MaterialType::eLegacy >( 0u );
-		pass->setDiffuse( Colour::fromComponents( 0.0f, 0.1f, 0.2f, 1.0f ) );
-		pass->setSpecular( Colour::fromComponents( 0.3f, 0.4f, 0.5f, 1.0f ) );
+		pass->setDiffuse( RgbColour::fromComponents( 0.0f, 0.1f, 0.2f ) );
+		pass->setSpecular( RgbColour::fromComponents( 0.3f, 0.4f, 0.5f ) );
 		pass->setShininess( 0.6f );
 		pass->setAmbient( 0.7f );
 		pass->setEmissive( 0.8f );

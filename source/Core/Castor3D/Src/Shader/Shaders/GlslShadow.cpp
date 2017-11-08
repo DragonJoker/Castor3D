@@ -186,19 +186,15 @@ namespace castor3d
 		{
 			m_getLightSpacePosition = m_writer.implementFunction< Vec3 >( cuT( "getLightSpacePosition" )
 				, [this]( Mat4 const & lightMatrix
-					, Vec3 const & worldSpacePosition
-					, Vec3 const & lightDirection
-					, Vec3 const & normal )
+					, Vec3 const & worldSpacePosition )
 				{
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
 					// Perspective divide (result in range [-1,1]).
 					m_writer.returnStmt( lightSpacePosition.xyz() / lightSpacePosition.w() );
 				}
-				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
-				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
-				, InVec3( &m_writer, cuT( "lightDirection" ) )
-				, InVec3( &m_writer, cuT( "normal" ) ) );
+				, InMat4( &m_writer, cuT( "lightMatrix" ) )
+				, InVec3( &m_writer, cuT( "worldSpacePosition" ) ) );
 		}
 
 		void Shadow::doDeclareComputeDirectionalShadow()
@@ -211,7 +207,7 @@ namespace castor3d
 				{
 					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
+						, m_getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto moments = m_writer.declLocale( cuT( "moments" )
 						, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).xy() );
 
@@ -243,7 +239,7 @@ namespace castor3d
 				{
 					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot, SpotShadowMapCount );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
+						, m_getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto moments = m_writer.declLocale( cuT( "moments" )
 						, texture( c3d_mapShadowSpot[index], lightSpacePosition.xy() ).xy() );
 
@@ -330,7 +326,7 @@ namespace castor3d
 				{
 					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
+						, m_getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto moments = m_writer.declLocale( cuT( "moments" )
 						, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).xy() );
 

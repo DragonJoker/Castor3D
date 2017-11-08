@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_H___
@@ -284,7 +284,7 @@ namespace castor3d
 		 *\brief		Définit la couleur du fond
 		 *\param[in]	value	La nouvelle couleur
 		 */
-		inline void setBackgroundColour( castor::Colour const & value )
+		inline void setBackgroundColour( castor::RgbColour const & value )
 		{
 			m_backgroundColour = value;
 		}
@@ -294,7 +294,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur du fond
 		 */
-		inline castor::Colour const & getBackgroundColour()const
+		inline castor::RgbColour const & getBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}
@@ -365,7 +365,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur de la lumière ambiante
 		 */
-		inline castor::Colour const & getAmbientLight()const
+		inline castor::RgbColour const & getAmbientLight()const
 		{
 			return m_ambientLight;
 		}
@@ -377,7 +377,7 @@ namespace castor3d
 		 *\brief		Définit la couleur de la lumière ambiante.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAmbientLight( castor::Colour const & value )
+		inline void setAmbientLight( castor::RgbColour const & value )
 		{
 			m_ambientLight = value;
 		}
@@ -519,6 +519,42 @@ namespace castor3d
 		{
 			return m_config;
 		}
+		/**
+		 *\~english
+		 *\return		Tells if the scene needs a subsurface scattering pass.
+		 *\~french
+		 *\return		Dit si la scène a besoin d'une passe de subsurface scattering.
+		 */
+		inline bool needsSubsurfaceScattering()const
+		{
+			return m_needsSubsurfaceScattering;
+		}
+		/**
+		 *\~english
+		 *\return		Tells if the scene has opaque objects.
+		 *\~french
+		 *\return		Dit si la scène a des objets opaques.
+		 */
+		inline bool hasOpaqueObjects()const
+		{
+			return m_hasOpaqueObjects;
+		}
+		/**
+		 *\~english
+		 *\return		Tells if the scene has opaque objects.
+		 *\~french
+		 *\return		Dit si la scène a des objets opaques.
+		 */
+		inline bool hasTransparentObjects()const
+		{
+			return m_hasTransparentObjects;
+		}
+
+	private:
+		void doUpdateAnimations();
+		void doUpdateNoSkybox();
+		void doUpdateMaterials();
+		void onMaterialChanged( Material const & material );
 
 	public:
 		//!\~english	The signal raised when the scene has changed.
@@ -579,10 +615,10 @@ namespace castor3d
 		bool m_changed{ false };
 		//!\~english	Ambient light color
 		//!\~french		Couleur de la lumière ambiante
-		castor::Colour m_ambientLight;
+		castor::RgbColour m_ambientLight;
 		//!\~english	The scene background colour
 		//!\~french		La couleur de fond de la scène
-		castor::Colour m_backgroundColour;
+		castor::RgbColour m_backgroundColour;
 		//!\~english	The background image
 		//!\~french		L'image de fond
 		TextureLayoutSPtr m_backgroundImage;
@@ -619,6 +655,21 @@ namespace castor3d
 		//!\~english	The pool used to update the animations.
 		//!\~french		Le pool de mise à jour des animations.
 		castor::ThreadPool m_animationUpdater;
+		//!\~english	Tells if the scene needs a subsurface scattering pass.
+		//!\~french		Dit si la scène a besoin d'une passe de subsurface scattering.
+		bool m_needsSubsurfaceScattering{ false };
+		//!\~english	Tells if the scene has opaque objects.
+		//!\~french		Dit si la scène a des objets opaques.
+		bool m_hasOpaqueObjects{ false };
+		//!\~english	Tells if the scene has transparent objects.
+		//!\~french		Dit si la scène a des objets transparents.
+		bool m_hasTransparentObjects{ false };
+		//!\~english	The connections to the material changed signals.
+		//!\~french		Les connections aux signaux de matériau changé.
+		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
+		//!\~english	Tells if the materials hav changed since last update.
+		//!\~french		Dit si les matériaux ont changé depuis la dernière mise à jour.
+		bool m_dirtyMaterials{ true };
 
 	public:
 		//!\~english	The cameras root node name.

@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les facteurs de blend.
 		 */
-		inline const castor::Colour & getBlendFactors()const
+		inline const castor::RgbaColour & getBlendFactors()const
 		{
 			return m_blendFactors;
 		}
@@ -63,7 +63,7 @@ namespace castor3d
 		 *\brief		Définit les facteurs de blend.
 		 *\param[in]	p_factors	La nouvelle valeur.
 		 */
-		inline void setBlendFactors( const castor::Colour & p_factors )
+		inline void setBlendFactors( const castor::RgbaColour & p_factors )
 		{
 			m_blendFactors = p_factors;
 		}
@@ -451,7 +451,7 @@ namespace castor3d
 		bool m_independantBlend{ false };
 		//!\~english	Le blend colour.
 		//!\~french		La couleur de mélange.
-		castor::Colour m_blendFactors;
+		castor::RgbaColour m_blendFactors;
 		//!\~english	The blend states.
 		//!\~french		Les états de mélange.
 		std::array< stRT_BLEND_STATE, 8 > m_states;

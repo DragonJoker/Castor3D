@@ -1,4 +1,4 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -177,7 +177,7 @@ namespace castor3d
 		REQUIRE( m_geometryPassFrameBuffer->isComplete() );
 		m_geometryPassTexAttachs[size_t( DsTexture::eDepth )]->attach( AttachmentPoint::eDepth );
 		m_geometryPassFrameBuffer->setDrawBuffers();
-		m_geometryPassFrameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+		m_geometryPassFrameBuffer->clear( BufferComponent::eColour );
 		m_opaquePass.render( info
 			, shadowMaps
 			, jitter );
@@ -193,14 +193,27 @@ namespace castor3d
 			, camera
 			, m_geometryPassResult
 			, info );
-		m_subsurfaceScattering->render( m_geometryPassResult
-			, m_lightingPass->getDiffuse() );
-		m_reflection->render( m_geometryPassResult
-			, m_subsurfaceScattering->getResult()
-			, m_lightingPass->getSpecular()
-			, scene
-			, m_frameBuffer
-			, info );
+
+		if ( scene.needsSubsurfaceScattering() )
+		{
+			m_subsurfaceScattering->render( m_geometryPassResult
+				, m_lightingPass->getDiffuse() );
+			m_reflection->render( m_geometryPassResult
+				, m_subsurfaceScattering->getResult()
+				, m_lightingPass->getSpecular()
+				, scene
+				, m_frameBuffer
+				, info );
+		}
+		else
+		{
+			m_reflection->render( m_geometryPassResult
+				, m_lightingPass->getDiffuse()
+				, m_lightingPass->getSpecular()
+				, scene
+				, m_frameBuffer
+				, info );
+		}
 	}
 
 	void DeferredRendering::debugDisplay()const

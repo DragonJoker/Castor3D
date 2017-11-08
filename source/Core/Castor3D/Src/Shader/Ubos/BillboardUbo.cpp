@@ -1,4 +1,4 @@
-#include "BillboardUbo.hpp"
+﻿#include "BillboardUbo.hpp"
 
 #include "Engine.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -15,7 +15,7 @@ namespace castor3d
 		: m_ubo{ BillboardUbo::BufferBillboard
 			, *engine.getRenderSystem()
 			, BillboardUbo::BindingPoint }
-		, m_dimensions{ *m_ubo.createUniform< UniformType::eVec2i >( BillboardUbo::Dimensions ) }
+		, m_dimensions{ *m_ubo.createUniform< UniformType::eVec2f >( BillboardUbo::Dimensions ) }
 		, m_windowSize{ *m_ubo.createUniform< UniformType::eVec2i >( BillboardUbo::WindowSize ) }
 	{
 	}
@@ -24,9 +24,9 @@ namespace castor3d
 	{
 	}
 
-	void BillboardUbo::update( Size const & dimensions )const
+	void BillboardUbo::update( Point2f const & dimensions )const
 	{
-		m_dimensions.setValue( Point2i( dimensions[0], dimensions[1] ) );
+		m_dimensions.setValue( dimensions );
 		m_ubo.update();
 		m_ubo.bindTo( BillboardUbo::BindingPoint );
 	}

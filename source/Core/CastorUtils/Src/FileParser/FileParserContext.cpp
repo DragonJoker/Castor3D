@@ -1,10 +1,10 @@
-#include "FileParserContext.hpp"
+﻿#include "FileParserContext.hpp"
 
 namespace castor
 {
-	FileParserContext::FileParserContext( TextFile * p_pFile )
-		: m_file( p_pFile )
-		, m_line( 0 )
+	FileParserContext::FileParserContext( Path const & path )
+		: m_file{ path }
+		, m_line{ 0 }
 	{
 	}
 
@@ -12,23 +12,23 @@ namespace castor
 	{
 	}
 
-	void FileParserContext::registerUserContext( String const & p_name, void * p_data )
+	void FileParserContext::registerUserContext( String const & name, void * data )
 	{
-		if ( m_userContexts.find( p_name ) != m_userContexts.end() )
+		if ( m_userContexts.find( name ) != m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "A user context with name [" + string::stringCast< char >( p_name ) + "] already exists." );
+			CASTOR_EXCEPTION( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
 		}
 
-		m_userContexts.insert( std::make_pair( p_name, p_data ) );
+		m_userContexts.insert( std::make_pair( name, data ) );
 	}
 
-	void * FileParserContext::unregisterUserContext( String const & p_name )
+	void * FileParserContext::unregisterUserContext( String const & name )
 	{
-		auto it = m_userContexts.find( p_name );
+		auto it = m_userContexts.find( name );
 
 		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( p_name ) + "]." );
+			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}
 
 		void * result = it->second;
@@ -36,13 +36,13 @@ namespace castor
 		return result;
 	}
 
-	void * FileParserContext::getUserContext( String const & p_name )
+	void * FileParserContext::getUserContext( String const & name )
 	{
-		auto it = m_userContexts.find( p_name );
+		auto it = m_userContexts.find( name );
 
 		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( p_name ) + "]." );
+			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}
 
 		return it->second;

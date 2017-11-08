@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FRAME_BUFFER_H___
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Définit la couleur utilisée quand Clear est appelée sur le tampon couleur.
 		 *\param[in]	colour	La couleur.
 		 */
-		C3D_API void setClearColour( castor::Colour const & colour );
+		C3D_API void setClearColour( castor::RgbaColour const & colour );
 		/**
 		 *\~english
 		 *\brief		Defines the colour used when Clear is called on the color buffer.

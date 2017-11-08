@@ -1,4 +1,4 @@
-#include "ParticleSystem.hpp"
+﻿#include "ParticleSystem.hpp"
 
 #include "ComputeParticleSystem.hpp"
 #include "CpuParticleSystem.hpp"
@@ -41,7 +41,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.getDimensions().getWidth(), p_obj.getDimensions().getHeight() ) > 0;
+			result = p_file.print( 256, cuT( "%s\tdimensions %f %f\n" ), m_tabs.c_str(), p_obj.getDimensions()[0], p_obj.getDimensions()[1] ) > 0;
 			MovableObject::TextWriter::checkError( result, "ParticleSystem dimensions" );
 		}
 
@@ -197,7 +197,7 @@ namespace castor3d
 		}
 	}
 
-	void ParticleSystem::setDimensions( Size const & p_dimensions )
+	void ParticleSystem::setDimensions( Point2f const & p_dimensions )
 	{
 		m_dimensions = p_dimensions;
 
@@ -227,7 +227,7 @@ namespace castor3d
 		return m_material.lock();
 	}
 
-	Size const & ParticleSystem::getDimensions()const
+	Point2f const & ParticleSystem::getDimensions()const
 	{
 		return m_dimensions;
 	}

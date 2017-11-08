@@ -1,4 +1,4 @@
-﻿#include "PostEffect.hpp"
+#include "PostEffect.hpp"
 
 #include "Engine.hpp"
 
@@ -41,7 +41,7 @@ namespace castor3d
 		m_colourTexture.setTexture( colourTexture );
 		m_colourTexture.initialise();
 		m_fbo->initialise();
-		m_fbo->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
+		m_fbo->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 
 		m_fbo->bind();
 		m_fbo->attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->getType() );

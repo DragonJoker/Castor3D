@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_HDR_COLOUR_COMPONENT_H___
@@ -13,16 +13,17 @@ namespace castor
 	\version	0.9.0
 	\date		07/10=1/2016
 	\~english
-	\brief		Defines a HDR colour PixelComponents (R, G, B or A) to be used in castor::HdrColour.
+	\brief		Defines a HDR colour PixelComponents (R, G, B or A) to be used in castor::HdrRgbColour or castor::HdrRgbaColour.
 	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations
 	\~french
-	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans castor::HdrColour
-	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes
+	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans castor::HdrRgbColour ou castor::HdrRgbaColour.
+	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes.
 	*/
 	class HdrColourComponent
 	{
 	private:
-		friend class std::array< HdrColourComponent, 4 >;
+		friend class std::array< HdrColourComponent, 3u >;
+		friend class std::array< HdrColourComponent, 4u >;
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -32,7 +33,7 @@ namespace castor
 		 *\param[in]	p_object	L'objet à copier
 		 */
 		HdrColourComponent()
-			: m_pfComponent( nullptr )
+			: m_component( nullptr )
 		{
 		}
 
@@ -46,7 +47,7 @@ namespace castor
 		 *\param[in]	p_value	La valeur de la composante
 		 */
 		explicit HdrColourComponent( float * p_value )
-			: m_pfComponent( p_value )
+			: m_component( p_value )
 		{
 		}
 		/**
@@ -61,7 +62,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( HdrColourComponent const & p_rhs )
 		{
-			*m_pfComponent = *p_rhs.m_pfComponent;
+			*m_component = *p_rhs.m_component;
 			return *this;
 		}
 		/**
@@ -76,7 +77,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( float p_rhs )
 		{
-			*m_pfComponent = p_rhs;
+			*m_component = p_rhs;
 			return *this;
 		}
 		/**
@@ -91,7 +92,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( double p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -106,7 +107,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( long double p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -121,7 +122,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( int8_t p_rhs )
 		{
-			*m_pfComponent = float( uint8_t( p_rhs ) );
+			*m_component = float( uint8_t( p_rhs ) );
 			return *this;
 		}
 		/**
@@ -136,7 +137,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( uint8_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -151,7 +152,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( int16_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -166,7 +167,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( uint16_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -181,7 +182,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( int32_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -196,7 +197,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( uint32_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -211,7 +212,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( int64_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -226,7 +227,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator=( uint64_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			return *this;
 		}
 		/**
@@ -351,7 +352,7 @@ namespace castor
 		 */
 		void link( float * p_value )
 		{
-			m_pfComponent = p_value;
+			m_component = p_value;
 		}
 		/**
 		 *\~english
@@ -367,7 +368,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator+=( HdrColourComponent const & p_rhs )
 		{
-			*m_pfComponent += p_rhs.value();
+			*m_component += p_rhs.value();
 			return *this;
 		}
 		/**
@@ -384,7 +385,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator-=( HdrColourComponent const & p_rhs )
 		{
-			*m_pfComponent -= p_rhs.value();
+			*m_component -= p_rhs.value();
 			return *this;
 		}
 		/**
@@ -401,7 +402,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator*=( HdrColourComponent const & p_rhs )
 		{
-			*m_pfComponent *= p_rhs.value();
+			*m_component *= p_rhs.value();
 			return *this;
 		}
 		/**
@@ -418,7 +419,7 @@ namespace castor
 		 */
 		HdrColourComponent & operator/=( HdrColourComponent const & p_rhs )
 		{
-			*m_pfComponent /= p_rhs.value();
+			*m_component /= p_rhs.value();
 			return *this;
 		}
 		/**
@@ -434,7 +435,7 @@ namespace castor
 		template< typename T >
 		HdrColourComponent & operator+=( T const & p_rhs )
 		{
-			*m_pfComponent = float( *m_pfComponent + p_rhs );
+			*m_component = float( *m_component + p_rhs );
 			return *this;
 		}
 		/**
@@ -450,7 +451,7 @@ namespace castor
 		template< typename T >
 		HdrColourComponent & operator-=( T const & p_rhs )
 		{
-			*m_pfComponent = float( *m_pfComponent - p_rhs );
+			*m_component = float( *m_component - p_rhs );
 			return *this;
 		}
 		/**
@@ -466,7 +467,7 @@ namespace castor
 		template< typename T >
 		HdrColourComponent & operator*=( T const & p_rhs )
 		{
-			*m_pfComponent = float( *m_pfComponent * p_rhs );
+			*m_component = float( *m_component * p_rhs );
 			return *this;
 		}
 		/**
@@ -482,7 +483,7 @@ namespace castor
 		template< typename T >
 		HdrColourComponent & operator/=( T const & p_rhs )
 		{
-			*m_pfComponent = float( *m_pfComponent / p_rhs );
+			*m_component = float( *m_component / p_rhs );
 			return *this;
 		}
 		/**
@@ -495,7 +496,7 @@ namespace castor
 		 */
 		inline operator float()const
 		{
-			return *m_pfComponent;
+			return *m_component;
 		}
 		/**
 		 *\~english
@@ -507,7 +508,7 @@ namespace castor
 		 */
 		inline float const & value()const
 		{
-			return *m_pfComponent;
+			return *m_component;
 		}
 		/**
 		 *\~english
@@ -519,11 +520,11 @@ namespace castor
 		 */
 		inline float & value()
 		{
-			return *m_pfComponent;
+			return *m_component;
 		}
 
 	private:
-		float * m_pfComponent;
+		float * m_component;
 	};
 	/**
 	 *\~english

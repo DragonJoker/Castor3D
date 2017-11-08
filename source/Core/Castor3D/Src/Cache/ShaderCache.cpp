@@ -381,7 +381,7 @@ namespace castor3d
 				UBO_BILLBOARD( writer );
 
 				// Shader outputs
-				auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 				auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
 				auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 				auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -421,16 +421,16 @@ namespace castor3d
 						height = c3d_dimensions.y() / c3d_windowSize.y();
 					}
 
-					vtx_position = bbcenter
+					vtx_worldPosition = bbcenter
 						+ right * position.x() * width
 						+ up * position.y() * height;
 
 					vtx_texture = vec3( texture, 0.0 );
 					vtx_instance = gl_InstanceID;
 					auto curPosition = writer.declLocale( cuT( "curPosition" )
-						, writer.paren( c3d_curView * vec4( vtx_position, 1.0 ) ).xyz() );
+						, writer.paren( c3d_curView * vec4( vtx_worldPosition, 1.0 ) ).xyz() );
 					auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-						, writer.paren( c3d_prvView * vec4( vtx_position, 1.0 ) ) );
+						, writer.paren( c3d_prvView * vec4( vtx_worldPosition, 1.0 ) ) );
 					gl_Position = c3d_projection * vec4( curPosition, 1.0 );
 					prvPosition = c3d_projection * prvPosition;
 					vtx_curPosition = gl_Position.xyw();

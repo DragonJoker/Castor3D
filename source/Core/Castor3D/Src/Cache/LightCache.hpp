@@ -141,10 +141,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the lights texture.
+		 *\param[in]	camera	The camera used to tell if a light is applicable or not.
 		 *\~french
 		 *\brief		Met à jour la texture de sources lumineuses.
+		 *\param[in]	camera	La caméra utilisée pour déterminer si une source lumineuse est applicable ou pas.
 		 */
-		C3D_API void updateLights()const;
+		C3D_API void updateLights( Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Binds the lights texture.

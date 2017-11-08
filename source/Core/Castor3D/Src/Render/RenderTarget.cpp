@@ -1,4 +1,4 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -345,7 +345,7 @@ namespace castor3d
 		, CameraSPtr camera )
 	{
 		SceneSPtr scene = getScene();
-		fbo.m_frameBuffer->setClearColour( scene->getBackgroundColour() );
+		fbo.m_frameBuffer->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
 
 		// Render the scene through the RenderTechnique.
 		getEngine()->getMaterialCache().getPassBuffer().bind();

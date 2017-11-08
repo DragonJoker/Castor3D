@@ -1,4 +1,4 @@
-﻿#include "ShadowMapDirectional.hpp"
+#include "ShadowMapDirectional.hpp"
 
 #include "Engine.hpp"
 
@@ -48,7 +48,7 @@ namespace castor3d
 				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
 				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
 				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
 			}
 
 			auto texture = engine.getRenderSystem()->createTexture(
@@ -128,12 +128,14 @@ namespace castor3d
 
 	void ShadowMapDirectional::render()
 	{
+		m_pass->startTimer();
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
 		m_pass->render( 0u );
 		m_frameBuffer->unbind();
 
 		m_blur->blur( m_shadowMap.getTexture() );
+		m_pass->stopTimer();
 	}
 
 	void ShadowMapDirectional::debugDisplay( castor::Size const & size, uint32_t index )
@@ -146,17 +148,17 @@ namespace castor3d
 		position = Position{ int32_t( displaySize.getWidth() * ( 2 + index * 3 ) ), int32_t( displaySize.getHeight() * 3u ) };
 		getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
 			, displaySize
-			, *m_depthMap.getTexture() );
+			, *m_linearMap.getTexture() );
 	}
 
 	void ShadowMapDirectional::doInitialise()
 	{
-		m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
+		m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 		m_varianceAttach = m_frameBuffer->createAttachment( m_shadowMap.getTexture() );
-		m_depthAttach = m_frameBuffer->createAttachment( m_depthMap.getTexture() );
+		m_linearAttach = m_frameBuffer->createAttachment( m_linearMap.getTexture() );
 
 		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach, m_depthMap.getTexture()->getType() );
+		m_frameBuffer->attach( AttachmentPoint::eDepth, m_linearAttach, m_linearMap.getTexture()->getType() );
 		m_frameBuffer->attach( AttachmentPoint::eColour, 0u, m_varianceAttach, m_shadowMap.getTexture()->getType() );
 		ENSURE( m_frameBuffer->isComplete() );
 		m_frameBuffer->setDrawBuffers();
@@ -171,7 +173,7 @@ namespace castor3d
 	void ShadowMapDirectional::doCleanup()
 	{
 		m_blur.reset();
-		m_depthAttach.reset();
+		m_linearAttach.reset();
 		m_varianceAttach.reset();
 	}
 

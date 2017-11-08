@@ -30,7 +30,7 @@ namespace castor3d
 	OpaquePass::OpaquePass( Scene & scene
 		, Camera * camera
 		, SsaoConfig const & config )
-		: castor3d::RenderTechniquePass{ cuT( "deferred_opaque" )
+		: castor3d::RenderTechniquePass{ cuT( "Opaque pass" )
 			, scene
 			, camera
 			, false
@@ -107,7 +107,7 @@ namespace castor3d
 		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
-		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -122,13 +122,13 @@ namespace castor3d
 
 		std::function< void() > main = [&]()
 		{
-			auto p = writer.declLocale( cuT( "p" )
+			auto v4Position = writer.declLocale( cuT( "v4Position" )
 				, vec4( position.xyz(), 1.0 ) );
-			auto n = writer.declLocale( cuT( "n" )
+			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
 				, vec4( normal, 0.0 ) );
-			auto t = writer.declLocale( cuT( "t" )
+			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
 				, vec4( tangent, 0.0 ) );
-			auto tex = writer.declLocale( cuT( "tex" )
+			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 				, texture );
 			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
@@ -164,36 +164,34 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" )
-					, vec3( 1.0_f - c3d_time ) );
-				p = vec4( glsl::fma( p.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
-				n = vec4( glsl::fma( n.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
-				t = vec4( glsl::fma( t.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
-				tex = glsl::fma( tex, time, texture2 * c3d_time );
+				v4Position = vec4( glsl::mix( v4Position.xyz(), position2.xyz(), c3d_time ), 1.0 );
+				v4Normal = vec4( glsl::mix( v4Normal.xyz(), normal2.xyz(), c3d_time ), 1.0 );
+				v4Tangent = vec4( glsl::mix( v4Tangent.xyz(), tangent2.xyz(), c3d_time ), 1.0 );
+				v3Texture = glsl::mix( v3Texture, texture2, c3d_time );
 			}
 
-			vtx_texture = tex;
-			p = mtxModel * p;
-			vtx_position = p.xyz();
+			vtx_texture = v3Texture;
+			v4Position = mtxModel * v4Position;
+			vtx_worldPosition = v4Position.xyz();
 			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
-				, c3d_prvView * p );
-			p = c3d_curView * p;
+				, c3d_prvView * v4Position );
+			v4Position = c3d_curView * v4Position;
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{
-				vtx_normal = normalize( mtxNormal * -n.xyz() );
+				vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( mtxNormal * n.xyz() );
+				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
 			}
 
-			vtx_tangent = normalize( mtxNormal * t.xyz() );
+			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * p;
+			gl_Position = c3d_projection * v4Position;
 			prvVertex = c3d_projection * prvVertex;
 			// Convert the jitter from non-homogeneous coordiantes to homogeneous
 			// coordinates and add it:
@@ -205,7 +203,7 @@ namespace castor3d
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = tbn * vtx_position;
+			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 			vtx_curPosition = gl_Position.xyw();
 			vtx_prvPosition = prvVertex.xyw();
@@ -238,7 +236,7 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Inputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -412,7 +410,7 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Inputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -588,7 +586,7 @@ namespace castor3d
 		UBO_MODEL( writer );
 
 		// Fragment Inputs
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );

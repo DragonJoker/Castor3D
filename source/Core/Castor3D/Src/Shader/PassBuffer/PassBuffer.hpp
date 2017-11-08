@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PassBuffer_H___
@@ -160,7 +160,7 @@ namespace castor3d
 		std::vector< Pass const * > m_dirty;
 		//!\~english	The connections to change signal for current passes.
 		//!\~french		Les connexions aux signaux de changement des passes actuelles.
-		std::vector< Pass::OnChangedConnection > m_connections;
+		std::vector< OnPassChangedConnection > m_connections;
 		//!\~english	The maximum pass count.
 		//!\~french		Le nombre maximal de passes.
 		uint32_t m_passCount;

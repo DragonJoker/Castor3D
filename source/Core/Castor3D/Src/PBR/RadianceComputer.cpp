@@ -1,4 +1,4 @@
-#include "RadianceComputer.hpp"
+﻿#include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
 
@@ -154,7 +154,7 @@ namespace castor3d
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
 		};
-		REQUIRE( p_dstTexture->getDimensions() == m_size );
+		REQUIRE( dstTexture->getDimensions() == m_size );
 		std::array< FrameBufferAttachmentSPtr, 6 > attachs
 		{
 			{
@@ -201,12 +201,12 @@ namespace castor3d
 			UBO_MATRIX( writer );
 
 			// Outputs
-			auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			std::function< void() > main = [&]()
 			{
-				vtx_position = position;
+				vtx_worldPosition = position;
 				auto view = writer.declLocale( cuT( "normal" )
 					, mat4( mat3( c3d_curView ) ) );
 				gl_Position = writer.paren( c3d_projection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
@@ -222,7 +222,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
 
 			// Outputs
@@ -233,7 +233,7 @@ namespace castor3d
 				// From https://learnopengl.com/#!PBR/Lighting
 				// the sample direction equals the hemisphere's orientation 
 				auto normal = writer.declLocale( cuT( "normal" )
-					, normalize( vtx_position ) );
+					, normalize( vtx_worldPosition ) );
 
 				auto irradiance = writer.declLocale( cuT( "irradiance" )
 					, vec3( 0.0_f ) );

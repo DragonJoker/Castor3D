@@ -1,4 +1,4 @@
-﻿#include "ObjImporter.hpp"
+#include "ObjImporter.hpp"
 
 #include "ObjGroup.hpp"
 
@@ -680,14 +680,14 @@ namespace Obj
 						// Diffuse colour
 						StringStream stream( value );
 						stream >> components[0] >> components[1] >> components[2];
-						pass->setDiffuse( castor::Colour::fromComponents( components[0], components[1], components[2], real( 1.0 ) ) );
+						pass->setDiffuse( castor::RgbColour::fromComponents( components[0], components[1], components[2]) );
 					}
 					else if ( section == cuT( "ks" ) )
 					{
 						// Specular colour
 						StringStream stream( value );
 						stream >> components[0] >> components[1] >> components[2];
-						pass->setSpecular( castor::Colour::fromComponents( components[0], components[1], components[2], real( 1.0 ) ) );
+						pass->setSpecular( castor::RgbColour::fromComponents( components[0], components[1], components[2] ) );
 					}
 					else if ( section == cuT( "tr" ) || section == cuT( "d" ) )
 					{

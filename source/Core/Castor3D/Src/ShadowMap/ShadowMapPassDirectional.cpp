@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassDirectional.hpp"
+#include "ShadowMapPassDirectional.hpp"
 
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureImage.hpp"

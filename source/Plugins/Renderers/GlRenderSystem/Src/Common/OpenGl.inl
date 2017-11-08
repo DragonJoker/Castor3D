@@ -1,4 +1,4 @@
-﻿#include <Log/Logger.hpp>
+#include <Log/Logger.hpp>
 #include <Graphics/Position.hpp>
 #include <Graphics/Rectangle.hpp>
 #include <Graphics/Size.hpp>
@@ -895,7 +895,7 @@ namespace GlRender
 		EXEC_FUNCTION( ClearColor, red, green, blue, alpha );
 	}
 
-	void OpenGl::ClearColor( castor::Colour const & p_colour )const
+	void OpenGl::ClearColor( castor::RgbaColour const & p_colour )const
 	{
 		EXEC_FUNCTION( ClearColor, p_colour.red().value(), p_colour.green().value(), p_colour.blue().value(), p_colour.alpha().value() );
 	}
@@ -1251,7 +1251,7 @@ namespace GlRender
 		EXEC_FUNCTION( PolygonOffset, p_fFactor, p_fUnits );
 	}
 
-	void OpenGl::BlendColor( castor::Colour const & p_colour )const
+	void OpenGl::BlendColor( castor::RgbaColour const & p_colour )const
 	{
 		EXEC_FUNCTION( BlendColor, p_colour.red().value(), p_colour.green().value(), p_colour.blue().value(), p_colour.alpha().value() );
 	}

@@ -64,7 +64,7 @@ namespace GuiCommon
 
 	private:
 		void OnMaterialChange( castor::String const & p_name );
-		void OnSizeChange( castor::Size const & p_size );
+		void OnSizeChange( castor::Point2f const & p_size );
 
 	private:
 		castor3d::BillboardList & m_billboard;

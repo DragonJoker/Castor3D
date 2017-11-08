@@ -80,7 +80,7 @@ namespace Ase
 		~AseFileParser();
 
 	private:
-		void doInitialiseParser( castor::TextFile & p_file )override;
+		void doInitialiseParser()override;
 		void doCleanupParser()override;
 		bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( p_strLine ) )override
 		{

@@ -137,7 +137,7 @@ namespace GlRender
 		}
 	}
 
-	void GlTextureAttachment::doClear( Colour const & p_colour )const
+	void GlTextureAttachment::doClear( RgbaColour const & p_colour )const
 	{
 		getOpenGl().ClearBuffer( GlComponent::eColour
 			, getAttachmentIndex()

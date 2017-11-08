@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_SHADOW_H___
@@ -80,8 +80,6 @@ namespace castor3d
 				, glsl::InFloat > m_chebyshevUpperBound;
 			glsl::Function< glsl::Vec3
 				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InVec3
 				, glsl::InVec3 > m_getLightSpacePosition;
 			glsl::Function< glsl::Float
 				, glsl::InMat4

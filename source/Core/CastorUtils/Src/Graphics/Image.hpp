@@ -239,7 +239,18 @@ namespace castor
 		 *\param[in]	p_clrColour	La couleur de remplissage
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & fill( Colour const & p_clrColour );
+		CU_API Image & fill( RgbColour const & p_colour );
+		/**
+		 *\~english
+		 *\brief		Fills all image pixels with the given colour
+		 *\param[in]	p_clrColour	The fill colour
+		 *\return		A reference to the image
+		 *\~french
+		 *\brief		Remplit tous les pixels de l'image avec la couleur donnée
+		 *\param[in]	p_clrColour	La couleur de remplissage
+		 *\return		La référence de l'image
+		 */
+		CU_API Image & fill( RgbaColour const & p_colour );
 		/**
 		 *\~english
 		 *\brief		Fills the wanted pixel with the given buffer
@@ -267,7 +278,20 @@ namespace castor
 		 *\param[in]	p_clrColour	La couleur
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & setPixel( uint32_t x, uint32_t y, Colour const & p_clrColour );
+		CU_API Image & setPixel( uint32_t x, uint32_t y, RgbColour const & p_clrColour );
+		/**
+		 *\~english
+		 *\brief		sets the colour of the wanted pixel to the given one
+		 *\param[in]	x,y			The pixel coordinates
+		 *\param[in]	p_clrColour	The colour
+		 *\return		A reference to the image
+		 *\~french
+		 *\brief		Définit la couleur du pixel demandé
+		 *\param[in]	x,y			Les coordonnées du pixel
+		 *\param[in]	p_clrColour	La couleur
+		 *\return		La référence de l'image
+		 */
+		CU_API Image & setPixel( uint32_t x, uint32_t y, RgbaColour const & p_clrColour );
 		/**
 		 *\~english
 		 *\brief		set the wanted pixel to the given pixel
@@ -328,7 +352,7 @@ namespace castor
 		 *\param[in]	x,y			Les coordonnées du pixel
 		 *\return		La couleur du pixel
 		 */
-		CU_API Colour getPixel( uint32_t x, uint32_t y )const;
+		CU_API RgbaColour getPixel( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given image into this one

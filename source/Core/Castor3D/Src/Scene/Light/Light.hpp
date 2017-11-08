@@ -259,7 +259,7 @@ namespace castor3d
 		 *\brief		Définit la couleur.
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setColour( castor::Colour const & value )
+		inline void setColour( castor::RgbColour const & value )
 		{
 			m_category->setColour( toRGBFloat( value ) );
 		}

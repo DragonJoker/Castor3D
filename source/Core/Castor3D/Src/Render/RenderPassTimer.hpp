@@ -63,6 +63,14 @@ namespace castor3d
 		C3D_API void stop();
 		/**
 		 *\~english
+		 *\brief		Reset the timer's times.
+		 *\~french
+		 *\brief
+		 *\brief		Réinitialise les temps du timer.
+		 */
+		C3D_API void reset();
+		/**
+		 *\~english
 		 *\return		The CPU time.
 		 *\~french
 		 *\return		Le temps CPU.

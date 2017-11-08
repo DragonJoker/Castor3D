@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BillboardUbo_H___
@@ -56,7 +56,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	dimensions	Les dimensions du billboard.
 		 */
-		C3D_API void update( castor::Size const & dimensions )const;
+		C3D_API void update( castor::Point2f const & dimensions )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -101,7 +101,7 @@ namespace castor3d
 		UniformBuffer m_ubo;
 		//!\~english	The dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions.
-		Uniform2i & m_dimensions;
+		Uniform2f & m_dimensions;
 		//!\~english	The window dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions de la fenêtre.
 		Uniform2i & m_windowSize;
@@ -110,7 +110,7 @@ namespace castor3d
 
 #define UBO_BILLBOARD( Writer )\
 	glsl::Ubo billboard{ writer, castor3d::BillboardUbo::BufferBillboard, castor3d::BillboardUbo::BindingPoint };\
-	auto c3d_dimensions = billboard.declMember< IVec2 >( castor3d::BillboardUbo::Dimensions );\
+	auto c3d_dimensions = billboard.declMember< Vec2 >( castor3d::BillboardUbo::Dimensions );\
 	auto c3d_windowSize = billboard.declMember< IVec2 >( castor3d::BillboardUbo::WindowSize );\
 	billboard.end()
 

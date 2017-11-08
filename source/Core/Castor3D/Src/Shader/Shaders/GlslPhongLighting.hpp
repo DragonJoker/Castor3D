@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_PhongLighting_H___
@@ -39,15 +39,6 @@ namespace castor3d
 				, glsl::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
-			C3D_API glsl::Vec3 computeBackLit( DirectionalLight const & light
-				, glsl::Vec3 const & worldEye
-				, FragmentInput const & fragmentIn )const;
-			C3D_API glsl::Vec3 computeBackLit( PointLight const & light
-				, glsl::Vec3 const & worldEye
-				, FragmentInput const & fragmentIn )const;
-			C3D_API glsl::Vec3 computeBackLit( SpotLight const & light
-				, glsl::Vec3 const & worldEye
-				, FragmentInput const & fragmentIn )const;
 
 		protected:
 			void doDeclareModel();
@@ -56,9 +47,6 @@ namespace castor3d
 			void doDeclareComputeSpotLight()override;
 			void doDeclareComputeOnePointLight()override;
 			void doDeclareComputeOneSpotLight()override;
-			void doDeclareComputeDirectionalLightBackLit()override;
-			void doDeclareComputePointLightBackLit()override;
-			void doDeclareComputeSpotLightBackLit()override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye
@@ -68,12 +56,6 @@ namespace castor3d
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
 			void doDeclareComputeLight();
-
-			glsl::Vec3 doComputeLightBackLit( Light const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & lightDirection
-				, FragmentInput const & fragmentIn );
-			void doDeclareComputeLightBackLit();
 
 		public:
 			C3D_API static const castor::String Name;
@@ -120,23 +102,6 @@ namespace castor3d
 				, glsl::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeOneSpot;
-			glsl::Function< glsl::Vec3
-				, InLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, FragmentInput > m_computeLightBackLit;
-			glsl::Function< glsl::Vec3
-				, DirectionalLight
-				, glsl::InVec3
-				, FragmentInput > m_computeDirectionalBackLit;
-			glsl::Function< glsl::Vec3
-				, PointLight
-				, glsl::InVec3
-				, FragmentInput > m_computePointBackLit;
-			glsl::Function< glsl::Vec3
-				, SpotLight
-				, glsl::InVec3
-				, FragmentInput > m_computeSpotBackLit;
 		};
 	}
 }

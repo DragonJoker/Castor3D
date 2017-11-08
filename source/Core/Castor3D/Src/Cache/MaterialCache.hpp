@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MATERIAL_CACHE_H___
@@ -165,15 +165,15 @@ namespace castor3d
 		C3D_API bool write( castor::TextFile & file )const;
 		/**
 		 *\~english
-		 *\brief		Reads materials from a text file
-		 *\param[in]	file	The file
-		 *\return		\p true if ok
+		 *\brief		Reads materials from a file.
+		 *\param[in]	path	The file access path.
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Lit les matériaux à partir d'un fichier texte
-		 *\param[in]	file	Le fichier
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Lit les matériaux à partir d'un fichier.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool read( castor::TextFile & file );
+		C3D_API bool read( castor::Path const & path );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material

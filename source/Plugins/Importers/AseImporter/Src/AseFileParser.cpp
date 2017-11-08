@@ -103,7 +103,7 @@ namespace Ase
 	{
 	}
 
-	void AseFileParser::doInitialiseParser( TextFile & p_file )
+	void AseFileParser::doInitialiseParser()
 	{
 		addParser( uint32_t( ASESection::eRoot ), cuT( "*3DSMAX_ASCIIEXPORT" ), AseparserRootFormat );
 		addParser( uint32_t( ASESection::eRoot ), cuT( "*COMMENT" ), AseparserRootComment );
@@ -224,7 +224,7 @@ namespace Ase
 		addParser( uint32_t( ASESection::eNormalsList ), cuT( "*MESH_FACENORMAL" ), AseparserNormalsListFaceNormal );
 		addParser( uint32_t( ASESection::eNormalsList ), cuT( "*MESH_VERTEXNORMAL" ), AseparserNormalsListVertexNormal );
 		addParser( uint32_t( ASESection::eNormalsList ), cuT( "}" ), AseparserNormalsListEnd );
-		std::shared_ptr< AseFileContext > pContext = std::make_shared< AseFileContext >( this, m_importer, &p_file, m_scene, m_mesh );
+		std::shared_ptr< AseFileContext > pContext = std::make_shared< AseFileContext >( this, m_importer, m_scene, m_mesh );
 		m_context = std::static_pointer_cast< FileParserContext >( pContext );
 		pContext->initialise();
 		pContext->strName.clear();
