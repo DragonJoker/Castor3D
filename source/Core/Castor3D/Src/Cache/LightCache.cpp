@@ -7,6 +7,7 @@
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -123,7 +124,7 @@ namespace castor3d
 		MyObjectCache::cleanup();
 	}
 
-	void ObjectCache< Light, castor::String >::updateLights()const
+	void ObjectCache< Light, castor::String >::updateLights( Camera const & camera )const
 	{
 		auto layout = m_lightsTexture.getTexture();
 
@@ -136,7 +137,11 @@ namespace castor3d
 			{
 				for ( auto light : lights )
 				{
-					light->bind( *m_lightsBuffer, index++ );
+					if ( light->getLightType() == LightType::eDirectional
+						|| camera.isVisible( light->getCubeBox(), light->getParent()->getDerivedTransformationMatrix() ) )
+					{
+						light->bind( *m_lightsBuffer, index++ );
+					}
 				}
 			}
 
