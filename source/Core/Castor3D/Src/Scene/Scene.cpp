@@ -1150,13 +1150,17 @@ namespace castor3d
 
 			for ( auto & matName : *m_materialCacheView )
 			{
-				auto material = cache.find( matName );
-				m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
-
-				for ( auto & pass : *material )
+				if ( cache.has( matName ) )
 				{
-					m_hasTransparentObjects |= pass->hasAlphaBlending();
-					m_hasOpaqueObjects |= !pass->hasAlphaBlending();
+					auto material = cache.find( matName );
+
+					m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
+
+					for ( auto & pass : *material )
+					{
+						m_hasTransparentObjects |= pass->hasAlphaBlending();
+						m_hasOpaqueObjects |= !pass->hasAlphaBlending();
+					}
 				}
 			}
 
