@@ -1,4 +1,4 @@
-﻿#include "Data/BinaryFile.hpp"
+#include "Data/BinaryFile.hpp"
 #include "Data/TextFile.hpp"
 #include "Math/Math.hpp"
 #include "Miscellaneous/StringUtils.hpp"
@@ -33,7 +33,7 @@ namespace castor
 
 			for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 			{
-				colour[Component( i )] = string::toDouble( splitted[i] );
+				colour[RgbComponent( i )] = string::toDouble( splitted[i] );
 			}
 		}
 
@@ -587,10 +587,10 @@ namespace castor
 	Point4f toARGBFloat( RgbColourT< ComponentType > const & colour )
 	{
 		Point4f result;
-		colour.get( RgbComponent::eAlpha ).convertTo( result[0] );
+		result[0] = 1.0f;
 		colour.get( RgbComponent::eRed ).convertTo( result[1] );
 		colour.get( RgbComponent::eGreen ).convertTo( result[2] );
-		result[3] = 1.0f;
+		colour.get( RgbComponent::eBlue ).convertTo( result[3] );
 		return result;
 	}
 
@@ -612,7 +612,7 @@ namespace castor
 		colour.get( RgbComponent::eBlue ).convertTo( result[0] );
 		colour.get( RgbComponent::eGreen ).convertTo( result[1] );
 		colour.get( RgbComponent::eRed ).convertTo( result[2] );
-		result[0] = 1.0f;
+		result[3] = 1.0f;
 		return result;
 	}
 

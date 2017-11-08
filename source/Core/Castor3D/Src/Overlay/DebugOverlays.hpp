@@ -240,13 +240,13 @@ namespace castor3d
 		float m_averageFps{ 0.0f };
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
-		uint32_t m_totalVertexCount;
-		uint32_t m_totalFaceCount;
-		uint32_t m_totalObjectsCount;
-		uint32_t m_visibleObjectsCount;
-		uint32_t m_particlesCount;
-		uint32_t m_totalLightsCount;
-		uint32_t m_visibleLightsCount;
+		uint32_t m_totalVertexCount{ 0 };
+		uint32_t m_totalFaceCount{ 0 };
+		uint32_t m_totalObjectsCount{ 0 };
+		uint32_t m_visibleObjectsCount{ 0 };
+		uint32_t m_particlesCount{ 0 };
+		uint32_t m_totalLightsCount{ 0 };
+		uint32_t m_visibleLightsCount{ 0 };
 	};
 }
 
