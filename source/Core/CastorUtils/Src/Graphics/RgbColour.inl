@@ -1,4 +1,4 @@
-#include "Data/BinaryFile.hpp"
+﻿#include "Data/BinaryFile.hpp"
 #include "Data/TextFile.hpp"
 #include "Math/Math.hpp"
 #include "Miscellaneous/StringUtils.hpp"

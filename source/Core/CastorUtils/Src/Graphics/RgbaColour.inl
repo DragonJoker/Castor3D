@@ -1,4 +1,4 @@
-#include "Data/BinaryFile.hpp"
+﻿#include "Data/BinaryFile.hpp"
 #include "Data/TextFile.hpp"
 #include "Math/Math.hpp"
 #include "Miscellaneous/StringUtils.hpp"
@@ -492,7 +492,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] += rhs[Component( i )];
+			m_arrayComponents[i] += rhs[RgbaComponent( i )];
 		}
 
 		return *this;
@@ -503,7 +503,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] -= rhs[Component( i )];
+			m_arrayComponents[i] -= rhs[RgbaComponent( i )];
 		}
 
 		return *this;
