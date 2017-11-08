@@ -1,4 +1,4 @@
-﻿#include "ShadowMapSpot.hpp"
+#include "ShadowMapSpot.hpp"
 
 #include "Engine.hpp"
 
@@ -127,12 +127,14 @@ namespace castor3d
 
 	void ShadowMapSpot::render()
 	{
+		m_pass->startTimer();
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
 		m_pass->render();
 		m_frameBuffer->unbind();
 
 		m_blur->blur( m_shadowMap.getTexture() );
+		m_pass->stopTimer();
 	}
 
 	void ShadowMapSpot::debugDisplay( castor::Size const & size, uint32_t index )

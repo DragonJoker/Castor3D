@@ -1,4 +1,4 @@
-#include "ShadowMapPass.hpp"
+﻿#include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
@@ -26,6 +26,16 @@ namespace castor3d
 
 	ShadowMapPass::~ShadowMapPass()
 	{
+	}
+
+	void ShadowMapPass::startTimer()
+	{
+		m_timer->start();
+	}
+
+	void ShadowMapPass::stopTimer()
+	{
+		m_timer->stop();
 	}
 
 	void ShadowMapPass::doRenderNodes( SceneRenderNodes & nodes

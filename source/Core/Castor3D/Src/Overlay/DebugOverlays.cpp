@@ -115,7 +115,7 @@ namespace castor3d
 		m_externalTime = m_frameTimer.getElapsed();
 	}
 
-	void DebugOverlays::registerTimer( RenderPassTimer const & timer )
+	void DebugOverlays::registerTimer( RenderPassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
 		
@@ -206,7 +206,7 @@ namespace castor3d
 		it->second.m_timers.emplace_back( std::ref( timer ) );
 	}
 
-	void DebugOverlays::unregisterTimer( RenderPassTimer const & timer )
+	void DebugOverlays::unregisterTimer( RenderPassTimer & timer )
 	{
 		auto itC = m_renderPasses.find( timer.getCategory() );
 
@@ -274,6 +274,7 @@ namespace castor3d
 				{
 					cpu += timer.get().getCpuTime();
 					gpu += timer.get().getGpuTime();
+					timer.get().reset();
 				}
 
 				pass.second.m_cpuValue->setCaption( StringStream{} << cpu );

@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPoint.hpp"
+#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -133,6 +133,8 @@ namespace castor3d
 
 	void ShadowMapPoint::render()
 	{
+		m_pass->startTimer();
+
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
 			m_frameBuffer->bind( FrameBufferTarget::eDraw );
@@ -144,6 +146,8 @@ namespace castor3d
 			m_pass->render( face );
 			m_frameBuffer->unbind();
 		}
+
+		m_pass->stopTimer();
 	}
 
 	void ShadowMapPoint::debugDisplay( castor::Size const & size, uint32_t index )

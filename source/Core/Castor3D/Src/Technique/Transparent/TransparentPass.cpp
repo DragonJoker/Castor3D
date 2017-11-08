@@ -107,7 +107,7 @@ namespace castor3d
 	TransparentPass::TransparentPass( Scene & scene
 		, Camera * camera
 		, SsaoConfig const & config )
-		: castor3d::RenderTechniquePass{ cuT( "weighted_blend_transparent" )
+		: castor3d::RenderTechniquePass{ cuT( "Transparent pass" )
 			, scene
 			, camera
 			, true

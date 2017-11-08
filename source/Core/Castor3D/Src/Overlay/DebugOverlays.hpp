@@ -108,7 +108,7 @@ namespace castor3d
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à enregistrer.
 		 */
-		void registerTimer( RenderPassTimer const & timer );
+		void registerTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
@@ -117,12 +117,12 @@ namespace castor3d
 		 *\brief		Désenregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
-		void unregisterTimer( RenderPassTimer const & timer );
+		void unregisterTimer( RenderPassTimer & timer );
 
 	private:
 		struct RenderPassOverlays
 		{
-			std::vector< std::reference_wrapper< RenderPassTimer const > > m_timers;
+			std::vector< std::reference_wrapper< RenderPassTimer > > m_timers;
 			PanelOverlaySPtr m_panel;
 			PanelOverlaySPtr m_titlePanel;
 			TextOverlaySPtr m_title;

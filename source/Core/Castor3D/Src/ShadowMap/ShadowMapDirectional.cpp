@@ -1,4 +1,4 @@
-﻿#include "ShadowMapDirectional.hpp"
+#include "ShadowMapDirectional.hpp"
 
 #include "Engine.hpp"
 
@@ -128,12 +128,14 @@ namespace castor3d
 
 	void ShadowMapDirectional::render()
 	{
+		m_pass->startTimer();
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
 		m_pass->render( 0u );
 		m_frameBuffer->unbind();
 
 		m_blur->blur( m_shadowMap.getTexture() );
+		m_pass->stopTimer();
 	}
 
 	void ShadowMapDirectional::debugDisplay( castor::Size const & size, uint32_t index )
