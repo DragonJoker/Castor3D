@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -402,6 +402,15 @@ namespace castor3d
 		return result;
 	}
 
+	void Pass::setSubsurfaceScattering( SubsurfaceScatteringUPtr && value )
+	{
+		m_subsurfaceScattering = std::move( value );
+		m_sssConnection = m_subsurfaceScattering->onChanged.connect( std::bind( &Pass::onSssChanged
+			, this
+			, std::placeholders::_1 ) );
+		onChanged( *this );
+	}
+
 	bool Pass::doPrepareTexture( TextureChannel channel
 		, uint32_t & index
 		, TextureUnitSPtr & opacitySource
@@ -535,5 +544,10 @@ namespace castor3d
 				}
 			}
 		}
+	}
+
+	void Pass::onSssChanged( SubsurfaceScattering const & sss )
+	{
+		onChanged( *this );
 	}
 }

@@ -1,4 +1,4 @@
-﻿#include "RenderTechnique.hpp"
+#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -315,6 +315,11 @@ namespace castor3d
 		doUpdateParticles( info );
 
 		// Render part
+		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->setDrawBuffers();
+		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+		m_frameBuffer.m_frameBuffer->unbind();
+
 		doRenderOpaque( jitter
 			, velocity
 			, info );
@@ -473,34 +478,39 @@ namespace castor3d
 		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
-		auto & camera = *m_renderTarget.getCamera();
-		getEngine()->getMaterialCache().getPassBuffer().bind();
+
+		if ( scene.hasOpaqueObjects() )
+		{
+			auto & camera = *m_renderTarget.getCamera();
+			getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if DEBUG_FORWARD_RENDERING
 
-		getEngine()->setPerObjectLighting( true );
-		camera.apply();
-		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass->render( info
-			, m_activeShadowMaps );
+			getEngine()->setPerObjectLighting( true );
+			camera.apply();
+			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+			m_frameBuffer.m_frameBuffer->setDrawBuffers();
+			m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+			m_opaquePass->render( info
+				, m_activeShadowMaps );
 
 #else
 
-		m_deferredRendering->render( info
-			, scene
-			, camera
-			, m_activeShadowMaps
-			, jitter
-			, velocity );
+			m_deferredRendering->render( info
+				, scene
+				, camera
+				, m_activeShadowMaps
+				, jitter
+				, velocity );
 
 #endif
+		}
 	}
 
 	void RenderTechnique::doUpdateParticles( RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
+
 		m_particleTimer->start();
 		scene.getParticleSystemCache().forEach( [this, &info]( ParticleSystem & particleSystem )
 		{
@@ -515,31 +525,35 @@ namespace castor3d
 		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
-		auto & camera = *m_renderTarget.getCamera();
-		getEngine()->getMaterialCache().getPassBuffer().bind();
+
+		if ( scene.hasTransparentObjects() )
+		{
+			auto & camera = *m_renderTarget.getCamera();
+			getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if USE_WEIGHTED_BLEND
 
-		m_weightedBlendRendering->render( info
-			, scene
-			, camera
-			, m_activeShadowMaps
-			, jitter
-			, velocity );
+			m_weightedBlendRendering->render( info
+				, scene
+				, camera
+				, m_activeShadowMaps
+				, jitter
+				, velocity );
 
 #else
 
-		getEngine()->setPerObjectLighting( true );
-		m_transparentPass->renderShadowMaps();
-		camera.apply();
-		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_transparentPass->render( info
-			, scene.hasShadows()
-			, m_activeShadowMaps );
-		m_frameBuffer.m_frameBuffer->unbind();
+			getEngine()->setPerObjectLighting( true );
+			m_transparentPass->renderShadowMaps();
+			camera.apply();
+			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+			m_frameBuffer.m_frameBuffer->setDrawBuffers();
+			m_transparentPass->render( info
+				, scene.hasShadows()
+				, m_activeShadowMaps );
+			m_frameBuffer.m_frameBuffer->unbind();
 
 #endif
+		}
 	}
 
 	void RenderTechnique::doApplyPostEffects()

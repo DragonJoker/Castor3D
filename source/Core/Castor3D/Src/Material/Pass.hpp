@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PASS_H___
@@ -23,11 +23,6 @@ namespace castor3d
 	class Pass
 		: public castor::OwnedBy< Material >
 	{
-	public:
-		using Changed = std::function< void( Pass const & ) >;
-		using OnChanged = castor::Signal< Changed >;
-		using OnChangedConnection = OnChanged::connection;
-
 	public:
 		/*!
 		\author Sylvain DOREMUS
@@ -190,6 +185,15 @@ namespace castor3d
 		 *\return		La combinaison d'indicateurs de passe.
 		 */
 		C3D_API PassFlags getPassFlags()const;
+		/**
+		 *\~english
+		 *\brief		Sets the subsurface scattering extended informations.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit les informations étendues pour le subsurface scattering.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		C3D_API void setSubsurfaceScattering( SubsurfaceScatteringUPtr && value );
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -481,6 +485,7 @@ namespace castor3d
 		inline void setAlphaFunc( castor3d::ComparisonFunc value )
 		{
 			m_alphaFunc = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -503,6 +508,7 @@ namespace castor3d
 		inline void setAlphaValue( float value )
 		{
 			m_alphaValue = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -534,18 +540,6 @@ namespace castor3d
 		{
 			REQUIRE( m_subsurfaceScattering );
 			return *m_subsurfaceScattering;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the subsurface scattering extended informations.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit les informations étendues pour le subsurface scattering.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setSubsurfaceScattering( SubsurfaceScatteringUPtr && value )
-		{
-			m_subsurfaceScattering = std::move( value );
 		}
 
 	protected:
@@ -622,32 +616,13 @@ namespace castor3d
 		void doReduceTexture( TextureChannel channel, castor::PixelFormat format );
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the pass and all it's dependencies.
-		 *\~french
-		 *\brief		Initialise la passe et toutes ses dépendances.
-		 */
+		void onSssChanged( SubsurfaceScattering const & sss );
 		virtual void doInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans up the pass and all it's dependencies.
-		 *\~french
-		 *\brief		Nettoie la passe et toutes ses dépendances.
-		 */
 		virtual void doCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Sets the global alpha value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur alpha globale.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
 		virtual void doSetOpacity( float value ) = 0;
 
 	public:
-		OnChanged onChanged;
+		OnPassChanged onChanged;
 
 	private:
 		//!\~english	Texture units.
@@ -698,6 +673,9 @@ namespace castor3d
 		//!\~english	The subsurface scattering extended informations.
 		//!\~french		Les informations étendus pour le subsurface scattering.
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
+		//!\~english	The connection to the subsurface scattering changed signal.
+		//!\~french		La connexion au signal de subsurface scattering modifié.
+		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 	};
 }
 

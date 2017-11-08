@@ -519,6 +519,42 @@ namespace castor3d
 		{
 			return m_config;
 		}
+		/**
+		 *\~english
+		 *\return		Tells if the scene needs a subsurface scattering pass.
+		 *\~french
+		 *\return		Dit si la scène a besoin d'une passe de subsurface scattering.
+		 */
+		inline bool needsSubsurfaceScattering()const
+		{
+			return m_needsSubsurfaceScattering;
+		}
+		/**
+		 *\~english
+		 *\return		Tells if the scene has opaque objects.
+		 *\~french
+		 *\return		Dit si la scène a des objets opaques.
+		 */
+		inline bool hasOpaqueObjects()const
+		{
+			return m_hasOpaqueObjects;
+		}
+		/**
+		 *\~english
+		 *\return		Tells if the scene has opaque objects.
+		 *\~french
+		 *\return		Dit si la scène a des objets opaques.
+		 */
+		inline bool hasTransparentObjects()const
+		{
+			return m_hasTransparentObjects;
+		}
+
+	private:
+		void doUpdateAnimations();
+		void doUpdateNoSkybox();
+		void doUpdateMaterials();
+		void onMaterialChanged( Material const & material );
 
 	public:
 		//!\~english	The signal raised when the scene has changed.
@@ -619,6 +655,21 @@ namespace castor3d
 		//!\~english	The pool used to update the animations.
 		//!\~french		Le pool de mise à jour des animations.
 		castor::ThreadPool m_animationUpdater;
+		//!\~english	Tells if the scene needs a subsurface scattering pass.
+		//!\~french		Dit si la scène a besoin d'une passe de subsurface scattering.
+		bool m_needsSubsurfaceScattering{ false };
+		//!\~english	Tells if the scene has opaque objects.
+		//!\~french		Dit si la scène a des objets opaques.
+		bool m_hasOpaqueObjects{ false };
+		//!\~english	Tells if the scene has transparent objects.
+		//!\~french		Dit si la scène a des objets transparents.
+		bool m_hasTransparentObjects{ false };
+		//!\~english	The connections to the material changed signals.
+		//!\~french		Les connections aux signaux de matériau changé.
+		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
+		//!\~english	Tells if the materials hav changed since last update.
+		//!\~french		Dit si les matériaux ont changé depuis la dernière mise à jour.
+		bool m_dirtyMaterials{ true };
 
 	public:
 		//!\~english	The cameras root node name.

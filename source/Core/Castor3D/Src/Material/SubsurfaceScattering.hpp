@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SubsurfaceScattering_H___
@@ -22,6 +22,11 @@ namespace castor3d
 	*/
 	class SubsurfaceScattering
 	{
+	public:
+		using Changed = std::function< void( SubsurfaceScattering const & ) >;
+		using OnChanged = castor::Signal< Changed >;
+		using OnChangedConnection = OnChanged::connection;
+
 	public:
 		/*!
 		\~english
@@ -75,6 +80,7 @@ namespace castor3d
 		inline void setGaussianWidth( float value )
 		{
 			m_gaussianWidth = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -97,6 +103,7 @@ namespace castor3d
 		inline void setStrength( float value )
 		{
 			m_strength = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -109,6 +116,7 @@ namespace castor3d
 		inline void addProfileFactor( castor::Point4f const & value )
 		{
 			m_profileFactors.push_back( value );
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -160,6 +168,9 @@ namespace castor3d
 		{
 			return m_profileFactors.end();
 		}
+
+	public:
+		OnChanged onChanged;
 
 	private:
 		//!\~english	The Gaussian filter width.
