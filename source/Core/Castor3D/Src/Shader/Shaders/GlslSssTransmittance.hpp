@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_SssTransmittance_H___
@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <GlslIntrinsics.hpp>
 
-#define C3D_DEBUG_SSS_TRANSMITTANCE 1
+#define C3D_DEBUG_SSS_TRANSMITTANCE 0
 
 namespace castor3d
 {
@@ -45,7 +45,6 @@ namespace castor3d
 				, glsl::Float const & translucency )const;
 
 		private:
-			void doDeclareGetTransformedPosition();
 			void doDeclareComputeTransmittance();
 			
 			glsl::Vec3 doCompute( glsl::Float const & lightSpaceDepth
@@ -63,9 +62,6 @@ namespace castor3d
 			glsl::GlslWriter & m_writer;
 			bool m_shadowMap;
 
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InMat4 > m_getTransformedPosition;
 			glsl::Function < glsl::Vec3
 				, glsl::InFloat
 				, glsl::InInt

@@ -1,4 +1,4 @@
-﻿#include "GlslSssTransmittance.hpp"
+#include "GlslSssTransmittance.hpp"
 
 #include "GlslLight.hpp"
 #include "GlslPhongLighting.hpp"
@@ -30,7 +30,6 @@ namespace castor3d
 			{
 				auto c3d_transmittanceProfile = m_writer.declUniform< Vec4 >( SssTransmittance::TransmittanceProfile, 10u );
 				auto c3d_profileFactorsCount = m_writer.declUniform< Int >( SssTransmittance::ProfileFactorsCount );
-				doDeclareGetTransformedPosition();
 			}
 
 			doDeclareComputeTransmittance();
@@ -58,10 +57,12 @@ namespace castor3d
 					auto shrinkedPos = m_writer.declLocale( cuT( "shrinkedPos" )
 						, position - normal * 0.005 );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getTransformedPosition( shrinkedPos, light.m_transform() ) );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "d1" )
+						, writeFunctionCall< Vec3 >( &m_writer, cuT( "getLightSpacePosition" )
+							, light.m_transform()
+							, shrinkedPos ) );
+					auto shadowDepth = m_writer.declLocale( cuT( "d1" )
 						, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).r() );
-					result = doCompute( lightSpaceDepth
+					result = doCompute( shadowDepth
 						, material.m_transmittanceProfileSize()
 						, material.m_transmittanceProfile()
 						, material.m_gaussianWidth()
@@ -105,15 +106,15 @@ namespace castor3d
 						, shrinkedPos - light.m_position() );
 					auto direction = m_writer.declLocale( cuT( "direction" )
 						, vertexToLight );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "lightSpaceDepth" )
+					auto shadowDepth = m_writer.declLocale( cuT( "shadowDepth" )
 						, texture( c3d_mapDepthPoint, direction ).r() );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, writeFunctionCall< Vec3 >( &m_writer
 							, cuT( "calcWSPosition" )
 							, uv
-							, lightSpaceDepth
+							, shadowDepth
 							, c3d_mtxInvViewProj ) );
-					result = doCompute( lightSpaceDepth
+					result = doCompute( shadowDepth
 						, material.m_transmittanceProfileSize()
 						, material.m_transmittanceProfile()
 						, material.m_gaussianWidth()
@@ -144,18 +145,17 @@ namespace castor3d
 			{
 				IF( m_writer, material.m_subsurfaceScatteringEnabled() != 0_i )
 				{
-					auto c3d_mapDepthSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapDepthSpot );
-					/**
-					* First we shrink the position inwards the surface to avoid artifacts:
-					* (Note that this can be done once for all the lights)
-					*/
+					auto c3d_mapDepthSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
+					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( cuT( "shrinkedPos" )
 						, position - normal * 0.005 );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
-						, m_getTransformedPosition( shrinkedPos, light.m_transform() ) );
-					auto lightSpaceDepth = m_writer.declLocale( cuT( "d1" )
+						, writeFunctionCall< Vec3 >( &m_writer, cuT( "getLightSpacePosition" )
+							, light.m_transform()
+							, shrinkedPos ) );
+					auto shadowDepth = m_writer.declLocale( cuT( "shadowDepth" )
 						, texture( c3d_mapDepthSpot, lightSpacePosition.xy() ).r() );
-					result = doCompute( lightSpaceDepth
+					result = doCompute( shadowDepth
 						, material.m_transmittanceProfileSize()
 						, material.m_transmittanceProfile()
 						, material.m_gaussianWidth()
@@ -172,7 +172,7 @@ namespace castor3d
 			return result;
 		}
 
-		Vec3 SssTransmittance::doCompute( Float const & lightSpaceDepth
+		Vec3 SssTransmittance::doCompute( Float const & shadowDepth
 			, Int const & transmittanceProfileSize
 			, Array< Vec4 > const & transmittanceProfile
 			, Float const & sssWidth
@@ -183,7 +183,7 @@ namespace castor3d
 			, Float const & lightFarPlane
 			, Vec3 const & lightAttenuation )const
 		{
-			return m_compute( lightSpaceDepth
+			return m_compute( shadowDepth
 				, transmittanceProfileSize
 				, transmittanceProfile
 				, sssWidth
@@ -194,26 +194,11 @@ namespace castor3d
 				, lightFarPlane
 				, lightAttenuation );
 		}
-		
-		void SssTransmittance::doDeclareGetTransformedPosition()
-		{
-			m_getTransformedPosition = m_writer.implementFunction< Vec3 >( cuT( "getTransformedPosition" )
-				, [this]( Vec3 const & position
-					, Mat4 const & transform )
-				{
-					auto transformed = m_writer.declLocale( cuT( "transformed" )
-						, transform * vec4( position, 1.0_f ) );
-					// Perspective divide (result in range [0,1]).
-					m_writer.returnStmt( transformed.xyz() / transformed.w() );
-				}
-				, InVec3( &m_writer, cuT( "position" ) )
-				, InMat4( &m_writer, cuT( "transform" ) ) );
-		}
 
 		void SssTransmittance::doDeclareComputeTransmittance()
 		{
 			m_compute = m_writer.implementFunction< Vec3 >( cuT( "sssTransmittance" )
-				, [this]( Float const & lightSpaceDepth
+				, [this]( Float const & shadowDepth
 					, Int const & transmittanceProfileSize
 					, Array< Vec4 > const & transmittanceProfile
 					, Float const & sssWidth
@@ -241,7 +226,7 @@ namespace castor3d
 							 * Now we calculate the thickness from the light point of view:
 							 */
 							auto d = m_writer.declLocale( cuT( "d" )
-								, glsl::abs( lightSpaceDepth - lightSpacePosition.z() ) * lightFarPlane );
+								, glsl::abs( shadowDepth - lightSpacePosition.z() ) * lightFarPlane );
 
 #if C3D_DEBUG_SSS_TRANSMITTANCE
 
@@ -261,6 +246,7 @@ namespace castor3d
 								* clamp( 0.3_f + dot( lightVector, -worldNormal )
 									, 0.0_f
 									, 1.0_f );
+							//factor = vec3( lightSpacePosition.z() );
 
 #else
 
@@ -295,7 +281,7 @@ namespace castor3d
 
 					m_writer.returnStmt( factor );
 				}
-				, InFloat{ &m_writer, cuT( "lightSpaceDepth" ) }
+				, InFloat{ &m_writer, cuT( "shadowDepth" ) }
 				, InInt{ &m_writer, cuT( "transmittanceProfileSize" ) }
 				, InArrayParam< Vec4 >{ &m_writer, cuT( "transmittanceProfile" ), 10u }
 				, InFloat{ &m_writer, cuT( "sssWidth" ) }
