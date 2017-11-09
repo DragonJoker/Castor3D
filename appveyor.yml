@@ -25,8 +25,8 @@ branches:
 install:
   - cmd: git submodule init
   - cmd: git submodule update
-  - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 15 2017
-  - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 15 2017 Win64
+  - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 14 2015
+  - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 14 2015 Win64
   - cmd: if "%platform%"=="Win32" set PLATFORM_NAME=x86
   - cmd: if "%platform%"=="x64"   set PLATFORM_NAME=x64
   - cmd: if "%configuration%"=="Release" set DEPS_CONFIG_NAME=release
@@ -57,7 +57,3 @@ after_build:
 test_script:
   - cmd: cd C:\projects\Castor3D\build
   - cmd: ctest --build-config %configuration% --output-on-failure
-
-artifacts:
-  - path: binaries\Castor3D-%PLATFORM_NAME%.7z
-    name: 'Castor3D-%configuration%-%PLATFORM_NAME%-%APPVEYOR_REPO_COMMIT%'
