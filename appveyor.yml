@@ -1,4 +1,4 @@
-version: "{build}"
+version: '{branch}-rev{build}'
 
 os:
   - Visual Studio 2015
@@ -27,11 +27,11 @@ install:
   - cmd: git submodule update
   - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 14 2015
   - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 14 2015 Win64
-  - cmd: if "%platform%"=="Win32" set DEPS_PLATFORM_NAME=x86
-  - cmd: if "%platform%"=="x64"   set DEPS_PLATFORM_NAME=x64
+  - cmd: if "%platform%"=="Win32" set PLATFORM_NAME=x86
+  - cmd: if "%platform%"=="x64"   set PLATFORM_NAME=x64
   - cmd: if "%configuration%"=="Release" set DEPS_CONFIG_NAME=release
   - cmd: if "%configuration%"=="Debug"   set DEPS_CONFIG_NAME=debug
-  - cmd: cd C:\projects\Castor3D\dependencies\vc14\%DEPS_PLATFORM_NAME%
+  - cmd: cd C:\projects\Castor3D\dependencies\vc14\%PLATFORM_NAME%
   - cmd: 7z x assimp-3.2-win32.zip
   - cmd: 7z x FbxSDK-2016.1.2-win32.zip
   - cmd: 7z x ffmpeg-20160422-git-268b5ae.zip
@@ -52,3 +52,11 @@ build:
 
 test_script:
   - cmd: ctest --build-config %configuration% --output-on-failure
+
+after_build:
+  - cmd: cd C:\projects\Castor3D\binaries
+  - cmd: 7z a Castor3D-%PLATFORM_NAME%.7z .\%PLATFORM_NAME%\Release\*
+  
+artifacts:
+  - path: binaries\Castor3D-%PLATFORM_NAME%.7z
+    name: 'Castor3D-%configuration%-%PLATFORM_NAME%-%APPVEYOR_REPO_COMMIT%'
