@@ -7,6 +7,7 @@ option( CASTOR_BUILD_SAMPLE_CASTOR_TD "Build Castor Tower Defense (needs GuiComm
 if ( MSVC )
 	option( CASTOR_BUILD_SAMPLE_CASTOR_VIEWER_SHARP "Build CastorViewerSharp (needs ComCastor3D library)" FALSE )
 endif ()
+option( CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS "Allow video recording from CastorViewer" FALSE )
 
 function( SamplesInit )
 	set( GuiCmn "no (Not wanted)" PARENT_SCOPE )
@@ -36,21 +37,30 @@ function( SamplesBuild )
 				set( GTK2_FOUND TRUE )
 			endif()
 
-			find_package( FFMPEG COMPONENTS avcodec avformat avutil swscale swresample )
-
-			if( FFMPEG_FOUND )
-				include_directories( ${FFMPEG_INCLUDE_DIR} )
-			endif ()
-
 			set( GUICOMMON_C_FLAGS "" )
 			set( GUICOMMON_CXX_FLAGS "" )
 			set( GUICOMMON_LINKS "" )
 
-			if( FFMPEG_FOUND )
-				set( GUICOMMON_C_FLAGS "${GUICOMMON_C_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
-				set( GUICOMMON_CXX_FLAGS "${GUICOMMON_CXX_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
-				message( STATUS "+ Found FFMPEG" )
-			endif()
+			if ( ${CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS} )
+				find_package( FFMPEG COMPONENTS avcodec avformat avutil swscale swresample )
+
+				if( FFMPEG_FOUND )
+					include_directories( ${FFMPEG_INCLUDE_DIR} )
+					set( GUICOMMON_C_FLAGS "${GUICOMMON_C_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
+					set( GUICOMMON_CXX_FLAGS "${GUICOMMON_CXX_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
+					message( STATUS "+ Found FFMPEG" )
+
+					#FFMPEG Libs
+					set( FFMpegLibraries "" )
+					foreach(Lib ${FFMPEG_LIBRARIES})
+						if (FFMpegLibraries)
+							set(FFMpegLibraries "${FFMpegLibraries}|${Lib}")
+						else()
+							set(FFMpegLibraries "${Lib}")
+						endif()
+					endforeach()
+				endif()
+			endif ()
 
 			#we look for wxWidgets
 			if (WIN32)
@@ -79,31 +89,6 @@ function( SamplesBuild )
 						set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
 					else()
 						set( wxWidgetsLibraries "${Lib}" )
-					endif()
-				endforeach()
-
-				#OpenCV libs
-				set( OpenCVLibraries "")
-				set( OpenCV_LIBS
-					${OpenCV_LIBS}
-					${OpenCV_core_LIBRARY}
-					${OpenCV_highgui_LIBRARY}
-				)
-				foreach(Lib ${OpenCV_LIBS})
-					if (OpenCVLibraries)
-						set(OpenCVLibraries "${OpenCVLibraries}|${Lib}")
-					else()
-						set(OpenCVLibraries "${Lib}")
-					endif()
-				endforeach()
-
-				#FFMPEG Libs
-				set( FFMpegLibraries "")
-				foreach(Lib ${FFMPEG_LIBRARIES})
-					if (FFMpegLibraries)
-						set(FFMpegLibraries "${FFMpegLibraries}|${Lib}")
-					else()
-						set(FFMpegLibraries "${Lib}")
 					endif()
 				endforeach()
 
