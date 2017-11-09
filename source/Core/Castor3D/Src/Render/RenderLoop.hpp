@@ -99,7 +99,7 @@ namespace castor3d
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à enregistrer.
 		 */
-		C3D_API void registerTimer( RenderPassTimer const & timer );
+		C3D_API void registerTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
@@ -108,7 +108,7 @@ namespace castor3d
 		 *\brief		Désenregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
-		C3D_API void unregisterTimer( RenderPassTimer const & timer );
+		C3D_API void unregisterTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop.

@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPoint.hpp"
+#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -51,7 +51,7 @@ namespace castor3d
 				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
 			}
 
 			TextureUnit unit{ engine };
@@ -89,7 +89,7 @@ namespace castor3d
 				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				sampler->setBorderColour( Colour::fromPredefined( PredefinedColour::eOpaqueWhite ) );
+				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
 			}
 
 			TextureUnit unit{ engine };
@@ -133,17 +133,21 @@ namespace castor3d
 
 	void ShadowMapPoint::render()
 	{
+		m_pass->startTimer();
+
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
 			m_frameBuffer->bind( FrameBufferTarget::eDraw );
 			m_colourAttach[face]->attach( AttachmentPoint::eColour, 0u );
-			m_depthAttach[face]->attach( AttachmentPoint::eColour, 1u );
+			m_linearAttach[face]->attach( AttachmentPoint::eColour, 1u );
 			REQUIRE( m_frameBuffer->isComplete() );
-			m_frameBuffer->setDrawBuffers( { m_colourAttach[face], m_depthAttach[face] } );
+			m_frameBuffer->setDrawBuffers( { m_colourAttach[face], m_linearAttach[face] } );
 			m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
 			m_pass->render( face );
 			m_frameBuffer->unbind();
 		}
+
+		m_pass->stopTimer();
 	}
 
 	void ShadowMapPoint::debugDisplay( castor::Size const & size, uint32_t index )
@@ -156,7 +160,7 @@ namespace castor3d
 		position = Position{ int32_t( displaySize.getWidth() * 4 * ( index + 2 ) ), int32_t( displaySize.getHeight() * 4 ) };
 		getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
 			, displaySize
-			, *m_depthMap.getTexture() );
+			, *m_linearMap.getTexture() );
 	}
 
 	void ShadowMapPoint::doInitialise()
@@ -173,9 +177,9 @@ namespace castor3d
 		}
 
 		i = 0;
-		texture = m_depthMap.getTexture();
+		texture = m_linearMap.getTexture();
 
-		for ( auto & attach : m_depthAttach )
+		for ( auto & attach : m_linearAttach )
 		{
 			attach = m_frameBuffer->createAttachment( texture, CubeMapFace( i++ ) );
 			attach->setTarget( TextureType::eTwoDimensions );
@@ -189,7 +193,7 @@ namespace castor3d
 			attach.reset();
 		}
 
-		for ( auto & attach : m_depthAttach )
+		for ( auto & attach : m_linearAttach )
 		{
 			attach.reset();
 		}
@@ -218,7 +222,7 @@ namespace castor3d
 		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassPoint::FarPlane ) );
 		shadowMap.end();
 
-		auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
@@ -240,7 +244,7 @@ namespace castor3d
 				, *materials );
 
 			auto depth = writer.declLocale( cuT( "depth" )
-				, length( vtx_position - c3d_wordLightPosition ) );
+				, length( vtx_worldPosition - c3d_wordLightPosition ) );
 			pxl_linear = depth / c3d_farPlane;
 			pxl_depth.x() = pxl_linear;
 			pxl_depth.y() = pxl_linear * pxl_linear;

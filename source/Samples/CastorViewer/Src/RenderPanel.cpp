@@ -97,8 +97,8 @@ namespace CastorViewer
 				{
 					auto & legSource = static_cast< LegacyPass const & >( source );
 					auto pass = std::static_pointer_cast< LegacyPass >( result );
-					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
-					pass->setSpecular( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setDiffuse( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
+					pass->setSpecular( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
 					pass->setEmissive( legSource.getEmissive() );
 					pass->setShininess( legSource.getShininess() );
 				}
@@ -108,7 +108,7 @@ namespace CastorViewer
 				{
 					auto & mrSource = static_cast< MetallicRoughnessPbrPass const & >( source );
 					auto pass = std::static_pointer_cast< MetallicRoughnessPbrPass >( result );
-					pass->setAlbedo( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setAlbedo( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
 					pass->setRoughness( mrSource.getRoughness() );
 					pass->setMetallic( mrSource.getMetallic() );
 				}
@@ -118,7 +118,7 @@ namespace CastorViewer
 				{
 					auto & sgSource = static_cast< SpecularGlossinessPbrPass const & >( source );
 					auto pass = std::static_pointer_cast< SpecularGlossinessPbrPass >( result );
-					pass->setDiffuse( Colour::fromPredefined( PredefinedColour::eMedAlphaRed ) );
+					pass->setDiffuse( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
 					pass->setGlossiness( sgSource.getGlossiness() );
 					pass->setSpecular( sgSource.getSpecular() );
 				}

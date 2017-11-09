@@ -50,6 +50,21 @@ namespace castor3d
 		C3D_API ~ShadowMapPass();
 		/**
 		 *\~english
+		 *\brief		Starts the timers.
+		 *\~french
+		 *\brief		Démarre les timers.
+		 */
+		C3D_API void startTimer();
+		/**
+		 *\~english
+		 *\brief		Stops the timers.
+		 *\~french
+		 *\brief
+		 *\brief		Arrête les timers.
+		 */
+		C3D_API void stopTimer();
+		/**
+		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
 		 *\param[in]	camera	The viewer camera.

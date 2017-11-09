@@ -266,9 +266,13 @@ namespace castor
 	class ColourComponent;
 	class HdrColourComponent;
 	template< typename ComponentType >
-	class ColourT;
-	using Colour = ColourT< ColourComponent >;
-	using HdrColour = ColourT< HdrColourComponent >;
+	class RgbColourT;
+	template< typename ComponentType >
+	class RgbaColourT;
+	using RgbColour = RgbColourT< ColourComponent >;
+	using RgbaColour = RgbaColourT< ColourComponent >;
+	using HdrRgbColour = RgbColourT< HdrColourComponent >;
+	using HdrRgbaColour = RgbaColourT< HdrColourComponent >;
 	template< typename T >
 	class Line2D;
 	template< typename T >

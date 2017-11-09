@@ -1,4 +1,4 @@
-#include "SceneTreeItemProperty.hpp"
+﻿#include "SceneTreeItemProperty.hpp"
 
 #include <Render/RenderLoop.hpp>
 #include <Scene/Scene.hpp>
@@ -65,13 +65,13 @@ namespace GuiCommon
 			{
 				wxColour colour;
 				colour << property->GetValue();
-				onAmbientLightChange( Colour::fromBGR( colour.GetRGB() ) );
+				onAmbientLightChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
 			else if ( property->GetName() == PROPERTY_SCENE_BACKGROUND_COLOUR )
 			{
 				wxColour colour;
 				colour << property->GetValue();
-				onBackgroundColourChange( Colour::fromBGR( colour.GetRGB() ) );
+				onBackgroundColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
 			else if ( property->GetName() == PROPERTY_SCENE_BACKGROUND_IMAGE )
 			{
@@ -100,7 +100,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void SceneTreeItemProperty::onAmbientLightChange( castor::Colour const & value )
+	void SceneTreeItemProperty::onAmbientLightChange( castor::RgbColour const & value )
 	{
 		doApplyChange( [value, this]()
 		{
@@ -108,7 +108,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void SceneTreeItemProperty::onBackgroundColourChange( castor::Colour const & value )
+	void SceneTreeItemProperty::onBackgroundColourChange( castor::RgbColour const & value )
 	{
 		doApplyChange( [value, this]()
 		{

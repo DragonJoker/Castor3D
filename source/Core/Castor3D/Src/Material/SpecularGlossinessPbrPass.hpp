@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SpecularGlossinessPbrPass_H___
@@ -99,7 +99,7 @@ namespace castor3d
 		 *\brief		Définit la couleur d'albédo.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setDiffuse( castor::Colour const & value )
+		inline void setDiffuse( castor::RgbColour const & value )
 		{
 			m_diffuse = value;
 			onChanged( *this );
@@ -125,7 +125,7 @@ namespace castor3d
 		 *\brief		Définit la spécularité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setSpecular( castor::Colour const & value )
+		inline void setSpecular( castor::RgbColour const & value )
 		{
 			m_specular = value;
 			onChanged( *this );
@@ -136,7 +136,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur.
 		 */
-		inline castor::Colour const & getDiffuse()const
+		inline castor::RgbColour const & getDiffuse()const
 		{
 			return m_diffuse;
 		}
@@ -156,7 +156,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La spécularité.
 		 */
-		inline castor::Colour const & getSpecular()const
+		inline castor::RgbColour const & getSpecular()const
 		{
 			return m_specular;
 		}
@@ -178,10 +178,10 @@ namespace castor3d
 	private:
 		//!\~english	The diffuse colour.
 		//!\~french		La couleur diffuse.
-		castor::Colour m_diffuse;
+		castor::RgbColour m_diffuse;
 		//!\~english	The specular colour.
 		//!\~french		La couleur spéculaire.
-		castor::Colour m_specular;
+		castor::RgbColour m_specular;
 		//!\~english	The reflectance.
 		//!\~french		La réflectivité.
 		float m_glossiness{ 0.0 };

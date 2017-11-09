@@ -1,4 +1,4 @@
-﻿#include "GlslSpecularBrdfLighting.hpp"
+#include "GlslSpecularBrdfLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -140,47 +140,13 @@ namespace castor3d
 				, parentOutput );
 			m_writer << endi;
 		}
-		
 
-		Vec3 SpecularBrdfLightingModel::computeBackLit( DirectionalLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, FragmentInput const & fragmentIn )const
-		{
-			return m_computeDirectionalBackLit( DirectionalLight{ light }
-				, worldEye
-				, specular
-				, FragmentInput{ fragmentIn } );
-		}
-
-		Vec3 SpecularBrdfLightingModel::computeBackLit( PointLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, FragmentInput const & fragmentIn )const
-		{
-			return m_computePointBackLit( PointLight{ light }
-				, worldEye
-				, specular
-				, FragmentInput{ fragmentIn } );
-		}
-
-		Vec3 SpecularBrdfLightingModel::computeBackLit( SpotLight const & light
-			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, FragmentInput const & fragmentIn )const
-		{
-			return m_computeSpotBackLit( SpotLight{ light }
-				, worldEye
-				, specular
-				, FragmentInput{ fragmentIn } );
-		}
 		void SpecularBrdfLightingModel::doDeclareModel()
 		{
 			doDeclareDistribution();
 			doDeclareGeometry();
 			doDeclareFresnelShlick();
 			doDeclareComputeLight();
-			doDeclareComputeLightBackLit();
 		}
 
 		void SpecularBrdfLightingModel::doDeclareComputeDirectionalLight()
@@ -530,117 +496,6 @@ namespace castor3d
 				, output );
 		}
 
-		void SpecularBrdfLightingModel::doDeclareComputeDirectionalLightBackLit()
-		{
-			OutputComponents output{ m_writer };
-			m_computeDirectionalBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
-				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( -light.m_direction().xyz() ) );
-
-					m_writer.returnStmt( doComputeLightBackLit( light.m_lightBase()
-						, worldEye
-						, lightDirection
-						, specular
-						, fragmentIn ) );
-				}
-				, DirectionalLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void SpecularBrdfLightingModel::doDeclareComputePointLightBackLit()
-		{
-			OutputComponents output{ m_writer };
-			m_computePointBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
-				, [this]( PointLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_vertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
-						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( lightToVertex ) );
-
-					auto backLit = m_writer.declLocale( cuT( "backLit" )
-						, doComputeLightBackLit( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, specular
-							, fragmentIn ) );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, glsl::fma( light.m_attenuation().z()
-							, distance * distance
-							, glsl::fma( light.m_attenuation().y()
-								, distance
-								, light.m_attenuation().x() ) ) );
-					m_writer.returnStmt( backLit / attenuation );
-				}
-				, PointLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, FragmentInput{ m_writer } );
-		}
-
-		void SpecularBrdfLightingModel::doDeclareComputeSpotLightBackLit()
-		{
-			OutputComponents output{ m_writer };
-			m_computeSpotBackLit = m_writer.implementFunction< Vec3 >( cuT( "computeBackLit" )
-				, [this]( SpotLight const & light
-					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, FragmentInput const & fragmentIn )
-				{
-					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_vertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
-						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( lightToVertex ) );
-					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
-						, dot( lightDirection, -light.m_direction() ) );
-					auto backLit = m_writer.declLocale( cuT( "backLit" )
-						, vec3( 0.0_f ) );
-
-					IF( m_writer, spotFactor > light.m_cutOff() )
-					{
-						backLit = doComputeLightBackLit( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, specular
-							, fragmentIn );
-						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, glsl::fma( light.m_attenuation().z()
-								, distance * distance
-								, glsl::fma( light.m_attenuation().y()
-									, distance
-									, light.m_attenuation().x() ) ) );
-						spotFactor = glsl::fma( m_writer.paren( 1.0_f - spotFactor )
-							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
-							, 1.0_f );
-						backLit = spotFactor * backLit / attenuation;
-					}
-					FI;
-
-					m_writer.returnStmt( backLit );
-				}
-				, SpotLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, FragmentInput{ m_writer } );
-		}
-
 		void SpecularBrdfLightingModel::doDeclareComputeLight()
 		{
 			OutputComponents output{ m_writer };
@@ -718,55 +573,6 @@ namespace castor3d
 				, InFloat( &m_writer, cuT( "shadowFactor" ) )
 				, FragmentInput{ m_writer }
 				, output );
-		}
-
-		void SpecularBrdfLightingModel::doDeclareComputeLightBackLit()
-		{
-			OutputComponents output{ m_writer };
-			m_computeLightBackLit = m_writer.implementFunction< Vec3 >( cuT( "doComputeLightBackLit" )
-				, [this]( Light const & light
-					, Vec3 const & worldEye
-					, Vec3 const & direction
-					, Vec3 const & specular
-					, FragmentInput const & fragmentIn )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto L = m_writer.declLocale( cuT( "L" )
-						, normalize( direction ) );
-					auto V = m_writer.declLocale( cuT( "V" )
-						, normalize( normalize( worldEye - fragmentIn.m_vertex ) ) );
-					auto H = m_writer.declLocale( cuT( "H" )
-						, normalize( L + V ) );
-					auto N = m_writer.declLocale( cuT( "N" )
-						, normalize( fragmentIn.m_normal ) );
-					auto radiance = m_writer.declLocale( cuT( "radiance" )
-						, light.m_colour() );
-
-					auto NdotL = m_writer.declLocale( cuT( "NdotL" )
-						, max( 0.0_f, dot( N, L ) ) );
-					auto HdotV = m_writer.declLocale( cuT( "HdotV" )
-						, max( 0.0_f, dot( H, V ) ) );
-
-					auto f0 = m_writer.declLocale( cuT( "f0" )
-						, specular );
-					auto specfresnel = m_writer.declLocale( cuT( "specfresnel" )
-						, m_schlickFresnel( HdotV, f0 ) );
-			
-					auto kS = m_writer.declLocale( cuT( "kS" )
-						, specfresnel );
-					auto kD = m_writer.declLocale( cuT( "kD" )
-						, vec3( 1.0_f ) - kS );
-
-					kD *= 1.0_f - length( specular );
-
-					m_writer.returnStmt( radiance * NdotL * kD / PI );
-				}
-				, InLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "direction" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, FragmentInput{ m_writer } );
 		}
 
 		void SpecularBrdfLightingModel::doDeclareDistribution()
@@ -878,19 +684,6 @@ namespace castor3d
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
 			m_writer << endi;
-		}
-
-		Vec3 SpecularBrdfLightingModel::doComputeLightBackLit( Light const & light
-			, Vec3 const & worldEye
-			, Vec3 const & direction
-			, Vec3 const & specular
-			, FragmentInput const & fragmentIn )
-		{
-			return m_computeLightBackLit( light
-				, worldEye
-				, direction
-				, specular
-				, FragmentInput{ fragmentIn } );
 		}
 
 		//***********************************************************************************************

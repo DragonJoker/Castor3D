@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_LIGHT_TREE_ITEM_PROPERTY_H___
@@ -66,7 +66,7 @@ namespace GuiCommon
 		void doCreateDirectionalLightProperties( wxPropertyGrid * p_grid, castor3d::DirectionalLightSPtr p_light );
 		void doCreatePointLightProperties( wxPropertyGrid * p_grid, castor3d::PointLightSPtr p_light );
 		void doCreateSpotLightProperties( wxPropertyGrid * p_grid, castor3d::SpotLightSPtr p_light );
-		void OnColourChange( castor::Colour const & p_value );
+		void OnColourChange( castor::RgbColour const & p_value );
 		void OnIntensityChange( castor::Point2f const & p_value );
 		void OnAttenuationChange( castor::Point3f const & p_value );
 		void OnCutOffChange( double p_value );

@@ -187,13 +187,13 @@ namespace castor3d
 			UBO_MATRIX( writer );
 
 			// Outputs
-			auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				vtx_position = position;
-				gl_Position = writer.paren( c3d_projection * c3d_curView * vec4( vtx_position, 1.0 ) );
+				vtx_worldPosition = position;
+				gl_Position = writer.paren( c3d_projection * c3d_curView * vec4( vtx_worldPosition, 1.0 ) );
 			} );
 
 			vtx = writer.finalise();
@@ -206,7 +206,7 @@ namespace castor3d
 
 			// Inputs
 			UBO_HDR_CONFIG( writer );
-			auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ) );
+			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 
 			glsl::Utils utils{ writer };
@@ -225,7 +225,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
+				auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_worldPosition ) ) );
 				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec2( uv.x(), 1.0_r - uv.y() ) ).rgb(), 1.0_f );
 				pxl_fragColor = vec4( utils.removeGamma( c3d_gamma, pxl_fragColor.xyz() ), pxl_fragColor.w() );
 			} );

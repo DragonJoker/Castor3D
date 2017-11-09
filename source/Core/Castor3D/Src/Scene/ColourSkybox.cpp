@@ -1,4 +1,4 @@
-﻿#include "ColourSkybox.hpp"
+#include "ColourSkybox.hpp"
 
 #include "Engine.hpp"
 
@@ -100,9 +100,9 @@ namespace castor3d
 		}
 	}
 
-	void ColourSkybox::setColour( castor::Colour const & value )
+	void ColourSkybox::setColour( castor::RgbColour const & value )
 	{
-		m_colour = HdrColour::fromComponents( value.red(), value.green(), value.blue(), value.alpha() );
+		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 	}
 
 	void ColourSkybox::doUpdateTextureImage( uint32_t index

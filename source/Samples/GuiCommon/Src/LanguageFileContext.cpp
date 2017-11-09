@@ -1,4 +1,4 @@
-#include "LanguageFileContext.hpp"
+﻿#include "LanguageFileContext.hpp"
 #include "StcContext.hpp"
 #include "StyleInfo.hpp"
 #include "LanguageInfo.hpp"
@@ -7,8 +7,8 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	LanguageFileContext::LanguageFileContext( TextFile * p_pFile )
-		:	FileParserContext( p_pFile )
+	LanguageFileContext::LanguageFileContext( Path const & path )
+		:	FileParserContext( path )
 	{
 		mapTypes[cuT( "default" )] = eSTC_TYPE_DEFAULT;
 		mapTypes[cuT( "word1" )] = eSTC_TYPE_WORD1;

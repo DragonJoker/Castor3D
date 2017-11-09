@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ColourSkybox_H___
@@ -72,7 +72,7 @@ namespace castor3d
 		 *\brief		Définit la couleur de la skybox.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setColour( castor::Colour const & value );
+		C3D_API void setColour( castor::RgbColour const & value );
 		/**
 		 *\~english
 		 *\brief		Defines the skybox's colour.
@@ -81,7 +81,7 @@ namespace castor3d
 		 *\brief		Définit la couleur de la skybox.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setColour( castor::HdrColour const & value )
+		inline void setColour( castor::HdrRgbColour const & value )
 		{
 			m_colour = value;
 		}
@@ -104,7 +104,7 @@ namespace castor3d
 	private:
 		//!\~english	The skybox colour.
 		//!\~french		La couleur de la skybox.
-		castor::ChangeTracked< castor::HdrColour > m_colour;
+		castor::ChangeTracked< castor::HdrRgbColour > m_colour;
 	};
 }
 

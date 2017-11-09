@@ -29,7 +29,7 @@ namespace TestRender
 	{
 	}
 
-	void TestCubeTextureFaceAttachment::doClear( Colour const & p_colour )const
+	void TestCubeTextureFaceAttachment::doClear( RgbaColour const & p_colour )const
 	{
 	}
 

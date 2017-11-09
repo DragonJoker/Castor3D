@@ -407,7 +407,7 @@ namespace castor3d
 		if ( result )
 		{
 			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
-			m_frameBuffer->setClearColour( Colour::fromPredefined( PredefinedColour::eOpaqueBlack ) );
+			m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 			m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD32F );
 			result = m_depthBuffer->create();
 		}

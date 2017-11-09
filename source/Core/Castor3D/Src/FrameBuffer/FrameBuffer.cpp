@@ -20,7 +20,7 @@ namespace castor3d
 	{
 	}
 
-	void FrameBuffer::setClearColour( castor::Colour const & colour )
+	void FrameBuffer::setClearColour( castor::RgbaColour const & colour )
 	{
 		m_redClear = colour.red();
 		m_greenClear = colour.green();

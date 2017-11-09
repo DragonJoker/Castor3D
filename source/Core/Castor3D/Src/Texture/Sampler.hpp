@@ -273,7 +273,7 @@ namespace castor3d
 		 *\brief		Récupère la couleur de bord de la texture
 		 *\return		La couleur
 		 */
-		inline	castor::Colour const & getBorderColour()const
+		inline	castor::RgbaColour const & getBorderColour()const
 		{
 			return m_clrBorderColour;
 		}
@@ -285,7 +285,7 @@ namespace castor3d
 		 *\brief		Définit la couleur de bord de la texture
 		 *\param[in]	p_crColour	La nouvelle valeur
 		 */
-		inline	void setBorderColour( castor::Colour const & p_crColour )
+		inline	void setBorderColour( castor::RgbaColour const & p_crColour )
 		{
 			m_clrBorderColour = p_crColour;
 		}
@@ -366,7 +366,7 @@ namespace castor3d
 		real m_rLodBias{ 0.0_r };
 		//!\~english	Texture border colour.
 		//!\~french		Couleur des bords de la texture.
-		castor::Colour m_clrBorderColour{ castor::Colour::fromComponents( 0, 0, 0, 0 ) };
+		castor::RgbaColour m_clrBorderColour{ castor::RgbaColour::fromComponents( 0, 0, 0, 0 ) };
 		//!\~english	Maximal anisotropic filtering value.
 		//!\~french		Valeur maximale pour le filtrage anisotropique.
 		real m_rMaxAnisotropy{ 1.0_r };

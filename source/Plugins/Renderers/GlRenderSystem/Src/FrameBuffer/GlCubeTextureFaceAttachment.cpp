@@ -1,4 +1,4 @@
-﻿#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
+#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
@@ -86,7 +86,7 @@ namespace GlRender
 		m_glAttachmentPoint = GlAttachmentPoint::eNone;
 	}
 
-	void GlCubeTextureFaceAttachment::doClear( Colour const & p_colour )const
+	void GlCubeTextureFaceAttachment::doClear( RgbaColour const & p_colour )const
 	{
 		getOpenGl().ClearBuffer( GlComponent::eColour
 			, getAttachmentIndex()

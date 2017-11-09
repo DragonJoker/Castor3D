@@ -92,12 +92,12 @@ namespace castor3d
 		} );
 	}
 
-	void RenderLoop::registerTimer( RenderPassTimer const & timer )
+	void RenderLoop::registerTimer( RenderPassTimer & timer )
 	{
 		m_debugOverlays->registerTimer( timer );
 	}
 
-	void RenderLoop::unregisterTimer( RenderPassTimer const & timer )
+	void RenderLoop::unregisterTimer( RenderPassTimer & timer )
 	{
 		m_debugOverlays->unregisterTimer( timer );
 	}

@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_PREREQUISITES_MATERIAL_H___
 #define ___C3D_PREREQUISITES_MATERIAL_H___
 
+#include <Design/Signal.hpp>
+
 namespace castor3d
 {
 	/**@name Material */
@@ -546,6 +548,14 @@ namespace castor3d
 	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
 	//! TextureUnit reference array
 	DECLARE_VECTOR( std::reference_wrapper< TextureUnit >, DepthMap );
+
+	using OnPassChangedFunction = std::function< void( Pass const & ) >;
+	using OnPassChanged = castor::Signal< OnPassChangedFunction >;
+	using OnPassChangedConnection = OnPassChanged::connection;
+
+	using OnMaterialChangedFunction = std::function< void( Material const & ) >;
+	using OnMaterialChanged = castor::Signal< OnMaterialChangedFunction >;
+	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 
 	//@}
 }

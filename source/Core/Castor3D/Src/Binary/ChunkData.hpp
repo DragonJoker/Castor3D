@@ -653,7 +653,7 @@ namespace castor3d
 	 *\param[in]	p_value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t const * getBuffer( castor::Colour const & p_value )
+	static inline uint8_t const * getBuffer( castor::RgbColour const & p_value )
 	{
 		return reinterpret_cast< uint8_t const * >( p_value.constPtr() );
 	}
@@ -667,7 +667,7 @@ namespace castor3d
 	 *\param[in]	p_value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t * getBuffer( castor::Colour & p_value )
+	static inline uint8_t * getBuffer( castor::RgbColour & p_value )
 	{
 		return reinterpret_cast< uint8_t * >( p_value.ptr() );
 	}
@@ -681,9 +681,51 @@ namespace castor3d
 	 *\param[in]	p_value	La valeur.
 	 *\return		La taille (sizeof( p_value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::Colour const & p_value )
+	static inline size_t getDataSize( castor::RgbColour const & p_value )
 	{
-		return size_t( castor::Component::eCount ) * sizeof( float );
+		return 3u * sizeof( float );
+	}
+	/**
+	 *\~english
+	 *\brief		Retrieves the beginning of the buffer for given value.
+	 *\param[in]	p_value	The value.
+	 *\return		The buffer.
+	 *\~french
+	 *\brief		Récupère le début du tampon représentant la valeur.
+	 *\param[in]	p_value	La valeur.
+	 *\return		Le tampon.
+	 */
+	static inline uint8_t const * getBuffer( castor::RgbaColour const & p_value )
+	{
+		return reinterpret_cast< uint8_t const * >( p_value.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Retrieves the beginning of the buffer for given value.
+	 *\param[in]	p_value	The value.
+	 *\return		The buffer.
+	 *\~french
+	 *\brief		Récupère le début du tampon représentant la valeur.
+	 *\param[in]	p_value	La valeur.
+	 *\return		Le tampon.
+	 */
+	static inline uint8_t * getBuffer( castor::RgbaColour & p_value )
+	{
+		return reinterpret_cast< uint8_t * >( p_value.ptr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Retrieves the value binary size.
+	 *\param[in]	p_value	The value.
+	 *\return		The size (sizeof( p_value ) for basic types).
+	 *\~french
+	 *\brief		Récupère la taille en octets de la valeur.
+	 *\param[in]	p_value	La valeur.
+	 *\return		La taille (sizeof( p_value ) pour les types basiques).
+	 */
+	static inline size_t getDataSize( castor::RgbaColour const & p_value )
+	{
+		return 4u * sizeof( float );
 	}
 	/**
 	 *\~english
@@ -1122,7 +1164,25 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	p_value	La valeur.
 	 */
-	static inline void prepareChunkData( castor::Colour & p_value )
+	static inline void prepareChunkData( castor::RgbColour & p_value )
+	{
+		if ( !castor::isBigEndian() )
+		{
+			for ( auto & value : p_value )
+			{
+				castor::switchEndianness( value );
+			}
+		}
+	}
+	/**
+	 *\~english
+	 *\brief			sets given value to big endian.
+	 *\param[in,out]	p_value	The value.
+	 *\~french
+	 *\brief			Met la valeur donnée en big endian.
+	 *\param[in,out]	p_value	La valeur.
+	 */
+	static inline void prepareChunkData( castor::RgbaColour & p_value )
 	{
 		if ( !castor::isBigEndian() )
 		{

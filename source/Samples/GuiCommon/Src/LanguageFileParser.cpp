@@ -1,4 +1,4 @@
-#include "LanguageFileParser.hpp"
+﻿#include "LanguageFileParser.hpp"
 #include "LanguageFileContext.hpp"
 #include "LanguageInfo.hpp"
 #include "StyleInfo.hpp"
@@ -19,9 +19,9 @@ namespace GuiCommon
 	{
 	}
 
-	void LanguageFileParser::doInitialiseParser( TextFile & p_file )
+	void LanguageFileParser::doInitialiseParser( Path const & path )
 	{
-		LanguageFileContextPtr pContext = std::make_shared< LanguageFileContext >( &p_file );
+		LanguageFileContextPtr pContext = std::make_shared< LanguageFileContext >( path );
 		m_context = pContext;
 		addParser( uint32_t( LANGSection::eRoot ), cuT( "language" ), Root_Language, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "pattern" ), Language_Pattern, { makeParameter< ParameterType::eText >() } );

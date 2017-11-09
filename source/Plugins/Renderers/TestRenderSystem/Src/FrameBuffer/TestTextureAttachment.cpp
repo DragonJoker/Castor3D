@@ -27,7 +27,7 @@ namespace TestRender
 	{
 	}
 
-	void TestTextureAttachment::doClear( Colour const & p_colour )const
+	void TestTextureAttachment::doClear( RgbaColour const & p_colour )const
 	{
 	}
 

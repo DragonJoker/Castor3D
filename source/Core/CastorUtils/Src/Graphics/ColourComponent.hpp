@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_COLOUR_COMPONENT_H___
@@ -14,18 +14,19 @@ namespace castor
 	\date		19/10/2011
 	\todo		Remove accessors, create traits
 	\~english
-	\brief		Defines a colour PixelComponents (R, G, B or A) to be used in castor::Colour.
-	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations
-				<br />A colour PixelComponents value is a floating number between 0.0 and 1.0
+	\brief		Defines a colour PixelComponents (R, G, B or A) to be used in castor::RgbColour or castor::RgbaColour.
+	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations.
+				<br />A colour PixelComponents value is a floating number between 0.0 and 1.0.
 	\~french
-	\brief		Représente une composante de couleur (R, V, B ou A) pour l'utilisation dans castor::Colour
-	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes
-				<br />La valeur d'une composante de couleur est un nombre flottant compris entre 0.0 et 1.0
+	\brief		Représente une composante de couleur (R, V, B ou A) pour l'utilisation dans castor::RgbColour ou castor::RgbaColour.
+	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes.
+				<br />La valeur d'une composante de couleur est un nombre flottant compris entre 0.0 et 1.0.
 	*/
 	class ColourComponent
 	{
 	private:
-		friend class std::array< ColourComponent, 4 >;
+		friend class std::array< ColourComponent, 4u >;
+		friend class std::array< ColourComponent, 3u >;
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -35,7 +36,7 @@ namespace castor
 		 *\param[in]	p_object	L'objet à copier
 		 */
 		ColourComponent()
-			: m_pfComponent( nullptr )
+			: m_component( nullptr )
 		{
 		}
 
@@ -49,7 +50,7 @@ namespace castor
 		 *\param[in]	p_value	La valeur de la composante
 		 */
 		explicit ColourComponent( float * p_value )
-			: m_pfComponent( p_value )
+			: m_component( p_value )
 		{
 		}
 		/**
@@ -64,7 +65,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( ColourComponent const & p_rhs )
 		{
-			*m_pfComponent = *p_rhs.m_pfComponent;
+			*m_component = *p_rhs.m_component;
 			return *this;
 		}
 		/**
@@ -79,7 +80,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( float p_rhs )
 		{
-			*m_pfComponent = p_rhs;
+			*m_component = p_rhs;
 			doClamp();
 			return *this;
 		}
@@ -95,7 +96,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( double p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			doClamp();
 			return *this;
 		}
@@ -111,7 +112,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( long double p_rhs )
 		{
-			*m_pfComponent = float( p_rhs );
+			*m_component = float( p_rhs );
 			doClamp();
 			return *this;
 		}
@@ -127,7 +128,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int8_t p_rhs )
 		{
-			*m_pfComponent = float( uint8_t( p_rhs ) ) / 255.0f;
+			*m_component = float( uint8_t( p_rhs ) ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -143,7 +144,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint8_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs ) / 255.0f;
+			*m_component = float( p_rhs ) / 255.0f;
 			return *this;
 		}
 		/**
@@ -158,7 +159,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int16_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs ) / 255.0f;
+			*m_component = float( p_rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -174,7 +175,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint16_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs ) / 255.0f;
+			*m_component = float( p_rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -190,7 +191,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int32_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs ) / 255.0f;
+			*m_component = float( p_rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -206,7 +207,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint32_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs ) / 255.0f;
+			*m_component = float( p_rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -222,7 +223,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int64_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs ) / 255.0f;
+			*m_component = float( p_rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -238,7 +239,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint64_t p_rhs )
 		{
-			*m_pfComponent = float( p_rhs ) / 255.0f;
+			*m_component = float( p_rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -364,7 +365,7 @@ namespace castor
 		 */
 		void link( float * p_value )
 		{
-			m_pfComponent = p_value;
+			m_component = p_value;
 			doClamp();
 		}
 		/**
@@ -381,7 +382,7 @@ namespace castor
 		 */
 		ColourComponent & operator+=( ColourComponent && p_rhs )
 		{
-			*m_pfComponent += p_rhs.value();
+			*m_component += p_rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -399,7 +400,7 @@ namespace castor
 		 */
 		ColourComponent & operator-=( ColourComponent && p_rhs )
 		{
-			*m_pfComponent -= p_rhs.value();
+			*m_component -= p_rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -417,7 +418,7 @@ namespace castor
 		 */
 		ColourComponent & operator*=( ColourComponent && p_rhs )
 		{
-			*m_pfComponent *= p_rhs.value();
+			*m_component *= p_rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -435,7 +436,7 @@ namespace castor
 		 */
 		ColourComponent & operator/=( ColourComponent && p_rhs )
 		{
-			*m_pfComponent /= p_rhs.value();
+			*m_component /= p_rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -455,7 +456,7 @@ namespace castor
 			float fValue = 0;
 			ColourComponent PixelComponents( &fValue );
 			PixelComponents = p_rhs;
-			*m_pfComponent += PixelComponents.value();
+			*m_component += PixelComponents.value();
 			doClamp();
 			return *this;
 		}
@@ -475,7 +476,7 @@ namespace castor
 			float fValue = 0;
 			ColourComponent PixelComponents( &fValue );
 			PixelComponents = p_rhs;
-			*m_pfComponent -= PixelComponents.value();
+			*m_component -= PixelComponents.value();
 			doClamp();
 			return *this;
 		}
@@ -495,7 +496,7 @@ namespace castor
 			float fValue = 0;
 			ColourComponent PixelComponents( &fValue );
 			PixelComponents = p_rhs;
-			*m_pfComponent *= PixelComponents.value();
+			*m_component *= PixelComponents.value();
 			doClamp();
 			return *this;
 		}
@@ -515,7 +516,7 @@ namespace castor
 			float fValue = 0;
 			ColourComponent PixelComponents( &fValue );
 			PixelComponents = p_rhs;
-			*m_pfComponent /= PixelComponents.value();
+			*m_component /= PixelComponents.value();
 			doClamp();
 			return *this;
 		}
@@ -529,7 +530,7 @@ namespace castor
 		 */
 		inline operator float()const
 		{
-			return *m_pfComponent;
+			return *m_component;
 		}
 		/**
 		 *\~english
@@ -541,7 +542,7 @@ namespace castor
 		 */
 		inline float const & value()const
 		{
-			return *m_pfComponent;
+			return *m_component;
 		}
 		/**
 		 *\~english
@@ -553,7 +554,7 @@ namespace castor
 		 */
 		inline float & value()
 		{
-			return *m_pfComponent;
+			return *m_component;
 		}
 
 	private:
@@ -561,16 +562,16 @@ namespace castor
 		{
 			if ( value() < 0 )
 			{
-				*m_pfComponent = 0;
+				*m_component = 0;
 			}
 			else if ( value() > 1 )
 			{
-				*m_pfComponent = 1;
+				*m_component = 1;
 			}
 		}
 
 	private:
-		float * m_pfComponent;
+		float * m_component;
 	};
 	/**
 	 *\~english

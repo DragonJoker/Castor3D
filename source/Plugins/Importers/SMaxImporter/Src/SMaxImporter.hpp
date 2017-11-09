@@ -656,7 +656,7 @@ namespace C3dSMax
 		void doProcessNextObjectChunk( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Mesh & p_mesh );
 		void doProcessNextMaterialChunk( castor3d::Scene & p_scene, SMaxChunk * p_chunk );
 		void doProcessMaterialMapChunk( SMaxChunk * p_chunk, castor::String & p_strName );
-		void doReadColorChunk( SMaxChunk * p_chunk, castor::Colour & p_clrColour );
+		void doReadColorChunk( SMaxChunk * p_chunk, castor::RgbColour & p_clrColour );
 		void doReadVertices( SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
 		void doReadVertexIndices( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
 		void doReadUVCoordinates( SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );

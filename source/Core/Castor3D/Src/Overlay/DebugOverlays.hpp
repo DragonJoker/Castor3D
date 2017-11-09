@@ -108,7 +108,7 @@ namespace castor3d
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à enregistrer.
 		 */
-		void registerTimer( RenderPassTimer const & timer );
+		void registerTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
@@ -117,19 +117,104 @@ namespace castor3d
 		 *\brief		Désenregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
-		void unregisterTimer( RenderPassTimer const & timer );
+		void unregisterTimer( RenderPassTimer & timer );
 
 	private:
-		struct RenderPassOverlays
+		void doCreateDebugPanel( OverlayCache & cache );
+
+	private:
+		class DebugPanel
 		{
-			std::vector< std::reference_wrapper< RenderPassTimer const > > m_timers;
+		public:
+			DebugPanel( castor::String const & name
+				, castor::String const & label
+				, uint32_t index
+				, OverlayCache & cache );
+			virtual ~DebugPanel();
+			void setVisible( bool visible );
+			virtual void update() = 0;
+
+		protected:
+			OverlayCache & m_cache;
 			PanelOverlaySPtr m_panel;
+			TextOverlaySPtr m_label;
+			TextOverlaySPtr m_value;
+		};
+
+		class TimeDebugPanel
+			: public DebugPanel
+		{
+		public:
+			TimeDebugPanel( castor::String const & name
+				, castor::String const & label
+				, uint32_t index
+				, OverlayCache & cache
+				, castor::Nanoseconds const & value );
+			void update()override;
+
+		private:
+			castor::Nanoseconds const & m_v;
+		};
+
+		class CountDebugPanel
+			: public DebugPanel
+		{
+		public:
+			CountDebugPanel( castor::String const & name
+				, castor::String const & label
+				, uint32_t index
+				, OverlayCache & cache
+				, uint32_t const & value );
+			void update()override;
+
+		private:
+			uint32_t const & m_v;
+		};
+
+		class FloatDebugPanel
+			: public DebugPanel
+		{
+		public:
+			FloatDebugPanel( castor::String const & name
+				, castor::String const & label
+				, uint32_t index
+				, OverlayCache & cache
+				, float const & value );
+			void update()override;
+
+		private:
+			float const & m_v;
+		};
+
+		class RenderPassOverlays
+		{
+		public:
+			RenderPassOverlays( RenderPassOverlays const & ) = delete;
+			RenderPassOverlays & operator=( RenderPassOverlays const & ) = delete;
+			RenderPassOverlays( RenderPassOverlays && ) = default;
+			RenderPassOverlays & operator=( RenderPassOverlays && ) = default;
+			RenderPassOverlays( castor::String const & category
+				, uint32_t index
+				, OverlayCache & cache );
+			~RenderPassOverlays();
+			void addTimer( RenderPassTimer & timer );
+			bool removeTimer( RenderPassTimer & timer );
+			castor::Nanoseconds update();
+			void setVisible( bool visible );
+
+		private:
+			OverlayCache & m_cache;
+			std::vector< std::reference_wrapper< RenderPassTimer > > m_timers;
+			PanelOverlaySPtr m_panel;
+			PanelOverlaySPtr m_titlePanel;
 			TextOverlaySPtr m_title;
 			TextOverlaySPtr m_cpuName;
 			TextOverlaySPtr m_cpuValue;
 			TextOverlaySPtr m_gpuName;
 			TextOverlaySPtr m_gpuValue;
 		};
+
+		using DebugPanelArray = std::vector< std::unique_ptr< DebugPanel > >;
 		using RenderPassOverlaysArray = std::map< castor::String, RenderPassOverlays >;
 
 	private:
@@ -138,84 +223,30 @@ namespace castor3d
 #else
 		static const uint32_t FRAME_SAMPLES_COUNT = 20;
 #endif
-		//!\~english	The tasks (CPU or GPU) timer.
-		//!\~french		Le timer pour les tâches (CPU ou GPU).
 		castor::PreciseTimer m_taskTimer;
-		//!\~english	The frame timer.
-		//!\~french		Le timer de frame.
 		castor::PreciseTimer m_frameTimer;
-		//!\~english	The debug timer.
-		//!\~french		Le timer de debug.
 		castor::PreciseTimer m_debugTimer;
-		//!\~english	The base debug panel overlay.
-		//!\~french		Le panneau d'incrustations de débogage.
-		OverlayWPtr m_debugPanel;
-		//!\~english	The CPU time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps CPU.
-		TextOverlaySPtr m_debugCpuTime;
-		//!\~english	The GPU client time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps client GPU (Temps perdu).
-		TextOverlaySPtr m_debugGpuClientTime;
-		//!\~english	The GPU server time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps serveur GPU (Temps de rendu).
-		TextOverlaySPtr m_debugGpuServerTime;
-		//!\~english	The debug time value overlay.
-		//!\~french		L'incrustation contenant la valeur du temps de débogage.
-		TextOverlaySPtr m_debugTime;
-		//!\~english	The external time value overlay.
-		//!\~french		L'incrustation contenant la valeur du temps externe.
-		TextOverlaySPtr m_externTime;
-		//!\~english	The total time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps total.
-		TextOverlaySPtr m_debugTotalTime;
-		//!\~english	The average FPS value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre moyen d'images par secondes.
-		TextOverlaySPtr m_debugAverageFps;
-		//!\~english	The average time value overlay.
-		//!\~french		L'incrustation contenant la valeur du temps moyen par images.
-		TextOverlaySPtr m_debugAverageTime;
-		//!\~english	The vertex count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre de sommets.
-		TextOverlaySPtr m_debugVertexCount;
-		//!\~english	The faces count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre de faces.
-		TextOverlaySPtr m_debugFaceCount;
-		//!\~english	The objects count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre d'objets.
-		TextOverlaySPtr m_debugObjectCount;
-		//!\~english	The visible objects count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre d'objets visibles.
-		TextOverlaySPtr m_debugVisibleObjectCount;
-		//!\~english	The particles count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre de particules.
-		TextOverlaySPtr m_debugParticlesCount;
-		//!\~english	The render passes overlays.
-		//!\~french		Les incrustations des passes de rendu.
+		DebugPanelArray m_debugPanels;
 		RenderPassOverlaysArray m_renderPasses;
-		//!\~english	The times of the 100 last frames.
-		//!\~french		Les temps des 100 dernières frames.
 		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;
-		//!\~english	The current frame index in m_framesTimes.
-		//!\~french		L'index de la frame courante, dans m_framesTimes.
 		uint32_t m_frameIndex{ 0 };
-		//!\~english	Tells if the debug overlays are successfully loaded.
-		//!\~french		Dit si les incrustations de débogage sont chargées correctement.
-		bool m_valid{ false };
-		//!\~english	Defines if the debug overlays are shown.
-		//!\~french		Définit si les incrustations de débogage sont affichées ou cachées.
 		bool m_visible{ false };
-		//!\~english	The CPU time.
-		//!\~french		Le temps CPU.
 		castor::Nanoseconds m_cpuTime{ 0 };
-		//!\~english	The GPU time.
-		//!\~french		Le temps GPU.
+		castor::Nanoseconds m_gpuClientTime{ 0 };
+		castor::Nanoseconds m_gpuTotalTime{ 0 };
 		castor::Nanoseconds m_gpuTime{ 0 };
-		//!\~english	The time spent out of the render loop.
-		//!\~french		Le temps passé hors de la boucle de rendu.
+		castor::Nanoseconds m_totalTime{ 0 };
 		castor::Nanoseconds m_externalTime{ 0 };
-		//!\~english	The locale used to display times.
-		//!\~french		La locale utilisée pour afficher les temps.
+		float m_averageFps{ 0.0f };
+		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
+		uint32_t m_totalVertexCount{ 0 };
+		uint32_t m_totalFaceCount{ 0 };
+		uint32_t m_totalObjectsCount{ 0 };
+		uint32_t m_visibleObjectsCount{ 0 };
+		uint32_t m_particlesCount{ 0 };
+		uint32_t m_totalLightsCount{ 0 };
+		uint32_t m_visibleLightsCount{ 0 };
 	};
 }
 

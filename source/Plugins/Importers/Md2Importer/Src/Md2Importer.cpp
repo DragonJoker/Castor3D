@@ -243,10 +243,10 @@ namespace C3DMd2
 		delete m_texCoords;
 		delete m_triangles;
 		delete m_frames;
-		m_pFile = NULL;
-		m_skins = NULL;
-		m_texCoords = NULL;
-		m_triangles = NULL;
-		m_frames = NULL;
+		m_pFile = nullptr;
+		m_skins = nullptr;
+		m_texCoords = nullptr;
+		m_triangles = nullptr;
+		m_frames = nullptr;
 	}
 }

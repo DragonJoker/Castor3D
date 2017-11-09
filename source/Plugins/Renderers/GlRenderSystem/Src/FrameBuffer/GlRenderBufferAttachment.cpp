@@ -90,7 +90,7 @@ namespace GlRender
 		}
 	}
 
-	void GlRenderBufferAttachment::doClear( Colour const & p_colour )const
+	void GlRenderBufferAttachment::doClear( RgbaColour const & p_colour )const
 	{
 		getOpenGl().ClearBuffer( GlComponent::eColour
 			, getAttachmentIndex()

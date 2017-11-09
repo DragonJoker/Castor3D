@@ -1266,7 +1266,7 @@ namespace castor3d
 		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
-		auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -1329,7 +1329,7 @@ namespace castor3d
 
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
-			vtx_position = v4Vertex.xyz();
+			vtx_worldPosition = v4Vertex.xyz();
 			v4Vertex = c3d_curView * v4Vertex;
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
@@ -1350,7 +1350,7 @@ namespace castor3d
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = tbn * vtx_position;
+			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 		};
 

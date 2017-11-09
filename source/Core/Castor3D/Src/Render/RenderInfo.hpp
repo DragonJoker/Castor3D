@@ -35,6 +35,12 @@ namespace castor3d
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
 		uint32_t m_particlesCount{ 0u };
+		//!\~english	The total lights count.
+		//!\~french		Le nombre total de lumières.
+		uint32_t m_totalLightsCount{ 0u };
+		//!\~english	The visible lights count.
+		//!\~french		Le nombre de lumières visibles.
+		uint32_t m_visibleLightsCount{ 0u };
 		//!\~english	The draw calls count.
 		//!\~french		Le nombre d'appels aux fonctions de dessin.
 		uint32_t m_drawCalls{ 0u };

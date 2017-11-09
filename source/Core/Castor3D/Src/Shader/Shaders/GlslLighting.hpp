@@ -69,9 +69,6 @@ namespace castor3d
 			virtual void doDeclareComputeSpotLight() = 0;
 			virtual void doDeclareComputeOnePointLight() = 0;
 			virtual void doDeclareComputeOneSpotLight() = 0;
-			virtual void doDeclareComputeDirectionalLightBackLit() = 0;
-			virtual void doDeclareComputePointLightBackLit() = 0;
-			virtual void doDeclareComputeSpotLightBackLit() = 0;
 
 		protected:
 			ShadowType m_shadows;

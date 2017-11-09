@@ -34,7 +34,7 @@ namespace Lwo
 {
 	LwoImporter::LwoImporter( castor3d::Engine & p_engine )
 		: Importer( p_engine )
-		, m_file( NULL )
+		, m_file( nullptr )
 		, m_bIgnored( false )
 		, m_bHasUv( false )
 	{
@@ -339,7 +339,7 @@ namespace Lwo
 		{
 			p_strString = szTmp;
 
-			if ( result && p_strString.size() % 2 == 0 )
+			if ( result && ( p_strString.size() % 2 ) == 0 )
 			{
 				m_file->seek( 1, File::OffsetMode::eCurrent );
 			}
@@ -1014,7 +1014,7 @@ namespace Lwo
 	{
 		stLWO_SUBCHUNK currentSubchunk;
 		stLWO_SUBCHUNK blockHeader;
-		Colour clrBase;
+		RgbColour clrBase;
 		MaterialSPtr pMaterial;
 		LegacyPassSPtr pass;
 		UI4 uiVx;
@@ -1051,7 +1051,6 @@ namespace Lwo
 					bigEndianToSystemEndian( clrBase.ptr()[0] );
 					bigEndianToSystemEndian( clrBase.ptr()[1] );
 					bigEndianToSystemEndian( clrBase.ptr()[2] );
-					clrBase.alpha() = 1.0f;
 					currentSubchunk.m_read += doReadVX( uiVx );
 					Logger::logDebug( StringStream() << cuT( "		Colour: " ) << clrBase.red().value() << cuT( ", " ) << clrBase.green().value() << cuT( ", " ) << clrBase.blue().value() << cuT( " - VX : 0x" ) << std::hex << uiVx );
 					break;
@@ -1368,9 +1367,9 @@ namespace Lwo
 					mapPntsIds.insert( std::make_pair( *it, uiCount ) );
 				}
 
-				for ( std::vector< Lwo::Face >::iterator it = arrayFaces.begin() ; it != arrayFaces.end() ; ++it )
+				for ( auto & face : arrayFaces )
 				{
-					m_pSubmesh->addFace( mapPntsIds[it->at( 1 )], mapPntsIds[it->at( 0 )], mapPntsIds[it->at( 2 )] );
+					m_pSubmesh->addFace( mapPntsIds[face[1]], mapPntsIds[face[0]], mapPntsIds[face[2]] );
 				}
 			}
 		}

@@ -51,7 +51,7 @@ namespace GuiCommon
 	void LightTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( m_light.getName() ) ) );
-		p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( toBGRPacked( Colour::fromRGB( m_light.getColour() ) ) ) ) );
+		p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( toBGRPacked( RgbColour::fromRGB( m_light.getColour() ) ) ) ) );
 		p_grid->Append( new Point2fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.getIntensity() ) );
 
 		switch ( m_light.getLightType() )
@@ -81,7 +81,7 @@ namespace GuiCommon
 			if ( property->GetName() == PROPERTY_LIGHT_COLOUR )
 			{
 				colour << property->GetValue();
-				OnColourChange( Colour::fromBGR( colour.GetRGB() ) );
+				OnColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
 			else if ( property->GetName() == PROPERTY_LIGHT_INTENSITY )
 			{
@@ -126,7 +126,7 @@ namespace GuiCommon
 		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->getExponent() );
 	}
 
-	void LightTreeItemProperty::OnColourChange( Colour const & p_value )
+	void LightTreeItemProperty::OnColourChange( RgbColour const & p_value )
 	{
 		doApplyChange( [p_value, this]()
 		{

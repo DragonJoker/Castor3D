@@ -1,4 +1,4 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -29,12 +29,12 @@
 #include "Shader/Shaders/GlslPhongLighting.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
-#include "Shader/Shaders/GlslSubsurfaceScattering.hpp"
+#include "Shader/Shaders/GlslSssTransmittance.hpp"
 
 using namespace castor;
 using namespace castor3d;
 
-#define C3D_DISABLE_SSSSS_BACKLIT 0
+#define C3D_DISABLE_SSSSS_TRANSMITTANCE 1
 
 namespace castor3d
 {
@@ -523,7 +523,7 @@ namespace castor3d
 		declareDecodeReceiver( writer );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare();
-		shader::SubsurfaceScattering sss{ writer
+		shader::SssTransmittance sss{ writer
 			, m_shadows && shadowType != ShadowType::eNone };
 		sss.declare( type );
 
@@ -584,7 +584,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -604,7 +604,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -624,7 +624,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -685,7 +685,7 @@ namespace castor3d
 		declareDecodeReceiver( writer );
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare();
-		shader::SubsurfaceScattering sss{ writer
+		shader::SssTransmittance sss{ writer
 			, m_shadows && shadowType != ShadowType::eNone };
 		sss.declare( type );
 
@@ -740,7 +740,7 @@ namespace castor3d
 			case LightType::eDirectional:
 				{
 					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 #	if !C3D_DEBUG_SSS_TRANSMITTANCE
 					lighting->compute( light
 						, eye
@@ -750,14 +750,12 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse = fma( lightDiffuse
-						, sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance )
-						, lightDiffuse );
+					lightDiffuse += sss.compute( material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, transmittance );
 #	else
 					lightDiffuse = sss.compute( material
 						, light
@@ -782,7 +780,7 @@ namespace castor3d
 			case LightType::ePoint:
 				{
 					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 #	if !C3D_DEBUG_SSS_TRANSMITTANCE
 					lighting->compute( light
 						, eye
@@ -792,14 +790,12 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse = fma( lightDiffuse
-						, sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance )
-						, lightDiffuse );
+					lightDiffuse += sss.compute( material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, transmittance );
 #	else
 					lightDiffuse = sss.compute( material
 						, light
@@ -824,7 +820,7 @@ namespace castor3d
 			case LightType::eSpot:
 				{
 					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 #	if !C3D_DEBUG_SSS_TRANSMITTANCE
 					lighting->compute( light
 						, eye
@@ -834,14 +830,12 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-					lightDiffuse = fma( lightDiffuse
-						, sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance )
-						, lightDiffuse );
+					lightDiffuse += sss.compute( material
+						, light
+						, texCoord
+						, wsPosition
+						, wsNormal
+						, transmittance );
 #	else
 					lightDiffuse = sss.compute( material
 						, light
@@ -909,7 +903,7 @@ namespace castor3d
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 		declareDecodeReceiver( writer );
-		shader::SubsurfaceScattering sss{ writer
+		shader::SssTransmittance sss{ writer
 			, m_shadows && shadowType != ShadowType::eNone };
 		sss.declare( type );
 
@@ -979,7 +973,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -1001,7 +995,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -1023,7 +1017,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_BACKLIT
+#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord

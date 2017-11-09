@@ -44,7 +44,7 @@ namespace castor3d
 		m_index = 0;
 	}
 
-	void FrameBufferAttachment::clear( castor::Colour const & p_colour )const
+	void FrameBufferAttachment::clear( castor::RgbaColour const & p_colour )const
 	{
 		REQUIRE( m_point == AttachmentPoint::eColour );
 		doClear( p_colour );

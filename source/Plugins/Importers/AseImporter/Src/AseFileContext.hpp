@@ -15,7 +15,7 @@ namespace Ase
 	\brief		The context used into parsing functions
 	\remark		While parsing a file, the context holds the important data retrieved
 	\~french
-	\brief		Le contexted d'analyse
+	\brief		Le contexte d'analyse
 	\remark		Pendant l'analyse d'un fichier, le contexte retient les données importantes
 	*/
 	class AseFileContext
@@ -25,7 +25,7 @@ namespace Ase
 		/**
 		 * Constructor
 		 */
-		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, castor::TextFile * p_pFile, castor3d::Scene & p_scene, castor3d::Mesh * p_mesh );
+		AseFileContext( castor::Path const & path, AseFileParser * p_pParser, AseImporter & p_importer, castor3d::Scene & p_scene, castor3d::Mesh * p_mesh );
 		/**
 		 * Initialises all members
 		 */

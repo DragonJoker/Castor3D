@@ -28,7 +28,7 @@ namespace castor3d
 		if ( result )
 		{
 			result = p_file.print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_pass.getDiffuse(), p_file )
+				&& RgbColour::TextWriter( String() )( p_pass.getDiffuse(), p_file )
 				&& p_file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< LegacyPass >::checkError( result, "LegacyPass diffuse colour" );
 		}
@@ -36,7 +36,7 @@ namespace castor3d
 		if ( result )
 		{
 			result = p_file.print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( p_pass.getSpecular(), p_file )
+				&& RgbColour::TextWriter( String() )( p_pass.getSpecular(), p_file )
 				&& p_file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< LegacyPass >::checkError( result, "LegacyPass specular colour" );
 		}
@@ -70,8 +70,8 @@ namespace castor3d
 
 	LegacyPass::LegacyPass( Material & p_parent )
 		: Pass{ p_parent }
-		, m_diffuse{ Colour::fromRGBA( 0xFFFFFFFF ) }
-		, m_specular{ Colour::fromRGBA( 0xFFFFFFFF ) }
+		, m_diffuse{ RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_specular{ RgbColour::fromRGBA( 0xFFFFFFFF ) }
 	{
 	}
 
@@ -94,7 +94,5 @@ namespace castor3d
 
 	void LegacyPass::doSetOpacity( float p_value )
 	{
-		m_diffuse.alpha() = p_value;
-		m_specular.alpha() = p_value;
 	}
 }

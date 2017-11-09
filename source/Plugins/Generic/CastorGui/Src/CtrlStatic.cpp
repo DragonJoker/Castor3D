@@ -103,7 +103,7 @@ namespace CastorGui
 	{
 		if ( m_foregroundMaterial.expired() )
 		{
-			m_foregroundMaterial = CreateMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), Colour::fromComponents( 1.0, 1.0, 1.0, 1.0 ) );
+			m_foregroundMaterial = CreateMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
 		}
 
 		TextOverlaySPtr text = m_text.lock();

@@ -1,4 +1,4 @@
-﻿#include "GlslLighting.hpp"
+#include "GlslLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -103,9 +103,6 @@ namespace castor3d
 			doDeclareComputeDirectionalLight();
 			doDeclareComputePointLight();
 			doDeclareComputeSpotLight();
-			doDeclareComputeDirectionalLightBackLit();
-			doDeclareComputePointLightBackLit();
-			doDeclareComputeSpotLightBackLit();
 		}
 
 		void LightingModel::declareDirectionalModel( uint32_t & index )
@@ -119,7 +116,6 @@ namespace castor3d
 			doDeclareDirectionalLight();
 			doDeclareModel();
 			doDeclareComputeDirectionalLight();
-			doDeclareComputeDirectionalLightBackLit();
 		}
 
 		void LightingModel::declarePointModel( uint32_t & index )
@@ -133,7 +129,6 @@ namespace castor3d
 			doDeclarePointLight();
 			doDeclareModel();
 			doDeclareComputeOnePointLight();
-			doDeclareComputePointLightBackLit();
 		}
 
 		void LightingModel::declareSpotModel( uint32_t & index )
@@ -147,7 +142,6 @@ namespace castor3d
 			doDeclareSpotLight();
 			doDeclareModel();
 			doDeclareComputeOneSpotLight();
-			doDeclareComputeSpotLightBackLit();
 		}
 
 		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const

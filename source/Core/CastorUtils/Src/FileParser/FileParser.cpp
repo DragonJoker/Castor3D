@@ -1,4 +1,4 @@
-#include "FileParser.hpp"
+﻿#include "FileParser.hpp"
 
 namespace castor
 {
@@ -37,192 +37,208 @@ namespace castor
 	{
 	}
 
-	bool FileParser::parseFile( Path const & p_strFileName )
+	bool FileParser::parseFile( Path const & path )
 	{
 		m_ignoreLevel = 0;
 		m_ignored = false;
-		TextFile file( p_strFileName, File::OpenMode::eRead );
-		return parseFile( file );
-	}
-
-	bool FileParser::parseFile( TextFile & p_file )
-	{
+		String content;
 		bool result = false;
 
-		if ( p_file.isOk() )
 		{
-			bool bNextIsOpenBrace = false;
-			bool bCommented = false;
-			Logger::logInfo( cuT( "FileParser : Parsing file [" ) + p_file.getFileName() + cuT( "]" ) );
-			doInitialiseParser( p_file );
-			auto save = 0ull;
+			TextFile file( path, File::OpenMode::eRead );
+			result = file.isOk();
 
-			if ( m_context->m_sections.empty() )
+			if ( result )
 			{
-				m_context->m_sections.push_back( m_rootSectionId );
+				file.copytoString( content );
+			}
+		}
+
+		if ( result )
+		{
+			Logger::logInfo( cuT( "FileParser : Parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+			result = parseFile( path, content );
+			Logger::logInfo( cuT( "FileParser : Finished parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+		}
+		else
+		{
+			Logger::logError( cuT( "FileParser : Couldn't parse file [" ) + path.getFileName( true ) + cuT( "], file does not exist." ) );
+		}
+
+		return result;
+	}
+
+	bool FileParser::parseFile( Path const & path
+		, String const & content )
+	{
+		bool result = false;
+		bool bNextIsOpenBrace = false;
+		bool bCommented = false;
+		doInitialiseParser( path );
+		auto save = 0ull;
+
+		if ( m_context->m_sections.empty() )
+		{
+			m_context->m_sections.push_back( m_rootSectionId );
+		}
+
+		std::swap( m_context->m_line, save );
+		bool bReuse = false;
+		String strLine;
+		String strLine2;
+		String file = content;
+		string::replace( file, cuT( "\r\n" ), cuT( "\n" ) );
+		StringArray lines = string::split( file, cuT( "\n" ), uint32_t( std::count( file.begin(), file.end(), '\n' ) + 1 ), true );
+		auto it = lines.begin();
+
+		while ( it != lines.end() )
+		{
+			if ( !bReuse )
+			{
+				strLine = *it++;
+				m_context->m_line++;
+			}
+			else
+			{
+				bReuse = false;
 			}
 
-			std::swap( m_context->m_line, save );
-			bool bReuse = false;
-			String strLine;
-			String strLine2;
-			String file;
-			p_file.copytoString( file );
-			string::replace( file, cuT( "\r\n" ), cuT( "\n" ) );
-			StringArray lines = string::split( file, cuT( "\n" ), uint32_t( std::count( file.begin(), file.end(), '\n' ) + 1 ), true );
-			auto it = lines.begin();
+			//Logger::logDebug( string::toString( m_context->m_line ) + cuT( " - " ) + strLine.c_str() );
+			string::trim( strLine );
 
-			while ( it != lines.end() )
+			if ( !strLine.empty() )
 			{
-				if ( !bReuse )
+				if ( strLine.size() < 2 || strLine.substr( 0, 2 ) != cuT( "//" ) )
 				{
-					strLine = *it++;
-					m_context->m_line++;
-				}
-				else
-				{
-					bReuse = false;
-				}
-
-				//Logger::logDebug( string::toString( m_context->m_line ) + cuT( " - " ) + strLine.c_str() );
-				string::trim( strLine );
-
-				if ( !strLine.empty() )
-				{
-					if ( strLine.size() < 2 || strLine.substr( 0, 2 ) != cuT( "//" ) )
+					if ( !bCommented )
 					{
-						if ( !bCommented )
-						{
-							std::size_t uiCommentBegin = strLine.find( cuT( "/*" ) );
+						std::size_t uiCommentBegin = strLine.find( cuT( "/*" ) );
 
-							if ( uiCommentBegin != String::npos )
-							{
-								std::size_t uiCommentEnd = strLine.find( cuT( "*/" ) );
-
-								if ( uiCommentEnd < strLine.size() - 3 )
-								{
-									if ( uiCommentBegin > 0 )
-									{
-										strLine = strLine.substr( 0, uiCommentBegin ) + strLine.substr( uiCommentEnd + 2 );
-									}
-									else
-									{
-										strLine = strLine.substr( uiCommentEnd + 2 );
-									}
-								}
-								else if ( uiCommentEnd != String::npos )
-								{
-									if ( uiCommentBegin > 0 )
-									{
-										strLine = strLine.substr( 0, uiCommentBegin );
-									}
-									else
-									{
-										strLine.clear();
-									}
-								}
-								else if ( uiCommentBegin > 0 )
-								{
-									strLine = strLine.substr( 0, uiCommentBegin );
-									bCommented = true;
-								}
-								else
-								{
-									bCommented = true;
-								}
-
-								if ( !strLine.empty() && !bCommented )
-								{
-									bReuse = true;
-								}
-							}
-							else
-							{
-								if ( strLine.find( cuT( "{" ) ) == strLine.size() - 1 && strLine.size() > 1 )
-								{
-									// We got a "{" at the end of the line, so we split the line in two and reuse the line
-									strLine2 = strLine.substr( 0, strLine.size() - 1 );
-									string::trim( strLine2 );
-									bNextIsOpenBrace = doParseScriptLine( strLine2 );
-									strLine = cuT( "{" );
-									bReuse = true;
-								}
-								else
-								{
-									if ( bNextIsOpenBrace )
-									{
-										if ( strLine != cuT( "{" ) )
-										{
-											bNextIsOpenBrace = doParseScriptBlockEnd();
-											bReuse = true;
-										}
-										else
-										{
-											bNextIsOpenBrace = false;
-											doEnterBlock();
-										}
-									}
-									else if ( strLine == cuT( "{" ) )
-									{
-										doEnterBlock();
-									}
-									else
-									{
-										bNextIsOpenBrace = doParseScriptLine( strLine );
-									}
-
-									if ( m_ignoreLevel > 0 )
-									{
-										if ( !strLine.empty() && strLine.find( cuT( "}" ) ) == strLine.size() - 1 )
-										{
-											doLeaveBlock();
-										}
-									}
-								}
-							}
-						}
-						else
+						if ( uiCommentBegin != String::npos )
 						{
 							std::size_t uiCommentEnd = strLine.find( cuT( "*/" ) );
 
 							if ( uiCommentEnd < strLine.size() - 3 )
 							{
-								strLine = strLine.substr( uiCommentEnd + 2 );
-								bCommented = false;
-								bReuse = true;
+								if ( uiCommentBegin > 0 )
+								{
+									strLine = strLine.substr( 0, uiCommentBegin ) + strLine.substr( uiCommentEnd + 2 );
+								}
+								else
+								{
+									strLine = strLine.substr( uiCommentEnd + 2 );
+								}
 							}
 							else if ( uiCommentEnd != String::npos )
 							{
-								strLine.clear();
-								bCommented = false;
+								if ( uiCommentBegin > 0 )
+								{
+									strLine = strLine.substr( 0, uiCommentBegin );
+								}
+								else
+								{
+									strLine.clear();
+								}
 							}
+							else if ( uiCommentBegin > 0 )
+							{
+								strLine = strLine.substr( 0, uiCommentBegin );
+								bCommented = true;
+							}
+							else
+							{
+								bCommented = true;
+							}
+
+							if ( !strLine.empty() && !bCommented )
+							{
+								bReuse = true;
+							}
+						}
+						else
+						{
+							if ( strLine.find( cuT( "{" ) ) == strLine.size() - 1 && strLine.size() > 1 )
+							{
+								// We got a "{" at the end of the line, so we split the line in two and reuse the line
+								strLine2 = strLine.substr( 0, strLine.size() - 1 );
+								string::trim( strLine2 );
+								bNextIsOpenBrace = doParseScriptLine( strLine2 );
+								strLine = cuT( "{" );
+								bReuse = true;
+							}
+							else
+							{
+								if ( bNextIsOpenBrace )
+								{
+									if ( strLine != cuT( "{" ) )
+									{
+										bNextIsOpenBrace = doParseScriptBlockEnd();
+										bReuse = true;
+									}
+									else
+									{
+										bNextIsOpenBrace = false;
+										doEnterBlock();
+									}
+								}
+								else if ( strLine == cuT( "{" ) )
+								{
+									doEnterBlock();
+								}
+								else
+								{
+									bNextIsOpenBrace = doParseScriptLine( strLine );
+								}
+
+								if ( m_ignoreLevel > 0 )
+								{
+									if ( !strLine.empty() && strLine.find( cuT( "}" ) ) == strLine.size() - 1 )
+									{
+										doLeaveBlock();
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						std::size_t uiCommentEnd = strLine.find( cuT( "*/" ) );
+
+						if ( uiCommentEnd < strLine.size() - 3 )
+						{
+							strLine = strLine.substr( uiCommentEnd + 2 );
+							bCommented = false;
+							bReuse = true;
+						}
+						else if ( uiCommentEnd != String::npos )
+						{
+							strLine.clear();
+							bCommented = false;
 						}
 					}
 				}
 			}
+		}
 
-			if ( m_context->m_sections.empty() || m_context->m_sections.back() != m_rootSectionId )
+		if ( m_context->m_sections.empty() || m_context->m_sections.back() != m_rootSectionId )
+		{
+			if ( m_context.use_count() == 1 )
 			{
-				if ( m_context.use_count() == 1 )
-				{
-					parseError( cuT( "Unexpected end of file" ) );
-				}
-				else
-				{
-					doValidate();
-					result = true;
-				}
+				parseError( cuT( "Unexpected end of file" ) );
 			}
 			else
 			{
 				doValidate();
 				result = true;
 			}
-
-			Logger::logInfo( cuT( "FileParser : Finished parsing file [" ) + p_file.getFileName() + cuT( "]" ) );
-			std::swap( m_context->m_line, save );
+		}
+		else
+		{
+			doValidate();
+			result = true;
 		}
 
+		std::swap( m_context->m_line, save );
 		doCleanupParser();
 		return result;
 	}

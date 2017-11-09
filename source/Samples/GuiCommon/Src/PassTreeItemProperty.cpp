@@ -1,4 +1,4 @@
-#include "PassTreeItemProperty.hpp"
+﻿#include "PassTreeItemProperty.hpp"
 
 #include "ShaderDialog.hpp"
 
@@ -129,12 +129,12 @@ namespace GuiCommon
 			if ( property->GetName() == PROPERTY_PASS_DIFFUSE )
 			{
 				colour << property->GetValue();
-				OnDiffuseColourChange( Colour::fromBGR( colour.GetRGB() ) );
+				OnDiffuseColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
 			else if ( property->GetName() == PROPERTY_PASS_SPECULAR )
 			{
 				colour << property->GetValue();
-				OnSpecularColourChange( Colour::fromBGR( colour.GetRGB() ) );
+				OnSpecularColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
 			else if ( property->GetName() == PROPERTY_PASS_AMBIENT )
 			{
@@ -162,7 +162,7 @@ namespace GuiCommon
 			}
 			else if ( property->GetName() == PROPERTY_PASS_ALBEDO )
 			{
-				OnAlbedoChange( Colour::fromBGR( colour.GetRGB() ) );
+				OnAlbedoChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
 			else if ( property->GetName() == PROPERTY_PASS_ROUGHNESS )
 			{
@@ -179,7 +179,7 @@ namespace GuiCommon
 		}
 	}
 
-	void PassTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnDiffuseColourChange( RgbColour const & p_value )
 	{
 		auto pass = m_pass.lock();
 
@@ -207,7 +207,7 @@ namespace GuiCommon
 		}
 	}
 
-	void PassTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnSpecularColourChange( RgbColour const & p_value )
 	{
 		auto pass = m_pass.lock();
 
@@ -295,7 +295,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void PassTreeItemProperty::OnAlbedoChange( castor::Colour const & p_value )
+	void PassTreeItemProperty::OnAlbedoChange( castor::RgbColour const & p_value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrMetallicRoughness >();
 
