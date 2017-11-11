@@ -1,4 +1,4 @@
-#include "BinaryExportTest.hpp"
+﻿#include "BinaryExportTest.hpp"
 
 #include <Engine.hpp>
 #include <Cache/MeshCache.hpp>
@@ -47,12 +47,12 @@ namespace Testing
 
 	void BinaryExportTest::SimpleMesh()
 	{
+		CT_EQUAL( sizeof( Point3f ), sizeof( float ) * 3 );
+		CT_EQUAL( sizeof( Point2f ), sizeof( float ) * 2 );
+
 		String name = cuT( "SimpleTestMesh" );
 		Path path{ name + cuT( ".cmsh" ) };
 		Scene scene{ cuT( "TestScene" ), m_engine };
-
-		CT_EQUAL( sizeof( Point3f ), sizeof( float ) * 3 );
-		CT_EQUAL( sizeof( Point2f ), sizeof( float ) * 2 );
 
 		auto src = scene.getMeshCache().add( name );
 		Parameters parameters;
@@ -61,7 +61,41 @@ namespace Testing
 		parameters.add( cuT( "depth" ), cuT( "1.0" ) );
 		m_engine.getMeshFactory().create( cuT( "cube" ) )->generate( *src, parameters );
 
-		for ( auto submesh : *src )
+		doTestMesh( src );
+	}
+
+	void BinaryExportTest::ImportExport()
+	{
+		doTestMeshFile( cuT( "SimpleTestMesh" ) );
+	}
+
+	void BinaryExportTest::AnimatedMesh()
+	{
+		doTestMeshFile( cuT( "AnimTestMesh" ) );
+	}
+
+	void BinaryExportTest::doTestMeshFile( String const & name )
+	{
+		Path path{ name + cuT( ".cmsh" ) };
+		Scene scene{ cuT( "TestScene" ), m_engine };
+
+		auto src = scene.getMeshCache().add( name );
+		{
+			BinaryFile file{ m_testDataFolder / path, File::OpenMode::eRead };
+			BinaryParser< Mesh > parser;
+			CT_CHECK( parser.parse( *src, file ) );
+		}
+
+		doTestMesh( src );
+	}
+
+	void BinaryExportTest::doTestMesh( MeshSPtr & src )
+	{
+		Scene & scene = *src->getScene();
+		String name = src->getName();
+		Path path{ name + cuT( ".cmsh" ) };
+
+		for ( auto & submesh : *src )
 		{
 			submesh->initialise();
 		}
@@ -92,110 +126,6 @@ namespace Testing
 		m_engine.getRenderLoop().renderSyncFrame();
 		src.reset();
 		dst.reset();
-		DeCleanupEngine();
-	}
-
-	void BinaryExportTest::ImportExport()
-	{
-		String name = cuT( "SimpleTestMesh" );
-		Path path{ name + cuT( ".cmsh" ) };
-		Scene scene{ cuT( "TestScene" ), m_engine };
-
-		auto src = scene.getMeshCache().add( name );
-		Parameters parameters;
-		parameters.add( cuT( "width" ), cuT( "1.0" ) );
-		parameters.add( cuT( "height" ), cuT( "1.0" ) );
-		parameters.add( cuT( "depth" ), cuT( "1.0" ) );
-		m_engine.getMeshFactory().create( cuT( "cube" ) )->generate( *src, parameters );
-		{
-			BinaryFile file{ m_testDataFolder / path, File::OpenMode::eRead };
-			BinaryParser< Mesh > parser;
-			CT_CHECK( parser.parse( *src, file ) );
-		}
-
-		for ( auto submesh : *src )
-		{
-			submesh->initialise();
-		}
-
-		{
-			BinaryFile file{ path, File::OpenMode::eWrite };
-			BinaryWriter< Mesh > writer;
-			CT_CHECK( writer.write( *src, file ) );
-		}
-
-		auto dst = scene.getMeshCache().add( name + cuT( "_exp" ) );
-		{
-			BinaryFile file{ path, File::OpenMode::eRead };
-			BinaryParser< Mesh > parser;
-			CT_CHECK( parser.parse( *dst, file ) );
-		}
-
-		for ( auto submesh : *dst )
-		{
-			submesh->initialise();
-		}
-
-		auto & lhs = *src;
-		auto & rhs = *dst;
-		CT_EQUAL( lhs, rhs );
-		File::deleteFile( path );
-		scene.cleanup();
-		m_engine.getRenderLoop().renderSyncFrame();
-		src.reset();
-		dst.reset();
-		DeCleanupEngine();
-	}
-
-	void BinaryExportTest::AnimatedMesh()
-	{
-		SceneSPtr scene;
-		SceneFileParser parser{ m_engine };
-		CT_REQUIRE( parser.parseFile( m_testDataFolder / cuT( "Anim.zip" ) ) );
-		CT_REQUIRE( parser.scenesBegin() != parser.scenesEnd() );
-		scene = parser.scenesBegin()->second;
-		scene->getMeshCache().lock();
-		CT_REQUIRE( scene->getMeshCache().begin() != scene->getMeshCache().end() );
-		auto src = scene->getMeshCache().begin()->second;
-		scene->getMeshCache().unlock();
-		auto name = src->getName();
-
-		for ( auto submesh : *src )
-		{
-			submesh->initialise();
-		}
-
-		Path path{ cuT( "TestMesh.cmsh" ) };
-		{
-			BinaryFile file{ path, File::OpenMode::eWrite };
-			BinaryWriter< Mesh > writer;
-			CT_CHECK( writer.write( *src, file ) );
-		}
-
-		Scene sceneDst{ cuT( "TestScene" ), m_engine };
-		auto dst = sceneDst.getMeshCache().add( name + cuT( "_imp" ) );
-		{
-			BinaryFile file{ path, File::OpenMode::eRead };
-			BinaryParser< Mesh > parser;
-			CT_CHECK( parser.parse( *dst, file ) );
-		}
-
-		for ( auto submesh : *dst )
-		{
-			submesh->initialise();
-		}
-
-		auto & lhs = *src;
-		auto & rhs = *dst;
-		CT_EQUAL( lhs, rhs );
-		File::deleteFile( path );
-		scene->cleanup();
-		sceneDst.cleanup();
-		m_engine.getSceneCache().remove( scene->getName() );
-		m_engine.getRenderWindowCache().clear();
-		src.reset();
-		dst.reset();
-		scene.reset();
 		DeCleanupEngine();
 	}
 

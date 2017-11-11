@@ -332,7 +332,7 @@ namespace castor3d
 		{
 			it = m_renderPasses.emplace( timer.getCategory()
 				, RenderPassOverlays{ timer.getCategory()
-					, uint32_t( m_renderPasses.size() - 1u )
+					, uint32_t( m_renderPasses.size() )
 					, cache } ).first;
 			it->second.setVisible( m_visible );
 		}

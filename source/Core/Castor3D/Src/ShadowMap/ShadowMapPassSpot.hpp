@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SHADOW_MAP_PASS_SPOT_H___
@@ -88,7 +88,7 @@ namespace castor3d
 		static castor::String const ShadowMapUbo;
 		static castor::String const FarPlane;
 		static uint32_t constexpr UboBindingPoint = 8u;
-		static uint32_t constexpr TextureSize = 2048;
+		static uint32_t constexpr TextureSize = 512;
 
 	private:
 		//!\~english	The camera created from the light.

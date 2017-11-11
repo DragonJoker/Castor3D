@@ -80,6 +80,7 @@ namespace Bloom
 		castor::real m_buffer[12];
 		SurfaceArray m_hiPassSurfaces;
 		SurfaceArray m_blurSurfaces;
+		PostEffectSurface m_combineSurface;
 		uint32_t m_size;
 	};
 }

@@ -1,4 +1,4 @@
-#include "Castor3DTestCommon.hpp"
+﻿#include "Castor3DTestCommon.hpp"
 
 #include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Cache/CameraCache.hpp>
@@ -12,6 +12,7 @@
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
+#include <Mesh/SubmeshComponent/BonesComponent.hpp>
 #include <Render/Viewport.hpp>
 #include <Scene/Animation/AnimatedObject.hpp>
 #include <Scene/Animation/AnimatedObjectGroup.hpp>
@@ -33,8 +34,9 @@ using castor3d::operator<<;
 
 namespace Testing
 {
-	C3DTestCase::C3DTestCase( std::string const & p_name, castor3d::Engine & engine )
-		: TestCase{ p_name }
+	C3DTestCase::C3DTestCase( std::string const & name
+		, castor3d::Engine & engine )
+		: TestCase{ name }
 		, m_engine{ engine }
 		, m_testDataFolder{ Engine::getDataDirectory() / cuT( "Castor3DTest" ) / cuT( "data" ) }
 	{
@@ -322,6 +324,25 @@ namespace Testing
 		return result;
 	}
 
+	bool C3DTestCase::compare( BonesComponent const & p_a, BonesComponent const & p_b )
+	{
+		return CT_EQUAL( std::make_pair( p_a.getBonesBuffer().getData(), p_a.getBonesBuffer().getSize() )
+			, std::make_pair( p_b.getBonesBuffer().getData(), p_b.getBonesBuffer().getSize() ) );
+	}
+
+	bool C3DTestCase::compare( SubmeshComponent const & p_a, SubmeshComponent const & p_b )
+	{
+		bool result = CT_EQUAL( p_a.getType(), p_b.getType() );
+		result &= CT_EQUAL( p_a.getProgramFlags(), p_b.getProgramFlags() );
+
+		if ( result && p_a.getType() == BonesComponent::Name )
+		{
+			result &= CT_EQUAL( static_cast< BonesComponent const & >( p_a ), static_cast< BonesComponent const & >( p_b ) );
+		}
+
+		return result;
+	}
+
 	bool C3DTestCase::compare( Submesh const & p_a, Submesh const & p_b )
 	{
 		bool result{ CT_EQUAL( p_a.getPointsCount(), p_b.getPointsCount() ) };
@@ -330,20 +351,19 @@ namespace Testing
 		result &= CT_EQUAL( std::make_pair( p_a.getIndexBuffer().getData(), p_a.getIndexBuffer().getSize() )
 								, std::make_pair( p_b.getIndexBuffer().getData(), p_b.getIndexBuffer().getSize() ) );
 
-		result &= CT_EQUAL( p_a.hasBonesBuffer(), p_b.hasBonesBuffer() );
-
-		if ( result && p_a.hasBonesBuffer() )
+		if ( result )
 		{
-			result &= CT_EQUAL( std::make_pair( p_a.getBonesBuffer().getData(), p_a.getBonesBuffer().getSize() )
-								  , std::make_pair( p_b.getBonesBuffer().getData(), p_b.getBonesBuffer().getSize() ) );
-		}
+			result &= CT_EQUAL( p_a.getComponents().size(), p_b.getComponents().size() );
 
-		result &= CT_EQUAL( p_a.hasMatrixBuffer(), p_b.hasMatrixBuffer() );
-
-		if ( result && p_a.hasMatrixBuffer() )
-		{
-			result &= CT_EQUAL( std::make_pair( p_a.getMatrixBuffer().getData(), p_a.getMatrixBuffer().getSize() )
-								  , std::make_pair( p_b.getMatrixBuffer().getData(), p_b.getMatrixBuffer().getSize() ) );
+			for ( auto & itA : p_a.getComponents() )
+			{
+				if ( result )
+				{
+					auto itB = p_b.getComponents().find( itA.first );
+					result = CT_CHECK( itB != p_b.getComponents().end() );
+					result &= CT_EQUAL( *itA.second, *itB->second );
+				}
+			}
 		}
 
 		return result;
