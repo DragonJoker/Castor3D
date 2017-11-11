@@ -1,4 +1,4 @@
-#include "DirectionalLight.hpp"
+﻿#include "DirectionalLight.hpp"
 
 #include "Render/Viewport.hpp"
 
@@ -45,7 +45,11 @@ namespace castor3d
 		return std::unique_ptr< DirectionalLight >( new DirectionalLight{ p_light } );
 	}
 
-	void DirectionalLight::update( Point3r const & p_target
+	void DirectionalLight::update()
+	{
+	}
+
+	void DirectionalLight::updateShadow( Point3r const & p_target
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{

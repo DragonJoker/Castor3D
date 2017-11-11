@@ -1,8 +1,10 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_LIGHT_H___
 #define ___C3D_PREREQUISITES_LIGHT_H___
+
+#include <Design/Signal.hpp>
 
 namespace castor3d
 {
@@ -49,6 +51,10 @@ namespace castor3d
 	DECLARE_MAP( castor::String, LightSPtr, LightPtrStr );
 	//! Map of lights, sorted by index
 	DECLARE_MAP( int, LightSPtr, LightPtrInt );
+
+	using OnLightChangedFunction = std::function< void( Light & ) >;
+	using OnLightChanged = castor::Signal< OnLightChangedFunction >;
+	using OnLightChangedConnection = OnLightChanged::connection;
 
 	//@}
 }

@@ -1,4 +1,4 @@
-﻿#include "RenderTechnique.hpp"
+#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -304,7 +304,7 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
-		scene.getLightCache().updateLights( camera );
+		scene.getLightCache().updateLightsTexture( camera );
 		m_renderSystem.pushScene( &scene );
 		camera.resize( m_size );
 		camera.update();

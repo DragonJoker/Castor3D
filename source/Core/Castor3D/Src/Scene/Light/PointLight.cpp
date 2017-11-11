@@ -1,4 +1,4 @@
-﻿#include "PointLight.hpp"
+#include "PointLight.hpp"
 
 #include "Render/Viewport.hpp"
 #include "Technique/Opaque/LightPass.hpp"
@@ -151,22 +151,21 @@ namespace castor3d
 		return result;
 	}
 
-	void PointLight::update( Point3r const & p_target
+	void PointLight::update()
+	{
+		PointLight::generateVertices();
+		auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
+		m_cubeBox.load( Point3r{ -scale, -scale, -scale }
+		, Point3r{ scale, scale, scale } );
+		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+		m_attenuation.reset();
+	}
+
+	void PointLight::updateShadow( Point3r const & p_target
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{
 		m_shadowMapIndex = p_index;
-
-		if ( m_attenuation.isDirty() )
-		{
-			PointLight::generateVertices();
-			auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
-			m_cubeBox.load( Point3r{ -scale, -scale, -scale }
-				, Point3r{ scale, scale, scale } );
-			m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
-			m_attenuation.reset();
-		}
-
 		p_viewport.updateFar( m_farPlane );
 	}
 
@@ -181,6 +180,7 @@ namespace castor3d
 	void PointLight::setAttenuation( Point3f const & p_attenuation )
 	{
 		m_attenuation = p_attenuation;
+		getLight().onChanged( getLight() );
 	}
 
 	void PointLight::updateNode( SceneNode const & p_node )

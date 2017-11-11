@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LIGHT_H___
@@ -91,6 +91,13 @@ namespace castor3d
 		C3D_API ~Light();
 		/**
 		 *\~english
+		 *\brief		Updates the light.
+		 *\~french
+		 *\brief		Met la source à jour.
+		 */
+		C3D_API void update();
+		/**
+		 *\~english
 		 *\brief			Updates the light viewport.
 		 *\param[in]		target		The target position, used by directional shadow map.
 		 *\param[in,out]	viewport	The viewport to update.
@@ -101,7 +108,7 @@ namespace castor3d
 		 *\param[in,out]	viewport	Le viewport à mettre à jour.
 		 *\param[in]		index		L'indice de la shadow map de la lumière, -1 si elle n'en a pas.
 		 */
-		C3D_API void update( castor::Point3r const & target
+		C3D_API void updateShadow( castor::Point3r const & target
 			, Viewport & viewport
 			, int32_t index = -1 );
 		/**
@@ -419,6 +426,9 @@ namespace castor3d
 		{
 			m_shadowMap = value;
 		}
+
+	public:
+		OnLightChanged onChanged;
 
 	protected:
 		void onNodeChanged( SceneNode const & node );

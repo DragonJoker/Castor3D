@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassPoint.hpp"
+#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -60,7 +60,7 @@ namespace castor3d
 		, uint32_t index )
 	{
 		auto position = light.getParent()->getDerivedPosition();
-		light.update( position
+		light.updateShadow( position
 			, m_viewport
 			, index );
 		doUpdateShadowMatrices( position, m_matrices );

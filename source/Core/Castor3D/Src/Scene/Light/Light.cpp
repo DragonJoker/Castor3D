@@ -42,11 +42,16 @@ namespace castor3d
 	{
 	}
 
-	void Light::update( Point3r const & p_target
+	void Light::update()
+	{
+		m_category->update();
+	}
+
+	void Light::updateShadow( Point3r const & p_target
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{
-		m_category->update( p_target
+		m_category->updateShadow( p_target
 			, p_viewport
 			, p_index );
 	}
