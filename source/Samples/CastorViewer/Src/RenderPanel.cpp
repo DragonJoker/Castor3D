@@ -260,6 +260,7 @@ namespace CastorViewer
 
 	void RenderPanel::setRenderWindow( RenderWindowSPtr p_window )
 	{
+		m_cubeManager.reset();
 		m_renderWindow.reset();
 		doStopMovement();
 		castor::Size sizeWnd = GuiCommon::make_Size( GetClientSize() );
@@ -276,6 +277,7 @@ namespace CastorViewer
 
 			if ( scene )
 			{
+				m_cubeManager = std::make_unique< GuiCommon::CubeBoxManager >( *scene );
 				auto camera = p_window->getCamera();
 
 				if ( camera )
@@ -502,6 +504,7 @@ namespace CastorViewer
 
 			if ( oldGeometry )
 			{
+				m_cubeManager->hideObject( *oldGeometry );
 				scene = oldGeometry->getScene();
 				Restore( m_selectedGeometry );
 			}
@@ -509,6 +512,7 @@ namespace CastorViewer
 			if ( p_geometry )
 			{
 				Save( m_selectedGeometry, p_geometry );
+				m_cubeManager->displayObject( *p_geometry );
 			}
 		}
 

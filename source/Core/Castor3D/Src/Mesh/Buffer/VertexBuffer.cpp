@@ -1,4 +1,4 @@
-﻿#include "VertexBuffer.hpp"
+#include "VertexBuffer.hpp"
 
 #include "Engine.hpp"
 
@@ -10,10 +10,6 @@ namespace castor3d
 		, BufferDeclaration const & declaration )
 		: CpuBuffer< uint8_t >( engine )
 		, m_bufferDeclaration( declaration )
-	{
-	}
-
-	VertexBuffer::~VertexBuffer()
 	{
 	}
 

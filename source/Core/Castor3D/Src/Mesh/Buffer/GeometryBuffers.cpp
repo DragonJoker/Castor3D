@@ -1,4 +1,4 @@
-﻿#include "GeometryBuffers.hpp"
+#include "GeometryBuffers.hpp"
 
 using namespace castor;
 
@@ -26,5 +26,11 @@ namespace castor3d
 		doCleanup();
 		m_indexBuffer = nullptr;
 		m_buffers.clear();
+	}
+
+	void GeometryBuffers::setTopology( Topology p_value )
+	{
+		m_topology = p_value;
+		doSetTopology( p_value );
 	}
 }

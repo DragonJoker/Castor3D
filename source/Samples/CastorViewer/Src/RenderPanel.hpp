@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
+#include <CubeBoxManager.hpp>
 #include <NodeState.hpp>
 
 #include <Engine.hpp>
@@ -149,6 +150,7 @@ namespace CastorViewer
 		castor3d::SceneNodeSPtr m_currentNode;
 		KeyboardEventUPtr m_keyboardEvent;
 		castor::RangedValue< castor::real > m_camSpeed;
+		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager;
 
 		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates;
 		GuiCommon::NodeState * m_currentState{ nullptr };

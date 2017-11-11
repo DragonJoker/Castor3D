@@ -1,4 +1,4 @@
-﻿#include "Mesh/GlGeometryBuffers.hpp"
+#include "Mesh/GlGeometryBuffers.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Mesh/GlAttribute.hpp"
@@ -132,6 +132,11 @@ namespace GlRender
 	{
 		m_attributes.clear();
 		ObjectType::destroy();
+	}
+
+	void GlGeometryBuffers::doSetTopology( Topology p_value )
+	{
+		m_glTopology = getOpenGl().get( p_value );
 	}
 
 	BufferDeclaration::const_iterator GlGeometryBuffers::doFindElement( BufferDeclaration const & declaration

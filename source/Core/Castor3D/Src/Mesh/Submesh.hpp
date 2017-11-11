@@ -20,6 +20,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class SubmeshComponent;
 	/*!
 	\author		Sylvain DOREMUS
 	\date		14/02/2010
@@ -165,17 +166,6 @@ namespace castor3d
 		 *\param[in]	p_end	La fin des données de sommets.
 		 */
 		C3D_API void addPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end );
-		/**
-		 *\~english
-		 *\brief		adds bone datas.
-		 *\param[in]	p_begin	The bones data begin.
-		 *\param[in]	p_end	The bones data end.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_begin	Le début des données de bones.
-		 *\param[in]	p_end	La fin des données de bones.
-		 */
-		C3D_API void addBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
 		/**
 		 *\~english
 		 *\brief		Clears this submesh's face array
@@ -336,46 +326,6 @@ namespace castor3d
 		C3D_API void sortByDistance( castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
-		 *\brief		Increments instance count.
-		 *\param[in]	p_material	The material for which the instance count is incremented.
-		 *\return		The previous instance count.
-		 *\~french
-		 *\brief		Incrémente le compte d'instances.
-		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté.
-		 *\return		Le compte précédent.
-		 */
-		C3D_API uint32_t ref( MaterialSPtr p_material );
-		/**
-		 *\~english
-		 *\brief		Decrements instance count.
-		 *\param[in]	p_material	The material for which the instance count is decremented.
-		 *\return		The previous instance count.
-		 *\~french
-		 *\brief		Décrémente le compte d'instances.
-		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté.
-		 *\return		Le compte précédent.
-		 */
-		C3D_API uint32_t unref( MaterialSPtr p_material );
-		/**
-		 *\~english
-		 *\brief		Retrieves the instances count
-		 *\param[in]	p_material	The material for which the instance count is retrieved
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre d'instances
-		 *\param[in]	p_material	Le matériau pour lequel le compte est récupéré
-		 *\return		La valeur
-		 */
-		C3D_API uint32_t getRefCount( MaterialSPtr p_material )const;
-		/**
-		 *\~english
-		 *\return		The maximum instances count, amongst all materials.
-		 *\~french
-		 *\return		Le nombre moximum d'instances, tous matériaux confondus,
-		 */
-		C3D_API uint32_t getMaxRefCount()const;
-		/**
-		 *\~english
 		 *\return		The topology.
 		 *\~french
 		 *\return		La topologie.
@@ -401,11 +351,11 @@ namespace castor3d
 		C3D_API GeometryBuffersSPtr getGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
-		 *\return		The animated status.
+		 *\return		The shader program flags.
 		 *\~french
-		 *\return		Le statut de sous-maillage animé.
+		 *\return		Les indicateurs de shader.
 		 */
-		C3D_API void setAnimated( bool p_animated );
+		C3D_API ProgramFlags getProgramFlags()const;
 		/**
 		 *\~english
 		 *\brief		adds a points list to my list
@@ -430,31 +380,6 @@ namespace castor3d
 		inline void addPoints( std::array< InterleavedVertex, Count > const & p_vertices )
 		{
 			addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 */
-		inline void addBoneDatas( std::vector< VertexBoneData > const & p_boneData )
-		{
-			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 */
-		template< size_t Count >
-		inline void addBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
-		{
-			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
 		}
 		/**
 		 *\~english
@@ -640,56 +565,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The IndexBuffer.
-		 *\~french
-		 *\return		L'IndexBuffer.
-		 */
-		inline bool hasAnimationBuffer()const
-		{
-			return bool( m_animBuffer );
-		}
-		/**
-		 *\~english
-		 *\return		The bones VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer des bones.
-		 */
-		inline bool hasBonesBuffer()const
-		{
-			return bool( m_bonesBuffer );
-		}
-		/**
-		 *\~english
-		 *\return		\p true if the submesh has bone data.
-		 *\~french
-		 *\return		\p true si le sous-maillage a des données d'os.
-		 */
-		inline bool hasBoneData()const
-		{
-			return !m_bonesData.empty();
-		}
-		/**
-		 *\~english
-		 *\return		The instantiation VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer d'instanciation.
-		 */
-		inline bool hasMatrixBuffer()const
-		{
-			return bool( m_matrixBuffer );
-		}
-		/**
-		 *\~english
-		 *\return		Tells if the bone instantiation buffer exists.
-		 *\~french
-		 *\return		Dit si le tampon d'instanciation des os existe.
-		 */
-		inline bool hasInstancedBonesBuffer()const
-		{
-			return bool( m_instancedBonesBuffer );
-		}
-		/**
-		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
@@ -710,26 +585,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
-		inline VertexBuffer const & getAnimationBuffer()const
-		{
-			return *m_animBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
-		inline VertexBuffer & getAnimationBuffer()
-		{
-			return *m_animBuffer;
-		}
-		/**
-		 *\~english
 		 *\return		The IndexBuffer.
 		 *\~french
 		 *\return		L'IndexBuffer.
@@ -747,66 +602,6 @@ namespace castor3d
 		inline IndexBuffer & getIndexBuffer()
 		{
 			return m_indexBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The bones VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer des bones.
-		 */
-		inline VertexBuffer const & getBonesBuffer()const
-		{
-			return *m_bonesBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The bones VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer des bones.
-		 */
-		inline VertexBuffer & getBonesBuffer()
-		{
-			return *m_bonesBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The instantiation VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer d'instanciation.
-		 */
-		inline VertexBuffer const & getMatrixBuffer()const
-		{
-			return *m_matrixBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The instantiation VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer d'instanciation.
-		 */
-		inline VertexBuffer & getMatrixBuffer()
-		{
-			return *m_matrixBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The bone instantiation ShaderStorageBuffer.
-		 *\~french
-		 *\return		Le ShaderStorageBuffer d'instanciation des os.
-		 */
-		inline ShaderStorageBuffer const & getInstancedBonesBuffer()const
-		{
-			return *m_instancedBonesBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The bone instantiation ShaderStorageBuffer.
-		 *\~french
-		 *\return		Le ShaderStorageBuffer d'instanciation des os.
-		 */
-		inline ShaderStorageBuffer & getInstancedBonesBuffer()
-		{
-			return *m_instancedBonesBuffer;
 		}
 		/**
 		 *\~english
@@ -837,16 +632,6 @@ namespace castor3d
 		inline Mesh & getParent()
 		{
 			return m_parentMesh;
-		}
-		/**
-		 *\~english
-		 *\return		The shader program flags.
-		 *\~french
-		 *\return		Les indicateurs de shader.
-		 */
-		inline ProgramFlags const & getProgramFlags()const
-		{
-			return m_programFlags;
 		}
 		/**
 		 *\~english
@@ -887,11 +672,7 @@ namespace castor3d
 		void doDestroyBuffers();
 		void doGenerateBuffers();
 		void doGenerateVertexBuffer();
-		void doGenerateAnimBuffer();
 		void doGenerateIndexBuffer();
-		void doGenerateBonesBuffer();
-		void doGenerateMatrixBuffer( uint32_t p_count );
-		void doGenerateInstantiatedBonesBuffer( uint32_t p_count );
 		void doInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers );
 
 	private:
@@ -913,27 +694,12 @@ namespace castor3d
 		//!\~english	Tells the VAO needs reininitialisation.
 		//!\~french		Dit que le VAO a besoin d'être réinitialisé.
 		bool m_dirty{ true };
-		//!\~english	The submesh instances count.
-		//!\~french		Le nombre d'instances du sous-maillage.
-		std::map< MaterialSPtr, uint32_t > m_instanceCount;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBuffer m_vertexBuffer;
-		//!\~english	The animated vertex buffer.
-		//!\~french		Le tampon de sommets animés.
-		VertexBufferUPtr m_animBuffer;
 		//!\~english	The index buffer.
 		//!\~french		Le tampon d'indices.
 		IndexBuffer m_indexBuffer;
-		//!\~english	The bone data buffer (animation).
-		//!\~french		Le tampon de données de bones (animation).
-		VertexBufferUPtr m_bonesBuffer;
-		//!\~english	The matrix buffer (instantiation).
-		//!\~french		Le tampon de matrices (instanciation).
-		VertexBufferUPtr m_matrixBuffer;
-		//!\~english	The matrix buffer (instantiation).
-		//!\~french		Le tampon de matrices (instanciation).
-		ShaderStorageBufferSPtr m_instancedBonesBuffer;
 		//!\~english	The faces in the submesh.
 		//!\~french		Le tableau de faces.
 		FaceArray m_faces;
@@ -952,12 +718,6 @@ namespace castor3d
 		//!\~english	The vertex pointer array.
 		//!\~french		Le tableau de sommets.
 		VertexPtrArray m_points;
-		//!\~english	The bones data array.
-		//!\~french		Le tableau de données des bones.
-		BytePtrList m_bonesData;
-		//!\~english	The bones pointer array.
-		//!\~french		Le tableau de bones.
-		VertexPtrArray m_bones;
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
 		castor::Point3r m_cameraPosition;
@@ -967,6 +727,9 @@ namespace castor3d
 		//!\~english	The GeometryBuffers with which this submesh is compatible.
 		//!\~french		Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	The GeometryBuffers with which this submesh is compatible.
+		//!\~french		Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
+		std::map< castor::String, std::shared_ptr< SubmeshComponent > > m_components;
 
 		friend class GeometryBuffers;
 		friend class BinaryWriter< Submesh >;

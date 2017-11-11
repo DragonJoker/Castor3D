@@ -200,7 +200,7 @@ namespace Obj
 	{
 		std::ifstream file( m_fileName.c_str() );
 		file.seekg( 0, std::ios::end );
-		size_t size = file.tellg();
+		size_t size = size_t( file.tellg() );
 		file.seekg( 0, std::ios::beg );
 		std::string content;
 		content.resize( size + 1 );

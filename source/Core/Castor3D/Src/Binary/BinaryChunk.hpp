@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BINARY_CHUNK_H___
@@ -82,6 +82,7 @@ namespace castor3d
 		eSubmeshAnimationBufferSize = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'S', 'Z' ),
 		eSubmeshAnimationBuffersCount = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'C', 'T' ),
 		eSubmeshAnimationBuffers = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'U', 'F', 'S' ),
+		eBonesComponent = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'C', 'O', 'M', 'P' ),
 	};
 	/**
 	 *\~english

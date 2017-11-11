@@ -67,6 +67,15 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		sets the buffers topology.
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Définit la topologie des tampons.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		C3D_API void setTopology( Topology p_value );
+		/**
+		 *\~english
 		 *\brief		Draws the geometry held into the buffers
 		 *\param[in]	p_size	Specifies the number of elements to be rendered
 		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
@@ -113,18 +122,6 @@ namespace castor3d
 		{
 			return m_topology;
 		}
-		/**
-		 *\~english
-		 *\brief		sets the buffers topology.
-		 *\param[in]	p_value	The new value
-		 *\~french
-		 *\brief		Définit la topologie des tampons.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void setTopology( Topology p_value )
-		{
-			m_topology = p_value;
-		}
 
 	private:
 		/**
@@ -135,14 +132,23 @@ namespace castor3d
 		 *\brief		Crée le VAO.
 		 *\return		\p true si ça s'est bien passé.
 		 */
-		C3D_API virtual bool doInitialise() = 0;
+		virtual bool doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the VAO.
 		 *\~french
 		 *\brief		Détruit le VAO.
 		 */
-		C3D_API virtual void doCleanup() = 0;
+		virtual void doCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		sets the buffers topology.
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Définit la topologie des tampons.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		virtual void doSetTopology( Topology p_value ) = 0;
 
 	protected:
 		//!\~english	The vertex, animation, ... buffers.

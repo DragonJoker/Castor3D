@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GL_GEOMETRY_BUFFERS_H___
@@ -57,23 +57,27 @@ namespace GlRender
 		 *\copydoc		castor3d::GeometryBuffers::Draw
 		 */
 		virtual bool draw( uint32_t size
-			, uint32_t index )const;
+			, uint32_t index )const override;
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::DrawInstanced
 		 */
 		virtual bool drawInstanced( uint32_t size
 			, uint32_t index
-			, uint32_t count )const;
+			, uint32_t count )const override;
 
 	private:
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::doInitialise
 		 */
-		virtual bool doInitialise();
+		virtual bool doInitialise()override;
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::doCleanup
 		 */
-		virtual void doCleanup();
+		virtual void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
+		 */
+		virtual void doSetTopology( castor3d::Topology p_value )override;
 
 		castor3d::BufferDeclaration::const_iterator doFindElement( castor3d::BufferDeclaration const & declaration
 			, castor3d::BufferElementDeclaration const & element )const;
