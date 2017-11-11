@@ -40,6 +40,10 @@ namespace castor3d
 		 */
 		C3D_API ~BonesInstantiationComponent();
 		/**
+		 *\copydoc		castor3d::SubmeshComponent::gather
+		 */
+		C3D_API void gather( VertexBufferArray & buffers )override;
+		/**
 		 *\~english
 		 *\return		The skeleton.
 		 *\~french
@@ -97,7 +101,7 @@ namespace castor3d
 		void doUpload()override;
 
 	public:
-		static castor::String const Name;
+		C3D_API static castor::String const Name;
 
 	private:
 		//!\~english	The instantiation component.

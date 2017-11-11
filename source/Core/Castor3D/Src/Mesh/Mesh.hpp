@@ -182,24 +182,6 @@ namespace castor3d
 		 */
 		C3D_API void computeNormals( bool p_reverted = false );
 		/**
-		*\~english
-		*\brief		Increments submeshes' instance count
-		*\param[in]	p_material	The material for which the instance count is incremented
-		*\~french
-		*\brief		Incrémente le compte d'instances des sous maillages
-		*\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
-		*/
-		C3D_API void ref( MaterialSPtr p_material );
-		/**
-		*\~english
-		*\brief		Decrements submeshes' instance count
-		*\param[in]	p_material	The material for which the instance count is decremented
-		*\~french
-		*\brief		Décrémente le compte d'instances des sous maillages
-		*\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
-		*/
-		C3D_API void unref( MaterialSPtr p_material );
-		/**
 		 *\~english
 		 *\brief		sets the skeleton
 		 *\param[in]	p_skeleton	The new value

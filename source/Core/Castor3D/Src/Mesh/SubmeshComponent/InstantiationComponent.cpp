@@ -1,5 +1,7 @@
 ﻿#include "InstantiationComponent.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
+#include "Mesh/Submesh.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
 
@@ -9,26 +11,18 @@ using namespace castor;
 
 namespace castor3d
 {
-	String const InstantiationComponent::Name = cuT( "intantiation" );
+	String const InstantiationComponent::Name = cuT( "instantiation" );
 
-	InstantiationComponent::InstantiationComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, cuT( "intantiation" ) }
+	InstantiationComponent::InstantiationComponent( Submesh & submesh
+		, uint32_t threshold )
+		: SubmeshComponent{ submesh, Name }
+		, m_threshold{ threshold }
 	{
 	}
 
 	InstantiationComponent::~InstantiationComponent()
 	{
 		cleanup();
-	}
-
-	void InstantiationComponent::resetMatrixBuffers()
-	{
-		if ( m_matrixBuffer )
-		{
-			doGenerateMatrixBuffer( getMaxRefCount() );
-			m_matrixBuffer->initialise( BufferAccessType::eDynamic
-				, BufferAccessNature::eDraw );
-		}
 	}
 
 	uint32_t InstantiationComponent::ref( MaterialSPtr material )
@@ -100,6 +94,45 @@ namespace castor3d
 		}
 	}
 
+	void InstantiationComponent::setMaterial( MaterialSPtr oldMaterial
+		, MaterialSPtr newMaterial
+		, bool update )
+	{
+		auto oldCount = getMaxRefCount();
+
+		if ( oldMaterial != getOwner()->getDefaultMaterial() )
+		{
+			unref( oldMaterial );
+		}
+
+		auto count = ref( newMaterial ) + 1;
+
+		if ( count > oldCount && update )
+		{
+			if ( count < m_threshold )
+			{
+				// We remove the matrix buffer which is unneeded.
+				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+					, [this]()
+					{
+						if ( m_matrixBuffer )
+						{
+							m_matrixBuffer->cleanup();
+							m_matrixBuffer.reset();
+						}
+					} ) );
+			}
+			else
+			{
+				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
+					, [this]()
+					{
+						doFill();
+					} ) );
+			}
+		}
+	}
+
 	bool InstantiationComponent::doInitialise()
 	{
 		bool result = true;
@@ -149,13 +182,16 @@ namespace castor3d
 				{
 					matrixBuffer.resize( size );
 				}
-
-				matrixBuffer.initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
 			}
 			else
 			{
 				m_matrixBuffer.reset();
+			}
+
+			if ( m_matrixBuffer )
+			{
+				m_matrixBuffer->initialise( BufferAccessType::eDynamic
+					, BufferAccessNature::eDraw );
 			}
 		}
 	}

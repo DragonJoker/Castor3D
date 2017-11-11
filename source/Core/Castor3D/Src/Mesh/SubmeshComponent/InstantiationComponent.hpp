@@ -28,7 +28,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API InstantiationComponent( Submesh & submesh );
+		C3D_API InstantiationComponent( Submesh & submesh
+			, uint32_t threshold = 1u );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -36,13 +37,6 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~InstantiationComponent();
-		/**
-		 *\~english
-		 *\brief		Recreates the Matrix buffers.
-		 *\~french
-		 *\brief		Recrée le tampon de matrices.
-		 */
-		C3D_API void resetMatrixBuffers();
 		/**
 		 *\~english
 		 *\brief		Increments instance count.
@@ -88,6 +82,12 @@ namespace castor3d
 		 */
 		C3D_API void gather( VertexBufferArray & buffers )override;
 		/**
+		 *\copydoc		castor3d::SubmeshComponent::setMaterial
+		 */
+		C3D_API void setMaterial( MaterialSPtr oldMaterial
+			, MaterialSPtr newMaterial
+			, bool update )override;
+		/**
 		 *\~english
 		 *\return		The instantiation VertexBuffer.
 		 *\~french
@@ -122,7 +122,9 @@ namespace castor3d
 		 */
 		inline ProgramFlags getProgramFlags()const override
 		{
-			return hasMatrixBuffer() ? ProgramFlag::eInstantiation : ProgramFlag( 0 );
+			return hasMatrixBuffer()
+				? ProgramFlag::eInstantiation
+				: ProgramFlag( 0 );
 		}
 
 	private:
@@ -132,7 +134,7 @@ namespace castor3d
 		void doUpload()override;
 
 	public:
-		static castor::String const Name;
+		C3D_API static castor::String const Name;
 
 	private:
 		//!\~english	The submesh instances count.
@@ -141,6 +143,9 @@ namespace castor3d
 		//!\~english	The matrix buffer (instantiation).
 		//!\~french		Le tampon de matrices (instanciation).
 		VertexBufferUPtr m_matrixBuffer;
+		//!\~english	The threshold at which instantiation is triggered.
+		//!\~french		Le seuil à partir duquel l'instanciation est utilisée.
+		uint32_t m_threshold;
 	};
 }
 

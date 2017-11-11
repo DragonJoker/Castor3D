@@ -1,4 +1,4 @@
-#include "TransparentPass.hpp"
+﻿#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -250,7 +250,7 @@ namespace castor3d
 
 		std::function< void() > main = [&]()
 		{
-			auto curVertex = writer.declLocale( cuT( "curVertex" )
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vec4( position.xyz(), 1.0 ) );
 			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
 				, vec4( normal, 0.0 ) );
@@ -290,21 +290,19 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( cuT( "time" )
-					, vec3( 1.0_f - c3d_time ) );
-				curVertex = vec4( glsl::fma( curVertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
-				v4Normal = vec4( glsl::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
-				v4Tangent = vec4( glsl::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
-				v3Texture = glsl::fma( v3Texture, time, texture2 * c3d_time );
+				curPosition = vec4( glsl::mix( curPosition.xyz(), position2.xyz(), c3d_time ), 1.0 );
+				v4Normal = vec4( glsl::mix( v4Normal.xyz(), normal2.xyz(), c3d_time ), 1.0 );
+				v4Tangent = vec4( glsl::mix( v4Tangent.xyz(), tangent2.xyz(), c3d_time ), 1.0 );
+				v3Texture = glsl::mix( v3Texture, texture2, c3d_time );
 			}
 
 			vtx_texture = v3Texture;
-			curVertex = mtxModel * curVertex;
-			vtx_worldPosition = curVertex.xyz();
-			auto prvVertex = writer.declLocale( cuT( "prvVertex" )
-				, c3d_prvView * curVertex );
-			curVertex = c3d_curView * curVertex;
-			vtx_viewPosition = curVertex.xyz();
+			curPosition = mtxModel * curPosition;
+			vtx_worldPosition = curPosition.xyz();
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, c3d_prvView * curPosition );
+			curPosition = c3d_curView * curPosition;
+			vtx_viewPosition = curPosition.xyz();
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
@@ -320,21 +318,21 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * curVertex;
-			prvVertex = c3d_projection * prvVertex;
+			gl_Position = c3d_projection * curPosition;
+			prvPosition = c3d_projection * prvPosition;
 			// Convert the jitter from non-homogeneous coordiantes to homogeneous
 			// coordinates and add it:
 			// (note that for providing the jitter in non-homogeneous projection space,
 			//  pixel coordinates (screen space) need to multiplied by two in the C++
 			//  code)
 			gl_Position.xy() -= c3d_curJitter * gl_Position.w();
-			prvVertex.xy() -= c3d_prvJitter * gl_Position.w();
+			prvPosition.xy() -= c3d_prvJitter * gl_Position.w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 			vtx_curPosition = gl_Position.xyw();
-			vtx_prvPosition = prvVertex.xyw();
+			vtx_prvPosition = prvPosition.xyw();
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
 			// the scale (and flip the y axis):

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SubmeshComponent_H___
 #define ___C3D_SubmeshComponent_H___
 
-#include "Mesh/Submesh.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le sous-maillage
 		 */
-		C3D_API bool fill();
+		C3D_API void fill();
 		/**
 		 *\~english
 		 *\brief		Uploads data on VRAM.
@@ -69,6 +69,21 @@ namespace castor3d
 		 *\brief		Met les données en VRAM.
 		 */
 		C3D_API void upload();
+		/**
+		 *\~english
+		 *\brief		Sets the material.
+		 *\param[in]	oldMaterial	The old material.
+		 *\param[in]	newMaterial	The new material.
+		 *\param[in]	update		Tells if the buffers must be updated.
+		 *\~french
+		 *\brief		Définit le materiau.
+		 *\param[in]	oldMaterial	Le matériau précédent.
+		 *\param[in]	newMaterial	Le nouveau matériau.
+		 *\param[in]	update		Dit si les tampons doivent être mis à jour.
+		 */
+		C3D_API virtual void setMaterial( MaterialSPtr oldMaterial
+			, MaterialSPtr newMaterial
+			, bool update );
 		/**
 		 *\~english
 		 *\brief		Gathers buffers that need to go in a VAO.
@@ -92,6 +107,16 @@ namespace castor3d
 		inline castor::String const & getType()const
 		{
 			return m_type;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the component to be updated.
+		 *\~french
+		 *\return		Dit que le composant doit être mis à jour.
+		 */
+		inline void needsUpdate()
+		{
+			m_dirty = true;
 		}
 
 	private:

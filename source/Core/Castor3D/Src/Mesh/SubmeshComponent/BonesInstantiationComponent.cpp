@@ -1,5 +1,6 @@
 ﻿#include "BonesInstantiationComponent.hpp"
 
+#include "Mesh/Submesh.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
 
@@ -14,7 +15,7 @@ namespace castor3d
 	BonesInstantiationComponent::BonesInstantiationComponent( Submesh & submesh
 		, InstantiationComponent const & instantiation
 		, BonesComponent const & bones )
-		: SubmeshComponent{ submesh, cuT( "instantiated_bones" ) }
+		: SubmeshComponent{ submesh, Name }
 		, m_instantiation{ instantiation }
 		, m_bones{ bones }
 	{
@@ -23,6 +24,10 @@ namespace castor3d
 	BonesInstantiationComponent::~BonesInstantiationComponent()
 	{
 		cleanup();
+	}
+
+	void BonesInstantiationComponent::gather( VertexBufferArray & buffers )
+	{
 	}
 
 	bool BonesInstantiationComponent::doInitialise()

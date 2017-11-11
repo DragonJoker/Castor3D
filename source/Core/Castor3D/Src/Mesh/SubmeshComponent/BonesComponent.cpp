@@ -1,12 +1,11 @@
 ﻿#include "BonesComponent.hpp"
 
+#include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/BonedVertex.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 using namespace castor;
-
-//*************************************************************************************************
 
 namespace castor3d
 {
@@ -23,7 +22,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			VertexBoneData const * srcbuf = reinterpret_cast< VertexBoneData const * >( buffer.getData() );
+			auto const * srcbuf = reinterpret_cast< VertexBoneData const * >( buffer.getData() );
 			result = doWriteChunk( srcbuf, buffer.getSize() / sizeof( VertexBoneData ), ChunkType::eSubmeshBones, m_chunk );
 		}
 
@@ -81,7 +80,7 @@ namespace castor3d
 	String const BonesComponent::Name = cuT( "bones" );
 
 	BonesComponent::BonesComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, cuT( "bones" ) }
+		: SubmeshComponent{ submesh, Name }
 		, m_bonesBuffer{ *submesh.getScene()->getEngine()
 		, BufferDeclaration
 		{
@@ -116,6 +115,11 @@ namespace castor3d
 			m_bones.push_back( bonesData );
 			data += stride;
 		}
+	}
+
+	SkeletonSPtr BonesComponent::getSkeleton()const
+	{
+		return getOwner()->getParent().getSkeleton();
 	}
 
 	void BonesComponent::gather( VertexBufferArray & buffers )
@@ -174,4 +178,6 @@ namespace castor3d
 	{
 		m_bonesBuffer.upload();
 	}
+
+	//*************************************************************************************************
 }

@@ -79,12 +79,12 @@ namespace GlRender
 		 */
 		virtual void doSetTopology( castor3d::Topology p_value )override;
 
-		castor3d::BufferDeclaration::const_iterator doFindElement( castor3d::BufferDeclaration const & declaration
+		castor3d::BufferDeclaration::const_iterator doFindElement( std::vector< castor3d::BufferElementDeclaration > const & declaration
 			, castor3d::BufferElementDeclaration const & element )const;
 		GlAttributeBaseSPtr doCreateAttribute( castor3d::BufferElementDeclaration const & element
 			, uint32_t offset
 			, uint32_t divisor
-			, castor3d::BufferDeclaration const & declaration );
+			, uint32_t stride );
 		bool doCreateAttributes( castor3d::ProgramInputLayout const & layout
 			, castor3d::BufferDeclaration const & declaration
 			, uint32_t offset

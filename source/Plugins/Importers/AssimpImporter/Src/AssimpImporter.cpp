@@ -580,14 +580,15 @@ namespace C3dAssimp
 		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material )
 		{
 			submesh.setDefaultMaterial( material );
-			submesh.ref( material );
 			submesh.addPoints( doCreateVertexBuffer( aiMesh ) );
 
 			if ( aiMesh.HasBones() )
 			{
 				std::vector< VertexBoneData > arrayBones( aiMesh.mNumVertices );
 				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, arrayBones );
-				submesh.addBoneDatas( arrayBones );
+				auto bones = std::make_shared< BonesComponent >( submesh );
+				bones->addBoneDatas( arrayBones );
+				submesh.addComponent( bones );
 			}
 
 			for ( auto face : makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces ) )
@@ -778,8 +779,9 @@ namespace C3dAssimp
 				auto submesh = mesh.getSubmesh( aiMesh );
 				REQUIRE( submesh != nullptr );
 
-				if ( !submesh->hasBoneData() )
+				if ( !submesh->hasComponent( BonesComponent::Name ) )
 				{
+					auto bones = std::make_shared< BonesComponent >( *submesh );
 					std::vector< VertexBoneData > arrayBones( submesh->getPointsCount() );
 
 					for ( auto & boneData : arrayBones )
@@ -787,7 +789,8 @@ namespace C3dAssimp
 						boneData.addBoneData( index, 1.0_r );
 					}
 
-					submesh->addBoneDatas( arrayBones );
+					bones->addBoneDatas( arrayBones );
+					submesh->addComponent( bones );
 				}
 			}
 

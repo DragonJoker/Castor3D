@@ -4,8 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_BonesComponent_H___
 #define ___C3D_BonesComponent_H___
 
-#include "SubmeshComponent.hpp"
+#include "Binary/BinaryParser.hpp"
+#include "Binary/BinaryWriter.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
+#include "Mesh/SubmeshComponent/SubmeshComponent.hpp"
+#include "Mesh/Buffer/VertexBuffer.hpp"
 
 namespace castor3d
 {
@@ -52,6 +55,13 @@ namespace castor3d
 		 */
 		C3D_API void addBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
 		/**
+		 *\~english
+		 *\return		The skeleton.
+		 *\~french
+		 *\return		Le squelette.
+		 */
+		C3D_API SkeletonSPtr getSkeleton()const;
+		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( VertexBufferArray & buffers )override;
@@ -79,16 +89,6 @@ namespace castor3d
 		inline void addBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
 		{
 			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
-		}
-		/**
-		 *\~english
-		 *\return		The skeleton.
-		 *\~french
-		 *\return		Le squelette.
-		 */
-		inline SkeletonSPtr getSkeleton()const
-		{
-			return getOwner()->getParent().getSkeleton();
 		}
 		/**
 		 *\~english
@@ -125,7 +125,9 @@ namespace castor3d
 		 */
 		inline ProgramFlags getProgramFlags()const override
 		{
-			return ProgramFlag::eSkinning;
+			return hasBoneData()
+				? ProgramFlag::eSkinning
+				: ProgramFlag( 0 );
 		}
 
 	private:
@@ -135,7 +137,7 @@ namespace castor3d
 		void doUpload()override;
 
 	public:
-		static castor::String const Name;
+		C3D_API static castor::String const Name;
 
 	private:
 		//!\~english	The bone data buffer (animation).

@@ -139,7 +139,7 @@ namespace GlRender
 		m_glTopology = getOpenGl().get( p_value );
 	}
 
-	BufferDeclaration::const_iterator GlGeometryBuffers::doFindElement( BufferDeclaration const & declaration
+	BufferDeclaration::const_iterator GlGeometryBuffers::doFindElement( std::vector< BufferElementDeclaration > const & declaration
 		, BufferElementDeclaration const & element )const
 	{
 		// First try to find an attribute with matching name.
@@ -178,12 +178,11 @@ namespace GlRender
 	GlAttributeBaseSPtr GlGeometryBuffers::doCreateAttribute( BufferElementDeclaration const & element
 		, uint32_t offset
 		, uint32_t divisor
-		, BufferDeclaration const & declaration )
+		, uint32_t stride )
 	{
 		bool result = true;
 		auto const & renderSystem = getOpenGl().getRenderSystem();
 		GlAttributeBaseSPtr attribute;
-		uint32_t stride = declaration.stride();
 
 		switch ( element.m_dataType )
 		{
@@ -269,21 +268,30 @@ namespace GlRender
 		, uint32_t offset
 		, GlAttributePtrArray & attributes )
 	{
+		std::vector< BufferElementDeclaration > remaining{ declaration.begin(), declaration.end() };
+
 		for ( auto & element : layout )
 		{
-			auto it = doFindElement( declaration, element );
+			auto it = std::find_if( remaining.begin()
+				, remaining.end()
+				, [&element]( BufferElementDeclaration const & elem )
+			{
+				return elem.m_name == element.m_name;
+			} );
 
-			if ( it != declaration.end() )
+			if ( it != remaining.end() )
 			{
 				auto attribute = doCreateAttribute( element
 					, offset + it->m_offset
 					, it->m_divisor
-					, declaration );
+					, declaration.stride() );
 
 				if ( attribute )
 				{
 					attributes.push_back( attribute );
 				}
+
+				remaining.erase( it );
 			}
 		}
 

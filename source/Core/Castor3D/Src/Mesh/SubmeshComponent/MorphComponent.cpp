@@ -1,6 +1,9 @@
 ﻿#include "MorphComponent.hpp"
 
+#include "Mesh/Submesh.hpp"
+#include "Mesh/Vertex.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/ShaderProgram.hpp"
 
 using namespace castor;
 
@@ -10,8 +13,20 @@ namespace castor3d
 
 	MorphComponent::MorphComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, Name }
-		, m_animBuffer{ *submesh.getScene()->getEngine()
-			, submesh.getVertexBuffer().getDeclaration() }
+		, m_animBuffer
+		{
+			*submesh.getScene()->getEngine(),
+			BufferDeclaration
+			{
+				{
+					BufferElementDeclaration( ShaderProgram::Position2, uint32_t( ElementUsage::ePosition ), ElementType::eVec3, Vertex::getOffsetPos() ),
+					BufferElementDeclaration( ShaderProgram::Normal2, uint32_t( ElementUsage::eNormal ), ElementType::eVec3, Vertex::getOffsetNml() ),
+					BufferElementDeclaration( ShaderProgram::Tangent2, uint32_t( ElementUsage::eTangent ), ElementType::eVec3, Vertex::getOffsetTan() ),
+					BufferElementDeclaration( ShaderProgram::Bitangent2, uint32_t( ElementUsage::eBitangent ), ElementType::eVec3, Vertex::getOffsetBin() ),
+					BufferElementDeclaration( ShaderProgram::Texture2, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec3, Vertex::getOffsetTex() ),
+				}
+			}
+		}
 	{
 	}
 

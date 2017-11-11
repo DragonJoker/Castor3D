@@ -2080,7 +2080,6 @@ namespace castor3d
 
 						for ( auto submesh : *parsingContext->pMesh )
 						{
-							submesh->setAnimated( true );
 							animation.addChild( MeshAnimationSubmesh{ animation, *submesh } );
 						}
 					}

@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SUBMESH_H___
@@ -20,16 +20,21 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class SubmeshComponent;
+	template< typename T >
+	struct SubmeshComponentAdder
+	{
+		static inline void add( std::shared_ptr< T > component
+			, Submesh & submesh );
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
 	\brief		The submesh representation.
-	\remark		A submesh holds its buffers (vertex, normals and texture) and its combobox.
+	\remarks	A submesh holds its buffers (vertex, normals and texture) and its combobox.
 	\~french
 	\brief		Representation d'un sous-maillage.
-	\remark		Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
+	\remarks	Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
 	*/
 	class Submesh
 		: public castor::OwnedBy< Scene >
@@ -37,6 +42,7 @@ namespace castor3d
 	{
 	private:
 		DECLARE_LIST( castor::ByteArray, BytePtr );
+		template< typename T > friend struct SubmeshComponentAdder;
 
 	public:
 		/**
@@ -229,13 +235,6 @@ namespace castor3d
 		C3D_API void resetGpuBuffers();
 		/**
 		 *\~english
-		 *\brief		Recreates the Matrix buffers.
-		 *\~french
-		 *\brief		Recrée le tampon de matrices.
-		 */
-		C3D_API void resetMatrixBuffers();
-		/**
-		 *\~english
 		 *\brief		Draws the submesh.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw this submesh.
 		 *\~french
@@ -333,7 +332,7 @@ namespace castor3d
 		C3D_API Topology getTopology()const;
 		/**
 		 *\~english
-		 *\brief		sets the topology.
+		 *\brief		Sets the topology.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la topologie.
@@ -358,16 +357,30 @@ namespace castor3d
 		C3D_API ProgramFlags getProgramFlags()const;
 		/**
 		 *\~english
+		 *\brief		Sets the material.
+		 *\param[in]	oldMaterial	The old material.
+		 *\param[in]	newMaterial	The new material.
+		 *\param[in]	update		Tells if the buffers must be updated.
+		 *\return		\p true si le matériau a changé.
+		 *\~french
+		 *\brief		Définit le materiau.
+		 *\param[in]	oldMaterial	Le matériau précédent.
+		 *\param[in]	newMaterial	Le nouveau matériau.
+		 *\param[in]	update		Dit si les tampons doivent être mis à jour.
+		 *\return		\p true if the material is changed.
+		 */
+		C3D_API void setMaterial( MaterialSPtr oldMaterial
+			, MaterialSPtr newMaterial
+			, bool update );
+		/**
+		 *\~english
 		 *\brief		adds a points list to my list
 		 *\param[in]	p_vertices	The vertices
 		 *\~french
 		 *\brief		Ajoute des points à la liste
 		 *\param[in]	p_vertices	Les vertices
 		 */
-		inline void addPoints( std::vector< InterleavedVertex > const & p_vertices )
-		{
-			addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
-		}
+		inline void addPoints( std::vector< InterleavedVertex > const & p_vertices );
 		/**
 		 *\~english
 		 *\brief		adds a points list to my list
@@ -377,10 +390,7 @@ namespace castor3d
 		 *\param[in]	p_vertices	Les vertices
 		 */
 		template< size_t Count >
-		inline void addPoints( std::array< InterleavedVertex, Count > const & p_vertices )
-		{
-			addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
-		}
+		inline void addPoints( std::array< InterleavedVertex, Count > const & p_vertices );
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
@@ -389,10 +399,7 @@ namespace castor3d
 		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_faces	Les faces
 		 */
-		inline void addFaceGroup( std::vector< FaceIndices > const & p_faces )
-		{
-			addFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
-		}
+		inline void addFaceGroup( std::vector< FaceIndices > const & p_faces );
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
@@ -402,32 +409,23 @@ namespace castor3d
 		 *\param[in]	p_faces	Les faces
 		 */
 		template< size_t Count >
-		inline void addFaceGroup( std::array< FaceIndices, Count > const & p_faces )
-		{
-			addFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
-		}
+		inline void addFaceGroup( std::array< FaceIndices, Count > const & p_faces );
 		/**
 		 *\~english
 		 *\return		The skeleton.
 		 *\~french
 		 *\return		Le squelette.
 		 */
-		inline SkeletonSPtr getSkeleton()const
-		{
-			return getParent().getSkeleton();
-		}
+		inline SkeletonSPtr getSkeleton()const;
 		/**
 		 *\~english
-		 *\brief		sets the material
+		 *\brief		Sets the material
 		 *\param[in]	p_mat	The new value
 		 *\~french
 		 *\brief		Définit le material
 		 *\param[in]	p_mat	La nouvelle valeur
 		 */
-		inline void setDefaultMaterial( MaterialSPtr p_mat )
-		{
-			m_defaultMaterial = p_mat;
-		}
+		inline void setDefaultMaterial( MaterialSPtr p_mat );
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index
@@ -438,11 +436,7 @@ namespace castor3d
 		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr operator[]( uint32_t p_index )const
-		{
-			REQUIRE( p_index < m_points.size() );
-			return m_points[p_index];
-		}
+		inline BufferElementGroupSPtr operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index
@@ -453,81 +447,56 @@ namespace castor3d
 		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr getPoint( uint32_t p_index )const
-		{
-			REQUIRE( p_index < m_points.size() );
-			return m_points[p_index];
-		}
+		inline BufferElementGroupSPtr getPoint( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The material.
 		 *\~french
 		 *\return		Le matériau.
 		 */
-		inline MaterialSPtr getDefaultMaterial()const
-		{
-			return m_defaultMaterial.lock();
-		}
+		inline MaterialSPtr getDefaultMaterial()const;
 		/**
 		 *\~english
 		 *\return		The cube bounding box.
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline castor::CubeBox const & getCollisionBox()const
-		{
-			return m_box;
-		}
+		inline castor::CubeBox const & getCollisionBox()const;
 		/**
 		 *\~english
 		 *\return		The cube bounding box.
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline castor::CubeBox & getCollisionBox()
-		{
-			return m_box;
-		}
+		inline castor::CubeBox & getCollisionBox();
 		/**
 		 *\~english
 		 *\return		The sphere bounding box.
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline castor::SphereBox const & getCollisionSphere()const
-		{
-			return m_sphere;
-		}
+		inline castor::SphereBox const & getCollisionSphere()const;
 		/**
 		 *\~english
 		 *\return		The sphere bounding box.
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline castor::SphereBox & getCollisionSphere()
-		{
-			return m_sphere;
-		}
+		inline castor::SphereBox & getCollisionSphere();
 		/**
 		 *\~english
 		 *\return		The points array.
 		 *\~french
 		 *\return		Le tableau de points.
 		 */
-		inline VertexPtrArray const & getPoints()const
-		{
-			return m_points;
-		}
+		inline VertexPtrArray const & getPoints()const;
 		/**
 		 *\~english
 		 *\return		The points array.
 		 *\~french
 		 *\return		Le tableau de points.
 		 */
-		inline VertexPtrArray & getPoints()
-		{
-			return m_points;
-		}
+		inline VertexPtrArray & getPoints();
 		/**
 		 *\~english
 		 *\brief		Retrieves the face at given index
@@ -538,121 +507,84 @@ namespace castor3d
 		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline Face const & getFace( uint32_t p_index )const
-		{
-			REQUIRE( p_index < m_faces.size() );
-			return m_faces[p_index];
-		}
+		inline Face const & getFace( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The faces array.
 		 *\~french
 		 *\return		Le tableau de faces.
 		 */
-		inline FaceArray const & getFaces()const
-		{
-			return m_faces;
-		}
+		inline FaceArray const & getFaces()const;
 		/**
 		 *\~english
 		 *\return		The faces array.
 		 *\~french
 		 *\return		Le tableau de faces.
 		 */
-		inline FaceArray & getFaces()
-		{
-			return m_faces;
-		}
+		inline FaceArray & getFaces();
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer const & getVertexBuffer()const
-		{
-			return m_vertexBuffer;
-		}
+		inline VertexBuffer const & getVertexBuffer()const;
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer & getVertexBuffer()
-		{
-			return m_vertexBuffer;
-		}
+		inline VertexBuffer & getVertexBuffer();
 		/**
 		 *\~english
 		 *\return		The IndexBuffer.
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
-		inline IndexBuffer const & getIndexBuffer()const
-		{
-			return m_indexBuffer;
-		}
+		inline IndexBuffer const & getIndexBuffer()const;
 		/**
 		 *\~english
 		 *\return		The IndexBuffer.
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
-		inline IndexBuffer & getIndexBuffer()
-		{
-			return m_indexBuffer;
-		}
+		inline IndexBuffer & getIndexBuffer();
 		/**
 		 *\~english
 		 *\return		The initialisation status.
 		 *\~french
 		 *\return		Le statut d'initialisation.
 		 */
-		inline bool isInitialised()const
-		{
-			return m_initialised;
-		}
+		inline bool isInitialised()const;
 		/**
 		 *\~english
 		 *\return		The parent mesh.
 		 *\~french
 		 *\return		Le maillage parent.
 		 */
-		inline Mesh const & getParent()const
-		{
-			return m_parentMesh;
-		}
+		inline Mesh const & getParent()const;
 		/**
 		 *\~english
 		 *\return		The parent mesh.
 		 *\~french
 		 *\return		Le maillage parent.
 		 */
-		inline Mesh & getParent()
-		{
-			return m_parentMesh;
-		}
+		inline Mesh & getParent();
 		/**
 		 *\~english
 		 *\return		The submesh ID.
 		 *\~french
 		 *\return		L'ID du sous-maillage.
 		 */
-		inline uint32_t getId()const
-		{
-			return m_id;
-		}
+		inline uint32_t getId()const;
 		/**
 		 *\~english
-		 *\brief		sets the submesh to be updated.
+		 *\brief		Sets the submesh to be updated.
 		 *\~french
 		 *\return		Dit que le sous-maillage doit être mis à jour.
 		 */
-		inline void needsUpdate()
-		{
-			m_dirty = true;
-		}
+		inline void needsUpdate();
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
@@ -661,10 +593,76 @@ namespace castor3d
 		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_faces	Les faces
 		 */
-		template< uint32_t Count > void addFaceGroup( FaceIndices( & p_faces )[Count] )
-		{
-			addFaceGroup( p_faces, Count );
-		}
+		template< uint32_t Count >
+		void addFaceGroup( FaceIndices( &p_faces )[Count] );
+		/**
+		 *\~english
+		 *\brief		Checks if a component exists.
+		 *\param[in]	name		The component name.
+		 *\~french
+		 *\return		Vérifie si un composant existe.
+		 *\param[in]	name		Le nom du composant.
+		 */
+		inline bool hasComponent( castor::String const & name );
+		/**
+		 *\~english
+		 *\brief		Adds a component.
+		 *\param[in]	name		The component name.
+		 *\param[in]	component	The component.
+		 *\~french
+		 *\return		Ajoute un composant.
+		 *\param[in]	name		Le nom du composant.
+		 *\param[in]	component	Le composant.
+		 */
+		inline void addComponent( castor::String const & name
+			, SubmeshComponentSPtr component );
+		/**
+		 *\~english
+		 *\brief		Adds a component.
+		 *\param[in]	name		The component name.
+		 *\param[in]	component	The component.
+		 *\~french
+		 *\return		Ajoute un composant.
+		 *\param[in]	name		Le nom du composant.
+		 *\param[in]	component	Le composant.
+		 */
+		template< typename T >
+		inline void addComponent( std::shared_ptr< T > component );
+		/**
+		 *\~english
+		 *return		The instantiation component.
+		 *\~french
+		 *return		Le composant d'instantiation.
+		 */
+		inline InstantiationComponent & getInstantiation();
+		/**
+		 *\~english
+		 *return		The instantiation component.
+		 *\~french
+		 *return		Le composant d'instantiation.
+		 */
+		inline InstantiationComponent const & getInstantiation()const;
+		/**
+		 *\~english
+		 *return		The instantiation component.
+		 *\~french
+		 *return		Le composant d'instantiation.
+		 */
+		inline BonesInstantiationComponent & getInstantiatedBones();
+		/**
+		 *\~english
+		 *return		The instantiation component.
+		 *\~french
+		 *return		Le composant d'instantiation.
+		 */
+		inline BonesInstantiationComponent const & getInstantiatedBones()const;
+		/**
+		 *\~english
+		 *return		The components.
+		 *\~french
+		 *return		Les composants.
+		 */
+		inline SubmeshComponentStrMap const & getComponents()const;
 
 	private:
 		Face & doAddFace( const Face & p_face );
@@ -727,9 +725,15 @@ namespace castor3d
 		//!\~english	The GeometryBuffers with which this submesh is compatible.
 		//!\~french		Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
-		//!\~english	The GeometryBuffers with which this submesh is compatible.
-		//!\~french		Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
-		std::map< castor::String, std::shared_ptr< SubmeshComponent > > m_components;
+		//!\~english	The submesh components.
+		//!\~french		Les composants du sous-maillage.
+		SubmeshComponentStrMap m_components;
+		//!\~english	The instantiation component.
+		//!\~french		Le composant d'instantiation.
+		InstantiationComponentSPtr m_instantiation;
+		//!\~english	The instantiated bones component.
+		//!\~french		Le composant d'os instantiaciés.
+		BonesInstantiationComponentSPtr m_instantiatedBones;
 
 		friend class GeometryBuffers;
 		friend class BinaryWriter< Submesh >;
@@ -804,5 +808,7 @@ namespace castor3d
 		C3D_API bool doParse( Submesh & p_obj )override;
 	};
 }
+
+#include "Submesh.inl"
 
 #endif

@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MESH_ANIMATION_SUBMESH_H___
@@ -9,6 +9,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class MorphComponent;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -26,42 +27,42 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animation	The parent animation.
-		 *\param[in]	p_submesh	The submesh.
+		 *\param[in]	animation	The parent animation.
+		 *\param[in]	submesh		The submesh.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animation	L'animation parente.
-		 *\param[in]	p_submesh	Le sous-maillage.
+		 *\param[in]	animation	L'animation parente.
+		 *\param[in]	submesh		Le sous-maillage.
 		 */
-		C3D_API MeshAnimationSubmesh( MeshAnimation & p_animation, Submesh & p_submesh );
+		C3D_API MeshAnimationSubmesh( MeshAnimation & animation, Submesh & submesh );
 		/**
 		 *\~english
 		 *\brief		Move constructor.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh && p_rhs ) = default;
+		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh && p_rhs ) = default;
+		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh const & p_rhs ) = delete;
+		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
 		 */
-		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh const & p_rhs ) = delete;
+		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -72,15 +73,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates and adds an animation submesh buffer.
-		 *\param[in]	p_timeIndex		The time index.
-		 *\param[in]	p_buffer		The submesh buffer.
+		 *\param[in]	timeIndex	The time index.
+		 *\param[in]	buffer		The submesh buffer.
 		 *\~french
 		 *\brief		Crée et ajoute un tampon de sous-maillage d'animation.
-		 *\param[in]	p_timeIndex		L'index de temps.
-		 *\param[in]	p_buffer		Le tampon du sous-maillage.
+		 *\param[in]	timeIndex	L'index de temps.
+		 *\param[in]	buffer		Le tampon du sous-maillage.
 		 */
-		C3D_API bool addBuffer( castor::Milliseconds const & p_timeIndex
-			, InterleavedVertexArray && p_buffer );
+		C3D_API bool addBuffer( castor::Milliseconds const & timeIndex
+			, InterleavedVertexArray && buffer );
 		/**
 		 *\~english
 		 *\return		The vertex buffers.
@@ -124,14 +125,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the animation length.
-		 *\param[in]	p_length	The new value.
+		 *\param[in]	length	The new value.
 		 *\~french
 		 *\brief		Définit la durée de l'animation.
-		 *\param[in]	p_length	La nouvelle valeur.
+		 *\param[in]	length	La nouvelle valeur.
 		 */
-		inline void setLength( castor::Milliseconds const & p_length )
+		inline void setLength( castor::Milliseconds const & length )
 		{
-			m_length = p_length;
+			m_length = length;
 		}
 		/**
 		 *\~english
@@ -145,6 +146,26 @@ namespace castor3d
 		{
 			return !m_buffers.empty();
 		}
+		/**
+		 *\~english
+		 *\return		The bones component.
+		 *\~french
+		 *\return		Le composant des os.
+		 */
+		inline MorphComponent const & getComponent()const
+		{
+			return *m_component;
+		}
+		/**
+		 *\~english
+		 *\return		The bones component.
+		 *\~french
+		 *\return		Le composant des os.
+		 */
+		inline MorphComponent & getComponent()
+		{
+			return *m_component;
+		}
 
 	protected:
 		//!\~english	The animation length.
@@ -156,6 +177,9 @@ namespace castor3d
 		//!\~english	The submesh.
 		//!\~french		Le sous-maillage.
 		Submesh & m_submesh;
+		//!\~english	The bones component.
+		//!\~french		Le composant des os.
+		std::shared_ptr< MorphComponent > m_component;
 
 		friend class BinaryWriter< MeshAnimationSubmesh >;
 		friend class BinaryParser< MeshAnimationSubmesh >;
@@ -194,14 +218,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doWrite( MeshAnimationSubmesh const & p_obj )override;
+		C3D_API bool doWrite( MeshAnimationSubmesh const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -220,16 +244,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
-		 *\param[in]	p_chunk	The chunk containing data.
+		 *\param[out]	obj	The object to read.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
-		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse( MeshAnimationSubmesh & p_obj )override;
+		C3D_API bool doParse( MeshAnimationSubmesh & obj )override;
 	};
 }
 

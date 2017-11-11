@@ -139,16 +139,43 @@ namespace castor3d
 
 				break;
 
-			case ChunkType::eBonesComponent:
+			case ChunkType::eSubmeshBoneCount:
+				if ( !bonesComponent )
 				{
 					bonesComponent = std::make_shared< BonesComponent >( obj );
-					result = BinaryParser< BonesComponent >{}.parse( *bonesComponent, chunk );
-
-					if ( result )
-					{
-						obj.m_components.emplace( BonesComponent::Name, bonesComponent );
-					}
+					obj.addComponent( bonesComponent );
 				}
+
+				result = doParseChunk( count, chunk );
+
+				if ( result )
+				{
+					boneCount = count;
+					bones.resize( count );
+				}
+
+				break;
+
+			case ChunkType::eSubmeshBones:
+				result = doParseChunk( bones, chunk );
+
+				if ( result && boneCount > 0 )
+				{
+					bonesComponent->addBoneDatas( bones );
+				}
+
+				boneCount = 0u;
+				break;
+
+			case ChunkType::eBonesComponent:
+				bonesComponent = std::make_shared< BonesComponent >( obj );
+				result = BinaryParser< BonesComponent >{}.parse( *bonesComponent, chunk );
+
+				if ( result )
+				{
+					obj.addComponent( bonesComponent );
+				}
+
 				break;
 
 			case ChunkType::eSubmeshFaceCount:
@@ -205,6 +232,7 @@ namespace castor3d
 		}
 		, m_indexBuffer{ *p_scene.getEngine() }
 	{
+		addComponent( std::make_shared< InstantiationComponent >( *this ) );
 	}
 
 	Submesh::~Submesh()
@@ -427,17 +455,6 @@ namespace castor3d
 			{
 				doInitialiseGeometryBuffers( geometryBuffers );
 			}
-		}
-	}
-
-	void Submesh::resetMatrixBuffers()
-	{
-		auto it = m_components.find( InstantiationComponent::Name );
-
-		if ( it != m_components.end() )
-		{
-			auto instantiation = std::static_pointer_cast< InstantiationComponent >( it->second );
-			instantiation->resetMatrixBuffers();
 		}
 	}
 
@@ -668,6 +685,21 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void Submesh::setMaterial( MaterialSPtr oldMaterial
+		, MaterialSPtr newMaterial
+		, bool update )
+	{
+		if ( oldMaterial != newMaterial )
+		{
+			getScene()->setChanged();
+		}
+
+		for ( auto & component : m_components )
+		{
+			component.second->setMaterial( oldMaterial, newMaterial, update );
+		}
 	}
 
 	void Submesh::doCreateBuffers()

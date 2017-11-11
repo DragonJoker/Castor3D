@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "SubmeshComponent.hpp"
 
+#include "Mesh/Buffer/VertexBuffer.hpp"
+
 namespace castor3d
 {
 	/*!
@@ -75,7 +77,7 @@ namespace castor3d
 		void doUpload()override;
 
 	public:
-		static castor::String const Name;
+		C3D_API static castor::String const Name;
 
 	private:
 		//!\~english	The animated vertex buffer.

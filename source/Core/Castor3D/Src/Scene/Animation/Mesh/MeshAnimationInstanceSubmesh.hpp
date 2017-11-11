@@ -29,42 +29,43 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
-		 *\param[in]	p_animationObject	The animation object.
+		 *\param[in]	animationInstance	The parent skeleton animation instance.
+		 *\param[in]	animationObject		The animation object.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
-		 *\param[in]	p_animationObject	L'animation d'objet.
+		 *\param[in]	animationInstance	L'instance d'animation de squelette parent.
+		 *\param[in]	animationObject		L'animation d'objet.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh & p_animationObject );
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & animationInstance
+			, MeshAnimationSubmesh & animationObject );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & p_rhs ) = delete;
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & p_rhs ) = delete;
+		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Move constructor.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && p_rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move constructor.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && p_rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -75,12 +76,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	p_time	Current time index.
+		 *\param[in]	time	Current time index.
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	p_time	Index de temps courant.
+		 *\param[in]	time	Index de temps courant.
 		 */
-		C3D_API void update( castor::Milliseconds const & p_time );
+		C3D_API void update( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\brief		The current factor.

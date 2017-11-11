@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GEOMETRY_H___
@@ -11,6 +11,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class InstantiationComponent;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -79,20 +80,6 @@ namespace castor3d
 			, MeshSPtr mesh = nullptr );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~Geometry();
-		/**
-		 *\~english
-		 *\brief		Cleans all the object owned and created by the geometry
-		 *\~french
-		 *\brief		Nettoie tous les objets créés par la géométrie
-		 */
-		C3D_API void cleanup();
-		/**
-		 *\~english
 		 *brief			Creates the mesh buffers
 		 *\param[out]	nbFaces		Used to retrieve the faces number
 		 *\param[out]	nbVertex	Used to retrieve the vertexes number
@@ -101,21 +88,7 @@ namespace castor3d
 		 *\param[out]	nbFaces		Reçoit le nombre de faces du mesh
 		 *\param[out]	nbVertex	Reçoit le nombre de vertex du mesh
 		 */
-		C3D_API void createBuffers( uint32_t & nbFaces, uint32_t & nbVertex );
-		/**
-		 *\~english
-		 *\brief		Renders the geometry in a given display mode
-		 *\~french
-		 *\brief		Rend la géometrie dans un mode d'affichage donné
-		 */
-		C3D_API virtual void render();
-		/**
-		 *\~english
-		 *\brief		End render function, dummy
-		 *\~french
-		 *\brief		Fonction de fin de rendu, inutilisée
-		 */
-		C3D_API virtual void endRender() {}
+		C3D_API void prepare( uint32_t & nbFaces, uint32_t & nbVertex );
 		/**
 		 *\~english
 		 *\brief		Defines this geometry's mesh.
@@ -164,13 +137,16 @@ namespace castor3d
 			return m_mesh.lock();
 		}
 
-	protected:
+	private:
+		void doUpdateMesh();
+
+	private:
 		//!\~english	The mesh.
 		//!\~french		Le maillage.
 		MeshWPtr m_mesh;
 		//!\~english	The mesh name
 		//!\~french		Le nom du maillage.
-		castor::String m_strMeshName;
+		castor::String m_meshName;
 		//!\~english	Tells if the geometry has changed.
 		//!\~french		Dit si la géométrie a changé.
 		bool m_changed{ true };

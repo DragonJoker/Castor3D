@@ -1,4 +1,4 @@
-﻿#include "SubmeshComponent.hpp"
+#include "SubmeshComponent.hpp"
 
 namespace castor3d
 {
@@ -42,5 +42,11 @@ namespace castor3d
 		{
 			doUpload();
 		}
+	}
+
+	void SubmeshComponent::setMaterial( MaterialSPtr oldMaterial
+		, MaterialSPtr newMaterial
+		, bool update )
+	{
 	}
 }
