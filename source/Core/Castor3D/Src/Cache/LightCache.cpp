@@ -132,7 +132,7 @@ namespace castor3d
 		MyObjectCache::cleanup();
 	}
 
-	LightSPtr ObjectCache< Light, castor::String >::add( Key const & p_name, ElementPtr p_element )
+	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, castor::String >::add( Key const & p_name, ElementPtr p_element )
 	{
 		ElementPtr result{ p_element };
 
@@ -164,7 +164,7 @@ namespace castor3d
 		return result;
 	}
 
-	inline LightSPtr ObjectCache< Light, String >::add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
+	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
 	{
 		auto lock = castor::makeUniqueLock( m_elements );
 		ElementPtr result;
