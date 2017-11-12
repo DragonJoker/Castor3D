@@ -1,5 +1,10 @@
 #include "CubeBoxManager.hpp"
 
+#include "Mesh/SubmeshComponent/LinesMapping.hpp"
+#include "Scene/Scene.hpp"
+#include "Event/Frame/FrameListener.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
+
 #include <cstddef>
 
 using namespace castor;
@@ -10,12 +15,42 @@ namespace GuiCommon
 	CubeBoxManager::CubeBoxManager( Scene & scene )
 		: m_scene{ scene }
 	{
-		Parameters parameters;
-		parameters.add( cuT( "width" ), cuT( "1.0" ) );
-		parameters.add( cuT( "height" ), cuT( "1.0" ) );
-		parameters.add( cuT( "depth" ), cuT( "1.0" ) );
 		m_mesh = m_scene.getMeshCache().add( cuT( "CubeManager_Cube" ) );
-		m_scene.getEngine()->getMeshFactory().create( "cube" )->generate( *m_mesh, parameters );
+		auto submesh = m_mesh->createSubmesh();
+		InterleavedVertexArray vertex
+		{
+			InterleavedVertex{ { -1, -1, -1 } },
+			InterleavedVertex{ { -1, +1, -1 } },
+			InterleavedVertex{ { +1, +1, -1 } },
+			InterleavedVertex{ { +1, -1, -1 } },
+			InterleavedVertex{ { -1, -1, +1 } },
+			InterleavedVertex{ { -1, +1, +1 } },
+			InterleavedVertex{ { +1, +1, +1 } },
+			InterleavedVertex{ { +1, -1, +1 } },
+		};
+		submesh->setTopology( Topology::eLines );
+		submesh->addPoints( vertex );
+		auto mapping = std::make_shared< LinesMapping >( *submesh );
+		LineIndices lines[]
+		{
+			LineIndices{ { 0u, 1u } },
+			LineIndices{ { 1u, 2u } },
+			LineIndices{ { 2u, 3u } },
+			LineIndices{ { 3u, 0u } },
+			LineIndices{ { 4u, 5u } },
+			LineIndices{ { 5u, 6u } },
+			LineIndices{ { 6u, 7u } },
+			LineIndices{ { 7u, 4u } },
+			LineIndices{ { 0u, 4u } },
+			LineIndices{ { 1u, 5u } },
+			LineIndices{ { 2u, 6u } },
+			LineIndices{ { 3u, 7u } },
+		};
+		mapping->addLineGroup( lines );
+		submesh->setIndexMapping( mapping );
+		submesh->setDefaultMaterial( m_scene.getEngine()->getMaterialCache().find( cuT( "Red" ) ) );
+		m_mesh->computeContainers();
+		m_scene.getListener().postEvent( makeInitialiseEvent( *submesh ) );
 	}
 
 	CubeBoxManager::~CubeBoxManager()
@@ -39,11 +74,6 @@ namespace GuiCommon
 				for ( auto & submesh : *m_mesh )
 				{
 					geometry->setMaterial( *submesh, m_scene.getEngine()->getMaterialCache().find( cuT( "Red" ) ) );
-				}
-
-				for ( auto & submesh : *geometry->getMesh() )
-				{
-					submesh->setTopology( Topology::eLineStrip );
 				}
 			} ) );
 	}
