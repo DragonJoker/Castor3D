@@ -1,4 +1,4 @@
-#include "LwoImporter.hpp"
+﻿#include "LwoImporter.hpp"
 #include "LwoChunk.hpp"
 #include "LwoSubChunk.hpp"
 
@@ -17,7 +17,7 @@
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
@@ -1361,16 +1361,20 @@ namespace Lwo
 				std::map< UI4, UI4 > mapPntsIds;
 				FaceSPtr pFace;
 
-				for ( std::set< UI4 >::iterator it = setPntsIds.begin() ; it != setPntsIds.end() ; ++it, ++uiCount )
+				for ( auto it = setPntsIds.begin() ; it != setPntsIds.end() ; ++it, ++uiCount )
 				{
 					m_pSubmesh->addPoint( m_arrayPoints[*it] );
 					mapPntsIds.insert( std::make_pair( *it, uiCount ) );
 				}
 
+				auto mapping = std::make_shared< TriFaceMapping >( *m_pSubmesh );
+
 				for ( auto & face : arrayFaces )
 				{
-					m_pSubmesh->addFace( mapPntsIds[face[1]], mapPntsIds[face[0]], mapPntsIds[face[2]] );
+					mapping->addFace( mapPntsIds[face[1]], mapPntsIds[face[0]], mapPntsIds[face[2]] );
 				}
+
+				m_pSubmesh->setIndexMapping( mapping );
 			}
 		}
 		else

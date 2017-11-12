@@ -1,4 +1,4 @@
-#include "FbxImporter.hpp"
+﻿#include "FbxImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
@@ -576,8 +576,10 @@ namespace C3dFbx
 			{
 				FbxMesh * mesh = p_fbxNode->GetMesh();
 				std::vector< VertexBoneData > boneData{ submesh->getPointsCount() };
+				auto bonesComponent = std::make_shared< BonesComponent >( *submesh );
 				doProcessBonesWeights( p_fbxNode, *p_mesh.getSkeleton(), boneData );
-				submesh->addBoneDatas( boneData );
+				bonesComponent->addBoneDatas( boneData );
+				submesh->addComponent( bonesComponent );
 			}
 		} );
 	}
@@ -814,6 +816,7 @@ namespace C3dFbx
 	{
 		p_fbxMesh->GenerateNormals();
 		auto submesh = p_mesh.createSubmesh();
+		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
 		submesh->setDefaultMaterial( getEngine()->getMaterialCache().find( cuT( "White" ) ) );
 		bool tangentSpace = false;
 
@@ -920,13 +923,14 @@ namespace C3dFbx
 		}
 
 		submesh->addPoints( vertices );
-		submesh->addFaceGroup( faces );
+		mapping->addFaceGroup( faces );
 
 		if ( !tangentSpace )
 		{
-			submesh->computeTangentsFromNormals();
+			mapping->computeTangentsFromNormals();
 		}
 
+		submesh->setIndexMapping( mapping );
 		return submesh;
 	}
 

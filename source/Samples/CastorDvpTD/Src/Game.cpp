@@ -1,4 +1,4 @@
-#include "Game.hpp"
+﻿#include "Game.hpp"
 
 #include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Engine.hpp>
@@ -181,17 +181,7 @@ namespace castortd
 			}
 		}
 
-		for ( auto submesh : *m_lastMapCube->getMesh() )
-		{
-			// We need to update the render nodes (since the submesh's geometry buffers are now invalid).
-			m_scene.setChanged();
-			m_scene.getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
-				, [this, submesh]()
-			{
-				// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.
-				submesh->resetGpuBuffers();
-			} ) );
-		}
+		m_scene.setChanged();
 
 		auto & node = *m_path.rbegin();
 		doAddTarget( getCell( node.m_x, node.m_y ) );

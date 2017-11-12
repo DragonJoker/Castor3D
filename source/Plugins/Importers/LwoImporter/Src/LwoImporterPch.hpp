@@ -15,7 +15,7 @@
 #	include <Cache/SceneNodeCache.hpp>
 #	include <Event/Frame/InitialiseEvent.hpp>
 #	include <Material/Pass.hpp>
-#	include <Mesh/Face.hpp>
+#	include <Mesh/SubmeshComponent/Face.hpp>
 #	include <Mesh/Importer.hpp>
 #	include <Mesh/Submesh.hpp>
 #	include <Mesh/Vertex.hpp>

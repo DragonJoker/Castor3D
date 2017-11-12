@@ -1,4 +1,4 @@
-#include "SMaxImporter.hpp"
+﻿#include "SMaxImporter.hpp"
 
 #include <Graphics/Colour.hpp>
 #include <Graphics/Image.hpp>
@@ -15,7 +15,7 @@
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
@@ -167,6 +167,7 @@ namespace C3dSMax
 		SMaxChunk currentChunk;
 		bool ok = true;
 		SubmeshSPtr submesh = p_mesh.createSubmesh();
+		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
 
 		while ( m_pFile->isOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && ok )
 		{
@@ -185,7 +186,7 @@ namespace C3dSMax
 					break;
 
 				case eSMAX_CHUNK_FACE_ARRAY:
-					doReadVertexIndices( p_scene, &currentChunk, *submesh );
+					doReadVertexIndices( p_scene, &currentChunk, *submesh, *mapping );
 					break;
 
 				case eSMAX_CHUNK_MSH_MAT_GROUP:
@@ -205,13 +206,14 @@ namespace C3dSMax
 			p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 		}
 
-		if ( submesh->getPointsCount() && submesh->getFaceCount() )
+		if ( submesh->getPointsCount() )
 		{
 			if ( !m_bIndicesFound )
 			{
-				submesh->computeFacesFromPolygonVertex();
+				mapping->computeFacesFromPolygonVertex();
 			}
 
+			submesh->setIndexMapping( mapping );
 			submesh->computeContainers();
 		}
 
@@ -453,7 +455,7 @@ namespace C3dSMax
 		}
 	}
 
-	void SMaxImporter::doReadVertexIndices( Scene & p_scene, SMaxChunk * p_chunk, Submesh & p_submesh )
+	void SMaxImporter::doReadVertexIndices( Scene & p_scene, SMaxChunk * p_chunk, Submesh & p_submesh, TriFaceMapping & mapping )
 	{
 		std::vector< uint32_t > arrayGroups;
 		std::vector< FaceIndices > arrayFaces;
@@ -562,16 +564,6 @@ namespace C3dSMax
 						{
 							currentChunk.m_ulBytesRead += uint32_t( m_pFile->readArray( &arrayGroups[0], uiNbFaces ) );
 
-							//for( std::size_t i = 0 ; i < uiNbFaces && p_chunk->m_ulBytesRead < p_chunk->m_ulLength ; ++i )
-							//{
-							//	itGroups = mapGroupsById.find( arrayGroups[i] );
-
-							//	if( itGroups == mapGroupsById.end() )
-							//	{
-							//		mapGroupsById.insert( std::make_pair( arrayGroups[i], p_submesh.AddSmoothingGroup() ) );
-							//	}
-							//}
-
 							p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 
 							if ( p_chunk->m_ulBytesRead + 6 < p_chunk->m_ulLength )
@@ -625,16 +617,16 @@ namespace C3dSMax
 				}
 			}
 
-			for ( std::vector< FaceIndices >::const_iterator it = arrayFaces.begin(); it != arrayFaces.end(); ++it )
+			for ( auto & face : arrayFaces )
 			{
 				// It seems faces are inverted in 3DS so I invert the indices to fall back in a good order
-				uint32_t uiV1 = it->m_index[0];
-				uint32_t uiV2 = it->m_index[1];
-				uint32_t uiV3 = it->m_index[2];
+				uint32_t uiV1 = face.m_index[0];
+				uint32_t uiV2 = face.m_index[1];
+				uint32_t uiV3 = face.m_index[2];
 				pV1 = p_submesh.getPoint( uiV1 );
 				pV2 = p_submesh.getPoint( uiV2 );
 				pV3 = p_submesh.getPoint( uiV3 );
-				p_submesh.addFace( uiV1, uiV2, uiV3 );
+				mapping.addFace( uiV1, uiV2, uiV3 );
 
 				if ( !m_arrayTexVerts.empty() )
 				{

@@ -16,7 +16,7 @@
 #	include <Cache/CacheView.hpp>
 #	include <Material/Pass.hpp>
 #	include <Mesh/Submesh.hpp>
-#	include <Mesh/Face.hpp>
+#	include <Mesh/SubmeshComponent/Face.hpp>
 #	include <Mesh/Vertex.hpp>
 #	include <Mesh/Buffer/Buffer.hpp>
 #	include <Miscellaneous/Version.hpp>

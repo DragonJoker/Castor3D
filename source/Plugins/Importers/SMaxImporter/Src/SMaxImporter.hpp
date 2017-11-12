@@ -1,4 +1,4 @@
-/* See LICENSE file in root folder */
+﻿/* See LICENSE file in root folder */
 #ifndef ___3DS_IMPORTER_H___
 #define ___3DS_IMPORTER_H___
 
@@ -658,7 +658,7 @@ namespace C3dSMax
 		void doProcessMaterialMapChunk( SMaxChunk * p_chunk, castor::String & p_strName );
 		void doReadColorChunk( SMaxChunk * p_chunk, castor::RgbColour & p_clrColour );
 		void doReadVertices( SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
-		void doReadVertexIndices( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
+		void doReadVertexIndices( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Submesh & p_submesh, castor3d::TriFaceMapping & mapping );
 		void doReadUVCoordinates( SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
 		void doReadObjectMaterial( castor3d::Scene & p_scene, SMaxChunk * p_chunk, castor3d::Submesh & p_submesh );
 		void doDiscardChunk( SMaxChunk * p_chunk );

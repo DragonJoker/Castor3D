@@ -1,4 +1,4 @@
-/* See LICENSE file in root folder */
+﻿/* See LICENSE file in root folder */
 #ifndef ___ASE_FILE_CONTEXT_H___
 #define ___ASE_FILE_CONTEXT_H___
 
@@ -50,6 +50,8 @@ namespace Ase
 		castor3d::MaterialPtrUIntMap m_mapMaterials;
 		castor::Point3rPtrArray m_arrayTexCoords;
 		castor3d::ViewportType eViewportType;
+		std::shared_ptr< castor3d::TriFaceMapping > m_faceMapping;
+		std::vector< castor3d::FaceIndices > m_faces;
 		uint16_t uiUInt16;
 		uint32_t uiUInt32;
 		uint64_t uiUInt64;

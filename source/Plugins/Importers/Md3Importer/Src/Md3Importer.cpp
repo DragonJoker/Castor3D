@@ -1,4 +1,4 @@
-#include "Md3Importer.hpp"
+﻿#include "Md3Importer.hpp"
 
 #include <Graphics/Colour.hpp>
 #include <Graphics/Image.hpp>
@@ -15,7 +15,7 @@
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
@@ -201,6 +201,7 @@ namespace C3DMd3
 	{
 		BufferElementGroupSPtr pVertex;
 		SubmeshSPtr submesh = p_mesh.createSubmesh();
+		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
 		m_mapSubmeshesByName.insert( std::make_pair( string::stringCast< xchar >( p_meshHeader.m_strName ), submesh ) );
 
 		for ( int i = 0; i < p_meshHeader.m_numVertices; i++ )
@@ -213,48 +214,11 @@ namespace C3DMd3
 		{
 			if ( m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0 )
 			{
-				submesh->addFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2] );
+				mapping->addFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2] );
 			}
 		}
 
-		//for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
-		//{
-		//	if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
-		//	{
-		//		submesh->addPoint( m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[2] / 64.0f )->setTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) ) );
-		//		submesh->addPoint( m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[2] / 64.0f )->setTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) ) );
-		//		submesh->addPoint( m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[2] / 64.0f )->setTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) ) );
-		//		submesh->addFace( i * 3 + 0, i * 3 + 1, i * 3 + 2 );
-		//	}
-		//}
-
-		////Point2rArray texVerts;
-
-		////for (int i = 0 ; i < p_meshHeader.m_numVertices ; i++)
-		////{
-		////	texVerts.push_back( Point2r( m_texCoords[i].m_textureCoord[0], 1-m_texCoords[i].m_textureCoord[1] ) );
-		////}
-
-		////std::vector< FaceIndices > arrayFaces( p_meshHeader.m_numTriangles );
-		////std::vector< float > arrayTex;
-
-		////for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
-		////{
-		////	if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
-		////	{
-		////		arrayFaces[i].m_uiVertexIndex[0] = m_triangles[i].m_vertexIndices[0];
-		////		arrayFaces[i].m_uiVertexIndex[1] = m_triangles[i].m_vertexIndices[1];
-		////		arrayFaces[i].m_uiVertexIndex[2] = m_triangles[i].m_vertexIndices[2];
-		////		arrayTex.push_back( texVerts[m_triangles[i].m_vertexIndices[0]][0] );
-		////		arrayTex.push_back( texVerts[m_triangles[i].m_vertexIndices[0]][1] );
-		////		arrayTex.push_back( texVerts[m_triangles[i].m_vertexIndices[1]][0] );
-		////		arrayTex.push_back( texVerts[m_triangles[i].m_vertexIndices[1]][1] );
-		////		arrayTex.push_back( texVerts[m_triangles[i].m_vertexIndices[2]][0] );
-		////		arrayTex.push_back( texVerts[m_triangles[i].m_vertexIndices[2]][1] );
-		////	}
-		////}
-
-		////l_submesh->addFaceGroup( &arrayFaces[0], p_meshHeader.m_numTriangles, NULL, &arrayTex[0] );
+		submesh->setIndexMapping( mapping );
 	}
 
 	bool Md3Importer::doLoadSkin( Mesh & p_mesh, Path const & p_strSkin )

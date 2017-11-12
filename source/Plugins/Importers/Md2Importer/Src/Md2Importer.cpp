@@ -1,4 +1,4 @@
-#include "Md2Importer.hpp"
+﻿#include "Md2Importer.hpp"
 
 #include <Graphics/Colour.hpp>
 #include <Graphics/Image.hpp>
@@ -15,7 +15,7 @@
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
@@ -187,21 +187,7 @@ namespace C3DMd2
 
 		if ( m_header.m_numFrames > 0 )
 		{
-			//for (int i = 0 ; i < m_header.m_numVertices ; i++)
-			//{
-			//	pVertex = submesh->addPoint( m_frames[0].m_vertices[i].m_coords );
-			//}
-
-			//for (int i = 0 ; i < m_header.m_numTriangles ; i++)
-			//{
-			//	if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
-			//	{
-			//		submesh->getPoint( m_triangles[i].m_vertexIndices[0] )->setTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) / real( m_header.m_skinHeight ) );
-			//		submesh->getPoint( m_triangles[i].m_vertexIndices[1] )->setTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) / real( m_header.m_skinHeight ) );
-			//		submesh->getPoint( m_triangles[i].m_vertexIndices[2] )->setTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) / real( m_header.m_skinHeight ) );
-			//		submesh->addFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2] );
-			//	}
-			//}
+			auto mapping = std::make_shared< TriFaceMapping >( *submesh );
 
 			for ( int i = 0; i < m_header.m_numTriangles; i++ )
 			{
@@ -210,29 +196,12 @@ namespace C3DMd2
 					Vertex::setTexCoord( submesh->addPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[0]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) / real( m_header.m_skinHeight ) );
 					Vertex::setTexCoord( submesh->addPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[1]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) / real( m_header.m_skinHeight ) );
 					Vertex::setTexCoord( submesh->addPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[2]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) / real( m_header.m_skinHeight ) );
-					submesh->addFace( i * 3 + 0, i * 3 + 1, i * 3 + 2 );
+					mapping->addFace( i * 3 + 0, i * 3 + 1, i * 3 + 2 );
 				}
 			}
 
+			submesh->setIndexMapping( mapping );
 			delete[] m_frames[0].m_vertices;
-
-			//for (int i = 0 ; i < m_header.m_numTriangles ; i++)
-			//{
-			//	if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
-			//	{
-			//		arrayFaces[i].m_uiVertexIndex[0] = m_triangles[i].m_vertexIndices[0];
-			//		arrayFaces[i].m_uiVertexIndex[1] = m_triangles[i].m_vertexIndices[1];
-			//		arrayFaces[i].m_uiVertexIndex[2] = m_triangles[i].m_vertexIndices[2];
-			//		arrayTex.push_back( float( m_texCoords[m_triangles[i].m_textureIndices[0]].u ) / float( m_header.m_skinWidth ) );
-			//		arrayTex.push_back( 1-float( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) / float( m_header.m_skinHeight ) );
-			//		arrayTex.push_back( float( m_texCoords[m_triangles[i].m_textureIndices[1]].u ) / float( m_header.m_skinWidth ) );
-			//		arrayTex.push_back( 1-float( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) / float( m_header.m_skinHeight ) );
-			//		arrayTex.push_back( float( m_texCoords[m_triangles[i].m_textureIndices[2]].u ) / float( m_header.m_skinWidth ) );
-			//		arrayTex.push_back( 1-float( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) / float( m_header.m_skinHeight ) );
-			//	}
-			//}
-
-			//l_submesh->addFaceGroup( &arrayFaces[0], m_header.m_numTriangles, NULL, &arrayTex[0] );
 		}
 	}
 
