@@ -16,7 +16,7 @@
 #include <Cache/CacheView.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>

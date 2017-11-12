@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FACE_H___
@@ -34,17 +34,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex index
-		 *\param[in]	p_index	The index of the concerned vertex
+		 *\param[in]	index	The index of the concerned vertex
 		 *\return		The vertex index
 		 *\~french
 		 *\brief		Récupère l'indice du vertex voulu
-		 *\param[in]	p_index	L'index du vertex concerné
+		 *\param[in]	index	L'index du vertex concerné
 		 *\return		L'indice
 		 */
-		inline uint32_t operator[]( uint32_t p_index )const
+		inline uint32_t operator[]( uint32_t index )const
 		{
-			REQUIRE( p_index < 3 );
-			return m_face.m_index[p_index];
+			REQUIRE( index < 3 );
+			return m_face.m_index[index];
 		}
 
 	private:

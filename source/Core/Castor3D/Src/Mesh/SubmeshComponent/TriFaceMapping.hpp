@@ -5,9 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_TriFaceMapping_H___
 
 #include "IndexMapping.hpp"
-#include "Mesh/FaceIndices.hpp"
-#include "Mesh/FaceInfos.hpp"
-#include "Mesh/Face.hpp"
+#include "FaceIndices.hpp"
+#include "FaceInfos.hpp"
+#include "Face.hpp"
 
 namespace castor3d
 {
@@ -43,13 +43,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~TriFaceMapping();
-		/**
-		 *\~english
-		 *\return		The faces number.
-		 *\~french
-		 *\return		Le nombre de faces de ce submesh.
-		 */
-		C3D_API uint32_t getFaceCount()const;
 		/**
 		 *\~english
 		 *\brief		Clears this submesh's face array

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___OBJ_IMPORTER_PREREQUISITES_H___
 
 #include <Mesh/Importer.hpp>
-#include <Mesh/FaceIndices.hpp>
+#include <Mesh/SubmeshComponent/FaceIndices.hpp>
 
 namespace Obj
 {

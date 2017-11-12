@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 
 #include "Mesh/VertexGroup.hpp"
-#include "Mesh/FaceIndices.hpp"
+#include "Mesh/SubmeshComponent/FaceIndices.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
 #include "Animation/KeyFrame.hpp"
 

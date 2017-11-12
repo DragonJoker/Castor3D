@@ -38,11 +38,6 @@ namespace castor3d
 		cleanup();
 	}
 
-	uint32_t TriFaceMapping::getFaceCount()const
-	{
-		return m_faces.empty() ? m_faceCount : uint32_t( m_faces.size() );
-	}
-
 	Face TriFaceMapping::addFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		Face result{ a, b, c };

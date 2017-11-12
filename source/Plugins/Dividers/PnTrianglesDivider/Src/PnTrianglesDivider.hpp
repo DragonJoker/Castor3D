@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <Event/Frame/FrameListener.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Subdivider.hpp>
 

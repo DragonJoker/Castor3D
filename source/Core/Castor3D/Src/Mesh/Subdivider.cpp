@@ -1,7 +1,7 @@
-#include "Subdivider.hpp"
+﻿#include "Subdivider.hpp"
 
 #include "Engine.hpp"
-#include "Face.hpp"
+#include "SubmeshComponent/Face.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 
@@ -140,11 +140,6 @@ namespace castor3d
 
 	void Subdivider::doInitialise()
 	{
-		if ( m_bGenerateBuffers )
-		{
-			// TODO Replace by something appropriate:
-			// m_submesh->resetGpuBuffers();
-		}
 	}
 
 	void Subdivider::doSwapBuffers()

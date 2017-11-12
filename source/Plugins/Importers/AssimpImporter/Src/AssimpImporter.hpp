@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <Animation/KeyFrame.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>

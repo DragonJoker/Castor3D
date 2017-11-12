@@ -15,7 +15,7 @@
 #include "Material/MetallicRoughnessPbrPass.hpp"
 #include "Material/SpecularGlossinessPbrPass.hpp"
 #include "Material/SubsurfaceScattering.hpp"
-#include "Mesh/Face.hpp"
+#include "Mesh/SubmeshComponent/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Subdivider.hpp"

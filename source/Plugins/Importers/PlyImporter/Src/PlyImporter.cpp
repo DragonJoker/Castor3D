@@ -12,7 +12,7 @@
 #include <Cache/SceneCache.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Plugin/Plugin.hpp>
