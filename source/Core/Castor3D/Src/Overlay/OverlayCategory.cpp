@@ -129,6 +129,7 @@ namespace castor3d
 
 	Position OverlayCategory::getAbsolutePosition( castor::Size const & p_size )const
 	{
+		// TODO: Bug here
 		Point2d position = getAbsolutePosition();
 		return Position( int32_t( p_size.getWidth() * position[0] ), int32_t( p_size.getHeight() * position[1] ) );
 	}

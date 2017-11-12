@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SUBMESH_H___
@@ -6,9 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 #include "Mesh.hpp"
-#include "FaceIndices.hpp"
-#include "FaceInfos.hpp"
-#include "Face.hpp"
 #include "VertexGroup.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Mesh/Buffer/IndexBuffer.hpp"
@@ -115,7 +112,7 @@ namespace castor3d
 		C3D_API int isInMyPoints( castor::Point3r const & p_vertex, double p_precision );
 		/**
 		 *\~english
-		 *\brief		Creates and adds a vertex to my list
+		 *\brief		Creates and Adds a vertex to my list
 		 *\param[in]	x	The vertex X coordinate
 		 *\param[in]	y	The vertex Y coordinate
 		 *\param[in]	z	The vertex Z coordinate
@@ -130,7 +127,7 @@ namespace castor3d
 		C3D_API BufferElementGroupSPtr addPoint( real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		adds a vertex to my list
+		 *\brief		Adds a vertex to my list
 		 *\param[in]	p_v	The vertex to add
 		 *\return		The vertex
 		 *\~french
@@ -141,7 +138,7 @@ namespace castor3d
 		C3D_API BufferElementGroupSPtr addPoint( castor::Point3r const & p_v );
 		/**
 		 *\~english
-		 *\brief		Creates and adds a vertex to my list
+		 *\brief		Creates and Adds a vertex to my list
 		 *\param[in]	p_v	The vertex coordinates
 		 *\return		The created vertex
 		 *\~french
@@ -152,18 +149,7 @@ namespace castor3d
 		C3D_API BufferElementGroupSPtr addPoint( real * p_v );
 		/**
 		 *\~english
-		 *\brief		Creates and adds a vertex to my list.
-		 *\param[in]	p_v	The vertex.
-		 *\return		The created vertex.
-		 *\~french
-		 *\brief		Crée un Vertex et l'ajoute à la liste.
-		 *\param[in]	p_v	Le sommet.
-		 *\return		Le vertex créé.
-		 */
-		C3D_API BufferElementGroupSPtr addPoint( InterleavedVertex const & p_v );
-		/**
-		 *\~english
-		 *\brief		adds a points list to my list.
+		 *\brief		Adds a points list to my list.
 		 *\param[in]	p_begin	The vertices data begin.
 		 *\param[in]	p_end	The vertices data end.
 		 *\~french
@@ -172,60 +158,6 @@ namespace castor3d
 		 *\param[in]	p_end	La fin des données de sommets.
 		 */
 		C3D_API void addPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end );
-		/**
-		 *\~english
-		 *\brief		Clears this submesh's face array
-		 *\~french
-		 *\brief		Vide le tableau de faces
-		 */
-		C3D_API void clearFaces();
-		/**
-		 *\~english
-		 *\brief		Creates and adds a face to the submesh
-		 *\param[in]	a			The first face's vertex index
-		 *\param[in]	b			The second face's vertex index
-		 *\param[in]	c			The third face's vertex index
-		 *\return		The created face
-		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	a			L'index du premier vertex
-		 *\param[in]	b			L'index du second vertex
-		 *\param[in]	c			L'index du troisième vertex
-		 *\return		La face créée
-		 */
-		C3D_API Face addFace( uint32_t a, uint32_t b, uint32_t c );
-		/**
-		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_begin	The faces data begin.
-		 *\param[in]	p_end	The faces data end.
-		 *\~french
-		 *\brief		Crée et ajoute des faces au sous-maillage
-		 *\param[in]	p_begin	Le début des données de faces.
-		 *\param[in]	p_end	La fin des données de faces.
-		 */
-		C3D_API void addFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end );
-		/**
-		 *\~english
-		 *\brief		Creates and adds a quad face to the submesh
-		 *\param[in]	a		The first face's vertex index
-		 *\param[in]	b		The second face's vertex index
-		 *\param[in]	c		The third face's vertex index
-		 *\param[in]	d		The fourth face's vertex index
-		 *\param[in]	p_minUV	The UV of the bottom left corner
-		 *\param[in]	p_maxUV	The UV of the top right corner
-		 *\return		The created face
-		 *\~french
-		 *\brief		Crée et ajoute une face à 4 côtés au sous-maillage
-		 *\param[in]	a		L'index du premier vertex
-		 *\param[in]	b		L'index du second vertex
-		 *\param[in]	c		L'index du troisième vertex
-		 *\param[in]	d		L'index du quatrième vertex
-		 *\param[in]	p_minUV	L'UV du coin bas gauche
-		 *\param[in]	p_maxUV	L'UV du coin haut droit
-		 *\return		La face créée
-		 */
-		C3D_API void addQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, castor::Point3r const & p_minUV = castor::Point3r(), castor::Point3r const & p_maxUV = castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
 		 *\brief		Recreates the buffers.
@@ -255,65 +187,11 @@ namespace castor3d
 		C3D_API void drawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
 		/**
 		 *\~english
-		 *\brief		Creates faces from the points
-		 *\remarks		This function assumes the points are sorted like triangles fan
-		 *\~french
-		 *\brief		Crée les faces à partir des points
-		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan
-		 */
-		C3D_API void computeFacesFromPolygonVertex();
-		/**
-		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
 		C3D_API void computeNormals( bool p_reverted = false );
-		/**
-		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face
-		 *\param[in]	p_face	The face
-		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
-		 *\param[in]	p_face	La face
-		 */
-		C3D_API void computeNormals( Face const & p_face );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face
-		 *\param[in]	p_face	The face
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
-		 *\param[in]	p_face	La face
-		 */
-		C3D_API void computeTangents( Face const & p_face );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remarks		This function supposes the normals are defined
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
-		 *\remarks		Cette fonction suppose que les normales sont définies
-		 */
-		C3D_API void computeTangentsFromNormals();
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remarks		This function supposes bitangents and normals are defined
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
-		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies
-		 */
-		C3D_API void computeTangentsFromBitangents();
-		/**
-		 *\~english
-		 *\brief		Computes bitangent for each vertex of the submesh
-		 *\remarks		This function supposes the tangents and normals are defined
-		 *\~french
-		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage
-		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies
-		 */
-		C3D_API void computeBitangents();
 		/**
 		 *\~english
 		 *\brief		Sorts the face from farthest to nearest from the camera
@@ -374,7 +252,7 @@ namespace castor3d
 			, bool update );
 		/**
 		 *\~english
-		 *\brief		adds a points list to my list
+		 *\brief		Adds a points list to my list
 		 *\param[in]	p_vertices	The vertices
 		 *\~french
 		 *\brief		Ajoute des points à la liste
@@ -383,7 +261,7 @@ namespace castor3d
 		inline void addPoints( std::vector< InterleavedVertex > const & p_vertices );
 		/**
 		 *\~english
-		 *\brief		adds a points list to my list
+		 *\brief		Adds a points list to my list
 		 *\param[in]	p_vertices	The vertices
 		 *\~french
 		 *\brief		Ajoute des points à la liste
@@ -391,25 +269,6 @@ namespace castor3d
 		 */
 		template< size_t Count >
 		inline void addPoints( std::array< InterleavedVertex, Count > const & p_vertices );
-		/**
-		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_faces	The faces
-		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	p_faces	Les faces
-		 */
-		inline void addFaceGroup( std::vector< FaceIndices > const & p_faces );
-		/**
-		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_faces	The faces
-		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	p_faces	Les faces
-		 */
-		template< size_t Count >
-		inline void addFaceGroup( std::array< FaceIndices, Count > const & p_faces );
 		/**
 		 *\~english
 		 *\return		The skeleton.
@@ -499,31 +358,6 @@ namespace castor3d
 		inline VertexPtrArray & getPoints();
 		/**
 		 *\~english
-		 *\brief		Retrieves the face at given index
-		 *\param[in]	p_index	The index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère récupère la face à l'index donné
-		 *\param[in]	p_index	L'index
-		 *\return		La valeur
-		 */
-		inline Face const & getFace( uint32_t p_index )const;
-		/**
-		 *\~english
-		 *\return		The faces array.
-		 *\~french
-		 *\return		Le tableau de faces.
-		 */
-		inline FaceArray const & getFaces()const;
-		/**
-		 *\~english
-		 *\return		The faces array.
-		 *\~french
-		 *\return		Le tableau de faces.
-		 */
-		inline FaceArray & getFaces();
-		/**
-		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
@@ -587,14 +421,13 @@ namespace castor3d
 		inline void needsUpdate();
 		/**
 		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_faces	The faces
+		 *\brief		Sets the index mapping.
+		 *\param[in]	mapping	The mapping.
 		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	p_faces	Les faces
+		 *\return		Définit le mappage d'indices.
+		 *\param[in]	mapping	Le mappage.
 		 */
-		template< uint32_t Count >
-		void addFaceGroup( FaceIndices( &p_faces )[Count] );
+		inline void setIndexMapping( IndexMappingSPtr mapping );
 		/**
 		 *\~english
 		 *\brief		Checks if a component exists.
@@ -628,6 +461,27 @@ namespace castor3d
 		 */
 		template< typename T >
 		inline void addComponent( std::shared_ptr< T > component );
+		/**
+		 *\~english
+		 *\brief		Finds a component.
+		 *\param[in]	name	The component name.
+		 *\return		The component, nullptr if not found.
+		 *\~french
+		 *\return		Trouve un composant.
+		 *\param[in]	name	Le nom du composant.
+		 *return		Le composant, nullptr si non trouvé.
+		 */
+		inline SubmeshComponentSPtr getComponent( castor::String const & name );
+		/**
+		 *\~english
+		 *\brief		Finds a component.
+		 *\return		The component, nullptr if not found.
+		 *\~french
+		 *\return		Trouve un composant.
+		 *return		Le composant, nullptr si non trouvé.
+		 */
+		template< typename T >
+		inline std::shared_ptr< T > getComponent();
 		/**
 		 *\~english
 		 *return		The instantiation component.
@@ -665,21 +519,16 @@ namespace castor3d
 		inline SubmeshComponentStrMap const & getComponents()const;
 
 	private:
-		Face & doAddFace( const Face & p_face );
 		void doCreateBuffers();
 		void doDestroyBuffers();
 		void doGenerateBuffers();
 		void doGenerateVertexBuffer();
-		void doGenerateIndexBuffer();
 		void doInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers );
 
 	private:
 		//!\~english	The submesh ID.
 		//!\~french		L'id du sbmesh.
 		uint32_t m_id{ 0 };
-		//!\~english	Tells if normals exist or need to be computed.
-		//!\~french		Dit si les normales existent ou doivent être calculées.
-		bool m_hasNormals{ false };
 		//!\~english	The shader program flags.
 		//!\~french		Les indicateurs pour le shader.
 		ProgramFlags m_programFlags{ 0u };
@@ -698,9 +547,6 @@ namespace castor3d
 		//!\~english	The index buffer.
 		//!\~french		Le tampon d'indices.
 		IndexBuffer m_indexBuffer;
-		//!\~english	The faces in the submesh.
-		//!\~french		Le tableau de faces.
-		FaceArray m_faces;
 		//!\~english	The Material assigned at creation.
 		//!\~french		Le Materiau affecté à la création.
 		MaterialWPtr m_defaultMaterial;
@@ -716,9 +562,6 @@ namespace castor3d
 		//!\~english	The vertex pointer array.
 		//!\~french		Le tableau de sommets.
 		VertexPtrArray m_points;
-		//!\~english	The transformed camera position at last sort.
-		//!\~french		La position transformée de la caméra au dernier tri.
-		castor::Point3r m_cameraPosition;
 		//!\~english	The parent mesh.
 		//!\~french		Le maillage parent.
 		Mesh & m_parentMesh;
@@ -734,6 +577,9 @@ namespace castor3d
 		//!\~english	The instantiated bones component.
 		//!\~french		Le composant d'os instantiaciés.
 		BonesInstantiationComponentSPtr m_instantiatedBones;
+		//!\~english	The index mapping component.
+		//!\~french		Le composant de mappage d'indices.
+		IndexMappingSPtr m_indexMapping;
 
 		friend class GeometryBuffers;
 		friend class BinaryWriter< Submesh >;

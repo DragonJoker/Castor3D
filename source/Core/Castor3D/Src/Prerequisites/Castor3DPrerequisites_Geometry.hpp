@@ -47,11 +47,12 @@ namespace castor3d
 	DECLARE_SMART_PTR( Vertex );
 	DECLARE_SMART_PTR( BufferElementGroup );
 
-	template< typename T > class Pattern;
-	typedef Pattern< Vertex > VertexPattern;
-	typedef Pattern< castor::Point3r > Point3rPattern;
-	typedef Pattern< VertexSPtr > VertexPtrPattern;
-	typedef Pattern< castor::Point3rSPtr > Point3rPtrPattern;
+	template< typename T >
+	class Pattern;
+	using VertexPattern = Pattern< Vertex >;
+	using Point3rPattern = Pattern< castor::Point3r >;
+	using VertexPtrPattern = Pattern< VertexSPtr >;
+	using Point3rPtrPattern = Pattern< castor::Point3rSPtr >;
 
 	struct FaceGroup;
 	class Face;
@@ -64,6 +65,8 @@ namespace castor3d
 	class BonesComponent;
 	class BonesInstantiationComponent;
 	class MorphComponent;
+	class IndexMapping;
+	class TriFaceMapping;
 	class Cone;
 	class Cylinder;
 	class Icosahedron;
@@ -92,6 +95,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( SubmeshComponent );
 	DECLARE_SMART_PTR( InstantiationComponent );
 	DECLARE_SMART_PTR( BonesInstantiationComponent );
+	DECLARE_SMART_PTR( IndexMapping );
 	DECLARE_SMART_PTR( Cone );
 	DECLARE_SMART_PTR( Cylinder );
 	DECLARE_SMART_PTR( Icosahedron );

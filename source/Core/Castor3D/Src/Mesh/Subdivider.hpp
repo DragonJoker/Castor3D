@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SUBDIVIDER_H___
@@ -204,6 +204,13 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation
 		 */
 		C3D_API virtual void doInitialise();
+		/**
+		 *\~english
+		 *\brief		Adds generated faces to the submesh
+		 *\~french
+		 *\brief		Ajoute les faces générées à celles du sous-maillage
+		 */
+		C3D_API virtual void doAddGeneratedFaces() = 0;
 		/**
 		 *\~english
 		 *\brief		Swaps the internal faces with the submeshes ones

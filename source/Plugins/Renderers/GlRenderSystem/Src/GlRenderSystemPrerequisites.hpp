@@ -104,9 +104,6 @@ namespace GlRender
 		eTriangles = 0x0004,
 		eTriangleStrip = 0x0005,
 		eTriangleFan = 0x0006,
-		eQuads = 0x0007,
-		eQuadStrip = 0x0008,
-		ePolygon = 0x0009,
 		ePatches = 0x000E,
 	};
 

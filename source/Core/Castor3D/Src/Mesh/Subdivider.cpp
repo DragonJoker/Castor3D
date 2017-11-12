@@ -133,6 +133,7 @@ namespace castor3d
 		else
 		{
 			doSubdivide();
+			doAddGeneratedFaces();
 			doSwapBuffers();
 		}
 	}
@@ -148,11 +149,6 @@ namespace castor3d
 
 	void Subdivider::doSwapBuffers()
 	{
-		for ( auto const & face : m_arrayFaces )
-		{
-			m_submesh->addFace( face[0], face[1], face[2] );
-		}
-
 		m_submesh->computeNormals( true );
 
 		if ( m_bGenerateBuffers && !m_bThreaded )

@@ -1,4 +1,4 @@
-﻿#include "Submesh.hpp"
+#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -194,7 +194,9 @@ namespace castor3d
 
 				if ( result && faceCount > 0 )
 				{
-					obj.addFaceGroup( faces );
+					auto indexMapping = std::make_shared< TriFaceMapping >( obj );
+					indexMapping->addFaceGroup( faces );
+					obj.setIndexMapping( indexMapping );
 				}
 
 				faceCount = 0u;
@@ -284,7 +286,6 @@ namespace castor3d
 			m_indexBuffer.cleanup();
 		}
 
-		m_faces.clear();
 		m_points.clear();
 		m_pointsData.clear();
 		m_geometryBuffers.clear();
@@ -319,8 +320,37 @@ namespace castor3d
 
 	uint32_t Submesh::getFaceCount()const
 	{
-		return std::max( uint32_t( m_faces.size() )
-			, m_indexBuffer.getSize() / 3 );
+		uint32_t result = 0u;
+
+		switch ( getTopology() )
+		{
+		case Topology::ePoints:
+			result = m_indexBuffer.getSize();
+			break;
+
+		case Topology::eLines:
+			result = m_indexBuffer.getSize() / 2;
+			break;
+
+		case Topology::eLineLoop:
+			result = m_indexBuffer.getSize();
+			break;
+
+		case Topology::eLineStrip:
+			result = m_indexBuffer.getSize() - 1u;
+			break;
+
+		case Topology::eTriangles:
+			result = m_indexBuffer.getSize() / 3u;
+			break;
+
+		case Topology::eTriangleStrips:
+		case Topology::eTriangleFan:
+			result = m_indexBuffer.getSize() - 2u;
+			break;
+		}
+
+		return result;
 	}
 
 	uint32_t Submesh::getPointsCount()const
@@ -389,53 +419,6 @@ namespace castor3d
 			m_points.push_back( vertex );
 			data += stride;
 		} );
-	}
-
-	Face Submesh::addFace( uint32_t a, uint32_t b, uint32_t c )
-	{
-		Face result{ a, b, c };
-
-		if ( a < m_points.size() && b < m_points.size() && c < m_points.size() )
-		{
-			m_faces.push_back( result );
-			m_hasNormals = false;
-		}
-		else
-		{
-			throw std::range_error( "Submesh::addFace - One or more index out of bound" );
-		}
-
-		return result;
-	}
-
-	void Submesh::addFaceGroup( FaceIndices const * const begin
-		, FaceIndices const * const end )
-	{
-		std::for_each( begin, end, [this]( FaceIndices const & data )
-		{
-			addFace( data.m_index[0], data.m_index[1], data.m_index[2] );
-		} );
-	}
-
-	void Submesh::addQuadFace( uint32_t a
-		, uint32_t b
-		, uint32_t c
-		, uint32_t d
-		, Point3r const & minUV
-		, Point3r const & maxUV )
-	{
-		addFace( a, b, c );
-		addFace( a, c, d );
-		Vertex::setTexCoord( m_points[a], minUV[0], minUV[1] );
-		Vertex::setTexCoord( m_points[b], maxUV[0], minUV[1] );
-		Vertex::setTexCoord( m_points[c], maxUV[0], maxUV[1] );
-		Vertex::setTexCoord( m_points[d], minUV[0], maxUV[1] );
-	}
-
-	void Submesh::clearFaces()
-	{
-		m_faces.clear();
-		m_indexBuffer.clear();
 	}
 
 	void Submesh::resetGpuBuffers()
@@ -515,118 +498,19 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::computeFacesFromPolygonVertex()
-	{
-		SubmeshUtils::computeFacesFromPolygonVertex( *this );
-	}
-
 	void Submesh::computeNormals( bool reverted )
 	{
-		if ( !m_hasNormals )
+		if ( m_indexMapping )
 		{
-			SubmeshUtils::computeNormals( *this, reverted );
-			m_hasNormals = true;
+			m_indexMapping->computeNormals( reverted );
 		}
 	}
 
-	void Submesh::computeNormals( Face const & face )
+	void Submesh::sortByDistance( castor::Point3r const & cameraPosition )
 	{
-		SubmeshUtils::computeNormals( *this, face );
-	}
-
-	void Submesh::computeTangents( Face const & face )
-	{
-		SubmeshUtils::computeTangents( *this, face );
-	}
-
-	void Submesh::computeTangentsFromNormals()
-	{
-		SubmeshUtils::computeTangentsFromNormals( *this );
-	}
-
-	void Submesh::computeTangentsFromBitangents()
-	{
-		SubmeshUtils::computeTangentsFromBitangents( *this );
-	}
-
-	void Submesh::computeBitangents()
-	{
-		SubmeshUtils::computeBitangents( *this );
-	}
-
-	void Submesh::sortByDistance( Point3r const & cameraPosition )
-	{
-		REQUIRE( m_initialised );
-
-		try
+		if ( m_indexMapping )
 		{
-			if ( m_cameraPosition != cameraPosition )
-			{
-				if ( m_initialised
-					&& !m_indexBuffer.isEmpty()
-					&& !m_vertexBuffer.isEmpty() )
-				{
-					IndexBuffer & indices = m_indexBuffer;
-					VertexBuffer & vertices = m_vertexBuffer;
-
-					vertices.bind();
-					indices.bind();
-					m_cameraPosition = cameraPosition;
-					uint32_t uiIdxSize = indices.getSize();
-					uint32_t * pIdx = indices.lock( 0, uiIdxSize, AccessType::eRead | AccessType::eWrite );
-
-					if ( pIdx )
-					{
-						struct stFACE_DISTANCE
-						{
-							uint32_t m_index[3];
-							double m_distance;
-						};
-						uint32_t stride = vertices.getDeclaration().stride();
-						uint8_t * pVtx = vertices.getData();
-						DECLARE_VECTOR( stFACE_DISTANCE, Face );
-						FaceArray arraySorted;
-						arraySorted.reserve( uiIdxSize / 3 );
-
-						if ( pVtx )
-						{
-							for ( uint32_t * it = pIdx + 0; it < pIdx + uiIdxSize; it += 3 )
-							{
-								double dDistance = 0.0;
-								Coords3r pVtx1( reinterpret_cast< real * >( &pVtx[it[0] * stride] ) );
-								dDistance += point::lengthSquared( pVtx1 - cameraPosition );
-								Coords3r pVtx2( reinterpret_cast< real * >( &pVtx[it[1] * stride] ) );
-								dDistance += point::lengthSquared( pVtx2 - cameraPosition );
-								Coords3r pVtx3( reinterpret_cast< real * >( &pVtx[it[2] * stride] ) );
-								dDistance += point::lengthSquared( pVtx3 - cameraPosition );
-								stFACE_DISTANCE face = { { it[0], it[1], it[2] }, dDistance };
-								arraySorted.push_back( face );
-							}
-
-							std::sort( arraySorted.begin(), arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
-							{
-								return p_left.m_distance < p_right.m_distance;
-							} );
-
-							for ( FaceArrayConstIt it = arraySorted.begin(); it != arraySorted.end(); ++it )
-							{
-								*pIdx++ = it->m_index[0];
-								*pIdx++ = it->m_index[1];
-								*pIdx++ = it->m_index[2];
-							}
-						}
-
-						indices.unlock();
-					}
-
-					indices.unbind();
-					vertices.unbind();
-				}
-			}
-		}
-		catch ( Exception const & p_exc )
-		{
-			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
+			m_indexMapping->sortByDistance( cameraPosition );
 		}
 	}
 
@@ -730,7 +614,6 @@ namespace castor3d
 	void Submesh::doGenerateBuffers()
 	{
 		doGenerateVertexBuffer();
-		doGenerateIndexBuffer();
 
 		for ( auto & component : m_components )
 		{
@@ -779,32 +662,6 @@ namespace castor3d
 
 			//m_points.clear();
 			//m_pointsData.clear();
-		}
-	}
-
-	void Submesh::doGenerateIndexBuffer()
-	{
-		FaceSPtr pFace;
-		IndexBuffer & indexBuffer = m_indexBuffer;
-		uint32_t uiSize = uint32_t( m_faces.size() * 3 );
-
-		if ( uiSize )
-		{
-			if ( indexBuffer.getSize() != uiSize )
-			{
-				indexBuffer.resize( uiSize );
-			}
-
-			uint32_t index = 0;
-
-			for ( auto const & face : m_faces )
-			{
-				indexBuffer[index++] = face[0];
-				indexBuffer[index++] = face[1];
-				indexBuffer[index++] = face[2];
-			}
-
-			//m_faces.clear();
 		}
 	}
 

@@ -74,6 +74,14 @@ namespace PnTriangles
 		 *\copydoc		castor3d::Subdivider::doSubdivide
 		 */
 		void doSubdivide()override;
+		/**
+		 *\copydoc		castor3d::Subdivider::doInitialise
+		 */
+		void doInitialise()override;
+		/**
+		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
+		 */
+		void doAddGeneratedFaces()override;
 		void doComputeFaces( double u0, double v0, double u2, double v2, int p_occurences, Patch const & p_patch );
 		castor3d::BufferElementGroupSPtr doComputePoint( double u, double v, Patch const & p_patch );
 
@@ -83,6 +91,7 @@ namespace PnTriangles
 
 	private:
 		int m_occurences;
+		std::shared_ptr< castor3d::TriFaceMapping > m_indexMapping;
 	};
 }
 

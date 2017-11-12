@@ -1,4 +1,4 @@
-#include "Icosahedron.hpp"
+﻿#include "Icosahedron.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -100,28 +100,30 @@ void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	submesh->addPoints( vertices );
 
 	// on construit toutes les faces de l'icosaèdre
+	auto indexMapping = std::make_shared< TriFaceMapping >( *submesh );
+
 	Face faces[20]
 	{
-		submesh->addFace( 0, 1, 4 ),
-		submesh->addFace( 9, 0, 4 ),
-		submesh->addFace( 9, 4, 5 ),
-		submesh->addFace( 4, 8, 5 ),
-		submesh->addFace( 4, 1, 8 ),
-		submesh->addFace( 1, 10, 8 ),
-		submesh->addFace( 3, 8, 10 ),
-		submesh->addFace( 3, 5, 8 ),
-		submesh->addFace( 2, 5, 3 ),
-		submesh->addFace( 7, 2, 3 ),
-		submesh->addFace( 3, 10, 7 ),
-		submesh->addFace( 6, 7, 10 ),
-		submesh->addFace( 6, 11, 7 ),
-		submesh->addFace( 11, 6, 0 ),
-		submesh->addFace( 1, 0, 6 ),
-		submesh->addFace( 1, 6, 10 ),
-		submesh->addFace( 0, 9, 11 ),
-		submesh->addFace( 11, 9, 2 ),
-		submesh->addFace( 9, 5, 2 ),
-		submesh->addFace( 2, 7, 11 ),
+		indexMapping->addFace( 0, 1, 4 ),
+		indexMapping->addFace( 9, 0, 4 ),
+		indexMapping->addFace( 9, 4, 5 ),
+		indexMapping->addFace( 4, 8, 5 ),
+		indexMapping->addFace( 4, 1, 8 ),
+		indexMapping->addFace( 1, 10, 8 ),
+		indexMapping->addFace( 3, 8, 10 ),
+		indexMapping->addFace( 3, 5, 8 ),
+		indexMapping->addFace( 2, 5, 3 ),
+		indexMapping->addFace( 7, 2, 3 ),
+		indexMapping->addFace( 3, 10, 7 ),
+		indexMapping->addFace( 6, 7, 10 ),
+		indexMapping->addFace( 6, 11, 7 ),
+		indexMapping->addFace( 11, 6, 0 ),
+		indexMapping->addFace( 1, 0, 6 ),
+		indexMapping->addFace( 1, 6, 10 ),
+		indexMapping->addFace( 0, 9, 11 ),
+		indexMapping->addFace( 11, 9, 2 ),
+		indexMapping->addFace( 9, 5, 2 ),
+		indexMapping->addFace( 2, 7, 11 ),
 	};
 
 	for ( auto const & face : faces )
@@ -151,6 +153,7 @@ void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		Vertex::setTexCoord( vertex, vsVertex1.m_phi, vsVertex1.m_theta );
 	}
 
-	submesh->computeTangentsFromNormals();
+	indexMapping->computeTangentsFromNormals();
+	submesh->setIndexMapping( indexMapping );
 	p_mesh.computeContainers();
 }

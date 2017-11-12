@@ -444,14 +444,17 @@ namespace Obj
 		auto submesh = mesh.createSubmesh();
 		submesh->setDefaultMaterial( mesh.getScene()->getMaterialView().find( mtlName ) );
 		submesh->addPoints( vertex );
-		submesh->addFaceGroup( faces );
+		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
+
+		mapping->addFaceGroup( faces );
 
 		if ( normals )
 		{
-			submesh->computeNormals();
+			mapping->computeNormals();
 		}
 
-		submesh->computeTangentsFromNormals();
+		mapping->computeTangentsFromNormals();
+		submesh->setIndexMapping( mapping );
 	}
 
 	void ObjImporter::doParseTexParams( String & strValue

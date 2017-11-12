@@ -73,16 +73,18 @@ void Plane::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		}
 	}
 
+	auto indexMapping = std::make_shared< TriFaceMapping >( *submesh );
+
 	for ( uint32_t i = 0; i < m_subDivisionsW + 1; i++ )
 	{
 		for ( uint32_t j = i * ( m_subDivisionsD + 1 ); j < ( i + 1 ) * ( m_subDivisionsD + 1 ); j++ )
 		{
-			submesh->addFace( j + i, j + m_subDivisionsW + 2 + i, j + m_subDivisionsW + 3 + i );
-			submesh->addFace( j + m_subDivisionsW + 3 + i, j + i + 1, j + i );
+			indexMapping->addFace( j + i, j + m_subDivisionsW + 2 + i, j + m_subDivisionsW + 3 + i );
+			indexMapping->addFace( j + m_subDivisionsW + 3 + i, j + i + 1, j + i );
 		}
 	}
 
-	//computeNormals();
-	submesh->computeTangentsFromNormals();
+	indexMapping->computeTangentsFromNormals();
+	submesh->setIndexMapping( indexMapping );
 	p_mesh.computeContainers();
 }

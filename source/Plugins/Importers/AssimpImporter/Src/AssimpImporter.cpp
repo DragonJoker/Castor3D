@@ -1,4 +1,4 @@
-#include "AssimpImporter.hpp"
+﻿#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -591,22 +591,26 @@ namespace C3dAssimp
 				submesh.addComponent( bones );
 			}
 
+			auto mapping = std::make_shared< TriFaceMapping >( submesh );
+
 			for ( auto face : makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces ) )
 			{
 				if ( face.mNumIndices == 3 )
 				{
-					submesh.addFace( face.mIndices[0], face.mIndices[1], face.mIndices[2] );
+					mapping->addFace( face.mIndices[0], face.mIndices[1], face.mIndices[2] );
 				}
 			}
 
 			if ( !aiMesh.mNormals )
 			{
-				submesh.computeNormals( true );
+				mapping->computeNormals( true );
 			}
 			else if ( !aiMesh.mTangents )
 			{
-				submesh.computeTangentsFromNormals();
+				mapping->computeTangentsFromNormals();
 			}
+
+			submesh.setIndexMapping( mapping );
 
 			if ( aiScene.HasAnimations() )
 			{

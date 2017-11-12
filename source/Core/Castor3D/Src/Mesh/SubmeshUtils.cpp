@@ -1,5 +1,6 @@
 #include "SubmeshUtils.hpp"
 
+#include "SubmeshComponent/TriFaceMapping.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 
@@ -7,16 +8,17 @@ using namespace castor;
 
 namespace castor3d
 {
-	void SubmeshUtils::computeFacesFromPolygonVertex( Submesh & p_submesh )
+	void SubmeshUtils::computeFacesFromPolygonVertex( Submesh & submesh
+		, TriFaceMapping & triFace )
 	{
-		auto & points = p_submesh.getPoints();
+		auto & points = submesh.getPoints();
 
-		if ( points.size() )
+		if ( !points.empty() )
 		{
 			BufferElementGroupSPtr v1 = points[0];
 			BufferElementGroupSPtr v2 = points[1];
 			BufferElementGroupSPtr v3 = points[2];
-			p_submesh.addFace( 0, 1, 2 );
+			triFace.addFace( 0, 1, 2 );
 			Vertex::setTexCoord( v1, 0.0, 0.0 );
 			Vertex::setTexCoord( v2, 0.0, 0.0 );
 			Vertex::setTexCoord( v3, 0.0, 0.0 );
@@ -25,18 +27,19 @@ namespace castor3d
 			{
 				v2 = points[i];
 				v3 = points[i + 1];
-				p_submesh.addFace( 0, i, i + 1 );
+				triFace.addFace( 0, i, i + 1 );
 				Vertex::setTexCoord( v2, 0.0, 0.0 );
 				Vertex::setTexCoord( v3, 0.0, 0.0 );
 			}
 		}
 	}
 
-	void SubmeshUtils::computeNormals( Submesh & p_submesh
-		, bool p_reverted )
+	void SubmeshUtils::computeNormals( Submesh & submesh
+		, TriFaceMapping & triFace
+		, bool reverted )
 	{
-		auto & points = p_submesh.getPoints();
-		auto & faces = p_submesh.getFaces();
+		auto & points = submesh.getPoints();
+		auto & faces = triFace.getFaces();
 
 		Point3r vec2m1;
 		Point3r vec3m1;
@@ -64,7 +67,7 @@ namespace castor3d
 		Coords3r coord;
 
 		// Then we compute normals and tangents
-		if ( p_reverted )
+		if ( reverted )
 		{
 			for ( auto const & face : faces )
 			{
@@ -130,10 +133,10 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshUtils::computeNormals( Submesh & p_submesh
-		, Face const & p_face )
+	void SubmeshUtils::computeNormals( Submesh & submesh
+		, Face const & face )
 	{
-		auto & points = p_submesh.getPoints();
+		auto & points = submesh.getPoints();
 		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
 		Point3r vec2m1;
 		Point3r vec3m1;
@@ -141,9 +144,9 @@ namespace castor3d
 		Point3r pt1;
 		Point3r pt2;
 		Point3r pt3;
-		pVtx1 = points[p_face[0]];
-		pVtx2 = points[p_face[1]];
-		pVtx3 = points[p_face[2]];
+		pVtx1 = points[face[0]];
+		pVtx2 = points[face[1]];
+		pVtx3 = points[face[2]];
 		Vertex::getPosition( pVtx1, pt1 );
 		Vertex::getPosition( pVtx2, pt2 );
 		Vertex::getPosition( pVtx3, pt3 );
@@ -153,13 +156,13 @@ namespace castor3d
 		Vertex::setNormal( pVtx1, vFaceNormal );
 		Vertex::setNormal( pVtx2, vFaceNormal );
 		Vertex::setNormal( pVtx3, vFaceNormal );
-		computeTangents( p_submesh, p_face );
+		computeTangents( submesh, face );
 	}
 
-	void SubmeshUtils::computeTangents( Submesh & p_submesh
-		, Face const & p_face )
+	void SubmeshUtils::computeTangents( Submesh & submesh
+		, Face const & face )
 	{
-		auto & points = p_submesh.getPoints();
+		auto & points = submesh.getPoints();
 		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
 		Point3r vec2m1;
 		Point3r vec3m1;
@@ -172,9 +175,9 @@ namespace castor3d
 		Point3r pt1;
 		Point3r pt2;
 		Point3r pt3;
-		pVtx1 = points[p_face[0]];
-		pVtx2 = points[p_face[1]];
-		pVtx3 = points[p_face[2]];
+		pVtx1 = points[face[0]];
+		pVtx2 = points[face[1]];
+		pVtx3 = points[face[2]];
 		Vertex::getPosition( pVtx1, pt1 );
 		Vertex::getPosition( pVtx2, pt2 );
 		Vertex::getPosition( pVtx3, pt3 );
@@ -191,10 +194,11 @@ namespace castor3d
 		Vertex::setTangent( pVtx3, vFaceTangent );
 	}
 
-	void SubmeshUtils::computeTangentsFromNormals( Submesh & p_submesh )
+	void SubmeshUtils::computeTangentsFromNormals( Submesh & submesh
+		, TriFaceMapping & triFace )
 	{
-		auto & points = p_submesh.getPoints();
-		auto & faces = p_submesh.getFaces();
+		auto & points = submesh.getPoints();
+		auto & faces = triFace.getFaces();
 		Point3rArray arrayTangents( points.size() );
 
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
@@ -253,9 +257,9 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshUtils::computeTangentsFromBitangents( Submesh & p_submesh )
+	void SubmeshUtils::computeTangentsFromBitangents( Submesh & submesh )
 	{
-		for ( auto & point : p_submesh.getPoints() )
+		for ( auto & point : submesh.getPoints() )
 		{
 			Point3r normal;
 			Point3r bitangent;
@@ -266,9 +270,9 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshUtils::computeBitangents( Submesh & p_submesh )
+	void SubmeshUtils::computeBitangents( Submesh & submesh )
 	{
-		for ( auto & point : p_submesh.getPoints() )
+		for ( auto & point : submesh.getPoints() )
 		{
 			Point3r normal;
 			Point3r tangent;

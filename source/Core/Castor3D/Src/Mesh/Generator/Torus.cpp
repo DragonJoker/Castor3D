@@ -1,4 +1,4 @@
-#include "Torus.hpp"
+﻿#include "Torus.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -81,6 +81,7 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 
 		// Build the torus
 		step = real( Angle::PiMult2 ) / m_externalNbFaces;
+		auto indexMapping = std::make_shared< TriFaceMapping >( submesh );
 
 		for ( uint32_t i = 1; i <= uiExtMax; i++ )
 		{
@@ -100,14 +101,14 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 
 			for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 			{
-				submesh.addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
-				submesh.addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
+				indexMapping->addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
+				indexMapping->addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
 				uiPrv++;
 				uiCur++;
 			}
 
-			submesh.addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
-			submesh.addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
+			indexMapping->addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
+			indexMapping->addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
 			uiPrv++;
 			uiCur++;
 		}
@@ -118,15 +119,17 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 
 		for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 		{
-			submesh.addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
-			submesh.addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
+			indexMapping->addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
+			indexMapping->addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
 			uiPrv++;
 			uiCur++;
 		}
 
-		submesh.addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
-		submesh.addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
-		submesh.computeTangentsFromNormals();
+		indexMapping->addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
+		indexMapping->addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
+
+		indexMapping->computeTangentsFromNormals();
+		submesh.setIndexMapping( indexMapping );
 	}
 
 	p_mesh.computeContainers();

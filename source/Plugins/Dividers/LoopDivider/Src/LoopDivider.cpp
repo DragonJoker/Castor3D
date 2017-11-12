@@ -1,4 +1,4 @@
-#include "LoopDivider.hpp"
+﻿#include "LoopDivider.hpp"
 
 #include "LoopVertex.hpp"
 #include "LoopFaceEdges.hpp"
@@ -69,6 +69,7 @@ namespace Loop
 	void Subdivider::doInitialise()
 	{
 		castor3d::Subdivider::doInitialise();
+		m_indexMapping = m_submesh->getComponent< castor3d::TriFaceMapping >();
 		uint32_t index = 0;
 
 		for ( auto & point : getPoints() )
@@ -76,12 +77,20 @@ namespace Loop
 			m_mapVertex.insert( std::make_pair( index++, std::make_shared< Vertex >( point ) ) );
 		}
 
-		for ( auto & face : m_submesh->getFaces() )
+		for ( auto & face : m_indexMapping->getFaces() )
 		{
 			m_facesEdges.push_back( std::make_shared< FaceEdges >( this, face, m_mapVertex ) );
 		}
 
-		m_submesh->clearFaces();
+		m_indexMapping->clearFaces();
+	}
+
+	void Subdivider::doAddGeneratedFaces()
+	{
+		for ( auto const & face : m_arrayFaces )
+		{
+			m_indexMapping->addFace( face[0], face[1], face[2] );
+		}
 	}
 
 	void Subdivider::doSubdivide()
@@ -129,7 +138,7 @@ namespace Loop
 			position /= alpha + nbEdges;
 		}
 
-		for ( auto & face : m_submesh->getFaces() )
+		for ( auto & face : m_indexMapping->getFaces() )
 		{
 			Coords3r dump;
 			castor3d::Vertex::setPosition( m_submesh->getPoint( face[0] ), castor3d::Vertex::getPosition( m_mapVertex[face[0]]->getPoint(), dump ) );

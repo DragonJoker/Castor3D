@@ -1,4 +1,4 @@
-#include "Cone.hpp"
+﻿#include "Cone.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -46,8 +46,8 @@ namespace castor3d
 
 		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< real >::epsilon() && m_radius > std::numeric_limits< real >::epsilon() )
 		{
-			Submesh & submeshBase	= *p_mesh.createSubmesh();
-			Submesh & submeshSide	= *p_mesh.createSubmesh();
+			Submesh & submeshBase = *p_mesh.createSubmesh();
+			Submesh & submeshSide = *p_mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
 			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
 			uint32_t i = 0;
@@ -77,23 +77,31 @@ namespace castor3d
 				m_height = -m_height;
 			}
 
+			auto indexMappingBase = std::make_shared< TriFaceMapping >( submeshBase );
+			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
+
 			//Composition des extràmitàs
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				submeshBase.addFace( submeshBase[i]->getIndex(), submeshBase[i + 1]->getIndex(), ptBottomCenter->getIndex() );
+				indexMappingBase->addFace( submeshBase[i]->getIndex(), submeshBase[i + 1]->getIndex(), ptBottomCenter->getIndex() );
 			}
 
 			//Composition du bas
-			submeshBase.addFace( submeshBase[m_nbFaces - 1]->getIndex(), submeshBase[0]->getIndex(), ptBottomCenter->getIndex() );
+			indexMappingBase->addFace( submeshBase[m_nbFaces - 1]->getIndex(), submeshBase[0]->getIndex(), ptBottomCenter->getIndex() );
 
 			//Composition des càtàs
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				submeshSide.addFace( submeshSide[i + 0]->getIndex(), submeshSide[i + 1]->getIndex(), submeshSide[i + 2]->getIndex() );
+				indexMappingSide->addFace( submeshSide[i + 0]->getIndex(), submeshSide[i + 1]->getIndex(), submeshSide[i + 2]->getIndex() );
 			}
 
-			computeNormals( p_mesh, true );
+			submeshBase.setIndexMapping( indexMappingBase );
+			submeshSide.setIndexMapping( indexMappingSide );
+
+			indexMappingBase->computeNormals( true );
+			indexMappingSide->computeNormals( true );
+
 			Coords3r ptNormal0Top;
 			Coords3r ptNormal0Base;
 			Coords3r ptTangent0Top;

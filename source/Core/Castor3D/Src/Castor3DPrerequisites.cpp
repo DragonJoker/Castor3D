@@ -1,4 +1,4 @@
-﻿#include "Castor3DPrerequisites.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -42,9 +42,6 @@ namespace castor3d
 	template<> String const TopologyNamer< Topology::eTriangles >::Name = cuT( "triangles" );
 	template<> String const TopologyNamer< Topology::eTriangleStrips >::Name = cuT( "triangle_strip" );
 	template<> String const TopologyNamer< Topology::eTriangleFan >::Name = cuT( "triangle_fan" );
-	template<> String const TopologyNamer< Topology::eQuads >::Name = cuT( "quads" );
-	template<> String const TopologyNamer< Topology::eQuadStrips >::Name = cuT( "quad_strip" );
-	template<> String const TopologyNamer< Topology::ePolygon >::Name = cuT( "polygon" );
 
 	String getName( ElementType p_type )
 	{

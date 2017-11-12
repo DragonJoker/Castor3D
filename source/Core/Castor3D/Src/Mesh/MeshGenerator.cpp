@@ -1,4 +1,4 @@
-﻿#include "MeshGenerator.hpp"
+#include "MeshGenerator.hpp"
 
 #include "Engine.hpp"
 

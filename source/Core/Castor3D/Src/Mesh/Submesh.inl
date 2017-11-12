@@ -1,6 +1,7 @@
-﻿#include "SubmeshComponent/BonesComponent.hpp"
+#include "SubmeshComponent/BonesComponent.hpp"
 #include "SubmeshComponent/BonesInstantiationComponent.hpp"
 #include "SubmeshComponent/InstantiationComponent.hpp"
+#include "SubmeshComponent/TriFaceMapping.hpp"
 
 namespace castor3d
 {
@@ -68,6 +69,30 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	template<>
+	struct SubmeshComponentAdder< IndexMapping >
+	{
+		static inline void add( std::shared_ptr< IndexMapping > component
+			, Submesh & submesh )
+		{
+			CASTOR_EXCEPTION( "Use setIndexMapping, to define the index mapping for a Submesh" );
+		}
+	};
+
+	//*********************************************************************************************
+
+	template<>
+	struct SubmeshComponentAdder< TriFaceMapping >
+	{
+		static inline void add( std::shared_ptr< TriFaceMapping > component
+			, Submesh & submesh )
+		{
+			CASTOR_EXCEPTION( "Use setIndexMapping, to define the index mapping for a Submesh" );
+		}
+	};
+
+	//*********************************************************************************************
+
 	inline void Submesh::addPoints( std::vector< InterleavedVertex > const & p_vertices )
 	{
 		addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
@@ -77,17 +102,6 @@ namespace castor3d
 	inline void Submesh::addPoints( std::array< InterleavedVertex, Count > const & p_vertices )
 	{
 		addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
-	}
-
-	inline void Submesh::addFaceGroup( std::vector< FaceIndices > const & p_faces )
-	{
-		addFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
-	}
-
-	template< size_t Count >
-	inline void Submesh::addFaceGroup( std::array< FaceIndices, Count > const & p_faces )
-	{
-		addFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
 	}
 
 	inline SkeletonSPtr Submesh::getSkeleton()const
@@ -148,22 +162,6 @@ namespace castor3d
 		return m_points;
 	}
 
-	inline Face const & Submesh::getFace( uint32_t p_index )const
-	{
-		REQUIRE( p_index < m_faces.size() );
-		return m_faces[p_index];
-	}
-
-	inline FaceArray const & Submesh::getFaces()const
-	{
-		return m_faces;
-	}
-
-	inline FaceArray & Submesh::getFaces()
-	{
-		return m_faces;
-	}
-
 	inline VertexBuffer const & Submesh::getVertexBuffer()const
 	{
 		return m_vertexBuffer;
@@ -215,6 +213,18 @@ namespace castor3d
 		addFaceGroup( p_faces, Count );
 	}
 
+	inline void Submesh::setIndexMapping( IndexMappingSPtr mapping )
+	{
+		if ( m_indexMapping
+			&& m_indexMapping != mapping )
+		{
+			m_components.erase( m_indexMapping->getType() );
+		}
+
+		m_indexMapping = mapping;
+		m_components.emplace( mapping->getType(), mapping );
+	}
+
 	inline bool Submesh::hasComponent( castor::String const & name )
 	{
 		return m_components.find( name ) != m_components.end();
@@ -230,6 +240,25 @@ namespace castor3d
 	inline void Submesh::addComponent( std::shared_ptr< T > component )
 	{
 		SubmeshComponentAdder< T >::add( component, *this );
+	}
+
+	inline SubmeshComponentSPtr Submesh::getComponent( castor::String const & name )
+	{
+		SubmeshComponentSPtr result;
+		auto it = m_components.find( name );
+
+		if ( it != m_components.end() )
+		{
+			result = it->second;
+		}
+
+		return result;
+	}
+
+	template< typename T >
+	inline std::shared_ptr< T > Submesh::getComponent()
+	{
+		return std::static_pointer_cast< T >( getComponent( T::Name ) );
 	}
 
 	inline InstantiationComponent & Submesh::getInstantiation()

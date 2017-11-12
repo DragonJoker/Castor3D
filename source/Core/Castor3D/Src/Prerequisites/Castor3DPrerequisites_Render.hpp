@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_RENDER_H___
@@ -98,12 +98,6 @@ namespace castor3d
 		eTriangleStrips,
 		//! Display triangle fan
 		eTriangleFan,
-		//! Display quads
-		eQuads,
-		//! Display quad strips
-		eQuadStrips,
-		//! Display quad strips
-		ePolygon,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePoints )
 	};
 	/*!
@@ -152,15 +146,6 @@ namespace castor3d
 
 		case Topology::eTriangleFan:
 			return TopologyNamer< Topology::eTriangleFan >::Name;
-
-		case Topology::eQuads:
-			return TopologyNamer< Topology::eQuads >::Name;
-
-		case Topology::eQuadStrips:
-			return TopologyNamer< Topology::eQuadStrips >::Name;
-
-		case Topology::ePolygon:
-			return TopologyNamer< Topology::ePolygon >::Name;
 
 		default:
 			FAILURE( "Topology type unknown" );
