@@ -613,7 +613,7 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto buffers = submesh.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
 		m_geometryBuffers.insert( buffers );
 
 		return SkinningRenderNode
@@ -637,7 +637,7 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto buffers = submesh.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
 		m_geometryBuffers.insert( buffers );
 
 		return MorphingRenderNode
@@ -660,7 +660,7 @@ namespace castor3d
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto buffers = submesh.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
 		m_geometryBuffers.insert( buffers );
 
 		return StaticRenderNode
@@ -680,7 +680,7 @@ namespace castor3d
 		, RenderPipeline & pipeline
 		, BillboardBase & billboard )
 	{
-		auto buffers = billboard.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( billboard );
 		m_geometryBuffers.insert( buffers );
 
 		return BillboardRenderNode

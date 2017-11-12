@@ -207,12 +207,6 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	template< uint32_t Count >
-	void Submesh::addFaceGroup( FaceIndices( & p_faces )[Count] )
-	{
-		addFaceGroup( p_faces, Count );
-	}
-
 	inline void Submesh::setIndexMapping( IndexMappingSPtr mapping )
 	{
 		if ( m_indexMapping
@@ -288,6 +282,16 @@ namespace castor3d
 	inline SubmeshComponentStrMap const & Submesh::getComponents()const
 	{
 		return m_components;
+	}
+
+	inline Topology Submesh::getTopology()const
+	{
+		return m_topology;
+	}
+
+	inline void Submesh::setTopology( Topology p_value )
+	{
+		m_topology = p_value;
 	}
 
 	//*********************************************************************************************

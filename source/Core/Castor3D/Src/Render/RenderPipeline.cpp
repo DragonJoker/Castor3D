@@ -1,6 +1,11 @@
-﻿#include "RenderPipeline.hpp"
+#include "RenderPipeline.hpp"
 
+#include "Engine.hpp"
+#include "Event/Frame/FunctorEvent.hpp"
+#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Mesh/Submesh.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Shader/UniformBufferBinding.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -78,11 +83,93 @@ namespace castor3d
 	void RenderPipeline::cleanup()
 	{
 		m_program.cleanup();
+		m_meshGeometryBuffers.clear();
+		m_billboardGeometryBuffers.clear();
 	}
 
 	void RenderPipeline::addUniformBuffer( UniformBuffer & p_ubo )
 	{
 		m_bindings.push_back( std::ref( p_ubo.createBinding( m_program ) ) );
+	}
+
+	GeometryBuffersSPtr RenderPipeline::getGeometryBuffers( Submesh & submesh )
+	{
+		GeometryBuffersSPtr geometryBuffers;
+		auto it = m_meshGeometryBuffers.find( &submesh );
+
+		if ( it == m_meshGeometryBuffers.end() )
+		{
+			geometryBuffers = getRenderSystem()->createGeometryBuffers( submesh.getTopology()
+				, m_program );
+			m_meshGeometryBuffers.emplace( &submesh, geometryBuffers );
+			doInitialiseGeometryBuffers( submesh, geometryBuffers );
+		}
+		else
+		{
+			geometryBuffers = it->second;
+		}
+
+		return geometryBuffers;
+	}
+
+	GeometryBuffersSPtr RenderPipeline::getGeometryBuffers( BillboardBase & billboard )
+	{
+		GeometryBuffersSPtr geometryBuffers;
+		auto it = m_billboardGeometryBuffers.find( &billboard );
+
+		if ( it == m_billboardGeometryBuffers.end() )
+		{
+			geometryBuffers = getRenderSystem()->createGeometryBuffers( Topology::eTriangleFan
+				, m_program );
+			m_billboardGeometryBuffers.emplace( &billboard, geometryBuffers );
+			doInitialiseGeometryBuffers( billboard, geometryBuffers );
+		}
+		else
+		{
+			geometryBuffers = it->second;
+		}
+
+		return geometryBuffers;
+	}
+
+	void RenderPipeline::doInitialiseGeometryBuffers( Submesh & submesh
+		, GeometryBuffersSPtr geometryBuffers )
+	{
+		VertexBufferArray buffers;
+		submesh.gatherBuffers( buffers );
+
+		if ( getRenderSystem()->getCurrentContext() )
+		{
+			geometryBuffers->initialise( buffers, &submesh.getIndexBuffer() );
+		}
+		else
+		{
+			getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [geometryBuffers, &submesh, buffers]()
+			{
+				geometryBuffers->initialise( buffers, &submesh.getIndexBuffer() );
+			} ) );
+		}
+	}
+
+	void RenderPipeline::doInitialiseGeometryBuffers( BillboardBase & billboard
+		, GeometryBuffersSPtr geometryBuffers )
+	{
+		VertexBufferArray buffers;
+		billboard.gatherBuffers( buffers );
+
+		if ( getRenderSystem()->getCurrentContext() )
+		{
+			geometryBuffers->initialise( buffers, nullptr );
+		}
+		else
+		{
+			getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [geometryBuffers, buffers]()
+			{
+				geometryBuffers->initialise( buffers, nullptr );
+			} ) );
+		}
 	}
 
 	//*************************************************************************************************

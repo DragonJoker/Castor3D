@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SUBMESH_H___
@@ -45,16 +45,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_mesh	The parent mesh.
-		 *\param[in]	p_scene	The scene.
-		 *\param[in]	p_id	The submesh ID.
+		 *\param[in]	mesh	The parent mesh.
+		 *\param[in]	scene	The scene.
+		 *\param[in]	id	The submesh ID.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_mesh	Le mesh parent.
-		 *\param[in]	p_scene	La scène.
-		 *\param[in]	p_id	L'ID du sous-maillage.
+		 *\param[in]	mesh	Le mesh parent.
+		 *\param[in]	scene	La scène.
+		 *\param[in]	id	L'ID du sous-maillage.
 		 */
-		C3D_API Submesh( Scene & p_scene, Mesh & p_mesh, uint32_t p_id = 1 );
+		C3D_API Submesh( Scene & scene, Mesh & mesh, uint32_t id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -100,16 +100,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Tests if the given Point3r is in mine
-		 *\param[in]	p_vertex	The vertex to test
-		 *\param[in]	p_precision	The comparison precision
+		 *\param[in]	position	The vertex to test
+		 *\param[in]	precision	The comparison precision
 		 *\return		The index of the vertex equal to parameter, -1 if not found
 		 *\~french
 		 *\brief		Teste si le point donné fait partie de ceux de ce sous-maillage
-		 *\param[in]	p_vertex	Le point à tester
-		 *\param[in]	p_precision	La précision de comparaison
+		 *\param[in]	position	Le point à tester
+		 *\param[in]	precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		C3D_API int isInMyPoints( castor::Point3r const & p_vertex, double p_precision );
+		C3D_API int isInMyPoints( castor::Point3r const & position, double precision );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -128,104 +128,73 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adds a vertex to my list
-		 *\param[in]	p_v	The vertex to add
+		 *\param[in]	value	The vertex to add
 		 *\return		The vertex
 		 *\~french
 		 *\brief		Crée un Vertex à partir du point donné et l'ajoute à la liste
-		 *\param[in]	p_v	Le point
+		 *\param[in]	value	Le point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( castor::Point3r const & p_v );
+		C3D_API BufferElementGroupSPtr addPoint( castor::Point3r const & value );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
-		 *\param[in]	p_v	The vertex coordinates
+		 *\param[in]	value	The vertex coordinates
 		 *\return		The created vertex
 		 *\~french
 		 *\brief		Crée un Vertex à partir des coordonnées données et l'ajoute à la liste
-		 *\param[in]	p_v	Les coordonnées du point
+		 *\param[in]	value	Les coordonnées du point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( real * p_v );
+		C3D_API BufferElementGroupSPtr addPoint( real * value );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list.
-		 *\param[in]	p_begin	The vertices data begin.
-		 *\param[in]	p_end	The vertices data end.
+		 *\param[in]	begin	The vertices data begin.
+		 *\param[in]	end	The vertices data end.
 		 *\~french
 		 *\brief		Ajoute des points à la liste.
-		 *\param[in]	p_begin	Le début des données de sommets.
-		 *\param[in]	p_end	La fin des données de sommets.
+		 *\param[in]	begin	Le début des données de sommets.
+		 *\param[in]	end	La fin des données de sommets.
 		 */
-		C3D_API void addPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end );
-		/**
-		 *\~english
-		 *\brief		Recreates the buffers.
-		 *\~french
-		 *\brief		Recrée les tampons.
-		 */
-		C3D_API void resetGpuBuffers();
+		C3D_API void addPoints( InterleavedVertex const * const begin
+			, InterleavedVertex const * const end );
 		/**
 		 *\~english
 		 *\brief		Draws the submesh.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw this submesh.
+		 *\param[in]	geometryBuffers	The geometry buffers used to draw this submesh.
 		 *\~french
 		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
+		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
 		 */
-		C3D_API void draw( GeometryBuffers const & p_geometryBuffers );
+		C3D_API void draw( GeometryBuffers const & geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Draws the submesh.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw this submesh.
-		 *\param[in]	p_count				The instances count.
+		 *\param[in]	geometryBuffers	The geometry buffers used to draw this submesh.
+		 *\param[in]	count			The instances count.
 		 *\~french
 		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
-		 *\param[in]	p_count				Le nombre d'instances.
+		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
+		 *\param[in]	count			Le nombre d'instances.
 		 */
-		C3D_API void drawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
+		C3D_API void drawInstanced( GeometryBuffers const & geometryBuffers, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void computeNormals( bool p_reverted = false );
+		C3D_API void computeNormals( bool reverted = false );
 		/**
 		 *\~english
 		 *\brief		Sorts the face from farthest to nearest from the camera
-		 *\param[in]	p_cameraPosition	The camera position, relative to submesh
+		 *\param[in]	cameraPosition	The camera position, relative to submesh
 		 *\~french
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au sous-maillage
+		 *\param[in]	cameraPosition	La position de la caméra, relative au sous-maillage
 		 */
-		C3D_API void sortByDistance( castor::Point3r const & p_cameraPosition );
-		/**
-		 *\~english
-		 *\return		The topology.
-		 *\~french
-		 *\return		La topologie.
-		 */
-		C3D_API Topology getTopology()const;
-		/**
-		 *\~english
-		 *\brief		Sets the topology.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la topologie.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		C3D_API void setTopology( Topology p_value );
-		/**
-		 *\~english
-		 *\brief		Retrieves a GeometryBuffers for given program.
-		 *\param[in]	p_program	The program.
-		 *\~french
-		 *\brief		Récupère un GeometryBuffers pour le programme donné.
-		 *\param[in]	p_program	Le programme.
-		 */
-		C3D_API GeometryBuffersSPtr getGeometryBuffers( ShaderProgram const & p_program );
+		C3D_API void sortByDistance( castor::Point3r const & cameraPosition );
 		/**
 		 *\~english
 		 *\return		The shader program flags.
@@ -252,23 +221,30 @@ namespace castor3d
 			, bool update );
 		/**
 		 *\~english
-		 *\brief		Adds a points list to my list
-		 *\param[in]	p_vertices	The vertices
+		 *\brief		Gathers buffers that need to go in a VAO.
 		 *\~french
-		 *\brief		Ajoute des points à la liste
-		 *\param[in]	p_vertices	Les vertices
+		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
 		 */
-		inline void addPoints( std::vector< InterleavedVertex > const & p_vertices );
+		C3D_API void gatherBuffers( VertexBufferArray & buffers );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list
-		 *\param[in]	p_vertices	The vertices
+		 *\param[in]	vertices	The vertices
 		 *\~french
 		 *\brief		Ajoute des points à la liste
-		 *\param[in]	p_vertices	Les vertices
+		 *\param[in]	vertices	Les vertices
+		 */
+		inline void addPoints( std::vector< InterleavedVertex > const & vertices );
+		/**
+		 *\~english
+		 *\brief		Adds a points list to my list
+		 *\param[in]	vertices	The vertices
+		 *\~french
+		 *\brief		Ajoute des points à la liste
+		 *\param[in]	vertices	Les vertices
 		 */
 		template< size_t Count >
-		inline void addPoints( std::array< InterleavedVertex, Count > const & p_vertices );
+		inline void addPoints( std::array< InterleavedVertex, Count > const & vertices );
 		/**
 		 *\~english
 		 *\return		The skeleton.
@@ -279,34 +255,34 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the material
-		 *\param[in]	p_mat	The new value
+		 *\param[in]	material	The new value
 		 *\~french
 		 *\brief		Définit le material
-		 *\param[in]	p_mat	La nouvelle valeur
+		 *\param[in]	material	La nouvelle valeur
 		 */
-		inline void setDefaultMaterial( MaterialSPtr p_mat );
+		inline void setDefaultMaterial( MaterialSPtr material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index
-		 *\param[in]	p_index	The index
+		 *\param[in]	index	The index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le point à l'index donné
-		 *\param[in]	p_index	L'index
+		 *\param[in]	index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr operator[]( uint32_t p_index )const;
+		inline BufferElementGroupSPtr operator[]( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index
-		 *\param[in]	p_index	The index
+		 *\param[in]	index	The index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le point à l'index donné
-		 *\param[in]	p_index	L'index
+		 *\param[in]	index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr getPoint( uint32_t p_index )const;
+		inline BufferElementGroupSPtr getPoint( uint32_t index )const;
 		/**
 		 *\~english
 		 *\return		The material.
@@ -517,13 +493,25 @@ namespace castor3d
 		 *return		Les composants.
 		 */
 		inline SubmeshComponentStrMap const & getComponents()const;
+		/**
+		 *\~english
+		 *\return		The topology.
+		 *\~french
+		 *\return		La topologie.
+		 */
+		inline Topology getTopology()const;
+		/**
+		 *\~english
+		 *\brief		Sets the topology.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit la topologie.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setTopology( Topology value );
 
 	private:
-		void doCreateBuffers();
-		void doDestroyBuffers();
-		void doGenerateBuffers();
 		void doGenerateVertexBuffer();
-		void doInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers );
 
 	private:
 		//!\~english	The submesh ID.
@@ -565,9 +553,6 @@ namespace castor3d
 		//!\~english	The parent mesh.
 		//!\~french		Le maillage parent.
 		Mesh & m_parentMesh;
-		//!\~english	The GeometryBuffers with which this submesh is compatible.
-		//!\~french		Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
-		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english	The submesh components.
 		//!\~french		Les composants du sous-maillage.
 		SubmeshComponentStrMap m_components;
@@ -580,6 +565,9 @@ namespace castor3d
 		//!\~english	The index mapping component.
 		//!\~french		Le composant de mappage d'indices.
 		IndexMappingSPtr m_indexMapping;
+		//!\~english	The draw topology.
+		//!\\~french	La topologie de dessin.
+		Topology m_topology{ Topology::eTriangles };
 
 		friend class GeometryBuffers;
 		friend class BinaryWriter< Submesh >;

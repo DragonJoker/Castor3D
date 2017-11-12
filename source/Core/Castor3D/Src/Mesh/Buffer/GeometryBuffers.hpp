@@ -67,7 +67,7 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		sets the buffers topology.
+		 *\brief		Sets the buffers topology.
 		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit la topologie des tampons.
@@ -142,7 +142,7 @@ namespace castor3d
 		virtual void doCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		sets the buffers topology.
+		 *\brief		Sets the buffers topology.
 		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit la topologie des tampons.

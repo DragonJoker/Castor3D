@@ -1,4 +1,4 @@
-#include "Submesh.hpp"
+﻿#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -213,14 +213,14 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	Submesh::Submesh( Scene & p_scene, Mesh & mesh, uint32_t id )
-		: OwnedBy< Scene >( p_scene )
-		, m_defaultMaterial( p_scene.getEngine()->getMaterialCache().getDefaultMaterial() )
+	Submesh::Submesh( Scene & scene, Mesh & mesh, uint32_t id )
+		: OwnedBy< Scene >( scene )
+		, m_defaultMaterial( scene.getEngine()->getMaterialCache().getDefaultMaterial() )
 		, m_id( id )
 		, m_parentMesh( mesh )
 		, m_vertexBuffer
 		{
-			*p_scene.getEngine(),
+			*scene.getEngine(),
 			BufferDeclaration
 			{
 				{
@@ -232,7 +232,7 @@ namespace castor3d
 				}
 			}
 		}
-		, m_indexBuffer{ *p_scene.getEngine() }
+		, m_indexBuffer{ *scene.getEngine() }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this ) );
 	}
@@ -246,8 +246,15 @@ namespace castor3d
 	{
 		if ( !m_generated )
 		{
-			doCreateBuffers();
-			doGenerateBuffers();
+			doGenerateVertexBuffer();
+
+			for ( auto & component : m_components )
+			{
+				component.second->initialise();
+				component.second->fill();
+			}
+
+			m_generated = true;
 		}
 
 		if ( !m_initialised )
@@ -288,7 +295,6 @@ namespace castor3d
 
 		m_points.clear();
 		m_pointsData.clear();
-		m_geometryBuffers.clear();
 	}
 
 	void Submesh::computeContainers()
@@ -421,26 +427,6 @@ namespace castor3d
 		} );
 	}
 
-	void Submesh::resetGpuBuffers()
-	{
-		doDestroyBuffers();
-		doCreateBuffers();
-		doGenerateBuffers();
-
-		if ( !m_initialised )
-		{
-			initialise();
-		}
-
-		if ( m_initialised )
-		{
-			for ( auto & geometryBuffers : m_geometryBuffers )
-			{
-				doInitialiseGeometryBuffers( geometryBuffers );
-			}
-		}
-	}
-
 	void Submesh::draw( GeometryBuffers const & geometryBuffers )
 	{
 		REQUIRE( m_initialised );
@@ -514,51 +500,6 @@ namespace castor3d
 		}
 	}
 
-	Topology Submesh::getTopology()const
-	{
-		Topology result = Topology::eCount;
-
-		for ( auto buffers : m_geometryBuffers )
-		{
-			result = buffers->getTopology();
-		}
-
-		return result;
-	}
-
-	void Submesh::setTopology( Topology value )
-	{
-		for ( auto buffers : m_geometryBuffers )
-		{
-			buffers->setTopology( value );
-		}
-	}
-
-	GeometryBuffersSPtr Submesh::getGeometryBuffers( ShaderProgram const & program )
-	{
-		GeometryBuffersSPtr geometryBuffers;
-		auto it = std::find_if( std::begin( m_geometryBuffers )
-			, std::end( m_geometryBuffers )
-			, [&program]( GeometryBuffersSPtr p_buffers )
-			{
-				return &p_buffers->getProgram() == &program;
-			} );
-
-		if ( it == m_geometryBuffers.end() )
-		{
-			geometryBuffers = getScene()->getEngine()->getRenderSystem()->createGeometryBuffers( Topology::eTriangles
-				, program );
-			m_geometryBuffers.push_back( geometryBuffers );
-			doInitialiseGeometryBuffers( geometryBuffers );
-		}
-		else
-		{
-			geometryBuffers = *it;
-		}
-
-		return geometryBuffers;
-	}
-
 	ProgramFlags Submesh::getProgramFlags()const
 	{
 		auto result = m_programFlags;
@@ -586,41 +527,14 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::doCreateBuffers()
+	void Submesh::gatherBuffers( VertexBufferArray & buffers )
 	{
-		for ( auto & component : m_components )
-		{
-			component.second->initialise();
-		}
-	}
-
-	void Submesh::doDestroyBuffers()
-	{
-		m_generated = false;
-		m_initialised = false;
-		m_dirty = true;
+		buffers.emplace_back( m_vertexBuffer );
 
 		for ( auto & component : m_components )
 		{
-			component.second->cleanup();
+			component.second->gather( buffers );
 		}
-
-		for ( auto buffers : m_geometryBuffers )
-		{
-			buffers->cleanup();
-		}
-	}
-
-	void Submesh::doGenerateBuffers()
-	{
-		doGenerateVertexBuffer();
-
-		for ( auto & component : m_components )
-		{
-			component.second->fill();
-		}
-
-		m_generated = true;
 	}
 
 	void Submesh::doGenerateVertexBuffer()
@@ -662,30 +576,6 @@ namespace castor3d
 
 			//m_points.clear();
 			//m_pointsData.clear();
-		}
-	}
-
-	void Submesh::doInitialiseGeometryBuffers( GeometryBuffersSPtr geometryBuffers )
-	{
-		VertexBufferArray buffers;
-		buffers.emplace_back( m_vertexBuffer );
-
-		for ( auto & component : m_components )
-		{
-			component.second->gather( buffers );
-		}
-
-		if ( getScene()->getEngine()->getRenderSystem()->getCurrentContext() )
-		{
-			geometryBuffers->initialise( buffers, &m_indexBuffer );
-		}
-		else
-		{
-			getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, geometryBuffers, buffers]()
-				{
-					geometryBuffers->initialise( buffers, &m_indexBuffer );
-				} ) );
 		}
 	}
 }

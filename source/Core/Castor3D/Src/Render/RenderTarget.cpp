@@ -215,6 +215,7 @@ namespace castor3d
 			m_velocityTexture.getTexture()->initialise();
 
 			m_postPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "sRGB Post effects" ), cuT( "sRGB Post effects" ) );
+			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
 
 			for ( auto effect : m_postEffects )
 			{
@@ -253,6 +254,7 @@ namespace castor3d
 			m_postPostEffects.clear();
 
 			m_postPostFxTimer.reset();
+			m_overlaysTimer.reset();
 
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
@@ -373,7 +375,9 @@ namespace castor3d
 		// We also render overlays.
 		fbo.m_frameBuffer->bind();
 		getEngine()->getMaterialCache().getPassBuffer().bind();
+		m_overlaysTimer->start();
 		getEngine()->getOverlayCache().render( *scene, m_size );
+		m_overlaysTimer->stop();
 
 #if DISPLAY_DEBUG
 
