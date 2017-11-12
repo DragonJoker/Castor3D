@@ -305,10 +305,10 @@ namespace castor3d
 									//
 									// Fill buffer
 									//
-									TextOverlay::Vertex const vertexTR = { { right, top },    { fontUvRight, fontUvTop },    { texUvRight, texUvTop } };
-									TextOverlay::Vertex const vertexTL = { { left,  top },    { fontUvLeft,  fontUvTop },    { texUvLeft,  texUvTop } };
-									TextOverlay::Vertex const vertexBL = { { left,  bottom }, { fontUvLeft,  fontUvBottom }, { texUvLeft,  texUvBottom } };
-									TextOverlay::Vertex const vertexBR = { { right, bottom }, { fontUvRight, fontUvBottom }, { texUvRight, texUvBottom } };
+									TextOverlay::Vertex const vertexTR = { { float( right ) / p_size.getWidth(), float( top ) / p_size.getHeight() },    { fontUvRight, fontUvTop },    { texUvRight, texUvTop } };
+									TextOverlay::Vertex const vertexTL = { { float( left ) / p_size.getWidth(),  float( top ) / p_size.getHeight() },    { fontUvLeft,  fontUvTop },    { texUvLeft,  texUvTop } };
+									TextOverlay::Vertex const vertexBL = { { float( left ) / p_size.getWidth(),  float( bottom ) / p_size.getHeight() }, { fontUvLeft,  fontUvBottom }, { texUvLeft,  texUvBottom } };
+									TextOverlay::Vertex const vertexBR = { { float( right ) / p_size.getWidth(), float( bottom ) / p_size.getHeight() }, { fontUvRight, fontUvBottom }, { texUvRight, texUvBottom } };
 
 									m_arrayVtx.push_back( vertexBL );
 									m_arrayVtx.push_back( vertexBR );

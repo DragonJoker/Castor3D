@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_OVERLAY_RENDERER_H___
@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/RenderNode/PassRenderNode.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/OverlayUbo.hpp"
 #include "Shader/UniformBuffer.hpp"
