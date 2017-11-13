@@ -399,7 +399,6 @@ namespace castor3d
 		if ( m_mtxChanged )
 		{
 			m_derivedMtxChanged = true;
-			point::normalise( m_orientation );
 			matrix::setTransform( m_transform, m_position, m_scale, m_orientation );
 			m_mtxChanged = false;
 		}

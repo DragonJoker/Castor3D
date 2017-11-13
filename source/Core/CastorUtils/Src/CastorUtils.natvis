@@ -87,4 +87,11 @@
       <Item Name="col 3">m_columns[3]</Item>
     </Expand>
   </Type>
+
+  <Type Name="castor::Resource&lt;*&gt;">
+    <DisplayString>{{name={m_name}}}</DisplayString>
+    <Expand>
+      <Item Name="name">m_name</Item>
+    </Expand>
+  </Type>
 </AutoVisualizer>

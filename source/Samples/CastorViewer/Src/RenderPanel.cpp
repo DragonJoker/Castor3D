@@ -67,153 +67,6 @@ namespace CastorViewer
 
 			return result;
 		}
-
-		TextureUnitSPtr doCloneUnit( PassSPtr clone, TextureUnit const & source )
-		{
-			TextureUnitSPtr result = std::make_shared< TextureUnit >( *clone->getOwner()->getEngine() );
-
-			result->setAutoMipmaps( source.getAutoMipmaps() );
-			result->setChannel( source.getChannel() );
-			result->setIndex( source.getIndex() );
-			result->setRenderTarget( source.getRenderTarget() );
-			result->setSampler( source.getSampler() );
-			result->setTexture( source.getTexture() );
-
-			return result;
-		}
-
-		SubsurfaceScatteringUPtr doCloneSSSS( PassSPtr clone, SubsurfaceScattering const & source )
-		{
-			return std::make_unique< SubsurfaceScattering >( source );
-		}
-
-		PassSPtr doClonePass( MaterialSPtr clone, Pass const & source )
-		{
-			PassSPtr result = clone->createPass();
-
-			switch ( result->getType() )
-			{
-			case MaterialType::eLegacy:
-				{
-					auto & legSource = static_cast< LegacyPass const & >( source );
-					auto pass = std::static_pointer_cast< LegacyPass >( result );
-					pass->setDiffuse( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
-					pass->setSpecular( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
-					pass->setEmissive( legSource.getEmissive() );
-					pass->setShininess( legSource.getShininess() );
-				}
-				break;
-
-			case MaterialType::ePbrMetallicRoughness:
-				{
-					auto & mrSource = static_cast< MetallicRoughnessPbrPass const & >( source );
-					auto pass = std::static_pointer_cast< MetallicRoughnessPbrPass >( result );
-					pass->setAlbedo( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
-					pass->setRoughness( mrSource.getRoughness() );
-					pass->setMetallic( mrSource.getMetallic() );
-				}
-				break;
-
-			case MaterialType::ePbrSpecularGlossiness:
-				{
-					auto & sgSource = static_cast< SpecularGlossinessPbrPass const & >( source );
-					auto pass = std::static_pointer_cast< SpecularGlossinessPbrPass >( result );
-					pass->setDiffuse( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
-					pass->setGlossiness( sgSource.getGlossiness() );
-					pass->setSpecular( sgSource.getSpecular() );
-				}
-				break;
-			}
-			
-			result->setOpacity( source.getOpacity() );
-			result->setRefractionRatio( source.getRefractionRatio() );
-			result->setTwoSided( source.IsTwoSided() );
-			result->setAlphaBlendMode( source.getAlphaBlendMode() );
-			result->setColourBlendMode( source.getColourBlendMode() );
-			result->setAlphaFunc( source.getAlphaFunc() );
-			result->setAlphaValue( source.getAlphaValue() );
-
-			for ( auto const & unit : source )
-			{
-				result->addTextureUnit( doCloneUnit( result, *unit ) );
-			}
-
-			if ( source.hasSubsurfaceScattering() )
-			{
-				result->setSubsurfaceScattering( doCloneSSSS( result, source.getSubsurfaceScattering() ) );
-			}
-
-			return result;
-		}
-
-		MaterialSPtr doCloneMaterial( Material const & source )
-		{
-			MaterialSPtr result = std::make_shared< Material >( source.getName() + cuT( "_Clone" )
-				, *source.getEngine()
-				, source.getType() );
-
-			for ( auto const & pass : source )
-			{
-				doClonePass( result, *pass );
-			}
-
-			return result;
-		}
-
-		void Restore( RenderPanel::SelectedSubmesh & p_selected
-			, GeometrySPtr p_geometry )
-		{
-			p_geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
-				, [p_selected, p_geometry]()
-				{
-					p_geometry->setMaterial( *p_selected.m_submesh, p_selected.m_originalMaterial );
-				} ) );
-		}
-
-		void Restore( RenderPanel::SelectedGeometry & p_selected )
-		{
-			auto geometry = p_selected.m_geometry;
-
-			for ( auto & submesh : p_selected.m_submeshes )
-			{
-				Restore( submesh, geometry );
-			}
-
-			p_selected.m_geometry.reset();
-			p_selected.m_submeshes.clear();
-		}
-
-		void Save( RenderPanel::SelectedGeometry & p_selected
-			, GeometrySPtr p_geometry )
-		{
-			auto geometry = p_selected.m_geometry;
-			p_selected.m_submeshes.reserve(( p_geometry->getMesh()->getSubmeshCount() ) );
-
-			for ( auto & submesh : *p_geometry->getMesh() )
-			{
-				p_selected.m_submeshes.emplace_back( submesh, p_geometry->getMaterial( *submesh ) );
-			}
-
-			p_selected.m_geometry = p_geometry;
-		}
-
-		void Select( RenderPanel::SelectedSubmesh & selected
-			, GeometrySPtr geometry )
-		{
-			selected.m_selectedMaterial = doCloneMaterial( *selected.m_originalMaterial );
-
-			geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [selected]()
-				{
-					selected.m_selectedMaterial->initialise();
-				} ) );
-
-			geometry->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
-				, [selected, geometry]()
-				{
-					geometry->setMaterial( *selected.m_submesh, selected.m_selectedMaterial );
-				} ) );
-		}
 	}
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
@@ -488,16 +341,15 @@ namespace CastorViewer
 		return result;
 	}
 
-	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr p_geometry
-		, castor3d::SubmeshSPtr p_submesh )
+	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry
+		, castor3d::SubmeshSPtr submesh )
 	{
-		SelectedGeometry selected;
-		auto submesh = m_selectedSubmesh ? m_selectedSubmesh->m_submesh : nullptr;
-		auto oldGeometry = m_selectedGeometry.m_geometry;
+		auto oldSubmesh = m_selectedSubmesh;
+		auto oldGeometry = m_selectedGeometry;
 		bool changed = false;
-		SceneRPtr scene = p_geometry ? p_geometry->getScene() : nullptr;
+		SceneRPtr scene = geometry ? geometry->getScene() : nullptr;
 
-		if ( oldGeometry != p_geometry )
+		if ( oldGeometry != geometry )
 		{
 			changed = true;
 			m_selectedSubmesh = nullptr;
@@ -506,37 +358,24 @@ namespace CastorViewer
 			{
 				m_cubeManager->hideObject( *oldGeometry );
 				scene = oldGeometry->getScene();
-				Restore( m_selectedGeometry );
 			}
 
-			if ( p_geometry )
+			if ( geometry )
 			{
-				Save( m_selectedGeometry, p_geometry );
-				m_cubeManager->displayObject( *p_geometry );
+				m_cubeManager->displayObject( *geometry );
 			}
+
+			m_selectedGeometry = geometry;
 		}
 
-		if ( submesh != p_submesh )
+		if ( oldSubmesh != submesh )
 		{
-			if ( m_selectedSubmesh )
+			if ( submesh )
 			{
-				Restore( *m_selectedSubmesh, oldGeometry );
+				m_selectedSubmesh = submesh;
+				wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
 			}
 
-			if ( p_submesh )
-			{
-				auto it = std::find_if( m_selectedGeometry.m_submeshes.begin()
-					, m_selectedGeometry.m_submeshes.end()
-					, [&p_submesh]( auto & selectedSubmesh )
-					{
-						return selectedSubmesh.m_submesh == p_submesh;
-					} );
-				REQUIRE( it != m_selectedGeometry.m_submeshes.end());
-				m_selectedSubmesh = &( *it );
-				Select( *m_selectedSubmesh
-					, p_geometry );
-				wxGetApp().getMainFrame()->select( p_geometry, m_selectedSubmesh->m_submesh );
-			}
 			changed = true;
 		}
 
@@ -550,9 +389,9 @@ namespace CastorViewer
 		}
 
 		{
-			if ( p_geometry )
+			if ( geometry )
 			{
-				m_currentNode = m_selectedGeometry.m_geometry->getParent();
+				m_currentNode = m_selectedGeometry->getParent();
 			}
 			else
 			{

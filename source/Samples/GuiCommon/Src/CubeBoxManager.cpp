@@ -69,10 +69,12 @@ namespace GuiCommon
 		engine->postEvent( makeFunctorEvent( EventType::ePostRender
 			, [this, &object]()
 			{
+				auto mesh = object.getMesh();
 				auto node = m_scene.getSceneNodeCache().add( object.getName() + cuT( "-CubeNode" ), object.getParent() );
 				auto geometry = m_scene.getGeometryCache().add( object.getName() + cuT( "-Cube" ), node, m_mesh );
-				auto scale = m_mesh->getCollisionBox().getMax() - m_mesh->getCollisionBox().getMin();
+				auto scale = ( mesh->getCollisionBox().getMax() - mesh->getCollisionBox().getMin() ) / 2;
 				node->setScale( scale );
+				node->setPosition( mesh->getCollisionBox().getCenter() );
 				node->setVisible( true );
 
 				for ( auto & submesh : *m_mesh )

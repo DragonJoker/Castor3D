@@ -43,27 +43,6 @@ namespace CastorViewer
 		: public wxPanel
 	{
 	public:
-		struct SelectedSubmesh
-		{
-			SelectedSubmesh( castor3d::SubmeshSPtr p_submesh
-				, castor3d::MaterialSPtr p_originalMaterial )
-				: m_submesh{ p_submesh }
-				, m_originalMaterial{ p_originalMaterial }
-			{
-			}
-			castor3d::SubmeshSPtr m_submesh;
-			castor3d::MaterialSPtr m_originalMaterial;
-			castor3d::MaterialSPtr m_selectedMaterial;
-		};
-
-		struct SelectedGeometry
-		{
-			std::vector< SelectedSubmesh > m_submeshes;
-			castor3d::GeometrySPtr m_geometry;
-		};
-
-
-	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE );
 		virtual ~RenderPanel();
 
@@ -154,8 +133,8 @@ namespace CastorViewer
 
 		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates;
 		GuiCommon::NodeState * m_currentState{ nullptr };
-		SelectedGeometry m_selectedGeometry;
-		SelectedSubmesh * m_selectedSubmesh{ nullptr };
+		castor3d::GeometrySPtr m_selectedGeometry;
+		castor3d::SubmeshSPtr m_selectedSubmesh;
 	};
 }
 

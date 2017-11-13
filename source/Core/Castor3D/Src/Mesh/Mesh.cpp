@@ -137,22 +137,22 @@ namespace castor3d
 
 	void Mesh::computeContainers()
 	{
-		if ( m_submeshes.size() == 0 )
+		if ( m_submeshes.empty() )
 		{
 			return;
 		}
 
 		uint32_t count = getSubmeshCount();
 
-		for ( uint32_t i = 0; i < count; i++ )
+		for ( auto & submesh : m_submeshes )
 		{
-			m_submeshes[i]->computeContainers();
+			submesh->computeContainers();
 		}
 
 		Point3r min( m_submeshes[0]->getCollisionBox().getMin() );
 		Point3r max( m_submeshes[0]->getCollisionBox().getMax() );
 
-		for ( auto submesh : m_submeshes )
+		for ( auto & submesh : m_submeshes )
 		{
 			CubeBox const & box = submesh->getCollisionBox();
 			max[0] = std::max( box.getMax()[0], max[0] );
