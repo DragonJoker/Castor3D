@@ -181,7 +181,7 @@ namespace castor3d
 		class MainDebugPanel
 		{
 		public:
-			MainDebugPanel( OverlayCache & cache );
+			explicit MainDebugPanel( OverlayCache & cache );
 			~MainDebugPanel();
 			void update();
 			void setVisible( bool visible );

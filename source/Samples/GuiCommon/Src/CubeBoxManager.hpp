@@ -20,7 +20,7 @@ namespace GuiCommon
 	class CubeBoxManager
 	{
 	public:
-		CubeBoxManager( castor3d::Scene & scene );
+		explicit CubeBoxManager( castor3d::Scene & scene );
 		~CubeBoxManager();
 		void displayObject( castor3d::Geometry const & object );
 		void hideObject( castor3d::Geometry const & object );
