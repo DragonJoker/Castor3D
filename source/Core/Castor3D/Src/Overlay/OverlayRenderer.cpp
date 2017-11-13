@@ -30,7 +30,7 @@ namespace castor3d
 
 	namespace
 	{
-		uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator begin
+		uint32_t doFillBuffers( OverlayCategory::VertexArray::const_iterator begin
 			, uint32_t count
 			, VertexBuffer & vbo )
 		{
@@ -43,7 +43,7 @@ namespace castor3d
 			return count;
 		}
 
-		uint32_t FillBuffers( TextOverlay::VertexArray::const_iterator begin
+		uint32_t doFillBuffers( TextOverlay::VertexArray::const_iterator begin
 			, uint32_t count
 			, VertexBuffer & vbo )
 		{
@@ -219,11 +219,13 @@ namespace castor3d
 
 		if ( material )
 		{
-			m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
+			m_overlayUbo.setPosition( overlay.getAbsolutePosition()
+				, m_size
+				, overlay.getRenderRatio( m_size ) );
 			doDrawItem( *material
 				, *m_panelVertexBuffer
 				, m_panelGeometryBuffers
-				, FillBuffers( overlay.getPanelVertex().begin()
+				, doFillBuffers( overlay.getPanelVertex().begin()
 					, uint32_t( overlay.getPanelVertex().size() )
 					, *m_panelVertexBuffer ) );
 		}
@@ -236,11 +238,13 @@ namespace castor3d
 
 			if ( material )
 			{
-				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
+				m_overlayUbo.setPosition( overlay.getAbsolutePosition()
+					, m_size
+					, overlay.getRenderRatio( m_size ) );
 				doDrawItem( *material
 					, *m_panelVertexBuffer
 					, m_panelGeometryBuffers
-					, FillBuffers( overlay.getPanelVertex().begin()
+					, doFillBuffers( overlay.getPanelVertex().begin()
 						, uint32_t( overlay.getPanelVertex().size() )
 						, *m_panelVertexBuffer ) );
 			}
@@ -250,11 +254,13 @@ namespace castor3d
 
 			if ( material )
 			{
-				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
+				m_overlayUbo.setPosition( overlay.getAbsolutePosition()
+					, m_size
+					, overlay.getRenderRatio( m_size ) );
 				doDrawItem( *material
 					, *m_borderVertexBuffer
 					, m_borderGeometryBuffers
-					, FillBuffers( overlay.getBorderVertex().begin()
+					, doFillBuffers( overlay.getBorderVertex().begin()
 						, uint32_t( overlay.getBorderVertex().size() )
 						, *m_borderVertexBuffer ) );
 			}
@@ -295,7 +301,9 @@ namespace castor3d
 				auto texture = overlay.getFontTexture()->getTexture();
 				auto sampler = overlay.getFontTexture()->getSampler();
 				count = uint32_t( arrayVtx.size() );
-				m_overlayUbo.setPosition( overlay.getAbsolutePosition( m_size ) );
+				m_overlayUbo.setPosition( overlay.getAbsolutePosition()
+					, m_size
+					, overlay.getRenderRatio( m_size ) );
 
 				for ( auto pass : *material )
 				{
@@ -452,7 +460,12 @@ namespace castor3d
 				RasteriserState rsState;
 				rsState.setCulledFaces( Culling::eBack );
 
-				auto pipeline = getRenderSystem()->createRenderPipeline( std::move( dsState ), std::move( rsState ), std::move( blState ), std::move( msState ), *program, PipelineFlags{} );
+				auto pipeline = getRenderSystem()->createRenderPipeline( std::move( dsState )
+					, std::move( rsState )
+					, std::move( blState )
+					, std::move( msState )
+					, *program
+					, PipelineFlags{} );
 				pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 				pipeline->addUniformBuffer( m_overlayUbo.getUbo() );
 				it = m_pipelines.emplace( textureFlags, std::move( pipeline ) ).first;
@@ -569,7 +582,7 @@ namespace castor3d
 			geometryBuffers = m_textsGeometryBuffers[index];
 			auto & vertexBuffer = m_textsVertexBuffers[index];
 			count = std::min( count, C3D_MAX_CHARS_PER_BUFFER );
-			FillBuffers( it, count, *vertexBuffer );
+			doFillBuffers( it, count, *vertexBuffer );
 			it += count;
 		}
 		else
@@ -600,7 +613,7 @@ namespace castor3d
 			UBO_OVERLAY( writer );
 
 			// Shader inputs
-			auto position = writer.declAttribute< IVec2 >( ShaderProgram::Position );
+			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 			auto text = writer.declAttribute< Vec2 >( ShaderProgram::Text, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 
@@ -621,7 +634,11 @@ namespace castor3d
 					vtx_texture = texture;
 				}
 
-				gl_Position = c3d_projection * vec4( c3d_position.x() + position.x(), c3d_position.y() + position.y(), 0.0, 1.0 );
+				auto size = writer.declLocale( cuT( "size" )
+					, c3d_renderRatio * c3d_renderSize );
+				gl_Position = c3d_projection * vec4( size * writer.paren( c3d_position + position )
+					, 0.0
+					, 1.0 );
 			} );
 
 			strVs = writer.finalise();
@@ -680,17 +697,17 @@ namespace castor3d
 
 				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
-					alpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).r();
+					alpha *= texture( c3d_mapText, vtx_text ).r();
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
-					diffuse = texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+					diffuse = texture( c3d_mapDiffuse, vtx_texture ).xyz();
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					alpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
+					alpha *= texture( c3d_mapOpacity, vtx_texture ).r();
 				}
 
 				pxl_fragColor = vec4( diffuse.xyz(), alpha );

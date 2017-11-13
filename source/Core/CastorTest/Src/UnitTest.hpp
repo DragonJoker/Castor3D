@@ -4,6 +4,8 @@
 
 #include "CastorTestPrerequisites.hpp"
 
+#include <map>
+
 namespace Testing
 {
 	template< typename T >
@@ -78,12 +80,42 @@ namespace Testing
 		return stream.str();
 	}
 
+	template< typename Key, typename Value >
+	inline std::string toString( std::map< Key, Value > const & p_value )
+	{
+		std::stringstream stream;
+		stream << std::endl << "[" << std::endl;
+
+		for ( auto & pair : p_value )
+		{
+			stream << "  [" << toString( pair.first ) << ": " << toString( pair.second ) << "]" << std::endl;
+		}
+
+		stream << "]" << std::endl;
+		return stream.str();
+	}
+
+	template< typename Key, typename Value >
+	inline std::string toString( std::map< Key, std::shared_ptr< Value > > const & p_value )
+	{
+		std::stringstream stream;
+		stream << std::endl << "[" << std::endl;
+
+		for ( auto & pair : p_value )
+		{
+			stream << "  [" << toString( pair.first ) << ": " << toString( *pair.second ) << "]" << std::endl;
+		}
+
+		stream << "]" << std::endl;
+		return stream.str();
+	}
+
 	template< class Value >
 	class Lazy
 	{
 		using value_type = Value;
 		using pointer_type = std::shared_ptr< value_type >;
-		typedef std::function< pointer_type() > getter;
+		using getter = std::function< pointer_type() >;
 
 	public:
 		explicit Lazy( std::function< Value() > const & p_expression )
@@ -129,7 +161,7 @@ namespace Testing
 	{
 		using value_type = std::reference_wrapper< Value >;
 		using pointer_type = std::shared_ptr< value_type >;
-		typedef std::function< pointer_type() > getter;
+		using getter = std::function< pointer_type() >;
 
 	public:
 		explicit Lazy( std::function< Value &() > const & p_expression )
@@ -174,7 +206,7 @@ namespace Testing
 	class Lazy< void >
 	{
 		using value_type = void;
-		typedef std::function< void() > getter;
+		using getter = std::function< void() >;
 
 	public:
 		explicit Lazy( std::function< void() > const & p_expression )
@@ -486,6 +518,42 @@ namespace Testing
 			if ( result )
 			{
 				result = std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) ) == 0;
+			}
+
+			return result;
+		}
+
+		template< typename Key, typename Value >
+		inline bool compare( std::map< Key, Value > const & p_a, std::map< Key, Value > p_b )
+		{
+			bool result = p_a.size() == p_b.size();
+
+			for ( auto & itA : p_a )
+			{
+				if ( result )
+				{
+					auto itB = p_b.find( itA.first );
+					result = itB != p_b.end();
+					result &= compare( itA.second, itB->second );
+				}
+			}
+
+			return result;
+		}
+
+		template< typename Key, typename Value >
+		inline bool compare( std::map< Key, std::shared_ptr< Value > > const & p_a, std::map< Key, std::shared_ptr< Value > > p_b )
+		{
+			bool result = p_a.size() == p_b.size();
+
+			for ( auto & itA : p_a )
+			{
+				if ( result )
+				{
+					auto itB = p_b.find( itA.first );
+					result = itB != p_b.end();
+					result &= compare( *itA.second, *itB->second );
+				}
 			}
 
 			return result;

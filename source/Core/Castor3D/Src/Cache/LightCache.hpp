@@ -10,6 +10,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	using LightsRefArray = std::vector< Light * >;
 	using LightsArray = std::vector< LightSPtr >;
 	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
 	/*!
@@ -122,6 +123,19 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		adds an object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_element	The object.
+		 *\return		The added object, or the existing one.
+		 *\~french
+		 *\brief		Ajoute un objet.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_element	L'objet.
+		 *\return		L'objet ajouté, ou celui existant.
+		 */
+		C3D_API ElementPtr add( Key const & p_name, ElementPtr p_element );
+		/**
+		 *\~english
 		 *\brief		Creates an object.
 		 *\param[in]	p_name		The object name.
 		 *\param[in]	p_parent	The parent scene node.
@@ -134,10 +148,23 @@ namespace castor3d
 		 *\param[in]	p_type		Le type de source lumineuse.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
-		{
-			return MyObjectCache::add( p_name, p_parent, p_type );
-		}
+		C3D_API ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type );
+		/**
+		 *\~english
+		 *\brief		Removes an object, given a name.
+		 *\param[in]	p_name		The object name.
+		 *\~french
+		 *\brief		Retire un objet à partir d'un nom.
+		 *\param[in]	p_name		Le nom d'objet.
+		 */
+		C3D_API void remove( Key const & p_name );
+		/**
+		 *\~english
+		 *\brief		Updates the dirty lights.
+		 *\~french
+		 *\brief		Met à jour les sources lumineuses modifiées.
+		 */
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Updates the lights texture.
@@ -146,7 +173,7 @@ namespace castor3d
 		 *\brief		Met à jour la texture de sources lumineuses.
 		 *\param[in]	camera	La caméra utilisée pour déterminer si une source lumineuse est applicable ou pas.
 		 */
-		C3D_API void updateLights( Camera const & camera )const;
+		C3D_API void updateLightsTexture( Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Binds the lights texture.
@@ -191,6 +218,9 @@ namespace castor3d
 		}
 
 	private:
+		void onLightChanged( Light & light );
+
+	private:
 		//!\~english	The lights sorted by light type.
 		//!\~french		Les lumières, triées par type de lumière.
 		LightsMap m_typeSortedLights;
@@ -200,6 +230,12 @@ namespace castor3d
 		//!\~english	The lights texture buffer.
 		//!\~french		Le tampon de la texture contenant les lumières.
 		castor::PxBufferBaseSPtr m_lightsBuffer;
+		//!\~english	The light sources that need to be updated.
+		//!\~french		Les sources lumineuses ayant besoin d'être mises à jour.
+		LightsRefArray m_dirtyLights;
+		//!\~english	The connections to light source modified signal.
+		//!\~french		Les connexions au signal de source lumineuse modifiée.
+		std::map< Light *, OnLightChangedConnection > m_connections;
 	};
 	using LightCache = ObjectCache< Light, castor::String >;
 	DECLARE_SMART_PTR( LightCache );

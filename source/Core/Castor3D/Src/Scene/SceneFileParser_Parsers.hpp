@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_FILE_PARSER_PARSERS_H___

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RENDER_TARGET_H___
@@ -462,6 +462,9 @@ namespace castor3d
 		//!\~english	The post effect timer.
 		//!\~french		Le timer d'effets post-rendu.
 		RenderPassTimerSPtr m_postPostFxTimer;
+		//!\~english	The overlay rendering timer.
+		//!\~french		Le timer de rendu des incrustations.
+		RenderPassTimerSPtr m_overlaysTimer;
 		//!\~english	The SSAO configuration.
 		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;

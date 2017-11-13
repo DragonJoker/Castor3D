@@ -187,6 +187,7 @@ namespace diamond_square_terrain
 			divide( size, roughness );
 
 			auto submesh = p_mesh.createSubmesh();
+			auto mapping = std::make_shared< TriFaceMapping >( *submesh );
 
 			for ( auto y = 1u; y < max; y++ )
 			{
@@ -201,16 +202,17 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 0u; x < max - 2; x++ )
 				{
-					submesh->addFace( map.getIndex( x, y, size - 2 )
+					mapping->addFace( map.getIndex( x, y, size - 2 )
 						, map.getIndex( x + 1, y, size - 2 )
 						, map.getIndex( x, y + 1, size - 2 ) );
-					submesh->addFace( map.getIndex( x + 1, y, size - 2 )
+					mapping->addFace( map.getIndex( x + 1, y, size - 2 )
 						, map.getIndex( x + 1, y + 1, size - 2 )
 						, map.getIndex( x, y + 1, size - 2 ) );
 				}
 			}
 
-			submesh->computeNormals( true );
+			mapping->computeNormals( true );
+			submesh->setIndexMapping( mapping );
 			p_mesh.computeContainers();
 		}
 	}

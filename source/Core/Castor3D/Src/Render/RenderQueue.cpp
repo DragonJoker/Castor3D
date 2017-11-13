@@ -363,12 +363,13 @@ namespace castor3d
 								auto programFlags = submesh->getProgramFlags();
 								auto sceneFlags = p_scene.getFlags();
 								auto passFlags = pass->getPassFlags();
+								auto submeshFlags = submesh->getProgramFlags();
 								remFlag( programFlags, ProgramFlag::eSkinning );
 								remFlag( programFlags, ProgramFlag::eMorphing );
 								auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Skeleton" ) ) );
 								auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( p_scene, primitive.first + cuT( "_Mesh" ) ) );
 
-								if ( skeleton && submesh->hasBoneData() )
+								if ( skeleton && checkFlag( submeshFlags, ProgramFlag::eSkinning ) )
 								{
 									addFlag( programFlags, ProgramFlag::eSkinning );
 								}
@@ -386,7 +387,7 @@ namespace castor3d
 
 								pass->prepareTextures();
 
-								if ( submesh->getRefCount( material ) > 1
+								if ( checkFlag( submeshFlags, ProgramFlag::eInstantiation )
 									&& !checkFlag( programFlags, ProgramFlag::eMorphing )
 									&& ( !pass->hasAlphaBlending() || p_renderPass.isOrderIndependent() )
 									&& p_renderPass.getEngine()->getRenderSystem()->getGpuInformations().hasInstancing()

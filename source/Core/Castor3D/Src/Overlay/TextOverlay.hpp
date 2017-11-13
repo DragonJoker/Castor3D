@@ -32,7 +32,7 @@ namespace castor3d
 		*/
 		struct Vertex
 		{
-			int32_t coords[2];
+			float coords[2];
 			float text[2];
 			float texture[2];
 		};

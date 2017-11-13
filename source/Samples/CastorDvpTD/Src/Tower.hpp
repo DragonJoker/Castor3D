@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Ability.hpp"
 
@@ -101,7 +101,7 @@ namespace castortd
 				return m_material;
 			}
 
-			inline castor::Colour const & getColour()const
+			inline castor::RgbColour const & getColour()const
 			{
 				return m_colour;
 			}
@@ -135,7 +135,7 @@ namespace castortd
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };
 			castor::String m_material;
-			castor::Colour m_colour;
+			castor::RgbColour m_colour;
 			castor::String m_attackAnimName;
 			castor::Milliseconds m_attackAnimTime;
 		};

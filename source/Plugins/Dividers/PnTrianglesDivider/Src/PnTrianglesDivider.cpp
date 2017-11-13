@@ -10,7 +10,7 @@ namespace PnTriangles
 		Point3r barycenter( real u, real v, Point3r const & p1, Point3r const & p2, Point3r const & p3 )
 		{
 			double w = 1.0 - u - v;
-			ENSURE( u + v + w == 1 );
+			ENSURE( std::abs( u + v + w - 1.0 ) < 0.0001 );
 			return ( p1 * u + p2 * v + p3 * w );
 		}
 	}
@@ -71,14 +71,15 @@ namespace PnTriangles
 		else
 		{
 			doSubdivide();
+			doAddGeneratedFaces();
 			doSwapBuffers();
 		}
 	}
 
 	void Subdivider::doSubdivide()
 	{
-		auto facesArray = m_submesh->getFaces();
-		m_submesh->clearFaces();
+		auto facesArray = m_indexMapping->getFaces();
+		m_indexMapping->clearFaces();
 		std::map< uint32_t, Plane > posnml;
 		uint32_t i = 0;
 
@@ -93,6 +94,20 @@ namespace PnTriangles
 		for ( auto const & face : facesArray )
 		{
 			doComputeFaces( 0.0, 0.0, 1.0, 1.0, m_occurences, Patch( posnml[face[0]], posnml[face[1]], posnml[face[2]] ) );
+		}
+	}
+
+	void Subdivider::doInitialise()
+	{
+		castor3d::Subdivider::doInitialise();
+		m_indexMapping = m_submesh->getComponent< TriFaceMapping >();
+	}
+
+	void Subdivider::doAddGeneratedFaces()
+	{
+		for ( auto const & face : m_arrayFaces )
+		{
+			m_indexMapping->addFace( face[0], face[1], face[2] );
 		}
 	}
 

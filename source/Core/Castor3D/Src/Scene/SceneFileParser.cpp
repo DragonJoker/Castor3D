@@ -164,14 +164,10 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( Topology::eTriangles );
 	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( Topology::eTriangleStrips );
 	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( Topology::eTriangleFan );
-	m_mapPrimitiveTypes[cuT( "quads" )] = uint32_t( Topology::eQuads );
-	m_mapPrimitiveTypes[cuT( "quad_strip" )] = uint32_t( Topology::eQuadStrips );
-	m_mapPrimitiveTypes[cuT( "polygon" )] = uint32_t( Topology::ePolygon );
 
 	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( Topology::ePoints );
 	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( Topology::eLineStrip );
 	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( Topology::eTriangleStrips );
-	m_mapPrimitiveOutputTypes[cuT( "quad_strip" )] = uint32_t( Topology::eQuadStrips );
 
 	m_mapModels[cuT( "sm_1" )] = uint32_t( ShaderModel::eModel1 );
 	m_mapModels[cuT( "sm_2" )] = uint32_t( ShaderModel::eModel2 );

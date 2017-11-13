@@ -16,7 +16,7 @@
 #include <Cache/CacheView.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
@@ -200,7 +200,7 @@ namespace Obj
 	{
 		std::ifstream file( m_fileName.c_str() );
 		file.seekg( 0, std::ios::end );
-		size_t size = file.tellg();
+		size_t size = size_t( file.tellg() );
 		file.seekg( 0, std::ios::beg );
 		std::string content;
 		content.resize( size + 1 );
@@ -444,14 +444,17 @@ namespace Obj
 		auto submesh = mesh.createSubmesh();
 		submesh->setDefaultMaterial( mesh.getScene()->getMaterialView().find( mtlName ) );
 		submesh->addPoints( vertex );
-		submesh->addFaceGroup( faces );
+		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
+
+		mapping->addFaceGroup( faces );
 
 		if ( normals )
 		{
-			submesh->computeNormals();
+			mapping->computeNormals();
 		}
 
-		submesh->computeTangentsFromNormals();
+		mapping->computeTangentsFromNormals();
+		submesh->setIndexMapping( mapping );
 	}
 
 	void ObjImporter::doParseTexParams( String & strValue

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RenderPipeline_H___
@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include <Design/OwnedBy.hpp>
 
 #include <stack>
+#include <unordered_map>
 
 namespace castor3d
 {
@@ -43,29 +44,29 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	renderSystem	The parent RenderSystem.
-		 *\param[in]	p_dsState		The depth stencil state.
-		 *\param[in]	p_rsState		The rateriser state.
-		 *\param[in]	p_blState		The blend state.
-		 *\param[in]	p_msState		The multisample state.
-		 *\param[in]	p_program		The shader program.
-		 *\param[in]	p_flags			The creation flags.
+		 *\param[in]	dsState			The depth stencil state.
+		 *\param[in]	rsState			The rateriser state.
+		 *\param[in]	blState			The blend state.
+		 *\param[in]	msState			The multisample state.
+		 *\param[in]	program			The shader program.
+		 *\param[in]	flags			The creation flags.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem parent.
-		 *\param[in]	p_dsState		L'état de stencil et profondeur.
-		 *\param[in]	p_rsState		L'état de rastériseur.
-		 *\param[in]	p_blState		L'état de mélange.
-		 *\param[in]	p_msState		L'état de multi-échantillonnage.
-		 *\param[in]	p_program		Le programme shader.
-		 *\param[in]	p_flags			Les indicateurs de création.
+		 *\param[in]	dsState			L'état de stencil et profondeur.
+		 *\param[in]	rsState			L'état de rastériseur.
+		 *\param[in]	blState			L'état de mélange.
+		 *\param[in]	msState			L'état de multi-échantillonnage.
+		 *\param[in]	program			Le programme shader.
+		 *\param[in]	flags			Les indicateurs de création.
 		 */
 		C3D_API explicit RenderPipeline( RenderSystem & renderSystem
-			, DepthStencilState && p_dsState
-			, RasteriserState && p_rsState
-			, BlendState && p_blState
-			, MultisampleState && p_msState
-			, ShaderProgram & p_program
-			, PipelineFlags const & p_flags );
+			, DepthStencilState && dsState
+			, RasteriserState && rsState
+			, BlendState && blState
+			, MultisampleState && msState
+			, ShaderProgram & program
+			, PipelineFlags const & flags );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -95,7 +96,25 @@ namespace castor3d
 		 *\brief		Ajoute un tampon d'uniformes à ce pipeline.
 		 *\remarks		Crée le binding pour ce tampon, en utilisant le programme de ce pipeline.
 		 */
-		C3D_API void addUniformBuffer( UniformBuffer & p_ubo );
+		C3D_API void addUniformBuffer( UniformBuffer & ubo );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GeometryBuffers for given submesh.
+		 *\param[in]	submesh	The submesh.
+		 *\~french
+		 *\brief		Récupère un GeometryBuffers pour le sous-maillage donné.
+		 *\param[in]	submesh	Le sous-maillage.
+		 */
+		C3D_API GeometryBuffersSPtr getGeometryBuffers( Submesh & submesh );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GeometryBuffers for given billboard.
+		 *\param[in]	billboard	The billboard.
+		 *\~french
+		 *\brief		Récupère un GeometryBuffers pour le billboard donné.
+		 *\param[in]	billboard	Le billboard.
+		 */
+		C3D_API GeometryBuffersSPtr getGeometryBuffers( BillboardBase & billboard );
 		/**
 		 *\~english
 		 *\return		The shader program.
@@ -224,6 +243,12 @@ namespace castor3d
 			return *m_brdfMap;
 		}
 
+	private:
+		void doInitialiseGeometryBuffers( Submesh & submesh
+			, GeometryBuffersSPtr geometryBuffers );
+		void doInitialiseGeometryBuffers( BillboardBase & billboard
+			, GeometryBuffersSPtr geometryBuffers );
+
 	public:
 		C3D_API static const castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 
@@ -273,6 +298,12 @@ namespace castor3d
 		//!\~english	The uniform buffer bindings.
 		//!\~french		Les bindings de tampons d'uniformes.
 		BindingArray m_bindings;
+		//!\~english	The GeometryBuffers used with this pipeline.
+		//!\~french		Les GeometryBuffers utilisés avec ce pipeline.
+		std::unordered_map< Submesh *, GeometryBuffersSPtr > m_meshGeometryBuffers;
+		//!\~english	The GeometryBuffers used with this pipeline.
+		//!\~french		Les GeometryBuffers utilisés avec ce pipeline.
+		std::unordered_map< BillboardBase *, GeometryBuffersSPtr > m_billboardGeometryBuffers;
 	};
 }
 

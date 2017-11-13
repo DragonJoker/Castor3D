@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GL_GEOMETRY_BUFFERS_H___
@@ -57,30 +57,34 @@ namespace GlRender
 		 *\copydoc		castor3d::GeometryBuffers::Draw
 		 */
 		virtual bool draw( uint32_t size
-			, uint32_t index )const;
+			, uint32_t index )const override;
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::DrawInstanced
 		 */
 		virtual bool drawInstanced( uint32_t size
 			, uint32_t index
-			, uint32_t count )const;
+			, uint32_t count )const override;
 
 	private:
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::doInitialise
 		 */
-		virtual bool doInitialise();
+		virtual bool doInitialise()override;
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::doCleanup
 		 */
-		virtual void doCleanup();
+		virtual void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
+		 */
+		virtual void doSetTopology( castor3d::Topology p_value )override;
 
-		castor3d::BufferDeclaration::const_iterator doFindElement( castor3d::BufferDeclaration const & declaration
+		castor3d::BufferDeclaration::const_iterator doFindElement( std::vector< castor3d::BufferElementDeclaration > const & declaration
 			, castor3d::BufferElementDeclaration const & element )const;
 		GlAttributeBaseSPtr doCreateAttribute( castor3d::BufferElementDeclaration const & element
 			, uint32_t offset
 			, uint32_t divisor
-			, castor3d::BufferDeclaration const & declaration );
+			, uint32_t stride );
 		bool doCreateAttributes( castor3d::ProgramInputLayout const & layout
 			, castor3d::BufferDeclaration const & declaration
 			, uint32_t offset

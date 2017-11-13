@@ -32,4 +32,8 @@ namespace TestRender
 	void TestGeometryBuffers::doCleanup()
 	{
 	}
+
+	void TestGeometryBuffers::doSetTopology( castor3d::Topology p_value )
+	{
+	}
 }

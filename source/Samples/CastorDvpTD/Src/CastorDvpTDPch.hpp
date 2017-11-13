@@ -1,5 +1,3 @@
-#pragma once
-
 #include <Engine.hpp>
 #include <Event/Frame/FrameListener.hpp>
 #include <Event/UserInput/UserInputListener.hpp>

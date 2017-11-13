@@ -230,22 +230,6 @@ namespace castor3d
 		}
 	}
 
-	void Mesh::ref( MaterialSPtr p_material )
-	{
-		for ( auto submesh : m_submeshes )
-		{
-			submesh->ref( p_material );
-		}
-	}
-
-	void Mesh::unref( MaterialSPtr p_material )
-	{
-		for ( auto submesh : m_submeshes )
-		{
-			submesh->unref( p_material );
-		}
-	}
-
 	void Mesh::setSkeleton( SkeletonSPtr p_skeleton )
 	{
 		m_skeleton = p_skeleton;

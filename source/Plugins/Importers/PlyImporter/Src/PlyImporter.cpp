@@ -1,4 +1,4 @@
-#include "PlyImporter.hpp"
+﻿#include "PlyImporter.hpp"
 
 #include <Engine.hpp>
 
@@ -12,7 +12,7 @@
 #include <Cache/SceneCache.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Plugin/Plugin.hpp>
@@ -82,6 +82,7 @@ namespace C3dPly
 
 		pMaterial->getPass( 0 )->setTwoSided( true );
 		submesh->setDefaultMaterial( pMaterial );
+		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
 		// Parsing the ply identification line
 		std::getline( isFile, strLine );
 
@@ -225,7 +226,7 @@ namespace C3dPly
 					ssToken.clear( std::istringstream::goodbit );
 				}
 
-				submesh->addFaceGroup( faces );
+				mapping->addFaceGroup( faces );
 			}
 
 			result = true;
@@ -235,13 +236,14 @@ namespace C3dPly
 
 		if ( iNbProperties < 6 )
 		{
-			submesh->computeNormals( false );
+			mapping->computeNormals( false );
 		}
 		else
 		{
-			submesh->computeTangentsFromNormals();
+			mapping->computeTangentsFromNormals();
 		}
 
+		submesh->setIndexMapping( mapping );
 		isFile.close();
 		return result;
 	}

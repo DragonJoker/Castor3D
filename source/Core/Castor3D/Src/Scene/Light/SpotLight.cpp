@@ -1,4 +1,4 @@
-#include "SpotLight.hpp"
+﻿#include "SpotLight.hpp"
 
 #include "Render/Viewport.hpp"
 #include "Technique/Opaque/LightPass.hpp"
@@ -156,7 +156,18 @@ namespace castor3d
 		return result;
 	}
 
-	void SpotLight::update( Point3r const & p_target
+	void SpotLight::update()
+	{
+		SpotLight::generateVertices();
+		auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
+		m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
+		, Point3r{ scale[0], scale[0], scale[1] } );
+		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+		m_attenuation.reset();
+		m_cutOff.reset();
+	}
+
+	void SpotLight::updateShadow( Point3r const & p_target
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{
@@ -179,18 +190,6 @@ namespace castor3d
 		m_lightSpace = biasTransform * p_viewport.getProjection() * m_lightSpace;
 		m_shadowMapIndex = p_index;
 
-		if ( m_attenuation.isDirty()
-			|| m_cutOff.isDirty() )
-		{
-			SpotLight::generateVertices();
-			auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
-			m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
-				, Point3r{ scale[0], scale[0], scale[1] } );
-			m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
-			m_attenuation.reset();
-			m_cutOff.reset();
-		}
-
 		p_viewport.setPerspective( getCutOff() * 2
 			, p_viewport.getRatio()
 			, 0.5_r
@@ -212,6 +211,7 @@ namespace castor3d
 	void SpotLight::setAttenuation( Point3f const & p_attenuation )
 	{
 		m_attenuation = p_attenuation;
+		getLight().onChanged( getLight() );
 	}
 
 	void SpotLight::setExponent( float p_exponent )
@@ -222,6 +222,7 @@ namespace castor3d
 	void SpotLight::setCutOff( Angle const & p_cutOff )
 	{
 		m_cutOff = p_cutOff;
+		getLight().onChanged( getLight() );
 	}
 
 	void SpotLight::updateNode( SceneNode const & p_node )

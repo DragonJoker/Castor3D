@@ -1,4 +1,4 @@
-#include "ShadowMapPassDirectional.hpp"
+﻿#include "ShadowMapPassDirectional.hpp"
 
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureImage.hpp"
@@ -34,7 +34,7 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		light.update( light.getParent()->getDerivedPosition()
+		light.updateShadow( light.getParent()->getDerivedPosition()
 			, m_camera->getViewport()
 			, index );
 		m_camera->attachTo( light.getParent() );

@@ -890,6 +890,7 @@ namespace castor3d
 		doUpdateAnimations();
 		doUpdateNoSkybox();
 		doUpdateMaterials();
+		getLightCache().update();
 		m_changed = false;
 	}
 

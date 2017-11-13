@@ -1,4 +1,4 @@
-﻿#include "SubmeshTreeItemProperty.hpp"
+#include "SubmeshTreeItemProperty.hpp"
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>
@@ -111,18 +111,6 @@ namespace GuiCommon
 		case Topology::eTriangleFan:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_FAN;
 			break;
-
-		case Topology::eQuads:
-			selected = PROPERTY_TOPOLOGY_QUADS;
-			break;
-
-		case Topology::eQuadStrips:
-			selected = PROPERTY_TOPOLOGY_QUAD_STRIP;
-			break;
-
-		case Topology::ePolygon:
-			selected = PROPERTY_TOPOLOGY_POLYGON;
-			break;
 		}
 
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) ) );
@@ -177,18 +165,6 @@ namespace GuiCommon
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_FAN )
 				{
 					OnTopologyChange( Topology::eTriangleFan );
-				}
-				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_QUADS )
-				{
-					OnTopologyChange( Topology::eQuads );
-				}
-				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_QUAD_STRIP )
-				{
-					OnTopologyChange( Topology::eQuadStrips );
-				}
-				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_POLYGON )
-				{
-					OnTopologyChange( Topology::ePolygon );
 				}
 			}
 		}

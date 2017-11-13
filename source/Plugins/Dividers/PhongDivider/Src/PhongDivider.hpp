@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <Event/Frame/FrameListener.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Subdivider.hpp>
 
@@ -67,6 +67,14 @@ namespace Phong
 		 *\copydoc		castor3d::Subdivider::doSubdivide
 		 */
 		void doSubdivide()override;
+		/**
+		 *\copydoc		castor3d::Subdivider::doInitialise
+		 */
+		void doInitialise()override;
+		/**
+		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
+		 */
+		void doAddGeneratedFaces()override;
 		void doComputeFaces( castor::real u0
 			, castor::real v0
 			, castor::real u2
@@ -83,6 +91,7 @@ namespace Phong
 
 	private:
 		int m_occurences;
+		std::shared_ptr< castor3d::TriFaceMapping > m_indexMapping;
 	};
 }
 

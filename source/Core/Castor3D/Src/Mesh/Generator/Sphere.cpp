@@ -58,6 +58,8 @@ void Sphere::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 			rAlpha += rAngle / 2;
 		}
 
+		auto indexMapping = std::make_shared< TriFaceMapping >( submesh );
+
 		for ( uint32_t k = 0; k < m_nbFaces; k++ )
 		{
 			Point2r ptT = arc[k + 0];
@@ -94,8 +96,8 @@ void Sphere::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 			// Reconstition des faces
 			for ( uint32_t i = 0; i < m_nbFaces; i++ )
 			{
-				submesh.addFace( iPrv + 0, iCur + 0, iPrv + 1 );
-				submesh.addFace( iCur + 0, iCur + 1, iPrv + 1 );
+				indexMapping->addFace( iPrv + 0, iCur + 0, iPrv + 1 );
+				indexMapping->addFace( iCur + 0, iCur + 1, iPrv + 1 );
 				iPrv++;
 				iCur++;
 			}
@@ -104,7 +106,8 @@ void Sphere::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 			iCur++;
 		}
 
-		submesh.computeTangentsFromNormals();
+		indexMapping->computeTangentsFromNormals();
+		submesh.setIndexMapping( indexMapping );
 	}
 
 	p_mesh.computeContainers();

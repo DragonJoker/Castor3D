@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_OVERLAY_CATEGORY_H___
@@ -34,7 +34,7 @@ namespace castor3d
 		*/
 		struct Vertex
 		{
-			int32_t coords[2];
+			float coords[2];
 			float texture[2];
 		};
 		DECLARE_VECTOR( Vertex, Vertex );
@@ -170,6 +170,15 @@ namespace castor3d
 		 *\return		La taille
 		 */
 		C3D_API castor::Size getAbsoluteSize( castor::Size const & p_size )const;
+		/**
+		 *\~english
+		 *\param[in]	size	The render size
+		 *\return		The ratio between given dimensions and the dimensions used when computing relative position from pixel position.
+		 *\~french
+		 *\param[in]	p_size	La taille du rendu
+		 *\return		Le ratio entre les dimensions données et les dimensions utilisées lors du calcul de la position relative depuis la position en pixels.
+		 */
+		C3D_API castor::Point2f getRenderRatio( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position
@@ -557,33 +566,50 @@ namespace castor3d
 		virtual void doUpdateBuffer( castor::Size const & p_size ) = 0;
 
 	protected:
-		//!\~english The overlay	\~french L'incrustation
+		//!\~english	The overlay.
+		//!\~french		L'incrustation.
 		Overlay * m_pOverlay{ nullptr };
-		//!\~english The relative position (to parent or screen)	\~french La position relative (au parent ou à l'écran)
+		//!\~english	The relative position (to parent or screen).
+		//!\~french		La position relative (au parent ou à l'écran).
 		castor::Point2d m_position;
-		//!\~english The relative size (to parent or screen)	\~french La taille relative (à l'écran ou au parent)
+		//!\~english	The relative size (to parent or screen).
+		//!\~french		La taille relative (à l'écran ou au parent).
 		castor::Point2d m_ptSize;
-		//!\~english The relative position (to parent or screen), in pixels	\~french La position relative (à l'écran ou au parent), en pixels
+		//!\~english	The relative position (to parent or screen), in pixels.
+		//!\~french		La position relative (à l'écran ou au parent), en pixels.
 		castor::Position m_pxPosition;
-		//!\~english The absolute size in pixels	\~french La taille absolue en pixels
+		//!\~english	The absolute size in pixels.
+		//!\~french		La taille absolue en pixels.
 		castor::Size m_size;
-		//!\~english The visibility	\~french La visibilité
+		//!\~english	The size used to compute relative position from pixel position.
+		//!\~french		La taille utilisée pour calculer la position relative depuis la position en pixels.
+		castor::Size m_computeSize;
+		//!\~english	The visibility.
+		//!\~french		La visibilité.
 		bool m_visible{ true };
-		//!\~english The material used by the overlay	\~french Le matériau utilisé par l'incrustation
+		//!\~english	The material used by the overlay.
+		//!\~french		Le matériau utilisé par l'incrustation.
 		MaterialWPtr m_pMaterial;
-		//!\~english The overlay index	\~french L'index de l'overlay
+		//!\~english	The overlay index.
+		//!\~french		L'index de l'overlay.
 		int m_index{ 0 };
-		//!\~english The overlay level	\~french Le niveau de l'overlay
+		//!\~english	The overlay level.
+		//!\~french		Le niveau de l'overlay.
 		int m_level{ 0 };
-		//!\~english The material name	\~french Le nom du matériau
+		//!\~english	The material name.
+		//!\~french		Le nom du matériau.
 		castor::String m_strMatName;
-		//!\~english The overlay type	\~french Le type de l'incrustation
+		//!\~english	The overlay type.
+		//!\~french		Le type de l'incrustation.
 		OverlayType m_type;
-		//!\~english Tells if this overlay's size has changed.	\~french Dit si les dimensions de cette incrustation ont changé.
+		//!\~english	Tells if this overlay's size has changed..
+		//!\~french		Dit si les dimensions de cette incrustation ont changé.
 		bool m_sizeChanged{ true };
-		//!\~english Tells if this overlay's position has changed.	\~french Dit si la position de cette incrustation a changé.
+		//!\~english	Tells if this overlay's position has changed.
+		//!\~french		Dit si la position de cette incrustation a changé..
 		bool m_positionChanged{ true };
-		//!\~english The UV for the panel	\~french Les UV du panneau
+		//!\~english	The UV for the panel.
+		//!\~french		Les UV du panneau.
 		castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
 	};
 }

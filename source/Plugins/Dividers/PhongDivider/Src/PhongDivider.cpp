@@ -63,14 +63,15 @@ namespace Phong
 		else
 		{
 			doSubdivide();
+			doAddGeneratedFaces();
 			doSwapBuffers();
 		}
 	}
 
 	void Subdivider::doSubdivide()
 	{
-		auto facesArray = m_submesh->getFaces();
-		m_submesh->clearFaces();
+		auto facesArray = m_indexMapping->getFaces();
+		m_indexMapping->clearFaces();
 		std::map< uint32_t, Plane > posnml;
 		uint32_t i = 0;
 
@@ -88,6 +89,20 @@ namespace Phong
 		}
 
 		facesArray.clear();
+	}
+
+	void Subdivider::doInitialise()
+	{
+		castor3d::Subdivider::doInitialise();
+		m_indexMapping = m_submesh->getComponent< TriFaceMapping >();
+	}
+
+	void Subdivider::doAddGeneratedFaces()
+	{
+		for ( auto const & face : m_arrayFaces )
+		{
+			m_indexMapping->addFace( face[0], face[1], face[2] );
+		}
 	}
 
 	void Subdivider::doComputeFaces( real u0, real v0, real u2, real v2, int p_occurences, Patch const & p_patch )

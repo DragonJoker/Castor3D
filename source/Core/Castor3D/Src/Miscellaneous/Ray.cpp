@@ -1,6 +1,6 @@
 #include "Ray.hpp"
 
-#include "Mesh/Face.hpp"
+#include "Mesh/SubmeshComponent/Face.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"

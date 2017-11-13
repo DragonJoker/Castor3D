@@ -1,4 +1,4 @@
-#include "OverlayCategory.hpp"
+﻿#include "OverlayCategory.hpp"
 
 #include "Engine.hpp"
 
@@ -129,14 +129,34 @@ namespace castor3d
 
 	Position OverlayCategory::getAbsolutePosition( castor::Size const & p_size )const
 	{
+		// TODO: Bug here
 		Point2d position = getAbsolutePosition();
-		return Position( int32_t( p_size.getWidth() * position[0] ), int32_t( p_size.getHeight() * position[1] ) );
+		return Position{ int32_t( p_size.getWidth() * position[0] )
+			, int32_t( p_size.getHeight() * position[1] ) };
 	}
 
 	Size OverlayCategory::getAbsoluteSize( castor::Size const & p_size )const
 	{
 		Point2d size = getAbsoluteSize();
-		return Size( uint32_t( p_size.getWidth() * size[0] ), uint32_t( p_size.getHeight() * size[1] ) );
+		return Size{ uint32_t( p_size.getWidth() * size[0] )
+			, uint32_t( p_size.getHeight() * size[1] ) };
+	}
+
+	Point2f OverlayCategory::getRenderRatio( Size const & size )const
+	{
+		Point2f result{ 1, 1 };
+
+		if ( m_computeSize.getWidth() != 0 )
+		{
+			result[0] = m_computeSize.getWidth() / float( size.getWidth() );
+		}
+
+		if ( m_computeSize.getHeight() != 0 )
+		{
+			result[1] = m_computeSize.getHeight() / float( size.getHeight() );
+		}
+
+		return result;
 	}
 
 	Point2d OverlayCategory::getAbsolutePosition()const
@@ -216,6 +236,7 @@ namespace castor3d
 		{
 			if ( isPositionChanged() || renderer->isSizeChanged() )
 			{
+				Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
 				Point2d totalSize = doGetTotalSize();
 				bool changed = m_positionChanged;
 				Position pos = getPixelPosition();
@@ -225,12 +246,14 @@ namespace castor3d
 				{
 					changed |= ptPos[0] != double( pos.x() ) / totalSize[0];
 					ptPos[0] = pos.x() / totalSize[0];
+					m_computeSize[0] = uint32_t( renderSize[0] );
 				}
 
 				if ( pos.y() )
 				{
 					changed |= ptPos[1] != double( pos.y() ) / totalSize[1];
 					ptPos[1] = pos.y() / totalSize[1];
+					m_computeSize[1] = uint32_t( renderSize[1] );
 				}
 
 				if ( changed )
@@ -249,6 +272,7 @@ namespace castor3d
 		{
 			if ( isSizeChanged() || renderer->isSizeChanged() )
 			{
+				Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
 				Point2d totalSize = doGetTotalSize();
 				bool changed = m_sizeChanged;
 				Size size = getPixelSize();
@@ -258,12 +282,14 @@ namespace castor3d
 				{
 					changed |= ptSize[0] != double( size.getWidth() ) / totalSize[0];
 					ptSize[0] = size.getWidth() / totalSize[0];
+					m_computeSize[0] = uint32_t( renderSize[0] );
 				}
 
 				if ( size.getHeight() )
 				{
 					changed |=  ptSize[1] != double( size.getHeight() ) / totalSize[1];
 					ptSize[1] = size.getHeight() / totalSize[1];
+					m_computeSize[1] = uint32_t( renderSize[1] );
 				}
 
 				if ( changed )

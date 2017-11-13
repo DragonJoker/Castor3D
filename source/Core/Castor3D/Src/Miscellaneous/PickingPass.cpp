@@ -1,4 +1,4 @@
-#include "PickingPass.hpp"
+﻿#include "PickingPass.hpp"
 
 #include "Cache/MaterialCache.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
@@ -9,6 +9,7 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
@@ -55,6 +56,7 @@ namespace castor3d
 						p_function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
 					}
 				}
@@ -321,11 +323,12 @@ namespace castor3d
 			, [&p_scene, this]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
+				, InstantiationComponent & component
 				, StaticRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.hasMatrixBuffer() )
+				if ( !p_renderNodes.empty() && component.hasMatrixBuffer() )
 				{
-					auto count = doCopyNodesMatrices( p_renderNodes, p_submesh.getMatrixBuffer() );
+					auto count = doCopyNodesMatrices( p_renderNodes, component.getMatrixBuffer() );
 					p_submesh.drawInstanced( p_renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -361,11 +364,16 @@ namespace castor3d
 			, [&p_scene, this]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
+				, InstantiationComponent & component
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.hasMatrixBuffer() )
+				auto & instantiatedBones = p_submesh.getInstantiatedBones();
+
+				if ( !p_renderNodes.empty()
+					&& component.hasMatrixBuffer()
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					auto count = doCopyNodesBones( p_renderNodes, p_submesh.getInstancedBonesBuffer() );
+					auto count = doCopyNodesBones( p_renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					p_submesh.drawInstanced( p_renderNodes[0].m_buffers, count );
 				}
 			} );

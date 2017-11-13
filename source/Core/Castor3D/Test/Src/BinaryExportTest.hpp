@@ -22,6 +22,8 @@ namespace Testing
 		void SimpleMesh();
 		void ImportExport();
 		void AnimatedMesh();
+		void doTestMeshFile( castor::String const & name );
+		void doTestMesh( castor3d::MeshSPtr & src );
 	};
 }
 

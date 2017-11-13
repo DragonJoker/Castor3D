@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LOOP_DIVIDER_H___
@@ -57,6 +57,10 @@ namespace Loop
 		 */
 		void doInitialise()override;
 		/**
+		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
+		 */
+		void doAddGeneratedFaces()override;
+		/**
 		 *\copydoc		castor3d::Subdivider::doSubdivide
 		 */
 		void doSubdivide()override;
@@ -70,6 +74,7 @@ namespace Loop
 	private:
 		VertexPtrUIntMap m_mapVertex;
 		FaceEdgesPtrArray m_facesEdges;
+		std::shared_ptr< castor3d::TriFaceMapping > m_indexMapping;
 	};
 }
 

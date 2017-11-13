@@ -102,7 +102,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightCategory::update
 		 */
-		C3D_API void update( castor::Point3r const & target
+		C3D_API void update()override;
+		/**
+		 *\copydoc		castor3d::LightCategory::updateShadow
+		 */
+		C3D_API void updateShadow( castor::Point3r const & target
 			, Viewport & viewport
 			, int32_t index = -1 )override;
 		/**

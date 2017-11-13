@@ -1,4 +1,4 @@
-#include "Submesh.hpp"
+﻿#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -7,13 +7,11 @@
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
-#include "Mesh/Skeleton/BonedVertex.hpp"
+#include "Mesh/SubmeshComponent/BonesComponent.hpp"
+#include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/ShaderStorageBuffer.hpp"
 #include "Vertex.hpp"
-
-#include <Miscellaneous/BlockTracker.hpp>
 
 using namespace castor;
 
@@ -62,12 +60,12 @@ namespace castor3d
 			VertexBuffer const & buffer = obj.getVertexBuffer();
 			size_t size = buffer.getSize();
 			uint32_t stride = buffer.getDeclaration().stride();
-			uint32_t count = uint32_t( size / stride );
+			auto count = uint32_t( size / stride );
 			result = doWriteChunk( count, ChunkType::eSubmeshVertexCount, m_chunk );
 
 			if ( result )
 			{
-				InterleavedVertex const * srcbuf = reinterpret_cast< InterleavedVertex const * >( buffer.getData() );
+				auto const * srcbuf = reinterpret_cast< InterleavedVertex const * >( buffer.getData() );
 				std::vector< InterleavedVertexT< double > > dstbuf( count );
 				doCopyVertices( count, srcbuf, dstbuf.data() );
 				result = doWriteChunk( dstbuf, ChunkType::eSubmeshVertex, m_chunk );
@@ -82,22 +80,18 @@ namespace castor3d
 
 			if ( result )
 			{
-				FaceIndices const * srcbuf = reinterpret_cast< FaceIndices const * >( buffer.getData() );
+				auto const * srcbuf = reinterpret_cast< FaceIndices const * >( buffer.getData() );
 				result = doWriteChunk( srcbuf, buffer.getSize() / 3, ChunkType::eSubmeshFaces, m_chunk );
 			}
 		}
 
-		if ( result && obj.hasBonesBuffer() )
+		if ( result )
 		{
-			VertexBuffer const & buffer = obj.getBonesBuffer();
-			uint32_t stride = buffer.getDeclaration().stride();
-			uint32_t count = buffer.getSize() / stride;
-			result = doWriteChunk( count, ChunkType::eSubmeshBoneCount, m_chunk );
+			auto it = obj.m_components.find( BonesComponent::Name );
 
-			if ( result )
+			if ( it != obj.m_components.end() )
 			{
-				VertexBoneData const * srcbuf = reinterpret_cast< VertexBoneData const * >( buffer.getData() );
-				result = doWriteChunk( srcbuf, buffer.getSize() / sizeof( VertexBoneData ), ChunkType::eSubmeshBones, m_chunk );
+				BinaryWriter< BonesComponent >{}.write( *std::static_pointer_cast< BonesComponent >( it->second ), m_chunk );
 			}
 		}
 
@@ -117,6 +111,7 @@ namespace castor3d
 		uint32_t faceCount{ 0u };
 		uint32_t boneCount{ 0u };
 		BinaryChunk chunk;
+		std::shared_ptr< BonesComponent > bonesComponent;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -145,6 +140,12 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSubmeshBoneCount:
+				if ( !bonesComponent )
+				{
+					bonesComponent = std::make_shared< BonesComponent >( obj );
+					obj.addComponent( bonesComponent );
+				}
+
 				result = doParseChunk( count, chunk );
 
 				if ( result )
@@ -160,10 +161,21 @@ namespace castor3d
 
 				if ( result && boneCount > 0 )
 				{
-					obj.addBoneDatas( bones );
+					bonesComponent->addBoneDatas( bones );
 				}
 
 				boneCount = 0u;
+				break;
+
+			case ChunkType::eBonesComponent:
+				bonesComponent = std::make_shared< BonesComponent >( obj );
+				result = BinaryParser< BonesComponent >{}.parse( *bonesComponent, chunk );
+
+				if ( result )
+				{
+					obj.addComponent( bonesComponent );
+				}
+
 				break;
 
 			case ChunkType::eSubmeshFaceCount:
@@ -182,7 +194,9 @@ namespace castor3d
 
 				if ( result && faceCount > 0 )
 				{
-					obj.addFaceGroup( faces );
+					auto indexMapping = std::make_shared< TriFaceMapping >( obj );
+					indexMapping->addFaceGroup( faces );
+					obj.setIndexMapping( indexMapping );
 				}
 
 				faceCount = 0u;
@@ -199,14 +213,14 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	Submesh::Submesh( Scene & p_scene, Mesh & mesh, uint32_t id )
-		: OwnedBy< Scene >( p_scene )
-		, m_defaultMaterial( p_scene.getEngine()->getMaterialCache().getDefaultMaterial() )
+	Submesh::Submesh( Scene & scene, Mesh & mesh, uint32_t id )
+		: OwnedBy< Scene >( scene )
+		, m_defaultMaterial( scene.getEngine()->getMaterialCache().getDefaultMaterial() )
 		, m_id( id )
 		, m_parentMesh( mesh )
 		, m_vertexBuffer
 		{
-			*p_scene.getEngine(),
+			*scene.getEngine(),
 			BufferDeclaration
 			{
 				{
@@ -218,8 +232,9 @@ namespace castor3d
 				}
 			}
 		}
-		, m_indexBuffer{ *p_scene.getEngine() }
+		, m_indexBuffer{ *scene.getEngine() }
 	{
+		addComponent( std::make_shared< InstantiationComponent >( *this ) );
 	}
 
 	Submesh::~Submesh()
@@ -231,7 +246,15 @@ namespace castor3d
 	{
 		if ( !m_generated )
 		{
-			doGenerateBuffers();
+			doGenerateVertexBuffer();
+
+			for ( auto & component : m_components )
+			{
+				component.second->initialise();
+				component.second->fill();
+			}
+
+			m_generated = true;
 		}
 
 		if ( !m_initialised )
@@ -245,28 +268,9 @@ namespace castor3d
 					, BufferAccessNature::eDraw );
 			}
 
-			if ( m_initialised && m_animBuffer )
+			for ( auto & component : m_components )
 			{
-				m_initialised = m_animBuffer->initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
-			}
-
-			if ( m_initialised && m_bonesBuffer )
-			{
-				m_initialised = m_bonesBuffer->initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
-			}
-
-			if ( m_initialised && m_matrixBuffer )
-			{
-				m_initialised = m_matrixBuffer->initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
-			}
-
-			if ( m_initialised && m_instancedBonesBuffer )
-			{
-				m_initialised = m_instancedBonesBuffer->initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
+				m_initialised &= component.second->initialise();
 			}
 
 			m_dirty = !m_initialised;
@@ -276,18 +280,26 @@ namespace castor3d
 	void Submesh::cleanup()
 	{
 		m_initialised = false;
-		doDestroyBuffers();
-		m_faces.clear();
+
+		for ( auto & component : m_components )
+		{
+			component.second->cleanup();
+		}
+
+		m_vertexBuffer.cleanup();
+
+		if ( !m_indexBuffer.isEmpty() )
+		{
+			m_indexBuffer.cleanup();
+		}
+
 		m_points.clear();
 		m_pointsData.clear();
-		m_bones.clear();
-		m_bonesData.clear();
-		m_geometryBuffers.clear();
 	}
 
 	void Submesh::computeContainers()
 	{
-		if ( m_pointsData.size() > 0 )
+		if ( !m_pointsData.empty() )
 		{
 			Point3r min;
 			Point3r max;
@@ -314,8 +326,37 @@ namespace castor3d
 
 	uint32_t Submesh::getFaceCount()const
 	{
-		return std::max( uint32_t( m_faces.size() )
-			, m_indexBuffer.getSize() / 3 );
+		uint32_t result = 0u;
+
+		switch ( getTopology() )
+		{
+		case Topology::ePoints:
+			result = m_indexBuffer.getSize();
+			break;
+
+		case Topology::eLines:
+			result = m_indexBuffer.getSize() / 2;
+			break;
+
+		case Topology::eLineLoop:
+			result = m_indexBuffer.getSize();
+			break;
+
+		case Topology::eLineStrip:
+			result = m_indexBuffer.getSize() - 1u;
+			break;
+
+		case Topology::eTriangles:
+			result = m_indexBuffer.getSize() / 3u;
+			break;
+
+		case Topology::eTriangleStrips:
+		case Topology::eTriangleFan:
+			result = m_indexBuffer.getSize() - 2u;
+			break;
+		}
+
+		return result;
 	}
 
 	uint32_t Submesh::getPointsCount()const
@@ -348,7 +389,7 @@ namespace castor3d
 	{
 		BufferElementGroupSPtr result;
 		uint32_t stride = 3 * sizeof( real ) * 5;
-		m_pointsData.push_back( ByteArray( stride ) );
+		m_pointsData.emplace_back( stride );
 		uint8_t * data = m_pointsData.back().data();
 		result = std::make_shared< BufferElementGroup >( data, uint32_t( m_points.size() ) );
 		Vertex::setPosition( result, x, y, z );
@@ -370,7 +411,7 @@ namespace castor3d
 		, InterleavedVertex const * const end )
 	{
 		uint32_t stride = m_vertexBuffer.getDeclaration().stride();
-		m_pointsData.push_back( ByteArray( std::distance( begin, end ) * stride ) );
+		m_pointsData.emplace_back( std::distance( begin, end ) * stride );
 		uint8_t * data = m_pointsData.back().data();
 
 		std::for_each( begin, end, [this, &data, &stride]( InterleavedVertex const & p_data )
@@ -386,106 +427,6 @@ namespace castor3d
 		} );
 	}
 
-	void Submesh::addBoneDatas( VertexBoneData const * const begin
-		, VertexBoneData const * const end )
-	{
-		uint32_t stride = BonedVertex::Stride;
-		m_bonesData.push_back( ByteArray( std::distance( begin, end ) * stride ) );
-		auto data = &( *m_bonesData.rbegin() )[0];
-
-		std::for_each( begin, end, [this, &data, &stride]( VertexBoneData const & p_data )
-		{
-			auto bonesData = std::make_shared< BufferElementGroup >( data, uint32_t( m_bones.size() ) );
-			BonedVertex::setBones( bonesData, p_data );
-			m_bones.push_back( bonesData );
-			data += stride;
-		} );
-
-		addFlag( m_programFlags, ProgramFlag::eSkinning );
-	}
-
-	Face Submesh::addFace( uint32_t a, uint32_t b, uint32_t c )
-	{
-		Face result{ a, b, c };
-
-		if ( a < m_points.size() && b < m_points.size() && c < m_points.size() )
-		{
-			m_faces.push_back( result );
-			m_hasNormals = false;
-		}
-		else
-		{
-			throw std::range_error( "Submesh::addFace - One or more index out of bound" );
-		}
-
-		return result;
-	}
-
-	void Submesh::addFaceGroup( FaceIndices const * const begin
-		, FaceIndices const * const end )
-	{
-		std::for_each( begin, end, [this]( FaceIndices const & data )
-		{
-			addFace( data.m_index[0], data.m_index[1], data.m_index[2] );
-		} );
-	}
-
-	void Submesh::addQuadFace( uint32_t a
-		, uint32_t b
-		, uint32_t c
-		, uint32_t d
-		, Point3r const & minUV
-		, Point3r const & maxUV )
-	{
-		addFace( a, b, c );
-		addFace( a, c, d );
-		Vertex::setTexCoord( m_points[a], minUV[0], minUV[1] );
-		Vertex::setTexCoord( m_points[b], maxUV[0], minUV[1] );
-		Vertex::setTexCoord( m_points[c], maxUV[0], maxUV[1] );
-		Vertex::setTexCoord( m_points[d], minUV[0], maxUV[1] );
-	}
-
-	void Submesh::clearFaces()
-	{
-		m_faces.clear();
-		m_indexBuffer.clear();
-	}
-
-	void Submesh::resetGpuBuffers()
-	{
-		doDestroyBuffers();
-		doGenerateBuffers();
-
-		if ( !m_initialised )
-		{
-			initialise();
-		}
-
-		if ( m_initialised )
-		{
-			for ( auto & geometryBuffers : m_geometryBuffers )
-			{
-				doInitialiseGeometryBuffers( geometryBuffers );
-			}
-		}
-	}
-
-	void Submesh::resetMatrixBuffers()
-	{
-		if ( m_matrixBuffer )
-		{
-			uint32_t count = 0;
-
-			for ( auto it : m_instanceCount )
-			{
-				count = std::max( count, it.second );
-			}
-
-			doGenerateMatrixBuffer( count );
-			m_matrixBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		}
-	}
-
 	void Submesh::draw( GeometryBuffers const & geometryBuffers )
 	{
 		REQUIRE( m_initialised );
@@ -493,13 +434,12 @@ namespace castor3d
 		if ( m_dirty )
 		{
 			m_vertexBuffer.upload();
-
-			if ( m_animBuffer )
-			{
-				m_animBuffer->upload();
-			}
-
 			m_dirty = false;
+		}
+
+		for ( auto & component : m_components )
+		{
+			component.second->upload();
 		}
 
 		if ( !m_indexBuffer.isEmpty() )
@@ -525,6 +465,11 @@ namespace castor3d
 			m_dirty = false;
 		}
 
+		for ( auto & component : m_components )
+		{
+			component.second->upload();
+		}
+
 		if ( !m_indexBuffer.isEmpty() )
 		{
 			geometryBuffers.drawInstanced( m_indexBuffer.getSize()
@@ -539,376 +484,57 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::computeFacesFromPolygonVertex()
-	{
-		SubmeshUtils::computeFacesFromPolygonVertex( *this );
-	}
-
 	void Submesh::computeNormals( bool reverted )
 	{
-		if ( !m_hasNormals )
+		if ( m_indexMapping )
 		{
-			SubmeshUtils::computeNormals( *this, reverted );
-			m_hasNormals = true;
+			m_indexMapping->computeNormals( reverted );
 		}
 	}
 
-	void Submesh::computeNormals( Face const & face )
+	void Submesh::sortByDistance( castor::Point3r const & cameraPosition )
 	{
-		SubmeshUtils::computeNormals( *this, face );
-	}
-
-	void Submesh::computeTangents( Face const & face )
-	{
-		SubmeshUtils::computeTangents( *this, face );
-	}
-
-	void Submesh::computeTangentsFromNormals()
-	{
-		SubmeshUtils::computeTangentsFromNormals( *this );
-	}
-
-	void Submesh::computeTangentsFromBitangents()
-	{
-		SubmeshUtils::computeTangentsFromBitangents( *this );
-	}
-
-	void Submesh::computeBitangents()
-	{
-		SubmeshUtils::computeBitangents( *this );
-	}
-
-	void Submesh::sortByDistance( Point3r const & cameraPosition )
-	{
-		REQUIRE( m_initialised );
-
-		try
+		if ( m_indexMapping )
 		{
-			if ( m_cameraPosition != cameraPosition )
-			{
-				if ( m_initialised
-					&& !m_indexBuffer.isEmpty()
-					&& !m_vertexBuffer.isEmpty() )
-				{
-					IndexBuffer & indices = m_indexBuffer;
-					VertexBuffer & vertices = m_vertexBuffer;
-
-					vertices.bind();
-					indices.bind();
-					m_cameraPosition = cameraPosition;
-					uint32_t uiIdxSize = indices.getSize();
-					uint32_t * pIdx = indices.lock( 0, uiIdxSize, AccessType::eRead | AccessType::eWrite );
-
-					if ( pIdx )
-					{
-						struct stFACE_DISTANCE
-						{
-							uint32_t m_index[3];
-							double m_distance;
-						};
-						uint32_t stride = vertices.getDeclaration().stride();
-						uint8_t * pVtx = vertices.getData();
-						DECLARE_VECTOR( stFACE_DISTANCE, Face );
-						FaceArray arraySorted;
-						arraySorted.reserve( uiIdxSize / 3 );
-
-						if ( pVtx )
-						{
-							for ( uint32_t * it = pIdx + 0; it < pIdx + uiIdxSize; it += 3 )
-							{
-								double dDistance = 0.0;
-								Coords3r pVtx1( reinterpret_cast< real * >( &pVtx[it[0] * stride] ) );
-								dDistance += point::lengthSquared( pVtx1 - cameraPosition );
-								Coords3r pVtx2( reinterpret_cast< real * >( &pVtx[it[1] * stride] ) );
-								dDistance += point::lengthSquared( pVtx2 - cameraPosition );
-								Coords3r pVtx3( reinterpret_cast< real * >( &pVtx[it[2] * stride] ) );
-								dDistance += point::lengthSquared( pVtx3 - cameraPosition );
-								stFACE_DISTANCE face = { { it[0], it[1], it[2] }, dDistance };
-								arraySorted.push_back( face );
-							}
-
-							std::sort( arraySorted.begin(), arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
-							{
-								return p_left.m_distance < p_right.m_distance;
-							} );
-
-							for ( FaceArrayConstIt it = arraySorted.begin(); it != arraySorted.end(); ++it )
-							{
-								*pIdx++ = it->m_index[0];
-								*pIdx++ = it->m_index[1];
-								*pIdx++ = it->m_index[2];
-							}
-						}
-
-						indices.unlock();
-					}
-
-					indices.unbind();
-					vertices.unbind();
-				}
-			}
-		}
-		catch ( Exception const & p_exc )
-		{
-			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
+			m_indexMapping->sortByDistance( cameraPosition );
 		}
 	}
 
-	uint32_t Submesh::ref( MaterialSPtr material )
+	ProgramFlags Submesh::getProgramFlags()const
 	{
-		auto it = m_instanceCount.find( material );
+		auto result = m_programFlags;
 
-		if ( it == m_instanceCount.end() )
+		for ( auto & component : m_components )
 		{
-			m_instanceCount[material] = 0;
-			it = m_instanceCount.find( material );
-		}
-
-		if ( m_defaultMaterial.expired() )
-		{
-			m_defaultMaterial = material;
-		}
-
-		return it->second++;
-	}
-
-	uint32_t Submesh::unref( MaterialSPtr material )
-	{
-		auto it = m_instanceCount.find( material );
-		uint32_t result{ 0u };
-
-		if ( it != m_instanceCount.end() )
-		{
-			result = it->second;
-
-			if ( it->second )
-			{
-				it->second--;
-			}
-
-			if ( !it->second )
-			{
-				m_instanceCount.erase( it );
-			}
+			result |= component.second->getProgramFlags();
 		}
 
 		return result;
 	}
 
-	uint32_t Submesh::getRefCount( MaterialSPtr material )const
+	void Submesh::setMaterial( MaterialSPtr oldMaterial
+		, MaterialSPtr newMaterial
+		, bool update )
 	{
-		uint32_t result = 0;
-		auto it = m_instanceCount.find( material );
-
-		if ( it != m_instanceCount.end() )
+		if ( oldMaterial != newMaterial )
 		{
-			result = it->second;
+			getScene()->setChanged();
 		}
 
-		return result;
-	}
-
-	uint32_t Submesh::getMaxRefCount()const
-	{
-		return uint32_t( std::accumulate( m_instanceCount.begin()
-			, m_instanceCount.end()
-			, 0u
-			, []( uint32_t value, auto const & p_pair )
+		for ( auto & component : m_components )
 		{
-			return std::max( value, p_pair.second );
-		} ) );
-	}
-
-	Topology Submesh::getTopology()const
-	{
-		Topology result = Topology::eCount;
-
-		for ( auto buffers : m_geometryBuffers )
-		{
-			result = buffers->getTopology();
-		}
-
-		return result;
-	}
-
-	void Submesh::setTopology( Topology value )
-	{
-		for ( auto buffers : m_geometryBuffers )
-		{
-			buffers->setTopology( value );
+			component.second->setMaterial( oldMaterial, newMaterial, update );
 		}
 	}
 
-	GeometryBuffersSPtr Submesh::getGeometryBuffers( ShaderProgram const & program )
+	void Submesh::gatherBuffers( VertexBufferArray & buffers )
 	{
-		GeometryBuffersSPtr geometryBuffers;
-		auto it = std::find_if( std::begin( m_geometryBuffers )
-			, std::end( m_geometryBuffers )
-			, [&program]( GeometryBuffersSPtr p_buffers )
-			{
-				return &p_buffers->getProgram() == &program;
-			} );
+		buffers.emplace_back( m_vertexBuffer );
 
-		if ( it == m_geometryBuffers.end() )
+		for ( auto & component : m_components )
 		{
-			geometryBuffers = getScene()->getEngine()->getRenderSystem()->createGeometryBuffers( Topology::eTriangles
-				, program );
-			m_geometryBuffers.push_back( geometryBuffers );
-			doInitialiseGeometryBuffers( geometryBuffers );
+			component.second->gather( buffers );
 		}
-		else
-		{
-			geometryBuffers = *it;
-		}
-
-		return geometryBuffers;
-	}
-
-	void Submesh::setAnimated( bool animated )
-	{
-		if ( animated )
-		{
-			addFlag( m_programFlags, ProgramFlag::eMorphing );
-		}
-		else
-		{
-			remFlag( m_programFlags, ProgramFlag::eMorphing );
-		}
-	}
-
-	void Submesh::doCreateBuffers()
-	{
-		if ( checkFlag( getProgramFlags(), ProgramFlag::eMorphing ) )
-		{
-			m_animBuffer = std::make_unique< VertexBuffer >( *getScene()->getEngine(), BufferDeclaration
-			{
-				{
-					BufferElementDeclaration( ShaderProgram::Position2, uint32_t( ElementUsage::ePosition ), ElementType::eVec3, Vertex::getOffsetPos() ),
-					BufferElementDeclaration( ShaderProgram::Normal2, uint32_t( ElementUsage::eNormal ), ElementType::eVec3, Vertex::getOffsetNml() ),
-					BufferElementDeclaration( ShaderProgram::Tangent2, uint32_t( ElementUsage::eTangent ), ElementType::eVec3, Vertex::getOffsetTan() ),
-					BufferElementDeclaration( ShaderProgram::Bitangent2, uint32_t( ElementUsage::eBitangent ), ElementType::eVec3, Vertex::getOffsetBin() ),
-					BufferElementDeclaration( ShaderProgram::Texture2, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec3, Vertex::getOffsetTex() ),
-				}
-			} );
-		}
-		else if ( getScene()->getEngine()->getRenderSystem()->getGpuInformations().hasInstancing() )
-		{
-			uint32_t count = 0;
-
-			for ( auto it : m_instanceCount )
-			{
-				count = std::max( count, it.second );
-			}
-
-			if ( count > 1 )
-			{
-				addFlag( m_programFlags, ProgramFlag::eInstantiation );
-				m_matrixBuffer = std::make_unique< VertexBuffer >( *getScene()->getEngine(), BufferDeclaration
-				{
-					{
-						BufferElementDeclaration{ ShaderProgram::Transform, uint32_t( ElementUsage::eTransform ), ElementType::eMat4, 0, 1 },
-						BufferElementDeclaration{ ShaderProgram::Material, uint32_t( ElementUsage::eMatIndex ), ElementType::eInt, 64, 1 },
-					}
-				} );
-			}
-			else
-			{
-				m_matrixBuffer.reset();
-			}
-		}
-
-		if ( checkFlag( m_programFlags, ProgramFlag::eSkinning ) && m_parentMesh.getSkeleton() )
-		{
-			m_bonesBuffer = std::make_unique< VertexBuffer >( *getScene()->getEngine(), BufferDeclaration
-			{
-				{
-					BufferElementDeclaration{ ShaderProgram::BoneIds0, uint32_t( ElementUsage::eBoneIds0 ), ElementType::eIVec4, 0 },
-					BufferElementDeclaration{ ShaderProgram::BoneIds1, uint32_t( ElementUsage::eBoneIds1 ), ElementType::eIVec4, 16 },
-					BufferElementDeclaration{ ShaderProgram::Weights0, uint32_t( ElementUsage::eBoneWeights0 ), ElementType::eVec4, 32 },
-					BufferElementDeclaration{ ShaderProgram::Weights1, uint32_t( ElementUsage::eBoneWeights1 ), ElementType::eVec4, 48 },
-				}
-			} );
-			ENSURE( m_bonesBuffer->getDeclaration().stride() == BonedVertex::Stride );
-
-			if ( checkFlag( m_programFlags, ProgramFlag::eInstantiation ) )
-			{
-				m_instancedBonesBuffer = std::make_unique< ShaderStorageBuffer >( *getScene()->getEngine() );
-			}
-		}
-	}
-
-	void Submesh::doDestroyBuffers()
-	{
-		m_generated = false;
-		m_initialised = false;
-		m_dirty = true;
-		m_vertexBuffer.cleanup();
-
-		if ( !m_indexBuffer.isEmpty() )
-		{
-			m_indexBuffer.cleanup();
-		}
-
-		if ( m_animBuffer )
-		{
-			m_animBuffer->cleanup();
-		}
-
-		if ( m_matrixBuffer )
-		{
-			m_matrixBuffer->cleanup();
-		}
-
-		if ( m_bonesBuffer )
-		{
-			m_bonesBuffer->cleanup();
-		}
-
-		if ( m_instancedBonesBuffer )
-		{
-			m_instancedBonesBuffer->cleanup();
-		}
-
-		for ( auto buffers : m_geometryBuffers )
-		{
-			buffers->cleanup();
-		}
-	}
-
-	void Submesh::doGenerateBuffers()
-	{
-		doCreateBuffers();
-		doGenerateVertexBuffer();
-		doGenerateIndexBuffer();
-		uint32_t count = 0;
-
-		for ( auto it : m_instanceCount )
-		{
-			count = std::max( count, it.second );
-		}
-
-		if ( count > 1 )
-		{
-			addFlag( m_programFlags, ProgramFlag::eInstantiation );
-			doGenerateMatrixBuffer( count );
-		}
-
-		if ( !m_bones.empty() )
-		{
-			doGenerateBonesBuffer();
-
-			if ( count > 1 )
-			{
-				doGenerateInstantiatedBonesBuffer( count );
-			}
-		}
-
-		if ( checkFlag( m_programFlags, ProgramFlag::eMorphing ) )
-		{
-			doGenerateAnimBuffer();
-		}
-
-		m_generated = true;
 	}
 
 	void Submesh::doGenerateVertexBuffer()
@@ -950,162 +576,6 @@ namespace castor3d
 
 			//m_points.clear();
 			//m_pointsData.clear();
-		}
-	}
-
-	void Submesh::doGenerateAnimBuffer()
-	{
-		if ( m_animBuffer )
-		{
-			VertexBuffer & vertexBuffer = m_vertexBuffer;
-			VertexBuffer & animBuffer = *m_animBuffer;
-			uint32_t size = vertexBuffer.getSize();
-
-			if ( size && animBuffer.getSize() != size )
-			{
-				animBuffer.resize( size );
-			}
-		}
-	}
-
-	void Submesh::doGenerateIndexBuffer()
-	{
-		FaceSPtr pFace;
-		IndexBuffer & indexBuffer = m_indexBuffer;
-		uint32_t uiSize = uint32_t( m_faces.size() * 3 );
-
-		if ( uiSize )
-		{
-			if ( indexBuffer.getSize() != uiSize )
-			{
-				indexBuffer.resize( uiSize );
-			}
-
-			uint32_t index = 0;
-
-			for ( auto const & face : m_faces )
-			{
-				indexBuffer[index++] = face[0];
-				indexBuffer[index++] = face[1];
-				indexBuffer[index++] = face[2];
-			}
-
-			//m_faces.clear();
-		}
-	}
-
-	void Submesh::doGenerateBonesBuffer()
-	{
-		if ( m_bonesBuffer )
-		{
-			VertexBuffer & bonesBuffer = *m_bonesBuffer;
-			uint32_t stride = BonedVertex::Stride;
-			uint32_t size = uint32_t( m_bones.size() ) * stride;
-			auto itbones = m_bones.begin();
-
-			if ( size )
-			{
-				if ( bonesBuffer.getSize() != size )
-				{
-					bonesBuffer.resize( size );
-				}
-
-				auto buffer = bonesBuffer.getData();
-
-				for ( auto it : m_bonesData )
-				{
-					std::memcpy( buffer, it.data(), it.size() );
-					buffer += it.size();
-				}
-
-				buffer = bonesBuffer.getData();
-
-				for ( auto point : m_bones )
-				{
-					point->linkCoords( buffer );
-					buffer += stride;
-				}
-
-				//m_bones.clear();
-				//m_bonesData.clear();
-			}
-		}
-	}
-
-	void Submesh::doGenerateMatrixBuffer( uint32_t count )
-	{
-		if ( m_matrixBuffer )
-		{
-			if ( count )
-			{
-				VertexBuffer & matrixBuffer = *m_matrixBuffer;
-				uint32_t size = count * matrixBuffer.getDeclaration().stride();
-
-				if ( matrixBuffer.getSize() != size )
-				{
-					matrixBuffer.resize( size );
-				}
-			}
-			else
-			{
-				m_matrixBuffer.reset();
-			}
-		}
-	}
-
-	void Submesh::doGenerateInstantiatedBonesBuffer( uint32_t count )
-	{
-		if ( m_instancedBonesBuffer )
-		{
-			if ( count )
-			{
-				auto & bonesBuffer = *m_instancedBonesBuffer;
-				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
-				uint32_t size = count * stride;
-
-				if ( bonesBuffer.getSize() != size )
-				{
-					bonesBuffer.resize( size );
-				}
-			}
-			else
-			{
-				m_instancedBonesBuffer.reset();
-			}
-		}
-	}
-
-	void Submesh::doInitialiseGeometryBuffers( GeometryBuffersSPtr geometryBuffers )
-	{
-		VertexBufferArray buffers;
-		buffers.push_back( m_vertexBuffer );
-
-		if ( m_animBuffer )
-		{
-			buffers.push_back( *m_animBuffer );
-		}
-
-		if ( m_bonesBuffer )
-		{
-			buffers.push_back( *m_bonesBuffer );
-		}
-
-		if ( m_matrixBuffer )
-		{
-			buffers.push_back( *m_matrixBuffer );
-		}
-
-		if ( getScene()->getEngine()->getRenderSystem()->getCurrentContext() )
-		{
-			geometryBuffers->initialise( buffers, &m_indexBuffer );
-		}
-		else
-		{
-			getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, geometryBuffers, buffers]()
-				{
-					geometryBuffers->initialise( buffers, &m_indexBuffer );
-				} ) );
 		}
 	}
 }

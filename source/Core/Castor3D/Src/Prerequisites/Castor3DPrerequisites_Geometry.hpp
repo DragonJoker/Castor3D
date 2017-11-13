@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_GEOMETRY_H___
@@ -47,11 +47,12 @@ namespace castor3d
 	DECLARE_SMART_PTR( Vertex );
 	DECLARE_SMART_PTR( BufferElementGroup );
 
-	template< typename T > class Pattern;
-	typedef Pattern< Vertex > VertexPattern;
-	typedef Pattern< castor::Point3r > Point3rPattern;
-	typedef Pattern< VertexSPtr > VertexPtrPattern;
-	typedef Pattern< castor::Point3rSPtr > Point3rPtrPattern;
+	template< typename T >
+	class Pattern;
+	using VertexPattern = Pattern< Vertex >;
+	using Point3rPattern = Pattern< castor::Point3r >;
+	using VertexPtrPattern = Pattern< VertexSPtr >;
+	using Point3rPtrPattern = Pattern< castor::Point3rSPtr >;
 
 	struct FaceGroup;
 	class Face;
@@ -59,6 +60,13 @@ namespace castor3d
 	class Mesh;
 	class MeshGenerator;
 	class Submesh;
+	class SubmeshComponent;
+	class InstantiationComponent;
+	class BonesComponent;
+	class BonesInstantiationComponent;
+	class MorphComponent;
+	class IndexMapping;
+	class TriFaceMapping;
 	class Cone;
 	class Cylinder;
 	class Icosahedron;
@@ -84,6 +92,10 @@ namespace castor3d
 	DECLARE_SMART_PTR( Mesh );
 	DECLARE_SMART_PTR( MeshGenerator );
 	DECLARE_SMART_PTR( Submesh );
+	DECLARE_SMART_PTR( SubmeshComponent );
+	DECLARE_SMART_PTR( InstantiationComponent );
+	DECLARE_SMART_PTR( BonesInstantiationComponent );
+	DECLARE_SMART_PTR( IndexMapping );
 	DECLARE_SMART_PTR( Cone );
 	DECLARE_SMART_PTR( Cylinder );
 	DECLARE_SMART_PTR( Icosahedron );
@@ -134,6 +146,7 @@ namespace castor3d
 	DECLARE_MAP( castor::String, BoneSPtr, BonePtrStr );
 	//! BonedVertex pointer array
 	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
+	DECLARE_MAP( castor::String, SubmeshComponentSPtr, SubmeshComponentStr );
 
 	//@}
 }

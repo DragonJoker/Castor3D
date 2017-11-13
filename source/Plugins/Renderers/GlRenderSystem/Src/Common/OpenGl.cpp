@@ -160,9 +160,6 @@ namespace GlRender
 		PrimitiveTypes[uint32_t( castor3d::Topology::eTriangles )] = GlTopology::eTriangles;
 		PrimitiveTypes[uint32_t( castor3d::Topology::eTriangleStrips )] = GlTopology::eTriangleStrip;
 		PrimitiveTypes[uint32_t( castor3d::Topology::eTriangleFan )] = GlTopology::eTriangleFan;
-		PrimitiveTypes[uint32_t( castor3d::Topology::eQuads )] = GlTopology::eQuads;
-		PrimitiveTypes[uint32_t( castor3d::Topology::eQuadStrips )] = GlTopology::eQuadStrip;
-		PrimitiveTypes[uint32_t( castor3d::Topology::ePolygon )] = GlTopology::ePolygon;
 
 		TextureDimensions[uint32_t( castor3d::TextureType::eBuffer )] = GlTexDim::eBuffer;
 		TextureDimensions[uint32_t( castor3d::TextureType::eOneDimension )] = GlTexDim::e1D;

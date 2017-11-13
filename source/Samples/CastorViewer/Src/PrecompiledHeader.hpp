@@ -75,7 +75,7 @@ See LICENSE file in root folder
 #	include <Material/Material.hpp>
 #	include <Material/Pass.hpp>
 #	include <Mesh/Buffer/Buffer.hpp>
-#	include <Mesh/Face.hpp>
+#	include <Mesh/SubmeshComponent/Face.hpp>
 #	include <Mesh/Mesh.hpp>
 #	include <Mesh/Submesh.hpp>
 #	include <Mesh/Vertex.hpp>

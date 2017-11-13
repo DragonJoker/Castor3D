@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BILLBOARD_LIST_H___
@@ -31,18 +31,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_scene			The parent scene.
-		 *\param[in]	p_node			The parent scene node.
-		 *\param[in]	p_vertexBuffer	The vertex buffer.
+		 *\param[in]	scene			The parent scene.
+		 *\param[in]	node			The parent scene node.
+		 *\param[in]	vertexBuffer	The vertex buffer.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_scene			La scène parente.
-		 *\param[in]	p_node			Le noeud de scène parent.
-		 *\param[in]	p_vertexBuffer	Le tampon de sommets.
+		 *\param[in]	scene			La scène parente.
+		 *\param[in]	node			Le noeud de scène parent.
+		 *\param[in]	vertexBuffer	Le tampon de sommets.
 		 */
-		C3D_API BillboardBase( Scene & p_scene
-			, SceneNodeSPtr p_node
-			, VertexBufferSPtr p_vertexBuffer );
+		C3D_API BillboardBase( Scene & scene
+			, SceneNodeSPtr node
+			, VertexBufferSPtr vertexBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -53,14 +53,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements.
-		 *\param[in]	p_count	The elements count.
+		 *\param[in]	count	The elements count.
 		 *\return		\p true if all is OK.
 		 *\~french
 		 *\brief		Initialise les éléments GPU.
-		 *\param[in]	p_count	Le nombre d'éléments.
+		 *\param[in]	count	Le nombre d'éléments.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( uint32_t p_count );
+		C3D_API bool initialise( uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Cleans GPU side elements up
@@ -71,30 +71,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Draws the billboards.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw these billboards.
+		 *\param[in]	geometryBuffers	The geometry buffers used to draw these billboards.
 		 *\~french
 		 *\brief		Dessine les billboards.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
+		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
 		 */
-		C3D_API void draw( GeometryBuffers const & p_geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Retrieves a GeometryBuffers for given program.
-		 *\param[in]	p_program	The program.
-		 *\~french
-		 *\brief		Récupère un GeometryBuffers pour le programme donné.
-		 *\param[in]	p_program	Le programme.
-		 */
-		C3D_API GeometryBuffersSPtr getGeometryBuffers( ShaderProgram const & p_program );
+		C3D_API void draw( GeometryBuffers const & geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Sorts the points from farthest to nearest from the camera.
-		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
+		 *\param[in]	cameraPosition	The camera position, relative to billboard.
 		 *\~french
 		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
+		 *\param[in]	cameraPosition	La position de la caméra, relative au billboard.
 		 */
-		C3D_API void sortByDistance( castor::Point3r const & p_cameraPosition );
+		C3D_API void sortByDistance( castor::Point3r const & cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
@@ -111,15 +102,22 @@ namespace castor3d
 		C3D_API ProgramFlags getProgramFlags()const;
 		/**
 		 *\~english
+		 *\brief		Gathers buffers that need to go in a VAO.
+		 *\~french
+		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
+		 */
+		C3D_API void gatherBuffers( VertexBufferArray & buffers );
+		/**
+		 *\~english
 		 *\brief		sets the material
-		 *\param[in]	p_value	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Definit le materiau
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setMaterial( MaterialSPtr p_value )
+		inline void setMaterial( MaterialSPtr value )
 		{
-			m_material = p_value;
+			m_material = value;
 		}
 		/**
 		 *\~english
@@ -134,14 +132,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the billboards dimensions
-		 *\param[in]	p_value	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Definit les dimensios des billboards
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setDimensions( castor::Point2f const & p_value )
+		inline void setDimensions( castor::Point2f const & value )
 		{
-			m_dimensions = p_value;
+			m_dimensions = value;
 		}
 		/**
 		 *\~english
@@ -156,26 +154,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the offset of the center attribute in the vertex buffer.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Definit le décalage de l'attribut du centre dans le tampon de sommets.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setCenterOffset( uint32_t p_value )
+		inline void setCenterOffset( uint32_t value )
 		{
-			m_centerOffset = p_value;
+			m_centerOffset = value;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the billboards count.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Definit le nombre de billboards.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setCount( uint32_t p_value )
+		inline void setCount( uint32_t value )
 		{
-			m_count = p_value;
+			m_count = value;
 		}
 		/**
 		 *\~english
@@ -250,14 +248,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The parent scene node.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\return		Le noeud de scène parent.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setNode( SceneNodeSPtr p_value )
+		inline void setNode( SceneNodeSPtr value )
 		{
-			m_node = p_value;
+			m_node = value;
 		}
 		/**
 		 *\~english
@@ -272,14 +270,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		sets the billboard type.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\return		Définit le type de billboard.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setBillboardType( BillboardType p_value )
+		inline void setBillboardType( BillboardType value )
 		{
-			m_billboardType = p_value;
+			m_billboardType = value;
 		}
 		/**
 		 *\~english
@@ -294,14 +292,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		sets the billboard dimensions type.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\return		Définit le type des dimensions de billboard.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setBillboardSize( BillboardSize p_value )
+		inline void setBillboardSize( BillboardSize value )
 		{
-			m_billboardSize = p_value;
+			m_billboardSize = value;
 		}
 
 	protected:
@@ -326,9 +324,6 @@ namespace castor3d
 		//!\~english	The vertex buffer containing the instanced quad.
 		//!\~french		Le tampon de sommets contenant le quad instancié.
 		VertexBufferSPtr m_quad;
-		//!\~english	The GeometryBuffers with which this billboards list is compatible.
-		//!\~french		Les GeometryBuffers avec lesquel ce billboards list est compatible.
-		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
 		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
 		bool m_needUpdate{ true };
@@ -383,36 +378,37 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a billboards list into a text file
-			 *\param[in]	p_file	The file to save the object in
-			 *\param[in]	p_obj	The object to save
+			 *\param[in]	file	The file to save the object in
+			 *\param[in]	obj	The object to save
 			 *\~french
 			 *\brief		Ecrit une camera dans un fichier texte
-			 *\param[in]	p_file	Le fichier
-			 *\param[in]	p_obj	L'objet
+			 *\param[in]	file	Le fichier
+			 *\param[in]	obj	L'objet
 			 */
-			C3D_API bool operator()( BillboardList const & p_obj, castor::TextFile & p_file );
+			C3D_API bool operator()( BillboardList const & obj
+				, castor::TextFile & file );
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name		The name.
-		 *\param[in]	p_scene		The parent scene.
-		 *\param[in]	p_parent	The parent scene node.
+		 *\param[in]	name		The name.
+		 *\param[in]	scene		The parent scene.
+		 *\param[in]	parent	The parent scene node.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name		Le nom.
-		 *\param[in]	p_scene		La scene parente.
-		 *\param[in]	p_parent	Le noeud de scène parent.
+		 *\param[in]	name		Le nom.
+		 *\param[in]	scene		La scene parente.
+		 *\param[in]	parent	Le noeud de scène parent.
 		 */
-		C3D_API BillboardList( castor::String const & p_name
-			, Scene & p_scene
-			, SceneNodeSPtr p_parent );
+		C3D_API BillboardList( castor::String const & name
+			, Scene & scene
+			, SceneNodeSPtr parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -432,65 +428,65 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Removes a point from the list
-		 *\param[in]	p_index	The point index
+		 *\param[in]	index	The point index
 		 *\~french
 		 *\brief		Retire un point de la liste
-		 *\param[in]	p_index	L'index du point
+		 *\param[in]	index	L'index du point
 		 */
-		C3D_API void RemovePoint( uint32_t p_index );
+		C3D_API void RemovePoint( uint32_t index );
 		/**
 		 *\~english
 		 *\brief		adds a point to the list
-		 *\param[in]	p_position	The point
+		 *\param[in]	position	The point
 		 *\~french
 		 *\brief		Ajoute un point a la liste
-		 *\param[in]	p_position	Le point
+		 *\param[in]	position	Le point
 		 */
-		C3D_API void addPoint( castor::Point3r const & p_position );
+		C3D_API void addPoint( castor::Point3r const & position );
 		/**
 		 *\~english
 		 *\brief		adds a points list to the list
-		 *\param[in]	p_ptPositions	The points list
+		 *\param[in]	positions	The points list
 		 *\~french
 		 *\brief		Ajoute une liste de points a la liste
-		 *\param[in]	p_ptPositions	La liste de points
+		 *\param[in]	positions	La liste de points
 		 */
-		C3D_API void addPoints( castor::Point3rArray const & p_ptPositions );
+		C3D_API void addPoints( castor::Point3rArray const & positions );
 		/**
 		 *\~english
 		 *\brief		Attaches the movable object to a node
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API void attachTo( SceneNodeSPtr p_node );
+		C3D_API void attachTo( SceneNodeSPtr node );
 		/**
 		 *\~english
 		 *\brief		gets a point from the list
-		 *\param[in]	p_index	The point index
+		 *\param[in]	index	The point index
 		 *\return		The point
 		 *\~french
 		 *\brief		Recupere un point de la liste
-		 *\param[in]	p_index	L'index du point
+		 *\param[in]	index	L'index du point
 		 *\return		Le point
 		 */
-		inline castor::Point3r const & getAt( uint32_t p_index )const
+		inline castor::Point3r const & getAt( uint32_t index )const
 		{
-			return m_arrayPositions[p_index];
+			return m_arrayPositions[index];
 		}
 		/**
 		 *\~english
 		 *\brief		sets a point in the list
-		 *\param[in]	p_index		The point index
-		 *\param[in]	p_position	The point
+		 *\param[in]	index		The point index
+		 *\param[in]	position	The point
 		 *\~french
 		 *\brief		Definit un point de la liste
-		 *\param[in]	p_index		L'index du point
-		 *\param[in]	p_position	Le point
+		 *\param[in]	index		L'index du point
+		 *\param[in]	position	Le point
 		 */
-		inline void setAt( uint32_t p_index, castor::Point3r const & p_position )
+		inline void setAt( uint32_t index, castor::Point3r const & position )
 		{
 			m_needUpdate = true;
-			m_arrayPositions[p_index] = p_position;
+			m_arrayPositions[index] = position;
 		}
 		/**
 		 *\~english

@@ -72,7 +72,7 @@ namespace castortd
 			}
 
 			auto light = p_game.getScene().getLightCache().add( name, node, LightType::ePoint );
-			light->setColour( Colour::fromPredefined( PredefinedColour::eOpaqueRed ) );
+			light->setColour( RgbColour::fromPredefined( PredefinedRgbColour::eRed ) );
 			light->setIntensity( 0.8f, 1.0f );
 			light->getPointLight()->setAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );
 			result = std::make_shared< Enemy >( *baseNode, p_game, p_path, m_category );

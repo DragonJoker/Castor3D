@@ -1,4 +1,4 @@
-﻿#include "RenderPass.hpp"
+#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -48,6 +48,7 @@ namespace castor3d
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
 
 						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
@@ -84,6 +85,7 @@ namespace castor3d
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
 
 						doUnbindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
@@ -118,6 +120,7 @@ namespace castor3d
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
 
 						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
@@ -156,6 +159,7 @@ namespace castor3d
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
 
 						doUnbindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
@@ -609,7 +613,7 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto buffers = submesh.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
 		m_geometryBuffers.insert( buffers );
 
 		return SkinningRenderNode
@@ -633,7 +637,7 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto buffers = submesh.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
 		m_geometryBuffers.insert( buffers );
 
 		return MorphingRenderNode
@@ -656,7 +660,7 @@ namespace castor3d
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto buffers = submesh.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
 		m_geometryBuffers.insert( buffers );
 
 		return StaticRenderNode
@@ -676,7 +680,7 @@ namespace castor3d
 		, RenderPipeline & pipeline
 		, BillboardBase & billboard )
 	{
-		auto buffers = billboard.getGeometryBuffers( pipeline.getProgram() );
+		auto buffers = pipeline.getGeometryBuffers( billboard );
 		m_geometryBuffers.insert( buffers );
 
 		return BillboardRenderNode
@@ -810,11 +814,12 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && submesh.hasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -830,11 +835,12 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && submesh.hasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -849,11 +855,12 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && submesh.hasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -871,11 +878,12 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && submesh.hasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -894,11 +902,12 @@ namespace castor3d
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && submesh.hasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer(), info );
+					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer(), info );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 					++info.m_drawCalls;
 				}
@@ -1006,16 +1015,19 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, SkinningRenderNodeArray & renderNodes )
 			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
 				if ( !renderNodes.empty()
-					&& submesh.hasInstancedBonesBuffer() 
-					&& submesh.hasMatrixBuffer() )
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
-					uint32_t count2 = doCopyNodesBones( renderNodes, submesh.getInstancedBonesBuffer() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					submesh.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
@@ -1031,16 +1043,19 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, SkinningRenderNodeArray & renderNodes )
 			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
 				if ( !renderNodes.empty()
-					&& submesh.hasInstancedBonesBuffer() 
-					&& submesh.hasMatrixBuffer() )
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
-					uint32_t count2 = doCopyNodesBones( renderNodes, submesh.getInstancedBonesBuffer() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					submesh.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
@@ -1055,16 +1070,19 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, SkinningRenderNodeArray & renderNodes )
 			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
 				if ( !renderNodes.empty()
-					&& submesh.hasInstancedBonesBuffer() 
-					&& submesh.hasMatrixBuffer() )
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
-					uint32_t count2 = doCopyNodesBones( renderNodes, submesh.getInstancedBonesBuffer() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					submesh.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
@@ -1082,16 +1100,19 @@ namespace castor3d
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, SkinningRenderNodeArray & renderNodes )
 			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
 				if ( !renderNodes.empty()
-					&& submesh.hasInstancedBonesBuffer() 
-					&& submesh.hasMatrixBuffer() )
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer() );
-					uint32_t count2 = doCopyNodesBones( renderNodes, submesh.getInstancedBonesBuffer() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					submesh.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
@@ -1110,16 +1131,19 @@ namespace castor3d
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
+				, InstantiationComponent & instantiation
 				, SkinningRenderNodeArray & renderNodes )
 			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
 				if ( !renderNodes.empty()
-					&& submesh.hasInstancedBonesBuffer() 
-					&& submesh.hasMatrixBuffer() )
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, submesh.getMatrixBuffer(), info );
-					uint32_t count2 = doCopyNodesBones( renderNodes, submesh.getInstancedBonesBuffer(), info );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer(), info );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
 					REQUIRE( count1 == count2 );
-					submesh.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 					++info.m_drawCalls;
 				}

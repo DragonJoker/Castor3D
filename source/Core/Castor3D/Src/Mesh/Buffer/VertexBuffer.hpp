@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VERTEX_BUFFER_H___
@@ -43,7 +43,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~VertexBuffer();
+		C3D_API ~VertexBuffer() = default;
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.

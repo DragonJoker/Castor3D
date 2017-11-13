@@ -15,7 +15,7 @@
 #include "Material/MetallicRoughnessPbrPass.hpp"
 #include "Material/SpecularGlossinessPbrPass.hpp"
 #include "Material/SubsurfaceScattering.hpp"
-#include "Mesh/Face.hpp"
+#include "Mesh/SubmeshComponent/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Subdivider.hpp"
@@ -2032,7 +2032,7 @@ namespace castor3d
 				String tmp;
 				StringArray arrayStrParams = string::split( p_params[2]->get( tmp ), cuT( "-" ), 20, false );
 
-				if ( arrayStrParams.size() )
+				if ( !arrayStrParams.empty() )
 				{
 					for ( StringArrayConstIt it = arrayStrParams.begin(); it != arrayStrParams.end(); ++it )
 					{
@@ -2080,7 +2080,6 @@ namespace castor3d
 
 						for ( auto submesh : *parsingContext->pMesh )
 						{
-							submesh->setAnimated( true );
 							animation.addChild( MeshAnimationSubmesh{ animation, *submesh } );
 						}
 					}
@@ -2316,7 +2315,7 @@ namespace castor3d
 			p_params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !parsingContext->vertexTex.size() )
+			if ( parsingContext->vertexTex.empty() )
 			{
 				parsingContext->vertexTex.resize( parsingContext->vertexPos.size() );
 			}
@@ -2361,7 +2360,7 @@ namespace castor3d
 			p_params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !parsingContext->vertexTex.size() )
+			if ( parsingContext->vertexTex.empty() )
 			{
 				parsingContext->vertexTex.resize( parsingContext->vertexPos.size() );
 			}
@@ -2412,7 +2411,7 @@ namespace castor3d
 			p_params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !parsingContext->vertexNml.size() )
+			if ( parsingContext->vertexNml.empty() )
 			{
 				parsingContext->vertexNml.resize( parsingContext->vertexPos.size() );
 			}
@@ -2463,7 +2462,7 @@ namespace castor3d
 			p_params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !parsingContext->vertexTan.size() )
+			if ( parsingContext->vertexTan.empty() )
 			{
 				parsingContext->vertexTan.resize( parsingContext->vertexPos.size() );
 			}
@@ -2533,26 +2532,29 @@ namespace castor3d
 
 			parsingContext->pSubmesh->addPoints( vertices );
 
-			if ( parsingContext->faces.size() )
+			if ( !parsingContext->faces.empty() )
 			{
 				auto indices = reinterpret_cast< FaceIndices * >( &parsingContext->faces[0] );
-				parsingContext->pSubmesh->addFaceGroup( indices, indices + ( parsingContext->faces.size() / 3 ) );
+				auto mapping = std::make_shared< TriFaceMapping >( *parsingContext->pSubmesh );
+				mapping->addFaceGroup( indices, indices + ( parsingContext->faces.size() / 3 ) );
 
 				if ( !parsingContext->vertexNml.empty() )
 				{
 					if ( !parsingContext->vertexTan.empty() )
 					{
-						parsingContext->pSubmesh->computeBitangents();
+						mapping->computeBitangents();
 					}
 					else
 					{
-						parsingContext->pSubmesh->computeTangentsFromNormals();
+						mapping->computeTangentsFromNormals();
 					}
 				}
 				else
 				{
-					parsingContext->pSubmesh->computeNormals();
+					mapping->computeNormals();
 				}
+
+				parsingContext->pSubmesh->setIndexMapping( mapping );
 			}
 
 			parsingContext->vertexPos.clear();
@@ -4029,7 +4031,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( p_params.size() > 0 )
+		if ( !p_params.empty() )
 		{
 			uint32_t uiType;
 			parsingContext->pViewport->updateType( ViewportType( p_params[0]->get( uiType ) ) );

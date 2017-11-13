@@ -30,13 +30,13 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		light.update( light.getParent()->getDerivedPosition()
+		light.updateShadow( light.getParent()->getDerivedPosition()
 			, m_camera->getViewport()
 			, index );
 		m_camera->attachTo( light.getParent() );
 		m_camera->update();
 		m_farPlane.setValue( light.getSpotLight()->getFarPlane() );
-		queues.push_back( m_renderQueue );
+		queues.emplace_back( m_renderQueue );
 	}
 
 	void ShadowMapPassSpot::render( uint32_t index )
@@ -74,7 +74,7 @@ namespace castor3d
 
 	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )
 	{
-		queues.push_back( m_renderQueue );
+		queues.emplace_back( m_renderQueue );
 	}
 
 	void ShadowMapPassSpot::doPreparePipeline( ShaderProgram & program

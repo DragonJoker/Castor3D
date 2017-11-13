@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SubmeshUtils_H___
@@ -29,7 +29,8 @@ namespace castor3d
 		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan.
 		 *\param[in]	submesh	Le sous-maillage.
 		 */
-		C3D_API static void computeFacesFromPolygonVertex( Submesh & submesh );
+		C3D_API static void computeFacesFromPolygonVertex( Submesh & submesh
+			, TriFaceMapping & triFace );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents.
@@ -41,6 +42,7 @@ namespace castor3d
 		 *\param[in]	reverted	Dit si les normales doivent être inversées.
 		 */
 		C3D_API static void computeNormals( Submesh & submesh
+			, TriFaceMapping & triFace
 			, bool reverted = false );
 		/**
 		 *\~english
@@ -76,7 +78,8 @@ namespace castor3d
 		 *\remarks		Cette fonction suppose que les normales sont définies.
 		 *\param[in]	submesh	Le sous-maillage.
 		 */
-		C3D_API static void computeTangentsFromNormals( Submesh & submesh );
+		C3D_API static void computeTangentsFromNormals( Submesh & submesh
+			, TriFaceMapping & triFace );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh.

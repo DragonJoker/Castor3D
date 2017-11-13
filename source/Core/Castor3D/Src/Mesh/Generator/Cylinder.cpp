@@ -46,9 +46,13 @@ namespace castor3d
 
 		if ( m_nbFaces >= 2 )
 		{
-			Submesh & submeshBase	= *p_mesh.createSubmesh();
-			Submesh & submeshTop	= *p_mesh.createSubmesh();
-			Submesh & submeshSide	= *p_mesh.createSubmesh();
+			Submesh & submeshBase = *p_mesh.createSubmesh();
+			Submesh & submeshTop = *p_mesh.createSubmesh();
+			Submesh & submeshSide = *p_mesh.createSubmesh();
+			auto indexMappingBase = std::make_shared< TriFaceMapping >( submeshBase );
+			auto indexMappingTop = std::make_shared< TriFaceMapping >( submeshTop );
+			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
+
 			//CALCUL DE LA POSITION DES POINTS
 			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
 			uint32_t i = 0;
@@ -101,51 +105,30 @@ namespace castor3d
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				submeshBase.addFace( submeshBase[i]->getIndex(), submeshBase[i + 1]->getIndex(), ptBottomCenter->getIndex() );
+				indexMappingBase->addFace( submeshBase[i]->getIndex(), submeshBase[i + 1]->getIndex(), ptBottomCenter->getIndex() );
 				//Composition du dessus
-				submeshTop.addFace( ptTopCenter->getIndex(), submeshTop[i]->getIndex(), submeshTop[i + 1]->getIndex() );
+				indexMappingTop->addFace( ptTopCenter->getIndex(), submeshTop[i]->getIndex(), submeshTop[i + 1]->getIndex() );
 			}
 
 			//Composition du bas
-			submeshBase.addFace( submeshBase[m_nbFaces - 1]->getIndex(), submeshBase[0]->getIndex(), ptBottomCenter->getIndex() );
+			indexMappingBase->addFace( submeshBase[m_nbFaces - 1]->getIndex(), submeshBase[0]->getIndex(), ptBottomCenter->getIndex() );
 			//Composition du dessus
-			submeshTop.addFace( ptTopCenter->getIndex(), submeshTop[m_nbFaces - 1]->getIndex(), submeshTop[0]->getIndex() );
+			indexMappingTop->addFace( ptTopCenter->getIndex(), submeshTop[m_nbFaces - 1]->getIndex(), submeshTop[0]->getIndex() );
 
 			//Composition des càtàs
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				submeshSide.addFace( submeshSide[i + 0]->getIndex(), submeshSide[i + 1]->getIndex(), submeshSide[i + 2]->getIndex() );
-				submeshSide.addFace( submeshSide[i + 1]->getIndex(), submeshSide[i + 3]->getIndex(), submeshSide[i + 2]->getIndex() );
+				indexMappingSide->addFace( submeshSide[i + 0]->getIndex(), submeshSide[i + 1]->getIndex(), submeshSide[i + 2]->getIndex() );
+				indexMappingSide->addFace( submeshSide[i + 1]->getIndex(), submeshSide[i + 3]->getIndex(), submeshSide[i + 2]->getIndex() );
 			}
 
-			submeshBase.computeTangentsFromNormals();
-			submeshTop.computeTangentsFromNormals();
-			submeshSide.computeTangentsFromNormals();
-			//computeNormals( p_mesh );
-			//Coords3r ptNormal0Top;
-			//Coords3r ptNormal0Base;
-			//Coords3r ptTangent0Top;
-			//Coords3r ptTangent0Base;
-			//Coords3r ptNormal1Top;
-			//Coords3r ptNormal1Base;
-			//Coords3r ptTangent1Top;
-			//Coords3r ptTangent1Base;
-			//Vertex::getNormal( submeshSide[0], ptNormal0Top );
-			//Vertex::getNormal( submeshSide[1], ptNormal0Base );
-			//Vertex::getTangent( submeshSide[0], ptTangent0Top );
-			//Vertex::getTangent( submeshSide[1], ptTangent0Base );
-			//l_ptNormal0Top += Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 2], ptNormal1Top );
-			//l_ptNormal0Base += Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 1], ptNormal1Base );
-			//l_ptTangent0Top += Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 2], ptTangent1Top );
-			//l_ptTangent0Base += Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 1], ptTangent1Base );
-			//point::normalise( ptNormal0Top );
-			//point::normalise( ptNormal0Base );
-			//point::normalise( ptTangent0Top );
-			//point::normalise( ptTangent0Base );
-			//Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 2], ptNormal0Top );
-			//Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 1], ptNormal0Base );
-			//Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 2], ptTangent0Top );
-			//Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 1], ptTangent0Base );
+			indexMappingBase->computeTangentsFromNormals();
+			indexMappingTop->computeTangentsFromNormals();
+			indexMappingSide->computeTangentsFromNormals();
+
+			submeshBase.setIndexMapping( indexMappingBase );
+			submeshTop.setIndexMapping( indexMappingTop );
+			submeshSide.setIndexMapping( indexMappingSide );
 		}
 
 		p_mesh.computeContainers();

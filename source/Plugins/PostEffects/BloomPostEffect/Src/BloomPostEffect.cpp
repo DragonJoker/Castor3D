@@ -1,4 +1,4 @@
-﻿#include "BloomPostEffect.hpp"
+#include "BloomPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -164,6 +164,7 @@ namespace Bloom
 				PostEffectSurface{ *renderSystem.getEngine() }
 			}
 		} )
+		, m_combineSurface{ *renderSystem.getEngine() }
 	{
 		String count;
 
@@ -222,12 +223,12 @@ namespace Bloom
 
 		for ( auto & surface : m_hiPassSurfaces )
 		{
+			size.getWidth() >>= 1;
+			size.getHeight() >>= 1;
 			surface.initialise( m_renderTarget
 				, size
 				, index++
 				, m_linearSampler );
-			size.getWidth() >>= 1;
-			size.getHeight() >>= 1;
 		}
 
 		size = m_renderTarget.getSize();
@@ -235,13 +236,19 @@ namespace Bloom
 
 		for ( auto & surface : m_blurSurfaces )
 		{
+			size.getWidth() >>= 1;
+			size.getHeight() >>= 1;
 			surface.initialise( m_renderTarget
 				, size
 				, index++
 				, m_nearestSampler );
-			size.getWidth() >>= 1;
-			size.getHeight() >>= 1;
 		}
+
+		size = m_renderTarget.getSize();
+		m_combineSurface.initialise( m_renderTarget
+			, size
+			, 0u
+			, m_nearestSampler );
 
 		if ( result )
 		{
@@ -331,7 +338,7 @@ namespace Bloom
 
 			p_framebuffer.bind( FrameBufferTarget::eDraw );
 			getRenderSystem()->getCurrentContext()->renderTexture( texture.getDimensions()
-				, *m_blurSurfaces[0].m_colourTexture.getTexture() );
+				, *m_combineSurface.m_colourTexture.getTexture() );
 			p_framebuffer.unbind();
 		}
 
@@ -374,8 +381,8 @@ namespace Bloom
 
 	void BloomPostEffect::doCombine( TextureLayout const & p_origin )
 	{
-		m_blurSurfaces[0].m_fbo->bind( FrameBufferTarget::eDraw );
-		m_blurSurfaces[0].m_fbo->clear( BufferComponent::eColour );
+		m_combineSurface.m_fbo->bind( FrameBufferTarget::eDraw );
+		m_combineSurface.m_fbo->clear( BufferComponent::eColour );
 		m_viewport.resize( p_origin.getDimensions() );
 		m_viewport.update();
 		m_viewport.apply();
@@ -403,11 +410,11 @@ namespace Bloom
 		p_origin.unbind( MinTextureIndex + 4 );
 		m_linearSampler->unbind( MinTextureIndex + 4 );
 
-		m_blurSurfaces[0].m_fbo->unbind();
+		m_combineSurface.m_fbo->unbind();
 
-		m_blurSurfaces[0].m_colourTexture.bind();
-		m_blurSurfaces[0].m_colourTexture.getTexture()->generateMipmaps();
-		m_blurSurfaces[0].m_colourTexture.unbind();
+		m_combineSurface.m_colourTexture.bind();
+		m_combineSurface.m_colourTexture.getTexture()->generateMipmaps();
+		m_combineSurface.m_colourTexture.unbind();
 	}
 
 	SamplerSPtr BloomPostEffect::doCreateSampler( bool p_linear )

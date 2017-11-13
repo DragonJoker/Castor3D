@@ -1,7 +1,7 @@
-#include "Subdivider.hpp"
+﻿#include "Subdivider.hpp"
 
 #include "Engine.hpp"
-#include "Face.hpp"
+#include "SubmeshComponent/Face.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 
@@ -133,26 +133,17 @@ namespace castor3d
 		else
 		{
 			doSubdivide();
+			doAddGeneratedFaces();
 			doSwapBuffers();
 		}
 	}
 
 	void Subdivider::doInitialise()
 	{
-		if ( m_bGenerateBuffers )
-		{
-			// TODO Replace by something appropriate:
-			// m_submesh->resetGpuBuffers();
-		}
 	}
 
 	void Subdivider::doSwapBuffers()
 	{
-		for ( auto const & face : m_arrayFaces )
-		{
-			m_submesh->addFace( face[0], face[1], face[2] );
-		}
-
 		m_submesh->computeNormals( true );
 
 		if ( m_bGenerateBuffers && !m_bThreaded )

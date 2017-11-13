@@ -1,4 +1,4 @@
-﻿#include "TowerCategory.hpp"
+#include "TowerCategory.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -60,7 +60,7 @@ namespace castortd
 		m_bulletSpeed = 96.0f;
 		m_towerCost = 250u;
 		m_material = cuT( "OrangeTowerCube" );
-		m_colour = Colour::fromComponents( 1.0f, 1.0f, 0.0f, 1.0f );
+		m_colour = RgbColour::fromComponents( 1.0f, 1.0f, 0.0f );
 	}
 
 	ShortRangeTower::ShortRangeTower()
@@ -117,6 +117,6 @@ namespace castortd
 		m_bulletSpeed = 120.0f;
 		m_towerCost = 170u;
 		m_material = cuT( "BlueTowerCube" );
-		m_colour = Colour::fromComponents( 0.0f, 0.0f, 1.0f, 1.0f );
+		m_colour = RgbColour::fromComponents( 0.0f, 0.0f, 1.0f );
 	}
 }

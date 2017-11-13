@@ -142,57 +142,70 @@ namespace castor3d
 		Vertex::setTexCoord( vertex, 1.0, 1.0 );
 		Vertex::setNormal( vertex, 0.0, 1.0, 0.0 );
 
-		//CONSTRUCTION FACES /!\ Pour OpenGL le Z est inversé
+		auto mapping1 = std::make_shared< TriFaceMapping >( *pSubmesh1 );
+		auto mapping2 = std::make_shared< TriFaceMapping >( *pSubmesh2 );
+		auto mapping3 = std::make_shared< TriFaceMapping >( *pSubmesh3 );
+		auto mapping4 = std::make_shared< TriFaceMapping >( *pSubmesh4 );
+		auto mapping5 = std::make_shared< TriFaceMapping >( *pSubmesh5 );
+		auto mapping6 = std::make_shared< TriFaceMapping >( *pSubmesh6 );
 
 		if ( CptNegatif == 1 || CptNegatif == 3 )
 		{
 			// Faces du bas
-			pSubmesh1->addFace( 0, 1, 2 );
-			pSubmesh1->addFace( 2, 3, 0 );
-			// Face du haut
-			pSubmesh2->addFace( 0, 1, 2 );
-			pSubmesh2->addFace( 2, 3, 0 );
-			// Face de derrière
-			pSubmesh3->addFace( 0, 1, 2 );
-			pSubmesh3->addFace( 2, 3, 0 );
-			// Face de devant
-			pSubmesh4->addFace( 0, 1, 2 );
-			pSubmesh4->addFace( 2, 3, 0 );
+			mapping1->addFace( 0, 1, 2 );
+			mapping1->addFace( 2, 3, 0 );
+			// Faces du haut
+			mapping2->addFace( 0, 1, 2 );
+			mapping2->addFace( 2, 3, 0 );
+			// Faces de derrière
+			mapping3->addFace( 0, 1, 2 );
+			mapping3->addFace( 2, 3, 0 );
+			// Faces de devant
+			mapping4->addFace( 0, 1, 2 );
+			mapping4->addFace( 2, 3, 0 );
 			// Faces de droite
-			pSubmesh5->addFace( 0, 1, 2 );
-			pSubmesh5->addFace( 2, 3, 0 );
-			// Face de gauche
-			pSubmesh6->addFace( 0, 1, 2 );
-			pSubmesh6->addFace( 2, 3, 0 );
+			mapping5->addFace( 0, 1, 2 );
+			mapping5->addFace( 2, 3, 0 );
+			// Faces de gauche
+			mapping6->addFace( 0, 1, 2 );
+			mapping6->addFace( 2, 3, 0 );
 		}
 		else
 		{
 			// Faces du bas
-			pSubmesh1->addFace( 3, 2, 1 );
-			pSubmesh1->addFace( 1, 0, 3 );
-			// Face du haut
-			pSubmesh2->addFace( 3, 2, 1 );
-			pSubmesh2->addFace( 1, 0, 3 );
-			// Face de derrière
-			pSubmesh3->addFace( 3, 2, 1 );
-			pSubmesh3->addFace( 1, 0, 3 );
-			// Face de devant
-			pSubmesh4->addFace( 3, 2, 1 );
-			pSubmesh4->addFace( 1, 0, 3 );
+			mapping1->addFace( 3, 2, 1 );
+			mapping1->addFace( 1, 0, 3 );
+			// Faces du haut
+			mapping2->addFace( 3, 2, 1 );
+			mapping2->addFace( 1, 0, 3 );
+			// Faces de derrière
+			mapping3->addFace( 3, 2, 1 );
+			mapping3->addFace( 1, 0, 3 );
+			// Faces de devant
+			mapping4->addFace( 3, 2, 1 );
+			mapping4->addFace( 1, 0, 3 );
 			// Faces de droite
-			pSubmesh5->addFace( 3, 2, 1 );
-			pSubmesh5->addFace( 1, 0, 3 );
-			// Face de gauche
-			pSubmesh6->addFace( 3, 2, 1 );
-			pSubmesh6->addFace( 1, 0, 3 );
+			mapping5->addFace( 3, 2, 1 );
+			mapping5->addFace( 1, 0, 3 );
+			// Faces de gauche
+			mapping6->addFace( 3, 2, 1 );
+			mapping6->addFace( 1, 0, 3 );
 		}
 
-		pSubmesh1->computeTangentsFromNormals();
-		pSubmesh2->computeTangentsFromNormals();
-		pSubmesh3->computeTangentsFromNormals();
-		pSubmesh4->computeTangentsFromNormals();
-		pSubmesh5->computeTangentsFromNormals();
-		pSubmesh6->computeTangentsFromNormals();
+		mapping1->computeTangentsFromNormals();
+		mapping2->computeTangentsFromNormals();
+		mapping3->computeTangentsFromNormals();
+		mapping4->computeTangentsFromNormals();
+		mapping5->computeTangentsFromNormals();
+		mapping6->computeTangentsFromNormals();
+
+		pSubmesh1->setIndexMapping( mapping1 );
+		pSubmesh2->setIndexMapping( mapping2 );
+		pSubmesh3->setIndexMapping( mapping3 );
+		pSubmesh4->setIndexMapping( mapping4 );
+		pSubmesh5->setIndexMapping( mapping5 );
+		pSubmesh6->setIndexMapping( mapping6 );
+
 		p_mesh.computeContainers();
 	}
 }

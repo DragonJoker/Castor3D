@@ -44,21 +44,25 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::Draw
 		 */
-		virtual bool draw( uint32_t p_size, uint32_t p_index )const;
+		virtual bool draw( uint32_t p_size, uint32_t p_index )const override;
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::DrawInstanced
 		 */
-		virtual bool drawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const;
+		virtual bool drawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const override;
 
 	private:
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::doInitialise
 		 */
-		virtual bool doInitialise();
+		virtual bool doInitialise()override;
 		/**
 		 *\copydoc		castor3d::GeometryBuffers::doCleanup
 		 */
-		virtual void doCleanup();
+		virtual void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
+		 */
+		virtual void doSetTopology( castor3d::Topology p_value )override;
 	};
 }
 

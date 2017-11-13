@@ -1,4 +1,4 @@
-#include "AssimpImporter.hpp"
+﻿#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -580,32 +580,37 @@ namespace C3dAssimp
 		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material )
 		{
 			submesh.setDefaultMaterial( material );
-			submesh.ref( material );
 			submesh.addPoints( doCreateVertexBuffer( aiMesh ) );
 
 			if ( aiMesh.HasBones() )
 			{
 				std::vector< VertexBoneData > arrayBones( aiMesh.mNumVertices );
 				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, arrayBones );
-				submesh.addBoneDatas( arrayBones );
+				auto bones = std::make_shared< BonesComponent >( submesh );
+				bones->addBoneDatas( arrayBones );
+				submesh.addComponent( bones );
 			}
+
+			auto mapping = std::make_shared< TriFaceMapping >( submesh );
 
 			for ( auto face : makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces ) )
 			{
 				if ( face.mNumIndices == 3 )
 				{
-					submesh.addFace( face.mIndices[0], face.mIndices[1], face.mIndices[2] );
+					mapping->addFace( face.mIndices[0], face.mIndices[1], face.mIndices[2] );
 				}
 			}
 
 			if ( !aiMesh.mNormals )
 			{
-				submesh.computeNormals( true );
+				mapping->computeNormals( true );
 			}
 			else if ( !aiMesh.mTangents )
 			{
-				submesh.computeTangentsFromNormals();
+				mapping->computeTangentsFromNormals();
 			}
+
+			submesh.setIndexMapping( mapping );
 
 			if ( aiScene.HasAnimations() )
 			{
@@ -778,8 +783,9 @@ namespace C3dAssimp
 				auto submesh = mesh.getSubmesh( aiMesh );
 				REQUIRE( submesh != nullptr );
 
-				if ( !submesh->hasBoneData() )
+				if ( !submesh->hasComponent( BonesComponent::Name ) )
 				{
+					auto bones = std::make_shared< BonesComponent >( *submesh );
 					std::vector< VertexBoneData > arrayBones( submesh->getPointsCount() );
 
 					for ( auto & boneData : arrayBones )
@@ -787,7 +793,8 @@ namespace C3dAssimp
 						boneData.addBoneData( index, 1.0_r );
 					}
 
-					submesh->addBoneDatas( arrayBones );
+					bones->addBoneDatas( arrayBones );
+					submesh->addComponent( bones );
 				}
 			}
 
