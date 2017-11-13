@@ -13,12 +13,10 @@ namespace castor3d
 
 	bool BinaryWriter< BonesComponent >::doWrite( BonesComponent const & obj )
 	{
-		bool result = true;
-
 		VertexBuffer const & buffer = obj.getBonesBuffer();
 		uint32_t stride = buffer.getDeclaration().stride();
 		uint32_t count = buffer.getSize() / stride;
-		result = doWriteChunk( count, ChunkType::eSubmeshBoneCount, m_chunk );
+		bool result = doWriteChunk( count, ChunkType::eSubmeshBoneCount, m_chunk );
 
 		if ( result )
 		{

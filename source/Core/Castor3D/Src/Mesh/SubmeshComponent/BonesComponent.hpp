@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BonesComponent_H___
@@ -35,7 +35,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API BonesComponent( Submesh & submesh );
+		C3D_API explicit BonesComponent( Submesh & submesh );
 		/**
 		 *\~english
 		 *\brief		Destructor

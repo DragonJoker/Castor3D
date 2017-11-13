@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_InstantiationComponent_H___
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API InstantiationComponent( Submesh & submesh
+		C3D_API explicit InstantiationComponent( Submesh & submesh
 			, uint32_t threshold = 1u );
 		/**
 		 *\~english

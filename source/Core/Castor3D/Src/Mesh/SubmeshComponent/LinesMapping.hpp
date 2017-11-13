@@ -33,7 +33,7 @@ namespace castor3d
 		 *\param[in]	p_scene	La scène.
 		 *\param[in]	p_id	L'ID du sous-maillage.
 		 */
-		C3D_API LinesMapping( Submesh & submesh );
+		C3D_API explicit LinesMapping( Submesh & submesh );
 		/**
 		 *\~english
 		 *\brief		Destructor.
