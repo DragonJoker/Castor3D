@@ -1,9 +1,13 @@
-#include "CubeBoxManager.hpp"
+﻿#include "CubeBoxManager.hpp"
 
-#include "Mesh/SubmeshComponent/LinesMapping.hpp"
-#include "Scene/Scene.hpp"
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
+#include <Mesh/Mesh.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/SubmeshComponent/LinesMapping.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Event/Frame/FrameListener.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
 
 #include <cstddef>
 
