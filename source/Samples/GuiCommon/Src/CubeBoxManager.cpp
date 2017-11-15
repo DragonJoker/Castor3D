@@ -1,5 +1,7 @@
 #include "CubeBoxManager.hpp"
 
+#include <Event/Frame/FrameListener.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/SubmeshComponent/LinesMapping.hpp>
@@ -7,8 +9,6 @@
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
 #include <Scene/SceneNode.hpp>
-#include <Event/Frame/FrameListener.hpp>
-#include <Event/Frame/InitialiseEvent.hpp>
 
 #include <cstddef>
 
@@ -75,14 +75,10 @@ namespace GuiCommon
 		if ( m_objectMesh )
 		{
 			m_connection.disconnect();
-			doRemoveBB( m_OBBMesh );
-			doRemoveBB( m_AABBMesh );
 			m_objectMesh = nullptr;
 			m_objectName.clear();
 		}
 
-		m_scene.getMeshCache().remove( m_AABBMesh->getName() );
-		m_scene.getMeshCache().remove( m_OBBMesh->getName() );
 		m_AABBMesh.reset();
 		m_OBBMesh.reset();
 	}

@@ -45,7 +45,7 @@ namespace GuiCommon
 	{
 	}
 
-	void NodeState::Reset( float p_speed )
+	void NodeState::reset( float p_speed )
 	{
 		setMaxSpeed( p_speed );
 		m_angularVelocityX = 0.0_degrees;

@@ -353,7 +353,7 @@ namespace GuiCommon
 		Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	castor3d::WindowHandle make_WindowHandle( wxWindow * p_window )
+	castor3d::WindowHandle makeWindowHandle( wxWindow * p_window )
 	{
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
@@ -416,7 +416,7 @@ namespace GuiCommon
 		return wxString( p_value.c_str(), wxConvUTF8 );
 	}
 
-	castor::Size make_Size( wxSize const & p_value )
+	castor::Size makeSize( wxSize const & p_value )
 	{
 		return castor::Size( p_value.x, p_value.y );
 	}

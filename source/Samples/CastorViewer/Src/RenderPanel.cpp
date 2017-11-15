@@ -35,7 +35,7 @@ namespace CastorViewer
 
 	namespace
 	{
-		KeyboardKey ConvertKeyCode( int code )
+		KeyboardKey doConvertKeyCode( int code )
 		{
 			KeyboardKey result = KeyboardKey::eNone;
 
@@ -73,28 +73,28 @@ namespace CastorViewer
 		: wxPanel( parent, p_id, pos, size, style )
 		, m_camSpeed( DEF_CAM_SPEED, Range< real >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
 	{
-		m_pTimer[0] = nullptr;
+		m_timers[0] = nullptr;
 
 		for ( int i = 1; i < eTIMER_ID_COUNT; i++ )
 		{
-			m_pTimer[i] = new wxTimer( this, i );
+			m_timers[i] = new wxTimer( this, i );
 		}
 
-		m_pCursorArrow = new wxCursor( wxCURSOR_ARROW );
-		m_pCursorHand = new wxCursor( wxCURSOR_HAND );
-		m_pCursorNone = new wxCursor( wxCURSOR_BLANK );
+		m_cursorArrow = new wxCursor( wxCURSOR_ARROW );
+		m_cursorHand = new wxCursor( wxCURSOR_HAND );
+		m_cursorNone = new wxCursor( wxCURSOR_BLANK );
 	}
 
 	RenderPanel::~RenderPanel()
 	{
-		delete m_pCursorArrow;
-		delete m_pCursorHand;
-		delete m_pCursorNone;
+		delete m_cursorArrow;
+		delete m_cursorHand;
+		delete m_cursorNone;
 
 		for ( int i = 1; i <= eTIMER_ID_MOVEMENT; i++ )
 		{
-			delete m_pTimer[i];
-			m_pTimer[i] = nullptr;
+			delete m_timers[i];
+			m_timers[i] = nullptr;
 		}
 	}
 
@@ -116,14 +116,14 @@ namespace CastorViewer
 		m_cubeManager.reset();
 		m_renderWindow.reset();
 		doStopMovement();
-		castor::Size sizeWnd = GuiCommon::make_Size( GetClientSize() );
+		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
 
-		if ( p_window && p_window->initialise( sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
+		if ( p_window && p_window->initialise( sizeWnd, GuiCommon::makeWindowHandle( this ) ) )
 		{
 			castor::Size sizeScreen;
 			castor::System::getScreenSize( 0, sizeScreen );
 			GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
-			sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
+			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
 			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
 			m_listener = p_window->getListener();
 			SceneSPtr scene = p_window->getScene();
@@ -187,7 +187,7 @@ namespace CastorViewer
 	{
 		if ( !m_movementStarted )
 		{
-			m_pTimer[eTIMER_ID_MOVEMENT]->Start( 30 );
+			m_timers[eTIMER_ID_MOVEMENT]->Start( 30 );
 			m_movementStarted = true;
 		}
 	}
@@ -197,26 +197,26 @@ namespace CastorViewer
 		if ( m_movementStarted )
 		{
 			m_movementStarted = false;
-			m_pTimer[eTIMER_ID_MOVEMENT]->Stop();
+			m_timers[eTIMER_ID_MOVEMENT]->Stop();
 		}
 	}
 
 	void RenderPanel::doStartTimer( int p_id )
 	{
-		m_pTimer[p_id]->Start( 10 );
+		m_timers[p_id]->Start( 10 );
 	}
 
 	void RenderPanel::doStopTimer( int p_id )
 	{
 		if ( p_id != eTIMER_ID_COUNT )
 		{
-			m_pTimer[p_id]->Stop();
+			m_timers[p_id]->Stop();
 		}
 		else
 		{
 			for ( int i = 1; i < eTIMER_ID_MOVEMENT; i++ )
 			{
-				m_pTimer[i]->Stop();
+				m_timers[i]->Stop();
 			}
 		}
 	}
@@ -227,7 +227,7 @@ namespace CastorViewer
 
 		if ( m_currentState )
 		{
-			m_currentState->Reset( DEF_CAM_SPEED );
+			m_currentState->reset( DEF_CAM_SPEED );
 		}
 	}
 
@@ -239,12 +239,13 @@ namespace CastorViewer
 		if ( camera )
 		{
 			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
-			{
-				Quaternion orientation{ cameraNode->getOrientation() };
-				orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
-				cameraNode->setOrientation( orientation );
-			} ) );
+			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
+				, [this, cameraNode]()
+				{
+					Quaternion orientation{ cameraNode->getOrientation() };
+					orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
+					cameraNode->setOrientation( orientation );
+				} ) );
 		}
 	}
 
@@ -256,12 +257,13 @@ namespace CastorViewer
 		if ( camera )
 		{
 			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this, cameraNode]()
-			{
-				Quaternion orientation{ cameraNode->getOrientation() };
-				orientation *= Quaternion::fromAxisAngle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
-				cameraNode->setOrientation( orientation );
-			} ) );
+			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
+				, [this, cameraNode]()
+				{
+					Quaternion orientation{ cameraNode->getOrientation() };
+					orientation *= Quaternion::fromAxisAngle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
+					cameraNode->setOrientation( orientation );
+				} ) );
 		}
 	}
 
@@ -600,7 +602,7 @@ namespace CastorViewer
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireKeydown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeydown( doConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
@@ -653,7 +655,7 @@ namespace CastorViewer
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeyUp( doConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
@@ -732,7 +734,7 @@ namespace CastorViewer
 			wxChar key = p_event.GetUnicodeKey();
 			wxString tmp;
 			tmp << key;
-			inputListener->fireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( tmp.mb_str( wxConvUTF8 ) ) );
+			inputListener->fireChar( doConvertKeyCode( p_event.GetKeyCode() ), String( tmp.mb_str( wxConvUTF8 ) ) );
 		}
 
 		p_event.Skip();

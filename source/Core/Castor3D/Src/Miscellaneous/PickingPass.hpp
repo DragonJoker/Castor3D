@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PICKING_PASS_H___
@@ -28,9 +28,10 @@ namespace castor3d
 			: uint8_t
 		{
 			eNone,
-			eInstantiated,
 			eStatic,
+			eInstantiatedStatic,
 			eSkinning,
+			eInstantiatedSkinning,
 			eMorphing,
 			eBillboard
 		};

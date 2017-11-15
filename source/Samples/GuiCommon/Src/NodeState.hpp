@@ -37,7 +37,7 @@ namespace GuiCommon
 		*\brief
 		*	Réinitialise l'état.
 		*/
-		void Reset( float p_speed );
+		void reset( float p_speed );
 		/**
 		*\brief
 		*	Met à jour la vitesse maximale (de rotation et translation).

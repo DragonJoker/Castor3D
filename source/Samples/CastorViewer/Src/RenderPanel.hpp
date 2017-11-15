@@ -116,14 +116,14 @@ namespace CastorViewer
 		bool m_mouseRightDown{ false };
 		bool m_mouseMiddleDown{ false };
 		std::atomic_bool m_movementStarted{ false };
-		wxTimer * m_pTimer[eTIMER_ID_COUNT];
+		wxTimer * m_timers[eTIMER_ID_COUNT];
 		castor3d::RenderWindowWPtr m_renderWindow;
 		castor3d::CameraWPtr m_camera;
 		castor3d::SceneWPtr m_scene;
 		castor3d::FrameListenerSPtr m_listener;
-		wxCursor * m_pCursorArrow;
-		wxCursor * m_pCursorHand;
-		wxCursor * m_pCursorNone;
+		wxCursor * m_cursorArrow;
+		wxCursor * m_cursorHand;
+		wxCursor * m_cursorNone;
 
 		castor3d::SceneNodeSPtr m_lightsNode;
 		castor3d::SceneNodeSPtr m_currentNode;
