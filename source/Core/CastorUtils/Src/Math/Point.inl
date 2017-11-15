@@ -134,7 +134,7 @@ namespace castor
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Point< U, UCount > const & rhs )
 	{
-		if constexpr( std::is_same< T, U >::value )
+		if ( std::is_same< T, U >::value )
 		{
 			std::memcpy( this->m_coords, rhs.constPtr(), Point< U, MinValue< TCount, UCount >::value >::binary_size );
 		}
@@ -146,7 +146,7 @@ namespace castor
 			}
 		}
 
-		if constexpr( TCount > UCount )
+		if ( TCount > UCount )
 		{
 			for ( uint32_t i = UCount; i < TCount; ++i )
 			{
@@ -159,7 +159,7 @@ namespace castor
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )
 	{
-		if constexpr( std::is_same< T, U >::value )
+		if ( std::is_same< T, U >::value )
 		{
 			std::memcpy( this->m_coords, rhs.constPtr(), Point< U, MinValue< TCount, UCount >::value >::binary_size );
 		}
@@ -171,7 +171,7 @@ namespace castor
 			}
 		}
 
-		if constexpr( TCount > UCount )
+		if ( TCount > UCount )
 		{
 			for ( uint32_t i = UCount; i < TCount; ++i )
 			{
