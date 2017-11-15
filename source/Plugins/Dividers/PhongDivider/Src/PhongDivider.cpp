@@ -1,4 +1,4 @@
-﻿#include "PhongDivider.hpp"
+#include "PhongDivider.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -9,9 +9,9 @@ namespace Phong
 	{
 		Point3r barycenter( real u, real v, Point3r const & p1, Point3r const & p2, Point3r const & p3 )
 		{
-			double w = 1 - u - v;
-			ENSURE( u + v + w == 1 );
-			return ( p1 * u + p2 * v + p3 * w );
+			real w = real( 1 - u - v );
+			ENSURE( std::abs( u + v + w - 1.0 ) < 0.0001 );
+			return Point3r{ p1 * u + p2 * v + p3 * w };
 		}
 	}
 

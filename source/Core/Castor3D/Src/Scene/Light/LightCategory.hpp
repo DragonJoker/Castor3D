@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Graphics/CubeBox.hpp>
+#include <Graphics/BoundingBox.hpp>
 
 namespace castor3d
 {
@@ -288,7 +288,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La cube box de la lumière.
 		 */
-		inline castor::CubeBox const & getCubeBox()const
+		inline castor::BoundingBox const & getCubeBox()const
 		{
 			return m_cubeBox;
 		}
@@ -494,7 +494,7 @@ namespace castor3d
 	protected:
 		//!\~english	The cube box for the light volume of effect.
 		//!\~french		La cube box pour le volume d'effet de la lumière.
-		castor::CubeBox m_cubeBox;
+		castor::BoundingBox m_cubeBox;
 		//!\~english	The far plane's depth.
 		//!\~french		La profondeur du plan éloigné.
 		float m_farPlane{ 1.0f };

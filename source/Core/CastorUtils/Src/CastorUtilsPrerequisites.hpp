@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_UTILS_PREREQUISITES_H___
@@ -248,10 +248,10 @@ namespace castor
 	template< typename T, typename Key >
 	class Collection;
 	template< uint8_t Dimension >
-	class ContainerBox;
+	class BoundingContainer;
 	template< typename T, uint32_t Count >
 	class Coords;
-	class CubeBox;
+	class BoundingBox;
 	class File;
 	class FileParser;
 	class FileParserContext;
@@ -301,7 +301,7 @@ namespace castor
 	template< typename T >
 	class Resource;
 	class Size;
-	class SphereBox;
+	class BoundingSphere;
 	class SphericalVertex;
 	template< typename T, uint32_t Rows >
 	class SquareMatrix;
@@ -337,6 +337,10 @@ namespace castor
 	template< typename T > using Coords2 = Coords< T, 2 >;
 	template< typename T > using Coords3 = Coords< T, 3 >;
 	template< typename T > using Coords4 = Coords< T, 4 >;
+
+	template< typename T > using Matrix2x2 = SquareMatrix< T, 2 >;
+	template< typename T > using Matrix3x3 = SquareMatrix< T, 3 >;
+	template< typename T > using Matrix4x4 = SquareMatrix< T, 4 >;
 
 	using Angle = AngleT< real >;
 	using Quaternion = QuaternionT< real >;
@@ -504,8 +508,8 @@ namespace castor
 
 	DECLARE_SMART_PTR( Quaternion );
 	DECLARE_SMART_PTR( SphericalVertex );
-	DECLARE_SMART_PTR( CubeBox );
-	DECLARE_SMART_PTR( SphereBox );
+	DECLARE_SMART_PTR( BoundingBox );
+	DECLARE_SMART_PTR( BoundingSphere );
 	DECLARE_SMART_PTR( Image );
 	DECLARE_SMART_PTR( Font );
 	DECLARE_SMART_PTR( PxBufferBase );

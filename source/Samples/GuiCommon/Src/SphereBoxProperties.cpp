@@ -1,4 +1,4 @@
-﻿#include "SphereBoxProperties.hpp"
+#include "SphereBoxProperties.hpp"
 
 #include "PointProperties.hpp"
 
@@ -7,15 +7,15 @@
 
 using namespace castor;
 
-WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( SphereBox )
+WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( BoundingSphere )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( SphereBoxProperty, wxPGProperty, SphereBox, SphereBox const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingSphereProperty, wxPGProperty, BoundingSphere, BoundingSphere const &, TextCtrl )
 
-		SphereBoxProperty::SphereBoxProperty( wxString const & label
+		BoundingSphereProperty::BoundingSphereProperty( wxString const & label
 			, wxString const & name
-			, SphereBox const & value )
+			, BoundingSphere const & value )
 		: wxPGProperty{ label, name }
 	{
 		setValueI( value );
@@ -23,15 +23,15 @@ namespace GuiCommon
 		AddPrivateChild( new wxFloatProperty( wxT( "Radius" ), wxPG_LABEL, value.getRadius() ) );
 	}
 
-	SphereBoxProperty::~SphereBoxProperty()
+	BoundingSphereProperty::~BoundingSphereProperty()
 	{
 	}
 
-	void SphereBoxProperty::RefreshChildren()
+	void BoundingSphereProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
-			auto & box = SphereBoxRefFromVariant( m_value );
+			auto & box = BoundingSphereRefFromVariant( m_value );
 			Item( 0 )->SetValue( WXVARIANT( box.getCenter() ) );
 			Item( 1 )->SetValue( WXVARIANT( box.getRadius() ) );
 		}

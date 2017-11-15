@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_CubeBoxProperties_H___
@@ -6,28 +6,28 @@ See LICENSE file in root folder
 
 #include "AdditionalProperties.hpp"
 
-#include <Graphics/CubeBox.hpp>
+#include <Graphics/BoundingBox.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, CubeBox );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, BoundingBox );
 
 namespace GuiCommon
 {
-	class CubeBoxProperty
+	class BoundingBoxProperty
 		: public wxPGProperty
 	{
-		WX_PG_DECLARE_PROPERTY_CLASS( CubeBoxProperty )
+		WX_PG_DECLARE_PROPERTY_CLASS( BoundingBoxProperty )
 
 	public:
-		CubeBoxProperty( wxString const & label = wxPG_LABEL
+		BoundingBoxProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor::CubeBox const & value = castor::CubeBox{} );
-		virtual ~CubeBoxProperty();
+			, castor::BoundingBox const & value = castor::BoundingBox{} );
+		virtual ~BoundingBoxProperty();
 
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		inline void setValueI( castor::CubeBox const & value )
+		inline void setValueI( castor::BoundingBox const & value )
 		{
 			m_value = WXVARIANT( value );
 		}

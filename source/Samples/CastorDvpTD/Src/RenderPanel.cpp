@@ -180,7 +180,7 @@ namespace castortd
 						m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this, p_geometry]()
 						{
 							Point3r position = p_geometry->getParent()->getPosition();
-							auto height = p_geometry->getMesh()->getCollisionBox().getMax()[1] - p_geometry->getMesh()->getCollisionBox().getMin()[1];
+							auto height = p_geometry->getMesh()->getBoundingBox().getMax()[1] - p_geometry->getMesh()->getBoundingBox().getMin()[1];
 							m_marker->setPosition( Point3r{ position[0], height + 1, position[2] } );
 						} ) );
 						m_selectedTower = nullptr;

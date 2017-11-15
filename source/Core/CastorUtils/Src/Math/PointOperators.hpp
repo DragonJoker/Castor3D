@@ -20,40 +20,40 @@ namespace castor
 	struct PtOperators
 	{
 		template< typename PtType1 >
-		static inline Point< T1, C1 > add( PtType1 const & p_ptA, T2 const & p_scalar );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > add( PtType1 const & p_ptA, T2 const & p_scalar );
 
 		template< typename PtType1 >
-		static inline Point< T1, C1 > sub( PtType1 const & p_ptA, T2 const & p_scalar );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > sub( PtType1 const & p_ptA, T2 const & p_scalar );
 
 		template< typename PtType1 >
-		static inline Point< T1, C1 > mul( PtType1 const & p_ptA, T2 const & p_scalar );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > mul( PtType1 const & p_ptA, T2 const & p_scalar );
 
 		template< typename PtType1 >
-		static inline Point< T1, C1 > div( PtType1 const & p_ptA, T2 const & p_scalar );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > div( PtType1 const & p_ptA, T2 const & p_scalar );
 
 		template< typename PtType1 >
-		static inline Point< T1, C1 > add( PtType1 const & p_ptA, T2 const * p_buffer );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > add( PtType1 const & p_ptA, T2 const * p_buffer );
 
 		template< typename PtType1 >
-		static inline Point< T1, C1 > sub( PtType1 const & p_ptA, T2 const * p_buffer );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > sub( PtType1 const & p_ptA, T2 const * p_buffer );
 
 		template< typename PtType1 >
-		static inline Point< T1, C1 > mul( PtType1 const & p_ptA, T2 const * p_buffer );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > mul( PtType1 const & p_ptA, T2 const * p_buffer );
 
 		template< typename PtType1 >
-		static inline Point< T1, C1 > div( PtType1 const & p_ptA, T2 const * p_buffer );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > div( PtType1 const & p_ptA, T2 const * p_buffer );
 
 		template< typename PtType1, typename PtType2 >
-		static inline Point< T1, C1 > add( PtType1 const & p_ptA, PtType2 const & p_ptB );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > add( PtType1 const & p_ptA, PtType2 const & p_ptB );
 
 		template< typename PtType1, typename PtType2 >
-		static inline Point< T1, C1 > sub( PtType1 const & p_ptA, PtType2 const & p_ptB );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > sub( PtType1 const & p_ptA, PtType2 const & p_ptB );
 
 		template< typename PtType1, typename PtType2 >
-		static inline Point< T1, C1 > mul( PtType1 const & p_ptA, PtType2 const & p_ptB );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > mul( PtType1 const & p_ptA, PtType2 const & p_ptB );
 
 		template< typename PtType1, typename PtType2 >
-		static inline Point< T1, C1 > div( PtType1 const & p_ptA, PtType2 const & p_ptB );
+		static inline Point< typename std::remove_cv< T1 >::type, C1 > div( PtType1 const & p_ptA, PtType2 const & p_ptB );
 	};
 	/*!
 	\author		Sylvain DOREMUS

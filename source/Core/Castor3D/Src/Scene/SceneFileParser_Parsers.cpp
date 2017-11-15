@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -2135,7 +2135,7 @@ namespace castor3d
 			{
 				auto divider = engine->getSubdividerFactory().create( name );
 				parsingContext->pMesh->computeContainers();
-				Point3r ptCenter = parsingContext->pMesh->getCollisionBox().getCenter();
+				Point3r ptCenter = parsingContext->pMesh->getBoundingBox().getCenter();
 
 				for ( auto submesh : *parsingContext->pMesh )
 				{

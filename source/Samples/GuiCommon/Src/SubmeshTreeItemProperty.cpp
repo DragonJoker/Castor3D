@@ -117,12 +117,12 @@ namespace GuiCommon
 		p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY
 			, PROPERTY_TOPOLOGY
 			, choices ) )->SetValue( selected );
-		p_grid->Append( new SphereBoxProperty( PROPERTY_SUBMESH_SPHERE_BOX
+		p_grid->Append( new BoundingSphereProperty( PROPERTY_SUBMESH_SPHERE_BOX
 			, PROPERTY_SUBMESH_SPHERE_BOX
-			, m_submesh.getCollisionSphere() ) )->Enable( false );
-		p_grid->Append( new CubeBoxProperty( PROPERTY_SUBMESH_CUBE_BOX
+			, m_submesh.getBoundingSphere() ) )->Enable( false );
+		p_grid->Append( new BoundingBoxProperty( PROPERTY_SUBMESH_CUBE_BOX
 			, PROPERTY_SUBMESH_CUBE_BOX
-			, m_submesh.getCollisionBox() ) )->Enable( false );
+			, m_submesh.getBoundingBox() ) )->Enable( false );
 		p_grid->Append( doCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_geometry.getMaterial( m_submesh )->getName() ) ) );
 	}
 

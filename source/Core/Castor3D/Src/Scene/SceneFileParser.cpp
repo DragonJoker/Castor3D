@@ -360,12 +360,15 @@ bool SceneFileParser::parseFile( Path const & pathFile )
 
 			if ( File::listDirectoryFiles( path, files, true ) )
 			{
-				auto it = std::find_if( files.begin(), files.end(), []( Path const & p_path )
-				{
-					auto fileName = p_path.getFileName( true );
-					return fileName == cuT( "main.cscn" )
-						|| fileName == cuT( "scene.cscn" );
-				} );
+				auto it = std::find_if( files.begin()
+					, files.end()
+					, [pathFile]( Path const & lookup )
+					{
+						auto fileName = lookup.getFileName( true );
+						return fileName == cuT( "main.cscn" )
+							|| fileName == cuT( "scene.cscn" )
+							|| fileName == pathFile.getFileName() + cuT( ".cscn" );
+					} );
 
 				if ( it != files.end() )
 				{

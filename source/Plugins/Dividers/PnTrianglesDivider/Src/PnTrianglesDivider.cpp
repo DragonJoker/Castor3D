@@ -1,4 +1,4 @@
-﻿#include "PnTrianglesDivider.hpp"
+#include "PnTrianglesDivider.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -9,9 +9,9 @@ namespace PnTriangles
 	{
 		Point3r barycenter( real u, real v, Point3r const & p1, Point3r const & p2, Point3r const & p3 )
 		{
-			double w = 1.0 - u - v;
+			real w = real( 1.0 - u - v );
 			ENSURE( std::abs( u + v + w - 1.0 ) < 0.0001 );
-			return ( p1 * u + p2 * v + p3 * w );
+			return Point3r{ p1 * u + p2 * v + p3 * w };
 		}
 	}
 
@@ -137,6 +137,10 @@ namespace PnTriangles
 
 	castor3d::BufferElementGroupSPtr Subdivider::doComputePoint( double u, double v, Patch const & p_patch )
 	{
+		std::map< std::string, float > map;
+		for ( auto & pair : map )
+		{
+		}
 		double w = 1.0 - u - v;
 		double u2 = double( u * u );
 		double v2 = double( v * v );
@@ -145,16 +149,16 @@ namespace PnTriangles
 		double v3 = double( v2 * v );
 		double w3 = double( w2 * w );
 
-		Point3r point = Point3r( p_patch.b300 * w3
-			+ p_patch.b030 * u3
-			+ p_patch.b003 * v3
-			+ p_patch.b210 * 3.0 * w2 * u
-			+ p_patch.b120 * 3.0 * w * u2
-			+ p_patch.b201 * 3.0 * w2 * v
-			+ p_patch.b021 * 3.0 * u2 * v
-			+ p_patch.b102 * 3.0 * w * v2
-			+ p_patch.b012 * 3.0 * u * v2
-			+ p_patch.b111 * 6.0 * w * u * v );
+		Point3r point = Point3r( p_patch.b300 * real( w3 )
+			+ p_patch.b030 * real( u3 )
+			+ p_patch.b003 * real( v3 )
+			+ p_patch.b210 * real( 3.0 * w2 * u )
+			+ p_patch.b120 * real( 3.0 * w * u2 )
+			+ p_patch.b201 * real( 3.0 * w2 * v )
+			+ p_patch.b021 * real( 3.0 * u2 * v )
+			+ p_patch.b102 * real( 3.0 * w * v2 )
+			+ p_patch.b012 * real( 3.0 * u * v2 )
+			+ p_patch.b111 * real( 6.0 * w * u * v ) );
 
 		return doTryAddPoint( point );
 	}

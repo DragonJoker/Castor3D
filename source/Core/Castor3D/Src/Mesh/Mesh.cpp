@@ -149,12 +149,12 @@ namespace castor3d
 			submesh->computeContainers();
 		}
 
-		Point3r min( m_submeshes[0]->getCollisionBox().getMin() );
-		Point3r max( m_submeshes[0]->getCollisionBox().getMax() );
+		Point3r min( m_submeshes[0]->getBoundingBox().getMin() );
+		Point3r max( m_submeshes[0]->getBoundingBox().getMax() );
 
 		for ( auto & submesh : m_submeshes )
 		{
-			CubeBox const & box = submesh->getCollisionBox();
+			BoundingBox const & box = submesh->getBoundingBox();
 			max[0] = std::max( box.getMax()[0], max[0] );
 			max[1] = std::max( box.getMax()[1], max[1] );
 			max[2] = std::max( box.getMax()[2], max[2] );

@@ -370,13 +370,13 @@ namespace CastorViewer
 
 		if ( oldSubmesh != submesh )
 		{
+			changed = true;
+
 			if ( submesh )
 			{
 				m_selectedSubmesh = submesh;
 				wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
 			}
-
-			changed = true;
 		}
 
 		if ( changed )
@@ -388,18 +388,16 @@ namespace CastorViewer
 				} ) );
 		}
 
+		if ( geometry )
 		{
-			if ( geometry )
-			{
-				m_currentNode = m_selectedGeometry->getParent();
-			}
-			else
-			{
-				m_currentNode = m_camera.lock()->getParent();
-			}
-
-			m_currentState = &doAddNodeState( m_currentNode );
+			m_currentNode = m_selectedGeometry->getParent();
 		}
+		else
+		{
+			m_currentNode = m_camera.lock()->getParent();
+		}
+
+		m_currentState = &doAddNodeState( m_currentNode );
 	}
 
 	GuiCommon::NodeState & RenderPanel::doAddNodeState( SceneNodeSPtr p_node )

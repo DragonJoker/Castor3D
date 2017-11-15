@@ -551,8 +551,12 @@ namespace castor3d
 			for ( auto const & node : p_renderNodes )
 			{
 				if ( node.m_sceneNode.isDisplayable()
-					 && node.m_sceneNode.isVisible()
-					 && p_camera.isVisible( node.m_data.getCollisionSphere(), node.m_sceneNode.getDerivedPosition() ) )
+					&& node.m_sceneNode.isVisible()
+					&& p_camera.isVisible( node.m_data.getBoundingSphere()
+						, node.m_sceneNode.getDerivedPosition()
+						, node.m_sceneNode.getDerivedScale() )
+					&& p_camera.isVisible( node.m_data.getBoundingBox()
+						, node.m_sceneNode.getDerivedTransformationMatrix() ) )
 				{
 					doAddRenderNode( p_pass, p_pipeline, node, p_submesh, p_outputNodes );
 				}
@@ -569,8 +573,12 @@ namespace castor3d
 				for ( auto const & node : pipelines.second )
 				{
 					if ( node.m_sceneNode.isDisplayable()
-						 && node.m_sceneNode.isVisible()
-						 && p_camera.isVisible( node.m_data.getCollisionSphere(), node.m_sceneNode.getDerivedPosition() ) )
+						&& node.m_sceneNode.isVisible()
+						&& p_camera.isVisible( node.m_data.getBoundingSphere()
+							, node.m_sceneNode.getDerivedPosition()
+							, node.m_sceneNode.getDerivedScale() )
+						&& p_camera.isVisible( node.m_data.getBoundingBox()
+							, node.m_sceneNode.getDerivedTransformationMatrix() ) )
 					{
 						doAddRenderNode( *pipelines.first, node, p_outputNodes );
 					}

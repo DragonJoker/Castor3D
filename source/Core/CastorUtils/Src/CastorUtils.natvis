@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   <Type Name="castor::PointDataHolder&lt;*, 2&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
@@ -92,6 +92,28 @@
     <DisplayString>{{name={m_name}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::CubeBox">
+    <Expand>
+      <Item Name="center">m_ptCenter</Item>
+      <Item Name="min">m_min</Item>
+      <Item Name="max">m_max</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::SphereBox">
+    <Expand>
+      <Item Name="center">m_ptCenter</Item>
+      <Item Name="radius">m_radius</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::PlaneEquation">
+    <Expand>
+      <Item Name="normal">m_normal</Item>
+      <Item Name="d">m_d</Item>
     </Expand>
   </Type>
 </AutoVisualizer>

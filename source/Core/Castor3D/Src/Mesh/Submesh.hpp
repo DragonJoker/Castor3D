@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SUBMESH_H___
@@ -296,28 +296,28 @@ namespace castor3d
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline castor::CubeBox const & getCollisionBox()const;
+		inline castor::BoundingBox const & getBoundingBox()const;
 		/**
 		 *\~english
 		 *\return		The cube bounding box.
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline castor::CubeBox & getCollisionBox();
+		inline castor::BoundingBox & getBoundingBox();
 		/**
 		 *\~english
 		 *\return		The sphere bounding box.
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline castor::SphereBox const & getCollisionSphere()const;
+		inline castor::BoundingSphere const & getBoundingSphere()const;
 		/**
 		 *\~english
 		 *\return		The sphere bounding box.
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline castor::SphereBox & getCollisionSphere();
+		inline castor::BoundingSphere & getBoundingSphere();
 		/**
 		 *\~english
 		 *\return		The points array.
@@ -540,10 +540,10 @@ namespace castor3d
 		MaterialWPtr m_defaultMaterial;
 		//!\~english	The combo box container.
 		//!\~french		Le conteneur boîte.
-		castor::CubeBox m_box;
+		castor::BoundingBox m_box;
 		//!\~english	The spheric container.
 		//!\~french		Le conteneur sphère.
-		castor::SphereBox m_sphere;
+		castor::BoundingSphere m_sphere;
 		//!\~english	The vertex data array.
 		//!\~french		Le tableau de données des sommets.
 		BytePtrList m_pointsData;

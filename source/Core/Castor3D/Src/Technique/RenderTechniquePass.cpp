@@ -215,7 +215,7 @@ namespace castor3d
 			|| !nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			m_timer->start();
-			auto jitterProjSpace = jitter * 2;
+			auto jitterProjSpace = jitter * 2.0_r;
 			jitterProjSpace[0] /= camera.getWidth();
 			jitterProjSpace[1] /= camera.getHeight();
 			m_matrixUbo.update( camera.getView()

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_CAMERA_H___
@@ -192,34 +192,37 @@ namespace castor3d
 		C3D_API uint32_t getHeight()const;
 		/**
 		 *\~english
-		 *\brief		Checks if given CubeBox is in the view frustum
-		 *\param[in]	box				The CubeBox
-		 *\param[in]	transformations	The CubeBox transformations matrix
-		 *\return		\p false if the CubeBox is completely out of the view frustum
+		 *\brief		Checks if given BoundingBox is in the view frustum
+		 *\param[in]	box				The BoundingBox
+		 *\param[in]	transformations	The BoundingBox transformations matrix
+		 *\return		\p false if the BoundingBox is completely out of the view frustum
 		 *\~french
 		 *\brief
-		 *\brief		Vérifie si la CubeBox donnée est dans le frustum de vue
-		 *\param[in]	box				La CubeBox
-		 *\param[in]	transformations	La matrice de transformations de la CubeBox
-		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue
+		 *\brief		Vérifie si la BoundingBox donnée est dans le frustum de vue
+		 *\param[in]	box				La BoundingBox
+		 *\param[in]	transformations	La matrice de transformations de la BoundingBox
+		 *\return		\p false si la BoundingBox est complètement en dehors du frustum de vue
 		 */
-		C3D_API bool isVisible( castor::CubeBox const & box
+		C3D_API bool isVisible( castor::BoundingBox const & box
 			, castor::Matrix4x4r const & transformations )const;
 		/**
 		 *\~english
-		 *\brief		Checks if given SphereBox is in the view frustum.
-		 *\param[in]	box			The SphereBox.
-		 *\param[in]	position	The position for the SphereBox.
-		 *\return		\p false if the SphereBox is completely out of the view frustum.
+		 *\brief		Checks if given BoundingSphere is in the view frustum.
+		 *\param[in]	sphere		The BoundingSphere.
+		 *\param[in]	position	The position for the BoundingSphere.
+		 *\param[in]	scale		The scale for the BoundingSphere.
+		 *\return		\p false if the BoundingSphere is completely out of the view frustum.
 		 *\~french
 		 *\brief
 		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue.
-		 *\param[in]	box			La SphereBox.
-		 *\param[in]	position	La position de la SphereBox.
-		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue.
+		 *\param[in]	sphere		La BoundingSphere.
+		 *\param[in]	position	La position de la BoundingSphere.
+		 *\param[in]	scale		L'échelle de la SphereBox.
+		 *\return		\p false si la BoundingSphere est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool isVisible( castor::SphereBox const & box
-			, castor::Point3r const & position )const;
+		C3D_API bool isVisible( castor::BoundingSphere const & sphere
+			, castor::Point3r const & position
+			, castor::Point3r const & scale )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum

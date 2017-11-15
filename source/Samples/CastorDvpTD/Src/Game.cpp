@@ -1,4 +1,4 @@
-﻿#include "Game.hpp"
+#include "Game.hpp"
 
 #include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Engine.hpp>
@@ -119,9 +119,9 @@ namespace castortd
 		m_bulletMesh = m_scene.getMeshCache().find( cuT( "Bullet" ) );
 		m_bulletMaterial = m_scene.getMaterialView().find( cuT( "Bullet" ) );
 		m_targetNode = m_scene.getSceneNodeCache().find( cuT( "Target" ) );
-		m_cellDimensions[0] = m_mapCubeMesh->getCollisionBox().getMax()[0] - m_mapCubeMesh->getCollisionBox().getMin()[0];
-		m_cellDimensions[1] = m_mapCubeMesh->getCollisionBox().getMax()[1] - m_mapCubeMesh->getCollisionBox().getMin()[1];
-		m_cellDimensions[2] = m_mapCubeMesh->getCollisionBox().getMax()[2] - m_mapCubeMesh->getCollisionBox().getMin()[2];
+		m_cellDimensions[0] = m_mapCubeMesh->getBoundingBox().getMax()[0] - m_mapCubeMesh->getBoundingBox().getMin()[0];
+		m_cellDimensions[1] = m_mapCubeMesh->getBoundingBox().getMax()[1] - m_mapCubeMesh->getBoundingBox().getMin()[1];
+		m_cellDimensions[2] = m_mapCubeMesh->getBoundingBox().getMax()[2] - m_mapCubeMesh->getBoundingBox().getMin()[2];
 
 		m_hud.initialise();
 		Reset();

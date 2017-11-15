@@ -114,7 +114,7 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( CubeBox const & p_box, real & p_distance )const
+	Intersection Ray::intersects( BoundingBox const & p_box, real & p_distance )const
 	{
 		Point3r v1( p_box.getMin().constPtr() );
 		Point3r v8( p_box.getMax().constPtr() );
@@ -208,7 +208,7 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( SphereBox const & p_sphere, real & p_distance )const
+	Intersection Ray::intersects( BoundingSphere const & p_sphere, real & p_distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
 		auto result = Intersection::eOut;
@@ -271,7 +271,7 @@ namespace castor3d
 	{
 		MeshSPtr mesh = p_geometry->getMesh();
 		Point3r center{ p_geometry->getParent()->getDerivedPosition() };
-		SphereBox sphere{ center, mesh->getCollisionSphere().getRadius() };
+		BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
 		Matrix4x4r const & transform{ p_geometry->getParent()->getDerivedTransformationMatrix() };
 		auto result = Intersection::eOut;
 		real faceDist = std::numeric_limits< real >::max();
@@ -280,7 +280,7 @@ namespace castor3d
 		{
 			for ( auto submesh : *mesh )
 			{
-				sphere.load( center, submesh->getCollisionSphere().getRadius() );
+				sphere.load( center, submesh->getBoundingSphere().getRadius() );
 
 				if ( intersects( sphere, p_distance ) != Intersection::eOut )
 				{

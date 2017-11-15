@@ -26,8 +26,18 @@ namespace GuiCommon
 		void hideObject( castor3d::Geometry const & object );
 
 	private:
+		void doAddBB( castor3d::MeshSPtr bbMesh
+			, castor3d::SceneNodeSPtr parent );
+		void doRemoveBB( castor3d::MeshSPtr bbMesh );
+		void onNodeChanged( castor3d::SceneNode const & node );
+
+	private:
 		castor3d::Scene & m_scene;
-		castor3d::MeshSPtr m_mesh;
+		castor3d::MeshSPtr m_OBBMesh;
+		castor3d::MeshSPtr m_AABBMesh;
+		castor::String m_objectName;
+		castor3d::MeshSPtr m_objectMesh;
+		castor3d::SceneNode::OnChanged::connection m_connection;
 	};
 }
 
