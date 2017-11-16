@@ -1,4 +1,4 @@
-﻿#include "Submesh.hpp"
+#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -322,6 +322,12 @@ namespace castor3d
 			m_box.load( min, max );
 			m_sphere.load( m_box );
 		}
+	}
+
+	void Submesh::updateContainers( castor::BoundingBox const & boundingBox )
+	{
+		m_box = boundingBox;
+		m_sphere.load( m_box );
 	}
 
 	uint32_t Submesh::getFaceCount()const

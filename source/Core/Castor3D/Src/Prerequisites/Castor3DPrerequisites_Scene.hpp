@@ -215,6 +215,18 @@ namespace castor3d
 	//! Skeleton animation instance pointer array.
 	DECLARE_VECTOR( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
 
+	using OnSceneChangedFunction = std::function< void( Scene const & ) >;
+	using OnSceneChanged = castor::Signal< OnSceneChangedFunction >;
+	using OnSceneChangedConnection = OnSceneChanged::connection;
+
+	using OnSceneUpdateFunction = std::function< void( Scene const & ) >;
+	using OnSceneUpdate = castor::Signal< OnSceneUpdateFunction >;
+	using OnSceneUpdateConnection = OnSceneUpdate::connection;
+
+	using OnCameraChangedFunction = std::function< void( Camera const & ) >;
+	using OnCameraChanged = castor::Signal< OnCameraChangedFunction >;
+	using OnCameraChangedConnection = OnCameraChanged::connection;
+
 	using OnSceneNodeChangedFunction = std::function< void( SceneNode const & ) >;
 	using OnSceneNodeChanged = castor::Signal< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;

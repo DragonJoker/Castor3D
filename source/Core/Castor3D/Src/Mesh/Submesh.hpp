@@ -85,6 +85,13 @@ namespace castor3d
 		C3D_API void computeContainers();
 		/**
 		 *\~english
+		 *\brief		Updates containers from given bounding box.
+		 *\~french
+		 *\brief		Met à jour les conteneurs depuis la bounding box donnée
+		 */
+		C3D_API void updateContainers( castor::BoundingBox const & boundingBox );
+		/**
+		 *\~english
 		 *\return		The faces number
 		 *\~french
 		 *\return		Le nombre de faces de ce submesh

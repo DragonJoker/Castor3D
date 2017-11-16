@@ -1,4 +1,4 @@
-﻿#include "MeshAnimationSubmesh.hpp"
+#include "MeshAnimationSubmesh.hpp"
 
 #include "MeshAnimation.hpp"
 #include "Mesh/Submesh.hpp"
@@ -166,6 +166,25 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	BoundingBox computeBoundingBox( InterleavedVertexArray const & points )
+	{
+		Point3r min{ points[0].m_pos.data() };
+		Point3r max{ points[0].m_pos.data() };
+
+		for ( auto & vertex : points )
+		{
+			Point3r cur{ vertex.m_pos.data() };
+			max[0] = std::max( cur[0], max[0] );
+			max[1] = std::max( cur[1], max[1] );
+			max[2] = std::max( cur[2], max[2] );
+			min[0] = std::min( cur[0], min[0] );
+			min[1] = std::min( cur[1], min[1] );
+			min[2] = std::min( cur[2], min[2] );
+		}
+
+		return BoundingBox{ min, max };
+	}
+
 	MeshAnimationSubmesh::MeshAnimationSubmesh( MeshAnimation & animation, Submesh & submesh )
 		: OwnedBy< MeshAnimation >{ animation }
 		, m_submesh{ submesh }
@@ -193,7 +212,13 @@ namespace castor3d
 		if ( it == m_buffers.end() )
 		{
 			m_length = from;
-			m_buffers.insert( m_buffers.end(), SubmeshAnimationBuffer{ float( from.count() ), std::move( buffer ) } );
+			auto obb = computeBoundingBox( buffer );
+			m_buffers.insert( m_buffers.end(), SubmeshAnimationBuffer
+			{
+				float( from.count() ),
+				std::move( buffer ),
+				obb
+			} );
 			result = true;
 		}
 

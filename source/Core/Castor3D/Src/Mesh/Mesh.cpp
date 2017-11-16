@@ -135,36 +135,55 @@ namespace castor3d
 		m_submeshes.clear();
 	}
 
+	void Mesh::updateContainers()
+	{
+		if ( !m_submeshes.empty() )
+		{
+			Point3r min( m_submeshes[0]->getBoundingBox().getMin() );
+			Point3r max( m_submeshes[0]->getBoundingBox().getMax() );
+
+			for ( auto & submesh : m_submeshes )
+			{
+				BoundingBox const & box = submesh->getBoundingBox();
+				max[0] = std::max( box.getMax()[0], max[0] );
+				max[1] = std::max( box.getMax()[1], max[1] );
+				max[2] = std::max( box.getMax()[2], max[2] );
+				min[0] = std::min( box.getMin()[0], min[0] );
+				min[1] = std::min( box.getMin()[1], min[1] );
+				min[2] = std::min( box.getMin()[2], min[2] );
+			}
+
+			m_box.load( min, max );
+			m_sphere.load( m_box );
+		}
+	}
+
 	void Mesh::computeContainers()
 	{
-		if ( m_submeshes.empty() )
+		if ( !m_submeshes.empty() )
 		{
-			return;
+			for ( auto & submesh : m_submeshes )
+			{
+				submesh->computeContainers();
+			}
+
+			Point3r min( m_submeshes[0]->getBoundingBox().getMin() );
+			Point3r max( m_submeshes[0]->getBoundingBox().getMax() );
+
+			for ( auto & submesh : m_submeshes )
+			{
+				BoundingBox const & box = submesh->getBoundingBox();
+				max[0] = std::max( box.getMax()[0], max[0] );
+				max[1] = std::max( box.getMax()[1], max[1] );
+				max[2] = std::max( box.getMax()[2], max[2] );
+				min[0] = std::min( box.getMin()[0], min[0] );
+				min[1] = std::min( box.getMin()[1], min[1] );
+				min[2] = std::min( box.getMin()[2], min[2] );
+			}
+
+			m_box.load( min, max );
+			m_sphere.load( m_box );
 		}
-
-		uint32_t count = getSubmeshCount();
-
-		for ( auto & submesh : m_submeshes )
-		{
-			submesh->computeContainers();
-		}
-
-		Point3r min( m_submeshes[0]->getBoundingBox().getMin() );
-		Point3r max( m_submeshes[0]->getBoundingBox().getMax() );
-
-		for ( auto & submesh : m_submeshes )
-		{
-			BoundingBox const & box = submesh->getBoundingBox();
-			max[0] = std::max( box.getMax()[0], max[0] );
-			max[1] = std::max( box.getMax()[1], max[1] );
-			max[2] = std::max( box.getMax()[2], max[2] );
-			min[0] = std::min( box.getMin()[0], min[0] );
-			min[1] = std::min( box.getMin()[1], min[1] );
-			min[2] = std::min( box.getMin()[2], min[2] );
-		}
-
-		m_box.load( min, max );
-		m_sphere.load( m_box );
 	}
 
 	uint32_t Mesh::getFaceCount()const

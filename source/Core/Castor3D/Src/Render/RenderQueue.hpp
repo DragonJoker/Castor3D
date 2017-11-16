@@ -233,10 +233,10 @@ namespace castor3d
 		bool m_isSceneChanged{ true };
 		//!\~english	The connection to the scene change notification.
 		//!\~french		Les conenction à la notification de scène changée.
-		Scene::OnChanged::connection m_sceneChanged;
+		OnSceneChangedConnection m_sceneChanged;
 		//!\~english	The connection to the camera change notification.
 		//!\~french		Les conenction à la notification de caméra changée.
-		Camera::OnChanged::connection m_cameraChanged;
+		OnCameraChangedConnection m_cameraChanged;
 		//!\~english	The optional camera.
 		//!\~french		La camera optionnelle.
 		Camera * m_camera{ nullptr };

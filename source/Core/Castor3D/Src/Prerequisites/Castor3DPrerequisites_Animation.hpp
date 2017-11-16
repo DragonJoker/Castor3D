@@ -116,6 +116,9 @@ namespace castor3d
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		std::vector< InterleavedVertexT< T > > m_buffer;
+		//!\~english	The bounding box.
+		//!\~french		La bounding box.
+		castor::BoundingBox m_boundingBox;
 	};
 
 	class Animable;

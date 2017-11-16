@@ -65,8 +65,8 @@ namespace GuiCommon
 
 	CubeBoxManager::CubeBoxManager( Scene & scene )
 		: m_scene{ scene }
-		, m_OBBMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, cuT( "Red" ) ) }
-		, m_AABBMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, cuT( "Green" ) ) }
+		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, cuT( "Red" ) ) }
+		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, cuT( "Green" ) ) }
 	{
 	}
 
@@ -74,13 +74,15 @@ namespace GuiCommon
 	{
 		if ( m_objectMesh )
 		{
-			m_connection.disconnect();
+			m_sceneConnection.disconnect();
 			m_objectMesh = nullptr;
 			m_objectName.clear();
 		}
 
-		m_AABBMesh.reset();
-		m_OBBMesh.reset();
+		m_aabbMesh.reset();
+		m_obbMesh.reset();
+		m_aabbNode.reset();
+		m_obbNode.reset();
 	}
 
 	void CubeBoxManager::displayObject( Geometry const & object )
@@ -91,12 +93,11 @@ namespace GuiCommon
 			{
 				m_objectMesh = object.getMesh();
 				m_objectName = object.getName();
-				doAddBB( m_OBBMesh, object.getParent() );
-				doAddBB( m_AABBMesh, m_scene.getObjectRootNode() );
-				m_connection = object.getParent()->onChanged.connect( std::bind( &CubeBoxManager::onNodeChanged
+				m_obbNode = doAddBB( m_obbMesh, object.getParent() );
+				m_aabbNode = doAddBB( m_aabbMesh, m_scene.getObjectRootNode() );
+				m_sceneConnection = m_scene.onUpdate.connect( std::bind( &CubeBoxManager::onSceneUpdate
 					, this
 					, std::placeholders::_1 ) );
-				onNodeChanged( *object.getParent() );
 			} ) );
 	}
 
@@ -107,15 +108,17 @@ namespace GuiCommon
 		engine->postEvent( makeFunctorEvent( EventType::ePostRender
 			, [this, &object]()
 			{
-				m_connection.disconnect();
-				doRemoveBB( m_OBBMesh );
-				doRemoveBB( m_AABBMesh );
+				m_sceneConnection.disconnect();
+				doRemoveBB( m_obbMesh, m_obbNode );
+				doRemoveBB( m_aabbMesh, m_aabbNode );
+				m_obbNode.reset();
+				m_aabbNode.reset();
 				m_objectMesh = nullptr;
 				m_objectName.clear();
 			} ) );
 	}
 
-	void CubeBoxManager::doAddBB( MeshSPtr bbMesh
+	SceneNodeSPtr CubeBoxManager::doAddBB( MeshSPtr bbMesh
 		, SceneNodeSPtr parent )
 	{
 		auto name = m_objectName + cuT( "-" ) + bbMesh->getName();
@@ -135,9 +138,12 @@ namespace GuiCommon
 		{
 			geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
 		}
+
+		return node;
 	}
 
-	void CubeBoxManager::doRemoveBB( castor3d::MeshSPtr bbMesh )
+	void CubeBoxManager::doRemoveBB( MeshSPtr bbMesh
+		, SceneNodeSPtr bbNode )
 	{
 		auto name = m_objectName + cuT( "-" ) + bbMesh->getName();
 
@@ -146,36 +152,37 @@ namespace GuiCommon
 			m_scene.getGeometryCache().remove( name );
 		}
 
-		if ( m_scene.getSceneNodeCache().has( name ) )
-		{
-			auto node = m_scene.getSceneNodeCache().find( name );
-			node->setVisible( false );
-			node.reset();
-			m_scene.getSceneNodeCache().remove( name );
-		}
+		m_scene.getSceneNodeCache().remove( bbNode->getName() );
+
+		bbNode->setVisible( false );
 	}
 
-	void CubeBoxManager::onNodeChanged( castor3d::SceneNode const & node )
+	void CubeBoxManager::onSceneUpdate( castor3d::Scene const & scene )
 	{
-		auto aabb = m_objectMesh->getBoundingBox().getAxisAligned( node.getDerivedTransformationMatrix() );
+		auto & obb = m_objectMesh->getBoundingBox();
+		auto scale = ( obb.getMax() - obb.getMin() ) / 2.0_r;
+		m_obbNode->setScale( scale );
+		m_obbNode->setPosition( m_objectMesh->getBoundingBox().getCenter() );
+		m_obbNode->update();
 
-		// Update submesh
-		auto & min = aabb.getMin();
-		auto & max = aabb.getMax();
-		auto submesh = m_AABBMesh->getSubmesh( 0u );
-		Vertex::setPosition( *submesh->getPoint( 0u ), min[0], min[1], min[2] );
-		Vertex::setPosition( *submesh->getPoint( 1u ), min[0], max[1], min[2] );
-		Vertex::setPosition( *submesh->getPoint( 2u ), max[0], max[1], min[2] );
-		Vertex::setPosition( *submesh->getPoint( 3u ), max[0], min[1], min[2] );
-		Vertex::setPosition( *submesh->getPoint( 4u ), min[0], min[1], max[2] );
-		Vertex::setPosition( *submesh->getPoint( 5u ), min[0], max[1], max[2] );
-		Vertex::setPosition( *submesh->getPoint( 6u ), max[0], max[1], max[2] );
-		Vertex::setPosition( *submesh->getPoint( 7u ), max[0], min[1], max[2] );
+		auto aabb = obb.getAxisAligned( m_obbNode->getParent()->getDerivedTransformationMatrix() );
+		auto & aabbMin = aabb.getMin();
+		auto & aabbMax = aabb.getMax();
+		auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 0u ), aabbMin[0], aabbMin[1], aabbMin[2] );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 1u ), aabbMin[0], aabbMax[1], aabbMin[2] );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 2u ), aabbMax[0], aabbMax[1], aabbMin[2] );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 3u ), aabbMax[0], aabbMin[1], aabbMin[2] );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 4u ), aabbMin[0], aabbMin[1], aabbMax[2] );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 5u ), aabbMin[0], aabbMax[1], aabbMax[2] );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 6u ), aabbMax[0], aabbMax[1], aabbMax[2] );
+		Vertex::setPosition( *aabbSubmesh->getPoint( 7u ), aabbMax[0], aabbMin[1], aabbMax[2] );
+
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this, submesh]()
+			, [this, aabbSubmesh]()
 			{
-				submesh->getVertexBuffer().upload();
+				aabbSubmesh->getVertexBuffer().upload();
 			} ) );
 	}
 }

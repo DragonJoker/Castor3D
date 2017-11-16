@@ -122,9 +122,16 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Computes the collision box and sphere.
+		 *\brief		Computes the bounding box and sphere from the submeshes.
 		 *\~french
-		 *\brief		Calcule la boîte et la sphère de collision.
+		 *\brief		Calcule les bounding box et sphere depuis les sous-maillages.
+		 */
+		C3D_API void updateContainers();
+		/**
+		 *\~english
+		 *\brief		Computes the bounding box and sphere.
+		 *\~french
+		 *\brief		Calcule les bounding box et sphere.
 		 */
 		C3D_API void computeContainers();
 		/**

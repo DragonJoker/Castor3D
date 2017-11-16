@@ -1,4 +1,4 @@
-﻿#include "Scene.hpp"
+#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -891,6 +891,7 @@ namespace castor3d
 		doUpdateNoSkybox();
 		doUpdateMaterials();
 		getLightCache().update();
+		onUpdate( *this );
 		m_changed = false;
 	}
 

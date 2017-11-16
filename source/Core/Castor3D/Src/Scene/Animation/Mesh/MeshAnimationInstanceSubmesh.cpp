@@ -1,4 +1,4 @@
-﻿#include "MeshAnimationInstanceSubmesh.hpp"
+#include "MeshAnimationInstanceSubmesh.hpp"
 
 #include "Animation/Mesh/MeshAnimation.hpp"
 #include "MeshAnimationInstance.hpp"
@@ -15,6 +15,12 @@ namespace castor3d
 
 	namespace
 	{
+		std::ostream & operator<<( std::ostream & stream, Point3r const & point )
+		{
+			stream << "[" << point[0] << ", " << point[1] << ", " << point[2] << "]";
+			return stream;
+		}
+
 		inline void doFind( real time
 			, typename SubmeshAnimationBufferArray::const_iterator const & first
 			, typename SubmeshAnimationBufferArray::const_iterator const & last
@@ -36,6 +42,17 @@ namespace castor3d
 			}
 
 			ENSURE( prv != cur );
+		}
+
+		inline BoundingBox doInterpolateBB( BoundingBox const & prv
+			, BoundingBox const & cur
+			, float const factor )
+		{
+			return BoundingBox
+			{
+				Point3r{ prv.getMin() * real( 1.0 - factor ) + cur.getMin() * factor },
+				Point3r{ prv.getMax() * real( 1.0 - factor ) + cur.getMax() * factor }
+			};
 		}
 	}
 
@@ -81,6 +98,11 @@ namespace castor3d
 				m_animationObject.getSubmesh().needsUpdate();
 				m_animationObject.getComponent().needsUpdate();
 			}
+
+			m_animationObject.getSubmesh().updateContainers( doInterpolateBB( m_prev->m_boundingBox
+				, m_curr->m_boundingBox
+				, m_currentFactor ) );
+			m_animationObject.getSubmesh().getParent().updateContainers();
 		}
 	}
 
