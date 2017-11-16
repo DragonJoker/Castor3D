@@ -29,10 +29,6 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
-		using OnChangedFunction = std::function< void( SceneNode const & ) >;
-		using OnChanged = castor::Signal< OnChangedFunction >;
-
-	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
 		static uint64_t Count;
 		/*!
@@ -563,7 +559,7 @@ namespace castor3d
 	public:
 		//!\~english	Signal used to notify attached objects that the node has changed.
 		//!\~french		Signal utilisé pour notifier aux objets attachés que le noeud a changé.
-		OnChanged onChanged;
+		OnSceneNodeChanged onChanged;
 
 	protected:
 		//!\~english	Tells if it is displayable. A node is displayable if his parent is either displayable or the root node.

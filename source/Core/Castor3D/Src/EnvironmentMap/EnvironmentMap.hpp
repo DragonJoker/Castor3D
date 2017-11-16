@@ -160,7 +160,7 @@ namespace castor3d
 		SceneNode const & m_node;
 		//!\~english	The connection to node changed signal.
 		//!\~french		La connexion au signal de changement du noeud.
-		SceneNode::OnChanged::connection m_onNodeChanged;
+		OnSceneNodeChangedConnection m_onNodeChanged;
 		//!\~english	The view matrices for the render of each cube face.
 		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
 		CubeMatrices m_matrices;

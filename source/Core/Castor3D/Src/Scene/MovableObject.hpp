@@ -133,7 +133,7 @@ namespace castor3d
 		SceneNodeWPtr m_sceneNode;
 		//!\~english	The node change notification index.
 		//!\~french		L'indice de notifcation des changements du noeud.
-		SceneNode::OnChanged::connection m_notifyIndex;
+		OnSceneNodeChangedConnection m_notifyIndex;
 	};
 }
 

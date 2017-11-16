@@ -37,7 +37,7 @@ namespace GuiCommon
 		castor3d::MeshSPtr m_AABBMesh;
 		castor::String m_objectName;
 		castor3d::MeshSPtr m_objectMesh;
-		castor3d::SceneNode::OnChanged::connection m_connection;
+		castor3d::OnSceneNodeChangedConnection m_connection;
 	};
 }
 
