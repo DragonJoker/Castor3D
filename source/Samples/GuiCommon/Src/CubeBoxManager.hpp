@@ -27,18 +27,22 @@ namespace GuiCommon
 
 	private:
 		castor3d::SceneNodeSPtr doAddBB( castor3d::MeshSPtr bbMesh
-			, castor3d::SceneNodeSPtr parent );
-		void doRemoveBB( castor3d::MeshSPtr bbMesh
+			, castor::String const & name
+			, castor3d::SceneNodeSPtr parent
+			, castor::BoundingBox const & bb );
+		void doRemoveBB( castor::String const & name
 			, castor3d::SceneNodeSPtr bbNode );
 		void onSceneUpdate( castor3d::Scene const & scene );
 
 	private:
 		castor3d::Scene & m_scene;
 		castor3d::MeshSPtr m_obbMesh;
+		castor3d::MeshSPtr m_obbSubmesh;
 		castor3d::MeshSPtr m_aabbMesh;
 		castor::String m_objectName;
 		castor3d::MeshSPtr m_objectMesh;
 		castor3d::SceneNodeSPtr m_obbNode;
+		castor3d::SceneNodePtrArray m_obbSubmeshNodes;
 		castor3d::SceneNodeSPtr m_aabbNode;
 		castor3d::OnSceneUpdateConnection m_sceneConnection;
 	};
