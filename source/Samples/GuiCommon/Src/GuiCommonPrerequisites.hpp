@@ -242,7 +242,7 @@ namespace GuiCommon
 	 *\param[in]	p_window	La fenêtre
 	 *\return		Le WindowHandle créé
 	 */
-	castor3d::WindowHandle make_WindowHandle( wxWindow * p_window );
+	castor3d::WindowHandle makeWindowHandle( wxWindow * p_window );
 	/**
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets
@@ -301,7 +301,7 @@ namespace GuiCommon
 	 *\param[in]	p_value	Le wxSize
 	 *\return		Le castor::Size
 	 */
-	castor::Size make_Size( wxSize const & p_value );
+	castor::Size makeSize( wxSize const & p_value );
 	/**
 	 *\~english
 	 *\brief		Creates a wxSize from a castor::Size

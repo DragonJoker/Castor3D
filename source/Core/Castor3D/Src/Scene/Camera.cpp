@@ -1,4 +1,4 @@
-﻿#include "Camera.hpp"
+#include "Camera.hpp"
 
 #include "Engine.hpp"
 
@@ -6,8 +6,8 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Scene/Scene.hpp"
 
-#include <Graphics/CubeBox.hpp>
-#include <Graphics/SphereBox.hpp>
+#include <Graphics/BoundingBox.hpp>
+#include <Graphics/BoundingSphere.hpp>
 
 using namespace castor;
 
@@ -129,8 +129,7 @@ namespace castor3d
 					matrix::scale( m_view, Point3f{ -1.0f, 1.0f, 1.0f } );
 				}
 
-				//m_frustum.update( position, right, up, front );
-				m_frustum.update( m_viewport.getProjection(), getView() );
+				m_frustum.update( position, right, up, front );
 				m_nodeChanged = false;
 			}
 		}
@@ -171,18 +170,20 @@ namespace castor3d
 		m_viewport.updateType( value );
 	}
 
-	bool Camera::isVisible( CubeBox const & box
+	bool Camera::isVisible( BoundingBox const & box
 		, Matrix4x4r const & transformations )const
 	{
 		return m_frustum.isVisible( box
 			, transformations );
 	}
 
-	bool Camera::isVisible( castor::SphereBox const & box
-		, castor::Point3r const & position )const
+	bool Camera::isVisible( castor::BoundingSphere const & sphere
+		, Point3r const & position
+		, Point3r const & scale )const
 	{
-		return m_frustum.isVisible( box
-			, position );
+		return m_frustum.isVisible( sphere
+			, position
+			, scale );
 	}
 
 	bool Camera::isVisible( Point3r const & point )const

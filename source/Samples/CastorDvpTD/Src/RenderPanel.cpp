@@ -59,14 +59,14 @@ namespace castortd
 	void RenderPanel::setRenderWindow( castor3d::RenderWindowSPtr p_window )
 	{
 		m_renderWindow.reset();
-		castor::Size sizeWnd = GuiCommon::make_Size( GetClientSize() );
+		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
 
-		if ( p_window && p_window->initialise( sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
+		if ( p_window && p_window->initialise( sizeWnd, GuiCommon::makeWindowHandle( this ) ) )
 		{
 			castor::Size sizeScreen;
 			castor::System::getScreenSize( 0, sizeScreen );
 			GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
-			sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
+			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
 			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
 			SceneSPtr scene = p_window->getScene();
 
@@ -180,7 +180,7 @@ namespace castortd
 						m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this, p_geometry]()
 						{
 							Point3r position = p_geometry->getParent()->getPosition();
-							auto height = p_geometry->getMesh()->getCollisionBox().getMax()[1] - p_geometry->getMesh()->getCollisionBox().getMin()[1];
+							auto height = p_geometry->getMesh()->getBoundingBox().getMax()[1] - p_geometry->getMesh()->getBoundingBox().getMin()[1];
 							m_marker->setPosition( Point3r{ position[0], height + 1, position[2] } );
 						} ) );
 						m_selectedTower = nullptr;

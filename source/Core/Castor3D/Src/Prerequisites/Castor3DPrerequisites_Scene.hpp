@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_SCENE_H___
@@ -214,6 +214,10 @@ namespace castor3d
 	DECLARE_MAP( castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
 	//! Skeleton animation instance pointer array.
 	DECLARE_VECTOR( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
+
+	using OnSceneNodeChangedFunction = std::function< void( SceneNode const & ) >;
+	using OnSceneNodeChanged = castor::Signal< OnSceneNodeChangedFunction >;
+	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
 	//@}
 }

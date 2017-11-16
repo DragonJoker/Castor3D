@@ -1,4 +1,4 @@
-﻿#include "PlaneEquation.hpp"
+#include "PlaneEquation.hpp"
 
 namespace castor
 {
@@ -38,17 +38,17 @@ namespace castor
 		, Point3r const & p2
 		, Point3r const & p3 )
 	{
-		Point3r v{ point::getNormalised( p2 - p1 ) };
-		Point3r u{ point::getNormalised( p3 - p1 ) };
-		m_normal = point::cross( u, v );
-		m_d = -point::dot( m_normal, ( p1 + p2 + p3 ) / 3.0f );
+		Point3r v{ p2 - p1 };
+		Point3r u{ p3 - p1 };
+		set( point::getNormalised( point::cross( u, v ) )
+			, ( p1 + p2 + p3 ) / 3.0f );
 	}
 
 	void PlaneEquation::set( Point3r const & normal
 		, Point3r const & point )
 	{
-		m_normal = point::getNormalised( normal );
-		m_d = -point::dot( point, m_normal );
+		set( normal
+			, -point::dot( point, normal ) );
 	}
 
 	void PlaneEquation::set( Point3r const & normal

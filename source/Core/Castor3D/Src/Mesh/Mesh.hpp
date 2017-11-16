@@ -12,8 +12,8 @@ See LICENSE file in root folder
 #include "Binary/BinaryWriter.hpp"
 #include "Mesh/MeshFactory.hpp"
 
-#include <Graphics/CubeBox.hpp>
-#include <Graphics/SphereBox.hpp>
+#include <Graphics/BoundingBox.hpp>
+#include <Graphics/BoundingSphere.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Design/Resource.hpp>
 
@@ -273,7 +273,7 @@ namespace castor3d
 		 *\brief		Récupère la boîte de collision
 		 *\return		La valeur
 		 */
-		inline castor::CubeBox const & getCollisionBox()const
+		inline castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_box;
 		}
@@ -285,7 +285,7 @@ namespace castor3d
 		 *\brief		Récupère la sphère de collision
 		 *\return		La valeur
 		 */
-		inline castor::SphereBox const & getCollisionSphere()const
+		inline castor::BoundingSphere const & getBoundingSphere()const
 		{
 			return m_sphere;
 		}
@@ -310,10 +310,10 @@ namespace castor3d
 		bool m_modified;
 		//!\~english	The collision box.
 		//!\~french		La boîte de collision.
-		castor::CubeBox m_box;
+		castor::BoundingBox m_box;
 		//!\~english	The collision sphere.
 		//!\~french		La sphere de collision.
-		castor::SphereBox m_sphere;
+		castor::BoundingSphere m_sphere;
 		//!\~english	The submeshes array.
 		//!\~french		Le tableau de sous maillages.
 		SubmeshPtrArray m_submeshes;

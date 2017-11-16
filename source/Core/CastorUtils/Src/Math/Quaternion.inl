@@ -245,7 +245,7 @@ namespace castor
 	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4f const & p_matrix )
 	{
 		QuaternionT< T > result;
-		matrix::getrotate( p_matrix, result );
+		matrix::getRotate( p_matrix, result );
 		return result;
 	}
 
@@ -253,7 +253,7 @@ namespace castor
 	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4d const & p_matrix )
 	{
 		QuaternionT< T > result;
-		matrix::getrotate( p_matrix, result );
+		matrix::getRotate( p_matrix, result );
 		return result;
 	}
 
@@ -276,7 +276,7 @@ namespace castor
 	{
 		QuaternionT< T > result;
 		Angle halfAngle = p_angle * 0.5;
-		auto norm = point::getNormalised( p_vector ) * halfAngle.sin();
+		auto norm = point::getNormalised( p_vector ) * double( halfAngle.sin() );
 		result.quat.x = T( norm[0] );
 		result.quat.y = T( norm[1] );
 		result.quat.z = T( norm[2] );

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_SphereBoxProperties_H___
@@ -6,28 +6,28 @@ See LICENSE file in root folder
 
 #include "AdditionalProperties.hpp"
 
-#include <Graphics/SphereBox.hpp>
+#include <Graphics/BoundingSphere.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, SphereBox );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, BoundingSphere );
 
 namespace GuiCommon
 {
-	class SphereBoxProperty
+	class BoundingSphereProperty
 		: public wxPGProperty
 	{
-		WX_PG_DECLARE_PROPERTY_CLASS( SphereBoxProperty )
+		WX_PG_DECLARE_PROPERTY_CLASS( BoundingSphereProperty )
 
 	public:
-		SphereBoxProperty( wxString const & label = wxPG_LABEL
+		BoundingSphereProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor::SphereBox const & value = castor::SphereBox{} );
-		virtual ~SphereBoxProperty();
+			, castor::BoundingSphere const & value = castor::BoundingSphere{} );
+		virtual ~BoundingSphereProperty();
 
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		inline void setValueI( castor::SphereBox const & value )
+		inline void setValueI( castor::BoundingSphere const & value )
 		{
 			m_value = WXVARIANT( value );
 		}

@@ -114,7 +114,7 @@ namespace castor3d
 		 *\param[out]	p_distance	Reçoit la distance.
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
-		C3D_API castor::Intersection intersects( castor::CubeBox const & p_box, real & p_distance )const;
+		C3D_API castor::Intersection intersects( castor::BoundingBox const & p_box, real & p_distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given Sphere.
@@ -127,7 +127,7 @@ namespace castor3d
 		 *\param[out]	p_distance	Reçoit la distance.
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
-		C3D_API castor::Intersection intersects( castor::SphereBox const & p_sphere, real & p_distance )const;
+		C3D_API castor::Intersection intersects( castor::BoundingSphere const & p_sphere, real & p_distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given Geometry.

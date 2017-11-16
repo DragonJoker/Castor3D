@@ -239,7 +239,7 @@ namespace castor3d
 		Camera::OnChanged::connection m_cameraChanged;
 		//!\~english	The optional camera.
 		//!\~french		La camera optionnelle.
-		Camera const * m_camera{ nullptr };
+		Camera * m_camera{ nullptr };
 	};
 }
 

@@ -132,22 +132,22 @@ namespace castor3d
 		return m_defaultMaterial.lock();
 	}
 
-	inline castor::CubeBox const & Submesh::getCollisionBox()const
+	inline castor::BoundingBox const & Submesh::getBoundingBox()const
 	{
 		return m_box;
 	}
 
-	inline castor::CubeBox & Submesh::getCollisionBox()
+	inline castor::BoundingBox & Submesh::getBoundingBox()
 	{
 		return m_box;
 	}
 
-	inline castor::SphereBox const & Submesh::getCollisionSphere()const
+	inline castor::BoundingSphere const & Submesh::getBoundingSphere()const
 	{
 		return m_sphere;
 	}
 
-	inline castor::SphereBox & Submesh::getCollisionSphere()
+	inline castor::BoundingSphere & Submesh::getBoundingSphere()
 	{
 		return m_sphere;
 	}

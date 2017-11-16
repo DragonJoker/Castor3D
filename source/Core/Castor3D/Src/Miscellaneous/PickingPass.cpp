@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "Cache/MaterialCache.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
@@ -126,11 +126,11 @@ namespace castor3d
 			p_face = faceIndex;
 		}
 
-		template<>
-		inline void doPickFromList< SubmeshStaticRenderNodesByPipelineMap, Geometry, Submesh >( SubmeshStaticRenderNodesByPipelineMap const & p_map
+		template< typename MapType, typename NodeType, typename SubNodeType >
+		inline void doPickFromInstantiatedList( MapType const & p_map
 			, Point3f const & p_index
-			, GeometryWPtr & p_node
-			, SubmeshWPtr & p_subnode
+			, std::weak_ptr< NodeType > & p_node
+			, std::weak_ptr< SubNodeType > & p_subnode
 			, uint32_t & p_face )
 		{
 			uint32_t pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
@@ -283,16 +283,20 @@ namespace castor3d
 
 			switch ( result )
 			{
-			case NodeType::eInstantiated:
-				doPickFromList( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
-				break;
-
 			case NodeType::eStatic:
 				doPickFromList( p_nodes.m_staticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
 				break;
 
+			case NodeType::eInstantiatedStatic:
+				doPickFromInstantiatedList( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				break;
+
 			case NodeType::eSkinning:
 				doPickFromList( p_nodes.m_skinnedNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				break;
+
+			case NodeType::eInstantiatedSkinning:
+				doPickFromInstantiatedList( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eMorphing:
@@ -319,7 +323,7 @@ namespace castor3d
 		doTraverseNodes< true >( *this
 			, m_pickingUbo
 			, p_nodes
-			, NodeType::eInstantiated
+			, NodeType::eInstantiatedStatic
 			, [&p_scene, this]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
@@ -360,7 +364,7 @@ namespace castor3d
 		doTraverseNodes< true >( *this
 			, m_pickingUbo
 			, p_nodes
-			, NodeType::eInstantiated
+			, NodeType::eInstantiatedSkinning
 			, [&p_scene, this]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh

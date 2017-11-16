@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PRECOMPILED_HEADER_H___
@@ -46,12 +46,12 @@ See LICENSE file in root folder
 #	include <Design/Templates.hpp>
 #	include <Design/Unique.hpp>
 #	include <Graphics/Colour.hpp>
-#	include <Graphics/CubeBox.hpp>
+#	include <Graphics/BoundingBox.hpp>
 #	include <Graphics/Font.hpp>
 #	include <Graphics/Image.hpp>
 #	include <Graphics/Pixel.hpp>
 #	include <Graphics/Rectangle.hpp>
-#	include <Graphics/SphereBox.hpp>
+#	include <Graphics/BoundingSphere.hpp>
 #	include <Log/Logger.hpp>
 #	include <Math/Angle.hpp>
 #	include <Math/Line2D.hpp>

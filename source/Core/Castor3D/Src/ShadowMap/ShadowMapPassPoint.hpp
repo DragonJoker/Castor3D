@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SHADOW_MAP_PASS_POINT_H___
@@ -88,7 +88,7 @@ namespace castor3d
 	private:
 		//!\~english	The connection to light's node changed signal.
 		//!\~french		La connexion au signal de changement du noeud de la source lumineuse.
-		SceneNode::OnChanged::connection m_onNodeChanged;
+		OnSceneNodeChangedConnection m_onNodeChanged;
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		castor::Matrix4x4r m_projection;

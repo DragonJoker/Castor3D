@@ -1,4 +1,4 @@
-﻿#include "CubeBoxProperties.hpp"
+#include "CubeBoxProperties.hpp"
 
 #include "PointProperties.hpp"
 
@@ -7,15 +7,15 @@
 
 using namespace castor;
 
-WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( CubeBox )
+WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( BoundingBox )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( CubeBoxProperty, wxPGProperty, CubeBox, CubeBox const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingBoxProperty, wxPGProperty, BoundingBox, BoundingBox const &, TextCtrl )
 
-		CubeBoxProperty::CubeBoxProperty( wxString const & label
+		BoundingBoxProperty::BoundingBoxProperty( wxString const & label
 		, wxString const & name
-		, CubeBox const & value )
+		, BoundingBox const & value )
 		: wxPGProperty{ label, name }
 	{
 		setValueI( value );
@@ -24,15 +24,15 @@ namespace GuiCommon
 		AddPrivateChild( new Point3rProperty( wxT( "Max" ), wxPG_LABEL, value.getMax() ) );
 	}
 
-	CubeBoxProperty::~CubeBoxProperty()
+	BoundingBoxProperty::~BoundingBoxProperty()
 	{
 	}
 
-	void CubeBoxProperty::RefreshChildren()
+	void BoundingBoxProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
 		{
-			auto & box = CubeBoxRefFromVariant( m_value );
+			auto & box = BoundingBoxRefFromVariant( m_value );
 			Item( 0 )->SetValue( WXVARIANT( box.getCenter() ) );
 			Item( 1 )->SetValue( WXVARIANT( box.getMin() ) );
 			Item( 1 )->SetValue( WXVARIANT( box.getMax() ) );

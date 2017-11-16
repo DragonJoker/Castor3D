@@ -154,7 +154,7 @@ namespace GuiCommon
 
 			for ( auto overlay : engine->getOverlayCache() )
 			{
-				if ( overlay->getOverlayName().find( cuT( "DebugPanel" ) ) != 0
+				if ( overlay->getOverlayName().find( cuT( "MainDebugPanel" ) ) != 0
 					&& overlay->getOverlayName().find( cuT( "RenderPassOverlays" ) ) != 0 )
 				{
 					switch ( overlay->getType() )
