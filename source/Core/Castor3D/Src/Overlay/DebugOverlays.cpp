@@ -1,4 +1,4 @@
-﻿#include "DebugOverlays.hpp"
+#include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
 #include "Overlay/PanelOverlay.hpp"
@@ -308,11 +308,14 @@ namespace castor3d
 			m_gpuTotalTime = 0_ns;
 			m_totalVertexCount = info.m_totalVertexCount;
 			m_totalFaceCount = info.m_totalFaceCount;
+			m_visibleVertexCount = info.m_visibleVertexCount;
+			m_visibleFaceCount = info.m_visibleFaceCount;
 			m_totalObjectsCount = info.m_totalObjectsCount;
 			m_visibleObjectsCount = info.m_visibleObjectsCount;
 			m_particlesCount = info.m_particlesCount;
 			m_totalLightsCount = info.m_totalLightsCount;
 			m_visibleLightsCount = info.m_visibleLightsCount;
+			m_drawCalls = info.m_drawCalls;
 
 			for ( auto & pass : m_renderPasses )
 			{
@@ -397,15 +400,21 @@ namespace castor3d
 		m_debugPanel->addFpsPanel( cuT( "AverageFPS" )
 			, cuT( "Average FPS:" )
 			, m_averageFps );
-		m_debugPanel->addCountPanel( cuT( "VertexCount" )
+		m_debugPanel->addCountPanel( cuT( "TotalVertexCount" )
 			, cuT( "Vertices Count:" )
 			, m_totalVertexCount );
-		m_debugPanel->addCountPanel( cuT( "FaceCount" )
+		m_debugPanel->addCountPanel( cuT( "TotalFaceCount" )
 			, cuT( "Faces Count:" )
 			, m_totalFaceCount );
-		m_debugPanel->addCountPanel( cuT( "ObjectCount" )
+		m_debugPanel->addCountPanel( cuT( "TotalObjectCount" )
 			, cuT( "Objects Count:" )
 			, m_totalObjectsCount );
+		m_debugPanel->addCountPanel( cuT( "VisibleVertexCount" )
+			, cuT( "Visible Vertices Count:" )
+			, m_visibleVertexCount );
+		m_debugPanel->addCountPanel( cuT( "VisibleFaceCount" )
+			, cuT( "Visible Faces Count:" )
+			, m_visibleFaceCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleObjectCount" )
 			, cuT( "Visible Objects Count:" )
 			, m_visibleObjectsCount );
@@ -418,6 +427,9 @@ namespace castor3d
 		m_debugPanel->addCountPanel( cuT( "VisibleLightCount" )
 			, cuT( "Visible Lights Count:" )
 			, m_visibleLightsCount );
+		m_debugPanel->addCountPanel( cuT( "DrawCalls" )
+			, cuT( "Draw calls:" )
+			, m_drawCalls );
 		m_debugPanel->updatePosition();
 		m_debugPanel->setVisible( m_visible );
 	}

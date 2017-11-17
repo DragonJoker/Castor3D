@@ -310,6 +310,8 @@ namespace castor3d
 						, envMap );
 
 					doRenderNode( renderNode );
+					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_instance );
+					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_instance );
 					++info.m_drawCalls;
 
 					doUnbindPass( details::getParentNode( renderNode.m_instance )
@@ -325,7 +327,7 @@ namespace castor3d
 		}
 
 		template< typename ArrayT >
-		uint32_t CopyNodesMatrices( ArrayT const & renderNodes
+		uint32_t copyNodesMatrices( ArrayT const & renderNodes
 			, VertexBuffer & matrixBuffer )
 		{
 			auto const mtxSize = sizeof( float ) * 16;
@@ -342,6 +344,42 @@ namespace castor3d
 				auto id = it->m_passNode.m_pass.getId() - 1;
 				std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
 				buffer += stride;
+				++i;
+				++it;
+			}
+
+			matrixBuffer.upload( 0u, stride * count, matrixBuffer.getData() );
+			return count;
+		}
+
+		template< typename ArrayT >
+		uint32_t copyNodesMatrices( ArrayT const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer )
+		{
+			auto const mtxSize = sizeof( float ) * 16;
+			auto const stride = matrixBuffer.getDeclaration().stride();
+			auto const count = std::min( matrixBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
+			REQUIRE( count <= renderNodes.size() );
+			auto buffer = matrixBuffer.getData();
+			auto it = renderNodes.begin();
+			auto i = 0u;
+
+			while ( i < count )
+			{
+				if ( it->m_sceneNode.isDisplayable()
+					&& it->m_sceneNode.isVisible()
+					&& camera.isVisible( it->m_data.getBoundingSphere()
+						, it->m_sceneNode.getDerivedPosition()
+						, it->m_sceneNode.getDerivedScale() )
+					&& camera.isVisible( it->m_data.getBoundingBox()
+						, it->m_sceneNode.getDerivedTransformationMatrix() ) )
+				{
+					std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
+					auto id = it->m_passNode.m_pass.getId() - 1;
+					std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
+					buffer += stride;
+				}
 				++i;
 				++it;
 			}
@@ -747,14 +785,16 @@ namespace castor3d
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
 		, VertexBuffer & matrixBuffer )const
 	{
-		return CopyNodesMatrices( renderNodes, matrixBuffer );
+		return copyNodesMatrices( renderNodes
+			, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
 		, VertexBuffer & matrixBuffer
 		, RenderInfo & info )const
 	{
-		auto count = CopyNodesMatrices( renderNodes, matrixBuffer );
+		auto count = copyNodesMatrices( renderNodes
+			, matrixBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
@@ -762,14 +802,58 @@ namespace castor3d
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
 		, VertexBuffer & matrixBuffer )const
 	{
-		return CopyNodesMatrices( renderNodes, matrixBuffer );
+		return copyNodesMatrices( renderNodes
+			, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
 		, VertexBuffer & matrixBuffer
 		, RenderInfo & info )const
 	{
-		auto count = CopyNodesMatrices( renderNodes, matrixBuffer );
+		auto count = copyNodesMatrices( renderNodes
+			, matrixBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer )const
+	{
+		return copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer
+		, RenderInfo & info )const
+	{
+		auto count = copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer )const
+	{
+		return copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer
+		, RenderInfo & info )const
+	{
+		auto count = copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
@@ -819,7 +903,8 @@ namespace castor3d
 			{
 				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -840,7 +925,8 @@ namespace castor3d
 			{
 				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -852,7 +938,7 @@ namespace castor3d
 		doTraverseNodes( *this
 			, camera
 			, nodes
-			, [this]( RenderPipeline & pipeline
+			, [this, &camera]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
@@ -860,7 +946,9 @@ namespace castor3d
 			{
 				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, camera
+						, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -875,7 +963,7 @@ namespace castor3d
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
 			, shadowMaps
-			, [this]( RenderPipeline & pipeline
+			, [this, &camera]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
@@ -883,7 +971,9 @@ namespace castor3d
 			{
 				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, camera
+						, instantiation.getMatrixBuffer() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -909,6 +999,8 @@ namespace castor3d
 				{
 					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer(), info );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
+					info.m_visibleFaceCount += submesh.getFaceCount() * count;
+					info.m_visibleVertexCount += submesh.getPointsCount() * count;
 					++info.m_drawCalls;
 				}
 			} );
@@ -1145,6 +1237,8 @@ namespace castor3d
 					REQUIRE( count1 == count2 );
 					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
+					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
+					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
 				}
 			} );

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_TriFaceMapping_H___
@@ -161,6 +161,13 @@ namespace castor3d
 		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies
 		 */
 		C3D_API void computeBitangents();
+		/**
+		 *\~english
+		 *\return		The faces count.
+		 *\~french
+		 *\return		Le nombre de faces.
+		 */
+		C3D_API uint32_t getCount()const override;
 		/**
 		 *\copydoc		castor3d::IndexMapping::sortByDistance
 		 */

@@ -71,19 +71,19 @@ namespace castor3d
 	{
 	}
 
-	void ObjectCache< Geometry, castor::String >::fillInfo( RenderInfo & p_info )const
+	void ObjectCache< Geometry, castor::String >::fillInfo( RenderInfo & info )const
 	{
-		p_info.m_totalVertexCount += m_vertexCount;
-		p_info.m_totalFaceCount += m_faceCount;
 		auto lock = castor::makeUniqueLock( m_elements );
-		p_info.m_totalObjectsCount += std::accumulate( m_elements.begin()
-			, m_elements.end()
-			, 0u
-			, []( uint32_t p_value, std::pair< String, GeometrySPtr > const & p_pair )
+
+		for ( auto element : m_elements )
+		{
+			if ( element.second->getMesh() )
 			{
-				return p_value + ( p_pair.second->getMesh()
-					? p_pair.second->getMesh()->getSubmeshCount()
-					: 0u );
-			} );
+				auto mesh = element.second->getMesh();
+				info.m_totalObjectsCount += mesh->getSubmeshCount();
+				info.m_totalVertexCount += mesh->getVertexCount();
+				info.m_totalFaceCount += mesh->getFaceCount();
+			}
+		}
 	}
 }

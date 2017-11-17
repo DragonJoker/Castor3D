@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LinesMapping_H___
@@ -80,6 +80,13 @@ namespace castor3d
 		 *\brief		Génère les normales et les tangentes.
 		 */
 		C3D_API void computeNormals( bool reverted = false )override;
+		/**
+		 *\~english
+		 *\return		The lines count.
+		 *\~french
+		 *\return		Le nombre de lignes.
+		 */
+		C3D_API uint32_t getCount()const override;
 		/**
 		 *\~english
 		 *\brief		Sorts the lines from farthest to nearest from the camera.

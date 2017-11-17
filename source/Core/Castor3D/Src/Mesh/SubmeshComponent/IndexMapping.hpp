@@ -41,6 +41,13 @@ namespace castor3d
 		C3D_API ~IndexMapping();
 		/**
 		 *\~english
+		 *\return		The elements count.
+		 *\~french
+		 *\return		Le nombre d'éléments.
+		 */
+		C3D_API virtual uint32_t getCount()const = 0;
+		/**
+		 *\~english
 		 *\brief		Sorts the face from farthest to nearest from the camera
 		 *\param[in]	p_cameraPosition	The camera position, relative to submesh
 		 *\~french

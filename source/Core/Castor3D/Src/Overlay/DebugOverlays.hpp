@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DEBUG_OVERLAYS_H___
@@ -260,11 +260,14 @@ namespace castor3d
 		std::locale m_timesLocale;
 		uint32_t m_totalVertexCount{ 0 };
 		uint32_t m_totalFaceCount{ 0 };
+		uint32_t m_visibleVertexCount{ 0 };
+		uint32_t m_visibleFaceCount{ 0 };
 		uint32_t m_totalObjectsCount{ 0 };
 		uint32_t m_visibleObjectsCount{ 0 };
 		uint32_t m_particlesCount{ 0 };
 		uint32_t m_totalLightsCount{ 0 };
 		uint32_t m_visibleLightsCount{ 0 };
+		uint32_t m_drawCalls{ 0 };
 	};
 }
 

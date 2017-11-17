@@ -27,6 +27,7 @@ namespace GuiCommon
 			, PredefinedRgbColour const & colour )
 		{
 			auto result = scene.getMeshCache().add( name );
+			result->setSerialisable( false );
 			auto submesh = result->createSubmesh();
 			InterleavedVertexArray vertex
 			{

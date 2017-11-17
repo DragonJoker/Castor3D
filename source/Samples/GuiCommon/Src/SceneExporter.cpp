@@ -1,4 +1,4 @@
-﻿#include "SceneExporter.hpp"
+#include "SceneExporter.hpp"
 
 #include <Engine.hpp>
 #include <Cache/CacheView.hpp>
@@ -334,9 +334,13 @@ namespace GuiCommon
 			for ( auto const & it : p_scene.getMeshCache() )
 			{
 				auto mesh = it.second;
-				Path path{ folder / subfolder / it.first + cuT( ".cmsh" ) };
-				BinaryFile file{ path, File::OpenMode::eWrite };
-				result &= BinaryWriter< Mesh > {} .write( *mesh, file );
+
+				if ( result && it.second->isSerialisable() )
+				{
+					Path path{ folder / subfolder / it.first + cuT( ".cmsh" ) };
+					BinaryFile file{ path, File::OpenMode::eWrite };
+					result = BinaryWriter< Mesh > {}.write( *mesh, file );
+				}
 			}
 		}
 

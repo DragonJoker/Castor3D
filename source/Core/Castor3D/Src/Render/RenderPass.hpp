@@ -515,6 +515,76 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes		The instanced nodes.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\param[in]	renderNodes		Les noeuds instanciés.
+		 *\param[in]	camera			La caméra regardant la scène.
+		 *\param[in]	matrixBuffer	Le tampon de matrices.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		renderNodes		The instanced nodes.
+		 *\param[in]		camera			The viewing camera.
+		 *\param[in]		matrixBuffer	The matrix buffer.
+		 *\param[in, out]	info			Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		renderNodes		Les noeuds instanciés.
+		 *\param[in]		camera			La caméra regardant la scène.
+		 *\param[in]		matrixBuffer	Le tampon de matrices.
+		 *\param[in,out]	info			Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer
+			, RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes		The instanced nodes.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\param[in]	renderNodes		Les noeuds instanciés.
+		 *\param[in]	camera			La caméra regardant la scène.
+		 *\param[in]	matrixBuffer	Le tampon de matrices.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		renderNodes		The instanced nodes.
+		 *\param[in]		camera			The viewing camera.
+		 *\param[in]		matrixBuffer	The matrix buffer.
+		 *\param[in, out]	info			Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		renderNodes		Les noeuds instanciés.
+		 *\param[in]		camera			La caméra regardant la scène.
+		 *\param[in]		matrixBuffer	Le tampon de matrices.
+		 *\param[in,out]	info			Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer
+			, RenderInfo & info )const;
+		/**
+		 *\~english
 		 *\brief		Copies the instanced skinned nodes model matrices into given matrix buffer.
 		 *\param[in]	renderNodes	The instanced nodes.
 		 *\param[in]	bonesBuffer	The bones matrix buffer.

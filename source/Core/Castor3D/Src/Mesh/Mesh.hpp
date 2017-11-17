@@ -308,6 +308,28 @@ namespace castor3d
 		{
 			return m_skeleton;
 		}
+		/**
+		 *\~english
+		 *\return		The serialisable status.
+		 *\~french
+		 *\return		Le statut de sérialisation.
+		 */
+		inline bool isSerialisable()const
+		{
+			return m_serialisable;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the serialisable status.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit le statut de sérialisation.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setSerialisable( bool value )
+		{
+			m_serialisable = value;
+		}
 
 	protected:
 		friend class MeshGenerator;
@@ -327,6 +349,9 @@ namespace castor3d
 		//!\~english	The skeleton.
 		//!\~french		Le squelette.
 		SkeletonSPtr m_skeleton;
+		//!\~english	Tells that the mesh is serialisable.
+		//!\~french		Dit que le maillage est sérialisable.
+		bool m_serialisable{ true };
 
 		friend class BinaryWriter< Mesh >;
 		friend class BinaryParser< Mesh >;

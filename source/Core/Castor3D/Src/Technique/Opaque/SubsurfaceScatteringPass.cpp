@@ -1,4 +1,4 @@
-﻿#include "SubsurfaceScatteringPass.hpp"
+#include "SubsurfaceScatteringPass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"

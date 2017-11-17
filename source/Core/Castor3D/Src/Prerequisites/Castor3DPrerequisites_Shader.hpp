@@ -726,7 +726,7 @@ namespace castor3d
 			eSpecularGlossinessMaterial,
 		};
 
-		static constexpr uint32_t SpotShadowMapCount = 16u;
+		static constexpr uint32_t SpotShadowMapCount = 10u;
 		static constexpr uint32_t PointShadowMapCount = 6u;
 		static constexpr int BaseLightComponentsCount = 2;
 		static constexpr int MaxLightComponentsCount = 14;

@@ -1,4 +1,4 @@
-﻿#include "LinesMapping.hpp"
+#include "LinesMapping.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshUtils.hpp"
@@ -71,6 +71,11 @@ namespace castor3d
 
 	void LinesMapping::computeNormals( bool reverted )
 	{
+	}
+
+	uint32_t LinesMapping::getCount()const
+	{
+		return m_lineCount;
 	}
 
 	void LinesMapping::sortByDistance( Point3r const & cameraPosition )
