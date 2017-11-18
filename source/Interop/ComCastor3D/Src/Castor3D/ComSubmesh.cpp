@@ -13,7 +13,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CSubmesh::addPoint( /* [in] */ IVector3D * val )
+	STDMETHODIMP CSubmesh::AddPoint( /* [in] */ IVector3D * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -24,36 +24,36 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
 					 cuT( "addPoint" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CSubmesh::addFace( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z )
+	STDMETHODIMP CSubmesh::AddFace( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->addFace( x, y, z );
+			m_mapping->addFace( x, y, z );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
 					 cuT( "addFace" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

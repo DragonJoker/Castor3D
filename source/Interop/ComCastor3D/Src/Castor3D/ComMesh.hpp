@@ -46,13 +46,13 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY_GET( SubmeshCount, unsigned int, make_getter( m_internal.get(), &castor3d::Mesh::getSubmeshCount ) );
-		COM_PROPERTY_GET( FaceCount, unsigned int, make_getter( m_internal.get(), &castor3d::Mesh::getFaceCount ) );
-		COM_PROPERTY_GET( VertexCount, unsigned int, make_getter( m_internal.get(), &castor3d::Mesh::getVertexCount ) );
+		COM_PROPERTY_GET( SubmeshCount, unsigned int, makeGetter( m_internal.get(), &castor3d::Mesh::getSubmeshCount ) );
+		COM_PROPERTY_GET( FaceCount, unsigned int, makeGetter( m_internal.get(), &castor3d::Mesh::getFaceCount ) );
+		COM_PROPERTY_GET( VertexCount, unsigned int, makeGetter( m_internal.get(), &castor3d::Mesh::getVertexCount ) );
 
-		STDMETHOD( getSubmesh )( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal );
-		STDMETHOD( createSubmesh )( /* [out, retval] */ ISubmesh ** pVal );
-		STDMETHOD( deleteSubmesh )( /* [in] */ ISubmesh * val );
+		STDMETHOD( GetSubmesh )( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal );
+		STDMETHOD( CreateSubmesh )( /* [out, retval] */ ISubmesh ** pVal );
+		STDMETHOD( DeleteSubmesh )( /* [in] */ ISubmesh * val );
 	private:
 		castor3d::MeshSPtr m_internal;
 	};

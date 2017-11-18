@@ -2,7 +2,7 @@
 #ifndef __COMC3D_COM_DEPTH_STENCIL_STATE_H__
 #define __COMC3D_COM_DEPTH_STENCIL_STATE_H__
 
-#include "ComColour.hpp"
+#include "ComAtlObject.hpp"
 
 #include <State/DepthStencilState.hpp>
 
@@ -46,25 +46,25 @@ namespace CastorCom
 			m_state = state;
 		}
 
-		COM_PROPERTY( DepthTest, boolean, make_getter( m_state.get(), &castor3d::DepthStencilState::getDepthTest ), make_putter( m_state.get(), &castor3d::DepthStencilState::setDepthTest ) );
-		COM_PROPERTY( DepthFunc, eDEPTH_FUNC, make_getter( m_state.get(), &castor3d::DepthStencilState::getDepthFunc ), make_putter( m_state.get(), &castor3d::DepthStencilState::setDepthFunc ) );
-		COM_PROPERTY( DepthMask, eWRITING_MASK, make_getter( m_state.get(), &castor3d::DepthStencilState::getDepthMask ), make_putter( m_state.get(), &castor3d::DepthStencilState::setDepthMask ) );
-		COM_PROPERTY( StencilTest, boolean, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilTest ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilTest ) );
-		COM_PROPERTY( StencilReadMask, unsigned long, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilReadMask ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilReadMask ) );
-		COM_PROPERTY( StencilWriteMask, unsigned long, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilWriteMask ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilWriteMask ) );
-		COM_PROPERTY( StencilFrontFunc, eSTENCIL_FUNC, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontFunc ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontFunc ) );
-		COM_PROPERTY( StencilFrontFailOp, eSTENCIL_OP, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontFailOp ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontFailOp ) );
-		COM_PROPERTY( StencilFrontDepthFailOp, eSTENCIL_OP, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontDepthFailOp ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontDepthFailOp ) );
-		COM_PROPERTY( StencilFrontPassOp, eSTENCIL_OP, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontPassOp ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontPassOp ) );
-		COM_PROPERTY( StencilBackFunc, eSTENCIL_FUNC, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilBackFunc ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilBackFunc ) );
-		COM_PROPERTY( StencilBackFailOp, eSTENCIL_OP, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilBackFailOp ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilBackFailOp ) );
-		COM_PROPERTY( StencilBackDepthFailOp, eSTENCIL_OP, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilBackDepthFailOp ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilBackDepthFailOp ) );
-		COM_PROPERTY( StencilBackPassOp, eSTENCIL_OP, make_getter( m_state.get(), &castor3d::DepthStencilState::getStencilBackPassOp ), make_putter( m_state.get(), &castor3d::DepthStencilState::setStencilBackPassOp ) );
+		COM_PROPERTY( DepthTest, boolean, makeGetter( m_state.get(), &castor3d::DepthStencilState::getDepthTest ), makePutter( m_state.get(), &castor3d::DepthStencilState::setDepthTest ) );
+		COM_PROPERTY( DepthFunc, eDEPTH_FUNC, makeGetter( m_state.get(), &castor3d::DepthStencilState::getDepthFunc ), makePutter( m_state.get(), &castor3d::DepthStencilState::setDepthFunc ) );
+		COM_PROPERTY( DepthMask, eWRITING_MASK, makeGetter( m_state.get(), &castor3d::DepthStencilState::getDepthMask ), makePutter( m_state.get(), &castor3d::DepthStencilState::setDepthMask ) );
+		COM_PROPERTY( StencilTest, boolean, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilTest ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilTest ) );
+		COM_PROPERTY( StencilReadMask, unsigned long, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilReadMask ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilReadMask ) );
+		COM_PROPERTY( StencilWriteMask, unsigned long, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilWriteMask ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilWriteMask ) );
+		COM_PROPERTY( StencilFrontFunc, eSTENCIL_FUNC, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontFunc ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontFunc ) );
+		COM_PROPERTY( StencilFrontFailOp, eSTENCIL_OP, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontFailOp ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontFailOp ) );
+		COM_PROPERTY( StencilFrontDepthFailOp, eSTENCIL_OP, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontDepthFailOp ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontDepthFailOp ) );
+		COM_PROPERTY( StencilFrontPassOp, eSTENCIL_OP, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilFrontPassOp ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilFrontPassOp ) );
+		COM_PROPERTY( StencilBackFunc, eSTENCIL_FUNC, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilBackFunc ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilBackFunc ) );
+		COM_PROPERTY( StencilBackFailOp, eSTENCIL_OP, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilBackFailOp ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilBackFailOp ) );
+		COM_PROPERTY( StencilBackDepthFailOp, eSTENCIL_OP, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilBackDepthFailOp ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilBackDepthFailOp ) );
+		COM_PROPERTY( StencilBackPassOp, eSTENCIL_OP, makeGetter( m_state.get(), &castor3d::DepthStencilState::getStencilBackPassOp ), makePutter( m_state.get(), &castor3d::DepthStencilState::setStencilBackPassOp ) );
 
-		COM_PROPERTY_GET( DepthNear, double, make_getter( m_state.get(), &castor3d::DepthStencilState::getDepthNear ) );
-		COM_PROPERTY_GET( DepthFar, double, make_getter( m_state.get(), &castor3d::DepthStencilState::getDepthFar ) );
+		COM_PROPERTY_GET( DepthNear, double, makeGetter( m_state.get(), &castor3d::DepthStencilState::getDepthNear ) );
+		COM_PROPERTY_GET( DepthFar, double, makeGetter( m_state.get(), &castor3d::DepthStencilState::getDepthFar ) );
 
-		STDMETHOD( setDepthRange )( /* [in] */ double dnear, /* [in] */ double dfar );
+		STDMETHOD( SetDepthRange )( /* [in] */ double dnear, /* [in] */ double dfar );
 
 	private:
 		castor3d::DepthStencilStateSPtr m_state;

@@ -39,12 +39,12 @@ namespace CastorCom
 		 */
 		virtual ~CVector2D();
 
-		COM_PROPERTY( X, FLOAT, make_getter( this, &castor::Point2r::operator[], 0 ), make_putter( this, &castor::Point2r::operator[], 0 ) );
-		COM_PROPERTY( Y, FLOAT, make_getter( this, &castor::Point2r::operator[], 1 ), make_putter( this, &castor::Point2r::operator[], 1 ) );
+		COM_PROPERTY( X, FLOAT, makeGetter( this, &castor::Point2r::operator[], 0 ), makePutter( this, &castor::Point2r::operator[], 0 ) );
+		COM_PROPERTY( Y, FLOAT, makeGetter( this, &castor::Point2r::operator[], 1 ), makePutter( this, &castor::Point2r::operator[], 1 ) );
 
 		STDMETHOD( Negate )();
 		STDMETHOD( Normalise )();
-		STDMETHOD( dot )( IVector2D * pVal, FLOAT * pRet );
+		STDMETHOD( Dot )( IVector2D * pVal, FLOAT * pRet );
 		STDMETHOD( Length )( /* [out,retval] */ FLOAT * pVal );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

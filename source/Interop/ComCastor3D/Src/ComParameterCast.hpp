@@ -10,47 +10,47 @@
 namespace CastorCom
 {
 	template< typename Value, typename _Value >
-	inline Value parameter_cast( _Value const & value )
+	inline Value parameterCast( _Value const & value )
 	{
 		return Value( value );
 	}
 	template<>
-	inline bool parameter_cast< bool, boolean >( boolean const & value )
+	inline bool parameterCast< bool, boolean >( boolean const & value )
 	{
 		return value != 0;
 	}
 	template<>
-	inline boolean parameter_cast< boolean, bool >( bool const & value )
+	inline boolean parameterCast< boolean, bool >( bool const & value )
 	{
 		return value ? 1 : 0;
 	}
 	template<>
-	inline BSTR parameter_cast< BSTR, castor::String >( castor::String const & value )
+	inline BSTR parameterCast< BSTR, castor::String >( castor::String const & value )
 	{
-		return ToBstr( value );
+		return toBstr( value );
 	}
 	template<>
-	inline castor::String parameter_cast< castor::String, BSTR >( BSTR const & value )
+	inline castor::String parameterCast< castor::String, BSTR >( BSTR const & value )
 	{
-		return FromBstr( value );
+		return fromBstr( value );
 	}
 	template<>
-	inline BSTR parameter_cast< BSTR, castor::Path >( castor::Path const & value )
+	inline BSTR parameterCast< BSTR, castor::Path >( castor::Path const & value )
 	{
-		return ToBstr( value );
+		return toBstr( value );
 	}
 	template<>
-	inline castor::Path parameter_cast< castor::Path, BSTR >( BSTR const & value )
+	inline castor::Path parameterCast< castor::Path, BSTR >( BSTR const & value )
 	{
-		return castor::Path{ FromBstr( value ) };
+		return castor::Path{ fromBstr( value ) };
 	}
 	template<>
-	inline FLOAT parameter_cast< FLOAT, castor::ColourComponent >( castor::ColourComponent const & value )
+	inline FLOAT parameterCast< FLOAT, castor::ColourComponent >( castor::ColourComponent const & value )
 	{
 		return ( FLOAT )value;
 	}
 	template<>
-	inline IScene * parameter_cast< IScene *, castor3d::SceneSPtr >( castor3d::SceneSPtr const & value )
+	inline IScene * parameterCast< IScene *, castor3d::SceneSPtr >( castor3d::SceneSPtr const & value )
 	{
 		return reinterpret_cast< IScene *>( value.get() );
 	}

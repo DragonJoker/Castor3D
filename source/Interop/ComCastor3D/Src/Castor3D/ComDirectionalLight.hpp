@@ -46,10 +46,9 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &castor3d::LightCategory::getColour ), make_putter( m_internal.get(), &castor3d::LightCategory::setColour ) );
-		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getAmbientIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setAmbientIntensity ) );
-		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getDiffuseIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setDiffuseIntensity ) );
-		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getSpecularIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setSpecularIntensity ) );
+		COM_PROPERTY( Colour, IVector3D *, makeGetter( m_internal.get(), &castor3d::LightCategory::getColour ), makePutter( m_internal.get(), &castor3d::LightCategory::setColour ) );
+		COM_PROPERTY( DiffuseIntensity, float, makeGetter( m_internal.get(), &castor3d::LightCategory::getDiffuseIntensity ), makePutter( m_internal.get(), &castor3d::LightCategory::setDiffuseIntensity ) );
+		COM_PROPERTY( SpecularIntensity, float, makeGetter( m_internal.get(), &castor3d::LightCategory::getSpecularIntensity ), makePutter( m_internal.get(), &castor3d::LightCategory::setSpecularIntensity ) );
 
 	private:
 		castor3d::DirectionalLightSPtr m_internal;

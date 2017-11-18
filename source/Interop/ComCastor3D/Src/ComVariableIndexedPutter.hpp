@@ -12,7 +12,7 @@ namespace CastorCom
 	template< typename Class, typename Value, typename Index >
 	struct IndexedVariablePutter
 	{
-		typedef void ( Class::*Function )( Index, Value );
+		using Function = void ( Class::* )( Index, Value );
 		IndexedVariablePutter( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
@@ -25,12 +25,17 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				( m_instance->*m_function )( parameter_cast< Index >( index ), parameter_cast< Value >( value ) );
+				( m_instance->*m_function )( parameterCast< Index >( index ), parameterCast< Value >( value ) );
 				hr = S_OK;
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return S_OK;
@@ -43,7 +48,7 @@ namespace CastorCom
 	
 	template< typename Class, typename Value, typename Index, typename _Class >
 	IndexedVariablePutter< Class, Value, Index >
-	make_indexed_putter( _Class * instance, void ( Class::*function )( Index, Value ) )
+	makeIndexedPutter( _Class * instance, void ( Class::*function )( Index, Value ) )
 	{
 		return IndexedVariablePutter< Class, Value, Index >( ( Class * )instance, function );
 	}
@@ -51,7 +56,7 @@ namespace CastorCom
 	template< typename Class, typename Value, typename Index >
 	struct IndexedVariablePutterRev
 	{
-		typedef void ( Class::*Function )( Value, Index );
+		using Function = void ( Class::* )( Value, Index );
 		IndexedVariablePutterRev( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
@@ -64,12 +69,17 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				( m_instance->*m_function )( parameter_cast< Value >( value ), parameter_cast< Index >( index ) );
+				( m_instance->*m_function )( parameterCast< Value >( value ), parameterCast< Index >( index ) );
 				hr = S_OK;
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return S_OK;
@@ -82,7 +92,7 @@ namespace CastorCom
 
 	template< typename Class, typename Value, typename Index, typename _Class >
 	IndexedVariablePutterRev< Class, Value, Index >
-	make_indexed_putter_rev( _Class * instance, void ( Class::*function )( Value, Index ) )
+	makeIndexedPutterRev( _Class * instance, void ( Class::*function )( Value, Index ) )
 	{
 		return IndexedVariablePutterRev< Class, Value, Index >( ( Class * )instance, function );
 	}
@@ -90,7 +100,7 @@ namespace CastorCom
 	template< typename Class, typename Value, typename Index >
 	struct IndexedVariablePutterEvt
 	{
-		typedef void ( Class::*Function )( Index, Value );
+		using Function = void ( Class::* )( Index, Value );
 		IndexedVariablePutterEvt( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
@@ -103,15 +113,20 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				m_instance->getEngine()->postEvent( castor3d::MakeFunctorEvent( castor3d::eEVENT_TYPE_PRE_RENDER, [this, index, value]()
+				m_instance->getEngine()->postEvent( castor3d::makeFunctorEvent( castor3d::EventType::ePreRender, [this, index, value]()
 				{
-					( m_instance->*m_function )( parameter_cast< Index >( index ), parameter_cast< Value >( value ) );
+					( m_instance->*m_function )( parameterCast< Index >( index ), parameterCast< Value >( value ) );
 				} ) );
 				hr = S_OK;
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return S_OK;
@@ -124,7 +139,7 @@ namespace CastorCom
 
 	template< typename Class, typename Value, typename Index, typename _Class >
 	IndexedVariablePutterEvt< Class, Value, Index >
-	make_indexed_putter_evt( _Class * instance, void ( Class::*function )( Index, Value ) )
+	makeIndexedPutterEvt( _Class * instance, void ( Class::*function )( Index, Value ) )
 	{
 		return IndexedVariablePutterEvt< Class, Value, Index >( ( Class * )instance, function );
 	}
@@ -133,7 +148,7 @@ namespace CastorCom
 	template< typename Value, typename Index >\
 	struct IndexedVariablePutter< nmspc::type, Value, Index >\
 	{\
-		typedef void ( nmspc::type::*Function )( Value, Index );\
+		using Function = void( nmspc::type::* )( Value, Index );\
 		IndexedVariablePutter( nmspc::type * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\
@@ -142,7 +157,7 @@ namespace CastorCom
 		template< typename _Index, typename _Value >\
 		HRESULT operator()( _Index index, _Value value )\
 		{\
-			( m_instance->*m_function )( parameter_cast< Value >( value ), index );\
+			( m_instance->*m_function )( parameterCast< Value >( value ), index );\
 			return S_OK;\
 		}\
 	private:\
@@ -151,7 +166,7 @@ namespace CastorCom
 	};\
 	template< typename Value, typename Index, typename _Class >\
 	IndexedVariablePutter< nmspc::type, Value, Index >\
-	make_indexed_putter( _Class * instance, void ( nmspc::type::*function )( Value, Index ) )\
+	makeIndexedPutter( _Class * instance, void ( nmspc::type::*function )( Value, Index ) )\
 	{\
 		return IndexedVariablePutter< nmspc::type, Value, Index >( ( nmspc::type * )instance, function );\
 	}
@@ -160,7 +175,7 @@ namespace CastorCom
 	template< typename Value, typename Index >\
 	struct IndexedVariablePutterEvt< nmspc::type, Value, Index >\
 	{\
-		typedef void ( nmspc::type::*Function )( Value, Index );\
+		using Function = void( nmspc::type::* )( Value, Index );\
 		IndexedVariablePutterEvt( nmspc::type * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\
@@ -169,9 +184,9 @@ namespace CastorCom
 		template< typename _Index, typename _Value >\
 		HRESULT operator()( _Index index, _Value value )\
 		{\
-			m_instance->getEngine()->postEvent( castor3d::MakeFunctorEvent( castor3d::eEVENT_TYPE_PRE_RENDER, [this, value, index]()\
+			m_instance->getEngine()->postEvent( castor3d::makeFunctorEvent( castor3d::EventType::ePreRender, [this, value, index]()\
 			{\
-				( m_instance->*m_function )( parameter_cast< Value >( value ), index );\
+				( m_instance->*m_function )( parameterCast< Value >( value ), index );\
 			} ) );\
 			return S_OK;\
 		}\
@@ -181,7 +196,7 @@ namespace CastorCom
 	};\
 	template< typename Value, typename Index, typename _Class >\
 	IndexedVariablePutterEvt< nmspc::type, Value, Index >\
-	make_indexed_putter_evt( _Class * instance, void ( nmspc::type::*function )( Value, Index ) )\
+	makeIndexedPutterEvt( _Class * instance, void ( nmspc::type::*function )( Value, Index ) )\
 	{\
 		return IndexedVariablePutterEvt< nmspc::type, Value, Index >( ( nmspc::type * )instance, function );\
 	}

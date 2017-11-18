@@ -3,7 +3,7 @@
 #define __COMC3D_COM_SCENE_H__
 
 #include "ComSceneNode.hpp"
-#include "ComColour.hpp"
+#include "ComRgbColour.hpp"
 
 #include <Scene/Scene.hpp>
 
@@ -47,30 +47,30 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( BackgroundColour, IColour *, make_getter( m_internal.get(), &castor3d::Scene::getBackgroundColour ), make_putter( m_internal.get(), &castor3d::Scene::setBackgroundColour ) );
-		COM_PROPERTY( Name, BSTR, make_getter( m_internal.get(), &castor3d::Scene::getName ), make_putter( m_internal.get(), &castor3d::Scene::setName ) );
-		COM_PROPERTY( AmbientLight, IColour *, make_getter( m_internal.get(), &castor3d::Scene::getAmbientLight ), make_putter( m_internal.get(), &castor3d::Scene::setAmbientLight ) );
+		COM_PROPERTY( BackgroundColour, IRgbColour *, makeGetter( m_internal.get(), &castor3d::Scene::getBackgroundColour ), makePutter( m_internal.get(), &castor3d::Scene::setBackgroundColour ) );
+		COM_PROPERTY( Name, BSTR, makeGetter( m_internal.get(), &castor3d::Scene::getName ), makePutter( m_internal.get(), &castor3d::Scene::setName ) );
+		COM_PROPERTY( AmbientLight, IRgbColour *, makeGetter( m_internal.get(), &castor3d::Scene::getAmbientLight ), makePutter( m_internal.get(), &castor3d::Scene::setAmbientLight ) );
 
-		COM_PROPERTY_GET( RootNode, ISceneNode *, make_getter( m_internal.get(), &castor3d::Scene::getRootNode ) );
-		COM_PROPERTY_GET( ObjectRootNode, ISceneNode *, make_getter( m_internal.get(), &castor3d::Scene::getObjectRootNode ) );
-		COM_PROPERTY_GET( CameraRootNode, ISceneNode *, make_getter( m_internal.get(), &castor3d::Scene::getCameraRootNode ) );
+		COM_PROPERTY_GET( RootNode, ISceneNode *, makeGetter( m_internal.get(), &castor3d::Scene::getRootNode ) );
+		COM_PROPERTY_GET( ObjectRootNode, ISceneNode *, makeGetter( m_internal.get(), &castor3d::Scene::getObjectRootNode ) );
+		COM_PROPERTY_GET( CameraRootNode, ISceneNode *, makeGetter( m_internal.get(), &castor3d::Scene::getCameraRootNode ) );
 
 		STDMETHOD( ClearScene )();
-		STDMETHOD( setBackgroundImage )( /* [in] */ BSTR path );
+		STDMETHOD( SetBackgroundImage )( /* [in] */ BSTR path );
 		STDMETHOD( CreateSceneNode )( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal );
 		STDMETHOD( CreateGeometry )( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal );
 		STDMETHOD( CreateCamera )( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [out, retval] */ ICamera ** pVal );
 		STDMETHOD( CreateLight )( /* [in] */ BSTR name, /* [in] */ ISceneNode * node, /* [in] */ eLIGHT_TYPE type, /* [out, retval] */ ILight ** pVal );
 		STDMETHOD( CreateMesh )( /* [in] */ BSTR type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal );
-		STDMETHOD( getNode )( /* [in] */ BSTR name, /* [out, retval] */ ISceneNode ** pVal );
-		STDMETHOD( getGeometry )( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal );
-		STDMETHOD( getLight )( /* [in] */ BSTR name, /* [out, retval] */ ILight ** pVal );
-		STDMETHOD( getCamera )( /* [in] */ BSTR name, /* [out, retval] */ ICamera ** pVal );
+		STDMETHOD( GetNode )( /* [in] */ BSTR name, /* [out, retval] */ ISceneNode ** pVal );
+		STDMETHOD( GetGeometry )( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal );
+		STDMETHOD( GetLight )( /* [in] */ BSTR name, /* [out, retval] */ ILight ** pVal );
+		STDMETHOD( GetCamera )( /* [in] */ BSTR name, /* [out, retval] */ ICamera ** pVal );
 		STDMETHOD( RemoveLight )( /* [in] */ ILight * light );
 		STDMETHOD( RemoveNode )( /* [in] */ ISceneNode * node );
 		STDMETHOD( RemoveGeometry )( /* [in] */ IGeometry * geometry );
 		STDMETHOD( RemoveCamera )( /* [in] */ ICamera * camera );
-		STDMETHOD( getBackgroundImage )( /* [out, retval] */ ITextureLayout ** pVal );
+		STDMETHOD( GetBackgroundImage )( /* [out, retval] */ ITextureLayout ** pVal );
 
 	private:
 		castor3d::SceneSPtr m_internal;

@@ -2,7 +2,7 @@
 #ifndef __COMC3D_COM_SAMPLER_H__
 #define __COMC3D_COM_SAMPLER_H__
 
-#include "ComColour.hpp"
+#include "ComRgbaColour.hpp"
 
 #include <Texture/Sampler.hpp>
 
@@ -46,17 +46,17 @@ namespace CastorCom
 			m_sampler = state;
 		}
 
-		COM_PROPERTY( MinFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &castor3d::Sampler::getInterpolationMode, castor3d::InterpolationFilter::eMin ), make_putter( m_sampler.get(), &castor3d::Sampler::setInterpolationMode, castor3d::InterpolationFilter::eMin ) );
-		COM_PROPERTY( MagFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &castor3d::Sampler::getInterpolationMode, castor3d::InterpolationFilter::eMag ), make_putter( m_sampler.get(), &castor3d::Sampler::setInterpolationMode, castor3d::InterpolationFilter::eMag ) );
-		COM_PROPERTY( MipFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &castor3d::Sampler::getInterpolationMode, castor3d::InterpolationFilter::eMip ), make_putter( m_sampler.get(), &castor3d::Sampler::setInterpolationMode, castor3d::InterpolationFilter::eMip ) );
-		COM_PROPERTY( UWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &castor3d::Sampler::getWrappingMode, castor3d::TextureUVW::eU ), make_putter( m_sampler.get(), &castor3d::Sampler::setWrappingMode, castor3d::TextureUVW::eU ) );
-		COM_PROPERTY( VWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &castor3d::Sampler::getWrappingMode, castor3d::TextureUVW::eV ), make_putter( m_sampler.get(), &castor3d::Sampler::setWrappingMode, castor3d::TextureUVW::eV ) );
-		COM_PROPERTY( WWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &castor3d::Sampler::getWrappingMode, castor3d::TextureUVW::eW ), make_putter( m_sampler.get(), &castor3d::Sampler::setWrappingMode, castor3d::TextureUVW::eW ) );
-		COM_PROPERTY( MaxAnisotropy, float, make_getter( m_sampler.get(), &castor3d::Sampler::getMaxAnisotropy ), make_putter( m_sampler.get(), &castor3d::Sampler::setMaxAnisotropy ) );
-		COM_PROPERTY( MinLod, float, make_getter( m_sampler.get(), &castor3d::Sampler::getMinLod ), make_putter( m_sampler.get(), &castor3d::Sampler::setMinLod ) );
-		COM_PROPERTY( MaxLod, float, make_getter( m_sampler.get(), &castor3d::Sampler::getMaxLod ), make_putter( m_sampler.get(), &castor3d::Sampler::setMaxLod ) );
-		COM_PROPERTY( LodBias, float, make_getter( m_sampler.get(), &castor3d::Sampler::getLodBias ), make_putter( m_sampler.get(), &castor3d::Sampler::setLodBias ) );
-		COM_PROPERTY( BorderColour, IColour *, make_getter( m_sampler.get(), &castor3d::Sampler::getBorderColour ), make_putter( m_sampler.get(), &castor3d::Sampler::setBorderColour ) );
+		COM_PROPERTY( MinFilter, eINTERPOLATION_MODE, makeGetter( m_sampler.get(), &castor3d::Sampler::getInterpolationMode, castor3d::InterpolationFilter::eMin ), makePutter( m_sampler.get(), &castor3d::Sampler::setInterpolationMode, castor3d::InterpolationFilter::eMin ) );
+		COM_PROPERTY( MagFilter, eINTERPOLATION_MODE, makeGetter( m_sampler.get(), &castor3d::Sampler::getInterpolationMode, castor3d::InterpolationFilter::eMag ), makePutter( m_sampler.get(), &castor3d::Sampler::setInterpolationMode, castor3d::InterpolationFilter::eMag ) );
+		COM_PROPERTY( MipFilter, eINTERPOLATION_MODE, makeGetter( m_sampler.get(), &castor3d::Sampler::getInterpolationMode, castor3d::InterpolationFilter::eMip ), makePutter( m_sampler.get(), &castor3d::Sampler::setInterpolationMode, castor3d::InterpolationFilter::eMip ) );
+		COM_PROPERTY( UWrappingMode, eWRAP_MODE, makeGetter( m_sampler.get(), &castor3d::Sampler::getWrappingMode, castor3d::TextureUVW::eU ), makePutter( m_sampler.get(), &castor3d::Sampler::setWrappingMode, castor3d::TextureUVW::eU ) );
+		COM_PROPERTY( VWrappingMode, eWRAP_MODE, makeGetter( m_sampler.get(), &castor3d::Sampler::getWrappingMode, castor3d::TextureUVW::eV ), makePutter( m_sampler.get(), &castor3d::Sampler::setWrappingMode, castor3d::TextureUVW::eV ) );
+		COM_PROPERTY( WWrappingMode, eWRAP_MODE, makeGetter( m_sampler.get(), &castor3d::Sampler::getWrappingMode, castor3d::TextureUVW::eW ), makePutter( m_sampler.get(), &castor3d::Sampler::setWrappingMode, castor3d::TextureUVW::eW ) );
+		COM_PROPERTY( MaxAnisotropy, float, makeGetter( m_sampler.get(), &castor3d::Sampler::getMaxAnisotropy ), makePutter( m_sampler.get(), &castor3d::Sampler::setMaxAnisotropy ) );
+		COM_PROPERTY( MinLod, float, makeGetter( m_sampler.get(), &castor3d::Sampler::getMinLod ), makePutter( m_sampler.get(), &castor3d::Sampler::setMinLod ) );
+		COM_PROPERTY( MaxLod, float, makeGetter( m_sampler.get(), &castor3d::Sampler::getMaxLod ), makePutter( m_sampler.get(), &castor3d::Sampler::setMaxLod ) );
+		COM_PROPERTY( LodBias, float, makeGetter( m_sampler.get(), &castor3d::Sampler::getLodBias ), makePutter( m_sampler.get(), &castor3d::Sampler::setLodBias ) );
+		COM_PROPERTY( BorderColour, IRgbaColour *, makeGetter( m_sampler.get(), &castor3d::Sampler::getBorderColour ), makePutter( m_sampler.get(), &castor3d::Sampler::setBorderColour ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

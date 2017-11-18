@@ -521,7 +521,7 @@ namespace castor
 		{
 			// Essential Mathematics, page 467
 			T angle = acos( cosTheta );
-			return ( sin( ( 1.0 - p_factor ) * angle ) * ( *this ) + sin( p_factor * angle ) * p_target ) / T( sin( angle ) );
+			return QuaternionT{ ( sin( ( 1.0 - p_factor ) * angle ) * ( *this ) + sin( p_factor * angle ) * p_target ) / T( sin( angle ) ) };
 		}
 	}
 

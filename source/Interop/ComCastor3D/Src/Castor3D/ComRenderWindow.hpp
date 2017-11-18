@@ -46,20 +46,20 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( RenderTarget, IRenderTarget *, make_getter( m_internal.get(), &castor3d::RenderWindow::getRenderTarget ), make_putter( m_internal.get(), &castor3d::RenderWindow::setRenderTarget ) );
+		COM_PROPERTY( RenderTarget, IRenderTarget *, makeGetter( m_internal.get(), &castor3d::RenderWindow::getRenderTarget ), makePutter( m_internal.get(), &castor3d::RenderWindow::setRenderTarget ) );
 
-		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &castor3d::RenderWindow::getSize ) );
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &castor3d::RenderWindow::getName ) );
+		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal.get(), &castor3d::RenderWindow::getSize ) );
+		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal.get(), &castor3d::RenderWindow::getName ) );
 
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( Resize )( /* [in] */ ISize * size );
 		STDMETHOD( OnMouseMove )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseLButtondown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseLButtonDown )( /* [in] */ IPosition * pos );
 		STDMETHOD( OnMouseLButtonUp )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseMButtondown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseMButtonDown )( /* [in] */ IPosition * pos );
 		STDMETHOD( OnMouseMButtonUp )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseRButtondown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseRButtonDown )( /* [in] */ IPosition * pos );
 		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos );
 
 	private:

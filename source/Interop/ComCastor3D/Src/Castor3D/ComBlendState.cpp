@@ -13,7 +13,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CBlendState::setColourMask( /* [in] */ eWRITING_MASK red, /* [in] */ eWRITING_MASK green, /* [in] */ eWRITING_MASK blue, /* [in] */ eWRITING_MASK alpha )
+	STDMETHODIMP CBlendState::SetColourMask( /* [in] */ eWRITING_MASK red, /* [in] */ eWRITING_MASK green, /* [in] */ eWRITING_MASK blue, /* [in] */ eWRITING_MASK alpha )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -24,7 +24,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IBlendState, cuT( "setColourMask" ), ERROR_UNINITIALISED_STATE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IBlendState, cuT( "SetColourMask" ), ERROR_UNINITIALISED_STATE.c_str(), 0, nullptr );
 		}
 
 		return hr;

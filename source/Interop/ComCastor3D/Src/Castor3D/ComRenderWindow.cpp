@@ -15,7 +15,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CRenderWindow::initialise( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal )
+	STDMETHODIMP CRenderWindow::Initialise( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -40,13 +40,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "Initialise" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "Initialise" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::cleanup()
+	STDMETHODIMP CRenderWindow::Cleanup()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -57,13 +57,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "Cleanup" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "Cleanup" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::resize( /* [in] */ ISize * size )
+	STDMETHODIMP CRenderWindow::Resize( /* [in] */ ISize * size )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -74,7 +74,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "Resize" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "Resize" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -108,13 +108,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMove" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMove" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtondown( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -142,7 +142,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtondown" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtondown" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -176,13 +176,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtondown( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -210,7 +210,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtondown" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtondown" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -244,13 +244,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtondown( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -278,7 +278,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtondown" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtondown" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -312,7 +312,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;

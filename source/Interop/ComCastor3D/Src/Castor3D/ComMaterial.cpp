@@ -14,7 +14,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CMaterial::initialise()
+	STDMETHODIMP CMaterial::Initialise()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -25,19 +25,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 cuT( "Initialise" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::cleanup()
+	STDMETHODIMP CMaterial::Cleanup()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -48,19 +48,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 cuT( "Cleanup" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::createPass( /* [out, retval] */ IPass ** pVal )
+	STDMETHODIMP CMaterial::CreatePass( /* [out, retval] */ IPass ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -78,19 +78,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
-					 cuT( "createPass" ),			// This is generally displayed as the title
+					 cuT( "CreatePass" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::getPass( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal )
+	STDMETHODIMP CMaterial::GetPass( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -108,32 +108,32 @@ namespace CastorCom
 					}
 					catch ( std::exception & )
 					{
-						hr = CComError::DispatchError(
+						hr = CComError::dispatchError(
 								 E_FAIL,							// This represents the error
 								 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
-								 cuT( "getPass" ),					// This is generally displayed as the title
+								 cuT( "GetPass" ),					// This is generally displayed as the title
 								 ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
 								 0,									// This is the context in the help file
-								 NULL );
+								 nullptr );
 					}
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
-					 cuT( "getPass" ),				// This is generally displayed as the title
+					 cuT( "GetPass" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::destroyPass( /* [in] */ unsigned int val )
+	STDMETHODIMP CMaterial::DestroyPass( /* [in] */ unsigned int val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -146,24 +146,24 @@ namespace CastorCom
 			}
 			catch ( std::exception & )
 			{
-				hr = CComError::DispatchError(
+				hr = CComError::dispatchError(
 						 E_FAIL,							// This represents the error
 						 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
-						 cuT( "destroyPass" ),				// This is generally displayed as the title
+						 cuT( "DestroyPass" ),				// This is generally displayed as the title
 						 ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
 						 0,									// This is the context in the help file
-						 NULL );
+						 nullptr );
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
-					 cuT( "destroyPass" ),			// This is generally displayed as the title
+					 cuT( "DestroyPass" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

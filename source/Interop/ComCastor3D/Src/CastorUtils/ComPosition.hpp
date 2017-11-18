@@ -38,10 +38,10 @@ namespace CastorCom
 		 */
 		virtual ~CPosition();
 
-		COM_PROPERTY( X, INT, make_getter( this, &castor::Position::x ), make_putter( this, &castor::Position::x ) );
-		COM_PROPERTY( Y, INT, make_getter( this, &castor::Position::y ), make_putter( this, &castor::Position::y ) );
+		COM_PROPERTY( X, INT, makeGetter( this, &castor::Position::x ), makePutter( this, &castor::Position::x ) );
+		COM_PROPERTY( Y, INT, makeGetter( this, &castor::Position::y ), makePutter( this, &castor::Position::y ) );
 
-		STDMETHOD( set )( /* [in] */ INT x, /* [in] */ INT y );
+		STDMETHOD( Set )( /* [in] */ INT x, /* [in] */ INT y );
 		STDMETHOD( Offset )( /* [in] */ INT x, /* [in] */ INT y );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

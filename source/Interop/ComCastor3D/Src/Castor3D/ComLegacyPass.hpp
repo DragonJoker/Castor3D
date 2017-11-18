@@ -2,8 +2,7 @@
 #ifndef __COMC3D_COM_LEGACY_PASS_H__
 #define __COMC3D_COM_LEGACY_PASS_H__
 
-#include "ComColour.hpp"
-#include "ComHdrColour.hpp"
+#include "ComRgbColour.hpp"
 #include "ComShaderProgram.hpp"
 
 #include <Material/LegacyPass.hpp>
@@ -48,19 +47,53 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( Diffuse, IColour *, make_getter( m_internal.get(), &castor3d::LegacyPass::getDiffuse ), make_putter( m_internal.get(), &castor3d::LegacyPass::setDiffuse ) );
-		COM_PROPERTY( Specular, IColour *, make_getter( m_internal.get(), &castor3d::LegacyPass::getSpecular ), make_putter( m_internal.get(), &castor3d::LegacyPass::setSpecular ) );
-		COM_PROPERTY( Emissive, IHdrColour *, make_getter( m_internal.get(), &castor3d::LegacyPass::getEmissive ), make_putter( m_internal.get(), &castor3d::LegacyPass::setEmissive ) );
-		COM_PROPERTY( Shininess, float, make_getter( m_internal.get(), &castor3d::LegacyPass::getShininess ), make_putter( m_internal.get(), &castor3d::LegacyPass::setShininess ) );
-		COM_PROPERTY( TwoSided, boolean, make_getter( m_internal.get(), &castor3d::LegacyPass::IsTwoSided ), make_putter( m_internal.get(), &castor3d::LegacyPass::setTwoSided ) );
-		COM_PROPERTY( Opacity, float, make_getter( m_internal.get(), &castor3d::LegacyPass::getOpacity ), make_putter( m_internal.get(), &castor3d::LegacyPass::setOpacity ) );
+		COM_PROPERTY( Emissive
+			, float
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getEmissive )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setEmissive ) );
+		COM_PROPERTY( RefractionRatio
+			, float
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getRefractionRatio )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setRefractionRatio ) );
+		COM_PROPERTY( AlphaFunc
+			, eCOMPARISON_FUNC
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getAlphaFunc )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setAlphaFunc ) );
+		COM_PROPERTY( AlphaRefValue
+			, float
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getAlphaValue )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setAlphaValue ) );
+		COM_PROPERTY( TwoSided
+			, boolean
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::IsTwoSided )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setTwoSided ) );
+		COM_PROPERTY( Opacity
+			, float
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getOpacity )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setOpacity ) );
+		COM_PROPERTY( Diffuse
+			, IRgbColour *
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getDiffuse )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setDiffuse ) );
+		COM_PROPERTY( Specular
+			, IRgbColour *
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getSpecular )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setSpecular ) );
+		COM_PROPERTY( Shininess
+			, float
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getShininess )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setShininess ) );
+		COM_PROPERTY( Ambient
+			, float
+			, makeGetter( m_internal.get(), &castor3d::LegacyPass::getAmbient )
+			, makePutter( m_internal.get(), &castor3d::LegacyPass::setAmbient ) );
 
-		COM_PROPERTY_GET( TextureUnitCount, unsigned int, make_getter( m_internal.get(), &castor3d::LegacyPass::getTextureUnitsCount ) );
+		COM_PROPERTY_GET( TextureUnitCount, unsigned int, makeGetter( m_internal.get(), &castor3d::LegacyPass::getTextureUnitsCount ) );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( getTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( destroyTextureUnit )( /* [in] */ ITextureUnit * val );
-		STDMETHOD( getTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( DestroyTextureUnit )( /* [in] */ ITextureUnit * val );
+		STDMETHOD( GetTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
 
 	private:
 		castor3d::LegacyPassSPtr m_internal;

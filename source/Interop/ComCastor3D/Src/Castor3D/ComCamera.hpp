@@ -47,13 +47,13 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, make_getter( m_internal.get(), &castor3d::Camera::getViewportType ), make_putter( m_internal.get(), &castor3d::Camera::setViewportType ) );
+		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, makeGetter( m_internal.get(), &castor3d::Camera::getViewportType ), makePutter( m_internal.get(), &castor3d::Camera::setViewportType ) );
 
-		COM_PROPERTY_GET( Width, unsigned int, make_getter( m_internal.get(), &castor3d::Camera::getWidth ) );
-		COM_PROPERTY_GET( Height, unsigned int, make_getter( m_internal.get(), &castor3d::Camera::getHeight ) );
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &castor3d::MovableObject::getName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &castor3d::MovableObject::getType ) );
-		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &castor3d::MovableObject::getScene ) );
+		COM_PROPERTY_GET( Width, unsigned int, makeGetter( m_internal.get(), &castor3d::Camera::getWidth ) );
+		COM_PROPERTY_GET( Height, unsigned int, makeGetter( m_internal.get(), &castor3d::Camera::getHeight ) );
+		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal.get(), &castor3d::MovableObject::getName ) );
+		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, makeGetter( m_internal.get(), &castor3d::MovableObject::getType ) );
+		COM_PROPERTY_GET( Scene, IScene *, makeGetter( m_internal.get(), &castor3d::MovableObject::getScene ) );
 
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();

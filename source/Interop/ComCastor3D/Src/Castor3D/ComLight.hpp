@@ -48,15 +48,15 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &castor3d::MovableObject::getName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &castor3d::MovableObject::getType ) );
-		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &castor3d::MovableObject::getScene ) );
-		COM_PROPERTY_GET( LightType, eLIGHT_TYPE, make_getter( m_internal.get(), &castor3d::Light::getLightType ) );
-		COM_PROPERTY_GET( DirectionalLight, IDirectionalLight *, make_getter( m_internal.get(), &castor3d::Light::getDirectionalLight ) );
-		COM_PROPERTY_GET( PointLight, IPointLight *, make_getter( m_internal.get(), &castor3d::Light::getPointLight ) );
-		COM_PROPERTY_GET( SpotLight, ISpotLight *, make_getter( m_internal.get(), &castor3d::Light::getSpotLight ) );
+		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal.get(), &castor3d::MovableObject::getName ) );
+		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, makeGetter( m_internal.get(), &castor3d::MovableObject::getType ) );
+		COM_PROPERTY_GET( Scene, IScene *, makeGetter( m_internal.get(), &castor3d::MovableObject::getScene ) );
+		COM_PROPERTY_GET( LightType, eLIGHT_TYPE, makeGetter( m_internal.get(), &castor3d::Light::getLightType ) );
+		COM_PROPERTY_GET( DirectionalLight, IDirectionalLight *, makeGetter( m_internal.get(), &castor3d::Light::getDirectionalLight ) );
+		COM_PROPERTY_GET( PointLight, IPointLight *, makeGetter( m_internal.get(), &castor3d::Light::getPointLight ) );
+		COM_PROPERTY_GET( SpotLight, ISpotLight *, makeGetter( m_internal.get(), &castor3d::Light::getSpotLight ) );
 
-		STDMETHOD( attachTo )( /* [in] */ ISceneNode * val );
+		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();
 	private:
 		castor3d::LightSPtr m_internal;

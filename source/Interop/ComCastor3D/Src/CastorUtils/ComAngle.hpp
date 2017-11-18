@@ -38,9 +38,9 @@ namespace CastorCom
 		 */
 		virtual ~CAngle();
 
-		COM_PROPERTY( Degrees, FLOAT, make_getter( this, &castor::Angle::degrees ), make_putter( this, &castor::Angle::degrees ) );
-		COM_PROPERTY( Radians, FLOAT, make_getter( this, &castor::Angle::radians ), make_putter( this, &castor::Angle::radians ) );
-		COM_PROPERTY( Grads, FLOAT, make_getter( this, &castor::Angle::grads ), make_putter( this, &castor::Angle::grads ) );
+		COM_PROPERTY( Degrees, FLOAT, makeGetter( this, &castor::Angle::degrees ), makePutter( this, &castor::Angle::degrees ) );
+		COM_PROPERTY( Radians, FLOAT, makeGetter( this, &castor::Angle::radians ), makePutter( this, &castor::Angle::radians ) );
+		COM_PROPERTY( Grads, FLOAT, makeGetter( this, &castor::Angle::grads ), makePutter( this, &castor::Angle::grads ) );
 
 		STDMETHOD( Cos )( /* [out, retval] */ float * pVal );
 		STDMETHOD( Sin )( /* [out, retval] */ float * pVal );

@@ -51,7 +51,7 @@ namespace CastorCom
 	static const castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
 
 	template< typename T, typename FuncT >
-	HRESULT RetrieveValue( T * pVal, FuncT p_func )
+	HRESULT retrieveValue( T * pVal, FuncT p_func )
 	{
 		HRESULT hr = E_POINTER;
 

@@ -2,7 +2,7 @@
 #ifndef ___C3DCOM_COM_ATL_OBJECT_H___
 #define ___C3DCOM_COM_ATL_OBJECT_H___
 
-#include "ComVariablegetter.hpp"
+#include "ComVariableGetter.hpp"
 #include "ComVariablePutter.hpp"
 #include "ComVariableIndexedGetter.hpp"
 #include "ComVariableIndexedPutter.hpp"
@@ -14,7 +14,7 @@ namespace CastorCom
 	class CComAtlObject
 		: public ATL::CComObjectRootEx< ATL::CComSingleThreadModel >
 		, public ATL::CComCoClass< CObject, ClsidClass >
-		, public ATL::IDispatchImpl< IObject, IidObject, &LIBID_castor3d, MAJOR_VERSION, MINOR_VERSION >
+		, public ATL::IDispatchImpl< IObject, IidObject, &LIBID_Castor3D, MAJOR_VERSION, MINOR_VERSION >
 	{
 	public:
 		CComAtlObject()
@@ -64,12 +64,12 @@ namespace CastorCom
 		return Functor( val );\
 	}
 
-#define COM_PROPERTY( Name, Type, getter, Putter )\
-	COM_PROPERTY_GET( Name, Type, getter )\
+#define COM_PROPERTY( Name, Type, Getter, Putter )\
+	COM_PROPERTY_GET( Name, Type, Getter )\
 	COM_PROPERTY_PUT( Name, Type, Putter )
 
-#define COM_EVT_PROPERTY( Name, Type, getter, Putter )\
-	COM_PROPERTY_GET( Name, Type, getter )\
+#define COM_EVT_PROPERTY( Name, Type, Getter, Putter )\
+	COM_PROPERTY_GET( Name, Type, Getter )\
 	COM_EVT_PROPERTY_PUT( Name, Type, Putter )
 
 #define COM_PROPERTY_INDEXED_GET( Name, Index, Type, Functor )\
@@ -90,12 +90,12 @@ namespace CastorCom
 		return Functor( index, val );\
 	}
 
-#define COM_PROPERTY_INDEXED( Name, Index, Type, getter, Putter )\
-	COM_PROPERTY_INDEXED_GET( Name, Index, Type, getter )\
+#define COM_PROPERTY_INDEXED( Name, Index, Type, Getter, Putter )\
+	COM_PROPERTY_INDEXED_GET( Name, Index, Type, Getter )\
 	COM_PROPERTY_INDEXED_PUT( Name, Index, Type, Putter )
 
-#define COM_EVT_PROPERTY_INDEXED( Name, Index, Type, getter, Putter )\
-	COM_PROPERTY_INDEXED_GET( Name, Index, Type, getter )\
+#define COM_EVT_PROPERTY_INDEXED( Name, Index, Type, Getter, Putter )\
+	COM_PROPERTY_INDEXED_GET( Name, Index, Type, Getter )\
 	COM_EVT_PROPERTY_INDEXED_PUT( Name, Index, Type, Putter )
 }
 

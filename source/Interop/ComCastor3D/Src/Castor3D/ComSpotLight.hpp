@@ -47,13 +47,12 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &castor3d::LightCategory::getColour ), make_putter( m_internal.get(), &castor3d::LightCategory::setColour ) );
-		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getAmbientIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setAmbientIntensity ) );
-		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getDiffuseIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setDiffuseIntensity ) );
-		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &castor3d::LightCategory::getSpecularIntensity ), make_putter( m_internal.get(), &castor3d::LightCategory::setSpecularIntensity ) );
-		COM_PROPERTY( Attenuation, IVector3D *, make_getter( m_internal.get(), &castor3d::SpotLight::getAttenuation ), make_putter( m_internal.get(), &castor3d::SpotLight::setAttenuation ) );
-		COM_PROPERTY( Exponent, float, make_getter( m_internal.get(), &castor3d::SpotLight::getExponent ), make_putter( m_internal.get(), &castor3d::SpotLight::setExponent ) );
-		COM_PROPERTY( CutOff, IAngle *, make_getter( m_internal.get(), &castor3d::SpotLight::getCutOff ), make_putter( m_internal.get(), &castor3d::SpotLight::setCutOff ) );
+		COM_PROPERTY( Colour, IVector3D *, makeGetter( m_internal.get(), &castor3d::LightCategory::getColour ), makePutter( m_internal.get(), &castor3d::LightCategory::setColour ) );
+		COM_PROPERTY( DiffuseIntensity, float, makeGetter( m_internal.get(), &castor3d::LightCategory::getDiffuseIntensity ), makePutter( m_internal.get(), &castor3d::LightCategory::setDiffuseIntensity ) );
+		COM_PROPERTY( SpecularIntensity, float, makeGetter( m_internal.get(), &castor3d::LightCategory::getSpecularIntensity ), makePutter( m_internal.get(), &castor3d::LightCategory::setSpecularIntensity ) );
+		COM_PROPERTY( Attenuation, IVector3D *, makeGetter( m_internal.get(), &castor3d::SpotLight::getAttenuation ), makePutter( m_internal.get(), &castor3d::SpotLight::setAttenuation ) );
+		COM_PROPERTY( Exponent, float, makeGetter( m_internal.get(), &castor3d::SpotLight::getExponent ), makePutter( m_internal.get(), &castor3d::SpotLight::setExponent ) );
+		COM_PROPERTY( CutOff, IAngle *, makeGetter( m_internal.get(), &castor3d::SpotLight::getCutOff ), makePutter( m_internal.get(), &castor3d::SpotLight::setCutOff ) );
 
 	private:
 		castor3d::SpotLightSPtr m_internal;

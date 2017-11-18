@@ -10,15 +10,15 @@ namespace CastorCom
 		: public ATL::CAtlDllModuleT< CComCastor3DModule >
 	{
 	public :
-		DECLARE_LIBID( LIBID_castor3d )
+		DECLARE_LIBID( LIBID_Castor3D )
 
-		static LPCOLESTR getAppId() throw()
+		static LPCOLESTR GetAppId() throw()
 		{
 			USES_CONVERSION;
 			return T2W( m_appId );
 		}
 
-		static TCHAR * getAppIdT() throw()
+		static TCHAR * GetAppIdT() throw()
 		{
 			return m_appId;
 		}
@@ -27,8 +27,8 @@ namespace CastorCom
 		{
 			ATL::_ATL_REGMAP_ENTRY aMapEntries [] =
 			{
-				{ OLESTR( "APPID" ), getAppId() },
-				{ NULL, NULL }
+				{ OLESTR( "APPID" ), GetAppId() },
+				{ nullptr, nullptr }
 			};
 			return ATL::_pAtlModule->UpdateRegistryFromResource( IDR_Castor3D, bRegister, aMapEntries );
 		}

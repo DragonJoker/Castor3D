@@ -48,14 +48,14 @@ namespace CastorCom
 			return m_image;
 		}
 
-		COM_PROPERTY_GET( Buffer, IPixelBuffer *, make_getter( m_image.get(), &castor::Image::getPixels ) );
+		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_image.get(), &castor::Image::getPixels ) );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val );
 		STDMETHOD( LoadFromFormat )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size );
-		STDMETHOD( resample )( /* [in] */ ISize * val );
-		STDMETHOD( Fill )( /* [in] */ IColour * val );
-		STDMETHOD( copyImage )( /* [in] */ IImage * pVal );
-		STDMETHOD( subImage )( /* [in] */ IRect * val, /* [out, retval] */ IImage ** pVal );
+		STDMETHOD( Resample )( /* [in] */ ISize * val );
+		STDMETHOD( Fill )( /* [in] */ IRgbaColour * val );
+		STDMETHOD( CopyImage )( /* [in] */ IImage * pVal );
+		STDMETHOD( SubImage )( /* [in] */ IRect * val, /* [out, retval] */ IImage ** pVal );
 		STDMETHOD( Flip )( /* [out, retval] */ IImage ** pVal );
 		STDMETHOD( Mirror )( /* [out, retval] */ IImage ** pVal );
 

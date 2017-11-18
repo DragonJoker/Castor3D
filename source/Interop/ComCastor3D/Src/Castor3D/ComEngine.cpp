@@ -25,7 +25,7 @@
 #include <Render/RenderLoop.hpp>
 #include <Scene/SceneFileParser.hpp>
 
-#define CASTOR3D_THREADED 0
+#define CASTOR3D_THREADED false
 
 #if defined( NDEBUG )
 static const int CASTOR_WANTED_FPS	= 120;
@@ -80,7 +80,7 @@ namespace CastorCom
 	static const castor::String ERROR_INITIALISED_ENGINE = cuT( "The IEngine has already been initialised" );
 
 	CEngine::CEngine()
-		:	m_internal( NULL )
+		:	m_internal( nullptr )
 	{
 	}
 
@@ -88,7 +88,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CEngine::create()
+	STDMETHODIMP CEngine::Create()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -99,31 +99,31 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "create" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "create" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::destroy()
+	STDMETHODIMP CEngine::Destroy()
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
 			delete m_internal;
-			m_internal = NULL;
+			m_internal = nullptr;
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Destroy" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "Destroy" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::initialise( /* [in] */ int fps )
+	STDMETHODIMP CEngine::Initialise( /* [in] */ int fps )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -134,13 +134,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Initialise" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "Initialise" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::cleanup()
+	STDMETHODIMP CEngine::Cleanup()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -151,7 +151,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Cleanup" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "Cleanup" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -169,13 +169,13 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CScene * >( *pVal )->setInternal( m_internal->getSceneCache().add( FromBstr( name ) ) );
+					static_cast< CScene * >( *pVal )->setInternal( m_internal->getSceneCache().add( fromBstr( name ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -192,24 +192,24 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "ClearScenes" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "ClearScenes" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::loadRenderer( /* [in] */ BSTR type )
+	STDMETHODIMP CEngine::LoadRenderer( /* [in] */ BSTR type )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->loadRenderer( FromBstr( type ) );
+			m_internal->loadRenderer( fromBstr( type ) );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "loadRenderer" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "loadRenderer" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -226,24 +226,24 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RenderOneFrame" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "RenderOneFrame" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::loadPlugin( /* [in] */ BSTR path )
+	STDMETHODIMP CEngine::LoadPlugin( /* [in] */ BSTR path )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->getPluginCache().loadPlugin( castor::Path{ FromBstr( path ) } );
+			m_internal->getPluginCache().loadPlugin( castor::Path{ fromBstr( path ) } );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "loadPlugin" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "loadPlugin" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -259,7 +259,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateOverlay" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateOverlay" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -277,13 +277,13 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRenderWindow * >( *pVal )->setInternal( m_internal->getRenderWindowCache().add( FromBstr( name ) ) );
+					static_cast< CRenderWindow * >( *pVal )->setInternal( m_internal->getRenderWindowCache().add( fromBstr( name ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -300,13 +300,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RemoveWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "RemoveWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::createSampler( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal )
+	STDMETHODIMP CEngine::CreateSampler( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -318,13 +318,13 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSampler * >( *pVal )->setInternal( m_internal->getSamplerCache().add( FromBstr( name ) ) );
+					static_cast< CSampler * >( *pVal )->setInternal( m_internal->getSamplerCache().add( fromBstr( name ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "createSampler" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "createSampler" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -343,7 +343,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateBlendState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateBlendState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -362,7 +362,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateDepthStencilState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateDepthStencilState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -381,7 +381,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -400,7 +400,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -412,11 +412,11 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->getSceneCache().remove( FromBstr( name ) );
+			m_internal->getSceneCache().remove( fromBstr( name ) );
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RemoveScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "RemoveScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -430,7 +430,7 @@ namespace CastorCom
 		{
 			if ( window )
 			{
-				castor::Path fileName{ FromBstr( name ) };
+				castor::Path fileName{ fromBstr( name ) };
 				castor3d::RenderWindowSPtr l_return;
 
 				if ( castor::File::fileExists( fileName ) )
@@ -464,13 +464,13 @@ namespace CastorCom
 				}
 				else
 				{
-					hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), cuT( "Scene file doesn't exist" ), 0, NULL );
+					hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), cuT( "Scene file doesn't exist" ), 0, nullptr );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;

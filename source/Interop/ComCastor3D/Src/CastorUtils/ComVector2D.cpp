@@ -23,7 +23,7 @@ namespace CastorCom
 		return S_OK;
 	}
 
-	STDMETHODIMP CVector2D::dot( IVector2D * pVal, FLOAT * pRet )
+	STDMETHODIMP CVector2D::Dot( IVector2D * pVal, FLOAT * pRet )
 	{
 		HRESULT hr = E_POINTER;
 

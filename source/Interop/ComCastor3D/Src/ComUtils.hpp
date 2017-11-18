@@ -20,12 +20,12 @@ namespace CastorCom
 	 *\brief		Lib�re un pointeur COM
 	 *\param[in]	val	Le pointeur
 	 */
-	template< typename T > void SafeRelease( T *& ptr )
+	template< typename T > void safeRelease( T *& ptr )
 	{
 		if ( ptr )
 		{
 			ptr->Release();
-			ptr = NULL;
+			ptr = nullptr;
 		}
 	}
 	/**
@@ -38,17 +38,17 @@ namespace CastorCom
 	 *\param[in]	val	Le BSTR
 	 *\return		Le castor::String
 	 */
-	inline castor::String FromBstr( BSTR val )
+	inline castor::String fromBstr( BSTR val )
 	{
 		castor::String l_return;
 		int l_length = ::SysStringLen( val );
-		int l_size = WideCharToMultiByte( CP_UTF8, 0, val, l_length, NULL, 0, NULL, NULL );
+		int l_size = ::WideCharToMultiByte( CP_UTF8, 0, val, l_length, nullptr, 0, nullptr, nullptr );
 
 		if ( l_size )
 		{
 			std::vector< char > l_out( l_size, 0 );
 
-			if ( WideCharToMultiByte( CP_UTF8, 0, val, l_length, l_out.data(), int( l_out.size() ), NULL, NULL ) )
+			if ( ::WideCharToMultiByte( CP_UTF8, 0, val, l_length, l_out.data(), int( l_out.size() ), nullptr, nullptr ) )
 			{
 				l_return = castor::string::stringCast< xchar >( std::string( l_out.begin(), l_out.end() ) );
 			}
@@ -66,12 +66,12 @@ namespace CastorCom
 	 *\param[in]	val	Le castor::String
 	 *\return		Le BSTR
 	 */
-	inline BSTR ToBstr( castor::String const & val )
+	inline BSTR toBstr( castor::String const & val )
 	{
-		BSTR l_return = NULL;
+		BSTR l_return = nullptr;
 		std::string l_in = castor::string::stringCast< char >( val );
 		int l_length = int( l_in.size() );
-		int l_size = MultiByteToWideChar( CP_UTF8, 0, &l_in[0], l_length, NULL, 0 );
+		int l_size = MultiByteToWideChar( CP_UTF8, 0, &l_in[0], l_length, nullptr, 0 );
 
 		if ( l_size )
 		{
@@ -93,7 +93,7 @@ namespace CastorCom
 	\brief		Foncteur utilis� pour remplir un VARIANT � partir d'un castor::String
 	\remarks	A utiliser si vous avez besoin d'un SAFEARRAY de BSTR
 	*/
-	struct BStrValuesetter
+	struct BStrValueSetter
 	{
 		/**
 		 *\~english
@@ -109,10 +109,11 @@ namespace CastorCom
 		 *\param[out]	variant	Le VARIANT
 		 *\return		S_OK
 		 */
-		HRESULT operator()( const castor::String & value, VARIANT & variant )
+		HRESULT operator()( const castor::String & value
+			, VARIANT & variant )
 		{
 			variant.vt = VT_BSTR;
-			variant.bstrVal = ToBstr( value );
+			variant.bstrVal = toBstr( value );
 			return S_OK;
 		}
 	};
@@ -128,7 +129,7 @@ namespace CastorCom
 	\brief		Foncteur utilis� pour remplir un castor::String � partir d'un VARIANT
 	\remarks	A utiliser si vous avez besoin d'un SAFEARRAY de BSTR
 	*/
-	struct StrValuesetter
+	struct StrValueSetter
 	{
 		/**
 		 *\~english
@@ -144,23 +145,23 @@ namespace CastorCom
 		 *\param[out]	value	Le castor::String
 		 *\return		S_OK si �a amarch�
 		 */
-		HRESULT operator()( const VARIANT & variant, castor::String & value )
+		HRESULT operator()( const VARIANT & variant
+			, castor::String & value )
 		{
 			HRESULT hr = ( ( variant.vt | VT_BSTR ) == VT_BSTR ) ? S_OK : E_FAIL;
 
 			if ( hr == S_OK )
 			{
-				value = FromBstr( variant.bstrVal );
+				value = fromBstr( variant.bstrVal );
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,							// This represents the error
-						 LIBID_castor3d,					// This is the GUID of PixelComponents throwing error
-						 ERROR_WRONG_VARIANT_TYPE.c_str(),	// This is generally displayed as the title
-						 ERROR_EXPECTED_STRING.c_str(),		// This is the description
-						 0,									// This is the context in the help file
-						 NULL );
+				hr = CComError::dispatchError( E_FAIL	// This represents the error
+					, LIBID_Castor3D					// This is the GUID of PixelComponents throwing error
+					, ERROR_WRONG_VARIANT_TYPE.c_str()	// This is generally displayed as the title
+					, ERROR_EXPECTED_STRING.c_str()		// This is the description
+					, 0									// This is the context in the help file
+					, nullptr );
 			}
 
 			return hr;
@@ -181,7 +182,7 @@ namespace CastorCom
 	\arg		CastorType	Le type Castor
 	*/
 	template< typename ComType, typename CastorType >
-	struct Valuegetter
+	struct ValueGetter
 	{
 		/**
 		 *\~english
@@ -195,7 +196,9 @@ namespace CastorCom
 		 *\param[in]	value		La valeur
 		 *\param[in]	comSetter	La fonction utilis�e pour remplir la valeur ComType � partir de la valeur CastorType
 		 */
-		HRESULT operator()( VARIANT & variant, CastorType * value, HRESULT( * comsetter )( CastorType *, ComType * ) )
+		HRESULT operator()( VARIANT & variant
+			, CastorType * value
+			, HRESULT( * comsetter )( CastorType *, ComType * ) )
 		{
 			ComType * pValue = static_cast< ComType * >( ComType::CreateInstance() );
 			HRESULT hr = comsetter( value, pValue );
@@ -240,7 +243,9 @@ namespace CastorCom
 		 *\param[out]	value		La valeur
 		 *\param[in]	comsetter	La fonction utilis�e pour remplir la valeur CastorType � partir de la valeur ComType
 		 */
-		HRESULT operator()( const VARIANT & variant, CastorType * value, HRESULT( * comPutter )( ComType *, CastorType * ) )
+		HRESULT operator()( const VARIANT & variant
+			, CastorType * value
+			, HRESULT( * comPutter )( ComType *, CastorType * ) )
 		{
 			HRESULT hr = ( ( variant.vt & VT_DISPATCH ) == VT_DISPATCH ) ? S_OK : E_FAIL;
 
@@ -251,13 +256,12 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,							// This represents the error
-						 LIBID_castor3d,					// This is the GUID of PixelComponents throwing error
-						 ERROR_WRONG_VARIANT_TYPE.c_str(),	// This is generally displayed as the title
-						 ERROR_EXPECTED_DISPATCH.c_str(),	// This is the description
-						 0,									// This is the context in the help file
-						 NULL );
+				hr = CComError::dispatchError( E_FAIL	// This represents the error
+					, LIBID_Castor3D					// This is the GUID of PixelComponents throwing error
+					, ERROR_WRONG_VARIANT_TYPE.c_str()	// This is generally displayed as the title
+					, ERROR_EXPECTED_DISPATCH.c_str()	// This is the description
+					, 0									// This is the context in the help file
+					, nullptr );
 			}
 
 			return hr;
@@ -276,7 +280,7 @@ namespace CastorCom
 	\arg		CastorType	Le type Castor
 	*/
 	template< typename CastorType >
-	struct SafeArraygetter
+	struct SafeArrayGetter
 	{
 		/**
 		 *\~english
@@ -292,8 +296,10 @@ namespace CastorCom
 		 *\param[out]	pVal			Re�oit le SAFEARRAY
 		 *\param[in]	comValuesetter	La fonction utilis�e pour remplir un VARIANT � partir d'une valeur CastorType
 		 */
-		template< typename setterFunc >
-		HRESULT operator()( const std::vector< CastorType > & vals, VARIANT * pVal, setterFunc comValueSetter )
+		template< typename SetterFunc >
+		HRESULT operator()( std::vector< CastorType > const & vals
+			, VARIANT * pVal
+			, SetterFunc comValueSetter )
 		{
 			///@remarks We create the SAFEARRAY
 			CComSafeArray< VARIANT > array;
@@ -305,7 +311,7 @@ namespace CastorCom
 				for ( int i = 0; i < int( vals.size() ) && hr == S_OK; ++i )
 				{
 					VARIANT value;
-					VariantInit( &value );
+					::VariantInit( &value );
 					hr = comValuesetter( vals[i], value );
 
 					if ( hr == S_OK )
@@ -359,8 +365,11 @@ namespace CastorCom
 		 *\param[in]	caller		L'appelant (car ce foncteur est g�n�ralement appel� depuis une fonction membre de cette classe)
 		 *\param[in]	valuesetter	La fonction membre utilis�e pour d�finir le vector de valeurs CastorType
 		 */
-		template< typename PutterFunc, typename setterFunc >
-		HRESULT operator()( VARIANT val, PutterFunc valuePutter, CallerType * caller, setterFunc valueSetter )
+		template< typename PutterFunc, typename SetterFunc >
+		HRESULT operator()( VARIANT val
+			, PutterFunc valuePutter
+			, CallerType * caller
+			, SetterFunc valueSetter )
 		{
 			uint32_t type = VT_ARRAY | VT_VARIANT;
 			HRESULT hr = ( ( val.vt & type ) == type ) ? S_OK : E_FAIL;
@@ -393,13 +402,12 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
-						 ERROR_WRONG_VARIANT_TYPE.c_str(),		// This is generally displayed as the title
-						 ERROR_EXPECTED_VARIANT_ARRAY.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::dispatchError( E_FAIL		// This represents the error
+					, LIBID_Castor3D						// This is the GUID of PixelComponents throwing error
+					, ERROR_WRONG_VARIANT_TYPE.c_str()		// This is generally displayed as the title
+					, ERROR_EXPECTED_VARIANT_ARRAY.c_str()	// This is the description
+					, 0										// This is the context in the help file
+					, nullptr );
 			}
 
 			return hr;
@@ -421,7 +429,10 @@ namespace CastorCom
 		 *\param[in]	valuesetter	La fonction membre utilis�e pour d�finir le vector de valeurs CastorType
 		 */
 		template< typename PutterFunc >
-		HRESULT operator()( VARIANT val, PutterFunc valuePutter, CallerType * caller, void ( __thiscall CallerType::* valuesetter )( const std::vector< CastorType > & ) )
+		HRESULT operator()( VARIANT val
+			, PutterFunc valuePutter
+			, CallerType * caller
+			, void ( __thiscall CallerType::* valuesetter )( const std::vector< CastorType > & ) )
 		{
 			uint32_t type = VT_ARRAY | VT_VARIANT;
 			HRESULT hr = ( ( val.vt & type ) == type ) ? S_OK : E_FAIL;
@@ -454,13 +465,12 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
-						 ERROR_WRONG_VARIANT_TYPE.c_str(),		// This is generally displayed as the title
-						 ERROR_EXPECTED_VARIANT_ARRAY.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::dispatchError( E_FAIL		// This represents the error
+					, LIBID_Castor3D						// This is the GUID of PixelComponents throwing error
+					, ERROR_WRONG_VARIANT_TYPE.c_str()		// This is generally displayed as the title
+					, ERROR_EXPECTED_VARIANT_ARRAY.c_str()	// This is the description
+					, 0										// This is the context in the help file
+					, nullptr );
 			}
 
 			return hr;

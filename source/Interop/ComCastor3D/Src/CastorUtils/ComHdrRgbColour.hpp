@@ -1,6 +1,6 @@
 /* See LICENSE file in root folder */
-#ifndef __COMC3D_COM_HDRCOLOUR_H__
-#define __COMC3D_COM_HDRCOLOUR_H__
+#ifndef __COMC3D_COM_HDRRGBCOLOUR_H__
+#define __COMC3D_COM_HDRRGBCOLOUR_H__
 
 #include "ComAtlObject.hpp"
 
@@ -17,9 +17,9 @@ namespace CastorCom
 	\~french
 	\brief		Cette classe définit un HdrColour accessible depuis COM
 	*/
-	class ATL_NO_VTABLE CHdrColour
-		: COM_ATL_OBJECT( HdrColour )
-		, public castor::HdrColour
+	class ATL_NO_VTABLE CHdrRgbColour
+		: COM_ATL_OBJECT( HdrRgbColour )
+		, public castor::HdrRgbColour
 	{
 	public:
 		/**
@@ -28,42 +28,41 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		CHdrColour();
+		CHdrRgbColour();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~CHdrColour();
+		virtual ~CHdrRgbColour();
 		/**
 		*\~english
 		*\brief		Implicit conversion operator, to castor::Point4f.
 		*\~french
 		*\brief		Opérateur de conversion implicite vers castor::Point4f.
 		*/
-		inline operator castor::Point4f()const
+		inline operator castor::Point3f()const
 		{
-			return toBGRAFloat( *this );
+			return toBGRFloat( *this );
 		}
 
-		COM_PROPERTY( R, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eRed ), make_putter( this, &castor::HdrColour::get, castor::Component::eRed ) );
-		COM_PROPERTY( G, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eGreen ), make_putter( this, &castor::HdrColour::get, castor::Component::eGreen ) );
-		COM_PROPERTY( B, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eBlue ), make_putter( this, &castor::HdrColour::get, castor::Component::eBlue ) );
-		COM_PROPERTY( A, FLOAT, make_getter( this, &castor::HdrColour::get, castor::Component::eAlpha ), make_putter( this, &castor::HdrColour::get, castor::Component::eAlpha ) );
+		COM_PROPERTY( R, FLOAT, makeGetter( this, &castor::HdrRgbColour::get, castor::RgbComponent::eRed ), makePutter( this, &castor::HdrRgbColour::get, castor::RgbComponent::eRed ) );
+		COM_PROPERTY( G, FLOAT, makeGetter( this, &castor::HdrRgbColour::get, castor::RgbComponent::eGreen ), makePutter( this, &castor::HdrRgbColour::get, castor::RgbComponent::eGreen ) );
+		COM_PROPERTY( B, FLOAT, makeGetter( this, &castor::HdrRgbColour::get, castor::RgbComponent::eBlue ), makePutter( this, &castor::HdrRgbColour::get, castor::RgbComponent::eBlue ) );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( HdrColour ), CHdrColour );
+	OBJECT_ENTRY_AUTO( __uuidof( HdrRgbColour ), CHdrRgbColour );
 
-	DECLARE_VARIABLE_REF_GETTER( HdrColour, castor, HdrColour );
-	DECLARE_VARIABLE_REF_PUTTER( HdrColour, castor, HdrColour );
+	DECLARE_VARIABLE_REF_GETTER( HdrRgbColour, castor, HdrRgbColour );
+	DECLARE_VARIABLE_REF_PUTTER( HdrRgbColour, castor, HdrRgbColour );
 /*
 	template< typename Class >
-	struct VariableRefgetter< Class, castor::Point4f >
+	struct VariableRefGetter< Class, castor::Point4f >
 	{
 		typedef castor::Point4f Value;
 		typedef Value const & ( Class::*Function )( )const;
-		VariableRefgetter( Class * instance, Function function )
+		VariableRefGetter( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
 		{
@@ -87,7 +86,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, IID_IHdrColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL, IID_IHdrColour, cuT( "nullptr instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, nullptr );
 			}
 
 			return hr;
@@ -121,7 +120,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, IID_IHdrColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL, IID_IHdrColour, cuT( "nullptr instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, nullptr );
 			}
 
 			return hr;

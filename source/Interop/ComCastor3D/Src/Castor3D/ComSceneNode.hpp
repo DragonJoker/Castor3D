@@ -3,7 +3,7 @@
 #define __COMC3D_COM_SCENE_NODE_H__
 
 #include "ComTextureLayout.hpp"
-#include "ComColour.hpp"
+#include "ComRgbColour.hpp"
 #include "ComVector3D.hpp"
 #include "ComQuaternion.hpp"
 
@@ -30,17 +30,17 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					m_instance->getScene()->getEngine()->postEvent( castor3d::MakeFunctorEvent( castor3d::EventType::ePreRender
+					m_instance->getScene()->getEngine()->postEvent( castor3d::makeFunctorEvent( castor3d::EventType::ePreRender
 						, [this, value]
 						{
-							( m_instance->*m_function )( parameter_cast< Value >( value ) );
+							( m_instance->*m_function )( parameterCast< Value >( value ) );
 						} ) );
 					hr = S_OK;
 				}
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "nullptr instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, nullptr );
 			}
 
 			return hr;
@@ -89,13 +89,13 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_EVT_PROPERTY( Position, IVector3D *, make_getter( m_internal.get(), &castor3d::SceneNode::getPosition ), make_putter_evt( m_internal.get(), &castor3d::SceneNode::setPosition ) );
-		COM_EVT_PROPERTY( Orientation, IQuaternion *, make_getter( m_internal.get(), &castor3d::SceneNode::getOrientation ), make_putter_evt( m_internal.get(), &castor3d::SceneNode::setOrientation ) );
-		COM_EVT_PROPERTY( Scaling, IVector3D *, make_getter( m_internal.get(), &castor3d::SceneNode::getScale ), make_putter_evt( m_internal.get(), &castor3d::SceneNode::setScale ) );
+		COM_EVT_PROPERTY( Position, IVector3D *, makeGetter( m_internal.get(), &castor3d::SceneNode::getPosition ), makePutterEvt( m_internal.get(), &castor3d::SceneNode::setPosition ) );
+		COM_EVT_PROPERTY( Orientation, IQuaternion *, makeGetter( m_internal.get(), &castor3d::SceneNode::getOrientation ), makePutterEvt( m_internal.get(), &castor3d::SceneNode::setOrientation ) );
+		COM_EVT_PROPERTY( Scaling, IVector3D *, makeGetter( m_internal.get(), &castor3d::SceneNode::getScale ), makePutterEvt( m_internal.get(), &castor3d::SceneNode::setScale ) );
 
-		STDMETHOD( attachObject )( /* [in] */ IMovableObject * val );
-		STDMETHOD( detachObject )( /* [in] */ IMovableObject * val );
-		STDMETHOD( attachTo )( /* [in] */ ISceneNode * val );
+		STDMETHOD( AttachObject )( /* [in] */ IMovableObject * val );
+		STDMETHOD( DetachObject )( /* [in] */ IMovableObject * val );
+		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();
 		STDMETHOD( Yaw )( /* [in] */ IAngle * val );
 		STDMETHOD( Pitch )( /* [in] */ IAngle * val );

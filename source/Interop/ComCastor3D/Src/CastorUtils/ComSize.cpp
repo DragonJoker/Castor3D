@@ -11,7 +11,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CSize::set( /* [in] */ UINT x, /* [in] */ UINT y )
+	STDMETHODIMP CSize::Set( /* [in] */ UINT x, /* [in] */ UINT y )
 	{
 		this->set( x, y );
 		return S_OK;

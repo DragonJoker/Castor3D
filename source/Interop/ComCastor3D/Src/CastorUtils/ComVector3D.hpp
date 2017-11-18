@@ -39,13 +39,13 @@ namespace CastorCom
 		 */
 		virtual ~CVector3D();
 
-		COM_PROPERTY( X, FLOAT, make_getter( this, &castor::Point3r::operator[], 0 ), make_putter( this, &castor::Point3r::operator[], 0 ) );
-		COM_PROPERTY( Y, FLOAT, make_getter( this, &castor::Point3r::operator[], 1 ), make_putter( this, &castor::Point3r::operator[], 1 ) );
-		COM_PROPERTY( Z, FLOAT, make_getter( this, &castor::Point3r::operator[], 2 ), make_putter( this, &castor::Point3r::operator[], 2 ) );
+		COM_PROPERTY( X, FLOAT, makeGetter( this, &castor::Point3r::operator[], 0 ), makePutter( this, &castor::Point3r::operator[], 0 ) );
+		COM_PROPERTY( Y, FLOAT, makeGetter( this, &castor::Point3r::operator[], 1 ), makePutter( this, &castor::Point3r::operator[], 1 ) );
+		COM_PROPERTY( Z, FLOAT, makeGetter( this, &castor::Point3r::operator[], 2 ), makePutter( this, &castor::Point3r::operator[], 2 ) );
 
 		STDMETHOD( Negate )();
 		STDMETHOD( Normalise )();
-		STDMETHOD( dot )( IVector3D * pVal, FLOAT * pRet );
+		STDMETHOD( Dot )( IVector3D * pVal, FLOAT * pRet );
 		STDMETHOD( Cross )( /* [in] */ IVector3D * val, /* [out,retval] */ IVector3D ** pRet );
 		STDMETHOD( Length )( /* [out,retval] */ FLOAT * pVal );
 	};

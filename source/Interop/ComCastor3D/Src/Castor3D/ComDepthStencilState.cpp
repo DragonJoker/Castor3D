@@ -13,7 +13,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CDepthStencilState::setDepthRange( /* [in] */ double dnear, /* [in] */ double dfar )
+	STDMETHODIMP CDepthStencilState::SetDepthRange( /* [in] */ double dnear, /* [in] */ double dfar )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -24,13 +24,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,							// This represents the error
 					 IID_IDepthStencilState,			// This is the GUID of PixelComponents throwing error
-					 cuT( "setDepthRange" ),			// This is generally displayed as the title
+					 cuT( "SetDepthRange" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED_STATE.c_str(),	// This is the description
 					 0,									// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

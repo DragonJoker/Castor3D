@@ -11,7 +11,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CRect::set( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom )
+	STDMETHODIMP CRect::Set( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom )
 	{
 		this->set( left, top, right, bottom );
 		return S_OK;

@@ -38,10 +38,10 @@ namespace CastorCom
 		 */
 		virtual ~CSize();
 
-		COM_PROPERTY( Width, UINT, make_getter( this, &castor::Size::getWidth ), make_putter( this, &castor::Size::getWidth ) );
-		COM_PROPERTY( Height, UINT, make_getter( this, &castor::Size::getHeight ), make_putter( this, &castor::Size::getHeight ) );
+		COM_PROPERTY( Width, UINT, makeGetter( this, &castor::Size::getWidth ), makePutter( this, &castor::Size::getWidth ) );
+		COM_PROPERTY( Height, UINT, makeGetter( this, &castor::Size::getHeight ), makePutter( this, &castor::Size::getHeight ) );
 
-		STDMETHOD( set )( /* [in] */ UINT x, /* [in] */ UINT y );
+		STDMETHOD( Set )( /* [in] */ UINT x, /* [in] */ UINT y );
 		STDMETHOD( Grow )( /* [in] */ INT x, /* [in] */ INT y );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

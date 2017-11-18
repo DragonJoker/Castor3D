@@ -46,13 +46,13 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
-		STDMETHOD( get_File )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [out, retval] */ BSTR * pVal );
-		STDMETHOD( put_File )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [in] */ BSTR val );
-		STDMETHOD( get_Source )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [out, retval] */ BSTR * pVal );
-		STDMETHOD( put_Source )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [in] */ BSTR val );
+		STDMETHOD( get_File )( /* [in] */ eSHADER_TYPE target, /* [out, retval] */ BSTR * pVal );
+		STDMETHOD( put_File )( /* [in] */ eSHADER_TYPE target, /* [in] */ BSTR val );
+		STDMETHOD( get_Source )( /* [in] */ eSHADER_TYPE target, /* [out, retval] */ BSTR * pVal );
+		STDMETHOD( put_Source )( /* [in] */ eSHADER_TYPE target, /* [in] */ BSTR val );
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
-		STDMETHOD( createObject )( /* [in] */ eSHADER_TYPE val );
+		STDMETHOD( CreateObject )( /* [in] */ eSHADER_TYPE val );
 
 	private:
 		castor3d::ShaderProgramSPtr m_internal;

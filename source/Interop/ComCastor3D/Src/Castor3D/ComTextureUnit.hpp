@@ -3,7 +3,7 @@
 #define __COMC3D_COM_TEXTURE_UNIT_H__
 
 #include "ComTextureLayout.hpp"
-#include "ComColour.hpp"
+#include "ComRgbaColour.hpp"
 
 #include <Texture/TextureUnit.hpp>
 
@@ -47,19 +47,11 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Texture, ITextureLayout *, make_getter( m_internal.get(), &castor3d::TextureUnit::getTexture ), make_putter( m_internal.get(), &castor3d::TextureUnit::setTexture ) );
-		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &castor3d::TextureUnit::getSampler ), make_putter( m_internal.get(), &castor3d::TextureUnit::setSampler ) );
-		COM_PROPERTY( AlphaFunc, eCOMPARISON_FUNC, make_getter( m_internal.get(), &castor3d::TextureUnit::getAlphaFunc ), make_putter( m_internal.get(), &castor3d::TextureUnit::setAlphaFunc ) );
-		COM_PROPERTY( AlphaValue, float, make_getter( m_internal.get(), &castor3d::TextureUnit::getAlphaValue ), make_putter( m_internal.get(), &castor3d::TextureUnit::setAlphaValue ) );
-		COM_PROPERTY( AlpFunction, eALPHA_BLEND_FUNC, make_getter( m_internal.get(), &castor3d::TextureUnit::getAlpFunction ), make_putter( m_internal.get(), &castor3d::TextureUnit::setAlpFunction ) );
-		COM_PROPERTY( RgbFunction, eRGB_BLEND_FUNC, make_getter( m_internal.get(), &castor3d::TextureUnit::getRgbFunction ), make_putter( m_internal.get(), &castor3d::TextureUnit::setRgbFunction ) );
-		COM_PROPERTY( Channel, eTEXTURE_CHANNEL, make_getter( m_internal.get(), &castor3d::TextureUnit::getChannel ), make_putter( m_internal.get(), &castor3d::TextureUnit::setChannel ) );
-		COM_PROPERTY( BlendColour, IColour *, make_getter( m_internal.get(), &castor3d::TextureUnit::getBlendColour ), make_putter( m_internal.get(), &castor3d::TextureUnit::setBlendColour ) );
+		COM_PROPERTY( Texture, ITextureLayout *, makeGetter( m_internal.get(), &castor3d::TextureUnit::getTexture ), makePutter( m_internal.get(), &castor3d::TextureUnit::setTexture ) );
+		COM_PROPERTY( Sampler, ISampler *, makeGetter( m_internal.get(), &castor3d::TextureUnit::getSampler ), makePutter( m_internal.get(), &castor3d::TextureUnit::setSampler ) );
+		COM_PROPERTY( Channel, eTEXTURE_CHANNEL, makeGetter( m_internal.get(), &castor3d::TextureUnit::getChannel ), makePutter( m_internal.get(), &castor3d::TextureUnit::setChannel ) );
 
-		COM_PROPERTY_INDEXED( AlpArgument, unsigned int, eBLEND_SOURCE, make_indexed_getter( m_internal.get(), &castor3d::TextureUnit::getAlpArgument ), make_indexed_putter( m_internal.get(), &castor3d::TextureUnit::setAlpArgument ) );
-		COM_PROPERTY_INDEXED( RgbArgument, unsigned int, eBLEND_SOURCE, make_indexed_getter( m_internal.get(), &castor3d::TextureUnit::getRgbArgument ), make_indexed_putter( m_internal.get(), &castor3d::TextureUnit::setRgbArgument ) );
-
-		STDMETHOD( loadTexture )( /* [in] */ BSTR path );
+		STDMETHOD( LoadTexture )( /* [in] */ BSTR path );
 
 	private:
 		castor3d::TextureUnitSPtr m_internal;

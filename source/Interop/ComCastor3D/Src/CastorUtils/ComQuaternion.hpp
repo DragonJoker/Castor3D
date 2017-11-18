@@ -40,14 +40,14 @@ namespace CastorCom
 		virtual ~CQuaternion();
 
 		typedef VariablePutter< castor::Quaternion, castor::Matrix4x4r const & > MtxPutter;
-		COM_PROPERTY( RotationMatrix, IMatrix4x4 *, make_getter( this, &castor::Quaternion::toMatrix ), MtxPutter( this, &castor::Quaternion::fromMatrix ) );
+		COM_PROPERTY_GET( RotationMatrix, IMatrix4x4 *, makeGetter( this, &castor::Quaternion::toMatrix ) );
 
 		STDMETHOD( Transform )( /* [in] */ IVector3D * val, /* [out, retval] */ IVector3D ** pVal );
 		STDMETHOD( ToAxisAngle )( /* [out] */ IVector3D ** pAxis, /* [out] */ IAngle ** pAngle );
 		STDMETHOD( FromAxisAngle )( /* [in] */ IVector3D * axis, /* [in] */ IAngle * angle );
 		STDMETHOD( ToAxes )( /* [out] */ IVector3D ** pX, /* [out] */ IVector3D ** pY, /* [out] */ IVector3D ** pZ );
 		STDMETHOD( FromAxes )( /* [in] */ IVector3D * x, /* [in] */ IVector3D * y, /* [in] */ IVector3D * z );
-		STDMETHOD( getMagnitude )( /* [out, retval] */ float * pVal );
+		STDMETHOD( GetMagnitude )( /* [out, retval] */ float * pVal );
 		STDMETHOD( Conjugate )();
 		STDMETHOD( Slerp )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat );
 		STDMETHOD( Mix )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat );

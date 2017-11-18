@@ -2,13 +2,13 @@
 #ifndef __COMC3D_COM_MULTISAMPLE_STATE_H__
 #define __COMC3D_COM_MULTISAMPLE_STATE_H__
 
-#include "ComColour.hpp"
+#include "ComAtlObject.hpp"
 
 #include <State/MultisampleState.hpp>
 
 namespace CastorCom
 {
-	DECLARE_INDEXED_VAL_PUTTER_EVT( Castor3D, MultisampleState );
+	DECLARE_INDEXED_VAL_PUTTER_EVT( castor3d, MultisampleState );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -47,9 +47,9 @@ namespace CastorCom
 			m_state = state;
 		}
 		
-		COM_PROPERTY( Multisample, boolean, make_getter( m_state.get(), &castor3d::MultisampleState::getMultisample ), make_putter( m_state.get(), &castor3d::MultisampleState::setMultisample ) );
-		COM_EVT_PROPERTY( AlphaToCoverageEnabled, boolean, make_getter( m_state.get(), &castor3d::MultisampleState::isAlphaToCoverageEnabled ), make_putter( m_state.get(), &castor3d::MultisampleState::enableAlphaToCoverage ) );
-		COM_EVT_PROPERTY( SampleCoverageMask, unsigned int, make_getter( m_state.get(), &castor3d::MultisampleState::getSampleCoverageMask ), make_putter( m_state.get(), &castor3d::MultisampleState::setSampleCoverageMask ) );
+		COM_PROPERTY( Multisample, boolean, makeGetter( m_state.get(), &castor3d::MultisampleState::getMultisample ), makePutter( m_state.get(), &castor3d::MultisampleState::setMultisample ) );
+		COM_EVT_PROPERTY( AlphaToCoverageEnabled, boolean, makeGetter( m_state.get(), &castor3d::MultisampleState::isAlphaToCoverageEnabled ), makePutter( m_state.get(), &castor3d::MultisampleState::enableAlphaToCoverage ) );
+		COM_EVT_PROPERTY( SampleCoverageMask, unsigned int, makeGetter( m_state.get(), &castor3d::MultisampleState::getSampleCoverageMask ), makePutter( m_state.get(), &castor3d::MultisampleState::setSampleCoverageMask ) );
 
 	private:
 		castor3d::MultisampleStateSPtr m_state;
