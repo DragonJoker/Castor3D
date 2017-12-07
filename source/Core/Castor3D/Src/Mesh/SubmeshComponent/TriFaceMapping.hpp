@@ -26,14 +26,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_mesh	The parent mesh.
-		 *\param[in]	p_scene	The scene.
-		 *\param[in]	p_id	The submesh ID.
+		 *\param[in]	submesh	The parent submesh.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_mesh	Le mesh parent.
-		 *\param[in]	p_scene	La scène.
-		 *\param[in]	p_id	L'ID du sous-maillage.
+		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
 		C3D_API explicit TriFaceMapping( Submesh & submesh );
 		/**
@@ -45,9 +41,9 @@ namespace castor3d
 		C3D_API ~TriFaceMapping();
 		/**
 		 *\~english
-		 *\brief		Clears this submesh's face array
+		 *\brief		Clears this submesh's face array.
 		 *\~french
-		 *\brief		Vide le tableau de faces
+		 *\brief		Vide le tableau de faces.
 		 */
 		C3D_API void clearFaces();
 		/**
@@ -102,70 +98,60 @@ namespace castor3d
 			, castor::Point3r const & maxUV = castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
-		 *\brief		Creates faces from the points
-		 *\remarks		This function assumes the points are sorted like triangles fan
+		 *\brief		Creates faces from the points.
+		 *\remarks		This function assumes the points are sorted like triangles fan.
 		 *\~french
-		 *\brief		Crée les faces à partir des points
-		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan
+		 *\brief		Crée les faces à partir des points.
+		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan.
 		 */
 		C3D_API void computeFacesFromPolygonVertex();
 		/**
 		 *\~english
-		 *\brief		Generates normals and tangents
+		 *\brief		Computes normal and tangent for each vertex of the given face.
+		 *\param[in]	face	The face.
 		 *\~french
-		 *\brief		Génère les normales et les tangentes
-		 */
-		C3D_API void computeNormals( bool reverted = false )override;
-		/**
-		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face
-		 *\param[in]	face	The face
-		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
-		 *\param[in]	face	La face
+		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
+		 *\param[in]	face	La face.
 		 */
 		C3D_API void computeNormals( Face const & face );
 		/**
 		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face
-		 *\param[in]	face	The face
+		 *\brief		Computes tangent for each vertex of the given face.
+		 *\param[in]	face	The face.
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
-		 *\param[in]	face	La face
+		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
+		 *\param[in]	face	La face.
 		 */
 		C3D_API void computeTangents( Face const & face );
 		/**
 		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remarks		This function supposes the normals are defined
+		 *\brief		Computes tangent for each vertex of the submesh.
+		 *\remarks		This function supposes the normals are defined.
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
-		 *\remarks		Cette fonction suppose que les normales sont définies
+		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
+		 *\remarks		Cette fonction suppose que les normales sont définies.
 		 */
 		C3D_API void computeTangentsFromNormals();
 		/**
 		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remarks		This function supposes bitangents and normals are defined
+		 *\brief		Computes tangent for each vertex of the submesh.
+		 *\remarks		This function supposes bitangents and normals are defined.
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
-		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies
+		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
+		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies.
 		 */
 		C3D_API void computeTangentsFromBitangents();
 		/**
 		 *\~english
-		 *\brief		Computes bitangent for each vertex of the submesh
-		 *\remarks		This function supposes the tangents and normals are defined
+		 *\brief		Computes bitangent for each vertex of the submesh.
+		 *\remarks		This function supposes the tangents and normals are defined.
 		 *\~french
-		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage
-		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies
+		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage.
+		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies.
 		 */
 		C3D_API void computeBitangents();
 		/**
-		 *\~english
-		 *\return		The faces count.
-		 *\~french
-		 *\return		Le nombre de faces.
+		 *\copydoc		castor3d::IndexMapping::getCount
 		 */
 		C3D_API uint32_t getCount()const override;
 		/**
@@ -173,12 +159,16 @@ namespace castor3d
 		 */
 		C3D_API void sortByDistance( castor::Point3r const & cameraPosition )override;
 		/**
+		 *\copydoc		castor3d::IndexMapping::computeNormals
+		 */
+		C3D_API void computeNormals( bool reverted = false )override;
+		/**
 		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	faces	The faces
+		 *\brief		Creates and adds faces to the submesh.
+		 *\param[in]	faces	The faces.
 		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	faces	Les faces
+		 *\brief		Crée et ajoute une face au sous-maillage.
+		 *\param[in]	faces	Les faces.
 		 */
 		inline void addFaceGroup( std::vector< FaceIndices > const & faces )
 		{
@@ -186,11 +176,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	faces	The faces
+		 *\brief		Creates and adds faces to the submesh.
+		 *\param[in]	faces	The faces.
 		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	faces	Les faces
+		 *\brief		Crée et ajoute une face au sous-maillage.
+		 *\param[in]	faces	Les faces.
 		 */
 		template< size_t Count >
 		inline void addFaceGroup( std::array< FaceIndices, Count > const & faces )
@@ -199,11 +189,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	faces	The faces
+		 *\brief		Creates and adds faces to the submesh.
+		 *\param[in]	faces	The faces.
 		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	faces	Les faces
+		 *\brief		Crée et ajoute une face au sous-maillage.
+		 *\param[in]	faces	Les faces.
 		 */
 		template< uint32_t Count >
 		void addFaceGroup( FaceIndices( &faces )[Count] )
@@ -212,13 +202,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the face at given index
-		 *\param[in]	index	The index
-		 *\return		The value
+		 *\brief		Retrieves the face at given index.
+		 *\param[in]	index	The index.
+		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère la face à l'index donné
-		 *\param[in]	index	L'index
-		 *\return		La valeur
+		 *\brief		Récupère la face à l'index donné.
+		 *\param[in]	index	L'index.
+		 *\return		La valeur.
 		 */
 		inline Face const & operator[]( uint32_t index )const
 		{

@@ -29,11 +29,11 @@ namespace castor3d
 	{
 	}
 
-	void OverlayUbo::setPosition( castor::Point2d const & p_position
+	void OverlayUbo::setPosition( castor::Point2d const & position
 		, castor::Size const & renderSize
 		, castor::Point2f const & renderRatio )
 	{
-		m_position.setValue( Point2f{ p_position[0], p_position[1] } );
+		m_position.setValue( Point2f{ position[0], position[1] } );
 		m_size.setValue( Point2i{ renderSize[0], renderSize[1] } );
 		m_ratio.setValue( renderRatio );
 	}

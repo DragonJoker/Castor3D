@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BonesInstantiationComponent_H___
@@ -24,10 +24,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	submesh	The parent submesh.
+		 *\param[in]	submesh			The parent submesh.
+		 *\param[in]	instantiation	The instantiation component.
+		 *\param[in]	bones			The bones component.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	submesh	Le sous-maillage parent.
+		 *\param[in]	submesh			Le sous-maillage parent.
+		 *\param[in]	instantiation	Le composant d'instanciation.
+		 *\param[in]	bones			Le composant de bones.
 		 */
 		C3D_API BonesInstantiationComponent( Submesh & submesh
 			, InstantiationComponent const & instantiation

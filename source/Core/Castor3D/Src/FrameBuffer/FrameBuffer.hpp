@@ -370,18 +370,18 @@ namespace castor3d
 		 *\brief		Creates an attachment to a cube texture's face's mipmap.
 		 *\param[in]	texture		The texture.
 		 *\param[in]	face		The face.
-		 *\param[in]	p_mipLevel	The mipmap level.
+		 *\param[in]	mipLevel	The mipmap level.
 		 *\return		The created attachment
 		 *\~french
 		 *\brief		Crée une attache à un mipmap d'une face d'une texture cube.
 		 *\param[in]	texture		La texture.
 		 *\param[in]	face		La face.
-		 *\param[in]	p_mipLevel	Le niveau du mipmap.
+		 *\param[in]	mipLevel	Le niveau du mipmap.
 		 *\return		L'attache créée
 		 */
 		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture
 			, CubeMapFace face
-			, uint32_t p_mipLevel )const = 0;
+			, uint32_t mipLevel )const = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if the FBO is complete

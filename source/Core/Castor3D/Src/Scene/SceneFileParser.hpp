@@ -200,7 +200,7 @@ namespace castor3d
 		 *\param[in]	path	The file access path.
 		 *\return		\p false if any problem occured.
 		 *\~english
-		 *\french		Analyse le fichier donné (s'attend à recevoir un fichier CSCN).
+		 *\brief		Analyse le fichier donné (s'attend à recevoir un fichier CSCN).
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 *\return		\p false si un problème est survenu.
 		 */
@@ -212,7 +212,7 @@ namespace castor3d
 		 *\param[in]	context	The context.
 		 *\return		\p false if any problem occured.
 		 *\~english
-		 *\french		Analyse le fichier donné (s'attend à recevoir un fichier CSCN), en utilisant un contexte externe.
+		 *\brief		Analyse le fichier donné (s'attend à recevoir un fichier CSCN), en utilisant un contexte externe.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 *\param[in]	context	Le contexte.
 		 *\return		\p false si un problème est survenu.

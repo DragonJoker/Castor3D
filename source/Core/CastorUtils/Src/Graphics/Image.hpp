@@ -46,14 +46,14 @@ namespace castor
 			/**
 			 *\~english
 			 *\brief			Loads an image from a binary file
-			 *\param[in,out]	p_image	The image name
-			 *\param[in]		p_path	The path of the file from which to load the image
+			 *\param[in,out]	image	The image name
+			 *\param[in]		path	The path of the file from which to load the image
 			 *\~french
 			 *\brief			Charge une image à partir d'un fichier binaire
-			 *\param[in,out]	p_image	Le nom de l'image
-			 *\param[in]		p_path	Le chemin du fichier contenant l'image
+			 *\param[in,out]	image	Le nom de l'image
+			 *\param[in]		path	Le chemin du fichier contenant l'image
 			 */
-			CU_API virtual bool operator()( Image & p_image, Path const & p_path );
+			CU_API virtual bool operator()( Image & image, Path const & path );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -77,14 +77,14 @@ namespace castor
 			/**
 			 *\~english
 			 *\brief			Writes an image into a binary file
-			 *\param[in,out]	p_image	The image name
-			 *\param[in]		p_path	The path of the file into which we write the image
+			 *\param[in,out]	image	The image name
+			 *\param[in]		path	The path of the file into which we write the image
 			 *\~french
 			 *\brief			Ecrit une image dans un fichier binaire
-			 *\param[in,out]	p_image	Le nom de l'image
-			 *\param[in]		p_path	Le chemin du fichier recevant l'image
+			 *\param[in,out]	image	Le nom de l'image
+			 *\param[in]		path	Le chemin du fichier recevant l'image
 			 */
-			CU_API virtual bool operator()( Image const & p_image, Path const & p_path );
+			CU_API virtual bool operator()( Image const & image, Path const & path );
 		};
 
 	private:
@@ -97,120 +97,132 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
-		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_size		The wanted image dimensions
-		 *\param[in]	p_format	The wanted image pixel format
-		 *\param[in]	p_buffer		A buffer containing pixels
-		 *\param[in]	p_eBufferFormat	The buffer pixel format
+		 *\param[in]	name			The resource name
+		 *\param[in]	size			The wanted image dimensions
+		 *\param[in]	format			The wanted image pixel format
+		 *\param[in]	buffer			A buffer containing pixels
+		 *\param[in]	bufferFormat	The buffer pixel format
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés
-		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_size		Les dimensions voulues pour l'image
-		 *\param[in]	p_format	Le format de pixel voulu pour l'image
-		 *\param[in]	p_buffer		Un buffer de pixels
-		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
+		 *\param[in]	name			Le nom de ressource
+		 *\param[in]	size			Les dimensions voulues pour l'image
+		 *\param[in]	format			Le format de pixel voulu pour l'image
+		 *\param[in]	buffer			Un buffer de pixels
+		 *\param[in]	bufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_size, PixelFormat p_format, ByteArray const & p_buffer, PixelFormat p_eBufferFormat );
+		CU_API Image( String const & name
+			, Size const & size
+			, PixelFormat format
+			, ByteArray const & buffer
+			, PixelFormat bufferFormat );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
-		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_size		The wanted image dimensions
-		 *\param[in]	p_format	The wanted image pixel format
-		 *\param[in]	p_buffer		A buffer containing pixels
-		 *\param[in]	p_eBufferFormat	The buffer pixel format
+		 *\param[in]	name			The resource name
+		 *\param[in]	size			The wanted image dimensions
+		 *\param[in]	format			The wanted image pixel format
+		 *\param[in]	buffer			A buffer containing pixels
+		 *\param[in]	bufferFormat	The buffer pixel format
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés
-		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_size		Les dimensions voulues pour l'image
-		 *\param[in]	p_format	Le format de pixel voulu pour l'image
-		 *\param[in]	p_buffer		Un buffer de pixels
-		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
+		 *\param[in]	name			Le nom de ressource
+		 *\param[in]	size			Les dimensions voulues pour l'image
+		 *\param[in]	format			Le format de pixel voulu pour l'image
+		 *\param[in]	buffer			Un buffer de pixels
+		 *\param[in]	bufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_size, PixelFormat p_format = PixelFormat::eA8R8G8B8, uint8_t const * p_buffer = nullptr, PixelFormat p_eBufferFormat = PixelFormat::eA8R8G8B8 );
+		CU_API Image( String const & name
+			, Size const & size
+			, PixelFormat format = PixelFormat::eA8R8G8B8
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eA8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
-		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_buffer		A buffer containing pixels
+		 *\param[in]	name		The resource name
+		 *\param[in]	buffer		A buffer containing pixels
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés
-		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_buffer		Un buffer de pixels
+		 *\param[in]	name		Le nom de ressource
+		 *\param[in]	buffer		Un buffer de pixels
 		 */
-		CU_API Image( String const & p_name, PxBufferBase const & p_buffer );
+		CU_API Image( String const & name
+			, PxBufferBase const & buffer );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
 		 *\remarks		The wanted pixel format and buffer pixel format are the template params
-		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_size		The wanted image dimensions
-		 *\param[in]	p_buffer		A buffer containing pixels
+		 *\param[in]	name		The resource name
+		 *\param[in]	size		The wanted image dimensions
+		 *\param[in]	buffer		A buffer containing pixels
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés
 		 *\remarks		Le format voulu ainsi que le format du buffer sont les arguments template
-		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_size		Les dimensions voulues pour l'image
-		 *\param[in]	p_buffer		Un buffer de pixels
+		 *\param[in]	name		Le nom de ressource
+		 *\param[in]	size		Les dimensions voulues pour l'image
+		 *\param[in]	buffer		Un buffer de pixels
 		 */
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		Image( String const & p_name, Size const & p_size, uint8_t const * p_buffer = nullptr )
-			: Resource< Image > ( p_name )
-			, m_buffer( std::make_shared< PxBuffer< PFDst > >( p_size, p_buffer, PFSrc ) )
+		Image( String const & name
+			, Size const & size
+			, uint8_t const * buffer = nullptr )
+			: Resource< Image > ( name )
+			, m_buffer( std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) )
 		{
 			CHECK_INVARIANTS();
 		}
 		/**
 		 *\~english
 		 *\brief		Creates the image from a file
-		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_pathFile		The file path
+		 *\param[in]	name		The resource name
+		 *\param[in]	pathFile	The file path
 		 *\~french
 		 *\brief		Crée l'image à partir d'un fichier
-		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_pathFile		Le chemin du fichier
+		 *\param[in]	name		Le nom de ressource
+		 *\param[in]	pathFile	Le chemin du fichier
 		 */
-		CU_API Image( String const & p_name, Path const & p_pathFile );
+		CU_API Image( String const & name
+			, Path const & pathFile );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_image	The Image object to copy
+		 *\param[in]	image	The Image object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_image	L'objet Image à copier
+		 *\param[in]	image	L'objet Image à copier
 		 */
-		CU_API Image( Image const & p_image );
+		CU_API Image( Image const & image );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
-		 *\param[in]	p_image	The Image object to move
+		 *\param[in]	image	The Image object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_image	L'objet Image à déplacer
+		 *\param[in]	image	L'objet Image à déplacer
 		 */
-		CU_API Image( Image && p_image );
+		CU_API Image( Image && image );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_image	The Image object to copy
+		 *\param[in]	image	The Image object to copy
 		 *\return		A reference to this Image object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_image	L'objet Image à copier
+		 *\param[in]	image	L'objet Image à copier
 		 *\return		Une référence sur cet objet Image
 		 */
-		CU_API Image & operator=( Image const & p_image );
+		CU_API Image & operator=( Image const & image );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_image	The Image object to move
+		 *\param[in]	image	The Image object to move
 		 *\return		A reference to this Image object
 		 *\~french
 		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	p_image	L'objet Image à déplacer
+		 *\param[in]	image	L'objet Image à déplacer
 		 *\return		Une référence sur cet objet Image
 		 */
-		CU_API Image & operator=( Image && p_image );
+		CU_API Image & operator=( Image && image );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -221,94 +233,104 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Resizes the image to the given resolution
-		 *\param[in]	p_size	The new resolution
+		 *\param[in]	size	The new resolution
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Redimensionne l'image à la résolution donnée
-		 *\param[in]	p_size	La nouvelle résolution
+		 *\param[in]	size	La nouvelle résolution
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & resample( Size const & p_size );
+		CU_API Image & resample( Size const & size );
 		/**
 		 *\~english
 		 *\brief		Fills all image pixels with the given colour
-		 *\param[in]	p_clrColour	The fill colour
+		 *\param[in]	colour	The fill colour
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Remplit tous les pixels de l'image avec la couleur donnée
-		 *\param[in]	p_clrColour	La couleur de remplissage
+		 *\param[in]	colour	La couleur de remplissage
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & fill( RgbColour const & p_colour );
+		CU_API Image & fill( RgbColour const & colour );
 		/**
 		 *\~english
 		 *\brief		Fills all image pixels with the given colour
-		 *\param[in]	p_clrColour	The fill colour
+		 *\param[in]	colour	The fill colour
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Remplit tous les pixels de l'image avec la couleur donnée
-		 *\param[in]	p_clrColour	La couleur de remplissage
+		 *\param[in]	colour	La couleur de remplissage
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & fill( RgbaColour const & p_colour );
+		CU_API Image & fill( RgbaColour const & colour );
 		/**
 		 *\~english
 		 *\brief		Fills the wanted pixel with the given buffer
-		 *\param[in]	x,y			The pixel coordinates
-		 *\param[in]	p_pPixel	The buffer
-		 *\param[in]	p_format	The buffer's pixel format
+		 *\param[in]	x,y		The pixel coordinates
+		 *\param[in]	pixel	The buffer
+		 *\param[in]	format	The buffer's pixel format
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Remplit le pixel demandé avec le buffer donné
-		 *\param[in]	x,y			Les coordonnées du pixel
-		 *\param[in]	p_pPixel	Le buffer
-		 *\param[in]	p_format	Le format de pixel du tampon
+		 *\param[in]	x,y		Les coordonnées du pixel
+		 *\param[in]	pixel	Le buffer
+		 *\param[in]	format	Le format de pixel du tampon
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & setPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel, PixelFormat p_format );
+		CU_API Image & setPixel( uint32_t x
+			, uint32_t y
+			, uint8_t const * pixel
+			, PixelFormat format );
+		/**
+		 *\~english
+		 *\brief		sets the colour of the wanted pixel to the given one
+		 *\param[in]	x,y		The pixel coordinates
+		 *\param[in]	colour	The colour
+		 *\return		A reference to the image
+		 *\~french
+		 *\brief		Définit la couleur du pixel demandé
+		 *\param[in]	x,y		Les coordonnées du pixel
+		 *\param[in]	colour	La couleur
+		 *\return		La référence de l'image
+		 */
+		CU_API Image & setPixel( uint32_t x
+			, uint32_t y
+			, RgbColour const & colour );
 		/**
 		 *\~english
 		 *\brief		sets the colour of the wanted pixel to the given one
 		 *\param[in]	x,y			The pixel coordinates
-		 *\param[in]	p_clrColour	The colour
+		 *\param[in]	colour	The colour
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Définit la couleur du pixel demandé
 		 *\param[in]	x,y			Les coordonnées du pixel
-		 *\param[in]	p_clrColour	La couleur
+		 *\param[in]	colour	La couleur
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & setPixel( uint32_t x, uint32_t y, RgbColour const & p_clrColour );
-		/**
-		 *\~english
-		 *\brief		sets the colour of the wanted pixel to the given one
-		 *\param[in]	x,y			The pixel coordinates
-		 *\param[in]	p_clrColour	The colour
-		 *\return		A reference to the image
-		 *\~french
-		 *\brief		Définit la couleur du pixel demandé
-		 *\param[in]	x,y			Les coordonnées du pixel
-		 *\param[in]	p_clrColour	La couleur
-		 *\return		La référence de l'image
-		 */
-		CU_API Image & setPixel( uint32_t x, uint32_t y, RgbaColour const & p_clrColour );
+		CU_API Image & setPixel( uint32_t x
+			, uint32_t y
+			, RgbaColour const & colour );
 		/**
 		 *\~english
 		 *\brief		set the wanted pixel to the given pixel
 		 *\param[in]	x,y		The pixel coordinates
-		 *\param[in]	p_pixel	The pixel
+		 *\param[in]	pixel	The pixel
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Définit le pixel demandé avec le pixel donné
 		 *\param[in]	x,y		Les coordonnées du pixel
-		 *\param[in]	p_pixel	Le pixel
+		 *\param[in]	pixel	Le pixel
 		 *\return		La référence de l'image
 		 */
-		template< PixelFormat PF > Image & setPixel( uint32_t x, uint32_t y, Pixel< PF > const & p_pixel )
+		template< PixelFormat PF >
+		Image & setPixel( uint32_t x
+			, uint32_t y
+			, Pixel< PF > const & pixel )
 		{
 			CHECK_INVARIANTS();
 			REQUIRE( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
-			convertPixel( PF, p_pixel.constPtr(), getPixelFormat(), m_buffer->getAt( x, y ) );
+			convertPixel( PF, pixel.constPtr(), getPixelFormat(), m_buffer->getAt( x, y ) );
 			CHECK_INVARIANTS();
 			return * this;
 		}
@@ -316,65 +338,71 @@ namespace castor
 		 *\~english
 		 *\brief		Retrieves the pixel at given coordinates
 		 *\param[in]	x,y		The pixel coordinates
-		 *\param[out]	p_pixel	Receives the pixel
+		 *\param[out]	pixel	Receives the pixel
 		 *\~french
 		 *\brief		Récupère le pixel aux coordonnées données
 		 *\param[in]	x,y		Les coordonnées du pixel
-		 *\param[out]	p_pixel	Reçoit le pixel
+		 *\param[out]	pixel	Reçoit le pixel
 		 */
-		template< PixelFormat PF > void getPixel( uint32_t x, uint32_t y, Pixel< PF > & p_pixel )const
+		template< PixelFormat PF >
+		void getPixel( uint32_t x
+			, uint32_t y
+			, Pixel< PF > & pixel )const
 		{
 			CHECK_INVARIANTS();
 			REQUIRE( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
-			convertPixel( getPixelFormat(), m_buffer->getAt( x, y ), PF, p_pixel.ptr() );
+			convertPixel( getPixelFormat(), m_buffer->getAt( x, y ), PF, pixel.ptr() );
 			CHECK_INVARIANTS();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted pixel and puts it in the buffer to the given format
-		 *\param[in]	x,y			The pixel coordinates
-		 *\param[out]	p_pPixel	Receives the pixel in given format
-		 *\param[in]	p_format	The wanted format for the pixel buffer
+		 *\param[in]	x,y		The pixel coordinates
+		 *\param[out]	pixel	Receives the pixel in given format
+		 *\param[in]	format	The wanted format for the pixel buffer
 		 *\~french
 		 *\brief		Récupère le pixel demandé et remplit le buffer au format donné
-		 *\param[in]	x,y			Les coordonnées du pixel
-		 *\param[out]	p_pPixel	Reçoit le pixel dans le format donné
-		 *\param[in]	p_format	Le format voulu pour le buffer
+		 *\param[in]	x,y		Les coordonnées du pixel
+		 *\param[out]	pixel	Reçoit le pixel dans le format donné
+		 *\param[in]	format	Le format voulu pour le buffer
 		 */
-		CU_API void getPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, PixelFormat p_format )const;
+		CU_API void getPixel( uint32_t x
+			, uint32_t y
+			, uint8_t * pixel
+			, PixelFormat format )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel colour
-		 *\param[in]	x,y			The pixel coordinates
+		 *\param[in]	x,y	The pixel coordinates
 		 *\return		The pixel colour
 		 *\~french
 		 *\brief		Récupère la couleur du pixel demandé
-		 *\param[in]	x,y			Les coordonnées du pixel
+		 *\param[in]	x,y	Les coordonnées du pixel
 		 *\return		La couleur du pixel
 		 */
 		CU_API RgbaColour getPixel( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given image into this one
-		 *\param[in]	p_src	The image to copy
+		 *\param[in]	src	The image to copy
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Copie l'image donnée dans celle-ci
-		 *\param[in]	p_src	L'image à copier
+		 *\param[in]	src	L'image à copier
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & copyImage( Image const & p_src );
+		CU_API Image & copyImage( Image const & src );
 		/**
 		 *\~english
 		 *\brief		Gives the sub-image contained in the given rectangle
-		 *\param[in]	p_rcRect	The sub-image rectangle
+		 *\param[in]	rect	The sub-image rectangle
 		 *\return		The sub-image
 		 *\~french
 		 *\brief		Retourne la portion d'image contenue dans le rectangle donné
-		 *\param[in]	p_rcRect	Le rectangle de la portion d'image
+		 *\param[in]	rect	Le rectangle de la portion d'image
 		 *\return		La portion d'image
 		 */
-		CU_API Image subImage( Rectangle const & p_rcRect )const;
+		CU_API Image subImage( Rectangle const & rect )const;
 		/**
 		 *\~english
 		 *\brief		Swaps the image lines

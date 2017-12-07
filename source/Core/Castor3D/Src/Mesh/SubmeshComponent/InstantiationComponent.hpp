@@ -23,10 +23,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	submesh	The parent submesh.
+		 *\param[in]	submesh		The parent submesh.
+		 *\param[in]	threshold	The threshold from which a submesh will be instantiated.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	submesh	Le sous-maillage parent.
+		 *\param[in]	submesh		Le sous-maillage parent.
+		 *\param[in]	threshold	Le seuil à partir duquel un sous-maillage sera instancié.
 		 */
 		C3D_API explicit InstantiationComponent( Submesh & submesh
 			, uint32_t threshold = 1u );
@@ -40,36 +42,36 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Increments instance count.
-		 *\param[in]	p_material	The material for which the instance count is incremented.
+		 *\param[in]	material	The material for which the instance count is incremented.
 		 *\return		The previous instance count.
 		 *\~french
 		 *\brief		Incrémente le compte d'instances.
-		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté.
+		 *\param[in]	material	Le matériau pour lequel le compte est incrémenté.
 		 *\return		Le compte précédent.
 		 */
-		C3D_API uint32_t ref( MaterialSPtr p_material );
+		C3D_API uint32_t ref( MaterialSPtr material );
 		/**
 		 *\~english
 		 *\brief		Decrements instance count.
-		 *\param[in]	p_material	The material for which the instance count is decremented.
+		 *\param[in]	material	The material for which the instance count is decremented.
 		 *\return		The previous instance count.
 		 *\~french
 		 *\brief		Décrémente le compte d'instances.
-		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté.
+		 *\param[in]	material	Le matériau pour lequel le compte est décrémenté.
 		 *\return		Le compte précédent.
 		 */
-		C3D_API uint32_t unref( MaterialSPtr p_material );
+		C3D_API uint32_t unref( MaterialSPtr material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the instances count
-		 *\param[in]	p_material	The material for which the instance count is retrieved
+		 *\param[in]	material	The material for which the instance count is retrieved
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le nombre d'instances
-		 *\param[in]	p_material	Le matériau pour lequel le compte est récupéré
+		 *\param[in]	material	Le matériau pour lequel le compte est récupéré
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t getRefCount( MaterialSPtr p_material )const;
+		C3D_API uint32_t getRefCount( MaterialSPtr material )const;
 		/**
 		 *\~english
 		 *\return		The maximum instances count, amongst all materials.

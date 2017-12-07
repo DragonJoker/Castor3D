@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_Line_H___
@@ -22,7 +22,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	a, b, c	The two vertices indices
+		 *\param[in]	a, b	The two vertices indices
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	a, b	Les indices des 2 sommets.
@@ -49,6 +49,8 @@ namespace castor3d
 		//!\~french		Les indices des sommets de la face.
 		LineIndices m_line;
 	};
+	//!\~english	An array of Lines.
+	//!\~french		Un tableau de Lines.
 	using LineArray = std::vector< Line >;
 }
 

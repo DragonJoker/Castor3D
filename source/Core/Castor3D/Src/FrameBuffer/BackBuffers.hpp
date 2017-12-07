@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BACK_BUFFERS_H___
@@ -64,28 +64,62 @@ namespace castor3d
 		 */
 		C3D_API virtual void bind( WindowBuffer buffer, FrameBufferTarget target )const = 0;
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::RenderBufferSPtr)
+		 *\~english
+		 *\brief		Creates an attachment to a render buffer
+		 *\param[in]	renderBuffer	The render buffer
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un tampon de rendu
+		 *\param[in]	renderBuffer	Le tampon de rendu
+		 *\return		L'attache créée
 		 */
 		C3D_API RenderBufferAttachmentSPtr createAttachment( RenderBufferSPtr renderBuffer )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::TextureLayoutSPtr)
+		 *\~english
+		 *\brief		Creates an attachment to a texture
+		 *\param[in]	texture	The texture
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à une texture
+		 *\param[in]	texture	La texture
+		 *\return		L'attache créée
 		 */
 		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::TextureLayoutSPtr,castor3d::CubeMapFace)
+		 *\~english
+		 *\brief		Creates an attachment to a cube texture's face.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	face	The face.
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à une face d'une texture cube.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	face	La face.
+		 *\return		L'attache créée
 		 */
 		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		castor3d::FrameBuffer::createAttachment(castor3d::TextureLayoutSPtr,castor3d::CubeMapFace,uint32_t)
+		 *\~english
+		 *\brief		Creates an attachment to a cube texture's face's mipmap.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	face		The face.
+		 *\param[in]	mipLevel	The mipmap level.
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un mipmap d'une face d'une texture cube.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	face		La face.
+		 *\param[in]	mipLevel	Le niveau du mipmap.
+		 *\return		L'attache créée
 		 */
 		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture, CubeMapFace face, uint32_t mipLevel )const override
 		{

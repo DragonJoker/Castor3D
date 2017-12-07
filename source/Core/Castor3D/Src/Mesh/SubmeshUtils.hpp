@@ -21,25 +21,29 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Creates faces from the points.
-		 *\remarks		This function assumes the points are sorted like triangles fan.
-		 *\param[in]	submesh	The submesh.
+		 *\brief			Creates faces from the points.
+		 *\remarks			This function assumes the points are sorted like triangles fan.
+		 *\param[in]		submesh	The submesh.
+		 *\param[in,out]	triFace	The component that will receive the computed triangles.
 		 *\~french
-		 *\brief		Crée les faces à partir des points.
-		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan.
-		 *\param[in]	submesh	Le sous-maillage.
+		 *\brief			Crée les faces à partir des points.
+		 *\remarks			Cette fonction suppose que les points sont tirés à la manière triangles fan.
+		 *\param[in]		submesh	Le sous-maillage.
+		 *\param[in,out]	triFace	Le composant qui va recevoir les faces calculées.
 		 */
 		C3D_API static void computeFacesFromPolygonVertex( Submesh & submesh
 			, TriFaceMapping & triFace );
 		/**
 		 *\~english
-		 *\brief		Generates normals and tangents.
-		 *\param[in]	submesh		The submesh.
-		 *\param[in]	reverted	Tells if the normals must be inverted.
+		 *\brief			Generates normals and tangents.
+		 *\param[in]		submesh		The submesh.
+		 *\param[in]		reverted	Tells if the normals must be inverted.
+		 *\param[in,out]	triFace		The component that will receive the computed triangles.
 		 *\~french
-		 *\brief		Génère les normales et les tangentes.
-		 *\param[in]	submesh		Le sous-maillage.
-		 *\param[in]	reverted	Dit si les normales doivent être inversées.
+		 *\brief			Génère les normales et les tangentes.
+		 *\param[in]		submesh		Le sous-maillage.
+		 *\param[in]		reverted	Dit si les normales doivent être inversées.
+		 *\param[in,out]	triFace		Le composant qui va recevoir les faces calculées.
 		 */
 		C3D_API static void computeNormals( Submesh & submesh
 			, TriFaceMapping & triFace
@@ -70,13 +74,15 @@ namespace castor3d
 			, Face const & face );
 		/**
 		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh.
-		 *\remarks		This function supposes the normals are defined.
-		 *\param[in]	submesh	The submesh.
+		 *\brief			Computes tangent for each vertex of the submesh.
+		 *\remarks			This function supposes the normals are defined.
+		 *\param[in]		submesh	The submesh.
+		 *\param[in,out]	triFace	The component that will receive the computed triangles.
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les normales sont définies.
-		 *\param[in]	submesh	Le sous-maillage.
+		 *\brief			Calcule la tangente pour chaque vertex du sous-maillage.
+		 *\remarks			Cette fonction suppose que les normales sont définies.
+		 *\param[in]		submesh	Le sous-maillage.
+		 *\param[in,out]	triFace	Le composant qui va recevoir les faces calculées.
 		 */
 		C3D_API static void computeTangentsFromNormals( Submesh & submesh
 			, TriFaceMapping & triFace );
