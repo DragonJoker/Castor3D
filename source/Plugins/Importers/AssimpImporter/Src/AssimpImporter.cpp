@@ -362,42 +362,42 @@ namespace C3dAssimp
 			return result;
 		}
 
-		void doSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
-			, std::map< Milliseconds, Point3r > const & scales
-			, std::map< Milliseconds, Quaternion > const & rotates
-			, std::set< Milliseconds > const & times
-			, uint32_t fps
-			, int64_t ticksPerMilliSecond
-			, SkeletonAnimationObject & object )
-		{
-			InterpolatorT< Point3r, InterpolatorType::eLinear > pointInterpolator;
-			InterpolatorT< Quaternion, InterpolatorType::eLinear > quatInterpolator;
+		//void doSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
+		//	, std::map< Milliseconds, Point3r > const & scales
+		//	, std::map< Milliseconds, Quaternion > const & rotates
+		//	, std::set< Milliseconds > const & times
+		//	, uint32_t fps
+		//	, int64_t ticksPerMilliSecond
+		//	, SkeletonAnimationObject & object )
+		//{
+		//	InterpolatorT< Point3r, InterpolatorType::eLinear > pointInterpolator;
+		//	InterpolatorT< Quaternion, InterpolatorType::eLinear > quatInterpolator;
 
-			if ( ticksPerMilliSecond / 1000 >= fps )
-			{
-				for ( auto time : times )
-				{
-					Point3r translate = doCompute( time, pointInterpolator, translates );
-					Point3r scale = doCompute( time, pointInterpolator, scales );
-					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
-					object.addKeyFrame( time, translate, rotate, scale );
-				}
-			}
-			else
-			{
-				// Limit the key frames per second to 60, to spare RAM...
-				Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
-				Milliseconds maxTime{ *times.rbegin() + step };
+		//	if ( ticksPerMilliSecond / 1000 >= fps )
+		//	{
+		//		for ( auto time : times )
+		//		{
+		//			Point3r translate = doCompute( time, pointInterpolator, translates );
+		//			Point3r scale = doCompute( time, pointInterpolator, scales );
+		//			Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+		//			object.addKeyFrame( time, translate, rotate, scale );
+		//		}
+		//	}
+		//	else
+		//	{
+		//		// Limit the key frames per second to 60, to spare RAM...
+		//		Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
+		//		Milliseconds maxTime{ *times.rbegin() + step };
 
-				for ( Milliseconds time{ 0 }; time < maxTime; time += step )
-				{
-					Point3r translate = doCompute( time, pointInterpolator, translates );
-					Point3r scale = doCompute( time, pointInterpolator, scales );
-					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
-					object.addKeyFrame( time, translate, rotate, scale );
-				}
-			}
-		}
+		//		for ( Milliseconds time{ 0 }; time < maxTime; time += step )
+		//		{
+		//			Point3r translate = doCompute( time, pointInterpolator, translates );
+		//			Point3r scale = doCompute( time, pointInterpolator, scales );
+		//			Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+		//			object.addKeyFrame( time, translate, rotate, scale );
+		//		}
+		//	}
+		//}
 	}
 
 	//*********************************************************************************************
@@ -648,11 +648,11 @@ namespace C3dAssimp
 			auto & animation = mesh.createAnimation( name );
 			MeshAnimationSubmesh animSubmesh{ animation, submesh };
 
-			for ( auto aiKey : makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
-			{
-				animSubmesh.addBuffer( Milliseconds{ int64_t( aiKey.mTime * 1000 ) }
-					, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
-			}
+			//for ( auto aiKey : makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
+			//{
+			//	animSubmesh.addBuffer( Milliseconds{ int64_t( aiKey.mTime * 1000 ) }
+			//		, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
+			//}
 
 			animation.addChild( std::move( animSubmesh ) );
 		}
@@ -828,10 +828,10 @@ namespace C3dAssimp
 				parent->addChild( object );
 			}
 
-			if ( !object->hasKeyFrames() )
-			{
-				object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
-			}
+			//if ( !object->hasKeyFrames() )
+			//{
+			//	object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
+			//}
 		}
 
 		for ( auto node : makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
@@ -864,13 +864,13 @@ namespace C3dAssimp
 			, aiNodeAnim.mNumRotationKeys
 			, ticksPerMilliSecond
 			, times );
-		doSynchroniseKeys( translates
-			, scales
-			, rotates
-			, times
-			, getEngine()->getRenderLoop().getWantedFps()
-			, ticksPerMilliSecond
-			, object );
+		//doSynchroniseKeys( translates
+		//	, scales
+		//	, rotates
+		//	, times
+		//	, getEngine()->getRenderLoop().getWantedFps()
+		//	, ticksPerMilliSecond
+		//	, object );
 	}
 
 	//*********************************************************************************************

@@ -34,8 +34,11 @@ namespace castor3d
 		std::array< T, 3 > m_tex;
 	};
 
+	template< typename T >
+	using InterleavedVertexTArray = std::vector< InterleavedVertexT< T > >;
+
 	using InterleavedVertex = InterleavedVertexT< real >;
-	using InterleavedVertexArray = std::vector< InterleavedVertex >;
+	using InterleavedVertexArray = InterleavedVertexTArray< real >;
 }
 
 #endif

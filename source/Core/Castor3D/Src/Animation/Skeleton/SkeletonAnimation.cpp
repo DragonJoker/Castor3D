@@ -177,13 +177,13 @@ namespace castor3d
 		return result;
 	}
 
-	void SkeletonAnimation::doUpdateLength()
-	{
-		for ( auto it : m_toMove )
-		{
-			m_length = std::max( m_length, it.second->getLength() );
-		}
-	}
+	//void SkeletonAnimation::doUpdateLength()
+	//{
+	//	for ( auto it : m_toMove )
+	//	{
+	//		m_length = std::max( m_length, it.second->getLength() );
+	//	}
+	//}
 
 	//*************************************************************************************************
 }

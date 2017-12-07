@@ -14,28 +14,28 @@ namespace castor3d
 
 	namespace
 	{
-		inline void doFind( Milliseconds const & p_time
-			, typename KeyFrameArray::const_iterator const & p_first
-			, typename KeyFrameArray::const_iterator const & p_last
-			, typename KeyFrameArray::const_iterator & p_prv
-			, typename KeyFrameArray::const_iterator & p_cur )
-		{
-			while ( p_prv != p_first && p_prv->getTimeIndex() >= p_time )
-			{
-				// Time has gone too fast backward.
-				--p_prv;
-				--p_cur;
-			}
+		//inline void doFind( Milliseconds const & p_time
+		//	, typename KeyFrameArray::const_iterator const & p_first
+		//	, typename KeyFrameArray::const_iterator const & p_last
+		//	, typename KeyFrameArray::const_iterator & p_prv
+		//	, typename KeyFrameArray::const_iterator & p_cur )
+		//{
+		//	while ( p_prv != p_first && p_prv->getTimeIndex() >= p_time )
+		//	{
+		//		// Time has gone too fast backward.
+		//		--p_prv;
+		//		--p_cur;
+		//	}
 
-			while ( p_cur != p_last && p_cur->getTimeIndex() < p_time )
-			{
-				// Time has gone too fast forward.
-				++p_prv;
-				++p_cur;
-			}
+		//	while ( p_cur != p_last && p_cur->getTimeIndex() < p_time )
+		//	{
+		//		// Time has gone too fast forward.
+		//		++p_prv;
+		//		++p_cur;
+		//	}
 
-			ENSURE( p_prv != p_cur );
-		}
+		//	ENSURE( p_prv != p_cur );
+		//}
 
 		String const & getObjectTypeName( SkeletonAnimationObjectType p_type )
 		{
@@ -56,8 +56,8 @@ namespace castor3d
 		, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
 		: OwnedBy< SkeletonAnimationInstance >{ p_animationInstance }
 		, m_animationObject{ p_animationObject }
-		, m_prev{ p_animationObject.getKeyFrames().empty() ? p_animationObject.getKeyFrames().end() : p_animationObject.getKeyFrames().begin() }
-		, m_curr{ p_animationObject.getKeyFrames().empty() ? p_animationObject.getKeyFrames().end() : p_animationObject.getKeyFrames().begin() + 1 }
+		//, m_prev{ p_animationObject.getKeyFrames().empty() ? p_animationObject.getKeyFrames().end() : p_animationObject.getKeyFrames().begin() }
+		//, m_curr{ p_animationObject.getKeyFrames().empty() ? p_animationObject.getKeyFrames().end() : p_animationObject.getKeyFrames().begin() + 1 }
 	{
 		for ( auto moving : p_animationObject.m_children )
 		{
@@ -88,29 +88,29 @@ namespace castor3d
 	void SkeletonAnimationInstanceObject::update( Milliseconds const & p_time
 		, Matrix4x4r const & p_transformations )
 	{
-		if ( m_animationObject.hasKeyFrames() )
-		{
-			if ( m_animationObject.getKeyFrames().size() == 1 )
-			{
-				m_cumulativeTransform = p_transformations * m_prev->getTransform();
-			}
-			else
-			{
-				doFind( p_time, m_animationObject.getKeyFrames().begin(), m_animationObject.getKeyFrames().end() - 1, m_prev, m_curr );
-				m_cumulativeTransform = p_transformations * m_curr->getTransform();
-			}
-		}
-		else
-		{
-			m_cumulativeTransform = p_transformations * m_animationObject.getNodeTransform();
-		}
+		//if ( m_animationObject.hasKeyFrames() )
+		//{
+		//	if ( m_animationObject.getKeyFrames().size() == 1 )
+		//	{
+		//		m_cumulativeTransform = p_transformations * m_prev->getTransform();
+		//	}
+		//	else
+		//	{
+		//		doFind( p_time, m_animationObject.getKeyFrames().begin(), m_animationObject.getKeyFrames().end() - 1, m_prev, m_curr );
+		//		m_cumulativeTransform = p_transformations * m_curr->getTransform();
+		//	}
+		//}
+		//else
+		//{
+		//	m_cumulativeTransform = p_transformations * m_animationObject.getNodeTransform();
+		//}
 
-		doApply();
+		//doApply();
 
-		for ( auto object : m_children )
-		{
-			object->update( p_time, m_cumulativeTransform );
-		}
+		//for ( auto object : m_children )
+		//{
+		//	object->update( p_time, m_cumulativeTransform );
+		//}
 	}
 
 	//*************************************************************************************************

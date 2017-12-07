@@ -118,10 +118,10 @@ namespace castor3d
 		SkeletonAnimationObject & m_animationObject;
 		//!\~english	Iterator to the previous keyframe (when playing the animation).
 		//!\~french		Itérateur sur la key frame précédente (quand l'animation est jouée).
-		KeyFrameArray::const_iterator m_prev;
+		AnimationKeyFrameArray::const_iterator m_prev;
 		//!\~english	Iterator to the current keyframe (when playing the animation).
 		//!\~french		Itérateur sur la key frame courante (quand l'animation est jouée).
-		KeyFrameArray::const_iterator m_curr;
+		AnimationKeyFrameArray::const_iterator m_curr;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
 		SkeletonAnimationInstanceObjectPtrArray m_children;

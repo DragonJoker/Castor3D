@@ -13,6 +13,22 @@ namespace castor
 	{
 	}
 
+	BoundingBox BoundingBox::getUnion( BoundingBox const & bb )const
+	{
+		auto min = getMin();
+		auto max = getMax();
+		auto bbmin = bb.getMin();
+		auto bbmax = bb.getMax();
+
+		for ( uint32_t i = 0u; i < 3u; ++i )
+		{
+			min[i] = std::min( min[i], bbmin[i] );
+			max[i] = std::max( max[i], bbmax[i] );
+		}
+
+		return BoundingBox{ min, max };
+	}
+
 	bool BoundingBox::isWithin( Point3r const & point )const
 	{
 		auto min = getMin();

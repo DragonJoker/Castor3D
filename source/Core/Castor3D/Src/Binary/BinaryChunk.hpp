@@ -19,7 +19,7 @@ namespace castor3d
 	| (uint32_t( revision ) << 0))
 	//!\~english	The current format version number.
 	//!\~french		La version actuelle du format.
-	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x01, 0x0000 );
+	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x02, 0x0000 );
 	//!\~english	A define to ease the declaration of a chunk id.
 	//!\~french		Un define pour faciliter la déclaration d'un id de chunk.
 #	define MAKE_CHUNK_ID( a, b, c, d, e, f, g, h )\
@@ -76,13 +76,12 @@ namespace castor3d
 		eMovingTransform = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
 		eKeyframeCount = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
 		eKeyframes = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
-		eMeshAnimationSubmeshID = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'I', 'D' ),
-		eMeshAnimationSubmesh = MAKE_CHUNK_ID( 'M', 'S', 'H', 'A', 'N', 'S', 'M', 'H' ),
-		eSubmeshAnimationBuffer = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'B', 'F' ),
-		eSubmeshAnimationBufferSize = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'S', 'Z' ),
-		eSubmeshAnimationBuffersCount = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'C', 'T' ),
-		eSubmeshAnimationBuffers = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'U', 'F', 'S' ),
 		eBonesComponent = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'C', 'O', 'M', 'P' ),
+		eMeshAnimationKeyFrame = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'R', 'M' ),
+		eMeshAnimationKeyFrameTime = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'T', 'M' ),
+		eMeshAnimationKeyFrameSubmeshID = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'I', 'D' ),
+		eMeshAnimationKeyFrameBufferSize = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'S', 'Z' ),
+		eMeshAnimationKeyFrameBufferData = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'D', 'T' ),
 	};
 	/**
 	 *\~english

@@ -78,35 +78,35 @@ namespace castor3d
 		 *\return		Le nom.
 		 */
 		C3D_API virtual castor::String const & getName()const = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a scaling key frame and adds it to the list.
-		 *\remarks		If a key frame with the same starting time already exists, it is returned, but not modified.
-		 *\param[in]	from		The starting time.
-		 *\param[in]	translate	The translation at start time.
-		 *\param[in]	rotate		The rotation at start time.
-		 *\param[in]	scale		The scaling at start time.
-		 *\~french
-		 *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
-		 *\remarks		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		 *\param[in]	from		L'index de temps de début.
-		 *\param[in]	translate	La translation au temps de début.
-		 *\param[in]	rotate		La rotation au temps de début.
-		 *\param[in]	scale		L'échelle au temps de début.
-		 */
-		C3D_API KeyFrame & addKeyFrame( castor::Milliseconds const & from
-			, castor::Point3r const & translate = castor::Point3r{}
-		, castor::Quaternion const & rotate = castor::Quaternion{}
-		, castor::Point3r const & scale = castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
-		/**
-		 *\~english
-		 *\brief		Deletes the scaling key frame at time index p_time.
-		 *\param[in]	time	The time index.
-		 *\~french
-		 *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
-		 *\param[in]	time	L'index de temps.
-		 */
-		C3D_API void removeKeyFrame( castor::Milliseconds const & time );
+		///**
+		// *\~english
+		// *\brief		Creates a scaling key frame and adds it to the list.
+		// *\remarks		If a key frame with the same starting time already exists, it is returned, but not modified.
+		// *\param[in]	from		The starting time.
+		// *\param[in]	translate	The translation at start time.
+		// *\param[in]	rotate		The rotation at start time.
+		// *\param[in]	scale		The scaling at start time.
+		// *\~french
+		// *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
+		// *\remarks		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
+		// *\param[in]	from		L'index de temps de début.
+		// *\param[in]	translate	La translation au temps de début.
+		// *\param[in]	rotate		La rotation au temps de début.
+		// *\param[in]	scale		L'échelle au temps de début.
+		// */
+		//C3D_API KeyFrame & addKeyFrame( castor::Milliseconds const & from
+		//	, castor::Point3r const & translate = castor::Point3r{}
+		//, castor::Quaternion const & rotate = castor::Quaternion{}
+		//, castor::Point3r const & scale = castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
+		///**
+		// *\~english
+		// *\brief		Deletes the scaling key frame at time index p_time.
+		// *\param[in]	time	The time index.
+		// *\~french
+		// *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
+		// *\param[in]	time	L'index de temps.
+		// */
+		//C3D_API void removeKeyFrame( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
@@ -117,16 +117,16 @@ namespace castor3d
 		{
 			return m_mode;
 		}
-		/**
-		 *\~english
-		 *\return		The key frames.
-		 *\~french
-		 *\return		Les key frames.
-		 */
-		inline KeyFrameArray const & getKeyFrames()const
-		{
-			return m_keyframes;
-		}
+		///**
+		// *\~english
+		// *\return		The key frames.
+		// *\~french
+		// *\return		Les key frames.
+		// */
+		//inline KeyFrameArray const & getKeyFrames()const
+		//{
+		//	return m_keyframes;
+		//}
 		/**
 		 *\~english
 		 *\return		The animation length.
@@ -183,18 +183,18 @@ namespace castor3d
 		{
 			m_nodeTransform = transform;
 		}
-		/**
-		 *\~english
-		 *\brief		Tells whether or not the object has keyframes.
-		 *\return		\p false if no keyframes.
-		 *\~french
-		 *\brief		Dit si l'objet a des keyframes.
-		 *\return		\p false si pas de keyframes.
-		 */
-		inline bool hasKeyFrames()const
-		{
-			return !m_keyframes.empty();
-		}
+		///**
+		// *\~english
+		// *\brief		Tells whether or not the object has keyframes.
+		// *\return		\p false if no keyframes.
+		// *\~french
+		// *\brief		Dit si l'objet a des keyframes.
+		// *\return		\p false si pas de keyframes.
+		// */
+		//inline bool hasKeyFrames()const
+		//{
+		//	return !m_keyframes.empty();
+		//}
 		/**
 		 *\~english
 		 *\return		The children array.
@@ -226,9 +226,6 @@ namespace castor3d
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
 		SkeletonAnimationObjectType m_type;
-		//!\~english	The key frames.
-		//!\~french		Les keyframes.
-		KeyFrameArray m_keyframes;
 		//!\~english	Animation node transformations.
 		//!\~french		Transformations du noeud d'animation.
 		castor::Matrix4x4r m_nodeTransform;

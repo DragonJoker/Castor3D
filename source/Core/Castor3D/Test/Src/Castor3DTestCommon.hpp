@@ -1,4 +1,4 @@
-﻿/* See LICENSE file in root folder */
+/* See LICENSE file in root folder */
 #ifndef ___C3DT_COMMON_H___
 #define ___C3DT_COMMON_H___
 
@@ -193,9 +193,21 @@ namespace Testing
 	}
 
 	template<>
-	inline std::string toString< castor3d::KeyFrame >( castor3d::KeyFrame const & p_value )
+	inline std::string toString< castor3d::AnimationKeyFrame >( castor3d::AnimationKeyFrame  const & p_value )
 	{
-		return std::string{ "castor3d::KeyFrame" };
+		return std::string{ "castor3d::AnimationKeyFrame " };
+	}
+
+	template<>
+	inline std::string toString< castor3d::MeshAnimationKeyFrame >( castor3d::MeshAnimationKeyFrame  const & p_value )
+	{
+		return std::string{ "castor3d::MeshAnimationKeyFrame " };
+	}
+
+	template<>
+	inline std::string toString< castor3d::SkeletonAnimationKeyFrame >( castor3d::SkeletonAnimationKeyFrame  const & p_value )
+	{
+		return std::string{ "castor3d::SkeletonAnimationKeyFrame " };
 	}
 
 	template<>
@@ -363,7 +375,8 @@ namespace Testing
 		bool compare( castor3d::Animation const & p_a, castor3d::Animation const & p_b );
 		bool compare( castor3d::SkeletonAnimation const & p_a, castor3d::SkeletonAnimation const & p_b );
 		bool compare( castor3d::SkeletonAnimationObject const & p_a, castor3d::SkeletonAnimationObject const & p_b );
-		bool compare( castor3d::KeyFrame const & p_a, castor3d::KeyFrame const & p_b );
+		bool compare( castor3d::AnimationKeyFrame const & p_a, castor3d::AnimationKeyFrame const & p_b );
+		bool compare( castor3d::MeshAnimationKeyFrame const & p_a, castor3d::MeshAnimationKeyFrame const & p_b );
 		bool compare( castor3d::AnimatedObjectGroup const & p_a, castor3d::AnimatedObjectGroup const & p_b );
 		bool compare( castor3d::AnimatedObject const & p_a, castor3d::AnimatedObject const & p_b );
 		bool compare( castor3d::AnimationInstance const & p_a, castor3d::AnimationInstance const & p_b );

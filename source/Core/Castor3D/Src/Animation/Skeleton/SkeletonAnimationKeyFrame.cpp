@@ -1,4 +1,4 @@
-#include "KeyFrame.hpp"
+#include "SkeletonAnimationKeyFrame.hpp"
 
 using namespace castor;
 
@@ -7,7 +7,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
+		SquareMatrix< T, 4 > & doRotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
 		{
 			SquareMatrix< T, 4 > rotate;
 			auto const qxx( p_quat.quat.x * p_quat.quat.x );
@@ -44,22 +44,28 @@ namespace castor3d
 		}
 	}
 
-	KeyFrame::KeyFrame( Milliseconds const & p_timeIndex
-		, Point3r const & p_translate
-		, Quaternion const & p_rotate
-		, Point3r const & p_scale )
-		: m_timeIndex{ p_timeIndex }
-		, m_transform{ 1.0_r }
+	SkeletonAnimationKeyFrame::SkeletonAnimationKeyFrame( Skeleton & skeleton
+		, Milliseconds const & timeIndex )
+		: AnimationKeyFrame{ timeIndex }
+		, OwnedBy< Skeleton >{ skeleton }
 	{
-		matrix::translate( m_transform, p_translate );
-		rotate( m_transform, p_rotate );
-		matrix::scale( m_transform, p_scale );
 	}
 
-	KeyFrame::KeyFrame( Milliseconds const & p_timeIndex
-		, castor::Matrix4x4r const & p_transform )
-		: m_timeIndex{ p_timeIndex }
-		, m_transform{ p_transform }
+	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject const & object
+		, Point3r const & translate
+		, Quaternion const & rotate
+		, Point3r const & scale )
 	{
+		Matrix4x4r transform{ 1.0_r };
+		matrix::translate( transform, translate );
+		doRotate( transform, rotate );
+		matrix::scale( transform, scale );
+		addAnimationObject( object, transform );
+	}
+
+	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject const & object
+		, castor::Matrix4x4r const & transform )
+	{
+		m_keyFrames.emplace( &object, transform );
 	}
 }

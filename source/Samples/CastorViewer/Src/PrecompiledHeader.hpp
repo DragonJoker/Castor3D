@@ -70,7 +70,7 @@ See LICENSE file in root folder
 #	include <Cache/ShaderCache.hpp>
 
 #	include <Animation/Animation.hpp>
-#	include <Animation/KeyFrame.hpp>
+#	include <Animation/AnimationKeyFrame.hpp>
 #	include <Event/Frame/FrameListener.hpp>
 #	include <Material/Material.hpp>
 #	include <Material/Pass.hpp>

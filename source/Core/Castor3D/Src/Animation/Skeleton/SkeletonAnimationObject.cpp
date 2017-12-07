@@ -9,58 +9,58 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		using KeyFramed = std::array< double, 17 >;
+	//namespace
+	//{
+	//	using KeyFramed = std::array< double, 17 >;
 
-		void doConvert( std::vector< KeyFrame > const & in
-			, std::vector< KeyFramed > & out )
-		{
-			out.resize( in.size() );
-			auto it = out.begin();
+	//	void doConvert( std::vector< KeyFrame > const & in
+	//		, std::vector< KeyFramed > & out )
+	//	{
+	//		out.resize( in.size() );
+	//		auto it = out.begin();
 
-			for ( auto & kf : in )
-			{
-				auto & out = *it;
-				size_t index{ 0u };
-				auto const & transform = kf.getTransform();
-				out[index++] = double( kf.getTimeIndex().count() / 1000.0 );
-				out[index++] = transform[0][0];
-				out[index++] = transform[0][1];
-				out[index++] = transform[0][2];
-				out[index++] = transform[0][3];
-				out[index++] = transform[1][0];
-				out[index++] = transform[1][1];
-				out[index++] = transform[1][2];
-				out[index++] = transform[1][3];
-				out[index++] = transform[2][0];
-				out[index++] = transform[2][1];
-				out[index++] = transform[2][2];
-				out[index++] = transform[2][3];
-				out[index++] = transform[3][0];
-				out[index++] = transform[3][1];
-				out[index++] = transform[3][2];
-				out[index++] = transform[3][3];
-				++it;
-			}
-		}
+	//		for ( auto & kf : in )
+	//		{
+	//			auto & out = *it;
+	//			size_t index{ 0u };
+	//			auto const & transform = kf.getTransform();
+	//			out[index++] = double( kf.getTimeIndex().count() / 1000.0 );
+	//			out[index++] = transform[0][0];
+	//			out[index++] = transform[0][1];
+	//			out[index++] = transform[0][2];
+	//			out[index++] = transform[0][3];
+	//			out[index++] = transform[1][0];
+	//			out[index++] = transform[1][1];
+	//			out[index++] = transform[1][2];
+	//			out[index++] = transform[1][3];
+	//			out[index++] = transform[2][0];
+	//			out[index++] = transform[2][1];
+	//			out[index++] = transform[2][2];
+	//			out[index++] = transform[2][3];
+	//			out[index++] = transform[3][0];
+	//			out[index++] = transform[3][1];
+	//			out[index++] = transform[3][2];
+	//			out[index++] = transform[3][3];
+	//			++it;
+	//		}
+	//	}
 
-		void doConvert( std::vector< KeyFramed > const & in
-			, std::vector< KeyFrame > & out )
-		{
-			out.resize( in.size() );
-			auto it = out.begin();
+	//	void doConvert( std::vector< KeyFramed > const & in
+	//		, std::vector< KeyFrame > & out )
+	//	{
+	//		out.resize( in.size() );
+	//		auto it = out.begin();
 
-			for ( auto & kf : in )
-			{
-				size_t index{ 0u };
-				Milliseconds timeIndex{ int64_t( kf[index++] * 1000.0 ) };
-				Matrix4x4r transform{ &kf[index] };
-				( *it ) = KeyFrame{ timeIndex, transform };
-				++it;
-			}
-		}
-	}
+	//		for ( auto & kf : in )
+	//		{
+	//			size_t index{ 0u };
+	//			Milliseconds timeIndex{ int64_t( kf[index++] * 1000.0 ) };
+	//			Matrix4x4r transform{ &kf[index] };
+	//			( *it ) = KeyFrame{ timeIndex, transform };
+	//			++it;
+	//		}
+	//	}
+	//}
 
 	//*************************************************************************************************
 
@@ -78,20 +78,20 @@ namespace castor3d
 			result = doWriteChunk( real( obj.m_length.count() ) * 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
-		if ( !obj.m_keyframes.empty() )
-		{
-			if ( result )
-			{
-				result = doWriteChunk( uint32_t( obj.m_keyframes.size() ), ChunkType::eKeyframeCount, m_chunk );
-			}
+		//if ( !obj.m_keyframes.empty() )
+		//{
+		//	if ( result )
+		//	{
+		//		result = doWriteChunk( uint32_t( obj.m_keyframes.size() ), ChunkType::eKeyframeCount, m_chunk );
+		//	}
 
-			if ( result )
-			{
-				std::vector< KeyFramed > keyFrames;
-				doConvert( obj.m_keyframes, keyFrames );
-				result = doWriteChunk( keyFrames, ChunkType::eKeyframes, m_chunk );
-			}
-		}
+		//	if ( result )
+		//	{
+		//		std::vector< KeyFramed > keyFrames;
+		//		doConvert( obj.m_keyframes, keyFrames );
+		//		result = doWriteChunk( keyFrames, ChunkType::eKeyframes, m_chunk );
+		//	}
+		//}
 
 		for ( auto const & moving : obj.m_children )
 		{
@@ -116,7 +116,7 @@ namespace castor3d
 	{
 		bool result = true;
 		Matrix4x4r transform;
-		std::vector< KeyFramed > keyframes;
+		//std::vector< KeyFramed > keyframes;
 		SkeletonAnimationNodeSPtr node;
 		SkeletonAnimationObjectSPtr object;
 		SkeletonAnimationBoneSPtr bone;
@@ -137,17 +137,17 @@ namespace castor3d
 
 				if ( result )
 				{
-					keyframes.resize( count );
+					//keyframes.resize( count );
 				}
 
 				break;
 
 			case ChunkType::eKeyframes:
-				result = doParseChunk( keyframes, chunk );
+				//result = doParseChunk( keyframes, chunk );
 
 				if ( result )
 				{
-					doConvert( keyframes, obj.m_keyframes );
+					//doConvert( keyframes, obj.m_keyframes );
 				}
 
 				break;
@@ -206,50 +206,50 @@ namespace castor3d
 		m_children.push_back( object );
 	}
 
-	KeyFrame & SkeletonAnimationObject::addKeyFrame( Milliseconds const & from
-		, Point3r const & translate
-		, Quaternion const & rotate
-		, Point3r const & scale )
-	{
-		auto it = std::find_if( m_keyframes.begin()
-			, m_keyframes.end()
-			, [&from]( KeyFrame & keyframe )
-			{
-				return keyframe.getTimeIndex() >= from;
-			} );
+	//KeyFrame & SkeletonAnimationObject::addKeyFrame( Milliseconds const & from
+	//	, Point3r const & translate
+	//	, Quaternion const & rotate
+	//	, Point3r const & scale )
+	//{
+	//	auto it = std::find_if( m_keyframes.begin()
+	//		, m_keyframes.end()
+	//		, [&from]( KeyFrame & keyframe )
+	//		{
+	//			return keyframe.getTimeIndex() >= from;
+	//		} );
 
-		if ( it == m_keyframes.end() )
-		{
-			m_length = from;
-			it = m_keyframes.insert( m_keyframes.end(), KeyFrame{ from, translate, rotate, scale } );
-		}
-		else if ( it->getTimeIndex() > from )
-		{
-			if ( it != m_keyframes.begin() )
-			{
-				--it;
-			}
+	//	if ( it == m_keyframes.end() )
+	//	{
+	//		m_length = from;
+	//		it = m_keyframes.insert( m_keyframes.end(), KeyFrame{ from, translate, rotate, scale } );
+	//	}
+	//	else if ( it->getTimeIndex() > from )
+	//	{
+	//		if ( it != m_keyframes.begin() )
+	//		{
+	//			--it;
+	//		}
 
-			it = m_keyframes.insert( it, KeyFrame{ from, translate, rotate, scale } );
-		}
+	//		it = m_keyframes.insert( it, KeyFrame{ from, translate, rotate, scale } );
+	//	}
 
-		return *it;
-	}
+	//	return *it;
+	//}
 
-	void SkeletonAnimationObject::removeKeyFrame( Milliseconds const & time )
-	{
-		auto it = std::find_if( m_keyframes.begin()
-			, m_keyframes.end()
-			, [&time]( KeyFrame const & keyframe )
-		{
-			return keyframe.getTimeIndex() == time;
-		} );
+	//void SkeletonAnimationObject::removeKeyFrame( Milliseconds const & time )
+	//{
+	//	auto it = std::find_if( m_keyframes.begin()
+	//		, m_keyframes.end()
+	//		, [&time]( KeyFrame const & keyframe )
+	//	{
+	//		return keyframe.getTimeIndex() == time;
+	//	} );
 
-		if ( it != m_keyframes.end() )
-		{
-			m_keyframes.erase( it );
-		}
-	}
+	//	if ( it != m_keyframes.end() )
+	//	{
+	//		m_keyframes.erase( it );
+	//	}
+	//}
 
 	//*************************************************************************************************
 }

@@ -44,6 +44,17 @@ namespace castor
 		CU_API BoundingBox( Point3r const & min, Point3r const & max );
 		/**
 		 *\~english
+		 *\brief		Computes the bounding box resulting of the union of this bounding box and given one.
+		 *\param[in]	bb	The other bounding box.
+		 *\return		The resulting bounding box.
+		 *\~french
+		 *\brief		Calcule la bounding box résultant de l'union de cette bounding box et de celle donnée.
+		 *\param[in]	bb	L'autre bounding box.
+		 *\return		La bounding box résultante.
+		 */
+		CU_API BoundingBox getUnion( BoundingBox const & bb )const;
+		/**
+		 *\~english
 		 *\brief		Tests if a vertex is within the container, id est inside it but not on it's limits.
 		 *\param[in]	point	The vertex to test.
 		 *\return		\p true if the vertex is within the container, false if not.

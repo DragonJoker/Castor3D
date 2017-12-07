@@ -8,6 +8,7 @@
 
 #include "Animation/AnimatedObject.hpp"
 #include "Animation/Mesh/MeshAnimation.hpp"
+#include "Animation/Mesh/MeshAnimationKeyFrame.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Cache/CacheView.hpp"
 #include "Material/Material.hpp"
@@ -2086,21 +2087,24 @@ namespace castor3d
 
 					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext->pMesh->getAnimation( animName ) ) };
 					uint32_t index = 0u;
+					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+						, Milliseconds{ int64_t( timeIndex * 1000 ) } );
 
-					for ( auto submesh : mesh )
+					for ( auto & submesh : mesh )
 					{
 						auto & submeshAnim = animation.getSubmesh( index );
 						std::clog << "Source: " << submeshAnim.getSubmesh().getPointsCount() << " - Anim: " << submesh->getPointsCount() << std::endl;
 
+
 						if ( submesh->getPointsCount() == submeshAnim.getSubmesh().getPointsCount() )
 						{
-							submeshAnim.addBuffer( Milliseconds{ int64_t( timeIndex * 1000 ) }, convert( submesh->getPoints() ) );
+							keyFrame->addSubmeshBuffer( *submesh, convert( submesh->getPoints() ) );
 						}
 
 						++index;
 					}
 
-					animation.updateLength();
+					animation.addKeyFrame( std::move( keyFrame ) );
 				}
 				else
 				{

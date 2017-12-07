@@ -1,4 +1,4 @@
-﻿#include "Castor3DTestCommon.hpp"
+#include "Castor3DTestCommon.hpp"
 
 #include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Cache/CameraCache.hpp>
@@ -8,6 +8,7 @@
 
 #include <Animation/Animable.hpp>
 #include <Animation/Animation.hpp>
+#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -481,21 +482,21 @@ namespace Testing
 			result = CT_EQUAL( p_a.getParent()->getName(), p_b.getParent()->getName() );
 		}
 
-		if ( result )
-		{
-			result = CT_EQUAL( p_a.getKeyFrames().size(), p_b.getKeyFrames().size() );
-			auto itA = p_a.getKeyFrames().begin();
-			auto const endItA = p_a.getKeyFrames().end();
-			auto itB = p_b.getKeyFrames().begin();
-			auto const endItB = p_b.getKeyFrames().end();
+		//if ( result )
+		//{
+		//	result = CT_EQUAL( p_a.getKeyFrames().size(), p_b.getKeyFrames().size() );
+		//	auto itA = p_a.getKeyFrames().begin();
+		//	auto const endItA = p_a.getKeyFrames().end();
+		//	auto itB = p_b.getKeyFrames().begin();
+		//	auto const endItB = p_b.getKeyFrames().end();
 
-			while ( result && itA != endItA )
-			{
-				result = CT_EQUAL( *itA, *itB );
-				++itA;
-				++itB;
-			}
-		}
+		//	while ( result && itA != endItA )
+		//	{
+		//		result = CT_EQUAL( *itA, *itB );
+		//		++itA;
+		//		++itB;
+		//	}
+		//}
 
 		if ( result )
 		{
@@ -519,10 +520,31 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( KeyFrame const & p_a, KeyFrame const & p_b )
+	bool C3DTestCase::compare( AnimationKeyFrame const & p_a, AnimationKeyFrame const & p_b )
 	{
-		bool result{ CT_EQUAL( p_a.getTransform(), p_b.getTransform() ) };
-		result &= CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() );
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::MeshAnimationKeyFrame const & p_a, castor3d::MeshAnimationKeyFrame const & p_b )
+	{
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
+
+		if ( result )
+		{
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
+			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				result = CT_EQUAL( itA->first, itB->first );
+				//result &= CT_EQUAL( itA->second, itB->second );
+			}
+		}
+
 		return result;
 	}
 

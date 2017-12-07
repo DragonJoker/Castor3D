@@ -1,4 +1,4 @@
-﻿#include "BinaryExportTest.hpp"
+#include "BinaryExportTest.hpp"
 
 #include <Engine.hpp>
 #include <Cache/MeshCache.hpp>
@@ -6,7 +6,7 @@
 #include <Cache/SceneCache.hpp>
 
 #include <Animation/Animation.hpp>
-#include <Animation/KeyFrame.hpp>
+#include <Animation/AnimationKeyFrame.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Animation/Skeleton/SkeletonAnimationNode.hpp>

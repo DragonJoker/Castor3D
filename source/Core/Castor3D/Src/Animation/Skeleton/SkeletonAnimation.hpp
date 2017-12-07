@@ -171,12 +171,6 @@ namespace castor3d
 			return m_arrayMoving;
 		}
 
-	private:
-		/**
-		 *\copydoc		Casto3D::Animation::doUpdateLength
-		 */
-		C3D_API void doUpdateLength()override;
-
 	protected:
 		//!\~english	The root moving objects.
 		//!\~french		Les objets mouvants racine.

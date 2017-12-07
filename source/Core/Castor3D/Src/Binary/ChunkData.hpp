@@ -8,7 +8,6 @@ See LICENSE file in root folder
 #include "Mesh/VertexGroup.hpp"
 #include "Mesh/SubmeshComponent/FaceIndices.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
-#include "Animation/KeyFrame.hpp"
 
 #include <Data/Endianness.hpp>
 #include <Graphics/Colour.hpp>
@@ -1284,25 +1283,6 @@ namespace castor3d
 			castor::switchEndianness( p_value.m_weights[5] );
 			castor::switchEndianness( p_value.m_weights[6] );
 			castor::switchEndianness( p_value.m_weights[7] );
-		}
-	}
-	/**
-	 *\~english
-	 *\brief			sets given value to big endian.
-	 *\param[in,out]	p_value	The value.
-	 *\~french
-	 *\brief			Met la valeur donnée en big endian.
-	 *\param[in,out]	p_value	La valeur.
-	 */
-	static inline void prepareChunkData( KeyFrame & p_value )
-	{
-		if ( !castor::isBigEndian() )
-		{
-			p_value = KeyFrame
-			{
-				castor::switchEndianness( p_value.getTimeIndex() ),
-				castor::switchEndianness( p_value.getTransform() )
-			};
 		}
 	}
 }

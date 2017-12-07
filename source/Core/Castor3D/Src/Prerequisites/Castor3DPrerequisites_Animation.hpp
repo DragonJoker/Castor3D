@@ -110,9 +110,6 @@ namespace castor3d
 	template< typename T >
 	struct SubmeshAnimationBufferT
 	{
-		//!\~english	The start time index.
-		//!\~french		L'index de temps de début.
-		float m_timeIndex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		std::vector< InterleavedVertexT< T > > m_buffer;
@@ -121,19 +118,23 @@ namespace castor3d
 		castor::BoundingBox m_boundingBox;
 	};
 
+	class Submesh;
+
 	class Animable;
 	class Animation;
+	class AnimationKeyFrame;
 	class SkeletonAnimation;
+	class SkeletonAnimationKeyFrame;
 	class SkeletonAnimationObject;
 	class SkeletonAnimationBone;
 	class SkeletonAnimationNode;
 	class MeshAnimation;
+	class MeshAnimationKeyFrame;
 	class MeshAnimationSubmesh;
-	class KeyFrame;
-	template< typename T > class Interpolator;
-	template< typename T, InterpolatorType > class InterpolatorT;
-	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
-	using SubmeshAnimationBufferArray = std::vector< SubmeshAnimationBuffer >;
+	template< typename T >
+	class Interpolator;
+	template< typename T, InterpolatorType >
+	class InterpolatorT;
 
 	struct GroupAnimation
 	{
@@ -142,20 +143,24 @@ namespace castor3d
 		float m_scale;
 	};
 
-	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
-	using Point3rInterpolator = Interpolator< castor::Point3r >;
-	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
-	using KeyFrameRealMap = std::map< real, KeyFrame >;
-	using KeyFrameArray = std::vector< KeyFrame >;
-
 	DECLARE_SMART_PTR( Animation );
+	DECLARE_SMART_PTR( AnimationKeyFrame );
 	DECLARE_SMART_PTR( SkeletonAnimation );
+	DECLARE_SMART_PTR( SkeletonAnimationKeyFrame );
 	DECLARE_SMART_PTR( SkeletonAnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationBone );
 	DECLARE_SMART_PTR( SkeletonAnimationNode );
 	DECLARE_SMART_PTR( MeshAnimation );
+	DECLARE_SMART_PTR( MeshAnimationKeyFrame );
 	DECLARE_SMART_PTR( MeshAnimationSubmesh );
 	DECLARE_SMART_PTR( Animable );
+
+	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
+	using SubmeshAnimationBufferMap = std::map< uint32_t, SubmeshAnimationBuffer >;
+	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
+	using Point3rInterpolator = Interpolator< castor::Point3r >;
+	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
+	using AnimationKeyFrameArray = std::vector< AnimationKeyFrameUPtr >;
 
 	//! Animation pointer map, sorted by name.
 	DECLARE_MAP( castor::String, AnimationSPtr, AnimationPtrStr );
