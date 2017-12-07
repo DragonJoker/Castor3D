@@ -38,11 +38,13 @@ namespace GuiCommon
 		castor3d::Scene & m_scene;
 		castor3d::MeshSPtr m_obbMesh;
 		castor3d::MeshSPtr m_obbSubmesh;
+		castor3d::MeshSPtr m_obbBone;
 		castor3d::MeshSPtr m_aabbMesh;
 		castor::String m_objectName;
 		castor3d::MeshSPtr m_objectMesh;
 		castor3d::SceneNodeSPtr m_obbNode;
 		castor3d::SceneNodePtrArray m_obbSubmeshNodes;
+		castor3d::SceneNodePtrArray m_obbBoneNodes;
 		castor3d::SceneNodeSPtr m_aabbNode;
 		castor3d::OnSceneUpdateConnection m_sceneConnection;
 	};

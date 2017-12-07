@@ -9,18 +9,18 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< SkeletonAnimationBone >::doWrite( SkeletonAnimationBone const & p_obj )
+	bool BinaryWriter< SkeletonAnimationBone >::doWrite( SkeletonAnimationBone const & obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = BinaryWriter< SkeletonAnimationObject >{}.write( p_obj, m_chunk );
+			result = BinaryWriter< SkeletonAnimationObject >{}.write( obj, m_chunk );
 		}
 
 		return result;
@@ -28,7 +28,7 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	bool BinaryParser< SkeletonAnimationBone >::doParse( SkeletonAnimationBone & p_obj )
+	bool BinaryParser< SkeletonAnimationBone >::doParse( SkeletonAnimationBone & obj )
 	{
 		bool result = true;
 		String name;
@@ -43,11 +43,11 @@ namespace castor3d
 
 				if ( result )
 				{
-					auto bone = static_cast< Skeleton * >( p_obj.getOwner()->getOwner() )->findBone( name );
+					auto bone = static_cast< Skeleton * >( obj.getOwner()->getOwner() )->findBone( name );
 
 					if ( bone )
 					{
-						p_obj.setBone( bone );
+						obj.setBone( bone );
 					}
 					else
 					{
@@ -58,7 +58,7 @@ namespace castor3d
 				break;
 
 			case ChunkType::eAnimationObject:
-				result = BinaryParser< SkeletonAnimationObject >{}.parse( p_obj, chunk );
+				result = BinaryParser< SkeletonAnimationObject >{}.parse( obj, chunk );
 				break;
 			}
 		}
@@ -68,8 +68,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	SkeletonAnimationBone::SkeletonAnimationBone( SkeletonAnimation & p_animation )
-		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::eBone }
+	SkeletonAnimationBone::SkeletonAnimationBone( SkeletonAnimation & animation )
+		: SkeletonAnimationObject{ animation, SkeletonAnimationObjectType::eBone }
 	{
 	}
 

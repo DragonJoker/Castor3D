@@ -26,14 +26,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animation	The parent animation.
-		 *\param[in]	p_name		The node name.
+		 *\param[in]	animation	The parent animation.
+		 *\param[in]	name		The node name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animation	L'animation parente.
-		 *\param[in]	p_name		Le nom du noeud.
+		 *\param[in]	animation	L'animation parente.
+		 *\param[in]	name		Le nom du noeud.
 		 */
-		C3D_API SkeletonAnimationNode( SkeletonAnimation & p_animation, castor::String const & p_name = castor::cuEmptyString );
+		C3D_API SkeletonAnimationNode( SkeletonAnimation & animation
+			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -47,28 +48,28 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API SkeletonAnimationNode( SkeletonAnimationNode && p_rhs ) = default;
+		C3D_API SkeletonAnimationNode( SkeletonAnimationNode && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode && p_rhs ) = default;
+		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API SkeletonAnimationNode( SkeletonAnimationNode const & p_rhs ) = delete;
+		C3D_API SkeletonAnimationNode( SkeletonAnimationNode const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
 		 */
-		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode const & p_rhs ) = delete;
+		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name
@@ -123,14 +124,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doWrite( SkeletonAnimationNode const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimationNode const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -149,16 +150,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
+		 *\param[out]	obj	The object to read.
 		 *\param[in]	p_chunk	The chunk containing data.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
+		 *\param[out]	obj	L'objet à lire.
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse( SkeletonAnimationNode & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimationNode & obj )override;
 	};
 }
 

@@ -109,6 +109,13 @@ namespace castor3d
 		C3D_API SkeletonAnimation & createAnimation( castor::String const & p_name );
 		/**
 		 *\~english
+		 *\brief		Computes the bounding box and sphere for each bone, for given mesh.
+		 *\~french
+		 *\brief		Calcule les bounding box et sphere, pour chaque os, pour le maillage donné.
+		 */
+		C3D_API void computeContainers( Mesh & mesh );
+		/**
+		 *\~english
 		 *\return		The global inverse transform.
 		 *\~french
 		 *\return		La transformation globale inversée.
@@ -179,14 +186,35 @@ namespace castor3d
 		{
 			return m_bones.end();
 		}
+		/**
+		 *\~english
+		 *\return		The bones boxes.
+		 *\~french
+		 *\return		Les boîtes des os.
+		 */
+		inline std::vector< castor::BoundingBox > const & getContainers( Mesh & mesh )const
+		{
+			auto it = m_boxes.find( &mesh );
+
+			if ( it != m_boxes.end() )
+			{
+				return it->second;
+			}
+
+			static std::vector< castor::BoundingBox > const dummy;
+			return dummy;
+		}
 
 	private:
 		//!\~english	The bones.
 		//!\~french		Les bones.
 		BonePtrArray m_bones;
 		//!\~english	The global skeleton transform.
-		//!\~french		La transformation globale du squelette
+		//!\~french		La transformation globale du squelette.
 		castor::Matrix4x4r m_globalInverse;
+		//!\~english	The bounding box for each bone, sorted by mesh.
+		//!\~french		La bounding box pour chaque os, trié par maillage.
+		std::map< Mesh *, std::vector< castor::BoundingBox > > m_boxes;
 
 		friend class BinaryWriter< Skeleton >;
 		friend class BinaryParser< Skeleton >;

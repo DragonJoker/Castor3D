@@ -1,4 +1,4 @@
-﻿#include "AssimpImporter.hpp"
+#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -35,7 +35,7 @@ namespace C3dAssimp
 
 	namespace
 	{
-		aiNodeAnim const * const FindNodeAnim( const aiAnimation & animation
+		aiNodeAnim const * const doFindNodeAnim( const aiAnimation & animation
 			, const String & nodeName )
 		{
 			aiNodeAnim const * result = nullptr;
@@ -584,10 +584,10 @@ namespace C3dAssimp
 
 			if ( aiMesh.HasBones() )
 			{
-				std::vector< VertexBoneData > arrayBones( aiMesh.mNumVertices );
-				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, arrayBones );
+				std::vector< VertexBoneData > bonesData( aiMesh.mNumVertices );
+				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, bonesData );
 				auto bones = std::make_shared< BonesComponent >( submesh );
-				bones->addBoneDatas( arrayBones );
+				bones->addBoneDatas( bonesData );
 				submesh.addComponent( bones );
 			}
 
@@ -759,7 +759,7 @@ namespace C3dAssimp
 	}
 
 	void AssimpImporter::doProcessAnimationNodes( Mesh & mesh
-		, SkeletonAnimation & p_animation
+		, SkeletonAnimation & animation
 		, int64_t ticksPerMilliSecond
 		, Skeleton & skeleton
 		, aiNode const & aiNode
@@ -767,7 +767,7 @@ namespace C3dAssimp
 		, SkeletonAnimationObjectSPtr parent )
 	{
 		String name = string::stringCast< xchar >( aiNode.mName.data );
-		const aiNodeAnim * aiNodeAnim = FindNodeAnim( aiAnimation, name );
+		const aiNodeAnim * aiNodeAnim = doFindNodeAnim( aiAnimation, name );
 		SkeletonAnimationObjectSPtr object;
 		auto itBone = m_mapBoneByID.find( name );
 
@@ -804,7 +804,7 @@ namespace C3dAssimp
 		if ( itBone != m_mapBoneByID.end() )
 		{
 			auto bone = m_arrayBones[itBone->second];
-			object = p_animation.addObject( bone, parent );
+			object = animation.addObject( bone, parent );
 
 			if ( parent && parent->getType() == SkeletonAnimationObjectType::eBone )
 			{
@@ -813,7 +813,7 @@ namespace C3dAssimp
 		}
 		else
 		{
-			object = p_animation.addObject( aiNode.mName.C_Str(), parent );
+			object = animation.addObject( aiNode.mName.C_Str(), parent );
 		}
 
 		if ( aiNodeAnim )
@@ -837,7 +837,7 @@ namespace C3dAssimp
 		for ( auto node : makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
 			doProcessAnimationNodes( mesh
-				, p_animation
+				, animation
 				, ticksPerMilliSecond
 				, skeleton
 				, *node

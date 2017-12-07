@@ -90,9 +90,9 @@ namespace castor
 		 *\~french
 		 *\return		Le point minimal.
 		 */
-		inline Point3r const & getMin()const
+		inline Point3r getMin()const
 		{
-			return m_min;
+			return getCenter() - ( m_dimensions / 2.0_r );
 		}
 		/**
 		 *\~english
@@ -100,18 +100,25 @@ namespace castor
 		 *\~french
 		 *\return		Le point maximal.
 		 */
-		inline Point3r const & getMax()const
+		inline Point3r getMax()const
 		{
-			return m_max;
+			return getCenter() + ( m_dimensions / 2.0_r );
+		}
+		/**
+		 *\~english
+		 *\return		The dimensions.
+		 *\~french
+		 *\return		Les dimensions.
+		 */
+		inline Point3r const & getDimensions()const
+		{
+			return m_dimensions;
 		}
 
 	private:
-		//!\~english	The min extent of the bounding box.
-		//!\~french		Le point minimal de la bounding box.
-		Point3r m_min;
-		//!\~english	The max extent of the bounding box.
-		//\~french		Le point maximal de la bounding box
-		Point3r m_max;
+		//!\~english	The dimensions of the bounding box.
+		//!\~french		Les dimensions de la bounding box.
+		Point3r m_dimensions;
 	};
 }
 

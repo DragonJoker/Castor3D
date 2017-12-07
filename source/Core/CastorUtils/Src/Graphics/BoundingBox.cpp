@@ -4,55 +4,57 @@ namespace castor
 {
 	BoundingBox::BoundingBox()
 		: BoundingContainer3D()
-		, m_min()
-		, m_max()
 	{
 	}
 
 	BoundingBox::BoundingBox( Point3r const & min, Point3r const & max )
 		: BoundingContainer3D( min + ( max - min ) / real( 2.0 ) )
-		, m_min( min )
-		, m_max( max )
+		, m_dimensions( max - min )
 	{
 	}
 
 	bool BoundingBox::isWithin( Point3r const & point )const
 	{
-		return ( point[0] > m_min[0] && point[0] < m_max[0] )
-			&& ( point[1] > m_min[1] && point[1] < m_max[1] )
-			&& ( point[2] > m_min[2] && point[2] < m_max[2] );
+		auto min = getMin();
+		auto max = getMax();
+		return ( point[0] > min[0] && point[0] < max[0] )
+			&& ( point[1] > min[1] && point[1] < max[1] )
+			&& ( point[2] > min[2] && point[2] < max[2] );
 	}
 
 	bool BoundingBox::isOnLimits( Point3r const & point )const
 	{
+		auto min = getMin();
+		auto max = getMax();
 		return !isWithin( point )
-			&& ( point[0] == m_min[0]
-				|| point[0] == m_max[0]
-				|| point[1] == m_min[1]
-				|| point[1] == m_max[1]
-				|| point[2] == m_min[2]
-				|| point[2] == m_max[2] );
+			&& ( point[0] == min[0]
+				|| point[0] == max[0]
+				|| point[1] == min[1]
+				|| point[1] == max[1]
+				|| point[2] == min[2]
+				|| point[2] == max[2] );
 	}
 
 	void BoundingBox::load( Point3r const & min, Point3r const & max )
 	{
-		m_min = min;
-		m_max = max;
-		m_center = m_min + ( m_max - m_min ) / real( 2.0 );
+		m_center = min + ( max - min ) / real( 2.0 );
+		m_dimensions = max - min;
 	}
 
 	BoundingBox BoundingBox::getAxisAligned( Matrix4x4r const & transformations )const
 	{
+		auto min = getMin();
+		auto max = getMax();
 		Point3r corners[]
 		{
-			m_min,
-			m_max,
-			Point3r{ m_min[0], m_max[1], m_min[2] },
-			Point3r{ m_max[0], m_max[1], m_min[2] },
-			Point3r{ m_max[0], m_min[1], m_min[2] },
-			Point3r{ m_min[0], m_max[1], m_max[2] },
-			Point3r{ m_min[0], m_min[1], m_max[2] },
-			Point3r{ m_max[0], m_min[1], m_max[2] }
+			min,
+			max,
+			Point3r{ min[0], max[1], min[2] },
+			Point3r{ max[0], max[1], min[2] },
+			Point3r{ max[0], min[1], min[2] },
+			Point3r{ min[0], max[1], max[2] },
+			Point3r{ min[0], min[1], max[2] },
+			Point3r{ max[0], min[1], max[2] }
 		};
 
 		// Express object box in axis aligned coordinates.
@@ -62,9 +64,6 @@ namespace castor
 		}
 
 		// Retrieve axis aligned box boundaries.
-		Point3r min( corners[0] );
-		Point3r max( corners[1] );
-
 		for ( auto & corner : corners )
 		{
 			min[0] = std::min( corner[0], min[0] );

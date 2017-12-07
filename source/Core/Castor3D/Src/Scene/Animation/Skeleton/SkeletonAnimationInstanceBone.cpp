@@ -7,9 +7,11 @@ using namespace castor;
 
 namespace castor3d
 {
-	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
-		: SkeletonAnimationInstanceObject{ p_animationInstance, p_animationObject, p_allObjects }
-		, m_animationBone{ p_animationObject }
+	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & animationInstance
+		, SkeletonAnimationBone & animationObject
+		, SkeletonAnimationInstanceObjectPtrStrMap & allObjects )
+		: SkeletonAnimationInstanceObject{ animationInstance, animationObject, allObjects }
+		, m_animationBone{ animationObject }
 	{
 	}
 

@@ -7,6 +7,8 @@
 #include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
+#include <Mesh/Skeleton/Bone.hpp>
+#include <Mesh/Skeleton/Skeleton.hpp>
 #include <Mesh/SubmeshComponent/LinesMapping.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Scene/Geometry.hpp>
@@ -106,6 +108,7 @@ namespace GuiCommon
 		: m_scene{ scene }
 		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, PredefinedRgbColour::eRed ) }
 		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, PredefinedRgbColour::eBlue ) }
+		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, PredefinedRgbColour::eDarkBlue ) }
 		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, PredefinedRgbColour::eGreen ) }
 	{
 	}
@@ -121,6 +124,8 @@ namespace GuiCommon
 
 		m_aabbMesh.reset();
 		m_obbMesh.reset();
+		m_obbBone.reset();
+		m_obbSubmesh.reset();
 		m_aabbNode.reset();
 		m_obbNode.reset();
 	}
@@ -150,6 +155,21 @@ namespace GuiCommon
 						, submesh->getBoundingBox() ) );
 				}
 
+				//auto skeleton = m_objectMesh->getSkeleton();
+
+				//if ( skeleton )
+				//{
+				//	uint32_t index = 0u;
+
+				//	for ( auto & box : skeleton->getContainers( *m_objectMesh ) )
+				//	{
+				//		m_obbBoneNodes.push_back( doAddBB( m_obbBone
+				//			, m_obbMesh->getName() + cuT( "_Bone_" ) + string::toString( index++ )
+				//			, object.getParent()
+				//			, box ) );
+				//	}
+				//}
+
 				m_sceneConnection = m_scene.onUpdate.connect( std::bind( &CubeBoxManager::onSceneUpdate
 					, this
 					, std::placeholders::_1 ) );
@@ -175,6 +195,15 @@ namespace GuiCommon
 					i++;
 				}
 
+				i = 0u;
+
+				for ( auto & node : m_obbBoneNodes )
+				{
+					doRemoveBB( m_obbMesh->getName() + cuT( "_Bone_" ) + string::toString( i++ )
+						, node );
+				}
+
+				m_obbBoneNodes.clear();
 				m_obbSubmeshNodes.clear();
 				m_obbNode.reset();
 				m_aabbNode.reset();
@@ -227,7 +256,7 @@ namespace GuiCommon
 	void CubeBoxManager::onSceneUpdate( castor3d::Scene const & scene )
 	{
 		auto & obb = m_objectMesh->getBoundingBox();
-		auto scale = ( obb.getMax() - obb.getMin() ) / 2.0_r;
+		auto scale = obb.getDimensions() / 2.0_r;
 		m_obbNode->setScale( scale );
 		m_obbNode->setPosition( obb.getCenter() );
 		m_obbNode->update();
@@ -236,7 +265,7 @@ namespace GuiCommon
 		for ( auto & submesh : *m_objectMesh )
 		{
 			auto & sobb = submesh->getBoundingBox();
-			m_obbSubmeshNodes[i]->setScale( ( sobb.getMax() - sobb.getMin() ) / 2.0_r );
+			m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0_r );
 			m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
 			m_obbSubmeshNodes[i]->update();
 			++i;

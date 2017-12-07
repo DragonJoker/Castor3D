@@ -113,7 +113,7 @@ namespace castor3d
 
 	void AnimatedSkeleton::doStartAnimation( AnimationInstance & p_animation )
 	{
-		m_playingAnimations.push_back( static_cast< SkeletonAnimationInstance & >( p_animation ) );
+		m_playingAnimations.emplace_back( static_cast< SkeletonAnimationInstance & >( p_animation ) );
 	}
 
 	void AnimatedSkeleton::doStopAnimation( AnimationInstance & p_animation )

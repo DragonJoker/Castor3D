@@ -8,18 +8,18 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< SkeletonAnimationNode >::doWrite( SkeletonAnimationNode const & p_obj )
+	bool BinaryWriter< SkeletonAnimationNode >::doWrite( SkeletonAnimationNode const & obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = BinaryWriter< SkeletonAnimationObject >{}.write( p_obj, m_chunk );
+			result = BinaryWriter< SkeletonAnimationObject >{}.write( obj, m_chunk );
 		}
 
 		return result;
@@ -27,7 +27,7 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	bool BinaryParser< SkeletonAnimationNode >::doParse( SkeletonAnimationNode & p_obj )
+	bool BinaryParser< SkeletonAnimationNode >::doParse( SkeletonAnimationNode & obj )
 	{
 		bool result = true;
 		String name;
@@ -38,11 +38,11 @@ namespace castor3d
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				result = doParseChunk( p_obj.m_name, chunk );
+				result = doParseChunk( obj.m_name, chunk );
 				break;
 
 			case ChunkType::eAnimationObject:
-				result = BinaryParser< SkeletonAnimationObject >{}.parse( p_obj, chunk );
+				result = BinaryParser< SkeletonAnimationObject >{}.parse( obj, chunk );
 				break;
 			}
 		}
@@ -52,9 +52,10 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & p_animation, String const & p_name )
-		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::eNode }
-		, m_name{ p_name }
+	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & animation
+		, String const & name )
+		: SkeletonAnimationObject{ animation, SkeletonAnimationObjectType::eNode }
+		, m_name{ name }
 	{
 	}
 

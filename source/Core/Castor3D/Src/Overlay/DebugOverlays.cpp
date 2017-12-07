@@ -253,7 +253,7 @@ namespace castor3d
 		m_debugPanel.reset();
 	}
 
-	void DebugOverlays::beginFrame()
+	RenderInfo & DebugOverlays::beginFrame()
 	{
 		if ( m_visible )
 		{
@@ -263,6 +263,8 @@ namespace castor3d
 		}
 
 		m_externalTime = m_frameTimer.getElapsed();
+		m_renderInfo = RenderInfo{};
+		return m_renderInfo;
 	}
 
 	void DebugOverlays::registerTimer( RenderPassTimer & timer )
@@ -295,7 +297,7 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::endFrame( RenderInfo const & info )
+	void DebugOverlays::endFrame()
 	{
 		m_totalTime = m_frameTimer.getElapsed() + m_externalTime;
 
@@ -306,16 +308,6 @@ namespace castor3d
 			m_averageFps = 1000000.0f / std::chrono::duration_cast< std::chrono::microseconds >( m_averageTime ).count();
 			m_fps = 1000000.0f / std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime ).count();
 			m_gpuTotalTime = 0_ns;
-			m_totalVertexCount = info.m_totalVertexCount;
-			m_totalFaceCount = info.m_totalFaceCount;
-			m_visibleVertexCount = info.m_visibleVertexCount;
-			m_visibleFaceCount = info.m_visibleFaceCount;
-			m_totalObjectsCount = info.m_totalObjectsCount;
-			m_visibleObjectsCount = info.m_visibleObjectsCount;
-			m_particlesCount = info.m_particlesCount;
-			m_totalLightsCount = info.m_totalLightsCount;
-			m_visibleLightsCount = info.m_visibleLightsCount;
-			m_drawCalls = info.m_drawCalls;
 
 			for ( auto & pass : m_renderPasses )
 			{
@@ -402,34 +394,34 @@ namespace castor3d
 			, m_averageFps );
 		m_debugPanel->addCountPanel( cuT( "TotalVertexCount" )
 			, cuT( "Vertices Count:" )
-			, m_totalVertexCount );
+			, m_renderInfo.m_totalVertexCount );
 		m_debugPanel->addCountPanel( cuT( "TotalFaceCount" )
 			, cuT( "Faces Count:" )
-			, m_totalFaceCount );
+			, m_renderInfo.m_totalFaceCount );
 		m_debugPanel->addCountPanel( cuT( "TotalObjectCount" )
 			, cuT( "Objects Count:" )
-			, m_totalObjectsCount );
+			, m_renderInfo.m_totalObjectsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleVertexCount" )
 			, cuT( "Visible Vertices Count:" )
-			, m_visibleVertexCount );
+			, m_renderInfo.m_visibleVertexCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleFaceCount" )
 			, cuT( "Visible Faces Count:" )
-			, m_visibleFaceCount );
+			, m_renderInfo.m_visibleFaceCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleObjectCount" )
 			, cuT( "Visible Objects Count:" )
-			, m_visibleObjectsCount );
+			, m_renderInfo.m_visibleObjectsCount );
 		m_debugPanel->addCountPanel( cuT( "ParticlesCount" )
 			, cuT( "Particles Count:" )
-			, m_particlesCount );
+			, m_renderInfo.m_particlesCount );
 		m_debugPanel->addCountPanel( cuT( "LightCount" )
 			, cuT( "Lights Count:" )
-			, m_totalLightsCount );
+			, m_renderInfo.m_totalLightsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleLightCount" )
 			, cuT( "Visible Lights Count:" )
-			, m_visibleLightsCount );
+			, m_renderInfo.m_visibleLightsCount );
 		m_debugPanel->addCountPanel( cuT( "DrawCalls" )
 			, cuT( "Draw calls:" )
-			, m_drawCalls );
+			, m_renderInfo.m_drawCalls );
 		m_debugPanel->updatePosition();
 		m_debugPanel->setVisible( m_visible );
 	}

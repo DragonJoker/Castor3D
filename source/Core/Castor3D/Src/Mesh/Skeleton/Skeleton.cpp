@@ -139,4 +139,22 @@ namespace castor3d
 
 		return doGetAnimation< SkeletonAnimation >( p_name );
 	}
+
+	void Skeleton::computeContainers( Mesh & mesh )
+	{
+		auto it = m_boxes.find( &mesh );
+
+		if ( it == m_boxes.end() )
+		{
+			uint32_t index = 0u;
+			std::vector< BoundingBox > boxes;
+			boxes.reserve( m_bones.size() );
+
+			for ( auto & bone : m_bones )
+			{
+				boxes.emplace_back( bone->computeBoundingBox( mesh, index ) );
+				++index;
+			}
+		}
+	}
 }

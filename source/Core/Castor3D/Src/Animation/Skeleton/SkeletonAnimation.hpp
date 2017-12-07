@@ -27,14 +27,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animable	The parent animable object.
-		 *\param[in]	p_name		The name of the animation.
+		 *\param[in]	animable	The parent animable object.
+		 *\param[in]	name		The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animable	L'objet animable parent.
-		 *\param[in]	p_name		Le nom de l'animation.
+		 *\param[in]	animable	L'objet animable parent.
+		 *\param[in]	name		Le nom de l'animation.
 		 */
-		C3D_API SkeletonAnimation( Animable & p_animable, castor::String const & p_name = castor::cuEmptyString );
+		C3D_API SkeletonAnimation( Animable & animable
+			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -48,101 +49,106 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API SkeletonAnimation( SkeletonAnimation && p_rhs ) = default;
+		C3D_API SkeletonAnimation( SkeletonAnimation && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API SkeletonAnimation & operator=( SkeletonAnimation && p_rhs ) = default;
+		C3D_API SkeletonAnimation & operator=( SkeletonAnimation && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API SkeletonAnimation( SkeletonAnimation const & p_rhs ) = delete;
+		C3D_API SkeletonAnimation( SkeletonAnimation const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
 		 */
-		C3D_API SkeletonAnimation & operator=( SkeletonAnimation const & p_rhs ) = delete;
+		C3D_API SkeletonAnimation & operator=( SkeletonAnimation const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving node.
-		 *\param[in]	p_name		The node name.
-		 *\param[in]	p_parent	The moving object's parent.
+		 *\param[in]	name	The node name.
+		 *\param[in]	parent	The moving object's parent.
 		 *\~french
 		 *\brief		Crée et ajoute un noeud mouvant.
-		 *\param[in]	p_name		Le nom du noeud.
-		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
+		 *\param[in]	name	Le nom du noeud.
+		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( castor::String const & p_name, SkeletonAnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr addObject( castor::String const & name
+			, SkeletonAnimationObjectSPtr parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving bone.
-		 *\param[in]	p_bone		The bone to add.
-		 *\param[in]	p_parent	The moving object's parent.
+		 *\param[in]	bone	The bone to add.
+		 *\param[in]	parent	The moving object's parent.
 		 *\~french
 		 *\brief		Crée et ajoute un os mouvant.
-		 *\param[in]	p_bone		L'os.
-		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
+		 *\param[in]	bone	L'os.
+		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( BoneSPtr p_bone, SkeletonAnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr addObject( BoneSPtr bone
+			, SkeletonAnimationObjectSPtr parent );
 		/**
 		 *\~english
 		 *\brief		adds an animated object.
-		 *\param[in]	p_object	The animated object to add.
-		 *\param[in]	p_parent	The moving object's parent.
+		 *\param[in]	object	The animated object to add.
+		 *\param[in]	parent	The moving object's parent.
 		 *\~french
 		 *\brief		Ajoute un objet animé.
-		 *\param[in]	p_object	L'objet animé.
-		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
+		 *\param[in]	object	L'objet animé.
+		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr addObject( SkeletonAnimationObjectSPtr object
+			, SkeletonAnimationObjectSPtr parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.
-		 *\param[in]	p_type	The object type.
-		 *\param[in]	p_name	The object name.
+		 *\param[in]	type	The object type.
+		 *\param[in]	name	The object name.
 		 *\~french
 		 *\brief		Dit si l'animation a l'objet animé.
-		 *\param[in]	p_type	Le type de l'objet.
-		 *\param[in]	p_name	Le nom de l'objet.
+		 *\param[in]	type	Le type de l'objet.
+		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API bool hasObject( SkeletonAnimationObjectType p_type, castor::String const & p_name )const;
+		C3D_API bool hasObject( SkeletonAnimationObjectType type
+			, castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone.
-		 *\param[in]	p_bone	The bone.
+		 *\param[in]	bone	The bone.
 		 *\~french
 		 *\brief		Récupère un os animé.
-		 *\param[in]	p_bone	L'os.
+		 *\param[in]	bone	L'os.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( Bone const & p_bone )const;
+		C3D_API SkeletonAnimationObjectSPtr getObject( Bone const & bone )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
-		 *\param[in]	p_name	The object name.
+		 *\param[in]	name	The object name.
 		 *\~french
 		 *\brief		Récupère un objet animé.
-		 *\param[in]	p_name	Le nom de l'objet.
+		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( castor::String const & p_name )const;
+		C3D_API SkeletonAnimationObjectSPtr getObject( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
-		 *\param[in]	p_type	The object type.
-		 *\param[in]	p_name	The object name.
+		 *\param[in]	type	The object type.
+		 *\param[in]	name	The object name.
 		 *\~french
 		 *\brief		Récupère un objet animé.
-		 *\param[in]	p_type	Le type d'objet.
-		 *\param[in]	p_name	Le nom de l'objet.
+		 *\param[in]	type	Le type d'objet.
+		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonAnimationObjectType p_type, castor::String const & p_name )const;
+		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonAnimationObjectType type
+			, castor::String const & name )const;
 		/**
 		 *\~english
 		 *\return		The moving objects.
@@ -216,14 +222,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doWrite( SkeletonAnimation const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimation const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -242,16 +248,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
-		 *\param[in]	p_chunk	The chunk containing data.
+		 *\param[out]	obj	The object to read.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
-		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse( SkeletonAnimation & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimation & obj )override;
 	};
 }
 

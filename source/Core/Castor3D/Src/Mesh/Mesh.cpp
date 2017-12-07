@@ -252,6 +252,7 @@ namespace castor3d
 	void Mesh::setSkeleton( SkeletonSPtr p_skeleton )
 	{
 		m_skeleton = p_skeleton;
+		m_skeleton->computeContainers( *this );
 	}
 
 	MeshAnimation & Mesh::createAnimation( castor::String const & p_name )

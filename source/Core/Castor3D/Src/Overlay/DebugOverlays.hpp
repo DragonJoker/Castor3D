@@ -64,19 +64,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Resets all frame counters.
+		 *\return		The render infos.
 		 *\~french
 		 *\brief		Réinitialise tous les compteurs d'image.
+		 *\return		Les informations de rendu.
 		 */
-		void beginFrame();
+		RenderInfo & beginFrame();
 		/**
 		 *\~english
 		 *\brief		Updates the overlays texts.
-		 *\param[in]	info	The render informations.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
-		 *\param[in]	info	Les informations de rendu.
 		 */
-		void endFrame( RenderInfo const & info );
+		void endFrame();
 		/**
 		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
@@ -258,16 +258,7 @@ namespace castor3d
 		float m_averageFps{ 0.0f };
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
-		uint32_t m_totalVertexCount{ 0 };
-		uint32_t m_totalFaceCount{ 0 };
-		uint32_t m_visibleVertexCount{ 0 };
-		uint32_t m_visibleFaceCount{ 0 };
-		uint32_t m_totalObjectsCount{ 0 };
-		uint32_t m_visibleObjectsCount{ 0 };
-		uint32_t m_particlesCount{ 0 };
-		uint32_t m_totalLightsCount{ 0 };
-		uint32_t m_visibleLightsCount{ 0 };
-		uint32_t m_drawCalls{ 0 };
+		RenderInfo m_renderInfo;
 	};
 }
 

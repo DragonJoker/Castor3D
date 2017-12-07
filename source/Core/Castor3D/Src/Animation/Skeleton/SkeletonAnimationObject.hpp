@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Binary/BinaryWriter.hpp"
 #include "Animation/Interpolator.hpp"
 
+#include <Graphics/BoundingBox.hpp>
 #include <Math/SquareMatrix.hpp>
 #include <Math/Quaternion.hpp>
 
@@ -32,21 +33,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animation	The parent animation.
-		 *\param[in]	p_type		The skeleton animation object type.
+		 *\param[in]	animation	The parent animation.
+		 *\param[in]	type		The skeleton animation object type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animation	L'animation parente.
-		 *\param[in]	p_type		Le type d'objet d'animation de squelette.
+		 *\param[in]	animation	L'animation parente.
+		 *\param[in]	type		Le type d'objet d'animation de squelette.
 		 */
-		C3D_API SkeletonAnimationObject( SkeletonAnimation & p_animation, SkeletonAnimationObjectType p_type );
+		C3D_API SkeletonAnimationObject( SkeletonAnimation & animation
+			, SkeletonAnimationObjectType type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API SkeletonAnimationObject( SkeletonAnimationObject const & p_rhs ) = delete;
+		C3D_API SkeletonAnimationObject( SkeletonAnimationObject const & rhs ) = delete;
 
 	public:
 		/**
@@ -60,13 +62,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
-		 *\param[in]	p_object	The child.
+		 *\param[in]	object	The child.
 		 *\~french
 		 *\brief		Ajoute un objet enfant à celui-ci.
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
-		 *\param[in]	p_object	L'enfant.
+		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void addChild( SkeletonAnimationObjectSPtr p_object );
+		C3D_API void addChild( SkeletonAnimationObjectSPtr object );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name.
@@ -80,31 +82,31 @@ namespace castor3d
 		 *\~english
 		 *\brief		Creates a scaling key frame and adds it to the list.
 		 *\remarks		If a key frame with the same starting time already exists, it is returned, but not modified.
-		 *\param[in]	p_from		The starting time.
-		 *\param[in]	p_translate	The translation at start time.
-		 *\param[in]	p_rotate	The rotation at start time.
-		 *\param[in]	p_scale		The scaling at start time.
+		 *\param[in]	from		The starting time.
+		 *\param[in]	translate	The translation at start time.
+		 *\param[in]	rotate		The rotation at start time.
+		 *\param[in]	scale		The scaling at start time.
 		 *\~french
 		 *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
 		 *\remarks		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		 *\param[in]	p_from		L'index de temps de début.
-		 *\param[in]	p_translate	La translation au temps de début.
-		 *\param[in]	p_rotate	La rotation au temps de début.
-		 *\param[in]	p_scale		L'échelle au temps de début.
+		 *\param[in]	from		L'index de temps de début.
+		 *\param[in]	translate	La translation au temps de début.
+		 *\param[in]	rotate		La rotation au temps de début.
+		 *\param[in]	scale		L'échelle au temps de début.
 		 */
-		C3D_API KeyFrame & addKeyFrame( castor::Milliseconds const & p_from
-			, castor::Point3r const & p_translate = castor::Point3r{}
-		, castor::Quaternion const & p_rotate = castor::Quaternion{}
-		, castor::Point3r const & p_scale = castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
+		C3D_API KeyFrame & addKeyFrame( castor::Milliseconds const & from
+			, castor::Point3r const & translate = castor::Point3r{}
+		, castor::Quaternion const & rotate = castor::Quaternion{}
+		, castor::Point3r const & scale = castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
 		/**
 		 *\~english
 		 *\brief		Deletes the scaling key frame at time index p_time.
-		 *\param[in]	p_time	The time index.
+		 *\param[in]	time	The time index.
 		 *\~french
 		 *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
-		 *\param[in]	p_time	L'index de temps.
+		 *\param[in]	time	L'index de temps.
 		 */
-		C3D_API void removeKeyFrame( castor::Milliseconds const & p_time );
+		C3D_API void removeKeyFrame( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
@@ -148,14 +150,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the animation length.
-		 *\param[in]	p_length	The new value.
+		 *\param[in]	length	The new value.
 		 *\~french
 		 *\brief		Définit la durée de l'animation.
-		 *\param[in]	p_length	La nouvelle valeur.
+		 *\param[in]	length	La nouvelle valeur.
 		 */
-		inline void	setLength( castor::Milliseconds const & p_length )
+		inline void	setLength( castor::Milliseconds const & length )
 		{
-			m_length = p_length;
+			m_length = length;
 		}
 		/**
 		 *\~english
@@ -172,14 +174,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the animation node transformation.
-		 *\param[in]	p_transform	The new value.
+		 *\param[in]	transform	The new value.
 		 *\~french
 		 *\brief		Définit les animations du noeud de transformation.
-		 *\param[in]	p_transform	La nouvelle valeur.
+		 *\param[in]	transform	La nouvelle valeur.
 		 */
-		inline void setNodeTransform( castor::Matrix4x4r const & p_transform )
+		inline void setNodeTransform( castor::Matrix4x4r const & transform )
 		{
-			m_nodeTransform = p_transform;
+			m_nodeTransform = transform;
 		}
 		/**
 		 *\~english
@@ -236,6 +238,9 @@ namespace castor3d
 		//!\~english	The parent object.
 		//!\~french		L'objet parent.
 		SkeletonAnimationObjectWPtr m_parent;
+		//!\~english	The bounding box.
+		//!\~french		La bounding box.
+		castor::BoundingBox m_boundingBox;
 
 		friend class BinaryWriter< SkeletonAnimationObject >;
 		friend class BinaryParser< SkeletonAnimationObject >;
@@ -274,14 +279,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doWrite( SkeletonAnimationObject const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimationObject const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -300,16 +305,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
-		 *\param[in]	p_chunk	The chunk containing data.
+		 *\param[out]	obj	The object to read.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
-		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse( SkeletonAnimationObject & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimationObject & obj )override;
 	};
 }
 
