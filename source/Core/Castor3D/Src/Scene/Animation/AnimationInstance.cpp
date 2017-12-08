@@ -4,9 +4,9 @@ using namespace castor;
 
 namespace castor3d
 {
-	AnimationInstance::AnimationInstance( AnimatedObject & p_object, Animation const & p_animation )
-		: OwnedBy< AnimatedObject >{ p_object }
-		, m_animation{ p_animation }
+	AnimationInstance::AnimationInstance( AnimatedObject & object, Animation & animation )
+		: OwnedBy< AnimatedObject >{ object }
+		, m_animation{ animation }
 	{
 	}
 
@@ -14,7 +14,7 @@ namespace castor3d
 	{
 	}
 
-	void AnimationInstance::update( Milliseconds const & p_tslf )
+	void AnimationInstance::update( Milliseconds const & elapsed )
 	{
 		auto length = m_animation.getLength();
 		auto scale = m_scale;
@@ -24,7 +24,7 @@ namespace castor3d
 		{
 			if ( m_state == AnimationState::ePlaying )
 			{
-				m_currentTime += Milliseconds( int64_t( p_tslf.count() * scale ) );
+				m_currentTime += Milliseconds( int64_t( elapsed.count() * scale ) );
 
 				if ( m_currentTime >= length )
 				{

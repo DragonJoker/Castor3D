@@ -98,14 +98,14 @@ namespace castor3d
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		28/05/2016
+	\version	0.10.0
+	\date 		07/12/2017
 	\~english
 	\brief		Helper structure to find ChunkType from a type.
-	\remarks	Specialisation for MeshAnimationSubmesh.
+	\remarks	Specialisation for MeshAnimationKeyFrame.
 	\~french
 	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
-	\remarks	Spécialisation pour MeshAnimationSubmesh.
+	\remarks	Spécialisation pour MeshAnimationKeyFrame.
 	*/
 	template<>
 	struct ChunkTyper< MeshAnimationKeyFrame >
@@ -114,12 +114,12 @@ namespace castor3d
 	};
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		26/01/2016
+	\version	0.10.0
+	\date 		07/12/2017
 	\~english
-	\brief		MeshAnimationSubmesh binary loader.
+	\brief		MeshAnimationKeyFrame binary loader.
 	\~english
-	\brief		Loader binaire de MeshAnimationSubmesh.
+	\brief		Loader binaire de MeshAnimationKeyFrame.
 	*/
 	template<>
 	class BinaryWriter< MeshAnimationKeyFrame >
@@ -140,12 +140,12 @@ namespace castor3d
 	};
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		26/01/2016
+	\version	0.10.0
+	\date 		07/12/2017
 	\~english
-	\brief		MeshAnimationSubmesh binary loader.
+	\brief		MeshAnimationKeyFrame binary loader.
 	\~english
-	\brief		Loader binaire de MeshAnimationSubmesh.
+	\brief		Loader binaire de MeshAnimationKeyFrame.
 	*/
 	template<>
 	class BinaryParser< MeshAnimationKeyFrame >

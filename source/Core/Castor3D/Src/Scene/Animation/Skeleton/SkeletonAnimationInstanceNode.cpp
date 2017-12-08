@@ -6,8 +6,10 @@ using namespace castor;
 
 namespace castor3d
 {
-	SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationNode & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
-		: SkeletonAnimationInstanceObject{ p_animationInstance, p_animationObject, p_allObjects }
+	SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode( SkeletonAnimationInstance & animationInstance
+		, SkeletonAnimationNode & animationObject
+		, SkeletonAnimationInstanceObjectPtrArray & allObjects )
+		: SkeletonAnimationInstanceObject{ animationInstance, animationObject, allObjects }
 	{
 	}
 
@@ -17,6 +19,6 @@ namespace castor3d
 
 	void SkeletonAnimationInstanceNode::doApply()
 	{
-		m_finalTransform = m_animationObject.getNodeTransform();
+		m_finalTransform = m_cumulativeTransform;
 	}
 }

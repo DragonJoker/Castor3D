@@ -163,6 +163,7 @@ namespace castor3d
 	class AnimatedMesh;
 	class AnimationInstance;
 	class SkeletonAnimationInstance;
+	class SkeletonAnimationInstanceKeyFrame;
 	class SkeletonAnimationInstanceObject;
 	class SkeletonAnimationInstanceNode;
 	class SkeletonAnimationInstanceBone;

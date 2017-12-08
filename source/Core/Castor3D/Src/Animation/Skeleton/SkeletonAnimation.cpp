@@ -4,6 +4,7 @@
 
 #include "Mesh/Skeleton/Bone.hpp"
 #include "SkeletonAnimationBone.hpp"
+#include "SkeletonAnimationKeyFrame.hpp"
 #include "SkeletonAnimationNode.hpp"
 
 #include "Scene/Geometry.hpp"
@@ -48,6 +49,11 @@ namespace castor3d
 			}
 		}
 
+		for ( auto & keyframe : obj )
+		{
+			result &= BinaryWriter< SkeletonAnimationKeyFrame >{}.write( static_cast< SkeletonAnimationKeyFrame const & >( *keyframe ), m_chunk );
+		}
+
 		return result;
 	}
 
@@ -59,6 +65,7 @@ namespace castor3d
 		SkeletonAnimationNodeSPtr node;
 		SkeletonAnimationObjectSPtr object;
 		SkeletonAnimationBoneSPtr bone;
+		SkeletonAnimationKeyFrameUPtr keyFrame;
 		String name;
 		BinaryChunk chunk;
 
@@ -84,6 +91,17 @@ namespace castor3d
 				if ( result )
 				{
 					obj.addObject( bone, nullptr );
+				}
+
+				break;
+
+			case ChunkType::eSkeletonAnimationKeyFrame:
+				keyFrame = std::make_unique< SkeletonAnimationKeyFrame >( obj );
+				result = BinaryParser< SkeletonAnimationKeyFrame >{}.parse( *keyFrame, chunk );
+
+				if ( result )
+				{
+					obj.addKeyFrame( std::move( keyFrame ) );
 				}
 
 				break;
@@ -176,14 +194,6 @@ namespace castor3d
 
 		return result;
 	}
-
-	//void SkeletonAnimation::doUpdateLength()
-	//{
-	//	for ( auto it : m_toMove )
-	//	{
-	//		m_length = std::max( m_length, it.second->getLength() );
-	//	}
-	//}
 
 	//*************************************************************************************************
 }

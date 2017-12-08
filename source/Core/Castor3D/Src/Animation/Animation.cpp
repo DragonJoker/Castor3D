@@ -109,13 +109,24 @@ namespace castor3d
 			{
 				return lhs->getTimeIndex() < rhs->getTimeIndex();
 			} );
+		keyFrame->initialise();
 		m_keyframes.insert( it, std::move( keyFrame ) );
 		updateLength();
 	}
 
+	AnimationKeyFrameArray::iterator Animation::find( castor::Milliseconds const & time )
+	{
+		return std::find_if( m_keyframes.begin()
+			, m_keyframes.end()
+			, [&time]( AnimationKeyFrameUPtr const & lookup )
+			{
+				return lookup->getTimeIndex() == time;
+			} );
+	}
+
 	void Animation::findKeyFrame( Milliseconds const & time
-		, AnimationKeyFrameArray::const_iterator & prv
-		, AnimationKeyFrameArray::const_iterator & cur )const
+		, AnimationKeyFrameArray::iterator & prv
+		, AnimationKeyFrameArray::iterator & cur )const
 	{
 		while ( prv != m_keyframes.begin() && ( *prv )->getTimeIndex() >= time )
 		{

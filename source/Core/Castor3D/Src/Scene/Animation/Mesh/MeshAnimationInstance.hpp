@@ -88,10 +88,10 @@ namespace castor3d
 		MeshAnimationInstanceSubmeshMap m_submeshes;
 		//!\~english	Iterator to the previous keyframe (when playing the animation).
 		//!\~french		Itérateur sur la keyframe précédente (quand l'animation est jouée).
-		AnimationKeyFrameArray::const_iterator m_prev;
+		AnimationKeyFrameArray::iterator m_prev;
 		//!\~english	Iterator to the current keyframe (when playing the animation).
 		//!\~french		Itérateur sur la keyframe courante (quand l'animation est jouée).
-		AnimationKeyFrameArray::const_iterator m_curr;
+		AnimationKeyFrameArray::iterator m_curr;
 
 		friend class BinaryWriter< MeshAnimation >;
 		friend class BinaryParser< MeshAnimation >;

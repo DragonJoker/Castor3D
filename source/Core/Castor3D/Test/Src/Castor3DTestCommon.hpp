@@ -241,6 +241,12 @@ namespace Testing
 	}
 
 	template<>
+	inline std::string toString< castor3d::SkeletonAnimationInstanceKeyFrame >( castor3d::SkeletonAnimationInstanceKeyFrame const & p_value )
+	{
+		return std::string{ "castor3d::SkeletonAnimationInstanceObject" };
+	}
+
+	template<>
 	inline std::string toString< castor3d::InterpolatorType >( castor3d::InterpolatorType const & p_value )
 	{
 		static std::map< castor3d::InterpolatorType, std::string > Names
@@ -377,11 +383,13 @@ namespace Testing
 		bool compare( castor3d::SkeletonAnimationObject const & p_a, castor3d::SkeletonAnimationObject const & p_b );
 		bool compare( castor3d::AnimationKeyFrame const & p_a, castor3d::AnimationKeyFrame const & p_b );
 		bool compare( castor3d::MeshAnimationKeyFrame const & p_a, castor3d::MeshAnimationKeyFrame const & p_b );
+		bool compare( castor3d::SkeletonAnimationKeyFrame const & p_a, castor3d::SkeletonAnimationKeyFrame const & p_b );
 		bool compare( castor3d::AnimatedObjectGroup const & p_a, castor3d::AnimatedObjectGroup const & p_b );
 		bool compare( castor3d::AnimatedObject const & p_a, castor3d::AnimatedObject const & p_b );
 		bool compare( castor3d::AnimationInstance const & p_a, castor3d::AnimationInstance const & p_b );
 		bool compare( castor3d::SkeletonAnimationInstance const & p_a, castor3d::SkeletonAnimationInstance const & p_b );
 		bool compare( castor3d::SkeletonAnimationInstanceObject const & p_a, castor3d::SkeletonAnimationInstanceObject const & p_b );
+		bool compare( castor3d::SkeletonAnimationInstanceKeyFrame const & p_a, castor3d::SkeletonAnimationInstanceKeyFrame const & p_b );
 
 	protected:
 		castor3d::Engine & m_engine;

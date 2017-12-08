@@ -13,10 +13,22 @@ namespace castor3d
 {
 	//!\~english	Macro to make a version number.
 	//!\~french		Macro pour créer un numéro de version.
-#	define	MAKE_CMSH_VERSION( major, minor, revision )\
-	((uint32_t( major ) << 24)\
-	| (uint32_t( minor ) << 16)\
-	| (uint32_t( revision ) << 0))
+#	define	MAKE_CMSH_VERSION( maj, min, rev )\
+	( ( uint32_t( maj ) << 24 ) \
+	| ( uint32_t( min ) << 16 ) \
+	| ( uint32_t( rev ) <<  0 ) )
+	//!\~english	Macro to get the major number from a version number.
+	//!\~french		Macro pour créer le numéro majeur depuis un numéro de version.
+#	define	CMSH_VERSION_MAJOR( version )\
+	( uint32_t( version ) >> 24 )
+	//!\~english	Macro to get the minor number from a version number.
+	//!\~french		Macro pour créer le numéro mineur depuis un numéro de version.
+#	define	CMSH_VERSION_MINOR( version )\
+	( ( uint32_t( version ) >> 16 ) & uint32_t( 0xFF ) )
+	//!\~english	Macro to get the revision number from a version number.
+	//!\~french		Macro pour créer le numéro de révision depuis un numéro de version.
+#	define	CMSH_VERSION_REVISION( version )\
+	( ( uint32_t( version ) >>  0 ) & uint32_t( 0xFF ) )
 	//!\~english	The current format version number.
 	//!\~french		La version actuelle du format.
 	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x02, 0x0000 );
@@ -77,11 +89,17 @@ namespace castor3d
 		eKeyframeCount = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
 		eKeyframes = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
 		eBonesComponent = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'C', 'O', 'M', 'P' ),
+		// Version 1.2
 		eMeshAnimationKeyFrame = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'R', 'M' ),
 		eMeshAnimationKeyFrameTime = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'T', 'M' ),
 		eMeshAnimationKeyFrameSubmeshID = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'I', 'D' ),
 		eMeshAnimationKeyFrameBufferSize = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'S', 'Z' ),
 		eMeshAnimationKeyFrameBufferData = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'D', 'T' ),
+		eSkeletonAnimationKeyFrame = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'R', 'M' ),
+		eSkeletonAnimationKeyFrameTime = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'T', 'M' ),
+		eSkeletonAnimationKeyFrameObjectType = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'Y' ),
+		eSkeletonAnimationKeyFrameObjectName = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'N' ),
+		eSkeletonAnimationKeyFrameObjectTransform = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' ),
 	};
 	/**
 	 *\~english
@@ -299,6 +317,16 @@ namespace castor3d
 		void endParse()
 		{
 			m_index = uint32_t( m_data.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Resets the chunk, to be able to reparse it.
+		 *\~french
+		 *\brief		Réinitialise le chunk, afin de pouvoir le reparser.
+		 */
+		void resetParse()
+		{
+			m_index = 0u;
 		}
 
 	private:

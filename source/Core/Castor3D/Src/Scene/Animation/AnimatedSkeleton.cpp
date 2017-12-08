@@ -105,7 +105,7 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			auto & animation = static_cast< SkeletonAnimation const & >( m_skeleton.getAnimation( p_name ) );
+			auto & animation = static_cast< SkeletonAnimation & >( m_skeleton.getAnimation( p_name ) );
 			auto instance = std::make_unique< SkeletonAnimationInstance >( *this, animation );
 			m_animations.emplace( p_name, std::move( instance ) );
 		}

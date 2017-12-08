@@ -1,15 +1,14 @@
 #include "SkeletonAnimationInstance.hpp"
 
 #include "Engine.hpp"
-
-#include "SkeletonAnimationInstanceBone.hpp"
-#include "SkeletonAnimationInstanceNode.hpp"
-
 #include "Animation/Skeleton/SkeletonAnimation.hpp"
-#include "Animation/Skeleton/SkeletonAnimationNode.hpp"
 #include "Animation/Skeleton/SkeletonAnimationBone.hpp"
+#include "Animation/Skeleton/SkeletonAnimationKeyFrame.hpp"
+#include "Animation/Skeleton/SkeletonAnimationNode.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
+#include "Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
+#include "Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
 
 using namespace castor;
 
@@ -19,7 +18,7 @@ namespace castor3d
 
 	namespace
 	{
-		castor::String const & getObjectTypeName( SkeletonAnimationObjectType p_type )
+		castor::String const & getObjectTypeName( SkeletonAnimationObjectType type )
 		{
 			static std::map< SkeletonAnimationObjectType, String > Names
 			{
@@ -27,58 +26,84 @@ namespace castor3d
 				{ SkeletonAnimationObjectType::eBone, cuT( "Bone_" ) },
 			};
 
-			return Names[p_type];
+			return Names[type];
 		}
 	}
 
 	//*************************************************************************************************
 
-	SkeletonAnimationInstance::SkeletonAnimationInstance( AnimatedSkeleton & p_object, SkeletonAnimation const & p_animation )
-		: AnimationInstance{ p_object, p_animation }
+	SkeletonAnimationInstance::SkeletonAnimationInstance( AnimatedSkeleton & object
+		, SkeletonAnimation & animation )
+		: AnimationInstance{ object, animation }
 	{
-		for ( auto moving : p_animation.m_arrayMoving )
+		for ( auto moving : animation.m_arrayMoving )
 		{
 			switch ( moving->getType() )
 			{
 			case SkeletonAnimationObjectType::eNode:
-				m_arrayMoving.push_back( std::make_shared< SkeletonAnimationInstanceNode >( *this, *std::static_pointer_cast< SkeletonAnimationNode >( moving ), m_toMove ) );
-				m_toMove.insert( { getObjectTypeName( moving->getType() ) + moving->getName(), m_arrayMoving.back() } );
+				{
+					auto instance = std::make_shared< SkeletonAnimationInstanceNode >( *this
+						, *std::static_pointer_cast< SkeletonAnimationNode >( moving )
+						, m_toMove );
+					m_toMove.push_back( instance );
+				}
 				break;
 
 			case SkeletonAnimationObjectType::eBone:
-				m_arrayMoving.push_back( std::make_shared< SkeletonAnimationInstanceBone >( *this, *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_toMove ) );
-				m_toMove.insert( { getObjectTypeName( moving->getType() ) + moving->getName(), m_arrayMoving.back() } );
+				{
+					auto instance = std::make_shared< SkeletonAnimationInstanceBone >( *this
+						, *std::static_pointer_cast< SkeletonAnimationBone >( moving )
+						, m_toMove );
+					m_toMove.push_back( instance );
+				}
 				break;
 			}
 		}
+
+		for ( auto & keyFrame : animation )
+		{
+			m_keyFrames.emplace_back( *this
+				, static_cast< SkeletonAnimationKeyFrame const & >( *keyFrame ) );
+		}
+
+		m_curr = m_keyFrames.empty()
+			? m_keyFrames.end()
+			: m_keyFrames.begin();
 	}
 
 	SkeletonAnimationInstance::~SkeletonAnimationInstance()
 	{
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( Bone const & p_bone )const
+	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( Bone const & bone )const
 	{
-		return getObject( SkeletonAnimationObjectType::eBone, p_bone.getName() );
+		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( castor::String const & p_name )const
+	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( castor::String const & name )const
 	{
-		return getObject( SkeletonAnimationObjectType::eNode, p_name );
+		return getObject( SkeletonAnimationObjectType::eNode, name );
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonAnimationObjectType p_type, castor::String const & p_name )const
+	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonAnimationObjectType type
+		, castor::String const & name )const
 	{
 		SkeletonAnimationInstanceObjectSPtr result;
-		auto it = m_toMove.find( getObjectTypeName( p_type ) + p_name );
+		auto fullName = getObjectTypeName( type ) + name;
+		auto it = std::find_if( m_toMove.begin()
+			, m_toMove.end()
+			, [&fullName]( SkeletonAnimationInstanceObjectSPtr lookup )
+			{
+				return getObjectTypeName( lookup->getObject().getType() ) + lookup->getObject().getName() == fullName;
+			} );
 
 		if ( it != m_toMove.end() )
 		{
-			result = it->second;
+			result = *it;
 		}
 		else
 		{
-			Logger::logWarning( cuT( "No object named " ) + p_name + cuT( " for this animation instance" ) );
+			Logger::logWarning( cuT( "No object named " ) + name + cuT( " for this animation instance" ) );
 		}
 
 		return result;
@@ -86,9 +111,26 @@ namespace castor3d
 
 	void SkeletonAnimationInstance::doUpdate()
 	{
-		for ( auto moving : m_arrayMoving )
+		if ( !m_keyFrames.empty() )
 		{
-			moving->update( m_currentTime, Matrix4x4r{ 1 } );
+			auto limit = m_keyFrames.begin();
+
+			while ( m_curr != limit && m_curr->getTimeIndex() >= m_currentTime )
+			{
+				// Time has gone too fast backward.
+				--m_curr;
+			}
+
+			limit = ( m_keyFrames.end() - 1 );
+
+			while ( m_curr != limit && m_curr->getTimeIndex() < m_currentTime )
+			{
+				// Time has gone too fast forward.
+				++m_curr;
+			}
+
+			m_curr->apply();
+			//static_cast< Mesh & >( *m_meshAnimation.getOwner() ).updateContainers();
 		}
 	}
 

@@ -78,35 +78,6 @@ namespace castor3d
 		 *\return		Le nom.
 		 */
 		C3D_API virtual castor::String const & getName()const = 0;
-		///**
-		// *\~english
-		// *\brief		Creates a scaling key frame and adds it to the list.
-		// *\remarks		If a key frame with the same starting time already exists, it is returned, but not modified.
-		// *\param[in]	from		The starting time.
-		// *\param[in]	translate	The translation at start time.
-		// *\param[in]	rotate		The rotation at start time.
-		// *\param[in]	scale		The scaling at start time.
-		// *\~french
-		// *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
-		// *\remarks		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		// *\param[in]	from		L'index de temps de début.
-		// *\param[in]	translate	La translation au temps de début.
-		// *\param[in]	rotate		La rotation au temps de début.
-		// *\param[in]	scale		L'échelle au temps de début.
-		// */
-		//C3D_API KeyFrame & addKeyFrame( castor::Milliseconds const & from
-		//	, castor::Point3r const & translate = castor::Point3r{}
-		//, castor::Quaternion const & rotate = castor::Quaternion{}
-		//, castor::Point3r const & scale = castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
-		///**
-		// *\~english
-		// *\brief		Deletes the scaling key frame at time index p_time.
-		// *\param[in]	time	The time index.
-		// *\~french
-		// *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
-		// *\param[in]	time	L'index de temps.
-		// */
-		//C3D_API void removeKeyFrame( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
@@ -117,26 +88,6 @@ namespace castor3d
 		{
 			return m_mode;
 		}
-		///**
-		// *\~english
-		// *\return		The key frames.
-		// *\~french
-		// *\return		Les key frames.
-		// */
-		//inline KeyFrameArray const & getKeyFrames()const
-		//{
-		//	return m_keyframes;
-		//}
-		/**
-		 *\~english
-		 *\return		The animation length.
-		 *\~french
-		 *\return		La durée de l'animation.
-		 */
-		inline castor::Milliseconds const & getLength()const
-		{
-			return m_length;
-		}
 		/**
 		 *\~english
 		 *\return		The moving object type.
@@ -146,18 +97,6 @@ namespace castor3d
 		inline SkeletonAnimationObjectType getType()const
 		{
 			return m_type;
-		}
-		/**
-		 *\~english
-		 *\brief		sets the animation length.
-		 *\param[in]	length	The new value.
-		 *\~french
-		 *\brief		Définit la durée de l'animation.
-		 *\param[in]	length	La nouvelle valeur.
-		 */
-		inline void	setLength( castor::Milliseconds const & length )
-		{
-			m_length = length;
 		}
 		/**
 		 *\~english
@@ -183,18 +122,6 @@ namespace castor3d
 		{
 			m_nodeTransform = transform;
 		}
-		///**
-		// *\~english
-		// *\brief		Tells whether or not the object has keyframes.
-		// *\return		\p false if no keyframes.
-		// *\~french
-		// *\brief		Dit si l'objet a des keyframes.
-		// *\return		\p false si pas de keyframes.
-		// */
-		//inline bool hasKeyFrames()const
-		//{
-		//	return !m_keyframes.empty();
-		//}
 		/**
 		 *\~english
 		 *\return		The children array.
@@ -220,9 +147,6 @@ namespace castor3d
 		//!\~english	The interpolation mode.
 		//!\~french		Le mode d'interpolation.
 		InterpolatorType m_mode{ InterpolatorType::eCount };
-		//!\~english	The animation length.
-		//!\~french		La durée de l'animation.
-		castor::Milliseconds m_length{ 0 };
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
 		SkeletonAnimationObjectType m_type;
@@ -310,6 +234,17 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
 		C3D_API bool doParse( SkeletonAnimationObject & obj )override;
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk in version 1.1.
+		 *\param[out]	obj	The object to read.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk en version 1.1.
+		 *\param[out]	obj	L'objet à lire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool doParse_v1_1( SkeletonAnimationObject & obj )override;
 	};
 }
 

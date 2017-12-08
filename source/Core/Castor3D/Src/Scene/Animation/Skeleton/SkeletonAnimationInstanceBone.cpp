@@ -9,7 +9,7 @@ namespace castor3d
 {
 	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & animationInstance
 		, SkeletonAnimationBone & animationObject
-		, SkeletonAnimationInstanceObjectPtrStrMap & allObjects )
+		, SkeletonAnimationInstanceObjectPtrArray & allObjects )
 		: SkeletonAnimationInstanceObject{ animationInstance, animationObject, allObjects }
 		, m_animationBone{ animationObject }
 	{

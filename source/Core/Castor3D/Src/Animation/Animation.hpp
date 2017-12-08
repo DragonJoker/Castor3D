@@ -77,6 +77,15 @@ namespace castor3d
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
 		 *\param[in]		time	The time index.
+		 *\~french
+		 *\brief			Trouve une keyframe à l'index de temps donné.
+		 *\param[in]		time	L'index de temps.
+		 */
+		C3D_API AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
+		/**
+		 *\~english
+		 *\brief			Finds a keyframe given a time index.
+		 *\param[in]		time	The time index.
 		 *\param[in,out]	prv		The previous keyframe, receives the new previous keyframe, if there is a change.
 		 *\param[in,out]	cur		Receives the current keyframe, receives the new current keyframe, if there is a change.
 		 *\~french
@@ -86,8 +95,8 @@ namespace castor3d
 		 *\param[in,out]	cur		La keyframe courante, reçoit la nouvelle s'il y a eu un changement.
 		 */
 		C3D_API void findKeyFrame( castor::Milliseconds const & time
-			, AnimationKeyFrameArray::const_iterator & prv
-			, AnimationKeyFrameArray::const_iterator & cur )const;
+			, AnimationKeyFrameArray::iterator & prv
+			, AnimationKeyFrameArray::iterator & cur )const;
 		/**
 		 *\~english
 		 *\brief		Updates the animation length.
@@ -117,11 +126,31 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The beginning of the key frames.
+		 *\~french
+		 *\return		Le début des key frames.
+		 */
+		inline AnimationKeyFrameArray::iterator begin()
+		{
+			return m_keyframes.begin();
+		}
+		/**
+		 *\~english
 		 *\return		The end of the key frames.
 		 *\~french
 		 *\return		La fin des key frames.
 		 */
 		inline AnimationKeyFrameArray::const_iterator end()const
+		{
+			return m_keyframes.end();
+		}
+		/**
+		 *\~english
+		 *\return		The end of the key frames.
+		 *\~french
+		 *\return		La fin des key frames.
+		 */
+		inline AnimationKeyFrameArray::iterator end()
 		{
 			return m_keyframes.end();
 		}

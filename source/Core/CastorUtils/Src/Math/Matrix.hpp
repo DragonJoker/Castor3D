@@ -56,35 +56,38 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class Matrix
 	{
+		template< typename U, uint32_t C, uint32_t R >
+		friend class Matrix;
+
 	protected:
-		typedef T __value_type;
-		typedef Matrix< __value_type, Columns, Rows > __type;
-		typedef Matrix< __value_type, Rows, Columns > __transpose;
-		typedef Point< __value_type, Columns > __row;
-		typedef Coords< __value_type, Rows > __column;
-		typedef Coords< __value_type const, Rows > __const_column;
+		using __value_type = T;
+		using __type = Matrix< __value_type, Columns, Rows >;
+		using __transpose = Matrix< __value_type, Rows, Columns >;
+		using __row = Point< __value_type, Columns >;
+		using __column = Coords< __value_type, Rows >;
+		using __const_column = Coords< __value_type const, Rows >;
 		static const std::size_t count = Rows * Columns;
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
 	public:
 		//!\~english	Typedef on the data type.
 		//!\~french		Typedef sur le type de données.
-		typedef __value_type value_type;
+		using value_type = __value_type;
 		//!\~english	Typedef on the column type
 		//!\~french		Typedef sur le type de colonne.
-		typedef __column col_type;
+		using col_type = __column;
 		//!\~english	Typedef on the column type
 		//!\~french		Typedef sur le type de colonne.
-		typedef __const_column const_col_type;
+		using const_col_type = __const_column;
 		//!\~english	Typedef on the line type.
 		//!\~french		Typedef sur le type de ligne.
-		typedef __row row_type;
+		using row_type = __row;
 		//!\~english	Typedef on the transposed matrix type.
 		//!\~french		Typedef sur le type de matrice transposée.
-		typedef __transpose transpose_type;
+		using transpose_type = __transpose;
 		//!\~english	Typedef on this matrix type.
 		//!\~french		Typedef sur le type de cette matrice.
-		typedef Matrix< value_type, Columns, Rows > my_type;
+		using my_type = Matrix< value_type, Columns, Rows >;
 
 	public:
 		/**

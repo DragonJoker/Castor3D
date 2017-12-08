@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SKELETON_ANIMATION_INSTANCE_OBJECT_H___
-#define ___C3D_SKELETON_ANIMATION_INSTANCE_OBJECT_H___
+#ifndef ___C3D_SkeletonAnimationInstanceObject_H___
+#define ___C3D_SkeletonAnimationInstanceObject_H___
 
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
@@ -31,25 +31,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
-		 *\param[in]	p_animationObject	The animation object.
-		 *\param[out]	p_allObjects		Receives this object's children.
+		 *\param[in]	animationInstance	The parent skeleton animation instance.
+		 *\param[in]	animationObject		The animation object.
+		 *\param[out]	allObjects			Receives this object's children.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
-		 *\param[in]	p_animationObject	L'animation d'objet.
-		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
+		 *\param[in]	animationInstance	L'instance d'animation de squelette parent.
+		 *\param[in]	animationObject		L'animation d'objet.
+		 *\param[out]	allObjects			Reçoit les enfants de cet objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance
-			, SkeletonAnimationObject & p_animationObject
-			, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects );
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & animationInstance
+			, SkeletonAnimationObject & animationObject
+			, SkeletonAnimationInstanceObjectPtrArray & allObjects );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & p_rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & rhs ) = delete;
 
 	public:
 		/**
@@ -63,25 +63,22 @@ namespace castor3d
 		 *\~english
 		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
-		 *\param[in]	p_object	The child.
+		 *\param[in]	object	The child.
 		 *\~french
 		 *\brief		Ajoute un objet enfant à celui-ci.
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
-		 *\param[in]	p_object	L'enfant.
+		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void addChild( SkeletonAnimationInstanceObjectSPtr p_object );
+		C3D_API void addChild( SkeletonAnimationInstanceObjectSPtr object );
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	p_time				Current time index.
-		 *\param[in]	p_transformations	The current transformation matrix.
+		 *\brief		Updates the object, applies the transformations.
+		 *\param[in]	current		The current transformation matrix.
 		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	p_time				Index de temps courant.
-		 *\param[in]	p_transformations	La matrice de transformation courante.
+		 *\brief		Met à jour les transformations appliquées à l'objet.
+		 *\param[in]	current		La matrice de transformation courante.
 		 */
-		C3D_API void update( castor::Milliseconds const & p_time
-			, castor::Matrix4x4r const & p_transformations );
+		C3D_API void update( castor::Matrix4x4r const & current );
 		/**
 		 *\~english
 		 *\brief		The final object's animations transformation.
@@ -102,6 +99,16 @@ namespace castor3d
 		{
 			return m_children;
 		}
+		/**
+		 *\~english
+		 *\return		The animation object.
+		 *\~french
+		 *\return		L'objet d'animation.
+		 */
+		inline SkeletonAnimationObject const & getObject()const
+		{
+			return m_animationObject;
+		}
 
 	protected:
 		/**
@@ -114,7 +121,7 @@ namespace castor3d
 
 	protected:
 		//!\~english	The animation object.
-		//!\~french		L'animation d'objet.
+		//!\~french		L'objet d'animation.
 		SkeletonAnimationObject & m_animationObject;
 		//!\~english	Iterator to the previous keyframe (when playing the animation).
 		//!\~french		Itérateur sur la key frame précédente (quand l'animation est jouée).
