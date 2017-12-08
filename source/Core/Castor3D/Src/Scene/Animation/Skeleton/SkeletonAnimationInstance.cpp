@@ -63,7 +63,8 @@ namespace castor3d
 		for ( auto & keyFrame : animation )
 		{
 			m_keyFrames.emplace_back( *this
-				, static_cast< SkeletonAnimationKeyFrame const & >( *keyFrame ) );
+				, static_cast< SkeletonAnimationKeyFrame const & >( *keyFrame )
+				, object );
 		}
 
 		m_curr = m_keyFrames.empty()

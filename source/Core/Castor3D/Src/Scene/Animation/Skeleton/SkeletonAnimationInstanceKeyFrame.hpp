@@ -37,7 +37,8 @@ namespace castor3d
 		 *\param[in]	keyFrame			La keyframe d'animation.
 		 */
 		C3D_API SkeletonAnimationInstanceKeyFrame( SkeletonAnimationInstance & skeletonAnimation
-			, SkeletonAnimationKeyFrame const & keyFrame );
+			, SkeletonAnimationKeyFrame const & keyFrame
+			, AnimatedSkeleton & skeleton );
 		/**
 		 *\~english
 		 *\brief		Applies the keyframe.
@@ -57,8 +58,10 @@ namespace castor3d
 		}
 
 	private:
+		AnimatedSkeleton & m_skeleton;
 		SkeletonAnimationKeyFrame const & m_keyFrame;
 		ObjectArray m_objects;
+		SubmeshBoundingBoxList m_boxes;
 	};
 	using SkeletonAnimationInstanceKeyFrameArray = std::vector< SkeletonAnimationInstanceKeyFrame >;
 }

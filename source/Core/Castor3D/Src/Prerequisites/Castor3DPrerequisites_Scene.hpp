@@ -232,6 +232,11 @@ namespace castor3d
 	using OnSceneNodeChanged = castor::Signal< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
+	using SubmeshBoundingBoxList = std::vector< std::pair< Submesh const *, castor::BoundingBox > >;
+	using SubmeshBoundingBoxMap = std::map< Submesh const *, castor::BoundingBox >;
+	using SubmeshBoundingSphereMap = std::map< Submesh const *, castor::BoundingSphere >;
+	using SubmeshMaterialMap = std::map< Submesh const *, MaterialWPtr >;
+
 	//@}
 }
 

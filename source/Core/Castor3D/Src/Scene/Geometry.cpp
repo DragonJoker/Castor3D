@@ -188,6 +188,53 @@ namespace castor3d
 		return result;
 	}
 
+	void Geometry::updateContainers( SubmeshBoundingBoxList const & boxes )
+	{
+		m_submeshesBoxes.clear();
+
+		if ( !boxes.empty() )
+		{
+			m_box = boxes[0].second;
+			m_submeshesBoxes.emplace( boxes[0].first, boxes[0].second );
+			m_submeshesSpheres.emplace( boxes[0].first, BoundingSphere{ boxes[0].second } );
+
+			for ( auto i = 1u; i < boxes.size(); ++i )
+			{
+				m_submeshesBoxes.emplace( boxes[i].first, boxes[i].second );
+				m_submeshesSpheres.emplace( boxes[1].first, BoundingSphere{ boxes[1].second } );
+				m_box = m_box.getUnion( boxes[i].second );
+			}
+
+			m_sphere.load( m_box );
+		}
+	}
+
+	BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
+	{
+		static BoundingBox const dummy;
+		auto it = m_submeshesBoxes.find( &submesh );
+
+		if ( it != m_submeshesBoxes.end() )
+		{
+			return it->second;
+		}
+
+		return dummy;
+	}
+
+	BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
+	{
+		static BoundingSphere const dummy;
+		auto it = m_submeshesSpheres.find( &submesh );
+
+		if ( it != m_submeshesSpheres.end() )
+		{
+			return it->second;
+		}
+
+		return dummy;
+	}
+
 	void Geometry::doUpdateMesh()
 	{
 		auto mesh = m_mesh.lock();

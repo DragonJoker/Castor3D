@@ -419,7 +419,7 @@ namespace castor3d
 		 *\brief		Vérifie si un composant existe.
 		 *\param[in]	name		Le nom du composant.
 		 */
-		inline bool hasComponent( castor::String const & name );
+		inline bool hasComponent( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Adds a component.
@@ -452,7 +452,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du composant.
 		 *return		Le composant, nullptr si non trouvé.
 		 */
-		inline SubmeshComponentSPtr getComponent( castor::String const & name );
+		inline SubmeshComponentSPtr getComponent( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Finds a component.
@@ -462,7 +462,7 @@ namespace castor3d
 		 *return		Le composant, nullptr si non trouvé.
 		 */
 		template< typename T >
-		inline std::shared_ptr< T > getComponent();
+		inline std::shared_ptr< T > getComponent()const;
 		/**
 		 *\~english
 		 *return		The instantiation component.

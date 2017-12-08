@@ -40,8 +40,7 @@ namespace GuiCommon
 		castor3d::MeshSPtr m_obbSubmesh;
 		castor3d::MeshSPtr m_obbBone;
 		castor3d::MeshSPtr m_aabbMesh;
-		castor::String m_objectName;
-		castor3d::MeshSPtr m_objectMesh;
+		castor3d::Geometry const * m_object{ nullptr };
 		castor3d::SceneNodeSPtr m_obbNode;
 		castor3d::SceneNodePtrArray m_obbSubmeshNodes;
 		castor3d::SceneNodePtrArray m_obbBoneNodes;

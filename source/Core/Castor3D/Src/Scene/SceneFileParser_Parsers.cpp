@@ -4268,7 +4268,8 @@ namespace castor3d
 			{
 				if ( !geometry->getAnimations().empty() )
 				{
-					parsingContext->pAnimMovable = parsingContext->pAnimGroup->addObject( *geometry, geometry->getName() + cuT( "_Movable" ) );
+					parsingContext->pAnimMovable = parsingContext->pAnimGroup->addObject( *geometry
+						, geometry->getName() + cuT( "_Movable" ) );
 				}
 
 				if ( geometry->getMesh() )
@@ -4277,7 +4278,9 @@ namespace castor3d
 
 					if ( !mesh->getAnimations().empty() )
 					{
-						parsingContext->pAnimMesh = parsingContext->pAnimGroup->addObject( *mesh, geometry->getName() + cuT( "_Mesh" ) );
+						parsingContext->pAnimMesh = parsingContext->pAnimGroup->addObject( *mesh
+							, *geometry
+							, geometry->getName() + cuT( "_Mesh" ) );
 					}
 
 					auto skeleton = mesh->getSkeleton();
@@ -4286,7 +4289,10 @@ namespace castor3d
 					{
 						if ( !skeleton->getAnimations().empty() )
 						{
-							parsingContext->pAnimSkeleton = parsingContext->pAnimGroup->addObject( *skeleton, geometry->getName() + cuT( "_Skeleton" ) );
+							parsingContext->pAnimSkeleton = parsingContext->pAnimGroup->addObject( *skeleton
+								, *mesh
+								, *geometry
+								, geometry->getName() + cuT( "_Skeleton" ) );
 						}
 					}
 				}

@@ -115,11 +115,10 @@ namespace GuiCommon
 
 	CubeBoxManager::~CubeBoxManager()
 	{
-		if ( m_objectMesh )
+		if ( m_object )
 		{
 			m_sceneConnection.disconnect();
-			m_objectMesh = nullptr;
-			m_objectName.clear();
+			m_object = nullptr;
 		}
 
 		m_aabbMesh.reset();
@@ -136,23 +135,22 @@ namespace GuiCommon
 		engine->postEvent( makeFunctorEvent( EventType::ePostRender
 			, [this, &object]()
 			{
-				m_objectMesh = object.getMesh();
-				m_objectName = object.getName();
+				m_object = &object;
 				m_obbNode = doAddBB( m_obbMesh
 					, m_obbMesh->getName()
 					, object.getParent()
-					, m_objectMesh->getBoundingBox() );
+					, m_object->getBoundingBox() );
 				m_aabbNode = doAddBB( m_aabbMesh
 					, m_aabbMesh->getName()
 					, m_scene.getObjectRootNode()
-					, m_objectMesh->getBoundingBox() );
+					, m_object->getBoundingBox() );
 
-				for ( auto & submesh : *m_objectMesh )
+				for ( auto & submesh : *m_object->getMesh() )
 				{
 					m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
 						, m_obbMesh->getName() + string::toString( submesh->getId() )
 						, object.getParent()
-						, submesh->getBoundingBox() ) );
+						, m_object->getBoundingBox( *submesh ) ) );
 				}
 
 				//auto skeleton = m_objectMesh->getSkeleton();
@@ -188,7 +186,7 @@ namespace GuiCommon
 				doRemoveBB( m_aabbMesh->getName(), m_aabbNode );
 				uint32_t i = 0u;
 
-				for ( auto & submesh : *m_objectMesh )
+				for ( auto & submesh : *m_object->getMesh() )
 				{
 					doRemoveBB( m_obbMesh->getName() + string::toString( submesh->getId() )
 						, m_obbSubmeshNodes[i] );
@@ -207,8 +205,7 @@ namespace GuiCommon
 				m_obbSubmeshNodes.clear();
 				m_obbNode.reset();
 				m_aabbNode.reset();
-				m_objectMesh = nullptr;
-				m_objectName.clear();
+				m_object = nullptr;
 			} ) );
 	}
 
@@ -217,7 +214,7 @@ namespace GuiCommon
 		, SceneNodeSPtr parent
 		, BoundingBox const & bb )
 	{
-		auto name = m_objectName + cuT( "-" ) + nameSpec;
+		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
 		auto node = m_scene.getSceneNodeCache().add( name, parent );
 		auto geometry = m_scene.getGeometryCache().add( name, node, bbMesh );
 		geometry->setShadowCaster( false );
@@ -241,7 +238,7 @@ namespace GuiCommon
 	void CubeBoxManager::doRemoveBB( String const & nameSpec
 		, SceneNodeSPtr bbNode )
 	{
-		auto name = m_objectName + cuT( "-" ) + nameSpec;
+		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
 
 		if ( m_scene.getGeometryCache().has( name ) )
 		{
@@ -255,16 +252,16 @@ namespace GuiCommon
 
 	void CubeBoxManager::onSceneUpdate( castor3d::Scene const & scene )
 	{
-		auto & obb = m_objectMesh->getBoundingBox();
+		auto & obb = m_object->getBoundingBox();
 		auto scale = obb.getDimensions() / 2.0_r;
 		m_obbNode->setScale( scale );
 		m_obbNode->setPosition( obb.getCenter() );
 		m_obbNode->update();
 		uint32_t i = 0u;
 
-		for ( auto & submesh : *m_objectMesh )
+		for ( auto & submesh : *m_object->getMesh() )
 		{
-			auto & sobb = submesh->getBoundingBox();
+			auto & sobb = m_object->getBoundingBox( *submesh );
 			m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0_r );
 			m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
 			m_obbSubmeshNodes[i]->update();

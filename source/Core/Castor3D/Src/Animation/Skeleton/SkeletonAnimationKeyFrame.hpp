@@ -13,7 +13,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using TransformArray = std::vector< std::pair< SkeletonAnimationObject *, castor::Matrix4x4r > >;
+	using ObjectTransform = std::pair< SkeletonAnimationObject *, castor::Matrix4x4r >;
+	using TransformArray = std::vector< ObjectTransform >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.1
@@ -77,6 +78,13 @@ namespace castor3d
 		 *\return		L'itérateur correspondant à l'objet d'animation donné.
 		 */
 		C3D_API TransformArray::const_iterator find( SkeletonAnimationObject const & object )const;
+		/**
+		 *\~english
+		 *\return		The iterator matching given bone.
+		 *\~french
+		 *\return		L'itérateur correspondant à l'os donné.
+		 */
+		C3D_API TransformArray::const_iterator find( Bone const & bone )const;
 		/**
 		 *\~english
 		 *\brief		Initialises the keyframe.

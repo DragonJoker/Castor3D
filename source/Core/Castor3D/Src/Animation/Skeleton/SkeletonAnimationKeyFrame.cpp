@@ -1,7 +1,7 @@
 #include "SkeletonAnimationKeyFrame.hpp"
 
 #include "Animation/Skeleton/SkeletonAnimation.hpp"
-#include "Animation/Skeleton/SkeletonAnimationObject.hpp"
+#include "Animation/Skeleton/SkeletonAnimationBone.hpp"
 
 using namespace castor;
 
@@ -185,10 +185,21 @@ namespace castor3d
 	{
 		return std::find_if( m_cumulative.begin()
 			, m_cumulative.end()
-			, [&object]( auto const & lookup )
+			, [&object]( ObjectTransform const & lookup )
 			{
 				return lookup.first == &object;
 			} );
+	}
+
+	TransformArray::const_iterator SkeletonAnimationKeyFrame::find( Bone const & bone )const
+	{
+		return std::find_if( m_cumulative.begin()
+			, m_cumulative.end()
+			, [&bone]( ObjectTransform const & lookup )
+		{
+			return lookup.first->getType() == SkeletonAnimationObjectType::eBone
+				&& static_cast< SkeletonAnimationBone const & >( *lookup.first ).getBone().get() == &bone;
+		} );
 	}
 
 	void SkeletonAnimationKeyFrame::initialise()

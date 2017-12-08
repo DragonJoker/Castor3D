@@ -54,7 +54,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Calcule les bounding box et sphere, pour chaque os, pour le maillage donné.
 		 */
-		C3D_API castor::BoundingBox computeBoundingBox( Mesh & mesh, uint32_t boneIndex );
+		C3D_API castor::BoundingBox computeBoundingBox( Mesh const & mesh
+			, uint32_t boneIndex )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the transfromation matrix from mesh space to bone space

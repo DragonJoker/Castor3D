@@ -108,7 +108,7 @@ namespace castor3d
 		}
 	}
 
-	BoundingBox Bone::computeBoundingBox( Mesh & mesh, uint32_t boneIndex )
+	BoundingBox Bone::computeBoundingBox( Mesh const & mesh, uint32_t boneIndex )const
 	{
 		real rmax = std::numeric_limits< real >::max();
 		real rmin = std::numeric_limits< real >::lowest();

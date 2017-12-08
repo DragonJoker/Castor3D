@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GEOMETRY_H___
@@ -8,6 +8,9 @@ See LICENSE file in root folder
 
 #include "MovableObject.hpp"
 #include "RenderedObject.hpp"
+
+#include <Graphics/BoundingBox.hpp>
+#include <Graphics/BoundingSphere.hpp>
 
 namespace castor3d
 {
@@ -126,6 +129,31 @@ namespace castor3d
 			, bool updateSubmesh = true );
 		/**
 		 *\~english
+		 *\brief		Computes the bounding box from the given submeshes boxes.
+		 *\~french
+		 *\brief		Calcule les bounding box et sphere depuis boxes des sous-maillages données.
+		 */
+		C3D_API void updateContainers( SubmeshBoundingBoxList const & boxes );
+		/**
+		 *\~english
+		 *\param[in]	submesh	The submesh.
+		 *\return		The collision box for given submesh.
+		 *\~french
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\return		La boîte de collision pour le sous-maillage donné.
+		 */
+		C3D_API castor::BoundingBox const & getBoundingBox( Submesh const & submesh )const;
+		/**
+		 *\~english
+		 *\param[in]	submesh	The submesh.
+		 *\return		The collision sphere for given submesh.
+		 *\~french
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\return		La sphère de collision pour le sous-maillage donné.
+		 */
+		C3D_API castor::BoundingSphere const & getBoundingSphere( Submesh const & submesh )const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the mesh
 		 *\return		The mesh
 		 *\~french
@@ -135,6 +163,30 @@ namespace castor3d
 		inline MeshSPtr getMesh()const
 		{
 			return m_mesh.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the collision box
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la boîte de collision
+		 *\return		La valeur
+		 */
+		inline castor::BoundingBox const & getBoundingBox()const
+		{
+			return m_box;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the collision sphere
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la sphère de collision
+		 *\return		La valeur
+		 */
+		inline castor::BoundingSphere const & getBoundingSphere()const
+		{
+			return m_sphere;
 		}
 
 	private:
@@ -155,7 +207,19 @@ namespace castor3d
 		bool m_listCreated{ false };
 		//!\~english	The submeshes materials.
 		//!\~french		Les matériaux des sous maillages.
-		std::map< Submesh const *, MaterialWPtr > m_submeshesMaterials;
+		SubmeshMaterialMap m_submeshesMaterials;
+		//!\~english	The submeshes bounding boxes.
+		//!\~french		Les bounding box des sous-maillages.
+		SubmeshBoundingBoxMap m_submeshesBoxes;
+		//!\~english	The submeshes bounding spheres.
+		//!\~french		Les bounding spheres des sous-maillages.
+		SubmeshBoundingSphereMap m_submeshesSpheres;
+		//!\~english	The whole geometry bounding box.
+		//!\~french		La bounding box de la géométrie complète.
+		castor::BoundingBox m_box;
+		//!\~english	The whole geometry bounding sphere.
+		//!\~french		La bounding sphere de la géométrie complète.
+		castor::BoundingSphere m_sphere;
 	};
 }
 
