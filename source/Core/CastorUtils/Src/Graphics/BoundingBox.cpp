@@ -97,4 +97,48 @@ namespace castor
 
 		return BoundingBox{ min, max };
 	}
+
+	Point3r BoundingBox::getPositiveVertex( Point3r const & normal )const
+	{
+		Point3r result{ getCenter() };
+
+		if ( normal[0] > 0.0_r )
+		{
+			result[0] += m_dimensions[0];
+		}
+
+		if ( normal[1] > 0.0_r )
+		{
+			result[1] += m_dimensions[1];
+		}
+
+		if ( normal[2] > 0.0_r )
+		{
+			result[2] += m_dimensions[2];
+		}
+
+		return result;
+	}
+
+	Point3r BoundingBox::getNegativeVertex( Point3r const & normal )const
+	{
+		Point3r result{ getCenter() };
+
+		if ( normal[0] < 0.0_r )
+		{
+			result[0] += m_dimensions[0];
+		}
+
+		if ( normal[1] < 0.0_r )
+		{
+			result[1] += m_dimensions[1];
+		}
+
+		if ( normal[2] < 0.0_r )
+		{
+			result[2] += m_dimensions[2];
+		}
+
+		return result;
+	}
 }

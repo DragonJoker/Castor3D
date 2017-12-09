@@ -63,6 +63,21 @@ namespace castor3d
 			, castor::Point3r const & front );
 		/**
 		 *\~english
+		 *\brief		Updates the frustum planes.
+		 *\param[in]	eye		The view position.
+		 *\param[in]	target	The view target vector.
+		 *\param[in]	up		The direction of the up vector according to the orientation of the view.
+		 *\~french
+		 *\brief		Met à jour les plans du frustum.
+		 *\param[in]	eye		La position de la vue.
+		 *\param[in]	target	La position de la cible de la vue.
+		 *\param[in]	up		La direction du vecteur haut, selon l'orientation de la vue.
+		 */
+		C3D_API void update( castor::Point3r const & eye
+			, castor::Point3r const & target
+			, castor::Point3r const & up );
+		/**
+		 *\~english
 		 *\brief		Checks if given BoundingBox is in the view frustum.
 		 *\param[in]	box				The BoundingBox.
 		 *\param[in]	transformations	The BoundingBox transformations matrix.
@@ -110,6 +125,9 @@ namespace castor3d
 		//!\~english	The viewport.
 		//!\~french		Le viewport.
 		Viewport & m_viewport;
+		//!\~english	The view frustum's corners.
+		//!\~french		Les coins du frustum de vue.
+		std::array< castor::Point3r, size_t( FrustumCorner::eCount ) > m_corners;
 		//!\~english	The view frustum's planes.
 		//!\~french		Les plans du frustum de vue.
 		std::array< castor::PlaneEquation, size_t( FrustumPlane::eCount ) > m_planes;

@@ -291,10 +291,10 @@ namespace castor3d
 	enum class FrustumPlane
 	{
 		//!\~english	Near plane.
-		//!\~french		Plan éloigné.
+		//!\~french		Plan proche.
 		eNear,
 		//!\~english	Far plane.
-		//!\~french		Plan proche.
+		//!\~french		Plan éloigné.
 		eFar,
 		//!\~english	Left plane.
 		//!\~french		Plan gauche.
@@ -309,6 +309,43 @@ namespace castor3d
 		//!\~french		Plan bas.
 		eBottom,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNear )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		10/06/2013
+	\version	0.7.0
+	\~english
+	\brief		Frustum view planes enumeration
+	\~french
+	\brief		Enumération des plans du frustum de vue
+	*/
+	enum class FrustumCorner
+	{
+		//!\~english	Far left bottom corner.
+		//!\~french		Coin éloigné bas gauche.
+		eFarLeftBottom,
+		//!\~english	Far left top corner.
+		//!\~french		Coin éloigné haut gauche.
+		eFarLeftTop,
+		//!\~english	Far right top corner.
+		//!\~french		Coin éloigné haut droit.
+		eFarRightTop,
+		//!\~english	Far right bottom corner.
+		//!\~french		Coin éloigné bas droit.
+		eFarRightBottom,
+		//!\~english	Near left bottom corner.
+		//!\~french		Coin proche bas gauche.
+		eNearLeftBottom,
+		//!\~english	Near left top corner.
+		//!\~french		Coin proche haut gauche.
+		eNearLeftTop,
+		//!\~english	Near right top corner.
+		//!\~french		Coin proche haut droit.
+		eNearRightTop,
+		//!\~english	Near right bottom corner.
+		//!\~french		Coin proche bas droit.
+		eNearRightBottom,
+		CASTOR_SCOPED_ENUM_BOUNDS( eFarLeftBottom )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

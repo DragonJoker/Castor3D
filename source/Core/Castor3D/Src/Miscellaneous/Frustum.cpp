@@ -11,59 +11,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		Point3r getVertexP( Point3r const & min
-			, Point3r const & max
-			, Point3r const & normal )
-		{
-			Point3r result{ min };
-
-			if ( normal[0] >= 0 )
-			{
-				result[0] = max[0];
-			}
-
-			if ( normal[1] >= 0 )
-			{
-				result[1] = max[1];
-			}
-
-			if ( normal[2] >= 0 )
-			{
-				result[2] = max[2];
-			}
-
-			return result;
-		}
-
-		Point3r getVertexN( Point3r const & min
-			, Point3r const & max
-			, Point3r const & normal )
-		{
-			Point3r result{ max };
-
-			if ( normal[0] >= 0 )
-			{
-				result[0] = min[0];
-			}
-
-			if ( normal[1] >= 0 )
-			{
-				result[1] = min[1];
-			}
-
-			if ( normal[2] >= 0 )
-			{
-				result[2] = min[2];
-			}
-
-			return result;
-		}
-	}
-
-	//*************************************************************************************************
-
 	Frustum::Frustum( Viewport & viewport )
 		: m_viewport{ viewport }
 	{
@@ -109,44 +56,55 @@ namespace castor3d
 		}
 		else
 		{
-			real const ratio{ m_viewport.getRatio() };
+			auto ratio = m_viewport.getRatio();
 			real const tan = real( m_viewport.getFovY().tan() );
-			nearH = 2 * tan * near;
-			nearW = nearH * m_viewport.getRatio();
-			farH = 2 * tan * far;
-			farW = farH * m_viewport.getRatio();
+			nearH = near * tan;
+			nearW = nearH * ratio;
+			farH = far * tan;
+			farW = farH * ratio;
 		}
 
-		// Compute planes' points
-		// N => Near
-		// F => Far
-		// C => Center
-		// T => Top
-		// L => Left
-		// R => Right
-		// B => Bottom
-		Point3r rn{ right * nearW / 2.0_r };
-		Point3r rf{ right * farW / 2.0_r };
-		Point3r tn{ up * nearH / 2.0_r };
-		Point3r tf{ up * farH / 2.0_r };
+		// Compute planes' corners
 		Point3r nc{ position + front * near };
-		Point3r ntl{ nc + tn - rn };
-		Point3r ntr{ nc + tn + rn };
-		Point3r nbl{ nc - tn - rn };
-		Point3r nbr{ nc - tn + rn };
 		Point3r fc{ position + front * far };
-		Point3r ftl{ fc + tf - rf };
-		Point3r ftr{ fc + tf + rf };
-		Point3r fbl{ fc - tf - rf };
-		Point3r fbr{ fc - tf + rf };
+		m_corners[size_t( FrustumCorner::eFarLeftBottom )] = fc - up * farH - right * farW;
+		m_corners[size_t( FrustumCorner::eFarLeftTop )] = fc + up * farH - right * farW;
+		m_corners[size_t( FrustumCorner::eFarRightTop )] = fc + up * farH + right * farW;
+		m_corners[size_t( FrustumCorner::eFarRightBottom )] = fc - up * farH + right * farW;
+		m_corners[size_t( FrustumCorner::eNearLeftBottom )] = nc - up * nearH - right * nearW;
+		m_corners[size_t( FrustumCorner::eNearLeftTop )] = nc + up * nearH - right * nearW;
+		m_corners[size_t( FrustumCorner::eNearRightTop )] = nc + up * nearH + right * nearW;
+		m_corners[size_t( FrustumCorner::eNearRightBottom )] = nc - up * nearH + right * nearW;
 
 		// Fill planes
-		m_planes[size_t( FrustumPlane::eNear )].set( ntl, ntr, nbr );
-		m_planes[size_t( FrustumPlane::eFar )].set( ftr, ftl, fbl );
-		m_planes[size_t( FrustumPlane::eLeft )].set( ntl, nbl, fbl );
-		m_planes[size_t( FrustumPlane::eRight )].set( nbr, ntr, fbr );
-		m_planes[size_t( FrustumPlane::eTop )].set( ntr, ntl, ftl );
-		m_planes[size_t( FrustumPlane::eBottom )].set( nbl, nbr, fbr );
+		m_planes[size_t( FrustumPlane::eBottom )].set( m_corners[size_t( FrustumCorner::eNearLeftBottom )]
+			, m_corners[size_t( FrustumCorner::eNearRightBottom )]
+			, m_corners[size_t( FrustumCorner::eFarRightBottom )] );
+		m_planes[size_t( FrustumPlane::eFar )].set( m_corners[size_t( FrustumCorner::eFarRightTop )]
+			, m_corners[size_t( FrustumCorner::eFarLeftTop )]
+			, m_corners[size_t( FrustumCorner::eFarLeftBottom )] );
+		m_planes[size_t( FrustumPlane::eLeft )].set( m_corners[size_t( FrustumCorner::eNearLeftTop )]
+			, m_corners[size_t( FrustumCorner::eNearLeftBottom )]
+			, m_corners[size_t( FrustumCorner::eFarLeftBottom )] );
+		m_planes[size_t( FrustumPlane::eNear )].set( m_corners[size_t( FrustumCorner::eNearLeftTop )]
+			, m_corners[size_t( FrustumCorner::eNearRightTop )]
+			, m_corners[size_t( FrustumCorner::eNearRightBottom )] );
+		m_planes[size_t( FrustumPlane::eRight )].set( m_corners[size_t( FrustumCorner::eNearRightBottom )]
+			, m_corners[size_t( FrustumCorner::eNearRightTop )]
+			, m_corners[size_t( FrustumCorner::eFarRightBottom )] );
+		m_planes[size_t( FrustumPlane::eTop )].set( m_corners[size_t( FrustumCorner::eNearRightTop )]
+			, m_corners[size_t( FrustumCorner::eNearLeftTop )]
+			, m_corners[size_t( FrustumCorner::eFarLeftTop )] );
+	}
+
+	void Frustum::update( Point3r const & eye
+		, Point3r const & target
+		, Point3r const & up )
+	{
+		auto f = point::getNormalised( target - eye );
+		auto u = point::getNormalised( up );
+		auto r = point::cross( f, u );
+		update( eye, r, u, f );
 	}
 
 	bool Frustum::isVisible( BoundingBox const & box
@@ -154,31 +112,27 @@ namespace castor3d
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		auto aabb = box.getAxisAligned( transformations );
-		auto & min = aabb.getMin();
-		auto & max = aabb.getMax();
+		auto it = std::find_if( m_planes.begin()
+			, m_planes.end()
+			, [&aabb]( PlaneEquation const & plane )
+			{
+				return plane.distance( aabb.getPositiveVertex( plane.getNormal() ) ) < 0;
+			} );
+		bool result = it == m_planes.end();
 
-		Intersection result{ Intersection::eIn };
-		size_t i{ 0u };
+#if !defined( NDEBUG )
 
-		while ( i < size_t( FrustumPlane::eCount ) && result != Intersection::eOut )
+		if ( !result )
 		{
-			auto & plane = m_planes[i];
-
-			if ( plane.distance( getVertexP( min, max, m_planes[i].getNormal() ) ) < 0 )
-			{
-				// The positive vertex outside?
-				result = Intersection::eOut;
-			}
-			else if ( plane.distance( getVertexN( min, max, m_planes[i].getNormal() ) ) < 0 )
-			{
-				// The negative vertex outside?
-				result = Intersection::eIntersect;
-			}
-
-			++i;
+			auto dist = it->distance( aabb.getPositiveVertex( it->getNormal() ) ) < 0;
+			std::clog << dist << std::endl;
 		}
 
-		return result != Intersection::eOut;
+#endif
+
+		return result;
+
+		return it == m_planes.end();
 	}
 
 	bool Frustum::isVisible( BoundingSphere const & sphere
@@ -188,22 +142,20 @@ namespace castor3d
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		auto maxScale = std::max( scale[0], std::max( scale[1], scale[2] ) );
 		Point3r center = ( sphere.getCenter() * scale ) + position;
-		auto radius = sphere.getRadius() * point::length( Point3r{ maxScale, maxScale, maxScale } );
-
+		auto radius = sphere.getRadius() * maxScale;
 		auto it = std::find_if( m_planes.begin()
 			, m_planes.end()
-			, [&center, &radius]( auto const & plane )
+			, [&center, &radius]( PlaneEquation const & plane )
 			{
 				return plane.distance( center ) < -radius;
 			} );
-
 		bool result = it == m_planes.end();
 
 #if !defined( NDEBUG )
 
 		if ( !result )
 		{
-			auto dist = ( *it ).distance( center );
+			auto dist = it->distance( center );
 			std::clog << "dist: " << dist << ", radius: " << radius << ", scale: " << point::length( scale ) << std::endl;
 		}
 
@@ -217,18 +169,17 @@ namespace castor3d
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		auto it = std::find_if( m_planes.begin()
 			, m_planes.end()
-			, [&point]( auto const & p_plane )
+			, [&point]( PlaneEquation const & p_plane )
 		{
 			return p_plane.distance( point ) < 0;
 		} );
-
 		bool result = it == m_planes.end();
 
 #if !defined( NDEBUG )
 
 		if ( !result )
 		{
-			auto dist = ( *it ).distance( point );
+			auto dist = it->distance( point );
 			std::clog << dist << std::endl;
 		}
 

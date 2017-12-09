@@ -97,6 +97,21 @@ namespace castor
 		CU_API BoundingBox getAxisAligned( Matrix4x4r const & transformations )const;
 		/**
 		 *\~english
+		 *\brief		Computes the positive vertex of a direction.
+		 *\see			getNegativeVertex.
+		 *\param[in]	normal	The direction vector.
+		 *\return		The position of the vertex on the box in the same way as the normal, while considering the center.
+		 */
+		CU_API Point3r getPositiveVertex( Point3r const & normal )const;
+		/**
+		 *\~english
+		 *\brief		Computes the negative vertex of a direction.
+		 *\param[in]	normal	The direction vector.
+		 *\return		The position of the vertex on the box in the opposite way from the normal, while considering the center.
+		 */
+		CU_API Point3r getNegativeVertex( Point3r const & normal )const;
+		/**
+		 *\~english
 		 *\return		The min extent.
 		 *\~french
 		 *\return		Le point minimal.
