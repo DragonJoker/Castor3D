@@ -10,8 +10,10 @@
 #include <Cache/SceneNodeCache.hpp>
 
 #include <Animation/Mesh/MeshAnimation.hpp>
+#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
 #include <Animation/Mesh/MeshAnimationSubmesh.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
@@ -362,42 +364,65 @@ namespace C3dAssimp
 			return result;
 		}
 
-		//void doSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
-		//	, std::map< Milliseconds, Point3r > const & scales
-		//	, std::map< Milliseconds, Quaternion > const & rotates
-		//	, std::set< Milliseconds > const & times
-		//	, uint32_t fps
-		//	, int64_t ticksPerMilliSecond
-		//	, SkeletonAnimationObject & object )
-		//{
-		//	InterpolatorT< Point3r, InterpolatorType::eLinear > pointInterpolator;
-		//	InterpolatorT< Quaternion, InterpolatorType::eLinear > quatInterpolator;
+		SkeletonAnimationKeyFrame & doGetKeyFrame( Milliseconds const & time
+			, SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes )
+		{
+			auto it = keyframes.find( time );
 
-		//	if ( ticksPerMilliSecond / 1000 >= fps )
-		//	{
-		//		for ( auto time : times )
-		//		{
-		//			Point3r translate = doCompute( time, pointInterpolator, translates );
-		//			Point3r scale = doCompute( time, pointInterpolator, scales );
-		//			Quaternion rotate = doCompute( time, quatInterpolator, rotates );
-		//			object.addKeyFrame( time, translate, rotate, scale );
-		//		}
-		//	}
-		//	else
-		//	{
-		//		// Limit the key frames per second to 60, to spare RAM...
-		//		Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
-		//		Milliseconds maxTime{ *times.rbegin() + step };
+			if ( it == keyframes.end() )
+			{
+				it = keyframes.emplace( time
+					, std::make_unique< SkeletonAnimationKeyFrame >( animation, time ) ).first;
+			}
 
-		//		for ( Milliseconds time{ 0 }; time < maxTime; time += step )
-		//		{
-		//			Point3r translate = doCompute( time, pointInterpolator, translates );
-		//			Point3r scale = doCompute( time, pointInterpolator, scales );
-		//			Quaternion rotate = doCompute( time, quatInterpolator, rotates );
-		//			object.addKeyFrame( time, translate, rotate, scale );
-		//		}
-		//	}
-		//}
+			return *it->second;
+		}
+
+		void doSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
+			, std::map< Milliseconds, Point3r > const & scales
+			, std::map< Milliseconds, Quaternion > const & rotates
+			, std::set< Milliseconds > const & times
+			, uint32_t fps
+			, int64_t ticksPerMilliSecond
+			, SkeletonAnimationObject & object
+			, SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes )
+		{
+			InterpolatorT< Point3r, InterpolatorType::eLinear > pointInterpolator;
+			InterpolatorT< Quaternion, InterpolatorType::eLinear > quatInterpolator;
+
+			if ( ticksPerMilliSecond / 1000 >= fps )
+			{
+				for ( auto time : times )
+				{
+					Point3r translate = doCompute( time, pointInterpolator, translates );
+					Point3r scale = doCompute( time, pointInterpolator, scales );
+					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+						, translate
+						, rotate
+						, scale );
+				}
+			}
+			else
+			{
+				// Limit the key frames per second to 60, to spare RAM...
+				Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
+				Milliseconds maxTime{ *times.rbegin() + step };
+
+				for ( Milliseconds time{ 0 }; time < maxTime; time += step )
+				{
+					Point3r translate = doCompute( time, pointInterpolator, translates );
+					Point3r scale = doCompute( time, pointInterpolator, scales );
+					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+						, translate
+						, rotate
+						, scale );
+				}
+			}
+		}
 	}
 
 	//*********************************************************************************************
@@ -647,14 +672,15 @@ namespace C3dAssimp
 			Logger::logDebug( cuT( "Mesh animation found: [" ) + name + cuT( "]" ) );
 			auto & animation = mesh.createAnimation( name );
 			MeshAnimationSubmesh animSubmesh{ animation, submesh };
-
-			//for ( auto aiKey : makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
-			//{
-			//	animSubmesh.addBuffer( Milliseconds{ int64_t( aiKey.mTime * 1000 ) }
-			//		, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
-			//}
-
 			animation.addChild( std::move( animSubmesh ) );
+
+			for ( auto aiKey : makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
+			{
+				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+					, Milliseconds{ int64_t( aiKey.mTime * 1000 ) } );
+				keyFrame->addSubmeshBuffer( submesh, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
+				animation.addKeyFrame( std::move( keyFrame ) );
+			}
 		}
 	}
 
@@ -748,13 +774,21 @@ namespace C3dAssimp
 
 		auto & animation = skeleton.createAnimation( name );
 		int64_t ticksPerMilliSecond = int64_t( aiAnimation.mTicksPerSecond ? aiAnimation.mTicksPerSecond : 25 );
+		SkeletonAnimationKeyFrameMap keyframes;
 		doProcessAnimationNodes( mesh
 			, animation
 			, ticksPerMilliSecond
 			, skeleton
 			, aiNode
 			, aiAnimation
-			, nullptr );
+			, nullptr
+			, keyframes );
+
+		for ( auto & keyFrame : keyframes )
+		{
+			animation.addKeyFrame( std::move( keyFrame.second ) );
+		}
+
 		animation.updateLength();
 	}
 
@@ -764,7 +798,8 @@ namespace C3dAssimp
 		, Skeleton & skeleton
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation
-		, SkeletonAnimationObjectSPtr parent )
+		, SkeletonAnimationObjectSPtr parent
+		, SkeletonAnimationKeyFrameMap & keyFrames )
 	{
 		String name = string::stringCast< xchar >( aiNode.mName.data );
 		const aiNodeAnim * aiNodeAnim = doFindNodeAnim( aiAnimation, name );
@@ -816,11 +851,6 @@ namespace C3dAssimp
 			object = animation.addObject( aiNode.mName.C_Str(), parent );
 		}
 
-		if ( aiNodeAnim )
-		{
-			doProcessAnimationNodeKeys( *aiNodeAnim, ticksPerMilliSecond, *object );
-		}
-
 		if ( object )
 		{
 			if ( parent && object != parent )
@@ -828,10 +858,16 @@ namespace C3dAssimp
 				parent->addChild( object );
 			}
 
-			//if ( !object->hasKeyFrames() )
-			//{
-			//	object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
-			//}
+			object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
+		}
+
+		if ( aiNodeAnim )
+		{
+			doProcessAnimationNodeKeys( *aiNodeAnim
+				, ticksPerMilliSecond
+				, *object
+				, animation
+				, keyFrames );
 		}
 
 		for ( auto node : makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
@@ -842,13 +878,16 @@ namespace C3dAssimp
 				, skeleton
 				, *node
 				, aiAnimation
-				, object );
+				, object
+				, keyFrames );
 		}
 	}
 
 	void AssimpImporter::doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
 		, int64_t ticksPerMilliSecond
-		, castor3d::SkeletonAnimationObject & object )
+		, SkeletonAnimationObject & object
+		, SkeletonAnimation & animation
+		, SkeletonAnimationKeyFrameMap & keyframes )
 	{
 		std::set< Milliseconds > times;
 
@@ -864,13 +903,15 @@ namespace C3dAssimp
 			, aiNodeAnim.mNumRotationKeys
 			, ticksPerMilliSecond
 			, times );
-		//doSynchroniseKeys( translates
-		//	, scales
-		//	, rotates
-		//	, times
-		//	, getEngine()->getRenderLoop().getWantedFps()
-		//	, ticksPerMilliSecond
-		//	, object );
+		doSynchroniseKeys( translates
+			, scales
+			, rotates
+			, times
+			, getEngine()->getRenderLoop().getWantedFps()
+			, ticksPerMilliSecond
+			, object
+			, animation
+			, keyframes );
 	}
 
 	//*********************************************************************************************
