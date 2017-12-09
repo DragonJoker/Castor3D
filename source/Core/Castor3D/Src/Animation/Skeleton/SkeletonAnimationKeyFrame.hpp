@@ -148,6 +148,7 @@ namespace castor3d
 		TransformArray m_cumulative;
 
 		friend class BinaryParser< SkeletonAnimationKeyFrame >;
+		friend class BinaryWriter< SkeletonAnimationKeyFrame >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

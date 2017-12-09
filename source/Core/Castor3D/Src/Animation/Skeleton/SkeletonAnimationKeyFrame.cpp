@@ -66,7 +66,7 @@ namespace castor3d
 			result = doWriteChunk( double( obj.getTimeIndex().count() ) / 1000.0, ChunkType::eSkeletonAnimationKeyFrameTime, m_chunk );
 		}
 
-		for ( auto & it : obj )
+		for ( auto & it : obj.m_transforms )
 		{
 			if ( result )
 			{
