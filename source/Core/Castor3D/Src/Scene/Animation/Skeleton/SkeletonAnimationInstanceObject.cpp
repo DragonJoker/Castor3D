@@ -62,30 +62,6 @@ namespace castor3d
 
 	void SkeletonAnimationInstanceObject::update( Matrix4x4r const & current )
 	{
-		//if ( m_animationObject.hasKeyFrames() )
-		//{
-		//	if ( m_animationObject.getKeyFrames().size() == 1 )
-		//	{
-		//		m_cumulativeTransform = p_transformations * m_prev->getTransform();
-		//	}
-		//	else
-		//	{
-		//		doFind( p_time, m_animationObject.getKeyFrames().begin(), m_animationObject.getKeyFrames().end() - 1, m_prev, m_curr );
-		//		m_cumulativeTransform = p_transformations * m_curr->getTransform();
-		//	}
-		//}
-		//else
-		//{
-		//	m_cumulativeTransform = p_transformations * m_animationObject.getNodeTransform();
-		//}
-
-		//doApply();
-
-		//for ( auto object : m_children )
-		//{
-		//	object->update( p_time, m_cumulativeTransform );
-		//}
-
 		m_cumulativeTransform = current;
 		doApply();
 	}

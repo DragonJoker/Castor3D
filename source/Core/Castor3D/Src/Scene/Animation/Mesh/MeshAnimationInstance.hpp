@@ -69,6 +69,16 @@ namespace castor3d
 		{
 			return m_meshAnimation;
 		}
+		/**
+		 *\~english
+		 *\return		The animated mesh.
+		 *\~french
+		 *\return		Le maillage animé.
+		 */
+		inline AnimatedMesh & getAnimatedMesh()
+		{
+			return m_animatedMesh;
+		}
 
 	private:
 		/**

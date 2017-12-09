@@ -1,5 +1,7 @@
 #include "BoundingBox.hpp"
 
+#include <Design/ArrayView.hpp>
+
 namespace castor
 {
 	BoundingBox::BoundingBox()
@@ -61,7 +63,7 @@ namespace castor
 	{
 		auto min = getMin();
 		auto max = getMax();
-		Point3r corners[]
+		Point3r corners[8]
 		{
 			min,
 			max,
@@ -80,7 +82,9 @@ namespace castor
 		}
 
 		// Retrieve axis aligned box boundaries.
-		for ( auto & corner : corners )
+		min = corners[0];
+		max = corners[0];
+		for ( auto & corner : makeArrayView( corners + 1, corners + 8 ) )
 		{
 			min[0] = std::min( corner[0], min[0] );
 			min[1] = std::min( corner[1], min[1] );

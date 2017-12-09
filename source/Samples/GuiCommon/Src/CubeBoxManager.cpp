@@ -73,22 +73,16 @@ namespace GuiCommon
 				switch ( scene.getMaterialsType() )
 				{
 				case MaterialType::eLegacy:
-					{
-						std::static_pointer_cast< LegacyPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
-						std::static_pointer_cast< LegacyPass >( pass )->setAmbient( 1.0f );
-					}
+					std::static_pointer_cast< LegacyPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
+					std::static_pointer_cast< LegacyPass >( pass )->setAmbient( 1.0f );
 					break;
 
 				case MaterialType::ePbrMetallicRoughness:
-					{
-						std::static_pointer_cast< MetallicRoughnessPbrPass >( pass )->setAlbedo( RgbColour::fromPredefined( colour ) );
-					}
+					std::static_pointer_cast< MetallicRoughnessPbrPass >( pass )->setAlbedo( RgbColour::fromPredefined( colour ) );
 					break;
 
 				case MaterialType::ePbrSpecularGlossiness:
-					{
-						std::static_pointer_cast< SpecularGlossinessPbrPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
-					}
+					std::static_pointer_cast< SpecularGlossinessPbrPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
 					break;
 				}
 			}
@@ -153,21 +147,6 @@ namespace GuiCommon
 						, m_object->getBoundingBox( *submesh ) ) );
 				}
 
-				//auto skeleton = m_objectMesh->getSkeleton();
-
-				//if ( skeleton )
-				//{
-				//	uint32_t index = 0u;
-
-				//	for ( auto & box : skeleton->getContainers( *m_objectMesh ) )
-				//	{
-				//		m_obbBoneNodes.push_back( doAddBB( m_obbBone
-				//			, m_obbMesh->getName() + cuT( "_Bone_" ) + string::toString( index++ )
-				//			, object.getParent()
-				//			, box ) );
-				//	}
-				//}
-
 				m_sceneConnection = m_scene.onUpdate.connect( std::bind( &CubeBoxManager::onSceneUpdate
 					, this
 					, std::placeholders::_1 ) );
@@ -176,7 +155,7 @@ namespace GuiCommon
 
 	void CubeBoxManager::hideObject( Geometry const & object )
 	{
-		REQUIRE( object.getName() == m_objectName );
+		REQUIRE( object.getName() == m_object->getName() );
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeFunctorEvent( EventType::ePostRender
 			, [this, &object]()

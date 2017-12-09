@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -377,16 +377,15 @@ namespace castor3d
 				transmittance = texture( c3d_mapTransmittance, texCoord.xy() ).r();
 			}
 
-			out_c3dOutput1 = vec4( normal, flags );
-			out_c3dOutput2 = vec4( diffuse, matShininess );
-			out_c3dOutput3 = vec4( specular, ambientOcclusion );
-			out_c3dOutput4 = vec4( emissive, transmittance );
-
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			out_c3dOutput5.xyz() = vec3( curPosition - prvPosition, writer.cast< Float >( vtx_material ) );
+			out_c3dOutput1 = vec4( normal, flags );
+			out_c3dOutput2 = vec4( diffuse, matShininess );
+			out_c3dOutput3 = vec4( specular, ambientOcclusion );
+			out_c3dOutput4 = vec4( emissive, transmittance );
+			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 		} );
 
 		return writer.finalise();

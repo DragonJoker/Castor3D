@@ -910,7 +910,6 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
 		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
-		auto pxl_backLit = writer.declFragData< Vec3 >( cuT( "pxl_backLit" ), 1 );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{

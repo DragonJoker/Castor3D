@@ -5,6 +5,8 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshComponent/MorphComponent.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Scene/Geometry.hpp"
+#include "Scene/Animation/AnimatedMesh.hpp"
 #include "Shader/Uniform/Uniform.hpp"
 
 using namespace castor;
@@ -60,9 +62,10 @@ namespace castor3d
 			m_animationObject.getComponent().needsUpdate();
 		}
 
-		m_animationObject.getSubmesh().updateContainers( doInterpolateBB( prv.m_boundingBox
-			, cur.m_boundingBox
-			, factor ) );
+		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()
+			, doInterpolateBB( prv.m_boundingBox
+				, cur.m_boundingBox
+				, factor ) );
 		m_cur = &cur;
 		m_currentFactor = factor;
 	}

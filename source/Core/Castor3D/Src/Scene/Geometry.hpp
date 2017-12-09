@@ -154,6 +154,18 @@ namespace castor3d
 		C3D_API castor::BoundingSphere const & getBoundingSphere( Submesh const & submesh )const;
 		/**
 		 *\~english
+		 *\brief		Sets the bounding box for given submesh.
+		 *\param[in]	submesh	The submesh.
+		 *\param[in]	box		The bounding box.
+		 *\~french
+		 *\brief		Définit la bounding box pour le sous-maillage donné.
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\param[in]	box		La bounding box.
+		 */
+		C3D_API void setBoundingBox( Submesh const & submesh
+			, castor::BoundingBox const & box );
+		/**
+		 *\~english
 		 *\brief		Retrieves the mesh
 		 *\return		The mesh
 		 *\~french
@@ -191,6 +203,7 @@ namespace castor3d
 
 	private:
 		void doUpdateMesh();
+		void doUpdateContainers();
 
 	private:
 		//!\~english	The mesh.
