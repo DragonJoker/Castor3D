@@ -603,7 +603,7 @@ namespace castortd
 
 			if ( !mesh->getAnimations().empty() )
 			{
-				auto object = animGroup->addObject( *mesh, tower->getName() + cuT( "_Mesh" ) );
+			  auto object = animGroup->addObject( *mesh, *tower, tower->getName() + cuT( "_Mesh" ) );
 				time = std::max( time
 					, mesh->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 			}
@@ -614,7 +614,7 @@ namespace castortd
 			{
 				if ( !skeleton->getAnimations().empty() )
 				{
-					auto object = animGroup->addObject( *skeleton, tower->getName() + cuT( "_Skeleton" ) );
+					auto object = animGroup->addObject( *skeleton, *mesh, *tower, tower->getName() + cuT( "_Skeleton" ) );
 					time = std::max( time
 						, skeleton->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 				}

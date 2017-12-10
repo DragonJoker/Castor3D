@@ -248,8 +248,8 @@ namespace GuiCommon
 		}
 
 		auto aabb = obb.getAxisAligned( m_obbNode->getParent()->getDerivedTransformationMatrix() );
-		auto & aabbMin = aabb.getMin();
-		auto & aabbMax = aabb.getMax();
+		auto aabbMin = aabb.getMin();
+		auto aabbMax = aabb.getMax();
 		auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
 		Vertex::setPosition( *aabbSubmesh->getPoint( 0u ), aabbMin[0], aabbMin[1], aabbMin[2] );
 		Vertex::setPosition( *aabbSubmesh->getPoint( 1u ), aabbMin[0], aabbMax[1], aabbMin[2] );

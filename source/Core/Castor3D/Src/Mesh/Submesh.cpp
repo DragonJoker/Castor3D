@@ -352,7 +352,6 @@ namespace castor3d
 				break;
 
 			case Topology::eLineLoop:
-				result = result;
 				break;
 
 			case Topology::eLineStrip:

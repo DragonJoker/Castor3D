@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Mesh/VertexGroup.hpp"
 
+#include <Graphics/BoundingBox.hpp>
+
 namespace castor3d
 {
 	/**@name Animation */

@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "ChunkParser.hpp"
 
+#include "Miscellaneous/Version.hpp"
+
 namespace castor3d
 {
 	/*!
@@ -192,17 +194,17 @@ namespace castor3d
 
 					if ( result )
 					{
-						Version fileVersion{ CMSH_VERSION_MAJOR( version )
-							, CMSH_VERSION_MINOR( version )
-							, CMSH_VERSION_REVISION( version ) };
+					  Version fileVersion{ int( CMSH_VERSION_MAJOR( version ) )
+							, int( CMSH_VERSION_MINOR( version ) )
+							, int( CMSH_VERSION_REVISION( version ) ) };
 						version = CMSH_VERSION;
-						Version latestVersion{ CMSH_VERSION_MAJOR( version )
-							, CMSH_VERSION_MINOR( version )
-							, CMSH_VERSION_REVISION( version ) };
+						Version latestVersion{ int( CMSH_VERSION_MAJOR( version ) )
+							, int( CMSH_VERSION_MINOR( version ) )
+							, int( CMSH_VERSION_REVISION( version ) ) };
 
 						if ( fileVersion < latestVersion )
 						{
-							castor::Logger::logWarning( StringStream{} << cuT( "This file is using version " )
+							castor::Logger::logWarning( castor::StringStream{} << cuT( "This file is using version " )
 								<< fileVersion
 								<< cuT( ", consider upgrading it to version " )
 								<< latestVersion
