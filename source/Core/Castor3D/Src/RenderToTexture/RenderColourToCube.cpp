@@ -141,7 +141,7 @@ namespace castor3d
 		}
 
 		m_sampler->initialise();
-		static Matrix4x4r const projection = matrix::perspective( Angle::fromDegrees( 90.0_r ), 1.0_r, 0.1_r, 10.0_r );
+		static Matrix4x4r const projection = matrix::perspective( 90.0_degrees, 1.0_r, 0.1_r, 10.0_r );
 		static Matrix4x4r const views[] =
 		{
 			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),

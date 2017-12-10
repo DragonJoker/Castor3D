@@ -104,6 +104,7 @@ namespace castor3d
 				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
 			}
 		}
+		, m_viewport{ engine }
 	{
 		String const skybox = cuT( "Skybox" );
 
@@ -215,7 +216,13 @@ namespace castor3d
 			auto & scene = *camera.getScene();
 			auto node = camera.getParent();
 			matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
+			m_viewport.setPerspective( 45.0_degrees
+				, camera.getViewport().getRatio()
+				, 0.1f
+				, 2.0f );
+			m_viewport.update();
 			m_matrixUbo.update( camera.getView()
+				//, m_viewport.getProjection() );
 				, camera.getViewport().getProjection() );
 			m_modelMatrixUbo.update( m_mtxModel );
 

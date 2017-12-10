@@ -96,7 +96,7 @@ namespace castor3d
 		real const aspect = real( p_size.getWidth() ) / p_size.getHeight();
 		real const near = 1.0_r;
 		real const far = 2000.0_r;
-		matrix::perspective( m_projection, Angle::fromDegrees( 90.0_r ), aspect, near, far );
+		matrix::perspective( m_projection, 90.0_degrees, aspect, near, far );
 
 		m_viewport.resize( p_size );
 		m_viewport.initialise();
@@ -110,9 +110,10 @@ namespace castor3d
 		m_shadowConfig.cleanup();
 		m_onNodeChanged.disconnect();
 	}
+
 	void ShadowMapPassPoint::doUpdate( RenderQueueArray & p_queues )
 	{
-		p_queues.push_back( m_renderQueue );
+		p_queues.emplace_back( m_renderQueue );
 	}
 
 	void ShadowMapPassPoint::doPreparePipeline( ShaderProgram & program

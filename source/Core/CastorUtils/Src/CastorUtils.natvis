@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   <Type Name="castor::PointDataHolder&lt;*, 2&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
@@ -114,6 +114,22 @@
     <Expand>
       <Item Name="normal">m_normal</Item>
       <Item Name="d">m_d</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::ChangeTracked&lt;*&gt;">
+    <DisplayString>{{value={m_value}, dirty={m_dirty}}}</DisplayString>
+    <Expand>
+      <Item Name="value">m_value</Item>
+      <Item Name="dirty">m_dirty</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::GroupChangeTracked&lt;*&gt;">
+    <DisplayString>{{value={m_value}, dirty={m_dirty}}}</DisplayString>
+    <Expand>
+      <Item Name="value">m_value</Item>
+      <Item Name="dirty">m_dirty</Item>
     </Expand>
   </Type>
 </AutoVisualizer>

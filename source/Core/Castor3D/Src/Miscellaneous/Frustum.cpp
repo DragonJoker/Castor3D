@@ -9,6 +9,8 @@
 
 using namespace castor;
 
+#define DEBUG_FRUSTUM 0
+
 namespace castor3d
 {
 	Frustum::Frustum( Viewport & viewport )
@@ -120,7 +122,7 @@ namespace castor3d
 			} );
 		bool result = it == m_planes.end();
 
-#if !defined( NDEBUG )
+#if DEBUG_FRUSTUM
 
 		if ( !result )
 		{
@@ -151,7 +153,7 @@ namespace castor3d
 			} );
 		bool result = it == m_planes.end();
 
-#if !defined( NDEBUG )
+#if DEBUG_FRUSTUM
 
 		if ( !result )
 		{
@@ -175,7 +177,7 @@ namespace castor3d
 		} );
 		bool result = it == m_planes.end();
 
-#if !defined( NDEBUG )
+#if DEBUG_FRUSTUM
 
 		if ( !result )
 		{

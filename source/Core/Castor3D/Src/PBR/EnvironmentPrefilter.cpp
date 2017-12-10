@@ -56,7 +56,7 @@ namespace castor3d
 		}
 
 		m_viewport.initialise();
-		m_viewport.setPerspective( Angle::fromDegrees( 90.0_r ), 1.0_r, 0.1_r, 10.0_r );
+		m_viewport.setPerspective( 90.0_degrees, 1.0_r, 0.1_r, 10.0_r );
 		m_viewport.update();
 		auto & program = *doCreateProgram();
 		auto & renderSystem = *getEngine()->getRenderSystem();
