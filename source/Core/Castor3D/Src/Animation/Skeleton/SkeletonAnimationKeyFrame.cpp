@@ -181,6 +181,16 @@ namespace castor3d
 		}
 	}
 
+	bool SkeletonAnimationKeyFrame::hasObject( SkeletonAnimationObject const & object )const
+	{
+		return m_transforms.end() != std::find_if( m_transforms.begin()
+			, m_transforms.end()
+			, [&object]( auto const & lookup )
+			{
+				return lookup.first == &object;
+			} );
+	}
+
 	TransformArray::const_iterator SkeletonAnimationKeyFrame::find( SkeletonAnimationObject const & object )const
 	{
 		return std::find_if( m_cumulative.begin()

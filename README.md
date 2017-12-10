@@ -7,7 +7,7 @@
 Castor3D
 ========
 
-Castor3D is a 3D engine written in C++.
+Castor3D is a 3D engine written in C++ 14.
 It works on Windows and also on GNU/Linux.
 It uses OpenGL (with GLSL).
 
@@ -15,7 +15,7 @@ Features
 --------
 
 - Deferred rendering.
-- Normal mapping
+- Normal mapping.
 - Parallax Occlusion mapping.
 - Screen Space Ambient Occlusion.
 - Shadow Mapping.
@@ -37,7 +37,6 @@ Implemented Plug-ins
 - ASSIMP: Multiple format mesh importer.
 - PLY: Stanford Polygon library mesh importer.
 - OBJ: Wavefront OBJ mesh importer.
-- FBX: Autodesk Maya mesh importer.
 
 **Dividers**
 - Loop subdivision surfaces.
@@ -69,7 +68,7 @@ Implemented Plug-ins
 ![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-small.png)
 ![Park](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-small.png)
 ![Park](http://dragonjoker.github.com/Castor3D/img/Park-PBR-small.png)
-![Park](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
+![Nyra](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
 
 Links
 -----

@@ -40,6 +40,7 @@ See LICENSE file in root folder
 namespace C3dAssimp
 {
 	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
+	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
 	/*!
 	\author		Sylvain DOREMUS
 	\date		25/08/2010
@@ -95,7 +96,8 @@ namespace C3dAssimp
 			, aiNode const & p_aiNode
 			, aiAnimation const & p_aiAnimation
 			, castor3d::SkeletonAnimationObjectSPtr p_object
-			, SkeletonAnimationKeyFrameMap & keyFrames );
+			, SkeletonAnimationKeyFrameMap & keyFrames
+			, SkeletonAnimationObjectSet & notAnimated );
 		void doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
 			, int64_t ticksPerMilliSecond
 			, castor3d::SkeletonAnimationObject & object

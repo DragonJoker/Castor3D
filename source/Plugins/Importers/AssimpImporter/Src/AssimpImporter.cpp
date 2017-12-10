@@ -775,6 +775,7 @@ namespace C3dAssimp
 		auto & animation = skeleton.createAnimation( name );
 		int64_t ticksPerMilliSecond = int64_t( aiAnimation.mTicksPerSecond ? aiAnimation.mTicksPerSecond : 25 );
 		SkeletonAnimationKeyFrameMap keyframes;
+		SkeletonAnimationObjectSet notAnimated;
 		doProcessAnimationNodes( mesh
 			, animation
 			, ticksPerMilliSecond
@@ -782,7 +783,19 @@ namespace C3dAssimp
 			, aiNode
 			, aiAnimation
 			, nullptr
-			, keyframes );
+			, keyframes
+			, notAnimated );
+
+		for ( auto & object : notAnimated )
+		{
+			for ( auto & keyFrame : keyframes )
+			{
+				if ( !keyFrame.second->hasObject( *object ) )
+				{
+					keyFrame.second->addAnimationObject( *object, object->getNodeTransform() );
+				}
+			}
+		}
 
 		for ( auto & keyFrame : keyframes )
 		{
@@ -799,7 +812,8 @@ namespace C3dAssimp
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation
 		, SkeletonAnimationObjectSPtr parent
-		, SkeletonAnimationKeyFrameMap & keyFrames )
+		, SkeletonAnimationKeyFrameMap & keyFrames
+		, SkeletonAnimationObjectSet & notAnimated )
 	{
 		String name = string::stringCast< xchar >( aiNode.mName.data );
 		const aiNodeAnim * aiNodeAnim = doFindNodeAnim( aiAnimation, name );
@@ -869,6 +883,10 @@ namespace C3dAssimp
 				, animation
 				, keyFrames );
 		}
+		else
+		{
+			notAnimated.insert( object );
+		}
 
 		for ( auto node : makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
@@ -879,7 +897,8 @@ namespace C3dAssimp
 				, *node
 				, aiAnimation
 				, object
-				, keyFrames );
+				, keyFrames
+				, notAnimated );
 		}
 	}
 

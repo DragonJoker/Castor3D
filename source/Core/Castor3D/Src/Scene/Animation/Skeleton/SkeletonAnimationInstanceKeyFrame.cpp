@@ -28,7 +28,12 @@ namespace castor3d
 			Point3r min{ rmax, rmax, rmax };
 			Point3r max{ rmin, rmin, rmin };
 
-			if ( submesh.hasComponent( BonesComponent::Name ) )
+			if ( !submesh.hasComponent( BonesComponent::Name ) )
+			{
+				min = submesh.getBoundingBox().getMin();
+				max = submesh.getBoundingBox().getMax();
+			}
+			else
 			{
 				auto component = submesh.getComponent< BonesComponent >();
 				uint32_t index = 0u;
@@ -41,7 +46,9 @@ namespace castor3d
 					if ( boneData.m_weights[0] > 0 )
 					{
 						auto bone = *( skeleton.begin() + boneData.m_ids[0] );
-						transform = Matrix4x4r{ keyFrame.find( *bone )->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
+						auto it = keyFrame.find( *bone );
+						REQUIRE( it != keyFrame.end() );
+						transform = Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
 					}
 
 					for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
@@ -49,7 +56,9 @@ namespace castor3d
 						if ( boneData.m_weights[i] > 0 )
 						{
 							auto bone = *( skeleton.begin() + boneData.m_ids[i] );
-							transform += Matrix4x4r{ keyFrame.find( *bone )->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
+							auto it = keyFrame.find( *bone );
+							REQUIRE( it != keyFrame.end() );
+							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
 						}
 					}
 
@@ -68,6 +77,12 @@ namespace castor3d
 				}
 			}
 
+			ENSURE( !isNan( min[0] ) && !isNan( min[1] ) && !isNan( min[2] ) );
+			ENSURE( !isNan( max[0] ) && !isNan( max[1] ) && !isNan( max[2] ) );
+			ENSURE( !isInf( min[0] ) && !isInf( min[1] ) && !isInf( min[2] ) );
+			ENSURE( !isInf( max[0] ) && !isInf( max[1] ) && !isInf( max[2] ) );
+			ENSURE( min != Point3r( rmax, rmax, rmax ) );
+			ENSURE( max != Point3r( rmin, rmin, rmin ) );
 			return BoundingBox{ min, max };
 		}
 	}
@@ -82,6 +97,7 @@ namespace castor3d
 		for ( auto & object : skeletonAnimation )
 		{
 			auto it = keyFrame.find( object->getObject() );
+			REQUIRE( it != keyFrame.end() );
 			m_objects.emplace_back( object.get(), it->second );
 
 			if ( object->getObject().getType() == SkeletonAnimationObjectType::eBone )

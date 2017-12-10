@@ -134,12 +134,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the animations of the object, given the time since the last frame
-		 *\param[in]	elpased		Time elapsed since the last frame
+		 *\param[in]	elapsed		Time elapsed since the last frame
 		 *\~french
 		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
-		 *\param[in]	elpased		Le temps écoulé depuis la dernière frame
+		 *\param[in]	elapsed		Le temps écoulé depuis la dernière frame
 		 */
-		C3D_API virtual void update( castor::Milliseconds const & elpased ) = 0;
+		C3D_API virtual void update( castor::Milliseconds const & elapsed ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the object is playing an animation.

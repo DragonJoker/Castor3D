@@ -31,19 +31,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_timeIndex	When the key frame starts.
-		 *\param[in]	p_translate	The translation at start time.
-		 *\param[in]	p_rotate	The rotation at start time.
-		 *\param[in]	p_scale		The scaling at start time.
+		 *\param[in]	parent		The parent animation.
+		 *\param[in]	timeIndex	When the key frame starts.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_timeIndex	Quand la key frame commence.
-		 *\param[in]	p_translate	La translation au temps de début.
-		 *\param[in]	p_rotate	La rotation au temps de début.
-		 *\param[in]	p_scale		L'échelle au temps de début.
+		 *\param[in]	parent		L'animation parente.
+		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
 		C3D_API MeshAnimationKeyFrame( MeshAnimation & parent
-			, castor::Milliseconds const & p_timeIndex = 0_ms );
+			, castor::Milliseconds const & timeIndex = 0_ms );
 		/**
 		 *\~english
 		 *\brief		Adds a submesh buffer.

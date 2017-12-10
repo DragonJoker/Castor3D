@@ -31,10 +31,12 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	skeletonAnimation	The animation instance.
 		 *\param[in]	keyFrame			The animation keyframe.
+		 *\param[in]	skeleton			The target animated skeleton.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	skeletonAnimation	L'instance d'animation.
 		 *\param[in]	keyFrame			La keyframe d'animation.
+		 *\param[in]	skeleton			Le squelette animé cible.
 		 */
 		C3D_API SkeletonAnimationInstanceKeyFrame( SkeletonAnimationInstance & skeletonAnimation
 			, SkeletonAnimationKeyFrame const & keyFrame

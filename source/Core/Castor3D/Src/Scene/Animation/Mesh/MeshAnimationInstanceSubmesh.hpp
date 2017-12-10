@@ -59,11 +59,15 @@ namespace castor3d
 		C3D_API virtual ~MeshAnimationInstanceSubmesh();
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	time	Current time index.
+		 *\brief		Updates the object, given to animation buffers.
+		 *\param[in]	factor	The percentage between \p prv and \p cur.
+		 *\param[in]	prv		The previous animation buffer (factor 0).
+		 *\param[in]	cur		The current animation buffer (factor 1).
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	time	Index de temps courant.
+		 *\param[in]	factor	Le pourcentage entre \p prv et \p cur.
+		 *\param[in]	prv		Le tampon d'animation précédent (pourcentage 0).
+		 *\param[in]	cur		Le tampon d'animation courant (pourcentage 1).
 		 */
 		C3D_API void update( float factor
 			, SubmeshAnimationBuffer const & prv
