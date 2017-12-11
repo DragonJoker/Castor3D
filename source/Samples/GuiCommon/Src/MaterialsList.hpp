@@ -14,7 +14,7 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		MaterialsList( PropertiesHolder * p_propertiesHolder
+		MaterialsList( PropertiesContainer * p_propertiesHolder
 			, wxWindow * p_parent
 			, wxPoint const & p_ptPos = wxDefaultPosition
 			, wxSize const & p_size = wxDefaultSize );
@@ -43,7 +43,7 @@ namespace GuiCommon
 	private:
 		castor3d::Engine * m_engine{ nullptr };
 		castor3d::Scene * m_scene{ nullptr };
-		PropertiesHolder * m_propertiesHolder{ nullptr };
+		PropertiesContainer * m_propertiesHolder{ nullptr };
 	};
 }
 

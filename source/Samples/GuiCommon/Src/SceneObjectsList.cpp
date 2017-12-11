@@ -13,7 +13,7 @@
 #include "RenderTargetTreeItemProperty.hpp"
 #include "RenderWindowTreeItemProperty.hpp"
 #include "SubmeshTreeItemProperty.hpp"
-#include "PropertiesHolder.hpp"
+#include "PropertiesContainer.hpp"
 #include "ViewportTreeItemProperty.hpp"
 
 #include "ImagesLoader.hpp"
@@ -44,7 +44,7 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	SceneObjectsList::SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
+	SceneObjectsList::SceneObjectsList( PropertiesContainer * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxNO_BORDER )
 		, m_engine( nullptr )
 		, m_propertiesHolder( p_propertiesHolder )

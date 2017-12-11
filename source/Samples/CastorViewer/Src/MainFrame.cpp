@@ -2,6 +2,7 @@
 
 #include "MainFrame.hpp"
 #include "CastorViewer.hpp"
+#include "PropertiesContainer.hpp"
 #include "PropertiesHolder.hpp"
 #include "TreeHolder.hpp"
 
@@ -315,7 +316,10 @@ namespace CastorViewer
 		m_sceneTabsContainer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_sceneTabsContainer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->SetArtProvider( new AuiTabArt );
-		m_propertiesContainer = new PropertiesHolder( true, this, wxDefaultPosition, wxDefaultSize );
+		m_propertiesHolder = new PropertiesHolder{ this };
+		m_propertiesHolder->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_propertiesHolder->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_propertiesContainer = new PropertiesContainer( true, m_propertiesHolder, wxDefaultPosition, wxDefaultSize );
 		m_propertiesContainer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_propertiesContainer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_propertiesContainer->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -326,6 +330,7 @@ namespace CastorViewer
 		m_propertiesContainer->SetCellTextColour( INACTIVE_TEXT_COLOUR );
 		m_propertiesContainer->SetLineColour( BORDER_COLOUR );
 		m_propertiesContainer->SetMarginColour( BORDER_COLOUR );
+		m_propertiesHolder->setGrid( m_propertiesContainer );
 
 		m_auiManager.AddPane( m_renderPanel
 			, wxAuiPaneInfo()
@@ -370,7 +375,7 @@ namespace CastorViewer
 				.MinSize( m_propertiesWidth, size.y / 3 )
 				.Layer( 2 )
 				.PaneBorder( false ) );
-		m_auiManager.AddPane( m_propertiesContainer
+		m_auiManager.AddPane( m_propertiesHolder
 			, wxAuiPaneInfo()
 				.CaptionVisible( false )
 				.Hide()
@@ -754,7 +759,7 @@ namespace CastorViewer
 	{
 		Logger::unregisterCallback( this );
 		m_auiManager.DetachPane( m_sceneTabsContainer );
-		m_auiManager.DetachPane( m_propertiesContainer );
+		m_auiManager.DetachPane( m_propertiesHolder );
 		m_auiManager.DetachPane( m_logTabsContainer );
 		m_auiManager.DetachPane( m_renderPanel );
 		m_auiManager.DetachPane( m_toolBar );
@@ -915,13 +920,13 @@ namespace CastorViewer
 
 	void MainFrame::OnShowProperties( wxCommandEvent & event )
 	{
-		if ( !m_propertiesContainer->IsShown() )
+		if ( !m_propertiesHolder->IsShown() )
 		{
-			m_auiManager.GetPane( m_propertiesContainer ).Show();
+			m_auiManager.GetPane( m_propertiesHolder ).Show();
 		}
 		else
 		{
-			m_auiManager.GetPane( m_propertiesContainer ).Hide();
+			m_auiManager.GetPane( m_propertiesHolder ).Hide();
 		}
 
 		m_auiManager.Update();

@@ -111,7 +111,7 @@ namespace GuiCommon
 
 	class CastorApplication;
 
-	class PropertiesHolder;
+	class PropertiesContainer;
 	class TreeItemProperty;
 	class CameraTreeItemProperty;
 	class GeometryTreeItemProperty;
@@ -134,6 +134,7 @@ namespace GuiCommon
 	class SplashScreen;
 	class StcTextEditor;
 	class TreeHolder;
+	class PropertiesHolder;
 
 	class LanguageFileContext;
 	class LanguageFileParser;

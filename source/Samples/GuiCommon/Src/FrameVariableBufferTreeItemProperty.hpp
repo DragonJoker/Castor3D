@@ -13,9 +13,9 @@ namespace GuiCommon
 	\date 		10/09/2015
 	\version	0.8.0
 	\~english
-	\brief		Frame variable buffer helper class to communicate between Scene objects or Materials lists and PropertiesHolder
+	\brief		Frame variable buffer helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les tampons de variables de frame
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les tampons de variables de frame
 	*/
 	class FrameVariableBufferTreeItemProperty
 		: public TreeItemProperty

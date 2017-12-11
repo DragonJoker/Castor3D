@@ -3,7 +3,7 @@
 #include "ImagesLoader.hpp"
 #include "FrameVariableBufferTreeItemProperty.hpp"
 #include "FrameVariableTreeItemProperty.hpp"
-#include "PropertiesHolder.hpp"
+#include "PropertiesContainer.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -38,7 +38,7 @@ namespace GuiCommon
 		eID_FRAME_VARIABLE_BUFFER_SEL,
 	}	eID;
 
-	FrameVariablesList::FrameVariablesList( PropertiesHolder * p_propertiesHolder
+	FrameVariablesList::FrameVariablesList( PropertiesContainer * p_propertiesHolder
 		, wxWindow * p_parent
 		, wxPoint const & p_ptPos
 		, wxSize const & p_size )

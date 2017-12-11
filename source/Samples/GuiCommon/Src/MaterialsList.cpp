@@ -3,7 +3,7 @@
 #include "ImagesLoader.hpp"
 #include "MaterialTreeItemProperty.hpp"
 #include "PassTreeItemProperty.hpp"
-#include "PropertiesHolder.hpp"
+#include "PropertiesContainer.hpp"
 #include "RenderTargetTreeItemProperty.hpp"
 #include "TextureTreeItemProperty.hpp"
 
@@ -34,7 +34,7 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	MaterialsList::MaterialsList( PropertiesHolder * p_propertiesHolder
+	MaterialsList::MaterialsList( PropertiesContainer * p_propertiesHolder
 		, wxWindow * p_parent
 		, wxPoint const & p_ptPos
 		, wxSize const & p_size )

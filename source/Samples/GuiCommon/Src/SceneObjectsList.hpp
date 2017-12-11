@@ -19,7 +19,7 @@ namespace GuiCommon
 		using GeometrySubmeshIdMap = std::map< castor3d::GeometrySPtr, SubmeshIdMap >;
 
 	public:
-		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		SceneObjectsList( PropertiesContainer * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~SceneObjectsList();
 
 		void loadScene( castor3d::Engine * engine, castor3d::SceneSPtr p_scene );
@@ -45,7 +45,7 @@ namespace GuiCommon
 	private:
 		castor3d::SceneWPtr m_scene;
 		castor3d::Engine * m_engine;
-		PropertiesHolder * m_propertiesHolder;
+		PropertiesContainer * m_propertiesHolder;
 		GeometrySubmeshIdMap m_ids;
 	};
 }

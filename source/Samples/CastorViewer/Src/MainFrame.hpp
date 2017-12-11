@@ -87,7 +87,8 @@ namespace CastorViewer
 		wxAuiToolBar * m_toolBar;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
-		GuiCommon::PropertiesHolder * m_propertiesContainer;
+		GuiCommon::PropertiesHolder * m_propertiesHolder;
+		GuiCommon::PropertiesContainer * m_propertiesContainer;
 		wxListBox * m_messageLog;
 		wxListBox * m_errorLog;
 		GuiCommon::SplashScreen * m_splashScreen;
