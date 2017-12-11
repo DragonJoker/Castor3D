@@ -3,6 +3,7 @@
 #include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/LegacyPass.hpp>
+#include <Material/Material.hpp>
 #include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Mesh.hpp>
