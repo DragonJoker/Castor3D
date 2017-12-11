@@ -19,13 +19,12 @@ namespace castor3d
 	{
 		castor::String const & getMovingTypeName( SkeletonAnimationObjectType type )
 		{
-			static std::map< SkeletonAnimationObjectType, String > Names
+			static std::map< SkeletonAnimationObjectType, String > const names
 			{
 				{ SkeletonAnimationObjectType::eNode, cuT( "Node_" ) },
 				{ SkeletonAnimationObjectType::eBone, cuT( "Bone_" ) },
 			};
-
-			return Names[type];
+			return names.at( type );
 		}
 	}
 

@@ -31,7 +31,7 @@ namespace castor3d
 	( ( uint32_t( version ) >>  0 ) & uint32_t( 0xFF ) )
 	//!\~english	The current format version number.
 	//!\~french		La version actuelle du format.
-	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x02, 0x0000 );
+	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x03, 0x0000 );
 	//!\~english	A define to ease the declaration of a chunk id.
 	//!\~french		Un define pour faciliter la déclaration d'un id de chunk.
 #	define MAKE_CHUNK_ID( a, b, c, d, e, f, g, h )\

@@ -45,11 +45,6 @@ namespace castor3d
 			result &= BinaryWriter< Submesh >{}.write( *submesh, m_chunk );
 		}
 
-		if ( result && p_obj.m_skeleton )
-		{
-			result = BinaryWriter< Skeleton >{}.write( *p_obj.m_skeleton, m_chunk );
-		}
-
 		return result;
 	}
 
@@ -87,7 +82,29 @@ namespace castor3d
 				}
 
 				break;
+			}
+		}
 
+		if ( result )
+		{
+			p_obj.computeContainers();
+		}
+
+		return result;
+	}
+
+	bool BinaryParser< Mesh >::doParse_v1_2( Mesh & p_obj )
+	{
+		bool result = true;
+		SubmeshSPtr submesh;
+		SkeletonSPtr skeleton;
+		String name;
+		BinaryChunk chunk;
+
+		while ( result && doGetSubChunk( chunk ) )
+		{
+			switch ( chunk.getChunkType() )
+			{
 			case ChunkType::eSkeleton:
 				skeleton = std::make_shared< Skeleton >( *p_obj.getScene() );
 				result = BinaryParser< Skeleton >{}.parse( *skeleton, chunk );
@@ -99,11 +116,6 @@ namespace castor3d
 
 				break;
 			}
-		}
-
-		if ( result )
-		{
-			p_obj.computeContainers();
 		}
 
 		return result;
