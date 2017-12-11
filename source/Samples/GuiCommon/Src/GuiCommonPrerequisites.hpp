@@ -102,6 +102,8 @@ namespace GuiCommon
 		eBMP_TEXTURE_SEL,
 		eBMP_BILLBOARD,
 		eBMP_BILLBOARD_SEL,
+		eBMP_COLLAPSE_ALL,
+		eBMP_EXPAND_ALL,
 		eBMP_COUNT,
 	}	eBMP;
 
@@ -131,6 +133,7 @@ namespace GuiCommon
 	class ShaderEditorPage;
 	class SplashScreen;
 	class StcTextEditor;
+	class TreeHolder;
 
 	class LanguageFileContext;
 	class LanguageFileParser;

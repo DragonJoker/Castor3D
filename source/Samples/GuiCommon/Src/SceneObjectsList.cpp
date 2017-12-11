@@ -99,7 +99,7 @@ namespace GuiCommon
 			ImagesLoader::getBitmap( eBMP_BILLBOARD_SEL ),
 		};
 
-		wxImageList * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
+		auto * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
 		for ( auto image : icons )
 		{
