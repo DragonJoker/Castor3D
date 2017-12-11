@@ -163,6 +163,7 @@ namespace castor3d
 	class AnimatedMesh;
 	class AnimationInstance;
 	class SkeletonAnimationInstance;
+	class SkeletonAnimationInstanceKeyFrame;
 	class SkeletonAnimationInstanceObject;
 	class SkeletonAnimationInstanceNode;
 	class SkeletonAnimationInstanceBone;
@@ -215,9 +216,26 @@ namespace castor3d
 	//! Skeleton animation instance pointer array.
 	DECLARE_VECTOR( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
 
+	using OnSceneChangedFunction = std::function< void( Scene const & ) >;
+	using OnSceneChanged = castor::Signal< OnSceneChangedFunction >;
+	using OnSceneChangedConnection = OnSceneChanged::connection;
+
+	using OnSceneUpdateFunction = std::function< void( Scene const & ) >;
+	using OnSceneUpdate = castor::Signal< OnSceneUpdateFunction >;
+	using OnSceneUpdateConnection = OnSceneUpdate::connection;
+
+	using OnCameraChangedFunction = std::function< void( Camera const & ) >;
+	using OnCameraChanged = castor::Signal< OnCameraChangedFunction >;
+	using OnCameraChangedConnection = OnCameraChanged::connection;
+
 	using OnSceneNodeChangedFunction = std::function< void( SceneNode const & ) >;
 	using OnSceneNodeChanged = castor::Signal< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
+
+	using SubmeshBoundingBoxList = std::vector< std::pair< Submesh const *, castor::BoundingBox > >;
+	using SubmeshBoundingBoxMap = std::map< Submesh const *, castor::BoundingBox >;
+	using SubmeshBoundingSphereMap = std::map< Submesh const *, castor::BoundingSphere >;
+	using SubmeshMaterialMap = std::map< Submesh const *, MaterialWPtr >;
 
 	//@}
 }

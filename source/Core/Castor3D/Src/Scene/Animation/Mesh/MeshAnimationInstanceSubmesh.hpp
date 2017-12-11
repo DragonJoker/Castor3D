@@ -27,6 +27,18 @@ namespace castor3d
 	{
 	public:
 		/**
+		*\~english
+		*name Copy / Move.
+		*\~french
+		*name Copie / Déplacement.
+		**/
+		/**@{*/
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & rhs ) = delete;
+		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & rhs ) = delete;
+		/**@}*/
+		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	animationInstance	The parent skeleton animation instance.
@@ -40,34 +52,6 @@ namespace castor3d
 			, MeshAnimationSubmesh & animationObject );
 		/**
 		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && rhs ) = default;
-		/**
-		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
@@ -75,13 +59,26 @@ namespace castor3d
 		C3D_API virtual ~MeshAnimationInstanceSubmesh();
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	time	Current time index.
+		 *\brief		Updates the object, given to animation buffers.
+		 *\param[in]	factor	The percentage between \p prv and \p cur.
+		 *\param[in]	prv		The previous animation buffer (factor 0).
+		 *\param[in]	cur		The current animation buffer (factor 1).
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	time	Index de temps courant.
+		 *\param[in]	factor	Le pourcentage entre \p prv et \p cur.
+		 *\param[in]	prv		Le tampon d'animation précédent (pourcentage 0).
+		 *\param[in]	cur		Le tampon d'animation courant (pourcentage 1).
 		 */
-		C3D_API void update( castor::Milliseconds const & time );
+		C3D_API void update( float factor
+			, SubmeshAnimationBuffer const & prv
+			, SubmeshAnimationBuffer const & cur );
+		/**
+		 *\~english
+		 *\brief		The submesh.
+		 *\~french
+		 *\brief		Le sous-maillage.
+		 */
+		C3D_API Submesh const & getSubmesh()const;
 		/**
 		 *\~english
 		 *\brief		The current factor.
@@ -97,21 +94,12 @@ namespace castor3d
 		//!\~english	The animation object.
 		//!\~french		L'animation d'objet.
 		MeshAnimationSubmesh & m_animationObject;
-		//!\~english	Iterator to the first buffer.
-		//!\~french		Itérateur sur le premier tampon.
-		SubmeshAnimationBufferArray::const_iterator m_first;
-		//!\~english	Iterator to the last buffer.
-		//!\~french		Itérateur sur le dernier tampon.
-		SubmeshAnimationBufferArray::const_iterator m_last;
-		//!\~english	Iterator to the previous buffer (when playing the animation).
-		//!\~french		Itérateur sur le tampon précédent (quand l'animation est jouée).
-		SubmeshAnimationBufferArray::const_iterator m_prev;
-		//!\~english	Iterator to the current buffer (when playing the animation).
-		//!\~french		Itérateur sur le tampon courant (quand l'animation est jouée).
-		SubmeshAnimationBufferArray::const_iterator m_curr;
 		//!\~english	The time elapsed since the last keyframe.
 		//!\~french		Le temps écoulé depuis la dernière keyframe.
 		float m_currentFactor{ 0.0f };
+		//!\~english	The current animation buffer.
+		//!\~french		Le tampon d'animation actuel.
+		SubmeshAnimationBuffer const * m_cur{ nullptr };
 	};
 }
 

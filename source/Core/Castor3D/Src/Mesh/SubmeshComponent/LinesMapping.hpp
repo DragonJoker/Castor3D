@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LinesMapping_H___
@@ -24,14 +24,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_mesh	The parent mesh.
-		 *\param[in]	p_scene	The scene.
-		 *\param[in]	p_id	The submesh ID.
+		 *\param[in]	submesh	The parent submesh.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_mesh	Le mesh parent.
-		 *\param[in]	p_scene	La scène.
-		 *\param[in]	p_id	L'ID du sous-maillage.
+		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
 		C3D_API explicit LinesMapping( Submesh & submesh );
 		/**
@@ -74,21 +70,17 @@ namespace castor3d
 		C3D_API void addLineGroup( LineIndices const * const begin
 			, LineIndices const * const end );
 		/**
-		 *\~english
-		 *\brief		Generates normals and tangents.
-		 *\~french
-		 *\brief		Génère les normales et les tangentes.
+		 *\copydoc		castor3d::IndexMapping::getCount
+		 */
+		C3D_API uint32_t getCount()const override;
+		/**
+		 *\copydoc		castor3d::IndexMapping::sortByDistance
+		 */
+		C3D_API void sortByDistance( castor::Point3r const & cameraPosition )override;
+		/**
+		 *\copydoc		castor3d::IndexMapping::computeNormals
 		 */
 		C3D_API void computeNormals( bool reverted = false )override;
-		/**
-		 *\~english
-		 *\brief		Sorts the lines from farthest to nearest from the camera.
-		 *\param[in]	p_cameraPosition	The camera position, relative to submesh.
-		 *\~french
-		 *\brief		Trie les lignes des plus éloignées aux plus proches de la caméra.
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au sous-maillage.
-		 */
-		C3D_API void sortByDistance( castor::Point3r const & p_cameraPosition )override;
 		/**
 		 *\~english
 		 *\brief		Creates and adds lines to the submesh.
@@ -129,13 +121,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the line at given index
-		 *\param[in]	index	The index
-		 *\return		The value
+		 *\brief		Retrieves the line at given index.
+		 *\param[in]	index	The index.
+		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère la ligne à l'index donné
-		 *\param[in]	index	L'index
-		 *\return		La valeur
+		 *\brief		Récupère la ligne à l'index donné.
+		 *\param[in]	index	L'index.
+		 *\return		La valeur.
 		 */
 		inline Line const & operator[]( uint32_t index )const
 		{

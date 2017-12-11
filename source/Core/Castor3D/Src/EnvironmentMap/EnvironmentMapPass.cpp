@@ -11,34 +11,34 @@ namespace castor3d
 {
 	namespace
 	{
-		CameraSPtr doCreateCamera( SceneNode & p_node )
+		CameraSPtr doCreateCamera( SceneNode & node )
 		{
-			Viewport viewport{ *p_node.getScene()->getEngine() };
-			return std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + p_node.getName()
-				, *p_node.getScene()
-				, p_node.shared_from_this()
+			Viewport viewport{ *node.getScene()->getEngine() };
+			return std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
+				, *node.getScene()
+				, node.shared_from_this()
 				, std::move( viewport ) );
 		}
 	}
 
-	EnvironmentMapPass::EnvironmentMapPass( EnvironmentMap & p_reflectionMap
-		, SceneNodeSPtr p_node
-		, SceneNode const & p_objectNode )
-		: OwnedBy< EnvironmentMap >{ p_reflectionMap }
-		, m_node{ p_node }
-		, m_camera{ doCreateCamera( *p_node ) }
+	EnvironmentMapPass::EnvironmentMapPass( EnvironmentMap & reflectionMap
+		, SceneNodeSPtr node
+		, SceneNode const & objectNode )
+		: OwnedBy< EnvironmentMap >{ reflectionMap }
+		, m_node{ node }
+		, m_camera{ doCreateCamera( *node ) }
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
-			, *p_node->getScene()
+			, *node->getScene()
 			, m_camera.get()
 			, true
-			, &p_objectNode
+			, &objectNode
 			, SsaoConfig{} ) }
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
-			, *p_node->getScene()
+			, *node->getScene()
 			, m_camera.get()
 			, true
 			, true
-			, &p_objectNode
+			, &objectNode
 			, SsaoConfig{} ) }
 	{
 	}
@@ -47,19 +47,19 @@ namespace castor3d
 	{
 	}
 
-	bool EnvironmentMapPass::initialise( Size const & p_size )
+	bool EnvironmentMapPass::initialise( Size const & size )
 	{
-		real const aspect = real( p_size.getWidth() ) / p_size.getHeight();
-		real const near = 1.0_r;
+		real const aspect = real( size.getWidth() ) / size.getHeight();
+		real const near = 0.1_r;
 		real const far = 1000.0_r;
-		m_camera->getViewport().setPerspective( Angle::fromDegrees( 90.0_r )
+		m_camera->getViewport().setPerspective( 90.0_degrees
 			, aspect
 			, near
 			, far );
-		m_camera->resize( p_size );
+		m_camera->resize( size );
 		m_camera->getViewport().initialise();
-		m_opaquePass->initialise( p_size );
-		m_transparentPass->initialise( p_size );
+		m_opaquePass->initialise( size );
+		m_transparentPass->initialise( size );
 		return true;
 	}
 
@@ -70,14 +70,14 @@ namespace castor3d
 		m_camera->getViewport().cleanup();
 	}
 
-	void EnvironmentMapPass::update( SceneNode const & p_node, RenderQueueArray & p_queues )
+	void EnvironmentMapPass::update( SceneNode const & node, RenderQueueArray & queues )
 	{
-		auto position = p_node.getDerivedPosition();
+		auto position = node.getDerivedPosition();
 		m_camera->getParent()->setPosition( position );
 		m_camera->getParent()->update();
 		m_camera->update();
-		m_opaquePass->update( p_queues );
-		m_transparentPass->update( p_queues );
+		m_opaquePass->update( queues );
+		m_transparentPass->update( queues );
 	}
 
 	void EnvironmentMapPass::render()

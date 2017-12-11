@@ -102,6 +102,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The bone data.
+		 *\~french
+		 *\return		Les données d'os.
+		 */
+		inline VertexPtrArray const & getBonesData()const
+		{
+			return m_bones;
+		}
+		/**
+		 *\~english
 		 *\return		The bones VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer des bones.

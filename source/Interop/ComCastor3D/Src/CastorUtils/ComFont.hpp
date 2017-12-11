@@ -47,12 +47,12 @@ namespace CastorCom
 			return m_font;
 		}
 
-		COM_PROPERTY_GET( Height, UINT, make_getter( m_font.get(), &castor::Font::getHeight ) );
-		COM_PROPERTY_GET( MaxHeight, INT, make_getter( m_font.get(), &castor::Font::getMaxHeight ) );
-		COM_PROPERTY_GET( MaxWidth, INT, make_getter( m_font.get(), &castor::Font::getMaxWidth ) );
+		COM_PROPERTY_GET( Height, UINT, makeGetter( m_font.get(), &castor::Font::getHeight ) );
+		COM_PROPERTY_GET( MaxHeight, INT, makeGetter( m_font.get(), &castor::Font::getMaxHeight ) );
+		COM_PROPERTY_GET( MaxWidth, INT, makeGetter( m_font.get(), &castor::Font::getMaxWidth ) );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR path, /* [in] */ BSTR name, /* [in] */ UINT height );
-		STDMETHOD( getGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );
+		STDMETHOD( GetGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );
 
 	private:
 		castor::FontSPtr m_font;

@@ -1,3 +1,4 @@
+option( CASTOR_BUILDGRP_RENDERER "Build Castor3D Renderer plugins" TRUE )
 option( CASTOR_BUILD_RENDERER_OGL "Build OpenGL Renderer plugin" TRUE )
 option( CASTOR_BUILD_RENDERER_OGL_ES3 "Build OpenGL ES 3.0 Renderer plugin" TRUE )
 option( CASTOR_BUILD_TEST_RENDERER_OGL "Build OpenGL Renderer Test application" TRUE )
@@ -10,7 +11,7 @@ function( RenderersInit )
 endfunction( RenderersInit )
 
 function( RenderersBuild )
-	if ( ${CASTOR_BUILD_PLUGINS} )
+	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
 		if ( ANDROID )
 			if ( ${CASTOR_BUILD_RENDERER_OGL_ES3} )
 				set( Build ${OglES3} )
@@ -29,7 +30,6 @@ function( RenderersBuild )
 					set( OglT ${Build} PARENT_SCOPE )
 				endif()
 			endif()
-
 		endif ()
 	endif ()
 
@@ -53,7 +53,7 @@ endfunction( RenderersBuild )
 function( RenderersSummary msg_in msgtest_in )
 	set( msg_tmp "\n\nRenderers :" )
 
-	if ( ${CASTOR_BUILD_PLUGINS} )
+	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
 		set( msg_tmp "${msg_tmp}\n    OpenGL               ${Ogl}" )
 		set( msg_tmp "${msg_tmp}\n    OpenGL ES 3.0        ${OglES3}" )
 
@@ -76,7 +76,7 @@ function( RenderersSetup )
 		DESCRIPTION "Renderer plugins usable in Castor3D."
 		PARENT_GROUP Plugins
 	)
-	if ( ${CASTOR_BUILD_PLUGINS} )
+	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
 		if( ${CASTOR_BUILD_RENDERER_OGL} )
 			cpack_add_component( GlRenderSystem
 				DISPLAY_NAME "GlRenderSystem"

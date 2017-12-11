@@ -13,7 +13,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CLight::attachTo( /* [in] */ ISceneNode * val )
+	STDMETHODIMP CLight::AttachTo( /* [in] */ ISceneNode * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -24,19 +24,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_ILight,					// This is the GUID of PixelComponents throwing error
-					 cuT( "attachTo" ),				// This is generally displayed as the title
+					 cuT( "AttachTo" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CLight::detach()
+	STDMETHODIMP CLight::Detach()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -47,13 +47,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_ILight,					// This is the GUID of PixelComponents throwing error
 					 cuT( "Detach" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

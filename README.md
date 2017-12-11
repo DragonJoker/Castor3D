@@ -7,7 +7,7 @@
 Castor3D
 ========
 
-Castor3D is a 3D engine written in C++.
+Castor3D is a 3D engine written in C++ 14.
 It works on Windows and also on GNU/Linux.
 It uses OpenGL (with GLSL).
 
@@ -15,12 +15,12 @@ Features
 --------
 
 - Deferred rendering.
-- Normal mapping
+- Normal mapping.
 - Parallax Occlusion mapping.
 - Screen Space Ambient Occlusion.
 - Shadow Mapping.
 - Reflection Mapping.
-- PBR rendering (Metallic and Specular), and Legacy rendering.
+- PBR rendering (Metallic and Specular workflows), and Legacy rendering.
 - HDR rendering with various tone mapping operators.
 - Scene graph.
 - Modular architecture through plug-ins.
@@ -34,15 +34,9 @@ Implemented Plug-ins
 - GlRenderSystem.
 
 **Importers**
-- ASE: ASCII Scene Export mesh importer.
-- 3DS: 3D Studio mesh importer.
-- LWO: Lightwave Object mesh importer.
-- MD2: Quake II mesh importer.
-- MD3: Quake III mesh importer.
-- ASSIMP: Multiple format mesh importer, replaces the previous ones if Assimp is available.
+- ASSIMP: Multiple format mesh importer.
 - PLY: Stanford Polygon library mesh importer.
 - OBJ: Wavefront OBJ mesh importer.
-- FBX: Autodesk Maya mesh importer.
 
 **Dividers**
 - Loop subdivision surfaces.
@@ -50,9 +44,12 @@ Implemented Plug-ins
 - PN-Triangles surfaces.
 
 **PostEffects**
-- Bloom.
+- Bloom: HDR Bloom implementation.
+- FilmGrain: To display some grain on the render.
 - GrayScale.
-- FXAA.
+- LightStreaks (using Kawase Light Streaks)
+- FXAA Antialiasing.
+- SMAA Antialiasing (1X and T2X so far).
 
 **Generators**
 - DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
@@ -71,12 +68,13 @@ Implemented Plug-ins
 ![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-small.png)
 ![Park](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-small.png)
 ![Park](http://dragonjoker.github.com/Castor3D/img/Park-PBR-small.png)
-![Park](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
+![Nyra](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
 
 Links
 -----
 
 - [Building Castor3D](http://dragonjoker.github.com/Castor3D/pages/build)
+- API Documentation [English](http://dragonjoker.github.com/Castor3D/doc/Castor3D/English), [French](http://dragonjoker.github.com/Castor3D/doc/Castor3D/French)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
 General Questions

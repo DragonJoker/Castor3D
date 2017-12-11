@@ -1,4 +1,4 @@
-﻿#include "RadianceComputer.hpp"
+#include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
 
@@ -52,7 +52,7 @@ namespace castor3d
 		}
 
 		m_viewport.initialise();
-		m_viewport.setPerspective( Angle::fromDegrees( 90.0_r ), 1.0_r, 0.1_r, 10.0_r );
+		m_viewport.setPerspective( 90.0_degrees, 1.0_r, 0.1_r, 10.0_r );
 		m_viewport.resize( m_size );
 		m_viewport.update();
 		auto & program = *doCreateProgram();

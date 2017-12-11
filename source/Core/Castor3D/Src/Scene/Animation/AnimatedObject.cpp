@@ -7,8 +7,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	AnimatedObject::AnimatedObject( String const & p_name )
-		: Named{ p_name }
+	AnimatedObject::AnimatedObject( String const & name )
+		: Named{ name }
 	{
 	}
 
@@ -16,14 +16,14 @@ namespace castor3d
 	{
 	}
 
-	void AnimatedObject::addAnimation( String const & p_name )
+	void AnimatedObject::addAnimation( String const & name )
 	{
-		doAddAnimation( p_name );
+		doAddAnimation( name );
 	}
 
-	void AnimatedObject::startAnimation( String const & p_name )
+	void AnimatedObject::startAnimation( String const & name )
 	{
-		auto it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
 		if ( it != m_animations.end() )
 		{
@@ -44,9 +44,9 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObject::stopAnimation( String const & p_name )
+	void AnimatedObject::stopAnimation( String const & name )
 	{
-		auto it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
 		if ( it != m_animations.end() )
 		{
@@ -60,9 +60,9 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObject::pauseAnimation( String const & p_name )
+	void AnimatedObject::pauseAnimation( String const & name )
 	{
-		auto it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
 		if ( it != m_animations.end() )
 		{
@@ -99,13 +99,13 @@ namespace castor3d
 		}
 	}
 
-	AnimationInstance & AnimatedObject::getAnimation( castor::String const & p_name )
+	AnimationInstance & AnimatedObject::getAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
 		if ( it == m_animations.end() )
 		{
-			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + name );
 		}
 
 		return *it->second;

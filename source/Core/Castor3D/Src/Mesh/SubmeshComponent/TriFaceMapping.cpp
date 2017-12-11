@@ -1,4 +1,4 @@
-﻿#include "TriFaceMapping.hpp"
+#include "TriFaceMapping.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshUtils.hpp"
@@ -126,6 +126,11 @@ namespace castor3d
 	void TriFaceMapping::computeBitangents()
 	{
 		SubmeshUtils::computeBitangents( *getOwner() );
+	}
+
+	uint32_t TriFaceMapping::getCount()const
+	{
+		return m_faceCount;
 	}
 
 	void TriFaceMapping::sortByDistance( Point3r const & cameraPosition )

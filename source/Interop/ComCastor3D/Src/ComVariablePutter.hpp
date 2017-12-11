@@ -12,7 +12,7 @@ namespace CastorCom
 	template< typename Class, typename Value >
 	struct VariablePutter
 	{
-		typedef void ( Class::*Function )( Value );
+		using Function = void ( Class::* )( Value );
 		VariablePutter( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
@@ -27,13 +27,18 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					( m_instance->*m_function )( parameter_cast< Value >( value ) );
+					( m_instance->*m_function )( parameterCast< Value >( value ) );
 					hr = S_OK;
 				}
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return hr;
@@ -46,7 +51,7 @@ namespace CastorCom
 
 	template< typename Class, typename Value, typename _Class >
 	VariablePutter< Class, Value >
-	make_putter( _Class * instance, void ( Class::*function )( Value ) )
+	makePutter( _Class * instance, void ( Class::*function )( Value ) )
 	{
 		return VariablePutter< Class, Value >( ( Class * )instance, function );
 	}
@@ -54,7 +59,7 @@ namespace CastorCom
 	template< typename Class, typename Value >
 	struct VariablePutterEvt
 	{
-		typedef void ( Class::*Function )( Value );
+		using Function = void ( Class::* )( Value );
 		VariablePutterEvt( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
@@ -69,16 +74,21 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					m_instance->getEngine()->postEvent( castor3d::MakeFunctorEvent( castor3d::eEVENT_TYPE_PRE_RENDER, [this, value]
+					m_instance->getEngine()->postEvent( castor3d::makeFunctorEvent( castor3d::EventType::ePreRender, [this, value]
 					{
-						( m_instance->*m_function )( parameter_cast< Value >( value ) );
+						( m_instance->*m_function )( parameterCast< Value >( value ) );
 					} ) );
 					hr = S_OK;
 				}
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return hr;
@@ -91,7 +101,7 @@ namespace CastorCom
 
 	template< typename Class, typename Value, typename _Class >
 	VariablePutterEvt< Class, Value >
-	make_putter_evt( _Class * instance, void ( Class::*function )( Value ) )
+	makePutterEvt( _Class * instance, void ( Class::*function )( Value ) )
 	{
 		return VariablePutterEvt< Class, Value >( ( Class * )instance, function );
 	}
@@ -99,7 +109,7 @@ namespace CastorCom
 	template< typename Class, typename Value >
 	struct VariableRetPutter
 	{
-		typedef Value & ( Class::*Function )();
+		using Function = Value & ( Class::* )();
 		VariableRetPutter( Class * instance, Function function )
 			: m_instance( instance )
 			, m_function( function )
@@ -112,12 +122,17 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				( m_instance->*m_function )() = parameter_cast< Value >( value );
+				( m_instance->*m_function )() = parameterCast< Value >( value );
 				hr = S_OK;
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return hr;
@@ -130,7 +145,7 @@ namespace CastorCom
 
 	template< typename Class, typename Value, typename _Class >
 	VariableRetPutter< Class, Value >
-	make_putter( _Class * instance, Value & ( Class::*function )() )
+	makePutter( _Class * instance, Value & ( Class::*function )() )
 	{
 		return VariableRetPutter< Class, Value >( ( Class * )instance, function );
 	}
@@ -138,7 +153,7 @@ namespace CastorCom
 	template< typename Class, typename Value, typename Index >
 	struct ParameteredVariablePutter
 	{
-		typedef Value & ( Class::*Function )( Index );
+		using Function = Value & ( Class::* )( Index );
 		ParameteredVariablePutter( Class * instance, Function function, Index index )
 			: m_instance( instance )
 			, m_function( function )
@@ -152,13 +167,18 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				// No parameter_cast here, to be able to compile this with Value = castor3d::ColourComponent and _Value = FLOAT
+				// No parameterCast here, to be able to compile this with Value = castor3d::ColourComponent and _Value = FLOAT
 				( m_instance->*m_function )( m_index ) = value;
 				hr = S_OK;
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return hr;
@@ -172,7 +192,7 @@ namespace CastorCom
 
 	template< typename Class, typename Value, typename Index, typename _Class, typename _Index >
 	ParameteredVariablePutter< Class, Value, Index >
-	make_putter( _Class * instance, Value & ( Class::*function )( Index ), _Index index )
+	makePutter( _Class * instance, Value & ( Class::*function )( Index ), _Index index )
 	{
 		return ParameteredVariablePutter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
 	}
@@ -180,7 +200,7 @@ namespace CastorCom
 	template< typename Class, typename Value, typename Index >
 	struct ParameteredParVariablePutter
 	{
-		typedef void ( Class::*Function )( Index, Value );
+		using Function = void ( Class::* )( Index, Value );
 		ParameteredParVariablePutter( Class * instance, Function function, Index index )
 			: m_instance( instance )
 			, m_function( function )
@@ -194,12 +214,17 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				( m_instance->*m_function )( m_index, parameter_cast< Value >( value ) );
+				( m_instance->*m_function )( m_index, parameterCast< Value >( value ) );
 				hr = S_OK;
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, LIBID_castor3d, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return hr;
@@ -213,7 +238,7 @@ namespace CastorCom
 
 	template< typename Class, typename Value, typename Index, typename _Class, typename _Index >
 	ParameteredParVariablePutter< Class, Value, Index >
-	make_putter( _Class * instance, void ( Class::*function )( Index, Value ), _Index index )
+	makePutter( _Class * instance, void ( Class::*function )( Index, Value ), _Index index )
 	{
 		return ParameteredParVariablePutter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
 	}
@@ -241,7 +266,12 @@ namespace CastorCom
 			}\
 			else\
 			{\
-				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+				hr = CComError::dispatchError( E_FAIL\
+					, IID_I##ctype\
+					, cuT( "Null instance" )\
+					, ERROR_UNINITIALISED_INSTANCE.c_str()\
+					, 0\
+					, nullptr );\
 			}\
 			return hr;\
 		}\
@@ -273,7 +303,12 @@ namespace CastorCom
 			}\
 			else\
 			{\
-				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+				hr = CComError::dispatchError( E_FAIL\
+					, IID_I##ctype\
+					, cuT( "Null instance" )\
+					, ERROR_UNINITIALISED_INSTANCE.c_str()\
+					, 0\
+					, nullptr );\
 			}\
 			return hr;\
 		}\

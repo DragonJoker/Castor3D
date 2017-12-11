@@ -1,10 +1,12 @@
-﻿#include "MeshAnimationInstanceSubmesh.hpp"
+#include "MeshAnimationInstanceSubmesh.hpp"
 
 #include "Animation/Mesh/MeshAnimation.hpp"
 #include "MeshAnimationInstance.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshComponent/MorphComponent.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Scene/Geometry.hpp"
+#include "Scene/Animation/AnimatedMesh.hpp"
 #include "Shader/Uniform/Uniform.hpp"
 
 using namespace castor;
@@ -15,27 +17,21 @@ namespace castor3d
 
 	namespace
 	{
-		inline void doFind( real time
-			, typename SubmeshAnimationBufferArray::const_iterator const & first
-			, typename SubmeshAnimationBufferArray::const_iterator const & last
-			, typename SubmeshAnimationBufferArray::const_iterator & prv
-			, typename SubmeshAnimationBufferArray::const_iterator & cur )
+		std::ostream & operator<<( std::ostream & stream, Point3r const & point )
 		{
-			while ( prv != first && prv->m_timeIndex >= time )
-			{
-				// Time has gone too fast backward.
-				--prv;
-				--cur;
-			}
+			stream << "[" << point[0] << ", " << point[1] << ", " << point[2] << "]";
+			return stream;
+		}
 
-			while ( cur != last && cur->m_timeIndex < time )
+		inline BoundingBox doInterpolateBB( BoundingBox const & prv
+			, BoundingBox const & cur
+			, float const factor )
+		{
+			return BoundingBox
 			{
-				// Time has gone too fast forward.
-				++prv;
-				++cur;
-			}
-
-			ENSURE( prv != cur );
+				Point3r{ prv.getMin() * real( 1.0 - factor ) + cur.getMin() * factor },
+				Point3r{ prv.getMax() * real( 1.0 - factor ) + cur.getMax() * factor }
+			};
 		}
 	}
 
@@ -45,43 +41,38 @@ namespace castor3d
 		, MeshAnimationSubmesh & animationObject )
 		: OwnedBy< MeshAnimationInstance >{ animationInstance }
 		, m_animationObject{ animationObject }
-		, m_first{ animationObject.getBuffers().begin() }
-		, m_last{ animationObject.getBuffers().end() }
-		, m_prev{ animationObject.getBuffers().empty() ? animationObject.getBuffers().end() : animationObject.getBuffers().begin() }
-		, m_curr{ animationObject.getBuffers().empty() ? animationObject.getBuffers().end() : animationObject.getBuffers().begin() }
 	{
-		if ( !animationObject.getBuffers().empty() )
-		{
-			++m_curr;
-			--m_last;
-		}
 	}
 
 	MeshAnimationInstanceSubmesh::~MeshAnimationInstanceSubmesh()
 	{
 	}
 
-	void MeshAnimationInstanceSubmesh::update( Milliseconds const & time )
+	void MeshAnimationInstanceSubmesh::update( float factor
+		, SubmeshAnimationBuffer const & prv
+		, SubmeshAnimationBuffer const & cur )
 	{
-		m_currentFactor = 0.0f;
-
-		if ( m_first != m_last )
+		if ( &cur != m_cur )
 		{
-			auto curr = m_curr;
-			auto timef = real( time.count() );
-			doFind( timef, m_first, m_last, m_prev, m_curr );
-			m_currentFactor = float( ( timef - m_prev->m_timeIndex ) / ( m_curr->m_timeIndex - m_prev->m_timeIndex ) );
-
-			if ( curr != m_curr )
-			{
-				auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
-				auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
-				std::memcpy( vertexBuffer.getData(), m_prev->m_buffer.data(), vertexBuffer.getSize() );
-				std::memcpy( animBuffer.getData(), m_curr->m_buffer.data(), animBuffer.getSize() );
-				m_animationObject.getSubmesh().needsUpdate();
-				m_animationObject.getComponent().needsUpdate();
-			}
+			auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
+			auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
+			std::memcpy( vertexBuffer.getData(), prv.m_buffer.data(), vertexBuffer.getSize() );
+			std::memcpy( animBuffer.getData(), cur.m_buffer.data(), animBuffer.getSize() );
+			m_animationObject.getSubmesh().needsUpdate();
+			m_animationObject.getComponent().needsUpdate();
 		}
+
+		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()
+			, doInterpolateBB( prv.m_boundingBox
+				, cur.m_boundingBox
+				, factor ) );
+		m_cur = &cur;
+		m_currentFactor = factor;
+	}
+
+	Submesh const & MeshAnimationInstanceSubmesh::getSubmesh()const
+	{
+		return m_animationObject.getSubmesh();
 	}
 
 	//*************************************************************************************************

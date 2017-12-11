@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MESH_ANIMATION_SUBMESH_H___
@@ -72,28 +72,6 @@ namespace castor3d
 		C3D_API virtual ~MeshAnimationSubmesh();
 		/**
 		 *\~english
-		 *\brief		Creates and adds an animation submesh buffer.
-		 *\param[in]	timeIndex	The time index.
-		 *\param[in]	buffer		The submesh buffer.
-		 *\~french
-		 *\brief		Crée et ajoute un tampon de sous-maillage d'animation.
-		 *\param[in]	timeIndex	L'index de temps.
-		 *\param[in]	buffer		Le tampon du sous-maillage.
-		 */
-		C3D_API bool addBuffer( castor::Milliseconds const & timeIndex
-			, InterleavedVertexArray && buffer );
-		/**
-		 *\~english
-		 *\return		The vertex buffers.
-		 *\~french
-		 *\return		Les tampons de sommets.
-		 */
-		inline SubmeshAnimationBufferArray const & getBuffers()const
-		{
-			return m_buffers;
-		}
-		/**
-		 *\~english
 		 *\return		The submesh.
 		 *\~french
 		 *\return		Le sous-maillage.
@@ -111,40 +89,6 @@ namespace castor3d
 		inline Submesh const & getSubmesh()const
 		{
 			return m_submesh;
-		}
-		/**
-		 *\~english
-		 *\return		The animation length.
-		 *\~french
-		 *\return		La durée de l'animation.
-		 */
-		inline castor::Milliseconds getLength()const
-		{
-			return m_length;
-		}
-		/**
-		 *\~english
-		 *\brief		sets the animation length.
-		 *\param[in]	length	The new value.
-		 *\~french
-		 *\brief		Définit la durée de l'animation.
-		 *\param[in]	length	La nouvelle valeur.
-		 */
-		inline void setLength( castor::Milliseconds const & length )
-		{
-			m_length = length;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells whether or not the object has keyframes.
-		 *\return		\p false if no keyframes.
-		 *\~french
-		 *\brief		Dit si l'objet a des keyframes.
-		 *\return		\p false si pas de keyframes.
-		 */
-		inline bool hasBuffers()const
-		{
-			return !m_buffers.empty();
 		}
 		/**
 		 *\~english
@@ -171,9 +115,6 @@ namespace castor3d
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
 		castor::Milliseconds m_length{ 0 };
-		//!\~english	The buffers.
-		//!\~french		Les tampons.
-		SubmeshAnimationBufferArray m_buffers;
 		//!\~english	The submesh.
 		//!\~french		Le sous-maillage.
 		Submesh & m_submesh;
@@ -181,77 +122,7 @@ namespace castor3d
 		//!\~french		Le composant des os.
 		std::shared_ptr< MorphComponent > m_component;
 
-		friend class BinaryWriter< MeshAnimationSubmesh >;
-		friend class BinaryParser< MeshAnimationSubmesh >;
 		friend class MeshAnimationInstanceSubmesh;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		28/05/2016
-	\~english
-	\brief		Helper structure to find ChunkType from a type.
-	\remarks	Specialisation for MeshAnimationSubmesh.
-	\~french
-	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
-	\remarks	Spécialisation pour MeshAnimationSubmesh.
-	*/
-	template<>
-	struct ChunkTyper< MeshAnimationSubmesh >
-	{
-		static ChunkType const Value = ChunkType::eMeshAnimationSubmesh;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		26/01/2016
-	\~english
-	\brief		MeshAnimationSubmesh binary loader.
-	\~english
-	\brief		Loader binaire de MeshAnimationSubmesh.
-	*/
-	template<>
-	class BinaryWriter< MeshAnimationSubmesh >
-		: public BinaryWriterBase< MeshAnimationSubmesh >
-	{
-	protected:
-		/**
-		 *\~english
-		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	obj	The object to write.
-		 *\return		\p false if any error occured.
-		 *\~french
-		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	obj	L'objet à écrire.
-		 *\return		\p false si une erreur quelconque est arrivée.
-		 */
-		C3D_API bool doWrite( MeshAnimationSubmesh const & obj )override;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		26/01/2016
-	\~english
-	\brief		MeshAnimationSubmesh binary loader.
-	\~english
-	\brief		Loader binaire de MeshAnimationSubmesh.
-	*/
-	template<>
-	class BinaryParser< MeshAnimationSubmesh >
-		: public BinaryParserBase< MeshAnimationSubmesh >
-	{
-	private:
-		/**
-		 *\~english
-		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	obj	The object to read.
-		 *\return		\p false if any error occured.
-		 *\~french
-		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	obj	L'objet à lire.
-		 *\return		\p false si une erreur quelconque est arrivée.
-		 */
-		C3D_API bool doParse( MeshAnimationSubmesh & obj )override;
 	};
 }
 

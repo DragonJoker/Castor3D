@@ -1,4 +1,4 @@
-﻿#include "Submesh.hpp"
+#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -324,36 +324,49 @@ namespace castor3d
 		}
 	}
 
+	void Submesh::updateContainers( castor::BoundingBox const & boundingBox )
+	{
+		m_box = boundingBox;
+		m_sphere.load( m_box );
+	}
+
 	uint32_t Submesh::getFaceCount()const
 	{
 		uint32_t result = 0u;
-
-		switch ( getTopology() )
+		
+		if ( m_indexMapping )
 		{
-		case Topology::ePoints:
-			result = m_indexBuffer.getSize();
-			break;
+			result = m_indexMapping->getCount();
+		}
+		else
+		{
+			result = getPointsCount();
 
-		case Topology::eLines:
-			result = m_indexBuffer.getSize() / 2;
-			break;
+			switch ( getTopology() )
+			{
+			case Topology::ePoints:
+				break;
 
-		case Topology::eLineLoop:
-			result = m_indexBuffer.getSize();
-			break;
+			case Topology::eLines:
+				result = result / 2;
+				break;
 
-		case Topology::eLineStrip:
-			result = m_indexBuffer.getSize() - 1u;
-			break;
+			case Topology::eLineLoop:
+				break;
 
-		case Topology::eTriangles:
-			result = m_indexBuffer.getSize() / 3u;
-			break;
+			case Topology::eLineStrip:
+				result = result - 1u;
+				break;
 
-		case Topology::eTriangleStrips:
-		case Topology::eTriangleFan:
-			result = m_indexBuffer.getSize() - 2u;
-			break;
+			case Topology::eTriangles:
+				result = result / 3u;
+				break;
+
+			case Topology::eTriangleStrips:
+			case Topology::eTriangleFan:
+				result = result - 2u;
+				break;
+			}
 		}
 
 		return result;

@@ -1,4 +1,4 @@
-﻿#include "Scene.hpp"
+#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -270,7 +270,7 @@ namespace castor3d
 
 				for ( auto const & it : scene.getMeshCache() )
 				{
-					if ( result )
+					if ( result && it.second->isSerialisable() )
 					{
 						result = Mesh::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
 					}
@@ -361,7 +361,12 @@ namespace castor3d
 
 				for ( auto const & it : scene.getGeometryCache() )
 				{
-					result &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					if ( result
+						&& it.second->getMesh()
+						&& it.second->getMesh()->isSerialisable() )
+					{
+						result = Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
 				}
 			}
 		}
@@ -891,6 +896,7 @@ namespace castor3d
 		doUpdateNoSkybox();
 		doUpdateMaterials();
 		getLightCache().update();
+		onUpdate( *this );
 		m_changed = false;
 	}
 

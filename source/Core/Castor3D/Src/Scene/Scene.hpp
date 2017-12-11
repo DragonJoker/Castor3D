@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_H___
@@ -49,10 +49,6 @@ namespace castor3d
 		, public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
-	public:
-		using OnChangedFunction = std::function< void( Scene const & ) >;
-		using OnChanged = castor::Signal< OnChangedFunction >;
-
 	public:
 		/*!
 		\author		Sylvain DOREMUS
@@ -559,7 +555,10 @@ namespace castor3d
 	public:
 		//!\~english	The signal raised when the scene has changed.
 		//!\~french		Le signal levé lorsque la scène a changé.
-		OnChanged onChanged;
+		OnSceneChanged onChanged;
+		//!\~english	The signal raised when the scene is updating.
+		//!\~french		Le signal levé lorsque la scène se met à jour.
+		OnSceneUpdate onUpdate;
 
 	private:
 		//!\~english	Tells if the scene is initialised.

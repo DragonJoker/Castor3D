@@ -23,19 +23,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IPass,						// This is the GUID of PixelComponents throwing error
 					 cuT( "CreateTextureUnit" ),	// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CLegacyPass::getTextureUnitByIndex( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal )
+	STDMETHODIMP CLegacyPass::GetTextureUnitByIndex( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -44,19 +44,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,							// This represents the error
 					 IID_IPass,							// This is the GUID of PixelComponents throwing error
-					 cuT( "getTextureUnitByIndex" ),	// This is generally displayed as the title
+					 cuT( "GetTextureUnitByIndex" ),	// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),		// This is the description
 					 0,									// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CLegacyPass::destroyTextureUnit( /* [in] */ ITextureUnit * val )
+	STDMETHODIMP CLegacyPass::DestroyTextureUnit( /* [in] */ ITextureUnit * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -65,19 +65,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IPass,						// This is the GUID of PixelComponents throwing error
-					 cuT( "destroyTextureUnit" ),	// This is generally displayed as the title
+					 cuT( "DestroyTextureUnit" ),	// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CLegacyPass::getTextureUnitByChannel( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal )
+	STDMETHODIMP CLegacyPass::GetTextureUnitByChannel( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -86,13 +86,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,							// This represents the error
 					 IID_IPass,							// This is the GUID of PixelComponents throwing error
-					 cuT( "getTextureUnitByChannel" ),	// This is generally displayed as the title
+					 cuT( "GetTextureUnitByChannel" ),	// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),		// This is the description
 					 0,									// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

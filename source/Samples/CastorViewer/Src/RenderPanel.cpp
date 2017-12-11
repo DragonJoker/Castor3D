@@ -111,27 +111,29 @@ namespace CastorViewer
 		wxClientDC dc( this );
 	}
 
-	void RenderPanel::setRenderWindow( RenderWindowSPtr p_window )
+	void RenderPanel::setRenderWindow( RenderWindowSPtr window )
 	{
 		m_cubeManager.reset();
 		m_renderWindow.reset();
 		doStopMovement();
 		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
 
-		if ( p_window && p_window->initialise( sizeWnd, GuiCommon::makeWindowHandle( this ) ) )
+		if ( window && window->initialise( sizeWnd, GuiCommon::makeWindowHandle( this ) ) )
 		{
 			castor::Size sizeScreen;
 			castor::System::getScreenSize( 0, sizeScreen );
 			GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
+			GetParent()->SetMinClientSize( GuiCommon::make_wxSize( window->getRenderTarget()->getSize() ) );
 			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
-			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
-			m_listener = p_window->getListener();
-			SceneSPtr scene = p_window->getScene();
+			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
+				, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
+			m_listener = window->getListener();
+			SceneSPtr scene = window->getScene();
 
 			if ( scene )
 			{
 				m_cubeManager = std::make_unique< GuiCommon::CubeBoxManager >( *scene );
-				auto camera = p_window->getCamera();
+				auto camera = window->getCamera();
 
 				if ( camera )
 				{
@@ -152,12 +154,12 @@ namespace CastorViewer
 						m_currentState = &doAddNodeState( m_currentNode );
 					}
 
-					m_renderWindow = p_window;
-					m_keyboardEvent = std::make_unique< KeyboardEvent >( p_window );
+					m_renderWindow = window;
+					m_keyboardEvent = std::make_unique< KeyboardEvent >( window );
 
 					{
 						auto lock = makeUniqueLock( scene->getCameraCache() );
-						p_window->getPickingPass().addScene( *scene, *( scene->getCameraCache().begin()->second ) );
+						window->getPickingPass().addScene( *scene, *( scene->getCameraCache().begin()->second ) );
 					}
 
 					m_camera = camera;
@@ -243,7 +245,7 @@ namespace CastorViewer
 				, [this, cameraNode]()
 				{
 					Quaternion orientation{ cameraNode->getOrientation() };
-					orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
+					orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, 90.0_degrees );
 					cameraNode->setOrientation( orientation );
 				} ) );
 		}
@@ -261,7 +263,7 @@ namespace CastorViewer
 				, [this, cameraNode]()
 				{
 					Quaternion orientation{ cameraNode->getOrientation() };
-					orientation *= Quaternion::fromAxisAngle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::fromDegrees( 90.0_r ) );
+					orientation *= Quaternion::fromAxisAngle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, 90.0_degrees );
 					cameraNode->setOrientation( orientation );
 				} ) );
 		}

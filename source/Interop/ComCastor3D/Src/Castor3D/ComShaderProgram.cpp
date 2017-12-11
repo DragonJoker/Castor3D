@@ -14,7 +14,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CShaderProgram::get_File( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [out, retval] */ BSTR * pVal )
+	STDMETHODIMP CShaderProgram::get_File( /* [in] */ eSHADER_TYPE target, /* [out, retval] */ BSTR * pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -22,48 +22,48 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				*pVal = ToBstr( m_internal->getFile( castor3d::ShaderType( target ), castor3d::ShaderModel( model ) ) );
+				*pVal = toBstr( m_internal->getFile( castor3d::ShaderType( target ) ) );
 				hr = S_OK;
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IShaderProgram,			// This is the GUID of PixelComponents throwing error
 					 cuT( "File" ),					// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CShaderProgram::put_File( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [in] */ BSTR val )
+	STDMETHODIMP CShaderProgram::put_File( /* [in] */ eSHADER_TYPE target, /* [in] */ BSTR val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->setFile( castor3d::ShaderType ( target ), castor3d::ShaderModel( model ), castor::Path{ FromBstr( val ) } );
+			m_internal->setFile( castor3d::ShaderType ( target ), castor::Path{ fromBstr( val ) } );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IShaderProgram,			// This is the GUID of PixelComponents throwing error
 					 cuT( "File" ),					// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CShaderProgram::get_Source( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [out, retval] */ BSTR * pVal )
+	STDMETHODIMP CShaderProgram::get_Source( /* [in] */ eSHADER_TYPE target, /* [out, retval] */ BSTR * pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -71,48 +71,48 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				*pVal = ToBstr( m_internal->getSource( castor3d::ShaderType( target ), castor3d::ShaderModel( model ) ) );
+				*pVal = toBstr( m_internal->getSource( castor3d::ShaderType( target ) ) );
 				hr = S_OK;
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IShaderProgram,			// This is the GUID of PixelComponents throwing error
 					 cuT( "Source" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CShaderProgram::put_Source( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [in] */ BSTR val )
+	STDMETHODIMP CShaderProgram::put_Source( /* [in] */ eSHADER_TYPE target, /* [in] */ BSTR val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->setSource( castor3d::ShaderType( target ), castor3d::ShaderModel( model ), FromBstr( val ) );
+			m_internal->setSource( castor3d::ShaderType( target ), fromBstr( val ) );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IShaderProgram,			// This is the GUID of PixelComponents throwing error
 					 cuT( "Source" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CShaderProgram::initialise()
+	STDMETHODIMP CShaderProgram::Initialise()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -123,19 +123,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IShaderProgram,			// This is the GUID of PixelComponents throwing error
 					 cuT( "Initialise" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CShaderProgram::cleanup()
+	STDMETHODIMP CShaderProgram::Cleanup()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -146,19 +146,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IShaderProgram,			// This is the GUID of PixelComponents throwing error
 					 cuT( "Cleanup" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CShaderProgram::createObject( /* [in] */ eSHADER_TYPE val )
+	STDMETHODIMP CShaderProgram::CreateObject( /* [in] */ eSHADER_TYPE val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -169,13 +169,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IShaderProgram,			// This is the GUID of PixelComponents throwing error
 					 cuT( "createObject" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

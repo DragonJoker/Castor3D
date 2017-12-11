@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_OverlayUbo_H___
@@ -52,10 +52,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Sets the overlay position and render ratio.
 		 *\param[in]	position	The new value.
+		 *\param[in]	renderSize	The current render size.
 		 *\param[in]	renderRatio	The ratio between computed position value's reference size and current render size.
 		 *\~french
 		 *\brief		Définit la la position de l'incrustation et le ratio de rendu.
 		 *\param[in]	position	La nouvelle valeur.
+		 *\param[in]	renderSize	Les dimensions de rendu actuelles.
 		 *\param[in]	renderRatio	Le ratio entre les dimensions de référence lors du calcul de la position, et les dimensions de rendu actuelles.
 		 */
 		C3D_API void setPosition( castor::Point2d const & position

@@ -12,9 +12,14 @@ using namespace castor;
 
 namespace castor3d
 {
-	AnimatedSkeleton::AnimatedSkeleton( String const & p_name, Skeleton & p_skeleton )
-		: AnimatedObject{ p_name }
-		, m_skeleton{ p_skeleton }
+	AnimatedSkeleton::AnimatedSkeleton( String const & name
+		, Skeleton & skeleton
+		, Mesh & mesh
+		, Geometry & geometry )
+		: AnimatedObject{ name }
+		, m_skeleton{ skeleton }
+		, m_mesh{ mesh }
+		, m_geometry{ geometry }
 	{
 	}
 
@@ -22,15 +27,15 @@ namespace castor3d
 	{
 	}
 
-	void AnimatedSkeleton::update( Milliseconds const & p_tslf )
+	void AnimatedSkeleton::update( Milliseconds const & elapsed )
 	{
 		for ( auto & animation : m_playingAnimations )
 		{
-			animation.get().update( p_tslf );
+			animation.get().update( elapsed );
 		}
 	}
 
-	void AnimatedSkeleton::fillShader( Uniform4x4r & p_variable )const
+	void AnimatedSkeleton::fillShader( Uniform4x4r & variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
@@ -39,7 +44,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton )
 			{
-				p_variable.setValue( skeleton.getGlobalInverseTransform(), i++ );
+				variable.setValue( skeleton.getGlobalInverseTransform(), i++ );
 			}
 		}
 		else
@@ -58,15 +63,14 @@ namespace castor3d
 					}
 				}
 
-				p_variable.setValue( final, i++ );
+				variable.setValue( final, i++ );
 			}
 		}
 	}
 
-	void AnimatedSkeleton::fillBuffer( uint8_t * p_buffer )const
+	void AnimatedSkeleton::fillBuffer( uint8_t * buffer )const
 	{
 		Skeleton & skeleton = m_skeleton;
-		auto buffer = p_buffer;
 		auto stride = 16u * sizeof( float );
 
 		if ( m_playingAnimations.empty() )
@@ -99,30 +103,30 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSkeleton::doAddAnimation( String const & p_name )
+	void AnimatedSkeleton::doAddAnimation( String const & name )
 	{
-		auto it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
 		if ( it == m_animations.end() )
 		{
-			auto & animation = static_cast< SkeletonAnimation const & >( m_skeleton.getAnimation( p_name ) );
+			auto & animation = static_cast< SkeletonAnimation & >( m_skeleton.getAnimation( name ) );
 			auto instance = std::make_unique< SkeletonAnimationInstance >( *this, animation );
-			m_animations.emplace( p_name, std::move( instance ) );
+			m_animations.emplace( name, std::move( instance ) );
 		}
 	}
 
-	void AnimatedSkeleton::doStartAnimation( AnimationInstance & p_animation )
+	void AnimatedSkeleton::doStartAnimation( AnimationInstance & animation )
 	{
-		m_playingAnimations.push_back( static_cast< SkeletonAnimationInstance & >( p_animation ) );
+		m_playingAnimations.emplace_back( static_cast< SkeletonAnimationInstance & >( animation ) );
 	}
 
-	void AnimatedSkeleton::doStopAnimation( AnimationInstance & p_animation )
+	void AnimatedSkeleton::doStopAnimation( AnimationInstance & animation )
 	{
 		m_playingAnimations.erase( std::find_if( m_playingAnimations.begin()
 			, m_playingAnimations.end()
-			, [&p_animation]( std::reference_wrapper< SkeletonAnimationInstance > & p_instance )
+			, [&animation]( std::reference_wrapper< SkeletonAnimationInstance > & instance )
 			{
-				return &p_instance.get() == &static_cast< SkeletonAnimationInstance & >( p_animation );
+				return &instance.get() == &static_cast< SkeletonAnimationInstance & >( animation );
 			} ) );
 	}
 

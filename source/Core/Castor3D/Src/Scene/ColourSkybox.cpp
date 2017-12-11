@@ -69,11 +69,6 @@ namespace castor3d
 		return Skybox::initialise();
 	}
 
-	void ColourSkybox::render( Camera const & camera )
-	{
-		Skybox::render( camera );
-	}
-
 	void ColourSkybox::update()
 	{
 		if ( m_colour.isDirty()

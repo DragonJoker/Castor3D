@@ -12,7 +12,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CRenderTarget::initialise( /* [in] */ unsigned int index )
+	STDMETHODIMP CRenderTarget::Initialise( /* [in] */ unsigned int index )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -23,19 +23,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IRenderTarget,				// This is the GUID of PixelComponents throwing error
 					 cuT( "File" ),					// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CRenderTarget::cleanup()
+	STDMETHODIMP CRenderTarget::Cleanup()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -46,13 +46,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IRenderTarget,				// This is the GUID of PixelComponents throwing error
 					 cuT( "File" ),					// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

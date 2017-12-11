@@ -219,7 +219,7 @@ namespace castor3d
 		m_components.emplace( mapping->getType(), mapping );
 	}
 
-	inline bool Submesh::hasComponent( castor::String const & name )
+	inline bool Submesh::hasComponent( castor::String const & name )const
 	{
 		return m_components.find( name ) != m_components.end();
 	}
@@ -236,7 +236,7 @@ namespace castor3d
 		SubmeshComponentAdder< T >::add( component, *this );
 	}
 
-	inline SubmeshComponentSPtr Submesh::getComponent( castor::String const & name )
+	inline SubmeshComponentSPtr Submesh::getComponent( castor::String const & name )const
 	{
 		SubmeshComponentSPtr result;
 		auto it = m_components.find( name );
@@ -250,7 +250,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	inline std::shared_ptr< T > Submesh::getComponent()
+	inline std::shared_ptr< T > Submesh::getComponent()const
 	{
 		return std::static_pointer_cast< T >( getComponent( T::Name ) );
 	}

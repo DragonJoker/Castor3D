@@ -137,11 +137,10 @@ namespace castor3d
 	{
 		if ( m_renderSystem.getMainContext() )
 		{
-			RenderInfo info;
-			m_debugOverlays->beginFrame();
+			RenderInfo & info = m_debugOverlays->beginFrame();
 			doGpuStep( info );
 			doCpuStep();
-			m_debugOverlays->endFrame( info );
+			m_debugOverlays->endFrame();
 		}
 	}
 

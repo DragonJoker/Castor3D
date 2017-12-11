@@ -15,7 +15,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CGeometry::attachTo( /* [in] */ ISceneNode * val )
+	STDMETHODIMP CGeometry::AttachTo( /* [in] */ ISceneNode * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -26,19 +26,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
-					 cuT( "attachTo" ),				// This is generally displayed as the title
+					 cuT( "AttachTo" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CGeometry::detach()
+	STDMETHODIMP CGeometry::Detach()
 	{
 		HRESULT hr = E_POINTER;
 
@@ -49,19 +49,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
 					 cuT( "Detach" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CGeometry::getMaterial( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal )
+	STDMETHODIMP CGeometry::GetMaterial( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -79,19 +79,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
-					 cuT( "getMaterial" ),			// This is generally displayed as the title
+					 cuT( "GetMaterial" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CGeometry::setMaterial( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val )
+	STDMETHODIMP CGeometry::SetMaterial( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -102,13 +102,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
-					 cuT( "setMaterial" ),			// This is generally displayed as the title
+					 cuT( "SetMaterial" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

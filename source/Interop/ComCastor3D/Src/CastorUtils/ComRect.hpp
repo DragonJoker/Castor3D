@@ -38,15 +38,15 @@ namespace CastorCom
 		 */
 		virtual ~CRect();
 
-		COM_PROPERTY( Left, INT, make_getter( this, &castor::Rectangle::left ), make_putter( this, &castor::Rectangle::left ) );
-		COM_PROPERTY( Right, INT, make_getter( this, &castor::Rectangle::right ), make_putter( this, &castor::Rectangle::right ) );
-		COM_PROPERTY( Top, INT, make_getter( this, &castor::Rectangle::top ), make_putter( this, &castor::Rectangle::top ) );
-		COM_PROPERTY( Bottom, INT, make_getter( this, &castor::Rectangle::bottom ), make_putter( this, &castor::Rectangle::bottom ) );
+		COM_PROPERTY( Left, INT, makeGetter( this, &castor::Rectangle::left ), makePutter( this, &castor::Rectangle::left ) );
+		COM_PROPERTY( Right, INT, makeGetter( this, &castor::Rectangle::right ), makePutter( this, &castor::Rectangle::right ) );
+		COM_PROPERTY( Top, INT, makeGetter( this, &castor::Rectangle::top ), makePutter( this, &castor::Rectangle::top ) );
+		COM_PROPERTY( Bottom, INT, makeGetter( this, &castor::Rectangle::bottom ), makePutter( this, &castor::Rectangle::bottom ) );
 
-		COM_PROPERTY_GET( Width, INT, make_getter( this, &castor::Rectangle::width ) );
-		COM_PROPERTY_GET( Height, INT, make_getter( this, &castor::Rectangle::width ) );
+		COM_PROPERTY_GET( Width, INT, makeGetter( this, &castor::Rectangle::getWidth ) );
+		COM_PROPERTY_GET( Height, INT, makeGetter( this, &castor::Rectangle::getHeight ) );
 
-		STDMETHOD( set )( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom );
+		STDMETHOD( Set )( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom );
 		STDMETHOD( IntersectsPosition )( /* [in] */ IPosition * pos, /* [retval][out] */ eINTERSECTION * pVal );
 		STDMETHOD( IntersectsRectangle )( /* [in] */ IRect * pos, /* [retval][out] */ eINTERSECTION * pVal );
 	};

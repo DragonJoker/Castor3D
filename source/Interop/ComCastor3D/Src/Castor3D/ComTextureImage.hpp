@@ -47,7 +47,7 @@ namespace CastorCom
 			m_internal = state;
 		}
 
-		COM_PROPERTY_GET( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &castor3d::TextureImage::getBuffer ) );
+		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_internal.get(), &castor3d::TextureImage::getBuffer ) );
 
 		STDMETHOD( Resize2D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h );
 		STDMETHOD( Resize3D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d );

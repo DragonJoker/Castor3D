@@ -1,10 +1,11 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SKYBOX_H___
 #define ___C3D_SKYBOX_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Render/Viewport.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
@@ -99,7 +100,7 @@ namespace castor3d
 		 *\brief		Dessine la skybox.
 		 *\param[in]	camera	La caméra de la scène.
 		 */
-		C3D_API virtual void render( Camera const & camera );
+		C3D_API void render( Camera const & camera );
 		/**
 		*\~english
 		*\return		sets the skybox's equirectangular texture.
@@ -232,6 +233,9 @@ namespace castor3d
 		//!\~english	Tells if the skybox's texture is HDR.
 		//!\~french		Dit si la texture de la skybox est HDR.
 		bool m_hdr{ false };
+		//!\~english	The skybox's viewport.
+		//!\~french		Le viewport de la skybox.
+		Viewport m_viewport;
 	};
 }
 

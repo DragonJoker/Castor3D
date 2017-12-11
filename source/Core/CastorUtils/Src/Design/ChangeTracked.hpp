@@ -82,7 +82,7 @@ namespace castor
 
 	private:
 		T m_value;
-		bool m_dirty;
+		bool m_dirty{ true };
 	};
 
 	template< typename T >

@@ -39,12 +39,13 @@ namespace CastorCom
 		virtual ~CLogger();
 
 		STDMETHOD( Initialise )( /* [in] */ eLOG_TYPE level );
-		STDMETHOD( setFileName )( /* [in] */ BSTR name, eLOG_TYPE target );
+		STDMETHOD( SetFileName )( /* [in] */ BSTR name, eLOG_TYPE target );
 		STDMETHOD( Cleanup )();
-		STDMETHOD( logDebug )( /* [in] */ BSTR msg );
-		STDMETHOD( logInfo )( /* [in] */ BSTR msg );
-		STDMETHOD( logWarning )( /* [in] */ BSTR msg );
-		STDMETHOD( logError )( /* [in] */ BSTR msg );
+		STDMETHOD( LogTrace )( /* [in] */ BSTR msg );
+		STDMETHOD( LogDebug )( /* [in] */ BSTR msg );
+		STDMETHOD( LogInfo )( /* [in] */ BSTR msg );
+		STDMETHOD( LogWarning )( /* [in] */ BSTR msg );
+		STDMETHOD( LogError )( /* [in] */ BSTR msg );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Logger ), CLogger )

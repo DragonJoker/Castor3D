@@ -93,7 +93,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CQuaternion::getMagnitude( /* [out, retval] */ float * pVal )
+	STDMETHODIMP CQuaternion::GetMagnitude( /* [out, retval] */ float * pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -121,7 +121,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = castor::Quaternion::slerp( *static_cast< CQuaternion * >( quat ), percent );
+				static_cast< castor::Quaternion & >( *static_cast< CQuaternion * >( *pQuat ) ) = castor::Quaternion::slerp( *static_cast< CQuaternion * >( quat ), percent );
 			}
 		}
 
@@ -138,7 +138,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = castor::Quaternion::mix( *static_cast< CQuaternion * >( quat ), percent );
+				static_cast< castor::Quaternion & >( *static_cast< CQuaternion * >( *pQuat ) ) = castor::Quaternion::mix( *static_cast< CQuaternion * >( quat ), percent );
 			}
 		}
 

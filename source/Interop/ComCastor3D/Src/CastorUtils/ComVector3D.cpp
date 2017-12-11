@@ -23,7 +23,7 @@ namespace CastorCom
 		return S_OK;
 	}
 
-	STDMETHODIMP CVector3D::dot( IVector3D * pVal, FLOAT * pRet )
+	STDMETHODIMP CVector3D::Dot( IVector3D * pVal, FLOAT * pRet )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -47,7 +47,7 @@ namespace CastorCom
 			if ( hr == S_OK )
 			{
 				CVector3D * ret = reinterpret_cast< CVector3D * >( *pRet );
-				castor::Point3f tmp = *this ^ *reinterpret_cast< CVector3D * >( pVal );
+				castor::Point3f tmp = castor::point::cross( *this, *reinterpret_cast< CVector3D * >( pVal ) );
 				std::memcpy( ret->ptr(), tmp.ptr(), tmp.size() );
 			}
 		}

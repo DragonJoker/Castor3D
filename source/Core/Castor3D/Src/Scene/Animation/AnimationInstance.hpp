@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ANIMATION_INSTANCE_H___
@@ -27,14 +27,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_object	The parent AnimatedObject.
-		 *\param[in]	p_animation	The animation.
+		 *\param[in]	object		The parent AnimatedObject.
+		 *\param[in]	animation	The animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_object	L'AnimatedObject parent.
-		 *\param[in]	p_animation	L'animation.
+		 *\param[in]	object		L'AnimatedObject parent.
+		 *\param[in]	animation	L'animation.
 		 */
-		C3D_API AnimationInstance( AnimatedObject & p_object, Animation const & p_animation );
+		C3D_API AnimationInstance( AnimatedObject & object, Animation & animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -45,12 +45,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index.
-		 *\param[in]	p_tslf	The time since the last frame.
+		 *\param[in]	elapsed	The time since the last frame.
 		 *\~french
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
-		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
+		 *\param[in]	elapsed	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API void update( castor::Milliseconds const & p_tslf );
+		C3D_API void update( castor::Milliseconds const & elapsed );
 		/**
 		 *\~english
 		 *\brief		Plays the animation.
@@ -94,15 +94,15 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the animation time scale
-		 *\param[in]	p_scale	The new value
+		 *\brief		Sets the animation time scale
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le multiplicateur de temps de l'animation
-		 *\param[in]	p_scale	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setScale( real p_scale )
+		inline void setScale( real value )
 		{
-			m_scale = p_scale;
+			m_scale = value;
 		}
 		/**
 		 *\~english
@@ -116,15 +116,15 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the animation loop status
-		 *\param[in]	p_looped	The new value
+		 *\brief		Sets the animation loop status
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit l'état de boucle de l'animation
-		 *\param[in]	p_looped	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setLooped( bool p_looped )
+		inline void setLooped( bool value )
 		{
-			m_looped = p_looped;
+			m_looped = value;
 		}
 		/**
 		 *\~english

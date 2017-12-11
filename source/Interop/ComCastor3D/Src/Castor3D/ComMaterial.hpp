@@ -46,13 +46,13 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY_GET( PassCount, unsigned int, make_getter( m_internal.get(), &castor3d::Material::getPassCount ) );
+		COM_PROPERTY_GET( PassCount, unsigned int, makeGetter( m_internal.get(), &castor3d::Material::getPassCount ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
-		STDMETHOD( createPass )( /* [out, retval] */ IPass ** pVal );
-		STDMETHOD( getPass )( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal );
-		STDMETHOD( destroyPass )( /* [in] */ unsigned int val );
+		STDMETHOD( CreatePass )( /* [out, retval] */ IPass ** pVal );
+		STDMETHOD( GetPass )( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal );
+		STDMETHOD( DestroyPass )( /* [in] */ unsigned int val );
 
 	private:
 		castor3d::MaterialSPtr m_internal;

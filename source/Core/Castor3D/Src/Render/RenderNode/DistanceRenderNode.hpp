@@ -11,6 +11,10 @@ namespace castor3d
 {
 	namespace details
 	{
+		uint32_t getPrimitiveCount( Geometry & p_instance );
+		uint32_t getPrimitiveCount( BillboardBase & p_instance );
+		uint32_t getVertexCount( Geometry & p_instance );
+		uint32_t getVertexCount( BillboardBase & p_instance );
 		SceneNode & getParentNode( Geometry & p_instance );
 		SceneNode & getParentNode( BillboardBase & p_instance );
 	}

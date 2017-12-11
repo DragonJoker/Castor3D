@@ -15,7 +15,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CTextureUnit::loadTexture( /* [in] */ BSTR path )
+	STDMETHODIMP CTextureUnit::LoadTexture( /* [in] */ BSTR path )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -24,20 +24,20 @@ namespace CastorCom
 			auto l_texture = m_internal->getEngine()->getRenderSystem()->createTexture( castor3d::TextureType::eTwoDimensions
 				, castor3d::AccessType::eRead
 				, castor3d::AccessType::eRead );
-			castor::Path l_path{ FromBstr( path ) };
+			castor::Path l_path{ fromBstr( path ) };
 			l_texture->getImage().initialiseSource(l_path.getPath(), l_path.getFileName( true ) );
 			m_internal->setTexture( l_texture );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
-					 cuT( "loadTexture" ),			// This is generally displayed as the title
+					 cuT( "LoadTexture" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

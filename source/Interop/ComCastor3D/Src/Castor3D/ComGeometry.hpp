@@ -47,15 +47,15 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Mesh, IMesh *, make_getter( m_internal.get(), &castor3d::Geometry::getMesh ), make_putter( m_internal.get(), &castor3d::Geometry::setMesh ) );
+		COM_PROPERTY( Mesh, IMesh *, makeGetter( m_internal.get(), &castor3d::Geometry::getMesh ), makePutter( m_internal.get(), &castor3d::Geometry::setMesh ) );
 
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &castor3d::MovableObject::getName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &castor3d::MovableObject::getType ) );
-		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &castor3d::MovableObject::getScene ) );
+		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal.get(), &castor3d::MovableObject::getName ) );
+		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, makeGetter( m_internal.get(), &castor3d::MovableObject::getType ) );
+		COM_PROPERTY_GET( Scene, IScene *, makeGetter( m_internal.get(), &castor3d::MovableObject::getScene ) );
 
-		STDMETHOD( getMaterial )( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal );
-		STDMETHOD( setMaterial )( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val );
-		STDMETHOD( attachTo )( /* [in] */ ISceneNode * val );
+		STDMETHOD( GetMaterial )( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal );
+		STDMETHOD( SetMaterial )( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val );
+		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();
 
 	private:

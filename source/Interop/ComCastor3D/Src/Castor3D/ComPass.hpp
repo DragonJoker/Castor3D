@@ -2,7 +2,7 @@
 #ifndef __COMC3D_COM_PASS_H__
 #define __COMC3D_COM_PASS_H__
 
-#include "ComColour.hpp"
+#include "ComRgbColour.hpp"
 #include "ComShaderProgram.hpp"
 
 #include <Material/Pass.hpp>
@@ -47,15 +47,37 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( TwoSided, boolean, make_getter( m_internal.get(), &castor3d::Pass::IsTwoSided ), make_putter( m_internal.get(), &castor3d::Pass::setTwoSided ) );
-		COM_PROPERTY( Opacity, float, make_getter( m_internal.get(), &castor3d::Pass::getOpacity ), make_putter( m_internal.get(), &castor3d::Pass::setOpacity ) );
+		COM_PROPERTY( Emissive
+			, float
+			, makeGetter( m_internal.get(), &castor3d::Pass::getEmissive )
+			, makePutter( m_internal.get(), &castor3d::Pass::setEmissive ) );
+		COM_PROPERTY( RefractionRatio
+			, float
+			, makeGetter( m_internal.get(), &castor3d::Pass::getRefractionRatio )
+			, makePutter( m_internal.get(), &castor3d::Pass::setRefractionRatio ) );
+		COM_PROPERTY( AlphaFunc
+			, eCOMPARISON_FUNC
+			, makeGetter( m_internal.get(), &castor3d::Pass::getAlphaFunc )
+			, makePutter( m_internal.get(), &castor3d::Pass::setAlphaFunc ) );
+		COM_PROPERTY( AlphaRefValue
+			, float
+			, makeGetter( m_internal.get(), &castor3d::Pass::getAlphaValue )
+			, makePutter( m_internal.get(), &castor3d::Pass::setAlphaValue ) );
+		COM_PROPERTY( TwoSided
+			, boolean
+			, makeGetter( m_internal.get(), &castor3d::Pass::IsTwoSided )
+			, makePutter( m_internal.get(), &castor3d::Pass::setTwoSided ) );
+		COM_PROPERTY( Opacity
+			, float
+			, makeGetter( m_internal.get(), &castor3d::Pass::getOpacity )
+			, makePutter( m_internal.get(), &castor3d::Pass::setOpacity ) );
 
-		COM_PROPERTY_GET( TextureUnitCount, unsigned int, make_getter( m_internal.get(), &castor3d::Pass::getTextureUnitsCount ) );
+		COM_PROPERTY_GET( TextureUnitCount, unsigned int, makeGetter( m_internal.get(), &castor3d::Pass::getTextureUnitsCount ) );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( getTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( destroyTextureUnit )( /* [in] */ ITextureUnit * val );
-		STDMETHOD( getTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( DestroyTextureUnit )( /* [in] */ ITextureUnit * val );
+		STDMETHOD( GetTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
 
 	private:
 		castor3d::PassSPtr m_internal;

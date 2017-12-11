@@ -188,7 +188,9 @@ namespace castor3d
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_cameraPosition ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
-					, c3d_ambientLight.xyz() );
+					, clamp( c3d_ambientLight.xyz() + material.m_ambient() * material.m_diffuse()
+						, vec3( 0.0_f )
+						, vec3( 1.0_f ) ) );
 
 				if ( hasSsao )
 				{

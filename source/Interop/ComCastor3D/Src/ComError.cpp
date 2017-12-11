@@ -4,7 +4,7 @@
 
 namespace CastorCom
 {
-	HRESULT CComError::DispatchWin32Error(
+	HRESULT CComError::dispatchWin32Error(
 		DWORD dwError,
 		REFCLSID clsid,
 		LPCTSTR szSource,
@@ -12,13 +12,13 @@ namespace CastorCom
 		LPCTSTR szHelpFileName )
 	{
 		// Dispatch the requested error message
-		return DispatchError(
+		return dispatchError(
 				   HRESULT_FROM_WIN32( dwError ),
-				   clsid, szSource, NULL, dwHelpContext,
+				   clsid, szSource, nullptr, dwHelpContext,
 				   szHelpFileName );
 	}
 
-	HRESULT CComError::DispatchError(
+	HRESULT CComError::dispatchError(
 		HRESULT hError,
 		REFCLSID clsid,
 		LPCTSTR szSource,
@@ -31,9 +31,9 @@ namespace CastorCom
 		// (Hence we must use this MACRO provided by ATL)
 		USES_CONVERSION;
 		// Convert the description to OLE string
-		LPOLESTR wszError = NULL;
+		LPOLESTR wszError = nullptr;
 
-		if ( szDescription != NULL )
+		if ( szDescription != nullptr )
 		{
 			// Convert to wide char
 			wszError = T2OLE( ( LPTSTR )szDescription );
@@ -44,22 +44,22 @@ namespace CastorCom
 			if ( HRESULT_FACILITY( hError ) == FACILITY_WIN32 )
 			{
 				// get the error from the system
-				LPTSTR szError = NULL;
+				LPTSTR szError = nullptr;
 
 				if ( !::FormatMessage(
 							FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER,
-							NULL,
+							nullptr,
 							HRESULT_CODE( hError ),
 							MAKELANGID( LANG_USER_DEFAULT, SUBLANG_DEFAULT ),
 							( LPTSTR )&szError,
 							0,
-							NULL ) )
+							nullptr ) )
 				{
-					return HRESULT_FROM_WIN32( getLastError() );
+					return HRESULT_FROM_WIN32( ::GetLastError() );
 				}
 
 				// Convert the Error multibyte string to OLE string
-				if ( szError != NULL )
+				if ( szError != nullptr )
 				{
 					// Convert to wide char
 					wszError = T2OLE( szError );
@@ -70,46 +70,46 @@ namespace CastorCom
 		}
 
 		// Convert the source string to OLE string
-		LPOLESTR wszSource = NULL;
+		LPOLESTR wszSource = nullptr;
 
-		if ( szSource != NULL )
+		if ( szSource != nullptr )
 		{
 			wszSource = T2OLE( ( LPTSTR )szSource );
 		}
 
 		// Convert the help filename to OLE string
-		LPOLESTR wszHelpFile = NULL;
+		LPOLESTR wszHelpFile = nullptr;
 
-		if ( szHelpFileName != NULL )
+		if ( szHelpFileName != nullptr )
 		{
 			wszHelpFile = T2OLE( ( LPTSTR )szHelpFileName );
 		}
 
 		// get the ICreateErrorInfo Interface
-		ICreateErrorInfo * pCreateErrorInfo = NULL;
+		ICreateErrorInfo * pCreateErrorInfo = nullptr;
 		HRESULT hSuccess = CreateErrorInfo( &pCreateErrorInfo );
 		ATLASSERT( SUCCEEDED( hSuccess ) );
 		// Fill the error information into it
-		pCreateErrorInfo->setGUID( clsid );
+		pCreateErrorInfo->SetGUID( clsid );
 
-		if ( wszError != NULL )
+		if ( wszError != nullptr )
 		{
-			pCreateErrorInfo->setDescription( wszError );
+			pCreateErrorInfo->SetDescription( wszError );
 		}
 
-		if ( wszSource != NULL )
+		if ( wszSource != nullptr )
 		{
-			pCreateErrorInfo->setSource( wszSource );
+			pCreateErrorInfo->SetSource( wszSource );
 		}
 
-		if ( wszHelpFile != NULL )
+		if ( wszHelpFile != nullptr )
 		{
-			pCreateErrorInfo->setHelpFile( wszHelpFile );
+			pCreateErrorInfo->SetHelpFile( wszHelpFile );
 		}
 
-		pCreateErrorInfo->setHelpContext( dwHelpContext );
+		pCreateErrorInfo->SetHelpContext( dwHelpContext );
 		// get the IErrorInfo interface
-		IErrorInfo * pErrorInfo = NULL;
+		IErrorInfo * pErrorInfo = nullptr;
 		hSuccess = pCreateErrorInfo->QueryInterface( IID_IErrorInfo, ( LPVOID * )&pErrorInfo );
 
 		if ( FAILED( hSuccess ) )
@@ -119,7 +119,7 @@ namespace CastorCom
 		}
 
 		// set this error information in the current thread
-		hSuccess = setErrorInfo( 0, pErrorInfo );
+		hSuccess = SetErrorInfo( 0, pErrorInfo );
 
 		if ( FAILED( hSuccess ) )
 		{

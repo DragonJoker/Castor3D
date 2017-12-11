@@ -23,15 +23,31 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API AnimatedMesh( AnimatedMesh && rhs ) = default;
+		C3D_API AnimatedMesh & operator=( AnimatedMesh && rhs ) = default;
+		C3D_API AnimatedMesh( AnimatedMesh const & rhs ) = delete;
+		C3D_API AnimatedMesh & operator=( AnimatedMesh const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name	The object name.
-		 *\param[in]	p_mesh	The mesh.
+		 *\param[in]	name		The object name.
+		 *\param[in]	mesh		The mesh.
+		 *\param[in]	geometry	The geometry instantiating the mesh.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom de l'objet.
-		 *\param[in]	p_mesh	Le maillage.
+		 *\param[in]	name		Le nom de l'objet.
+		 *\param[in]	mesh		Le maillage.
+		 *\param[in]	geometry	La géométrie instanciant le maillage.
 		 */
-		C3D_API AnimatedMesh( castor::String const & p_name, Mesh & p_mesh );
+		C3D_API AnimatedMesh( castor::String const & name
+			, Mesh & mesh
+			, Geometry & geometry );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -40,37 +56,9 @@ namespace castor3d
 		 */
 		C3D_API ~AnimatedMesh();
 		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API AnimatedMesh( AnimatedMesh && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API AnimatedMesh & operator=( AnimatedMesh && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API AnimatedMesh( AnimatedMesh const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API AnimatedMesh & operator=( AnimatedMesh const & p_rhs ) = delete;
-		/**
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
-		C3D_API void update( castor::Milliseconds const & p_tslf )override;
+		C3D_API void update( castor::Milliseconds const & elapsed )override;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
 		 */
@@ -80,11 +68,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the skeleton
-		 *\return		The skeleton
+		 *\return		The mesh.
 		 *\~french
-		 *\brief		Récupère le squelette
-		 *\return		Le squelette
+		 *\return		Le maillage.
 		 */
 		inline Mesh const & getMesh()const
 		{
@@ -92,15 +78,33 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the skeleton
-		 *\return		The skeleton
+		 *\return		The mesh.
 		 *\~french
-		 *\brief		Récupère le squelette
-		 *\return		Le squelette
+		 *\return		Le maillage.
 		 */
 		inline Mesh & getMesh()
 		{
 			return m_mesh;
+		}
+		/**
+		 *\~english
+		 *\return		The geometry instantiating the mesh.
+		 *\~french
+		 *\return		La géométrie instanciant le maillage.
+		 */
+		inline Geometry const & getGeometry()const
+		{
+			return m_geometry;
+		}
+		/**
+		 *\~english
+		 *\return		The geometry instantiating the mesh.
+		 *\~french
+		 *\return		La géométrie instanciant le maillage.
+		 */
+		inline Geometry & getGeometry()
+		{
+			return m_geometry;
 		}
 		/**
 		 *\~english
@@ -117,15 +121,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void doAddAnimation( castor::String const & p_name )override;
+		void doAddAnimation( castor::String const & name )override;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::doStartAnimation
 		 */
-		void doStartAnimation( AnimationInstance & p_animation )override;
+		void doStartAnimation( AnimationInstance & animation )override;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::doStopAnimation
 		 */
-		void doStopAnimation( AnimationInstance & p_animation )override;
+		void doStopAnimation( AnimationInstance & animation )override;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::doClearAnimations
 		 */
@@ -135,6 +139,9 @@ namespace castor3d
 		//!\~english	The submesh affected by the animations.
 		//!\~french		Le sous-maillage affecté par les animations.
 		Mesh & m_mesh;
+		//!\~english	The geometry instantiating the mesh.
+		//!\~french		La géométrie instanciant le maillage.
+		Geometry & m_geometry;
 		//!\~english	Currently playing animation.
 		//!\~french		L'animation en cours de lecture.
 		MeshAnimationInstanceRPtr m_playingAnimation{ nullptr };

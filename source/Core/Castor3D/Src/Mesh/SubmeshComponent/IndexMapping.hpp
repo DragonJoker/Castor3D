@@ -41,20 +41,29 @@ namespace castor3d
 		C3D_API ~IndexMapping();
 		/**
 		 *\~english
-		 *\brief		Sorts the face from farthest to nearest from the camera
-		 *\param[in]	p_cameraPosition	The camera position, relative to submesh
+		 *\return		The elements count.
 		 *\~french
-		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au sous-maillage
+		 *\return		Le nombre d'éléments.
 		 */
-		C3D_API virtual void sortByDistance( castor::Point3r const & p_cameraPosition ) = 0;
+		C3D_API virtual uint32_t getCount()const = 0;
 		/**
 		 *\~english
-		 *\brief		Generates normals and tangents
+		 *\brief		Sorts the face from farthest to nearest from the camera
+		 *\param[in]	cameraPosition	The camera position, relative to submesh
 		 *\~french
-		 *\brief		Génère les normales et les tangentes
+		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
+		 *\param[in]	cameraPosition	La position de la caméra, relative au sous-maillage
 		 */
-		C3D_API virtual void computeNormals( bool p_reverted = false ) = 0;
+		C3D_API virtual void sortByDistance( castor::Point3r const & cameraPosition ) = 0;
+		/**
+		 *\~english
+		 *\brief		Generates normals and tangents.
+		 *\param[in]	reverted	Tells if normals are inverted.
+		 *\~french
+		 *\brief		Génère les normales et les tangentes.
+		 *\param[in]	reverted	Dit si les normales sont inversées.
+		 */
+		C3D_API virtual void computeNormals( bool reverted = false ) = 0;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */

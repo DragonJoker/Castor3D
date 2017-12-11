@@ -23,17 +23,31 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone && rhs ) = default;
+		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone && rhs ) = default;
+		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone const & rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
-		 *\param[in]	p_animationObject	The animation object.
-		 *\param[out]	p_allObjects		Receives this object's children.
+		 *\param[in]	animationInstance	The parent skeleton animation instance.
+		 *\param[in]	animationObject		The animation object.
+		 *\param[out]	allObjects			Receives this object's children.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
-		 *\param[in]	p_animationObject	L'animation d'objet.
-		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
+		 *\param[in]	animationInstance	L'instance d'animation de squelette parent.
+		 *\param[in]	animationObject		L'animation d'objet.
+		 *\param[out]	allObjects			Reçoit les enfants de cet objet.
 		 */
-		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects );
+		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstance & animationInstance
+			, SkeletonAnimationBone & animationObject
+			, SkeletonAnimationInstanceObjectPtrArray & allObjects );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -41,34 +55,6 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~SkeletonAnimationInstanceBone();
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone const & p_rhs ) = delete;
 
 	private:
 		/**

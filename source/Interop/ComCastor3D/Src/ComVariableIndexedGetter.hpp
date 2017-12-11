@@ -7,10 +7,10 @@
 namespace CastorCom
 {
 	template< typename Class, typename Value, typename Index >
-	struct IndexedVariablegetter
+	struct IndexedVariableGetter
 	{
-		typedef Value( Class::*Function )( Index )const;
-		IndexedVariablegetter( Class * instance, Function function )
+		using Function = Value( Class::* )( Index )const;
+		IndexedVariableGetter( Class * instance, Function function )
 			:	m_instance( instance )
 			,	m_function( function )
 		{
@@ -24,19 +24,18 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					*value = parameter_cast< _Value >( ( m_instance->*m_function )( parameter_cast< Index >( index ) ) );
+					*value = parameterCast< _Value >( ( m_instance->*m_function )( parameterCast< Index >( index ) ) );
 					hr = S_OK;
 				}
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return hr;
@@ -48,17 +47,17 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename Index, typename _Class >
-	IndexedVariablegetter< Class, Value, Index >
-	make_indexed_getter( _Class * instance, Value( Class::*function )( Index )const )
+	IndexedVariableGetter< Class, Value, Index >
+	makeIndexedGetter( _Class * instance, Value( Class::*function )( Index )const )
 	{
-		return IndexedVariablegetter< Class, Value, Index >( ( Class * )instance, function );
+		return IndexedVariableGetter< Class, Value, Index >( ( Class * )instance, function );
 	}
 
 	template< typename Class, typename Value, typename Index >
-	struct IndexedRefVariablegetter
+	struct IndexedRefVariableGetter
 	{
-		typedef Value const & ( Class::*Function )( Index )const;
-		IndexedRefVariablegetter( Class * instance, Function function )
+		using Function = Value const & ( Class::* )( Index )const;
+		IndexedRefVariableGetter( Class * instance, Function function )
 			:	m_instance( instance )
 			,	m_function( function )
 		{
@@ -72,19 +71,18 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					*value = parameter_cast< _Value & >( ( m_instance->*m_function )( parameter_cast< Index >( index ) ) );
+					*value = parameterCast< _Value & >( ( m_instance->*m_function )( parameterCast< Index >( index ) ) );
 					hr = S_OK;
 				}
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_castor3d,						// This is the GUID of PixelComponents throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, cuT( "Null instance" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
 			}
 
 			return hr;
@@ -96,10 +94,10 @@ namespace CastorCom
 	};
 
 	template< typename Class, typename Value, typename Index, typename _Class >
-	IndexedRefVariablegetter< Class, Value, Index >
-	make_indexed_getter( _Class * instance, Value const & ( Class::*function )( Index )const )
+	IndexedRefVariableGetter< Class, Value, Index >
+	makeIndexedGetter( _Class * instance, Value const & ( Class::*function )( Index )const )
 	{
-		return IndexedRefVariablegetter< Class, Value, Index >( ( Class * )instance, function );
+		return IndexedRefVariableGetter< Class, Value, Index >( ( Class * )instance, function );
 	}
 }
 

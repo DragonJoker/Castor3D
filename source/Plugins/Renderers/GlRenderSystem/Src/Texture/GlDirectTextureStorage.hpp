@@ -59,7 +59,7 @@ namespace GlRender
 		void fill( castor3d::TextureStorage & p_storage, castor3d::TextureImage const & p_image );
 
 	private:
-		Debug_Decl( uint32_t, m_allocatedSize );
+		Debug_Decl( uint32_t, m_allocatedSize )
 	};
 }
 

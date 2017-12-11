@@ -28,10 +28,6 @@ namespace castor3d
 		: public MovableObject
 	{
 	public:
-		using OnChangedFunction = std::function< void( Camera const & ) >;
-		using OnChanged = castor::Signal< OnChangedFunction >;
-
-	public:
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
@@ -288,7 +284,7 @@ namespace castor3d
 	public:
 		//!\~english	The signal raised when the camera has changed.
 		//!\~french		Le signal levé lorsque la caméra a changé.
-		OnChanged onChanged;
+		OnCameraChanged onChanged;
 
 	private:
 		friend class Scene;

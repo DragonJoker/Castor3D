@@ -2,7 +2,7 @@
 #ifndef __COMC3D_COM_BLEND_STATE_H__
 #define __COMC3D_COM_BLEND_STATE_H__
 
-#include "ComColour.hpp"
+#include "ComRgbaColour.hpp"
 
 #include <State/BlendState.hpp>
 
@@ -47,19 +47,19 @@ namespace CastorCom
 			m_state = state;
 		}
 
-		COM_PROPERTY( IndependantBlendEnabled, boolean, make_getter( m_state.get(), &castor3d::BlendState::isIndependantBlendEnabled ), make_putter( m_state.get(), &castor3d::BlendState::enableIndependantBlend ) );
-		COM_PROPERTY( BlendFactors, IColour *, make_getter( m_state.get(), &castor3d::BlendState::getBlendFactors ), make_putter( m_state.get(), &castor3d::BlendState::setBlendFactors ) );
+		COM_PROPERTY( IndependantBlendEnabled, boolean, makeGetter( m_state.get(), &castor3d::BlendState::isIndependantBlendEnabled ), makePutter( m_state.get(), &castor3d::BlendState::enableIndependantBlend ) );
+		COM_PROPERTY( BlendFactors, IRgbaColour *, makeGetter( m_state.get(), &castor3d::BlendState::getBlendFactors ), makePutter( m_state.get(), &castor3d::BlendState::setBlendFactors ) );
 
-		COM_PROPERTY_INDEXED( BlendEnabled, unsigned int, boolean, make_indexed_getter( m_state.get(), &castor3d::BlendState::isBlendEnabled ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::enableBlend ) );
-		COM_PROPERTY_INDEXED( RgbSrcBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &castor3d::BlendState::getRgbSrcBlend ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::setRgbSrcBlend ) );
-		COM_PROPERTY_INDEXED( RgbDstBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &castor3d::BlendState::getRgbDstBlend ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::setRgbDstBlend ) );
-		COM_PROPERTY_INDEXED( RgbBlendOp, unsigned int, eBLEND_OP, make_indexed_getter( m_state.get(), &castor3d::BlendState::getRgbBlendOp ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::setRgbBlendOp ) );
-		COM_PROPERTY_INDEXED( AlphaSrcBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &castor3d::BlendState::getAlphaSrcBlend ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::setAlphaSrcBlend ) );
-		COM_PROPERTY_INDEXED( AlphaDstBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &castor3d::BlendState::getAlphaDstBlend ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::setAlphaDstBlend ) );
-		COM_PROPERTY_INDEXED( AlphaBlendOp, unsigned int, eBLEND_OP, make_indexed_getter( m_state.get(), &castor3d::BlendState::getAlphaBlendOp ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::setAlphaBlendOp ) );
-		COM_PROPERTY_INDEXED( WriteMask, unsigned int, byte, make_indexed_getter( m_state.get(), &castor3d::BlendState::getWriteMask ), make_indexed_putter_rev( m_state.get(), &castor3d::BlendState::setWriteMask ) );
+		COM_PROPERTY_INDEXED( BlendEnabled, unsigned int, boolean, makeIndexedGetter( m_state.get(), &castor3d::BlendState::isBlendEnabled ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::enableBlend ) );
+		COM_PROPERTY_INDEXED( RgbSrcBlend, unsigned int, eBLEND, makeIndexedGetter( m_state.get(), &castor3d::BlendState::getRgbSrcBlend ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::setRgbSrcBlend ) );
+		COM_PROPERTY_INDEXED( RgbDstBlend, unsigned int, eBLEND, makeIndexedGetter( m_state.get(), &castor3d::BlendState::getRgbDstBlend ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::setRgbDstBlend ) );
+		COM_PROPERTY_INDEXED( RgbBlendOp, unsigned int, eBLEND_OP, makeIndexedGetter( m_state.get(), &castor3d::BlendState::getRgbBlendOp ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::setRgbBlendOp ) );
+		COM_PROPERTY_INDEXED( AlphaSrcBlend, unsigned int, eBLEND, makeIndexedGetter( m_state.get(), &castor3d::BlendState::getAlphaSrcBlend ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::setAlphaSrcBlend ) );
+		COM_PROPERTY_INDEXED( AlphaDstBlend, unsigned int, eBLEND, makeIndexedGetter( m_state.get(), &castor3d::BlendState::getAlphaDstBlend ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::setAlphaDstBlend ) );
+		COM_PROPERTY_INDEXED( AlphaBlendOp, unsigned int, eBLEND_OP, makeIndexedGetter( m_state.get(), &castor3d::BlendState::getAlphaBlendOp ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::setAlphaBlendOp ) );
+		COM_PROPERTY_INDEXED( WriteMask, unsigned int, byte, makeIndexedGetter( m_state.get(), &castor3d::BlendState::getWriteMask ), makeIndexedPutterRev( m_state.get(), &castor3d::BlendState::setWriteMask ) );
 
-		STDMETHOD( setColourMask )( /* [in] */ eWRITING_MASK red, /* [in] */ eWRITING_MASK green, /* [in] */ eWRITING_MASK blue, /* [in] */ eWRITING_MASK alpha );
+		STDMETHOD( SetColourMask )( /* [in] */ eWRITING_MASK red, /* [in] */ eWRITING_MASK green, /* [in] */ eWRITING_MASK blue, /* [in] */ eWRITING_MASK alpha );
 
 	private:
 		castor3d::BlendStateSPtr m_state;

@@ -117,6 +117,7 @@ namespace castor3d
 		m_submeshesMaterials.clear();
 		m_mesh = mesh;
 		doUpdateMesh();
+		doUpdateContainers();
 	}
 
 	void Geometry::setMaterial( Submesh & submesh
@@ -188,6 +189,59 @@ namespace castor3d
 		return result;
 	}
 
+	void Geometry::updateContainers( SubmeshBoundingBoxList const & boxes )
+	{
+		m_submeshesBoxes.clear();
+
+		if ( !boxes.empty() )
+		{
+			m_submeshesBoxes.emplace( boxes[0].first, boxes[0].second );
+			m_submeshesSpheres.emplace( boxes[0].first, BoundingSphere{ boxes[0].second } );
+
+			for ( auto i = 1u; i < boxes.size(); ++i )
+			{
+				m_submeshesBoxes.emplace( boxes[i].first, boxes[i].second );
+				m_submeshesSpheres.emplace( boxes[1].first, BoundingSphere{ boxes[1].second } );
+			}
+
+			doUpdateContainers();
+		}
+	}
+
+	BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
+	{
+		static BoundingBox const dummy;
+		auto it = m_submeshesBoxes.find( &submesh );
+
+		if ( it != m_submeshesBoxes.end() )
+		{
+			return it->second;
+		}
+
+		return dummy;
+	}
+
+	BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
+	{
+		static BoundingSphere const dummy;
+		auto it = m_submeshesSpheres.find( &submesh );
+
+		if ( it != m_submeshesSpheres.end() )
+		{
+			return it->second;
+		}
+
+		return dummy;
+	}
+
+	void Geometry::setBoundingBox( Submesh const & submesh
+		, BoundingBox const & box )
+	{
+		m_submeshesBoxes[&submesh] = box;
+		m_submeshesSpheres[&submesh] = BoundingSphere{ box };
+		doUpdateContainers();
+	}
+
 	void Geometry::doUpdateMesh()
 	{
 		auto mesh = m_mesh.lock();
@@ -199,11 +253,31 @@ namespace castor3d
 			for ( auto submesh : *mesh )
 			{
 				m_submeshesMaterials[submesh.get()] = submesh->getDefaultMaterial();
+				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
+				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
 			}
 		}
 		else
 		{
 			m_meshName = cuEmptyString;
+		}
+	}
+
+	void Geometry::doUpdateContainers()
+	{
+		if ( !m_submeshesBoxes.empty() )
+		{
+			auto it = m_submeshesBoxes.begin();
+			m_box = it->second;
+			++it;
+
+			while ( it != m_submeshesBoxes.end() )
+			{
+				m_box = m_box.getUnion( it->second );
+				++it;
+			}
+
+			m_sphere.load( m_box );
 		}
 	}
 }

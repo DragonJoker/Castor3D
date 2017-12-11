@@ -26,6 +26,12 @@ namespace castor3d
 		//!\~english	The total face count.
 		//!\~french		Le nombre total de faces.
 		uint32_t m_totalFaceCount{ 0u };
+		//!\~english	The visble objects vertex count.
+		//!\~french		Le nombre de sommets visibles.
+		uint32_t m_visibleVertexCount{ 0u };
+		//!\~english	The visible objects face count.
+		//!\~french		Le nombre de faces visibles.
+		uint32_t m_visibleFaceCount{ 0u };
 		//!\~english	The total object count.
 		//!\~french		Le nombre total d'objets.
 		uint32_t m_totalObjectsCount{ 0u };

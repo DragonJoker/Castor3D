@@ -43,9 +43,9 @@ namespace CastorCom
 			m_glyph = p_glyph;
 		}
 
-		COM_PROPERTY_GET( Size, ISize *, make_getter( m_glyph, &castor::Glyph::getSize ) );
-		COM_PROPERTY_GET( Bearing, IPosition *, make_getter( m_glyph, &castor::Glyph::getBearing ) );
-		COM_PROPERTY_GET( Advance, INT, make_getter( m_glyph, &castor::Glyph::getAdvance ) );
+		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_glyph, &castor::Glyph::getSize ) );
+		COM_PROPERTY_GET( Bearing, IPosition *, makeGetter( m_glyph, &castor::Glyph::getBearing ) );
+		COM_PROPERTY_GET( Advance, INT, makeGetter( m_glyph, &castor::Glyph::getAdvance ) );
 
 	private:
 		castor::Glyph * m_glyph;

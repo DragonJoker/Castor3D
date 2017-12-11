@@ -1,5 +1,5 @@
 #include "ComImage.hpp"
-#include "ComColour.hpp"
+#include "ComRgbaColour.hpp"
 #include "ComRect.hpp"
 #include "ComSize.hpp"
 #include "ComUtils.hpp"
@@ -30,8 +30,8 @@ namespace CastorCom
 			{
 				CEngine * l_engn = static_cast< CEngine * >( engine );
 				castor3d::Engine * l_engine = l_engn->getInternal();
-				castor::String l_name = FromBstr( name );
-				castor::Path l_path{ FromBstr( val ) };
+				castor::String l_name = fromBstr( name );
+				castor::Path l_path{ fromBstr( val ) };
 				castor::Path l_pathImage = l_path;
 
 				if ( !castor::File::fileExists( l_pathImage ) )
@@ -48,13 +48,13 @@ namespace CastorCom
 
 				if ( !m_image )
 				{
-					hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFile" ), ERROR_WRONG_FILE_NAME, 0, NULL );
+					hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFile" ), ERROR_WRONG_FILE_NAME, 0, nullptr );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFile" ), ERROR_IMAGE_EXISTS, 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFile" ), ERROR_IMAGE_EXISTS, 0, nullptr );
 		}
 
 		return hr;
@@ -68,7 +68,7 @@ namespace CastorCom
 		{
 			CEngine * l_engn = static_cast< CEngine * >( engine );
 			castor3d::Engine * l_engine = l_engn->getInternal();
-			castor::String l_name = FromBstr( name );
+			castor::String l_name = fromBstr( name );
 
 			if ( !m_image )
 			{
@@ -77,14 +77,14 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFormat" ), ERROR_IMAGE_EXISTS, 0, NULL );
+				hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFormat" ), ERROR_IMAGE_EXISTS, 0, nullptr );
 			}
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::resample( /* [in] */ ISize * val )
+	STDMETHODIMP CImage::Resample( /* [in] */ ISize * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -95,30 +95,30 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "resample" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "Resample" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::fill( /* [in] */ IColour * val )
+	STDMETHODIMP CImage::Fill( /* [in] */ IRgbaColour * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_image )
 		{
 			hr = S_OK;
-			m_image->fill( *static_cast< CColour * >( val ) );
+			m_image->fill( *static_cast< CRgbaColour * >( val ) );
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Fill" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "Fill" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::copyImage( /* [in] */ IImage * val )
+	STDMETHODIMP CImage::CopyImage( /* [in] */ IImage * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -129,13 +129,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "copyImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "CcopyImage" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::subImage( /* [in] */ IRect * val, /* [out, retval] */ IImage ** pVal )
+	STDMETHODIMP CImage::SubImage( /* [in] */ IRect * val, /* [out, retval] */ IImage ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -151,13 +151,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "subImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "SubImage" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::flip( /* [out, retval] */ IImage ** pVal )
+	STDMETHODIMP CImage::Flip( /* [out, retval] */ IImage ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -173,13 +173,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Flip" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "Flip" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CImage::mirror( /* [out, retval] */ IImage ** pVal )
+	STDMETHODIMP CImage::Mirror( /* [out, retval] */ IImage ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -195,7 +195,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Mirror" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, cuT( "Mirror" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;

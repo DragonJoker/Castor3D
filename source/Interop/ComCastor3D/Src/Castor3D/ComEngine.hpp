@@ -41,23 +41,23 @@ namespace CastorCom
 			return m_internal;
 		}
 
-		COM_PROPERTY_GET( PluginsDirectory, BSTR, make_static_getter( &castor3d::Engine::getPluginsDirectory ) );
-		COM_PROPERTY_GET( EngineDirectory, BSTR, make_static_getter( &castor3d::Engine::getEngineDirectory ) );
-		COM_PROPERTY_GET( DataDirectory, BSTR, make_static_getter( &castor3d::Engine::getDataDirectory ) );
+		COM_PROPERTY_GET( PluginsDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getPluginsDirectory ) );
+		COM_PROPERTY_GET( EngineDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getEngineDirectory ) );
+		COM_PROPERTY_GET( DataDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getDataDirectory ) );
 
-		STDMETHOD( create )();
-		STDMETHOD( Destroy )();
+		STDMETHOD( Create )( );
+		STDMETHOD( Destroy )( );
 		STDMETHOD( Initialise )( /* [in] */ int fps );
-		STDMETHOD( Cleanup )();
+		STDMETHOD( Cleanup )( );
 		STDMETHOD( CreateScene )( /* [in] */ BSTR name, /* [out, retval] */ IScene ** pVal );
-		STDMETHOD( ClearScenes )();
-		STDMETHOD( loadRenderer )( /* [in] */ BSTR type );
-		STDMETHOD( RenderOneFrame )();
-		STDMETHOD( loadPlugin )( /* [in] */ BSTR path );
+		STDMETHOD( ClearScenes )( );
+		STDMETHOD( LoadRenderer )( /* [in] */ BSTR type );
+		STDMETHOD( RenderOneFrame )( );
+		STDMETHOD( LoadPlugin )( /* [in] */ BSTR path );
 		STDMETHOD( CreateOverlay )( /* [in] */ eOVERLAY_TYPE type, /* [in] */ BSTR name, /* [in] */ IOverlay * parent, /* [in] */ IScene * scene, /* [out, retval] */ IOverlay ** pVal );
 		STDMETHOD( CreateRenderWindow )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal );
 		STDMETHOD( RemoveWindow )( /* [in] */ IRenderWindow * val );
-		STDMETHOD( createSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
+		STDMETHOD( CreateSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
 		STDMETHOD( CreateBlendState )( /* [in] */ BSTR name, /* [out, retval] */ IBlendState ** pVal );
 		STDMETHOD( CreateDepthStencilState )( /* [in] */ BSTR name, /* [out, retval] */ IDepthStencilState ** pVal );
 		STDMETHOD( CreateMultisampleState )( /* [in] */ BSTR name, /* [out, retval] */ IMultisampleState ** pVal );

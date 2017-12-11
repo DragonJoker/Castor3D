@@ -44,6 +44,17 @@ namespace castor
 		CU_API BoundingBox( Point3r const & min, Point3r const & max );
 		/**
 		 *\~english
+		 *\brief		Computes the bounding box resulting of the union of this bounding box and given one.
+		 *\param[in]	bb	The other bounding box.
+		 *\return		The resulting bounding box.
+		 *\~french
+		 *\brief		Calcule la bounding box résultant de l'union de cette bounding box et de celle donnée.
+		 *\param[in]	bb	L'autre bounding box.
+		 *\return		La bounding box résultante.
+		 */
+		CU_API BoundingBox getUnion( BoundingBox const & bb )const;
+		/**
+		 *\~english
 		 *\brief		Tests if a vertex is within the container, id est inside it but not on it's limits.
 		 *\param[in]	point	The vertex to test.
 		 *\return		\p true if the vertex is within the container, false if not.
@@ -86,13 +97,28 @@ namespace castor
 		CU_API BoundingBox getAxisAligned( Matrix4x4r const & transformations )const;
 		/**
 		 *\~english
+		 *\brief		Computes the positive vertex of a direction.
+		 *\see			getNegativeVertex.
+		 *\param[in]	normal	The direction vector.
+		 *\return		The position of the vertex on the box in the same way as the normal, while considering the center.
+		 */
+		CU_API Point3r getPositiveVertex( Point3r const & normal )const;
+		/**
+		 *\~english
+		 *\brief		Computes the negative vertex of a direction.
+		 *\param[in]	normal	The direction vector.
+		 *\return		The position of the vertex on the box in the opposite way from the normal, while considering the center.
+		 */
+		CU_API Point3r getNegativeVertex( Point3r const & normal )const;
+		/**
+		 *\~english
 		 *\return		The min extent.
 		 *\~french
 		 *\return		Le point minimal.
 		 */
-		inline Point3r const & getMin()const
+		inline Point3r getMin()const
 		{
-			return m_min;
+			return getCenter() - ( m_dimensions / 2.0_r );
 		}
 		/**
 		 *\~english
@@ -100,18 +126,25 @@ namespace castor
 		 *\~french
 		 *\return		Le point maximal.
 		 */
-		inline Point3r const & getMax()const
+		inline Point3r getMax()const
 		{
-			return m_max;
+			return getCenter() + ( m_dimensions / 2.0_r );
+		}
+		/**
+		 *\~english
+		 *\return		The dimensions.
+		 *\~french
+		 *\return		Les dimensions.
+		 */
+		inline Point3r const & getDimensions()const
+		{
+			return m_dimensions;
 		}
 
 	private:
-		//!\~english	The min extent of the bounding box.
-		//!\~french		Le point minimal de la bounding box.
-		Point3r m_min;
-		//!\~english	The max extent of the bounding box.
-		//\~french		Le point maximal de la bounding box
-		Point3r m_max;
+		//!\~english	The dimensions of the bounding box.
+		//!\~french		Les dimensions de la bounding box.
+		Point3r m_dimensions;
 	};
 }
 

@@ -85,6 +85,13 @@ namespace castor3d
 		C3D_API void computeContainers();
 		/**
 		 *\~english
+		 *\brief		Updates containers from given bounding box.
+		 *\~french
+		 *\brief		Met à jour les conteneurs depuis la bounding box donnée
+		 */
+		C3D_API void updateContainers( castor::BoundingBox const & boundingBox );
+		/**
+		 *\~english
 		 *\return		The faces number
 		 *\~french
 		 *\return		Le nombre de faces de ce submesh
@@ -392,7 +399,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Sets the submesh to be updated.
 		 *\~french
-		 *\return		Dit que le sous-maillage doit être mis à jour.
+		 *\brief		Dit que le sous-maillage doit être mis à jour.
 		 */
 		inline void needsUpdate();
 		/**
@@ -400,7 +407,7 @@ namespace castor3d
 		 *\brief		Sets the index mapping.
 		 *\param[in]	mapping	The mapping.
 		 *\~french
-		 *\return		Définit le mappage d'indices.
+		 *\brief		Définit le mappage d'indices.
 		 *\param[in]	mapping	Le mappage.
 		 */
 		inline void setIndexMapping( IndexMappingSPtr mapping );
@@ -409,17 +416,17 @@ namespace castor3d
 		 *\brief		Checks if a component exists.
 		 *\param[in]	name		The component name.
 		 *\~french
-		 *\return		Vérifie si un composant existe.
+		 *\brief		Vérifie si un composant existe.
 		 *\param[in]	name		Le nom du composant.
 		 */
-		inline bool hasComponent( castor::String const & name );
+		inline bool hasComponent( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Adds a component.
 		 *\param[in]	name		The component name.
 		 *\param[in]	component	The component.
 		 *\~french
-		 *\return		Ajoute un composant.
+		 *\brief		Ajoute un composant.
 		 *\param[in]	name		Le nom du composant.
 		 *\param[in]	component	Le composant.
 		 */
@@ -428,11 +435,9 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adds a component.
-		 *\param[in]	name		The component name.
 		 *\param[in]	component	The component.
 		 *\~french
-		 *\return		Ajoute un composant.
-		 *\param[in]	name		Le nom du composant.
+		 *\brief		Ajoute un composant.
 		 *\param[in]	component	Le composant.
 		 */
 		template< typename T >
@@ -443,21 +448,21 @@ namespace castor3d
 		 *\param[in]	name	The component name.
 		 *\return		The component, nullptr if not found.
 		 *\~french
-		 *\return		Trouve un composant.
+		 *\brief		Trouve un composant.
 		 *\param[in]	name	Le nom du composant.
 		 *return		Le composant, nullptr si non trouvé.
 		 */
-		inline SubmeshComponentSPtr getComponent( castor::String const & name );
+		inline SubmeshComponentSPtr getComponent( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Finds a component.
 		 *\return		The component, nullptr if not found.
 		 *\~french
-		 *\return		Trouve un composant.
+		 *\brief		Trouve un composant.
 		 *return		Le composant, nullptr si non trouvé.
 		 */
 		template< typename T >
-		inline std::shared_ptr< T > getComponent();
+		inline std::shared_ptr< T > getComponent()const;
 		/**
 		 *\~english
 		 *return		The instantiation component.

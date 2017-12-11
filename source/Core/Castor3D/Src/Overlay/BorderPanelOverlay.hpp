@@ -44,24 +44,24 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( castor::String const & p_tabs, BorderPanelOverlay const * p_category = nullptr );
+			C3D_API TextWriter( castor::String const & tabs, BorderPanelOverlay const * category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
-			 *\param[in]	p_file		the file to save the overlay in
-			 *\param[in]	p_overlay	the overlay to save
+			 *\param[in]	file		the file to save the overlay in
+			 *\param[in]	overlay	the overlay to save
 			 *\return		\p true if everything is OK
 			 *\~french
 			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
-			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation à enregistrer
+			 *\param[in]	file		Le fichier où enregistrer l'incrustation
+			 *\param[in]	overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API bool operator()( BorderPanelOverlay const & p_overlay, castor::TextFile & p_file );
+			C3D_API bool operator()( BorderPanelOverlay const & overlay, castor::TextFile & file );
 			/**
 			 *\copydoc		castor3d::OverlayCategory::TextWriter::writeInto
 			 */
-			C3D_API bool writeInto( castor::TextFile & p_file )override;
+			C3D_API bool writeInto( castor::TextFile & file )override;
 
 		private:
 			BorderPanelOverlay const * m_category;
@@ -81,7 +81,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~BorderPanelOverlay();
+		C3D_API ~BorderPanelOverlay();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by the factory
@@ -94,30 +94,30 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
-		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & p_tabs )override
+		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
 		{
-			return std::make_unique< TextWriter >( p_tabs, this );
+			return std::make_unique< TextWriter >( tabs, this );
 		}
 		/**
 		 *\~english
 		 *\brief		sets the border material
-		 *\param[in]	p_material	The new value
+		 *\param[in]	material	The new value
 		 *\~french
 		 *\brief		Définit le matériau des bords
-		 *\param[in]	p_material	La nouvelle valeur
+		 *\param[in]	material	La nouvelle valeur
 		 */
-		C3D_API void setBorderMaterial( MaterialSPtr p_material );
+		C3D_API void setBorderMaterial( MaterialSPtr material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay borders size, in pixels
-		 *\param[in]	p_size	The screen size
+		 *\param[in]	size	The screen size
 		 *\return		The size
 		 *\~french
 		 *\brief		Récupère la taille absolue des bordures de l'incrustation
-		 *\param[in]	p_size	La taille de l'écran
+		 *\param[in]	size	La taille de l'écran
 		 *\return		La taille
 		 */
-		C3D_API castor::Rectangle getAbsoluteBorderSize( castor::Size const & p_size )const;
+		C3D_API castor::Rectangle getAbsoluteBorderSize( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay borders size
@@ -133,7 +133,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		C3D_API virtual bool isChanged()const
+		C3D_API bool isChanged()const override
 		{
 			return m_borderChanged;
 		}
@@ -237,66 +237,66 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the left border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setLeftBorderSize( double p_size )
+		inline void setLeftBorderSize( double size )
 		{
-			m_ptBorderSize[0] = p_size;
+			m_ptBorderSize[0] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the top border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setTopBorderSize( double p_size )
+		inline void setTopBorderSize( double size )
 		{
-			m_ptBorderSize[1] = p_size;
+			m_ptBorderSize[1] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the right border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setRightBorderSize( double p_size )
+		inline void setRightBorderSize( double size )
 		{
-			m_ptBorderSize[2] = p_size;
+			m_ptBorderSize[2] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the bottom border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBottomBorderSize( double p_size )
+		inline void setBottomBorderSize( double size )
 		{
-			m_ptBorderSize[3] = p_size;
+			m_ptBorderSize[3] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the borders thicknesses
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBorderSize( castor::Point4d const & p_size )
+		inline void setBorderSize( castor::Point4d const & size )
 		{
-			m_ptBorderSize = p_size;
+			m_ptBorderSize = size;
 			m_borderChanged = true;
 		}
 		/**
@@ -375,66 +375,66 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the left border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setLeftBorderPixelSize( int p_size )
+		inline void setLeftBorderPixelSize( int size )
 		{
-			m_borderSize[0] = p_size;
+			m_borderSize[0] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the top border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setTopBorderPixelSize( int p_size )
+		inline void setTopBorderPixelSize( int size )
 		{
-			m_borderSize[1] = p_size;
+			m_borderSize[1] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the right border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setRightBorderPixelSize( int p_size )
+		inline void setRightBorderPixelSize( int size )
 		{
-			m_borderSize[2] = p_size;
+			m_borderSize[2] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the bottom border thickness
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBottomBorderPixelSize( int p_size )
+		inline void setBottomBorderPixelSize( int size )
 		{
-			m_borderSize[3] = p_size;
+			m_borderSize[3] = size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		sets the borders thicknesses
-		 *\param[in]	p_size	The new value
+		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
-		 *\param[in]	p_size	La nouvelle valeur
+		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBorderPixelSize( castor::Rectangle const & p_size )
+		inline void setBorderPixelSize( castor::Rectangle const & size )
 		{
-			m_borderSize = p_size;
+			m_borderSize = size;
 			m_borderChanged = true;
 		}
 		/**
@@ -452,14 +452,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the border position
-		 *\param[in]	p_position	The new value
+		 *\param[in]	position	The new value
 		 *\~french
 		 *\brief		Définit la position de la bordure
-		 *\param[in]	p_position	La nouvelle valeur
+		 *\param[in]	position	La nouvelle valeur
 		 */
-		void setBorderPosition( BorderPosition p_position )
+		void setBorderPosition( BorderPosition position )
 		{
-			m_borderPosition = p_position;
+			m_borderPosition = position;
 		}
 		/**
 		 *\~english
@@ -476,14 +476,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the borders outer part UV
-		 *\param[in]	p_value	The new value (left, top, right and bottom)
+		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie extérieure de la bordure
-		 *\param[in]	p_value	La nouvelle valeur (gauche, haut, droite, bas)
+		 *\param[in]	value	La nouvelle valeur (gauche, haut, droite, bas)
 		 */
-		inline void setBorderOuterUV( castor::Point4d const & p_value )
+		inline void setBorderOuterUV( castor::Point4d const & value )
 		{
-			m_borderOuterUv = p_value;
+			m_borderOuterUv = value;
 		}
 		/**
 		 *\~english
@@ -500,14 +500,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the borders inner part UV
-		 *\param[in]	p_value	The new value (left, top, right and bottom)
+		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie intérieure de la bordure
-		 *\param[in]	p_value	La nouvelle valeur (gauche, haut, droite, bas)
+		 *\param[in]	value	La nouvelle valeur (gauche, haut, droite, bas)
 		 */
-		inline void setBorderInnerUV( castor::Point4d const & p_value )
+		inline void setBorderInnerUV( castor::Point4d const & value )
 		{
-			m_borderInnerUv = p_value;
+			m_borderInnerUv = value;
 		}
 		/**
 		 *\~english
@@ -526,49 +526,59 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
+		 *\param[in]	renderer	The renderer used to draw this overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
-		C3D_API virtual void doRender( OverlayRendererSPtr p_renderer );
+		C3D_API void doRender( OverlayRendererSPtr renderer )override;
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
-		 *\param[in]	p_size	The render target size.
+		 *\param[in]	size	The render target size.
 		 *\~french
 		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	p_size	Les dimensions de la cible de rendu.
+		 *\param[in]	size	Les dimensions de la cible de rendu.
 		 */
-		C3D_API virtual void doUpdateBuffer( castor::Size const & p_size );
+		C3D_API void doUpdateBuffer( castor::Size const & size )override;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay size, taking care of wanted pixel size.
 		 *\~french
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		C3D_API virtual void doUpdateSize();
+		C3D_API void doUpdateSize()override;
 
 	protected:
-		//!\~english The border material	\~french Le matériau des bords
+		//!\~english	The border material.
+		//!\~french		Le matériau des bords.
 		MaterialWPtr m_pBorderMaterial;
-		//!\~english The border size	\~french La taille des bords
+		//!\~english	The border size.
+		//!\~french		La taille des bords.
 		castor::Point4d m_ptBorderSize;
-		//!\~english The absolute size in pixels	\~french La taille absolue en pixels
+		//!\~english	The absolute size in pixels.
+		//!\~french		La taille absolue en pixels.
 		castor::Rectangle m_borderSize;
-		//!\~english The border material name	\~french Le nom du matériau des bords
+		//!\~english	The border material name.
+		//!\~french		Le nom du matériau des bords.
 		castor::String m_strBorderMatName;
-		//!\~english The border material name	\~french Le nom du matériau des bords
+		//!\~english	The border material name.
+		//!\~french		Le nom du matériau des bords.
 		BorderPosition m_borderPosition;
-		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
+		//!\~english	The vertex buffer data.
+		//!\~french		Les données du tampon de sommets.
 		VertexArray m_arrayVtx;
-		//!\~english The borders vertex buffer data	\~french Les données du tampon de sommets pour la bordure
+		//!\~english	The borders vertex buffer data.
+		//!\~french		Les données du tampon de sommets pour la bordure.
 		OverlayCategory::VertexArray m_arrayVtxBorder;
-		//!\~english The UV for the outer part of the border	\~french Les UV de la partie extérieure de la bordure
+		//!\~english	The UV for the outer part of the border.
+		//!\~french		Les UV de la partie extérieure de la bordure.
 		castor::Point4d m_borderOuterUv;
-		//!\~english The UV for the inner part of the border	\~french Les UV de la partie intérieure de la bordure
+		//!\~english	The UV for the inner part of the border.
+		//!\~french		Les UV de la partie intérieure de la bordure.
 		castor::Point4d m_borderInnerUv;
-		//!\~english Tells if the border has changed, in any way.	\~french Dit si la bordure a changé, de quelque manière que ce soit.
+		//!\~english	Tells if the border has changed, in any way.
+		//!\~french		Dit si la bordure a changé, de quelque manière que ce soit.
 		bool m_borderChanged;
 	};
 }

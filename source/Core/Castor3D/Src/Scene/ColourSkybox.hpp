@@ -50,15 +50,6 @@ namespace castor3d
 		C3D_API bool initialise()override;
 		/**
 		 *\~english
-		 *\brief		Renders the skybox.
-		 *\param[in]	camera	The scene's camera.
-		 *\~french
-		 *\brief		Dessine la skybox.
-		 *\param[in]	camera	La caméra de la scène.
-		 */
-		C3D_API void render( Camera const & camera )override;
-		/**
-		 *\~english
 		 *\brief		Updates the skybox.
 		 *\~french
 		 *\brief		Met la skybox à jour.

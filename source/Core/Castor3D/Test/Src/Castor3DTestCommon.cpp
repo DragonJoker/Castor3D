@@ -1,4 +1,4 @@
-﻿#include "Castor3DTestCommon.hpp"
+#include "Castor3DTestCommon.hpp"
 
 #include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Cache/CameraCache.hpp>
@@ -8,6 +8,8 @@
 
 #include <Animation/Animable.hpp>
 #include <Animation/Animation.hpp>
+#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
+#include <Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -464,6 +466,23 @@ namespace Testing
 			}
 		}
 
+		if ( result )
+		{
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
+			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+
+			while ( result && itA != endItA )
+			{
+				result = CT_EQUAL( static_cast< SkeletonAnimationKeyFrame const & >( **itA )
+					, static_cast< SkeletonAnimationKeyFrame const & >( **itB ) );
+				++itA;
+				++itB;
+			}
+		}
+
 		return result;
 	}
 
@@ -472,29 +491,12 @@ namespace Testing
 		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
 		result &= CT_EQUAL( p_a.getInterpolationMode(), p_b.getInterpolationMode() );
 		result &= CT_EQUAL( p_a.getNodeTransform(), p_b.getNodeTransform() );
-		result &= CT_EQUAL( p_a.getLength(), p_b.getLength() );
 		result &= CT_EQUAL( p_a.getType(), p_b.getType() );
 		result &= CT_EQUAL( p_a.getParent() == nullptr, p_b.getParent() == nullptr );
 
 		if ( result && p_a.getParent() )
 		{
 			result = CT_EQUAL( p_a.getParent()->getName(), p_b.getParent()->getName() );
-		}
-
-		if ( result )
-		{
-			result = CT_EQUAL( p_a.getKeyFrames().size(), p_b.getKeyFrames().size() );
-			auto itA = p_a.getKeyFrames().begin();
-			auto const endItA = p_a.getKeyFrames().end();
-			auto itB = p_b.getKeyFrames().begin();
-			auto const endItB = p_b.getKeyFrames().end();
-
-			while ( result && itA != endItA )
-			{
-				result = CT_EQUAL( *itA, *itB );
-				++itA;
-				++itB;
-			}
 		}
 
 		if ( result )
@@ -519,14 +521,61 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( KeyFrame const & p_a, KeyFrame const & p_b )
+	bool C3DTestCase::compare( AnimationKeyFrame const & p_a, AnimationKeyFrame const & p_b )
 	{
-		bool result{ CT_EQUAL( p_a.getTransform(), p_b.getTransform() ) };
-		result &= CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() );
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
 		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( AnimatedObjectGroup const & p_a, AnimatedObjectGroup const & p_b )
+	bool C3DTestCase::compare( castor3d::MeshAnimationKeyFrame const & p_a, castor3d::MeshAnimationKeyFrame const & p_b )
+	{
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
+
+		if ( result )
+		{
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
+			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				result = CT_EQUAL( itA->first, itB->first );
+				//result &= CT_EQUAL( itA->second, itB->second );
+				++itA;
+				++itB;
+			}
+		}
+
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::SkeletonAnimationKeyFrame const & p_a, castor3d::SkeletonAnimationKeyFrame const & p_b )
+	{
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
+
+		if ( result )
+		{
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
+			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				result = CT_EQUAL( itA->first->getName(), itB->first->getName() );
+				result &= CT_EQUAL( itA->second, itB->second );
+				++itA;
+				++itB;
+			}
+		}
+
+		return result;
+	}
+
+	bool C3DTestCase::compare( AnimatedObjectGroup const & p_a, AnimatedObjectGroup const & p_b )
 	{
 		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
 
@@ -569,7 +618,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( AnimatedObject const & p_a, AnimatedObject const & p_b )
+	bool C3DTestCase::compare( AnimatedObject const & p_a, AnimatedObject const & p_b )
 	{
 		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
 
@@ -593,7 +642,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( AnimationInstance const & p_a, AnimationInstance const & p_b )
+	bool C3DTestCase::compare( AnimationInstance const & p_a, AnimationInstance const & p_b )
 	{
 		bool result{ CT_EQUAL( p_a.getAnimation().getName(), p_b.getAnimation().getName() ) };
 		result &= CT_EQUAL( p_a.getScale(), p_b.getScale() );
@@ -611,50 +660,9 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( SkeletonAnimationInstance const & p_a, SkeletonAnimationInstance const & p_b )
+	bool C3DTestCase::compare( SkeletonAnimationInstance const & p_a, SkeletonAnimationInstance const & p_b )
 	{
-		bool result{ CT_EQUAL( p_a.getRootObjectsCount(), p_b.getRootObjectsCount() ) };
-		result &= CT_EQUAL( p_a.getObjectsCount(), p_b.getObjectsCount() );
-
-		if ( result )
-		{
-			auto itA = p_a.begin();
-			auto const endItA = p_a.end();
-			auto itB = p_b.begin();
-			auto const endItB = p_b.end();
-
-			while ( result && itA != endItA && itB != endItB )
-			{
-				result &= CT_EQUAL( *( *itA ), *( *itB ) );
-				++itA;
-				++itB;
-			}
-		}
-
-		return result;
-	}
-
-	bool C3DTestCase::C3DTestCase::compare( SkeletonAnimationInstanceObject const & p_a, SkeletonAnimationInstanceObject const & p_b )
-	{
-		bool result{ true };
-
-		if ( result )
-		{
-			result = CT_EQUAL( p_a.getChildren().size(), p_b.getChildren().size() );
-			auto itA = p_a.getChildren().begin();
-			auto const endItA = p_a.getChildren().end();
-			auto itB = p_b.getChildren().begin();
-			auto const endItB = p_b.getChildren().end();
-
-			while ( result && itA != endItA && itB != endItB )
-			{
-				result &= CT_EQUAL( *( *itA ), *( *itB ) );
-				++itA;
-				++itB;
-			}
-		}
-
-		return result;
+		return CT_EQUAL( p_a.getObjectsCount(), p_b.getObjectsCount() );
 	}
 
 	//*********************************************************************************************

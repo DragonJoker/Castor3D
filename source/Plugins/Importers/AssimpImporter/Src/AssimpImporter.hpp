@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include <Engine.hpp>
 
 #include <Animation/Animation.hpp>
-#include <Animation/KeyFrame.hpp>
+#include <Animation/AnimationKeyFrame.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/SubmeshComponent/Face.hpp>
@@ -39,6 +39,8 @@ See LICENSE file in root folder
 
 namespace C3dAssimp
 {
+	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
+	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
 	/*!
 	\author		Sylvain DOREMUS
 	\date		25/08/2010
@@ -93,10 +95,14 @@ namespace C3dAssimp
 			, castor3d::Skeleton & p_skeleton
 			, aiNode const & p_aiNode
 			, aiAnimation const & p_aiAnimation
-			, castor3d::SkeletonAnimationObjectSPtr p_object );
-		void doProcessAnimationNodeKeys( aiNodeAnim const & p_aiNodeAnim
-			, int64_t p_ticksPerMilliSecond
-			, castor3d::SkeletonAnimationObject & p_object );
+			, castor3d::SkeletonAnimationObjectSPtr p_object
+			, SkeletonAnimationKeyFrameMap & keyFrames
+			, SkeletonAnimationObjectSet & notAnimated );
+		void doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
+			, int64_t ticksPerMilliSecond
+			, castor3d::SkeletonAnimationObject & object
+			, castor3d::SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes );
 		void doProcessAnimationMeshes( castor3d::Mesh & p_mesh
 			, castor3d::Submesh & p_submesh
 			, aiMesh const & p_aiMesh

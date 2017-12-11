@@ -1,4 +1,4 @@
-﻿#include "AssimpImporter.hpp"
+#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -10,8 +10,10 @@
 #include <Cache/SceneNodeCache.hpp>
 
 #include <Animation/Mesh/MeshAnimation.hpp>
+#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
 #include <Animation/Mesh/MeshAnimationSubmesh.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
@@ -35,7 +37,7 @@ namespace C3dAssimp
 
 	namespace
 	{
-		aiNodeAnim const * const FindNodeAnim( const aiAnimation & animation
+		aiNodeAnim const * const doFindNodeAnim( const aiAnimation & animation
 			, const String & nodeName )
 		{
 			aiNodeAnim const * result = nullptr;
@@ -362,13 +364,30 @@ namespace C3dAssimp
 			return result;
 		}
 
+		SkeletonAnimationKeyFrame & doGetKeyFrame( Milliseconds const & time
+			, SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes )
+		{
+			auto it = keyframes.find( time );
+
+			if ( it == keyframes.end() )
+			{
+				it = keyframes.emplace( time
+					, std::make_unique< SkeletonAnimationKeyFrame >( animation, time ) ).first;
+			}
+
+			return *it->second;
+		}
+
 		void doSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
 			, std::map< Milliseconds, Point3r > const & scales
 			, std::map< Milliseconds, Quaternion > const & rotates
 			, std::set< Milliseconds > const & times
 			, uint32_t fps
 			, int64_t ticksPerMilliSecond
-			, SkeletonAnimationObject & object )
+			, SkeletonAnimationObject & object
+			, SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes )
 		{
 			InterpolatorT< Point3r, InterpolatorType::eLinear > pointInterpolator;
 			InterpolatorT< Quaternion, InterpolatorType::eLinear > quatInterpolator;
@@ -380,7 +399,10 @@ namespace C3dAssimp
 					Point3r translate = doCompute( time, pointInterpolator, translates );
 					Point3r scale = doCompute( time, pointInterpolator, scales );
 					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
-					object.addKeyFrame( time, translate, rotate, scale );
+					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+						, translate
+						, rotate
+						, scale );
 				}
 			}
 			else
@@ -394,7 +416,10 @@ namespace C3dAssimp
 					Point3r translate = doCompute( time, pointInterpolator, translates );
 					Point3r scale = doCompute( time, pointInterpolator, scales );
 					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
-					object.addKeyFrame( time, translate, rotate, scale );
+					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+						, translate
+						, rotate
+						, scale );
 				}
 			}
 		}
@@ -584,10 +609,10 @@ namespace C3dAssimp
 
 			if ( aiMesh.HasBones() )
 			{
-				std::vector< VertexBoneData > arrayBones( aiMesh.mNumVertices );
-				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, arrayBones );
+				std::vector< VertexBoneData > bonesData( aiMesh.mNumVertices );
+				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, bonesData );
 				auto bones = std::make_shared< BonesComponent >( submesh );
-				bones->addBoneDatas( arrayBones );
+				bones->addBoneDatas( bonesData );
 				submesh.addComponent( bones );
 			}
 
@@ -647,14 +672,15 @@ namespace C3dAssimp
 			Logger::logDebug( cuT( "Mesh animation found: [" ) + name + cuT( "]" ) );
 			auto & animation = mesh.createAnimation( name );
 			MeshAnimationSubmesh animSubmesh{ animation, submesh };
+			animation.addChild( std::move( animSubmesh ) );
 
 			for ( auto aiKey : makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
 			{
-				animSubmesh.addBuffer( Milliseconds{ int64_t( aiKey.mTime * 1000 ) }
-					, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
+				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+					, Milliseconds{ int64_t( aiKey.mTime * 1000 ) } );
+				keyFrame->addSubmeshBuffer( submesh, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
+				animation.addKeyFrame( std::move( keyFrame ) );
 			}
-
-			animation.addChild( std::move( animSubmesh ) );
 		}
 	}
 
@@ -748,26 +774,49 @@ namespace C3dAssimp
 
 		auto & animation = skeleton.createAnimation( name );
 		int64_t ticksPerMilliSecond = int64_t( aiAnimation.mTicksPerSecond ? aiAnimation.mTicksPerSecond : 25 );
+		SkeletonAnimationKeyFrameMap keyframes;
+		SkeletonAnimationObjectSet notAnimated;
 		doProcessAnimationNodes( mesh
 			, animation
 			, ticksPerMilliSecond
 			, skeleton
 			, aiNode
 			, aiAnimation
-			, nullptr );
+			, nullptr
+			, keyframes
+			, notAnimated );
+
+		for ( auto & object : notAnimated )
+		{
+			for ( auto & keyFrame : keyframes )
+			{
+				if ( !keyFrame.second->hasObject( *object ) )
+				{
+					keyFrame.second->addAnimationObject( *object, object->getNodeTransform() );
+				}
+			}
+		}
+
+		for ( auto & keyFrame : keyframes )
+		{
+			animation.addKeyFrame( std::move( keyFrame.second ) );
+		}
+
 		animation.updateLength();
 	}
 
 	void AssimpImporter::doProcessAnimationNodes( Mesh & mesh
-		, SkeletonAnimation & p_animation
+		, SkeletonAnimation & animation
 		, int64_t ticksPerMilliSecond
 		, Skeleton & skeleton
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation
-		, SkeletonAnimationObjectSPtr parent )
+		, SkeletonAnimationObjectSPtr parent
+		, SkeletonAnimationKeyFrameMap & keyFrames
+		, SkeletonAnimationObjectSet & notAnimated )
 	{
 		String name = string::stringCast< xchar >( aiNode.mName.data );
-		const aiNodeAnim * aiNodeAnim = FindNodeAnim( aiAnimation, name );
+		const aiNodeAnim * aiNodeAnim = doFindNodeAnim( aiAnimation, name );
 		SkeletonAnimationObjectSPtr object;
 		auto itBone = m_mapBoneByID.find( name );
 
@@ -804,7 +853,7 @@ namespace C3dAssimp
 		if ( itBone != m_mapBoneByID.end() )
 		{
 			auto bone = m_arrayBones[itBone->second];
-			object = p_animation.addObject( bone, parent );
+			object = animation.addObject( bone, parent );
 
 			if ( parent && parent->getType() == SkeletonAnimationObjectType::eBone )
 			{
@@ -813,12 +862,7 @@ namespace C3dAssimp
 		}
 		else
 		{
-			object = p_animation.addObject( aiNode.mName.C_Str(), parent );
-		}
-
-		if ( aiNodeAnim )
-		{
-			doProcessAnimationNodeKeys( *aiNodeAnim, ticksPerMilliSecond, *object );
+			object = animation.addObject( aiNode.mName.C_Str(), parent );
 		}
 
 		if ( object )
@@ -828,27 +872,41 @@ namespace C3dAssimp
 				parent->addChild( object );
 			}
 
-			if ( !object->hasKeyFrames() )
-			{
-				object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
-			}
+			object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
+		}
+
+		if ( aiNodeAnim )
+		{
+			doProcessAnimationNodeKeys( *aiNodeAnim
+				, ticksPerMilliSecond
+				, *object
+				, animation
+				, keyFrames );
+		}
+		else
+		{
+			notAnimated.insert( object );
 		}
 
 		for ( auto node : makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
 			doProcessAnimationNodes( mesh
-				, p_animation
+				, animation
 				, ticksPerMilliSecond
 				, skeleton
 				, *node
 				, aiAnimation
-				, object );
+				, object
+				, keyFrames
+				, notAnimated );
 		}
 	}
 
 	void AssimpImporter::doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
 		, int64_t ticksPerMilliSecond
-		, castor3d::SkeletonAnimationObject & object )
+		, SkeletonAnimationObject & object
+		, SkeletonAnimation & animation
+		, SkeletonAnimationKeyFrameMap & keyframes )
 	{
 		std::set< Milliseconds > times;
 
@@ -870,7 +928,9 @@ namespace C3dAssimp
 			, times
 			, getEngine()->getRenderLoop().getWantedFps()
 			, ticksPerMilliSecond
-			, object );
+			, object
+			, animation
+			, keyframes );
 	}
 
 	//*********************************************************************************************

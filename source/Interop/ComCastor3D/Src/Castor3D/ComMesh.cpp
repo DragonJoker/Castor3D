@@ -13,7 +13,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CMesh::getSubmesh( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal )
+	STDMETHODIMP CMesh::GetSubmesh( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -31,19 +31,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
-					 cuT( "getSubmesh" ),			// This is generally displayed as the title
+					 cuT( "GetSubmesh" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CMesh::createSubmesh( /* [out, retval] */ ISubmesh ** pVal )
+	STDMETHODIMP CMesh::CreateSubmesh( /* [out, retval] */ ISubmesh ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -61,19 +61,19 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
-					 cuT( "createSubmesh" ),		// This is generally displayed as the title
+					 cuT( "CreateSubmesh" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CMesh::deleteSubmesh( /* [in] */ ISubmesh * val )
+	STDMETHODIMP CMesh::DeleteSubmesh( /* [in] */ ISubmesh * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -84,13 +84,13 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
-					 cuT( "deleteSubmesh" ),		// This is generally displayed as the title
+					 cuT( "DeleteSubmesh" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
