@@ -237,7 +237,8 @@ namespace castor3d
 				for ( auto light : lights )
 				{
 					if ( light->getLightType() == LightType::eDirectional
-						|| camera.isVisible( light->getCubeBox(), light->getParent()->getDerivedTransformationMatrix() ) )
+						|| camera.isVisible( light->getBoundingBox()
+							, light->getParent()->getDerivedTransformationMatrix() ) )
 					{
 						light->bind( *m_lightsBuffer, index++ );
 					}

@@ -149,29 +149,6 @@ namespace castor3d
 		}
 	}
 
-	inline void doUnbindPass( SceneNode & p_sceneNode
-		, PassRenderNode & p_node
-		, Scene & p_scene
-		, RenderPipeline & p_pipeline
-		, ShadowMapLightTypeArray const & shadowMaps
-		, EnvironmentMap * p_envMap )
-	{
-		//if ( p_envMap )
-		//{
-		//	p_envMap->getTexture().unbind();
-		//}
-
-		//for ( auto & array : shadowMaps )
-		//{
-		//	for ( auto & shadowMap : array )
-		//	{
-		//		shadowMap.get().getTexture().unbind();
-		//	}
-		//}
-
-		//p_node.m_pass.unbindTextures();
-	}
-
 	inline void doBindPassOpacityMap( PassRenderNode & p_node
 		, Pass & p_pass )
 	{

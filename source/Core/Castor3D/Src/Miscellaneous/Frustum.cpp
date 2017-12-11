@@ -113,28 +113,43 @@ namespace castor3d
 		, Matrix4x4r const & transformations )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
+//		auto aabb = box.getAxisAligned( transformations );
+//		auto it = std::find_if( m_planes.begin()
+//			, m_planes.end()
+//			, [&aabb]( PlaneEquation const & plane )
+//			{
+//				return plane.distance( aabb.getPositiveVertex( plane.getNormal() ) ) < 0;
+//			} );
+//		bool result = it == m_planes.end();
+//
+//#if DEBUG_FRUSTUM
+//
+//		if ( !result )
+//		{
+//			auto dist = it->distance( aabb.getPositiveVertex( it->getNormal() ) ) < 0;
+//			std::clog << dist << std::endl;
+//		}
+//
+//#endif
+//
+//		return true;// result;
+		return true;
 		auto aabb = box.getAxisAligned( transformations );
-		auto it = std::find_if( m_planes.begin()
-			, m_planes.end()
-			, [&aabb]( PlaneEquation const & plane )
-			{
-				return plane.distance( aabb.getPositiveVertex( plane.getNormal() ) ) < 0;
-			} );
-		bool result = it == m_planes.end();
-
-#if DEBUG_FRUSTUM
-
-		if ( !result )
+		bool results[size_t( FrustumPlane::eCount )] =
 		{
-			auto dist = it->distance( aabb.getPositiveVertex( it->getNormal() ) ) < 0;
-			std::clog << dist << std::endl;
-		}
-
-#endif
-
-		return result;
-
-		return it == m_planes.end();
+			m_planes[0].distance( aabb.getPositiveVertex( m_planes[0].getNormal() ) ) >= 0,
+			m_planes[1].distance( aabb.getPositiveVertex( m_planes[1].getNormal() ) ) >= 0,
+			m_planes[2].distance( aabb.getPositiveVertex( m_planes[2].getNormal() ) ) >= 0,
+			m_planes[3].distance( aabb.getPositiveVertex( m_planes[3].getNormal() ) ) >= 0,
+			m_planes[4].distance( aabb.getPositiveVertex( m_planes[4].getNormal() ) ) >= 0,
+			m_planes[5].distance( aabb.getPositiveVertex( m_planes[5].getNormal() ) ) >= 0,
+		};
+		return results[0]
+			&& results[1]
+			&& results[2]
+			&& results[3]
+			&& results[4]
+			&& results[5];
 	}
 
 	bool Frustum::isVisible( BoundingSphere const & sphere
@@ -145,25 +160,21 @@ namespace castor3d
 		auto maxScale = std::max( scale[0], std::max( scale[1], scale[2] ) );
 		Point3r center = ( sphere.getCenter() * scale ) + position;
 		auto radius = sphere.getRadius() * maxScale;
-		auto it = std::find_if( m_planes.begin()
-			, m_planes.end()
-			, [&center, &radius]( PlaneEquation const & plane )
-			{
-				return plane.distance( center ) < -radius;
-			} );
-		bool result = it == m_planes.end();
-
-#if DEBUG_FRUSTUM
-
-		if ( !result )
+		bool results[size_t( FrustumPlane::eCount )] = 
 		{
-			auto dist = it->distance( center );
-			std::clog << "dist: " << dist << ", radius: " << radius << ", scale: " << point::length( scale ) << std::endl;
-		}
-
-#endif
-
-		return result;
+			m_planes[0].distance( center ) >= -radius,
+			m_planes[1].distance( center ) >= -radius,
+			m_planes[2].distance( center ) >= -radius,
+			m_planes[3].distance( center ) >= -radius,
+			m_planes[4].distance( center ) >= -radius,
+			m_planes[5].distance( center ) >= -radius,
+		};
+		return results[0]
+			&& results[1]
+			&& results[2]
+			&& results[3]
+			&& results[4]
+			&& results[5];
 	}
 
 	bool Frustum::isVisible( Point3r const & point )const
@@ -187,6 +198,6 @@ namespace castor3d
 
 #endif
 
-		return result;
+		return true;// result;
 	}
 }

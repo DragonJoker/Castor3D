@@ -336,9 +336,9 @@ namespace castor3d
 		 *\~french
 		 *\return		La cube box de la lumière.
 		 */
-		inline castor::BoundingBox const & getCubeBox()const
+		inline castor::BoundingBox const & getBoundingBox()const
 		{
-			return m_category->getCubeBox();
+			return m_category->getBoundingBox();
 		}
 		/**
 		 *\~english

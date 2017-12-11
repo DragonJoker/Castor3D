@@ -556,9 +556,7 @@ namespace castor3d
 					&& node.m_sceneNode.isVisible()
 					&& camera.isVisible( node.m_instance.getBoundingSphere( node.m_data )
 						, node.m_sceneNode.getDerivedPosition()
-						, node.m_sceneNode.getDerivedScale() )
-					&& camera.isVisible( node.m_instance.getBoundingBox( node.m_data )
-						, node.m_sceneNode.getDerivedTransformationMatrix() ) )
+						, node.m_sceneNode.getDerivedScale() ) )
 				{
 					doAddRenderNode( pass, pipeline, node, submesh, outputNodes );
 				}
@@ -578,9 +576,7 @@ namespace castor3d
 						&& node.m_sceneNode.isVisible()
 						&& camera.isVisible( node.m_instance.getBoundingSphere( node.m_data )
 							, node.m_sceneNode.getDerivedPosition()
-							, node.m_sceneNode.getDerivedScale() )
-						&& camera.isVisible( node.m_instance.getBoundingBox( node.m_data )
-							, node.m_sceneNode.getDerivedTransformationMatrix() ) )
+							, node.m_sceneNode.getDerivedScale() ) )
 					{
 						doAddRenderNode( *pipelines.first, node, outputNodes );
 					}
