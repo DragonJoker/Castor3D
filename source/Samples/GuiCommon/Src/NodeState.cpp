@@ -11,46 +11,52 @@ namespace GuiCommon
 {
 	namespace
 	{
-		float getValue( Angle const & p_value )
+		float getValue( Angle const & value )
 		{
-			return p_value.degrees();
+			return value.degrees();
 		}
 
-		float getValue( float const & p_value )
+		float getValue( float const & value )
 		{
-			return p_value;
+			return value;
 		}
 
 		template< typename T >
-		RangedValue< T > doUpdateVelocity( RangedValue< T > p_velocity )
+		RangedValue< T > doUpdateVelocity( RangedValue< T > velocity )
 		{
 			static T const zero{};
-			auto ret = p_velocity.value() / 1.2f;
+			auto ret = velocity.value() / 1.2f;
 
 			if ( std::abs( getValue( ret ) ) < 0.2f )
 			{
 				ret = zero;
 			}
 
-			return RangedValue< T >( ret, p_velocity.range() );
+			return RangedValue< T >( ret, velocity.range() );
 		}
 	}
 
-	NodeState::NodeState( FrameListener & p_listener
-		, castor3d::SceneNodeSPtr p_node )
-		: m_listener{ p_listener }
-		, m_node{ p_node }
-		, m_originalOrientation{ p_node->getOrientation() }
-		, m_originalPosition{ p_node->getPosition() }
+	NodeState::NodeState( FrameListener & listener
+		, SceneNodeSPtr node )
+		: m_listener{ listener }
+		, m_node{ node }
+		, m_originalOrientation{ node->getOrientation() }
+		, m_originalPosition{ node->getPosition() }
+		, m_originalAngles
+		{
+			m_originalOrientation.getPitch(),
+			m_originalOrientation.getYaw(),
+		}
+		, m_angles{ m_originalAngles }
 	{
 	}
 
-	void NodeState::reset( float p_speed )
+	void NodeState::reset( float speed )
 	{
-		setMaxSpeed( p_speed );
+		setMaxSpeed( speed );
 		m_angularVelocityX = 0.0_degrees;
 		m_angularVelocityY = 0.0_degrees;
-		m_angles = Angles{ { 0.0_radians, 0.0_radians } };
+		m_angles = m_originalAngles;
 		m_scalarVelocityX = 0.0f;
 		m_scalarVelocityY = 0.0f;
 		m_scalarVelocityZ = 0.0f;
@@ -63,15 +69,15 @@ namespace GuiCommon
 			} ) );
 	}
 
-	void NodeState::setMaxSpeed( float p_speed )
+	void NodeState::setMaxSpeed( float speed )
 	{
-		m_angularVelocityX.updateRange( makeRange( Angle::fromDegrees( -p_speed * 2 )
-			, Angle::fromDegrees( p_speed * 2 ) ) );
-		m_angularVelocityY.updateRange( makeRange( Angle::fromDegrees( -p_speed * 2 )
-			, Angle::fromDegrees( p_speed * 2 ) ) );
-		m_scalarVelocityX.updateRange( makeRange( -p_speed, p_speed ) );
-		m_scalarVelocityY.updateRange( makeRange( -p_speed, p_speed ) );
-		m_scalarVelocityZ.updateRange( makeRange( -p_speed, p_speed ) );
+		m_angularVelocityX.updateRange( makeRange( Angle::fromDegrees( -speed * 2 )
+			, Angle::fromDegrees( speed * 2 ) ) );
+		m_angularVelocityY.updateRange( makeRange( Angle::fromDegrees( -speed * 2 )
+			, Angle::fromDegrees( speed * 2 ) ) );
+		m_scalarVelocityX.updateRange( makeRange( -speed, speed ) );
+		m_scalarVelocityY.updateRange( makeRange( -speed, speed ) );
+		m_scalarVelocityZ.updateRange( makeRange( -speed, speed ) );
 	}
 
 	bool NodeState::update()
@@ -112,38 +118,38 @@ namespace GuiCommon
 			{
 				m_node->translate( translate );
 
-				Quaternion x{ Quaternion::fromAxisAngle( Point3r{ 1.0, 0.0, 0.0 }, angles[0] ) };
-				Quaternion y{ Quaternion::fromAxisAngle( Point3r{ 0.0, 1.0, 0.0 }, angles[1] ) };
-				m_node->setOrientation( m_originalOrientation * y * x );
+				Quaternion pitch{ Quaternion::fromAxisAngle( Point3r{ 1.0, 0.0, 0.0 }, angles[0] ) };
+				Quaternion yaw{ Quaternion::fromAxisAngle( Point3r{ 0.0, 1.0, 0.0 }, angles[1] ) };
+				m_node->setOrientation( yaw * pitch );
 			} ) );
 		}
 
 		return result;
 	}
 
-	void NodeState::setAngularVelocity( castor::Point2r const & p_value )noexcept
+	void NodeState::setAngularVelocity( Point2r const & value )noexcept
 	{
-		m_angularVelocityX = castor::Angle::fromDegrees( p_value[0] );
-		m_angularVelocityY = castor::Angle::fromDegrees( p_value[1] );
+		m_angularVelocityX = Angle::fromDegrees( value[0] );
+		m_angularVelocityY = Angle::fromDegrees( value[1] );
 	}
 
-	 void NodeState::setScalarVelocity( castor::Point3r const & p_value )noexcept
+	 void NodeState::setScalarVelocity( Point3r const & value )noexcept
 	{
-		m_scalarVelocityX = p_value[0];
-		m_scalarVelocityY = p_value[1];
-		m_scalarVelocityZ = p_value[2];
+		m_scalarVelocityX = value[0];
+		m_scalarVelocityY = value[1];
+		m_scalarVelocityZ = value[2];
 	}
 
-	void NodeState::addAngularVelocity( castor::Point2r const & p_value )noexcept
+	void NodeState::addAngularVelocity( Point2r const & value )noexcept
 	{
-		m_angularVelocityX += castor::Angle::fromDegrees( p_value[0] );
-		m_angularVelocityY += castor::Angle::fromDegrees( p_value[1] );
+		m_angularVelocityX += Angle::fromDegrees( value[0] );
+		m_angularVelocityY += Angle::fromDegrees( value[1] );
 	}
 
-	void NodeState::addScalarVelocity( castor::Point3r const & p_value )noexcept
+	void NodeState::addScalarVelocity( Point3r const & value )noexcept
 	{
-		m_scalarVelocityX += p_value[0];
-		m_scalarVelocityY += p_value[1];
-		m_scalarVelocityZ += p_value[2];
+		m_scalarVelocityX += value[0];
+		m_scalarVelocityY += value[1];
+		m_scalarVelocityZ += value[2];
 	}
 }

@@ -453,6 +453,27 @@ namespace castor
 		inline double getMagnitude()const;
 		/**
 		 *\~english
+		 *\return		The pitch angle.
+		 *\~french
+		 *\return		L'angle de pitch.
+		 */
+		inline AngleT< T > getPitch()const;
+		/**
+		 *\~english
+		 *\return		The yaw angle.
+		 *\~french
+		 *\return		L'angle de yaw.
+		 */
+		inline AngleT< T > getYaw()const;
+		/**
+		 *\~english
+		 *\return		The roll angle.
+		 *\~french
+		 *\return		L'angle de roll.
+		 */
+		inline AngleT< T > getRoll()const;
+		/**
+		 *\~english
 		 *\brief		Spherical linear interpolation another quaternions.
 		 *\remarks		The interpolation is oriented and the rotation is performed at constant speed.
 		 *\param[in]	p_target	The target quaternion
