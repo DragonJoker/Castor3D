@@ -28,18 +28,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The Context.
-		 *\param[in]	p_matrixUbo	The UBO containing matrix data.
-		 *\param[in]	p_invertU	Tells if the U coordinate of UV must be inverted, thus mirroring the reulting image.
+		 *\param[in]	context		The Context.
+		 *\param[in]	matrixUbo	The UBO containing matrix data.
+		 *\param[in]	invertU		Tells if the U coordinate of UV must be inverted, thus mirroring the reulting image.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le Context.
-		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
-		 *\param[in]	p_invertU	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
+		 *\param[in]	context		Le Context.
+		 *\param[in]	matrixUbo	L'UBO contenant les données de matrices.
+		 *\param[in]	invertU		Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
 		 */
-		C3D_API explicit RenderColourToTexture( Context & p_context
-			, MatrixUbo & p_matrixUbo
-			, bool p_invertU = false );
+		C3D_API explicit RenderColourToTexture( Context & context
+			, MatrixUbo & matrixUbo
+			, bool invertU = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -64,65 +64,102 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_pipeline	The pipleline used to render the texture.
-		 *\param[in]	p_matrixUbo	The uniform buffer receiving matrices.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	pipeline	The pipleline used to render the texture.
+		 *\param[in]	matrixUbo	The uniform buffer receiving matrices.
 		 *\~french
 		 *\brief		Dessine la texture donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
-		 *\param[in]	p_matrixUbo	Le tampon d'uniformes recevant les matrices.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	pipeline	Le pipeline utilisé pour dessiner la texture.
+		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
-		C3D_API void render( castor::Position const & p_position
-			, castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, MatrixUbo & p_matrixUbo
-			, RenderPipeline & p_pipeline );
+		C3D_API void render( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture
+			, MatrixUbo & matrixUbo
+			, RenderPipeline & pipeline );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	pipeline	The pipleline used to render the texture.
+		 *\param[in]	matrixUbo	The uniform buffer receiving matrices.
+		 *\~french
+		 *\brief		Dessine la texture donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	pipeline	Le pipeline utilisé pour dessiner la texture.
+		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
+		 */
+		C3D_API void renderNearest( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture
+			, MatrixUbo & matrixUbo
+			, RenderPipeline & pipeline );
+		/**
+		 *\~english
+		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void render( castor::Position const & p_position
-			, castor::Size const & p_size
-			, TextureLayout const & p_texture );
+		C3D_API void render( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
+		/**
+		 *\~english
+		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\~french
+		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 */
+		C3D_API void renderNearest( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
-		 *\param[in]	p_position			The render viewport position.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	position		The render viewport position.
+		 *\param[in]	size			The render viewport size.
+		 *\param[in]	texture			The texture.
+		 *\param[in]	pipeline		The render pipeline.
+		 *\param[in]	matrixUbo		The uniform buffer receiving matrices.
+		 *\param[in]	geometryBuffers	The geometry buffers used to render the texture.
 		 *\~french
 		 *\brief		Dessine la texture donnée.
-		 *\param[in]	p_position			La position du viewport de rendu.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	position		La position du viewport de rendu.
+		 *\param[in]	size			La taille du viewport de rendu.
+		 *\param[in]	texture			La texture.
+		 *\param[in]	pipeline		Le pipeline de rendu.
+		 *\param[in]	matrixUbo		Le tampon d'uniformes recevant les matrices.
+		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void doRender( castor::Position const & p_position
-			, castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, RenderPipeline & p_pipeline
-			, MatrixUbo & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void doRender( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo
+			, GeometryBuffers const & geometryBuffers
+			, Sampler const & sampler );
 		/**
 		 *\~english
 		 *\brief		Creates the render a 2D texture shader program.
@@ -157,9 +194,12 @@ namespace castor3d
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
 		RenderPipelineUPtr m_pipeline;
-		//!\~english	The sampler for the texture.
-		//!\~french		Le sampler pour la texture.
-		SamplerSPtr m_sampler;
+		//!\~english	The linear sampler for the texture.
+		//!\~french		Le sampler linéaire pour la texture.
+		SamplerSPtr m_samplerLinear;
+		//!\~english	The point sampler for the texture.
+		//!\~french		Le sampler point pour la texture.
+		SamplerSPtr m_samplerNearest;
 	};
 }
 
