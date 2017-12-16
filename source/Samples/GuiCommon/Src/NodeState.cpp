@@ -152,4 +152,16 @@ namespace GuiCommon
 		m_scalarVelocityY += value[1];
 		m_scalarVelocityZ += value[2];
 	}
+
+	void NodeState::pitch( castor::Angle const & value )noexcept
+	{
+		m_angles[0] += ( value - 0.01_degrees );
+		m_angularVelocityX = 0.01_degrees;
+	}
+
+	void NodeState::yaw( castor::Angle const & value )noexcept
+	{
+		m_angles[1] += ( value - 0.01_degrees );
+		m_angularVelocityY = 0.01_degrees;
+	}
 }

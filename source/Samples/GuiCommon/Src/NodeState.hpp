@@ -78,6 +78,20 @@ namespace GuiCommon
 		*	La nouvelle valeur.
 		*/
 		void addScalarVelocity( castor::Point3r const & value )noexcept;
+		/**
+		*\brief
+		*	Tourne le noeud autour de l'axe X de l'angle donné.
+		*param[in] value
+		*	La valeur de l'angle.
+		*/
+		void pitch( castor::Angle const & value )noexcept;
+		/**
+		*\brief
+		*	Tourne le noeud autour de l'axe Y de l'angle donné.
+		*param[in] value
+		*	La valeur de l'angle.
+		*/
+		void yaw( castor::Angle const & value )noexcept;
 
 	private:
 		//! Le listener qui recevra les évènements de déplacement / rotation.

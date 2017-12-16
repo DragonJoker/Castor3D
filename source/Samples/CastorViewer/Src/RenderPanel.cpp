@@ -236,18 +236,10 @@ namespace CastorViewer
 	void RenderPanel::doTurnCameraHoriz()
 	{
 		doResetTimers();
-		auto camera = m_camera.lock();
 
-		if ( camera )
+		if ( m_currentState )
 		{
-			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
-				, [this, cameraNode]()
-				{
-					Quaternion orientation{ cameraNode->getOrientation() };
-					orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, 90.0_degrees );
-					cameraNode->setOrientation( orientation );
-				} ) );
+			m_currentState->yaw( 90.0_degrees );
 		}
 	}
 
