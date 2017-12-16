@@ -4342,6 +4342,23 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserAnimatedObjectGroupAnimationPause )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
+		p_params[0]->get( name );
+
+		if ( parsingContext->pAnimGroup )
+		{
+			parsingContext->pAnimGroup->pauseAnimation( name );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No animated object group initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserAnimatedObjectGroupEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
