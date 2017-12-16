@@ -63,9 +63,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\ttone_mapping \"" ) + target.m_toneMapping->getName() + cuT( "\"" ) )
-					   && target.m_toneMapping->writeInto( file )
-					   && file.writeText( cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\ttone_mapping \"" ) + target.m_toneMapping->getName() + cuT( "\n" ) ) > 0;
 			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget tone mapping" );
 		}
 
@@ -358,7 +356,7 @@ namespace castor3d
 		// Then draw the render's result to the RenderTarget's frame buffer.
 		fbo.m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		fbo.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_toneMapping->setConfig( scene->getHdrConfig() );
+		m_toneMapping->update( scene->getHdrConfig() );
 		m_toneMapping->apply( getSize()
 			, m_renderTechnique->getResult()
 			, info );

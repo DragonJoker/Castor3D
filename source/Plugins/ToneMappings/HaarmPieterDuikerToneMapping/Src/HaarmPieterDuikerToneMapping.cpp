@@ -1,4 +1,4 @@
-﻿#include "HaarmPieterDuikerToneMapping.hpp"
+#include "HaarmPieterDuikerToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -21,39 +21,30 @@ namespace HaarmPieterDuiker
 {
 	String ToneMapping::Name = cuT( "haarm" );
 
-	ToneMapping::ToneMapping( Engine & engine, Parameters const & p_parameters )
-		: castor3d::ToneMapping{ Name, engine, p_parameters }
+	ToneMapping::ToneMapping( Engine & engine
+		, Parameters const & parameters )
+		: castor3d::ToneMapping{ Name, engine, parameters }
 	{
-		String param;
-
-		if ( p_parameters.get( cuT( "Gamma" ), param ) )
-		{
-			m_config.setGamma( string::toFloat( param ) );
-		}
 	}
 
 	ToneMapping::~ToneMapping()
 	{
 	}
 
-	ToneMappingSPtr ToneMapping::create( Engine & engine, Parameters const & p_parameters )
+	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, p_parameters );
+		return std::make_shared< ToneMapping >( engine, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()
 	{
-		m_gammaVar = m_configUbo.createUniform< UniformType::eFloat >( HdrConfigUbo::Gamma );
-
 		glsl::Shader pxl;
 		{
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
-			Ubo config{ writer, HdrConfigUbo::BufferHdrConfig, HdrConfigUbo::BindingPoint };
-			auto c3d_fExposure = config.declMember< Float >( HdrConfigUbo::Exposure );
-			auto c3d_fGamma = config.declMember< Float >( HdrConfigUbo::Gamma );
-			config.end();
+			UBO_HDR_CONFIG( writer );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -69,11 +60,11 @@ namespace HaarmPieterDuiker
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto hdrColor = writer.declLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
-				hdrColor *= c3d_fExposure;
+				hdrColor *= c3d_exposure;
 				auto ld = writer.declLocale( cuT( "ld" ), vec3( 0.002_f ) );
 				auto linReference = writer.declLocale( cuT( "linReference" ), 0.18_f );
 				auto logReference = writer.declLocale( cuT( "logReference" ), 444.0_f );
-				auto logGamma = writer.declLocale( cuT( "logGamma" ), 1.0_f / c3d_fGamma );
+				auto logGamma = writer.declLocale( cuT( "logGamma" ), 1.0_f / c3d_gamma );
 
 				auto logColor = writer.declLocale( cuT( "LogColor" )
 					, writer.paren( log10( vec3( 0.4_f ) * hdrColor.rgb() / linReference )
@@ -98,16 +89,9 @@ namespace HaarmPieterDuiker
 
 	void ToneMapping::doDestroy()
 	{
-		m_gammaVar.reset();
 	}
 
 	void ToneMapping::doUpdate()
 	{
-		m_gammaVar->setValue( m_config.getGamma() );
-	}
-
-	bool ToneMapping::doWriteInto( TextFile & p_file )
-	{
-		return p_file.writeText( cuT( " -Gamma=" ) + string::toString( m_config.getGamma() ) ) > 0;
 	}
 }

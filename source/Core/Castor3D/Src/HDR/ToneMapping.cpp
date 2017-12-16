@@ -15,26 +15,14 @@ using namespace glsl;
 
 namespace castor3d
 {
-	String const ToneMapping::HdrConfigUbo = cuT( "HdrConfig" );
-
 	ToneMapping::ToneMapping( castor::String const & name
 		, Engine & engine
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_matrixUbo{ engine }
-		, m_configUbo{ ToneMapping::HdrConfigUbo
-			, *engine.getRenderSystem()
-			, HdrConfigUbo::BindingPoint }
+		, m_configUbo{ engine }
 	{
-		m_exposureVar = m_configUbo.createUniform< UniformType::eFloat >( HdrConfigUbo::Exposure );
-		
-		String param;
-
-		if ( parameters.get( cuT( "Exposure" ), param ) )
-		{
-			m_config.setExposure( string::toFloat( param ) );
-		}
 	}
 
 	ToneMapping::~ToneMapping()
@@ -87,7 +75,7 @@ namespace castor3d
 			dsState.setDepthMask( WritingMask::eZero );
 			m_pipeline = getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 			m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-			m_pipeline->addUniformBuffer( m_configUbo );
+			m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
 
 			m_colour = std::make_unique< RenderColourToTexture >( *getEngine()->getRenderSystem()->getMainContext(), m_matrixUbo );
 			m_colour->initialise();
@@ -109,15 +97,20 @@ namespace castor3d
 			m_colour.reset();
 		}
 
-		m_exposureVar.reset();
-		m_configUbo.cleanup();
-		m_matrixUbo.getUbo().cleanup();
-
 		if ( m_pipeline )
 		{
 			m_pipeline->cleanup();
 			m_pipeline.reset();
 		}
+
+		m_configUbo.getUbo().cleanup();
+		m_matrixUbo.getUbo().cleanup();
+	}
+
+	void ToneMapping::update( HdrConfig const & config )
+	{
+		m_configUbo.update( config );
+		doUpdate();
 	}
 
 	void ToneMapping::apply( Size const & size
@@ -126,26 +119,11 @@ namespace castor3d
 	{
 		static Position const position;
 		m_timer->start();
-		m_exposureVar->setValue( m_config.getExposure() );
-		doUpdate();
-		m_configUbo.update();
-		m_configUbo.bindTo( HdrConfigUbo::BindingPoint );
 		m_colour->render( position
 			, size
 			, texture
 			, m_matrixUbo
 			, *m_pipeline );
 		m_timer->stop();
-	}
-
-	bool ToneMapping::writeInto( castor::TextFile & file )
-	{
-		return file.writeText( cuT( " -Exposure=" ) + string::toString( m_config.getExposure() ) ) > 0
-			   && doWriteInto( file );
-	}
-
-	void ToneMapping::setConfig( HdrConfig const & config )
-	{
-		m_config = config;
 	}
 }

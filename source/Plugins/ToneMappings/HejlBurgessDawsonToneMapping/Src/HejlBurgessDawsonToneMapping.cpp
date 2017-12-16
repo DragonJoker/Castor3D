@@ -1,4 +1,4 @@
-﻿#include "HejlBurgessDawsonToneMapping.hpp"
+#include "HejlBurgessDawsonToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -21,8 +21,9 @@ namespace HejlBurgessDawson
 {
 	String ToneMapping::Name = cuT( "hejl" );
 
-	ToneMapping::ToneMapping( Engine & engine, Parameters const & p_parameters )
-		: castor3d::ToneMapping{ Name, engine, p_parameters }
+	ToneMapping::ToneMapping( Engine & engine
+		, Parameters const & parameters )
+		: castor3d::ToneMapping{ Name, engine, parameters }
 	{
 	}
 
@@ -30,9 +31,10 @@ namespace HejlBurgessDawson
 	{
 	}
 
-	ToneMappingSPtr ToneMapping::create( Engine & engine, Parameters const & p_parameters )
+	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, p_parameters );
+		return std::make_shared< ToneMapping >( engine, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()
@@ -42,9 +44,7 @@ namespace HejlBurgessDawson
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
-			Ubo config{ writer, ToneMapping::HdrConfigUbo, HdrConfigUbo::BindingPoint };
-			auto c3d_exposure = config.declMember< Float >( HdrConfigUbo::Exposure );
-			config.end();
+			UBO_HDR_CONFIG( writer );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -72,10 +72,5 @@ namespace HejlBurgessDawson
 
 	void ToneMapping::doUpdate()
 	{
-	}
-
-	bool ToneMapping::doWriteInto( TextFile & p_file )
-	{
-		return true;
 	}
 }

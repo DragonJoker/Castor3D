@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_HPD_TONE_MAPPING_H___
@@ -25,13 +25,14 @@ namespace HaarmPieterDuiker
 		 *\~english
 		 * Specified constructor
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_parameters	The implementation specific parameters.
+		 *\param[in]	parameters	The implementation specific parameters.
 		 *\~french
 		 * Constructeur spécifié
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
+		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		ToneMapping( castor3d::Engine & engine, castor3d::Parameters const & p_parameters );
+		ToneMapping( castor3d::Engine & engine
+			, castor3d::Parameters const & parameters );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -43,13 +44,14 @@ namespace HaarmPieterDuiker
 		 *\~english
 		 *\brief		Creator function, for the factory.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_parameters	The implementation specific parameters.
+		 *\param[in]	parameters	The implementation specific parameters.
 		 *\~french
 		 *\brief		Fonction de cràation, pour la fabrique.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
+		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine, castor3d::Parameters const & p_parameters );
+		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine
+			, castor3d::Parameters const & parameters );
 
 	private:
 		/**
@@ -64,10 +66,6 @@ namespace HaarmPieterDuiker
 		 *\copydoc		castor3d::ToneMapping::doUpdate
 		 */
 		virtual void doUpdate()override;
-		/**
-		 *\copydoc		castor3d::ToneMapping::doWriteInto
-		 */
-		virtual bool doWriteInto( castor::TextFile & p_file )override;
 
 	public:
 		static castor::String Name;

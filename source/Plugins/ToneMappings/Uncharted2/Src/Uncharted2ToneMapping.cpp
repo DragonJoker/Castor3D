@@ -21,39 +21,30 @@ namespace Uncharted2
 {
 	String ToneMapping::Name = cuT( "uncharted2" );
 
-	ToneMapping::ToneMapping( Engine & engine, Parameters const & p_parameters )
-		: castor3d::ToneMapping{ Name, engine, p_parameters }
+	ToneMapping::ToneMapping( Engine & engine
+		, Parameters const & parameters )
+		: castor3d::ToneMapping{ Name, engine, parameters }
 	{
-		String param;
-
-		if ( p_parameters.get( cuT( "Gamma" ), param ) )
-		{
-			m_config.setGamma( string::toFloat( param ) );
-		}
 	}
 
 	ToneMapping::~ToneMapping()
 	{
 	}
 
-	ToneMappingSPtr ToneMapping::create( Engine & engine, Parameters const & p_parameters )
+	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, p_parameters );
+		return std::make_shared< ToneMapping >( engine, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()
 	{
-		m_gammaVar = m_configUbo.createUniform< UniformType::eFloat >( HdrConfigUbo::Gamma );
-
 		glsl::Shader pxl;
 		{
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
-			Ubo config{ writer, HdrConfigUbo::BufferHdrConfig, HdrConfigUbo::BindingPoint };
-			auto c3d_fExposure = config.declMember< Float >( HdrConfigUbo::Exposure );
-			auto c3d_fGamma = config.declMember< Float >( HdrConfigUbo::Gamma );
-			config.end();
+			UBO_HDR_CONFIG( writer );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -86,14 +77,14 @@ namespace Uncharted2
 				hdrColor *= vec3( 16.0_f ); // Hardcoded Exposure Adjustment.
 
 				auto current = writer.declLocale( cuT( "current" )
-					, uncharted2ToneMap( hdrColor * c3d_fExposure ) );
+					, uncharted2ToneMap( hdrColor * c3d_exposure ) );
 
 				auto whiteScale = writer.declLocale( cuT( "whiteScale" )
 					, vec3( 1.0_f ) * uncharted2ToneMap( vec3( Float( W ) ) ) );
 				auto colour = writer.declLocale( cuT( "colour" )
 					, current * whiteScale );
 
-				pxl_rgb = vec4( utils.applyGamma( c3d_fGamma, colour ), 1.0 );
+				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, colour ), 1.0 );
 			} );
 
 			pxl = writer.finalise();
@@ -104,16 +95,9 @@ namespace Uncharted2
 
 	void ToneMapping::doDestroy()
 	{
-		m_gammaVar.reset();
 	}
 
 	void ToneMapping::doUpdate()
 	{
-		m_gammaVar->setValue( m_config.getGamma() );
-	}
-
-	bool ToneMapping::doWriteInto( TextFile & p_file )
-	{
-		return p_file.writeText( cuT( " -Gamma=" ) + string::toString( m_config.getGamma() ) ) > 0;
 	}
 }
