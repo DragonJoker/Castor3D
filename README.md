@@ -62,6 +62,7 @@ Implemented Plug-ins
 - HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
 - HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
 - ReinhardToneMapping: Reinhard tone mapping.
+- Uncharted2ToneMapping: Uncharted 2 tone mapping.
 
 
 ![Sponza](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-small.png)

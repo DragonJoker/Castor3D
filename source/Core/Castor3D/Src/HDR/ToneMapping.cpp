@@ -18,7 +18,8 @@ namespace castor3d
 	String const ToneMapping::HdrConfigUbo = cuT( "HdrConfig" );
 
 	ToneMapping::ToneMapping( castor::String const & name
-		, Engine & engine, Parameters const & parameters )
+		, Engine & engine
+		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_matrixUbo{ engine }
@@ -145,6 +146,6 @@ namespace castor3d
 
 	void ToneMapping::setConfig( HdrConfig const & config )
 	{
-		m_config = config;
+		m_config.setGamma( config.getGamma() );
 	}
 }
