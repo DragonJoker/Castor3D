@@ -30,10 +30,6 @@ namespace castor
 	{
 	}
 
-	PlaneEquation::~PlaneEquation()
-	{
-	}
-
 	void PlaneEquation::set( Point3r const & p1
 		, Point3r const & p2
 		, Point3r const & p3 )

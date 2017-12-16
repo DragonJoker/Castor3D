@@ -9,7 +9,7 @@
 
 using namespace castor;
 
-#define DEBUG_FRUSTUM 1
+#define DEBUG_FRUSTUM 0
 
 namespace castor3d
 {
@@ -158,26 +158,6 @@ namespace castor3d
 			auto dimension = aabb.getDimensions();
 			std::clog << cuT( "BoundingBox" )
 				<< cuT( " - P: " ) << names[index]
-				<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
-				<< cuT( " - V: " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[2]
-				<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[2]
-				<< cuT( " - S: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[2] << std::endl;
-		}
-		else
-		{
-			auto index = size_t( FrustumPlane::eTop );
-			auto vp = aabb.getPositiveVertex( m_planes[index].getNormal() );
-			auto dist = m_planes[index].distance( vp );
-			auto center = aabb.getCenter();
-			auto dimension = aabb.getDimensions();
-			std::clog << cuT( "BoundingBox" )
-				<< cuT( " - P:    Top" )
 				<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
 				<< cuT( " - V: " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[0]
 					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[1]
