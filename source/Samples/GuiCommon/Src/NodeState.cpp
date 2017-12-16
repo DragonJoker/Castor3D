@@ -37,7 +37,8 @@ namespace GuiCommon
 	}
 
 	NodeState::NodeState( FrameListener & listener
-		, SceneNodeSPtr node )
+		, SceneNodeSPtr node
+		, bool camera )
 		: m_listener{ listener }
 		, m_node{ node }
 		, m_originalOrientation{ node->getOrientation() }
@@ -46,6 +47,7 @@ namespace GuiCommon
 		{
 			m_originalOrientation.getPitch(),
 			m_originalOrientation.getYaw(),
+			camera ? Angle{} : m_originalOrientation.getRoll(),
 		}
 		, m_angles{ m_originalAngles }
 	{
@@ -120,7 +122,8 @@ namespace GuiCommon
 
 				Quaternion pitch{ Quaternion::fromAxisAngle( Point3r{ 1.0, 0.0, 0.0 }, angles[0] ) };
 				Quaternion yaw{ Quaternion::fromAxisAngle( Point3r{ 0.0, 1.0, 0.0 }, angles[1] ) };
-				m_node->setOrientation( yaw * pitch );
+				Quaternion roll{ Quaternion::fromAxisAngle( Point3r{ 0.0, 0.0, 1.0 }, angles[2] ) };
+				m_node->setOrientation( roll * yaw * pitch );
 			} ) );
 		}
 

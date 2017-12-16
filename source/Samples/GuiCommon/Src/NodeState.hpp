@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using Angles = std::array< castor::Angle, 2u >;
+	using Angles = std::array< castor::Angle, 3u >;
 	static float constexpr MaxAngularSpeed = 5.0f;
 	static float constexpr MaxScalarSpeed = 20.0f;
 	/**
@@ -30,9 +30,12 @@ namespace GuiCommon
 		*	Le listener qui recevra les évènements.
 		*\param[in] node
 		*	Le noeud
+		*\param[in] camera
+		*	Dit si l'état est pour une caméra (pour désactiver le roll)
 		*/
 		NodeState( castor3d::FrameListener & listener
-			, castor3d::SceneNodeSPtr node );
+			, castor3d::SceneNodeSPtr node
+			, bool camera );
 		/**
 		*\brief
 		*	Réinitialise l'état.
