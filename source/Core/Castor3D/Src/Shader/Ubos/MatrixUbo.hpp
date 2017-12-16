@@ -97,6 +97,8 @@ namespace castor3d
 		C3D_API static castor::String const Projection;
 		C3D_API static castor::String const CurView;
 		C3D_API static castor::String const PrvView;
+		C3D_API static castor::String const CurViewProj;
+		C3D_API static castor::String const PrvViewProj;
 		C3D_API static castor::String const InvProjection;
 		C3D_API static castor::String const CurJitter;
 		C3D_API static castor::String const PrvJitter;
@@ -117,6 +119,12 @@ namespace castor3d
 		//!\~english	The previous view matrix variable.
 		//!\~french		La variable de la matrice vue précédente.
 		Uniform4x4f & m_prvView;
+		//!\~english	The current view projection matrix variable.
+		//!\~french		La variable de la matrice vue projection courante.
+		Uniform4x4f & m_curViewProj;
+		//!\~english	The previous view projection matrix variable.
+		//!\~french		La variable de la matrice vue projection précédente.
+		Uniform4x4f & m_prvViewProj;
 		//!\~english	The current jittering value variable.
 		//!\~french		La variable de la valeur de jittering courante.
 		Uniform2f & m_curJitter;
@@ -132,6 +140,8 @@ namespace castor3d
 	auto c3d_invProjection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::InvProjection );\
 	auto c3d_curView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurView );\
 	auto c3d_prvView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvView );\
+	auto c3d_curViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
+	auto c3d_prvViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
 	auto c3d_curJitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::CurJitter );\
 	auto c3d_prvJitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::PrvJitter );\
 	matrices.end()

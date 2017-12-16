@@ -183,7 +183,7 @@ namespace glsl
 					, vec3( 1.0_f ) - kS );
 				kD *= 1.0 - metallic;
 				auto irradiance = m_writer.declLocale( cuT( "irradiance" )
-					, texture( irradianceMap, normal ).rgb() );
+					, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
 				auto diffuseReflection = m_writer.declLocale( cuT( "diffuseReflection" )
 					, irradiance * albedo );
 
@@ -243,7 +243,7 @@ namespace glsl
 					, vec3( 1.0_f ) - kS );
 				kD *= 1.0 - length( specular );
 				auto irradiance = m_writer.declLocale( cuT( "irradiance" )
-					, texture( irradianceMap, normal ).rgb() );
+					, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
 				auto diffuseReflection = m_writer.declLocale( cuT( "diffuseReflection" )
 					, irradiance * diffuse );
 
