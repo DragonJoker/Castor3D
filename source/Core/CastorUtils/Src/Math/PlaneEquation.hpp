@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_PlaneEquation_HPP___
@@ -186,6 +186,16 @@ namespace castor
 		inline Point3r const & getNormal()const
 		{
 			return m_normal;
+		}
+		/**
+		 *\~english
+		 *\return		The plane's distance to origin.
+		 *\~french
+		 *\return		La distance entre le plan et l'origine.
+		 */
+		inline real getDistance()const
+		{
+			return m_d;
 		}
 
 	private:

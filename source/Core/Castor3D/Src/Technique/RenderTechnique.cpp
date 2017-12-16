@@ -63,7 +63,8 @@ namespace castor3d
 
 				if ( light->isShadowProducer()
 					&& ( light->getLightType() == LightType::eDirectional
-						|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) ) )
+						|| camera.isVisible( light->getBoundingBox()
+							, light->getParent()->getDerivedTransformationMatrix() ) ) )
 				{
 					lights.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
 						, light->getParent()->getDerivedPosition() )

@@ -9,7 +9,7 @@
 
 using namespace castor;
 
-#define DEBUG_FRUSTUM 0
+#define DEBUG_FRUSTUM 1
 
 namespace castor3d
 {
@@ -113,91 +113,201 @@ namespace castor3d
 		, Matrix4x4r const & transformations )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-//		auto aabb = box.getAxisAligned( transformations );
-//		auto it = std::find_if( m_planes.begin()
-//			, m_planes.end()
-//			, [&aabb]( PlaneEquation const & plane )
-//			{
-//				return plane.distance( aabb.getPositiveVertex( plane.getNormal() ) ) < 0;
-//			} );
-//		bool result = it == m_planes.end();
-//
-//#if DEBUG_FRUSTUM
-//
-//		if ( !result )
-//		{
-//			auto dist = it->distance( aabb.getPositiveVertex( it->getNormal() ) ) < 0;
-//			std::clog << dist << std::endl;
-//		}
-//
-//#endif
-//
-//		return true;// result;
-		return true;
 		auto aabb = box.getAxisAligned( transformations );
 		bool results[size_t( FrustumPlane::eCount )] =
 		{
-			m_planes[0].distance( aabb.getPositiveVertex( m_planes[0].getNormal() ) ) >= 0,
-			m_planes[1].distance( aabb.getPositiveVertex( m_planes[1].getNormal() ) ) >= 0,
-			m_planes[2].distance( aabb.getPositiveVertex( m_planes[2].getNormal() ) ) >= 0,
-			m_planes[3].distance( aabb.getPositiveVertex( m_planes[3].getNormal() ) ) >= 0,
-			m_planes[4].distance( aabb.getPositiveVertex( m_planes[4].getNormal() ) ) >= 0,
-			m_planes[5].distance( aabb.getPositiveVertex( m_planes[5].getNormal() ) ) >= 0,
+			m_planes[size_t( FrustumPlane::eNear )].distance( aabb.getPositiveVertex( m_planes[size_t( FrustumPlane::eNear )].getNormal() ) ) >= 0,
+			m_planes[size_t( FrustumPlane::eFar )].distance( aabb.getPositiveVertex( m_planes[size_t( FrustumPlane::eFar )].getNormal() ) ) >= 0,
+			m_planes[size_t( FrustumPlane::eLeft )].distance( aabb.getPositiveVertex( m_planes[size_t( FrustumPlane::eLeft )].getNormal() ) ) >= 0,
+			m_planes[size_t( FrustumPlane::eRight )].distance( aabb.getPositiveVertex( m_planes[size_t( FrustumPlane::eRight )].getNormal() ) ) >= 0,
+			m_planes[size_t( FrustumPlane::eTop )].distance( aabb.getPositiveVertex( m_planes[size_t( FrustumPlane::eTop )].getNormal() ) ) >= 0,
+			m_planes[size_t( FrustumPlane::eBottom )].distance( aabb.getPositiveVertex( m_planes[size_t( FrustumPlane::eBottom )].getNormal() ) ) >= 0,
 		};
-		return results[0]
-			&& results[1]
-			&& results[2]
-			&& results[3]
-			&& results[4]
-			&& results[5];
-	}
-
-	bool Frustum::isVisible( BoundingSphere const & sphere
-		, Point3r const & position
-		, Point3r const & scale )const
-	{
-		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		auto maxScale = std::max( scale[0], std::max( scale[1], scale[2] ) );
-		Point3r center = ( sphere.getCenter() * scale ) + position;
-		auto radius = sphere.getRadius() * maxScale;
-		bool results[size_t( FrustumPlane::eCount )] = 
-		{
-			m_planes[0].distance( center ) >= -radius,
-			m_planes[1].distance( center ) >= -radius,
-			m_planes[2].distance( center ) >= -radius,
-			m_planes[3].distance( center ) >= -radius,
-			m_planes[4].distance( center ) >= -radius,
-			m_planes[5].distance( center ) >= -radius,
-		};
-		return results[0]
-			&& results[1]
-			&& results[2]
-			&& results[3]
-			&& results[4]
-			&& results[5];
-	}
-
-	bool Frustum::isVisible( Point3r const & point )const
-	{
-		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		auto it = std::find_if( m_planes.begin()
-			, m_planes.end()
-			, [&point]( PlaneEquation const & p_plane )
-		{
-			return p_plane.distance( point ) < 0;
-		} );
-		bool result = it == m_planes.end();
+		auto result = results[size_t( FrustumPlane::eNear )]
+			&& results[size_t( FrustumPlane::eFar )]
+			&& results[size_t( FrustumPlane::eLeft )]
+			&& results[size_t( FrustumPlane::eRight )]
+			&& results[size_t( FrustumPlane::eTop )]
+			&& results[size_t( FrustumPlane::eBottom )];
 
 #if DEBUG_FRUSTUM
 
 		if ( !result )
 		{
-			auto dist = it->distance( point );
-			std::clog << dist << std::endl;
+			auto index = 0u;
+
+			while ( results[index] )
+			{
+				++index;
+			}
+
+			static String const names[]
+			{
+				cuT( "  Near" ),
+				cuT( "   Far" ),
+				cuT( "  Left" ),
+				cuT( " Right" ),
+				cuT( "   Top" ),
+				cuT( "Bottom" )
+			};
+
+			auto plane = FrustumPlane( index );
+			auto vp = aabb.getPositiveVertex( m_planes[index].getNormal() );
+			auto dist = m_planes[index].distance( vp );
+			auto center = aabb.getCenter();
+			auto dimension = aabb.getDimensions();
+			std::clog << cuT( "BoundingBox" )
+				<< cuT( " - P: " ) << names[index]
+				<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
+				<< cuT( " - V: " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[2]
+				<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[2]
+				<< cuT( " - S: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[2] << std::endl;
+		}
+		else
+		{
+			auto index = size_t( FrustumPlane::eTop );
+			auto vp = aabb.getPositiveVertex( m_planes[index].getNormal() );
+			auto dist = m_planes[index].distance( vp );
+			auto center = aabb.getCenter();
+			auto dimension = aabb.getDimensions();
+			std::clog << cuT( "BoundingBox" )
+				<< cuT( " - P:    Top" )
+				<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
+				<< cuT( " - V: " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[2]
+				<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[2]
+				<< cuT( " - S: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[2] << std::endl;
 		}
 
 #endif
 
-		return true;// result;
+		return result;
+	}
+
+	bool Frustum::isVisible( BoundingSphere const & sphere
+		, Matrix4x4r const & transformations
+		, Point3r const & scale)const
+	{
+		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
+		auto maxScale = std::max( scale[0], std::max( scale[1], scale[2] ) );
+		Point3r center = transformations * sphere.getCenter();
+		auto radius = sphere.getRadius() * maxScale;
+		bool results[size_t( FrustumPlane::eCount )] = 
+		{
+			m_planes[size_t( FrustumPlane::eNear )].distance( center ) >= -radius,
+			m_planes[size_t( FrustumPlane::eFar )].distance( center ) >= -radius,
+			m_planes[size_t( FrustumPlane::eLeft )].distance( center ) >= -radius,
+			m_planes[size_t( FrustumPlane::eRight )].distance( center ) >= -radius,
+			m_planes[size_t( FrustumPlane::eTop )].distance( center ) >= -radius,
+			m_planes[size_t( FrustumPlane::eBottom )].distance( center ) >= -radius,
+		};
+		auto result = results[size_t( FrustumPlane::eNear )]
+			&& results[size_t( FrustumPlane::eFar )]
+			&& results[size_t( FrustumPlane::eLeft )]
+			&& results[size_t( FrustumPlane::eRight )]
+			&& results[size_t( FrustumPlane::eTop )]
+			&& results[size_t( FrustumPlane::eBottom )];
+
+#if DEBUG_FRUSTUM
+
+		if ( !result )
+		{
+			auto index = 0u;
+
+			while ( results[index] )
+			{
+				++index;
+			}
+
+			static String const names[]
+			{
+				cuT( "  Near" ),
+				cuT( "   Far" ),
+				cuT( "  Left" ),
+				cuT( " Right" ),
+				cuT( "   Top" ),
+				cuT( "Bottom" )
+			};
+
+			auto plane = FrustumPlane( index );
+			auto dist = m_planes[index].distance( center );
+			std::clog << cuT( "BoundingSphere" )
+				<< cuT( " - P: " ) << names[index]
+				<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
+				<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[2]
+				<< cuT( " - R: " ) << std::setw( 7 ) << std::setprecision( 4 ) << radius << std::endl;
+		}
+
+#endif
+
+		return result;
+	}
+
+	bool Frustum::isVisible( Point3r const & point )const
+	{
+		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
+		bool results[size_t( FrustumPlane::eCount )] =
+		{
+			m_planes[size_t( FrustumPlane::eNear )].distance( point ) >= 0,
+			m_planes[size_t( FrustumPlane::eFar )].distance( point ) >= 0,
+			m_planes[size_t( FrustumPlane::eLeft )].distance( point ) >= 0,
+			m_planes[size_t( FrustumPlane::eRight )].distance( point ) >= 0,
+			m_planes[size_t( FrustumPlane::eTop )].distance( point ) >= 0,
+			m_planes[size_t( FrustumPlane::eBottom )].distance( point ) >= 0,
+		};
+		auto result = results[size_t( FrustumPlane::eNear )]
+			&& results[size_t( FrustumPlane::eFar )]
+			&& results[size_t( FrustumPlane::eLeft )]
+			&& results[size_t( FrustumPlane::eRight )]
+			&& results[size_t( FrustumPlane::eTop )]
+			&& results[size_t( FrustumPlane::eBottom )];
+
+#if DEBUG_FRUSTUM
+
+		if ( !result )
+		{
+			auto index = 0u;
+
+			while ( results[index] )
+			{
+				++index;
+			}
+
+			static String const names[]
+			{
+				cuT( "  Near" ),
+				cuT( "   Far" ),
+				cuT( "  Left" ),
+				cuT( " Right" ),
+				cuT( "   Top" ),
+				cuT( "Bottom" )
+			};
+
+			auto plane = FrustumPlane( index );
+			auto dist = m_planes[index].distance( point );
+			std::clog << cuT( "Point" )
+				<< cuT( " - P: " ) << names[index]
+				<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
+				<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << point[0]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << point[1]
+					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << point[2] << std::endl;
+		}
+
+#endif
+
+		return result;
 	}
 }

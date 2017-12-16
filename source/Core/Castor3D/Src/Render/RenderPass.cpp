@@ -331,9 +331,7 @@ namespace castor3d
 			{
 				if ( it->m_sceneNode.isDisplayable()
 					&& it->m_sceneNode.isVisible()
-					&& camera.isVisible( it->m_data.getBoundingSphere()
-						, it->m_sceneNode.getDerivedPosition()
-						, it->m_sceneNode.getDerivedScale() ) )
+					&& camera.isVisible( it->m_instance, it->m_data ) )
 				{
 					std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
 					auto id = it->m_passNode.m_pass.getId() - 1;

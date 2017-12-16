@@ -192,6 +192,7 @@ namespace castor3d
 	void Geometry::updateContainers( SubmeshBoundingBoxList const & boxes )
 	{
 		m_submeshesBoxes.clear();
+		m_submeshesSpheres.clear();
 
 		if ( !boxes.empty() )
 		{
@@ -201,7 +202,7 @@ namespace castor3d
 			for ( auto i = 1u; i < boxes.size(); ++i )
 			{
 				m_submeshesBoxes.emplace( boxes[i].first, boxes[i].second );
-				m_submeshesSpheres.emplace( boxes[1].first, BoundingSphere{ boxes[1].second } );
+				m_submeshesSpheres.emplace( boxes[i].first, BoundingSphere{ boxes[i].second } );
 			}
 
 			doUpdateContainers();

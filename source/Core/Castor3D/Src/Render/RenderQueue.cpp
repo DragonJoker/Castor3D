@@ -554,9 +554,7 @@ namespace castor3d
 			{
 				if ( node.m_sceneNode.isDisplayable()
 					&& node.m_sceneNode.isVisible()
-					&& camera.isVisible( node.m_instance.getBoundingSphere( node.m_data )
-						, node.m_sceneNode.getDerivedPosition()
-						, node.m_sceneNode.getDerivedScale() ) )
+					&& camera.isVisible( node.m_instance, node.m_data ) )
 				{
 					doAddRenderNode( pass, pipeline, node, submesh, outputNodes );
 				}
@@ -574,9 +572,7 @@ namespace castor3d
 				{
 					if ( node.m_sceneNode.isDisplayable()
 						&& node.m_sceneNode.isVisible()
-						&& camera.isVisible( node.m_instance.getBoundingSphere( node.m_data )
-							, node.m_sceneNode.getDerivedPosition()
-							, node.m_sceneNode.getDerivedScale() ) )
+						&& camera.isVisible( node.m_instance, node.m_data ) )
 					{
 						doAddRenderNode( *pipelines.first, node, outputNodes );
 					}

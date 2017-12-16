@@ -720,8 +720,7 @@ namespace C3dAssimp
 		, Skeleton & skeleton
 		, uint32_t & index )
 	{
-		BoneSPtr bone = skeleton.createBone( name );
-		bone->setOffsetMatrix( offset );
+		BoneSPtr bone = skeleton.createBone( name, offset );
 		index = uint32_t( m_arrayBones.size() );
 		m_arrayBones.push_back( bone );
 		m_mapBoneByID[name] = index;

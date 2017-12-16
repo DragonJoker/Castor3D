@@ -25,13 +25,25 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API Skeleton( Skeleton && rhs ) = default;
+		C3D_API Skeleton & operator=( Skeleton && rhs ) = default;
+		C3D_API Skeleton( Skeleton const & rhs ) = delete;
+		C3D_API Skeleton & operator=( Skeleton const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_scene	The scene.
+		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_scene	La scène.
+		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit Skeleton( Scene & p_scene );
+		C3D_API explicit Skeleton( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -41,72 +53,47 @@ namespace castor3d
 		C3D_API ~Skeleton();
 		/**
 		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API Skeleton( Skeleton && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API Skeleton & operator=( Skeleton && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API Skeleton( Skeleton const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API Skeleton & operator=( Skeleton const & p_rhs ) = delete;
-		/**
-		 *\~english
 		 *\brief		Creates a bone.
-		 *\param[in]	p_name	The bone name.
+		 *\param[in]	name	The bone name.
+		 *\param[in]	offset	The transfromation matrix from mesh space to bone space.
 		 *\~french
 		 *\brief		Crée un os.
-		 *\param[in]	p_name	Le nom de l'os.
+		 *\param[in]	name	Le nom de l'os.
+		 *\param[in]	offset	La matrice de transformation de l'espace objet vers l'espace du bone.
 		 */
-		C3D_API BoneSPtr createBone( castor::String const & p_name );
+		C3D_API BoneSPtr createBone( castor::String const & name
+			, castor::Matrix4x4r const & offset );
 		/**
 		 *\~english
 		 *\brief		Finds a bone from a name.
-		 *\param[in]	p_name	The bone name.
+		 *\param[in]	name	The bone name.
 		 *\~french
 		 *\brief		Trouve un os à partir de son nom.
-		 *\param[in]	p_name	Le nom de l'os.
+		 *\param[in]	name	Le nom de l'os.
 		 */
-		C3D_API BoneSPtr findBone( castor::String const & p_name )const;
+		C3D_API BoneSPtr findBone( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		adds a bone to another bone's children
-		 *\param[in]	p_bone		The bone.
-		 *\param[in]	p_parent	The parent bone.
+		 *\param[in]	bone	The bone.
+		 *\param[in]	parent	The parent bone.
 		 *\~french
 		 *\brief		Ajoute un os aux enfants d'un autre os.
-		 *\param[in]	p_bone		L'os.
-		 *\param[in]	p_parent	L'os parent.
+		 *\param[in]	bone	L'os.
+		 *\param[in]	parent	L'os parent.
 		 */
-		C3D_API void setBoneParent( BoneSPtr p_bone, BoneSPtr p_parent );
+		C3D_API void setBoneParent( BoneSPtr bone, BoneSPtr parent );
 		/**
 		 *\~english
 		 *\brief		Creates an animation
-		 *\param[in]	p_name	The animation name
+		 *\param[in]	name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Crée une animation
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API SkeletonAnimation & createAnimation( castor::String const & p_name );
+		C3D_API SkeletonAnimation & createAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box and sphere for each bone, for given mesh.
@@ -127,14 +114,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the global inverse transform.
-		 *\param[in]	p_transform	The new value.
+		 *\param[in]	transform	The new value.
 		 *\~french
 		 *\brief		Définit la transformation globale inversée.
-		 *\param[in]	p_transform	La nouvelle valeur.
+		 *\param[in]	transform	La nouvelle valeur.
 		 */
-		inline void setGlobalInverseTransform( castor::Matrix4x4r const & p_transform )
+		inline void setGlobalInverseTransform( castor::Matrix4x4r const & transform )
 		{
-			m_globalInverse = p_transform;
+			m_globalInverse = transform;
 		}
 		/**
 		 *\~english
@@ -252,14 +239,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doWrite( Skeleton const & p_obj )override;
+		C3D_API bool doWrite( Skeleton const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -278,16 +265,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
-		 *\param[in]	p_chunk	The chunk containing data.
+		 *\param[out]	obj	The object to read.
 		 *\return		\p false if any error occured.
 		 *\~french
-		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
-		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir du chunk.
+		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse( Skeleton & p_obj )override;
+		C3D_API bool doParse( Skeleton & obj )override;
 	};
 }
 
