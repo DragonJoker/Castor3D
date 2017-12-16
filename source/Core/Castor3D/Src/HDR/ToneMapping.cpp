@@ -146,6 +146,6 @@ namespace castor3d
 
 	void ToneMapping::setConfig( HdrConfig const & config )
 	{
-		m_config.setGamma( config.getGamma() );
+		m_config = config;
 	}
 }

@@ -76,6 +76,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogType )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogDensity )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneParticleSystem )
+	DECLARE_ATTRIBUTE_PARSER( parserSceneHdrConfig )
 	DECLARE_ATTRIBUTE_PARSER( parserMesh )
 
 	// ParticleSystem parsers
@@ -302,6 +303,10 @@ namespace castor3d
 
 	// Transmittance Profile parsers
 	DECLARE_ATTRIBUTE_PARSER( parserTransmittanceProfileFactor )
+
+	// HDR config parsers
+	DECLARE_ATTRIBUTE_PARSER( parserHdrExponent )
+	DECLARE_ATTRIBUTE_PARSER( parserHdrGamma )
 }
 
 #endif

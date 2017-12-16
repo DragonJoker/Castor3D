@@ -1169,6 +1169,17 @@ namespace castor3d
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticleSystem )
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneHdrConfig )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eHdrConfig )
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserMesh )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -4739,6 +4750,48 @@ namespace castor3d
 			Point4f value;
 			p_params[0]->get( value );
 			parsingContext->subsurfaceScattering->addProfileFactor( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserHdrExponent )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			float value;
+			p_params[0]->get( value );
+			parsingContext->pScene->setExposure( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserHdrGamma )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			float value;
+			p_params[0]->get( value );
+			parsingContext->pScene->setGamma( value );
 		}
 	}
 	END_ATTRIBUTE()

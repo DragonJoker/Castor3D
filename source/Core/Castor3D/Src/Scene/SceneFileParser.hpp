@@ -59,6 +59,7 @@ namespace castor3d
 		eSsao = MAKE_SECTION_NAME( 'S', 'S', 'A', 'O' ),
 		eSubsurfaceScattering = MAKE_SECTION_NAME( 'S', 'S', 'S', 'G' ),
 		eTransmittanceProfile = MAKE_SECTION_NAME( 'T', 'R', 'P', 'R' ),
+		eHdrConfig = MAKE_SECTION_NAME( 'H', 'D', 'R', 'C' ),
 	};
 	/*!
 	\author		Sylvain DOREMUS
