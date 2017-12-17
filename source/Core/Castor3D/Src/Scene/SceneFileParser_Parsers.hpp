@@ -293,6 +293,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnabled )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoBias )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoKernelSize )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnd )
 
 	// Subsurface Scattering parsers

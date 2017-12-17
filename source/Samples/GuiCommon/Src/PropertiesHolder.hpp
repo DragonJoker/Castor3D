@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include <wx/panel.h>
 #include <wx/propgrid/propgrid.h>
+#include <wx/aui/framemanager.h>
 #include <wx/aui/auibar.h>
 
 namespace GuiCommon

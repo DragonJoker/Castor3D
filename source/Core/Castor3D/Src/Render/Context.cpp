@@ -6,6 +6,7 @@
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
+#include "HDR/HdrConfig.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderWindow.hpp"

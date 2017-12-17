@@ -83,7 +83,7 @@ namespace castortd
 					auto lock = makeUniqueLock( scene->getCameraCache() );
 					auto camera = scene->getCameraCache().begin()->second;
 					p_window->getPickingPass().addScene( *scene, *camera );
-					m_cameraState = std::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent() );
+					m_cameraState = std::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
 					m_timers[size_t( TimerID::eMouse )]->Start( 30 );
 				}
 			}

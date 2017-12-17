@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 
+#include "HDR/HdrConfig.hpp"
 #include "RenderToTexture/RenderColourToTexture.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"

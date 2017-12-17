@@ -1,6 +1,7 @@
-﻿#include "HdrConfigUbo.hpp"
+#include "HdrConfigUbo.hpp"
 
 #include "Engine.hpp"
+#include "HDR/HdrConfig.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 using namespace castor;

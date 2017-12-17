@@ -489,162 +489,97 @@ namespace castor3d
 		ProgramFlags m_programFlags;
 		SceneFlags m_sceneFlags;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		09/04/2017
-	\~english
-	\brief		HDR configuration (expsure and gamma correction).
-	\~french
-	\brief		Configuration HDR (exposition et correction gamma).
-	*/
-	class HdrConfig
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		sets the exposure value.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de l'exposition.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void setExposure( float p_value )
-		{
-			m_exposure = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		sets the gamma correction value.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de la correction gamma.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void setGamma( float p_value )
-		{
-			m_gamma = p_value;
-		}
-		/**
-		 *\~english
-		 *\return		The exposure value.
-		 *\~french
-		 *\return		La valeur de l'exposition.
-		 */
-		inline float getExposure()const
-		{
-			return m_exposure;
-		}
-		/**
-		 *\~english
-		 *\return		The gamma correction value.
-		 *\~french
-		 *\return		La valeur de la correction gamma.
-		 */
-		inline float getGamma()const
-		{
-			return m_gamma;
-		}
-
-	private:
-		//!\~english	The exposure value.
-		//!\~french		La valeur d'exposition.
-		float m_exposure{ 1.0f };
-		//!\~english	The gamma correction value.
-		//!\~french		La valeur de correction gamma.
-		float m_gamma{ 2.2f };
-	};
-
-	class GpuInformations;
-	class RenderSystem;
-	class RenderPass;
-	class RenderTechnique;
-	class Context;
-	class RenderWindow;
-	class RenderPipeline;
-	class DepthStencilState;
-	class RasteriserState;
-	class BlendState;
-	class MultisampleState;
-	class ToneMapping;
-	class PostEffect;
-	class EnvironmentMapPass;
-	class ShadowMapPass;
-	struct PassRenderNodeUniforms;
-	struct PassRenderNode;
-	struct SceneRenderNode;
-	struct StaticRenderNode;
-	struct SkinningRenderNode;
-	struct MorphingRenderNode;
-	struct BillboardRenderNode;
-	struct DistanceRenderNodeBase;
-	class RenderTechnique;
-	class RenderWindow;
-	class RenderTarget;
-	class RenderLoop;
-	class RenderLoopAsync;
-	class RenderLoopSync;
-	class RenderQueue;
-	class EnvironmentMap;
-	class ShadowMap;
-	class RenderColourCubeToTexture;
-	class RenderColourCubeLayerToTexture;
-	class RenderColourLayerToTexture;
-	class RenderColourToCube;
-	class RenderColourToTexture;
-	class RenderDepthCubeToTexture;
-	class RenderDepthCubeLayerToTexture;
-	class RenderDepthLayerToTexture;
-	class RenderDepthToCube;
-	class TextureProjection;
-	class GpuBuffer;
-	class IblTextures;
 
 	template< typename T >
 	class CpuBuffer;
 
-	struct BufferElementDeclaration;
+	class BlendState;
 	class BufferDeclaration;
-	class VertexBuffer;
-	class IndexBuffer;
+	class Context;
+	class DepthStencilState;
+	class EnvironmentMap;
+	class EnvironmentMapPass;
 	class GeometryBuffers;
+	class GpuBuffer;
+	class GpuInformations;
+	class HdrConfig;
+	class IblTextures;
+	class IndexBuffer;
+	class MultisampleState;
+	class PostEffect;
+	class RasteriserState;
+	class RenderColourCubeLayerToTexture;
+	class RenderColourCubeToTexture;
+	class RenderColourLayerToTexture;
+	class RenderColourToCube;
+	class RenderColourToTexture;
+	class RenderDepthCubeLayerToTexture;
+	class RenderDepthCubeToTexture;
+	class RenderDepthLayerToTexture;
+	class RenderDepthToCube;
+	class RenderLoop;
+	class RenderLoopAsync;
+	class RenderLoopSync;
+	class RenderPass;
+	class RenderPipeline;
+	class RenderQueue;
+	class RenderSystem;
+	class RenderTarget;
+	class RenderTechnique;
+	class RenderTechnique;
+	class RenderWindow;
+	class RenderWindow;
+	class ShadowMap;
+	class ShadowMapPass;
 	class TextureBuffer;
+	class TextureProjection;
+	class ToneMapping;
+	class VertexBuffer;
+	struct BillboardRenderNode;
+	struct BufferElementDeclaration;
+	struct DistanceRenderNodeBase;
+	struct MorphingRenderNode;
+	struct PassRenderNode;
+	struct PassRenderNodeUniforms;
+	struct SceneRenderNode;
+	struct SkinningRenderNode;
+	struct StaticRenderNode;
 
-	DECLARE_SMART_PTR( RenderSystem );
-	DECLARE_SMART_PTR( GeometryBuffers );
-	DECLARE_SMART_PTR( BufferElementDeclaration );
+	DECLARE_SMART_PTR( BlendState );
 	DECLARE_SMART_PTR( BufferDeclaration );
-	DECLARE_SMART_PTR( VertexBuffer );
-	DECLARE_SMART_PTR( IndexBuffer );
-	DECLARE_SMART_PTR( TextureBuffer );
+	DECLARE_SMART_PTR( BufferElementDeclaration );
 	DECLARE_SMART_PTR( Context );
 	DECLARE_SMART_PTR( DepthStencilState );
-	DECLARE_SMART_PTR( RasteriserState );
-	DECLARE_SMART_PTR( BlendState );
-	DECLARE_SMART_PTR( MultisampleState );
-	DECLARE_SMART_PTR( RenderPipeline );
-	DECLARE_SMART_PTR( ToneMapping );
-	DECLARE_SMART_PTR( PostEffect );
-	DECLARE_SMART_PTR( EnvironmentMapPass );
-	DECLARE_SMART_PTR( ShadowMapPass );
-	DECLARE_SMART_PTR( RenderTechnique );
-	DECLARE_SMART_PTR( RenderWindow );
-	DECLARE_SMART_PTR( RenderLoop );
-	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( EnvironmentMap );
-	DECLARE_SMART_PTR( ShadowMap );
-	DECLARE_SMART_PTR( RenderColourCubeToTexture );
+	DECLARE_SMART_PTR( EnvironmentMapPass );
+	DECLARE_SMART_PTR( GeometryBuffers );
+	DECLARE_SMART_PTR( GpuBuffer );
+	DECLARE_SMART_PTR( IblTextures );
+	DECLARE_SMART_PTR( IndexBuffer );
+	DECLARE_SMART_PTR( MultisampleState );
+	DECLARE_SMART_PTR( PostEffect );
+	DECLARE_SMART_PTR( RasteriserState );
 	DECLARE_SMART_PTR( RenderColourCubeLayerToTexture );
+	DECLARE_SMART_PTR( RenderColourCubeToTexture );
 	DECLARE_SMART_PTR( RenderColourLayerToTexture );
 	DECLARE_SMART_PTR( RenderColourToCube );
 	DECLARE_SMART_PTR( RenderColourToTexture );
-	DECLARE_SMART_PTR( RenderDepthCubeToTexture );
 	DECLARE_SMART_PTR( RenderDepthCubeLayerToTexture );
+	DECLARE_SMART_PTR( RenderDepthCubeToTexture );
 	DECLARE_SMART_PTR( RenderDepthLayerToTexture );
 	DECLARE_SMART_PTR( RenderDepthToCube );
+	DECLARE_SMART_PTR( RenderLoop );
+	DECLARE_SMART_PTR( RenderPipeline );
+	DECLARE_SMART_PTR( RenderSystem );
+	DECLARE_SMART_PTR( RenderTarget );
+	DECLARE_SMART_PTR( RenderTechnique );
+	DECLARE_SMART_PTR( RenderWindow );
+	DECLARE_SMART_PTR( ShadowMap );
+	DECLARE_SMART_PTR( ShadowMapPass );
+	DECLARE_SMART_PTR( TextureBuffer );
 	DECLARE_SMART_PTR( TextureProjection );
-	DECLARE_SMART_PTR( GpuBuffer );
-	DECLARE_SMART_PTR( IblTextures );
+	DECLARE_SMART_PTR( ToneMapping );
+	DECLARE_SMART_PTR( VertexBuffer );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );

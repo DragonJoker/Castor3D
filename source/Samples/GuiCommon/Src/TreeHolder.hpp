@@ -7,7 +7,9 @@ See LICENSE file in root folder
 #include "GuiCommonPrerequisites.hpp"
 
 #include <wx/panel.h>
+#include <wx/treectrl.h>
 #include <wx/aui/auibar.h>
+#include <wx/aui/framemanager.h>
 
 namespace GuiCommon
 {

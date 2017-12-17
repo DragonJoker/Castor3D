@@ -18,6 +18,7 @@ See LICENSE file in root folder
 #include "Cache/ParticleSystemCache.hpp"
 #include "Cache/SamplerCache.hpp"
 
+#include "HDR/HdrConfig.hpp"
 #include "RenderToTexture/TextureProjection.hpp"
 #include "Scene/ColourSkybox.hpp"
 #include "Scene/Fog.hpp"

@@ -258,7 +258,7 @@ namespace castor3d
 
 	void RenderTechniquePass::doUpdate( RenderQueueArray & queues )
 	{
-		queues.push_back( m_renderQueue );
+		queues.emplace_back( m_renderQueue );
 	}
 
 	void RenderTechniquePass::doUpdateFlags( PassFlags & passFlags

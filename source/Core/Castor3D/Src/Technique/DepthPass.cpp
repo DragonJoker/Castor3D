@@ -1,4 +1,4 @@
-﻿#include "DepthPass.hpp"
+#include "DepthPass.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -69,9 +69,9 @@ namespace castor3d
 	{
 	}
 
-	void DepthPass::doUpdate( RenderQueueArray & p_queues )
+	void DepthPass::doUpdate( RenderQueueArray & queues )
 	{
-		p_queues.push_back( m_renderQueue );
+		queues.emplace_back( m_renderQueue );
 	}
 
 	void DepthPass::doUpdateFlags( PassFlags & passFlags
@@ -286,12 +286,6 @@ namespace castor3d
 					auto time = writer.declLocale( cuT( "time" )
 						, vec3( 1.0_f - c3d_time ) );
 					vtx_texture = glsl::fma( vtx_texture, time, texture2 * c3d_time );
-				}
-
-				if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
-				{
-					auto time = writer.declLocale( cuT( "time" )
-						, vec3( 1.0_f - c3d_time ) );
 					vertex = vec4( glsl::fma( vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
 				}
 

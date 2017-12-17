@@ -16,12 +16,12 @@ namespace glsl
 	void Utils::declareCalcTexCoord()
 	{
 		m_calcTexCoord = m_writer.implementFunction< Vec2 >( cuT( "calcTexCoord" )
-			, [&]()
+			, [&]( Vec2 const & renderSize )
 			{
 				auto gl_FragCoord = m_writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
-				auto c3d_renderSize = m_writer.getBuiltin< Vec2 >( cuT( "c3d_renderSize" ) );
-				m_writer.returnStmt( gl_FragCoord.xy() / c3d_renderSize );
-			} );
+				m_writer.returnStmt( gl_FragCoord.xy() / renderSize );
+			}
+			, InVec2{ &m_writer, cuT( "renderSize" ) } );
 	}
 
 	void Utils::declareCalcVSPosition()
@@ -274,9 +274,9 @@ namespace glsl
 			, InParam< Sampler2D >{ &m_writer, cuT( "brdfMap" ) } );
 	}
 
-	Vec2 Utils::calcTexCoord()
+	Vec2 Utils::calcTexCoord( Vec2 const & renderSize )
 	{
-		return m_calcTexCoord();
+		return m_calcTexCoord( renderSize );
 	}
 
 	Vec3 Utils::calcVSPosition( Vec2 const & uv

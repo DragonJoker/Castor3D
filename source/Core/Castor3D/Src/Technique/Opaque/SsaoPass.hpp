@@ -113,6 +113,7 @@ namespace castor3d
 		TextureUnit m_blurResult;
 		FrameBufferSPtr m_blurFbo;
 		TextureAttachmentSPtr m_blurResultAttach;
+		UniformBuffer m_blurConfig;
 		RenderPassTimerSPtr m_blurTimer;
 
 	};
