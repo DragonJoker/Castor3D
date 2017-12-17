@@ -32,7 +32,7 @@
 
 using namespace castor;
 
-#define DISPLAY_DEBUG_DEFERRED_BUFFERS 0
+#define DISPLAY_DEBUG_DEFERRED_BUFFERS 1
 #define DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS 0
 #define DISPLAY_DEBUG_IBL_BUFFERS 0
 #define DISPLAY_DEBUG_SHADOW_MAPS 0
@@ -63,7 +63,8 @@ namespace castor3d
 
 				if ( light->isShadowProducer()
 					&& ( light->getLightType() == LightType::eDirectional
-						|| camera.isVisible( light->getCubeBox(), light->getParent()->getDerivedTransformationMatrix() ) ) )
+						|| camera.isVisible( light->getBoundingBox()
+							, light->getParent()->getDerivedTransformationMatrix() ) ) )
 				{
 					lights.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
 						, light->getParent()->getDerivedPosition() )

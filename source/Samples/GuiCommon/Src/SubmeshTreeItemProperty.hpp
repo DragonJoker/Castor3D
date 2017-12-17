@@ -13,9 +13,9 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Submesh helper class to communicate between Scene objects or Materials lists and PropertiesHolder
+	\brief		Submesh helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les maillages
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les maillages
 	*/
 	class SubmeshTreeItemProperty
 		: public TreeItemProperty

@@ -16,10 +16,10 @@ using namespace castor;
 namespace castor3d
 {
 	RenderColourToTexture::RenderColourToTexture( Context & p_context
-		, MatrixUbo & p_matrixUbo
+		, MatrixUbo & matrixUbo
 		, bool p_invertU )
 		: OwnedBy< Context >{ p_context }
-		, m_matrixUbo{ p_matrixUbo }
+		, m_matrixUbo{ matrixUbo }
 		, m_viewport{ *p_context.getRenderSystem()->getEngine() }
 		, m_bufferVertex
 		{
@@ -89,18 +89,32 @@ namespace castor3d
 		String const name = cuT( "RenderColourToTexture" );
 		SamplerSPtr sampler;
 
-		if ( getOwner()->getRenderSystem()->getEngine()->getSamplerCache().has( name ) )
+		if ( getOwner()->getRenderSystem()->getEngine()->getSamplerCache().has( name + cuT( "_Linear" ) ) )
 		{
-			m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().find( name );
+			m_samplerLinear = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().find( name + cuT( "_Linear" ) );
 		}
 		else
 		{
-			m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( name );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			m_samplerLinear = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( name + cuT( "_Linear" ) );
+			m_samplerLinear->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			m_samplerLinear->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			m_samplerLinear->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			m_samplerLinear->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			m_samplerLinear->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		}
+
+		if ( getOwner()->getRenderSystem()->getEngine()->getSamplerCache().has( name + cuT( "_Nearest" ) ) )
+		{
+			m_samplerNearest = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().find( name + cuT( "_Nearest" ) );
+		}
+		else
+		{
+			m_samplerNearest = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( name + cuT( "_Nearest" ) );
+			m_samplerNearest->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+			m_samplerNearest->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+			m_samplerNearest->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			m_samplerNearest->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			m_samplerNearest->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 		}
 
 		m_viewport.update();
@@ -108,7 +122,8 @@ namespace castor3d
 
 	void RenderColourToTexture::cleanup()
 	{
-		m_sampler.reset();
+		m_samplerNearest.reset();
+		m_samplerLinear.reset();
 		m_pipeline->cleanup();
 		m_pipeline.reset();
 		m_vertexBuffer->cleanup();
@@ -118,51 +133,82 @@ namespace castor3d
 		m_viewport.cleanup();
 	}
 
-	void RenderColourToTexture::render( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, MatrixUbo & p_matrixUbo
-		, RenderPipeline & p_pipeline )
+	void RenderColourToTexture::render( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, MatrixUbo & matrixUbo
+		, RenderPipeline & pipeline )
 	{
-		doRender( p_position
-			, p_size
-			, p_texture
-			, p_pipeline
-			, p_matrixUbo
-			, *m_geometryBuffers );
+		doRender( position
+			, size
+			, texture
+			, pipeline
+			, matrixUbo
+			, *m_geometryBuffers
+			, *m_samplerLinear );
 	}
 
-	void RenderColourToTexture::render( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture )
+	void RenderColourToTexture::renderNearest( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, MatrixUbo & matrixUbo
+		, RenderPipeline & pipeline )
 	{
-		doRender( p_position
-			, p_size
-			, p_texture
+		doRender( position
+			, size
+			, texture
+			, pipeline
+			, matrixUbo
+			, *m_geometryBuffers
+			, *m_samplerNearest );
+	}
+
+	void RenderColourToTexture::render( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
+	{
+		doRender( position
+			, size
+			, texture
 			, *m_pipeline
 			, m_matrixUbo
-			, *m_geometryBuffers );
+			, *m_geometryBuffers
+			, *m_samplerLinear );
 	}
 
-	void RenderColourToTexture::doRender( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, RenderPipeline & p_pipeline
-		, MatrixUbo & p_matrixUbo
-		, GeometryBuffers const & p_geometryBuffers )
+	void RenderColourToTexture::renderNearest( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
 	{
-		m_viewport.setPosition( p_position );
-		m_viewport.resize( p_size );
+		doRender( position
+			, size
+			, texture
+			, *m_pipeline
+			, m_matrixUbo
+			, *m_geometryBuffers
+			, *m_samplerNearest );
+	}
+
+	void RenderColourToTexture::doRender( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, RenderPipeline & pipeline
+		, MatrixUbo & matrixUbo
+		, GeometryBuffers const & geometryBuffers
+		, Sampler const & sampler )
+	{
+		m_viewport.setPosition( position );
+		m_viewport.resize( size );
 		m_viewport.apply();
 
-		p_matrixUbo.update( m_viewport.getProjection() );
-		p_pipeline.apply();
+		matrixUbo.update( m_viewport.getProjection() );
+		pipeline.apply();
 
-		p_texture.bind( MinTextureIndex );
-		m_sampler->bind( MinTextureIndex );
-		p_geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( MinTextureIndex );
-		p_texture.unbind( MinTextureIndex );
+		texture.bind( MinTextureIndex );
+		sampler.bind( MinTextureIndex );
+		geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
+		sampler.unbind( MinTextureIndex );
+		texture.unbind( MinTextureIndex );
 	}
 
 	ShaderProgramSPtr RenderColourToTexture::doCreateProgram()

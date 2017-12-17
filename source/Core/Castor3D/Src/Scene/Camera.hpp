@@ -188,6 +188,20 @@ namespace castor3d
 		C3D_API uint32_t getHeight()const;
 		/**
 		 *\~english
+		 *\brief		Checks if a submesh is visible, through a geometry.
+		 *\param[in]	geometry	The geometry.
+		 *\param[in]	submesh		The submesh.
+		 *\return		\p false if the submesh is not visible.
+		 *\~french
+		 *\brief
+		 *\brief		Vérifie si un sous-maillage est visible, via une géométrie.
+		 *\param[in]	geometry	La géométrie.
+		 *\param[in]	submesh		Le sous-maillage.
+		 *\return		\p false si le sous-maillage n'est pas visible.
+		 */
+		C3D_API bool isVisible( Geometry const & geometry, Submesh const & submesh )const;
+		/**
+		 *\~english
 		 *\brief		Checks if given BoundingBox is in the view frustum
 		 *\param[in]	box				The BoundingBox
 		 *\param[in]	transformations	The BoundingBox transformations matrix
@@ -204,20 +218,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Checks if given BoundingSphere is in the view frustum.
-		 *\param[in]	sphere		The BoundingSphere.
-		 *\param[in]	position	The position for the BoundingSphere.
-		 *\param[in]	scale		The scale for the BoundingSphere.
+		 *\param[in]	sphere			The BoundingSphere.
+		 *\param[in]	transformations	The BoundingSphere transformations matrix.
+		 *\param[in]	scale			The scale for the BoundingSphere.
 		 *\return		\p false if the BoundingSphere is completely out of the view frustum.
 		 *\~french
 		 *\brief
 		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue.
-		 *\param[in]	sphere		La BoundingSphere.
-		 *\param[in]	position	La position de la BoundingSphere.
-		 *\param[in]	scale		L'échelle de la SphereBox.
+		 *\param[in]	sphere			La BoundingSphere.
+		 *\param[in]	transformations	La matrice de transformations de la BoundingSphere.
+		 *\param[in]	scale			L'échelle de la BoundingSphere.
 		 *\return		\p false si la BoundingSphere est complètement en dehors du frustum de vue.
 		 */
 		C3D_API bool isVisible( castor::BoundingSphere const & sphere
-			, castor::Point3r const & position
+			, castor::Matrix4x4r const & transformations
 			, castor::Point3r const & scale )const;
 		/**
 		 *\~english

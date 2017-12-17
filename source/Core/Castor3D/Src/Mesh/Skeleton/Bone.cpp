@@ -13,23 +13,23 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< Bone >::doWrite( Bone const & p_obj )
+	bool BinaryWriter< Bone >::doWrite( Bone const & obj )
 	{
 		bool result = true;
 
 		if ( result )
 		{
-			result = doWriteChunk( p_obj.getName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( result )
 		{
-			result = doWriteChunk( p_obj.getOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
+			result = doWriteChunk( obj.getOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
 		}
 
-		if ( p_obj.getParent() )
+		if ( obj.getParent() )
 		{
-			result = doWriteChunk( p_obj.getParent()->getName(), ChunkType::eBoneParentName, m_chunk );
+			result = doWriteChunk( obj.getParent()->getName(), ChunkType::eBoneParentName, m_chunk );
 		}
 
 		return result;
@@ -37,13 +37,13 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	bool BinaryParser< Bone >::doParse( Bone & p_obj )
+	bool BinaryParser< Bone >::doParse( Bone & obj )
 	{
 		bool result = true;
 		BoneSPtr bone;
 		String name;
 		BinaryChunk chunk;
-		auto & skeleton = p_obj.m_skeleton;
+		auto & skeleton = obj.m_skeleton;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -54,13 +54,13 @@ namespace castor3d
 
 				if ( result )
 				{
-					p_obj.setName( name );
+					obj.setName( name );
 				}
 
 				break;
 
 			case ChunkType::eBoneOffsetMatrix:
-				result = doParseChunk( p_obj.m_offset, chunk );
+				result = doParseChunk( obj.m_offset, chunk );
 				break;
 
 			case ChunkType::eBoneParentName:
@@ -72,8 +72,8 @@ namespace castor3d
 
 					if ( parent )
 					{
-						parent->addChild( p_obj.shared_from_this() );
-						p_obj.setParent( parent );
+						parent->addChild( obj.shared_from_this() );
+						obj.setParent( parent );
 					}
 					else
 					{
@@ -90,9 +90,12 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	Bone::Bone( Skeleton & p_skeleton )
-		: Named( cuEmptyString )
-		, m_skeleton( p_skeleton )
+	Bone::Bone( Skeleton & skeleton
+		, Matrix4x4r const & offset )
+		: Named{ cuEmptyString }
+		, m_skeleton{ skeleton }
+		, m_offset{ offset }
+		, m_absoluteOffset{ skeleton.getGlobalInverseTransform() }
 	{
 	}
 
@@ -100,15 +103,22 @@ namespace castor3d
 	{
 	}
 
-	void Bone::addChild( BoneSPtr p_bone )
+	void Bone::addChild( BoneSPtr bone )
 	{
-		if ( m_children.end() == m_children.find( p_bone->getName() ) )
+		if ( m_children.end() == m_children.find( bone->getName() ) )
 		{
-			m_children.insert( { p_bone->getName(), p_bone } );
+			m_children.emplace( bone->getName(), bone );
 		}
 	}
 
-	BoundingBox Bone::computeBoundingBox( Mesh const & mesh, uint32_t boneIndex )const
+	void Bone::setParent( BoneSPtr bone )
+	{
+		m_parent = bone;
+		m_absoluteOffset = m_offset * m_parent->m_absoluteOffset;
+	}
+
+	BoundingBox Bone::computeBoundingBox( Mesh const & mesh
+		, uint32_t boneIndex )const
 	{
 		real rmax = std::numeric_limits< real >::max();
 		real rmin = std::numeric_limits< real >::lowest();

@@ -480,6 +480,42 @@ namespace castor
 	}
 
 	template< typename T >
+	inline AngleT< T > QuaternionT< T >::getPitch()const
+	{
+		auto pitch = *this;
+		pitch[1] = 0;
+		pitch[2] = 0;
+		double pitchMag = sqrt( pitch[3] * pitch[3] + pitch[0] * pitch[0] );
+		pitch[3] /= T( pitchMag );
+		pitch[0] /= T( pitchMag );
+		return Angle::fromRadians( 2 * acos( pitch[3] ) );
+	}
+
+	template< typename T >
+	inline AngleT< T > QuaternionT< T >::getYaw()const
+	{
+		auto yaw = *this;
+		yaw[0] = 0;
+		yaw[2] = 0;
+		double yawMag = sqrt( yaw[3] * yaw[3] + yaw[1] * yaw[1] );
+		yaw[3] /= T( yawMag );
+		yaw[1] /= T( yawMag );
+		return Angle::fromRadians( 2 * acos( yaw[3] ) );
+	}
+
+	template< typename T >
+	inline AngleT< T > QuaternionT< T >::getRoll()const
+	{
+		auto roll = *this;
+		roll[0] = 0;
+		roll[1] = 0;
+		double rollMag = sqrt( roll[3] * roll[3] + roll[2] * roll[2] );
+		roll[3] /= T( rollMag );
+		roll[2] /= T( rollMag );
+		return Angle::fromRadians( 2 * acos( roll[3] ) );
+	}
+
+	template< typename T >
 	QuaternionT< T > QuaternionT< T >::mix( QuaternionT< T > const & p_target, double p_factor )const
 	{
 		T cosTheta = point::dot( *this, p_target );

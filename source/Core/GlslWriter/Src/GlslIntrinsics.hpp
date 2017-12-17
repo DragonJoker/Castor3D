@@ -114,6 +114,7 @@ namespace glsl
 	template< typename ... Values > inline BVec2 bvec2( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline BVec3 bvec3( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline BVec4 bvec4( Type const & p_value, Values const & ... p_values );
+	template< typename ... Values > inline Mat2 mat2( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Mat3 mat3( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Mat4 mat4( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Float dot( Type const & p_value, Values const & ... p_values );

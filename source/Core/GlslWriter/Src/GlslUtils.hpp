@@ -22,7 +22,7 @@ namespace glsl
 		GlslWriter_API void declareFresnelSchlick();
 		GlslWriter_API void declareComputeMetallicIBL();
 		GlslWriter_API void declareComputeSpecularIBL();
-		GlslWriter_API Vec2 calcTexCoord();
+		GlslWriter_API Vec2 calcTexCoord( Vec2 const & renderSize );
 		GlslWriter_API Vec3 calcVSPosition( Vec2 const & uv
 			, Float const & depth
 			, Mat4 const & invProj );
@@ -65,7 +65,8 @@ namespace glsl
 
 	private:
 		GlslWriter & m_writer;
-		Function< Vec2 > m_calcTexCoord;
+		Function< Vec2
+			, InVec2 > m_calcTexCoord;
 		Function< Vec3
 			, InVec2
 			, InFloat

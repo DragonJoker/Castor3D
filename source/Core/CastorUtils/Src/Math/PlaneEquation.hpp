@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_PlaneEquation_HPP___
@@ -13,11 +13,9 @@ namespace castor
 	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
-	\brief		Plane equation.
-	\remark		do you remember ax + by + cz + d = 0 ?
+	\brief		Plane equation implementation (ax + by + cz + d = 0).
 	\~french
-	\brief		Equation de plan.
-	\remark		Vous connaissez ax + by + cz + d = 0 ?
+	\brief		Implémentation d'une équation de plan (ax + by + cz + d = 0).
 	*/
 	class PlaneEquation
 	{
@@ -68,13 +66,6 @@ namespace castor
 		 */
 		CU_API PlaneEquation( Point3r const & normal
 			, real d );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		CU_API ~PlaneEquation();
 		/**
 		 *\~english
 		 *\brief		Compute plane's equation from 3 points.
@@ -186,6 +177,16 @@ namespace castor
 		inline Point3r const & getNormal()const
 		{
 			return m_normal;
+		}
+		/**
+		 *\~english
+		 *\return		The plane's distance to origin.
+		 *\~french
+		 *\return		La distance entre le plan et l'origine.
+		 */
+		inline real getDistance()const
+		{
+			return m_d;
 		}
 
 	private:

@@ -106,6 +106,7 @@ See LICENSE file in root folder
 
 #	include <SceneObjectsList.hpp>
 #	include <ImagesLoader.hpp>
+#	include <PropertiesContainer.hpp>
 #	include <PropertiesHolder.hpp>
 #	include <MaterialsList.hpp>
 #	include <RendererSelector.hpp>

@@ -69,8 +69,12 @@ namespace CastorViewer
 		}
 	}
 
-	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
-		: wxPanel( parent, p_id, pos, size, style )
+	RenderPanel::RenderPanel( wxWindow * parent
+		, wxWindowID id
+		, wxPoint const & pos
+		, wxSize const & size
+		, long style )
+		: wxPanel( parent, id, pos, size, style )
 		, m_camSpeed( DEF_CAM_SPEED, Range< real >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
 	{
 		m_timers[0] = nullptr;
@@ -151,7 +155,7 @@ namespace CastorViewer
 					if ( cameraNode )
 					{
 						m_currentNode = cameraNode;
-						m_currentState = &doAddNodeState( m_currentNode );
+						m_currentState = &doAddNodeState( m_currentNode, true );
 					}
 
 					m_renderWindow = window;
@@ -236,18 +240,10 @@ namespace CastorViewer
 	void RenderPanel::doTurnCameraHoriz()
 	{
 		doResetTimers();
-		auto camera = m_camera.lock();
 
-		if ( camera )
+		if ( m_currentState )
 		{
-			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
-				, [this, cameraNode]()
-				{
-					Quaternion orientation{ cameraNode->getOrientation() };
-					orientation *= Quaternion::fromAxisAngle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, 90.0_degrees );
-					cameraNode->setOrientation( orientation );
-				} ) );
+			m_currentState->yaw( 90.0_degrees );
 		}
 	}
 
@@ -401,17 +397,18 @@ namespace CastorViewer
 			m_currentNode = m_camera.lock()->getParent();
 		}
 
-		m_currentState = &doAddNodeState( m_currentNode );
+		m_currentState = &doAddNodeState( m_currentNode, false );
 	}
 
-	GuiCommon::NodeState & RenderPanel::doAddNodeState( SceneNodeSPtr p_node )
+	GuiCommon::NodeState & RenderPanel::doAddNodeState( SceneNodeSPtr node
+		, bool camera )
 	{
-		auto it = m_nodesStates.find( p_node->getName() );
+		auto it = m_nodesStates.find( node->getName() );
 
 		if ( it == m_nodesStates.end() )
 		{
-			it = m_nodesStates.emplace( p_node->getName()
-				, std::make_unique< GuiCommon::NodeState >( *m_listener, p_node ) ).first;
+			it = m_nodesStates.emplace( node->getName()
+				, std::make_unique< GuiCommon::NodeState >( *m_listener, node, camera ) ).first;
 		}
 
 		it->second->setMaxSpeed( m_camSpeed.value() );
@@ -644,7 +641,7 @@ namespace CastorViewer
 				if ( m_lightsNode )
 				{
 					m_currentNode = m_lightsNode;
-					m_currentState = &doAddNodeState( m_currentNode );
+					m_currentState = &doAddNodeState( m_currentNode, false );
 				}
 				break;
 			}
@@ -719,7 +716,7 @@ namespace CastorViewer
 
 			case 'L':
 				m_currentNode = m_camera.lock()->getParent();
-				m_currentState = &doAddNodeState( m_currentNode );
+				m_currentState = &doAddNodeState( m_currentNode, false );
 				break;
 			}
 		}

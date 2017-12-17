@@ -1,10 +1,12 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SsaoConfig_H___
 #define ___C3D_SsaoConfig_H___
 
 #include "Castor3DPrerequisites.hpp"
+
+#include <Math/RangedValue.hpp>
 
 namespace castor3d
 {
@@ -62,6 +64,9 @@ namespace castor3d
 		//!\~english	The effect bias.
 		//!\~french		Le bias de l'effet.
 		float m_bias{ 0.025f };
+		//!\~english	The number of values in the random points kernel.
+		//!\~french		Le nombre de points dans le kernel de points aléatoires.
+		castor::RangedValue< uint32_t > m_kernelSize{ 64u, castor::makeRange( 0u, 64u ) };
 	};
 }
 

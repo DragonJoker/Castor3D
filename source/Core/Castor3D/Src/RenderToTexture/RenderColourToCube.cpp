@@ -4,6 +4,7 @@
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
+#include "HDR/HdrConfig.hpp"
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"

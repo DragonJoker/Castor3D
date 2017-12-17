@@ -166,7 +166,7 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 				{
 					auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
-					shininess = texture( c3d_mapGloss, texCoord.xy() ).r();
+					shininess = texture( c3d_mapGloss, texCoord.xy() ).r() * 128.0_f;
 				}
 			}
 
@@ -424,13 +424,13 @@ namespace castor3d
 					if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
 					{
 						auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
-						p_specular = texture( c3d_mapSpecular, texCoord.xy() ).rgb();
+						p_specular *= texture( c3d_mapSpecular, texCoord.xy() ).rgb();
 					}
 
 					if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 					{
 						auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
-						p_glossiness = texture( c3d_mapGloss, texCoord.xy() ).r();
+						p_glossiness *= texture( c3d_mapGloss, texCoord.xy() ).r();
 					}
 				}
 

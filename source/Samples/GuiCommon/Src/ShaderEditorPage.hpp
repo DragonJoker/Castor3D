@@ -58,7 +58,7 @@ namespace GuiCommon
 		StcContext & m_stcContext;
 		StcTextEditor * m_editor;
 		FrameVariablesList * m_frameVariablesList;
-		PropertiesHolder * m_frameVariablesProperties;
+		PropertiesContainer * m_frameVariablesProperties;
 		wxString m_shaderFile;
 		wxString m_shaderSource;
 		castor3d::ShaderProgramWPtr m_shaderProgram;

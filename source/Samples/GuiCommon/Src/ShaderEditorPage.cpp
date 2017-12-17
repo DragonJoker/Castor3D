@@ -3,7 +3,7 @@
 #include "AuiDockArt.hpp"
 #include "StcTextEditor.hpp"
 #include "FrameVariablesList.hpp"
-#include "PropertiesHolder.hpp"
+#include "PropertiesContainer.hpp"
 
 #include <Engine.hpp>
 #include <Cache/WindowCache.hpp>
@@ -161,7 +161,7 @@ namespace GuiCommon
 #endif
 
 		// The frame variable properties holder
-		m_frameVariablesProperties = new PropertiesHolder( m_canEdit, this, wxDefaultPosition, wxSize( iListWidth, 0 ) );
+		m_frameVariablesProperties = new PropertiesContainer( m_canEdit, this, wxDefaultPosition, wxSize( iListWidth, 0 ) );
 		m_frameVariablesProperties->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_frameVariablesProperties->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_frameVariablesProperties->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/RenderInfo.hpp"
 #include "Shader/UniformBuffer.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 
 #include <Design/Named.hpp>
@@ -65,6 +66,15 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		Updates the tone mapping.
+		 *\param[in]	config	The HDR configuration.
+		 *\~english
+		 *\brief		Met à jour le tone mapping.
+		 *\param[in]	config	La configuration HDR.
+		 */
+		C3D_API void update( HdrConfig const & config );
+		/**
+		 *\~english
 		 *\brief		Applies the tone mapping for given HDR texture.
 		 *\param[in]	size	The target dimensions.
 		 *\param[in]	texture	The HDR texture.
@@ -78,34 +88,6 @@ namespace castor3d
 		C3D_API void apply( castor::Size const & size
 			, TextureLayout const & texture
 			, RenderInfo & info );
-		/**
-		 *\~english
-		 *\brief		Writes the tone mapping into a text file.
-		 *\param[in]	file	The file.
-		 *\~french
-		 *\brief		Ecrit le mappage de tons dans un fichier texte.
-		 *\param[in]	file	Le fichier.
-		 */
-		C3D_API bool writeInto( castor::TextFile & file );
-		/**
-		 *\~english
-		 *\brief		sets the HDR config for the tone mapping.
-		 *\param[in]	config	The new value.
-		 *\~french
-		 *\brief		Définit la configuration HDR pour le mappage de tons.
-		 *\param[in]	config	La nouvelle valeur.
-		 */
-		C3D_API void setConfig( HdrConfig const & config );
-		/**
-		 *\~english
-		 *\return		The HDR configuration.
-		 *\~french
-		 *\return		La configuration HDR.
-		 */
-		inline HdrConfig const & getConfig()const
-		{
-			return m_config;
-		}
 
 	private:
 		/**
@@ -133,41 +115,20 @@ namespace castor3d
 		 *\brief		Met à jour les variables shader du mappage de tons.
 		 */
 		C3D_API virtual void doUpdate() = 0;
-		/**
-		 *\~english
-		 *\brief		Writes the tone mapping into a text file.
-		 *\param[in]	file	The file.
-		 *\~french
-		 *\brief		Ecrit le mappage de tons dans un fichier texte.
-		 *\param[in]	file	Le fichier.
-		 */
-		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
 
 	protected:
-		//!\~english	The HDR configuration.
-		//!\~french		La configuration HDR.
-		HdrConfig m_config;
-		//!\~english	The exposure shader variable.
-		//!\~french		La variable shader pour l'exposition.
-		Uniform1fSPtr m_exposureVar;
-		//!\~english	The gamma correction shader variable.
-		//!\~french		La variable shader pour la correction gamma.
-		Uniform1fSPtr m_gammaVar;
-		//!\~english	The tone mapping shader program.
-		//!\~french		Le shader de mappage de ton.
-		RenderPipelineUPtr m_pipeline;
 		//!\~english	The matrix data UBO.
 		//!\~french		L'UBO de données de matrices.
 		MatrixUbo m_matrixUbo;
 		//!\~english	The configuration data UBO.
 		//!\~french		L'UBO de données de configuration.
-		UniformBuffer m_configUbo;
+		HdrConfigUbo m_configUbo;
+		//!\~english	The tone mapping shader program.
+		//!\~french		Le shader de mappage de ton.
+		RenderPipelineUPtr m_pipeline;
 		//!\~english	The pipeline used to render the tone mapping.
 		//!\~french		Le pipeline utilisé pour le rendu du mappage de tons.
 		RenderColourToTextureUPtr m_colour;
-		//!\~english	The configuration constants buffer name.
-		//!\~french		Le nom du tampon de constantes de configuration.
-		C3D_API static castor::String const HdrConfigUbo;
 		//!\~english	The render pass timer.
 		//!\~french		Le timer de passe de rendu.
 		RenderPassTimerSPtr m_timer;

@@ -1,4 +1,4 @@
-﻿#include "ForwardRenderTechniquePass.hpp"
+#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"

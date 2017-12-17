@@ -1,55 +1,32 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_PROPERTIES_HOLDER_H___
-#define ___GUICOMMON_PROPERTIES_HOLDER_H___
+#ifndef ___GuiCommon_PropertiesHolder_H___
+#define ___GuiCommon_PropertiesHolder_H___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommonPrerequisites.hpp"
 
+#include <wx/panel.h>
 #include <wx/propgrid/propgrid.h>
+#include <wx/aui/framemanager.h>
+#include <wx/aui/auibar.h>
 
 namespace GuiCommon
 {
 	class PropertiesHolder
-		: public wxPropertyGrid
+		: public wxPanel
 	{
 	public:
-		PropertiesHolder( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		PropertiesHolder( wxWindow * parent
+			, wxPoint const & position = wxDefaultPosition
+			, wxSize const & size = wxDefaultSize );
 		~PropertiesHolder();
 
-		void setPropertyData( TreeItemProperty * p_data );
-		/**
-		 *\~english
-		 *\brief		Retrieves the editable status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de modifiabilità
-		 *\return		La valeur
-		 */
-		inline bool IsEditable()const
-		{
-			return m_bCanEdit;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the button editor
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'àditeur bouton
-		 *\return		La valeur
-		 */
-		static inline wxPGEditor * getButtonEditor()
-		{
-			return m_buttonEditor;
-		}
+		void setGrid( wxPropertyGrid * grid );
 
 	private:
-		void onPropertyChange( wxPropertyGridEvent & p_event );
-
-	private:
-		bool m_bCanEdit;
-		TreeItemProperty * m_data;
-		static wxPGEditor * m_buttonEditor;
+		wxAuiManager m_auiManager;
+		wxPropertyGrid * m_grid{ nullptr };
 	};
 }
 

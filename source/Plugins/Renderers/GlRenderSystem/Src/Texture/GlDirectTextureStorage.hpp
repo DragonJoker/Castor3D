@@ -9,16 +9,16 @@ See LICENSE file in root folder
 namespace GlRender
 {
 #if !defined( NDEBUG )
-#	define Debug_Decl( type, name )\
-	type name
-#	define Debug_Set( name, value )\
-	name = value
-#	define Debug_Check( name, value )\
-	REQUIRE( name == value )
+#	define GlDebug_Decl( type, name )\
+	type name;
+#	define GlDebug_Set( name, value )\
+	name = value;
+#	define GlDebug_Check( name, value )\
+	REQUIRE( name == value );
 #else
-#	define Debug_Decl( type, name )
-#	define Debug_Set( name, value )
-#	define Debug_Check( name, value )
+#	define GlDebug_Decl( type, name )
+#	define GlDebug_Set( name, value )
+#	define GlDebug_Check( name, value )
 #endif
 	/*!
 	\author		Sylvain doremus.
@@ -59,7 +59,7 @@ namespace GlRender
 		void fill( castor3d::TextureStorage & p_storage, castor3d::TextureImage const & p_image );
 
 	private:
-		Debug_Decl( uint32_t, m_allocatedSize )
+		GlDebug_Decl( uint32_t, m_allocatedSize )
 	};
 }
 

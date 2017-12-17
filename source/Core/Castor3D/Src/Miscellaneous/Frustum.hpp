@@ -94,20 +94,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Checks if given BoundingSphere is in the view frustum.
-		 *\param[in]	sphere		The BoundingSphere.
-		 *\param[in]	position	The position for the BoundingSphere.
-		 *\param[in]	scale		The scale for the BoundingSphere.
+		 *\param[in]	sphere			The BoundingSphere.
+		 *\param[in]	transformations	The BoundingSphere transformations matrix.
+		 *\param[in]	scale			The scale for the BoundingSphere.
 		 *\return		\p false if the BoundingSphere is completely out of the view frustum.
 		 *\~french
 		 *\brief
 		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue.
-		 *\param[in]	sphere		La BoundingSphere.
-		 *\param[in]	position	La position de la BoundingSphere.
-		 *\param[in]	scale		L'échelle de la SphereBox.
+		 *\param[in]	sphere			La BoundingSphere.
+		 *\param[in]	transformations	La matrice de transformations de la BoundingSphere.
+		 *\param[in]	scale			L'échelle de la BoundingSphere.
 		 *\return		\p false si la BoundingSphere est complètement en dehors du frustum de vue.
 		 */
 		C3D_API bool isVisible( castor::BoundingSphere const & sphere
-			, castor::Point3r const & position
+			, castor::Matrix4x4r const & transformations
 			, castor::Point3r const & scale )const;
 		/**
 		 *\~english

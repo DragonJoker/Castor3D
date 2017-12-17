@@ -87,13 +87,6 @@ namespace castor3d
 							, *itSubmeshes.first
 							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
-
-						doUnbindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
-							, itSubmeshes.second[0].m_passNode
-							, scene
-							, *itPipelines.first
-							, shadowMaps
-							, envMap );
 					}
 				}
 			}
@@ -161,13 +154,6 @@ namespace castor3d
 							, *itSubmeshes.first
 							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
-
-						doUnbindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
-							, itSubmeshes.second[0].m_passNode
-							, scene
-							, *itPipelines.first
-							, shadowMaps
-							, envMap );
 					}
 				}
 			}
@@ -214,15 +200,7 @@ namespace castor3d
 						, shadowMaps
 						, renderNode.m_modelUbo
 						, envMap );
-
 					doRenderNode( renderNode );
-
-					doUnbindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, envMap );
 				}
 			}
 		}
@@ -272,15 +250,7 @@ namespace castor3d
 						, shadowMaps
 						, renderNode.m_modelUbo
 						, envMap );
-
 					doRenderNode( renderNode );
-
-					doUnbindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, envMap );
 				}
 			}
 		}
@@ -313,14 +283,6 @@ namespace castor3d
 					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_instance );
 					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_instance );
 					++info.m_drawCalls;
-
-					doUnbindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, envMap );
-
 					++info.m_visibleObjectsCount;
 				}
 			}
@@ -369,11 +331,7 @@ namespace castor3d
 			{
 				if ( it->m_sceneNode.isDisplayable()
 					&& it->m_sceneNode.isVisible()
-					&& camera.isVisible( it->m_data.getBoundingSphere()
-						, it->m_sceneNode.getDerivedPosition()
-						, it->m_sceneNode.getDerivedScale() )
-					&& camera.isVisible( it->m_data.getBoundingBox()
-						, it->m_sceneNode.getDerivedTransformationMatrix() ) )
+					&& camera.isVisible( it->m_instance, it->m_data ) )
 				{
 					std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
 					auto id = it->m_passNode.m_pass.getId() - 1;

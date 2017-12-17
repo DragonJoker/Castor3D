@@ -5,7 +5,7 @@
 #include "AuiToolBarArt.hpp"
 #include "StcTextEditor.hpp"
 #include "FrameVariablesList.hpp"
-#include "PropertiesHolder.hpp"
+#include "PropertiesContainer.hpp"
 #include "ShaderEditorPage.hpp"
 
 #include <Engine.hpp>

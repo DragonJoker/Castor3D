@@ -7,6 +7,7 @@
 #include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Mesh.hpp>
+#include <Mesh/Skeleton/Skeleton.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -337,9 +338,20 @@ namespace GuiCommon
 
 				if ( result && it.second->isSerialisable() )
 				{
-					Path path{ folder / subfolder / it.first + cuT( ".cmsh" ) };
-					BinaryFile file{ path, File::OpenMode::eWrite };
-					result = BinaryWriter< Mesh > {}.write( *mesh, file );
+					Path base{ folder / subfolder };
+					Path path{ base / it.first + cuT( ".cmsh" ) };
+					{
+						BinaryFile file{ path, File::OpenMode::eWrite };
+						result = BinaryWriter< Mesh >{}.write( *mesh, file );
+					}
+
+					auto skeleton = mesh->getSkeleton();
+
+					if ( result && skeleton )
+					{
+						BinaryFile file{ base / ( it.first + cuT( ".cskl" ) ), File::OpenMode::eWrite };
+						result = BinaryWriter< Skeleton >{}.write( *skeleton, file );
+					}
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-﻿#include "MatrixUbo.hpp"
+#include "MatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -13,6 +13,8 @@ namespace castor3d
 	String const MatrixUbo::Projection = cuT( "c3d_projection" );
 	String const MatrixUbo::CurView = cuT( "c3d_curView" );
 	String const MatrixUbo::PrvView = cuT( "c3d_prvView" );
+	String const MatrixUbo::CurViewProj = cuT( "c3d_curViewProj" );
+	String const MatrixUbo::PrvViewProj = cuT( "c3d_prvViewProj" );
 	String const MatrixUbo::InvProjection = cuT( "c3d_invProjection" );
 	String const MatrixUbo::CurJitter = cuT( "c3d_curJitter" );
 	String const MatrixUbo::PrvJitter = cuT( "c3d_prvJitter" );
@@ -25,6 +27,8 @@ namespace castor3d
 		, m_invProjection{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::InvProjection ) }
 		, m_curView{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::CurView ) }
 		, m_prvView{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::PrvView ) }
+		, m_curViewProj{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::CurViewProj ) }
+		, m_prvViewProj{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::PrvViewProj ) }
 		, m_curJitter{ *m_ubo.createUniform< UniformType::eVec2f >( MatrixUbo::CurJitter ) }
 		, m_prvJitter{ *m_ubo.createUniform< UniformType::eVec2f >( MatrixUbo::PrvJitter ) }
 	{
@@ -39,9 +43,11 @@ namespace castor3d
 		, Point2r const & jitter )const
 	{
 		m_prvView.setValue( m_curView.getValue() );
+		m_prvViewProj.setValue( m_curViewProj.getValue() );
 		m_prvJitter.setValue( Point2r{ m_curJitter.getValue() } );
 		m_curView.setValue( view );
 		m_projection.setValue( projection );
+		m_curViewProj.setValue( projection * view );
 		m_invProjection.setValue( projection.getInverse() );
 		m_curJitter.setValue( jitter );
 		m_ubo.update();

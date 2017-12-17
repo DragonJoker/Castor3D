@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//***********************************************************************************************
 
@@ -756,6 +756,12 @@
 	inline Mat3 mat3( Type const & p_value, Values const & ... p_values )
 	{
 		return writeFunctionCall< Mat3, Type, Values... >( p_value.m_writer, cuT( "mat3" ), p_value, p_values... );
+	}
+
+	template< typename ... Values >
+	inline Mat2 mat2( Type const & p_value, Values const & ... p_values )
+	{
+		return writeFunctionCall< Mat2, Type, Values... >( p_value.m_writer, cuT( "mat2" ), p_value, p_values... );
 	}
 
 	template< typename ... Values >

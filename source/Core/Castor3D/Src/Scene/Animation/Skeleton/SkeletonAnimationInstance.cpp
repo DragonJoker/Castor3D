@@ -131,7 +131,6 @@ namespace castor3d
 			}
 
 			m_curr->apply();
-			//static_cast< Mesh & >( *m_meshAnimation.getOwner() ).updateContainers();
 		}
 	}
 

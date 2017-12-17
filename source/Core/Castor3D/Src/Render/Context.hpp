@@ -165,6 +165,21 @@ namespace castor3d
 			, TextureLayout const & texture );
 		/**
 		 *\~english
+		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\~french
+		 *\brief		Rend la texture 2D donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 */
+		C3D_API void renderTextureNearest( castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
+		/**
+		 *\~english
 		 *\brief		Renders the wanted layer of given 2D texture array to the currently draw-bound frame buffer.
 		 *\param[in]	position	The render viewport position.
 		 *\param[in]	size		The render viewport size.
@@ -318,6 +333,24 @@ namespace castor3d
 		{
 			static castor::Position const position;
 			renderTexture( position
+				, size
+				, texture );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\~french
+		 *\brief		Rend la texture 2D donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 */
+		inline void renderTextureNearest( castor::Size const & size
+			, TextureLayout const & texture )
+		{
+			static castor::Position const position;
+			renderTextureNearest( position
 				, size
 				, texture );
 		}

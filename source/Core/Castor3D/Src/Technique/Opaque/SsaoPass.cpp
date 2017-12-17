@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -41,9 +41,8 @@ namespace castor3d
 			return a + f * ( b - a );
 		}
 
-		Point3fArray doGetKernel()
+		Point3fArray doGetKernel( uint32_t size )
 		{
-			constexpr uint32_t size = 64;
 			std::uniform_real_distribution< float > distribution( 0.0f, 1.0f );
 			std::default_random_engine generator;
 			Point3fArray result;
@@ -101,9 +100,9 @@ namespace castor3d
 
 			for ( auto i = 0u; i < size; i++ )
 			{
-				noise.emplace_back( distribution( generator ) * 2.0 - 1.0
+				noise.push_back( point::getNormalised( Point3r{ distribution( generator ) * 2.0 - 1.0
 					, distribution( generator ) * 2.0 - 1.0
-					, 0.0f );
+					, 0.0f } ) );
 			}
 
 			auto buffer = PxBufferBase::create( Size{ 4, 4 }
@@ -162,7 +161,8 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		glsl::Shader doGetSsaoPixelProgram( Engine & engine )
+		glsl::Shader doGetSsaoPixelProgram( Engine & engine
+			, SsaoConfig const & config )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
@@ -177,11 +177,12 @@ namespace castor3d
 			auto c3d_mapNoise = writer.declSampler< Sampler2D >( cuT( "c3d_mapNoise" ), index++ );
 
 			Ubo ssaoConfig{ writer, cuT( "SsaoConfig" ), 8u };
-			auto c3d_kernel = ssaoConfig.declMember< Vec3 >( cuT( "c3d_kernel" ), 64u );
+			auto c3d_kernel = ssaoConfig.declMember< Vec3 >( cuT( "c3d_kernel" ), config.m_kernelSize.range().max() );
 			auto c3d_kernelSize = ssaoConfig.declMember< Int >( cuT( "c3d_kernelSize" ) );
 			auto c3d_radius = ssaoConfig.declMember< Float >( cuT( "c3d_radius" ) );
 			auto c3d_bias = ssaoConfig.declMember< Float >( cuT( "c3d_bias" ) );
 			auto c3d_noiseScale = ssaoConfig.declMember< Vec2 >( cuT( "c3d_noiseScale" ) );
+			auto c3d_ssaoSize = ssaoConfig.declMember< Vec2 >( cuT( "c3d_ssaoSize" ) );
 			ssaoConfig.end();
 
 			glsl::Utils utils{ writer };
@@ -189,13 +190,13 @@ namespace castor3d
 			utils.declareCalcVSPosition();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ) );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto texCoord = writer.declLocale( cuT( "texCoord" ), utils.calcTexCoord() );
-
+					auto texCoord = writer.declLocale( cuT( "texCoord" )
+						, utils.calcTexCoord( c3d_ssaoSize ) );
 					auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 						, utils.calcVSPosition( texCoord
 							, texture( c3d_mapDepth, texCoord ).r()
@@ -215,33 +216,36 @@ namespace castor3d
 						, 0.0_f );
 					auto radius = writer.declLocale( cuT( "radius" )
 						, vec3( c3d_radius ) );
+					auto samplePos = writer.declLocale< Vec3 >( cuT( "samplePos" ) );
+					auto offset = writer.declLocale< Vec4 >( cuT( "offset" ) );
+					auto sampleDepth = writer.declLocale< Float >( cuT( "sampleDepth" ) );
+					auto rangeCheck = writer.declLocale< Float >( cuT( "rangeCheck" ) );
 
-					FOR( writer, Int, i, 0, cuT( "i < c3d_kernelSize" ), cuT( "++i" ) )
+					for ( auto i = 0u; i < config.m_kernelSize.value(); ++i )
 					{
 						// get sample position
-						auto samplePos = writer.declLocale( cuT( "samplePos" )
-							, tbn * c3d_kernel[i] );                                // From tangent to view-space
+						samplePos = tbn * c3d_kernel[i];                            // From tangent to view-space
 						samplePos = glsl::fma( samplePos, radius, vsPosition );
-						auto offset = writer.declLocale( cuT( "offset" )
-							, vec4( samplePos, 1.0 ) );
+						offset = vec4( samplePos, 1.0 );
 						offset = c3d_mtxGProj * offset;                             // from view to clip-space
 						offset.xyz() = offset.xyz() / offset.w();                   // perspective divide
 						offset.xyz() = glsl::fma( offset.xyz()
 							, vec3( 0.5_f )
 							, vec3( 0.5_f ) );                                      // transform to range 0.0 - 1.0 
-						auto sampleDepth = writer.declLocale( cuT( "sampleDepth" )
-							, utils.calcVSPosition( offset.xy()
-								, texture( c3d_mapDepth, offset.xy() ).r()
-								, c3d_mtxInvProj ).z() );
-						auto rangeCheck = writer.declLocale( cuT( "rangeCheck" )
-							, smoothstep( 0.0_f, 1.0_f, c3d_radius / glsl::abs( vsPosition.z() - sampleDepth ) ) );
-						occlusion += writer.ternary( sampleDepth >= samplePos.z() + c3d_bias, 1.0_f, 0.0_f ) * rangeCheck;
+						sampleDepth = utils.calcVSPosition( offset.xy()
+							, texture( c3d_mapDepth, offset.xy() ).r()
+							, c3d_mtxInvProj ).z();
+						rangeCheck = smoothstep( 0.0_f
+							, 1.0_f
+							, c3d_radius / glsl::abs( vsPosition.z() - sampleDepth ) );
+						occlusion += writer.ternary( sampleDepth >= samplePos.z() + c3d_bias
+							, 1.0_f
+							, 0.0_f ) * rangeCheck;
 					}
-					ROF;
 
 					occlusion = 1.0_f - writer.paren( occlusion / c3d_kernelSize );
-					pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
-			} );
+					pxl_fragColor = occlusion;
+				} );
 			return writer.finalise();
 		}
 		
@@ -277,39 +281,46 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
+			Ubo blurConfig{ writer, cuT( "BlurConfig" ), 2u };
+			auto c3d_texelSize = blurConfig.declMember< Vec2 >( cuT( "c3d_texelSize" ) );
+			auto c3d_noiseSize = blurConfig.declMember< Int >( cuT( "c3d_noiseSize" ) );
+			blurConfig.end();
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto c3d_mapColour = writer.declSampler< Sampler2D >( cuT( "c3d_mapColour" ), MinTextureIndex );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ) );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto texelSize = writer.declLocale( cuT( "texelSize" ), vec2( 1.0_f, 1.0_f ) / vec2( textureSize( c3d_mapColour, 0 ) ) );
-					auto result = writer.declLocale( cuT( "result" ), 0.0_f );
+					auto result = writer.declLocale( cuT( "result" )
+						, 0.0_f );
+					auto hlim = writer.declLocale( cuT( "hlim" )
+						, vec2( glsl::fma( writer.cast< Float >( -c3d_noiseSize ), 0.5_f, 0.5_f ) ) );
+					auto offset = writer.declLocale< Vec2 >( cuT( "offset" ) );
 
-					FOR( writer, Int, x, -2, cuT( "x < 2" ), cuT( "++x" ) )
+					FOR( writer, Int, x, 0, "x < c3d_noiseSize", "++x" )
 					{
-						FOR( writer, Int, y, -2, cuT( "y < 2" ), cuT( "++y" ) )
+						FOR( writer, Int, y, 0, "y < c3d_noiseSize", "++y" )
 						{
-							auto offset = writer.declLocale( cuT( "offset" ), vec2( writer.cast< Float >( x ), writer.cast< Float >( y ) ) * texelSize );
+							offset = writer.paren( hlim + vec2( Float( x ), Float( y ) ) ) * c3d_texelSize;
 							result += texture( c3d_mapColour, vtx_texture + offset ).r();
 						}
 						ROF;
 					}
 					ROF;
 
-					result /= writer.paren( 4.0_f * 4.0_f );
-					pxl_fragColor = vec4( vec3( result ), 1.0 );
+					pxl_fragColor = result / writer.cast< Float >( c3d_noiseSize * c3d_noiseSize );
 				} );
 			return writer.finalise();
 		}
 
-		ShaderProgramSPtr doGetSsaoProgram( Engine & engine )
+		ShaderProgramSPtr doGetSsaoProgram( Engine & engine
+			, SsaoConfig const & config )
 		{
 			auto vtx = doGetSsaoVertexProgram( engine );
-			auto pxl = doGetSsaoPixelProgram( engine );
+			auto pxl = doGetSsaoPixelProgram( engine, config );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
@@ -382,22 +393,25 @@ namespace castor3d
 		, SsaoConfig const & config
 		, GpInfoUbo & gpInfoUbo )
 		: m_engine{ engine }
-		, m_size{ size }
+		, m_size{ size/*.getWidth() / 2, size.getHeight() / 2*/ }
 		, m_matrixUbo{ engine }
-		, m_ssaoKernel{ doGetKernel() }
+		, m_ssaoKernel{ doGetKernel( config.m_kernelSize.value() ) }
 		, m_ssaoNoise{ doGetNoise( engine ) }
 		, m_ssaoResult{ engine }
-		, m_ssaoProgram{ doGetSsaoProgram( engine ) }
+		, m_ssaoProgram{ doGetSsaoProgram( engine, config ) }
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
 			, *engine.getRenderSystem()
 			, 8u }
-		, m_blurProgram{ doGetBlurProgram( engine ) }
-		, m_blurResult{ engine }
 		, m_viewport{ engine }
 		, m_config{ config }
 		, m_ssaoTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao raw" ), cuT( "Ssao raw" ) ) }
-		, m_blurTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao blur" ), cuT( "Ssao blur" ) ) }
 		, m_gpInfoUbo{ gpInfoUbo }
+		, m_blurProgram{ doGetBlurProgram( engine ) }
+		, m_blurResult{ engine }
+		, m_blurConfig{ cuT( "BlurConfig" )
+			, *engine.getRenderSystem()
+			, 2u }
+		, m_blurTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao blur" ), cuT( "Ssao blur" ) ) }
 	{
 		doInitialiseQuadRendering();
 		doInitialiseSsaoPass();
@@ -431,11 +445,12 @@ namespace castor3d
 		auto & renderSystem = *m_engine.getRenderSystem();
 		float const wScale = m_size.getWidth() / 4.0f;
 		float const hScale = m_size.getHeight() / 4.0f;
-		m_kernelUniform = m_ssaoConfig.createUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), 64u );
-		m_ssaoConfig.createUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->setValue( 64 );
+		m_kernelUniform = m_ssaoConfig.createUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), m_config.m_kernelSize.range().max() );
+		m_ssaoConfig.createUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->setValue( m_config.m_kernelSize.value() );
 		m_ssaoConfig.createUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->setValue( m_config.m_radius );
 		m_ssaoConfig.createUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->setValue( m_config.m_bias );
 		m_ssaoConfig.createUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->setValue( Point2f( wScale, hScale ) );
+		m_ssaoConfig.createUniform< UniformType::eVec2f >( cuT( "c3d_ssaoSize" ) )->setValue( Point2f{ m_size.getWidth(), m_size.getHeight() } );
 		m_kernelUniform->setValues( m_ssaoKernel );
 
 		auto sampler = doCreateSampler( m_engine, cuT( "SSAO_Result" ), WrapMode::eClampToEdge );
@@ -443,7 +458,7 @@ namespace castor3d
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite );
 		ssaoResult->setSource( PxBufferBase::create( m_size
-			, PixelFormat::eA8R8G8B8 ) );
+			, PixelFormat::eL32F ) );
 		m_ssaoResult.setTexture( ssaoResult );
 		m_ssaoResult.setSampler( sampler );
 		m_ssaoResult.setIndex( MinTextureIndex );
@@ -475,12 +490,14 @@ namespace castor3d
 	void SsaoPass::doInitialiseBlurPass()
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
+		m_blurConfig.createUniform< UniformType::eVec2f >( cuT( "c3d_texelSize" ) )->setValue( Point2f{ 1.0 / m_size.getWidth(), 1.0 / m_size.getHeight() } );
+		m_blurConfig.createUniform< UniformType::eInt >( cuT( "c3d_noiseSize" ) )->setValue( 4 );
 		auto sampler = doCreateSampler( m_engine, cuT( "SSAO_Blurred" ), WrapMode::eClampToEdge );
 		auto blurResult = renderSystem.createTexture( TextureType::eTwoDimensions
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite );
 		blurResult->setSource( PxBufferBase::create( m_size
-			, PixelFormat::eA8R8G8B8 ) );
+			, PixelFormat::eL32F ) );
 		m_blurResult.setTexture( blurResult );
 		m_blurResult.setSampler( sampler );
 		m_blurResult.initialise();
@@ -497,6 +514,7 @@ namespace castor3d
 
 		m_blurPipeline = doCreatePipeline( m_engine, *m_blurProgram );
 		m_blurPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		m_blurPipeline->addUniformBuffer( m_blurConfig );
 
 		m_blurVertexBuffer = doCreateVbo( m_engine );
 		m_blurGeometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
@@ -541,6 +559,7 @@ namespace castor3d
 		m_blurPipeline.reset();
 		m_blurProgram.reset();
 		m_blurFbo->bind();
+		m_blurConfig.cleanup();
 		m_blurFbo->detachAll();
 		m_blurFbo->unbind();
 		m_blurFbo->cleanup();
@@ -557,6 +576,7 @@ namespace castor3d
 		m_ssaoFbo->clear( BufferComponent::eColour );
 		auto index = MinTextureIndex;
 		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
+		gp[size_t( DsTexture::eDepth )]->getTexture()->generateMipmaps();
 		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
 		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
@@ -575,6 +595,7 @@ namespace castor3d
 	void SsaoPass::doRenderBlur()
 	{
 		m_blurTimer->start();
+		m_blurConfig.bindTo( 2u );
 		m_viewport.apply();
 		m_blurFbo->bind( FrameBufferTarget::eDraw );
 		m_blurFbo->clear( BufferComponent::eColour );

@@ -79,24 +79,25 @@ namespace CastorViewer
 		void OnStop( wxCommandEvent & p_event );
 
 	private:
-		int m_iLogsHeight;
-		int m_iPropertiesWidth;
+		int m_logsHeight;
+		int m_propertiesWidth;
 		wxAuiManager m_auiManager;
-		RenderPanel * m_pRenderPanel;
+		RenderPanel * m_renderPanel;
 		wxTimer * m_timer;
 		wxAuiToolBar * m_toolBar;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
-		GuiCommon::PropertiesHolder * m_propertiesContainer;
+		GuiCommon::PropertiesHolder * m_propertiesHolder;
+		GuiCommon::PropertiesContainer * m_propertiesContainer;
 		wxListBox * m_messageLog;
 		wxListBox * m_errorLog;
 		GuiCommon::SplashScreen * m_splashScreen;
 		GuiCommon::SceneObjectsList * m_sceneObjectsList;
 		GuiCommon::MaterialsList * m_materialsList;
-		castor3d::SceneWPtr m_pMainScene;
-		castor3d::CameraWPtr m_pMainCamera;
+		castor3d::SceneWPtr m_mainScene;
+		castor3d::CameraWPtr m_mainCamera;
 		castor3d::SceneNodeWPtr m_sceneNode;
-		castor::Path m_strFilePath;
+		castor::Path m_filePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
 		wxTimer * m_timerErr;

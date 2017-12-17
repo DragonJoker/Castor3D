@@ -76,6 +76,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogType )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogDensity )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneParticleSystem )
+	DECLARE_ATTRIBUTE_PARSER( parserSceneHdrConfig )
 	DECLARE_ATTRIBUTE_PARSER( parserMesh )
 
 	// ParticleSystem parsers
@@ -270,6 +271,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserAnimatedObjectGroupAnimatedObject )
 	DECLARE_ATTRIBUTE_PARSER( parserAnimatedObjectGroupAnimation )
 	DECLARE_ATTRIBUTE_PARSER( parserAnimatedObjectGroupAnimationStart )
+	DECLARE_ATTRIBUTE_PARSER( parserAnimatedObjectGroupAnimationPause )
 	DECLARE_ATTRIBUTE_PARSER( parserAnimatedObjectGroupEnd )
 
 	// Animated object group animation parsers
@@ -291,6 +293,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnabled )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoBias )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoKernelSize )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnd )
 
 	// Subsurface Scattering parsers
@@ -301,6 +304,10 @@ namespace castor3d
 
 	// Transmittance Profile parsers
 	DECLARE_ATTRIBUTE_PARSER( parserTransmittanceProfileFactor )
+
+	// HDR config parsers
+	DECLARE_ATTRIBUTE_PARSER( parserHdrExponent )
+	DECLARE_ATTRIBUTE_PARSER( parserHdrGamma )
 }
 
 #endif

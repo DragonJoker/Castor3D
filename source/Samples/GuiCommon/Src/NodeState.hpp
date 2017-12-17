@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using Angles = std::array< castor::Angle, 2u >;
+	using Angles = std::array< castor::Angle, 3u >;
 	static float constexpr MaxAngularSpeed = 5.0f;
 	static float constexpr MaxScalarSpeed = 20.0f;
 	/**
@@ -26,23 +26,26 @@ namespace GuiCommon
 		/**
 		*\brief
 		*	Définit le noeud affecté par les évènements.
-		*\param[in] p_listener
+		*\param[in] listener
 		*	Le listener qui recevra les évènements.
-		*\param[in] p_node
+		*\param[in] node
 		*	Le noeud
+		*\param[in] camera
+		*	Dit si l'état est pour une caméra (pour désactiver le roll)
 		*/
-		NodeState( castor3d::FrameListener & p_listener
-			, castor3d::SceneNodeSPtr p_node );
+		NodeState( castor3d::FrameListener & listener
+			, castor3d::SceneNodeSPtr node
+			, bool camera );
 		/**
 		*\brief
 		*	Réinitialise l'état.
 		*/
-		void reset( float p_speed );
+		void reset( float speed );
 		/**
 		*\brief
 		*	Met à jour la vitesse maximale (de rotation et translation).
 		*/
-		void setMaxSpeed( float p_speed );
+		void setMaxSpeed( float speed );
 		/**
 		*\brief
 		*	Met à jour l'angle et le zoom en fonction des vitesses.
@@ -53,31 +56,45 @@ namespace GuiCommon
 		/**
 		*\brief
 		*	Définit la vitesse de rotation du noeud.
-		*param[in] p_value
+		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void setAngularVelocity( castor::Point2r const & p_value )noexcept;
+		void setAngularVelocity( castor::Point2r const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de translation du noeud.
-		*param[in] p_value
+		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void setScalarVelocity( castor::Point3r const & p_value )noexcept;
+		void setScalarVelocity( castor::Point3r const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de rotation du noeud.
-		*param[in] p_value
+		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void addAngularVelocity( castor::Point2r const & p_value )noexcept;
+		void addAngularVelocity( castor::Point2r const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de translation du noeud.
-		*param[in] p_value
+		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void addScalarVelocity( castor::Point3r const & p_value )noexcept;
+		void addScalarVelocity( castor::Point3r const & value )noexcept;
+		/**
+		*\brief
+		*	Tourne le noeud autour de l'axe X de l'angle donné.
+		*param[in] value
+		*	La valeur de l'angle.
+		*/
+		void pitch( castor::Angle const & value )noexcept;
+		/**
+		*\brief
+		*	Tourne le noeud autour de l'axe Y de l'angle donné.
+		*param[in] value
+		*	La valeur de l'angle.
+		*/
+		void yaw( castor::Angle const & value )noexcept;
 
 	private:
 		//! Le listener qui recevra les évènements de déplacement / rotation.
@@ -88,6 +105,8 @@ namespace GuiCommon
 		castor::Point3r const m_originalPosition;
 		//! L'orientation originelle du noeud.
 		castor::Quaternion const m_originalOrientation;
+		//! La rotation initiale sur les axes X et Y.
+		Angles const m_originalAngles;
 		//! La rotation sur les axes X et Y.
 		Angles m_angles;
 		//! La vitesse de rotation sur l'axe X.

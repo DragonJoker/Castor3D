@@ -43,14 +43,18 @@ namespace CastorViewer
 		: public wxPanel
 	{
 	public:
-		RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE );
+		RenderPanel( wxWindow * parent
+			, wxWindowID id
+			, wxPoint const & pos = wxDefaultPosition
+			, wxSize const & size = wxDefaultSize
+			, long style = wxDEFAULT_FRAME_STYLE );
 		virtual ~RenderPanel();
 
 		virtual void Focus();
 		virtual void UnFocus();
 
 		virtual void DrawOneFrame();
-		void setRenderWindow( castor3d::RenderWindowSPtr p_window );
+		void setRenderWindow( castor3d::RenderWindowSPtr window );
 
 		inline castor3d::RenderWindowSPtr getRenderWindow()const
 		{
@@ -72,39 +76,41 @@ namespace CastorViewer
 		castor::real doTransformY( int y );
 		int doTransformX( castor::real x );
 		int doTransformY( castor::real y );
-		void doUpdateSelectedGeometry( castor3d::GeometrySPtr p_geometry, castor3d::SubmeshSPtr p_submesh );
-		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeSPtr p_node );
+		void doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry
+			, castor3d::SubmeshSPtr submesh );
+		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeSPtr node
+			, bool camera );
 
 		DECLARE_EVENT_TABLE()
-		void OnTimerFwd( wxTimerEvent & p_event );
-		void OnTimerBck( wxTimerEvent & p_event );
-		void OnTimerLft( wxTimerEvent & p_event );
-		void OnTimerRgt( wxTimerEvent & p_event );
-		void OnTimerUp( wxTimerEvent & p_event );
-		void OnTimerDwn( wxTimerEvent & p_event );
-		void OnTimerMouse( wxTimerEvent & p_event );
-		void OnTimerMovement( wxTimerEvent & p_event );
-		void OnSize( wxSizeEvent & p_event );
-		void OnMove( wxMoveEvent & p_event );
-		void OnPaint( wxPaintEvent & p_event );
-		void OnEnterWindow( wxMouseEvent & p_event );
-		void OnLeaveWindow( wxMouseEvent & p_event );
-		void OnEraseBackground( wxEraseEvent & p_event );
-		void OnsetFocus( wxFocusEvent & p_event );
-		void OnKillFocus( wxFocusEvent & p_event );
-		void onKeydown( wxKeyEvent & p_event );
-		void OnKeyUp( wxKeyEvent & p_event );
-		void OnChar( wxKeyEvent & p_event );
-		void OnMouseLDClick( wxMouseEvent & p_event );
-		void OnMouseLdown( wxMouseEvent & p_event );
-		void OnMouseLUp( wxMouseEvent & p_event );
-		void OnMouseMdown( wxMouseEvent & p_event );
-		void OnMouseMUp( wxMouseEvent & p_event );
-		void OnMouseRdown( wxMouseEvent & p_event );
-		void OnMouseRUp( wxMouseEvent & p_event );
-		void OnMouseMove( wxMouseEvent & p_event );
-		void OnMouseWheel( wxMouseEvent & p_event );
-		void OnMenuClose( wxCommandEvent & p_event );
+		void OnTimerFwd( wxTimerEvent & event );
+		void OnTimerBck( wxTimerEvent & event );
+		void OnTimerLft( wxTimerEvent & event );
+		void OnTimerRgt( wxTimerEvent & event );
+		void OnTimerUp( wxTimerEvent & event );
+		void OnTimerDwn( wxTimerEvent & event );
+		void OnTimerMouse( wxTimerEvent & event );
+		void OnTimerMovement( wxTimerEvent & event );
+		void OnSize( wxSizeEvent & event );
+		void OnMove( wxMoveEvent & event );
+		void OnPaint( wxPaintEvent & event );
+		void OnEnterWindow( wxMouseEvent & event );
+		void OnLeaveWindow( wxMouseEvent & event );
+		void OnEraseBackground( wxEraseEvent & event );
+		void OnsetFocus( wxFocusEvent & event );
+		void OnKillFocus( wxFocusEvent & event );
+		void onKeydown( wxKeyEvent & event );
+		void OnKeyUp( wxKeyEvent & event );
+		void OnChar( wxKeyEvent & event );
+		void OnMouseLDClick( wxMouseEvent & event );
+		void OnMouseLdown( wxMouseEvent & event );
+		void OnMouseLUp( wxMouseEvent & event );
+		void OnMouseMdown( wxMouseEvent & event );
+		void OnMouseMUp( wxMouseEvent & event );
+		void OnMouseRdown( wxMouseEvent & event );
+		void OnMouseRUp( wxMouseEvent & event );
+		void OnMouseMove( wxMouseEvent & event );
+		void OnMouseWheel( wxMouseEvent & event );
+		void OnMenuClose( wxCommandEvent & event );
 
 	public:
 		castor::real m_x{ 0.0_r };

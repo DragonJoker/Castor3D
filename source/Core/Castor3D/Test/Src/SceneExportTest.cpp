@@ -77,6 +77,14 @@ namespace Testing
 					Path path{ folder / subfolder / it.first + cuT( ".cmsh" ) };
 					BinaryFile file{ path, File::OpenMode::eWrite };
 					result &= BinaryWriter< Mesh >{}.write( *mesh, file );
+
+					auto skeleton = mesh->getSkeleton();
+
+					if ( result && skeleton )
+					{
+						BinaryFile file{ folder / subfolder / ( it.first + cuT( ".cskl" ) ), File::OpenMode::eWrite };
+						result = BinaryWriter< Skeleton >{}.write( *skeleton, file );
+					}
 				}
 			}
 

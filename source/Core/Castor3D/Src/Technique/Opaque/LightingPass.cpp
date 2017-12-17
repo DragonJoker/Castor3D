@@ -211,7 +211,7 @@ namespace castor3d
 			for ( auto & light : cache.getLights( p_type ) )
 			{
 				if ( light->getLightType() == LightType::eDirectional
-					|| camera.isVisible( light->getCubeBox(), light->getParent()->getDerivedTransformationMatrix() ) )
+					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 				{
 					if ( light->isShadowProducer() && light->getShadowMap() )
 					{

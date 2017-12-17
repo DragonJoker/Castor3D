@@ -1,4 +1,4 @@
-﻿#include "TransparentPass.hpp"
+#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -235,7 +235,6 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -300,9 +299,8 @@ namespace castor3d
 			curPosition = mtxModel * curPosition;
 			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, c3d_prvView * curPosition );
-			curPosition = c3d_curView * curPosition;
-			vtx_viewPosition = curPosition.xyz();
+				, c3d_prvViewProj * curPosition );
+			gl_Position = c3d_curViewProj * curPosition;
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
@@ -318,8 +316,6 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * curPosition;
-			prvPosition = c3d_projection * prvPosition;
 			// Convert the jitter from non-homogeneous coordiantes to homogeneous
 			// coordinates and add it:
 			// (note that for providing the jitter in non-homogeneous projection space,
@@ -360,7 +356,6 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -619,7 +614,6 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -858,7 +852,6 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );

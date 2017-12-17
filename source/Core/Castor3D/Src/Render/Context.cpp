@@ -1,4 +1,4 @@
-﻿#include "Context.hpp"
+#include "Context.hpp"
 
 #include "Engine.hpp"
 
@@ -6,6 +6,7 @@
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
+#include "HDR/HdrConfig.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderWindow.hpp"
@@ -156,6 +157,15 @@ namespace castor3d
 		, TextureLayout const & texture )
 	{
 		m_colour.render( position
+			, size
+			, texture );
+	}
+
+	void Context::renderTextureNearest( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
+	{
+		m_colour.renderNearest( position
 			, size
 			, texture );
 	}

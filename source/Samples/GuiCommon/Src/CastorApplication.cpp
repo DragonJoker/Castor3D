@@ -27,8 +27,10 @@
 #include "xpms/camera.xpm"
 #include "xpms/camera_sel.xpm"
 #include "xpms/castor_transparent.xpm"
+#include "xpms/collapse_all.xpm"
 #include "xpms/directional.xpm"
 #include "xpms/directional_sel.xpm"
+#include "xpms/expand_all.xpm"
 #include "xpms/frame_variable.xpm"
 #include "xpms/frame_variable_sel.xpm"
 #include "xpms/frame_variable_buffer.xpm"
@@ -361,6 +363,8 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_COLLAPSE_ALL, collapse_all_xpm );
+		ImagesLoader::addBitmap( eBMP_EXPAND_ALL, expand_all_xpm );
 		doLoadAppImages();
 		ImagesLoader::waitAsyncLoads();
 	}

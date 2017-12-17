@@ -181,6 +181,17 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene background image" );
 		}
 
+		if ( result && scene.hasSkybox() )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// HDR Configuration\n" ) ) > 0;
+
+			if ( result )
+			{
+				Logger::logInfo( cuT( "Scene::write - HDR Config" ) );
+				result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( scene.getHdrConfig(), file );
+			}
+		}
+
 		if ( result )
 		{
 			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );

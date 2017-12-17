@@ -83,7 +83,20 @@ namespace Testing
 		{
 			BinaryFile file{ m_testDataFolder / path, File::OpenMode::eRead };
 			BinaryParser< Mesh > parser;
-			CT_CHECK( parser.parse( *src, file ) );
+			auto result = CT_CHECK( parser.parse( *src, file ) );
+
+			if ( result && File::fileExists( m_testDataFolder / ( name + cuT( ".cskl" ) ) ) )
+			{
+				auto skeleton = std::make_shared< Skeleton >( *src->getScene() );
+				BinaryFile file{ m_testDataFolder / ( name + cuT( ".cskl" ) )
+					, File::OpenMode::eRead };
+				result = CT_CHECK( BinaryParser< Skeleton >().parse( *skeleton, file ) );
+
+				if ( result )
+				{
+					src->setSkeleton( skeleton );
+				}
+			}
 		}
 
 		doTestMesh( src );
@@ -103,14 +116,34 @@ namespace Testing
 		{
 			BinaryFile file{ path, File::OpenMode::eWrite };
 			BinaryWriter< Mesh > writer;
-			CT_CHECK( writer.write( *src, file ) );
+			auto result = CT_CHECK( writer.write( *src, file ) );
+			auto skeleton = src->getSkeleton();
+
+			if ( result && skeleton )
+			{
+				BinaryFile file{ Path{ path.getFileName() + cuT( ".cskl" ) }, File::OpenMode::eWrite };
+				result = CT_CHECK( BinaryWriter< Skeleton >().write( *skeleton, file ) );
+			}
 		}
 
 		auto dst = scene.getMeshCache().add( name + cuT( "_imp" ) );
 		{
 			BinaryFile file{ path, File::OpenMode::eRead };
 			BinaryParser< Mesh > parser;
-			CT_CHECK( parser.parse( *dst, file ) );
+			auto result = CT_CHECK( parser.parse( *dst, file ) );
+
+			if ( result && File::fileExists( Path{ path.getFileName() + cuT( ".cskl" ) } ) )
+			{
+				auto skeleton = std::make_shared< Skeleton >( *dst->getScene() );
+				BinaryFile file{ Path{ path.getFileName() + cuT( ".cskl" ) }
+					, File::OpenMode::eRead };
+				result = CT_CHECK( BinaryParser< Skeleton >().parse( *skeleton, file ) );
+
+				if ( result )
+				{
+					dst->setSkeleton( skeleton );
+				}
+			}
 		}
 
 		for ( auto submesh : *dst )

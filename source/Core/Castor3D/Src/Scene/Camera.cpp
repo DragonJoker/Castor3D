@@ -4,6 +4,7 @@
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 
 #include <Graphics/BoundingBox.hpp>
@@ -170,6 +171,16 @@ namespace castor3d
 		m_viewport.updateType( value );
 	}
 
+	bool Camera::isVisible( Geometry const & geometry, Submesh const & submesh )const
+	{
+		auto & sceneNode = *geometry.getParent();
+		return m_frustum.isVisible( geometry.getBoundingSphere( submesh )
+				, sceneNode.getDerivedTransformationMatrix()
+				, sceneNode.getDerivedScale() )
+			&& m_frustum.isVisible( geometry.getBoundingBox( submesh )
+				, sceneNode.getDerivedTransformationMatrix() );
+	}
+
 	bool Camera::isVisible( BoundingBox const & box
 		, Matrix4x4r const & transformations )const
 	{
@@ -178,11 +189,11 @@ namespace castor3d
 	}
 
 	bool Camera::isVisible( castor::BoundingSphere const & sphere
-		, Point3r const & position
+		, Matrix4x4r const & transformations
 		, Point3r const & scale )const
 	{
 		return m_frustum.isVisible( sphere
-			, position
+			, transformations
 			, scale );
 	}
 

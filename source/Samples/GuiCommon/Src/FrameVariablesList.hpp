@@ -14,7 +14,7 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		FrameVariablesList( PropertiesHolder * p_propertiesHolder
+		FrameVariablesList( PropertiesContainer * p_propertiesHolder
 			, wxWindow * p_parent
 			, wxPoint const & p_ptPos = wxDefaultPosition
 			, wxSize const & p_size = wxDefaultSize );
@@ -42,7 +42,7 @@ namespace GuiCommon
 
 	private:
 		castor3d::ShaderProgramWPtr m_program;
-		PropertiesHolder * m_propertiesHolder;
+		PropertiesContainer * m_propertiesHolder;
 	};
 }
 

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/Viewport.hpp"
 
+#include "HDR/HdrConfig.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 
