@@ -21,6 +21,89 @@ using namespace castor3d;
 
 namespace castor3d
 {
+	namespace
+	{
+		inline BlendState doCreateBlendState( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode )
+		{
+			BlendState state;
+			bool blend = false;
+
+			switch ( colourBlendMode )
+			{
+			case BlendMode::eNoBlend:
+				state.setRgbSrcBlend( BlendOperand::eOne );
+				state.setRgbDstBlend( BlendOperand::eZero );
+				break;
+
+			case BlendMode::eAdditive:
+				blend = true;
+				state.setRgbSrcBlend( BlendOperand::eOne );
+				state.setRgbDstBlend( BlendOperand::eOne );
+				break;
+
+			case BlendMode::eMultiplicative:
+				blend = true;
+				state.setRgbSrcBlend( BlendOperand::eZero );
+				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
+				break;
+
+			case BlendMode::eInterpolative:
+				blend = true;
+				state.setRgbSrcBlend( BlendOperand::eSrcColour );
+				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
+				break;
+
+			default:
+				blend = true;
+				state.setRgbSrcBlend( BlendOperand::eSrcColour );
+				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
+				break;
+			}
+
+			switch ( alphaBlendMode )
+			{
+			case BlendMode::eNoBlend:
+				state.setAlphaSrcBlend( BlendOperand::eOne );
+				state.setAlphaDstBlend( BlendOperand::eZero );
+				break;
+
+			case BlendMode::eAdditive:
+				blend = true;
+				state.setAlphaSrcBlend( BlendOperand::eOne );
+				state.setAlphaDstBlend( BlendOperand::eOne );
+				break;
+
+			case BlendMode::eMultiplicative:
+				blend = true;
+				state.setAlphaSrcBlend( BlendOperand::eZero );
+				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
+				state.setRgbSrcBlend( BlendOperand::eZero );
+				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
+				break;
+
+			case BlendMode::eInterpolative:
+				blend = true;
+				state.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
+				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
+				state.setRgbSrcBlend( BlendOperand::eSrcAlpha );
+				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
+				break;
+
+			default:
+				blend = true;
+				state.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
+				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
+				state.setRgbSrcBlend( BlendOperand::eSrcAlpha );
+				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
+				break;
+			}
+
+			state.enableBlend( blend );
+			return state;
+		}
+	}
+
 	String const OpaquePass::Output1 = cuT( "c3d_output1" );
 	String const OpaquePass::Output2 = cuT( "c3d_output2" );
 	String const OpaquePass::Output3 = cuT( "c3d_output3" );
@@ -130,28 +213,32 @@ namespace castor3d
 				, vec4( tangent, 0.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 				, texture );
-			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, SkinningUbo::computeTransform( writer, programFlags ) );
 				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
 					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				mtxModel = transform;
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, transform );
 				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
 					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else
 			{
-				mtxModel = c3d_mtxModel;
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, c3d_mtxModel );
 				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
 					, transpose( inverse( mat3( mtxModel ) ) ) );
 				//auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
 				//	, mat3( c3d_mtxNormal ) );
 			}
+
+			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -750,5 +837,101 @@ namespace castor3d
 
 	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
+	}
+
+	void OpaquePass::doPrepareFrontPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
+	{
+		auto it = m_frontPipelines.find( flags );
+
+		if ( it == m_frontPipelines.end() )
+		{
+			DepthStencilState dsState;
+			dsState.setDepthTest( true );
+			dsState.setDepthMask( WritingMask::eZero );
+			dsState.setDepthFunc( DepthFunc::eEqual );
+			RasteriserState rsState;
+			rsState.setCulledFaces( Culling::eFront );
+			auto & pipeline = *m_frontPipelines.emplace( flags
+				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+					, std::move( rsState )
+					, doCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
+					, MultisampleState{}
+					, program
+					, flags ) ).first->second;
+
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]()
+				{
+					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
+
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
+					{
+						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
+					}
+
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					{
+						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
+					}
+
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
+					{
+						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
+					}
+				} ) );
+		}
+	}
+
+	void OpaquePass::doPrepareBackPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
+	{
+		auto it = m_backPipelines.find( flags );
+
+		if ( it == m_backPipelines.end() )
+		{
+			DepthStencilState dsState;
+			dsState.setDepthTest( true );
+			dsState.setDepthMask( WritingMask::eZero );
+			dsState.setDepthFunc( DepthFunc::eEqual );
+			RasteriserState rsState;
+			rsState.setCulledFaces( Culling::eBack );
+			auto & pipeline = *m_backPipelines.emplace( flags
+				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+				, std::move( rsState )
+				, doCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
+					, MultisampleState{}
+				, program
+				, flags ) ).first->second;
+
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]()
+				{
+					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
+					pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
+					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
+
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
+					{
+						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
+					}
+
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					{
+						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
+					}
+
+					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
+					{
+						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
+					}
+				} ) );
+		}
 	}
 }

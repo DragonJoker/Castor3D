@@ -556,10 +556,10 @@ namespace castor3d
 	public:
 		//!\~english	The signal raised when the scene has changed.
 		//!\~french		Le signal levé lorsque la scène a changé.
-		OnSceneChanged onChanged;
+		mutable OnSceneChanged onChanged;
 		//!\~english	The signal raised when the scene is updating.
 		//!\~french		Le signal levé lorsque la scène se met à jour.
-		OnSceneUpdate onUpdate;
+		mutable OnSceneUpdate onUpdate;
 
 	private:
 		//!\~english	Tells if the scene is initialised.

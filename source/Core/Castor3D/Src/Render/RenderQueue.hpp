@@ -47,14 +47,14 @@ namespace castor3d
 	*/
 	struct SceneRenderNodes
 	{
-		SceneRenderNodes & operator=( SceneRenderNodes const & p_rhs )
+		SceneRenderNodes & operator=( SceneRenderNodes const & rhs )
 		{
-			m_staticNodes = p_rhs.m_staticNodes;
-			m_instantiatedStaticNodes = p_rhs.m_instantiatedStaticNodes;
-			m_skinnedNodes = p_rhs.m_skinnedNodes;
-			m_instantiatedSkinnedNodes = p_rhs.m_instantiatedSkinnedNodes;
-			m_morphingNodes = p_rhs.m_morphingNodes;
-			m_billboardNodes = p_rhs.m_billboardNodes;
+			m_staticNodes = rhs.m_staticNodes;
+			m_instantiatedStaticNodes = rhs.m_instantiatedStaticNodes;
+			m_skinnedNodes = rhs.m_skinnedNodes;
+			m_instantiatedSkinnedNodes = rhs.m_instantiatedSkinnedNodes;
+			m_morphingNodes = rhs.m_morphingNodes;
+			m_billboardNodes = rhs.m_billboardNodes;
 			return *this;
 		}
 
@@ -65,8 +65,9 @@ namespace castor3d
 		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodesByPipelineMap >;
 		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap >;
 
-		//!\~english	The scene.	\~french La scène.
-		Scene & m_scene;
+		//!\~english	The scene.
+		//!\~french		La scène.
+		Scene const & m_scene;
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
 		StaticNodesMap m_staticNodes;
@@ -86,20 +87,20 @@ namespace castor3d
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 		BillboardNodesMap m_billboardNodes;
 
-		SceneRenderNodes( Scene & p_scene
-			, StaticNodesMap const & p_staticGeometries = StaticNodesMap()
-			, SkinnedNodesMap const & p_skinnedGeometries = SkinnedNodesMap()
-			, InstantiatedStaticNodesMap const & p_instantiatedStaticGeometries = InstantiatedStaticNodesMap()
-			, InstantiatedSkinnedNodesMap const & p_instantiatedSkinnedGeometries = InstantiatedSkinnedNodesMap()
-			, MorphingNodesMap const & p_morphingGeometries = MorphingNodesMap()
-			, BillboardNodesMap const & p_billboards = BillboardNodesMap() )
-			: m_scene{ p_scene }
-			, m_staticNodes( p_staticGeometries )
-			, m_skinnedNodes( p_skinnedGeometries )
-			, m_instantiatedStaticNodes( p_instantiatedStaticGeometries )
-			, m_instantiatedSkinnedNodes( p_instantiatedSkinnedGeometries )
-			, m_morphingNodes( p_morphingGeometries )
-			, m_billboardNodes( p_billboards )
+		SceneRenderNodes( Scene const & scene
+			, StaticNodesMap const & staticGeometries = StaticNodesMap()
+			, SkinnedNodesMap const & skinnedGeometries = SkinnedNodesMap()
+			, InstantiatedStaticNodesMap const & instantiatedStaticGeometries = InstantiatedStaticNodesMap()
+			, InstantiatedSkinnedNodesMap const & instantiatedSkinnedGeometries = InstantiatedSkinnedNodesMap()
+			, MorphingNodesMap const & morphingGeometries = MorphingNodesMap()
+			, BillboardNodesMap const & billboards = BillboardNodesMap() )
+			: m_scene{ scene }
+			, m_staticNodes( staticGeometries )
+			, m_skinnedNodes( skinnedGeometries )
+			, m_instantiatedStaticNodes( instantiatedStaticGeometries )
+			, m_instantiatedSkinnedNodes( instantiatedSkinnedGeometries )
+			, m_morphingNodes( morphingGeometries )
+			, m_billboardNodes( billboards )
 		{
 		}
 	};
@@ -121,38 +122,38 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderPass	The parent render pass.
-		 *\param[in]	p_opaque		Tells if this render queue is for opaque nodes.
-		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	renderPass	The parent render pass.
+		 *\param[in]	opaque		Tells if this render queue is for opaque nodes.
+		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderPass	La passe de rendu parente.
-		 *\param[in]	p_opaque		Dit si cette file de rendu est pour les noeuds opaques.
-		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	renderPass	La passe de rendu parente.
+		 *\param[in]	opaque		Dit si cette file de rendu est pour les noeuds opaques.
+		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderQueue( RenderPass & p_renderPass
-			, bool p_opaque
-			, SceneNode const * p_ignored );
+		C3D_API RenderQueue( RenderPass & renderPass
+			, bool opaque
+			, SceneNode const * ignored );
 		/**
 		 *\~english
 		 *\brief		Plugs the render queue to given scene and camera.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_camera	The camera.
+		 *\param[in]	scene	The scene.
+		 *\param[in]	camera	The camera.
 		 *\~french
 		 *\brief		Branche la file de rendu à la scène et à la caméra données.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_camera	La caméra.
+		 *\param[in]	scene	La scène.
+		 *\param[in]	camera	La caméra.
 		 */
-		C3D_API void initialise( Scene & p_scene, Camera & p_camera );
+		C3D_API void initialise( Scene const & scene, Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Plugs the render queue to given scene.
-		 *\param[in]	p_scene		The scene.
+		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Branche la file de rendu à la scène donnée.
-		 *\param[in]	p_scene		La scène.
+		 *\param[in]	scene	La scène.
 		 */
-		C3D_API void initialise( Scene & p_scene );
+		C3D_API void initialise( Scene const & scene );
 		/**
 		 *\~english
 		 *\brief		Updates the render nodes.
@@ -174,12 +175,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Prepares given nodes for render.
-		 *\param[in]	p_camera		The camera.
+		 *\param[in]	camera		The camera.
 		 *\param[in]	p_inputNodes	The scene nodes.
 		 *\param[out]	p_outputNodes	Receives the renderable nodes.
 		 *\~french
 		 *\brief		Prépare les noeuds donnés pour le rendu.
-		 *\param[in]	p_camera		La caméra.
+		 *\param[in]	camera		La caméra.
 		 *\param[in]	p_inputNodes	Les noeuds de la scène.
 		 *\param[out]	p_outputNodes	Reçoit les noeuds à dessiner.
 		 */
@@ -196,21 +197,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Notification that the scene has changed.
-		 *\param[in]	p_scene	The changed scene.
+		 *\param[in]	scene	The changed scene.
 		 *\~french
 		 *\brief		Notification que la scène a changé.
-		 *\param[in]	p_scene	La scène changée.
+		 *\param[in]	scene	La scène changée.
 		 */
-		void onSceneChanged( Scene const & p_scene );
+		void onSceneChanged( Scene const & scene );
 		/**
 		 *\~english
 		 *\brief		Notification that the camera has changed.
-		 *\param[in]	p_camera	The changed camera.
+		 *\param[in]	camera	The changed camera.
 		 *\~french
 		 *\brief		Notification que la caméra a changé.
-		 *\param[in]	p_camera	La caméra changée.
+		 *\param[in]	camera	La caméra changée.
 		 */
-		void onCameraChanged( Camera const & p_camera );
+		void onCameraChanged( Camera const & camera );
 
 	protected:
 		//!\~english	Tells if this queue is for opaque nodes.

@@ -30,21 +30,21 @@ namespace castor3d
 		static String const NodeIndex = cuT( "c3d_iNodeIndex" );
 
 		template< bool Opaque, typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & p_pass
-			, UniformBuffer & p_ubo
-			, MapType & p_nodes
-			, PickingPass::NodeType p_type
-			, FuncType p_function )
+		inline void doTraverseNodes( RenderPass const & pass
+			, UniformBuffer & ubo
+			, MapType & nodes
+			, PickingPass::NodeType type
+			, FuncType function )
 		{
 			uint32_t count{ 1u };
 
-			for ( auto itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				p_pass.updatePipeline( *itPipelines.first );
+				pass.updatePipeline( *itPipelines.first );
 				itPipelines.first->apply();
-				auto drawIndex = p_ubo.getUniform< UniformType::eUInt >( DrawIndex );
-				auto nodeIndex = p_ubo.getUniform< UniformType::eUInt >( NodeIndex );
-				drawIndex->setValue( uint8_t( p_type ) + ( ( count & 0x00FFFFFF ) << 8 ) );
+				auto drawIndex = ubo.getUniform< UniformType::eUInt >( DrawIndex );
+				auto nodeIndex = ubo.getUniform< UniformType::eUInt >( NodeIndex );
+				drawIndex->setValue( uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 ) );
 				uint32_t index{ 0u };
 
 				for ( auto itPass : itPipelines.second )
@@ -52,8 +52,8 @@ namespace castor3d
 					for ( auto itSubmeshes : itPass.second )
 					{
 						nodeIndex->setValue( index++ );
-						p_ubo.update();
-						p_function( *itPipelines.first
+						ubo.update();
+						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
 							, itSubmeshes.first->getInstantiation()
@@ -66,27 +66,27 @@ namespace castor3d
 		}
 
 		template< bool Opaque, typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & p_pass
-			, UniformBuffer & p_ubo
-			, Scene & p_scene
-			, PickingPass::NodeType p_type
-			, MapType & p_nodes )
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, UniformBuffer & ubo
+			, Scene const & scene
+			, PickingPass::NodeType type
+			, MapType & nodes )
 		{
 			uint32_t count{ 1u };
 
-			for ( auto itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				p_pass.updatePipeline( *itPipelines.first );
+				pass.updatePipeline( *itPipelines.first );
 				itPipelines.first->apply();
-				auto drawIndex = p_ubo.getUniform< UniformType::eUInt >( DrawIndex );
-				auto nodeIndex = p_ubo.getUniform< UniformType::eUInt >( NodeIndex );
-				drawIndex->setValue( uint8_t( p_type ) + ( ( count & 0x00FFFFFF ) << 8 ) );
+				auto drawIndex = ubo.getUniform< UniformType::eUInt >( DrawIndex );
+				auto nodeIndex = ubo.getUniform< UniformType::eUInt >( NodeIndex );
+				drawIndex->setValue( uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 ) );
 				uint32_t index{ 0u };
 
 				for ( auto & renderNode : itPipelines.second )
 				{
 					nodeIndex->setValue( index++ );
-					p_ubo.update();
+					ubo.update();
 
 					if ( renderNode.m_data.isInitialised() )
 					{
@@ -99,18 +99,18 @@ namespace castor3d
 		}
 
 		template< typename MapType, typename NodeType, typename SubNodeType >
-		inline void doPickFromList( MapType const & p_map
-			, Point3f const & p_index
-			, std::weak_ptr< NodeType > & p_node
-			, std::weak_ptr< SubNodeType > & p_subnode
-			, uint32_t & p_face )
+		inline void doPickFromList( MapType const & map
+			, Point3f const & index
+			, std::weak_ptr< NodeType > & node
+			, std::weak_ptr< SubNodeType > & subnode
+			, uint32_t & face )
 		{
-			uint32_t pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
-			uint32_t nodeIndex{ uint32_t( p_index[1] ) };
-			uint32_t faceIndex{ uint32_t( p_index[3] ) };
+			uint32_t pipelineIndex{ ( uint32_t( index[0] ) >> 8 ) - 1 };
+			uint32_t nodeIndex{ uint32_t( index[1] ) };
+			uint32_t faceIndex{ uint32_t( index[3] ) };
 
-			REQUIRE( p_map.size() > pipelineIndex );
-			auto itPipeline = p_map.begin();
+			REQUIRE( map.size() > pipelineIndex );
+			auto itPipeline = map.begin();
 
 			while ( pipelineIndex )
 			{
@@ -121,23 +121,23 @@ namespace castor3d
 			REQUIRE( itPipeline->second.size() > nodeIndex );
 			auto itNode = itPipeline->second.begin() + nodeIndex;
 
-			p_subnode = std::static_pointer_cast< SubNodeType >( itNode->m_data.shared_from_this() );
-			p_node = std::static_pointer_cast< NodeType >( itNode->m_instance.shared_from_this() );
-			p_face = faceIndex;
+			subnode = std::static_pointer_cast< SubNodeType >( itNode->m_data.shared_from_this() );
+			node = std::static_pointer_cast< NodeType >( itNode->m_instance.shared_from_this() );
+			face = faceIndex;
 		}
 
 		template< typename MapType, typename NodeType, typename SubNodeType >
-		inline void doPickFromInstantiatedList( MapType const & p_map
-			, Point3f const & p_index
-			, std::weak_ptr< NodeType > & p_node
-			, std::weak_ptr< SubNodeType > & p_subnode
-			, uint32_t & p_face )
+		inline void doPickFromInstantiatedList( MapType const & map
+			, Point3f const & index
+			, std::weak_ptr< NodeType > & node
+			, std::weak_ptr< SubNodeType > & subnode
+			, uint32_t & face )
 		{
-			uint32_t pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
-			uint32_t nodeIndex{ uint32_t( p_index[1] ) };
+			uint32_t pipelineIndex{ ( uint32_t( index[0] ) >> 8 ) - 1 };
+			uint32_t nodeIndex{ uint32_t( index[1] ) };
 
-			REQUIRE( p_map.size() > pipelineIndex );
-			auto itPipeline = p_map.begin();
+			REQUIRE( map.size() > pipelineIndex );
+			auto itPipeline = map.begin();
 
 			while ( pipelineIndex )
 			{
@@ -171,14 +171,14 @@ namespace castor3d
 			if ( itPass != itPipeline->second.end()
 					&& itMesh != itPass->second.end() )
 			{
-				uint32_t instanceIndex{ uint32_t( p_index[2] ) };
-				uint32_t faceIndex{ uint32_t( p_index[3] ) };
+				uint32_t instanceIndex{ uint32_t( index[2] ) };
+				uint32_t faceIndex{ uint32_t( index[3] ) };
 				REQUIRE( !itMesh->second.empty() );
 				auto itNode = itMesh->second.begin() + instanceIndex;
 
-				p_subnode = itNode->m_data.shared_from_this();
-				p_node = std::static_pointer_cast< Geometry >( itNode->m_instance.shared_from_this() );
-				p_face = faceIndex;
+				subnode = itNode->m_data.shared_from_this();
+				node = std::static_pointer_cast< Geometry >( itNode->m_instance.shared_from_this() );
+				face = faceIndex;
 			}
 		}
 
@@ -200,32 +200,32 @@ namespace castor3d
 	{
 	}
 
-	void PickingPass::addScene( Scene & p_scene, Camera & p_camera )
+	void PickingPass::addScene( Scene & scene, Camera & camera )
 	{
-		auto itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;
-		auto itCam = itScn->second.emplace( &p_camera, RenderQueue{ *this, m_opaque, nullptr } ).first;
-		itCam->second.initialise( p_scene, p_camera );
+		auto itScn = m_scenes.emplace( &scene, CameraQueueMap{} ).first;
+		auto itCam = itScn->second.emplace( &camera, RenderQueue{ *this, m_opaque, nullptr } ).first;
+		itCam->second.initialise( scene, camera );
 	}
 
-	PickingPass::NodeType PickingPass::pick( Position const & p_position
-		, Camera const & p_camera )
+	PickingPass::NodeType PickingPass::pick( Position const & position
+		, Camera const & camera )
 	{
 		NodeType result{ NodeType::eNone };
 		m_geometry.reset();
 		m_submesh.reset();
 		m_face = 0u;
 
-		auto itScn = m_scenes.find( p_camera.getScene() );
+		auto itScn = m_scenes.find( camera.getScene() );
 
 		if ( itScn != m_scenes.end() )
 		{
-			auto itCam = itScn->second.find( &p_camera );
+			auto itCam = itScn->second.find( &camera );
 
 			if ( itCam != itScn->second.end() )
 			{
 				itCam->second.update();
 				auto & nodes = itCam->second.getRenderNodes();
-				auto pixel = doFboPick( p_position, p_camera, nodes );
+				auto pixel = doFboPick( position, camera, nodes );
 				result = doPick( pixel, nodes );
 			}
 		}
@@ -233,35 +233,35 @@ namespace castor3d
 		return result;
 	}
 
-	void PickingPass::doRenderNodes( SceneRenderNodes & p_nodes
-		, Camera const & p_camera )
+	void PickingPass::doRenderNodes( SceneRenderNodes & nodes
+		, Camera const & camera )
 	{
-		m_matrixUbo.update( p_camera.getView()
-			, p_camera.getViewport().getProjection() );
-		doRender( p_nodes.m_scene, p_nodes.m_instantiatedStaticNodes.m_backCulled );
-		doRender( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
-		doRender( p_nodes.m_scene, p_nodes.m_skinnedNodes.m_backCulled );
-		doRender( p_nodes.m_scene, p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
-		doRender( p_nodes.m_scene, p_nodes.m_morphingNodes.m_backCulled );
-		doRender( p_nodes.m_scene, p_nodes.m_billboardNodes.m_backCulled );
+		m_matrixUbo.update( camera.getView()
+			, camera.getViewport().getProjection() );
+		doRender( nodes.m_scene, nodes.m_instantiatedStaticNodes.m_backCulled );
+		doRender( nodes.m_scene, nodes.m_staticNodes.m_backCulled );
+		doRender( nodes.m_scene, nodes.m_skinnedNodes.m_backCulled );
+		doRender( nodes.m_scene, nodes.m_instantiatedSkinnedNodes.m_backCulled );
+		doRender( nodes.m_scene, nodes.m_morphingNodes.m_backCulled );
+		doRender( nodes.m_scene, nodes.m_billboardNodes.m_backCulled );
 	}
 
-	Point3f PickingPass::doFboPick( Position const & p_position
-		, Camera const & p_camera
-		, SceneRenderNodes & p_nodes )
+	Point3f PickingPass::doFboPick( Position const & position
+		, Camera const & camera
+		, SceneRenderNodes & nodes )
 	{
 		m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
 		getEngine()->getMaterialCache().getPassBuffer().bind();
-		p_camera.apply();
+		camera.apply();
 		m_pickingUbo.bindTo( 7u );
-		doRenderNodes( p_nodes, p_camera );
+		doRenderNodes( nodes, camera );
 		m_frameBuffer->unbind();
 
 		Position offset
 		{
-			p_position.x() - PickingOffset,
-			int32_t( p_camera.getHeight() - p_position.y() - PickingOffset )
+			position.x() - PickingOffset,
+			int32_t( camera.getHeight() - position.y() - PickingOffset )
 		};
 		m_frameBuffer->bind( FrameBufferTarget::eRead );
 		m_colourAttach->download( offset
@@ -272,39 +272,39 @@ namespace castor3d
 		return Point3f{ reinterpret_cast< float const * >( it->constPtr() ) };
 	}
 
-	PickingPass::NodeType PickingPass::doPick( Point3f const & p_pixel
-		, SceneRenderNodes & p_nodes )
+	PickingPass::NodeType PickingPass::doPick( Point3f const & pixel
+		, SceneRenderNodes & nodes )
 	{
 		NodeType result{ NodeType::eNone };
 
-		if ( castor::point::lengthSquared( p_pixel ) )
+		if ( castor::point::lengthSquared( pixel ) )
 		{
-			result = NodeType( uint32_t( p_pixel[0] ) & 0xFF );
+			result = NodeType( uint32_t( pixel[0] ) & 0xFF );
 
 			switch ( result )
 			{
 			case NodeType::eStatic:
-				doPickFromList( p_nodes.m_staticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				doPickFromList( nodes.m_staticNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eInstantiatedStatic:
-				doPickFromInstantiatedList( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				doPickFromInstantiatedList( nodes.m_instantiatedStaticNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eSkinning:
-				doPickFromList( p_nodes.m_skinnedNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				doPickFromList( nodes.m_skinnedNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eInstantiatedSkinning:
-				doPickFromInstantiatedList( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				doPickFromInstantiatedList( nodes.m_instantiatedSkinnedNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eMorphing:
-				doPickFromList( p_nodes.m_morphingNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				doPickFromList( nodes.m_morphingNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eBillboard:
-				doPickFromList( p_nodes.m_billboardNodes.m_backCulled, p_pixel, m_billboard, m_billboard, m_face );
+				doPickFromList( nodes.m_billboardNodes.m_backCulled, pixel, m_billboard, m_billboard, m_face );
 				break;
 
 			default:
@@ -317,103 +317,103 @@ namespace castor3d
 		return result;
 	}
 
-	void PickingPass::doRender( Scene & p_scene
-		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
+	void PickingPass::doRender( Scene const & scene
+		, SubmeshStaticRenderNodesByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
 			, m_pickingUbo
-			, p_nodes
+			, nodes
 			, NodeType::eInstantiatedStatic
-			, [&p_scene, this]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
+			, [&scene, this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
 				, InstantiationComponent & component
-				, StaticRenderNodeArray & p_renderNodes )
+				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !p_renderNodes.empty() && component.hasMatrixBuffer() )
+				if ( !renderNodes.empty() && component.hasMatrixBuffer() )
 				{
-					auto count = doCopyNodesMatrices( p_renderNodes, component.getMatrixBuffer() );
-					p_submesh.drawInstanced( p_renderNodes[0].m_buffers, count );
+					auto count = doCopyNodesMatrices( renderNodes, component.getMatrixBuffer() );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void PickingPass::doRender( Scene & p_scene
-		, StaticRenderNodesByPipelineMap & p_nodes )
+	void PickingPass::doRender( Scene const & scene
+		, StaticRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
 			, m_pickingUbo
-			, p_scene
+			, scene
 			, NodeType::eStatic
-			, p_nodes );
+			, nodes );
 	}
 
-	void PickingPass::doRender( Scene & p_scene
-		, SkinningRenderNodesByPipelineMap & p_nodes )
+	void PickingPass::doRender( Scene const & scene
+		, SkinningRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
 			, m_pickingUbo
-			, p_scene
+			, scene
 			, NodeType::eSkinning
-			, p_nodes );
+			, nodes );
 	}
 	
-	void PickingPass::doRender( Scene & p_scene
-		, SubmeshSkinningRenderNodesByPipelineMap & p_nodes )
+	void PickingPass::doRender( Scene const & scene
+		, SubmeshSkinningRenderNodesByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
 			, m_pickingUbo
-			, p_nodes
+			, nodes
 			, NodeType::eInstantiatedSkinning
-			, [&p_scene, this]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
+			, [&scene, this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
 				, InstantiationComponent & component
-				, SkinningRenderNodeArray & p_renderNodes )
+				, SkinningRenderNodeArray & renderNodes )
 			{
-				auto & instantiatedBones = p_submesh.getInstantiatedBones();
+				auto & instantiatedBones = submesh.getInstantiatedBones();
 
-				if ( !p_renderNodes.empty()
+				if ( !renderNodes.empty()
 					&& component.hasMatrixBuffer()
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					auto count = doCopyNodesBones( p_renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					p_submesh.drawInstanced( p_renderNodes[0].m_buffers, count );
+					auto count = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void PickingPass::doRender( Scene & p_scene
-		, MorphingRenderNodesByPipelineMap & p_nodes )
+	void PickingPass::doRender( Scene const & scene
+		, MorphingRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
 			, m_pickingUbo
-			, p_scene
+			, scene
 			, NodeType::eMorphing
-			, p_nodes );
+			, nodes );
 	}
 
-	void PickingPass::doRender( Scene & p_scene
-		, BillboardRenderNodesByPipelineMap & p_nodes )
+	void PickingPass::doRender( Scene const & scene
+		, BillboardRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
 			, m_pickingUbo
-			, p_scene
+			, scene
 			, NodeType::eBillboard
-			, p_nodes );
+			, nodes );
 	}
 
-	bool PickingPass::doInitialise( Size const & p_size )
+	bool PickingPass::doInitialise( Size const & size )
 	{
 		m_colourTexture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
 			, PixelFormat::eRGB32F
-			, p_size );
+			, size );
 		m_buffer = PxBufferBase::create( Size{ PickingWidth, PickingWidth }
 			, m_colourTexture->getPixelFormat() );
 		m_colourTexture->getImage().initialiseSource();
-		auto size = m_colourTexture->getDimensions();
+		auto realSize = m_colourTexture->getDimensions();
 		bool result = m_colourTexture->initialise();
 
 		if ( result )
@@ -426,7 +426,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = m_depthBuffer->initialise( size );
+			result = m_depthBuffer->initialise( realSize );
 
 			if ( !result )
 			{
@@ -478,7 +478,7 @@ namespace castor3d
 		}
 	}
 
-	void PickingPass::doUpdate( RenderQueueArray & CU_PARAM_UNUSED( p_queues ) )
+	void PickingPass::doUpdate( RenderQueueArray & CU_PARAM_UNUSED( queues ) )
 	{
 	}
 
@@ -598,47 +598,47 @@ namespace castor3d
 		addFlag( programFlags, ProgramFlag::ePicking );
 	}
 
-	void PickingPass::doUpdatePipeline( RenderPipeline & p_pipeline )const
+	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
 	}
 
-	void PickingPass::doPrepareFrontPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
+	void PickingPass::doPrepareFrontPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
 	}
 
-	void PickingPass::doPrepareBackPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
+	void PickingPass::doPrepareBackPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
-		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
+		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
 		{
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eBack );
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
-			auto & pipeline = *m_backPipelines.emplace( p_flags
+			auto & pipeline = *m_backPipelines.emplace( flags
 				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
 					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
+					, program
+					, flags ) ).first->second;
 			pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
 			pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
 			pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
 
-			if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+			if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
 			{
 				pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
 			}
 
-			if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-				&& !checkFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+			if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+				&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
 			{
 				pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
 			}
 
-			if ( checkFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+			if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
 			{
 				pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
 			}

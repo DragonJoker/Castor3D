@@ -11,9 +11,7 @@ namespace castor3d
 
 	bool HdrConfig::TextWriter::operator()( HdrConfig const & obj, TextFile & file )
 	{
-		bool result = true;
-
-		result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "hdr_config\n" ) ) > 0
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "hdr_config\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( result )

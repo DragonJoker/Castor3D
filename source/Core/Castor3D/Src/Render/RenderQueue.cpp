@@ -77,7 +77,7 @@ namespace castor3d
 			itObject->second.emplace_back( std::move( node ) );
 		}
 
-		AnimatedObjectSPtr doFindAnimatedObject( Scene & scene
+		AnimatedObjectSPtr doFindAnimatedObject( Scene const & scene
 			, String const & name )
 		{
 			AnimatedObjectSPtr result;
@@ -324,7 +324,7 @@ namespace castor3d
 		void doSortRenderNodes( RenderPass & renderPass
 			, bool opaque
 			, SceneNode const * ignored
-			, Scene & scene
+			, Scene const & scene
 			, SceneRenderNodes::StaticNodesMap & statics
 			, SceneRenderNodes::InstantiatedStaticNodesMap & instanced
 			, SceneRenderNodes::SkinnedNodesMap & skinning
@@ -468,7 +468,7 @@ namespace castor3d
 
 		void doSortRenderNodes( RenderPass & renderPass
 			, bool opaque
-			, Scene & scene
+			, Scene const & scene
 			, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & nodes )
 		{
 			bool shadows{ scene.hasShadows() };
@@ -610,7 +610,7 @@ namespace castor3d
 	{
 	}
 
-	void RenderQueue::initialise( Scene & scene
+	void RenderQueue::initialise( Scene const & scene
 		, Camera & camera )
 	{
 		initialise( scene );
@@ -622,7 +622,7 @@ namespace castor3d
 		m_preparedRenderNodes = std::make_unique< SceneRenderNodes >( scene );
 	}
 
-	void RenderQueue::initialise( Scene & scene )
+	void RenderQueue::initialise( Scene const & scene )
 	{
 		m_sceneChanged = scene.onChanged.connect( std::bind( &RenderQueue::onSceneChanged
 			, this

@@ -95,6 +95,16 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 */
+		C3D_API void doPrepareFrontPipeline( ShaderProgram & program
+			, PipelineFlags const & flags )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 */
+		C3D_API void doPrepareBackPipeline( ShaderProgram & program
+			, PipelineFlags const & flags )override;
 
 	private:
 		static castor::String const Output1;

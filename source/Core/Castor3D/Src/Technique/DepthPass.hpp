@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DepthPass_H___
 #define ___C3D_DepthPass_H___
 
-#include "Render/RenderPass.hpp"
+#include "RenderTechniquePass.hpp"
 
 namespace castor3d
 {
@@ -18,7 +18,7 @@ namespace castor3d
 	\brief		Classe de passe de technique de rendu implémentant le Deferred lighting.
 	*/
 	class DepthPass
-		: public RenderPass
+		: public RenderTechniquePass
 	{
 	public:
 		/**
@@ -26,15 +26,21 @@ namespace castor3d
 		 *\brief		Constructor for opaque nodes.
 		 *\param[in]	name		This pass name.
 		 *\param[in]	scene		The rendered scene.
+		 *\param[in]	camera		The camera for this pass.
+		 *\param[in]	config		The SSAO configuration.
 		 *\param[in]	depthBuffer	The target depth buffer.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
 		 *\param[in]	name		Le nom de cette passe.
 		 *\param[in]	scene		La scène rendue.
+		 *\param[in]	camera		La caméra pour cette passe.
+		 *\param[in]	config		La configuration du SSAO.
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
 		DepthPass( castor::String const & name
-			, Scene & scene
+			, Scene const & scene
+			, Camera & camera
+			, SsaoConfig const & ssaoConfig
 			, TextureLayoutSPtr depthBuffer );
 		/**
 		 *\~english
@@ -44,24 +50,13 @@ namespace castor3d
 		 */
 		~DepthPass();
 		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\param[in]	camera	The viewer camera.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[in]	camera	La caméra de l'observateur.
+		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		void render( Camera const & camera );
+		void render( RenderInfo & info
+			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter )override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doInitialise
-		 */
-		bool doInitialise( castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCleanup
-		 */
-		void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
@@ -136,23 +131,6 @@ namespace castor3d
 			, ComparisonFunc alphaFunc )const;
 
 	private:
-		/**
-		 *\~english
-		 *\brief			Renders render nodes.
-		 *\param[in]		nodes	The scene render nodes.
-		 *\param			camera	The viewing camera.
-		 *\~french
-		 *\brief			Dessine les noeuds de rendu.
-		 *\param[in]		nodes	Les noeuds de rendu de la scène.
-		 *\param			camera	La caméra regardant la scène.
-		 */
-		C3D_API void doRenderNodes( SceneRenderNodes & nodes
-			, Camera const & camera )const;
-
-	private:
-		//!\~english	The rendered scne.
-		//!\~french		La scène rendue.
-		Scene & m_scene;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;

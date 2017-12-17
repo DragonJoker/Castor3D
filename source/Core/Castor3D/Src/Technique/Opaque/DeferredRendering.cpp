@@ -72,7 +72,7 @@ namespace castor3d
 			m_geometryPassResult[0]->initialise();
 			m_geometryPassTexAttachs[0] = m_geometryPassFrameBuffer->createAttachment( m_depthAttach.getTexture() );
 
-			for ( uint32_t i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
+			for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
 			{
 				auto texture = renderSystem.createTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
