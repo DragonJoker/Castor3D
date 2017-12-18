@@ -197,9 +197,11 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( cuT( "texCoord" )
 						, utils.calcTexCoord( c3d_ssaoSize ) );
+					auto depth = writer.declLocale( cuT( "depth" )
+						, texture( c3d_mapDepth, texCoord, 0.0_f ).r() );
 					auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 						, utils.calcVSPosition( texCoord
-							, texture( c3d_mapDepth, texCoord ).r()
+							, depth
 							, c3d_mtxInvProj ) );
 					auto vsNormal = writer.declLocale( cuT( "vsNormal" )
 						, normalize( writer.paren( c3d_mtxInvView * vec4( texture( c3d_mapNormal, texCoord ).xyz(), 1.0_f ) ).xyz() ) );
@@ -576,7 +578,6 @@ namespace castor3d
 		m_ssaoFbo->clear( BufferComponent::eColour );
 		auto index = MinTextureIndex;
 		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->generateMipmaps();
 		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
 		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
 		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
