@@ -271,6 +271,8 @@ namespace Bloom
 		m_geometryBuffers->cleanup();
 		m_geometryBuffers.reset();
 
+		m_combineSurface.cleanup();
+
 		for ( auto & surface : m_blurSurfaces )
 		{
 			surface.cleanup();
