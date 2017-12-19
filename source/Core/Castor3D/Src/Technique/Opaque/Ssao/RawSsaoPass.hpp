@@ -1,30 +1,29 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DeferredSsaoPass_H___
-#define ___C3D_DeferredSsaoPass_H___
+#ifndef ___C3D_RawSsaoPass_H___
+#define ___C3D_RawSsaoPass_H___
 
-#include "LightPass.hpp"
-
-#include "Technique/Opaque/Ssao/BlurPass.hpp"
-#include "Technique/Opaque/Ssao/LineariseDepthPass.hpp"
+#include "SsaoConfigUbo.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Technique/Opaque/Ssao/RawSsaoPass.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Technique/Opaque/LightPass.hpp"
+#include "Texture/TextureUnit.hpp"
 
 namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
-	\date		08/06/2017
+	\date		18/12/2017
 	\~english
-	\brief		Screen Space Ambient Occlusion pass.
+	\brief		Raw ambient occlusion pass.
 	\~french
-	\brief		Passe de Occlusion Ambiante en Espace Ecran.
+	\brief		Passe d'occlusion ambiante.
 	*/
-	class SsaoPass
+	class RawSsaoPass
 	{
 	public:
 		/**
@@ -33,15 +32,13 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	config		The SSAO configuration.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	config		La configuration du SSAO.
-		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
 		 */
-		SsaoPass( Engine & engine
+		RawSsaoPass( Engine & engine
 			, castor::Size const & size
 			, SsaoConfig const & config );
 		/**
@@ -50,34 +47,44 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~SsaoPass();
+		~RawSsaoPass();
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	gp		The geometry pass result.
-		 *\param[in]	info	Receives rendering info.
+		 *\param[in]	linearisedDepthBuffer	The geometry pass result.
+		 *\param[in]	viewport				Receives rendering info.
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image donné.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	info	Reçoit les informations de rendu.
+		 *\param[in]	linearisedDepthBuffer	Le résultat de la geometry pass.
+		 *\param[in]	viewport				Reçoit les informations de rendu.
 		 */
-		void render( TextureUnit const & depthBuffer
-			, Viewport const & viewport
-			, RenderInfo & info );
+		void compute( TextureUnit const & linearisedDepthBuffer
+			, Viewport const & viewport );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
 		 *\~french
 		 *\return		Le résultat de la passe SSAO.
 		 */
-		TextureUnit const & getResult()const;
+		inline TextureUnit const & getResult()const
+		{
+			return m_result;
+		}
 
 	private:
 		Engine & m_engine;
-		LineariseDepthPass m_linearisePass;
-		RawSsaoPass m_rawSsaoPass;
-		SsaoBlurPass m_horizontalBlur;
-		SsaoBlurPass m_verticalBlur;
+		SsaoConfig const & m_config;
+		castor::Size m_size;
+		MatrixUbo m_matrixUbo;
+		SsaoConfigUbo m_ssaoConfigUbo;
+		Viewport m_viewport;
+		TextureUnit m_result;
+		ShaderProgramSPtr m_program;
+		RenderPipelineUPtr m_pipeline;
+		FrameBufferSPtr m_fbo;
+		TextureAttachmentSPtr m_resultAttach;
+		RenderPassTimerSPtr m_timer;
+
 	};
 }
 

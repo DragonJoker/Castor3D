@@ -38,6 +38,12 @@ namespace castor3d
 
 			if ( result )
 			{
+				result = p_file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( p_object.m_intensity ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig intensity" );
+			}
+
+			if ( result )
+			{
 				result = p_file.writeText( m_tabs + cuT( "\tkernel_size " ) + string::toString( p_object.m_kernelSize.value() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig kernel size" );
 			}

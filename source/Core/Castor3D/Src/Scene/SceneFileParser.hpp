@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include "Mesh/Submesh.hpp"
 #include "Scene/Skybox.hpp"
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Material/SubsurfaceScattering.hpp"
 
 #include <Design/OwnedBy.hpp>

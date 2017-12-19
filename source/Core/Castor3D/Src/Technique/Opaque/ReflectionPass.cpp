@@ -6,10 +6,11 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Skybox.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
@@ -576,6 +577,11 @@ namespace castor3d
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
+
+				if ( hasSsao )
+				{
+					pxl_fragColor = vec4( texture( c3d_mapSsao, vtx_texture ).r() );
+				}
 			} );
 			return writer.finalise();
 		}
@@ -1033,7 +1039,7 @@ namespace castor3d
 		}
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
 		, m_ssaoEnabled{ config.m_enabled }
-		, m_ssao{ engine, size, config, gpInfoUbo }
+		, m_ssao{ engine, size, config }
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.initialise();
@@ -1052,6 +1058,7 @@ namespace castor3d
 		, TextureUnit const & lightDiffuse
 		, TextureUnit const & lightSpecular
 		, Scene const & scene
+		, Camera const & camera
 		, FrameBuffer const & frameBuffer
 		, RenderInfo & info )
 	{
@@ -1059,7 +1066,9 @@ namespace castor3d
 
 		if ( m_ssaoEnabled )
 		{
-			m_ssao.render( gp, info );
+			m_ssao.render( *gp[size_t( DsTexture::eDepth )]
+				, camera.getViewport()
+				, info );
 			ssao = &m_ssao.getResult();
 		}
 

@@ -4650,7 +4650,7 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoKernelSize )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoIntensity )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
@@ -4662,9 +4662,9 @@ namespace castor3d
 			}
 			else
 			{
-				uint8_t value;
+				float value;
 				p_params[0]->get( value );
-				parsingContext->ssaoConfig.m_kernelSize = uint32_t( value );
+				parsingContext->ssaoConfig.m_intensity = value;
 			}
 		}
 		else

@@ -202,6 +202,7 @@ namespace castor3d
 				, m_subsurfaceScattering->getResult()
 				, m_lightingPass->getSpecular()
 				, scene
+				, camera
 				, m_frameBuffer
 				, info );
 		}
@@ -211,6 +212,7 @@ namespace castor3d
 				, m_lightingPass->getDiffuse()
 				, m_lightingPass->getSpecular()
 				, scene
+				, camera
 				, m_frameBuffer
 				, info );
 		}

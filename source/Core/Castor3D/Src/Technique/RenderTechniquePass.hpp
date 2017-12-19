@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderTechniquePass_H___
 #define ___C3D_RenderTechniquePass_H___
 
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPass.hpp"
 
 namespace castor3d

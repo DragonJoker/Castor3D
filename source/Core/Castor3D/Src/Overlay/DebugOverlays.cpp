@@ -13,6 +13,18 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace
+	{
+		String getFullName( RenderPassTimer & timer )
+		{
+			return timer.getCategory() == timer.getName()
+				? timer.getCategory()
+				: timer.getCategory() + cuT( ": " ) + timer.getName();
+		}
+	}
+
+	//*********************************************************************************************
+
 	DebugOverlays::MainDebugPanel::MainDebugPanel( OverlayCache & cache )
 		: m_cache{ cache }
 		, m_panel{ m_cache.add( cuT( "MainDebugPanel" )
@@ -270,12 +282,13 @@ namespace castor3d
 	void DebugOverlays::registerTimer( RenderPassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
-		auto it = m_renderPasses.find( timer.getCategory() );
+		auto fullName = getFullName( timer );
+		auto it = m_renderPasses.find( fullName );
 
 		if ( it == m_renderPasses.end() )
 		{
-			it = m_renderPasses.emplace( timer.getCategory()
-				, RenderPassOverlays{ timer.getCategory()
+			it = m_renderPasses.emplace( fullName
+				, RenderPassOverlays{ fullName
 					, uint32_t( m_renderPasses.size() )
 					, cache } ).first;
 			it->second.setVisible( m_visible );
@@ -286,7 +299,8 @@ namespace castor3d
 
 	void DebugOverlays::unregisterTimer( RenderPassTimer & timer )
 	{
-		auto it = m_renderPasses.find( timer.getCategory() );
+		auto fullName = getFullName( timer );
+		auto it = m_renderPasses.find( fullName );
 
 		if ( it != m_renderPasses.end() )
 		{

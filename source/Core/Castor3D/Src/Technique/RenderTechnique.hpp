@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderTechnique_H___
 
 #include "HDR/ToneMapping.hpp"
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Technique/DepthPass.hpp"
