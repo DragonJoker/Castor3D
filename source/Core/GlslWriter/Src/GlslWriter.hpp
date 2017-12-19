@@ -37,6 +37,8 @@ namespace glsl
 		GlslWriter_API GlslWriter & operator=( GlslWriter const & rhs );
 		GlslWriter_API void registerName( castor::String const & name, TypeName type );
 		GlslWriter_API void checkNameExists( castor::String const & name, TypeName type );
+		GlslWriter_API void inlineComment( castor::String const & comment );
+		GlslWriter_API void multilineComment( castor::String const & comment );
 
 		inline uint32_t getShaderLanguageVersion()const
 		{

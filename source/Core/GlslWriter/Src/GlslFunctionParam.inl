@@ -39,7 +39,7 @@ namespace glsl
 	OutParam< TypeT >::OutParam( TypeT const & other )
 		: TypeT( other.m_writer, toString( other ) )
 	{
-		TypeT::m_type = cuT( "in " ) + TypeT::m_type;
+		TypeT::m_type = cuT( "out " ) + TypeT::m_type;
 	}
 
 	template< typename TypeT >
@@ -64,7 +64,7 @@ namespace glsl
 	InOutParam< TypeT >::InOutParam( TypeT const & other )
 		: TypeT( other.m_writer, toString( other ) )
 	{
-		TypeT::m_type = cuT( "in " ) + TypeT::m_type;
+		TypeT::m_type = cuT( "inout " ) + TypeT::m_type;
 	}
 
 	template< typename TypeT >
@@ -116,7 +116,7 @@ namespace glsl
 	OutArrayParam< TypeT >::OutArrayParam( Array< TypeT > const & other )
 		: Array< TypeT >( other.m_writer, toString( other ), other.m_dimension )
 	{
-		TypeT::m_type = cuT( "in " ) + TypeT::m_type + cuT( "[" ) + toString( other.m_dimension ) + cuT( "]" );
+		TypeT::m_type = cuT( "out " ) + TypeT::m_type + cuT( "[" ) + toString( other.m_dimension ) + cuT( "]" );
 	}
 
 	template< typename TypeT >
@@ -142,7 +142,7 @@ namespace glsl
 	InOutArrayParam< TypeT >::InOutArrayParam( Array< TypeT > const & other )
 		: Array< TypeT >( other.m_writer, toString( other ), other.m_dimension )
 	{
-		TypeT::m_type = cuT( "in " ) + TypeT::m_type + cuT( "[" ) + toString( other.m_dimension ) + cuT( "]" );
+		TypeT::m_type = cuT( "inout " ) + TypeT::m_type + cuT( "[" ) + toString( other.m_dimension ) + cuT( "]" );
 	}
 
 	template< typename TypeT >

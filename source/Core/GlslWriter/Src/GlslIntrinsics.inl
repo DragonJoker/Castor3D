@@ -2,7 +2,7 @@ namespace glsl
 {
 	//***********************************************************************************************
 
-	namespace
+	namespace details
 	{
 		template< typename TypeR, typename TypeA, typename TypeB >
 		struct Operator
@@ -98,133 +98,154 @@ namespace glsl
 			using T = typename OperatorType::T;
 			using U = typename  OperatorType::U;
 		};
+
+		template< typename V, typename U, typename Enable = void >
+		struct Step;
+
+		template< typename V, typename U >
+		struct Step< V, U, typename std::enable_if< std::is_same< V, V >::value >::type >
+		{
+			static V step( V const & edge, U const & x )
+			{
+				return writeFunctionCall< V >( edge.m_writer, cuT( "step" ), edge, x );
+			}
+		};
+
+		template< typename V, typename U >
+		struct Step< V, U, typename std::enable_if< std::is_same< U, Float >::value && !std::is_same< V, Float >::value >::type >
+		{
+			static V step( V const & edge, U const & x )
+			{
+				return writeFunctionCall< V >( edge.m_writer, cuT( "step" ), edge, x );
+			}
+		};
 	}
 
 #	define GLSL_IMPLEMENT_OPERATOR( RetType, LhsType, RhsType, Operator, OperatorType )\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( LhsType const & p_lhs, RhsType const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( LhsType const & p_lhs, InParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( LhsType const & p_lhs, InOutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( LhsType const & p_lhs, OutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( LhsType const & p_lhs, Optional< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InOutParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InOutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( InOutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( OutParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( OutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( OutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( OutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( OutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( Optional< LhsType > const & p_lhs, RhsType const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( Optional< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( Optional< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( Optional< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
 	RetType operator Operator( Optional< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
 	{\
-		return OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
 	}
 
 #	define GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( LhsType, RhsType, Operator )\
@@ -237,6 +258,7 @@ namespace glsl
 	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, - )
 	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, * )
 	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, / )
+	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, ^ )
 	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, == )
 	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, != )
 	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, < )
@@ -432,10 +454,10 @@ namespace glsl
 		return writeFunctionCall< Value >( value.m_writer, cuT( "round" ), value );
 	}
 
-	template< typename Value >
-	inline Value step( Value const & edge, Value const & x )
+	template< typename ValueE, typename ValueX >
+	inline ValueE step( ValueE const & edge, ValueX const & x )
 	{
-		return writeFunctionCall< Value >( edge.m_writer, cuT( "step" ), edge, x );
+		return details::Step< ValueE, ValueX >::step( edge, x );
 	}
 
 	template< typename Value >

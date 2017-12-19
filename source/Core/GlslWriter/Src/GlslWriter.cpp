@@ -65,6 +65,16 @@ namespace glsl
 		}
 	}
 
+	void GlslWriter::inlineComment( castor::String const & comment )
+	{
+		m_stream << cuT( "//" ) << comment << std::endl;
+	}
+
+	void GlslWriter::multilineComment( castor::String const & comment )
+	{
+		m_stream << cuT( "/*" ) << comment << "*/" << std::endl;
+	}
+
 	Shader GlslWriter::finalise()
 	{
 		m_shader.setSource( m_stream.str() );
