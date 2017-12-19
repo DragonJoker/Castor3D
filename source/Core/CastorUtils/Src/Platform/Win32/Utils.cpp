@@ -1,4 +1,4 @@
-﻿#include "Config/PlatformConfig.hpp"
+#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
@@ -44,7 +44,7 @@ namespace castor
 		castor::String getLastErrorText()
 		{
 			DWORD dwError = ::GetLastError();
-			String strReturn = string::toString( dwError );;
+			String strReturn = cuT( "0x" ) + string::toString( dwError, 16 );
 
 			if ( dwError != ERROR_SUCCESS )
 			{

@@ -12,7 +12,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 
 		StringStream stream;
-		stream << Debug::Backtrace{ 40 };
+		stream << Debug::Backtrace{ 20 };
 		m_stackTrace = stream.str();
 
 #endif

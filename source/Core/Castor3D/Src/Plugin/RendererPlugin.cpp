@@ -1,4 +1,4 @@
-﻿#include "RendererPlugin.hpp"
+#include "RendererPlugin.hpp"
 
 #include "Render/RenderSystem.hpp"
 
@@ -11,18 +11,12 @@ namespace castor3d
 	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * engine )
 		: Plugin( PluginType::eRenderer, p_library, *engine )
 	{
-		if ( m_pfnOnLoad )
-		{
-			m_pfnOnLoad( getEngine(), this );
-		}
+		load();
 	}
 
 	RendererPlugin::~RendererPlugin()
 	{
-		if ( m_pfnOnUnload )
-		{
-			m_pfnOnUnload( getEngine() );
-		}
+		unload();
 	}
 
 	String const & RendererPlugin::getRendererType()
