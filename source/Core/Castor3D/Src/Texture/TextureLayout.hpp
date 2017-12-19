@@ -25,72 +25,90 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type			The texture type.
+		 *\param[in]	type			The texture type.
 		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type			Le type de texture.
+		 *\param[in]	type			Le type de texture.
 		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
 		 */
-		C3D_API TextureLayout(
-			RenderSystem & renderSystem,
-			TextureType p_type,
-			AccessTypes const & p_cpuAccess,
-			AccessTypes const & p_gpuAccess );
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type			The texture type.
+		 *\param[in]	type			The texture type.
 		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	p_format		The texture format.
-		 *\param[in]	p_size			The texture dimensions.
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	mipmapCount		The mipmap count for the texture.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type			Le type de texture.
+		 *\param[in]	type			Le type de texture.
 		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	p_format		Le format de la texture.
-		 *\param[in]	p_size			Les dimensions de la texture.
+		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	mipmapCount		Le nombre de mipmaps de la texture.
 		 */
-		C3D_API TextureLayout(
-			RenderSystem & renderSystem,
-			TextureType p_type,
-			AccessTypes const & p_cpuAccess,
-			AccessTypes const & p_gpuAccess,
-			castor::PixelFormat p_format,
-			castor::Size const & p_size );
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess
+			, uint32_t mipmapCount );
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type			The texture type.
+		 *\param[in]	type			The texture type.
 		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	p_format		The texture format.
-		 *\param[in]	p_size			The texture dimensions.
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	format			The texture format.
+		 *\param[in]	size			The texture dimensions.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type			Le type de texture.
+		 *\param[in]	type			Le type de texture.
 		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	p_format		Le format de la texture.
-		 *\param[in]	p_size			Les dimensions de la texture.
+		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	format			Le format de la texture.
+		 *\param[in]	size			Les dimensions de la texture.
 		 */
-		C3D_API TextureLayout(
-			RenderSystem & renderSystem,
-			TextureType p_type,
-			AccessTypes const & p_cpuAccess,
-			AccessTypes const & p_gpuAccess,
-			castor::PixelFormat p_format,
-			castor::Point3ui const & p_size );
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess
+			, castor::PixelFormat format
+			, castor::Size const & size );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	type			The texture type.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	format			The texture format.
+		 *\param[in]	size			The texture dimensions.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	type			Le type de texture.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	format			Le format de la texture.
+		 *\param[in]	size			Les dimensions de la texture.
+		 */
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess
+			, castor::PixelFormat format
+			, castor::Point3ui const & size );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -101,111 +119,112 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_index	The texture index
+		 *\param[in]	index	The texture index
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_index	L'index de texture
+		 *\param[in]	index	L'index de texture
 		 */
-		C3D_API void bind( uint32_t p_index )const;
+		C3D_API void bind( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	p_index	The texture index
+		 *\param[in]	index	The texture index
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 *\param[in]	p_index	L'index de texture
+		 *\param[in]	index	L'index de texture
 		 */
-		C3D_API void unbind( uint32_t p_index )const;
+		C3D_API void unbind( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Resizes the texture buffer
-		 *\param[in]	p_size	The new size
+		 *\param[in]	size	The new size
 		 *\~french
 		 *\brief		Redimensionne le buffer de la texture
-		 *\param[in]	p_size	La nouvelle taille
+		 *\param[in]	size	La nouvelle taille
 		 */
-		C3D_API void resize( castor::Size const & p_size );
+		C3D_API void resize( castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Resizes the 3D texture buffer
-		 *\param[in]	p_size	The new size
+		 *\param[in]	size	The new size
 		 *\~french
 		 *\brief		Redimensionne le buffer de la texture 3D
-		 *\param[in]	p_size	La nouvelle taille
+		 *\param[in]	size	La nouvelle taille
 		 */
-		C3D_API void resize( castor::Point3ui const & p_size );
+		C3D_API void resize( castor::Point3ui const & size );
 		/**
 		 *\~english
 		 *\brief		Locks layout buffer from GPU, allowing modifications into it.
 		 *\remarks		Binds the texture.
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of AccessType.
+		 *\param[in]	lock	Defines the lock mode (r, w, rw), combination of AccessType.
 		 *\return		The image buffer.
 		 *\~french
 		 *\brief		Locke le buffer du layout à partir du GPU, permettant des modification dessus.
 		 *\remarks		Active la texture.
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
+		 *\param[in]	lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * lock( AccessTypes const & p_lock );
+		C3D_API uint8_t * lock( AccessTypes const & lock );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
 		 *\remarks		Unbinds the texture.
-		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
+		 *\param[in]	modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
 		 *\~french
 		 *\brief		Délocke le buffer de l'image à partir du GPU.
 		 *\remarks		Désactive la texture.
-		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
+		 *\param[in]	modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 */
-		C3D_API void unlock( bool p_modified );
+		C3D_API void unlock( bool modified );
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it.
 		 *\remarks		The texture must be bound.
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of AccessType.
-		 *\param[in]	p_index	The image index.
+		 *\param[in]	lock	Defines the lock mode (r, w, rw), combination of AccessType.
+		 *\param[in]	index	The image index.
 		 *\return		The image buffer.
 		 *\~french
 		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus.
 		 *\remarks		La texture doit être activée.
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
-		 *\param[in]	p_index	L'index de l'image.
+		 *\param[in]	lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
+		 *\param[in]	index	L'index de l'image.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * lock( AccessTypes const & p_lock, uint32_t p_index );
+		C3D_API uint8_t * lock( AccessTypes const & lock, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
 		 *\remarks		The texture must be bound.
-		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
-		 *\param[in]	p_index		The image index.
+		 *\param[in]	modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
+		 *\param[in]	index		The image index.
 		 *\~french
 		 *\brief		Délocke le buffer de l'image à partir du GPU.
 		 *\remarks		La texture doit être activée.
-		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
-		 *\param[in]	p_index		L'index de l'image.
+		 *\param[in]	modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
+		 *\param[in]	index		L'index de l'image.
 		 */
-		C3D_API void unlock( bool p_modified, uint32_t p_index );
+		C3D_API void unlock( bool modified, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
-		 *\param[in]	p_folder	The folder containing the image.
-		 *\param[in]	p_relative	The image file path, relative to p_folder.
+		 *\param[in]	folder	The folder containing the image.
+		 *\param[in]	relative	The image file path, relative to folder.
 		 *\~french
 		 *\brief		Définit le tampon de la texture depuis un fichier image.
-		 *\param[in]	p_folder	Le dossier contenant l'image.
-		 *\param[in]	p_relative	Le chemin d'accès à l'image, relatif à p_folder.
+		 *\param[in]	folder	Le dossier contenant l'image.
+		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à folder.
 		 */
-		C3D_API void setSource( castor::Path const & p_folder, castor::Path const & p_relative );
+		C3D_API void setSource( castor::Path const & folder
+			, castor::Path const & relative );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
-		 *\param[in]	p_buffer	The buffer.
+		 *\param[in]	buffer	The buffer.
 		 *\~french
 		 *\brief		Initialise le tampon de la texture.
-		 *\param[in]	p_buffer	Le tampon.
+		 *\param[in]	buffer	Le tampon.
 		 */
-		C3D_API void setSource( castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void setSource( castor::PxBufferBaseSPtr buffer );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -231,11 +250,9 @@ namespace castor3d
 		C3D_API virtual void generateMipmaps()const = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the initialisation status
-		 *\return		The initialisation status
+		 *\return		The initialisation status.
 		 *\~french
-		 *\brief		Récupère le statut d'initialisation
-		 *\return		Le statut d'initialisation
+		 *\return		Le statut d'initialisation.
 		 */
 		inline bool isInitialised()const
 		{
@@ -243,11 +260,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture dimension
-		 *\return		The texture dimension
+		 *\return		The texture type.
 		 *\~french
-		 *\brief		Récupère la dimension de la texture
-		 *\return		La dimension de la texture
+		 *\return		Le type de texture.
 		 */
 		inline TextureType getType()const
 		{
@@ -255,29 +270,29 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_index	The image index.
+		 *\param[in]	index	The image index.
 		 *\return		The texture image.
 		 *\~french
-		 *\param[in]	p_index	L'index de l'image.
+		 *\param[in]	index	L'index de l'image.
 		 *\return		L'image de la texture.
 		 */
-		inline TextureImage const & getImage( size_t p_index = 0 )const
+		inline TextureImage const & getImage( size_t index = 0 )const
 		{
-			REQUIRE( p_index < m_images.size() && m_images[p_index] );
-			return *m_images[p_index];
+			REQUIRE( index < m_images.size() && m_images[index] );
+			return *m_images[index];
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_index	The image index.
+		 *\param[in]	index	The image index.
 		 *\return		The texture image.
 		 *\~french
-		 *\param[in]	p_index	L'index de l'image.
+		 *\param[in]	index	L'index de l'image.
 		 *\return		L'image de la texture.
 		 */
-		inline TextureImage & getImage( size_t p_index = 0 )
+		inline TextureImage & getImage( size_t index = 0 )
 		{
-			REQUIRE( p_index < m_images.size() && m_images[p_index] );
-			return *m_images[p_index];
+			REQUIRE( index < m_images.size() && m_images[index] );
+			return *m_images[index];
 		}
 		/**
 		 *\~english
@@ -293,11 +308,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture image height
-		 *\return		The height
+		 *\return		The texture image height.
 		 *\~french
-		 *\brief		Récupère la hauteur de l'image de la texture
-		 *\return		La hauteur
+		 *\return		La hauteur de l'image de la texture.
 		 */
 		inline uint32_t getHeight()const
 		{
@@ -305,11 +318,19 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture image dimensions
-		 *\return		The image dimensions
+		 *\return		The mimap count.
 		 *\~french
-		 *\brief		Récupère les dimensions de l'image de la texture
-		 *\return		Les dimensions de l'image
+		 *\return		Le nombre de mipmaps.
+		 */
+		inline uint32_t getMipmapCount()const
+		{
+			return m_mipmapCount;
+		}
+		/**
+		 *\~english
+		 *\return		The image image dimensions.
+		 *\~french
+		 *\return		Les dimensions de l'image de la texture.
 		 */
 		inline castor::Size const & getDimensions()const
 		{
@@ -317,11 +338,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture pixel format
-		 *\return		The pixel format
+		 *\return		The texture pixel format.
 		 *\~french
-		 *\brief		Récupère le format des pixels de la texture
-		 *\return		Le format des pixels
+		 *\return		Le format des pixels de la texture.
 		 */
 		inline castor::PixelFormat getPixelFormat()const
 		{
@@ -329,11 +348,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture depth
-		 *\return		The depth, 1 if not 3D
+		 *\return		The texture depth, 1 if not 3D.
 		 *\~french
-		 *\brief		Récupère la profondeur de la texture
-		 *\return		La profondeur, 1 si pas 3D
+		 *\return		La profondeur de la texture, 1 si pas 3D.
 		 */
 		inline uint32_t getDepth()const
 		{
@@ -341,11 +358,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture depth
-		 *\return		The depth, 1 if not array
+		 *\return		The texture layer count, 1 if not array.
 		 *\~french
-		 *\brief		Récupère la profondeur de la texture
-		 *\return		La profondeur, 1 si pas tableau
+		 *\return		Le nombre de couches de la texture, 1 si pas tableau.
 		 */
 		inline uint32_t getLayersCount()const
 		{
@@ -400,14 +415,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the size and format from first loaded image.
-		 *\param[in]	p_size		The image size.
-		 *\param[in]	p_format	The image format.
+		 *\param[in]	size	The image size.
+		 *\param[in]	format	The image format.
 		 *\~french
 		 *\brief		Met à jour les dimensions et le format, depuis la première image chargée.
-		 *\param[in]	p_size		Les dimensions de l'image.
-		 *\param[in]	p_format	Le format des pixels de l'image.
+		 *\param[in]	size	Les dimensions de l'image.
+		 *\param[in]	format	Le format des pixels de l'image.
 		 */
-		void doUpdateFromFirstImage( castor::Size const & p_size, castor::PixelFormat p_format );
+		void doUpdateFromFirstImage( castor::Size const & size, castor::PixelFormat format );
 		/**
 		 *\~english
 		 *\brief		Reinitialises the storage.
@@ -420,14 +435,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU storage.
-		 *\param[in]	p_type		The storage type.
+		 *\param[in]	type	The storage type.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le stockage GPU.
-		 *\param[in]	p_type		Le type de stockage.
+		 *\param[in]	type	Le type de stockage.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool doCreateStorage( TextureStorageType p_type );
+		bool doCreateStorage( TextureStorageType type );
 
 	private:
 		/**
@@ -452,14 +467,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Activation spécifique selon l'API
 		 */
-		C3D_API virtual void doBind( uint32_t p_index )const = 0;
+		C3D_API virtual void doBind( uint32_t index )const = 0;
 		/**
 		 *\~english
 		 *\brief		API specific unbinding function
 		 *\~french
 		 *\brief		Désactivation spécifique selon l'API
 		 */
-		C3D_API virtual void doUnbind( uint32_t p_index )const = 0;
+		C3D_API virtual void doUnbind( uint32_t index )const = 0;
 
 	protected:
 		//!\~english	Initialisation status
@@ -488,7 +503,10 @@ namespace castor3d
 		castor::PixelFormat m_format;
 		//!\~english	The texture's depth or layers count.
 		//!\~french		La profondeur ou nombre de couches de la texture.
-		uint32_t m_depth;
+		uint32_t m_depth{ 1 };
+		//!\~english	The texture's mipmap count.
+		//!\~french		Le nombre de mipmaps de la texture.
+		uint32_t m_mipmapCount{ ~( 0u ) };
 	};
 }
 

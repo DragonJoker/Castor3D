@@ -353,6 +353,20 @@ namespace castor3d
 		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )const = 0;
 		/**
 		 *\~english
+		 *\brief		Creates an attachment to a texture's mipmap.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	mipLevel	The mipmap level.
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un mipmap d'une texture.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	mipLevel	Le niveau du mipmap.
+		 *\return		L'attache créée
+		 */
+		C3D_API virtual TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture
+			, uint32_t mipLevel )const = 0;
+		/**
+		 *\~english
 		 *\brief		Creates an attachment to a cube texture's face.
 		 *\param[in]	texture	The texture.
 		 *\param[in]	face	The face.

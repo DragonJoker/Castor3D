@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RENDER_SYSTEM_H___
@@ -37,13 +37,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	p_name		The renderer name.
+		 *\param[in]	name	The renderer name.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_name		Le nom du renderer.
+		 *\param[in]	name	Le nom du renderer.
 		 */
-		C3D_API RenderSystem( Engine & engine, castor::String const & p_name );
+		C3D_API RenderSystem( Engine & engine, castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -57,7 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le render system
 		 */
-		C3D_API void initialise( GpuInformations && p_informations );
+		C3D_API void initialise( GpuInformations && informations );
 		/**
 		 *\~english
 		 *\brief		Cleans the render system up
@@ -68,12 +68,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Pushes a scene on the stack
-		 *\param[in]	p_scene	The scene
+		 *\param[in]	scene	The scene
 		 *\~french
 		 *\brief		Met une scène sur la pile
-		 *\param[in]	p_scene	La scène
+		 *\param[in]	scene	La scène
 		 */
-		C3D_API void pushScene( Scene * p_scene );
+		C3D_API void pushScene( Scene * scene );
 		/**
 		 *\~english
 		 *\brief		Pops a scene from the stack
@@ -83,11 +83,9 @@ namespace castor3d
 		C3D_API void popScene();
 		/**
 		 *\~english
-		 *\brief		Retrieves the top scene from the stack
-		 *\return		The scene, nullptr if the stack is void
+		 *\return		The top scene from the stack, nullptr if the stack is empty.
 		 *\~french
-		 *\brief		Récupère la scène du haut de la pile
-		 *\return		La scène, nullptr si la pile est vide
+		 *\return		La scène du haut de la pile, nullptr si la pile est vide.
 		 */
 		C3D_API Scene * getTopScene();
 		/**
@@ -99,20 +97,18 @@ namespace castor3d
 		C3D_API glsl::GlslWriter createGlslWriter();
 		/**
 		 *\~english
-		 *\brief		sets the currently active render context
-		 *\param[in]	p_context	The context
+		 *\brief		Sets the currently active render context
+		 *\param[in]	context	The context
 		 *\~french
 		 *\brief		Définit le contexte de rendu actuellement actif
-		 *\param[in]	p_context	Le contexte
+		 *\param[in]	context	Le contexte
 		 */
-		C3D_API void setCurrentContext( Context * p_context );
+		C3D_API void setCurrentContext( Context * context );
 		/**
 		 *\~english
-		 *\brief		Retrieves the currently active render context
-		 *\return		The context
+		 *\return		The currently active render context.
 		 *\~french
-		 *\brief		Récupère le contexte de rendu actuellement actif
-		 *\return		Le contexte
+		 *\return		Le contexte de rendu actuellement actif.
 		 */
 		C3D_API Context * getCurrentContext();
 		/**
@@ -192,23 +188,21 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the main render context
-		 *\param[in]	p_context	The context
+		 *\brief		Sets the main render context
+		 *\param[in]	context	The context
 		 *\~french
 		 *\brief		Définit le contexte de rendu principal
-		 *\param[in]	p_context	Le contexte
+		 *\param[in]	context	Le contexte
 		 */
-		inline void setMainContext( ContextSPtr p_context )
+		inline void setMainContext( ContextSPtr context )
 		{
-			m_mainContext = p_context;
+			m_mainContext = context;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the main render context
-		 *\return		The context
+		 *\return		The main render context.
 		 *\~french
-		 *\brief		Récupère le contexte de rendu principal
-		 *\return		Le contexte
+		 *\return		Le contexte de rendu principal.
 		 */
 		inline ContextSPtr getMainContext()
 		{
@@ -216,11 +210,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the overlay renderer
-		 *\return		The value
+		 *\return		The overlay renderer.
 		 *\~french
-		 *\brief		Récupère le renderer d'overlays
-		 *\return		La valeur
+		 *\return		Le renderer d'overlays.
 		 */
 		inline OverlayRendererSPtr getOverlayRenderer()
 		{
@@ -229,15 +221,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Increments the GPU time.
-		 *\param[in]	p_time	The increment value.
+		 *\param[in]	time	The increment value.
 		 *\~french
 		 *\brief		Incrémente le temps CPU.
-		 *\param[in]	p_time	La valeur d'incrément.
+		 *\param[in]	time	La valeur d'incrément.
 		 */
 		template< class Rep, class Period >
-		inline void incGpuTime( std::chrono::duration< Rep, Period > const & p_time )
+		inline void incGpuTime( std::chrono::duration< Rep, Period > const & time )
 		{
-			m_gpuTime += std::chrono::duration_cast< castor::Nanoseconds >( p_time );
+			m_gpuTime += std::chrono::duration_cast< castor::Nanoseconds >( time );
 		}
 		/**
 		 *\~english
@@ -251,11 +243,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the GPU time.
-		 *\return		The value.
+		 *\return		The GPU time.
 		 *\~french
-		 *\brief		Récupère le temps CPU.
-		 *\return		La valeur.
+		 *\return		Le temps CPU.
 		 */
 		inline castor::Nanoseconds const & getGpuTime()const
 		{
@@ -273,29 +263,29 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a UniformBufferBinding.
-		 *\param[in]	p_ubo		The parent uniform buffer.
-		 *\param[in]	p_program	The parent program.
+		 *\param[in]	ubo		The parent uniform buffer.
+		 *\param[in]	program	The parent program.
 		 *\return		The created UniformBufferBinding.
 		 *\~french
 		 *\brief		Crée un UniformBufferBinding.
-		 *\param[in]	p_ubo		le tampon d'uniformes parent.
-		 *\param[in]	p_program	Le programme parent.
+		 *\param[in]	ubo		le tampon d'uniformes parent.
+		 *\param[in]	program	Le programme parent.
 		 *\return		Le UniformBufferBinding créé.
 		 */
-		C3D_API virtual UniformBufferBindingUPtr createUniformBufferBinding( UniformBuffer & p_ubo
-			, ShaderProgram const & p_program ) = 0;
+		C3D_API virtual UniformBufferBindingUPtr createUniformBufferBinding( UniformBuffer & ubo
+			, ShaderProgram const & program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a geometries buffer holder.
-		 *\param[in]	p_topology	The buffers topology.
-		 *\param[in]	p_program	The shader program.
+		 *\param[in]	topology	The buffers topology.
+		 *\param[in]	program		The shader program.
 		 *\~french
 		 *\brief		Crée un conteneur de buffers de géométrie.
-		 *\param[in]	p_topology	La topologie des tampons.
-		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	topology	La topologie des tampons.
+		 *\param[in]	program		Le programme shader.
 		 */
-		C3D_API virtual GeometryBuffersSPtr createGeometryBuffers( Topology p_topology
-			, ShaderProgram const & p_program ) = 0;
+		C3D_API virtual GeometryBuffersSPtr createGeometryBuffers( Topology topology
+			, ShaderProgram const & program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context
@@ -308,151 +298,169 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		create a render pipeline.
-		 *\param[in]	p_dsState	The depth stencil state.
-		 *\param[in]	p_rsState	The rateriser state.
-		 *\param[in]	p_bdState	The blend state.
-		 *\param[in]	p_msState	The multisample state.
-		 *\param[in]	p_program	The shader program.
-		 *\param[in]	p_flags		The creation flags.
+		 *\param[in]	dsState	The depth stencil state.
+		 *\param[in]	rsState	The rateriser state.
+		 *\param[in]	bdState	The blend state.
+		 *\param[in]	msState	The multisample state.
+		 *\param[in]	program	The shader program.
+		 *\param[in]	flags	The creation flags.
 		 *\return		The pipeline.
 		 *\~french
 		 *\brief		Crée un pipeline de rendu.
-		 *\param[in]	p_dsState	L'état de stencil et profondeur.
-		 *\param[in]	p_rsState	L'état de rastériseur.
-		 *\param[in]	p_bdState	L'état de mélange.
-		 *\param[in]	p_msState	L'état de multi-échantillonnage.
-		 *\param[in]	p_program	Le programme shader.
-		 *\param[in]	p_flags		Les indicateurs de création.
+		 *\param[in]	dsState	L'état de stencil et profondeur.
+		 *\param[in]	rsState	L'état de rastériseur.
+		 *\param[in]	bdState	L'état de mélange.
+		 *\param[in]	msState	L'état de multi-échantillonnage.
+		 *\param[in]	program	Le programme shader.
+		 *\param[in]	flags	Les indicateurs de création.
 		 *\return		Le pipeline.
 		 */
-		C3D_API virtual RenderPipelineUPtr createRenderPipeline( DepthStencilState && p_dsState
-			, RasteriserState && p_rsState
-			, BlendState && p_bdState
-			, MultisampleState && p_msState
-			, ShaderProgram & p_program
-			, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual RenderPipelineUPtr createRenderPipeline( DepthStencilState && dsState
+			, RasteriserState && rsState
+			, BlendState && bdState
+			, MultisampleState && msState
+			, ShaderProgram & program
+			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a compute pipeline.
-		 *\param[in]	p_program	The shader program.
+		 *\param[in]	program	The shader program.
 		 *\return		The pipeline.
 		 *\~french
 		 *\brief		Crée un pipeline de pipeline.
-		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	program	Le programme shader.
 		 *\return		Le pipeline.
 		 */
-		C3D_API virtual ComputePipelineUPtr createComputePipeline( ShaderProgram & p_program ) = 0;
+		C3D_API virtual ComputePipelineUPtr createComputePipeline( ShaderProgram & program ) = 0;
 		/**
 		 *\~english
 		 *\brief		create a sampler
-		 *\param[in]	p_name	The sampler name
+		 *\param[in]	name	The sampler name
 		 *\return		The object
 		 *\~french
 		 *\brief		Crée un échantillonneur
-		 *\param[in]	p_name	Le nom de l'échantillonneur
+		 *\param[in]	name	Le nom de l'échantillonneur
 		 *\return		L'objet
 		 */
-		C3D_API virtual SamplerSPtr createSampler( castor::String const & p_name ) = 0;
+		C3D_API virtual SamplerSPtr createSampler( castor::String const & name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
-		 *\param[in]	p_type		The texture type.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	type		The texture type.
+		 *\param[in]	cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		The created texture, depending of current API.
 		 *\~french
 		 *\brief		Crée une texture.
-		 *\param[in]	p_type		Le type de texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	type		Le type de texture.
+		 *\param[in]	cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr createTexture( TextureType p_type
-			, AccessTypes const & p_cpuAccess
-			, AccessTypes const & p_gpuAccess ) = 0;
+		C3D_API virtual TextureLayoutSPtr createTexture( TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
-		 *\param[in]	p_type		The texture type.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	type		The texture type.
+		 *\param[in]	cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		The created texture, depending of current API.
-		 *\param[in]	p_format	The texture format.
-		 *\param[in]	p_size		The texture dimensions.
 		 *\~french
 		 *\brief		Crée une texture.
-		 *\param[in]	p_type		Le type de texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	p_format	Le format de la texture.
-		 *\param[in]	p_size		Les dimensions de la texture.
+		 *\param[in]	type		Le type de texture.
+		 *\param[in]	cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr createTexture( TextureType p_type
-			, AccessTypes const & p_cpuAccess
-			, AccessTypes const & p_gpuAccess
-			, castor::PixelFormat p_format
-			, castor::Size const & p_size ) = 0;
+		C3D_API virtual TextureLayoutSPtr createTexture( TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess
+			, uint32_t mipmapCount ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
-		 *\param[in]	p_type		The texture type.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	type		The texture type.
+		 *\param[in]	cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	format		The texture format.
+		 *\param[in]	size		The texture dimensions.
 		 *\return		The created texture, depending of current API.
-		 *\param[in]	p_format	The texture format.
-		 *\param[in]	p_size		The texture dimensions.
 		 *\~french
 		 *\brief		Crée une texture.
-		 *\param[in]	p_type		Le type de texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	p_format	Le format de la texture.
-		 *\param[in]	p_size		Les dimensions de la texture.
+		 *\param[in]	type		Le type de texture.
+		 *\param[in]	cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	format		Le format de la texture.
+		 *\param[in]	size		Les dimensions de la texture.
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr createTexture( TextureType p_type
-			, AccessTypes const & p_cpuAccess
-			, AccessTypes const & p_gpuAccess
-			, castor::PixelFormat p_format
-			, castor::Point3ui const & p_size ) = 0;
+		C3D_API virtual TextureLayoutSPtr createTexture( TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess
+			, castor::PixelFormat format
+			, castor::Size const & size ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a texture.
+		 *\param[in]	type		The texture type.
+		 *\param[in]	cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	format		The texture format.
+		 *\param[in]	size		The texture dimensions.
+		 *\return		The created texture, depending of current API.
+		 *\~french
+		 *\brief		Crée une texture.
+		 *\param[in]	type		Le type de texture.
+		 *\param[in]	cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	format		Le format de la texture.
+		 *\param[in]	size		Les dimensions de la texture.
+		 *\return		La texture créée, dépendante de l'API actuelle.
+		 */
+		C3D_API virtual TextureLayoutSPtr createTexture( TextureType type
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess
+			, castor::PixelFormat format
+			, castor::Point3ui const & size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture storage.
-		 *\param[in]	p_type		The storage type.
-		 *\param[in]	p_layout	The texture layout.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	type		The storage type.
+		 *\param[in]	layout		The texture layout.
+		 *\param[in]	cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		The created storage, depending on current API.
 		 *\~french
 		 *\brief		Crée un stockage de texture.
-		 *\param[in]	p_type		Le type de stockage.
-		 *\param[in]	p_layout	Le layout de la texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	type		Le type de stockage.
+		 *\param[in]	layout		Le layout de la texture.
+		 *\param[in]	cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		Le stockage créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TextureStorageUPtr createTextureStorage( TextureStorageType p_type
-			, TextureLayout & p_layout
-			, AccessTypes const & p_cpuAccess
-			, AccessTypes const & p_gpuAccess ) = 0;
+		C3D_API virtual TextureStorageUPtr createTextureStorage( TextureStorageType type
+			, TextureLayout & layout
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a transform feedback instance.
-		 *\param[in]	p_computed	The computed elements description.
-		 *\param[in]	p_topology	The topology.
-		 *\param[in]	p_program	The shader program.
+		 *\param[in]	computed	The computed elements description.
+		 *\param[in]	topology	The topology.
+		 *\param[in]	program		The shader program.
 		 *\return		The created transform feedback, depending on current API.
 		 *\~french
 		 *\brief		Crée une instance de transform feedback.
-		 *\param[in]	p_computed	La description des éléments calculés.
-		 *\param[in]	p_topology	La topologie.
-		 *\param[in]	p_program	Le programm shader.
+		 *\param[in]	computed	La description des éléments calculés.
+		 *\param[in]	topology	La topologie.
+		 *\param[in]	program		Le programm shader.
 		 *\return		Le tampon de transform feedback créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TransformFeedbackUPtr createTransformFeedback( BufferDeclaration const & p_computed
-			, Topology p_topology
-			, ShaderProgram & p_program ) = 0;
+		C3D_API virtual TransformFeedbackUPtr createTransformFeedback( BufferDeclaration const & computed
+			, Topology topology
+			, ShaderProgram & program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a frame buffer.
@@ -474,25 +482,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a GPU query.
-		 *\param[in]	p_type	The query type.
+		 *\param[in]	type	The query type.
 		 *\return		The created GPU query.
 		 *\~french
 		 *\brief		Crée une requête GPU.
-		 *\param[in]	p_type	Le type de requête.
+		 *\param[in]	type	Le type de requête.
 		 *\return		La requête GPU créée.
 		 */
-		C3D_API virtual GpuQueryUPtr createQuery( QueryType p_type ) = 0;
+		C3D_API virtual GpuQueryUPtr createQuery( QueryType type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a viewport render API specific implementation.
-		 *\param[in]	p_viewport	The parent vieport.
+		 *\param[in]	viewport	The parent viewport.
 		 *\return		The created implementation.
 		 *\~french
 		 *\brief		Crée une implémentation de viewport spécifique à l'API de rendu.
-		 *\param[in]	p_viewport	Le voewport parent.
+		 *\param[in]	viewport	Le viewport parent.
 		 *\return		L'implémentation créée.
 		 */
-		C3D_API virtual IViewportImplUPtr createViewport( Viewport & p_viewport ) = 0;
+		C3D_API virtual IViewportImplUPtr createViewport( Viewport & viewport ) = 0;
 
 	protected:
 		/**
@@ -512,14 +520,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a GPU buffer.
-		 *\param[in]	p_type	The buffer type.
+		 *\param[in]	type	The buffer type.
 		 *\return		The created buffer, depending on current API.
 		 *\~french
 		 *\brief		Crée un tampon GPU.
-		 *\param[in]	p_type	Le type de tampon.
+		 *\param[in]	type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual GpuBufferSPtr doCreateBuffer( BufferType p_type ) = 0;
+		C3D_API virtual GpuBufferSPtr doCreateBuffer( BufferType type ) = 0;
 
 	protected:
 		//!\~english	Mutex used to make this class thread safe.

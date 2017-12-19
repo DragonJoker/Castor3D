@@ -1,4 +1,4 @@
-﻿/* See LICENSE file in root folder */
+/* See LICENSE file in root folder */
 #ifndef ___TRS_FRAME_BUFFER_H___
 #define ___TRS_FRAME_BUFFER_H___
 
@@ -72,6 +72,11 @@ namespace TestRender
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
 		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture )const override;
+		/**
+		 *\copydoc		castor3d::FrameBuffer::createAttachment
+		 */
+		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr texture
+			, uint32_t mipLevel )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */

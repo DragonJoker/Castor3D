@@ -464,63 +464,71 @@ namespace GlRender
 	}
 
 	TextureLayoutSPtr GlRenderSystem::createTexture( TextureType p_type
-		, AccessTypes const & p_cpuAccess
-		, AccessTypes const & p_gpuAccess )
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess )
 	{
-		return std::make_shared< GlTexture >( getOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess );
+		return std::make_shared< GlTexture >( getOpenGl(), *this, p_type, cpuAccess, gpuAccess );
 	}
 
 	TextureLayoutSPtr GlRenderSystem::createTexture( TextureType p_type
-		, AccessTypes const & p_cpuAccess
-		, AccessTypes const & p_gpuAccess
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
+		, uint32_t mipmapCount )
+	{
+		return std::make_shared< GlTexture >( getOpenGl(), *this, p_type, cpuAccess, gpuAccess, mipmapCount );
+	}
+
+	TextureLayoutSPtr GlRenderSystem::createTexture( TextureType p_type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
 		, PixelFormat p_format
 		, Size const & p_size )
 	{
-		return std::make_shared< GlTexture >( getOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+		return std::make_shared< GlTexture >( getOpenGl(), *this, p_type, cpuAccess, gpuAccess, p_format, p_size );
 	}
 
 	TextureLayoutSPtr GlRenderSystem::createTexture( TextureType p_type
-		, AccessTypes const & p_cpuAccess
-		, AccessTypes const & p_gpuAccess
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
 		, PixelFormat p_format
 		, Point3ui const & p_size )
 	{
-		return std::make_shared< GlTexture >( getOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+		return std::make_shared< GlTexture >( getOpenGl(), *this, p_type, cpuAccess, gpuAccess, p_format, p_size );
 	}
 
 	TextureStorageUPtr GlRenderSystem::createTextureStorage( TextureStorageType p_type
 		, TextureLayout & p_image
-		, AccessTypes const & p_cpuAccess
-		, AccessTypes const & p_gpuAccess )
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess )
 	{
 		TextureStorageUPtr result;
 
 		if ( p_type == TextureStorageType::eBuffer )
 		{
-			result = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			result = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, cpuAccess, gpuAccess );
 		}
 
 		if ( !result )
 		{
-			if ( !checkFlag( p_gpuAccess, AccessType::eWrite ) )
+			if ( !checkFlag( gpuAccess, AccessType::eWrite ) )
 			{
 				if ( getOpenGl().hasExtension( ARB_texture_storage, false )
-					 && p_cpuAccess == AccessType::eNone )
+					 && cpuAccess == AccessType::eNone )
 				{
-					result = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					result = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, cpuAccess, gpuAccess );
 				}
 				else
 				{
-					result = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					result = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, cpuAccess, gpuAccess );
 				}
 			}
-			else if ( p_cpuAccess != AccessType::eNone )
+			else if ( cpuAccess != AccessType::eNone )
 			{
-				result = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				result = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, cpuAccess, gpuAccess );
 			}
 			else
 			{
-				result = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, AccessType::eNone, p_gpuAccess );
+				result = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( getOpenGl(), *this, p_type, p_image, AccessType::eNone, gpuAccess );
 			}
 		}
 

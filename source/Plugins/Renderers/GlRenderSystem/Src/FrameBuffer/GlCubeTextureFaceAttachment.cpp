@@ -13,10 +13,9 @@ namespace GlRender
 		, TextureLayoutSPtr p_texture
 		, CubeMapFace p_face
 		, uint32_t p_mipLevel )
-		: TextureAttachment( p_texture )
+		: TextureAttachment( p_texture, p_mipLevel )
 		, Holder( p_gl )
 		, m_glFace{ p_gl.get( p_face ) }
-		, m_mipLevel{ p_mipLevel }
 		, m_face{ p_face }
 	{
 	}
@@ -44,12 +43,13 @@ namespace GlRender
 
 		switch ( texture->getType() )
 		{
+		case TextureType::eTwoDimensions:
 		case TextureType::eCube:
-			getOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, texture->getGlName(), m_mipLevel );
+			getOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, texture->getGlName(), getMipLevel() );
 			break;
 
 		case TextureType::eCubeArray:
-			REQUIRE( m_mipLevel == 0u );
+			REQUIRE( getMipLevel() == 0u );
 			getOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, texture->getGlName(), 0, getLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
 			break;
 

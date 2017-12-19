@@ -16,59 +16,70 @@ using namespace castor;
 
 namespace GlRender
 {
-	GlTexture::GlTexture(
-		OpenGl & p_gl,
-		GlRenderSystem & renderSystem,
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
-		: ObjectType{ p_gl,
-					  "GlTexture",
-					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
-					}
-		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess }
+	GlTexture::GlTexture( OpenGl & p_gl
+		, GlRenderSystem & renderSystem
+		, TextureType p_type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess )
+		: ObjectType{ p_gl
+			, "GlTexture"
+			, std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 ) }
+		, TextureLayout{ renderSystem, p_type, cpuAccess, gpuAccess }
 		, m_glRenderSystem{ &renderSystem }
 		, m_glDimension{ p_gl.get( p_type ) }
 	{
 	}
 
-	GlTexture::GlTexture(
-		OpenGl & p_gl,
-		GlRenderSystem & renderSystem,
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
-		PixelFormat p_format,
-		Size const & p_size )
-		: ObjectType{ p_gl,
-					  "GlTexture",
-					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
-					}
-		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+	GlTexture::GlTexture( OpenGl & p_gl
+		, GlRenderSystem & renderSystem
+		, TextureType p_type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
+		, uint32_t mipmapCount )
+		: ObjectType{ p_gl
+			, "GlTexture"
+			, std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 ) }
+		, TextureLayout{ renderSystem, p_type, cpuAccess, gpuAccess, mipmapCount }
 		, m_glRenderSystem{ &renderSystem }
 		, m_glDimension{ p_gl.get( p_type ) }
 	{
 	}
 
-	GlTexture::GlTexture(
-		OpenGl & p_gl,
-		GlRenderSystem & renderSystem,
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
-		PixelFormat p_format,
-		Point3ui const & p_size )
-		: ObjectType{ p_gl,
-					  "GlTexture",
-					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
-					}
-		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+	GlTexture::GlTexture( OpenGl & p_gl
+		, GlRenderSystem & renderSystem
+		, TextureType p_type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
+		, PixelFormat p_format
+		, Size const & p_size )
+		: ObjectType{ p_gl
+			, "GlTexture"
+			, std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 ) }
+		, TextureLayout{ renderSystem, p_type, cpuAccess, gpuAccess, p_format, p_size }
+		, m_glRenderSystem{ &renderSystem }
+		, m_glDimension{ p_gl.get( p_type ) }
+	{
+	}
+
+	GlTexture::GlTexture( OpenGl & p_gl
+		, GlRenderSystem & renderSystem
+		, TextureType p_type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
+		, PixelFormat p_format
+		, Point3ui const & p_size )
+		: ObjectType{ p_gl
+			, "GlTexture"
+			, std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 ) }
+		, TextureLayout{ renderSystem, p_type, cpuAccess, gpuAccess, p_format, p_size }
 		, m_glRenderSystem{ &renderSystem }
 		, m_glDimension{ p_gl.get( p_type ) }
 	{

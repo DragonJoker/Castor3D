@@ -63,7 +63,13 @@ namespace TestRender
 
 	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture )const
 	{
-		return std::make_shared< TestTextureAttachment >( p_texture );
+		return std::make_shared< TestTextureAttachment >( p_texture, 0u );
+	}
+
+	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr texture
+		, uint32_t mipLevel )const
+	{
+		return std::make_shared< TestTextureAttachment >( texture, mipLevel );
 	}
 
 	TextureAttachmentSPtr TestFrameBuffer::createAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )const

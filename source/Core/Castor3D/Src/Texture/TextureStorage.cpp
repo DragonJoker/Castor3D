@@ -9,11 +9,11 @@ namespace castor3d
 	TextureStorage::TextureStorage(
 		TextureStorageType p_type,
 		TextureLayout & p_layout,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess )
 		: OwnedBy< TextureLayout >{ p_layout }
-		, m_cpuAccess{ p_cpuAccess }
-		, m_gpuAccess{ p_gpuAccess }
+		, m_cpuAccess{ cpuAccess }
+		, m_gpuAccess{ gpuAccess }
 		, m_type{ p_type }
 	{
 	}

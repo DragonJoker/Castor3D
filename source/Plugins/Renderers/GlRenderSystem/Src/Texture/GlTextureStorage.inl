@@ -9,9 +9,9 @@ namespace GlRender
 												  , GlRenderSystem & renderSystem
 												  , castor3d::TextureStorageType p_type
 												  , castor3d::TextureLayout & p_layout
-												  , castor3d::AccessTypes const & p_cpuAccess
-												  , castor3d::AccessTypes const & p_gpuAccess )
-		: castor3d::TextureStorage{ p_type, p_layout, p_cpuAccess, p_gpuAccess }
+												  , castor3d::AccessTypes const & cpuAccess
+												  , castor3d::AccessTypes const & gpuAccess )
+		: castor3d::TextureStorage{ p_type, p_layout, cpuAccess, gpuAccess }
 		, Holder{ p_gl }
 		, m_glRenderSystem{ &renderSystem }
 		, m_glType{ p_gl.get( p_type ) }

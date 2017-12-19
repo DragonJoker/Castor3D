@@ -5,8 +5,9 @@ using namespace castor;
 
 namespace TestRender
 {
-	TestTextureAttachment::TestTextureAttachment( TextureLayoutSPtr p_texture )
-		: TextureAttachment( p_texture )
+	TestTextureAttachment::TestTextureAttachment( TextureLayoutSPtr p_texture
+		, uint32_t mipLevel )
+		: TextureAttachment( p_texture, mipLevel )
 	{
 	}
 

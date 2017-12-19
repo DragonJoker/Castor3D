@@ -6,11 +6,13 @@ using namespace castor;
 
 namespace castor3d
 {
-	TextureAttachment::TextureAttachment( TextureLayoutSPtr p_texture )
+	TextureAttachment::TextureAttachment( TextureLayoutSPtr texture
+		, uint32_t mipLevel )
 		: FrameBufferAttachment( AttachmentType::eTexture )
-		, m_texture( p_texture )
+		, m_texture( texture )
 		, m_target( TextureType::eCount )
 		, m_layer( 0 )
+		, m_mipLevel{ mipLevel }
 	{
 	}
 

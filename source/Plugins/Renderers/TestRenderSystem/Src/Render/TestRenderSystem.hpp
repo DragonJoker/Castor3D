@@ -60,32 +60,39 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::RenderSystem::createTexture
 		 */
-		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType p_type
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess )override;
+		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType type
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess )override;
 		/**
 		 *\copydoc		castor3d::RenderSystem::createTexture
 		 */
-		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType p_type
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess
+		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType type
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess
+			, uint32_t mipmapCount );
+		/**
+		 *\copydoc		castor3d::RenderSystem::createTexture
+		 */
+		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType type
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess
 			, castor::PixelFormat p_format
 			, castor::Size const & p_size )override;
 		/**
 		 *\copydoc		castor3d::RenderSystem::createTexture
 		 */
-		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType p_type
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess
+		castor3d::TextureLayoutSPtr createTexture( castor3d::TextureType type
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess
 			, castor::PixelFormat p_format
 			, castor::Point3ui const & p_size )override;
 		/**
 		 *\copydoc		castor3d::RenderSystem::createTextureStorage
 		 */
-		castor3d::TextureStorageUPtr createTextureStorage( castor3d::TextureStorageType p_type
+		castor3d::TextureStorageUPtr createTextureStorage( castor3d::TextureStorageType type
 			, castor3d::TextureLayout & p_layout
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess )override;
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess )override;
 		/**
 		 *\copydoc		castor3d::RenderSystem::createFrameBuffer
 		 */
@@ -97,7 +104,7 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::RenderSystem::createQuery
 		 */
-		castor3d::GpuQueryUPtr createQuery( castor3d::QueryType p_type )override;
+		castor3d::GpuQueryUPtr createQuery( castor3d::QueryType type )override;
 		/**
 		 *\copydoc		castor3d::RenderSystem::createViewport
 		 */
@@ -115,7 +122,7 @@ namespace TestRender
 		/**
 		 *\copydoc		castor3d::RenderSystem::doCreateBuffer
 		 */
-		castor3d::GpuBufferSPtr doCreateBuffer( castor3d::BufferType p_type )override;
+		castor3d::GpuBufferSPtr doCreateBuffer( castor3d::BufferType type )override;
 
 	public:
 		C3D_Test_API static castor::String Name;

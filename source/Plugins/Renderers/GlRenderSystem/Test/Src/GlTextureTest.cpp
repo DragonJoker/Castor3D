@@ -28,12 +28,12 @@ namespace Testing
 		void doTestStorage( GlTextureTest & p_case
 			, Engine & engine
 			, TextureType p_type
-			, AccessTypes const & p_cpuAccess
-			, AccessTypes const & p_gpuAccess )
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess )
 		{
 			auto & renderSystem = static_cast< GlRenderSystem & >( *engine.getRenderSystem() );
 			renderSystem.getMainContext()->setCurrent();
-			auto texture = renderSystem.createTexture( p_type, p_cpuAccess, p_gpuAccess );
+			auto texture = renderSystem.createTexture( p_type, cpuAccess, gpuAccess );
 			texture->setSource( PxBufferBase::create( Size{ Width, Height }, Format ) );
 			texture->initialise();
 			std::array< uint8_t, Width * Height * Bpp > src;

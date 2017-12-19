@@ -23,27 +23,40 @@ namespace TestRender
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_renderSystem	The RenderSystem.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
 		 */
 		TestTexture( TestRenderSystem & p_renderSystem
 			, castor3d::TextureType p_type
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess );
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_renderSystem	The RenderSystem.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
+		 */
+		TestTexture( TestRenderSystem & p_renderSystem
+			, castor3d::TextureType p_type
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess
+			, uint32_t mipmapCount );
+		/**
+		 *\brief		Constructor.
+		 *\param[in]	p_gl			The OpenGL APIs.
+		 *\param[in]	p_type			The texture type.
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
 		 *\param[in]	p_format		The texture format.
 		 *\param[in]	p_size			The texture dimensions.
 		 */
 		TestTexture( TestRenderSystem & p_renderSystem
 			, castor3d::TextureType p_type
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess
 			, castor::PixelFormat p_format
 			, castor::Size const & p_size );
 		/**
@@ -51,15 +64,15 @@ namespace TestRender
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_renderSystem	The RenderSystem.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
 		 *\param[in]	p_format		The texture format.
 		 *\param[in]	p_size			The texture dimensions.
 		 */
 		TestTexture( TestRenderSystem & p_renderSystem
 			, castor3d::TextureType p_type
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess
 			, castor::PixelFormat p_format
 			, castor::Point3ui const & p_size );
 		/**

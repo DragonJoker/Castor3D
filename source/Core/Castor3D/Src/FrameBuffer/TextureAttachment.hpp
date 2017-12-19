@@ -24,12 +24,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_texture	The texture
+		 *\param[in]	texture		The texture.
+		 *\param[in]	mipLevel	The mipmap level.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_texture	La texture
+		 *\param[in]	texture		La texture.
+		 *\param[in]	mipLevel	Le niveau de mipmap.
 		 */
-		C3D_API explicit TextureAttachment( TextureLayoutSPtr p_texture );
+		C3D_API explicit TextureAttachment( TextureLayoutSPtr texture
+			, uint32_t mipLevel );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -55,11 +58,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the attached target dimension
-		 *\return		The target dimension
+		 *\return		The target dimension.
 		 *\~french
-		 *\brief		Récupère la dimension cible attachée
-		 *\return		La dimension cible
+		 *\return		La dimension cible.
 		 */
 		inline TextureType getTarget()const
 		{
@@ -67,11 +68,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the attached layer
-		 *\return		The layer
+		 *\return		The attached layer
 		 *\~french
-		 *\brief		Récupère la couche associée
-		 *\return		La couche
+		 *\return		La couche associée.
 		 */
 		inline int getLayer()const
 		{
@@ -79,36 +78,52 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the attached target dimension.
-		 *\param[in]	p_target	The target dimension.
+		 *\return		The mipmap level.
 		 *\~french
-		 *\brief		Récupère la dimension cible attachée.
-		 *\param[in]	p_target	La dimension cible.
+		 *\return		Le niveau de mipmap.
 		 */
-		inline void setTarget( TextureType p_target )
+		inline int getMipLevel()const
 		{
-			m_target = p_target;
+			return m_mipLevel;
 		}
 		/**
 		 *\~english
-		 *\brief		sets the attached layer.
-		 *\param[in]	p_layer	The layer.
+		 *\brief		Sets the attached target dimension.
+		 *\param[in]	target	The target dimension.
+		 *\~french
+		 *\brief		Définit la dimension cible attachée.
+		 *\param[in]	target	La dimension cible.
+		 */
+		inline void setTarget( TextureType target )
+		{
+			m_target = target;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the attached layer.
+		 *\param[in]	layer	The layer.
 		 *\~french
 		 *\brief		Définit la couche associée.
-		 *\param[in]	p_layer	La couche.
+		 *\param[in]	layer	La couche.
 		 */
-		inline void setLayer( int p_layer )
+		inline void setLayer( int layer )
 		{
-			m_layer = p_layer;
+			m_layer = layer;
 		}
 
 	private:
-		//!\~english The attached texture	\~french La texture attachée
+		//!\~english	The attached texture.
+		//!\~french		La texture attachée.
 		TextureLayoutWPtr m_texture;
-		//!\~english The texture target type	\~french Le type de cible de la texture
+		//!\~english	The texture target type.
+		//!\~french		Le type de cible de la texture.
 		TextureType m_target;
-		//!\~english The attached layer	\~french La couche attachée
+		//!\~english	The attached layer.
+		//!\~french		La couche attachée.
 		int m_layer;
+		//!\~english	The attached layer.
+		//!\~french		La couche attachée.
+		uint32_t m_mipLevel;
 	};
 }
 

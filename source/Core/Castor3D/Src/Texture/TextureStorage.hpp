@@ -28,20 +28,20 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	p_type		The storage type.
 		 *\param[in]	p_layout	The parent layout.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess	The required GPU access (combination of AccessType).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_type		Le type de stockage.
 		 *\param[in]	p_layout	Le layout parent.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 */
 		C3D_API TextureStorage(
 			TextureStorageType p_type,
 			TextureLayout & p_layout,
-			AccessTypes const & p_cpuAccess,
-			AccessTypes const & p_gpuAccess );
+			AccessTypes const & cpuAccess,
+			AccessTypes const & gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
