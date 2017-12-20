@@ -5,11 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_SsaoBlurPass_H___
 
 #include "Render/Viewport.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Texture/TextureUnit.hpp"
 
 namespace castor3d
 {
+	class MatrixUbo;
+	class SsaoConfigUbo;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -33,7 +34,10 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions de la zone de rendu.
 		 */
 		SsaoBlurPass( Engine & engine
-			, castor::Size const & size );
+			, castor::Size const & size
+			, SsaoConfig const & config
+			, MatrixUbo & matrixUbo
+			, SsaoConfigUbo & ssaoConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -67,8 +71,8 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		castor::Size m_size;
-		MatrixUbo m_matrixUbo;
-		Viewport m_viewport;
+		MatrixUbo & m_matrixUbo;
+		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit m_result;
 		ShaderProgramSPtr m_program;
 		PushUniform2i & m_axis;

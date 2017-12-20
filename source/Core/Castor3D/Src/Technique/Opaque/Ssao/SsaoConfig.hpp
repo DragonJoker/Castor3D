@@ -67,9 +67,9 @@ namespace castor3d
 		//!\~english	The effect intensity.
 		//!\~french		L'intensité de l'effet.
 		float m_intensity{ 1.0f };
-		//!\~english	The number of values in the random points kernel.
-		//!\~french		Le nombre de points dans le kernel de points aléatoires.
-		castor::RangedValue< uint32_t > m_kernelSize{ 64u, castor::makeRange( 0u, 64u ) };
+		//!\~english	The blur effect radius.
+		//!\~french		L' rayon de l'effet de flou.
+		uint32_t m_blurRadius{ 4u };
 	};
 }
 

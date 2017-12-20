@@ -5,11 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_LineariseDepthPass_H___
 
 #include "Render/Viewport.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Texture/TextureUnit.hpp"
 
 namespace castor3d
 {
+	class MatrixUbo;
+	class SsaoConfigUbo;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -33,7 +34,9 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 */
 		LineariseDepthPass( Engine & engine
-			, castor::Size const & size );
+			, castor::Size const & size
+			, MatrixUbo & matrixUbo
+			, SsaoConfigUbo & ssaoConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -75,9 +78,9 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		MatrixUbo & m_matrixUbo;
+		SsaoConfigUbo & m_ssaoConfigUbo;
 		castor::Size m_size;
-		Viewport m_viewport;
-		MatrixUbo m_matrixUbo;
 		ShaderProgramSPtr m_lineariseProgram;
 		PushUniform3fSPtr m_clipInfo;
 		RenderPipelineUPtr m_linearisePipeline;
@@ -85,8 +88,8 @@ namespace castor3d
 		PushUniform1iSPtr m_previousLevel;
 		RenderPipelineUPtr m_minifyPipeline;
 		TextureUnit m_result;
-		std::array< FrameBufferSPtr, MaxMipLevel > m_fbos;
-		std::array< TextureAttachmentSPtr, MaxMipLevel > m_resultAttaches;
+		std::array< FrameBufferSPtr, MaxMipLevel + 1u > m_fbos;
+		std::array< TextureAttachmentSPtr, MaxMipLevel + 1u > m_resultAttaches;
 		RenderPassTimerSPtr m_timer;
 
 	};

@@ -13,10 +13,12 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -32,6 +34,9 @@
 using namespace castor;
 using namespace castor3d;
 
+#define SSAO_USE_NORMAL_BUFFER 0
+#define HIGH_QUALITY 1
+
 namespace castor3d
 {
 	namespace
@@ -44,7 +49,6 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_MATRIX( writer );
-			UBO_GPINFO( writer );
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
@@ -59,39 +63,40 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		glsl::Shader doGetPixelProgram( Engine & engine
-			, SsaoConfig const & config )
+		glsl::Shader doGetPixelProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 			auto index = MinTextureIndex;
 
-			// Total number of direct samples to take at each pixel
-			auto NUM_SAMPLES = writer.declConstant( cuT( "NUM_SAMPLES" ), 256_i );
-
 			// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
 			// miplevel to maintain reasonable spatial locality in the cache
 			// If this number is too small (< 3), too many taps will land in the same pixel, and we'll get bad variance that manifests as flashing.
 			// If it is too high (> 5), we'll get bad performance because we're not using the MIP levels effectively
-			auto LOG_MAX_OFFSET = writer.declConstant( cuT( "LOG_MAX_OFFSET" ), 3_i );
+			auto const LOG_MAX_OFFSET = writer.declConstant( cuT( "LOG_MAX_OFFSET" ), 3_i );
 
 			// This must be less than or equal to the MAX_MIP_LEVEL defined in SSAO.cpp
-			auto MAX_MIP_LEVEL = writer.declConstant( cuT( "MAX_MIP_LEVEL" ), Int{ int( LineariseDepthPass::MaxMipLevel ) } );
+			auto const MAX_MIP_LEVEL = writer.declConstant( cuT( "MAX_MIP_LEVEL" ), Int{ int( LineariseDepthPass::MaxMipLevel ) } );
 
-			// Used for preventing AO computation on the sky (at infinite depth) and defining the CS Z to bilateral depth key scaling.
-			// This need not match the real far plane.
-			auto FAR_PLANE_Z = writer.declConstant( cuT( "FAR_PLANE_Z" ), -300.0_f );
+			// pixels
+			auto const MIN_RADIUS = writer.declConstant( cuT( "MIN_RADIUS" ), 3.0_f );
 
-			// This is the number of turns around the circle that the spiral pattern makes.
-			// This should be prime to prevent taps from lining up.
-			// This particular choice was tuned for numSamples == 9
-			auto NUM_SPIRAL_TURNS = writer.declConstant( cuT( "NUM_SPIRAL_TURNS" ), 10_i );
+			auto const VARIATION = writer.declConstant( cuT( "VARIATION" ), 0_i );
 
 			//////////////////////////////////////////////////
 
-			// Negative, \"linear\" values in world-space units
+			// Negative, "linear" values in world-space units
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), index++ );
+
+#if SSAO_USE_NORMAL_BUFFER
+
+			/** Same size as result buffer, do not offset by guard band when reading from it */
+			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), index++ );
+			auto c3d_readMultiplyFirst = writer.declUniform( cuT( "c3d_readMultiplyFirst" ), vec4( 2.0_f ) );
+			auto c3d_readAddSecond = writer.declUniform( cuT( "c3d_readAddSecond" ), vec4( 1.0_f ) );
+
+#endif
 
 			UBO_SSAO_CONFIG( writer );
 
@@ -100,7 +105,7 @@ namespace castor3d
 			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ) );
 
 #define visibility      pxl_fragColor.r()
-#define bilateralKey    pxl_fragColor.gb()
+#define bilateralKey    pxl_fragColor.g()
 
 			//////////////////////////////////////////////////
 
@@ -111,247 +116,390 @@ namespace castor3d
 			// Costs 3 MADD.  Error is on the order of 10^3 at the far plane, partly due to z precision.
 			auto reconstructCSPosition = writer.implementFunction< Vec3 >( cuT( "reconstructCSPosition" )
 				, [&]( Vec2 const & S
-					, Float const & z )
+					, Float const & z
+					, Vec4 const & projInfo )
 				{
-					writer.returnStmt( vec3( glsl::fma( S.xy(), c3d_projInfo.xy(), c3d_projInfo.zw() ) * z, z ) );
+					writer.returnStmt( vec3( glsl::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
 				}
 				, InVec2{ &writer, cuT( "S" ) }
-				, InFloat{ &writer, cuT( "z" ) } );
+				, InFloat{ &writer, cuT( "z" ) }
+				, InVec4{ &writer, cuT( "projInfo" ) } );
 
 			// Reconstructs screen-space unit normal from screen-space position
 			auto reconstructCSFaceNormal = writer.implementFunction< Vec3 >( cuT( "reconstructCSFaceNormal" )
-				, [&]( Vec3 const & C )
+				, [&]( Vec3 const & wsPosition )
 				{
-					writer.returnStmt( normalize( cross( dFdy( C ), dFdx( C ) ) ) );
+					writer.returnStmt( normalize( cross( dFdy( wsPosition ), dFdx( wsPosition ) ) ) );
 				}
-				, InVec3{ &writer, cuT( "C" ) } );
+				, InVec3{ &writer, cuT( "wsPosition" ) } );
+			
+			auto reconstructNonUnitCSFaceNormal = writer.implementFunction< Vec3 >( cuT( "reconstructNonUnitCSFaceNormal" )
+				, [&]( Vec3 const & wsPosition )
+				{
+					writer.returnStmt( cross( dFdy( wsPosition ), dFdx( wsPosition ) ) );
+				}
+				, InVec3{ &writer, cuT( "wsPosition" ) } );
 
 			// Returns a unit vector and a screen-space radius for the tap on a unit disk (the caller should scale by the actual disk radius)
 			auto tapLocation = writer.implementFunction< Vec2 >( cuT( "tapLocation" )
 				, [&]( Int const & sampleNumber
 					, Float const & spinAngle
-					, Float & ssR )
+					, Float & ssRadius )
 				{
 					// Radius relative to ssR
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, writer.cast< Float >( sampleNumber + 0.5_f ) * writer.paren( 1.0_f / NUM_SAMPLES ) );
+						, writer.cast< Float >( sampleNumber + 0.5_f ) * writer.paren( 1.0_f / c3d_numSamples ) );
 					auto angle = writer.declLocale( cuT( "angle" )
-						, alpha * writer.paren( 6.28_f * NUM_SPIRAL_TURNS ) + spinAngle );
+						, alpha * writer.paren( 6.28_f * c3d_numSpiralTurns ) + spinAngle );
 
-					ssR = alpha;
+					ssRadius = alpha;
 					writer.returnStmt( vec2( cos( angle ), sin( angle ) ) );
 				}
 				, InInt{ &writer, cuT( "sampleNumber" ) }
 				, InFloat{ &writer, cuT( "spinAngle" ) }
-				, OutFloat{ &writer, cuT( "ssR" ) } );
+				, OutFloat{ &writer, cuT( "ssRadius" ) } );
 
 
 			// Used for packing Z into the GB channels
 			auto csZToKey = writer.implementFunction< Float >( cuT( "csZToKey" )
 				, [&]( Float const & z )
 				{
-					writer.returnStmt( clamp( z * writer.paren( 1.0_f / FAR_PLANE_Z ), 0.0_f, 1.0_f ) );
+					writer.returnStmt( clamp( z * writer.paren( 1.0_f / c3d_farPlaneZ ), 0.0_f, 1.0_f ) );
 				}
 				, InFloat{ &writer, cuT( "z" ) } );
 
-
-			// Used for packing Z into the GB channels
-			auto packKey = writer.implementFunction< Void >( cuT( "packKey" )
-				, [&]( Float const & key
-					, Vec2 & p )
-				{
-					// Round to the nearest 1/256.0
-					auto temp = writer.declLocale( cuT( "temp" )
-						, floor( key * 256.0_f ) );
-
-					// Integer part
-					p.x() = temp * writer.paren( 1.0_f / 256.0 );
-
-					// Fractional part
-					p.y() = key * 256.0 - temp;
-				}
-				, InFloat{ &writer, cuT( "key" ) }
-				, OutVec2{ &writer, cuT( "p" ) } );
-
-
 			// Read the camera-space position of the point at screen-space pixel ssP
 			auto getPosition = writer.implementFunction< Vec3 >( cuT( "getPosition" )
-				, [&]( IVec2 const & ssP )
+				, [&]( IVec2 const & ssPosition )
 				{
-					auto P = writer.declLocale< Vec3 >( cuT( "P" ) );
-					P.z() = texelFetch( c3d_mapDepth, ssP, 0 ).r();
+					auto position = writer.declLocale< Vec3 >( cuT( "position" ) );
+					position.z() = texelFetch( c3d_mapDepth, ssPosition, 0 ).r();
 
 					// Offset to pixel center
-					P = reconstructCSPosition( vec2( ssP ) + vec2( 0.5_f ), P.z() );
-					writer.returnStmt( P );
+					position = reconstructCSPosition( vec2( ssPosition ) + vec2( 0.5_f )
+						, position.z()
+						, c3d_projInfo );
+					writer.returnStmt( position );
 				}
-				, InIVec2{ &writer, cuT( "ssP" ) } );
+				, InIVec2{ &writer, cuT( "ssPosition" ) } );
 
-			// Read the camera-space position of the point at screen-space pixel ssP + unitOffset * ssR.  Assumes length(unitOffset) == 1
+			auto getMipLevel = writer.implementFunction< Int >( cuT( "getMipLevel" )
+				, [&]( Float const & ssRadius )
+				{
+					// Derivation:
+					writer.returnStmt( clamp( writer.cast< Int >( floor( log2( ssRadius ) ) ) - LOG_MAX_OFFSET
+						, 0_i
+						, MAX_MIP_LEVEL ) );
+				}
+				, InFloat{ &writer, cuT( "ssRadius" ) } );
+
+			// Read the camera-space position of the point at screen-space pixel ssP + unitOffset * ssR.
+			// Assumes length(unitOffset) == 1
 			auto getOffsetPosition = writer.implementFunction< Vec3 >( cuT( "getOffsetPosition" )
-				, [&]( IVec2 const & ssC
+				, [&]( IVec2 const & ssCenter
 					, Vec2 const & unitOffset
-					, Float const & ssR )
+					, Float const & ssRadius
+					, Float const & invCszBufferScale )
 				{
 					// Derivation:
 					auto mipLevel = writer.declLocale( cuT( "mipLevel" )
-						, clamp( findMSB( writer.cast< Int >( ssR ) ) - LOG_MAX_OFFSET, 0, MAX_MIP_LEVEL ) );
-
-					auto ssP = writer.declLocale( cuT( "ssP" )
-						, ivec2( ssR * unitOffset ) + ssC );
-
-					auto P = writer.declLocale< Vec3 >( cuT( "P" ) );
+						, getMipLevel( ssRadius ) );
+					auto ssPosition = writer.declLocale( cuT( "ssPosition" )
+						, ivec2( ssRadius * unitOffset ) + ssCenter );
+					auto position = writer.declLocale< Vec3 >( cuT( "position" ) );
 
 					// We need to divide by 2^mipLevel to read the appropriately scaled coordinate from a MIP-map.
 					// Manually clamp to the texture size because texelFetch bypasses the texture unit
-					auto mipP = writer.declLocale( cuT( "mipP" )
-						, clamp( ivec2( ssP.x() >> mipLevel, ssP.y() >> mipLevel )
+					auto mipPosition = writer.declLocale( cuT( "mipPosition" )
+						, clamp( ivec2( ssPosition.x() >> mipLevel, ssPosition.y() >> mipLevel )
 							, ivec2( 0_i )
 							, textureSize( c3d_mapDepth, mipLevel ) - ivec2( 1_i ) ) );
-					P.z() = texelFetch( c3d_mapDepth, mipP, mipLevel ).r();
+					position.z() = texelFetch( c3d_mapDepth, mipPosition, mipLevel ).r();
 
 					// Offset to pixel center
-					P = reconstructCSPosition( vec2( ssP ) + vec2( 0.5_f ), P.z() );
-
-					writer.returnStmt( P );
+					position = reconstructCSPosition( writer.paren( vec2( ssPosition ) + vec2( 0.5_f ) ) * invCszBufferScale
+						, position.z()
+						, c3d_projInfo );
+					writer.returnStmt( position );
 				}
-				, InIVec2{ &writer, cuT( "ssC" ) }
+				, InIVec2{ &writer, cuT( "ssCenter" ) }
 				, InVec2{ &writer, cuT( "unitOffset" ) }
-				, InFloat{ &writer, cuT( "ssR" ) } );
+				, InFloat{ &writer, cuT( "ssRadius" ) }
+				, InFloat{ &writer, cuT( "invCszBufferScale" ) } );
 
-			auto radius2 = writer.declLocale( cuT( "radius2" )
-				, c3d_radius * c3d_radius );
-
-			// Compute the occlusion due to sample with index \a i about the pixel at \a ssC that corresponds
-			// to camera-space point \\a C with unit normal \\a n_C, using maximum screen-space sampling radius \\a ssDiskRadius
-
-			// Note that units of H() in the HPG12 paper are meters, not
-			// unitless.  The whole falloff/sampling function is therefore
-			// unitless.  In this implementation, we factor out (9 / radius).
-
-			// Four versions of the falloff function are implemented below."
-			auto sampleAO = writer.implementFunction< Float >( cuT( "sampleAO" )
-				, [&]( IVec2 const & ssC
-					, Vec3 const & C
-					, Vec3 const & n_C
-					, Float const & ssDiskRadius
-					, Int const & tapIndex
-					, Float const & randomPatternRotationAngle )
+			// Read the camera-space position of the points at screen-space pixel ssP + unitOffset * ssR in both channels of the packed csz buffer.
+			// Assumes length(unitOffset) == 1
+			auto getOffsetPositions = writer.implementFunction< Void >( cuT( "getOffsetPositions" )
+				, [&]( IVec2 const & ssCenter
+					, Vec2 const & unitOffset
+					, Float const & ssRadius
+					, Vec3 & pos0
+					, Vec3 & pos1 )
 				{
-					// Offset on the unit disk, spun for this pixel
-					auto ssR = writer.declLocale< Float >( cuT( "ssR" ) );
-					auto unitOffset = writer.declLocale( cuT( "unitOffset" )
-						, tapLocation( tapIndex, randomPatternRotationAngle, ssR ) );
-					ssR *= ssDiskRadius;
+					// Derivation:
+					auto mipLevel = writer.declLocale( cuT( "mipLevel" )
+						, getMipLevel( ssRadius ) );
+					auto ssPosition = writer.declLocale( cuT( "ssPosition" )
+						, ivec2( ssRadius * unitOffset ) + ssCenter );
 
-					// The occluding point in camera space
-					auto Q = writer.declLocale( cuT( "Q" )
-						, getOffsetPosition( ssC, unitOffset, ssR ) );
+					// We need to divide by 2^mipLevel to read the appropriately scaled coordinate from a MIP-map.
+					// Manually clamp to the texture size because texelFetch bypasses the texture unit
+					auto mipPosition = writer.declLocale( cuT( "mipPosition" )
+						, clamp( ivec2( ssPosition.x() >> mipLevel, ssPosition.y() >> mipLevel )
+							, ivec2( 0_i )
+							, textureSize( c3d_mapDepth, mipLevel ) - ivec2( 1_i ) ) );
+					auto depths = writer.declLocale( cuT( "depths" )
+						, texelFetch( c3d_mapDepth, mipPosition, mipLevel ).rg() );
 
+					// Offset to pixel center
+					pos0 = reconstructCSPosition( vec2( ssPosition ) + vec2( 0.5_f )
+						, depths.x()
+						, c3d_projInfo );
+					pos1 = reconstructCSPosition( vec2( ssPosition ) + vec2( 0.5_f )
+						, depths.y()
+						, c3d_projInfo );
+				}
+				, InIVec2{ &writer, cuT( "ssCenter" ) }
+				, InVec2{ &writer, cuT( "unitOffset" ) }
+				, InFloat{ &writer, cuT( "ssRadius" ) }
+				, OutVec3{ &writer, cuT( "pos0" ) }
+				, OutVec3{ &writer, cuT( "pos1" ) } );
+
+			auto fallOffFunction = writer.implementFunction< Float >( cuT( "fallOffFunction" )
+				, [&]( Float const & vv
+					, Float const & vn
+					, Float const & epsilon )
+				{
+					// A: From the HPG12 paper
+					// Note large epsilon to avoid overdarkening within cracks
+					//  Assumes the desired result is intensity/radius^6 in main()
+					// return float(vv < radius2) * max((vn - bias) / (epsilon + vv), 0.0) * radius2 * 0.6;
+
+					// B: Smoother transition to zero (lowers contrast, smoothing out corners). [Recommended]
+#if HIGH_QUALITY
+					// Epsilon inside the sqrt for rsqrt operation
+					auto f = writer.declLocale( cuT( "f" )
+						, max( 1.0_f - vv * c3d_invRadius2, 0.0_f ) );
+					writer.returnStmt( f * max( writer.paren( vn - c3d_bias ) * inversesqrt( epsilon + vv ), 0.0_f ) );
+#else
+					// Avoid the square root from above.
+					//  Assumes the desired result is intensity/radius^6 in main()
+					auto f = writer.declLocale( cuT( "f" )
+						, max( c3d_radius2 - vv, 0.0_f ) );
+					writer.returnStmt( f * f * f * max( writer.paren( vn - c3d_bias ) / writer.paren( epsilon + vv ), 0.0_f ) );
+#endif
+
+					// C: Medium contrast (which looks better at high radii), no division.  Note that the 
+					// contribution still falls off with radius^2, but we've adjusted the rate in a way that is
+					// more computationally efficient and happens to be aesthetically pleasing.  Assumes 
+					// division by radius^6 in main()
+					// return 4.0 * max(1.0 - vv * invRadius2, 0.0) * max(vn - bias, 0.0);
+
+					// D: Low contrast, no division operation
+					//return 2.0 * float(vv < radius * radius) * max(vn - bias, 0.0);
+				}
+				, InFloat{ &writer, cuT( "vv" ) }
+				, InFloat{ &writer, cuT( "vn" ) }
+				, InFloat{ &writer, cuT( "epsilon" ) } );
+
+			// Compute the occlusion due to sample point \a Q about camera-space point \a wsPosition with unit normal \a normal
+			auto aoValueFromPositionsAndNormal = writer.implementFunction< Float >( cuT( "aoValueFromPositionsAndNormal" )
+				, [&]( Vec3 const & wsPosition
+					, Vec3 const & normal
+					, Vec3 const & occluder )
+				{
 					auto v = writer.declLocale( cuT( "v" )
-						, Q - C );
-
+						, occluder - wsPosition );
 					auto vv = writer.declLocale( cuT( "vv" )
 						, dot( v, v ) );
 					auto vn = writer.declLocale( cuT( "vn" )
-						, dot( v, n_C ) );
+						, dot( v, normal ) );
+					auto const epsilon = writer.declLocale( cuT( "epsilon" )
+						, 0.001_f );
 
-					float constexpr epsilon = 0.01f;
-
-					// A: From the HPG12 paper
-					// Note large epsilon to avoid overdarkening within cracks
-					// writer.returnStmt( writer.cast< Float >( vv < radius2 ) * max( writer.paren( vn - bias ) / writer.paren( epsilon + vv ), 0.0 ) * radius2 * 0.6 );
-
-					// B: Smoother transition to zero (lowers contrast, smoothing out corners). [Recommended]
-					auto f = writer.declLocale( cuT( "f" )
-						, max( radius2 - vv, 0.0_f ) );
-
-					writer.returnStmt( f * f * f * max( writer.paren( vn - c3d_bias ) / writer.paren( epsilon + vv ), 0.0 ) );
-
-					// C: Medium contrast (which looks better at high radii), no division.  Note that the
-					// contribution still falls off with radius^2, but we've adjusted the rate in a way that is
-					// more computationally efficient and happens to be aesthetically pleasing.
-					// writer.returnStmt( 4.0 * max( 1.0_f - vv * invRadius2, 0.0 ) * max( vn - bias, 0.0 ) );
-
-					// D: Low contrast, no division operation
-					// return writer.returnStmt( 2.0 * float( vv < radius2 ) * max( vn - bias, 0.0 ) );
+					// Without the angular adjustment term, surfaces seen head on have less AO
+					writer.returnStmt( fallOffFunction( vv, vn, epsilon ) * mix( 1.0_f, max( 0.0_f, 1.5_f * normal.z() ), 0.35_f ) );
 				}
-				, InIVec2{ &writer, cuT( "ssC" ) }
-				, InVec3{ &writer, cuT( "C" ) }
-				, InVec3{ &writer, cuT( "n_C" ) }
+				, InVec3{ &writer, cuT( "wsPosition" ) }
+				, InVec3{ &writer, cuT( "normal" ) }
+				, InVec3{ &writer, cuT( "occluder" ) } );
+
+			// Compute the occlusion due to sample with index \a tapIndex about the pixel at \a ssCenter that corresponds
+			// to camera-space point \a wsPosition with unit normal \a normal, using maximum screen-space sampling radius \a ssDiskRadius
+
+			// Note that units of H() in the HPG12 paper are meters, not unitless.
+			// The whole falloff/sampling function is therefore unitless.
+			// In this implementation, we factor out (9 / radius).
+
+			// Four versions of the falloff function are implemented below."
+			auto sampleAO = writer.implementFunction< Float >( cuT( "sampleAO" )
+				, [&]( IVec2 const & ssCenter
+					, Vec3 const & wsPosition
+					, Vec3 const & normal
+					, Float const & ssDiskRadius
+					, Int const & tapIndex
+					, Float const & randomPatternRotationAngle
+					, Float const & invCszBufferScale )
+				{
+					// Offset on the unit disk, spun for this pixel
+					auto ssRadius = writer.declLocale< Float >( cuT( "ssRadius" ) );
+					auto unitOffset = writer.declLocale( cuT( "unitOffset" )
+						, tapLocation( tapIndex, randomPatternRotationAngle, ssRadius ) );
+
+					// Ensure that the taps are at least 1 pixel away
+					ssRadius = max( 0.75_f, ssRadius * ssDiskRadius );
+
+#if (CS_Z_PACKED_TOGETHER != 0)
+
+					auto occ0 = writer.declLocale< Vec3 >( cuT( "occ0" ) );
+					auto occ1 = writer.declLocale< Vec3 >( cuT( "occ1" ) );
+					getOffsetPositions( ssCenter, unitOffset, ssDiskRadius, occ0, occ1 );
+
+					return max( aoValueFromPositionsAndNormal( wsPosition, normal, occ0 )
+						, aoValueFromPositionsAndNormal( wsPosition, normal, occ1 ) );
+
+#else
+
+					// The occluding point in camera space
+					auto occluder = writer.declLocale( cuT( "occluder" )
+						, getOffsetPosition( ssCenter
+							, unitOffset
+							, ssRadius
+							, invCszBufferScale ) );
+
+					writer.returnStmt( aoValueFromPositionsAndNormal( wsPosition, normal, occluder ) );
+
+#endif
+				}
+				, InIVec2{ &writer, cuT( "ssCenter" ) }
+				, InVec3{ &writer, cuT( "wsPosition" ) }
+				, InVec3{ &writer, cuT( "normal" ) }
 				, InFloat{ &writer, cuT( "ssDiskRadius" ) }
 				, InInt{ &writer, cuT( "tapIndex" ) }
-				, InFloat{ &writer, cuT( "randomPatternRotationAngle" ) } );
+				, InFloat{ &writer, cuT( "randomPatternRotationAngle" ) }
+				, InFloat{ &writer, cuT( "invCszBufferScale" ) } );
+
+			auto square = writer.implementFunction< Float >( cuT( "square" )
+				, [&]( Float const & x )
+				{
+					writer.returnStmt( x * x );
+				}
+				, InFloat{ &writer, cuT( "x") } );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
 					// Pixel being shaded
-					auto ssC = writer.declLocale( cuT( "ssC" )
+					auto ssCenter = writer.declLocale( cuT( "ssCenter" )
 						, ivec2( gl_FragCoord.xy() ) );
 
 					// World space point being shaded
-					auto C = writer.declLocale( cuT( "C" )
-						, getPosition( ssC ) );
+					auto wsPosition = writer.declLocale( cuT( "wsPosition" )
+						, getPosition( ssCenter ) );
 
-					writer << packKey( csZToKey( C.z() ), bilateralKey ) << endi;
+					bilateralKey = csZToKey( wsPosition.z() );
 
-					writer.multilineComment( cuT( "Unneccessary with depth test.\n" )
-						cuT( "if (C.z < FAR_PLANE_Z) {\n" )
-						cuT( "// We're on the skybox\n" )
-						cuT( "discard;\n" )
-						cuT( "}\n" ) );
+#if SSAO_USE_NORMAL_BUFFER
 
-					// Hash function used in the HPG12 AlchemyAO paper
-					auto randomPatternRotationAngle = writer.declLocale( cuT( "randomPatternRotationAngle" )
-						, 10.0_f * writer.paren( 3 * ssC.x() ^ ssC.y() + ssC.x() * ssC.y() ) );
+					auto normal = writer.declLocale( cuT( "normal" )
+						, texelFetch( c3d_mapNormal, ivec2( gl_FragCoord.xy() ), 0 ).xyz() );
+					//normal = normalize( writer.paren( c3d_mtxInvView * vec4( normal, 1.0_f ) ).xyz() );
+					normal = writer.paren( c3d_mtxInvView * vec4( normal, 1.0_f ) ).xyz();
+					normal = normalize( glsl::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 
-					// Reconstruct normals from positions. These will lead to 1-pixel black lines
-					// at depth discontinuities, however the blur will wipe those out so they are not visible
-					// in the final image.
-					auto n_C = writer.declLocale( cuT( "n_C" )
-						, reconstructCSFaceNormal( C ) );
+#else
+
+					// Reconstruct normals from positions.
+					auto normal = writer.declLocale( cuT( "normal" )
+						, reconstructNonUnitCSFaceNormal( wsPosition ) );
+
+					// Since normal is computed from the cross product of camera-space edge vectors from points at adjacent pixels,
+					// its magnitude will be proportional to the square of distance from the camera
+					IF( writer, dot( normal, normal ) > writer.paren( square( wsPosition.z() * wsPosition.z() * 0.00006 ) ) )
+					{
+						// if the threshold is too big you will see black dots where we used a bad normal at edges, too small -> white
+						// The normals from depth should be very small values before normalization,
+						// except at depth discontinuities, where they will be large and lead
+						// to 1-pixel false occlusions because they are not reliable
+						visibility = 1.0_f;
+						writer.returnStmt();
+					}
+					ELSE
+					{
+						normal = normalize( normal );
+					}
+					FI;
+
+#endif
 
 					// Choose the screen-space sample radius
 					// proportional to the projected area of the sphere
 					auto ssDiskRadius = writer.declLocale( cuT( "ssDiskRadius" )
-						, -c3d_projScale * c3d_radius / C.z() );
+						, c3d_projScale * c3d_radius / wsPosition.z() );
+
+					IF( writer, ssDiskRadius <= MIN_RADIUS )
+					{
+						// There is no way to compute AO at this radius
+						visibility = 1.0_f;
+						//pxl_fragColor = vec3( 0.0_f, 1.0, 1.0 );
+						writer.returnStmt();
+					}
+					FI;
+
+					// Hash function used in the HPG12 AlchemyAO paper
+					auto randomPatternRotationAngle = writer.declLocale( cuT( "randomPatternRotationAngle" )
+						, 10.0_f * writer.paren( writer.paren( 3 * ssCenter.x() ) ^ writer.paren( ssCenter.y() + ssCenter.x() * ssCenter.y() ) ) );
 
 					auto sum = writer.declLocale( cuT( "sum" )
 						, 0.0_f );
 
-					FOR( writer, Int, i, 0, "i < NUM_SAMPLES", "++i" )
+					FOR( writer, Int, i, 0, "i < c3d_numSamples", "++i" )
 					{
-						sum += sampleAO( ssC, C, n_C, ssDiskRadius, i, randomPatternRotationAngle );
+						sum += sampleAO( ssCenter
+							, wsPosition
+							, normal
+							, ssDiskRadius
+							, i
+							, randomPatternRotationAngle
+							, 1.0_f );
 					}
 					ROF;
 
+#   if HIGH_QUALITY
+
 					auto A = writer.declLocale( cuT( "A" )
-						, max( 0.0_f, 1.0_f - sum * c3d_intensityDivR6 * writer.paren( 5.0_f / NUM_SAMPLES ) ) );
+						, pow( max( 0.0_f
+								, 1.0_f - sqrt( sum * writer.paren( 3.0_f / c3d_numSamples ) ) )
+							, c3d_intensity ) );
 
-					// Bilateral box-filter over a quad for free, respecting depth edges
-					// (the difference that this makes is subtle)
-					IF( writer, abs( dFdx( C.z() ) ) < 0.02_f )
-					{
-						A -= dFdx( A ) * writer.paren( writer.paren( ssC.x() & 1 ) - 0.5_f );
-					}
-					FI;
-					IF( writer, abs( dFdy( C.z() ) ) < 0.02_f )
-					{
-						A -= dFdy( A ) * writer.paren( writer.paren( ssC.y() & 1 ) - 0.5_f );
-					}
-					FI;
+#   else
 
-					visibility = A;
+					auto A = writer.declLocale( cuT( "A" )
+						, max( 0.0_f
+							, 1.0_f - sum * c3d_intensityDivR6 * writer.paren( 5.0_f / c3d_numSamples ) ) );
+					// Anti-tone map to reduce contrast and drag dark region farther
+					// (x^0.2 + 1.2 * x^4)/2.2
+					A = writer.paren( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
+
+#   endif
+
+					// Visualize random spin distribution
+					//A = mod(randomPatternRotationAngle / (2 * 3.141592653589), 1.0);
+
+					// Fade in as the radius reaches 2 pixels
+					visibility = mix( 1.0_f
+						, A
+						, clamp( ssDiskRadius - MIN_RADIUS
+							, 0.0_f
+							, 1.0_f ) );
 				} );
 			return writer.finalise();
 		}
 
-		ShaderProgramSPtr doGetProgram( Engine & engine
-			, SsaoConfig const & config )
+		ShaderProgramSPtr doGetProgram( Engine & engine )
 		{
 			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetPixelProgram( engine, config );
+			auto pxl = doGetPixelProgram( engine );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
 			program->createObject( ShaderType::eVertex );
 			program->createObject( ShaderType::ePixel );
@@ -404,30 +552,24 @@ namespace castor3d
 
 	RawSsaoPass::RawSsaoPass( Engine & engine
 		, Size const & size
-		, SsaoConfig const & config )
+		, MatrixUbo & matrixUbo
+		, SsaoConfigUbo & ssaoConfigUbo )
 		: m_engine{ engine }
-		, m_config{ config }
+		, m_matrixUbo{ matrixUbo }
+		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_size{ size }
-		, m_matrixUbo{ engine }
-		, m_ssaoConfigUbo{ engine }
-		, m_viewport{ engine }
 		, m_result{ engine }
-		, m_program{ doGetProgram( engine, config ) }
+		, m_program{ doGetProgram( engine ) }
 		, m_pipeline{ doCreatePipeline( engine, *m_program ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
-		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
-		m_viewport.initialise();
-		m_viewport.resize( m_size );
-		m_viewport.update();
-
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto sampler = doCreateSampler( m_engine, cuT( "SSAORaw_Result" ), WrapMode::eClampToEdge );
 		auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite );
 		ssaoResult->setSource( PxBufferBase::create( m_size
-			, PixelFormat::eR8G8B8 ) );
+			, PixelFormat::eRGB32F ) );
 		m_result.setTexture( ssaoResult );
 		m_result.setSampler( sampler );
 		m_result.setIndex( MinTextureIndex );
@@ -458,22 +600,22 @@ namespace castor3d
 		m_program.reset();
 		m_ssaoConfigUbo.getUbo().cleanup();
 		m_matrixUbo.getUbo().cleanup();
-		m_viewport.cleanup();
 		m_result.cleanup();
 	}
 
 	void RawSsaoPass::compute( TextureUnit const & linearisedDepthBuffer
-		, Viewport const & viewport )
+		, TextureUnit const & normals )
 	{
 		m_timer->start();
-		m_ssaoConfigUbo.update( m_config, viewport );
-		m_matrixUbo.update( m_viewport.getProjection() );
 		m_fbo->bind( FrameBufferTarget::eDraw );
 		m_fbo->clear( BufferComponent::eColour );
-		linearisedDepthBuffer.getTexture()->bind( MinTextureIndex );
-		linearisedDepthBuffer.getSampler()->bind( MinTextureIndex );
+#if SSAO_USE_NORMAL_BUFFER
+
+		normals.getTexture()->bind( MinTextureIndex + 1 );
+		normals.getSampler()->bind( MinTextureIndex + 1 );
+
+#endif
 		m_pipeline->apply();
-		m_viewport.apply();
 		m_engine.getRenderSystem()->getCurrentContext()->renderTexture( m_size
 			, *linearisedDepthBuffer.getTexture()
 			, *m_pipeline

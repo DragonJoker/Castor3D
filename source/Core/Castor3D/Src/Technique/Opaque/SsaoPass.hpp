@@ -9,9 +9,10 @@ See LICENSE file in root folder
 #include "Technique/Opaque/Ssao/BlurPass.hpp"
 #include "Technique/Opaque/Ssao/LineariseDepthPass.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Technique/Opaque/Ssao/RawSsaoPass.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Shader/Ubos/GpInfoUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
 namespace castor3d
 {
@@ -61,8 +62,8 @@ namespace castor3d
 		 *\param[in]	gp		Le résultat de la geometry pass.
 		 *\param[in]	info	Reçoit les informations de rendu.
 		 */
-		void render( TextureUnit const & depthBuffer
-			, Viewport const & viewport
+		void render( GeometryPassResult const & gpResult
+			, Camera const & camera
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -74,6 +75,9 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		SsaoConfig const & m_config;
+		MatrixUbo m_matrixUbo;
+		SsaoConfigUbo m_ssaoConfigUbo;
 		LineariseDepthPass m_linearisePass;
 		RawSsaoPass m_rawSsaoPass;
 		SsaoBlurPass m_horizontalBlur;

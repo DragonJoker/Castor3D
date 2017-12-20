@@ -7,13 +7,13 @@ See LICENSE file in root folder
 #include "SsaoConfigUbo.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Shader/Ubos/GpInfoUbo.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Technique/Opaque/LightPass.hpp"
 #include "Texture/TextureUnit.hpp"
 
 namespace castor3d
 {
+	class MatrixUbo;
+	class SsaoConfigUbo;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -40,7 +40,8 @@ namespace castor3d
 		 */
 		RawSsaoPass( Engine & engine
 			, castor::Size const & size
-			, SsaoConfig const & config );
+			, MatrixUbo & matrixUbo
+			, SsaoConfigUbo & ssaoConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -59,7 +60,7 @@ namespace castor3d
 		 *\param[in]	viewport				Reçoit les informations de rendu.
 		 */
 		void compute( TextureUnit const & linearisedDepthBuffer
-			, Viewport const & viewport );
+			, TextureUnit const & normals );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
@@ -73,11 +74,9 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		SsaoConfig const & m_config;
+		MatrixUbo & m_matrixUbo;
+		SsaoConfigUbo & m_ssaoConfigUbo;
 		castor::Size m_size;
-		MatrixUbo m_matrixUbo;
-		SsaoConfigUbo m_ssaoConfigUbo;
-		Viewport m_viewport;
 		TextureUnit m_result;
 		ShaderProgramSPtr m_program;
 		RenderPipelineUPtr m_pipeline;

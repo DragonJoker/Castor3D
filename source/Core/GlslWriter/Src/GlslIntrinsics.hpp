@@ -129,6 +129,7 @@ namespace glsl
 	template< typename Value > inline Value sqrt( Value const & value );
 	template< typename Value > inline Value pow( Value const & x, Value const & y );
 	template< typename Value > inline Value pow( Value const & x, Optional< Value > const & y );
+	template< typename Value > inline Value pow2( Value const & p );
 	template< typename Value > inline Value neg( Value const & p_value );
 	template< typename Value > inline Value log( Value const & p_value );
 	template< typename Value > inline Value exp( Value const & p_value );

@@ -577,11 +577,6 @@ namespace castor3d
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
-
-				if ( hasSsao )
-				{
-					pxl_fragColor = vec4( texture( c3d_mapSsao, vtx_texture ).r() );
-				}
 			} );
 			return writer.finalise();
 		}
@@ -1066,8 +1061,8 @@ namespace castor3d
 
 		if ( m_ssaoEnabled )
 		{
-			m_ssao.render( *gp[size_t( DsTexture::eDepth )]
-				, camera.getViewport()
+			m_ssao.render( gp
+				, camera
 				, info );
 			ssao = &m_ssao.getResult();
 		}

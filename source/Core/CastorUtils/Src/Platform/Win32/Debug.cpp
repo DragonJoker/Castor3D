@@ -31,6 +31,12 @@ namespace castor
 				return result;
 			}
 
+			DWORD64 & doGetLibraryBaseAddress( DynamicLibrary const & library )
+			{
+				static std::map< DynamicLibrary const *, DWORD64 > result;
+				return result[&library];
+			}
+
 			::HANDLE doGetProcess()
 			{
 				static ::HANDLE result( ::GetCurrentProcess() );
@@ -122,6 +128,8 @@ namespace castor
 
 #endif
 
+#if !defined( NDEBUG )
+
 		void initialise()
 		{
 			::SymSetOptions( SYMOPT_UNDNAME | SYMOPT_LOAD_LINES );
@@ -134,12 +142,6 @@ namespace castor
 			{
 				::SymCleanup( doGetProcess() );
 			}
-		}
-
-		DWORD64 & doGetLibraryBaseAddress( DynamicLibrary const & library )
-		{
-			static std::map< DynamicLibrary const *, DWORD64 > result;
-			return result[&library];
 		}
 
 		void loadModule( DynamicLibrary const & library )
@@ -172,6 +174,26 @@ namespace castor
 				::SymUnloadModule64( doGetProcess(), address );
 			}
 		}
+
+#else
+
+		void initialise()
+		{
+		}
+
+		void cleanup()
+		{
+		}
+
+		void loadModule( DynamicLibrary const & library )
+		{
+		}
+
+		void unloadModule( DynamicLibrary const & library )
+		{
+		}
+
+#endif
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{

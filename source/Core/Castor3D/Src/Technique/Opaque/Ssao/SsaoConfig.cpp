@@ -44,8 +44,8 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tkernel_size " ) + string::toString( p_object.m_kernelSize.value() ) + cuT( "\n" ) ) > 0;
-				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig kernel size" );
+				result = p_file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( p_object.m_blurRadius ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur radius" );
 			}
 
 			p_file.writeText( m_tabs + cuT( "}\n" ) );

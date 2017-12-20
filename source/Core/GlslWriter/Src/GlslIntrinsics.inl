@@ -335,6 +335,12 @@ namespace glsl
 	}
 
 	template< typename Value >
+	inline Value pow2( Value const & p )
+	{
+		return writeFunctionCall< Value >( p.m_writer, cuT( "pow2" ), p );
+	}
+
+	template< typename Value >
 	Value normalize( Value const & p_value )
 	{
 		return writeFunctionCall< Value >( p_value.m_writer, cuT( "normalize" ), p_value );

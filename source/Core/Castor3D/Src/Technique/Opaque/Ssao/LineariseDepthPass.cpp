@@ -8,10 +8,12 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -99,13 +101,15 @@ namespace castor3d
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto ssP = writer.declLocale( cuT( "ssP" )
+					auto ssPosition = writer.declLocale( cuT( "ssP" )
 						, ivec2( gl_FragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
 					// On DX9, the bit-and can be implemented with floating-point modulo
 					pxl_fragColor = texelFetch( c3d_mapDepth
-						, clamp( ssP * 2 + ivec2( ssP.y() & 1, ssP.x() & 1 ), ivec2( 0_i ), textureSize( c3d_mapDepth, c3d_previousLevel ) - ivec2( 1_i ) )
+						, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
+							, ivec2( 0_i )
+							, textureSize( c3d_mapDepth, c3d_previousLevel ) - ivec2( 1_i ) )
 						, c3d_previousLevel ).r();
 				} );
 			return writer.finalise();
@@ -180,25 +184,22 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
-		, Size const & size )
+		, Size const & size
+		, MatrixUbo & matrixUbo
+		, SsaoConfigUbo & ssaoConfigUbo )
 		: m_engine{ engine }
 		, m_size{ size }
-		, m_viewport{ engine }
-		, m_matrixUbo{ engine }
+		, m_matrixUbo{ matrixUbo }
+		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_result{ engine }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSAO" ), cuT( "Linearise depth" ) ) }
 	{
-		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
-		m_viewport.initialise();
-		m_viewport.resize( m_size );
-		m_viewport.update();
-
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto sampler = doCreateSampler( m_engine, cuT( "LinearisePass_Result" ), WrapMode::eClampToEdge );
 		auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite
-			, MaxMipLevel );
+			, MaxMipLevel + 1u );
 		ssaoResult->setSource( PxBufferBase::create( m_size
 			, PixelFormat::eL32F ) );
 		m_result.setTexture( ssaoResult );
@@ -206,7 +207,7 @@ namespace castor3d
 		m_result.setIndex( MinTextureIndex );
 		m_result.initialise();
 
-		for ( uint32_t index = 0u; index < MaxMipLevel; ++index )
+		for ( uint32_t index = 0u; index <= MaxMipLevel; ++index )
 		{
 			auto & fbo = m_fbos[index];
 			fbo = renderSystem.createFrameBuffer();
@@ -230,16 +231,14 @@ namespace castor3d
 		doCleanupMinifyPass();
 		doCleanupLinearisePass();
 
-		for ( uint32_t index = 0u; index < MaxMipLevel; ++index )
+		for ( uint32_t index = 0u; index <= MaxMipLevel; ++index )
 		{
 			m_fbos[index]->cleanup();
 			m_fbos[index].reset();
 			m_resultAttaches[index].reset();
 		}
 
-		m_matrixUbo.getUbo().cleanup();
 		m_result.cleanup();
-		m_viewport.cleanup();
 	}
 
 	void LineariseDepthPass::linearise( TextureUnit const & depthBuffer
@@ -252,8 +251,6 @@ namespace castor3d
 			? Point3f{ z_n, -1.0f, 1.0f }
 			: Point3f{ z_n * z_f, z_n - z_f, z_f };
 		m_clipInfo->setValue( clipInfo );
-		m_matrixUbo.update( m_viewport.getProjection() );
-		m_viewport.apply();
 
 		m_fbos[0]->bind( FrameBufferTarget::eDraw );
 		m_fbos[0]->clear( BufferComponent::eColour );
@@ -266,11 +263,11 @@ namespace castor3d
 			, m_matrixUbo );
 		m_fbos[0]->unbind();
 
-		for ( auto index = 1u; index < MaxMipLevel; ++index )
+		for ( auto index = 1u; index <= MaxMipLevel; ++index )
 		{
+			m_previousLevel->setValue( index - 1 );
 			m_fbos[index]->bind( FrameBufferTarget::eDraw );
 			m_fbos[index]->clear( BufferComponent::eColour );
-			m_result.bind();
 			m_minifyPipeline->apply();
 			m_engine.getRenderSystem()->getCurrentContext()->renderTexture( m_size
 				, *m_result.getTexture()
@@ -294,7 +291,7 @@ namespace castor3d
 	{
 		m_minifyProgram = doGetMinifyProgram( m_engine );
 		m_previousLevel = m_minifyProgram->findUniform< UniformType::eInt >( cuT( "c3d_previousLevel" ), ShaderType::ePixel );
-		m_minifyPipeline = doCreatePipeline( m_engine, *m_lineariseProgram );
+		m_minifyPipeline = doCreatePipeline( m_engine, *m_minifyProgram );
 		m_minifyPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 	}
 

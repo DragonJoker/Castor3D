@@ -196,6 +196,11 @@ namespace glsl
 		m_stream << cuT( "layout( max_vertices = " ) << p_count << cuT( " ) out;" ) << std::endl;
 	}
 
+	void GlslWriter::returnStmt()
+	{
+		m_stream << cuT( "return;" ) << std::endl;
+	}
+
 	Vec4 GlslWriter::texture( Sampler1D const & p_sampler, Float const & p_value )
 	{
 		return writeFunctionCall< Vec4 >( this, m_keywords->getTexture1D(), p_sampler, p_value );
