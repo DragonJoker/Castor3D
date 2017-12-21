@@ -114,13 +114,13 @@ namespace castor3d
 #undef NUM_PRECOMPUTED
 
 		float const scale = std::abs( 2.0f * ( viewport.getFovY() * 0.5f ).tan() );
-		float const radius = config.m_radius * 100.0f;
+		float const radius = config.m_radius;
 		float const invRadius = 1 / radius;
 		float const radius2 = radius * radius;
 		float const invRadius2 = 1.0f / radius2;
 		float const intersityDivR6 = config.m_intensity / std::pow( radius, 6.0f );
 		float const projScale = std::abs( viewport.getHeight() / scale );
-		float const MIN_AO_SS_RADIUS = 100.0f;
+		float const MIN_AO_SS_RADIUS = 1.0f;
 		// Second parameter of max is just solving for Z coordinate at which we hit MIN_AO_SS_RADIUS
 		float farZ = std::max( viewport.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
