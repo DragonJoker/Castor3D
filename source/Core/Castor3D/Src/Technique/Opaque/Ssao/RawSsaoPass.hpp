@@ -29,17 +29,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	config			The SSAO configuration.
+		 *\param[in]	matrixUbo		The Matrix UBO.
+		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	config			La configuration du SSAO.
+		 *\param[in]	matrixUbo		L'UBO des matrices.
+		 *\param[in]	ssaoConfigUbo	L'UBO de configuration du SSAO.
 		 */
 		RawSsaoPass( Engine & engine
 			, castor::Size const & size
+			, SsaoConfig const & config
 			, MatrixUbo & matrixUbo
 			, SsaoConfigUbo & ssaoConfigUbo );
 		/**

@@ -4602,6 +4602,54 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoHighQuality )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_highQuality = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoUseNormalsBuffer )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_useNormalsBuffer = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoRadius )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -4665,6 +4713,126 @@ namespace castor3d
 				float value;
 				p_params[0]->get( value );
 				parsingContext->ssaoConfig.m_intensity = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoNumSamples )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_numSamples = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoEdgeSharpness )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_edgeSharpness = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoBlurStepSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_blurStepSize = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoBlurHighQuality )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_blurHighQuality = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoBlurRadius )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_blurRadius = value;
 			}
 		}
 		else

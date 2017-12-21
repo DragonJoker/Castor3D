@@ -26,6 +26,24 @@ namespace castor3d
 
 			if ( result )
 			{
+				result = p_file.writeText( m_tabs + cuT( "\thigh_quality " ) + ( p_object.m_highQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig high quality" );
+			}
+
+			if ( result )
+			{
+				result = p_file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( p_object.m_useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig use normals buffer" );
+			}
+
+			if ( result )
+			{
+				result = p_file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( p_object.m_intensity ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig intensity" );
+			}
+
+			if ( result )
+			{
 				result = p_file.writeText( m_tabs + cuT( "\tradius " ) + string::toString( p_object.m_radius ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig radius" );
 			}
@@ -38,8 +56,26 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( p_object.m_intensity ) + cuT( "\n" ) ) > 0;
-				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig intensity" );
+				result = p_file.writeText( m_tabs + cuT( "\tnum_samples " ) + string::toString( p_object.m_numSamples ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig num samples" );
+			}
+
+			if ( result )
+			{
+				result = p_file.writeText( m_tabs + cuT( "\tedge_sharpness " ) + string::toString( p_object.m_edgeSharpness ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig edge sharpness" );
+			}
+
+			if ( result )
+			{
+				result = p_file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( p_object.m_blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur high quality" );
+			}
+
+			if ( result )
+			{
+				result = p_file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( p_object.m_blurStepSize ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur step size" );
 			}
 
 			if ( result )

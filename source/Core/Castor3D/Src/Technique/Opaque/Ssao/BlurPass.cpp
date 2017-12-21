@@ -26,8 +26,6 @@
 
 using namespace castor;
 
-#define COMPUTE_PLANE_WEIGHT 1
-
 namespace castor3d
 {
 	namespace
@@ -60,30 +58,14 @@ namespace castor3d
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
-
-			//////////////////////////////////////////////////////////////////////////////////////////////
-
-			/** Type of data to read from source.  This macro allows
-			the same blur shader to be used on different kinds of input data. */
-#define ValueType            Float
-#define InValueType          InFloat
-#define OutValueType         OutFloat
-
-			/** Swizzle to use to extract the channels of source. This macro allows
-			the same blur shader to be used on different kinds of input data. */
-#define ValueComponents      r()
-
-#define ValueIsKey           0
-
-			/** Channel encoding the bilateral key value (which must not be the same as ValueComponents) */
-#if NUM_KEY_COMPONENTS == 2
-#   define KeyComponents     gb()
-#else
-#   define KeyComponents     g()
-#endif
-
 			auto index = MinTextureIndex;
+
 			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), index++ );
+
+			/** Same size as result buffer, do not offset by guard band when reading from it */
+			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), index++, config.m_useNormalsBuffer );
+			auto c3d_readMultiplyFirst = writer.declUniform( cuT( "c3d_readMultiplyFirst" ), config.m_useNormalsBuffer, vec4( 2.0_f ) );
+			auto c3d_readAddSecond = writer.declUniform( cuT( "c3d_readAddSecond" ), config.m_useNormalsBuffer, vec4( 1.0_f ) );
 
 			UBO_SSAO_CONFIG( writer );
 
@@ -94,20 +76,8 @@ namespace castor3d
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ) );
-#define  result         pxl_fragColor.ValueComponents
-#define  keyPassThrough pxl_fragColor.KeyComponents
-
-#if NUM_KEY_COMPONENTS == 2
-
-			/** Returns a number on (0, 1) */
-			auto unpackKey = writer.implementFunction< Float >( cuT( "unpackKey" )
-				, [&]( Vec2 const & p )
-				{
-					writer.returnStmt( p.x() * ( 256.0 / 257.0 ) + p.y() * ( 1.0 / 257.0 ) );
-				}
-				, InVec2{ &writer, cuT( "p" ) } );
-
-#else
+#define  result         pxl_fragColor.r()
+#define  keyPassThrough pxl_fragColor.g()
 
 			/** Returns a number on (0, 1) */
 			auto unpackKey = writer.implementFunction< Float >( cuT( "unpackKey" )
@@ -116,8 +86,6 @@ namespace castor3d
 					writer.returnStmt( p );
 				}
 				, InFloat{ &writer, cuT( "p" ) } );
-
-#endif
 
 			// Reconstruct camera-space P.xyz from screen-space S = (x, y) in
 			// pixels and camera-space z < 0.  Assumes that the upper-left pixel center
@@ -156,24 +124,35 @@ namespace castor3d
 			auto getTapInformation = writer.implementFunction< Void >( cuT( "getTapInformation" )
 				, [&]( IVec2 const & tapLoc
 					, Float & tapKey
-					, ValueType & value
+					, Float & value
 					, Vec3 & tapNormal )
 				{
 					auto temp = writer.declLocale( cuT( "temp" )
 						, texelFetch( c3d_mapInput, tapLoc, 0 ) );
-					tapKey = unpackKey( temp.KeyComponents );
-					value = temp.ValueComponents;
-#ifdef normal_notNull
-					tapNormal = texelFetch( normal_buffer, tapLoc, 0 ).xyz;
-					tapNormal = normalize( tapNormal * normal_readMultiplyFirst.xyz() + normal_readAddSecond.xyz() );
-#else
-					tapNormal = vec3( 0.0_f );
-#endif
+					tapKey = unpackKey( temp.g() );
+					value = temp.r();
+
+					if ( config.m_useNormalsBuffer )
+					{
+						tapNormal = texelFetch( c3d_mapNormal, tapLoc, 0 ).xyz();
+						tapNormal = normalize( tapNormal * c3d_readMultiplyFirst.xyz() + c3d_readAddSecond.xyz() );
+					}
+					else
+					{
+						tapNormal = vec3( 0.0_f );
+					}
 				}
 				, InIVec2{ &writer, cuT( "tapLoc" ) }
 				, OutFloat{ &writer, cuT( "tapKey" ) }
-				, OutValueType{ &writer, cuT( "value" ) }
+				, OutFloat{ &writer, cuT( "value" ) }
 				, OutVec3{ &writer, cuT( "tapNormal" ) } );
+
+			auto square = writer.implementFunction< Float >( cuT( "square" )
+				, [&]( Float const & x )
+				{
+					writer.returnStmt( x * x );
+				}
+				, InFloat{ &writer, cuT( "x") } );
 
 			auto calculateBilateralWeight = writer.implementFunction< Float >( cuT( "calculateBilateralWeight" )
 				, [&]( Float const & key
@@ -202,46 +181,51 @@ namespace castor3d
 					auto planeWeight = writer.declLocale( cuT( "planeWeight" )
 						, 1.0_f );
 
-#   if defined(normal_notNull)
+					if ( config.m_useNormalsBuffer )
+					{
+						auto normalCloseness = writer.declLocale( cuT( "normalCloseness" )
+							, dot( tapNormal, normal ) );
 
-					auto normalCloseness = writer.declLocale( cuT( "normalCloseness" )
-						, dot( tapNormal, normal ) );
-#       if (COMPUTE_PLANE_WEIGHT == 0)
-					normalCloseness = normalCloseness * normalCloseness;
-					normalCloseness = normalCloseness * normalCloseness;
-					k_normal = 4.0_f;
-#       endif
-					auto normalError = writer.declLocale( cuT( "normalError" )
-						, ( 1.0_f - normalCloseness ) * k_normal );
-					normalWeight = max( writer.paren( 1.0_f - c3d_edgeSharpness * normalError ), 0.0_f );
+						if ( !config.m_blurHighQuality )
+						{
+							normalCloseness = normalCloseness * normalCloseness;
+							normalCloseness = normalCloseness * normalCloseness;
+							k_normal = 4.0_f;
+						}
 
-#       if (COMPUTE_PLANE_WEIGHT == 1)
-					auto lowDistanceThreshold2 = writer.declLocale( cuT( "lowDistanceThreshold2" )
-						, 0.001_f );
+						auto normalError = writer.declLocale( cuT( "normalError" )
+							, writer.paren( 1.0_f - normalCloseness ) * k_normal );
+						normalWeight = max( writer.paren( 1.0_f - c3d_edgeSharpness * normalError ), 0.0_f );
 
-					auto tapPosition = writer.declLocale( cuT( "tapPosition" )
-						, positionFromKey( tapKey, tapLoc, projInfo ) );
+						if ( config.m_blurHighQuality )
+						{
+							auto lowDistanceThreshold2 = writer.declLocale( cuT( "lowDistanceThreshold2" )
+								, 0.001_f );
 
-					// Change in position in camera space
-					auto dq = writer.declLocale( cuT( "dq" )
-						, position - tapPosition );
+							auto tapPosition = writer.declLocale( cuT( "tapPosition" )
+								, positionFromKey( tapKey, tapLoc, c3d_projInfo ) );
 
-					// How far away is this point from the original sample
-					// in camera space? (Max value is unbounded)
-					auto distance2 = writer.declLocale( cuT( "distance2" )
-						, dot( dq, dq ) );
+							// Change position in camera space
+							auto dq = writer.declLocale( cuT( "dq" )
+								, position - tapPosition );
 
-					// How far off the expected plane (on the perpendicular) is this point?  Max value is unbounded.
-					auto planeError = writer.declLocale( cuT( "planeError" )
-						, max( abs( dot( dq, tapNormal ) ), abs( dot( dq, normal ) ) ) );
+							// How far away is this point from the original sample
+							// in camera space? (Max value is unbounded)
+							auto distance2 = writer.declLocale( cuT( "distance2" )
+								, dot( dq, dq ) );
 
-					// Minimum distance threshold must be scale-invariant, so factor in the radius
-					planeWeight = ( distance2 * square( scale ) < lowDistanceThreshold2 )
-						? 1.0_f
-						: pow( max( 0.0_f, 1.0_f - c3d_edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) ), 2.0 );
-#       endif
+							// How far off the expected plane (on the perpendicular) is this point?  Max value is unbounded.
+							auto planeError = writer.declLocale( cuT( "planeError" )
+								, max( abs( dot( dq, tapNormal ) ), abs( dot( dq, normal ) ) ) );
 
-#   endif
+							// Minimum distance threshold must be scale-invariant, so factor in the radius
+							planeWeight = ( distance2 * square( scale ) < lowDistanceThreshold2 )
+								? 1.0_f
+								: pow( max( 0.0_f
+										, 1.0_f - c3d_edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) )
+									, 2.0_f );
+						}
+					}
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
 				}
@@ -275,16 +259,18 @@ namespace castor3d
 					auto temp = writer.declLocale( cuT( "temp" )
 						, texelFetch( c3d_mapInput, ssCenter, 0 ) );
 					auto sum = writer.declLocale( cuT( "sum" )
-						, temp.ValueComponents );
+						, temp.r() );
 
-					keyPassThrough = temp.KeyComponents;
+					keyPassThrough = temp.g();
 					auto key = writer.declLocale( cuT( "key" )
 						, unpackKey( keyPassThrough ) );
 					auto normal = writer.declLocale< Vec3 >( cuT( "normal" ) );
 
-#ifdef normal_notNull
-					normal = normalize( texelFetch( normal_buffer, ssCenter, 0 ).xyz() * normal_readMultiplyFirst.xyz + normal_readAddSecond.xyz );
-#endif
+					if ( config.m_useNormalsBuffer )
+					{
+						normal = texelFetch( c3d_mapNormal, ssCenter, 0 ).xyz();
+						normal = normalize( glsl::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
+					}
 
 					IF( writer, key == 1.0_f )
 					{
@@ -302,11 +288,8 @@ namespace castor3d
 						, BASE );
 					sum *= totalWeight;
 
-
 					auto position = writer.declLocale( cuT( "position" )
 						, positionFromKey( key, ssCenter, c3d_projInfo ) );
-
-# if MDB_WEIGHTS==0
 
 					FOR( writer, Int, r, -c3d_blurRadius, "r <= c3d_blurRadius", "++r" )
 					{
@@ -322,17 +305,17 @@ namespace castor3d
 								, 0.3_f + gaussian[abs( r )] );
 
 							auto tapKey = writer.declLocale< Float >( cuT( "tapKey" ) );
-							auto value = writer.declLocale< ValueType >( cuT( "value" ) );
+							auto value = writer.declLocale< Float >( cuT( "value" ) );
 							auto tapNormal = writer.declLocale< Vec3 >( cuT( "tapNormal" ) );
 							writer << getTapInformation( tapLoc, tapKey, value, tapNormal ) << endi;
 
 							auto bilateralWeight = writer.declLocale( cuT( "bilateralWeight" )
 								, calculateBilateralWeight( key
-								, tapKey
-								, tapLoc
-								, normal
-								, tapNormal
-								, position ) );
+									, tapKey
+									, tapLoc
+									, normal
+									, tapNormal
+									, position ) );
 
 							weight *= bilateralWeight;
 							sum += value * weight;
@@ -341,52 +324,6 @@ namespace castor3d
 						FI;
 					}
 					ROF;
-
-#else 
-
-					float lastBilateralWeight = 9999.0;
-					for ( int r = -1; r >= -R; --r ) {
-						ivec2 tapLoc = ssCenter + axis * writer.paren( r * SCALE );
-
-						float tapKey;
-						VALUE_TYPE value;
-						vec3 tapNormal;
-						getTapInformation( tapLoc, tapKey, value, tapNormal );
-
-						float bilateralWeight = calculateBilateralWeight( key, tapKey, tapLoc, normal, tapNormal, position );
-
-						// spatial domain: offset gaussian tap
-						float weight = 0.3 + gaussian[abs( r )];
-
-						bilateralWeight = min( lastBilateralWeight, bilateralWeight );
-						lastBilateralWeight = bilateralWeight;
-						weight *= bilateralWeight;
-						sum += value * weight;
-						totalWeight += weight;
-					}
-
-					lastBilateralWeight = 9999.0;
-					for ( int r = 1; r <= R; ++r ) {
-						ivec2 tapLoc = ssCenter + axis * ( r * SCALE );
-
-						float tapKey;
-						VALUE_TYPE value;
-						vec3 tapNormal;
-						getTapInformation( tapLoc, tapKey, value, tapNormal );
-
-						float bilateralWeight = calculateBilateralWeight( key, tapKey, tapLoc, normal, tapNormal, position );
-
-						// spatial domain: offset gaussian tap
-						float weight = 0.3 + gaussian[abs( r )];
-
-						bilateralWeight = min( lastBilateralWeight, bilateralWeight );
-						lastBilateralWeight = bilateralWeight;
-						weight *= bilateralWeight;
-						sum += value * weight;
-						totalWeight += weight;
-					}
-
-#endif
 
 					auto const epsilon = writer.declLocale( cuT( "epsilon" )
 						, 0.0001_f );
@@ -455,14 +392,16 @@ namespace castor3d
 		, Size const & size
 		, SsaoConfig const & config
 		, MatrixUbo & matrixUbo
-		, SsaoConfigUbo & ssaoConfigUbo )
+		, SsaoConfigUbo & ssaoConfigUbo
+		, Point2i const & axis )
 		: m_engine{ engine }
 		, m_size{ size }
+		, m_axis{ axis }
 		, m_matrixUbo{ matrixUbo }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_result{ engine }
 		, m_program{ doGetProgram( engine, config ) }
-		, m_axis{ *m_program->findUniform< UniformType::eVec2i >( cuT( "c3d_axis" ), ShaderType::ePixel ) }
+		, m_axisUniform{ *m_program->findUniform< UniformType::eVec2i >( cuT( "c3d_axis" ), ShaderType::ePixel ) }
 		, m_pipeline{ doCreatePipeline( engine, *m_program ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
 	{
@@ -505,12 +444,14 @@ namespace castor3d
 	}
 
 	void SsaoBlurPass::blur( TextureUnit const & input
-		, Point2i const & axis )
+		, TextureUnit const & normals )
 	{
 		m_timer->start();
-		m_axis.setValue( axis );
+		m_axisUniform.setValue( m_axis );
 		m_fbo->bind( FrameBufferTarget::eDraw );
 		m_fbo->clear( BufferComponent::eColour );
+		normals.getTexture()->bind( MinTextureIndex + 1 );
+		normals.getSampler()->bind( MinTextureIndex + 1 );
 		m_pipeline->apply();
 		m_engine.getRenderSystem()->getCurrentContext()->renderTexture( m_size
 			, *input.getTexture()

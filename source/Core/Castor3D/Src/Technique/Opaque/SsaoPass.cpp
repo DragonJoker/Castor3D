@@ -16,9 +16,9 @@ namespace castor3d
 		, m_matrixUbo{ engine }
 		, m_ssaoConfigUbo{ engine }
 		, m_linearisePass{ engine, size, m_matrixUbo, m_ssaoConfigUbo }
-		, m_rawSsaoPass{ engine, size, m_matrixUbo, m_ssaoConfigUbo }
-		, m_horizontalBlur{ engine, size, config, m_matrixUbo, m_ssaoConfigUbo }
-		, m_verticalBlur{ engine, size, config, m_matrixUbo, m_ssaoConfigUbo }
+		, m_rawSsaoPass{ engine, size, config, m_matrixUbo, m_ssaoConfigUbo }
+		, m_horizontalBlur{ engine, size, config, m_matrixUbo, m_ssaoConfigUbo, Point2i{ 1, 0 } }
+		, m_verticalBlur{ engine, size, config, m_matrixUbo, m_ssaoConfigUbo, Point2i{ 0, 1 } }
 	{
 	}
 
@@ -37,9 +37,9 @@ namespace castor3d
 		m_rawSsaoPass.compute( m_linearisePass.getResult()
 			, *gpResult[size_t( DsTexture::eData1 )] );
 		m_horizontalBlur.blur( m_rawSsaoPass.getResult()
-			, Point2i{ 1, 0 } );
+			, *gpResult[size_t( DsTexture::eData1 )] );
 		m_verticalBlur.blur( m_horizontalBlur.getResult()
-			, Point2i{ 0, 1 } );
+			, *gpResult[size_t( DsTexture::eData1 )] );
 	}
 
 	TextureUnit const & SsaoPass::getResult()const

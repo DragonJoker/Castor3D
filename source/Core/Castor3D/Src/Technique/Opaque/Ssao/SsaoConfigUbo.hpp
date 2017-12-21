@@ -167,7 +167,7 @@ namespace castor3d
 	auto c3d_blurStepSize = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::BlurStepSize );\
 	auto c3d_blurRadius = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::BlurRadius );\
 	auto c3d_projInfo = ssaoConfig.declMember< glsl::Vec4 >( castor3d::SsaoConfigUbo::ProjInfo );\
-	auto c3d_mtxInvView = ssaoConfig.declMember< glsl::Mat4 >( castor3d::SsaoConfigUbo::InvViewMatrix );\
+	auto c3d_worldToCamera = ssaoConfig.declMember< glsl::Mat4 >( castor3d::SsaoConfigUbo::InvViewMatrix );\
 	ssaoConfig.end()
 
 #endif

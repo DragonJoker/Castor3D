@@ -26,7 +26,7 @@ namespace castor3d
 	String const SsaoConfigUbo::BlurStepSize = cuT( "c3d_blurStepSize" );
 	String const SsaoConfigUbo::BlurRadius = cuT( "c3d_blurRadius" );
 	String const SsaoConfigUbo::ProjInfo = cuT( "c3d_projInfo" );
-	String const SsaoConfigUbo::InvViewMatrix = cuT( "c3d_mtxInvView" );
+	String const SsaoConfigUbo::InvViewMatrix = cuT( "c3d_worldToCamera" );
 
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
 		: m_ubo{ SsaoConfigUbo::BufferSsaoConfig
@@ -83,7 +83,6 @@ namespace castor3d
 		, Camera const & camera )
 	{
 		auto & viewport = camera.getViewport();
-		auto numSamples = 19;
 		int numSpiralTurns = 0;
 
 #define NUM_PRECOMPUTED 100
@@ -103,9 +102,9 @@ namespace castor3d
 			19, 27, 21, 25, 39, 29, 17, 21, 27, 29   // 9
 		};
 
-		if ( numSamples < NUM_PRECOMPUTED )
+		if ( config.m_numSamples < NUM_PRECOMPUTED )
 		{
-			numSpiralTurns =  minDiscrepancyArray[numSamples];
+			numSpiralTurns =  minDiscrepancyArray[config.m_numSamples];
 		}
 		else
 		{
@@ -115,20 +114,20 @@ namespace castor3d
 #undef NUM_PRECOMPUTED
 
 		float const scale = std::abs( 2.0f * ( viewport.getFovY() * 0.5f ).tan() );
-		float const radius = config.m_radius;
+		float const radius = config.m_radius * 100.0f;
 		float const invRadius = 1 / radius;
 		float const radius2 = radius * radius;
 		float const invRadius2 = 1.0f / radius2;
-		float const intersityDivR6 = config.m_intensity / std::pow( config.m_radius, 6.0f );
+		float const intersityDivR6 = config.m_intensity / std::pow( radius, 6.0f );
 		float const projScale = std::abs( viewport.getHeight() / scale );
-		float const MIN_AO_SS_RADIUS = 1.0f;
+		float const MIN_AO_SS_RADIUS = 100.0f;
 		// Second parameter of max is just solving for Z coordinate at which we hit MIN_AO_SS_RADIUS
 		float farZ = std::max( viewport.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
-		auto proj = getProjectUnitMatrix( viewport );
+		auto const proj = getProjectUnitMatrix( viewport );
 
-		m_numSamples.setValue( 19 );
+		m_numSamples.setValue( config.m_numSamples );
 		m_numSpiralTurns.setValue( numSpiralTurns );
 		m_projScale.setValue( projScale );
 		m_radius.setValue( radius );
@@ -139,10 +138,9 @@ namespace castor3d
 		m_intensity.setValue( config.m_intensity );
 		m_intensityDivR6.setValue( intersityDivR6 );
 		m_farPlaneZ.setValue( farZ );
-		m_edgeSharpness.setValue( 1.0f );
-		m_blurStepSize.setValue( 2 );
-		m_blurRadius.setValue( 4 );
-		m_edgeSharpness.setValue( 1.0f );
+		m_edgeSharpness.setValue( config.m_edgeSharpness );
+		m_blurStepSize.setValue( config.m_blurStepSize );
+		m_blurRadius.setValue( config.m_blurRadius );
 		m_projInfo.setValue( Point4f
 		{
 			-2.0f / ( viewport.getWidth() * proj[0][0] ),
@@ -150,7 +148,7 @@ namespace castor3d
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		} );
-		m_invViewMatrix.setValue( camera.getView()/*.getInverse()*/ );
+		m_invViewMatrix.setValue( camera.getView() );
 
 		m_ubo.update();
 		m_ubo.bindTo( SsaoConfigUbo::BindingPoint );

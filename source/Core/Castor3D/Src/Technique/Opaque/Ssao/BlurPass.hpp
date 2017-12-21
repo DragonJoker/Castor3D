@@ -37,7 +37,8 @@ namespace castor3d
 			, castor::Size const & size
 			, SsaoConfig const & config
 			, MatrixUbo & matrixUbo
-			, SsaoConfigUbo & ssaoConfigUbo );
+			, SsaoConfigUbo & ssaoConfigUbo
+			, castor::Point2i const & axis );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -56,7 +57,7 @@ namespace castor3d
 		 *\param[in]	axis	Reçoit les informations de rendu.
 		 */
 		void blur( TextureUnit const & input
-			, castor::Point2i const & axis );
+			, TextureUnit const & normals );
 		/**
 		 *\~english
 		 *\return		The pass result.
@@ -71,11 +72,12 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		castor::Size m_size;
+		castor::Point2i m_axis;
 		MatrixUbo & m_matrixUbo;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit m_result;
 		ShaderProgramSPtr m_program;
-		PushUniform2i & m_axis;
+		PushUniform2i & m_axisUniform;
 		RenderPipelineUPtr m_pipeline;
 		FrameBufferSPtr m_fbo;
 		TextureAttachmentSPtr m_resultAttach;
