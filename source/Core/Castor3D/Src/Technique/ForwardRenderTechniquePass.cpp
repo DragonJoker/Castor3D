@@ -13,6 +13,7 @@
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
@@ -296,16 +297,7 @@ namespace castor3d
 			, ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
 			, checkFlag( textureFlags, TextureChannel::eReflection )
-				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
-		auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" )
-			, checkFlag( textureFlags, TextureChannel::eReflection ) || checkFlag( textureFlags, TextureChannel::eRefraction )
-			, 0.10_f );
-		auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" )
-			, checkFlag( textureFlags, TextureChannel::eReflection ) || checkFlag( textureFlags, TextureChannel::eRefraction )
-			, 0.25_f );
-		auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" )
-			, checkFlag( textureFlags, TextureChannel::eReflection ) || checkFlag( textureFlags, TextureChannel::eRefraction )
-			, 0.30_f );
+			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -314,6 +306,7 @@ namespace castor3d
 		auto lighting = shader::legacy::createLightingModel( writer
 			, getShadowType( sceneFlags )
 			, index );
+		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
@@ -402,52 +395,54 @@ namespace castor3d
 				, c3d_shadowReceiver
 				, shader::FragmentInput( vtx_worldPosition, normal )
 				, output );
+			auto occlusion = writer.declLocale( cuT( "occlusion" )
+				, 1.0_f );
 
-			pxl_fragColor.xyz() = glsl::fma( ambient + lightDiffuse
-				, matDiffuse
-				, glsl::fma( lightSpecular
-					, material.m_specular()
-					, matEmissive ) );
+			if ( checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) )
+			{
+				occlusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
+			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
-				auto incident = writer.declLocale( cuT( "i" )
-					, normalize( vtx_worldPosition - c3d_cameraPosition ) );
-				auto reflectedColour = writer.declLocale( cuT( "reflectedColour" )
-					, vec3( 0.0_f, 0, 0 ) );
-				auto refractedColour = writer.declLocale( cuT( "refractedColour" )
-					, matDiffuse / 2.0 );
-
-				if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
-				{
-					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, normal ) );
-					reflectedColour = texture( c3d_mapEnvironment, reflected ).xyz()
-						* length( pxl_fragColor.xyz() );
-				}
-
-				if ( checkFlag( textureFlags, TextureChannel::eRefraction ) )
-				{
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, material.m_refractionRatio() ) );
-					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz()
-						* matDiffuse / length( matDiffuse );
-				}
+				auto incident = writer.declLocale( cuT( "incident" )
+					, reflections.computeIncident( vtx_worldPosition, c3d_cameraPosition ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
-					&& !checkFlag( textureFlags, TextureChannel::eRefraction ) )
+					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					pxl_fragColor.xyz() = reflectedColour * matDiffuse / length( matDiffuse );
+					pxl_fragColor.xyz() = reflections.computeReflRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
+						, matDiffuse );
+				}
+				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
+				{
+					pxl_fragColor.xyz() = reflections.computeRefl( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment );
 				}
 				else
 				{
-					auto refFactor = writer.declLocale( cuT( "refFactor" )
-						, glsl::fma( c3d_fresnelScale
-							, pow( 1.0_f + dot( incident, normal ), c3d_fresnelPower )
-							, c3d_fresnelBias ) );
-					pxl_fragColor.xyz() = mix( refractedColour, reflectedColour, refFactor );
+					pxl_fragColor.xyz() = reflections.computeRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
+						, matDiffuse );
 				}
+			}
+			else
+			{
+				pxl_fragColor.xyz() = glsl::fma( ambient + lightDiffuse
+					, matDiffuse
+					, glsl::fma( lightSpecular
+						, material.m_specular()
+						, matEmissive ) );
 			}
 
 			if ( !m_opaque && alphaFunc != ComparisonFunc::eAlways )

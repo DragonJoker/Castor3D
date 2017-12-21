@@ -41,7 +41,7 @@ namespace castor3d
 				, OutputComponents & output )const;
 
 		protected:
-			void doDeclareModel();
+			void doDeclareModel()override;
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;

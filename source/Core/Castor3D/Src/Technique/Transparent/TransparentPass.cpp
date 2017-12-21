@@ -18,6 +18,7 @@
 #include "Shader/Shaders/GlslShadow.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
@@ -427,6 +428,7 @@ namespace castor3d
 		auto lighting = shader::legacy::createLightingModel( writer
 			, getShadowType( sceneFlags )
 			, index );
+		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
@@ -501,43 +503,47 @@ namespace castor3d
 				, c3d_shadowReceiver
 				, shader::FragmentInput( vtx_worldPosition, normal )
 				, output );
+			auto occlusion = writer.declLocale( cuT( "occlusion" )
+				, 1.0_f );
+
+			if ( checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) )
+			{
+				occlusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
+			}
 
 			auto colour = writer.declLocale< Vec3 >( cuT( "colour" ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
-				auto incident = writer.declLocale( cuT( "i" )
-					, normalize( vtx_worldPosition - c3d_cameraPosition ) );
-				auto reflectedColour = writer.declLocale( cuT( "reflectedColour" )
-					, vec3( 0.0_f, 0, 0 ) );
-				auto refractedColour = writer.declLocale( cuT( "refractedColour" )
-					, matDiffuse / 2.0 );
-
-				if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
-				{
-					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, normal ) );
-					reflectedColour = texture( c3d_mapEnvironment, reflected ).xyz() * length( pxl_accumulation.xyz() );
-				}
-
-				if ( checkFlag( textureFlags, TextureChannel::eRefraction ) )
-				{
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, material.m_refractionRatio() ) );
-					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz() * matDiffuse / length( matDiffuse );
-				}
+				auto incident = writer.declLocale( cuT( "incident" )
+					, reflections.computeIncident( vtx_worldPosition, c3d_cameraPosition ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
-					&& !checkFlag( textureFlags, TextureChannel::eRefraction ) )
+					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					colour = reflectedColour * matDiffuse / length( matDiffuse );
+					colour = reflections.computeReflRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
+						, matDiffuse );
+				}
+				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
+				{
+					colour = reflections.computeRefl( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment );
 				}
 				else
 				{
-					auto refFactor = writer.declLocale( cuT( "refFactor" )
-						, glsl::fma( c3d_fresnelScale, pow( 1.0_f + dot( incident, normal ), c3d_fresnelPower ), c3d_fresnelBias ) );
-					colour = mix( refractedColour, reflectedColour, refFactor );
+					colour = reflections.computeRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
+						, matDiffuse );
 				}
 			}
 			else
@@ -545,7 +551,7 @@ namespace castor3d
 				colour = glsl::fma( ambient + lightDiffuse
 					, matDiffuse
 					, glsl::fma( lightSpecular
-						, matSpecular
+						, material.m_specular()
 						, matEmissive ) );
 			}
 
