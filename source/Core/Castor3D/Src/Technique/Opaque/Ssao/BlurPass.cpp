@@ -123,9 +123,9 @@ namespace castor3d
 
 			auto getTapInformation = writer.implementFunction< Void >( cuT( "getTapInformation" )
 				, [&]( IVec2 const & tapLoc
-					, Float & tapKey
-					, Float & value
-					, Vec3 & tapNormal )
+					, Float tapKey
+					, Float value
+					, Vec3 tapNormal )
 				{
 					auto temp = writer.declLocale( cuT( "temp" )
 						, texelFetch( c3d_mapInput, tapLoc, 0 ) );
@@ -264,7 +264,8 @@ namespace castor3d
 					keyPassThrough = temp.g();
 					auto key = writer.declLocale( cuT( "key" )
 						, unpackKey( keyPassThrough ) );
-					auto normal = writer.declLocale< Vec3 >( cuT( "normal" ) );
+					auto normal = writer.declLocale( cuT( "normal" )
+						, vec3( 0.0_f ) );
 
 					if ( config.m_useNormalsBuffer )
 					{

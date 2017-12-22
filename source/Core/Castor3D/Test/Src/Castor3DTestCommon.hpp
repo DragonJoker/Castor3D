@@ -315,7 +315,7 @@ namespace Testing
 			{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
 			{ castor3d::ProgramFlag::eLighting, "eLighting" },
 			{ castor3d::ProgramFlag::eMorphing, "eMorphing" },
-			{ castor3d::ProgramFlag::eNoFragment, "eNoFragment" },
+			{ castor3d::ProgramFlag::eDepthPass, "eDepthPass" },
 			{ castor3d::ProgramFlag::ePicking, "ePicking" },
 			{ castor3d::ProgramFlag::eShadowMapDirectional, "eShadowMapDirectional" },
 			{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },

@@ -139,7 +139,7 @@ namespace castor3d
 			auto tapLocation = writer.implementFunction< Vec2 >( cuT( "tapLocation" )
 				, [&]( Int const & sampleNumber
 					, Float const & spinAngle
-					, Float & ssRadius )
+					, Float ssRadius )
 				{
 					// Radius relative to ssR
 					auto alpha = writer.declLocale( cuT( "alpha" )
@@ -228,8 +228,8 @@ namespace castor3d
 				, [&]( IVec2 const & ssCenter
 					, Vec2 const & unitOffset
 					, Float const & ssRadius
-					, Vec3 & pos0
-					, Vec3 & pos1 )
+					, Vec3 pos0
+					, Vec3 pos1 )
 				{
 					// Derivation:
 					auto mipLevel = writer.declLocale( cuT( "mipLevel" )

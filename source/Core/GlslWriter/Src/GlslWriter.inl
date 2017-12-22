@@ -91,7 +91,7 @@ namespace glsl
 		writeFunctionHeader< RetType >( *this, name, params... );
 		{
 			IndentBlock block( *this );
-			function( std::forward < Params && > ( params )... );
+			function( std::forward< Params && > ( params )... );
 		}
 		m_stream << std::endl;
 		return Function< RetType, Params... >{ this, name };

@@ -76,6 +76,7 @@ namespace castor3d
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
+		addFlag( programFlags, ProgramFlag::eDepthPass );
 		remFlag( programFlags, ProgramFlag::eLighting );
 		remFlag( programFlags, ProgramFlag::eEnvironmentMapping );
 	}
@@ -203,6 +204,7 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer );
 		UBO_MODEL_MATRIX( writer );
