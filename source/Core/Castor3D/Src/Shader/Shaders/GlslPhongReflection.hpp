@@ -13,7 +13,7 @@ namespace castor3d
 		class PhongReflectionModel
 		{
 		public:
-			C3D_API PhongReflectionModel( glsl::GlslWriter & writer );
+			C3D_API explicit PhongReflectionModel( glsl::GlslWriter & writer );
 			C3D_API glsl::Vec3 computeIncident( glsl::Vec3 const & wsPosition
 				, glsl::Vec3 const & wsCamera )const;
 			C3D_API glsl::Vec3 computeRefl( glsl::Vec3 const & wsIncident
