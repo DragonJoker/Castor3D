@@ -426,7 +426,6 @@ namespace castor3d
 					{
 						// There is no way to compute AO at this radius
 						visibility = 1.0_f;
-						//pxl_fragColor = vec3( 0.0_f, 1.0, 1.0 );
 						writer.returnStmt();
 					}
 					FI;

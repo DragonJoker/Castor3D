@@ -101,11 +101,10 @@ namespace castor3d
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto ssPosition = writer.declLocale( cuT( "ssP" )
+					auto ssPosition = writer.declLocale( cuT( "ssPosition" )
 						, ivec2( gl_FragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
-					// On DX9, the bit-and can be implemented with floating-point modulo
 					pxl_fragColor = texelFetch( c3d_mapDepth
 						, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
 							, ivec2( 0_i )
@@ -250,6 +249,9 @@ namespace castor3d
 		auto clipInfo = std::isinf( z_f )
 			? Point3f{ z_n, -1.0f, 1.0f }
 			: Point3f{ z_n * z_f, z_n - z_f, z_f };
+		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
+		// depth = 0 => result = z_n
+		// depth = 1 => result = z_f
 		m_clipInfo->setValue( clipInfo );
 
 		m_fbos[0]->bind( FrameBufferTarget::eDraw );

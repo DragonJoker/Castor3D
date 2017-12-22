@@ -75,14 +75,11 @@ namespace castor3d
 		, uint32_t index )
 	{
 		scene.getIbl( sceneNode ).getIrradiance().getTexture()->bind( index );
-		scene.getIbl( sceneNode ).getIrradiance().getSampler()->bind( index );
-		pipeline.getIrradianceMapVariable().setValue( index++ );
+		scene.getIbl( sceneNode ).getIrradiance().getSampler()->bind( index++ );
 		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getTexture()->bind( index );
-		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getSampler()->bind( index );
-		pipeline.getPrefilteredMapVariable().setValue( index++ );
+		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getSampler()->bind( index++ );
 		scene.getSkybox().getIbl().getPrefilteredBrdf().getTexture()->bind( index );
-		scene.getSkybox().getIbl().getPrefilteredBrdf().getSampler()->bind( index );
-		pipeline.getBrdfMapVariable().setValue( index++ );
+		scene.getSkybox().getIbl().getPrefilteredBrdf().getSampler()->bind( index++ );
 		return index;
 	}
 
