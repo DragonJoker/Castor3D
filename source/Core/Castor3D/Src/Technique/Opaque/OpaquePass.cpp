@@ -191,7 +191,6 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -263,7 +262,6 @@ namespace castor3d
 			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, c3d_prvViewProj * curPosition );
-			vtx_viewPosition = curPosition.xyz();
 			gl_Position = c3d_curViewProj * curPosition;
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
@@ -324,7 +322,6 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -473,7 +470,7 @@ namespace castor3d
 			out_c3dOutput2 = vec4( diffuse, matShininess );
 			out_c3dOutput3 = vec4( specular, ambientOcclusion );
 			out_c3dOutput4 = vec4( emissive, transmittance );
-			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), vtx_viewPosition.z() );
+			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 		} );
 
 		return writer.finalise();
@@ -498,7 +495,6 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -652,7 +648,7 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matAlbedo, 0.0_f );
 			out_c3dOutput3 = vec4( matMetallic, matRoughness, 0.0_f, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
-			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), vtx_viewPosition.z() );
+			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 		} );
 
 		return writer.finalise();
@@ -674,7 +670,6 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -832,7 +827,7 @@ namespace castor3d
 			out_c3dOutput2 = vec4( matDiffuse, matGlossiness );
 			out_c3dOutput3 = vec4( matSpecular, ambientOcclusion );
 			out_c3dOutput4 = vec4( matEmissive, transmittance );
-			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), vtx_viewPosition.z() );
+			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 		} );
 
 		return writer.finalise();
