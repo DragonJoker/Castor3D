@@ -6,10 +6,11 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Skybox.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
@@ -18,6 +19,7 @@
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
@@ -119,9 +121,6 @@ namespace castor3d
 			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
 			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++ );
 			auto c3d_mapEnvironment = writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment, index++, c_environmentCount );
-			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
-			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
-			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			shader::LegacyMaterials materials{ writer };
@@ -130,6 +129,7 @@ namespace castor3d
 			glsl::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();
+			shader::PhongReflectionModel reflections{ writer };
 			declareDecodeMaterial( writer );
 			shader::Fog fog{ fogType, writer };
 
@@ -185,8 +185,6 @@ namespace castor3d
 					, data3.a() );
 				auto emissive = writer.declLocale( cuT( "emissive" )
 					, data4.xyz() );
-				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_cameraPosition ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
 					, clamp( c3d_ambientLight.xyz() + material.m_ambient() * material.m_diffuse()
 						, vec3( 0.0_f )
@@ -199,56 +197,36 @@ namespace castor3d
 
 				IF( writer, envMapIndex > 0_i && writer.paren( reflection != 0_i || refraction != 0_i ) )
 				{
+					auto incident = writer.declLocale( cuT( "incident" )
+						, reflections.computeIncident( position, c3d_cameraPosition ) );
 					envMapIndex = envMapIndex - 1_i;
 
 					IF( writer, reflection != 0_i && refraction != 0_i )
 					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						ambient = occlusion * texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
-						auto ratio = writer.declLocale( cuT( "ratio" )
-							, material.m_refractionRatio() );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						ambient = mix( texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse )
-							, ambient * ambient / length( ambient )
-							, fresnel );
+						ambient = reflections.computeReflRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapEnvironment[envMapIndex]
+							, material.m_refractionRatio()
+							, diffuse );
 						diffuse = vec3( 0.0_f );
 					}
 					ELSEIF( writer, reflection != 0_i )
 					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						diffuse = occlusion * texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
+						diffuse = reflections.computeRefl( incident
+							, normal
+							, occlusion
+							, c3d_mapEnvironment[envMapIndex] );
 						ambient = vec3( 0.0_f );
 					}
 					ELSE
 					{
-						auto ratio = writer.declLocale( cuT( "ratio" )
-							, material.m_refractionRatio() );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						ambient = texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse );
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapEnvironment[envMapIndex]
+							, material.m_refractionRatio()
+							, diffuse );
 						diffuse = vec3( 0.0_f );
 					}
 					FI;
@@ -297,9 +275,6 @@ namespace castor3d
 			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
 			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
 			auto c3d_mapEnvironment = writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment, index++, c_environmentCount );
-			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
-			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
-			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			shader::PbrMRMaterials materials{ writer };
@@ -604,9 +579,6 @@ namespace castor3d
 			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++ );
 			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++ );
 			auto c3d_mapEnvironment = writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment, index++, c_environmentCount );
-			auto c3d_fresnelBias = writer.declUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
-			auto c3d_fresnelScale = writer.declUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
-			auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			shader::PbrSGMaterials materials{ writer };
@@ -1017,23 +989,15 @@ namespace castor3d
 		, m_programs
 		{
 			{
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrSpecularGlossiness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, engine.getMaterialsType() },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, engine.getMaterialsType() },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, engine.getMaterialsType() },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, engine.getMaterialsType() },
 			}
 		}
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
 		, m_ssaoEnabled{ config.m_enabled }
-		, m_ssao{ engine, size, config, gpInfoUbo }
+		, m_ssao{ engine, size, config }
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.initialise();
@@ -1052,6 +1016,7 @@ namespace castor3d
 		, TextureUnit const & lightDiffuse
 		, TextureUnit const & lightSpecular
 		, Scene const & scene
+		, Camera const & camera
 		, FrameBuffer const & frameBuffer
 		, RenderInfo & info )
 	{
@@ -1059,7 +1024,9 @@ namespace castor3d
 
 		if ( m_ssaoEnabled )
 		{
-			m_ssao.render( gp, info );
+			m_ssao.render( gp
+				, camera
+				, info );
 			ssao = &m_ssao.getResult();
 		}
 
@@ -1071,18 +1038,12 @@ namespace castor3d
 		auto & maps = scene.getEnvironmentMaps();
 
 		auto index = MinTextureIndex;
-		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index++ );
+
+		for ( auto & buffer : gp )
+		{
+			buffer->getTexture()->bind( index );
+			buffer->getSampler()->bind( index++ );
+		}
 
 		if ( m_ssaoEnabled )
 		{
@@ -1094,9 +1055,7 @@ namespace castor3d
 		lightDiffuse.getSampler()->bind( index++ );
 		lightSpecular.getTexture()->bind( index );
 		lightSpecular.getSampler()->bind( index++ );
-		auto program = size_t( scene.getMaterialsType() )
-			* size_t( FogType::eCount )
-			+ size_t( scene.getFog().getType() );
+		auto program = size_t( scene.getFog().getType() );
 
 		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
@@ -1108,68 +1067,15 @@ namespace castor3d
 			skyboxIbl.getIrradiance().getSampler()->bind( index++ );
 			skyboxIbl.getPrefilteredEnvironment().getTexture()->bind( index );
 			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index++ );
-
-			for ( auto & map : maps )
-			{
-				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index++ );
-			}
-
-			m_programs[program].render( *m_vertexBuffer );
-
-			for ( auto & map : makeReverse( maps ) )
-			{
-				map.get().getTexture().getTexture()->unbind( --index );
-				map.get().getTexture().getSampler()->unbind( index );
-			}
-
-			skyboxIbl.getPrefilteredBrdf().getTexture()->unbind( --index );
-			skyboxIbl.getPrefilteredBrdf().getSampler()->unbind( index );
-			skyboxIbl.getIrradiance().getTexture()->unbind( --index );
-			skyboxIbl.getIrradiance().getSampler()->unbind( index );
-			skyboxIbl.getPrefilteredEnvironment().getTexture()->unbind( --index );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index );
 		}
-		else
+
+		for ( auto & map : maps )
 		{
-			for ( auto & map : maps )
-			{
-				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index++ );
-			}
-
-			m_programs[program].render( *m_vertexBuffer );
-
-			for ( auto & map : makeReverse( maps ) )
-			{
-				map.get().getTexture().getTexture()->unbind( --index );
-				map.get().getTexture().getSampler()->unbind( index );
-			}
+			map.get().getTexture().getTexture()->bind( index );
+			map.get().getTexture().getSampler()->bind( index++ );
 		}
 
-		lightSpecular.getTexture()->bind( --index );
-		lightSpecular.getSampler()->bind( index );
-		lightDiffuse.getTexture()->bind( --index );
-		lightDiffuse.getSampler()->bind( index );
-
-		if ( m_ssaoEnabled )
-		{
-			ssao->getSampler()->bind( --index );
-			ssao->getTexture()->bind( index );
-		}
-
-		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index );
+		m_programs[program].render( *m_vertexBuffer );
 		frameBuffer.unbind();
 
 		m_timer->stop();

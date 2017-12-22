@@ -18,6 +18,7 @@ namespace castor3d
 		, m_pfnGetRequiredVersion( 0 )
 		, m_pfnGetName( 0 )
 		, m_type( p_type )
+		, m_library( p_library )
 	{
 		if ( !p_library->getFunction( m_pfnGetName, GetNameFunctionABIName ) )
 		{
@@ -46,6 +47,7 @@ namespace castor3d
 			strError += System::getLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 		}
+
 	}
 
 	Plugin::~Plugin()
@@ -72,5 +74,40 @@ namespace castor3d
 		}
 
 		return strReturn;
+	}
+
+
+	void Plugin::load()
+	{
+		if ( m_pfnOnLoad )
+		{
+#if !defined( NDEBUG )
+			auto library = m_library.lock();
+
+			if ( library )
+			{
+				Debug::loadModule( *library );
+			}
+#endif
+
+			m_pfnOnLoad( getEngine(), this );
+		}
+	}
+
+	void Plugin::unload()
+	{
+		if ( m_pfnOnUnload )
+		{
+			m_pfnOnUnload( getEngine() );
+
+#if !defined( NDEBUG )
+			auto library = m_library.lock();
+
+			if ( library )
+			{
+				Debug::unloadModule( *library );
+			}
+#endif
+		}
 	}
 }

@@ -99,16 +99,40 @@ namespace castor3d
 		}
 
 	protected:
-		//!\~english The plug-in's version checking function	\~french La fonction de récupération de la version requise
+		/**
+		 *\~english
+		 *\brief		Calls load function for the plug-in.
+		 *\~french
+		 *\brief		Exécute la fonction de chargement du plug-in.
+		 */
+		void load();
+		/**
+		 *\~english
+		 *\brief		Calls unload function for the plug-in.
+		 *\~french
+		 *\brief		Exécute la fonction de déchargement du plug-in.
+		 */
+		void unload();
+
+	protected:
+		//!\~english	The plug-in's version checking function.
+		//!\~french		La fonction de récupération de la version requise.
 		PGetRequiredVersionFunction m_pfnGetRequiredVersion;
-		//!\~english The plug-in's name retrieval function	\~french La fonction de récupération du nom du plug-in
+		//!\~english	The plug-in's name retrieval function.
+		//!\~french		La fonction de récupération du nom du plug-in.
 		PGetNameFunction m_pfnGetName;
-		//!\~english The plug-in's loading function	\~french La fonction de chargement du plug-in
+		//!\~english	The plug-in's loading function.
+		//!\~french		La fonction de chargement du plug-in.
 		POnLoadFunction m_pfnOnLoad;
-		//!\~english The plug-in's unloading function	\~french La fonction de déchargement du plug-in
+		//!\~english	The plug-in's unloading function
+		//!\~french		La fonction de déchargement du plug-in.
 		POnUnloadFunction m_pfnOnUnload;
-		//!\~english The plug-in type	\~french Le type du plug-in
+		//!\~english	The plug-in type.
+		//!\~french		Le type du plug-in.
 		PluginType m_type;
+		//!\~english	The plug-in library.
+		//!\~french		La bibliothèque du plug-in.
+		castor::DynamicLibraryWPtr m_library;
 	};
 }
 

@@ -65,6 +65,16 @@ namespace glsl
 		}
 	}
 
+	void GlslWriter::inlineComment( castor::String const & comment )
+	{
+		m_stream << cuT( "//" ) << comment << std::endl;
+	}
+
+	void GlslWriter::multilineComment( castor::String const & comment )
+	{
+		m_stream << cuT( "/*" ) << comment << "*/" << std::endl;
+	}
+
 	Shader GlslWriter::finalise()
 	{
 		m_shader.setSource( m_stream.str() );
@@ -184,6 +194,11 @@ namespace glsl
 	void GlslWriter::outputVertexCount( uint32_t p_count )
 	{
 		m_stream << cuT( "layout( max_vertices = " ) << p_count << cuT( " ) out;" ) << std::endl;
+	}
+
+	void GlslWriter::returnStmt()
+	{
+		m_stream << cuT( "return;" ) << std::endl;
 	}
 
 	Vec4 GlslWriter::texture( Sampler1D const & p_sampler, Float const & p_value )

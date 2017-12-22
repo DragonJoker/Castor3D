@@ -1,10 +1,12 @@
-﻿#include "Config/PlatformConfig.hpp"
+#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
 #include "Miscellaneous/Debug.hpp"
 
+#include "Miscellaneous/DynamicLibrary.hpp"
 #include "Miscellaneous/StringUtils.hpp"
+#include "Miscellaneous/Utils.hpp"
 #include "Config/MultiThreadConfig.hpp"
 
 #if !defined( NDEBUG )
@@ -23,6 +25,24 @@ namespace castor
 
 		namespace
 		{
+			bool & doGetInitialisationStatus()
+			{
+				static bool result = false;
+				return result;
+			}
+
+			DWORD64 & doGetLibraryBaseAddress( DynamicLibrary const & library )
+			{
+				static std::map< DynamicLibrary const *, DWORD64 > result;
+				return result[&library];
+			}
+
+			::HANDLE doGetProcess()
+			{
+				static ::HANDLE result( ::GetCurrentProcess() );
+				return result;
+			}
+
 			template< typename CharU, typename CharT >
 			inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
@@ -49,45 +69,52 @@ namespace castor
 			inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 			{
 				static std::mutex mutex;
-				auto lock = makeUniqueLock( mutex );
-				const int MaxFnNameLen( 255 );
 
-				std::vector< void * > backTrace( p_toCapture - p_toSkip );
-				unsigned int num( ::RtlCaptureStackBackTrace( p_toSkip, p_toCapture - p_toSkip, backTrace.data(), nullptr ) );
-
-				::HANDLE process( ::GetCurrentProcess() );
-
-				//if ( process != INVALID_HANDLE_VALUE )
+				if ( doGetInitialisationStatus() )
 				{
+					auto lock = makeUniqueLock( mutex );
+					const int MaxFnNameLen( 255 );
+
+					std::vector< void * > backTrace( p_toCapture - p_toSkip );
+					unsigned int num( ::RtlCaptureStackBackTrace( p_toSkip, p_toCapture - p_toSkip, backTrace.data(), nullptr ) );
+
 					p_stream << "CALL STACK:" << std::endl;
 
 					// symbol->Name type is char [1] so there is space for \0 already
-					SYMBOL_INFO * symbol( ( SYMBOL_INFO * )malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
+					auto symbol( ( SYMBOL_INFO * )malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
 
 					if ( symbol )
 					{
 						symbol->MaxNameLen = MaxFnNameLen;
 						symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
-						::SymSetOptions( SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS );
-						bool symbolsInitialised = ::SymInitialize( process, nullptr, TRUE ) == TRUE;
-
-						if ( symbolsInitialised )
+						for ( unsigned int i = 0; i < num; ++i )
 						{
-							for ( unsigned int i = 0; i < num; ++i )
+							if ( ::SymFromAddr( doGetProcess(), reinterpret_cast< DWORD64 >( backTrace[i] ), nullptr, symbol ) )
 							{
-								if ( ::SymFromAddr( process, reinterpret_cast< DWORD64 >( backTrace[i] ), 0, symbol ) )
+								p_stream << "== " << Demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) );
+								IMAGEHLP_LINE64 line;
+								DWORD displacement;
+								line.SizeOfStruct = sizeof( IMAGEHLP_LINE64 );
+
+								if ( ::SymGetLineFromAddr64( doGetProcess(), symbol->Address, &displacement, &line ) )
 								{
-									p_stream << "== " << Demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) ) << std::endl;
+									p_stream << "(" << string::stringCast< CharT >( line.FileName ) << ":" << line.LineNumber << ")";
 								}
+
+								p_stream << std::endl;
 							}
-						}
-						else
-						{
-							p_stream << "== Unable to retrieve the call stack" << std::endl;
+							else
+							{
+								p_stream << "== Symbol not found." << std::endl;
+							}
 						}
 
 						free( symbol );
 					}
+				}
+				else
+				{
+					p_stream << "== Unable to retrieve the call stack: " << string::stringCast< CharT >( System::getLastErrorText() ) << std::endl;
 				}
 			}
 		}
@@ -96,6 +123,73 @@ namespace castor
 
 		template< typename CharT >
 		inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int, int )
+		{
+		}
+
+#endif
+
+#if !defined( NDEBUG )
+
+		void initialise()
+		{
+			::SymSetOptions( SYMOPT_UNDNAME | SYMOPT_LOAD_LINES );
+			doGetInitialisationStatus() = ::SymInitialize( doGetProcess(), nullptr, TRUE ) == TRUE;
+		}
+
+		void cleanup()
+		{
+			if ( doGetInitialisationStatus() )
+			{
+				::SymCleanup( doGetProcess() );
+			}
+		}
+
+		void loadModule( DynamicLibrary const & library )
+		{
+			auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
+				, nullptr                                      // handle to image - not used
+				, library.getPath().c_str()                    // name of image file
+				, nullptr                                      // name of module - not required
+				, 0                                            // base address - not required
+				, 0                                            // size of image - not required
+				, nullptr                                      // MODLOAD_DATA used for special cases 
+				, 0 );                                         // flags - not required
+
+			if ( !result )
+			{
+				std::cerr << "SymLoadModuleEx failed: " << System::getLastErrorText() << std::endl;
+			}
+			else
+			{
+				doGetLibraryBaseAddress( library ) = result;
+			}
+		}
+
+		void unloadModule( DynamicLibrary const & library )
+		{
+			auto address = doGetLibraryBaseAddress( library );
+
+			if ( address )
+			{
+				::SymUnloadModule64( doGetProcess(), address );
+			}
+		}
+
+#else
+
+		void initialise()
+		{
+		}
+
+		void cleanup()
+		{
+		}
+
+		void loadModule( DynamicLibrary const & library )
+		{
+		}
+
+		void unloadModule( DynamicLibrary const & library )
 		{
 		}
 

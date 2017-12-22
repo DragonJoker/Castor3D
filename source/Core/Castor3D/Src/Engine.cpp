@@ -36,6 +36,10 @@ namespace castor3d
 		, m_threaded( false )
 		, m_materialType{ MaterialType::eLegacy }
 	{
+#if !defined( NDEBUG )
+		Debug::initialise();
+#endif
+
 		auto dummy = []( auto p_element )
 		{
 		};
@@ -176,6 +180,10 @@ namespace castor3d
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
 		Image::cleanupImageLib();
+
+#if !defined( NDEBUG )
+		Debug::cleanup();
+#endif
 	}
 
 	void Engine::initialise( uint32_t p_wanted, bool p_threaded )

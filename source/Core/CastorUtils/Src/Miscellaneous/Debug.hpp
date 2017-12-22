@@ -23,6 +23,34 @@ namespace castor
 		};
 		/**
 		 *\~english
+		 *\brief		Initialises debug data.
+		 *\~french
+		 *\brief		Initialise les données de débogage.
+		 */
+		CU_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Loads debug data for given library.
+		 *\~french
+		 *\brief		Charge les données de débogage pour la bibliothèque donnée.
+		 */
+		CU_API void loadModule( DynamicLibrary const & library );
+		/**
+		 *\~english
+		 *\brief		Unloads debug data for given library.
+		 *\~french
+		 *\brief		Décharge les données de débogage pour la bibliothèque donnée.
+		 */
+		CU_API void unloadModule( DynamicLibrary const & library );
+		/**
+		 *\~english
+		 *\brief		Cleans up debug data.
+		 *\~french
+		 *\brief		Nettoie les données de débogage.
+		 */
+		CU_API void cleanup();
+		/**
+		 *\~english
 		 *\brief			Puts the backtrace into a stream
 		 *\param[in,out]	p_stream	The stream
 		 *\~french

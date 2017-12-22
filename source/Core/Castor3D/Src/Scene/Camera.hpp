@@ -298,7 +298,7 @@ namespace castor3d
 	public:
 		//!\~english	The signal raised when the camera has changed.
 		//!\~french		Le signal levé lorsque la caméra a changé.
-		OnCameraChanged onChanged;
+		mutable OnCameraChanged onChanged;
 
 	private:
 		friend class Scene;

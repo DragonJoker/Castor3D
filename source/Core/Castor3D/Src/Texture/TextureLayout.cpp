@@ -6,6 +6,8 @@ using namespace castor;
 
 namespace castor3d
 {
+	//************************************************************************************************
+
 	namespace
 	{
 		size_t getImagesCount( TextureType type, uint32_t depth )
@@ -72,6 +74,8 @@ namespace castor3d
 		}
 	}
 
+	//************************************************************************************************
+
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
 		, TextureType type
 		, AccessTypes const & cpuAccess
@@ -81,7 +85,26 @@ namespace castor3d
 		, m_images{ getImagesCount( type, 1 ) }
 		, m_cpuAccess{ cpuAccess }
 		, m_gpuAccess{ gpuAccess }
-		, m_depth{ 1 }
+	{
+		uint32_t index = 0u;
+
+		for ( auto & image : m_images )
+		{
+			image = std::make_unique< TextureImage >( *this, index++ );
+		}
+	}
+
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, TextureType type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
+		, uint32_t mipmapCount )
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_type{ type }
+		, m_images{ getImagesCount( type, 1 ) }
+		, m_cpuAccess{ cpuAccess }
+		, m_gpuAccess{ gpuAccess }
+		, m_mipmapCount{ mipmapCount }
 	{
 		uint32_t index = 0u;
 
@@ -104,7 +127,6 @@ namespace castor3d
 		, m_gpuAccess{ gpuAccess }
 		, m_format{ format }
 		, m_size{ size }
-		, m_depth{ 1 }
 	{
 		REQUIRE( m_type != TextureType::eThreeDimensions
 				 && m_type != TextureType::eOneDimensionArray
@@ -336,11 +358,15 @@ namespace castor3d
 			}
 			catch ( std::exception & p_exc )
 			{
-				Logger::logError( StringStream() << cuT( "TextureImage::Initialise - Error encountered while allocating storage: " ) << string::stringCast< xchar >( p_exc.what() ) );
+				Logger::logError( StringStream()
+					<< cuT( "TextureImage::Initialise - Error encountered while allocating storage: " )
+					<< string::stringCast< xchar >( p_exc.what() ) );
 			}
 		}
 
 		ENSURE( m_storage );
 		return result;
 	}
+
+	//************************************************************************************************
 }

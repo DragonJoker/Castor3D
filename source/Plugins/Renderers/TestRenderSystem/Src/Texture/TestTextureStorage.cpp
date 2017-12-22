@@ -13,9 +13,9 @@ namespace TestRender
 		TestRenderSystem & p_renderSystem,
 		TextureStorageType p_type,
 		TextureLayout & p_layout,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
-		: TextureStorage{ p_type, p_layout, p_cpuAccess, p_gpuAccess }
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess )
+		: TextureStorage{ p_type, p_layout, cpuAccess, gpuAccess }
 	{
 	}
 

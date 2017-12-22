@@ -22,12 +22,16 @@ using namespace castor3d;
 namespace castor3d
 {
 	DepthPass::DepthPass( String const & name
-		, Scene & scene
+		, Scene const & scene
+		, Camera & camera
+		, SsaoConfig const & ssaoConfig
 		, TextureLayoutSPtr depthBuffer )
-		: RenderPass{ name
-			, *scene.getEngine()
-			, nullptr }
-		, m_scene{ scene }
+		: RenderTechniquePass{ name
+			, scene
+			, &camera
+			, false
+			, nullptr
+			, ssaoConfig }
 	{
 		auto size = depthBuffer->getDimensions();
 		m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
@@ -49,24 +53,17 @@ namespace castor3d
 		m_frameBuffer->cleanup();
 	}
 
-	void DepthPass::render( Camera const & camera )
+	void DepthPass::render( RenderInfo & info
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter )
 	{
-		camera.apply();
+		m_camera->apply();
 		m_frameBuffer->bind();
 		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eStencil );
-		doRenderNodes( m_renderQueue.getRenderNodes()
-			, camera );
+		doRender( info
+			, shadowMaps
+			, jitter );
 		m_frameBuffer->unbind();
-	}
-
-	bool DepthPass::doInitialise( Size const & CU_PARAM_UNUSED( p_size ) )
-	{
-		m_renderQueue.initialise( m_scene );
-		return true;
-	}
-
-	void DepthPass::doCleanup()
-	{
 	}
 
 	void DepthPass::doUpdate( RenderQueueArray & queues )
@@ -79,37 +76,9 @@ namespace castor3d
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags )const
 	{
+		addFlag( programFlags, ProgramFlag::eDepthPass );
 		remFlag( programFlags, ProgramFlag::eLighting );
 		remFlag( programFlags, ProgramFlag::eEnvironmentMapping );
-		addFlag( programFlags, ProgramFlag::eNoFragment );
-	}
-
-	void DepthPass::doRenderNodes( SceneRenderNodes & nodes
-		, Camera const & camera )const
-	{
-		if ( !nodes.m_staticNodes.m_backCulled.empty()
-			|| !nodes.m_instantiatedStaticNodes.m_backCulled.empty()
-			|| !nodes.m_skinnedNodes.m_backCulled.empty()
-			|| !nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
-			|| !nodes.m_morphingNodes.m_backCulled.empty()
-			|| !nodes.m_billboardNodes.m_backCulled.empty() )
-		{
-			m_matrixUbo.update( camera.getView()
-				, camera.getViewport().getProjection() );
-			doRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera );
-			doRender( nodes.m_staticNodes.m_frontCulled, camera );
-			doRender( nodes.m_skinnedNodes.m_frontCulled, camera );
-			doRender( nodes.m_instantiatedSkinnedNodes.m_frontCulled, camera );
-			doRender( nodes.m_morphingNodes.m_frontCulled, camera );
-			doRender( nodes.m_billboardNodes.m_frontCulled, camera );
-
-			doRender( nodes.m_instantiatedStaticNodes.m_backCulled, camera );
-			doRender( nodes.m_staticNodes.m_backCulled, camera );
-			doRender( nodes.m_skinnedNodes.m_backCulled, camera );
-			doRender( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera );
-			doRender( nodes.m_morphingNodes.m_backCulled, camera );
-			doRender( nodes.m_billboardNodes.m_backCulled, camera );
-		}
 	}
 
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )const
@@ -235,6 +204,7 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer );
 		UBO_MODEL_MATRIX( writer );
@@ -243,30 +213,33 @@ namespace castor3d
 		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
+		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
 		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		writer.implementFunction< void >( cuT( "main" )
 			, [&]()
-			{
-				auto vertex = writer.declLocale( cuT( "vertex" )
+		{
+				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, vec4( position.xyz(), 1.0 ) );
-				vtx_texture = texture;
+				auto v3Texture = writer.declLocale( cuT( "v3Texture" )
+					, texture );
 
 				if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 				{
-					auto model = writer.declLocale( cuT( "model" )
+					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
 						, SkinningUbo::computeTransform( writer, programFlags ) );
 				}
 				else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 				{
-					auto model = writer.declLocale( cuT( "model" )
+					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
 						, transform );
 				}
 				else
 				{
-					auto model = writer.declLocale( cuT( "model" )
+					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
 						, c3d_mtxModel );
 				}
 
@@ -279,17 +252,33 @@ namespace castor3d
 					vtx_material = c3d_materialIndex;
 				}
 
-				auto model = writer.declBuiltin< Mat4 >( cuT( "model" ) );
+				auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
 
 				if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 				{
-					auto time = writer.declLocale( cuT( "time" )
-						, vec3( 1.0_f - c3d_time ) );
-					vtx_texture = glsl::fma( vtx_texture, time, texture2 * c3d_time );
-					vertex = vec4( glsl::fma( vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+					curPosition = vec4( glsl::mix( curPosition.xyz(), position2.xyz(), c3d_time ), 1.0 );
+					v3Texture = glsl::mix( v3Texture, texture2, c3d_time );
 				}
 
-				gl_Position = c3d_projection * c3d_curView * model * vertex;
+				vtx_texture = v3Texture;
+				curPosition = mtxModel * curPosition;
+				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+					, c3d_prvViewProj * curPosition );
+				gl_Position = c3d_curViewProj * curPosition;
+				// Convert the jitter from non-homogeneous coordiantes to homogeneous
+				// coordinates and add it:
+				// (note that for providing the jitter in non-homogeneous projection space,
+				//  pixel coordinates (screen space) need to multiplied by two in the C++
+				//  code)
+				gl_Position.xy() -= c3d_curJitter * gl_Position.w();
+				prvPosition.xy() -= c3d_prvJitter * gl_Position.w();
+				vtx_curPosition = gl_Position.xyw();
+				vtx_prvPosition = prvPosition.xyw();
+				// Positions in projection space are in [-1, 1] range, while texture
+				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
+				// the scale (and flip the y axis):
+				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
+				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
 			} );
 
 		return writer.finalise();
@@ -352,6 +341,8 @@ namespace castor3d
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Intputs
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity

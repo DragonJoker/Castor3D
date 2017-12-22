@@ -291,9 +291,16 @@ namespace castor3d
 
 	// SSAO parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnabled )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoHighQuality )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoUseNormalsBuffer )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoBias )
-	DECLARE_ATTRIBUTE_PARSER( parserSsaoKernelSize )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoIntensity )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoNumSamples )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoEdgeSharpness )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoBlurHighQuality )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoBlurStepSize )
+	DECLARE_ATTRIBUTE_PARSER( parserSsaoBlurRadius )
 	DECLARE_ATTRIBUTE_PARSER( parserSsaoEnd )
 
 	// Subsurface Scattering parsers

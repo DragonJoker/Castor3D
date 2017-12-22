@@ -20,12 +20,16 @@ namespace GlRender
 		 *\brief		Constructor
 		 *\para[in]		p_gl		The OpenGL APIs.
 		 *\param[in]	p_texture	The texture.
+		 *\param[in]	mipLevel	The mipmap level.
 		 *\~french
 		 *\brief		Constructeur
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
+		 *\param[in]	mipLevel	Le niveau de mipmap.
 		 */
-		GlTextureAttachment( OpenGl & p_gl, castor3d::TextureLayoutSPtr p_texture );
+		GlTextureAttachment( OpenGl & p_gl
+			, castor3d::TextureLayoutSPtr p_texture
+			, uint32_t mipLevel = 0u );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -1,4 +1,4 @@
-﻿#include "SmaaPostEffect.hpp"
+#include "SmaaPostEffect.hpp"
 
 #include "SearchTex.h"
 #include "AreaTex.h"
@@ -1293,7 +1293,7 @@ namespace smaa
 			surface.cleanup();
 		}
 
-		if ( m_reprojectPipeline )
+		if ( m_mode == Mode::eT2X )
 		{
 			m_reprojectSurface.cleanup();
 			m_reprojectPipeline->cleanup();

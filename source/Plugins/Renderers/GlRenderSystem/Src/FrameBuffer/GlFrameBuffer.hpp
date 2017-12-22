@@ -86,6 +86,11 @@ namespace GlRender
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment
 		 */
+		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr texture
+			, uint32_t mipLevel )const override;
+		/**
+		 *\copydoc		castor3d::FrameBuffer::createAttachment
+		 */
 		castor3d::TextureAttachmentSPtr createAttachment( castor3d::TextureLayoutSPtr p_texture, castor3d::CubeMapFace p_face )const override;
 		/**
 		 *\copydoc		castor3d::FrameBuffer::createAttachment

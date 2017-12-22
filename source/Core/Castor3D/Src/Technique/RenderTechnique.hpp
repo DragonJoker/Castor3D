@@ -1,14 +1,15 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RenderTechnique_H___
 #define ___C3D_RenderTechnique_H___
 
 #include "HDR/ToneMapping.hpp"
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Technique/DepthPass.hpp"
+#include "Technique/RenderTechniqueFbo.hpp"
 #include "Technique/Opaque/DeferredRendering.hpp"
 #include "Technique/Transparent/WeightedBlendRendering.hpp"
 #include "ShadowMap/ShadowMap.hpp"
@@ -36,43 +37,6 @@ namespace castor3d
 		, public castor::Named
 	{
 		friend class RenderTechniquePass;
-
-	protected:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		19/12/2012
-		\~english
-		\brief		Internal struct holding a complete frame buffer.
-		\~french
-		\brief		Structure interne contenant un tampon d'image complet.
-		*/
-		struct TechniqueFbo
-		{
-		public:
-			explicit TechniqueFbo( RenderTechnique & technique );
-			bool initialise( castor::Size size );
-			void cleanup();
-
-			//!\~english	The texture receiving the color render.
-			//!\~french		La texture recevant le rendu couleur.
-			TextureLayoutSPtr m_colourTexture;
-			//!\~english	The buffer receiving the depth render.
-			//!\~french		Le tampon recevant le rendu profondeur.
-			TextureLayoutSPtr m_depthBuffer;
-			//!\~english	The frame buffer.
-			//!\~french		Le tampon d'image.
-			FrameBufferSPtr m_frameBuffer;
-			//!\~english	The attach between texture and main frame buffer.
-			//!\~french		L'attache entre la texture et le tampon principal.
-			TextureAttachmentSPtr m_colourAttach;
-			//!\~english	The attach between depth buffer and main frame buffer.
-			//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-			TextureAttachmentSPtr m_depthAttach;
-
-		private:
-			RenderTechnique & m_technique;
-		};
 
 	public:
 		/**
@@ -261,7 +225,7 @@ namespace castor3d
 		castor::Size m_size;
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
-		TechniqueFbo m_frameBuffer;
+		RenderTechniqueFbo m_frameBuffer;
 		//!\~english	The pass used to render opaque nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
@@ -295,6 +259,9 @@ namespace castor3d
 		//!\~english	The active shadow maps.
 		//!\~french		Les textures d'ombres actives.
 		ShadowMapLightTypeArray m_activeShadowMaps;
+		//!\~english	The depth prepass.
+		//!\~french		La prépasse de profondeur.
+		std::unique_ptr< DepthPass > m_depthPrepass;
 	};
 }
 

@@ -1,4 +1,4 @@
-﻿#include "ImporterPlugin.hpp"
+#include "ImporterPlugin.hpp"
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
@@ -9,18 +9,12 @@ namespace castor3d
 	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_library, Engine * engine )
 		: Plugin( PluginType::eImporter, p_library, *engine )
 	{
-		if ( m_pfnOnLoad )
-		{
-			m_pfnOnLoad( getEngine(), this );
-		}
+		load();
 	}
 
 	ImporterPlugin::~ImporterPlugin()
 	{
-		if ( m_pfnOnUnload )
-		{
-			m_pfnOnUnload( getEngine() );
-		}
+		unload();
 	}
 
 	ImporterPlugin::ExtensionArray const & ImporterPlugin::getExtensions()

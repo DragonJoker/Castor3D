@@ -1,4 +1,4 @@
-﻿#include "Texture/GlPboTextureStorage.hpp"
+#include "Texture/GlPboTextureStorage.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Texture/GlDownloadPixelBuffer.hpp"
@@ -57,40 +57,60 @@ namespace GlRender
 			auto size = p_storage.getOwner()->getDimensions();
 			OpenGl::PixelFmt format = storage.getOpenGl().get( p_storage.getOwner()->getPixelFormat() );
 
-			switch ( storage.getGlType() )
+			if ( storage.getGlType() == GlTextureStorageType::e2DArray
+				|| storage.getGlType() == GlTextureStorageType::e3D
+				|| storage.getGlType() == GlTextureStorageType::eCubeMapArray )
 			{
-			case GlTextureStorageType::e1D:
-				storage.getOpenGl().TexImage1D( storage.getGlType(), 0, format.Internal, size.getWidth(), 0, format.Format, format.Type, nullptr );
-				break;
+				switch ( storage.getGlType() )
+				{
+				case GlTextureStorageType::e2DArray:
+					storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth(), 0, format.Format, format.Type, nullptr );
+					break;
 
-			case GlTextureStorageType::e2D:
-				storage.getOpenGl().TexImage2D( storage.getGlType(), 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
-				break;
+				case GlTextureStorageType::e3D:
+					storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth(), 0, format.Format, format.Type, nullptr );
+					break;
 
-			case GlTextureStorageType::e2DMS:
-				storage.getOpenGl().TexImage2DMultisample( storage.getGlType(), 0, format.Internal, size, true );
-				break;
+				case GlTextureStorageType::eCubeMapArray:
+					storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth() * 6, 0, format.Format, format.Type, nullptr );
+					break;
+				}
+			}
+			else
+			{
+				int maxLevel = p_storage.getOwner()->getMipmapCount() == ~( 0u )
+					? 1
+					: int( p_storage.getOwner()->getMipmapCount() );
 
-			case GlTextureStorageType::e2DArray:
-				storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth(), 0, format.Format, format.Type, nullptr );
-				break;
+				for ( auto level = 0; level < maxLevel; ++level )
+				{
+					switch ( storage.getGlType() )
+					{
+					case GlTextureStorageType::e1D:
+						storage.getOpenGl().TexImage1D( storage.getGlType(), level, format.Internal, size.getWidth(), 0, format.Format, format.Type, nullptr );
+						break;
 
-			case GlTextureStorageType::e3D:
-				storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth(), 0, format.Format, format.Type, nullptr );
-				break;
+					case GlTextureStorageType::e2D:
+						storage.getOpenGl().TexImage2D( storage.getGlType(), level, format.Internal, size, 0, format.Format, format.Type, nullptr );
+						break;
 
-			case GlTextureStorageType::eCubeMap:
-				storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosX, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
-				storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegX, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
-				storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosY, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
-				storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegY, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
-				storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosZ, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
-				storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegZ, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
-				break;
+					case GlTextureStorageType::e2DMS:
+						storage.getOpenGl().TexImage2DMultisample( storage.getGlType(), level, format.Internal, size, true );
+						break;
 
-			case GlTextureStorageType::eCubeMapArray:
-				storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth() * 6, 0, format.Format, format.Type, nullptr );
-				break;
+					case GlTextureStorageType::eCubeMap:
+						storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosX, level, format.Internal, size, 0, format.Format, format.Type, nullptr );
+						storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegX, level, format.Internal, size, 0, format.Format, format.Type, nullptr );
+						storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosY, level, format.Internal, size, 0, format.Format, format.Type, nullptr );
+						storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegY, level, format.Internal, size, 0, format.Format, format.Type, nullptr );
+						storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosZ, level, format.Internal, size, 0, format.Format, format.Type, nullptr );
+						storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegZ, level, format.Internal, size, 0, format.Format, format.Type, nullptr );
+						break;
+					}
+
+					size.getWidth() >>= 1;
+					size.getHeight() >>= 1;
+				}
 			}
 		}
 	}

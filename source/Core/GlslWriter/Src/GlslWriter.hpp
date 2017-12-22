@@ -37,6 +37,8 @@ namespace glsl
 		GlslWriter_API GlslWriter & operator=( GlslWriter const & rhs );
 		GlslWriter_API void registerName( castor::String const & name, TypeName type );
 		GlslWriter_API void checkNameExists( castor::String const & name, TypeName type );
+		GlslWriter_API void inlineComment( castor::String const & comment );
+		GlslWriter_API void multilineComment( castor::String const & comment );
 
 		inline uint32_t getShaderLanguageVersion()const
 		{
@@ -148,6 +150,7 @@ namespace glsl
 		GlslWriter_API void outputGeometryLayout( castor::String const & p_layout );
 		GlslWriter_API void outputGeometryLayout( castor::String const & p_layout, uint32_t p_count );
 		GlslWriter_API void outputVertexCount( uint32_t p_count );
+		GlslWriter_API void returnStmt();
 		GlslWriter_API Vec4 texture( Sampler1D const & p_sampler, Float const & p_value );
 		GlslWriter_API Vec4 texture( Sampler1D const & p_sampler, Float const & p_value, Float const & p_lod );
 		GlslWriter_API Vec4 texture( Sampler2D const & p_sampler, Vec2 const & p_value );

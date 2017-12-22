@@ -6,11 +6,13 @@ See LICENSE file in root folder
 
 #include "LightPass.hpp"
 
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/BlurPass.hpp"
+#include "Technique/Opaque/Ssao/LineariseDepthPass.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
+#include "Technique/Opaque/Ssao/RawSsaoPass.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
-#include "Texture/TextureUnit.hpp"
 
 namespace castor3d
 {
@@ -42,8 +44,7 @@ namespace castor3d
 		 */
 		SsaoPass( Engine & engine
 			, castor::Size const & size
-			, SsaoConfig const & config
-			, GpInfoUbo & gpInfoUbo );
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,7 +62,8 @@ namespace castor3d
 		 *\param[in]	gp		Le résultat de la geometry pass.
 		 *\param[in]	info	Reçoit les informations de rendu.
 		 */
-		void render( GeometryPassResult const & gp
+		void render( GeometryPassResult const & gpResult
+			, Camera const & camera
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -69,53 +71,17 @@ namespace castor3d
 		 *\~french
 		 *\return		Le résultat de la passe SSAO.
 		 */
-		inline TextureUnit const & getResult()const
-		{
-			return m_blurResult;
-		}
-
-	private:
-		void doInitialiseQuadRendering();
-		void doInitialiseSsaoPass();
-		void doInitialiseBlurPass();
-		void doCleanupQuadRendering();
-		void doCleanupSsaoPass();
-		void doCleanupBlurPass();
-		void doRenderSsao( GeometryPassResult const & gp );
-		void doRenderBlur();
+		TextureUnit const & getResult()const;
 
 	private:
 		Engine & m_engine;
-		SsaoConfig m_config;
-		// Quad rendering
-		castor::Size m_size;
+		SsaoConfig const & m_config;
 		MatrixUbo m_matrixUbo;
-		Viewport m_viewport;
-		// Raw SSAO pass
-		VertexBufferSPtr m_ssaoVertexBuffer;
-		GeometryBuffersSPtr m_ssaoGeometryBuffers;
-		RenderPipelineUPtr m_ssaoPipeline;
-		ShaderProgramSPtr m_ssaoProgram;
-		castor::Point3fArray m_ssaoKernel;
-		TextureUnit m_ssaoNoise;
-		TextureUnit m_ssaoResult;
-		FrameBufferSPtr m_ssaoFbo;
-		TextureAttachmentSPtr m_ssaoResultAttach;
-		UniformBuffer m_ssaoConfig;
-		Uniform3fSPtr m_kernelUniform;
-		GpInfoUbo & m_gpInfoUbo;
-		RenderPassTimerSPtr m_ssaoTimer;
-		// SSAO blur pass
-		VertexBufferSPtr m_blurVertexBuffer;
-		GeometryBuffersSPtr m_blurGeometryBuffers;
-		RenderPipelineUPtr m_blurPipeline;
-		ShaderProgramSPtr m_blurProgram;
-		TextureUnit m_blurResult;
-		FrameBufferSPtr m_blurFbo;
-		TextureAttachmentSPtr m_blurResultAttach;
-		UniformBuffer m_blurConfig;
-		RenderPassTimerSPtr m_blurTimer;
-
+		SsaoConfigUbo m_ssaoConfigUbo;
+		LineariseDepthPass m_linearisePass;
+		RawSsaoPass m_rawSsaoPass;
+		SsaoBlurPass m_horizontalBlur;
+		SsaoBlurPass m_verticalBlur;
 	};
 }
 

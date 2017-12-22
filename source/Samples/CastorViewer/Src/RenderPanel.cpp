@@ -28,8 +28,8 @@ namespace CastorViewer
 	namespace
 	{
 		static const real MAX_CAM_SPEED = 10.0_r;
-		static const real DEF_CAM_SPEED = 1.0_r;
-		static const real MIN_CAM_SPEED = 0.1_r;
+		static const real DEF_CAM_SPEED = 0.5_r;
+		static const real MIN_CAM_SPEED = 0.05_r;
 		static const real CAM_SPEED_INC = 0.9_r;
 	}
 
@@ -930,7 +930,7 @@ namespace CastorViewer
 		{
 			if ( m_currentState )
 			{
-				static real constexpr mult = 4.0_r;
+				static real constexpr mult = 2.0_r;
 				real deltaX = std::min( m_camSpeed / mult, 1.0_r ) * ( m_oldX - m_x ) / mult;
 				real deltaY = std::min( m_camSpeed / mult, 1.0_r ) * ( m_oldY - m_y ) / mult;
 

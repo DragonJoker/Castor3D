@@ -30,12 +30,11 @@ using namespace castor;
 
 namespace castor3d
 {
-	inline uint32_t doFillShaderShadowMaps( RenderPipeline & p_pipeline
-		, ShadowMapLightTypeArray & shadowMaps )
+	inline uint32_t doFillShaderShadowMaps( RenderPipeline & pipeline
+		, ShadowMapLightTypeArray & shadowMaps
+		, uint32_t & index )
 	{
-		uint32_t index = p_pipeline.getTexturesCount() + MinTextureIndex;
-
-		if ( getShadowType( p_pipeline.getFlags().m_sceneFlags ) != ShadowType::eNone )
+		if ( getShadowType( pipeline.getFlags().m_sceneFlags ) != ShadowType::eNone )
 		{
 			for ( auto i = 0u; i < shadowMaps.size(); ++i )
 			{
@@ -51,15 +50,15 @@ namespace castor3d
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						p_pipeline.getDirectionalShadowMapsVariable().setValue( index++, layer++ );
+						pipeline.getDirectionalShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
 					case LightType::eSpot:
-						p_pipeline.getSpotShadowMapsVariable().setValue( index++, layer++ );
+						pipeline.getSpotShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
 					case LightType::ePoint:
-						p_pipeline.getPointShadowMapsVariable().setValue( index++, layer++ );
+						pipeline.getPointShadowMapsVariable().setValue( index++, layer++ );
 						++layer;
 						break;
 					}
@@ -70,45 +69,51 @@ namespace castor3d
 		return index;
 	}
 
-	inline uint32_t doFillShaderPbrMaps( RenderPipeline & p_pipeline
-		, Scene & p_scene
-		, SceneNode & p_sceneNode
-		, uint32_t p_index )
+	inline uint32_t doFillShaderPbrMaps( RenderPipeline & pipeline
+		, Scene & scene
+		, SceneNode & sceneNode
+		, uint32_t index )
 	{
-		p_scene.getIbl( p_sceneNode ).getIrradiance().getTexture()->bind( p_index );
-		p_scene.getIbl( p_sceneNode ).getIrradiance().getSampler()->bind( p_index );
-		p_pipeline.getIrradianceMapVariable().setValue( p_index++ );
-		p_scene.getIbl( p_sceneNode ).getPrefilteredEnvironment().getTexture()->bind( p_index );
-		p_scene.getIbl( p_sceneNode ).getPrefilteredEnvironment().getSampler()->bind( p_index );
-		p_pipeline.getPrefilteredMapVariable().setValue( p_index++ );
-		p_scene.getSkybox().getIbl().getPrefilteredBrdf().getTexture()->bind( p_index );
-		p_scene.getSkybox().getIbl().getPrefilteredBrdf().getSampler()->bind( p_index );
-		p_pipeline.getBrdfMapVariable().setValue( p_index++ );
-		return p_index;
+		scene.getIbl( sceneNode ).getIrradiance().getTexture()->bind( index );
+		scene.getIbl( sceneNode ).getIrradiance().getSampler()->bind( index );
+		pipeline.getIrradianceMapVariable().setValue( index++ );
+		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getTexture()->bind( index );
+		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getSampler()->bind( index );
+		pipeline.getPrefilteredMapVariable().setValue( index++ );
+		scene.getSkybox().getIbl().getPrefilteredBrdf().getTexture()->bind( index );
+		scene.getSkybox().getIbl().getPrefilteredBrdf().getSampler()->bind( index );
+		pipeline.getBrdfMapVariable().setValue( index++ );
+		return index;
 	}
 
-	inline void doBindPass( SceneNode & p_sceneNode
-		, PassRenderNode & p_node
-		, Scene & p_scene
-		, RenderPipeline & p_pipeline
+	inline void doBindPass( SceneNode & sceneNode
+		, PassRenderNode & node
+		, Scene & scene
+		, RenderPipeline & pipeline
 		, ShadowMapLightTypeArray & shadowMaps
-		, ModelUbo & p_model
-		, EnvironmentMap *& p_envMap )
+		, ModelUbo & model
+		, EnvironmentMap *& envMap )
 	{
-		p_node.m_pass.bindTextures();
-		auto index = doFillShaderShadowMaps( p_pipeline, shadowMaps );
+		node.m_pass.bindTextures();
 
-		if ( ( checkFlag( p_pipeline.getFlags().m_passFlags, PassFlag::ePbrMetallicRoughness )
-				|| checkFlag( p_pipeline.getFlags().m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
-			&& checkFlag( p_pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		uint32_t index = pipeline.getTexturesCount() + MinTextureIndex;
+
+		if ( checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			index = doFillShaderPbrMaps( p_pipeline
-				, p_scene
-				, p_sceneNode
+			doFillShaderShadowMaps( pipeline, shadowMaps, index );
+		}
+
+		if ( ( checkFlag( pipeline.getFlags().m_passFlags, PassFlag::ePbrMetallicRoughness )
+				|| checkFlag( pipeline.getFlags().m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
+			&& checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			index = doFillShaderPbrMaps( pipeline
+				, scene
+				, sceneNode
 				, index );
 		}
 
-		for ( auto pair : p_node.m_textures )
+		for ( auto pair : node.m_textures )
 		{
 			auto texture = pair.first;
 			auto & variable = pair.second;
@@ -127,45 +132,45 @@ namespace castor3d
 			}
 		}
 
-		if ( p_node.m_pass.hasEnvironmentMapping() )
+		if ( node.m_pass.hasEnvironmentMapping() )
 		{
-			p_envMap = &p_scene.getEnvironmentMap( p_sceneNode );
+			envMap = &scene.getEnvironmentMap( sceneNode );
 
-			if ( checkFlag( p_pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+			if ( checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
-				p_pipeline.getEnvironmentMapVariable().setValue( index );
-				p_envMap->getTexture().setIndex( index );
-				p_envMap->getTexture().bind();
+				pipeline.getEnvironmentMapVariable().setValue( index );
+				envMap->getTexture().setIndex( index );
+				envMap->getTexture().bind();
 			}
 			else
 			{
-				p_model.setEnvMapIndex( p_envMap->getIndex() );
+				model.setEnvMapIndex( envMap->getIndex() );
 			}
 		}
 		else
 		{
-			p_model.setEnvMapIndex( 0 );
-			p_envMap = nullptr;
+			model.setEnvMapIndex( 0 );
+			envMap = nullptr;
 		}
 	}
 
-	inline void doBindPassOpacityMap( PassRenderNode & p_node
-		, Pass & p_pass )
+	inline void doBindPassOpacityMap( PassRenderNode & node
+		, Pass & pass )
 	{
-		auto unit = p_pass.getTextureUnit( TextureChannel::eOpacity );
+		auto unit = pass.getTextureUnit( TextureChannel::eOpacity );
 
 		if ( unit )
 		{
-			p_node.m_textures.find( unit->getIndex() )->second.get().setValue( 0 );
+			node.m_textures.find( unit->getIndex() )->second.get().setValue( 0 );
 			unit->getTexture()->bind( 0u );
 			unit->getSampler()->bind( 0u );
 		}
 	}
 
-	inline void doUnbindPassOpacityMap( PassRenderNode & p_node
-		, Pass & p_pass )
+	inline void doUnbindPassOpacityMap( PassRenderNode & node
+		, Pass & pass )
 	{
-		auto unit = p_pass.getTextureUnit( TextureChannel::eOpacity );
+		auto unit = pass.getTextureUnit( TextureChannel::eOpacity );
 
 		if ( unit )
 		{
@@ -175,62 +180,62 @@ namespace castor3d
 	}
 
 	template< typename DataType, typename InstanceType >
-	inline void doRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & p_node )
+	inline void doRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & node )
 	{
-		auto & model = p_node.m_sceneNode.getDerivedTransformationMatrix();
-		p_node.m_modelMatrixUbo.update( model );
-		p_node.m_data.draw( p_node.m_buffers );
+		auto & model = node.m_sceneNode.getDerivedTransformationMatrix();
+		node.m_modelMatrixUbo.update( model );
+		node.m_data.draw( node.m_buffers );
 	}
 
-	inline void doRenderNodeNoPass( StaticRenderNode & p_node )
+	inline void doRenderNodeNoPass( StaticRenderNode & node )
 	{
-		doRenderObjectNode( p_node );
+		doRenderObjectNode( node );
 	}
 
-	inline void doRenderNodeNoPass( BillboardRenderNode & p_node )
+	inline void doRenderNodeNoPass( BillboardRenderNode & node )
 	{
-		p_node.m_billboardUbo.update( p_node.m_instance.getDimensions() );
-		doRenderObjectNode( p_node );
+		node.m_billboardUbo.update( node.m_instance.getDimensions() );
+		doRenderObjectNode( node );
 	}
 
-	inline void doRenderNodeNoPass( MorphingRenderNode & p_node )
+	inline void doRenderNodeNoPass( MorphingRenderNode & node )
 	{
-		if ( p_node.m_mesh.isPlayingAnimation() )
+		if ( node.m_mesh.isPlayingAnimation() )
 		{
-			auto submesh = p_node.m_mesh.getPlayingAnimation().getAnimationSubmesh( p_node.m_data.getId() );
+			auto submesh = node.m_mesh.getPlayingAnimation().getAnimationSubmesh( node.m_data.getId() );
 
 			if ( submesh )
 			{
-				p_node.m_morphingUbo.update( submesh->getCurrentFactor() );
+				node.m_morphingUbo.update( submesh->getCurrentFactor() );
 			}
 			else
 			{
-				p_node.m_morphingUbo.update( 1.0f );
+				node.m_morphingUbo.update( 1.0f );
 			}
 		}
 		else
 		{
-			p_node.m_morphingUbo.update( 1.0f );
+			node.m_morphingUbo.update( 1.0f );
 		}
 
-		doRenderObjectNode( p_node );
+		doRenderObjectNode( node );
 	}
 
-	inline void doRenderNodeNoPass( SkinningRenderNode & p_node )
+	inline void doRenderNodeNoPass( SkinningRenderNode & node )
 	{
-		if ( !checkFlag( p_node.m_pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		if ( !checkFlag( node.m_pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
 		{
-			p_node.m_skinningUbo.update( p_node.m_skeleton );
+			node.m_skinningUbo.update( node.m_skeleton );
 		}
 
-		doRenderObjectNode( p_node );
+		doRenderObjectNode( node );
 	}
 
 	template< typename NodeType >
-	inline void doRenderNode( NodeType & p_node )
+	inline void doRenderNode( NodeType & node )
 	{
-		p_node.m_modelUbo.update( p_node.m_instance.isShadowReceiver()
-			, p_node.m_passNode.m_pass.getId() );
-		doRenderNodeNoPass( p_node );
+		node.m_modelUbo.update( node.m_instance.isShadowReceiver()
+			, node.m_passNode.m_pass.getId() );
+		doRenderNodeNoPass( node );
 	}
 }

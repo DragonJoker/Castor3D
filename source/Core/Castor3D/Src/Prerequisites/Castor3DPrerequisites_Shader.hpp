@@ -161,9 +161,9 @@ namespace castor3d
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
 		eEnvironmentMapping = 0x0800,
-		//!\~english	Shader without code in fragment shader.
-		//\~french		Shader sans code dans le fragment shader.
-		eNoFragment = 0x1000,
+		//!\~english	Shader for the depth pre-pass.
+		//\~french		Shader pour la pré-passe de profondeur.
+		eDepthPass = 0x1000,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
 	/**

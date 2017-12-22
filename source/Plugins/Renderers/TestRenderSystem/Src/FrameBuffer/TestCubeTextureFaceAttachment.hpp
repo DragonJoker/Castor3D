@@ -64,7 +64,6 @@ namespace TestRender
 
 	private:
 		castor3d::CubeMapFace m_face;
-		uint32_t m_mipLevel;
 	};
 }
 

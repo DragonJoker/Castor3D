@@ -1976,10 +1976,10 @@ namespace castor3d
 
 			if ( p_params.size() > 1 )
 			{
-				String tmp;
-				StringArray arrayStrParams = string::split( p_params[1]->get( tmp ), cuT( "-" ), 20, false );
+				String params;
+				StringArray paramArray = string::split( p_params[1]->get( params ), cuT( "-" ), 20, false );
 
-				for ( auto param : arrayStrParams )
+				for ( auto param : paramArray )
 				{
 					if ( param.find( cuT( "smooth_normals" ) ) == 0 )
 					{
@@ -1998,6 +1998,21 @@ namespace castor3d
 					else if ( param.find( cuT( "split_mesh" ) ) == 0 )
 					{
 						parameters.add( cuT( "split_mesh" ), true );
+					}
+					else if ( param.find( cuT( "rescale" ) ) == 0 )
+					{
+						auto eqIndex = param.find( cuT( '=' ) );
+
+						if ( eqIndex != String::npos )
+						{
+							float value;
+							string::parse< float >( param.substr( eqIndex + 1 ), value );
+							parameters.add( cuT( "rescale" ), value );
+						}
+						else
+						{
+							PARSING_ERROR( cuT( "Malformed parameter -rescale." ) );
+						}
 					}
 				}
 			}
@@ -4602,6 +4617,54 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoHighQuality )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_highQuality = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoUseNormalsBuffer )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_useNormalsBuffer = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoRadius )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -4650,7 +4713,7 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoKernelSize )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoIntensity )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
@@ -4662,9 +4725,129 @@ namespace castor3d
 			}
 			else
 			{
-				uint8_t value;
+				float value;
 				p_params[0]->get( value );
-				parsingContext->ssaoConfig.m_kernelSize = uint32_t( value );
+				parsingContext->ssaoConfig.m_intensity = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoNumSamples )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_numSamples = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoEdgeSharpness )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_edgeSharpness = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoBlurStepSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_blurStepSize = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoBlurHighQuality )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_blurHighQuality = value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSsaoBlurRadius )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				p_params[0]->get( value );
+				parsingContext->ssaoConfig.m_blurRadius = value;
 			}
 		}
 		else

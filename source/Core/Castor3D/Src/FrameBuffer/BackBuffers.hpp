@@ -90,6 +90,23 @@ namespace castor3d
 		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture )const override
 		{
 			return nullptr;
+		};
+		/**
+		 *\~english
+		 *\brief		Creates an attachment to a texture's mipmap.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	mipLevel	The mipmap level.
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un mipmap d'une texture.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	mipLevel	Le niveau du mipmap.
+		 *\return		L'attache créée
+		 */
+		C3D_API TextureAttachmentSPtr createAttachment( TextureLayoutSPtr texture
+			, uint32_t mipLevel )const override
+		{
+			return nullptr;
 		}
 		/**
 		 *\~english

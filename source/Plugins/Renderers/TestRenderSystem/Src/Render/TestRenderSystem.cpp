@@ -92,24 +92,29 @@ namespace TestRender
 		return std::make_unique< TestTransformFeedback >( *this, p_computed, p_topology, p_program );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )
+	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & cpuAccess, AccessTypes const & gpuAccess )
 	{
-		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess );
+		return std::make_shared< TestTexture >( *this, p_type, cpuAccess, gpuAccess );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess, PixelFormat p_format, Size const & p_size )
+	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & cpuAccess, AccessTypes const & gpuAccess, uint32_t mipmapCount )
 	{
-		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+		return std::make_shared< TestTexture >( *this, p_type, cpuAccess, gpuAccess, mipmapCount );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & cpuAccess, AccessTypes const & gpuAccess, PixelFormat p_format, Size const & p_size )
 	{
-		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+		return std::make_shared< TestTexture >( *this, p_type, cpuAccess, gpuAccess, p_format, p_size );
 	}
 
-	TextureStorageUPtr TestRenderSystem::createTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )
+	TextureLayoutSPtr TestRenderSystem::createTexture( TextureType p_type, AccessTypes const & cpuAccess, AccessTypes const & gpuAccess, PixelFormat p_format, Point3ui const & p_size )
 	{
-		return std::make_unique< TestTextureStorage >( *this, p_type, p_layout, p_cpuAccess, p_gpuAccess );
+		return std::make_shared< TestTexture >( *this, p_type, cpuAccess, gpuAccess, p_format, p_size );
+	}
+
+	TextureStorageUPtr TestRenderSystem::createTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessTypes const & cpuAccess, AccessTypes const & gpuAccess )
+	{
+		return std::make_unique< TestTextureStorage >( *this, p_type, p_layout, cpuAccess, gpuAccess );
 	}
 
 	FrameBufferSPtr TestRenderSystem::createFrameBuffer()

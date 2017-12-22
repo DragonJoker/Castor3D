@@ -1,10 +1,10 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RenderTechniquePass_H___
 #define ___C3D_RenderTechniquePass_H___
 
-#include "Miscellaneous/SsaoConfig.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPass.hpp"
 
 namespace castor3d
@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	config		La configuration du SSAO.
 		 */
 		C3D_API RenderTechniquePass( castor::String const & name
-			, Scene & scene
+			, Scene const & scene
 			, Camera * camera
 			, bool environment
 			, SceneNode const * ignored
@@ -179,7 +179,7 @@ namespace castor3d
 	protected:
 		//!\~english	The rendered scne.
 		//!\~french		La scène rendue.
-		Scene & m_scene;
+		Scene const & m_scene;
 		//!\~english	The viewer camera, if any.
 		//!\~french		La caméra, s'il y en a une.
 		Camera * m_camera{ nullptr };

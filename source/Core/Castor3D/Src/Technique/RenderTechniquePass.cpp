@@ -156,7 +156,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	RenderTechniquePass::RenderTechniquePass( String const & name
-		, Scene & scene
+		, Scene const & scene
 		, Camera * camera
 		, bool environment
 		, SceneNode const * ignored

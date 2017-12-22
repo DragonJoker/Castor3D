@@ -91,76 +91,6 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTechnique::TechniqueFbo::TechniqueFbo( RenderTechnique & technique )
-		: m_technique{ technique }
-	{
-	}
-
-	bool RenderTechnique::TechniqueFbo::initialise( Size size )
-	{
-		m_colourTexture = m_technique.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-			, AccessType::eNone
-			, AccessType::eRead | AccessType::eWrite
-			, PixelFormat::eRGBA16F32F
-			, size );
-		m_colourTexture->getImage().initialiseSource();
-		size = m_colourTexture->getDimensions();
-
-		bool result = m_colourTexture->initialise();
-
-		if ( result )
-		{
-			m_frameBuffer = m_technique.getEngine()->getRenderSystem()->createFrameBuffer();
-			m_depthBuffer = m_technique.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eD24S8
-				, size );
-			m_depthBuffer->getImage().initialiseSource();
-			result = m_depthBuffer->initialise();
-		}
-
-		if ( result )
-		{
-			m_colourAttach = m_frameBuffer->createAttachment( m_colourTexture );
-			m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-			result = m_frameBuffer->initialise();
-		}
-
-		if ( result )
-		{
-			m_frameBuffer->bind();
-			m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->getType() );
-			m_frameBuffer->attach( AttachmentPoint::eDepthStencil, m_depthAttach, m_depthBuffer->getType() );
-			m_frameBuffer->setDrawBuffer( m_colourAttach );
-			result = m_frameBuffer->isComplete();
-			m_frameBuffer->unbind();
-		}
-
-		return result;
-	}
-
-	void RenderTechnique::TechniqueFbo::cleanup()
-	{
-		if ( m_frameBuffer )
-		{
-			m_frameBuffer->bind();
-			m_frameBuffer->detachAll();
-			m_frameBuffer->unbind();
-			m_frameBuffer->cleanup();
-			m_colourTexture->cleanup();
-			m_depthBuffer->cleanup();
-
-			m_depthAttach.reset();
-			m_depthBuffer.reset();
-			m_colourAttach.reset();
-			m_colourTexture.reset();
-			m_frameBuffer.reset();
-		}
-	}
-
-	//*************************************************************************************************
-
 	RenderTechnique::RenderTechnique( String const & name
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
@@ -246,6 +176,13 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
+				m_depthPrepass = std::make_unique< DepthPass >( cuT( "DepthPrepass" )
+					, *m_renderTarget.getScene()
+					, *m_renderTarget.getCamera()
+					, m_ssaoConfig
+					, m_frameBuffer.m_depthBuffer );
+				m_depthPrepass->initialise( m_size );
+
 #if !DEBUG_FORWARD_RENDERING
 				m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
 					, static_cast< OpaquePass & >( *m_opaquePass )
@@ -280,6 +217,8 @@ namespace castor3d
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
 		doCleanupShadowMaps();
+		m_depthPrepass->cleanup();
+		m_depthPrepass.reset();
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
 		m_initialised = false;
@@ -288,6 +227,7 @@ namespace castor3d
 
 	void RenderTechnique::update( RenderQueueArray & queues )
 	{
+		m_depthPrepass->update( queues );
 		m_opaquePass->update( queues );
 		m_transparentPass->update( queues );
 		doUpdateShadowMaps( queues );
@@ -318,8 +258,12 @@ namespace castor3d
 		// Render part
 		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour );
 		m_frameBuffer.m_frameBuffer->unbind();
+
+		m_depthPrepass->render( info
+			, m_activeShadowMaps
+			, jitter );
 
 		doRenderOpaque( jitter
 			, velocity

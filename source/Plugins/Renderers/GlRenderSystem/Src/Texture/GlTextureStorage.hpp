@@ -28,15 +28,15 @@ namespace GlRender
 		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_type			The storage texture type.
 		 *\param[in]	p_layout		The parent layout.
-		 *\param[in]	p_cpuAccess		The required CPU access.
-		 *\param[in]	p_gpuAccess		The required GPU access.
+		 *\param[in]	cpuAccess		The required CPU access.
+		 *\param[in]	gpuAccess		The required GPU access.
 		 */
 		GlTextureStorage( OpenGl & p_gl
 			, GlRenderSystem & renderSystem
 			, castor3d::TextureStorageType p_type
 			, castor3d::TextureLayout & p_layout
-			, castor3d::AccessTypes const & p_cpuAccess
-			, castor3d::AccessTypes const & p_gpuAccess );
+			, castor3d::AccessTypes const & cpuAccess
+			, castor3d::AccessTypes const & gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */

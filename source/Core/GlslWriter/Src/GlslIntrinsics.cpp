@@ -1,4 +1,4 @@
-﻿#include "GlslIntrinsics.hpp"
+#include "GlslIntrinsics.hpp"
 
 using namespace castor;
 
@@ -100,6 +100,26 @@ namespace glsl
 		Int result( p_a.m_writer );
 		result.m_value << String( p_a ) << cuT( " % " ) << String( p_b );
 		return result;
+	}
+
+	Int bitfieldReverse( Int const & value )
+	{
+		return writeFunctionCall< Int >( value.m_writer, cuT( "bitfieldReverse" ), value );
+	}
+
+	UInt bitfieldReverse( UInt const & value )
+	{
+		return writeFunctionCall< UInt >( value.m_writer, cuT( "bitfieldReverse" ), value );
+	}
+
+	Int findMSB( Int value )
+	{
+		return writeFunctionCall< Int >( value.m_writer, cuT( "findMSB" ), value );
+	}
+
+	Int findMSB( UInt value )
+	{
+		return writeFunctionCall< Int >( value.m_writer, cuT( "findMSB" ), value );
 	}
 
 	Int textureSize( Sampler1D const & p_sampler, Int const p_lod )

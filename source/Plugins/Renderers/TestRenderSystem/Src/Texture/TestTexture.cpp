@@ -12,31 +12,41 @@ namespace TestRender
 	TestTexture::TestTexture(
 		TestRenderSystem & p_renderSystem,
 		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
-		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess }
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess )
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess }
 	{
 	}
 
 	TestTexture::TestTexture(
 		TestRenderSystem & p_renderSystem,
 		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess,
+		uint32_t mipmapCount )
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess, mipmapCount }
+	{
+	}
+
+	TestTexture::TestTexture(
+		TestRenderSystem & p_renderSystem,
+		TextureType p_type,
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess,
 		PixelFormat p_format,
 		Size const & p_size )
-		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess, p_format, p_size }
 	{
 	}
 
 	TestTexture::TestTexture(
 		TestRenderSystem & p_renderSystem,
 		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess,
 		PixelFormat p_format,
 		Point3ui const & p_size )
-		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess, p_format, p_size }
 	{
 	}
 

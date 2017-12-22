@@ -62,6 +62,7 @@ namespace castor3d
 		 *\param[in]	lightDiffuse	The diffuse result of the lighting pass.
 		 *\param[in]	lightSpecular	The specular result of the lighting pass.
 		 *\param[in]	scene			The rendered scene.
+		 *\param[in]	camera			The viewing camera.
 		 *\param[in]	frameBuffer		The target frame buffer.
 		 *\param[out]	info			The render informations.
 		 *\~french
@@ -70,6 +71,7 @@ namespace castor3d
 		 *\param[in]	lightDiffuse	Le résultat diffus de la passe d'éclairage.
 		 *\param[in]	lightSpecular	Le résultat spéculaire de la passe d'éclairage.
 		 *\param[in]	scene			La scène rendue.
+		 *\param[in]	camera			La caméra de rendu.
 		 *\param[in]	frameBuffer		Le tampon d'image cible.
 		 *\param[out]	info			Les informations de rendu.
 		 */
@@ -77,6 +79,7 @@ namespace castor3d
 			, TextureUnit const & lightDiffuse
 			, TextureUnit const & lightSpecular
 			, Scene const & scene
+			, Camera const & camera
 			, FrameBuffer const & frameBuffer
 			, RenderInfo & info );
 		/**
@@ -155,7 +158,7 @@ namespace castor3d
 		};
 		//!\~english	An array of CombineProgram, one per fog type.
 		//!\~french		Un tableau de CombineProgram, un par type de brouillard.
-		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) * size_t( MaterialType::eCount ) >;
+		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
 		//!\~english	The render size.
 		//!\~french		La taille du rendu.
 		castor::Size m_size;

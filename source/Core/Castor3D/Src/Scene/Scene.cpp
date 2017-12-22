@@ -181,17 +181,6 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene background image" );
 		}
 
-		if ( result && scene.hasSkybox() )
-		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// HDR Configuration\n" ) ) > 0;
-
-			if ( result )
-			{
-				Logger::logInfo( cuT( "Scene::write - HDR Config" ) );
-				result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( scene.getHdrConfig(), file );
-			}
-		}
-
 		if ( result )
 		{
 			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );
@@ -212,6 +201,17 @@ namespace castor3d
 				Logger::logInfo( cuT( "Scene::write - Fog density" ) );
 				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Scene >::checkError( result, "Scene fog density" );
+			}
+		}
+
+		if ( result && scene.hasSkybox() )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// HDR Configuration\n" ) ) > 0;
+
+			if ( result )
+			{
+				Logger::logInfo( cuT( "Scene::write - HDR Config" ) );
+				result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( scene.getHdrConfig(), file );
 			}
 		}
 

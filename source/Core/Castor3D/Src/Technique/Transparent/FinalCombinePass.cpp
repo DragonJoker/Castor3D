@@ -6,7 +6,7 @@
 #include <Mesh/Buffer/BufferElementGroup.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Miscellaneous/SsaoConfig.hpp>
+#include <Technique/Opaque/Ssao/SsaoConfig.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Camera.hpp>

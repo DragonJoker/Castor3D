@@ -8,6 +8,7 @@
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Mesh/Vertex.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Texture/TextureImage.hpp"
@@ -74,6 +75,22 @@ namespace castor3d
 
 			if ( result && initialise )
 			{
+				float scale = 1.0f;
+
+				if ( m_parameters.get( cuT( "rescale" ), scale )
+					&& std::abs( scale - 1.0f ) > 0.01f )
+				{
+					for ( auto submesh : mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							Coords3r position;
+							Vertex::getPosition( vertex, position );
+							position *= scale;
+						}
+					}
+				}
+
 				mesh.computeContainers();
 
 				for ( auto submesh : mesh )
