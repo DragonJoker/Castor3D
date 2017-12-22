@@ -989,18 +989,10 @@ namespace castor3d
 		, m_programs
 		{
 			{
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::eLegacy },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrMetallicRoughness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, MaterialType::ePbrSpecularGlossiness },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, MaterialType::ePbrSpecularGlossiness },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, engine.getMaterialsType() },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, engine.getMaterialsType() },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, engine.getMaterialsType() },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, engine.getMaterialsType() },
 			}
 		}
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
@@ -1046,18 +1038,12 @@ namespace castor3d
 		auto & maps = scene.getEnvironmentMaps();
 
 		auto index = MinTextureIndex;
-		gp[size_t( DsTexture::eDepth )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->bind( index++ );
-		gp[size_t( DsTexture::eData5 )]->getTexture()->bind( index );
-		gp[size_t( DsTexture::eData5 )]->getSampler()->bind( index++ );
+
+		for ( auto & buffer : gp )
+		{
+			buffer->getTexture()->bind( index );
+			buffer->getSampler()->bind( index++ );
+		}
 
 		if ( m_ssaoEnabled )
 		{
@@ -1069,9 +1055,7 @@ namespace castor3d
 		lightDiffuse.getSampler()->bind( index++ );
 		lightSpecular.getTexture()->bind( index );
 		lightSpecular.getSampler()->bind( index++ );
-		auto program = size_t( scene.getMaterialsType() )
-			* size_t( FogType::eCount )
-			+ size_t( scene.getFog().getType() );
+		auto program = size_t( scene.getFog().getType() );
 
 		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
@@ -1083,68 +1067,15 @@ namespace castor3d
 			skyboxIbl.getIrradiance().getSampler()->bind( index++ );
 			skyboxIbl.getPrefilteredEnvironment().getTexture()->bind( index );
 			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index++ );
-
-			for ( auto & map : maps )
-			{
-				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index++ );
-			}
-
-			m_programs[program].render( *m_vertexBuffer );
-
-			for ( auto & map : makeReverse( maps ) )
-			{
-				map.get().getTexture().getTexture()->unbind( --index );
-				map.get().getTexture().getSampler()->unbind( index );
-			}
-
-			skyboxIbl.getPrefilteredBrdf().getTexture()->unbind( --index );
-			skyboxIbl.getPrefilteredBrdf().getSampler()->unbind( index );
-			skyboxIbl.getIrradiance().getTexture()->unbind( --index );
-			skyboxIbl.getIrradiance().getSampler()->unbind( index );
-			skyboxIbl.getPrefilteredEnvironment().getTexture()->unbind( --index );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->unbind( index );
 		}
-		else
+
+		for ( auto & map : maps )
 		{
-			for ( auto & map : maps )
-			{
-				map.get().getTexture().getTexture()->bind( index );
-				map.get().getTexture().getSampler()->bind( index++ );
-			}
-
-			m_programs[program].render( *m_vertexBuffer );
-
-			for ( auto & map : makeReverse( maps ) )
-			{
-				map.get().getTexture().getTexture()->unbind( --index );
-				map.get().getTexture().getSampler()->unbind( index );
-			}
+			map.get().getTexture().getTexture()->bind( index );
+			map.get().getTexture().getSampler()->bind( index++ );
 		}
 
-		lightSpecular.getTexture()->bind( --index );
-		lightSpecular.getSampler()->bind( index );
-		lightDiffuse.getTexture()->bind( --index );
-		lightDiffuse.getSampler()->bind( index );
-
-		if ( m_ssaoEnabled )
-		{
-			ssao->getSampler()->bind( --index );
-			ssao->getTexture()->bind( index );
-		}
-
-		gp[size_t( DsTexture::eData5 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData5 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData4 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData4 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData3 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData3 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eDepth )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eDepth )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData2 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData2 )]->getSampler()->unbind( index );
-		gp[size_t( DsTexture::eData1 )]->getTexture()->unbind( --index );
-		gp[size_t( DsTexture::eData1 )]->getSampler()->unbind( index );
+		m_programs[program].render( *m_vertexBuffer );
 		frameBuffer.unbind();
 
 		m_timer->stop();

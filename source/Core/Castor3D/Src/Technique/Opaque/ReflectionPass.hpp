@@ -158,7 +158,7 @@ namespace castor3d
 		};
 		//!\~english	An array of CombineProgram, one per fog type.
 		//!\~french		Un tableau de CombineProgram, un par type de brouillard.
-		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) * size_t( MaterialType::eCount ) >;
+		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
 		//!\~english	The render size.
 		//!\~french		La taille du rendu.
 		castor::Size m_size;
