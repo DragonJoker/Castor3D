@@ -1976,10 +1976,10 @@ namespace castor3d
 
 			if ( p_params.size() > 1 )
 			{
-				String tmp;
-				StringArray arrayStrParams = string::split( p_params[1]->get( tmp ), cuT( "-" ), 20, false );
+				String params;
+				StringArray paramArray = string::split( p_params[1]->get( params ), cuT( "-" ), 20, false );
 
-				for ( auto param : arrayStrParams )
+				for ( auto param : paramArray )
 				{
 					if ( param.find( cuT( "smooth_normals" ) ) == 0 )
 					{
@@ -1998,6 +1998,21 @@ namespace castor3d
 					else if ( param.find( cuT( "split_mesh" ) ) == 0 )
 					{
 						parameters.add( cuT( "split_mesh" ), true );
+					}
+					else if ( param.find( cuT( "rescale" ) ) == 0 )
+					{
+						auto eqIndex = param.find( cuT( '=' ) );
+
+						if ( eqIndex != String::npos )
+						{
+							float value;
+							string::parse< float >( param.substr( eqIndex + 1 ), value );
+							parameters.add( cuT( "rescale" ), value );
+						}
+						else
+						{
+							PARSING_ERROR( cuT( "Malformed parameter -rescale." ) );
+						}
 					}
 				}
 			}
