@@ -10,6 +10,7 @@ Castor3D
 Castor3D is a 3D engine written in C++ 14.
 It works on Windows and also on GNU/Linux.
 It uses OpenGL (with GLSL).
+It is still a work in progress, feel free to contribute!
 
 Features
 --------
@@ -17,11 +18,12 @@ Features
 - Deferred rendering.
 - Normal mapping.
 - Parallax Occlusion mapping.
-- Screen Space Ambient Occlusion.
-- Shadow Mapping.
-- Reflection Mapping.
+- Screen Space Ambient Occlusion (using Scalable Ambiant Obscurance implementation).
+- Shadow Mapping (using Variance Shadow Maps).
+- Reflection/Refraction Mapping.
 - PBR rendering (Metallic and Specular workflows), and Legacy rendering.
 - HDR rendering with various tone mapping operators.
+- Screen Space Subsurface Scattering (without backlit transmittance yet).
 - Scene graph.
 - Modular architecture through plug-ins.
 - Shaders are generated automatically from material and pass configuration.
@@ -47,7 +49,7 @@ Implemented Plug-ins
 - Bloom: HDR Bloom implementation.
 - FilmGrain: To display some grain on the render.
 - GrayScale.
-- LightStreaks (using Kawase Light Streaks)
+- LightStreaks (using Kawase Light Streaks).
 - FXAA Antialiasing.
 - SMAA Antialiasing (1X and T2X so far).
 

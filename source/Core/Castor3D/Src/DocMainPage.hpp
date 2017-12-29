@@ -4,6 +4,80 @@
  *\section intro_sec Change log
  *This page is here to inform about the changes since the earliest versions of the engine.
  *
+ *\section version_0_10_0 Version 0.10.0
+ *\subsection feat_0_10_0 Features
+ *\subsubsection feat_0_10_0_cu CastorUtils
+ *<ul>
+ *<li>Renamed namespace Castor to castor.</li>
+ *<li>Added ChangeTracked and GroupChangeTracked classes, allowing to track changes to a member variable.</li>
+ *<li>Renamed CubeBox and SphereBox to BoundingBox and BoundingSphere.</li>
+ *<li>Splitted Colour in two classes: RgbColour and RgbaColour.</li>
+ *<li>PlaneEquation is no more a template class.</li>
+ *<li>Created a buddy allocator class: BuddyAllocator.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_c3d Castor3D
+ *<ul>
+ *<li>Renamed namespace Castor3D to castor3d.</li>
+ *<li>Fixed bounding boxes for animated meshes and skinned meshes.</li>
+ *<li>Repaired an reenabled frustum culling.</li>
+ *<li>Fixed alpha rejection.</li>
+ *<li>Emissive in a material is now stored on a single floating point (emissive maps still hold a colour though).</li>
+ *<li>Implemented Physical Based Rendering, using both metallic/roughness and specular/glossiness workflows.</li>
+ *<li>RenderPipeline now also holds the shader program.</li>
+ *<li>Implemented Screen Space Subsurface Scattering.</li>
+ *<li>The light pass result is now stored in two render targets: diffuse and specular.</li>
+ *<li>Vertex buffers now use a buddy allocated pool.</li>
+ *<li>Shadow mapping now uses variance shadow maps.</li>
+ *<li>Transparent meshes are now rendered using Weighted Blended rendering.</li>
+ *<li>Screen Space Ambiant Occlusion has been improved, using Scalable Ambiant Obscurance implementation.</li>
+ *<li>Parallax Occlusion mapping is implemented.</li>
+ *<li>Reflection and refraction mapping have been implemented.</li>
+ *<li>Deferred rendering has been fully integrated, for opaque objects rendering.</li>
+ *<li>Created components for submeshes, to move functionalities out of Submesh.</li>
+ *<li>Rendering now uses a depth prepass.</li>
+ *<li>Created ColourSkybox, to handle background colour and skyboxes in the same way.</li>
+ *<li>Created ShaderBuffer class, to be able to handle SSBOs or TBOs in a similar way, choosing the most appropriate one, depending on running machine.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_gen Generators
+ *<ul>
+ *<li>Created DiamondSquareTerrain plugin.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_gic Generic
+ *<ul>
+ *<li>Events from CastorGUI are now forwarded to the user.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_imp Importers
+ *<ul>
+ *<li>Removed almost every importer plugin, keeping only Assimp, OBJ, and PLY importers.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_gl RenderSystems
+ *<ul>
+ *<li>Updated to support the features provided by Castor3D.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_pos PostEffects
+ *<ul>
+ *<li>Created SMAA post effect.</li>
+ *<li>Created Kawase Light Streaks post effect.</li>
+ *<li>Created Film Grain post effect.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_tec Techniques
+ *<ul>
+ *<li>Technique plugins have been completely removed.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_ton Tone mappings
+ *<ul>
+ *<li>Created Uncharted 2 tone mappings.</li>
+ *</ul>
+ *
+ *
  *\section version_0_9_0 Version 0.9.0
  *\subsection feat_0_9_0 Features
  *\subsubsection feat_0_9_0_cu CastorUtils
@@ -465,6 +539,80 @@
  *\mainpage Moteur Castor3D
  *\section intro_sec Suivi de versions
  *Cette page sert à informer des évolutions du moteur depuis les premières versions.
+ *
+ *\section version_0_10_0 Version 0.10.0
+ *\subsection feat_0_10_0 Features
+ *\subsubsection feat_0_10_0_cu CastorUtils
+ *<ul>
+ *<li>Renamed namespace Castor to castor.</li>
+ *<li>Added ChangeTracked and GroupChangeTracked classes, allowing to track changes to a member variable.</li>
+ *<li>Renamed CubeBox and SphereBox to BoundingBox and BoundingSphere.</li>
+ *<li>Splitted Colour in two classes: RgbColour and RgbaColour.</li>
+ *<li>PlaneEquation is no more a template class.</li>
+ *<li>Created a buddy allocator class: BuddyAllocator.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_c3d Castor3D
+ *<ul>
+ *<li>Renamed namespace Castor3D to castor3d.</li>
+ *<li>Fixed bounding boxes for animated meshes and skinned meshes.</li>
+ *<li>Repaired an reenabled frustum culling.</li>
+ *<li>Fixed alpha rejection.</li>
+ *<li>Emissive in a material is now stored on a single floating point (emissive maps still hold a colour though).</li>
+ *<li>Implemented Physical Based Rendering, using both metallic/roughness and specular/glossiness workflows.</li>
+ *<li>RenderPipeline now also holds the shader program.</li>
+ *<li>Implemented Screen Space Subsurface Scattering.</li>
+ *<li>The light pass result is now stored in two render targets: diffuse and specular.</li>
+ *<li>Vertex buffers now use a buddy allocated pool.</li>
+ *<li>Shadow mapping now uses variance shadow maps.</li>
+ *<li>Transparent meshes are now rendered using Weighted Blended rendering.</li>
+ *<li>Screen Space Ambiant Occlusion has been improved, using Scalable Ambiant Obscurance implementation.</li>
+ *<li>Parallax Occlusion mapping is implemented.</li>
+ *<li>Reflection and refraction mapping have been implemented.</li>
+ *<li>Deferred rendering has been fully integrated, for opaque objects rendering.</li>
+ *<li>Created components for submeshes, to move functionalities out of Submesh.</li>
+ *<li>Rendering now uses a depth prepass.</li>
+ *<li>Created ColourSkybox, to handle background colour and skyboxes in the same way.</li>
+ *<li>Created ShaderBuffer class, to be able to handle SSBOs or TBOs in a similar way, choosing the most appropriate one, depending on running machine.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_gen Generators
+ *<ul>
+ *<li>Created DiamondSquareTerrain plugin.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_gic Generic
+ *<ul>
+ *<li>Events from CastorGUI are now forwarded to the user.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_imp Importers
+ *<ul>
+ *<li>Removed almost every importer plugin, keeping only Assimp, OBJ, and PLY importers.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_gl RenderSystems
+ *<ul>
+ *<li>Updated to support the features provided by Castor3D.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_pos PostEffects
+ *<ul>
+ *<li>Created SMAA post effect.</li>
+ *<li>Created Kawase Light Streaks post effect.</li>
+ *<li>Created Film Grain post effect.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_tec Techniques
+ *<ul>
+ *<li>Technique plugins have been completely removed.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_10_0_ton Tone mappings
+ *<ul>
+ *<li>Created Uncharted 2 tone mappings.</li>
+ *</ul>
+ *
  *
  *\section version_0_9_0 Version 0.9.0
  *\subsection feat_0_9_0 Fonctionnalités

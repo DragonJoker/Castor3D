@@ -51,12 +51,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO content.
-		 *\param[in]	config		The SSAO configuration.
-		 *\param[in]	viewport	The viewport.
+		 *\param[in]	config	The SSAO configuration.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Met à jour le contenu de l'UBO.
-		 *\param[in]	config		La configuratio du SSAO.
-		 *\param[in]	viewport	Le viewport.
+		 *\param[in]	config	La configuratio du SSAO.
+		 *\param[in]	camera	La caméra de rendu.
 		 */
 		C3D_API void update( SsaoConfig const & config
 			, Camera const & camera );

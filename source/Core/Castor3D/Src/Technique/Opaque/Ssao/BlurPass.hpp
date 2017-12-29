@@ -26,12 +26,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	config			The SSAO configuration.
+		 *\param[in]	matrixUbo		The matrices UBO.
+		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
+		 *\param[in]	axis			The axis to which the blur applies ({0, 1} for vertical, {1, 0} for horizontal).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	config			La configuration du SSAO.
+		 *\param[in]	matrixUbo		L'UBO des matrices.
+		 *\param[in]	ssaoConfigUbo	L'UBO de configuration du SSAO.
+		 *\param[in]	axis			L'axe dans lequel le flou s'applique ({0, 1} pour vertical, {1, 0} pour horizontal).
 		 */
 		SsaoBlurPass( Engine & engine
 			, castor::Size const & size
@@ -50,11 +58,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Blurs given texture.
 		 *\param[in]	input	The texture to blur.
-		 *\param[in]	axis	Receives rendering info.
+		 *\param[in]	normals	The normals buffer.
 		 *\~french
 		 *\brief		Applique le flou sur la texture donnée.
 		 *\param[in]	input	La texture à flouter.
-		 *\param[in]	axis	Reçoit les informations de rendu.
+		 *\param[in]	normals	Le tampon de normales.
 		 */
 		void blur( TextureUnit const & input
 			, TextureUnit const & normals );

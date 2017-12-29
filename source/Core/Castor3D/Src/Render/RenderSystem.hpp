@@ -366,12 +366,14 @@ namespace castor3d
 		 *\param[in]	type		The texture type.
 		 *\param[in]	cpuAccess	The required CPU access (combination of AccessType).
 		 *\param[in]	gpuAccess	The required GPU access (combination of AccessType).
+		 *\param[in]	mipmapCount	The wanted mipmaps count.
 		 *\return		The created texture, depending of current API.
 		 *\~french
 		 *\brief		Crée une texture.
 		 *\param[in]	type		Le type de texture.
 		 *\param[in]	cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	mipmapCount	Le nombre de mipmaps voulus.
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
 		C3D_API virtual TextureLayoutSPtr createTexture( TextureType type

@@ -27,14 +27,14 @@ namespace castor3d
 		 *\param[in]	name		This pass name.
 		 *\param[in]	scene		The rendered scene.
 		 *\param[in]	camera		The camera for this pass.
-		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	ssaoConfig	The SSAO configuration.
 		 *\param[in]	depthBuffer	The target depth buffer.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
 		 *\param[in]	name		Le nom de cette passe.
 		 *\param[in]	scene		La scène rendue.
 		 *\param[in]	camera		La caméra pour cette passe.
-		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	ssaoConfig	La configuration du SSAO.
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
 		DepthPass( castor::String const & name

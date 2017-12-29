@@ -26,12 +26,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render area dimensions.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	matrixUbo		The matrices UBO.
+		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		Les dimensions de la zone de rendu.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	matrixUbo		L'UBO des matrices.
+		 *\param[in]	ssaoConfigUbo	L'UBO de configuration SSAO.
 		 */
 		LineariseDepthPass( Engine & engine
 			, castor::Size const & size

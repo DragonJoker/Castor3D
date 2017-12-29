@@ -23,11 +23,11 @@ namespace castor3d
 	{
 		/*!
 		\author		Sylvain DOREMUS
-		\date		14/02/2010
+		\date		05/06/2017
 		\~english
-		\brief		RenderTarget loader
+		\brief		SsaoConfig loader
 		\~english
-		\brief		Loader de RenderTarget
+		\brief		Loader de SsaoConfig
 		*/
 		class TextWriter
 			: public castor::TextWriter< SsaoConfig >
@@ -36,23 +36,23 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor
-			 *\param[in]	p_tabs	The tabulations to put at the beginning of each line
+			 *\param[in]	tabs	The tabulations to put at the beginning of each line.
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
+			 *\param[in]	tabs	Les tabulations à mettre à chaque début de ligne.
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a SSAO configuration into a text file
-			 *\param[in]	p_target	the render target
-			 *\param[in]	p_file		the file
+			 *\param[in]	config	The object to write.
+			 *\param[in]	file	The output file.
 			 *\~french
 			 *\brief		Ecrit une configuration SSAO dans un fichier texte
-			 *\param[in]	p_target	La cible de rendu
-			 *\param[in]	p_file		Le fichier
+			 *\param[in]	config	L'objet à écrire.
+			 *\param[in]	file	Le fichier de sortie.
 			 */
-			C3D_API bool operator()( castor3d::SsaoConfig const & p_target, castor::TextFile & p_file )override;
+			C3D_API bool operator()( castor3d::SsaoConfig const & config, castor::TextFile & file )override;
 		};
 
 		//!\~english	The effect activation status.

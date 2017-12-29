@@ -34,13 +34,11 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	config		The SSAO configuration.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	config		La configuration du SSAO.
-		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
 		 */
 		SsaoPass( Engine & engine
 			, castor::Size const & size
@@ -55,12 +53,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	gp		The geometry pass result.
-		 *\param[in]	info	Receives rendering info.
+		 *\param[in]	gpResult	The geometry pass result.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	info		Receives rendering info.
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image donné.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	info	Reçoit les informations de rendu.
+		 *\param[in]	gpResult	Le résultat de la geometry pass.
+		 *\param[in]	camera		La caméra de rendu.
+		 *\param[in]	info		Reçoit les informations de rendu.
 		 */
 		void render( GeometryPassResult const & gpResult
 			, Camera const & camera

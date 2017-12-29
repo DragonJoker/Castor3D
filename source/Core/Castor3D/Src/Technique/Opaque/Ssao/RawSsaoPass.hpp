@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	engine			The engine.
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	config			The SSAO configuration.
-		 *\param[in]	matrixUbo		The Matrix UBO.
+		 *\param[in]	matrixUbo		The matrices UBO.
 		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
 		 *\~french
 		 *\brief		Constructeur.
@@ -57,12 +57,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	linearisedDepthBuffer	The geometry pass result.
-		 *\param[in]	viewport				Receives rendering info.
+		 *\param[in]	linearisedDepthBuffer	The linearised depth buffer.
+		 *\param[in]	normals					The normals buffer.
 		 *\~french
-		 *\brief		Dessine la passe SSAO sur le tampon d'image donné.
-		 *\param[in]	linearisedDepthBuffer	Le résultat de la geometry pass.
-		 *\param[in]	viewport				Reçoit les informations de rendu.
+		 *\brief		Dessine la passe SSAO sur le tampon d'image actif.
+		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
+		 *\param[in]	normals					Le tampon de normales.
 		 */
 		void compute( TextureUnit const & linearisedDepthBuffer
 			, TextureUnit const & normals );
