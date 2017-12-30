@@ -6,6 +6,12 @@ medium, provided this notice is preserved.
 
 Changes between version 0.10.0 and 0.9.0
 
+  BUGS FIXED
+  * Castor3D
+  *   Fixed bounding boxes for animated meshes and skinned meshes.
+  *   Repaired an reenabled frustum culling.
+  *   Fixed alpha rejection.
+
   FEATURES
   * CastorUtils
   *   Renamed namespace Castor to castor.
@@ -20,22 +26,19 @@ Changes between version 0.10.0 and 0.9.0
   *
   * Castor3D
   *   Renamed namespace Castor3D to castor3d.
-  *   Fixed bounding boxes for animated meshes and skinned meshes.
-  *   Repaired an reenabled frustum culling.
-  *   Fixed alpha rejection.
   *   Emissive in a material is now stored on a single floating point (emissive maps still hold a colour though).
   *   Implemented Physical Based Rendering, using both metallic/roughness and specular/glossiness workflows.
   *   RenderPipeline now also holds the shader program.
-  *   Implemented Screen Space Subsurface Scattering.
+  *   Implemented Screen Space Subsurface Scattering (without backlit transmittance, though).
   *   The light pass result is now stored in two render targets: diffuse and specular.
   *   Vertex buffers now use a buddy allocated pool.
   *   Shadow mapping now uses variance shadow maps.
-  *   Transparent meshes are now rendered using Weighted Blended rendering.
+  *   Transparent meshes are now rendered using Weighted Blended OIT rendering.
   *   Screen Space Ambiant Occlusion has been improved, using Scalable Ambiant Obscurance implementation.
   *   Parallax Occlusion mapping is implemented.
   *   Reflection and refraction mapping have been implemented.
-  *   Deferred rendering has been fully integrated, for opaque objects rendering.
-  *   Created components for submeshes, to move functionalities out of Submesh.
+  *   Deferred rendering has been fully integrated to the engine, for opaque objects rendering.
+  *   Created components for submeshes, to move functionalities out of Submesh, and make it more flexible.
   *   Rendering now uses a depth prepass.
   *   Created ColourSkybox, to handle background colour and skyboxes in the same way.
   *   Created ShaderBuffer class, to be able to handle SSBOs or TBOs in a similar way, choosing the most appropriate one, depending on running machine.
@@ -61,7 +64,7 @@ Changes between version 0.10.0 and 0.9.0
   *   Technique plugins have been completely removed.
   *
   * Tone mappings
-  *   Created Uncharted 2 tone mappings.
+  *   Created Uncharted 2 tone mapping plugin.
 
 
 Changes between version 0.9.0 and 0.8.0
