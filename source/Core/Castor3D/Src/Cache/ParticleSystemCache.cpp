@@ -1,8 +1,8 @@
 #include "ParticleSystemCache.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String ObjectCacheTraits< ParticleSystem, String >::Name = cuT( "ParticleSystem" );
 }

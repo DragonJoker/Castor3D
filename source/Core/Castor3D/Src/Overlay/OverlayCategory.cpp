@@ -1,4 +1,4 @@
-#include "OverlayCategory.hpp"
+﻿#include "OverlayCategory.hpp"
 
 #include "Engine.hpp"
 
@@ -8,58 +8,58 @@
 
 #include "Material/Material.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	OverlayCategory::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< OverlayCategory >{ p_tabs }
+		: castor::TextWriter< OverlayCategory >{ p_tabs }
 	{
 	}
 
 	bool OverlayCategory::TextWriter::operator()( OverlayCategory const & p_overlay, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "\tposition " ) ) > 0
-						&& Point2d::TextWriter{ String{} }( p_overlay.GetPosition(), p_file )
-						&& p_file.WriteText( cuT( "\n" ) ) > 0;
-		Castor::TextWriter< OverlayCategory >::CheckError( l_return, "OverlayCategory position" );
+		bool result = p_file.writeText( m_tabs + cuT( "\tposition " ) ) > 0
+						&& Point2d::TextWriter{ String{} }( p_overlay.getPosition(), p_file )
+						&& p_file.writeText( cuT( "\n" ) ) > 0;
+		castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory position" );
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tsize " ) ) > 0
-					   && Point2d::TextWriter{ String{} }( p_overlay.GetSize(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< OverlayCategory >::CheckError( l_return, "OverlayCategory size" );
+			result = p_file.writeText( m_tabs + cuT( "\tsize " ) ) > 0
+					   && Point2d::TextWriter{ String{} }( p_overlay.getSize(), p_file )
+					   && p_file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory size" );
 		}
 
-		if ( l_return && p_overlay.GetMaterial() )
+		if ( result && p_overlay.getMaterial() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_overlay.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< OverlayCategory >::CheckError( l_return, "OverlayCategory material" );
+			result = p_file.writeText( m_tabs + cuT( "\tmaterial \"" ) + p_overlay.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory material" );
 		}
 
-		for ( auto l_overlay : p_overlay.GetOverlay() )
+		for ( auto overlay : p_overlay.getOverlay() )
 		{
-			switch ( l_overlay->GetType() )
+			switch ( overlay->getType() )
 			{
 			case OverlayType::ePanel:
-				l_return &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetPanelOverlay(), p_file );
+				result &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getPanelOverlay(), p_file );
 				break;
 
 			case OverlayType::eBorderPanel:
-				l_return &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetBorderPanelOverlay(), p_file );
+				result &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getBorderPanelOverlay(), p_file );
 				break;
 
 			case OverlayType::eText:
-				l_return &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetTextOverlay(), p_file );
+				result &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getTextOverlay(), p_file );
 				break;
 
 			default:
-				l_return = false;
+				result = false;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -73,45 +73,48 @@ namespace Castor3D
 	{
 	}
 
-	void OverlayCategory::Update()
+	void OverlayCategory::update()
 	{
-		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
-
-		if ( l_renderer )
+		if ( getOverlay().isVisible() )
 		{
-			if ( IsPositionChanged() || l_renderer->IsSizeChanged() )
-			{
-				DoUpdatePosition();
-			}
+			OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
-			if ( IsSizeChanged() || l_renderer->IsSizeChanged() )
+			if ( renderer )
 			{
-				DoUpdateSize();
-			}
+				if ( isPositionChanged() || renderer->isSizeChanged() )
+				{
+					doUpdatePosition();
+				}
 
-			if ( IsChanged() || IsSizeChanged() || l_renderer->IsSizeChanged() )
-			{
-				DoUpdate();
-				DoUpdateBuffer( l_renderer->GetSize() );
-			}
+				if ( isSizeChanged() || renderer->isSizeChanged() )
+				{
+					doUpdateSize();
+				}
 
-			m_positionChanged = false;
-			m_sizeChanged = false;
+				if ( isChanged() || isSizeChanged() || renderer->isSizeChanged() )
+				{
+					doUpdate();
+					doUpdateBuffer( renderer->getSize() );
+				}
+
+				m_positionChanged = false;
+				m_sizeChanged = false;
+			}
 		}
 	}
 
-	void OverlayCategory::Render()
+	void OverlayCategory::render()
 	{
-		DoRender( GetOverlay().GetEngine()->GetOverlayCache().GetRenderer() );
+		doRender( getOverlay().getEngine()->getOverlayCache().getRenderer() );
 	}
 
-	void OverlayCategory::SetMaterial( MaterialSPtr p_material )
+	void OverlayCategory::setMaterial( MaterialSPtr p_material )
 	{
 		m_pMaterial = p_material;
 
 		if ( p_material )
 		{
-			m_strMatName = p_material->GetName();
+			m_strMatName = p_material->getName();
 		}
 		else
 		{
@@ -119,153 +122,179 @@ namespace Castor3D
 		}
 	}
 
-	String const & OverlayCategory::GetOverlayName()const
+	String const & OverlayCategory::getOverlayName()const
 	{
-		return m_pOverlay->GetName();
+		return m_pOverlay->getName();
 	}
 
-	Position OverlayCategory::GetAbsolutePosition( Castor::Size const & p_size )const
+	Position OverlayCategory::getAbsolutePosition( castor::Size const & p_size )const
 	{
-		Point2d l_position = GetAbsolutePosition();
-		return Position( int32_t( p_size.width() * l_position[0] ), int32_t( p_size.height() * l_position[1] ) );
+		// TODO: Bug here
+		Point2d position = getAbsolutePosition();
+		return Position{ int32_t( p_size.getWidth() * position[0] )
+			, int32_t( p_size.getHeight() * position[1] ) };
 	}
 
-	Size OverlayCategory::GetAbsoluteSize( Castor::Size const & p_size )const
+	Size OverlayCategory::getAbsoluteSize( castor::Size const & p_size )const
 	{
-		Point2d l_size = GetAbsoluteSize();
-		return Size( uint32_t( p_size.width() * l_size[0] ), uint32_t( p_size.height() * l_size[1] ) );
+		Point2d size = getAbsoluteSize();
+		return Size{ uint32_t( p_size.getWidth() * size[0] )
+			, uint32_t( p_size.getHeight() * size[1] ) };
 	}
 
-	Point2d OverlayCategory::GetAbsolutePosition()const
+	Point2f OverlayCategory::getRenderRatio( Size const & size )const
 	{
-		Point2d l_position = GetPosition();
-		OverlaySPtr l_parent = GetOverlay().GetParent();
+		Point2f result{ 1, 1 };
 
-		if ( l_parent )
+		if ( m_computeSize.getWidth() != 0 )
 		{
-			l_position *= l_parent->GetAbsoluteSize();
-			l_position += l_parent->GetAbsolutePosition();
+			result[0] = m_computeSize.getWidth() / float( size.getWidth() );
 		}
 
-		return l_position;
-	}
-
-	Point2d OverlayCategory::GetAbsoluteSize()const
-	{
-		Point2d l_size = GetSize();
-		OverlaySPtr l_parent = GetOverlay().GetParent();
-
-		if ( l_parent )
+		if ( m_computeSize.getHeight() != 0 )
 		{
-			l_size *= l_parent->GetAbsoluteSize();
+			result[1] = m_computeSize.getHeight() / float( size.getHeight() );
 		}
 
-		return l_size;
+		return result;
 	}
 
-	bool OverlayCategory::IsSizeChanged()const
+	Point2d OverlayCategory::getAbsolutePosition()const
 	{
-		bool l_changed = m_sizeChanged;
-		OverlaySPtr l_parent = GetOverlay().GetParent();
+		Point2d position = getPosition();
+		OverlaySPtr parent = getOverlay().getParent();
 
-		if ( !l_changed && l_parent )
+		if ( parent )
 		{
-			l_changed = l_parent->IsSizeChanged();
+			position *= parent->getAbsoluteSize();
+			position += parent->getAbsolutePosition();
 		}
 
-		return l_changed;
+		return position;
 	}
 
-	bool OverlayCategory::IsPositionChanged()const
+	Point2d OverlayCategory::getAbsoluteSize()const
 	{
-		bool l_changed = m_positionChanged;
-		OverlaySPtr l_parent = GetOverlay().GetParent();
+		Point2d size = getSize();
+		OverlaySPtr parent = getOverlay().getParent();
 
-		if ( !l_changed && l_parent )
+		if ( parent )
 		{
-			l_changed = l_parent->IsPositionChanged();
+			size *= parent->getAbsoluteSize();
 		}
 
-		return l_changed;
+		return size;
 	}
 
-	Point2d OverlayCategory::DoGetTotalSize()const
+	bool OverlayCategory::isSizeChanged()const
 	{
-		OverlaySPtr l_parent = GetOverlay().GetParent();
-		Size l_renderSize = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer()->GetSize();
-		Point2d l_totalSize( l_renderSize.width(), l_renderSize.height() );
+		bool changed = m_sizeChanged;
+		OverlaySPtr parent = getOverlay().getParent();
 
-		if ( l_parent )
+		if ( !changed && parent )
 		{
-			Point2d l_parentSize = l_parent->GetAbsoluteSize();
-			l_totalSize[0] = l_parentSize[0] * l_totalSize[0];
-			l_totalSize[1] = l_parentSize[1] * l_totalSize[1];
+			changed = parent->isSizeChanged();
 		}
 
-		return l_totalSize;
+		return changed;
 	}
 
-	void OverlayCategory::DoUpdatePosition()
+	bool OverlayCategory::isPositionChanged()const
 	{
-		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
+		bool changed = m_positionChanged;
+		OverlaySPtr parent = getOverlay().getParent();
 
-		if ( l_renderer )
+		if ( !changed && parent )
 		{
-			if ( IsPositionChanged() || l_renderer->IsSizeChanged() )
+			changed = parent->isPositionChanged();
+		}
+
+		return changed;
+	}
+
+	Point2d OverlayCategory::doGetTotalSize()const
+	{
+		OverlaySPtr parent = getOverlay().getParent();
+		Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
+		Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
+
+		if ( parent )
+		{
+			Point2d parentSize = parent->getAbsoluteSize();
+			totalSize[0] = parentSize[0] * totalSize[0];
+			totalSize[1] = parentSize[1] * totalSize[1];
+		}
+
+		return totalSize;
+	}
+
+	void OverlayCategory::doUpdatePosition()
+	{
+		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
+
+		if ( renderer )
+		{
+			if ( isPositionChanged() || renderer->isSizeChanged() )
 			{
-				Point2d l_totalSize = DoGetTotalSize();
-				bool l_changed = m_positionChanged;
-				Position l_pos = GetPixelPosition();
-				Point2d l_ptPos = GetPosition();
+				Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
+				Point2d totalSize = doGetTotalSize();
+				bool changed = m_positionChanged;
+				Position pos = getPixelPosition();
+				Point2d ptPos = getPosition();
 
-				if ( l_pos.x() )
+				if ( pos.x() )
 				{
-					l_changed = !Castor::Policy< double >::equals( l_ptPos[0], l_pos.x() / l_totalSize[0] );
-					l_ptPos[0] = l_pos.x() / l_totalSize[0];
+					changed |= ptPos[0] != double( pos.x() ) / totalSize[0];
+					ptPos[0] = pos.x() / totalSize[0];
+					m_computeSize[0] = uint32_t( renderSize[0] );
 				}
 
-				if ( l_pos.y() )
+				if ( pos.y() )
 				{
-					l_changed = !Castor::Policy< double >::equals( l_ptPos[1], l_pos.y() / l_totalSize[1] );
-					l_ptPos[1] = l_pos.y() / l_totalSize[1];
+					changed |= ptPos[1] != double( pos.y() ) / totalSize[1];
+					ptPos[1] = pos.y() / totalSize[1];
+					m_computeSize[1] = uint32_t( renderSize[1] );
 				}
 
-				if ( l_changed )
+				if ( changed )
 				{
-					SetPosition( l_ptPos );
+					setPosition( ptPos );
 				}
 			}
 		}
 	}
 
-	void OverlayCategory::DoUpdateSize()
+	void OverlayCategory::doUpdateSize()
 	{
-		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
+		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
-		if ( l_renderer )
+		if ( renderer )
 		{
-			if ( IsSizeChanged() || l_renderer->IsSizeChanged() )
+			if ( isSizeChanged() || renderer->isSizeChanged() )
 			{
-				Point2d l_totalSize = DoGetTotalSize();
-				bool l_changed = m_sizeChanged;
-				Size l_size = GetPixelSize();
-				Point2d l_ptSize = GetSize();
+				Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
+				Point2d totalSize = doGetTotalSize();
+				bool changed = m_sizeChanged;
+				Size size = getPixelSize();
+				Point2d ptSize = getSize();
 
-				if ( l_size.width() )
+				if ( size.getWidth() )
 				{
-					l_changed = !Castor::Policy< double >::equals( l_ptSize[0], l_size.width() / l_totalSize[0] );
-					l_ptSize[0] = l_size.width() / l_totalSize[0];
+					changed |= ptSize[0] != double( size.getWidth() ) / totalSize[0];
+					ptSize[0] = size.getWidth() / totalSize[0];
+					m_computeSize[0] = uint32_t( renderSize[0] );
 				}
 
-				if ( l_size.height() )
+				if ( size.getHeight() )
 				{
-					l_changed = !Castor::Policy< double >::equals( l_ptSize[1], l_size.height() / l_totalSize[1] );
-					l_ptSize[1] = l_size.height() / l_totalSize[1];
+					changed |=  ptSize[1] != double( size.getHeight() ) / totalSize[1];
+					ptSize[1] = size.getHeight() / totalSize[1];
+					m_computeSize[1] = uint32_t( renderSize[1] );
 				}
 
-				if ( l_changed )
+				if ( changed )
 				{
-					SetSize( l_ptSize );
+					setSize( ptSize );
 				}
 			}
 		}

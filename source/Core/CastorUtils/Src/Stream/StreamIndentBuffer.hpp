@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_STREAM_INDENT_BUFFER_H___
 #define ___CASTOR_STREAM_INDENT_BUFFER_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <streambuf>
 
-namespace Castor
+namespace castor
 {
 	namespace format
 	{
@@ -41,7 +22,7 @@ namespace Castor
 		\brief		Tampon de flux utilisé pour indenter les lignes
 		*/
 		template < typename char_type, char_type fill_char = ' ', typename traits = std::char_traits< char_type > >
-		struct basic_indent_buffer
+		struct BasicIndentBuffer
 			: public std::basic_streambuf< char_type, traits >
 		{
 		public:
@@ -58,7 +39,7 @@ namespace Castor
 			 *\brief		Constructeur par copie
 			 *\remarks		Non implémenté afin de le désactiver
 			 */
-			basic_indent_buffer( const basic_indent_buffer< char_type, fill_char, traits > & ) = delete;
+			BasicIndentBuffer( const BasicIndentBuffer< char_type, fill_char, traits > & ) = delete;
 
 			/**
 			 *\~english
@@ -68,7 +49,7 @@ namespace Castor
 			 *\brief		Opérateur d'affectation par copie
 			 *\remarks		Non implémenté afin de le désactiver
 			 */
-			basic_indent_buffer< char_type, fill_char, traits > & operator =( const basic_indent_buffer< char_type, fill_char, traits > & ) = delete;
+			BasicIndentBuffer< char_type, fill_char, traits > & operator =( const BasicIndentBuffer< char_type, fill_char, traits > & ) = delete;
 
 		public:
 			/**
@@ -77,7 +58,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			basic_indent_buffer( std::basic_streambuf< char_type, traits > * sbuf )
+			explicit BasicIndentBuffer( std::basic_streambuf< char_type, traits > * sbuf )
 				: m_sbuf( sbuf )
 				, m_count( 0 )
 				, m_set( true )
@@ -90,7 +71,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Destructeur
 			 */
-			~basic_indent_buffer()
+			~BasicIndentBuffer()
 			{
 			}
 
@@ -169,11 +150,11 @@ namespace Castor
 			bool m_set;
 		};
 
-		typedef basic_indent_buffer< char > spc_indent_buffer;
-		typedef basic_indent_buffer< wchar_t > wspc_indent_buffer;
+		typedef BasicIndentBuffer< char > SpaceIndentBuffer;
+		typedef BasicIndentBuffer< wchar_t > WSpaceIndentBuffer;
 
-		typedef basic_indent_buffer< char, '\t' > tab_indent_buffer;
-		typedef basic_indent_buffer< wchar_t, L'\t' > wtab_indent_buffer;
+		typedef BasicIndentBuffer< char, '\t' > TabIndentBuffer;
+		typedef BasicIndentBuffer< wchar_t, L'\t' > WTabIndentBuffer;
 	}
 }
 

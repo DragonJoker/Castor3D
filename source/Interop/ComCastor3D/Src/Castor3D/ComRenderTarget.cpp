@@ -2,7 +2,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The render target must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The render target must be initialised" );
 
 	CRenderTarget::CRenderTarget()
 	{
@@ -18,18 +18,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Initialise( index );
+			m_internal->initialise( index );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IRenderTarget,				// This is the GUID of component throwing error
+					 IID_IRenderTarget,				// This is the GUID of PixelComponents throwing error
 					 cuT( "File" ),					// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -41,18 +41,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Cleanup();
+			m_internal->cleanup();
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IRenderTarget,				// This is the GUID of component throwing error
+					 IID_IRenderTarget,				// This is the GUID of PixelComponents throwing error
 					 cuT( "File" ),					// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

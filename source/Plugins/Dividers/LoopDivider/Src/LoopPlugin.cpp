@@ -1,9 +1,9 @@
-#include "LoopDivider.hpp"
+﻿#include "LoopDivider.hpp"
 
 #include <Engine.hpp>
 #include <Log/Logger.hpp>
 
-using namespace Castor;
+using namespace castor;
 using namespace Loop;
 
 #ifndef CASTOR_PLATFORM_WINDOWS
@@ -16,27 +16,30 @@ using namespace Loop;
 #	endif
 #endif
 
-C3D_Loop_API void GetRequiredVersion( Castor3D::Version & p_version )
+extern "C"
 {
-	p_version = Castor3D::Version();
-}
+	C3D_Loop_API void getRequiredVersion( castor3d::Version * p_version )
+	{
+		*p_version = castor3d::Version();
+	}
 
-C3D_Loop_API Castor3D::PluginType GetType()
-{
-	return Castor3D::PluginType::eDivider;
-}
+	C3D_Loop_API void getType( castor3d::PluginType * p_type )
+	{
+		*p_type = castor3d::PluginType::eDivider;
+	}
 
-C3D_Loop_API Castor::String GetName()
-{
-	return Subdivider::Name;
-}
+	C3D_Loop_API void getName( char const ** p_name )
+	{
+		*p_name = Subdivider::Name.c_str();
+	}
 
-C3D_Loop_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->GetSubdividerFactory().Register( Subdivider::Type, &Subdivider::Create );
-}
+	C3D_Loop_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	{
+		engine->getSubdividerFactory().registerType( Subdivider::Type, &Subdivider::create );
+	}
 
-C3D_Loop_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->GetSubdividerFactory().Unregister( Subdivider::Type );
+	C3D_Loop_API void OnUnload( castor3d::Engine * engine )
+	{
+		engine->getSubdividerFactory().unregisterType( Subdivider::Type );
+	}
 }

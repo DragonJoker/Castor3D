@@ -8,51 +8,107 @@
 
 #include <Texture/TextureImage.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
 	GlDirectTextureStorageTraits::GlDirectTextureStorageTraits( TextureStorage & p_storage )
 	{
-		auto & l_storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
-		auto l_size = p_storage.GetOwner()->GetDimensions();
-		OpenGl::PixelFmt l_format = l_storage.GetOpenGl().Get( p_storage.GetOwner()->GetPixelFormat() );
+		auto & storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
+		auto size = p_storage.getOwner()->getDimensions();
+		OpenGl::PixelFmt format = storage.getOpenGl().get( p_storage.getOwner()->getPixelFormat() );
 
-		switch ( l_storage.GetGlType() )
+		if ( storage.getGlType() == GlTextureStorageType::e2DArray
+			|| storage.getGlType() == GlTextureStorageType::e3D
+			|| storage.getGlType() == GlTextureStorageType::eCubeMapArray )
 		{
-		case GlTextureStorageType::e1D:
-			l_storage.GetOpenGl().TexImage1D( l_storage.GetGlType(), 0, l_format.Internal, l_size.width(), 0, l_format.Format, l_format.Type, nullptr );
-			break;
+			switch ( storage.getGlType() )
+			{
+			case GlTextureStorageType::e2DArray:
+				storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth(), 0, format.Format, format.Type, nullptr );
+				GlDebug_Set( m_allocatedSize, size.getWidth() * size.getHeight() * p_storage.getOwner()->getDepth() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
+				break;
 
-		case GlTextureStorageType::e2D:
-			l_storage.GetOpenGl().TexImage2D( l_storage.GetGlType(), 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
-			break;
+			case GlTextureStorageType::e3D:
+				storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth(), 0, format.Format, format.Type, nullptr );
+				GlDebug_Set( m_allocatedSize, size.getWidth() * size.getHeight() * p_storage.getOwner()->getDepth() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
+				break;
 
-		case GlTextureStorageType::e2DMS:
-			l_storage.GetOpenGl().TexImage2DMultisample( l_storage.GetGlType(), 0, l_format.Internal, l_size, true );
-			break;
+			case GlTextureStorageType::eCubeMapArray:
+				storage.getOpenGl().TexImage3D( storage.getGlType(), 0, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth() * 6, 0, format.Format, format.Type, nullptr );
+				GlDebug_Set( m_allocatedSize, size.getWidth() * size.getHeight() * p_storage.getOwner()->getDepth() * 6u * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
+				break;
+			}
+		}
+		else
+		{
+			if ( p_storage.getOwner()->getMipmapCount() == ~( 0u ) )
+			{
+				switch ( storage.getGlType() )
+				{
+				case GlTextureStorageType::e1D:
+					storage.getOpenGl().TexImage1D( storage.getGlType(), 0, format.Internal, size.getWidth(), 0, format.Format, format.Type, nullptr );
+					GlDebug_Set( m_allocatedSize, size.getWidth() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
+					break;
 
-		case GlTextureStorageType::e2DArray:
-			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 0, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth(), 0, l_format.Format, l_format.Type, nullptr );
-			break;
+				case GlTextureStorageType::e2D:
+					storage.getOpenGl().TexImage2D( storage.getGlType(), 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
+					GlDebug_Set( m_allocatedSize, size.getWidth() * size.getHeight() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
+					break;
 
-		case GlTextureStorageType::e3D:
-			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 0, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth(), 0, l_format.Format, l_format.Type, nullptr );
-			break;
+				case GlTextureStorageType::e2DMS:
+					storage.getOpenGl().TexImage2DMultisample( storage.getGlType(), 0, format.Internal, size, true );
+					GlDebug_Set( m_allocatedSize, size.getWidth() * size.getHeight() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
+					break;
 
-		case GlTextureStorageType::eCubeMap:
-			l_storage.GetOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosX, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
-			l_storage.GetOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegX, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
-			l_storage.GetOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosY, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
-			l_storage.GetOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegY, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
-			l_storage.GetOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosZ, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
-			l_storage.GetOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegZ, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
-			break;
+				case GlTextureStorageType::eCubeMap:
+					storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosX, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
+					storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegX, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
+					storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosY, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
+					storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegY, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
+					storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFacePosZ, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
+					storage.getOpenGl().TexImage2D( GlTextureStorageType::eCubeMapFaceNegZ, 0, format.Internal, size, 0, format.Format, format.Type, nullptr );
+					GlDebug_Set( m_allocatedSize, size.getWidth() * size.getHeight() * 6u * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
+					break;
+				}
+			}
+			else
+			{
+				auto levels = p_storage.getOwner()->getMipmapCount();
 
-		case GlTextureStorageType::eCubeMapArray:
-			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 0, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() * 6, 0, l_format.Format, l_format.Type, nullptr );
-			break;
+				switch ( storage.getGlType() )
+				{
+				case GlTextureStorageType::e1D:
+					storage.getOpenGl().TexStorage1D( storage.getGlType(), levels, format.Internal, size.getWidth() );
+					break;
+
+				case GlTextureStorageType::e2D:
+					storage.getOpenGl().TexStorage2D( storage.getGlType(), levels, format.Internal, size.getWidth(), size.getHeight() );
+					break;
+
+				case GlTextureStorageType::eCubeMap:
+					storage.getOpenGl().TexStorage2D( storage.getGlType(), levels, format.Internal, size.getWidth(), size.getHeight() );
+					break;
+
+				case GlTextureStorageType::e2DArray:
+					storage.getOpenGl().TexStorage3D( storage.getGlType(), levels, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth() );
+					break;
+
+				case GlTextureStorageType::eCubeMapArray:
+					storage.getOpenGl().TexStorage3D( storage.getGlType(), levels, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth() );
+					break;
+
+				case GlTextureStorageType::e3D:
+					storage.getOpenGl().TexStorage3D( storage.getGlType(), levels, format.Internal, size.getWidth(), size.getHeight(), p_storage.getOwner()->getDepth() );
+					break;
+
+				default:
+					FAILURE( "Storage type unsupported for immutable storages" );
+					CASTOR_EXCEPTION( cuT( "Storage type unsupported for immutable storages" ) );
+					break;
+				}
+			}
 		}
 	}
 
@@ -60,78 +116,85 @@ namespace GlRender
 	{
 	}
 
-	void GlDirectTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlDirectTextureStorageTraits::bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 	}
 
-	void GlDirectTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlDirectTextureStorageTraits::unbind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 	}
 
-	uint8_t * GlDirectTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
+	uint8_t * GlDirectTextureStorageTraits::lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
-		uint8_t * l_return = nullptr;
-		auto l_buffer = p_storage.GetOwner()->GetImage( p_index ).GetBuffer();
+		uint8_t * result = nullptr;
+		auto buffer = p_storage.getOwner()->getImage( p_index ).getBuffer();
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
-			 && CheckFlag( p_lock, AccessType::eRead ) )
+		if ( checkFlag( p_storage.getCPUAccess(), AccessType::eRead )
+			 && checkFlag( p_lock, AccessType::eRead ) )
 		{
-			auto & l_storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
-			OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( l_buffer->format() );
-			l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
+			auto & storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
+			OpenGl::PixelFmt glPixelFmt = storage.getOpenGl().get( buffer->format() );
+			storage.getOpenGl().GetTexImage( storage.getGlType(), 0, glPixelFmt.Format, glPixelFmt.Type, buffer->ptr() );
 		}
 
-		if ( CheckFlag( p_lock, AccessType::eRead )
-			 || CheckFlag( p_lock, AccessType::eWrite ) )
+		if ( checkFlag( p_lock, AccessType::eRead )
+			 || checkFlag( p_lock, AccessType::eWrite ) )
 		{
-			l_return = l_buffer->ptr();
+			result = buffer->ptr();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void GlDirectTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )
+	void GlDirectTextureStorageTraits::unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )
 	{
-		if ( p_modified && CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
+		if ( p_modified && checkFlag( p_storage.getCPUAccess(), AccessType::eWrite ) )
 		{
-			Fill( p_storage, p_storage.GetOwner()->GetImage( p_index ) );
+			fill( p_storage, p_storage.getOwner()->getImage( p_index ) );
 		}
 	}
 
-	void GlDirectTextureStorageTraits::Fill( TextureStorage & p_storage, TextureImage const & p_image )
+	void GlDirectTextureStorageTraits::fill( TextureStorage & p_storage, TextureImage const & p_image )
 	{
-		auto & l_storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
-		auto l_size = p_storage.GetOwner()->GetDimensions();
-		OpenGl::PixelFmt l_format = l_storage.GetOpenGl().Get( p_storage.GetOwner()->GetPixelFormat() );
+		auto & storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
+		auto size = p_storage.getOwner()->getDimensions();
+		OpenGl::PixelFmt format = storage.getOpenGl().get( p_storage.getOwner()->getPixelFormat() );
 
-		switch ( l_storage.GetGlType() )
+		switch ( storage.getGlType() )
 		{
 		case GlTextureStorageType::e1D:
-			l_storage.GetOpenGl().TexSubImage1D( l_storage.GetGlType(), 0, 0, l_size.width(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.getOpenGl().TexSubImage1D( storage.getGlType(), 0, 0, size.getWidth(), format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			GlDebug_Check( m_allocatedSize, size.getWidth() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
 			break;
 
 		case GlTextureStorageType::e2D:
-			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.getOpenGl().TexSubImage2D( storage.getGlType(), 0, 0, 0, size.getWidth(), size.getHeight(), format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			GlDebug_Check( m_allocatedSize, size.getWidth() * size.getHeight() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
 			break;
 
 		case GlTextureStorageType::e2DMS:
-			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.getOpenGl().TexSubImage2D( storage.getGlType(), 0, 0, 0, size.getWidth(), size.getHeight(), format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			GlDebug_Check( m_allocatedSize, size.getWidth() * size.getHeight() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
 			break;
 
 		case GlTextureStorageType::e2DArray:
-			l_storage.GetOpenGl().TexSubImage3D( l_storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.getOpenGl().TexSubImage3D( storage.getGlType(), 0, 0, 0, p_image.getIndex(), size.getWidth(), size.getHeight(), 1, format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			GlDebug_Check( m_allocatedSize, size.getWidth() * size.getHeight() * p_storage.getOwner()->getDepth() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
 			break;
 
 		case GlTextureStorageType::e3D:
-			l_storage.GetOpenGl().TexSubImage3D( l_storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.getOpenGl().TexSubImage3D( storage.getGlType(), 0, 0, 0, p_image.getIndex(), size.getWidth(), size.getHeight(), 1, format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			GlDebug_Check( m_allocatedSize, size.getWidth() * size.getHeight() * p_storage.getOwner()->getDepth() * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
 			break;
 
 		case GlTextureStorageType::eCubeMap:
-			l_storage.GetOpenGl().TexSubImage2D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() ), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.getOpenGl().TexSubImage2D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.getIndex() ), 0, 0, 0, size.getWidth(), size.getHeight(), format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			GlDebug_Check( m_allocatedSize, size.getWidth() * size.getHeight() * 6u * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
 			break;
 
 		case GlTextureStorageType::eCubeMapArray:
-			l_storage.GetOpenGl().TexSubImage3D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() % 6 ), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.getOpenGl().TexSubImage3D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.getIndex() % 6 ), 0, 0, 0, p_image.getIndex(), size.getWidth(), size.getHeight(), p_image.getIndex() + 1, format.Format, format.Type, p_image.getBuffer()->constPtr() );
+			GlDebug_Check( m_allocatedSize, size.getWidth() * size.getHeight() * p_storage.getOwner()->getDepth() * 6u * PF::getBytesPerPixel( p_storage.getOwner()->getPixelFormat() ) );
 			break;
 		}
 	}

@@ -1,8 +1,8 @@
 #include "LanguageInfo.hpp"
 #include "StyleInfo.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -20,7 +20,7 @@ namespace GuiCommon
 		m_arrayStyles[eSTC_TYPE_WORD5].reset( new StyleInfo( wxT( "Keyword5" ), wxT( "DARK GREY" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
 		m_arrayStyles[eSTC_TYPE_WORD6].reset( new StyleInfo( wxT( "Keyword6" ), wxT( "GREY" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
 		m_arrayStyles[eSTC_TYPE_COMMENT].reset( new StyleInfo( wxT( "Comment" ), wxT( "FOREST GREEN" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
-		m_arrayStyles[eSTC_TYPE_COMMENT_DOC].reset( new StyleInfo( wxT( "Comment (Doc)" ), wxT( "FOREST GREEN" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
+		m_arrayStyles[eSTC_TYPE_COMMENT_DOC].reset( new StyleInfo( wxT( "Comment (doc)" ), wxT( "FOREST GREEN" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
 		m_arrayStyles[eSTC_TYPE_COMMENT_LINE].reset( new StyleInfo( wxT( "Comment line" ), wxT( "FOREST GREEN" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
 		m_arrayStyles[eSTC_TYPE_COMMENT_SPECIAL].reset( new StyleInfo( wxT( "Special comment" ), wxT( "FOREST GREEN" ), wxT( "WHITE" ), wxT( "" ), 10, eSTC_STYLE_ITALIC, 0 ) );
 		m_arrayStyles[eSTC_TYPE_CHARACTER].reset( new StyleInfo( wxT( "Character" ), wxT( "KHAKI" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
@@ -49,18 +49,18 @@ namespace GuiCommon
 	{
 	}
 
-	void LanguageInfo::SetWords( eSTC_TYPE p_type, Castor::StringArray const & p_arrayWords )
+	void LanguageInfo::setWords( eSTC_TYPE p_type, castor::StringArray const & p_arrayWords )
 	{
-		String l_strWords;
+		String strWords;
 		std::for_each( p_arrayWords.begin(), p_arrayWords.end(), [&]( String const & p_strWord )
 		{
-			if ( !l_strWords.empty() )
+			if ( !strWords.empty() )
 			{
-				l_strWords += cuT( " " );
+				strWords += cuT( " " );
 			}
 
-			l_strWords += p_strWord;
+			strWords += p_strWord;
 		} );
-		m_arrayWords[p_type] = l_strWords;
+		m_arrayWords[p_type] = strWords;
 	}
 }

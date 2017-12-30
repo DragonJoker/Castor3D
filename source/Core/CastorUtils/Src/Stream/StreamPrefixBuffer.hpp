@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_STREAM_PREFIX_BUFFER_H___
 #define ___CASTOR_STREAM_PREFIX_BUFFER_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 #include <sstream>
 #include <string>
 
-namespace Castor
+namespace castor
 {
 	namespace format
 	{
@@ -43,7 +24,7 @@ namespace Castor
 		\brief		Tampon de flux utilisé pour indenter les lignes
 		*/
 		template < typename prefix_type, typename char_type, typename traits = std::char_traits< char_type > >
-		struct basic_prefix_buffer
+		struct BasicPrefixBuffer
 			: public std::basic_streambuf< char_type, traits >
 			, public prefix_type
 		{
@@ -59,7 +40,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			basic_prefix_buffer( std::basic_streambuf< char_type, traits > * sbuf )
+			explicit BasicPrefixBuffer( std::basic_streambuf< char_type, traits > * sbuf )
 				: m_sbuf( sbuf )
 				, m_set( true )
 			{
@@ -70,7 +51,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Destructeur.
 			 */
-			~basic_prefix_buffer()
+			~BasicPrefixBuffer()
 			{
 			}
 			/**
@@ -87,8 +68,8 @@ namespace Castor
 			}
 
 		private:
-			basic_prefix_buffer( const basic_prefix_buffer< prefix_type, char_type, traits > & ) = delete;
-			basic_prefix_buffer< prefix_type, char_type, traits > & operator=( const basic_prefix_buffer< prefix_type, char_type, traits > & ) = delete;
+			BasicPrefixBuffer( const BasicPrefixBuffer< prefix_type, char_type, traits > & ) = delete;
+			BasicPrefixBuffer< prefix_type, char_type, traits > & operator=( const BasicPrefixBuffer< prefix_type, char_type, traits > & ) = delete;
 
 		private:
 			virtual int_type overflow( int_type c = traits::eof() )
@@ -100,8 +81,8 @@ namespace Castor
 
 				if ( m_set )
 				{
-					auto l_prefix = prefix_type::to_string();
-					m_sbuf->sputn( l_prefix.c_str(), l_prefix.size() );
+					auto Prefix = prefix_type::toString();
+					m_sbuf->sputn( Prefix.c_str(), Prefix.size() );
 					m_set = false;
 				}
 
@@ -121,7 +102,7 @@ namespace Castor
 		private:
 			//!\~english The internal stream buffer.	\~french Le tampon interne.
 			std::basic_streambuf< char_type, traits > * m_sbuf;
-			//!\~english Tells the stream it to prefix.	\~french Dit si le flux doit être préfixé.
+			//!\~english Tells the stream it to Prefix.	\~french Dit si le flux doit être préfixé.
 			bool m_set;
 		};
 	}

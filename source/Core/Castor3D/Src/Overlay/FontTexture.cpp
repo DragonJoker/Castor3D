@@ -8,113 +8,113 @@
 #include <Graphics/Font.hpp>
 #include <Graphics/Image.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	FontTexture::FontTexture( Engine & p_engine, FontSPtr p_font )
-		: OwnedBy< Engine >( p_engine )
+	FontTexture::FontTexture( Engine & engine, FontSPtr p_font )
+		: OwnedBy< Engine >( engine )
 		, m_font( p_font )
 	{
-		uint32_t const l_maxWidth = p_font->GetMaxWidth();
-		uint32_t const l_maxHeight = p_font->GetMaxHeight();
-		uint32_t const l_count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
+		uint32_t const maxWidth = p_font->getMaxWidth();
+		uint32_t const maxHeight = p_font->getMaxHeight();
+		uint32_t const count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
 
-		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( p_font->GetName() );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		m_sampler = l_sampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ l_maxWidth * 16, l_maxHeight * l_count } );
-		m_texture->GetImage().InitialiseSource();
+		SamplerSPtr sampler = getEngine()->getSamplerCache().add( p_font->getName() );
+		sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		m_sampler = sampler;
+		m_texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ maxWidth * 16, maxHeight * count } );
+		m_texture->getImage().initialiseSource();
 	}
 
 	FontTexture::~FontTexture()
 	{
 	}
 
-	void FontTexture::Initialise()
+	void FontTexture::initialise()
 	{
-		m_texture->Initialise();
-		m_texture->Bind( 0 );
-		m_texture->GenerateMipmaps();
-		m_texture->Unbind( 0 );
+		m_texture->initialise();
+		m_texture->bind( MinTextureIndex );
+		m_texture->generateMipmaps();
+		m_texture->unbind( MinTextureIndex );
 		onChanged( *this );
 	}
 
-	void FontTexture::Update()
+	void FontTexture::update()
 	{
-		FontSPtr l_font = GetFont();
+		FontSPtr font = getFont();
 
-		if ( l_font )
+		if ( font )
 		{
-			uint32_t const l_maxWidth = l_font->GetMaxWidth();
-			uint32_t const l_maxHeight = l_font->GetMaxHeight();
-			uint32_t const l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
-			Size l_size{ l_maxWidth * 16, l_maxHeight * l_count };
-			auto & l_image = m_texture->GetImage();
-			l_image.InitialiseSource( PxBufferBase::create( Size( l_maxWidth * 16, l_maxHeight * l_count ), PixelFormat::eL8 ) );
+			uint32_t const maxWidth = font->getMaxWidth();
+			uint32_t const maxHeight = font->getMaxHeight();
+			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
+			Size size{ maxWidth * 16, maxHeight * count };
+			auto & image = m_texture->getImage();
+			image.initialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eL8 ) );
 
-			auto l_it = l_font->begin();
-			Size const & l_sizeImg = l_size;
-			uint32_t const l_uiTotalWidth = l_sizeImg.width();
-			uint32_t l_uiOffY = l_sizeImg.height() - l_maxHeight;
-			uint8_t * l_pBuffer = l_image.GetBuffer()->ptr();
-			size_t const l_bufsize = l_image.GetBuffer()->size();
+			auto it = font->begin();
+			Size const & sizeImg = size;
+			uint32_t const uiTotalWidth = sizeImg.getWidth();
+			uint32_t uiOffY = sizeImg.getHeight() - maxHeight;
+			uint8_t * pBuffer = image.getBuffer()->ptr();
+			size_t const bufsize = image.getBuffer()->size();
 
-			for ( uint32_t y = 0; y < l_count && l_it != l_font->end(); ++y )
+			for ( uint32_t y = 0; y < count && it != font->end(); ++y )
 			{
-				uint32_t l_uiOffX = 0;
+				uint32_t uiOffX = 0;
 
-				for ( uint32_t x = 0; x < 16 && l_it != l_font->end(); ++x )
+				for ( uint32_t x = 0; x < 16 && it != font->end(); ++x )
 				{
-					Glyph const & l_glyph = *l_it;
-					Size const & l_size = l_glyph.GetSize();
-					ByteArray const & l_buffer = l_glyph.GetBitmap();
-					uint32_t const l_dstLineIndex = ( l_uiTotalWidth * l_uiOffY ) + l_uiOffX;
-					uint8_t * l_dstLineBuffer = &l_pBuffer[l_dstLineIndex];
+					Glyph const & glyph = *it;
+					Size const & size = glyph.getSize();
+					ByteArray const & buffer = glyph.getBitmap();
+					uint32_t const dstLineIndex = ( uiTotalWidth * uiOffY ) + uiOffX;
+					uint8_t * dstLineBuffer = &pBuffer[dstLineIndex];
 
-					for ( uint32_t i = 0; i < l_size.height(); ++i )
+					for ( uint32_t i = 0; i < size.getHeight(); ++i )
 					{
-						ENSURE( l_dstLineIndex + l_size.width() <= l_bufsize );
-						std::memcpy( l_dstLineBuffer, &l_buffer[i * l_size.width()], l_size.width() );
-						l_dstLineBuffer += l_uiTotalWidth;
+						ENSURE( dstLineIndex + size.getWidth() <= bufsize );
+						std::memcpy( dstLineBuffer, &buffer[i * size.getWidth()], size.getWidth() );
+						dstLineBuffer += uiTotalWidth;
 					}
 
-					m_glyphsPositions[l_glyph.GetCharacter()] = Position( l_uiOffX, l_uiOffY );
-					l_uiOffX += l_maxWidth;
-					++l_it;
+					m_glyphsPositions[glyph.getCharacter()] = Position( uiOffX, uiOffY );
+					uiOffX += maxWidth;
+					++it;
 				}
 
-				l_uiOffY -= l_maxHeight;
+				uiOffY -= maxHeight;
 			}
 		}
 
 	}
 
-	void FontTexture::Cleanup()
+	void FontTexture::cleanup()
 	{
 		if ( m_texture )
 		{
-			m_texture->Cleanup();
+			m_texture->cleanup();
 		}
 	}
 
-	String const & FontTexture::GetFontName()const
+	String const & FontTexture::getFontName()const
 	{
-		return GetFont()->GetName();
+		return getFont()->getName();
 	}
 
-	Position const & FontTexture::GetGlyphPosition( char32_t p_char )const
+	Position const & FontTexture::getGlyphPosition( char32_t p_char )const
 	{
-		GlyphPositionMapConstIt l_it = m_glyphsPositions.find( p_char );
+		GlyphPositionMapConstIt it = m_glyphsPositions.find( p_char );
 
-		if ( l_it == m_glyphsPositions.end() )
+		if ( it == m_glyphsPositions.end() )
 		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::string_cast< char >( string::to_string( p_char ) ) );
+			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( p_char ) ) );
 		}
 
-		return l_it->second;
+		return it->second;
 	}
 }

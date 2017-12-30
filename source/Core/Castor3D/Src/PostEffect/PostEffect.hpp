@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_POST_EFFECT_H___
 #define ___C3D_POST_EFFECT_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -44,8 +25,8 @@ namespace Castor3D
 				<br />Les effets post rendu sont appliqués de manière cumulative.
 	*/
 	class PostEffect
-		: public Castor::OwnedBy< RenderSystem >
-		, public Castor::Named
+		: public castor::OwnedBy< RenderSystem >
+		, public castor::Named
 	{
 	protected:
 		/*!
@@ -64,65 +45,77 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	p_engine	The engine.
+			 *\param[in]	engine	The engine.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	p_engine	Le moteur.
+			 *\param[in]	engine	Le moteur.
 			 */
-			C3D_API PostEffectSurface( Castor3D::Engine & p_engine );
+			C3D_API explicit PostEffectSurface( castor3d::Engine & engine );
 			/**
 			 *\~english
 			 *\brief		Initialises the surface.
-			 *\param[in]	p_renderTarget	The render target to which is attached this effect.
-			 *\param[in]	p_size			The surface size.
-			 *\param[in]	p_index			The surface index.
-			 *\param[in]	p_sampler		The surface sampler.
+			 *\param[in]	renderTarget	The render target to which is attached this effect.
+			 *\param[in]	size			The surface size.
+			 *\param[in]	index			The surface index.
+			 *\param[in]	sampler			The surface sampler.
+			 *\param[in]	format			The surface pixel format.
 			 *\~french
 			 *\brief		Initialise la surface.
-			 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
-			 *\param[in]	p_size			Les dimensions de la surface.
-			 *\param[in]	p_index			L'index de la surface.
-			 *\param[in]	p_sampler		L'échantillonneur de la surface.
+			 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+			 *\param[in]	size			Les dimensions de la surface.
+			 *\param[in]	index			L'index de la surface.
+			 *\param[in]	sampler			L'échantillonneur de la surface.
+			 *\param[in]	format			Le format des pixels de la surface.
 			 */
-			C3D_API bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
+			C3D_API bool initialise( castor3d::RenderTarget & renderTarget
+				, castor::Size const & size
+				, uint32_t index
+				, castor3d::SamplerSPtr sampler
+				, castor::PixelFormat format = castor::PixelFormat::eRGBA32F );
 			/**
 			 *\~english
 			 *\brief		Cleans up the surface.
 			 *\~french
 			 *\brief		Nettoie la surface.
 			 */
-			C3D_API void Cleanup();
+			C3D_API void cleanup();
 
 			//!\~english	The surface framebuffer.
 			//!\~french		Le framebuffer de la surface.
-			Castor3D::FrameBufferSPtr m_fbo;
+			castor3d::FrameBufferSPtr m_fbo;
 			//!\~english	The surface colour texture.
 			//!\~french		La texture couleur de la surface.
-			Castor3D::TextureUnit m_colourTexture;
+			castor3d::TextureUnit m_colourTexture;
 			//!\~english	The attach between framebuffer and texture.
 			//!\~french		L'attache entre la texture et le framebuffer.
-			Castor3D::TextureAttachmentSPtr m_colourAttach;
+			castor3d::TextureAttachmentSPtr m_colourAttach;
 			//!\~english	The surface dimensions.
 			//!\~french		Les dimensions de la surface.
-			Castor::Size m_size;
+			castor::Size m_size;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name			The effect name.
-		 *\param[in]	p_renderTarget	The render target to which is attached this effect.
-		 *\param[in]	p_renderSystem	The render system.
-		 *\param[in]	p_params		The optional parameters.
+		 *\param[in]	name			The effect name.
+		 *\param[in]	renderTarget	The render target to which is attached this effect.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	parameters		The optional parameters.
+		 *\param[in]	postToneMapping	Tells if the effect applies after tone mapping.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name			Le nom de l'effet.
-		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
-		 *\param[in]	p_renderSystem	Le render system.
-		 *\param[in]	p_params		Les paramètres optionnels.
+		 *\param[in]	name			Le nom de l'effet.
+		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	parameters		Les paramètres optionnels.
+		 *\param[in]	postToneMapping	Dit si l'effet s'applique après le mappage de tons.
 		 */
-		C3D_API PostEffect( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params );
+		C3D_API PostEffect( castor::String const & name
+			, RenderTarget & renderTarget
+			, RenderSystem & renderSystem
+			, Parameters const & parameters
+			, bool postToneMapping = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -133,12 +126,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.
-		 *\param[in]	p_file	The file.
+		 *\param[in]	file	The file.
 		 *\~french
 		 *\brief		Ecrit l'effet dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
+		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		C3D_API bool writeInto( castor::TextFile & file );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -147,41 +140,54 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool Initialise() = 0;
+		C3D_API virtual bool initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void Cleanup() = 0;
+		C3D_API virtual void cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief			Render function, applies the effect to the given framebuffer.
-		 *\param[in,out]	p_framebuffer	The framebuffer.
+		 *\param[in,out]	framebuffer	The framebuffer.
 		 *\return			\p true if ok.
 		 *\~french
 		 *\brief			Fonction de rendu, applique l'effet au tampon d'image donné.
-		 *\param[in,out]	p_framebuffer	Le tampon d'image.
+		 *\param[in,out]	framebuffer	Le tampon d'image.
 		 *\return			\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Apply( FrameBuffer & p_framebuffer ) = 0;
+		C3D_API virtual bool apply( FrameBuffer & framebuffer ) = 0;
+		/**
+		 *\~english
+		 *\return		\p true if the effect applies after tone mapping.
+		 *\~french
+		 *\brief		\p true si l'effet s'applique après le mappage de tons.
+		 */
+		inline bool isAfterToneMapping()const
+		{
+			return m_postToneMapping;
+		}
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.
-		 *\param[in]	p_file	The file.
+		 *\param[in]	file	The file.
 		 *\~french
 		 *\brief		Ecrit l'effet dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
+		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
+		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
 
 	protected:
 		//!\~english	The render target to which this effect is attached.
 		//!\~french		La cible de rendu à laquelle est attachée cet effet.
 		RenderTarget & m_renderTarget;
+		//!\~english	Tells if the effect applies after tone mapping.
+		//!\~french		Dit si l'effet s'applique après le mappage de tons.
+		bool m_postToneMapping{ false };
 	};
 }
 

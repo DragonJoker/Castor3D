@@ -2,39 +2,50 @@
 
 #include "Engine.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	VertexBuffer::VertexBuffer( Engine & p_engine, BufferDeclaration const & p_declaration )
-		: CpuBuffer< uint8_t >( p_engine )
-		, m_bufferDeclaration( p_declaration )
+	VertexBuffer::VertexBuffer( Engine & engine
+		, BufferDeclaration const & declaration )
+		: CpuBuffer< uint8_t >( engine )
+		, m_bufferDeclaration( declaration )
 	{
 	}
 
-	VertexBuffer::~VertexBuffer()
-	{
-	}
-
-	bool VertexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool VertexBuffer::initialise( BufferAccessType type
+		, BufferAccessNature nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateUInt8Buffer( BufferType::eArray );
+			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eArray
+				, getSize()
+				, type
+				, nature );
+			m_gpuBuffer = buffer.buffer;
+			m_offset = buffer.offset;
+			doInitialise( type, nature );
 		}
 
-		bool l_return = m_gpuBuffer != nullptr;
+		bool result = m_gpuBuffer != nullptr;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoInitialise( p_type, p_nature );
+			upload();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void VertexBuffer::Cleanup()
+	void VertexBuffer::cleanup()
 	{
-		DoCleanup();
+		if ( m_gpuBuffer )
+		{
+			getEngine()->getRenderSystem()->putBuffer( BufferType::eArray
+				, m_accessType
+				, m_accessNature
+				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
+			m_gpuBuffer.reset();
+		}
 	}
 }

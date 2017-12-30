@@ -4,15 +4,16 @@
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	RenderSystem::RenderSystem( Engine & p_engine, String const & p_name )
-		: OwnedBy< Engine >{ p_engine }
+	RenderSystem::RenderSystem( Engine & engine, String const & p_name )
+		: OwnedBy< Engine >{ engine }
 		, m_name{ p_name }
 		, m_initialised{ false }
 		, m_gpuInformations{}
+		, m_gpuBufferPool{ *this }
 	{
 	}
 
@@ -21,76 +22,107 @@ namespace Castor3D
 		m_mainContext.reset();
 	}
 
-	void RenderSystem::Initialise( GpuInformations && p_informations )
+	void RenderSystem::initialise( GpuInformations && p_informations )
 	{
 		m_gpuInformations = std::move( p_informations );
-		DoInitialise();
-		m_gpuInformations.UpdateMaxShaderModel();
-		REQUIRE( m_gpuInformations.GetMaxShaderModel() >= ShaderModel::eModel2 );
-		Logger::LogInfo( cuT( "Vendor: " ) + m_gpuInformations.GetVendor() );
-		Logger::LogInfo( cuT( "Renderer: " ) + m_gpuInformations.GetRenderer() );
-		Logger::LogInfo( cuT( "Version: " ) + m_gpuInformations.GetVersion() );
+		doInitialise();
+		m_gpuInformations.updateMaxShaderModel();
+		REQUIRE( m_gpuInformations.getMaxShaderModel() >= ShaderModel::eModel2 );
+		Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
+		Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
+		Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
+		//m_gpuInformations.removeFeature( GpuFeature::eShaderStorageBuffers );
 	}
 
-	void RenderSystem::Cleanup()
+	void RenderSystem::cleanup()
 	{
 		if ( m_mainContext )
 		{
-			m_mainContext->Cleanup();
+			m_mainContext->cleanup();
 			m_mainContext.reset();
 		}
 
-		DoCleanup();
+		doCleanup();
 
 #if C3D_TRACE_OBJECTS
 
-		m_tracker.ReportTracked();
+		m_tracker.reportTracked();
 
 #endif
 	}
 
-	void RenderSystem::PushScene( Scene * p_scene )
+	void RenderSystem::cleanupPool()
+	{
+		m_gpuBufferPool.cleanup();
+	}
+
+	void RenderSystem::pushScene( Scene * p_scene )
 	{
 		m_stackScenes.push( p_scene );
 	}
 
-	void RenderSystem::PopScene()
+	void RenderSystem::popScene()
 	{
 		m_stackScenes.pop();
 	}
 
-	Scene * RenderSystem::GetTopScene()
+	Scene * RenderSystem::getTopScene()
 	{
-		Scene * l_return = nullptr;
+		Scene * result = nullptr;
 
 		if ( m_stackScenes.size() )
 		{
-			l_return = m_stackScenes.top();
+			result = m_stackScenes.top();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	GLSL::GlslWriter RenderSystem::CreateGlslWriter()
+	glsl::GlslWriter RenderSystem::createGlslWriter()
 	{
-		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
+		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
+			, m_gpuInformations.hasConstantsBuffers()
+			, m_gpuInformations.hasTextureBuffers()
+			, m_gpuInformations.hasShaderStorageBuffers() } };
 	}
 
-	void RenderSystem::SetCurrentContext( Context * p_context )
+	void RenderSystem::setCurrentContext( Context * p_context )
 	{
 		m_currentContexts[std::this_thread::get_id()] = p_context;
 	}
 
-	Context * RenderSystem::GetCurrentContext()
+	Context * RenderSystem::getCurrentContext()
 	{
-		Context * l_return{ nullptr };
-		auto l_it = m_currentContexts.find( std::this_thread::get_id() );
+		Context * result{ nullptr };
+		auto it = m_currentContexts.find( std::this_thread::get_id() );
 
-		if ( l_it != m_currentContexts.end() )
+		if ( it != m_currentContexts.end() )
 		{
-			l_return = l_it->second;
+			result = it->second;
 		}
 
-		return l_return;
+		return result;
+	}
+
+	GpuBufferOffset RenderSystem::getBuffer( BufferType type
+		, uint32_t size
+		, BufferAccessType accessType
+		, BufferAccessNature accessNature )
+	{
+		return m_gpuBufferPool.getGpuBuffer( type
+			, size
+			, accessType
+			, accessNature );
+	}
+
+	void RenderSystem::putBuffer( BufferType type
+		, BufferAccessType accessType
+		, BufferAccessNature accessNature
+		, GpuBufferOffset const & bufferOffset )
+	{
+		m_gpuBufferPool.putGpuBuffer( type
+			, accessType
+			, accessNature
+			, bufferOffset );
 	}
 }

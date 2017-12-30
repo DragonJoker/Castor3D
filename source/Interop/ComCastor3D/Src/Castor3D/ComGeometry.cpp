@@ -5,7 +5,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The geometry must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The geometry must be initialised" );
 
 	CGeometry::CGeometry()
 	{
@@ -21,18 +21,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AttachTo( static_cast< CSceneNode * >( val )->GetInternal() );
+			m_internal->attachTo( static_cast< CSceneNode * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IGeometry,					// This is the GUID of component throwing error
+					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
 					 cuT( "AttachTo" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -44,18 +44,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Detach();
+			m_internal->detach();
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IGeometry,					// This is the GUID of component throwing error
+					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
 					 cuT( "Detach" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -73,19 +73,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CMaterial * >( *pVal )->SetInternal( m_internal->GetMaterial( static_cast< CSubmesh * >( submesh )->GetInternal() ) );
+					static_cast< CMaterial * >( *pVal )->setInternal( m_internal->getMaterial( *static_cast< CSubmesh * >( submesh )->getInternal() ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IGeometry,					// This is the GUID of component throwing error
+					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
 					 cuT( "GetMaterial" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -97,18 +97,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetMaterial( static_cast< CSubmesh * >( submesh )->GetInternal(), static_cast< CMaterial * >( val )->GetInternal() );
+			m_internal->setMaterial( *static_cast< CSubmesh * >( submesh )->getInternal(), static_cast< CMaterial * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IGeometry,					// This is the GUID of component throwing error
+					 IID_IGeometry,					// This is the GUID of PixelComponents throwing error
 					 cuT( "SetMaterial" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

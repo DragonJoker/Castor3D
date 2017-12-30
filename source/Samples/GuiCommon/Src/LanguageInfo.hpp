@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_LANGUAGE_INFO_H___
 #define ___GUICOMMON_LANGUAGE_INFO_H___
@@ -151,11 +132,11 @@ namespace GuiCommon
 	class LanguageInfo
 	{
 	private:
-		typedef std::array< Castor::String, eSTC_TYPE_COUNT > WordArray;
+		typedef std::array< castor::String, eSTC_TYPE_COUNT > WordArray;
 
 	private:
-		Castor::String m_name;
-		Castor::String m_strFilePattern;
+		castor::String m_name;
+		castor::String m_strFilePattern;
 		WordArray m_arrayWords;
 		eSTC_LEX m_eLexerID;
 		int m_iFoldFlags;
@@ -165,59 +146,59 @@ namespace GuiCommon
 		LanguageInfo();
 		virtual ~LanguageInfo();
 
-		void SetWords( eSTC_TYPE p_type, Castor::StringArray const & p_arrayWords );
+		void setWords( eSTC_TYPE p_type, castor::StringArray const & p_arrayWords );
 
-		inline int GetFoldFlags()const
+		inline int getFoldFlags()const
 		{
 			return m_iFoldFlags;
 		}
 
-		inline Castor::String const & GetWords( eSTC_TYPE p_type )const
+		inline castor::String const & getWords( eSTC_TYPE p_type )const
 		{
 			return m_arrayWords[p_type];
 		}
 
-		inline Castor::String const & GetFilePattern()const
+		inline castor::String const & getFilePattern()const
 		{
 			return m_strFilePattern;
 		}
 
-		inline Castor::String const & GetName()const
+		inline castor::String const & getName()const
 		{
 			return m_name;
 		}
 
-		inline eSTC_LEX GetLexerID()const
+		inline eSTC_LEX getLexerID()const
 		{
 			return m_eLexerID;
 		}
 
-		inline StyleInfoPtr & GetStyle( eSTC_TYPE p_type )
+		inline StyleInfoPtr & getStyle( eSTC_TYPE p_type )
 		{
 			return m_arrayStyles[p_type];
 		}
 
-		inline StyleInfoPtr const & GetStyle( eSTC_TYPE p_type )const
+		inline StyleInfoPtr const & getStyle( eSTC_TYPE p_type )const
 		{
 			return m_arrayStyles[p_type];
 		}
 
-		inline void SetLexer( eSTC_LEX p_eLexer )
+		inline void setLexer( eSTC_LEX p_eLexer )
 		{
 			m_eLexerID = p_eLexer;
 		}
 
-		inline void SetName( Castor::String const & p_strVal )
+		inline void setName( castor::String const & p_strVal )
 		{
 			m_name = p_strVal;
 		}
 
-		inline void SetFilePattern( Castor::String const & p_strVal )
+		inline void setFilePattern( castor::String const & p_strVal )
 		{
 			m_strFilePattern = p_strVal;
 		}
 
-		inline void SetFoldFlags( int p_iFlags )
+		inline void setFoldFlags( int p_iFlags )
 		{
 			m_iFoldFlags = p_iFlags;
 		}

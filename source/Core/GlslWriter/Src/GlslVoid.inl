@@ -1,4 +1,4 @@
-namespace GLSL
+namespace glsl
 {
 	Void::Void()
 		: Type( cuT( "void " ) )
@@ -6,7 +6,7 @@ namespace GLSL
 	}
 
 	Void::Void( GlslWriter * p_writer )
-		: Type( cuT( "void " ), p_writer, Castor::String() )
+		: Type( cuT( "void " ), p_writer, castor::String() )
 	{
 	}
 }

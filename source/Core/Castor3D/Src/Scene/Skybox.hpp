@@ -1,32 +1,18 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_SKYBOX_H___
 #define ___C3D_SKYBOX_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Render/Viewport.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "PBR/IblTextures.hpp"
+#include "Texture/TextureUnit.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -38,51 +24,51 @@ namespace Castor3D
 	\brief		Implémentation de Skybox.
 	*/
 	class Skybox
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
-		\brief		Scene loader
+		\brief		Skybox loader.
 		\~english
-		\brief		Loader de scène
+		\brief		Loader de Skybox.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Skybox >
+			: public castor::TextWriter< Skybox >
 		{
 		public:
 			/**
 			 *\~english
-			 *\brief		Constructor
+			 *\brief		Constructor.
 			 *\~french
-			 *\brief		Constructeur
+			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
-			 *\brief		Writes a Skybox into a text file
-			 *\param[in]	p_obj	the Skybox to save
-			 *\param[in]	p_file	the file to write the Skybox in
+			 *\brief		Writes a Skybox into a text file.
+			 *\param[in]	obj		The Skybox to save.
+			 *\param[in]	file	The file to write the Skybox in.
 			 *\~french
-			 *\brief		Ecrit une Skybox dans un fichier texte
-			 *\param[in]	p_obj	La Skybox
-			 *\param[in]	p_file	Le fichier
+			 *\brief		Ecrit une Skybox dans un fichier texte.
+			 *\param[in]	obj		La Skybox.
+			 *\param[in]	file	Le fichier.
 			 */
-			C3D_API bool operator()( Skybox const & p_obj, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Skybox const & obj, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit Skybox( Engine & p_engine );
+		C3D_API explicit Skybox( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -98,30 +84,48 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool Initialise();
+		C3D_API virtual bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void Cleanup();
+		C3D_API virtual void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the skybox.
-		 *\param[in]	p_camera	The scene's camera.
+		 *\param[in]	camera	The scene's camera.
 		 *\~french
 		 *\brief		Dessine la skybox.
-		 *\param[in]	p_camera	La caméra de la scène.
+		 *\param[in]	camera	La caméra de la scène.
 		 */
-		C3D_API void Render( Camera const & p_camera );
+		C3D_API void render( Camera const & camera );
+		/**
+		*\~english
+		*\return		sets the skybox's equirectangular texture.
+		*\~french
+		*\return		Définit la texture équirectangulaire de la skybox.
+		*/
+		C3D_API void setEquiTexture( TextureLayoutSPtr texture
+			, castor::Size const & size );
+		/**
+		 *\~english
+		 *\return		The skybox's equirectangular texture path.
+		 *\~french
+		 *\return		Le chemin de l'image équirectangulaire de la skybox.
+		 */
+		inline castor::Path const & getEquiTexturePath()const
+		{
+			return m_equiTexturePath;
+		}
 		/**
 		 *\~english
 		 *\return		The skybox's texture.
 		 *\~french
 		 *\return		La texture de la skybox.
 		 */
-		inline TextureLayout & GetTexture()
+		inline TextureLayout & getTexture()
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
@@ -132,31 +136,65 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture de la skybox.
 		 */
-		inline TextureLayoutSPtr GetTexture()const
+		inline TextureLayoutSPtr getTexture()const
 		{
 			return m_texture;
 		}
 		/**
 		 *\~english
-		 *\return		Sets the skybox's texture.
+		 *\return		The skybox's IBL textures.
+		 *\~french
+		 *\return		Les texture d'IBL de la skybox.
+		 */
+		inline IblTextures const & getIbl()const
+		{
+			REQUIRE( m_ibl );
+			return *m_ibl;
+		}
+		/**
+		 *\~english
+		 *\return		sets the skybox's texture.
 		 *\~french
 		 *\return		Définit la texture de la skybox.
 		 */
-		inline void SetTexture( TextureLayoutSPtr p_texture )
+		inline void setTexture( TextureLayoutSPtr texture )
 		{
-			m_texture = p_texture;
+			m_texture = texture;
+		}
+		/**
+		 *\~english
+		 *\return		sets the skybox's scene.
+		 *\~french
+		 *\return		Définit la scène de la skybox.
+		 */
+		inline void setScene( Scene & scene )
+		{
+			m_scene = &scene;
 		}
 
-	private:
-		ShaderProgram & DoInitialiseShader();
-		bool DoInitialiseTexture();
-		bool DoInitialiseVertexBuffer();
-		bool DoInitialisePipeline( ShaderProgram & p_program );
+	protected:
+		virtual ShaderProgram & doInitialiseShader();
+		bool doInitialiseTexture();
+		void doInitialiseEquiTexture();
+		bool doInitialiseVertexBuffer();
+		bool doInitialisePipeline( ShaderProgram & program );
 
-	private:
+	protected:
+		//!\~english	The skybox's scene.
+		//!\~french		La scène de la skybox.
+		SceneRPtr m_scene{ nullptr };
 		//!\~english	The pipeline used while rendering the skybox.
 		//!\~french		Le pipeline utilisé pour le rendu de la skybox.
 		RenderPipelineUPtr m_pipeline;
+		//!\~english	The skybox equirectangular map texture.
+		//!\~french		La texture équirectangulaire de la skybox.
+		TextureLayoutSPtr m_equiTexture;
+		//!\~english	The skybox equirectangular image path.
+		//!\~french		Le chemin de l'image équirectangulaire de la skybox.
+		castor::Path m_equiTexturePath;
+		//!\~english	The skybox equirectangular map texture wanted face size.
+		//!\~french		La taille voulue pour les faces de la texture équirectangulaire de la skybox.
+		castor::Size m_equiSize;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;
@@ -165,19 +203,13 @@ namespace Castor3D
 		SamplerWPtr m_sampler;
 		//!\~english	The shader matrices constants buffer.
 		//!\~french		Le tampon de constantes de shader contenant les matrices.
-		UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Uniform4x4fSPtr m_viewUniform{ nullptr };
+		MatrixUbo m_matrixUbo;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_modelMatrixUbo;
-		//!\~english	The uniform variable containing modeal matrix.
-		//!\~french		La variable uniforme contenant la matrice modèle.
-		Uniform4x4fSPtr m_modelUniform{ nullptr };
+		ModelMatrixUbo m_modelMatrixUbo;
+		//!\~english	The HDR configuration.
+		//!\~french		La configuration HDR.
+		HdrConfigUbo m_configUbo;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer{ nullptr };
@@ -186,15 +218,24 @@ namespace Castor3D
 		GeometryBuffersSPtr m_geometryBuffers{ nullptr };
 		//!\~english	Vertex elements declaration.
 		//!\~french		Déclaration des éléments d'un sommet.
-		Castor3D::BufferDeclaration m_declaration;
+		castor3d::BufferDeclaration m_declaration;
 		//!\~english	Vertex array (cube definition).
 		//!\~french		Tableau de vertex (définition du cube).
-		std::array< Castor3D::BufferElementGroupSPtr, 36 > m_arrayVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
 		//! 6 * 6 * [3(vertex position)].
-		std::array< Castor::real, 108 > m_bufferVertex;
+		std::array< castor::real, 108 > m_bufferVertex;
 		//!\~english	The model matrix.
 		//!\~french		La matrice modèle.
-		Castor::Matrix4x4r m_mtxModel;
+		castor::Matrix4x4r m_mtxModel;
+		//!\~english	The IBL textures.
+		//!\~french		Les textures l'IBL.
+		std::unique_ptr< IblTextures > m_ibl;
+		//!\~english	Tells if the skybox's texture is HDR.
+		//!\~french		Dit si la texture de la skybox est HDR.
+		bool m_hdr{ false };
+		//!\~english	The skybox's viewport.
+		//!\~french		Le viewport de la skybox.
+		Viewport m_viewport;
 	};
 }
 

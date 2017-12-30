@@ -12,12 +12,13 @@
 #include <Cache/SceneNodeCache.hpp>
 #include <Cache/MeshCache.hpp>
 #include <Cache/WindowCache.hpp>
+#include <Miscellaneous/Parameter.hpp>
 
 #include <Render/Viewport.hpp>
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The scene must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The scene must be initialised" );
 
 	CScene::CScene()
 	{
@@ -33,18 +34,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Cleanup();
+			m_internal->cleanup();
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "ClearScene" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -56,19 +57,19 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			Castor::Path l_path{ FromBstr( path ) };
-			m_internal->SetBackground( l_path.GetPath(), l_path.GetFileName( true ) );
+			castor::Path l_path{ fromBstr( path ) };
+			m_internal->setBackground( l_path.getPath(), l_path.getFileName( true ) );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "SetBackgroundImage" ),	// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -86,19 +87,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeCache().Add( FromBstr( name ), static_cast< CSceneNode * >( parent )->GetInternal() ) );
+					static_cast< CSceneNode * >( *pVal )->setInternal( m_internal->getSceneNodeCache().add( fromBstr( name ), static_cast< CSceneNode * >( parent )->getInternal() ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "CreateSceneNode" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -116,19 +117,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->GetGeometryCache().Add( FromBstr( name ), nullptr, nullptr ) );
+					static_cast< CGeometry * >( *pVal )->setInternal( m_internal->getGeometryCache().add( fromBstr( name ), nullptr, nullptr ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "CreateGeometry" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -146,23 +147,25 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					Castor3D::Viewport l_viewport{ *GetInternal()->GetEngine() };
-					l_viewport.SetPerspective( Castor::Angle::from_degrees( 120 ), 4.0_r / 3.0_r, 0.1_r, 1000.0_r );
-					l_viewport.Resize( Castor::Size( ww, wh ) );
-					auto l_camera = m_internal->GetCameraCache().Add( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr, l_viewport );
-					static_cast< CCamera * >( *pVal )->SetInternal( l_camera );
+					castor3d::Viewport l_viewport{ *getInternal()->getEngine() };
+					l_viewport.setPerspective( castor::Angle::fromDegrees( 120 ), 4.0_r / 3.0_r, 0.1_r, 1000.0_r );
+					l_viewport.resize( castor::Size( ww, wh ) );
+					auto l_camera = m_internal->getCameraCache().add( fromBstr( name )
+						, node ? static_cast< CSceneNode * >( node )->getInternal() : nullptr
+						, std::move( l_viewport ) );
+					static_cast< CCamera * >( *pVal )->setInternal( l_camera );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "CreateCamera" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -180,25 +183,25 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightCache().Add( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr, Castor3D::LightType( type ) ) );
+					static_cast< CLight * >( *pVal )->setInternal( m_internal->getLightCache().add( fromBstr( name ), node ? static_cast< CSceneNode * >( node )->getInternal() : nullptr, castor3d::LightType( type ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "CreateLight" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateMesh( /* [in] */ eMESH_TYPE type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )
+	STDMETHODIMP CScene::CreateMesh( /* [in] */ BSTR type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -210,39 +213,15 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					auto l_mesh = m_internal->GetMeshCache().Add( FromBstr( name ) );
-					m_internal->GetEngine()->GetMeshFactory().Create( Castor3D::eMeshType( type ) )->Generate( *l_mesh, Castor3D::UIntArray{}, Castor3D::RealArray{} );
-					static_cast< CMesh * >( *pVal )->SetInternal( l_mesh );
+					auto l_mesh = m_internal->getMeshCache().add( fromBstr( name ) );
+					m_internal->getEngine()->getMeshFactory().create( fromBstr( name ) )->generate( *l_mesh, castor3d::Parameters{} );
+					static_cast< CMesh * >( *pVal )->setInternal( l_mesh );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CScene::CreateRenderWindow( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CRenderWindow::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetRenderWindowCache().Add( FromBstr( name ) ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -260,19 +239,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeCache().Find( FromBstr( name ) ) );
+					static_cast< CSceneNode * >( *pVal )->setInternal( m_internal->getSceneNodeCache().find( fromBstr( name ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "GetNode" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -290,19 +269,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->GetGeometryCache().Find( FromBstr( name ) ) );
+					static_cast< CGeometry * >( *pVal )->setInternal( m_internal->getGeometryCache().find( fromBstr( name ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "GetGeometry" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -320,19 +299,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightCache().Find( FromBstr( name ) ) );
+					static_cast< CLight * >( *pVal )->setInternal( m_internal->getLightCache().find( fromBstr( name ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "GetLight" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -350,19 +329,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CCamera * >( *pVal )->SetInternal( m_internal->GetCameraCache().Find( FromBstr( name ) ) );
+					static_cast< CCamera * >( *pVal )->setInternal( m_internal->getCameraCache().find( fromBstr( name ) ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "GetCamera" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -376,19 +355,19 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->GetLightCache().Remove( static_cast< CLight * >( val )->GetInternal()->GetName() );
+				m_internal->getLightCache().remove( static_cast< CLight * >( val )->getInternal()->getName() );
 				hr = S_OK;
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "RemoveLight" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -402,19 +381,19 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->GetSceneNodeCache().Remove( static_cast< CSceneNode * >( val )->GetInternal()->GetName() );
+				m_internal->getSceneNodeCache().remove( static_cast< CSceneNode * >( val )->getInternal()->getName() );
 				hr = S_OK;
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "RemoveNode" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -428,19 +407,19 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->GetGeometryCache().Remove( static_cast< CGeometry * >( val )->GetInternal()->GetName() );
+				m_internal->getGeometryCache().remove( static_cast< CGeometry * >( val )->getInternal()->getName() );
 				hr = S_OK;
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "RemoveGeometry" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -454,19 +433,19 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->GetCameraCache().Remove( static_cast< CCamera * >( val )->GetInternal()->GetName() );
+				m_internal->getCameraCache().remove( static_cast< CCamera * >( val )->getInternal()->getName() );
 				hr = S_OK;
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "RemoveCamera" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -484,19 +463,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CTextureLayout * >( *pVal )->SetInternal( m_internal->GetBackgroundImage() );
+					static_cast< CTextureLayout * >( *pVal )->setInternal( m_internal->getBackgroundImage() );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of component throwing error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "GetBackgroundImage" ),	// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

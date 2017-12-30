@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_SKELETON_ANIMATION_OBJECT_H___
 #define ___C3D_SKELETON_ANIMATION_OBJECT_H___
@@ -27,10 +8,11 @@ SOFTWARE.
 #include "Binary/BinaryWriter.hpp"
 #include "Animation/Interpolator.hpp"
 
+#include <Graphics/BoundingBox.hpp>
 #include <Math/SquareMatrix.hpp>
 #include <Math/Quaternion.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -44,28 +26,29 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de l'objet.
 	*/
 	class SkeletonAnimationObject
-		: public Castor::OwnedBy< SkeletonAnimation >
+		: public castor::OwnedBy< SkeletonAnimation >
 		, public std::enable_shared_from_this< SkeletonAnimationObject >
 	{
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animation	The parent animation.
-		 *\param[in]	p_type		The skeleton animation object type.
+		 *\param[in]	animation	The parent animation.
+		 *\param[in]	type		The skeleton animation object type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animation	L'animation parente.
-		 *\param[in]	p_type		Le type d'objet d'animation de squelette.
+		 *\param[in]	animation	L'animation parente.
+		 *\param[in]	type		Le type d'objet d'animation de squelette.
 		 */
-		C3D_API SkeletonAnimationObject( SkeletonAnimation & p_animation, SkeletonAnimationObjectType p_type );
+		C3D_API SkeletonAnimationObject( SkeletonAnimation & animation
+			, SkeletonAnimationObjectType type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API SkeletonAnimationObject( SkeletonAnimationObject const & p_rhs ) = delete;
+		C3D_API SkeletonAnimationObject( SkeletonAnimationObject const & rhs ) = delete;
 
 	public:
 		/**
@@ -77,15 +60,15 @@ namespace Castor3D
 		C3D_API virtual ~SkeletonAnimationObject();
 		/**
 		 *\~english
-		 *\brief		Adds a child to this object.
+		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
-		 *\param[in]	p_object	The child.
+		 *\param[in]	object	The child.
 		 *\~french
 		 *\brief		Ajoute un objet enfant à celui-ci.
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
-		 *\param[in]	p_object	L'enfant.
+		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void AddChild( SkeletonAnimationObjectSPtr p_object );
+		C3D_API void addChild( SkeletonAnimationObjectSPtr object );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name.
@@ -94,65 +77,16 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet.
 		 *\return		Le nom.
 		 */
-		C3D_API virtual Castor::String const & GetName()const = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a scaling key frame and adds it to the list.
-		 *\remarks		If a key frame with the same starting time already exists, it is returned, but not modified.
-		 *\param[in]	p_from		The starting time.
-		 *\param[in]	p_translate	The translation at start time.
-		 *\param[in]	p_rotate	The rotation at start time.
-		 *\param[in]	p_scale		The scaling at start time.
-		 *\~french
-		 *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
-		 *\remarks		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		 *\param[in]	p_from		L'index de temps de début.
-		 *\param[in]	p_translate	La translation au temps de début.
-		 *\param[in]	p_rotate	La rotation au temps de début.
-		 *\param[in]	p_scale		L'échelle au temps de début.
-		 */
-		C3D_API KeyFrame & AddKeyFrame( std::chrono::milliseconds const & p_from
-			, Castor::Point3r const & p_translate = Castor::Point3r{}
-		, Castor::Quaternion const & p_rotate = Castor::Quaternion{}
-		, Castor::Point3r const & p_scale = Castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
-		/**
-		 *\~english
-		 *\brief		Deletes the scaling key frame at time index p_time.
-		 *\param[in]	p_time	The time index.
-		 *\~french
-		 *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
-		 *\param[in]	p_time	L'index de temps.
-		 */
-		C3D_API void RemoveKeyFrame( std::chrono::milliseconds const & p_time );
+		C3D_API virtual castor::String const & getName()const = 0;
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
-		inline InterpolatorType GetInterpolationMode()const
+		inline InterpolatorType getInterpolationMode()const
 		{
 			return m_mode;
-		}
-		/**
-		 *\~english
-		 *\return		The key frames.
-		 *\~french
-		 *\return		Les key frames.
-		 */
-		inline KeyFrameArray const & GetKeyFrames()const
-		{
-			return m_keyframes;
-		}
-		/**
-		 *\~english
-		 *\return		The animation length.
-		 *\~french
-		 *\return		La durée de l'animation.
-		 */
-		inline std::chrono::milliseconds const & GetLength()const
-		{
-			return m_length;
 		}
 		/**
 		 *\~english
@@ -160,21 +94,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'objet mouvant.
 		 */
-		inline SkeletonAnimationObjectType GetType()const
+		inline SkeletonAnimationObjectType getType()const
 		{
 			return m_type;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation length.
-		 *\param[in]	p_length	The new value.
-		 *\~french
-		 *\brief		Définit la durée de l'animation.
-		 *\param[in]	p_length	La nouvelle valeur.
-		 */
-		inline void	SetLength( std::chrono::milliseconds const & p_length )
-		{
-			m_length = p_length;
 		}
 		/**
 		 *\~english
@@ -184,33 +106,21 @@ namespace Castor3D
 		 *\brief		Récupère les animations du noeud de transformation.
 		 *\return		La valeur.
 		 */
-		inline Castor::Matrix4x4r const & GetNodeTransform()const
+		inline castor::Matrix4x4r const & getNodeTransform()const
 		{
 			return m_nodeTransform;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation node transformation.
-		 *\param[in]	p_transform	The new value.
+		 *\brief		sets the animation node transformation.
+		 *\param[in]	transform	The new value.
 		 *\~french
 		 *\brief		Définit les animations du noeud de transformation.
-		 *\param[in]	p_transform	La nouvelle valeur.
+		 *\param[in]	transform	La nouvelle valeur.
 		 */
-		inline void SetNodeTransform( Castor::Matrix4x4r const & p_transform )
+		inline void setNodeTransform( castor::Matrix4x4r const & transform )
 		{
-			m_nodeTransform = p_transform;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells whether or not the object has keyframes.
-		 *\return		\p false if no keyframes.
-		 *\~french
-		 *\brief		Dit si l'objet a des keyframes.
-		 *\return		\p false si pas de keyframes.
-		 */
-		inline bool HasKeyFrames()const
-		{
-			return !m_keyframes.empty();
+			m_nodeTransform = transform;
 		}
 		/**
 		 *\~english
@@ -218,7 +128,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline SkeletonAnimationObjectPtrArray const & GetChildren()const
+		inline SkeletonAnimationObjectPtrArray const & getChildren()const
 		{
 			return m_children;
 		}
@@ -228,7 +138,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'objet parent.
 		 */
-		inline SkeletonAnimationObjectSPtr GetParent()const
+		inline SkeletonAnimationObjectSPtr getParent()const
 		{
 			return m_parent.lock();
 		}
@@ -237,24 +147,21 @@ namespace Castor3D
 		//!\~english	The interpolation mode.
 		//!\~french		Le mode d'interpolation.
 		InterpolatorType m_mode{ InterpolatorType::eCount };
-		//!\~english	The animation length.
-		//!\~french		La durée de l'animation.
-		std::chrono::milliseconds m_length{ 0 };
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
 		SkeletonAnimationObjectType m_type;
-		//!\~english	The key frames.
-		//!\~french		Les keyframes.
-		KeyFrameArray m_keyframes;
 		//!\~english	Animation node transformations.
 		//!\~french		Transformations du noeud d'animation.
-		Castor::Matrix4x4r m_nodeTransform;
+		castor::Matrix4x4r m_nodeTransform;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
 		SkeletonAnimationObjectPtrArray m_children;
 		//!\~english	The parent object.
 		//!\~french		L'objet parent.
 		SkeletonAnimationObjectWPtr m_parent;
+		//!\~english	The bounding box.
+		//!\~french		La bounding box.
+		castor::BoundingBox m_boundingBox;
 
 		friend class BinaryWriter< SkeletonAnimationObject >;
 		friend class BinaryParser< SkeletonAnimationObject >;
@@ -293,14 +200,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( SkeletonAnimationObject const & p_obj )override;
+		C3D_API bool doWrite( SkeletonAnimationObject const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -319,16 +226,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
-		 *\param[in]	p_chunk	The chunk containing data.
+		 *\param[out]	obj	The object to read.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
-		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( SkeletonAnimationObject & p_obj )override;
+		C3D_API bool doParse( SkeletonAnimationObject & obj )override;
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk in version 1.1.
+		 *\param[out]	obj	The object to read.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk en version 1.1.
+		 *\param[out]	obj	L'objet à lire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool doParse_v1_1( SkeletonAnimationObject & obj )override;
 	};
 }
 

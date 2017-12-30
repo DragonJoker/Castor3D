@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_PARSER_PARAMETER_H___
 #define ___CASTOR_PARSER_PARAMETER_H___
@@ -28,11 +9,12 @@ SOFTWARE.
 #include "Graphics/Colour.hpp"
 #include "Data/Path.hpp"
 #include "Math/Point.hpp"
+#include "Math/Range.hpp"
 #include "Graphics/Position.hpp"
 #include "Graphics/Rectangle.hpp"
 #include "Graphics/Size.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -66,7 +48,7 @@ namespace Castor
 	\brief		Parmètre de parseur spécifié.
 	*/
 	template< ParameterType Type >
-	class ParserParameter < Type, typename std::enable_if < !has_base_parameter_type< Type >::value >::type >
+	class ParserParameter < Type, typename std::enable_if < !HasBaseParameterType< Type >::value && !IsArithmeticType< Type >::value >::type >
 		: public ParserParameterBase
 	{
 	public:
@@ -80,39 +62,117 @@ namespace Castor
 		{
 		}
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetType
+		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType GetType()
+		inline ParameterType getType()
 		{
 			return ParserParameterHelper< Type >::ParamType;
 		}
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const GetStrType()
+		inline xchar const * const getStrType()
 		{
 			return ParserParameterHelper< Type >::StringType;
 		}
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Clone
+		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr Clone()
+		inline ParserParameterBaseSPtr clone()
 		{
 			return std::make_shared< ParserParameter< Type > >( *this );
 		}
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Parse
+		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool Parse( String & p_params )
+		inline bool parse( String & p_params )
 		{
-			return ValueParser< Type >::Parse( p_params, m_value );
+			return ValueParser< Type >::parse( p_params, m_value );
 		}
 
 	public:
-		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		//!\~english	The parameter value type.
+		//!\~french		Le type de valeur du paramètre.
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
-		//!~english The parameter value.	\~french La valeur du paramètre.
+		//!\~english	The parameter value.
+		//!\~french		La valeur du paramètre.
 		ValueType m_value;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		26/03/2013
+	\version	0.7.0
+	\~english
+	\brief		Specified parser parameter.
+	\~french
+	\brief		Parmètre de parseur spécifié.
+	*/
+	template< ParameterType Type >
+	class ParserParameter < Type, typename std::enable_if < IsArithmeticType< Type >::value >::type >
+		: public ParserParameterBase
+	{
+	public:
+		//!\~english	The parameter value type.
+		//!\~french		Le type de valeur du paramètre.
+		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		inline ParserParameter()
+			: m_range{ makeRange( std::numeric_limits< ValueType >::lowest(), std::numeric_limits< ValueType >::max() ) }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		inline ParserParameter( Range< ValueType > const & range )
+			: m_range{ range }
+		{
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::getType
+		 */
+		inline ParameterType getType()
+		{
+			return ParserParameterHelper< Type >::ParamType;
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::getStrType
+		 */
+		inline xchar const * const getStrType()
+		{
+			return ParserParameterHelper< Type >::StringType;
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::clone
+		 */
+		inline ParserParameterBaseSPtr clone()
+		{
+			return std::make_shared< ParserParameter< Type > >( *this );
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::parse
+		 */
+		inline bool parse( String & p_params )
+		{
+			return ValueParser< Type >::parse( p_params, m_value, m_range );
+		}
+
+	public:
+		//!\~english	The parameter value.
+		//!\~french		La valeur du paramètre.
+		ValueType m_value;
+		//!\~english	The parameter value range.
+		//!\~french		L'intervalle de la valeur du paramètre.
+		Range< ValueType > m_range;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -137,25 +197,25 @@ namespace Castor
 		 */
 		inline ParserParameter();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetType
+		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType GetType();
+		inline ParameterType getType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType GetBaseType();
+		inline ParameterType getBaseType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const GetStrType();
+		inline xchar const * const getStrType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Clone
+		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr Clone();
+		inline ParserParameterBaseSPtr clone();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Parse
+		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool Parse( String & p_params );
+		inline bool parse( String & p_params );
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -181,25 +241,25 @@ namespace Castor
 		 */
 		inline ParserParameter( UIntStrMap const & p_values );
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetType
+		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType GetType();
+		inline ParameterType getType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType GetBaseType();
+		inline ParameterType getBaseType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const GetStrType();
+		inline xchar const * const getStrType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Clone
+		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr Clone();
+		inline ParserParameterBaseSPtr clone();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Parse
+		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool Parse( String & p_params );
+		inline bool parse( String & p_params );
 
 	public:
 		UIntStrMap const & m_values;
@@ -228,25 +288,25 @@ namespace Castor
 		 */
 		inline ParserParameter( UIntStrMap const & p_values );
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetType
+		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType GetType();
+		inline ParameterType getType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType GetBaseType();
+		inline ParameterType getBaseType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const GetStrType();
+		inline xchar const * const getStrType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Clone
+		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr Clone();
+		inline ParserParameterBaseSPtr clone();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Parse
+		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool Parse( String & p_params );
+		inline bool parse( String & p_params );
 
 	public:
 		UIntStrMap const & m_values;
@@ -275,25 +335,25 @@ namespace Castor
 		 */
 		inline ParserParameter( UInt64StrMap const & p_values );
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetType
+		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType GetType();
+		inline ParameterType getType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType GetBaseType();
+		inline ParameterType getBaseType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const GetStrType();
+		inline xchar const * const getStrType();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Clone
+		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr Clone();
+		inline ParserParameterBaseSPtr clone();
 		/**
-		 *\copydoc		Castor::ParserParameterBase::Parse
+		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool Parse( String & p_params );
+		inline bool parse( String & p_params );
 
 	public:
 		UInt64StrMap const & m_values;
@@ -307,9 +367,37 @@ namespace Castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr MakeParameter()
+	ParserParameterBaseSPtr makeParameter()
 	{
 		return std::make_shared< ParserParameter< Type > >();
+	}
+	/**
+	 *\~english
+	 *\brief		Creates a parameter of given type.
+	 *\return		The created parameter.
+	 *\~french
+	 *\brief		Crée un paramètre du type donné.
+	 *\return		Le paramètre créé.
+	 */
+	template< ParameterType Type, typename T >
+	ParserParameterBaseSPtr makeParameter( Range< T > const & range )
+	{
+		static_assert( Type >= ParameterType::eInt8 && Type <= ParameterType::eLongDouble
+			, "Only for arithmetic types" );
+		static_assert( ( Type == ParameterType::eInt8 && std::is_same< T, int8_t >::value )
+				|| ( Type == ParameterType::eInt16 && std::is_same< T, int16_t >::value )
+				|| ( Type == ParameterType::eInt32 && std::is_same< T, int32_t >::value )
+				|| ( Type == ParameterType::eInt64 && std::is_same< T, int64_t >::value )
+				|| ( Type == ParameterType::eUInt8 && std::is_same< T, uint8_t >::value )
+				|| ( Type == ParameterType::eUInt16 && std::is_same< T, uint16_t >::value )
+				|| ( Type == ParameterType::eUInt32 && std::is_same< T, uint32_t >::value )
+				|| ( Type == ParameterType::eUInt64 && std::is_same< T, uint64_t >::value )
+				|| ( Type == ParameterType::eFloat && std::is_same< T, float >::value )
+				|| ( Type == ParameterType::eDouble && std::is_same< T, double >::value )
+				|| ( Type == ParameterType::eLongDouble && std::is_same< T, long double >::value )
+			, "C type and ParameterType must match." );
+
+		return std::make_shared< ParserParameter< Type > >( range );
 	}
 	/**
 	 *\~english
@@ -322,7 +410,7 @@ namespace Castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr MakeParameter( UIntStrMap const & p_values )
+	ParserParameterBaseSPtr makeParameter( UIntStrMap const & p_values )
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( p_values );
@@ -338,7 +426,7 @@ namespace Castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr MakeParameter( UInt64StrMap const & p_values )
+	ParserParameterBaseSPtr makeParameter( UInt64StrMap const & p_values )
 	{
 		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( p_values );

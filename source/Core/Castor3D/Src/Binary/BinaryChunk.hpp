@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_BINARY_CHUNK_H___
 #define ___C3D_BINARY_CHUNK_H___
@@ -28,17 +9,29 @@ SOFTWARE.
 
 #include <cstring>
 
-namespace Castor3D
+namespace castor3d
 {
 	//!\~english	Macro to make a version number.
 	//!\~french		Macro pour créer un numéro de version.
-#	define	MAKE_CMSH_VERSION( major, minor, revision )\
-	((uint32_t( major ) << 24)\
-	| (uint32_t( minor ) << 16)\
-	| (uint32_t( revision ) << 0))
+#	define	MAKE_CMSH_VERSION( maj, min, rev )\
+	( ( uint32_t( maj ) << 24 ) \
+	| ( uint32_t( min ) << 16 ) \
+	| ( uint32_t( rev ) <<  0 ) )
+	//!\~english	Macro to get the major number from a version number.
+	//!\~french		Macro pour créer le numéro majeur depuis un numéro de version.
+#	define	CMSH_VERSION_MAJOR( version )\
+	( uint32_t( version ) >> 24 )
+	//!\~english	Macro to get the minor number from a version number.
+	//!\~french		Macro pour créer le numéro mineur depuis un numéro de version.
+#	define	CMSH_VERSION_MINOR( version )\
+	( ( uint32_t( version ) >> 16 ) & uint32_t( 0xFF ) )
+	//!\~english	Macro to get the revision number from a version number.
+	//!\~french		Macro pour créer le numéro de révision depuis un numéro de version.
+#	define	CMSH_VERSION_REVISION( version )\
+	( ( uint32_t( version ) >>  0 ) & uint32_t( 0xFF ) )
 	//!\~english	The current format version number.
 	//!\~french		La version actuelle du format.
-	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x01, 0x0000 );
+	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x03, 0x0000 );
 	//!\~english	A define to ease the declaration of a chunk id.
 	//!\~french		Un define pour faciliter la déclaration d'un id de chunk.
 #	define MAKE_CHUNK_ID( a, b, c, d, e, f, g, h )\
@@ -95,26 +88,32 @@ namespace Castor3D
 		eMovingTransform = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
 		eKeyframeCount = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
 		eKeyframes = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
-		eMeshAnimationSubmeshID = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'I', 'D' ),
-		eMeshAnimationSubmesh = MAKE_CHUNK_ID( 'M', 'S', 'H', 'A', 'N', 'S', 'M', 'H' ),
-		eSubmeshAnimationBuffer = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'B', 'F' ),
-		eSubmeshAnimationBufferSize = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'S', 'Z' ),
-		eSubmeshAnimationBuffersCount = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'C', 'T' ),
-		eSubmeshAnimationBuffers = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'U', 'F', 'S' ),
+		eBonesComponent = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'C', 'O', 'M', 'P' ),
+		// Version 1.2
+		eMeshAnimationKeyFrame = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'R', 'M' ),
+		eMeshAnimationKeyFrameTime = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'T', 'M' ),
+		eMeshAnimationKeyFrameSubmeshID = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'I', 'D' ),
+		eMeshAnimationKeyFrameBufferSize = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'S', 'Z' ),
+		eMeshAnimationKeyFrameBufferData = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'D', 'T' ),
+		eSkeletonAnimationKeyFrame = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'R', 'M' ),
+		eSkeletonAnimationKeyFrameTime = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'T', 'M' ),
+		eSkeletonAnimationKeyFrameObjectType = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'Y' ),
+		eSkeletonAnimationKeyFrameObjectName = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'N' ),
+		eSkeletonAnimationKeyFrameObjectTransform = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' ),
 	};
 	/**
 	 *\~english
-	 *\brief			Sets given value to big endian.
+	 *\brief			sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	p_value	La valeur.
 	 */
-	static inline void PrepareChunkData( ChunkType & p_value )
+	static inline void prepareChunkData( ChunkType & p_value )
 	{
-		if ( !Castor::IsBigEndian() )
+		if ( !castor::isBigEndian() )
 		{
-			Castor::SwitchEndianness( p_value );
+			castor::switchEndianness( p_value );
 		}
 	}
 	/*!
@@ -162,10 +161,10 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée le tampon final à partir de tout ce qui a été ajouté jusqu'à cet appel
 		 */
-		C3D_API void Finalise();
+		C3D_API void finalise();
 		/**
 		 *\~english
-		 *\brief		Adds data to the chunk
+		 *\brief		adds data to the chunk
 		 *\param[in]	p_data	The data buffer
 		 *\param[in]	p_size	The buffer size
 		 *\~french
@@ -173,7 +172,7 @@ namespace Castor3D
 		 *\param[in]	p_data	Le tampon de données
 		 *\param[in]	p_size	La taille du tampon
 		 */
-		C3D_API void Add( uint8_t * p_data, uint32_t p_size );
+		C3D_API void add( uint8_t * p_data, uint32_t p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves data from the chunk
@@ -184,7 +183,7 @@ namespace Castor3D
 		 *\param[in]	p_data	Le tampon de données à remplir
 		 *\param[in]	p_size	La taille du tampon
 		 */
-		C3D_API void Get( uint8_t * p_data, uint32_t p_size );
+		C3D_API void get( uint8_t * p_data, uint32_t p_size );
 		/**
 		 *\~english
 		 *\brief		Checks that the remaining place can hold the given size
@@ -193,7 +192,7 @@ namespace Castor3D
 		 *\brief		Vérifie que la place restante peut contenir la taille donnée
 		 *\param[in]	p_size	La taille
 		 */
-		C3D_API bool CheckAvailable( uint32_t p_size = 0 )const;
+		C3D_API bool checkAvailable( uint32_t p_size = 0 )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the remaining place
@@ -202,7 +201,7 @@ namespace Castor3D
 		 *\brief		Récupère la place restante
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t GetRemaining()const;
+		C3D_API uint32_t getRemaining()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a subchunk
@@ -213,7 +212,7 @@ namespace Castor3D
 		 *\param[out]	p_subchunk	Reçoit le sous chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool GetSubChunk( BinaryChunk & p_subchunk );
+		C3D_API bool getSubChunk( BinaryChunk & p_subchunk );
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk into a chunk
@@ -224,7 +223,7 @@ namespace Castor3D
 		 *\param[in]	p_subchunk	Le subchunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool AddSubChunk( BinaryChunk const & p_subchunk );
+		C3D_API bool addSubChunk( BinaryChunk const & p_subchunk );
 		/**
 		 *\~english
 		 *\brief		To chunk writer function
@@ -235,7 +234,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool Write( Castor::BinaryFile & p_file );
+		C3D_API bool write( castor::BinaryFile & p_file );
 		/**
 		 *\~english
 		 *\brief		From file reader function
@@ -246,7 +245,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool Read( Castor::BinaryFile & p_file );
+		C3D_API bool read( castor::BinaryFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Retrieves the remaining data
@@ -255,7 +254,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon restant
 		 *\return		La valeur
 		 */
-		inline uint8_t const * GetRemainingData()const
+		inline uint8_t const * getRemainingData()const
 		{
 			return &m_data[m_index];
 		}
@@ -267,7 +266,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de chunk
 		 *\return		La valeur
 		 */
-		inline ChunkType GetChunkType()const
+		inline ChunkType getChunkType()const
 		{
 			return m_type;
 		}
@@ -279,7 +278,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille des données du chunk
 		 *\return		La valeur
 		 */
-		inline uint32_t GetDataSize()const
+		inline uint32_t getDataSize()const
 		{
 			return uint32_t( m_data.size() );
 		}
@@ -291,13 +290,13 @@ namespace Castor3D
 		 *\brief		Récupère les données du chunk
 		 *\return		La valeur
 		 */
-		inline uint8_t const * GetData()const
+		inline uint8_t const * getData()const
 		{
 			return m_data.data();
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the chunk's data
+		 *\brief		sets the chunk's data
 		 *\param[in]	p_begin	The data buffer's begin
 		 *\param[in]	p_end	The data buffer's end
 		 *\~french
@@ -305,7 +304,7 @@ namespace Castor3D
 		 *\param[in]	p_begin	Le début du tampon de données
 		 *\param[in]	p_end	La fin du tampon de données
 		 */
-		inline void SetData( uint8_t const * p_begin, uint8_t const * p_end )
+		inline void setData( uint8_t const * p_begin, uint8_t const * p_end )
 		{
 			m_data.assign( p_begin, p_end );
 		}
@@ -315,46 +314,56 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère la taille des données du chunk
 		 */
-		void EndParse()
+		void endParse()
 		{
 			m_index = uint32_t( m_data.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Resets the chunk, to be able to reparse it.
+		 *\~french
+		 *\brief		Réinitialise le chunk, afin de pouvoir le reparser.
+		 */
+		void resetParse()
+		{
+			m_index = 0u;
 		}
 
 	private:
 		template< typename T >
-		inline bool DoRead( T * p_values, uint32_t p_count )
+		inline bool doRead( T * p_values, uint32_t p_count )
 		{
-			auto l_size = p_count * uint32_t( sizeof( T ) );
-			bool l_return{ m_index + l_size < m_data.size() };
+			auto size = p_count * uint32_t( sizeof( T ) );
+			bool result{ m_index + size < m_data.size() };
 
-			if ( l_return )
+			if ( result )
 			{
-				auto l_begin = reinterpret_cast< T * >( &m_data[m_index] );
-				auto l_end = l_begin + p_count;
-				auto l_value = p_values;
+				auto begin = reinterpret_cast< T * >( &m_data[m_index] );
+				auto end = begin + p_count;
+				auto value = p_values;
 
-				for ( auto l_it = l_begin; l_it != l_end; ++l_it )
+				for ( auto it = begin; it != end; ++it )
 				{
-					( *l_value ) = *l_it;
-					PrepareChunkData( *l_value );
-					++l_value;
+					( *value ) = *it;
+					prepareChunkData( *value );
+					++value;
 				}
 
-				m_index += l_size;
+				m_index += size;
 			}
 
-			return l_return;
+			return result;
 		}
 
 	private:
 		//!\~english The chunk type	\~french Le type du chunk
 		ChunkType m_type;
 		//!\~english The chunk data	\~french Les données du chunk
-		Castor::ByteArray m_data;
+		castor::ByteArray m_data;
 		//!\~english The current index in the chunk data	\~french L'index courant dans les données du chunk
 		uint32_t m_index;
 		//!\~english The chunk data	\~french Les données du chunk
-		std::list< Castor::ByteArray > m_addedData;
+		std::list< castor::ByteArray > m_addedData;
 	};
 }
 

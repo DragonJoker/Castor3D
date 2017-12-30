@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CU_ThreadPool_H___
 #define ___CU_ThreadPool_H___
 
 #include "WorkerThread.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -50,7 +31,7 @@ namespace Castor
 		 *\brief		Constructeur, initialise le pool au nombre de threads donné.
 		 *\param[in]	p_count	Le nombre de threads du pool.
 		 */
-		CU_API ThreadPool( size_t p_count );
+		CU_API explicit ThreadPool( size_t p_count );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -64,14 +45,14 @@ namespace Castor
 		 *\~french
 		 *\return		\p true si tous les threads sont occupés.
 		 */
-		CU_API bool IsEmpty()const;
+		CU_API bool isEmpty()const;
 		/**
 		 *\~english
 		 *\return		\p true if all the threads are idle.
 		 *\~french
 		 *\return		\p true si tous les threads sont inoccupés.
 		 */
-		CU_API bool IsFull()const;
+		CU_API bool isFull()const;
 		/**
 		 *\~english
 		 *\brief		Waits for all the threads to finish their job.
@@ -82,32 +63,32 @@ namespace Castor
 		 *\param[in]	p_timeout	Le temps d'attente maximum.
 		 *\return		\p true Si tous les threads on terminé.
 		 */
-		CU_API bool WaitAll( std::chrono::milliseconds const & p_timeout )const;
+		CU_API bool waitAll( castor::Milliseconds const & p_timeout )const;
 		/**
 		 *\~english
 		 *\brief		Feeds a worker thread with the given job.
 		 *\remarks		If no thread is available, waits for one to finish its job.
 		 *\param[in]	p_job	The job.
 		 *\~french
-		 *\brief		Donne à un thread de travail la tâche donnée.
+		 *\brief		donne à un thread de travail la tâche donnée.
 		 *\remarks		Si aucun thread n'est disponible, attend que l'un d'eux finisse sa tâche.
 		 *\param[in]	p_job	La tâche.
 		 */
-		CU_API void PushJob( WorkerThread::Job p_job );
+		CU_API void pushJob( WorkerThread::Job p_job );
 		/**
 		 *\~english
 		 *\return		The threads count.
 		 *\~french
 		 *\return		Le nombre de threads.
 		 */
-		inline size_t GetCount()const
+		inline size_t getCount()const
 		{
 			return m_count;
 		}
 
 	private:
-		WorkerThread & DoReserveWorker();
-		void DoFreeWorker( WorkerThread & p_worker );
+		WorkerThread & doReserveWorker();
+		void doFreeWorker( WorkerThread & p_worker );
 
 	private:
 		size_t const m_count;

@@ -9,15 +9,22 @@ set( CastorBinsDependencies
 set( CastorBinLibraries
 	${CastorMinLibraries}
 	${wxWidgetsLibraries}
-	${FFMpegLibraries}
-	${OpenCVLibraries}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
+if ( ${CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS} )
+	set( CastorBinLibraries
+		${CastorMinLibraries}
+		${FFMpegLibraries}
+		${OpenCVLibraries}
+		PARENT_SCOPE
+	)
+endif ()
+
 set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Common GUI tools" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )

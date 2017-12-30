@@ -8,22 +8,30 @@
 #include <Mesh/Buffer/IndexBuffer.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
-	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, Topology p_topology, ShaderProgram const & p_program )
-		: GeometryBuffers( p_topology, p_program )
-		, ObjectType( p_gl,
+	GlGeometryBuffers::GlGeometryBuffers( OpenGl & gl
+		, Topology topology
+		, ShaderProgram const & program )
+		: GeometryBuffers( topology, program )
+		, ObjectType( gl,
 					  "GlVertexArrayObjects",
-					  std::bind( &OpenGl::GenVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::DeleteVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::IsVertexArray, std::ref( p_gl ), std::placeholders::_1 ),
-					  std::bind( &OpenGl::BindVertexArray, std::ref( p_gl ), std::placeholders::_1 )
+					  std::bind( &OpenGl::GenVertexArrays, std::ref( gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::DeleteVertexArrays, std::ref( gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::IsVertexArray, std::ref( gl ), std::placeholders::_1 ),
+					  std::bind( &OpenGl::BindVertexArray, std::ref( gl ), std::placeholders::_1 )
 					)
-		, m_program{ p_program }
-		, m_glTopology{ p_gl.Get( p_topology ) }
+		, m_program{ program }
+		, m_glTopology{ gl.get( topology ) }
+		, m_glIndirectArraysBuffer{ static_cast< GlRenderSystem & >( *program.getRenderSystem() )
+			, gl
+			, GlBufferTarget::eIndirect }
+		, m_glIndirectElementsBuffer{ static_cast< GlRenderSystem & >( *program.getRenderSystem() )
+			, gl
+			, GlBufferTarget::eIndirect }
 	{
 	}
 
@@ -31,184 +39,215 @@ namespace GlRender
 	{
 	}
 
-	bool GlGeometryBuffers::Draw( uint32_t p_size, uint32_t p_index )const
+	bool GlGeometryBuffers::draw( uint32_t size, uint32_t index )const
 	{
-		ObjectType::Bind();
-		glCheckTextureUnits();
+		ObjectType::bind();
+		glcheckTextureUnits();
 
 		if ( m_indexBuffer )
 		{
-			GetOpenGl().DrawElements( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ) );
+			getOpenGl().DrawElements( m_glTopology
+				, int( size )
+				, GlType::eUnsignedInt
+				, BUFFER_OFFSET( index * sizeof( uint32_t ) ) );
 		}
 		else
 		{
-			GetOpenGl().DrawArrays( m_glTopology, int( p_index ), int( p_size ) );
+			getOpenGl().DrawArrays( m_glTopology
+				, int( 0u )
+				, int( size ) );
 		}
 
-		ObjectType::Unbind();
+		ObjectType::unbind();
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const
+	bool GlGeometryBuffers::drawInstanced( uint32_t size
+		, uint32_t index
+		, uint32_t count )const
 	{
-		ObjectType::Bind();
-		glCheckTextureUnits();
+		ObjectType::bind();
+		glcheckTextureUnits();
 
 		if ( m_indexBuffer )
 		{
-			GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ), int( p_count ) );
+			getOpenGl().DrawElementsInstanced( m_glTopology
+				, int( size )
+				, GlType::eUnsignedInt
+				, BUFFER_OFFSET( index * sizeof( uint32_t ) )
+				, int( count ) );
 		}
 		else
 		{
-			GetOpenGl().DrawArraysInstanced( m_glTopology, int( p_index ), int( p_size ), int( p_count ) );
+			getOpenGl().DrawArraysInstanced( m_glTopology
+				, int( 0u )
+				, int( size )
+				, int( count ) );
 		}
 
-		ObjectType::Unbind();
+		ObjectType::unbind();
 		return true;
 	}
 
-	bool GlGeometryBuffers::DoInitialise()
+	bool GlGeometryBuffers::doInitialise()
 	{
-		if ( m_program.GetStatus() != ProgramStatus::eLinked )
+		if ( m_program.getStatus() != ProgramStatus::eLinked )
 		{
 			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
 		}
 
-		bool l_return = ObjectType::Create();
+		bool result = ObjectType::create();
 
-		if ( l_return )
+		if ( result )
 		{
-			GetOpenGl().BindVertexArray( GetGlName() );
+			getOpenGl().BindVertexArray( getGlName() );
 
-			for ( auto & l_buffer : m_buffers )
+			for ( auto & buffer : m_buffers )
 			{
-				GlAttributePtrArray l_attributes;
+				GlAttributePtrArray attributes;
 
-				if ( DoCreateAttributes( m_program.GetLayout(), l_buffer.get().GetDeclaration(), l_attributes ) )
+				if ( doCreateAttributes( m_program.getLayout()
+					, buffer.get().getDeclaration()
+					, buffer.get().getOffset()
+					, attributes ) )
 				{
-					l_buffer.get().Bind();
-					DoBindAttributes( l_attributes );
-					m_attributes.insert( std::end( m_attributes ), std::begin( l_attributes ), std::end( l_attributes ) );
+					buffer.get().bind();
+					doBindAttributes( attributes );
+					m_attributes.insert( std::end( m_attributes ), std::begin( attributes ), std::end( attributes ) );
 				}
 			}
 
 			if ( m_indexBuffer )
 			{
-				m_indexBuffer->Bind();
+				m_indexBuffer->bind();
 			}
 
-			GetOpenGl().BindVertexArray( 0 );
+			getOpenGl().BindVertexArray( 0 );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void GlGeometryBuffers::DoCleanup()
+	void GlGeometryBuffers::doCleanup()
 	{
 		m_attributes.clear();
-		ObjectType::Destroy();
+		ObjectType::destroy();
 	}
 
-	BufferDeclaration::const_iterator GlGeometryBuffers::DoFindElement( BufferDeclaration const & p_declaration, BufferElementDeclaration const & p_element )const
+	void GlGeometryBuffers::doSetTopology( Topology p_value )
+	{
+		m_glTopology = getOpenGl().get( p_value );
+	}
+
+	BufferDeclaration::const_iterator GlGeometryBuffers::doFindElement( std::vector< BufferElementDeclaration > const & declaration
+		, BufferElementDeclaration const & element )const
 	{
 		// First try to find an attribute with matching name.
-		BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
-		{
-			return l_element.m_name == p_element.m_name;
-		} );
+		auto result = std::find_if( declaration.begin()
+			, declaration.end()
+			, [&element]( BufferElementDeclaration const & elem )
+			{
+				return elem.m_name == element.m_name;
+			} );
 
-		if ( l_return == p_declaration.end() )
+		if ( result == declaration.end() )
 		{
 			// We try to find an element with the same ElementUsage as asked.
-			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
-			{
-				return l_element.m_usages == p_element.m_usages;
-			} );
+			result = std::find_if( declaration.begin()
+				, declaration.end()
+				, [&element]( BufferElementDeclaration const & elem )
+				{
+					return elem.m_usages == element.m_usages;
+				} );
 		}
 
-		if ( l_return == p_declaration.end() )
+		if ( result == declaration.end() )
 		{
 			// We try to find an element with an ElementUsage approaching the one asked.
-			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
-			{
-				return ( l_element.m_usages & p_element.m_usages ) != 0;
-			} );
+			result = std::find_if( declaration.begin()
+				, declaration.end()
+				, [&element]( BufferElementDeclaration const & elem )
+				{
+					return ( elem.m_usages & element.m_usages ) != 0;
+				} );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	GlAttributeBaseSPtr GlGeometryBuffers::DoCreateAttribute( BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_divisor, BufferDeclaration const & p_declaration )
+	GlAttributeBaseSPtr GlGeometryBuffers::doCreateAttribute( BufferElementDeclaration const & element
+		, uint32_t offset
+		, uint32_t divisor
+		, uint32_t stride )
 	{
-		bool l_return = true;
-		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
-		GlAttributeBaseSPtr l_attribute;
-		uint32_t l_stride = p_declaration.stride();
+		bool result = true;
+		auto const & renderSystem = getOpenGl().getRenderSystem();
+		GlAttributeBaseSPtr attribute;
 
-		switch ( p_element.m_dataType )
+		switch ( element.m_dataType )
 		{
 		case ElementType::eFloat:
-			l_attribute = std::make_shared< GlAttributeVec1r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec1r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eVec2:
-			l_attribute = std::make_shared< GlAttributeVec2r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec2r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eVec3:
-			l_attribute = std::make_shared< GlAttributeVec3r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec3r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eVec4:
-			l_attribute = std::make_shared< GlAttributeVec4r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec4r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eColour:
-			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec1ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eInt:
-			l_attribute = std::make_shared< GlAttributeVec1i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec1i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eIVec2:
-			l_attribute = std::make_shared< GlAttributeVec2i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec2i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eIVec3:
-			l_attribute = std::make_shared< GlAttributeVec3i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec3i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eIVec4:
-			l_attribute = std::make_shared< GlAttributeVec4i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec4i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eUInt:
-			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec1ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eUIVec2:
-			l_attribute = std::make_shared< GlAttributeVec2ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec2ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eUIVec3:
-			l_attribute = std::make_shared< GlAttributeVec3ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec3ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eUIVec4:
-			l_attribute = std::make_shared< GlAttributeVec4ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
+			attribute = std::make_shared< GlAttributeVec4ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
 		case ElementType::eMat2:
-			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( getOpenGl(), m_program, stride, element.m_name );
 			break;
 
 		case ElementType::eMat3:
-			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( getOpenGl(), m_program, stride, element.m_name );
 			break;
 
 		case ElementType::eMat4:
-			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( getOpenGl(), m_program, stride, element.m_name );
 			break;
 
 		default:
@@ -216,42 +255,90 @@ namespace GlRender
 			break;
 		}
 
-		if ( l_attribute )
+		if ( attribute )
 		{
-			l_attribute->SetOffset( p_offset );
+			attribute->setOffset( offset );
 		}
 
-		return l_attribute;
+		return attribute;
 	}
 
-	bool GlGeometryBuffers::DoCreateAttributes( ProgramInputLayout const & p_layout, BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes )
+	bool GlGeometryBuffers::doCreateAttributes( ProgramInputLayout const & layout
+		, BufferDeclaration const & declaration
+		, uint32_t offset
+		, GlAttributePtrArray & attributes )
 	{
-		for ( auto & l_element : p_layout )
+		std::vector< BufferElementDeclaration > remaining{ declaration.begin(), declaration.end() };
+
+		for ( auto & element : layout )
 		{
-			auto l_it = DoFindElement( p_declaration, l_element );
-
-			if ( l_it != p_declaration.end() )
+			auto it = std::find_if( remaining.begin()
+				, remaining.end()
+				, [&element]( BufferElementDeclaration const & elem )
 			{
-				auto l_attribute = DoCreateAttribute( l_element, l_it->m_offset, l_it->m_divisor, p_declaration );
+				return elem.m_name == element.m_name;
+			} );
 
-				if ( l_attribute )
+			if ( it != remaining.end() )
+			{
+				auto attribute = doCreateAttribute( element
+					, offset + it->m_offset
+					, it->m_divisor
+					, declaration.stride() );
+
+				if ( attribute )
 				{
-					p_attributes.push_back( l_attribute );
+					attributes.push_back( attribute );
 				}
+
+				remaining.erase( it );
 			}
 		}
 
-		return !p_attributes.empty();
+		return !attributes.empty();
 	}
 
-	void GlGeometryBuffers::DoBindAttributes( GlAttributePtrArray const & p_attributes )const
+	void GlGeometryBuffers::doBindAttributes( GlAttributePtrArray const & attributes )const
 	{
-		for ( auto const & l_attribute : p_attributes )
+		for ( auto const & attribute : attributes )
 		{
-			if ( l_attribute->GetLocation() != GlInvalidIndex )
+			if ( attribute->getLocation() != GlInvalidIndex )
 			{
-				l_attribute->Bind( false );
+				attribute->bind( false );
 			}
 		}
+	}
+
+	void GlGeometryBuffers::doDrawElementsIndirect( uint32_t size
+		, uint32_t index
+		, uint32_t count )const
+	{
+		m_elementsCommand.baseInstance = 0u;
+		m_elementsCommand.count = count;
+		m_elementsCommand.firstIndex = index;
+		m_elementsCommand.baseVertex = 0u;
+		m_elementsCommand.primCount = size;
+		m_glIndirectElementsBuffer.upload( 0u
+			, sizeof( m_elementsCommand )
+			, reinterpret_cast< uint8_t * >( &m_elementsCommand ) );
+		m_glIndirectElementsBuffer.bind();
+		getOpenGl().DrawElementsIndirect( m_glTopology, GlType::eUnsignedInt, BUFFER_OFFSET( 0u ) );
+		m_glIndirectElementsBuffer.unbind();
+	}
+
+	void GlGeometryBuffers::doDrawArraysIndirect( uint32_t size
+		, uint32_t index
+		, uint32_t count )const
+	{
+		m_arraysCommand.baseInstance = 0u;
+		m_arraysCommand.count = count;
+		m_arraysCommand.first = index;
+		m_arraysCommand.primCount = size;
+		m_glIndirectArraysBuffer.upload( 0u
+			, sizeof( m_arraysCommand )
+			, reinterpret_cast< uint8_t * >( &m_arraysCommand ) );
+		m_glIndirectArraysBuffer.bind();
+		getOpenGl().DrawArraysIndirect( m_glTopology, BUFFER_OFFSET( 0u ) );
+		m_glIndirectArraysBuffer.unbind();
 	}
 }

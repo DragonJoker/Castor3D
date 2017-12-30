@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_GEOMETRY_CACHE_H___
 #define ___C3D_GEOMETRY_CACHE_H___
@@ -26,7 +7,7 @@ SOFTWARE.
 #include "Cache/ObjectCache.hpp"
 #include "Render/RenderInfo.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,10 +23,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct ObjectCacheTraits< Geometry, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< Geometry >( KeyType const &, SceneNodeSPtr, MeshSPtr ) >;
 		using Merger = std::function< void( ObjectCacheBase< Geometry, KeyType > const &
-			, Castor::Collection< Geometry, KeyType > &
+			, castor::Collection< Geometry, KeyType > &
 			, std::shared_ptr< Geometry >
 			, SceneNodeSPtr
 			, SceneNodeSPtr ) >;
@@ -60,11 +41,11 @@ namespace Castor3D
 	\brief		Cache de Geometry.
 	*/
 	template<>
-	class ObjectCache< Geometry, Castor::String >
-		: public ObjectCacheBase< Geometry, Castor::String >
+	class ObjectCache< Geometry, castor::String >
+		: public ObjectCacheBase< Geometry, castor::String >
 	{
 	public:
-		using MyObjectCache = ObjectCacheBase< Geometry, Castor::String >;
+		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
@@ -79,7 +60,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine			The engine.
+		 *\param[in]	engine			The engine.
 		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
@@ -92,7 +73,7 @@ namespace Castor3D
 		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	engine			Le moteur.
 		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
@@ -104,7 +85,7 @@ namespace Castor3D
 		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API ObjectCache( Engine & p_engine
+		C3D_API ObjectCache( Engine & engine
 			, Scene & p_scene
 			, SceneNodeSPtr p_rootNode
 			, SceneNodeSPtr p_rootCameraNode
@@ -128,7 +109,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'objets
 		 */
-		C3D_API void FillInfo( RenderInfo & p_info )const;
+		C3D_API void fillInfo( RenderInfo & p_info )const;
 		/**
 		 *\~english
 		 *\brief		Creates an object.
@@ -143,9 +124,9 @@ namespace Castor3D
 		 *\param[in]	p_mesh		Le maillage.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
+		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
 		{
-			return MyObjectCache::Add( p_name, p_parent, p_mesh );
+			return MyObjectCache::add( p_name, p_parent, p_mesh );
 		}
 
 	private:
@@ -156,7 +137,7 @@ namespace Castor3D
 		//!\~french		Le nombre total de sommets.
 		uint32_t m_vertexCount{ 0 };
 	};
-	using GeometryCache = ObjectCache< Geometry, Castor::String >;
+	using GeometryCache = ObjectCache< Geometry, castor::String >;
 	DECLARE_SMART_PTR( GeometryCache );
 }
 

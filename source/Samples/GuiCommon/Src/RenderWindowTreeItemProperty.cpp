@@ -5,8 +5,8 @@
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -16,7 +16,7 @@ namespace GuiCommon
 	}
 
 	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool p_editable, RenderWindowSPtr p_window )
-		: TreeItemProperty( p_window->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
+		: TreeItemProperty( p_window->getEngine(), p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
 		, m_window( p_window )
 	{
 		PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
@@ -28,22 +28,22 @@ namespace GuiCommon
 	{
 	}
 
-	void RenderWindowTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void RenderWindowTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		RenderWindowSPtr l_window = GetRenderWindow();
+		RenderWindowSPtr window = getRenderWindow();
 
-		if ( l_window )
+		if ( window )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_WINDOW + wxString( l_window->GetName() ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_WINDOW + wxString( window->getName() ) ) );
 		}
 	}
 
-	void RenderWindowTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void RenderWindowTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		RenderWindowSPtr l_window = GetRenderWindow();
-		wxPGProperty * l_property = p_event.GetProperty();
+		RenderWindowSPtr window = getRenderWindow();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_window )
+		if ( property && window )
 		{
 		}
 	}

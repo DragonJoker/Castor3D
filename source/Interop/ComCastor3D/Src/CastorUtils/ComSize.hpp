@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef __COMC3D_COM_SIZE_H__
 #define __COMC3D_COM_SIZE_H__
 
@@ -41,7 +20,7 @@ namespace CastorCom
 	*/
 	class ATL_NO_VTABLE CSize
 		:	COM_ATL_OBJECT( Size )
-		,	public Castor::Size
+		,	public castor::Size
 	{
 	public:
 		/**
@@ -59,8 +38,8 @@ namespace CastorCom
 		 */
 		virtual ~CSize();
 
-		COM_PROPERTY( Width, UINT, make_getter( this, &Castor::Size::width ), make_putter( this, &Castor::Size::width ) );
-		COM_PROPERTY( Height, UINT, make_getter( this, &Castor::Size::height ), make_putter( this, &Castor::Size::height ) );
+		COM_PROPERTY( Width, UINT, makeGetter( this, &castor::Size::getWidth ), makePutter( this, &castor::Size::getWidth ) );
+		COM_PROPERTY( Height, UINT, makeGetter( this, &castor::Size::getHeight ), makePutter( this, &castor::Size::getHeight ) );
 
 		STDMETHOD( Set )( /* [in] */ UINT x, /* [in] */ UINT y );
 		STDMETHOD( Grow )( /* [in] */ INT x, /* [in] */ INT y );
@@ -68,9 +47,9 @@ namespace CastorCom
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Size ), CSize );
 
-	DECLARE_VARIABLE_VAL_GETTER( Size, Castor, Size );
-	DECLARE_VARIABLE_REF_GETTER( Size, Castor, Size );
-	DECLARE_VARIABLE_REF_PUTTER( Size, Castor, Size );
+	DECLARE_VARIABLE_VAL_GETTER( Size, castor, Size );
+	DECLARE_VARIABLE_REF_GETTER( Size, castor, Size );
+	DECLARE_VARIABLE_REF_PUTTER( Size, castor, Size );
 }
 
 #endif

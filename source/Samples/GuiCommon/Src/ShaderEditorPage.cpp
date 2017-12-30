@@ -3,16 +3,34 @@
 #include "AuiDockArt.hpp"
 #include "StcTextEditor.hpp"
 #include "FrameVariablesList.hpp"
-#include "PropertiesHolder.hpp"
+#include "PropertiesContainer.hpp"
 
+#include <Engine.hpp>
+#include <Cache/WindowCache.hpp>
+#include <Cache/ShaderCache.hpp>
+#include <Material/Pass.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Technique/RenderTechnique.hpp>
+#include <Technique/RenderTechniquePass.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
+
 namespace GuiCommon
 {
-	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::ShaderType p_type, wxWindow * p_parent, wxPoint const & p_position, const wxSize p_size )
+	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit
+		, StcContext & p_stcContext
+		, ShaderProgramSPtr p_shader
+		, ShaderType p_type
+		, Pass const & p_pass
+		, Scene const & p_scene
+		, wxWindow * p_parent
+		, wxPoint const & p_position
+		, const wxSize p_size )
 		: wxPanel( p_parent, wxID_ANY, p_position, p_size )
 		, m_shaderProgram( p_shader )
 		, m_stcContext( p_stcContext )
@@ -25,17 +43,69 @@ namespace GuiCommon
 		, m_canEdit( p_bCanEdit || true )
 #endif
 	{
-		DoInitialiseShaderLanguage();
+		doInitialiseShaderLanguage();
 
 		if ( m_shaderModel != ShaderModel::eCount )
 		{
-			DoInitialiseLayout();
-			DoLoadPage();
+			doInitialiseLayout();
+
+			auto & engine = *p_shader->getRenderSystem()->getEngine();
+			auto lock = castor::makeUniqueLock( engine.getRenderWindowCache() );
+			auto it = engine.getRenderWindowCache().begin();
+
+			if ( it != engine.getRenderWindowCache().end() )
+			{
+				auto & technique = *it->second->getRenderTarget()->getTechnique();
+				auto textureFlags = p_pass.getTextureFlags();
+				auto passFlags = p_pass.getPassFlags();
+				auto sceneFlags = p_scene.getFlags();
+				ProgramFlags programFlags;
+				RenderPipelineRPtr pipeline;
+
+				if ( p_pass.hasAlphaBlending())
+				{
+					technique.getTransparentPass().updateFlags( passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags );
+					pipeline = technique.getTransparentPass().getPipelineBack( p_pass.getColourBlendMode()
+						, p_pass.getAlphaBlendMode()
+						, p_pass.getAlphaFunc()
+						, passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags );
+				}
+				else
+				{
+					technique.getOpaquePass().updateFlags( passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags );
+					pipeline = technique.getOpaquePass().getPipelineBack( p_pass.getColourBlendMode()
+						, p_pass.getAlphaBlendMode()
+						, p_pass.getAlphaFunc()
+						, passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags );
+				}
+
+				if ( pipeline )
+				{
+					doLoadPage( *pipeline );
+				}
+				else
+				{
+					Logger::logWarning( cuT( "Pipeline not found." ) );
+				}
+			}
 		}
 	}
 
 	ShaderEditorPage::~ShaderEditorPage()
 	{
+		doCleanup();
 		m_auiManager.UnInit();
 	}
 
@@ -47,19 +117,19 @@ namespace GuiCommon
 
 	void ShaderEditorPage::SaveFile( bool p_createIfNone )
 	{
-		ShaderProgramSPtr l_program = m_shaderProgram.lock();
+		ShaderProgramSPtr program = m_shaderProgram.lock();
 
 		if ( m_shaderFile.empty() && p_createIfNone )
 		{
-			wxString l_wildcard;
-			l_wildcard = _( "GLSL Files" );
-			l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
+			wxString wildcard;
+			wildcard = _( "GLSL Files" );
+			wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
 
-			wxFileDialog l_dialog( this, _( "Save Shader file " ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+			wxFileDialog dialog( this, _( "Save Shader file " ), wxEmptyString, wxEmptyString, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-			if ( l_dialog.ShowModal() == wxID_OK )
+			if ( dialog.ShowModal() == wxID_OK )
 			{
-				m_shaderFile = l_dialog.GetPath();
+				m_shaderFile = dialog.GetPath();
 			}
 		}
 
@@ -70,20 +140,19 @@ namespace GuiCommon
 		}
 	}
 
-	void ShaderEditorPage::DoInitialiseShaderLanguage()
+	void ShaderEditorPage::doInitialiseShaderLanguage()
 	{
 		m_shaderModel = ShaderModel::eCount;
-		ShaderProgramSPtr l_program = m_shaderProgram.lock();
-		RenderSystem * l_renderSystem = l_program->GetRenderSystem();
-		m_shaderModel = l_program->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		ShaderProgramSPtr program = m_shaderProgram.lock();
+		m_shaderModel = program->getRenderSystem()->getGpuInformations().getMaxShaderModel();
 	}
 
-	void ShaderEditorPage::DoInitialiseLayout()
+	void ShaderEditorPage::doInitialiseLayout()
 	{
-		const int l_iListWidth = 200;
-		wxSize l_size = GetClientSize();
+		const int iListWidth = 200;
+		wxSize size = GetClientSize();
 		// The editor
-		m_editor = new StcTextEditor( m_stcContext, this, wxID_ANY, wxPoint( l_iListWidth, 0 ), l_size - wxSize( l_iListWidth, 0 ) );
+		m_editor = new StcTextEditor( m_stcContext, this, wxID_ANY, wxPoint( iListWidth, 0 ), size - wxSize( iListWidth, 0 ) );
 		m_editor->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_editor->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_editor->Show();
@@ -92,7 +161,7 @@ namespace GuiCommon
 #endif
 
 		// The frame variable properties holder
-		m_frameVariablesProperties = new PropertiesHolder( m_canEdit, this, wxDefaultPosition, wxSize( l_iListWidth, 0 ) );
+		m_frameVariablesProperties = new PropertiesContainer( m_canEdit, this, wxDefaultPosition, wxSize( iListWidth, 0 ) );
 		m_frameVariablesProperties->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_frameVariablesProperties->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_frameVariablesProperties->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -105,45 +174,70 @@ namespace GuiCommon
 		m_frameVariablesProperties->SetMarginColour( BORDER_COLOUR );
 
 		// The frame variables list
-		m_frameVariablesList = new FrameVariablesList( m_frameVariablesProperties, this, wxPoint( 0, 25 ), wxSize( l_iListWidth, 0 ) );
+		m_frameVariablesList = new FrameVariablesList( m_frameVariablesProperties, this, wxPoint( 0, 25 ), wxSize( iListWidth, 0 ) );
 		m_frameVariablesList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_frameVariablesList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_frameVariablesList->Enable( m_canEdit );
 
 		// Put all that in the AUI manager
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		m_auiManager.AddPane( m_editor, wxAuiPaneInfo().CaptionVisible( false ).CloseButton( false ).Name( wxT( "Shaders" ) ).Caption( _( "Shaders" ) ).Center().Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false ) );
-		m_auiManager.AddPane( m_frameVariablesList, wxAuiPaneInfo().CaptionVisible( false ).CloseButton( false ).Name( wxT( "FrameVariablesList" ) ).Caption( _( "Frame variables" ) ).Right().Dock().LeftDockable().RightDockable().Movable().PinButton().Layer( 2 ).PaneBorder( false ).MinSize( l_iListWidth, 0 ) );
-		m_auiManager.AddPane( m_frameVariablesProperties, wxAuiPaneInfo().CaptionVisible( false ).CloseButton( false ).Name( wxT( "Properties" ) ).Caption( _( "Properties" ) ).Right().Dock().LeftDockable().RightDockable().Movable().PinButton().Layer( 2 ).PaneBorder( false ).MinSize( l_iListWidth, 0 ) );
+		m_auiManager.AddPane( m_editor
+			, wxAuiPaneInfo()
+				.CaptionVisible( false )
+				.CloseButton( false )
+				.Name( wxT( "Shaders" ) )
+				.Caption( _( "Shaders" ) )
+				.Center()
+				.Layer( 0 )
+				.Movable( false )
+				.PaneBorder( false )
+				.Dockable( false ) );
+		m_auiManager.AddPane( m_frameVariablesList
+			, wxAuiPaneInfo()
+				.CaptionVisible( false )
+				.CloseButton( false )
+				.Name( wxT( "FrameVariablesList" ) )
+				.Caption( _( "Frame variables" ) )
+				.Right()
+				.Dock()
+				.LeftDockable()
+				.RightDockable()
+				.Movable()
+				.PinButton()
+				.Layer( 2 )
+				.PaneBorder( false )
+				.MinSize( iListWidth, 0 ) );
+		m_auiManager.AddPane( m_frameVariablesProperties
+			, wxAuiPaneInfo()
+				.CaptionVisible( false )
+				.CloseButton( false )
+				.Name( wxT( "Properties" ) )
+				.Caption( _( "Properties" ) )
+				.Right()
+				.Dock()
+				.LeftDockable()
+				.RightDockable()
+				.Movable()
+				.PinButton()
+				.Layer( 2 )
+				.PaneBorder( false )
+				.MinSize( iListWidth, 0 ) );
 		m_auiManager.Update();
 	}
 
-	void ShaderEditorPage::DoLoadPage()
+	void ShaderEditorPage::doLoadPage( RenderPipeline & p_pipeline )
 	{
-		ShaderProgramSPtr l_program = m_shaderProgram.lock();
-		wxString l_extension = wxT( ".glsl" );
+		ShaderProgramSPtr program = m_shaderProgram.lock();
+		wxString extension = wxT( ".glsl" );
 
-		wxArrayString l_arrayChoices;
-		l_arrayChoices.push_back( wxCOMBO_NEW );
+		wxArrayString arrayChoices;
+		arrayChoices.push_back( wxCOMBO_NEW );
 
-		if ( l_program->GetObjectStatus( m_shaderType ) != ShaderStatus::eDontExist )
+		if ( program->getObjectStatus( m_shaderType ) != ShaderStatus::edontExist )
 		{
 			// Load the shader source file/text
-			uint8_t l_shaderModel = uint8_t( m_shaderModel );
-
-			while ( m_shaderSource.empty() && m_shaderFile.empty() && ShaderModel( l_shaderModel ) >= ShaderModel::eModel1 )
-			{
-				m_shaderSource = l_program->GetSource( m_shaderType, ShaderModel( l_shaderModel ) );
-				m_shaderFile = l_program->GetFile( m_shaderType, ShaderModel( l_shaderModel ) );
-
-				if ( !m_shaderSource.empty() || !m_shaderFile.empty() )
-				{
-					// Stop the loop as soon as we've got one of source or file
-					l_shaderModel = uint8_t( ShaderModel::eModel1 );
-				}
-
-				--l_shaderModel;
-			}
+			m_shaderSource = program->getSource( m_shaderType );
+			m_shaderFile = program->getFile( m_shaderType );
 		}
 
 		// Load the shader in the editor
@@ -156,15 +250,26 @@ namespace GuiCommon
 		else if ( !m_shaderSource.empty() )
 		{
 			// or source (read only, then)
-			m_editor->SetText( m_shaderSource );
+			m_editor->setText( m_shaderSource );
 			m_editor->SetReadOnly( true );
 		}
 
 		// Initialise the editor
-		m_editor->InitializePrefs( m_editor->DeterminePrefs( l_extension ) );
+		m_editor->InitializePrefs( m_editor->DeterminePrefs( extension ) );
 
 		// Load frame variables list
-		m_frameVariablesList->LoadVariables( m_shaderType, l_program );
+		m_frameVariablesList->LoadVariables( m_shaderType
+			, program
+			, p_pipeline );
+	}
+
+	void ShaderEditorPage::doCleanup()
+	{
+		m_auiManager.DetachPane( m_editor );
+		m_auiManager.DetachPane( m_frameVariablesList );
+		m_auiManager.DetachPane( m_frameVariablesProperties );
+		m_frameVariablesList->DeleteAllItems();
+		m_frameVariablesProperties->DestroyChildren();
 	}
 
 	BEGIN_EVENT_TABLE( ShaderEditorPage, wxPanel )
@@ -173,9 +278,7 @@ namespace GuiCommon
 
 	void ShaderEditorPage::OnClose( wxCloseEvent & p_event )
 	{
-		m_auiManager.DetachPane( m_editor );
-		m_auiManager.DetachPane( m_frameVariablesList );
-		m_auiManager.DetachPane( m_frameVariablesProperties );
+		doCleanup();
 		p_event.Skip();
 	}
 }

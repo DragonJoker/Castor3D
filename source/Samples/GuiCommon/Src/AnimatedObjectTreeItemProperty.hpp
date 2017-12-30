@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_ANIMATED_OBJECT_TREE_ITEM_PROPERTY_H___
 #define ___GUICOMMON_ANIMATED_OBJECT_TREE_ITEM_PROPERTY_H___
@@ -32,9 +13,9 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		AnimatedObject helper class to communicate between Scene objects or Materials lists and PropertiesHolder.
+	\brief		AnimatedObject helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les AnimatedObject.
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les AnimatedObject.
 	*/
 	class AnimatedObjectTreeItemProperty
 		: public TreeItemProperty
@@ -43,16 +24,16 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_editable	Tells if the properties are modifiable.
 		 *\param[in]	p_light		The target AnimatedObject.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	p_light		L"AnimatedObject cible.
 		 */
-		AnimatedObjectTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectSPtr p_light );
+		AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectSPtr p_light );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,23 +49,23 @@ namespace GuiCommon
 		 *\brief		Récupère l'AnimatedObject.
 		 *\return		La valeur.
 		 */
-		inline Castor3D::AnimatedObjectSPtr GetObject()
+		inline castor3d::AnimatedObjectSPtr getObject()
 		{
 			return m_object.lock();
 		}
 
 	private:
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
-		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::AnimatedObjectWPtr m_object;
+		castor3d::AnimatedObjectWPtr m_object;
 	};
 }
 

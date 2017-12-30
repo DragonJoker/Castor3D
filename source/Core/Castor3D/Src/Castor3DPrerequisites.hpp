@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_H___
 #define ___C3D_PREREQUISITES_H___
@@ -50,11 +31,11 @@ SOFTWARE.
 
 #include <GlslWriterPrerequisites.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
-	using Castor::real;
-	using Castor::UIntStrMap;
-	using Castor::UInt64StrMap;
+	using castor::real;
+	using castor::UIntStrMap;
+	using castor::UInt64StrMap;
 }
 
 #include "Prerequisites/Castor3DPrerequisites_Animation.hpp"
@@ -68,9 +49,9 @@ namespace Castor3D
 #include "Prerequisites/Castor3DPrerequisites_Render.hpp"
 #include "Prerequisites/Castor3DPrerequisites_Event.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
-	Castor::String const RENDERER_TYPE_UNDEFINED = cuT( "Undefined" );
+	castor::String const RENDERER_TYPE_UNDEFINED = cuT( "Undefined" );
 
 	/**@name Importer */
 	//@{
@@ -240,7 +221,7 @@ namespace Castor3D
 		//!\~english	Frame buffer is bound for configuration.
 		//!\~french		Le tampon d'image est activé pour configuration.
 		eConfig,
-		//!\~english	Frame buffer is bound and FrameBuffer::SetDrawBuffers is called automatically.
+		//!\~english	Frame buffer is bound and FrameBuffer::setDrawBuffers is called automatically.
 		//!\~french		Le tampon d'image est activé et FrameBuffer::SetDrawBuffers est appelée automatiquement.
 		eAutomatic,
 		//!\~english	Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants.
@@ -310,10 +291,10 @@ namespace Castor3D
 	enum class FrustumPlane
 	{
 		//!\~english	Near plane.
-		//!\~french		Plan éloigné.
+		//!\~french		Plan proche.
 		eNear,
 		//!\~english	Far plane.
-		//!\~french		Plan proche.
+		//!\~french		Plan éloigné.
 		eFar,
 		//!\~english	Left plane.
 		//!\~french		Plan gauche.
@@ -328,6 +309,43 @@ namespace Castor3D
 		//!\~french		Plan bas.
 		eBottom,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNear )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		10/06/2013
+	\version	0.7.0
+	\~english
+	\brief		Frustum view planes enumeration
+	\~french
+	\brief		Enumération des plans du frustum de vue
+	*/
+	enum class FrustumCorner
+	{
+		//!\~english	Far left bottom corner.
+		//!\~french		Coin éloigné bas gauche.
+		eFarLeftBottom,
+		//!\~english	Far left top corner.
+		//!\~french		Coin éloigné haut gauche.
+		eFarLeftTop,
+		//!\~english	Far right top corner.
+		//!\~french		Coin éloigné haut droit.
+		eFarRightTop,
+		//!\~english	Far right bottom corner.
+		//!\~french		Coin éloigné bas droit.
+		eFarRightBottom,
+		//!\~english	Near left bottom corner.
+		//!\~french		Coin proche bas gauche.
+		eNearLeftBottom,
+		//!\~english	Near left top corner.
+		//!\~french		Coin proche haut gauche.
+		eNearLeftTop,
+		//!\~english	Near right top corner.
+		//!\~french		Coin proche haut droit.
+		eNearRightTop,
+		//!\~english	Near right bottom corner.
+		//!\~french		Coin proche bas droit.
+		eNearRightBottom,
+		CASTOR_SCOPED_ENUM_BOUNDS( eFarLeftBottom )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -455,6 +473,10 @@ namespace Castor3D
 		eAtomicCounterBuffer = 0x01 << 3,
 		eQueryBuffer = 0x01 << 4,
 		eShaderStorageBuffer = 0x01 << 5,
+		eTextureFetch = 0x01 << 6,
+		eTextureUpdate = 0x01 << 7,
+		eFrameBuffer = 0x01 << 8,
+		ePixelBuffer = 0x01 << 9,
 		eAll = 0xFFFFFFFF,
 	};
 	IMPLEMENT_FLAGS( MemoryBarrier )
@@ -487,6 +509,9 @@ namespace Castor3D
 	class PickingPass;
 	class TransformFeedback;
 	class ComputePipeline;
+	struct SsaoConfig;
+	class RenderPassTimer;
+	class GaussianBlur;
 
 	DECLARE_SMART_PTR( RenderBuffer );
 	DECLARE_SMART_PTR( ColourRenderBuffer );
@@ -511,8 +536,10 @@ namespace Castor3D
 	DECLARE_SMART_PTR( PickingPass );
 	DECLARE_SMART_PTR( TransformFeedback );
 	DECLARE_SMART_PTR( ComputePipeline );
+	DECLARE_SMART_PTR( RenderPassTimer );
+	DECLARE_SMART_PTR( GaussianBlur );
 
-	using ParticleFactory = Castor::Factory< CpuParticleSystem, Castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
+	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	/*!
 	\author 	Sylvain DOREMUS
@@ -554,17 +581,17 @@ namespace Castor3D
 	using ElementCleaner = std::function< void( std::shared_ptr< ElementType > ) >;
 
 	template< typename ElementType, typename KeyType >
-	using ElementMerger = std::function< void( CacheBase< ElementType, KeyType > const &, Castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ) >;
+	using ElementMerger = std::function< void( CacheBase< ElementType, KeyType > const &, castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ) >;
 
 	class ShaderProgramCache;
 	class RenderTargetCache;
 
-	using ListenerCache = Cache< FrameListener, Castor::String >;
-	using MeshCache = Cache< Mesh, Castor::String >;
-	using SamplerCache = Cache< Sampler, Castor::String >;
-	using SceneCache = Cache< Scene, Castor::String >;
-	using RenderTechniqueCache = Cache< RenderTechnique, Castor::String >;
-	using RenderWindowCache = Cache< RenderWindow, Castor::String >;
+	using ListenerCache = Cache< FrameListener, castor::String >;
+	using MeshCache = Cache< Mesh, castor::String >;
+	using SamplerCache = Cache< Sampler, castor::String >;
+	using SceneCache = Cache< Scene, castor::String >;
+	using RenderTechniqueCache = Cache< RenderTechnique, castor::String >;
+	using RenderWindowCache = Cache< RenderWindow, castor::String >;
 
 	DECLARE_SMART_PTR( ListenerCache );
 	DECLARE_SMART_PTR( MeshCache );
@@ -611,9 +638,9 @@ namespace Castor3D
 	template< typename ElementType, typename KeyType >
 	class ObjectCache;
 
-	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, Castor::String >;
-	using BillboardListCache = ObjectCache< BillboardList, Castor::String >;
-	using CameraCache = ObjectCache< Camera, Castor::String >;
+	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
+	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
+	using CameraCache = ObjectCache< Camera, castor::String >;
 
 	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
 	DECLARE_SMART_PTR( BillboardListCache );
@@ -631,36 +658,36 @@ namespace Castor3D
 	//! FrameEvent pointer array
 	DECLARE_VECTOR( FrameEventUPtr, FrameEventPtr );
 	//! FrameListener pointer map, sorted by name
-	DECLARE_MAP( Castor::String, FrameListenerSPtr, FrameListenerPtrStr );
+	DECLARE_MAP( castor::String, FrameListenerSPtr, FrameListenerPtrStr );
 	//! RenderWindow pointer map, sorted by index
 	DECLARE_MAP( uint32_t, RenderWindowSPtr, RenderWindow );
 	//! Plugin map, sorted by name
-	DECLARE_MAP( Castor::String, PluginSPtr, PluginStr );
-	DECLARE_MAP( int, Castor::String, StrInt );
+	DECLARE_MAP( castor::String, PluginSPtr, PluginStr );
+	DECLARE_MAP( int, castor::String, StrInt );
 	DECLARE_VECTOR( PostEffectSPtr, PostEffectPtr );
 	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
 
-	DECLARE_MAP( Castor::String, RendererPluginSPtr, RendererPtr );
+	DECLARE_MAP( castor::String, RendererPluginSPtr, RendererPtr );
 	DECLARE_ARRAY( PluginStrMap, PluginType::eCount, PluginStrMap );
-	DECLARE_MAP( Castor::Path, Castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
+	DECLARE_MAP( castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
 	DECLARE_ARRAY( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );
-	DECLARE_MAP( Castor::Path, PluginType, PluginTypePath );
-	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
+	DECLARE_MAP( castor::Path, PluginType, PluginTypePath );
+	DECLARE_MAP( castor::String, BillboardListSPtr, BillboardListStr );
 
-	typedef std::map< Castor::String, RenderWindowSPtr > WindowPtrStrMap;
+	typedef std::map< castor::String, RenderWindowSPtr > WindowPtrStrMap;
 
 	//@}
 
 #define MAKE_CACHE_NAME( className )\
-	Cache< className, Castor::String >
+	Cache< className, castor::String >
 
 #define DECLARE_CACHE_MEMBER( memberName, className )\
 	public:\
-		inline MAKE_CACHE_NAME( className ) & Get##className##Cache()\
+		inline MAKE_CACHE_NAME( className ) & get##className##Cache()\
 		{\
 			return *m_##memberName##Cache;\
 		}\
-		inline MAKE_CACHE_NAME( className ) const & Get##className##Cache()const\
+		inline MAKE_CACHE_NAME( className ) const & get##className##Cache()const\
 		{\
 			return *m_##memberName##Cache;\
 		}\
@@ -669,11 +696,11 @@ namespace Castor3D
 
 #define DECLARE_NAMED_CACHE_MEMBER( memberName, className )\
 	public:\
-		inline className##Cache & Get##className##Cache()\
+		inline className##Cache & get##className##Cache()\
 		{\
 			return *m_##memberName##Cache;\
 		}\
-		inline className##Cache const & Get##className##Cache()const\
+		inline className##Cache const & get##className##Cache()const\
 		{\
 			return *m_##memberName##Cache;\
 		}\
@@ -681,29 +708,29 @@ namespace Castor3D
 		std::unique_ptr< className##Cache > m_##memberName##Cache
 
 #define MAKE_OBJECT_CACHE_NAME( className )\
-	ObjectCache< className, Castor::String >
+	ObjectCache< className, castor::String >
 
 #define DECLARE_OBJECT_CACHE_MEMBER( memberName, className )\
 	public:\
-		inline MAKE_OBJECT_CACHE_NAME( className ) & Get##className##Cache()\
+		inline MAKE_OBJECT_CACHE_NAME( className ) & get##className##Cache()\
 		{\
 			return *m_##memberName##Cache;\
 		}\
-		inline MAKE_OBJECT_CACHE_NAME( className ) const & Get##className##Cache()const\
+		inline MAKE_OBJECT_CACHE_NAME( className ) const & get##className##Cache()const\
 		{\
 			return *m_##memberName##Cache;\
 		}\
 	private:\
-		Castor::Connection< MAKE_OBJECT_CACHE_NAME( className )::OnChanged > m_on##className##Changed;\
+		castor::Connection< MAKE_OBJECT_CACHE_NAME( className )::OnChanged > m_on##className##Changed;\
 		std::unique_ptr< MAKE_OBJECT_CACHE_NAME( className ) > m_##memberName##Cache
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		inline CacheView< className, MAKE_CACHE_NAME( className ), eventType > & Get##className##View()\
+		inline CacheView< className, MAKE_CACHE_NAME( className ), eventType > & get##className##View()\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		inline CacheView< className, MAKE_CACHE_NAME( className ), eventType > const & Get##className##View()const\
+		inline CacheView< className, MAKE_CACHE_NAME( className ), eventType > const & get##className##View()const\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
@@ -712,51 +739,33 @@ namespace Castor3D
 
 #define DECLARE_CACHE_VIEW_MEMBER_CU( memberName, className, eventType )\
 	public:\
-		inline CacheView< Castor::className, Castor::className##Cache, eventType > & Get##className##View()\
+		inline CacheView< castor::className, castor::className##Cache, eventType > & get##className##View()\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		inline CacheView< Castor::className, Castor::className##Cache, eventType > const & Get##className##View()const\
+		inline CacheView< castor::className, castor::className##Cache, eventType > const & get##className##View()const\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
 	private:\
-		std::unique_ptr< CacheView< Castor::className, Castor::className##Cache, eventType > > m_##memberName##CacheView
+		std::unique_ptr< CacheView< castor::className, castor::className##Cache, eventType > > m_##memberName##CacheView
 
 #define DECLARE_CACHE_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
 	public:\
-		inline CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > & Get##className##View()\
+		inline CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > & get##className##View()\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		inline CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > const & Get##className##View()const\
+		inline CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > const & get##className##View()const\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
 	private:\
 		std::unique_ptr< CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
-
-	C3D_API void ComputePreLightingMapContributions(
-		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_normal,
-		GLSL::Float & p_shininess,
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags );
-
-	C3D_API void ComputePostLightingMapContributions(
-		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_ambient,
-		GLSL::Vec3 & p_diffuse,
-		GLSL::Vec3 & p_specular,
-		GLSL::Vec3 & p_emissive,
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags );
 }
 
-DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine )
-DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::RenderSystem, RenderSystem )
-DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Scene, Scene )
+DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Engine, Engine )
+DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::RenderSystem, RenderSystem )
+DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Scene, Scene )
 
 #endif

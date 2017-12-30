@@ -4,16 +4,16 @@
 #include "PointLight.hpp"
 #include "SpotLight.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	LightFactory::LightFactory()
 		: Factory< LightCategory, LightType, LightCategoryUPtr, std::function< LightCategoryUPtr( Light & ) > >()
 	{
-		Register( LightType::eDirectional, DirectionalLight::Create );
-		Register( LightType::ePoint, PointLight::Create );
-		Register( LightType::eSpot, SpotLight::Create );
+		registerType( LightType::eDirectional, DirectionalLight::create );
+		registerType( LightType::ePoint, PointLight::create );
+		registerType( LightType::eSpot, SpotLight::create );
 	}
 
 	LightFactory::~LightFactory()

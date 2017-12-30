@@ -1,61 +1,61 @@
-#include "Viewport.hpp"
+﻿#include "Viewport.hpp"
 
 #include "Engine.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Viewport::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Viewport >{ p_tabs }
+		: castor::TextWriter< Viewport >{ p_tabs }
 	{
 	}
 
 	bool Viewport::TextWriter::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[size_t( p_viewport.GetType() )] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Viewport >::CheckError( l_return, "Viewport type" );
+			result = p_file.writeText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[size_t( p_viewport.getType() )] + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Viewport >::checkError( result, "Viewport type" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			if ( p_viewport.GetType() == ViewportType::eOrtho || p_viewport.GetType() == ViewportType::eFrustum )
+			if ( p_viewport.getType() == ViewportType::eOrtho || p_viewport.getType() == ViewportType::eFrustum )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\tleft " ) + string::to_string( p_viewport.GetLeft() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\tright " ) + string::to_string( p_viewport.GetRight() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\ttop " ) + string::to_string( p_viewport.GetTop() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\tbottom " ) + string::to_string( p_viewport.GetBottom() ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( p_viewport.getNear() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( p_viewport.getFar() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tleft " ) + string::toString( p_viewport.getLeft() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tright " ) + string::toString( p_viewport.getRight() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\ttop " ) + string::toString( p_viewport.getTop() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tbottom " ) + string::toString( p_viewport.getBottom() ) + cuT( "\n" ) ) > 0;
 			}
 			else
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\taspect_ratio " ) + string::to_string( p_viewport.GetRatio() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( p_viewport.getNear() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\taspect_ratio " ) + string::toString( p_viewport.getRatio() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( p_viewport.getFar() ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tfov_y " ) + string::toString( p_viewport.getFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}
 
-			Castor::TextWriter< Viewport >::CheckError( l_return, "Viewport values" );
+			castor::TextWriter< Viewport >::checkError( result, "Viewport values" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	IViewportImpl::IViewportImpl( RenderSystem & p_renderSystem, Viewport & p_viewport )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
+	IViewportImpl::IViewportImpl( RenderSystem & renderSystem, Viewport & p_viewport )
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_viewport{ p_viewport }
 	{
 	}
@@ -68,19 +68,28 @@ namespace Castor3D
 
 	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
 
-	Viewport::Viewport( Engine & p_engine, ViewportType p_type, Castor::Angle const & p_fovY, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
-		: OwnedBy< Engine >{ p_engine }
-		, m_type{ p_type }
+	Viewport::Viewport( Engine & engine
+		, ViewportType type
+		, castor::Angle const & fovY
+		, real aspect
+		, real left
+		, real right
+		, real bottom
+		, real top
+		, real near
+		, real far )
+		: OwnedBy< Engine >{ engine }
+		, m_type{ type }
 		, m_size{}
-		, m_fovY{ p_fovY }
-		, m_ratio{ p_aspect }
-		, m_left{ p_left }
-		, m_right{ p_right }
-		, m_bottom{ p_bottom }
-		, m_top{ p_top }
-		, m_near{ p_near }
-		, m_far{ p_far }
 		, m_modified{ true }
+		, m_fovY{ m_modified, fovY }
+		, m_ratio{ m_modified, aspect }
+		, m_left{ m_modified, left }
+		, m_right{ m_modified, right }
+		, m_bottom{ m_modified, bottom }
+		, m_top{ m_modified, top }
+		, m_near{ m_modified, near }
+		, m_far{ m_modified, far }
 	{
 		if ( m_type != ViewportType::eOrtho && !m_near )
 		{
@@ -88,8 +97,8 @@ namespace Castor3D
 		}
 	}
 
-	Viewport::Viewport( Engine & p_engine )
-		: Viewport{ p_engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+	Viewport::Viewport( Engine & engine )
+		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 
@@ -97,69 +106,82 @@ namespace Castor3D
 	{
 	}
 
-	Viewport::Viewport( Viewport const & p_rhs )
-		: OwnedBy< Engine >{ *p_rhs.GetEngine() }
-		, m_type{ p_rhs.m_type }
-		, m_size{ p_rhs.m_size }
-		, m_fovY{ p_rhs.m_fovY }
-		, m_ratio{ p_rhs.m_ratio }
-		, m_left{ p_rhs.m_left }
-		, m_right{ p_rhs.m_right }
-		, m_bottom{ p_rhs.m_bottom }
-		, m_top{ p_rhs.m_top }
-		, m_near{ p_rhs.m_near }
-		, m_far{ p_rhs.m_far }
-		, m_modified{ p_rhs.m_modified }
-		, m_projection{ p_rhs.m_projection }
+	Viewport::Viewport( Viewport const & rhs )
+		: OwnedBy< Engine >{ *rhs.getEngine() }
+		, m_modified{ rhs.m_modified }
+		, m_fovY{ m_modified, rhs.m_fovY }
+		, m_ratio{ m_modified, rhs.m_ratio }
+		, m_left{ m_modified, rhs.m_left }
+		, m_right{ m_modified, rhs.m_right }
+		, m_bottom{ m_modified, rhs.m_bottom }
+		, m_top{ m_modified, rhs.m_top }
+		, m_near{ m_modified, rhs.m_near }
+		, m_far{ m_modified, rhs.m_far }
+		, m_projection{ rhs.m_projection }
+		, m_type{ rhs.m_type }
+		, m_size{ rhs.m_size }
 	{
 	}
 
-	Viewport & Viewport::operator=( Viewport const & p_rhs )
+	Viewport & Viewport::operator=( Viewport const & rhs )
 	{
-		m_type = p_rhs.m_type;
-		m_size = p_rhs.m_size;
-		m_fovY = p_rhs.m_fovY;
-		m_ratio = p_rhs.m_ratio;
-		m_left = p_rhs.m_left;
-		m_right = p_rhs.m_right;
-		m_bottom = p_rhs.m_bottom;
-		m_top = p_rhs.m_top;
-		m_near = p_rhs.m_near;
-		m_far = p_rhs.m_far;
-		m_modified = p_rhs.m_modified;
-		m_projection = p_rhs.m_projection;
+		m_modified = rhs.m_modified;
+		m_fovY = rhs.m_fovY.value();
+		m_ratio = rhs.m_ratio.value();
+		m_left = rhs.m_left.value();
+		m_right = rhs.m_right.value();
+		m_bottom = rhs.m_bottom.value();
+		m_top = rhs.m_top.value();
+		m_near = rhs.m_near.value();
+		m_far = rhs.m_far.value();
+		m_type = rhs.m_type;
+		m_size = rhs.m_size;
+		m_projection = rhs.m_projection;
 		return *this;
 	}
 
-	bool Viewport::Initialise()
+	bool Viewport::initialise()
 	{
-		m_impl = GetEngine()->GetRenderSystem()->CreateViewport( *this );
+		m_impl = getEngine()->getRenderSystem()->createViewport( *this );
 		return m_impl != nullptr;
 	}
 
-	void Viewport::Cleanup()
+	void Viewport::cleanup()
 	{
 		m_impl.reset();
 	}
 
-	bool Viewport::Update()
+	bool Viewport::update()
 	{
-		bool l_return = false;
+		bool result = false;
 
-		if ( IsModified() )
+		if ( isModified() )
 		{
 			switch ( m_type )
 			{
-			case Castor3D::ViewportType::eOrtho:
-				DoComputeOrtho( m_left, m_right, m_bottom, m_top, m_near, m_far );
+			case castor3d::ViewportType::eOrtho:
+				doComputeOrtho( m_left
+					, m_right
+					, m_bottom
+					, m_top
+					, m_near
+					, m_far );
 				break;
 
-			case Castor3D::ViewportType::ePerspective:
-				DoComputePerspective( m_fovY, m_ratio, m_near, m_far );
+			case castor3d::ViewportType::ePerspective:
+				doComputePerspective( m_fovY
+					, m_ratio
+					, m_near
+					, m_far );
 				break;
 
-			case Castor3D::ViewportType::eFrustum:
-				DoComputeFrustum( m_left, m_right, m_bottom, m_top, m_near, m_far );
+			case castor3d::ViewportType::eFrustum:
+				doComputeFrustum( m_left
+					, m_right
+					, m_bottom
+					, m_top
+					, m_near
+					, m_far );
 				break;
 
 			default:
@@ -167,105 +189,133 @@ namespace Castor3D
 			}
 
 			m_modified = false;
-			l_return = true;
+			result = true;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void Viewport::Apply()const
+	void Viewport::apply()const
 	{
-		m_impl->Apply();
+		m_impl->apply();
 	}
 
-	void Viewport::SetPerspective( Angle const & p_fovY, real p_aspect, real p_near, real p_far )
+	void Viewport::setPerspective( Angle const & fovY
+		, real aspect
+		, real near
+		, real far )
 	{
 		m_type = ViewportType::ePerspective;
-		m_fovY = p_fovY;
-		m_ratio = p_aspect;
+		m_fovY = fovY;
+		m_ratio = aspect;
 		m_left = 0;
 		m_right = 1;
 		m_bottom = 0;
 		m_top = 1;
-		m_near = p_near;
-		m_far = p_far;
+		m_near = near;
+		m_far = far;
 		m_modified = true;
 	}
 
-	void Viewport::SetFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	void Viewport::setFrustum( real left
+		, real right
+		, real bottom
+		, real top
+		, real near
+		, real far )
 	{
 		m_type = ViewportType::eFrustum;
 		m_fovY = Angle{};
 		m_ratio = 0;
-		m_left = p_left;
-		m_right = p_right;
-		m_bottom = p_bottom;
-		m_top = p_top;
-		m_near = p_near;
-		m_far = p_far;
+		m_left = left;
+		m_right = right;
+		m_bottom = bottom;
+		m_top = top;
+		m_near = near;
+		m_far = far;
 		m_modified = true;
 	}
 
-	void Viewport::SetOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	void Viewport::setOrtho( real left
+		, real right
+		, real bottom
+		, real top
+		, real near
+		, real far )
 	{
 		m_type = ViewportType::eOrtho;
 		m_fovY = Angle{};
 		m_ratio = 0;
-		m_left = p_left;
-		m_right = p_right;
-		m_bottom = p_bottom;
-		m_top = p_top;
-		m_near = p_near;
-		m_far = p_far;
+		m_left = left;
+		m_right = right;
+		m_bottom = bottom;
+		m_top = top;
+		m_near = near;
+		m_far = far;
 		m_modified = true;
 	}
 
-	void Viewport::DoComputePerspective( Angle const & p_fovy, real p_aspect, real p_near, real p_far )
+	void Viewport::doComputePerspective( Angle const & fovy
+		, real aspect
+		, real near
+		, real far )
 	{
-		m_projection = matrix::perspective( p_fovy, p_aspect, p_near, p_far );
+		m_projection = matrix::perspective( fovy, aspect, near, far );
 	}
 
-	void Viewport::DoComputeFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	void Viewport::doComputeFrustum( real left
+		, real right
+		, real bottom
+		, real top
+		, real near
+		, real far )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml)
 		m_projection.initialise();
-		m_projection[0][0] = real( ( 2 * p_near ) / ( p_right - p_left ) );
-		m_projection[1][1] = real( ( 2 * p_near ) / ( p_top - p_bottom ) );
-		m_projection[2][0] = real( ( p_right + p_left ) / ( p_right - p_left ) );
-		m_projection[2][1] = real( ( p_top + p_bottom ) / ( p_top - p_bottom ) );
-		m_projection[2][2] = real( -( p_far + p_near ) / ( p_far - p_near ) );
+		m_projection[0][0] = real( ( 2 * near ) / ( right - left ) );
+		m_projection[1][1] = real( ( 2 * near ) / ( top - bottom ) );
+		m_projection[2][0] = real( ( right + left ) / ( right - left ) );
+		m_projection[2][1] = real( ( top + bottom ) / ( top - bottom ) );
+		m_projection[2][2] = real( -( far + near ) / ( far - near ) );
 		m_projection[2][3] = real( -1 );
-		m_projection[3][2] = real( -( 2 * p_far * p_near ) / ( p_far - p_near ) );
+		m_projection[3][2] = real( -( 2 * far * near ) / ( far - near ) );
 	}
 
-	void Viewport::DoComputeOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	void Viewport::doComputeOrtho( real left
+		, real right
+		, real bottom
+		, real top
+		, real near
+		, real far )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml)
-		m_projection.set_identity();
-		m_projection[0][0] = real( 2 / ( p_right - p_left ) );
-		m_projection[1][1] = real( 2 / ( p_top - p_bottom ) );
-		m_projection[2][2] = real( -2 / ( p_far - p_near ) );
-		m_projection[3][0] = real( -( p_right + p_left ) / ( p_right - p_left ) );
-		m_projection[3][1] = real( -( p_top + p_bottom ) / ( p_top - p_bottom ) );
-		m_projection[3][2] = real( -( p_far + p_near ) / ( p_far - p_near ) );
+		m_projection.setIdentity();
+		m_projection[0][0] = real( 2 / ( right - left ) );
+		m_projection[1][1] = real( 2 / ( top - bottom ) );
+		m_projection[2][2] = real( -2 / ( far - near ) );
+		m_projection[3][0] = real( -( right + left ) / ( right - left ) );
+		m_projection[3][1] = real( -( top + bottom ) / ( top - bottom ) );
+		m_projection[3][2] = real( -( far + near ) / ( far - near ) );
 	}
 
-	void Viewport::DoComputeLookAt( Point3r const & p_eye, Point3r const & p_center, Point3r const & p_up )
+	void Viewport::doComputeLookAt( Point3r const & eye
+		, Point3r const & center
+		, Point3r const & up )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
-		Point3r l_f( point::get_normalised( p_center - p_eye ) );
-		Point3r l_u( point::get_normalised( p_up ) );
-		Point3r l_s( point::get_normalised( l_f ^ l_u ) );
-		l_u = l_s ^ l_f;
-		m_projection.set_identity();
-		m_projection[0][0] = l_s[0];
-		m_projection[0][1] = l_u[0];
-		m_projection[0][2] = -l_f[0];
-		m_projection[1][0] = l_s[1];
-		m_projection[1][1] = l_u[1];
-		m_projection[1][2] = -l_f[1];
-		m_projection[2][0] = l_s[2];
-		m_projection[2][1] = l_u[2];
-		m_projection[2][2] = -l_f[2];
+		Point3r f{ point::getNormalised( center - eye ) };
+		Point3r u{ point::getNormalised( up ) };
+		Point3r s{ point::getNormalised( point::cross( f, u ) ) };
+		u = point::cross( s, f );
+		m_projection.setIdentity();
+		m_projection[0][0] = s[0];
+		m_projection[0][1] = u[0];
+		m_projection[0][2] = -f[0];
+		m_projection[1][0] = s[1];
+		m_projection[1][1] = u[1];
+		m_projection[1][2] = -f[1];
+		m_projection[2][0] = s[2];
+		m_projection[2][1] = u[2];
+		m_projection[2][2] = -f[2];
 	}
 }

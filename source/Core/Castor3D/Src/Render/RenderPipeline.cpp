@@ -1,22 +1,24 @@
 #include "RenderPipeline.hpp"
 
+#include "Engine.hpp"
+#include "Event/Frame/FunctorEvent.hpp"
+#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Mesh/Submesh.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Shader/UniformBufferBinding.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
+#include "Shader/Shaders/GlslShadow.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	const String RenderPipeline::MtxProjection = cuT( "c3d_mtxProjection" );
-	const String RenderPipeline::MtxModel = cuT( "c3d_mtxModel" );
-	const String RenderPipeline::MtxView = cuT( "c3d_mtxView" );
-	const String RenderPipeline::MtxNormal = cuT( "c3d_mtxNormal" );
 	const String RenderPipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
 	{
 		cuT( "c3d_mtxTexture0" ),
@@ -27,18 +29,14 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderPipeline::RenderPipeline( RenderSystem & p_renderSystem
+	RenderPipeline::RenderPipeline( RenderSystem & renderSystem
 		, DepthStencilState && p_dsState
 		, RasteriserState && p_rsState
 		, BlendState && p_blState
 		, MultisampleState && p_msState
 		, ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
-		, m_mtxView{ 1 }
-		, m_mtxModel{ 1 }
-		, m_mtxProjection{ 1 }
-		, m_mtxNormal{ 1 }
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_dsState{ std::move( p_dsState ) }
 		, m_rsState{ std::move( p_rsState ) }
 		, m_blState{ std::move( p_blState ) }
@@ -46,25 +44,35 @@ namespace Castor3D
 		, m_program{ p_program }
 		, m_flags( p_flags )
 	{
-		auto l_textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
+		auto textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
 
-		while ( l_textures )
+		while ( textures )
 		{
 			m_textureCount++;
 
-			while ( !( l_textures & 0x01 ) )
+			while ( !( textures & 0x01 ) )
 			{
-				l_textures >>= 1;
+				textures >>= 1;
 			}
 
-			l_textures >>= 1;
+			textures >>= 1;
 		}
 
-		if ( m_program.HasObject( ShaderType::ePixel ) )
+		if ( m_program.hasObject( ShaderType::ePixel ) )
 		{
-			m_directionalShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-			m_spotShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-			m_pointShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+			m_directionalShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional, ShaderType::ePixel );
+			m_spotShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel );
+			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint, ShaderType::ePixel );
+			m_environmentMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+
+			if ( ( checkFlag( m_flags.m_passFlags, PassFlag::ePbrMetallicRoughness )
+					|| checkFlag( m_flags.m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
+				&& checkFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
+			{
+				m_irradianceMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );
+				m_prefilteredMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel );
+				m_brdfMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel );
+			}
 		}
 	}
 
@@ -72,112 +80,95 @@ namespace Castor3D
 	{
 	}
 
-	void RenderPipeline::Cleanup()
+	void RenderPipeline::cleanup()
 	{
-		m_program.Cleanup();
+		m_program.cleanup();
+		m_meshGeometryBuffers.clear();
+		m_billboardGeometryBuffers.clear();
 	}
 
-	void RenderPipeline::AddUniformBuffer( UniformBuffer & p_ubo )
+	void RenderPipeline::addUniformBuffer( UniformBuffer & p_ubo )
 	{
-		m_bindings.push_back( std::ref( p_ubo.CreateBinding( m_program ) ) );
+		m_bindings.push_back( std::ref( p_ubo.createBinding( m_program ) ) );
 	}
 
-	bool RenderPipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_result )
+	GeometryBuffersSPtr RenderPipeline::getGeometryBuffers( Submesh & submesh )
 	{
-		Point4r l_ptTmp( p_ptObj[0], p_ptObj[1], p_ptObj[2], real( 1 ) );
-		l_ptTmp = GetViewMatrix() * l_ptTmp;
-		l_ptTmp = GetProjectionMatrix() * l_ptTmp;
-		l_ptTmp /= Point4r( l_ptTmp[3], l_ptTmp[3], l_ptTmp[3], l_ptTmp[3] );
-		Point4r l_ptHalf = Point4r( 0.5, 0.5, 0.5, 0.5 );
-		l_ptTmp *= real( 0.5 );
-		l_ptTmp += l_ptHalf;
-		l_ptTmp[0] = l_ptTmp[0] * p_ptViewport[2] + p_ptViewport[0];
-		l_ptTmp[1] = l_ptTmp[1] * p_ptViewport[3] + p_ptViewport[1];
-		p_result = Point3r( l_ptTmp.const_ptr() );
-		return true;
-	}
+		GeometryBuffersSPtr geometryBuffers;
+		auto it = m_meshGeometryBuffers.find( &submesh );
 
-	bool RenderPipeline::UnProject( Point3i const & p_ptWin, Point4r const & p_ptViewport, Point3r & p_result )
-	{
-		Matrix4x4r l_mInverse = ( GetProjectionMatrix() * GetViewMatrix() ).get_inverse();
-		Point4r l_ptTmp( ( real )p_ptWin[0], ( real )p_ptWin[1], ( real )p_ptWin[2], real( 1 ) );
-		Point4r l_ptUnit( 1, 1, 1, 1 );
-		l_ptTmp[0] = ( l_ptTmp[0] - p_ptViewport[0] ) / p_ptViewport[2];
-		l_ptTmp[1] = ( l_ptTmp[1] - p_ptViewport[1] ) / p_ptViewport[3];
-		l_ptTmp *= real( 2.0 );
-		l_ptTmp -= l_ptUnit;
-		Point4r l_ptObj;
-		l_ptObj = l_mInverse.get_inverse() * l_ptTmp;
-		l_ptObj /= l_ptObj[3];
-		p_result = Point3r( l_ptObj.const_ptr() );
-		return true;
-	}
-
-	void RenderPipeline::ApplyProjection( UniformBuffer const & p_matrixBuffer )const
-	{
-		DoApplyMatrix( m_mtxProjection, MtxProjection, p_matrixBuffer );
-	}
-
-	void RenderPipeline::ApplyModel( UniformBuffer const & p_matrixBuffer )const
-	{
-		DoApplyMatrix( m_mtxModel, MtxModel, p_matrixBuffer );
-	}
-
-	void RenderPipeline::ApplyView( UniformBuffer const & p_matrixBuffer )const
-	{
-		DoApplyMatrix( m_mtxView, MtxView, p_matrixBuffer );
-	}
-
-	void RenderPipeline::ApplyNormal( UniformBuffer const & p_matrixBuffer )
-	{
-		m_mtxNormal = Matrix4x4r{ ( m_mtxModel * m_mtxView ).get_minor( 3, 3 ).invert().transpose() };
-		DoApplyMatrix( m_mtxNormal, MtxNormal, p_matrixBuffer );
-	}
-
-	void RenderPipeline::ApplyTexture( uint32_t p_index, UniformBuffer const & p_matrixBuffer )const
-	{
-		REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
-		DoApplyMatrix( m_mtxTexture[p_index], MtxTexture[p_index], p_matrixBuffer );
-	}
-
-	void RenderPipeline::ApplyMatrices( UniformBuffer const & p_matrixBuffer, uint64_t p_matrices )
-	{
-		if ( p_matrices & MASK_MTXMODE_PROJECTION )
+		if ( it == m_meshGeometryBuffers.end() )
 		{
-			ApplyProjection( p_matrixBuffer );
+			geometryBuffers = getRenderSystem()->createGeometryBuffers( submesh.getTopology()
+				, m_program );
+			m_meshGeometryBuffers.emplace( &submesh, geometryBuffers );
+			doInitialiseGeometryBuffers( submesh, geometryBuffers );
+		}
+		else
+		{
+			geometryBuffers = it->second;
 		}
 
-		if ( p_matrices & MASK_MTXMODE_MODEL )
+		return geometryBuffers;
+	}
+
+	GeometryBuffersSPtr RenderPipeline::getGeometryBuffers( BillboardBase & billboard )
+	{
+		GeometryBuffersSPtr geometryBuffers;
+		auto it = m_billboardGeometryBuffers.find( &billboard );
+
+		if ( it == m_billboardGeometryBuffers.end() )
 		{
-			ApplyModel( p_matrixBuffer );
+			geometryBuffers = getRenderSystem()->createGeometryBuffers( Topology::eTriangleFan
+				, m_program );
+			m_billboardGeometryBuffers.emplace( &billboard, geometryBuffers );
+			doInitialiseGeometryBuffers( billboard, geometryBuffers );
+		}
+		else
+		{
+			geometryBuffers = it->second;
 		}
 
-		if ( p_matrices & MASK_MTXMODE_VIEW )
-		{
-			ApplyView( p_matrixBuffer );
+		return geometryBuffers;
+	}
 
-			if ( p_matrices & MASK_MTXMODE_MODEL )
+	void RenderPipeline::doInitialiseGeometryBuffers( Submesh & submesh
+		, GeometryBuffersSPtr geometryBuffers )
+	{
+		VertexBufferArray buffers;
+		submesh.gatherBuffers( buffers );
+
+		if ( getRenderSystem()->getCurrentContext() )
+		{
+			geometryBuffers->initialise( buffers, &submesh.getIndexBuffer() );
+		}
+		else
+		{
+			getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [geometryBuffers, &submesh, buffers]()
 			{
-				ApplyNormal( p_matrixBuffer );
-			}
-		}
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			if ( p_matrices & ( uint64_t( 0x1 ) << ( int( MatrixMode::eTexture0 ) + i ) ) )
-			{
-				ApplyTexture( i, p_matrixBuffer );
-			}
+				geometryBuffers->initialise( buffers, &submesh.getIndexBuffer() );
+			} ) );
 		}
 	}
 
-	void RenderPipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, UniformBuffer const & p_matrixBuffer )const
+	void RenderPipeline::doInitialiseGeometryBuffers( BillboardBase & billboard
+		, GeometryBuffersSPtr geometryBuffers )
 	{
-		auto l_variable = p_matrixBuffer.GetUniform< UniformType::eMat4x4f >( p_name );
+		VertexBufferArray buffers;
+		billboard.gatherBuffers( buffers );
 
-		if ( l_variable )
+		if ( getRenderSystem()->getCurrentContext() )
 		{
-			l_variable->SetValue( p_matrix );
+			geometryBuffers->initialise( buffers, nullptr );
+		}
+		else
+		{
+			getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [geometryBuffers, buffers]()
+			{
+				geometryBuffers->initialise( buffers, nullptr );
+			} ) );
 		}
 	}
 

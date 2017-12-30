@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___TRS_GEOMETRY_BUFFERS_H___
 #define ___TRS_GEOMETRY_BUFFERS_H___
 
@@ -41,7 +20,7 @@ namespace TestRender
 	\remark		Permet aux implémentations d'utiliser les optimisations spécifiques aux API (comme les Vertex arrays objects OpenGL)
 	*/
 	class TestGeometryBuffers
-		: public Castor3D::GeometryBuffers
+		: public castor3d::GeometryBuffers
 	{
 	public:
 		/**
@@ -54,7 +33,7 @@ namespace TestRender
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		TestGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program );
+		TestGeometryBuffers( castor3d::Topology p_topology, castor3d::ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,23 +42,27 @@ namespace TestRender
 		 */
 		virtual ~TestGeometryBuffers();
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::Draw
+		 *\copydoc		castor3d::GeometryBuffers::Draw
 		 */
-		virtual bool Draw( uint32_t p_size, uint32_t p_index )const;
+		virtual bool draw( uint32_t p_size, uint32_t p_index )const override;
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DrawInstanced
+		 *\copydoc		castor3d::GeometryBuffers::DrawInstanced
 		 */
-		virtual bool DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const;
+		virtual bool drawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DoInitialise
+		 *\copydoc		castor3d::GeometryBuffers::doInitialise
 		 */
-		virtual bool DoInitialise();
+		virtual bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DoCleanup
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
 		 */
-		virtual void DoCleanup();
+		virtual void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
+		 */
+		virtual void doSetTopology( castor3d::Topology p_value )override;
 	};
 }
 

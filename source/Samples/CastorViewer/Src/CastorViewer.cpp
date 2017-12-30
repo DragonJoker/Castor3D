@@ -15,8 +15,8 @@
 #include <xpms/properties.xpm>
 #include <xpms/scene_blanc.xpm>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 using namespace GuiCommon;
 
 #if CHECK_MEMORYLEAKS && defined( VLD_AVAILABLE ) && USE_VLD
@@ -36,16 +36,16 @@ namespace CastorViewer
 	{
 	}
 
-	void CastorViewerApp::DoLoadAppImages()
+	void CastorViewerApp::doLoadAppImages()
 	{
-		ImagesLoader::AddBitmap( eBMP_SCENES, scene_blanc_xpm );
-		ImagesLoader::AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
-		ImagesLoader::AddBitmap( eBMP_EXPORT, export_xpm );
-		ImagesLoader::AddBitmap( eBMP_LOGS, log_xpm );
-		ImagesLoader::AddBitmap( eBMP_PROPERTIES, properties_xpm );
+		ImagesLoader::addBitmap( eBMP_SCENES, scene_blanc_xpm );
+		ImagesLoader::addBitmap( eBMP_MATERIALS, mat_blanc_xpm );
+		ImagesLoader::addBitmap( eBMP_EXPORT, export_xpm );
+		ImagesLoader::addBitmap( eBMP_LOGS, log_xpm );
+		ImagesLoader::addBitmap( eBMP_PROPERTIES, properties_xpm );
 	}
 
-	wxWindow * CastorViewerApp::DoInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )
+	wxWindow * CastorViewerApp::doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )
 	{
 		wxAppConsole::SetAppName( wxT( "castor_viewer" ) );
 		wxAppConsole::SetVendorName( wxT( "dragonjoker" ) );
@@ -59,15 +59,15 @@ namespace CastorViewer
 
 		m_mainFrame = new MainFrame( p_splashScreen, make_wxString( m_internalName ) );
 		m_mainFrame->Maximize();
-		bool l_return = m_mainFrame->Initialise();
+		bool result = m_mainFrame->initialise();
 
-		if ( l_return )
+		if ( result )
 		{
 			SetTopWindow( m_mainFrame );
 
-			if ( !GetFileName().empty() )
+			if ( !getFileName().empty() )
 			{
-				m_mainFrame->LoadScene( GetFileName() );
+				m_mainFrame->loadScene( getFileName() );
 			}
 		}
 		else

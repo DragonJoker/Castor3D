@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CastorUtils_Range_HPP___
 #define ___CastorUtils_Range_HPP___
@@ -29,7 +10,7 @@ SOFTWARE.
 #include <cmath>
 #include <limits>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -121,7 +102,7 @@ namespace Castor
 		 *				Une pourcentage allant de 0.0 à 1.0, selon que la valeur est plus
 		 *				proche de \p m_max ou de \p m_min.
 		 */
-		float inv_percent( T const & p_value )const noexcept
+		float invPercent( T const & p_value )const noexcept
 		{
 			return 1.0f - percent( p_value );
 		}
@@ -159,7 +140,7 @@ namespace Castor
 		 *				\p m_min si \p percent vaut 1.0.\n
 		 *				Une valeur comprise entre \p m_min et \p m_max.
 		 */
-		T inv_value( float const & p_percent )const noexcept
+		T invValue( float const & p_percent )const noexcept
 		{
 			return T{ m_min + ( 1.0f - p_percent ) * float( m_max - m_min ) };
 		}
@@ -203,7 +184,7 @@ namespace Castor
 	 *\return		L'intervalle créé.
 	 */
 	template< typename T >
-	inline Range< T > make_range( T const & p_min, T const & p_max )noexcept
+	inline Range< T > makeRange( T const & p_min, T const & p_max )noexcept
 	{
 		return Range< T >( p_min, p_max );
 	}

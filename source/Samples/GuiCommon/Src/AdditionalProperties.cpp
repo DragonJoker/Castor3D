@@ -5,7 +5,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -76,9 +76,9 @@ namespace GuiCommon
 
 	wxBoolProperty * CreateProperty( wxString const & p_name, bool const & p_value, bool p_checkbox )
 	{
-		wxBoolProperty * l_return = new wxBoolProperty( p_name, wxPG_LABEL );
-		l_return->SetAttribute( wxT( "UseCheckbox" ), p_checkbox );
-		return l_return;
+		wxBoolProperty * result = new wxBoolProperty( p_name, wxPG_LABEL );
+		result->SetAttribute( wxT( "UseCheckbox" ), p_checkbox );
+		return result;
 	}
 
 	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value )
@@ -88,10 +88,10 @@ namespace GuiCommon
 
 	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor )
 	{
-		wxStringProperty * l_return = new wxStringProperty( p_name, wxPG_LABEL, p_value );
-		l_return->SetEditor( p_editor );
-		l_return->SetClientObject( new ButtonData( p_method, p_handler ) );
-		return l_return;
+		wxStringProperty * result = new wxStringProperty( p_name, wxPG_LABEL, p_value );
+		result->SetEditor( p_editor );
+		result->SetClientObject( new ButtonData( p_method, p_handler ) );
+		return result;
 	}
 
 	//************************************************************************************************

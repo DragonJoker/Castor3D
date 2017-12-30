@@ -4,11 +4,11 @@
 #include "LoopVertex.hpp"
 #include "LoopDivider.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace Loop
 {
-	FaceEdges::FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face, VertexPtrUIntMap & p_mapVertex )
+	FaceEdges::FaceEdges( Subdivider * p_pDivider, castor3d::Face p_face, VertexPtrUIntMap & p_mapVertex )
 		: m_pDivider( p_pDivider )
 		, m_face( p_face )
 		, m_bOwnFace( true )
@@ -16,124 +16,124 @@ namespace Loop
 		, m_pVertex1( p_mapVertex[p_face[1]] )
 		, m_pVertex2( p_mapVertex[p_face[2]] )
 	{
-		m_edgeAB = DoAddEdge( m_pVertex0.lock(), m_pVertex1.lock(), true );
-		m_edgeBC = DoAddEdge( m_pVertex1.lock(), m_pVertex2.lock(), true );
-		m_edgeCA = DoAddEdge( m_pVertex2.lock(), m_pVertex0.lock(), true );
+		m_edgeAB = doAddEdge( m_pVertex0.lock(), m_pVertex1.lock(), true );
+		m_edgeBC = doAddEdge( m_pVertex1.lock(), m_pVertex2.lock(), true );
+		m_edgeCA = doAddEdge( m_pVertex2.lock(), m_pVertex0.lock(), true );
 	}
 
-	FaceEdges::FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face, EdgeSPtr l_ab, EdgeSPtr l_bc, EdgeSPtr l_ca )
+	FaceEdges::FaceEdges( Subdivider * p_pDivider, castor3d::Face p_face, EdgeSPtr ab, EdgeSPtr bc, EdgeSPtr ca )
 		: m_pDivider( p_pDivider )
 		, m_face( p_face )
-		, m_edgeAB( l_ab )
-		, m_edgeBC( l_bc )
-		, m_edgeCA( l_ca )
+		, m_edgeAB( ab )
+		, m_edgeBC( bc )
+		, m_edgeCA( ca )
 		, m_bOwnFace( false )
-		, m_pVertex0( l_ab->GetVertex1() )
-		, m_pVertex1( l_bc->GetVertex1() )
-		, m_pVertex2( l_ca->GetVertex1() )
+		, m_pVertex0( ab->getVertex1() )
+		, m_pVertex1( bc->getVertex1() )
+		, m_pVertex2( ca->getVertex1() )
 	{
 	}
 
-	void FaceEdges::Divide( real p_value, VertexPtrUIntMap & p_mapVertex, FaceEdgesPtrArray & p_newFaces )
+	void FaceEdges::divide( real p_value, VertexPtrUIntMap & p_mapVertex, FaceEdgesPtrArray & p_newFaces )
 	{
-		Point3r l_aTex, l_bTex, l_cTex, l_dTex, l_eTex, l_fTex;
+		Point3r aTex, bTex, cTex, dTex, eTex, fTex;
 		//// We first retrieve the 3 face's vertices
-		VertexSPtr l_a = p_mapVertex[m_face[0]];
-		VertexSPtr l_b = p_mapVertex[m_face[1]];
-		VertexSPtr l_c = p_mapVertex[m_face[2]];
+		VertexSPtr a = p_mapVertex[m_face[0]];
+		VertexSPtr b = p_mapVertex[m_face[1]];
+		VertexSPtr c = p_mapVertex[m_face[2]];
 		// We divide the 3 edges of the face and retrieve the resulting vertices
-		VertexSPtr l_d = m_edgeAB->Divide( m_pDivider, p_value );
-		VertexSPtr l_e = m_edgeBC->Divide( m_pDivider, p_value );
-		VertexSPtr l_f = m_edgeCA->Divide( m_pDivider, p_value );
+		VertexSPtr d = m_edgeAB->divide( m_pDivider, p_value );
+		VertexSPtr e = m_edgeBC->divide( m_pDivider, p_value );
+		VertexSPtr f = m_edgeCA->divide( m_pDivider, p_value );
 		// We remove the 3 original edges
-		DoRemoveEdge( m_edgeAB );
-		DoRemoveEdge( m_edgeBC );
-		DoRemoveEdge( m_edgeCA );
+		doRemoveEdge( m_edgeAB );
+		doRemoveEdge( m_edgeBC );
+		doRemoveEdge( m_edgeCA );
 		m_edgeAB.reset();
 		m_edgeBC.reset();
 		m_edgeCA.reset();
 		// We then compute the texture coordinates of the new 3 vertices
-		Castor3D::Vertex::GetTexCoord( l_a->GetPoint(), l_aTex );
-		Castor3D::Vertex::GetTexCoord( l_b->GetPoint(), l_bTex );
-		Castor3D::Vertex::GetTexCoord( l_c->GetPoint(), l_cTex );
-		l_dTex = l_aTex + ( l_bTex - l_aTex ) * p_value;
-		l_eTex = l_bTex + ( l_cTex - l_bTex ) * p_value;
-		l_fTex = l_cTex + ( l_aTex - l_cTex ) * p_value;
+		castor3d::Vertex::getTexCoord( a->getPoint(), aTex );
+		castor3d::Vertex::getTexCoord( b->getPoint(), bTex );
+		castor3d::Vertex::getTexCoord( c->getPoint(), cTex );
+		dTex = aTex + ( bTex - aTex ) * p_value;
+		eTex = bTex + ( cTex - bTex ) * p_value;
+		fTex = cTex + ( aTex - cTex ) * p_value;
 		// Then we add the 4 resulting faces
-		DoAddFaceAndEdges( l_a, l_d, l_f, l_aTex, l_dTex, l_fTex, p_newFaces );
-		DoAddFaceAndEdges( l_d, l_b, l_e, l_dTex, l_bTex, l_eTex, p_newFaces );
-		DoAddFaceAndEdges( l_e, l_c, l_f, l_eTex, l_cTex, l_fTex, p_newFaces );
-		DoAddFaceAndEdges( l_d, l_e, l_f, l_dTex, l_eTex, l_fTex, p_newFaces );
+		doAddFaceAndEdges( a, d, f, aTex, dTex, fTex, p_newFaces );
+		doAddFaceAndEdges( d, b, e, dTex, bTex, eTex, p_newFaces );
+		doAddFaceAndEdges( e, c, f, eTex, cTex, fTex, p_newFaces );
+		doAddFaceAndEdges( d, e, f, dTex, eTex, fTex, p_newFaces );
 	}
 
-	void FaceEdges::DoAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c,
+	void FaceEdges::doAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c,
 									   Point3r const & p_aTex, Point3r const & p_bTex, Point3r const & p_cTex,
 									   FaceEdgesPtrArray & p_newFaces )
 	{
 		// First we create the 3 edges of the face
-		EdgeSPtr l_edgeAB = DoAddEdge( p_a, p_b,	true );
-		EdgeSPtr l_edgeBC = DoAddEdge( p_b, p_c,	true );
-		EdgeSPtr l_edgeCA = DoAddEdge( p_c, p_a,	true );
+		EdgeSPtr edgeAB = doAddEdge( p_a, p_b,	true );
+		EdgeSPtr edgeBC = doAddEdge( p_b, p_c,	true );
+		EdgeSPtr edgeCA = doAddEdge( p_c, p_a,	true );
 		// Then we add it
-		DoAddFaceAndEdges( p_a, p_b, p_c, p_aTex, p_bTex, p_cTex, l_edgeAB, l_edgeBC, l_edgeCA, p_newFaces );
+		doAddFaceAndEdges( p_a, p_b, p_c, p_aTex, p_bTex, p_cTex, edgeAB, edgeBC, edgeCA, p_newFaces );
 	}
 
-	void FaceEdges::DoAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c,
+	void FaceEdges::doAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c,
 									   Point3r const & p_aTex, Point3r const & p_bTex, Point3r const & p_cTex,
 									   EdgeSPtr p_edgeAB, EdgeSPtr p_edgeBC, EdgeSPtr p_edgeCA,
 									   FaceEdgesPtrArray & p_newFaces )
 	{
-		auto l_face = m_pDivider->AddFace( p_a->GetIndex(), p_b->GetIndex(), p_c->GetIndex() );
-		Castor3D::Vertex::SetTexCoord( p_a->GetPoint(), p_aTex );
-		Castor3D::Vertex::SetTexCoord( p_b->GetPoint(), p_bTex );
-		Castor3D::Vertex::SetTexCoord( p_c->GetPoint(), p_cTex );
-		p_newFaces.push_back( std::make_shared< FaceEdges >( m_pDivider, l_face, p_edgeAB, p_edgeBC, p_edgeCA ) );
+		auto face = m_pDivider->addFace( p_a->getIndex(), p_b->getIndex(), p_c->getIndex() );
+		castor3d::Vertex::setTexCoord( p_a->getPoint(), p_aTex );
+		castor3d::Vertex::setTexCoord( p_b->getPoint(), p_bTex );
+		castor3d::Vertex::setTexCoord( p_c->getPoint(), p_cTex );
+		p_newFaces.push_back( std::make_shared< FaceEdges >( m_pDivider, face, p_edgeAB, p_edgeBC, p_edgeCA ) );
 	}
 
-	EdgeSPtr FaceEdges::DoAddEdge( VertexSPtr p_v1, VertexSPtr p_v2, bool p_toDivide )
+	EdgeSPtr FaceEdges::doAddEdge( VertexSPtr p_v1, VertexSPtr p_v2, bool p_toDivide )
 	{
 		// First we check if we have the edge v1->v2
-		EdgeSPtr l_return = p_v1->GetEdge( p_v2->GetIndex() );
-		bool l_bCreated = false;
+		EdgeSPtr result = p_v1->getEdge( p_v2->getIndex() );
+		bool bCreated = false;
 
-		if ( !l_return )
+		if ( !result )
 		{
 			// We haven't it, we check if we have the edge v2->v1
-			l_return = p_v2->GetEdge( p_v1->GetIndex() );
+			result = p_v2->getEdge( p_v1->getIndex() );
 
-			if ( !l_return )
+			if ( !result )
 			{
 				// We haven't it, so we create the edge
-				l_return = std::make_shared< Edge >( p_v1, p_v2, m_face, p_toDivide );
-				l_bCreated = true;
+				result = std::make_shared< Edge >( p_v1, p_v2, m_face, p_toDivide );
+				bCreated = true;
 			}
 
 			// We tell v1 it has an edge with v2
-			p_v1->AddEdge( l_return, p_v2->GetIndex() );
+			p_v1->addEdge( result, p_v2->getIndex() );
 		}
 
-		if ( !p_v2->HasEdge( p_v1->GetIndex() ) )
+		if ( !p_v2->hasEdge( p_v1->getIndex() ) )
 		{
 			// We tell v2 it has an edge with v1
-			p_v2->AddEdge( l_return, p_v1->GetIndex() );
+			p_v2->addEdge( result, p_v1->getIndex() );
 		}
 
-		if ( !l_bCreated )
+		if ( !bCreated )
 		{
 			// We add the face to the edge's faces
-			l_return->AddFace( m_face );
+			result->addFace( m_face );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void FaceEdges::DoRemoveEdge( EdgeSPtr p_edge )
+	void FaceEdges::doRemoveEdge( EdgeSPtr p_edge )
 	{
 		// We retrieve the two vertices of the edge
-		VertexSPtr l_v1 = p_edge->GetVertex1();
-		VertexSPtr l_v2 = p_edge->GetVertex2();
+		VertexSPtr v1 = p_edge->getVertex1();
+		VertexSPtr v2 = p_edge->getVertex2();
 		// We tell each vertex it doesn't have anymore an edge with the other one
-		l_v1->RemoveEdge( l_v2->GetIndex() );
-		l_v2->RemoveEdge( l_v1->GetIndex() );
+		v1->removeEdge( v2->getIndex() );
+		v2->removeEdge( v1->getIndex() );
 	}
 }

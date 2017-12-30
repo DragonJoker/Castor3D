@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GL_OBJECT_H___
 #define ___GL_OBJECT_H___
@@ -44,11 +25,11 @@ namespace GlRender
 	{
 		typedef std::function< void( int, uint32_t * ) > CreateFunction;
 
-		static inline uint32_t Apply( CreateFunction p_creator )
+		static inline uint32_t apply( CreateFunction p_creator )
 		{
-			uint32_t l_return = -1;
-			p_creator( 1, &l_return );
-			return l_return;
+			uint32_t result = -1;
+			p_creator( 1, &result );
+			return result;
 		}
 	};
 
@@ -69,7 +50,7 @@ namespace GlRender
 	{
 		typedef std::function< uint32_t() > CreateFunction;
 
-		static inline uint32_t Apply( CreateFunction p_creator )
+		static inline uint32_t apply( CreateFunction p_creator )
 		{
 			return p_creator();
 		}
@@ -92,7 +73,7 @@ namespace GlRender
 	{
 		typedef std::function< void( int, uint32_t const * ) > DestroyFunction;
 
-		static inline void Apply( DestroyFunction p_destroyer, uint32_t p_glName )
+		static inline void apply( DestroyFunction p_destroyer, uint32_t p_glName )
 		{
 			p_destroyer( 1, &p_glName );
 		}
@@ -115,7 +96,7 @@ namespace GlRender
 	{
 		typedef std::function< void( uint32_t ) > DestroyFunction;
 
-		static inline void Apply( DestroyFunction p_destroyer, uint32_t p_glName )
+		static inline void apply( DestroyFunction p_destroyer, uint32_t p_glName )
 		{
 			p_destroyer( p_glName );
 		}
@@ -151,7 +132,11 @@ namespace GlRender
 		@param[in] p_validator
 			The validation function
 		*/
-		inline Object( OpenGl & p_openGl, const char * p_typeName, CreateFunction p_creator, DestroyFunction p_destroyer, ValidatorFunction p_validator )
+		inline Object( OpenGl & p_openGl
+			, const char * p_typeName
+			, CreateFunction const & p_creator
+			, DestroyFunction const & p_destroyer
+			, ValidatorFunction const & p_validator )
 			: Holder( p_openGl )
 			, m_creator( p_creator )
 			, m_destroyer( p_destroyer )
@@ -171,18 +156,18 @@ namespace GlRender
 		@return
 			false if not created successfully
 		*/
-		inline bool Create()
+		inline bool create()
 		{
-			bool l_return = IsValid();
+			bool result = isValid();
 
-			if ( !l_return )
+			if ( !result )
 			{
-				l_return = DoCreate();
+				result = doCreate();
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				glTrack( Holder::GetOpenGl(), m_typeName, this );
+				glTrack( Holder::getOpenGl(), m_typeName, this );
 
 #if !defined( NDEBUG )
 
@@ -191,25 +176,25 @@ namespace GlRender
 #endif
 			}
 
-			return l_return;
+			return result;
 		}
 
 		/** Destroys the object on GPU, if valid.
 		 */
-		inline void Destroy()
+		inline void destroy()
 		{
 #if !defined( NDEBUG )
 
 			if ( m_hasBeenValid )
 			{
-				m_hasBeenValid = !glUntrack( Holder::GetOpenGl(), this );
+				m_hasBeenValid = !glUntrack( Holder::getOpenGl(), this );
 			}
 
 #endif
 
-			if ( IsValid() )
+			if ( isValid() )
 			{
-				DoDestroy();
+				doDestroy();
 			}
 			else
 			{
@@ -221,7 +206,7 @@ namespace GlRender
 		@return
 			The status
 		*/
-		inline bool IsValid()const
+		inline bool isValid()const
 		{
 			return m_glName != GlInvalidIndex;
 		}
@@ -230,16 +215,16 @@ namespace GlRender
 		@return
 			The status.
 		*/
-		inline bool Validate()const
+		inline bool validate()const
 		{
-			return IsValid() && m_validator( m_glName );
+			return isValid() && m_validator( m_glName );
 		}
 
 		/** Retrieves the OpenGl instance
 		@return
 			The instance
 		*/
-		inline uint32_t const & GetGlName()const
+		inline uint32_t const & getGlName()const
 		{
 			return m_glName;
 		}
@@ -248,7 +233,7 @@ namespace GlRender
 		@return
 			The instance
 		*/
-		inline uint32_t & GetGlName()
+		inline uint32_t & getGlName()
 		{
 			return m_glName;
 		}
@@ -257,7 +242,7 @@ namespace GlRender
 		@return
 			The name.
 		*/
-		inline const char * GetGlTypeName()
+		inline const char * getGlTypeName()
 		{
 			return m_typeName;
 		}
@@ -267,17 +252,17 @@ namespace GlRender
 		@return
 			false if not created successfully.
 		 */
-		inline bool DoCreate()
+		inline bool doCreate()
 		{
-			m_glName = CreatorHelper< CreateFunction >::Apply( m_creator );
+			m_glName = CreatorHelper< CreateFunction >::apply( m_creator );
 			return m_glName != GlInvalidIndex;
 		}
 
 		/** Effectively destroys the object on GPU.
 		 */
-		inline void DoDestroy()
+		inline void doDestroy()
 		{
-			DestroyerHelper< DestroyFunction >::Apply( m_destroyer, m_glName );
+			DestroyerHelper< DestroyFunction >::apply( m_destroyer, m_glName );
 			m_glName = GlInvalidIndex;
 		}
 

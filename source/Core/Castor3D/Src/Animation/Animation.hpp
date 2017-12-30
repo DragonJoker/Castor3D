@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ANIMATION_H___
 #define ___C3D_ANIMATION_H___
@@ -26,10 +7,12 @@ SOFTWARE.
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
 
+#include "AnimationKeyFrame.hpp"
+
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -43,23 +26,37 @@ namespace Castor3D
 	\remarks	Une animation est jouée au travers d'une AnimationInstance.
 	*/
 	class Animation
-		: public Castor::Named
-		, public Castor::OwnedBy< Animable >
+		: public castor::Named
+		, public castor::OwnedBy< Animable >
 	{
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API Animation( Animation && rhs ) = default;
+		C3D_API Animation & operator=( Animation && rhs ) = default;
+		C3D_API Animation( Animation const & rhs ) = delete;
+		C3D_API Animation & operator=( Animation const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type		The type of the animation.
-		 *\param[in]	p_animable	The parent animable object.
-		 *\param[in]	p_name		The name of the animation.
+		 *\param[in]	type		The type of the animation.
+		 *\param[in]	animable	The parent animable object.
+		 *\param[in]	name		The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type		Le type d'animation.
-		 *\param[in]	p_animable	L'objet animable parent.
-		 *\param[in]	p_name		Le nom de l'animation.
+		 *\param[in]	type		Le type d'animation.
+		 *\param[in]	animable	L'objet animable parent.
+		 *\param[in]	name		Le nom de l'animation.
 		 */
-		C3D_API Animation( AnimationType p_type, Animable & p_animable, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Animation( AnimationType type
+			, Animable & animable
+			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -69,46 +66,101 @@ namespace Castor3D
 		C3D_API ~Animation();
 		/**
 		 *\~english
-		 *\brief		Move constructor.
+		 *\brief		Adds a keyframe to the animation.
+		 *\param[in]	keyFrame	The keyframe.
 		 *\~french
-		 *\brief		Constructeur par déplacement.
+		 *\brief		Ajoute une keyframe à l'animation.
+		 *\param[in]	keyFrame	La keyframe.
 		 */
-		C3D_API Animation( Animation && p_rhs ) = default;
+		C3D_API void addKeyFrame( AnimationKeyFrameUPtr && keyFrame );
 		/**
 		 *\~english
-		 *\brief		Move assignment operator.
+		 *\brief			Finds a keyframe given a time index.
+		 *\param[in]		time	The time index.
 		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
+		 *\brief			Trouve une keyframe à l'index de temps donné.
+		 *\param[in]		time	L'index de temps.
 		 */
-		C3D_API Animation & operator=( Animation && p_rhs ) = default;
+		C3D_API AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
 		/**
 		 *\~english
-		 *\brief		Copy constructor.
+		 *\brief			Finds a keyframe given a time index.
+		 *\param[in]		time	The time index.
+		 *\param[in,out]	prv		The previous keyframe, receives the new previous keyframe, if there is a change.
+		 *\param[in,out]	cur		Receives the current keyframe, receives the new current keyframe, if there is a change.
 		 *\~french
-		 *\brief		Constructeur par copie.
+		 *\brief			Trouve une keyframe à l'index de temps donné.
+		 *\param[in]		time	L'index de temps.
+		 *\param[in,out]	prv		La keyframe précédente, reçoit la nouvelle s'il y a eu un changement.
+		 *\param[in,out]	cur		La keyframe courante, reçoit la nouvelle s'il y a eu un changement.
 		 */
-		C3D_API Animation( Animation const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API Animation & operator=( Animation const & p_rhs ) = delete;
+		C3D_API void findKeyFrame( castor::Milliseconds const & time
+			, AnimationKeyFrameArray::iterator & prv
+			, AnimationKeyFrameArray::iterator & cur )const;
 		/**
 		 *\~english
 		 *\brief		Updates the animation length.
 		 *\~french
 		 *\brief		Initialise la longueur de l'animation.
 		 */
-		C3D_API void UpdateLength();
+		C3D_API void updateLength();
+		/**
+		 *\~english
+		 *\return		\p true if the key frames list is empty.
+		 *\~french
+		 *\return		\p true si la liste de key frames est vide.
+		 */
+		inline bool isEmpty()const
+		{
+			return m_keyframes.empty();
+		}
+		/**
+		 *\~english
+		 *\return		The beginning of the key frames.
+		 *\~french
+		 *\return		Le début des key frames.
+		 */
+		inline AnimationKeyFrameArray::const_iterator begin()const
+		{
+			return m_keyframes.begin();
+		}
+		/**
+		 *\~english
+		 *\return		The beginning of the key frames.
+		 *\~french
+		 *\return		Le début des key frames.
+		 */
+		inline AnimationKeyFrameArray::iterator begin()
+		{
+			return m_keyframes.begin();
+		}
+		/**
+		 *\~english
+		 *\return		The end of the key frames.
+		 *\~french
+		 *\return		La fin des key frames.
+		 */
+		inline AnimationKeyFrameArray::const_iterator end()const
+		{
+			return m_keyframes.end();
+		}
+		/**
+		 *\~english
+		 *\return		The end of the key frames.
+		 *\~french
+		 *\return		La fin des key frames.
+		 */
+		inline AnimationKeyFrameArray::iterator end()
+		{
+			return m_keyframes.end();
+		}
 		/**
 		 *\~english
 		 *\return		The animation type.
 		 *\~french
 		 *\return		Le type de l'animation.
 		 */
-		inline AnimationType GetType()const
+		inline AnimationType getType()const
 		{
 			return m_type;
 		}
@@ -118,19 +170,10 @@ namespace Castor3D
 		 *\~french
 		 *\return		La longueur de l'animation.
 		 */
-		inline std::chrono::milliseconds const & GetLength()const
+		inline castor::Milliseconds const & getLength()const
 		{
 			return m_length;
 		}
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Updates the animation length.
-		 *\~french
-		 *\brief		Initialise la longueur de l'animation.
-		 */
-		virtual void DoUpdateLength() = 0;
 
 	protected:
 		//!\~english	The animation type.
@@ -138,7 +181,10 @@ namespace Castor3D
 		AnimationType m_type{ AnimationType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		std::chrono::milliseconds m_length{ 0 };
+		castor::Milliseconds m_length{ 0 };
+		//!\~english	The key frames.
+		//!\~french		Les keyframes.
+		AnimationKeyFrameArray m_keyframes;
 
 		friend class BinaryWriter< Animation >;
 		friend class BinaryParser< Animation >;
@@ -177,14 +223,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( Animation const & p_obj )override;
+		C3D_API bool doWrite( Animation const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -203,16 +249,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
+		 *\param[out]	obj	The object to read.
 		 *\param[in]	p_chunk	The chunk containing data.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
+		 *\param[out]	obj	L'objet à lire.
 		 *\param[in]	p_chunk	Le chunk contenant les données.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( Animation & p_obj )override;
+		C3D_API bool doParse( Animation & obj )override;
 	};
 }
 

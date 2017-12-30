@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The submesh must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The submesh must be initialised" );
 
 	CSubmesh::CSubmesh()
 	{
@@ -19,18 +19,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AddPoint( *static_cast< CVector3D * >( val ) );
+			m_internal->addPoint( *static_cast< CVector3D * >( val ) );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_ISubmesh,					// This is the GUID of component throwing error
-					 cuT( "AddPoint" ),				// This is generally displayed as the title
+					 IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
+					 cuT( "addPoint" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -42,18 +42,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AddFace( x, y, z );
+			m_mapping->addFace( x, y, z );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_ISubmesh,					// This is the GUID of component throwing error
-					 cuT( "AddFace" ),				// This is generally displayed as the title
+					 IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
+					 cuT( "addFace" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

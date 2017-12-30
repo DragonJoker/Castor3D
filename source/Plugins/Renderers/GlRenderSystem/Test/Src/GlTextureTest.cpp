@@ -12,8 +12,8 @@
 #include <Design/ArrayView.hpp>
 #include <Buffer/GlBuffer.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 using namespace GlRender;
 
 namespace Testing
@@ -23,50 +23,50 @@ namespace Testing
 		constexpr auto Width = 8u;
 		constexpr auto Height = 8u;
 		constexpr auto Format = PixelFormat::eR8G8B8;
-		constexpr auto Bpp = pixel_definitions< Format >::Size;
+		constexpr auto Bpp = PixelDefinitions< Format >::Size;
 
-		void DoTestStorage( GlTextureTest & p_case
-			, Engine & p_engine
+		void doTestStorage( GlTextureTest & p_case
+			, Engine & engine
 			, TextureType p_type
-			, AccessTypes const & p_cpuAccess
-			, AccessTypes const & p_gpuAccess )
+			, AccessTypes const & cpuAccess
+			, AccessTypes const & gpuAccess )
 		{
-			auto & l_renderSystem = static_cast< GlRenderSystem & >( *p_engine.GetRenderSystem() );
-			l_renderSystem.GetMainContext()->SetCurrent();
-			auto l_texture = l_renderSystem.CreateTexture( p_type, p_cpuAccess, p_gpuAccess );
-			l_texture->SetSource( PxBufferBase::create( Size{ Width, Height }, Format ) );
-			l_texture->Initialise();
-			std::array< uint8_t, Width * Height * Bpp > l_src;
-			std::iota( l_src.begin(), l_src.end(), 0 );
-			p_case.Upload( *l_texture, ArrayView< uint8_t >{ l_src.data(), l_src.size() } );
+			auto & renderSystem = static_cast< GlRenderSystem & >( *engine.getRenderSystem() );
+			renderSystem.getMainContext()->setCurrent();
+			auto texture = renderSystem.createTexture( p_type, cpuAccess, gpuAccess );
+			texture->setSource( PxBufferBase::create( Size{ Width, Height }, Format ) );
+			texture->initialise();
+			std::array< uint8_t, Width * Height * Bpp > src;
+			std::iota( src.begin(), src.end(), 0 );
+			p_case.upload( *texture, ArrayView< uint8_t >{ src.data(), src.size() } );
 
-			if ( l_renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
+			if ( renderSystem.getOpenGl().hasExtension( ARB_shader_image_load_store ) )
 			{
-				l_renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
+				renderSystem.getOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
 			}
 
-			l_renderSystem.GetMainContext()->SwapBuffers();
+			renderSystem.getMainContext()->swapBuffers();
 
-			std::vector< uint8_t > l_dst;
-			l_dst.resize( l_src.size() );
-			std::memset( l_texture->GetImage().GetBuffer()->ptr(), 0, l_texture->GetImage().GetBuffer()->size() );
-			p_case.Download( *l_texture, l_dst );
+			std::vector< uint8_t > dst;
+			dst.resize( src.size() );
+			std::memset( texture->getImage().getBuffer()->ptr(), 0, texture->getImage().getBuffer()->size() );
+			p_case.download( *texture, dst );
 
-			if ( l_renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
+			if ( renderSystem.getOpenGl().hasExtension( ARB_shader_image_load_store ) )
 			{
-				l_renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
+				renderSystem.getOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
 			}
 
-			l_renderSystem.GetMainContext()->SwapBuffers();
-			l_renderSystem.GetMainContext()->EndCurrent();
-			p_case.Compare( l_src, l_dst );
+			renderSystem.getMainContext()->swapBuffers();
+			renderSystem.getMainContext()->endCurrent();
+			p_case.Compare( src, dst );
 
-			l_texture->Cleanup();
+			texture->cleanup();
 		}
 	}
 
-	GlTextureTest::GlTextureTest( Engine & p_engine )
-		: GlTestCase{ "GlTextureTest", p_engine }
+	GlTextureTest::GlTextureTest( Engine & engine )
+		: GlTestCase{ "GlTextureTest", engine }
 	{
 	}
 
@@ -74,20 +74,20 @@ namespace Testing
 	{
 	}
 
-	void GlTextureTest::DoRegisterTests()
+	void GlTextureTest::doRegisterTests()
 	{
-		if ( m_engine.GetRenderSystem()->GetGpuInformations().HasFeature( GpuFeature::eImmutableTextureStorage ) )
+		if ( m_engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eImmutableTextureStorage ) )
 		{
-			DoRegisterTest( "GlTextureTest::ImmutableStorage", std::bind( &GlTextureTest::ImmutableStorage, this ) );
+			doRegisterTest( "GlTextureTest::ImmutableStorage", std::bind( &GlTextureTest::ImmutableStorage, this ) );
 		}
 
-		DoRegisterTest( "GlTextureTest::DirectStorage", std::bind( &GlTextureTest::DirectStorage, this ) );
-		DoRegisterTest( "GlTextureTest::PboStorage", std::bind( &GlTextureTest::PboStorage, this ) );
-		DoRegisterTest( "GlTextureTest::GpuOnlyStorage", std::bind( &GlTextureTest::GpuOnlyStorage, this ) );
+		doRegisterTest( "GlTextureTest::DirectStorage", std::bind( &GlTextureTest::DirectStorage, this ) );
+		doRegisterTest( "GlTextureTest::PboStorage", std::bind( &GlTextureTest::PboStorage, this ) );
+		doRegisterTest( "GlTextureTest::GpuOnlyStorage", std::bind( &GlTextureTest::GpuOnlyStorage, this ) );
 
-		if ( m_engine.GetRenderSystem()->GetGpuInformations().HasFeature( GpuFeature::eTextureBuffers ) )
+		if ( m_engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eTextureBuffers ) )
 		{
-			DoRegisterTest( "GlTextureTest::TboStorage", std::bind( &GlTextureTest::TboStorage, this ) );
+			doRegisterTest( "GlTextureTest::TboStorage", std::bind( &GlTextureTest::TboStorage, this ) );
 		}
 	}
 
@@ -97,12 +97,12 @@ namespace Testing
 
 	void GlTextureTest::DirectStorage()
 	{
-		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eRead | AccessType::eWrite, AccessType::eRead );
+		doTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eRead | AccessType::eWrite, AccessType::eRead );
 	}
 
 	void GlTextureTest::PboStorage()
 	{
-		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eRead | AccessType::eWrite, AccessType::eRead | AccessType::eWrite );
+		doTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eRead | AccessType::eWrite, AccessType::eRead | AccessType::eWrite );
 	}
 
 	void GlTextureTest::GpuOnlyStorage()
@@ -111,23 +111,23 @@ namespace Testing
 
 	void GlTextureTest::TboStorage()
 	{
-		DoTestStorage( *this, m_engine, TextureType::eBuffer, AccessType::eRead | AccessType::eWrite, AccessType::eRead | AccessType::eWrite );
+		doTestStorage( *this, m_engine, TextureType::eBuffer, AccessType::eRead | AccessType::eWrite, AccessType::eRead | AccessType::eWrite );
 	}
 
-	void GlTextureTest::Upload( TextureLayout & p_layout, ArrayView< uint8_t > const & p_view )
+	void GlTextureTest::upload( TextureLayout & p_layout, ArrayView< uint8_t > const & p_view )
 	{
-		auto l_buffer = p_layout.Lock( AccessType::eWrite );
-		CT_REQUIRE( l_buffer );
-		std::memcpy( l_buffer, &p_view[0], p_view.size() );
-		p_layout.Unlock( true );
+		auto buffer = p_layout.lock( AccessType::eWrite );
+		CT_REQUIRE( buffer );
+		std::memcpy( buffer, &p_view[0], p_view.size() );
+		p_layout.unlock( true );
 	}
 
-	void GlTextureTest::Download( TextureLayout & p_layout, std::vector< uint8_t > & p_dst )
+	void GlTextureTest::download( TextureLayout & p_layout, std::vector< uint8_t > & p_dst )
 	{
-		auto l_buffer = p_layout.Lock( AccessType::eRead );
-		CT_REQUIRE( l_buffer );
-		std::memcpy( p_dst.data(), l_buffer, p_dst.size() );
-		p_layout.Unlock( true );
+		auto buffer = p_layout.lock( AccessType::eRead );
+		CT_REQUIRE( buffer );
+		std::memcpy( p_dst.data(), buffer, p_dst.size() );
+		p_layout.unlock( true );
 	}
 
 	void GlTextureTest::Compare( std::array< uint8_t, 8 * 8 * 3 > const & p_src, std::vector< uint8_t > const & p_dst )

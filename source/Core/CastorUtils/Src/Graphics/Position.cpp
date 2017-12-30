@@ -1,6 +1,6 @@
 #include "Position.hpp"
 
-namespace Castor
+namespace castor
 {
 	Position::Position( int32_t p_x, int32_t p_y )
 		:	BaseType( m_data.buffer )

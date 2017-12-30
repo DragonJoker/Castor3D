@@ -1,4 +1,4 @@
-#include <Log/Logger.hpp>
+﻿#include <Log/Logger.hpp>
 
 #include <Engine.hpp>
 #include <Cache/TargetCache.hpp>
@@ -19,29 +19,31 @@
 #	endif
 #endif
 
-using namespace GrayScale;
-
-C3D_GrayScale_API void GetRequiredVersion( Castor3D::Version & p_version )
+extern "C"
 {
-	p_version = Castor3D::Version();
-}
+	C3D_GrayScale_API void getRequiredVersion( castor3d::Version * p_version )
+	{
+		*p_version = castor3d::Version();
+	}
 
-C3D_GrayScale_API Castor3D::PluginType GetType()
-{
-	return Castor3D::PluginType::ePostEffect;
-}
+	C3D_GrayScale_API void getType( castor3d::PluginType * p_type )
+	{
+		*p_type = castor3d::PluginType::ePostEffect;
+	}
 
-C3D_GrayScale_API Castor::String GetName()
-{
-	return GrayScalePostEffect::Name;
-}
+	C3D_GrayScale_API void getName( char const ** p_name )
+	{
+		*p_name = GrayScale::GrayScalePostEffect::Name.c_str();
+	}
 
-C3D_GrayScale_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( GrayScalePostEffect::Type, &GrayScalePostEffect::Create );
-}
+	C3D_GrayScale_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	{
+		engine->getRenderTargetCache().getPostEffectFactory().registerType( GrayScale::GrayScalePostEffect::Type
+			, &GrayScale::GrayScalePostEffect::create );
+	}
 
-C3D_GrayScale_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( GrayScalePostEffect::Type );
+	C3D_GrayScale_API void OnUnload( castor3d::Engine * engine )
+	{
+		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( GrayScale::GrayScalePostEffect::Type );
+	}
 }

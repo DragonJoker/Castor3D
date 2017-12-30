@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_MULTISAMPLE_STATE_H___
 #define ___C3D_MULTISAMPLE_STATE_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 #include <Graphics/Colour.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -50,19 +31,19 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'activation du multisample
 		 *\return		La valeur
 		 */
-		inline bool GetMultisample()const
+		inline bool getMultisample()const
 		{
 			return m_bMultisampled;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the multisample activation status
+		 *\brief		sets the multisample activation status
 		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation du multisample
 		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void SetMultisample( bool p_enable )
+		inline void setMultisample( bool p_enable )
 		{
 			m_bMultisampled = p_enable;
 		}
@@ -74,19 +55,19 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'activation de l'alpha to coverage
 		 *\return		La valeur
 		 */
-		inline bool IsAlphaToCoverageEnabled()const
+		inline bool isAlphaToCoverageEnabled()const
 		{
 			return m_bEnableAlphaToCoverage;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the alpha to coverage activation status
+		 *\brief		sets the alpha to coverage activation status
 		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de l'alpha to coverage
 		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void EnableAlphaToCoverage( bool p_enable )
+		inline void enableAlphaToCoverage( bool p_enable )
 		{
 			m_bEnableAlphaToCoverage = p_enable;
 		}
@@ -98,19 +79,19 @@ namespace Castor3D
 		 *\brief		Récupère le masque de couverture de samples
 		 *\return		La valeur
 		 */
-		inline uint32_t GetSampleCoverageMask()const
+		inline uint32_t getSampleCoverageMask()const
 		{
 			return m_uiSampleMask;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the sample coverage mask
+		 *\brief		sets the sample coverage mask
 		 *\param[in]	p_uiMask	The new value
 		 *\~french
 		 *\brief		Définit le masque de couverture de samples
 		 *\param[in]	p_uiMask	La nouvelle valeur
 		 */
-		inline void SetSampleCoverageMask( uint32_t p_uiMask )
+		inline void setSampleCoverageMask( uint32_t p_uiMask )
 		{
 			m_uiSampleMask = p_uiMask;
 		}

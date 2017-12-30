@@ -17,8 +17,8 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GuiCommon
 {
@@ -56,8 +56,8 @@ namespace GuiCommon
 		static std::array< int, size_t( TextTexturingMode::eCount ) > PROPERTY_OVERLAY_TEXTURING_VALUES{ int( TextTexturingMode::eLetter ), int( TextTexturingMode::eText ) };
 	}
 
-	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable, Castor3D::OverlayCategorySPtr p_overlay )
-		: TreeItemProperty( p_overlay->GetOverlay().GetEngine(), p_editable, ePROPERTY_DATA_TYPE_OVERLAY )
+	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable, castor3d::OverlayCategorySPtr p_overlay )
+		: TreeItemProperty( p_overlay->getOverlay().getEngine(), p_editable, ePROPERTY_DATA_TYPE_OVERLAY )
 		, m_overlay( p_overlay )
 	{
 		PROPERTY_CATEGORY_OVERLAY = _( "Overlay: " );
@@ -98,57 +98,57 @@ namespace GuiCommon
 	{
 	}
 
-	void OverlayTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void OverlayTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		OverlayCategorySPtr l_overlay = GetOverlay();
+		OverlayCategorySPtr overlay = getOverlay();
 
-		if ( l_overlay )
+		if ( overlay )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_OVERLAY + wxString( l_overlay->GetOverlayName() ) ) );
-			p_grid->Append( new PositionProperty( PROPERTY_OVERLAY_POSITION ) )->SetValue( WXVARIANT( l_overlay->GetPixelPosition() ) );
-			p_grid->Append( new SizeProperty( PROPERTY_OVERLAY_SIZE ) )->SetValue( WXVARIANT( l_overlay->GetPixelSize() ) );
-			p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_MATERIAL ) )->SetValue( wxVariant( make_wxString( l_overlay->GetMaterial()->GetName() ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_OVERLAY + wxString( overlay->getOverlayName() ) ) );
+			p_grid->Append( new PositionProperty( PROPERTY_OVERLAY_POSITION ) )->SetValue( WXVARIANT( overlay->getPixelPosition() ) );
+			p_grid->Append( new SizeProperty( PROPERTY_OVERLAY_SIZE ) )->SetValue( WXVARIANT( overlay->getPixelSize() ) );
+			p_grid->Append( doCreateMaterialProperty( PROPERTY_OVERLAY_MATERIAL ) )->SetValue( wxVariant( make_wxString( overlay->getMaterial()->getName() ) ) );
 
-			switch ( l_overlay->GetType() )
+			switch ( overlay->getType() )
 			{
 			case OverlayType::ePanel:
-				DoCreatePanelOverlayProperties( p_grid, std::static_pointer_cast< PanelOverlay >( GetOverlay() ) );
+				doCreatePanelOverlayProperties( p_grid, std::static_pointer_cast< PanelOverlay >( getOverlay() ) );
 				break;
 
 			case OverlayType::eBorderPanel:
-				DoCreateBorderPanelOverlayProperties( p_grid, std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() ) );
+				doCreateBorderPanelOverlayProperties( p_grid, std::static_pointer_cast< BorderPanelOverlay >( getOverlay() ) );
 				break;
 
 			case OverlayType::eText:
-				DoCreateTextOverlayProperties( p_grid, std::static_pointer_cast< TextOverlay >( GetOverlay() ) );
+				doCreateTextOverlayProperties( p_grid, std::static_pointer_cast< TextOverlay >( getOverlay() ) );
 				break;
 			}
 		}
 	}
 
-	void OverlayTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void OverlayTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
-		OverlayCategorySPtr l_overlay = GetOverlay();
+		wxPGProperty * property = p_event.GetProperty();
+		OverlayCategorySPtr overlay = getOverlay();
 
-		if ( l_property && l_overlay )
+		if ( property && overlay )
 		{
-			if ( l_property->GetName() == PROPERTY_OVERLAY_POSITION )
+			if ( property->GetName() == PROPERTY_OVERLAY_POSITION )
 			{
-				const Position & l_position = PositionRefFromVariant( l_property->GetValue() );
-				OnPositionChange( l_position );
+				const Position & position = PositionRefFromVariant( property->GetValue() );
+				OnPositionChange( position );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_SIZE )
+			else if ( property->GetName() == PROPERTY_OVERLAY_SIZE )
 			{
-				const Size & l_size = SizeRefFromVariant( l_property->GetValue() );
-				OnSizeChange( l_size );
+				const Size & size = SizeRefFromVariant( property->GetValue() );
+				OnSizeChange( size );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_MATERIAL )
+			else if ( property->GetName() == PROPERTY_OVERLAY_MATERIAL )
 			{
-				OnMaterialChange( String( l_property->GetValueAsString().c_str() ) );
+				OnMaterialChange( String( property->GetValueAsString().c_str() ) );
 			}
 
-			switch ( l_overlay->GetType() )
+			switch ( overlay->getType() )
 			{
 			case OverlayType::ePanel:
 				OnPanelOverlayPropertyChanged( p_event );
@@ -165,57 +165,57 @@ namespace GuiCommon
 		}
 	}
 
-	void OverlayTreeItemProperty::DoCreatePanelOverlayProperties( wxPropertyGrid * p_grid, PanelOverlaySPtr p_overlay )
+	void OverlayTreeItemProperty::doCreatePanelOverlayProperties( wxPropertyGrid * p_grid, PanelOverlaySPtr p_overlay )
 	{
 	}
 
-	void OverlayTreeItemProperty::DoCreateBorderPanelOverlayProperties( wxPropertyGrid * p_grid, BorderPanelOverlaySPtr p_overlay )
+	void OverlayTreeItemProperty::doCreateBorderPanelOverlayProperties( wxPropertyGrid * p_grid, BorderPanelOverlaySPtr p_overlay )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY ) );
-		wxPGChoices l_choices{ make_wxArrayString( PROPERTY_OVERLAY_BORDER_POSITION_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_BORDER_POSITION_VALUES ) };
-		wxString l_selected{ PROPERTY_OVERLAY_BORDER_POSITION_TEXTS[size_t( p_overlay->GetBorderPosition() )] };
+		wxPGChoices choices{ make_wxArrayString( PROPERTY_OVERLAY_BORDER_POSITION_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_BORDER_POSITION_VALUES ) };
+		wxString selected{ PROPERTY_OVERLAY_BORDER_POSITION_TEXTS[size_t( p_overlay->getBorderPosition() )] };
 
-		Point4i l_rec = p_overlay->GetBorderPixelSize();
-		p_grid->Append( new RectangleProperty( PROPERTY_OVERLAY_BORDER_SIZE ) )->SetValue( WXVARIANT( l_rec ) );
+		Point4i rec{ p_overlay->getBorderPixelSize() };
+		p_grid->Append( new RectangleProperty( PROPERTY_OVERLAY_BORDER_SIZE ) )->SetValue( WXVARIANT( rec ) );
 
-		if ( p_overlay->GetBorderMaterial() )
+		if ( p_overlay->getBorderMaterial() )
 		{
-			p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_BORDER_MATERIAL ) )->SetValue( WXVARIANT( make_wxString( p_overlay->GetBorderMaterial()->GetName() ) ) );
+			p_grid->Append( doCreateMaterialProperty( PROPERTY_OVERLAY_BORDER_MATERIAL ) )->SetValue( WXVARIANT( make_wxString( p_overlay->getBorderMaterial()->getName() ) ) );
 		}
 		else
 		{
-			p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_BORDER_MATERIAL ) );
+			p_grid->Append( doCreateMaterialProperty( PROPERTY_OVERLAY_BORDER_MATERIAL ) );
 		}
 
-		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_INNER_UV ) )->SetValue( WXVARIANT( p_overlay->GetBorderInnerUV() ) );
-		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_OUTER_UV ) )->SetValue( WXVARIANT( p_overlay->GetBorderOuterUV() ) );
-		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_BORDER_POSITION, PROPERTY_OVERLAY_BORDER_POSITION, l_choices ) )->SetValue( l_selected );
+		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_INNER_UV ) )->SetValue( WXVARIANT( p_overlay->getBorderInnerUV() ) );
+		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_OUTER_UV ) )->SetValue( WXVARIANT( p_overlay->getBorderOuterUV() ) );
+		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_BORDER_POSITION, PROPERTY_OVERLAY_BORDER_POSITION, choices ) )->SetValue( selected );
 	}
 
-	void OverlayTreeItemProperty::DoCreateTextOverlayProperties( wxPropertyGrid * p_grid, TextOverlaySPtr p_overlay )
+	void OverlayTreeItemProperty::doCreateTextOverlayProperties( wxPropertyGrid * p_grid, TextOverlaySPtr p_overlay )
 	{
-		wxPGChoices l_haligns{ make_wxArrayString( PROPERTY_OVERLAY_HALIGN_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_HALIGN_VALUES ) };
-		wxString l_halign{ PROPERTY_OVERLAY_HALIGN_TEXTS[size_t( p_overlay->GetHAlign() )] };
-		wxPGChoices l_valigns{ make_wxArrayString( PROPERTY_OVERLAY_VALIGN_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_VALIGN_VALUES ) };
-		wxString l_valign{ PROPERTY_OVERLAY_VALIGN_TEXTS[size_t( p_overlay->GetVAlign() )] };
-		wxPGChoices l_wrappings{ make_wxArrayString( PROPERTY_OVERLAY_WRAPPING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_WRAPPING_VALUES ) };
-		wxString l_wrapping{ PROPERTY_OVERLAY_WRAPPING_TEXTS[size_t( p_overlay->GetTextWrappingMode() )] };
-		wxPGChoices l_spacings{ make_wxArrayString( PROPERTY_OVERLAY_SPACING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_SPACING_VALUES ) };
-		wxString l_spacing{ PROPERTY_OVERLAY_SPACING_TEXTS[size_t( p_overlay->GetLineSpacingMode() )] };
-		wxPGChoices l_texturings{ make_wxArrayString( PROPERTY_OVERLAY_TEXTURING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_TEXTURING_VALUES ) };
-		wxString l_texturing{ PROPERTY_OVERLAY_TEXTURING_TEXTS[size_t( p_overlay->GetTexturingMode() )] };
+		wxPGChoices haligns{ make_wxArrayString( PROPERTY_OVERLAY_HALIGN_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_HALIGN_VALUES ) };
+		wxString halign{ PROPERTY_OVERLAY_HALIGN_TEXTS[size_t( p_overlay->getHAlign() )] };
+		wxPGChoices valigns{ make_wxArrayString( PROPERTY_OVERLAY_VALIGN_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_VALIGN_VALUES ) };
+		wxString valign{ PROPERTY_OVERLAY_VALIGN_TEXTS[size_t( p_overlay->getVAlign() )] };
+		wxPGChoices wrappings{ make_wxArrayString( PROPERTY_OVERLAY_WRAPPING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_WRAPPING_VALUES ) };
+		wxString wrapping{ PROPERTY_OVERLAY_WRAPPING_TEXTS[size_t( p_overlay->getTextWrappingMode() )] };
+		wxPGChoices spacings{ make_wxArrayString( PROPERTY_OVERLAY_SPACING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_SPACING_VALUES ) };
+		wxString spacing{ PROPERTY_OVERLAY_SPACING_TEXTS[size_t( p_overlay->getLineSpacingMode() )] };
+		wxPGChoices texturings{ make_wxArrayString( PROPERTY_OVERLAY_TEXTURING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_TEXTURING_VALUES ) };
+		wxString texturing{ PROPERTY_OVERLAY_TEXTURING_TEXTS[size_t( p_overlay->getTexturingMode() )] };
 
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXT_OVERLAY ) );
-		FontSPtr l_font = p_overlay->GetFontTexture()->GetFont();
-		wxFontInfo l_info( l_font->GetHeight() );
-		l_info.FaceName( l_font->GetFaceName() );
-		p_grid->Append( new wxFontProperty( PROPERTY_OVERLAY_FONT ) )->SetValue( WXVARIANT( wxFont( l_info ) ) );
-		p_grid->Append( new wxStringProperty( PROPERTY_OVERLAY_CAPTION ) )->SetValue( p_overlay->GetCaption() );
-		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_HALIGN, PROPERTY_OVERLAY_HALIGN, l_haligns ) )->SetValue( l_halign );
-		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_VALIGN, PROPERTY_OVERLAY_VALIGN, l_valigns ) )->SetValue( l_valign );
-		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_WRAPPING, PROPERTY_OVERLAY_WRAPPING, l_wrappings ) )->SetValue( l_wrapping );
-		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_SPACING, PROPERTY_OVERLAY_SPACING, l_spacings ) )->SetValue( l_spacing );
-		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_TEXTURING, PROPERTY_OVERLAY_TEXTURING, l_texturings ) )->SetValue( l_texturing );
+		FontSPtr font = p_overlay->getFontTexture()->getFont();
+		wxFontInfo info( font->getHeight() );
+		info.FaceName( font->getFaceName() );
+		p_grid->Append( new wxFontProperty( PROPERTY_OVERLAY_FONT ) )->SetValue( WXVARIANT( wxFont( info ) ) );
+		p_grid->Append( new wxStringProperty( PROPERTY_OVERLAY_CAPTION ) )->SetValue( p_overlay->getCaption() );
+		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_HALIGN, PROPERTY_OVERLAY_HALIGN, haligns ) )->SetValue( halign );
+		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_VALIGN, PROPERTY_OVERLAY_VALIGN, valigns ) )->SetValue( valign );
+		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_WRAPPING, PROPERTY_OVERLAY_WRAPPING, wrappings ) )->SetValue( wrapping );
+		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_SPACING, PROPERTY_OVERLAY_SPACING, spacings ) )->SetValue( spacing );
+		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_TEXTURING, PROPERTY_OVERLAY_TEXTURING, texturings ) )->SetValue( texturing );
 	}
 
 	void OverlayTreeItemProperty::OnPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event )
@@ -224,257 +224,257 @@ namespace GuiCommon
 
 	void OverlayTreeItemProperty::OnBorderPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
-			if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_SIZE )
+			if ( property->GetName() == PROPERTY_OVERLAY_BORDER_SIZE )
 			{
-				const Point4i & l_size = Point4iRefFromVariant( l_property->GetValue() );
-				OnBorderSizeChange( Castor::Rectangle( l_size[0], l_size[1], l_size[2], l_size[3] ) );
+				const Point4i & size = Point4iRefFromVariant( property->GetValue() );
+				OnBorderSizeChange( castor::Rectangle( size[0], size[1], size[2], size[3] ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_MATERIAL )
+			else if ( property->GetName() == PROPERTY_OVERLAY_BORDER_MATERIAL )
 			{
-				OnBorderMaterialChange( String( l_property->GetValueAsString().c_str() ) );
+				OnBorderMaterialChange( String( property->GetValueAsString().c_str() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_POSITION )
+			else if ( property->GetName() == PROPERTY_OVERLAY_BORDER_POSITION )
 			{
-				OnBorderPositionChange( BorderPosition( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnBorderPositionChange( BorderPosition( reinterpret_cast< wxEnumProperty * >( property )->GetChoiceSelection() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_INNER_UV )
+			else if ( property->GetName() == PROPERTY_OVERLAY_BORDER_INNER_UV )
 			{
-				OnBorderInnerUVChange( Point4dRefFromVariant( l_property->GetValue() ) );
+				OnBorderInnerUVChange( Point4dRefFromVariant( property->GetValue() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_OUTER_UV )
+			else if ( property->GetName() == PROPERTY_OVERLAY_BORDER_OUTER_UV )
 			{
-				OnBorderOuterUVChange( Point4dRefFromVariant( l_property->GetValue() ) );
+				OnBorderOuterUVChange( Point4dRefFromVariant( property->GetValue() ) );
 			}
 		}
 	}
 
 	void OverlayTreeItemProperty::OnTextOverlayPropertyChanged( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
-			if ( l_property->GetName() == PROPERTY_OVERLAY_FONT )
+			if ( property->GetName() == PROPERTY_OVERLAY_FONT )
 			{
-				wxFont l_wxfont;
-				l_wxfont << l_property->GetValue();
-				FontSPtr l_font = make_Font( GetOverlay()->GetOverlay().GetEngine(), l_wxfont );
+				wxFont wxfont;
+				wxfont << property->GetValue();
+				FontSPtr font = make_Font( getOverlay()->getOverlay().getEngine(), wxfont );
 
-				if ( l_font )
+				if ( font )
 				{
-					OnFontChange( l_font );
+					OnFontChange( font );
 				}
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_CAPTION )
+			else if ( property->GetName() == PROPERTY_OVERLAY_CAPTION )
 			{
-				OnCaptionChange( String( l_property->GetValueAsString().c_str() ) );
+				OnCaptionChange( String( property->GetValueAsString().c_str() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_HALIGN )
+			else if ( property->GetName() == PROPERTY_OVERLAY_HALIGN )
 			{
-				OnHAlignChange( HAlign( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnHAlignChange( HAlign( reinterpret_cast< wxEnumProperty * >( property )->GetChoiceSelection() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_VALIGN )
+			else if ( property->GetName() == PROPERTY_OVERLAY_VALIGN )
 			{
-				OnVAlignChange( VAlign( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnVAlignChange( VAlign( reinterpret_cast< wxEnumProperty * >( property )->GetChoiceSelection() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_WRAPPING )
+			else if ( property->GetName() == PROPERTY_OVERLAY_WRAPPING )
 			{
-				OnWrappingChange( TextWrappingMode( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnWrappingChange( TextWrappingMode( reinterpret_cast< wxEnumProperty * >( property )->GetChoiceSelection() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_SPACING )
+			else if ( property->GetName() == PROPERTY_OVERLAY_SPACING )
 			{
-				OnSpacingChange( TextLineSpacingMode( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnSpacingChange( TextLineSpacingMode( reinterpret_cast< wxEnumProperty * >( property )->GetChoiceSelection() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_OVERLAY_TEXTURING )
+			else if ( property->GetName() == PROPERTY_OVERLAY_TEXTURING )
 			{
-				OnTexturingChange( TextTexturingMode( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnTexturingChange( TextTexturingMode( reinterpret_cast< wxEnumProperty * >( property )->GetChoiceSelection() ) );
 			}
 		}
 	}
 
-	void OverlayTreeItemProperty::OnMaterialChange( Castor::String const & p_name )
+	void OverlayTreeItemProperty::OnMaterialChange( castor::String const & p_name )
 	{
-		OverlayCategorySPtr l_overlay = GetOverlay();
+		OverlayCategorySPtr overlay = getOverlay();
 
-		DoApplyChange( [p_name, l_overlay]()
+		doApplyChange( [p_name, overlay]()
 		{
-			auto & l_cache = l_overlay->GetOverlay().GetEngine()->GetMaterialCache();
-			MaterialSPtr l_material = l_cache.Find( p_name );
+			auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
+			MaterialSPtr material = cache.find( p_name );
 
-			if ( l_material )
+			if ( material )
 			{
-				l_overlay->SetMaterial( l_material );
+				overlay->setMaterial( material );
 			}
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnPositionChange( Castor::Position const & p_position )
+	void OverlayTreeItemProperty::OnPositionChange( castor::Position const & p_position )
 	{
-		OverlayCategorySPtr l_overlay = GetOverlay();
+		OverlayCategorySPtr overlay = getOverlay();
 
-		DoApplyChange( [p_position, l_overlay]()
+		doApplyChange( [p_position, overlay]()
 		{
-			l_overlay->SetPixelPosition( p_position );
+			overlay->setPixelPosition( p_position );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnSizeChange( Castor::Size const & p_size )
+	void OverlayTreeItemProperty::OnSizeChange( castor::Size const & p_size )
 	{
-		OverlayCategorySPtr l_overlay = GetOverlay();
+		OverlayCategorySPtr overlay = getOverlay();
 
-		DoApplyChange( [p_size, l_overlay]()
+		doApplyChange( [p_size, overlay]()
 		{
-			l_overlay->SetPixelSize( p_size );
+			overlay->setPixelSize( p_size );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderMaterialChange( Castor::String const & p_name )
+	void OverlayTreeItemProperty::OnBorderMaterialChange( castor::String const & p_name )
 	{
-		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
+		BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eBorderPanel );
 
-		DoApplyChange( [p_name, l_overlay]()
+		doApplyChange( [p_name, overlay]()
 		{
-			auto & l_cache = l_overlay->GetOverlay().GetEngine()->GetMaterialCache();
-			MaterialSPtr l_material = l_cache.Find( p_name );
+			auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
+			MaterialSPtr material = cache.find( p_name );
 
-			if ( l_material )
+			if ( material )
 			{
-				l_overlay->SetBorderMaterial( l_material );
+				overlay->setBorderMaterial( material );
 			}
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderSizeChange( Castor::Rectangle const & p_size )
+	void OverlayTreeItemProperty::OnBorderSizeChange( castor::Rectangle const & p_size )
 	{
-		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
+		BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eBorderPanel );
 
-		DoApplyChange( [p_size, l_overlay]()
+		doApplyChange( [p_size, overlay]()
 		{
-			l_overlay->SetBorderPixelSize( p_size );
+			overlay->setBorderPixelSize( p_size );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderInnerUVChange( Castor::Point4d const & p_value )
+	void OverlayTreeItemProperty::OnBorderInnerUVChange( castor::Point4d const & p_value )
 	{
-		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
+		BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eBorderPanel );
 		double x = p_value[0];
 		double y = p_value[1];
 		double z = p_value[2];
 		double w = p_value[3];
 
-		DoApplyChange( [x, y, z, w, l_overlay]()
+		doApplyChange( [x, y, z, w, overlay]()
 		{
-			l_overlay->SetBorderInnerUV( Point4d( x, y, z, w ) );
+			overlay->setBorderInnerUV( Point4d( x, y, z, w ) );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderOuterUVChange( Castor::Point4d const & p_value )
+	void OverlayTreeItemProperty::OnBorderOuterUVChange( castor::Point4d const & p_value )
 	{
-		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
+		BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eBorderPanel );
 		double x = p_value[0];
 		double y = p_value[1];
 		double z = p_value[2];
 		double w = p_value[3];
 
-		DoApplyChange( [x, y, z, w, l_overlay]()
+		doApplyChange( [x, y, z, w, overlay]()
 		{
-			l_overlay->SetBorderOuterUV( Point4d( x, y, z, w ) );
+			overlay->setBorderOuterUV( Point4d( x, y, z, w ) );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderPositionChange( Castor3D::BorderPosition p_position )
+	void OverlayTreeItemProperty::OnBorderPositionChange( castor3d::BorderPosition p_position )
 	{
-		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
+		BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eBorderPanel );
 
-		DoApplyChange( [p_position, l_overlay]()
+		doApplyChange( [p_position, overlay]()
 		{
-			l_overlay->SetBorderPosition( p_position );
+			overlay->setBorderPosition( p_position );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnCaptionChange( Castor::String const & p_caption )
+	void OverlayTreeItemProperty::OnCaptionChange( castor::String const & p_caption )
 	{
-		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eText );
+		TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eText );
 
-		DoApplyChange( [p_caption, l_overlay]()
+		doApplyChange( [p_caption, overlay]()
 		{
-			l_overlay->SetCaption( p_caption );
+			overlay->setCaption( p_caption );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnFontChange( Castor::FontSPtr p_font )
+	void OverlayTreeItemProperty::OnFontChange( castor::FontSPtr p_font )
 	{
-		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eText );
+		TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eText );
 
-		DoApplyChange( [p_font, l_overlay]()
+		doApplyChange( [p_font, overlay]()
 		{
-			l_overlay->SetFont( p_font->GetName() );
+			overlay->setFont( p_font->getName() );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnHAlignChange( Castor3D::HAlign p_value )
+	void OverlayTreeItemProperty::OnHAlignChange( castor3d::HAlign p_value )
 	{
-		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eText );
+		TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eText );
 
-		DoApplyChange( [p_value, l_overlay]()
+		doApplyChange( [p_value, overlay]()
 		{
-			l_overlay->SetHAlign( p_value );
+			overlay->setHAlign( p_value );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnVAlignChange( Castor3D::VAlign p_value )
+	void OverlayTreeItemProperty::OnVAlignChange( castor3d::VAlign p_value )
 	{
-		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eText );
+		TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eText );
 
-		DoApplyChange( [p_value, l_overlay]()
+		doApplyChange( [p_value, overlay]()
 		{
-			l_overlay->SetVAlign( p_value );
+			overlay->setVAlign( p_value );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnWrappingChange( Castor3D::TextWrappingMode p_value )
+	void OverlayTreeItemProperty::OnWrappingChange( castor3d::TextWrappingMode p_value )
 	{
-		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eText );
+		TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eText );
 
-		DoApplyChange( [p_value, l_overlay]()
+		doApplyChange( [p_value, overlay]()
 		{
-			l_overlay->SetTextWrappingMode( p_value );
+			overlay->setTextWrappingMode( p_value );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnSpacingChange( Castor3D::TextLineSpacingMode p_value )
+	void OverlayTreeItemProperty::OnSpacingChange( castor3d::TextLineSpacingMode p_value )
 	{
-		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eText );
+		TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eText );
 
-		DoApplyChange( [p_value, l_overlay]()
+		doApplyChange( [p_value, overlay]()
 		{
-			l_overlay->SetLineSpacingMode( p_value );
+			overlay->setLineSpacingMode( p_value );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnTexturingChange( Castor3D::TextTexturingMode p_value )
+	void OverlayTreeItemProperty::OnTexturingChange( castor3d::TextTexturingMode p_value )
 	{
-		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == OverlayType::eText );
+		TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
+		REQUIRE( overlay->getType() == OverlayType::eText );
 
-		DoApplyChange( [p_value, l_overlay]()
+		doApplyChange( [p_value, overlay]()
 		{
-			l_overlay->SetTexturingMode( p_value );
+			overlay->setTexturingMode( p_value );
 		} );
 	}
 }

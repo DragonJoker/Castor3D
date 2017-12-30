@@ -2,6 +2,7 @@
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
+#include "Common/GlGetFunction.hpp"
 #include "Render/GlMswContext.hpp"
 
 #include "Common/OpenGl.hpp"
@@ -17,8 +18,8 @@
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -51,99 +52,99 @@ namespace GlRender
 	{
 	}
 
-	bool GlContextImpl::Initialise( RenderWindow * p_window )
+	bool GlContextImpl::initialise( RenderWindow * p_window )
 	{
-		auto l_engine = p_window->GetEngine();
-		auto l_renderSystem = static_cast< GlRenderSystem * >( l_engine->GetRenderSystem() );
-		auto l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+		auto engine = p_window->getEngine();
+		auto renderSystem = static_cast< GlRenderSystem * >( engine->getRenderSystem() );
+		auto mainContext = std::static_pointer_cast< GlContext >( renderSystem->getMainContext() );
 
-		m_hWnd = p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
-		auto l_colour = p_window->GetPixelFormat();
-		auto l_stereo = p_window->IsUsingStereo() && l_renderSystem->GetGpuInformations().IsStereoAvailable();
-		bool l_isMain = false;
+		m_hWnd = p_window->getHandle().getInternal< IMswWindowHandle >()->getHwnd();
+		auto colour = p_window->getPixelFormat();
+		auto stereo = p_window->isUsingStereo() && renderSystem->getGpuInformations().isStereoAvailable();
+		bool isMain = false;
 
-		if ( !l_mainContext || l_mainContext->GetImpl().m_hWnd != m_hWnd )
+		if ( !mainContext || mainContext->getImpl().m_hWnd != m_hWnd )
 		{
 			m_hDC = ::GetDC( m_hWnd );
 		}
-		else if ( l_mainContext->GetImpl().m_hWnd == m_hWnd )
+		else if ( mainContext->getImpl().m_hWnd == m_hWnd )
 		{
-			l_isMain = true;
-			m_hContext = l_mainContext->GetImpl().m_hContext;
-			m_hDC = l_mainContext->GetImpl().m_hDC;
+			isMain = true;
+			m_hContext = mainContext->getImpl().m_hContext;
+			m_hDC = mainContext->getImpl().m_hDC;
 		}
 
-		if ( !l_renderSystem->IsInitialised() && !l_isMain )
+		if ( !renderSystem->isInitialised() && !isMain )
 		{
-			DoInitialiseOpenGL( l_colour, l_stereo );
+			doInitialiseOpenGL( colour, stereo );
 		}
 
-		bool l_bHasPF = false;
+		bool bHasPF = false;
 
-		if ( !l_mainContext )
+		if ( !mainContext )
 		{
-			if ( l_stereo )
+			if ( stereo )
 			{
-				l_bHasPF = DoSelectStereoPixelFormat( l_colour );
+				bHasPF = doSelectStereoPixelFormat( colour );
 			}
 			else
 			{
-				m_gpuInformations.RemoveFeature( GpuFeature::eStereo );
-				l_bHasPF = DoSelectPixelFormat( l_colour, false );
+				m_gpuInformations.removeFeature( GpuFeature::eStereo );
+				bHasPF = doSelectPixelFormat( colour, false );
 			}
 		}
-		else if ( !l_isMain )
+		else if ( !isMain )
 		{
-			l_bHasPF = DoSelectPixelFormat( l_colour, l_stereo );
+			bHasPF = doSelectPixelFormat( colour, stereo );
 		}
 
-		if ( l_bHasPF )
+		if ( bHasPF )
 		{
-			m_hContext = GetOpenGl().CreateContext( m_hDC );
+			m_hContext = getOpenGl().CreateContext( m_hDC );
 
-			if ( GetOpenGl().GetVersion() >= 30 )
+			if ( getOpenGl().getVersion() >= 30 )
 			{
-				m_initialised = DoCreateGl3Context();
+				m_initialised = doCreateGl3Context();
 			}
 			else
 			{
-				GetOpenGl().DeleteContext( m_hContext );
+				getOpenGl().DeleteContext( m_hContext );
 				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D" ) );
 			}
 		}
-		else if ( !l_isMain )
+		else if ( !isMain )
 		{
-			Logger::LogError( cuT( "No supported pixel format found, context creation failed" ) );
+			Logger::logError( cuT( "No supported pixel format found, context creation failed" ) );
 		}
 		else
 		{
 			m_initialised = true;
 		}
 
-		if ( m_initialised && !l_isMain )
+		if ( m_initialised && !isMain )
 		{
-			glTrack( GetOpenGl(), "GlContextImpl", this );
+			glTrack( getOpenGl(), "GlContextImpl", this );
 		}
 
 		return m_initialised;
 	}
 
-	void GlContextImpl::Cleanup()
+	void GlContextImpl::cleanup()
 	{
 		try
 		{
-			glUntrack( GetOpenGl(), this );
+			glUntrack( getOpenGl(), this );
 
 			if ( m_hDC )
 			{
-				GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
-				GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+				GlRenderSystem * renderSystem = static_cast< GlRenderSystem * >( m_context->getRenderSystem() );
+				GlContextSPtr mainContext = std::static_pointer_cast< GlContext >( renderSystem->getMainContext() );
 
-				if ( l_mainContext.get() == m_context || !l_mainContext || l_mainContext->GetImpl().m_hWnd != m_hWnd )
+				if ( mainContext.get() == m_context || !mainContext || mainContext->getImpl().m_hWnd != m_hWnd )
 				{
-					if ( !GetOpenGl().DeleteContext( m_hContext ) )
+					if ( !getOpenGl().DeleteContext( m_hContext ) )
 					{
-						Logger::LogError( cuT( "GlContextImpl::Cleanup - " ) +  System::GetLastErrorText() );
+						Logger::logError( cuT( "GlContextImpl::Cleanup - " ) +  System::getLastErrorText() );
 					}
 
 					::ReleaseDC( m_hWnd, m_hDC );
@@ -155,245 +156,244 @@ namespace GlRender
 		}
 	}
 
-	void GlContextImpl::SetCurrent()
+	void GlContextImpl::setCurrent()
 	{
-		GetOpenGl().MakeCurrent( m_hDC, m_hContext );
+		getOpenGl().MakeCurrent( m_hDC, m_hContext );
 	}
 
-	void GlContextImpl::EndCurrent()
+	void GlContextImpl::endCurrent()
 	{
-		GetOpenGl().MakeCurrent( nullptr, nullptr );
+		getOpenGl().MakeCurrent( nullptr, nullptr );
 	}
 
-	void GlContextImpl::SwapBuffers()
+	void GlContextImpl::swapBuffers()
 	{
-		GetOpenGl().SwapBuffers( m_hDC );
+		getOpenGl().SwapBuffers( m_hDC );
 	}
 
-	void GlContextImpl::UpdateVSync( bool p_enable )
+	void GlContextImpl::updateVSync( bool p_enable )
 	{
-		SetCurrent();
+		setCurrent();
 
 		if ( p_enable )
 		{
-			GetOpenGl().SwapInterval( 1 );
+			getOpenGl().SwapInterval( 1 );
 		}
 		else
 		{
-			GetOpenGl().SwapInterval( 0 );
+			getOpenGl().SwapInterval( 0 );
 		}
 
-		EndCurrent();
+		endCurrent();
 	}
 
-	void GlContextImpl::DoInitialiseOpenGL( PixelFormat p_colour, bool p_stereo )
+	void GlContextImpl::doInitialiseOpenGL( PixelFormat p_colour, bool p_stereo )
 	{
-		m_hContext = DoCreateDummyContext( p_colour, p_stereo );
-		SetCurrent();
+		m_hContext = doCreateDummyContext( p_colour, p_stereo );
+		setCurrent();
 		typedef const char * ( PFNWGLGETEXTENSIONSSTRINGEXTPROC )( );
 		PFNWGLGETEXTENSIONSSTRINGEXTPROC * wglGetExtensionsStringEXT;
 		wglGetExtensionsStringEXT = ( PFNWGLGETEXTENSIONSSTRINGEXTPROC * )wglGetProcAddress( "wglGetExtensionsStringEXT" );
 
 		if ( wglGetExtensionsStringEXT && wglGetExtensionsStringEXT() )
 		{
-			GetOpenGl().PreInitialise( string::string_cast< xchar >( wglGetExtensionsStringEXT() ) );
+			getOpenGl().preInitialise( string::stringCast< xchar >( wglGetExtensionsStringEXT() ) );
 		}
 		else
 		{
-			GetOpenGl().PreInitialise( String() );
+			getOpenGl().preInitialise( String() );
 		}
 
-		EndCurrent();
-		GetOpenGl().DeleteContext( m_hContext );
+		endCurrent();
+		getOpenGl().DeleteContext( m_hContext );
 		m_hContext = nullptr;
 	}
 
-	HGLRC GlContextImpl::DoCreateDummyContext( PixelFormat p_colour, bool p_stereo )
+	HGLRC GlContextImpl::doCreateDummyContext( PixelFormat p_colour, bool p_stereo )
 	{
-		HGLRC l_hReturn = nullptr;
+		HGLRC hReturn = nullptr;
 
-		if ( DoSelectPixelFormat( p_colour, p_stereo ) )
+		if ( doSelectPixelFormat( p_colour, p_stereo ) )
 		{
-			l_hReturn = GetOpenGl().CreateContext( m_hDC );
+			hReturn = getOpenGl().CreateContext( m_hDC );
 		}
 
-		return l_hReturn;
+		return hReturn;
 	}
 
-	bool GlContextImpl::DoSelectPixelFormat( PixelFormat p_colour, bool p_stereo )
+	bool GlContextImpl::doSelectPixelFormat( PixelFormat p_colour, bool p_stereo )
 	{
-		bool l_return = false;
-		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
-		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
-		l_pfd.nVersion = 1;
-		l_pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-		l_pfd.iPixelType = PFD_TYPE_RGBA;
-		l_pfd.iLayerType = PFD_MAIN_PLANE;
-		l_pfd.cColorBits = PF::GetBytesPerPixel( p_colour ) * 8;
+		bool result = false;
+		PIXELFORMATDESCRIPTOR pfd = { 0 };
+		pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
+		pfd.nVersion = 1;
+		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+		pfd.iPixelType = PFD_TYPE_RGBA;
+		pfd.iLayerType = PFD_MAIN_PLANE;
+		pfd.cColorBits = PF::getBytesPerPixel( p_colour ) * 8;
 
 		if ( p_stereo )
 		{
-			l_pfd.dwFlags |= PFD_STEREO;
+			pfd.dwFlags |= PFD_STEREO;
 		}
 
-		int l_iPixelFormats = ::ChoosePixelFormat( m_hDC, &l_pfd );
+		int iPixelFormats = ::ChoosePixelFormat( m_hDC, &pfd );
 
-		if ( l_iPixelFormats )
+		if ( iPixelFormats )
 		{
-			l_return = ::SetPixelFormat( m_hDC, l_iPixelFormats, &l_pfd ) != FALSE;
+			result = ::SetPixelFormat( m_hDC, iPixelFormats, &pfd ) != FALSE;
 
-			if ( !l_return )
+			if ( !result )
 			{
-				Castor::String l_error = Castor::System::GetLastErrorText();
+				castor::String error = castor::System::getLastErrorText();
 
-				if ( !l_error.empty() )
+				if ( !error.empty() )
 				{
-					Logger::LogError( cuT( "ChoosePixelFormat failed : " ) + l_error );
+					Logger::logError( cuT( "ChoosePixelFormat failed : " ) + error );
 				}
 				else
 				{
-					Logger::LogWarning( cuT( "ChoosePixelFormat failed" ) );
-					l_return = true;
+					Logger::logWarning( cuT( "ChoosePixelFormat failed" ) );
+					result = true;
 				}
 			}
 		}
 		else
 		{
-			Logger::LogError( cuT( "SetPixelFormat failed : " ) + Castor::System::GetLastErrorText() );
+			Logger::logError( cuT( "setPixelFormat failed : " ) + castor::System::getLastErrorText() );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool GlContextImpl::DoSelectStereoPixelFormat( PixelFormat p_colour )
+	bool GlContextImpl::doSelectStereoPixelFormat( PixelFormat p_colour )
 	{
-		bool l_return = false;
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
-		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
-		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
-		int l_iPixelFormat = ::DescribePixelFormat( m_hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &l_pfd );
-		bool l_bStereoAvailable = false;
+		bool result = false;
+		PIXELFORMATDESCRIPTOR pfd = { 0 };
+		pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
+		int iPixelFormat = ::DescribePixelFormat( m_hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &pfd );
+		bool bStereoAvailable = false;
 
-		BYTE l_color = PF::GetBytesPerPixel( p_colour ) * 8;
-		BYTE l_depth = 0;
-		BYTE l_stencil = 0;
+		BYTE color = PF::getBytesPerPixel( p_colour ) * 8;
+		BYTE depth = 0;
+		BYTE stencil = 0;
 
-		while ( l_iPixelFormat && !l_bStereoAvailable )
+		while ( iPixelFormat && !bStereoAvailable )
 		{
-			::DescribePixelFormat( m_hDC, l_iPixelFormat, sizeof( PIXELFORMATDESCRIPTOR ), &l_pfd );
+			::DescribePixelFormat( m_hDC, iPixelFormat, sizeof( PIXELFORMATDESCRIPTOR ), &pfd );
 
-			if ( l_pfd.dwFlags & PFD_STEREO )
+			if ( pfd.dwFlags & PFD_STEREO )
 			{
-				if ( ( l_pfd.dwFlags & PFD_SUPPORT_OPENGL )
-						&& ( l_pfd.dwFlags & PFD_DOUBLEBUFFER )
-						&& ( l_pfd.dwFlags & PFD_DRAW_TO_WINDOW )
-						&& l_pfd.iPixelType == PFD_TYPE_RGBA
-						&& l_pfd.cColorBits == l_color
-						&& l_pfd.cDepthBits == l_depth
-						&& l_pfd.cStencilBits == l_stencil )
+				if ( ( pfd.dwFlags & PFD_SUPPORT_OPENGL )
+						&& ( pfd.dwFlags & PFD_DOUBLEBUFFER )
+						&& ( pfd.dwFlags & PFD_DRAW_TO_WINDOW )
+						&& pfd.iPixelType == PFD_TYPE_RGBA
+						&& pfd.cColorBits == color
+						&& pfd.cDepthBits == depth
+						&& pfd.cStencilBits == stencil )
 				{
-					l_bStereoAvailable = true;
+					bStereoAvailable = true;
 				}
 				else
 				{
-					l_iPixelFormat--;
+					iPixelFormat--;
 				}
 			}
 			else
 			{
-				l_iPixelFormat--;
+				iPixelFormat--;
 			}
 		}
 
-		if ( l_bStereoAvailable )
+		if ( bStereoAvailable )
 		{
-			l_return = ::SetPixelFormat( m_hDC, l_iPixelFormat, &l_pfd ) == TRUE;
+			result = ::SetPixelFormat( m_hDC, iPixelFormat, &pfd ) == TRUE;
 
-			if ( !l_return )
+			if ( !result )
 			{
-				l_bStereoAvailable = false;
-				l_return = DoSelectPixelFormat( p_colour, false );
+				bStereoAvailable = false;
+				result = doSelectPixelFormat( p_colour, false );
 			}
 		}
 		else
 		{
-			l_return = DoSelectPixelFormat( p_colour, true );
+			result = doSelectPixelFormat( p_colour, true );
 		}
 
-		m_gpuInformations.UpdateFeature( GpuFeature::eStereo, l_bStereoAvailable );
-		return l_return;
+		m_gpuInformations.updateFeature( GpuFeature::eStereo, bStereoAvailable );
+		return result;
 	}
 
-	bool GlContextImpl::DoCreateGl3Context()
+	bool GlContextImpl::doCreateGl3Context()
 	{
-		bool l_return = false;
+		bool result = false;
 
 		try
 		{
-			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
+			GlRenderSystem * renderSystem = static_cast< GlRenderSystem * >( m_context->getRenderSystem() );
 
-			if ( GetOpenGl().HasCreateContextAttribs() )
+			if ( getOpenGl().HasCreateContextAttribs() )
 			{
 				std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > glCreateContextAttribs;
-				HGLRC l_hContext = m_hContext;
-				int l_major = GetOpenGl().GetVersion() / 10;
-				int l_minor = GetOpenGl().GetVersion() % 10;
-				IntArray l_attribList
+				HGLRC hContext = m_hContext;
+				int major = getOpenGl().getVersion() / 10;
+				int minor = getOpenGl().getVersion() % 10;
+				IntArray attribList
 				{
-					int( GlContextAttribute::eMajorVersion ), l_major,
-					int( GlContextAttribute::eMinorVersion ), l_minor,
+					int( GlContextAttribute::eMajorVersion ), major,
+					int( GlContextAttribute::eMinorVersion ), minor,
 					int( GlContextAttribute::eFlags ), C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS,
 					int( GlProfileAttribute::eMask ), C3D_GL_CONTEXT_CREATION_DEFAULT_MASK,
 					0
 				};
-				GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
-				SetCurrent();
+				GlContextSPtr mainContext = std::static_pointer_cast< GlContext >( renderSystem->getMainContext() );
+				setCurrent();
 
-				if ( GetOpenGl().HasExtension( ARB_create_context ) )
+				if ( getOpenGl().hasExtension( ARB_create_context ) )
 				{
-					gl_api::GetFunction( cuT( "wglCreateContextAttribsARB" ), glCreateContextAttribs );
+					gl_api::getFunction( cuT( "wglCreateContextAttribsARB" ), glCreateContextAttribs );
 				}
 				else
 				{
-					gl_api::GetFunction( cuT( "wglCreateContextAttribsEXT" ), glCreateContextAttribs );
+					gl_api::getFunction( cuT( "wglCreateContextAttribsEXT" ), glCreateContextAttribs );
 				}
 
-				if ( l_mainContext )
+				if ( mainContext )
 				{
-					m_hContext = glCreateContextAttribs( m_hDC, l_mainContext->GetImpl().GetContext(), l_attribList.data() );
+					m_hContext = glCreateContextAttribs( m_hDC, mainContext->getImpl().getContext(), attribList.data() );
 				}
 				else
 				{
-					m_hContext = glCreateContextAttribs( m_hDC, nullptr, l_attribList.data() );
+					m_hContext = glCreateContextAttribs( m_hDC, nullptr, attribList.data() );
 				}
 
-				EndCurrent();
-				GetOpenGl().DeleteContext( l_hContext );
-				l_return = m_hContext != nullptr;
+				endCurrent();
+				getOpenGl().DeleteContext( hContext );
+				result = m_hContext != nullptr;
 
-				if ( l_return )
+				if ( result )
 				{
-					Logger::LogInfo( StringStream() << cuT( "GlContext::Create - " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context created." ) );
+					Logger::logInfo( StringStream() << cuT( "GlContext::create - " ) << major << cuT( "." ) << minor << cuT( " OpenGL context created." ) );
 				}
 				else
 				{
-					StringStream l_error;
-					l_error << cuT( "Failed to create a " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context." );
-					CASTOR_EXCEPTION( l_error.str() );
+					StringStream error;
+					error << cuT( "Failed to create a " ) << major << cuT( "." ) << minor << cuT( " OpenGL context." );
+					CASTOR_EXCEPTION( error.str() );
 				}
 			}
 			else
 			{
-				GetOpenGl().DeleteContext( m_hContext );
+				getOpenGl().DeleteContext( m_hContext );
 				CASTOR_EXCEPTION( cuT( "Can't create OpenGL >= 3.x context, since glCreateContextAttribs function is not supported." ) );
 			}
 		}
 		catch ( ... )
 		{
-			l_return = false;
+			result = false;
 		}
 
-		return l_return;
+		return result;
 	}
 }
 

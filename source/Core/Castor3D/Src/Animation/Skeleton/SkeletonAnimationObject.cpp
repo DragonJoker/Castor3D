@@ -3,192 +3,197 @@
 #include "SkeletonAnimation.hpp"
 
 #include "SkeletonAnimationBone.hpp"
+#include "SkeletonAnimationKeyFrame.hpp"
 #include "SkeletonAnimationNode.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
+	//*************************************************************************************************
+
 	namespace
 	{
+		template< typename T >
+		struct KeyFrameT
+		{
+			Milliseconds m_timeIndex;
+			SquareMatrix< T, 4u > m_transform;
+		};
+
+		using KeyFrame = KeyFrameT< float >;
 		using KeyFramed = std::array< double, 17 >;
 
-		void DoConvert( std::vector< KeyFrame > const & p_in, std::vector< KeyFramed > & p_out )
+		void doConvert( std::vector< KeyFramed > const & in
+			, std::vector< KeyFrame > & out )
 		{
-			p_out.resize( p_in.size() );
-			auto l_it = p_out.begin();
+			out.resize( in.size() );
+			auto it = out.begin();
 
-			for ( auto & l_in : p_in )
+			for ( auto & kf : in )
 			{
-				auto & l_out = *l_it;
-				size_t l_index{ 0u };
-				auto const & l_transform = l_in.GetTransform();
-				l_out[l_index++] = double( l_in.GetTimeIndex().count() / 1000.0 );
-				l_out[l_index++] = l_transform[0][0];
-				l_out[l_index++] = l_transform[0][1];
-				l_out[l_index++] = l_transform[0][2];
-				l_out[l_index++] = l_transform[0][3];
-				l_out[l_index++] = l_transform[1][0];
-				l_out[l_index++] = l_transform[1][1];
-				l_out[l_index++] = l_transform[1][2];
-				l_out[l_index++] = l_transform[1][3];
-				l_out[l_index++] = l_transform[2][0];
-				l_out[l_index++] = l_transform[2][1];
-				l_out[l_index++] = l_transform[2][2];
-				l_out[l_index++] = l_transform[2][3];
-				l_out[l_index++] = l_transform[3][0];
-				l_out[l_index++] = l_transform[3][1];
-				l_out[l_index++] = l_transform[3][2];
-				l_out[l_index++] = l_transform[3][3];
-				++l_it;
-			}
-		}
-
-		void DoConvert( std::vector< KeyFramed > const & p_in, std::vector< KeyFrame > & p_out )
-		{
-			p_out.resize( p_in.size() );
-			auto l_it = p_out.begin();
-
-			for ( auto & l_in : p_in )
-			{
-				size_t l_index{ 0u };
-				std::chrono::milliseconds l_timeIndex{ int64_t( l_in[l_index++] * 1000.0 ) };
-				Matrix4x4r l_transform{ &l_in[l_index] };
-				( *l_it ) = KeyFrame{ l_timeIndex, l_transform };
-				++l_it;
+				size_t index{ 0u };
+				Milliseconds timeIndex{ int64_t( kf[index++] * 1000.0 ) };
+				Matrix4x4r transform{ &kf[index] };
+				( *it ) = KeyFrame{ timeIndex, transform };
+				++it;
 			}
 		}
 	}
 
 	//*************************************************************************************************
 
-	bool BinaryWriter< SkeletonAnimationObject >::DoWrite( SkeletonAnimationObject const & p_obj )
+	bool BinaryWriter< SkeletonAnimationObject >::doWrite( SkeletonAnimationObject const & obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.m_nodeTransform, ChunkType::eMovingTransform, m_chunk );
+			result = doWriteChunk( obj.m_nodeTransform, ChunkType::eMovingTransform, m_chunk );
 		}
 
-		if ( l_return )
+		for ( auto const & moving : obj.m_children )
 		{
-			l_return = DoWriteChunk( real( p_obj.m_length.count() ) * 1000.0_r, ChunkType::eAnimLength, m_chunk );
-		}
-
-		if ( !p_obj.m_keyframes.empty() )
-		{
-			if ( l_return )
-			{
-				l_return = DoWriteChunk( uint32_t( p_obj.m_keyframes.size() ), ChunkType::eKeyframeCount, m_chunk );
-			}
-
-			if ( l_return )
-			{
-				std::vector< KeyFramed > l_keyFrames;
-				DoConvert( p_obj.m_keyframes, l_keyFrames );
-				l_return = DoWriteChunk( l_keyFrames, ChunkType::eKeyframes, m_chunk );
-			}
-		}
-
-		for ( auto const & l_moving : p_obj.m_children )
-		{
-			switch ( l_moving->GetType() )
+			switch ( moving->getType() )
 			{
 			case SkeletonAnimationObjectType::eNode:
-				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
+				result &= BinaryWriter< SkeletonAnimationNode >{}.write( *std::static_pointer_cast< SkeletonAnimationNode >( moving ), m_chunk );
 				break;
 
 			case SkeletonAnimationObjectType::eBone:
-				l_return &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_chunk );
+				result &= BinaryWriter< SkeletonAnimationBone >{}.write( *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_chunk );
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	bool BinaryParser< SkeletonAnimationObject >::DoParse( SkeletonAnimationObject & p_obj )
+	bool BinaryParser< SkeletonAnimationObject >::doParse( SkeletonAnimationObject & obj )
 	{
-		bool l_return = true;
-		Matrix4x4r l_transform;
-		std::vector< KeyFramed > l_keyframes;
-		SkeletonAnimationNodeSPtr l_node;
-		SkeletonAnimationObjectSPtr l_object;
-		SkeletonAnimationBoneSPtr l_bone;
-		BinaryChunk l_chunk;
-		uint32_t l_count{ 0 };
-		real l_length{ 0.0_r };
+		bool result = true;
+		Matrix4x4r transform;
+		std::vector< KeyFrame > keyframes;
+		std::vector< KeyFramed > keyframesd;
+		SkeletonAnimationNodeSPtr node;
+		SkeletonAnimationObjectSPtr object;
+		SkeletonAnimationBoneSPtr bone;
+		BinaryChunk chunk;
+		uint32_t count{ 0 };
+		real length{ 0.0_r };
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eMovingTransform:
-				l_return = DoParseChunk( p_obj.m_nodeTransform, l_chunk );
-				break;
-
-			case ChunkType::eKeyframeCount:
-				l_return = DoParseChunk( l_count, l_chunk );
-
-				if ( l_return )
-				{
-					l_keyframes.resize( l_count );
-				}
-
-				break;
-
-			case ChunkType::eKeyframes:
-				l_return = DoParseChunk( l_keyframes, l_chunk );
-
-				if ( l_return )
-				{
-					DoConvert( l_keyframes, p_obj.m_keyframes );
-				}
-
-				break;
-
-			case ChunkType::eAnimLength:
-				l_return = DoParseChunk( l_length, l_chunk );
-				p_obj.m_length = std::chrono::milliseconds{ int64_t( l_length / 1000 ) };
+				result = doParseChunk( obj.m_nodeTransform, chunk );
 				break;
 
 			case ChunkType::eSkeletonAnimationBone:
-				l_bone = std::make_shared< SkeletonAnimationBone >( *p_obj.GetOwner() );
-				l_return = BinaryParser< SkeletonAnimationBone >{}.Parse( *l_bone, l_chunk );
+				bone = std::make_shared< SkeletonAnimationBone >( *obj.getOwner() );
+				obj.addChild( bone );
+				result = BinaryParser< SkeletonAnimationBone >{}.parse( *bone, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_obj.AddChild( l_bone );
-					p_obj.GetOwner()->AddObject( l_bone, p_obj.shared_from_this() );
+					obj.getOwner()->addObject( bone, obj.shared_from_this() );
 				}
 
 				break;
 
 			case ChunkType::eSkeletonAnimationNode:
-				l_node = std::make_shared< SkeletonAnimationNode >( *p_obj.GetOwner() );
-				l_return = BinaryParser< SkeletonAnimationNode >{}.Parse( *l_node, l_chunk );
+				node = std::make_shared< SkeletonAnimationNode >( *obj.getOwner() );
+				obj.addChild( node );
+				result = BinaryParser< SkeletonAnimationNode >{}.parse( *node, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_obj.AddChild( l_node );
-					p_obj.GetOwner()->AddObject( l_node, p_obj.shared_from_this() );
+					obj.getOwner()->addObject( node, obj.shared_from_this() );
 				}
 
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
+	}
+
+	bool BinaryParser< SkeletonAnimationObject >::doParse_v1_1( SkeletonAnimationObject & obj )
+	{
+		bool result = true;
+		Matrix4x4r transform;
+		std::vector< KeyFrame > keyframes;
+		std::vector< KeyFramed > keyframesd;
+		SkeletonAnimationNodeSPtr node;
+		SkeletonAnimationObjectSPtr object;
+		SkeletonAnimationBoneSPtr bone;
+		BinaryChunk chunk;
+		uint32_t count{ 0 };
+		real length{ 0.0_r };
+
+		while ( result && doGetSubChunk( chunk ) )
+		{
+			switch ( chunk.getChunkType() )
+			{
+			case ChunkType::eKeyframeCount:
+				result = doParseChunk( count, chunk );
+
+				if ( result )
+				{
+					keyframesd.resize( count );
+				}
+
+				break;
+
+			case ChunkType::eKeyframes:
+				result = doParseChunk( keyframesd, chunk );
+
+				if ( result )
+				{
+					doConvert( keyframesd, keyframes );
+					auto & animation = *obj.getOwner();
+
+					for ( auto & keyframe : keyframes )
+					{
+						auto it = animation.find( keyframe.m_timeIndex );
+
+						if ( it == animation.end() )
+						{
+							animation.addKeyFrame( std::make_unique< SkeletonAnimationKeyFrame >( *obj.getOwner()
+								, keyframe.m_timeIndex ) );
+							it = animation.find( keyframe.m_timeIndex );
+						}
+
+						auto & keyFrame = static_cast< SkeletonAnimationKeyFrame & >( **it );
+						keyFrame.addAnimationObject( obj, keyframe.m_transform );
+					}
+
+					for ( auto & keyFrame : animation )
+					{
+						keyFrame->initialise();
+					}
+				}
+
+				break;
+
+			case ChunkType::eAnimLength:
+				result = doParseChunk( length, chunk );
+				break;
+			}
+		}
+
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & p_animation, SkeletonAnimationObjectType p_type )
-		: OwnedBy< SkeletonAnimation >{ p_animation }
-		, m_type{ p_type }
+	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & animation
+		, SkeletonAnimationObjectType type )
+		: OwnedBy< SkeletonAnimation >{ animation }
+		, m_type{ type }
 	{
 	}
 
@@ -196,51 +201,11 @@ namespace Castor3D
 	{
 	}
 
-	void SkeletonAnimationObject::AddChild( SkeletonAnimationObjectSPtr p_object )
+	void SkeletonAnimationObject::addChild( SkeletonAnimationObjectSPtr object )
 	{
-		p_object->m_parent = shared_from_this();
-		m_children.push_back( p_object );
-	}
-
-	KeyFrame & SkeletonAnimationObject::AddKeyFrame( std::chrono::milliseconds const & p_from
-		, Point3r const & p_translate
-		, Quaternion const & p_rotate
-		, Point3r const & p_scale )
-	{
-		auto l_it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_from]( KeyFrame & p_keyframe )
-		{
-			return p_keyframe.GetTimeIndex() >= p_from;
-		} );
-
-		if ( l_it == m_keyframes.end() )
-		{
-			m_length = p_from;
-			l_it = m_keyframes.insert( m_keyframes.end(), KeyFrame{ p_from, p_translate, p_rotate, p_scale } );
-		}
-		else if ( l_it->GetTimeIndex() > p_from )
-		{
-			if ( l_it != m_keyframes.begin() )
-			{
-				--l_it;
-			}
-
-			l_it = m_keyframes.insert( l_it, KeyFrame{ p_from, p_translate, p_rotate, p_scale } );
-		}
-
-		return *l_it;
-	}
-
-	void SkeletonAnimationObject::RemoveKeyFrame( std::chrono::milliseconds const & p_time )
-	{
-		auto l_it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_time]( KeyFrame const & p_keyframe )
-		{
-			return p_keyframe.GetTimeIndex() == p_time;
-		} );
-
-		if ( l_it != m_keyframes.end() )
-		{
-			m_keyframes.erase( l_it );
-		}
+		REQUIRE( object.get() != this );
+		object->m_parent = shared_from_this();
+		m_children.push_back( object );
 	}
 
 	//*************************************************************************************************

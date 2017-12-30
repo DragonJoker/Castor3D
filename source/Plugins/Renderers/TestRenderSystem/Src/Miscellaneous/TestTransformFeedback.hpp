@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___TRS_TRANSFORM_FEEDBACK_H___
 #define ___TRS_TRANSFORM_FEEDBACK_H___
 
@@ -39,7 +18,7 @@ namespace TestRender
 	\brief		Implémentation du Transform feedback.
 	*/
 	class TestTransformFeedback
-		: public Castor3D::TransformFeedback
+		: public castor3d::TransformFeedback
 	{
 	public:
 		/**
@@ -54,7 +33,7 @@ namespace TestRender
 		 *\param[in]	m_declaration	La déclaration des éléments du tampon.
 		 *\param[in]	m_program		Le programm shader.
 		 */
-		TestTransformFeedback( TestRenderSystem & p_renderSystem, Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program );
+		TestTransformFeedback( TestRenderSystem & p_renderSystem, castor3d::BufferDeclaration const & p_computed, castor3d::Topology p_topology, castor3d::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -65,29 +44,29 @@ namespace TestRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Initialise
+		 *\copydoc		castor3d::TransformFeedback::Initialise
 		 */
-		bool DoInitialise()override;
+		bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Cleanup
+		 *\copydoc		castor3d::TransformFeedback::Cleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Bind
+		 *\copydoc		castor3d::TransformFeedback::Bind
 		 */
-		void DoBind()const override;
+		void doBind()const override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::Unbind
+		 *\copydoc		castor3d::TransformFeedback::Unbind
 		 */
-		void DoUnbind()const override;
+		void doUnbind()const override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::DoBegin
+		 *\copydoc		castor3d::TransformFeedback::doBegin
 		 */
-		void DoBegin()const override;
+		void doBegin()const override;
 		/**
-		 *\copydoc		Castor3D::TransformFeedback::DoEnd
+		 *\copydoc		castor3d::TransformFeedback::doEnd
 		 */
-		void DoEnd()const override;
+		void doEnd()const override;
 	};
 }
 

@@ -2,30 +2,35 @@
 
 #include "Engine.hpp"
 
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Buffer/BufferElementGroup.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslUtils.hpp>
 
-using namespace Castor;
-using namespace GLSL;
+using namespace castor;
+using namespace glsl;
 
-namespace Castor3D
+namespace castor3d
 {
-	Skybox::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Skybox >{ p_tabs }
+	Skybox::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Skybox >{ tabs }
 	{
 	}
 
-	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
+	bool Skybox::TextWriter::operator()( Skybox const & obj, TextFile & file )
 	{
-		static String const l_faces[]
+		static String const faces[]
 		{
 			cuT( "right" ),
 			cuT( "left" ),
@@ -35,72 +40,87 @@ namespace Castor3D
 			cuT( "front" ),
 		};
 
-		bool l_return = true;
+		bool result = true;
 
-		if ( Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 0 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 1 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 2 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 3 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 4 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 5 ) ) ).ToString() } ) )
+		if ( !obj.getEquiTexturePath().empty()
+			&& castor::File::fileExists( obj.getEquiTexturePath() ) )
 		{
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Path l_subfolder{ cuT( "Textures" ) };
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			Path subfolder{ cuT( "Textures" ) };
+			Path relative = Scene::TextWriter::copyFile( obj.getEquiTexturePath()
+				, file.getFilePath()
+				, subfolder );
+			result = file.writeText( m_tabs + cuT( "\tequirectangular" ) + cuT( " \"" ) + relative + cuT( "\" 1024 1024\n" ) ) > 0;
+			castor::TextWriter< Skybox >::checkError( result, "Skybox equi-texture" );
 
-			for ( uint32_t i = 0; i < 6 && l_return; ++i )
+			if ( result )
 			{
-				Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( i ) ) ).ToString() }
-					, p_file.GetFilePath()
-					, l_subfolder );
-				l_return = p_file.WriteText( m_tabs + cuT( "\t" ) + l_faces[i] + cuT( "\"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-				Castor::TextWriter< Skybox >::CheckError( l_return, ( "Skybox " + l_faces[i] ).c_str() );
+				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			}
+		}
+		else if ( castor::File::fileExists( Path{ obj.m_texture->getImage( size_t( CubeMapFace( 0 ) ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getImage( size_t( CubeMapFace( 1 ) ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getImage( size_t( CubeMapFace( 2 ) ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getImage( size_t( CubeMapFace( 3 ) ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getImage( size_t( CubeMapFace( 4 ) ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getImage( size_t( CubeMapFace( 5 ) ) ).toString() } ) )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			Path subfolder{ cuT( "Textures" ) };
+
+			for ( uint32_t i = 0; i < 6 && result; ++i )
+			{
+				Path relative = Scene::TextWriter::copyFile( Path{ obj.m_texture->getImage( size_t( CubeMapFace( i ) ) ).toString() }
+					, file.getFilePath()
+					, subfolder );
+				result = file.writeText( m_tabs + cuT( "\t" ) + faces[i] + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
+				castor::TextWriter< Skybox >::checkError( result, ( "Skybox " + faces[i] ).c_str() );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//************************************************************************************************
 
-	Skybox::Skybox( Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
-		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead ) }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
-		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
+	Skybox::Skybox( Engine & engine )
+		: OwnedBy< Engine >{ engine }
+		, m_texture{ engine.getRenderSystem()->createTexture( TextureType::eCube
+			, AccessType::eNone
+			, AccessType::eRead ) }
+		, m_matrixUbo{ engine }
+		, m_modelMatrixUbo{ engine }
+		, m_configUbo{ engine }
 		, m_declaration
 		{
 			{
 				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
 			}
 		}
+		, m_viewport{ engine }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
+		String const skybox = cuT( "Skybox" );
 
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
-		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
-		String const l_skybox = cuT( "Skybox" );
-
-		if ( GetEngine()->GetSamplerCache().Has( l_skybox ) )
+		if ( getEngine()->getSamplerCache().has( skybox ) )
 		{
-			m_sampler = GetEngine()->GetSamplerCache().Find( l_skybox );
+			m_sampler = getEngine()->getSamplerCache().find( skybox );
 		}
 		else
 		{
-			auto l_sampler = GetEngine()->GetSamplerCache().Add( l_skybox );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-			m_sampler = l_sampler;
+			auto sampler = getEngine()->getSamplerCache().add( skybox );
+			sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			m_sampler = sampler;
 		}
 
 		m_bufferVertex =
@@ -115,150 +135,347 @@ namespace Castor3D
 
 		uint32_t i = 0;
 
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
 		}
 	}
 
 	Skybox::~Skybox()
 	{
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex.reset();
+			vertex.reset();
 		}
 	}
 
-	bool Skybox::Initialise()
+	bool Skybox::initialise()
 	{
+		REQUIRE( m_scene );
 		REQUIRE( m_texture );
-		auto & l_program = DoInitialiseShader();
-		return DoInitialiseTexture()
-			   && DoInitialiseVertexBuffer()
-			   && DoInitialisePipeline( l_program );
-	}
+		bool result = doInitialiseTexture();
+		auto & program = doInitialiseShader();
 
-	void Skybox::Cleanup()
-	{
-		REQUIRE( m_texture );
-		m_texture->Cleanup();
-		m_texture.reset();
-		m_geometryBuffers->Cleanup();
-		m_geometryBuffers.reset();
-		m_vertexBuffer->Cleanup();
-		m_vertexBuffer.reset();
-		m_matrixUbo.Cleanup();
-		m_modelMatrixUbo.Cleanup();
-		m_pipeline->Cleanup();
-		m_pipeline.reset();
-	}
-
-	void Skybox::Render( Camera const & p_camera )
-	{
-		REQUIRE( m_texture );
-		auto l_sampler = m_sampler.lock();
-
-		if ( l_sampler )
+		if ( result )
 		{
-			p_camera.Apply();
-			auto l_node = p_camera.GetParent();
-			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
-			m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-			m_viewUniform->SetValue( p_camera.GetView() );
-			m_matrixUbo.Update();
-			m_modelUniform->SetValue( m_mtxModel );
-			m_modelMatrixUbo.Update();
-			m_pipeline->Apply();
-			m_texture->Bind( 0 );
-			l_sampler->Bind( 0 );
-			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
-			l_sampler->Unbind( 0 );
-			m_texture->Unbind( 0 );
+			if ( m_scene->getMaterialsType() == MaterialType::ePbrMetallicRoughness
+				|| m_scene->getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+			{
+				m_ibl = std::make_unique< IblTextures >( *m_scene );
+				m_ibl->update( *m_texture );
+			}
+
+			result = doInitialiseVertexBuffer()
+				&& doInitialisePipeline( program );
+		}
+
+		return result;
+	}
+
+	void Skybox::cleanup()
+	{
+		if ( m_texture )
+		{
+			m_texture->cleanup();
+			m_texture.reset();
+		}
+
+		if ( m_geometryBuffers )
+		{
+			m_geometryBuffers->cleanup();
+			m_geometryBuffers.reset();
+		}
+
+		if ( m_vertexBuffer )
+		{
+			m_vertexBuffer->cleanup();
+			m_vertexBuffer.reset();
+		}
+
+		m_matrixUbo.getUbo().cleanup();
+		m_modelMatrixUbo.getUbo().cleanup();
+		m_configUbo.getUbo().cleanup();
+
+		if ( m_pipeline )
+		{
+			m_pipeline->cleanup();
+			m_pipeline.reset();
+		}
+
+		m_ibl.reset();
+	}
+
+	void Skybox::render( Camera const & camera )
+	{
+		REQUIRE( m_texture );
+		auto sampler = m_sampler.lock();
+
+		if ( sampler )
+		{
+			camera.apply();
+			auto & scene = *camera.getScene();
+			auto node = camera.getParent();
+			matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
+			m_viewport.setPerspective( 45.0_degrees
+				, camera.getViewport().getRatio()
+				, 0.1f
+				, 2.0f );
+			m_viewport.update();
+			m_matrixUbo.update( camera.getView()
+				//, m_viewport.getProjection() );
+				, camera.getViewport().getProjection() );
+			m_modelMatrixUbo.update( m_mtxModel );
+
+			if ( !m_hdr )
+			{
+				m_configUbo.update( scene.getHdrConfig() );
+			}
+
+			m_pipeline->apply();
+			m_texture->bind( MinTextureIndex );
+			sampler->bind( MinTextureIndex );
+			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
+			sampler->unbind( MinTextureIndex );
+			m_texture->unbind( MinTextureIndex );
 		}
 	}
 
-	ShaderProgram & Skybox::DoInitialiseShader()
+	void Skybox::setEquiTexture( TextureLayoutSPtr texture
+		, castor::Size const & size )
 	{
-		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
+		m_equiTexturePath = castor::Path( texture->getImage().toString() );
+		m_equiTexture = texture;
+		m_equiSize = size;
+	}
 
-		String l_vtx;
+	ShaderProgram & Skybox::doInitialiseShader()
+	{
+		auto program = getEngine()->getShaderProgramCache().getNewProgram( false );
+
+		glsl::Shader vtx;
 		{
-			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
+			GlslWriter writer{ getEngine()->getRenderSystem()->createGlslWriter() };
 
 			// Inputs
-			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( l_writer );
-			UBO_MODEL_MATRIX( l_writer );
+			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
+			UBO_MATRIX( writer );
+			UBO_MODEL_MATRIX( writer );
 
 			// Outputs
-			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			std::function< void() > l_main = [&]()
+			std::function< void() > main = [&]()
 			{
-				gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 				vtx_texture = position;
 			};
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-			l_vtx = l_writer.Finalise();
+			writer.implementFunction< void >( cuT( "main" ), main );
+			vtx = writer.finalise();
 		}
 
-		String l_pxl;
+		glsl::Shader pxl;
 		{
-			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
+			GlslWriter writer{ getEngine()->getRenderSystem()->createGlslWriter() };
 
 			// Inputs
-			auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-			auto skybox = l_writer.GetUniform< SamplerCube >( cuT( "skybox" ) );
+			UBO_HDR_CONFIG( writer );
+			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
+			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), MinTextureIndex );
+			glsl::Utils utils{ writer };
+
+			if ( !m_hdr )
+			{
+				utils.declareRemoveGamma();
+			}
 
 			// Outputs
-			auto pxl_FragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
-			std::function< void() > l_main = [&]()
+			std::function< void() > main = [&]()
 			{
-				pxl_FragColor = texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) );
+				auto colour = writer.declLocale( cuT( "colour" )
+					, texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ) );
+
+				if ( !m_hdr )
+				{
+					pxl_FragColor = vec4( utils.removeGamma( c3d_gamma, colour.xyz() ), colour.w() );
+				}
+				else
+				{
+					pxl_FragColor = vec4( colour.xyz(), colour.w() );
+				}
 			};
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-			l_pxl = l_writer.Finalise();
+			writer.implementFunction< void >( cuT( "main" ), main );
+			pxl = writer.finalise();
 		}
 
-		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-		l_program->CreateObject( ShaderType::eVertex );
-		l_program->CreateObject( ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-		l_program->Initialise();
-		return *l_program;
+		program->createObject( ShaderType::eVertex );
+		program->createObject( ShaderType::ePixel );
+		program->setSource( ShaderType::eVertex, vtx );
+		program->setSource( ShaderType::ePixel, pxl );
+		program->createUniform< UniformType::eSampler >( cuT( "skybox" ), ShaderType::ePixel )->setValue( MinTextureIndex );
+		program->initialise();
+		return *program;
 	}
 
-	bool Skybox::DoInitialiseVertexBuffer()
+	bool Skybox::doInitialiseVertexBuffer()
 	{
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine(), m_declaration );
-		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.stride() ) );
-		m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		return m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *getEngine(), m_declaration );
+		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size() * m_declaration.stride() ) );
+		m_vertexBuffer->linkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
+		return m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 	}
 
-	bool Skybox::DoInitialiseTexture()
+	bool Skybox::doInitialiseTexture()
 	{
-		return m_texture->Initialise();
+		if ( m_equiTexture )
+		{
+			doInitialiseEquiTexture();
+			m_hdr = true;
+		}
+
+		auto result = m_texture->initialise();
+
+		if ( result )
+		{
+			auto sampler = m_sampler.lock();
+			m_texture->bind( MinTextureIndex );
+			m_texture->generateMipmaps();
+			m_texture->unbind( MinTextureIndex );
+		}
+
+		return result;
 	}
 
-	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )
+	void Skybox::doInitialiseEquiTexture()
 	{
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( true );
-		l_dsState.SetDepthFunc( DepthFunc::eLEqual );
+		auto & engine = *getEngine();
+		auto & renderSystem = *engine.getRenderSystem();
+		m_equiTexture->initialise();
 
-		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( Culling::eFront );
+		// create the cube texture.
+		m_texture = renderSystem.createTexture( TextureType::eCube
+			, AccessType::eNone
+			, AccessType::eRead | AccessType::eWrite
+			, PixelFormat::eRGB32F
+			, m_equiSize );
+		m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+		m_texture->initialise();
 
-		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo );
-		m_pipeline->AddUniformBuffer( m_modelMatrixUbo );
-		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, m_pipeline->GetProgram() );
-		return m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
+		// create the one shot FBO and attaches
+		auto fbo = renderSystem.createFrameBuffer();
+		std::array< FrameBufferAttachmentSPtr, 6 > attachs
+		{
+			{
+				fbo->createAttachment( m_texture, CubeMapFace::ePositiveX ),
+				fbo->createAttachment( m_texture, CubeMapFace::eNegativeX ),
+				fbo->createAttachment( m_texture, CubeMapFace::ePositiveY ),
+				fbo->createAttachment( m_texture, CubeMapFace::eNegativeY ),
+				fbo->createAttachment( m_texture, CubeMapFace::ePositiveZ ),
+				fbo->createAttachment( m_texture, CubeMapFace::eNegativeZ ),
+			}
+		};
+		// create The depth RBO.
+		auto depthRbo = fbo->createDepthStencilRenderBuffer( PixelFormat::eD24 );
+		depthRbo->create();
+		depthRbo->initialise( m_equiSize );
+		auto depthAttach = fbo->createAttachment( depthRbo );
+
+		// Fill the FBO
+		fbo->initialise();
+		fbo->bind();
+		fbo->attach( AttachmentPoint::eDepth, depthAttach );
+		REQUIRE( fbo->isComplete() );
+		fbo->unbind();
+
+		// Render the equirectangular texture to the cube faces.
+		renderSystem.getCurrentContext()->renderEquiToCube( m_equiSize
+			, *m_equiTexture
+			, m_texture
+			, fbo
+			, attachs
+			, m_scene->getHdrConfig() );
+/*
+		static String const FaceName[6u]
+		{
+			cuT( "PosX" ),
+			cuT( "NegX" ),
+			cuT( "NegY" ),
+			cuT( "PosY" ),
+			cuT( "NegZ" ),
+			cuT( "PosZ" ),
+		};
+
+		auto buffer = PxBufferBase::create( m_equiSize
+			, PixelFormat::eRGB32F );
+		fbo->bind();
+
+		for ( uint32_t face = 0u; face < 6; ++face )
+		{
+			attachs[face]->attach( AttachmentPoint::eColour, 0u );
+			attachs[face]->download( Position{}
+				, *buffer );
+			Image image{ FaceName[face], *buffer };
+			Image::BinaryWriter writer;
+			writer( image
+				, getEngine()->getDataDirectory() / ( cuT( "CubeMap_" ) + FaceName[face] + cuT( ".hdr" ) ) );
+		}
+
+		fbo->unbind();
+*/
+		// Cleanup the one shot FBO and attaches
+		fbo->bind();
+		fbo->detachAll();
+		fbo->unbind();
+
+		depthRbo->cleanup();
+		depthRbo->destroy();
+
+		for ( auto & attach : attachs )
+		{
+			attach.reset();
+		}
+
+		depthAttach.reset();
+		fbo->cleanup();
+
+		m_equiTexture->cleanup();
+		m_equiTexture.reset();
+	}
+
+	bool Skybox::doInitialisePipeline( ShaderProgram & program )
+	{
+		DepthStencilState dsState;
+		dsState.setDepthTest( true );
+		dsState.setDepthMask( WritingMask::eZero );
+		dsState.setDepthFunc( DepthFunc::eLEqual );
+
+		RasteriserState rsState;
+		rsState.setCulledFaces( Culling::eFront );
+
+		m_pipeline = getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+			, std::move( rsState )
+			, BlendState{}
+			, MultisampleState{}
+			, program
+			, PipelineFlags{} );
+		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		m_pipeline->addUniformBuffer( m_modelMatrixUbo.getUbo() );
+
+		if ( !m_hdr )
+		{
+			m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
+		}
+
+		m_geometryBuffers = getEngine()->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, m_pipeline->getProgram() );
+		return m_geometryBuffers->initialise( { *m_vertexBuffer }, nullptr );
 	}
 }

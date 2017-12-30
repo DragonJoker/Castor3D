@@ -7,12 +7,12 @@
 #	undef CreateFont
 #endif
 
-namespace Castor
+namespace castor
 {
 	namespace
 	{
-		static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::Create - Created " );
-		static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::Create - Duplicate " );
+		static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::create - Created " );
+		static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::create - Duplicate " );
 		static const xchar * WARNING_CACHE_NULL_OBJECT = cuT( "Cache::Insert - nullptr " );
 	}
 
@@ -26,117 +26,117 @@ namespace Castor
 	{
 	}
 
-	FontSPtr FontCache::Create( String const & p_name, uint32_t p_height, Path const & p_path )
+	FontSPtr FontCache::create( String const & p_name, uint32_t p_height, Path const & p_path )
 	{
-		String l_name = p_path.GetFileName() + cuT( "." ) + p_path.GetExtension();
-		FontSPtr l_result;
+		String name = p_path.getFileName() + cuT( "." ) + p_path.getExtension();
+		FontSPtr result;
 
-		if ( File::FileExists( p_path ) )
+		if ( File::fileExists( p_path ) )
 		{
-			l_result = std::make_shared< Font >( p_name, p_height, p_path );
+			result = std::make_shared< Font >( p_name, p_height, p_path );
 		}
 		else
 		{
-			auto l_it = m_paths.find( l_name );
+			auto it = m_paths.find( name );
 
-			if ( l_it != m_paths.end() )
+			if ( it != m_paths.end() )
 			{
-				l_result = std::make_shared< Font >( p_name, p_height, l_it->second );
+				result = std::make_shared< Font >( p_name, p_height, it->second );
 			}
 			else
 			{
-				CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::string_cast< char >( p_name ) + ", path: " + string::string_cast< char >( p_path ) );
+				CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
-	FontSPtr FontCache::Add( String const & p_name, uint32_t p_height, Path const & p_path )
+	FontSPtr FontCache::add( String const & p_name, uint32_t p_height, Path const & p_path )
 	{
-		auto l_lock = make_unique_lock( *this );
-		FontSPtr l_result;
+		auto lock = makeUniqueLock( *this );
+		FontSPtr result;
 
 		if ( Collection< Font, String >::has( p_name ) )
 		{
-			l_result = Collection< Font, String >::find( p_name );
-			Logger::LogWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+			result = Collection< Font, String >::find( p_name );
+			Logger::logWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{
-			String l_name = p_path.GetFileName() + cuT( "." ) + p_path.GetExtension();
+			String name = p_path.getFileName() + cuT( "." ) + p_path.getExtension();
 
-			if ( File::FileExists( p_path ) )
+			if ( File::fileExists( p_path ) )
 			{
-				l_result = std::make_shared< Font >( p_name, p_height, p_path );
-				Logger::LogInfo( StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
-				Collection< Font, String >::insert( p_name, l_result );
+				result = std::make_shared< Font >( p_name, p_height, p_path );
+				Logger::logDebug( StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
+				Collection< Font, String >::insert( p_name, result );
 
-				if ( m_paths.find( l_name ) == m_paths.end() )
+				if ( m_paths.find( name ) == m_paths.end() )
 				{
-					m_paths.insert( std::make_pair( l_name, p_path ) );
+					m_paths.insert( std::make_pair( name, p_path ) );
 				}
 			}
 			else
 			{
-				auto l_it = m_paths.find( l_name );
+				auto it = m_paths.find( name );
 
-				if ( l_it != m_paths.end() )
+				if ( it != m_paths.end() )
 				{
-					l_result = std::make_shared< Font >( p_name, p_height, l_it->second );
-					Collection< Font, String >::insert( p_name, l_result );
+					result = std::make_shared< Font >( p_name, p_height, it->second );
+					Collection< Font, String >::insert( p_name, result );
 				}
 				else
 				{
-					CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::string_cast< char >( p_name ) + ", path: " + string::string_cast< char >( p_path ) );
+					CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
 				}
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
-	FontSPtr FontCache::Add( Castor::String const & p_name, FontSPtr p_font )
+	FontSPtr FontCache::add( castor::String const & p_name, FontSPtr p_font )
 	{
-		auto l_lock = make_unique_lock( *this );
-		FontSPtr l_result{ p_font };
+		auto lock = makeUniqueLock( *this );
+		FontSPtr result{ p_font };
 
 		if ( Collection< Font, String >::has( p_name ) )
 		{
-			l_result = Collection< Font, String >::find( p_name );
-			Logger::LogWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+			result = Collection< Font, String >::find( p_name );
+			Logger::logWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{
-			auto l_path = p_font->GetFilePath();
-			String l_name = l_path.GetFileName() + cuT( "." ) + l_path.GetExtension();
-			Collection< Font, String >::insert( p_name, l_result );
+			auto path = p_font->getFilePath();
+			String name = path.getFileName() + cuT( "." ) + path.getExtension();
+			Collection< Font, String >::insert( p_name, result );
 
-			if ( m_paths.find( l_name ) == m_paths.end() )
+			if ( m_paths.find( name ) == m_paths.end() )
 			{
-				m_paths.insert( std::make_pair( l_name, l_path ) );
+				m_paths.insert( std::make_pair( name, path ) );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
-	FontSPtr FontCache::Find( String const & p_name )
+	FontSPtr FontCache::find( String const & p_name )
 	{
 		return Collection< Font, String >::find( p_name );
 	}
 
-	bool FontCache::Has( String const & p_name )
+	bool FontCache::has( String const & p_name )
 	{
 		return Collection< Font, String >::has( p_name );
 	}
 
-	void FontCache::Remove( String const & p_name )
+	void FontCache::remove( String const & p_name )
 	{
 		Collection< Font, String >::erase( p_name );
 	}
 
-	void FontCache::Clear()
+	void FontCache::clear()
 	{
 		Collection< Font, String >::lock();
 		Collection< Font, String >::clear();

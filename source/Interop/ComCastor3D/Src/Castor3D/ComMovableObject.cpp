@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The movable object must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The movable object must be initialised" );
 
 	CMovableObject::CMovableObject()
 	{
@@ -19,18 +19,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AttachTo( static_cast< CSceneNode * >( val )->GetInternal() );
+			m_internal->attachTo( static_cast< CSceneNode * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMovableObject,			// This is the GUID of component throwing error
+					 IID_IMovableObject,			// This is the GUID of PixelComponents throwing error
 					 cuT( "AttachTo" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -42,18 +42,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Detach();
+			m_internal->detach();
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMovableObject,			// This is the GUID of component throwing error
+					 IID_IMovableObject,			// This is the GUID of PixelComponents throwing error
 					 cuT( "Detach" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

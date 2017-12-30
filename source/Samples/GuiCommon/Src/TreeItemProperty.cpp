@@ -4,8 +4,8 @@
 #include <Cache/MaterialCache.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GuiCommon
 {
@@ -14,11 +14,11 @@ namespace GuiCommon
 		eID_DELETE = 1
 	}	eID;
 
-	TreeItemProperty::TreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, ePROPERTY_DATA_TYPE p_type )
+	TreeItemProperty::TreeItemProperty( castor3d::Engine * engine, bool p_editable, ePROPERTY_DATA_TYPE p_type )
 		: wxTreeItemData()
 		, m_type( p_type )
 		, m_editable( p_editable )
-		, m_engine( p_engine )
+		, m_engine( engine )
 		, m_menu( nullptr )
 	{
 	}
@@ -38,33 +38,33 @@ namespace GuiCommon
 
 	void TreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		DoCreateProperties( p_editor, p_grid );
+		doCreateProperties( p_editor, p_grid );
 	}
 
-	void TreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void TreeItemProperty::onPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		DoPropertyChange( p_event );
+		doPropertyChange( p_event );
 	}
 
-	wxEnumProperty * TreeItemProperty::DoCreateMaterialProperty( wxString const & p_name )
+	wxEnumProperty * TreeItemProperty::doCreateMaterialProperty( wxString const & p_name )
 	{
-		wxEnumProperty * l_material = new wxEnumProperty( p_name );
-		auto & l_cache = m_engine->GetMaterialCache();
-		wxPGChoices l_choices;
-		auto l_lock = make_unique_lock( l_cache );
+		wxEnumProperty * material = new wxEnumProperty( p_name );
+		auto & cache = m_engine->getMaterialCache();
+		wxPGChoices choices;
+		auto lock = makeUniqueLock( cache );
 
-		for ( auto l_pair : l_cache )
+		for ( auto pair : cache )
 		{
-			l_choices.Add( l_pair.first );
+			choices.Add( pair.first );
 		}
 
-		l_material->SetChoices( l_choices );
-		return l_material;
+		material->SetChoices( choices );
+		return material;
 	}
 
-	void TreeItemProperty::DoApplyChange( std::function< void() > p_functor )
+	void TreeItemProperty::doApplyChange( std::function< void() > p_functor )
 	{
-		m_engine->PostEvent( MakeFunctorEvent( EventType::ePreRender, p_functor ) );
+		m_engine->postEvent( makeFunctorEvent( EventType::ePreRender, p_functor ) );
 	}
 
 	void TreeItemProperty::CreateTreeItemMenu()
@@ -73,11 +73,11 @@ namespace GuiCommon
 		{
 			m_menu = new wxMenu();
 			m_menu->Append( eID_DELETE, _( "Delete" ) + wxT( "\tDEL" ) );
-			DoCreateTreeItemMenu();
+			doCreateTreeItemMenu();
 		}
 	}
 
-	void TreeItemProperty::DoCreateTreeItemMenu()
+	void TreeItemProperty::doCreateTreeItemMenu()
 	{
 	}
 }

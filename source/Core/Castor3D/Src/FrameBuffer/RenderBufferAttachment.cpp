@@ -4,9 +4,9 @@
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RenderBufferAttachment::RenderBufferAttachment( RenderBufferSPtr p_renderBuffer )
 		: FrameBufferAttachment( AttachmentType::eBuffer )
@@ -18,9 +18,9 @@ namespace Castor3D
 	{
 	}
 
-	PxBufferBaseSPtr RenderBufferAttachment::GetBuffer()const
+	PxBufferBaseSPtr RenderBufferAttachment::getBuffer()const
 	{
-		RenderBufferSPtr l_renderBuffer = this->GetRenderBuffer();
-		return PxBufferBase::create( l_renderBuffer->GetDimensions(), l_renderBuffer->GetPixelFormat() );
+		RenderBufferSPtr renderBuffer = this->getRenderBuffer();
+		return PxBufferBase::create( renderBuffer->getDimensions(), renderBuffer->getPixelFormat() );
 	}
 }

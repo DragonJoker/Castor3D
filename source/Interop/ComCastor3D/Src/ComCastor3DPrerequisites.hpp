@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___C3DCOM_PREREQUISITES_H___
 #define ___C3DCOM_PREREQUISITES_H___
 
@@ -69,7 +48,21 @@ namespace CastorCom
 	class ComPosition;
 	typedef std::basic_string< TCHAR > tstring;
 
-	static const Castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
+	static const castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
+
+	template< typename T, typename FuncT >
+	HRESULT retrieveValue( T * pVal, FuncT p_func )
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( *pVal )
+		{
+			*pVal = p_func();
+			hr = S_OK;
+		}
+
+		return hr;
+	}
 }
 
 #include "ComCastorUtils.hpp"

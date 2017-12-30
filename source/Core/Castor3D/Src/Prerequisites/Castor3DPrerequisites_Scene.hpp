@@ -1,33 +1,59 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_SCENE_H___
 #define ___C3D_PREREQUISITES_SCENE_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Scene */
 	//@{
 
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Shadow filter types enumeration.
+	\~french
+	\brief		Enumération des types de filtrage des ombres.
+	*/
+	enum class ShadowType
+	{
+		//!\~english	No shadows at all.
+		//!\~french		Pas d'ombres du tout.
+		eNone,
+		//!\~english	PCF filtering.
+		//!\~french		Filtrage PCF.
+		ePCF,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Fog types enumeration.
+	\~french
+	\brief		Enumération des types de brouillard.
+	*/
+	enum class FogType
+	{
+		//!\~english	No fog.
+		//!\~french		Pas de brouillard
+		eDisabled,
+		//!\~english	Fog intensity increases linearly with distance to camera.
+		//!\~french		L'intensité du brouillard augmente lin�airement avec la distance à la caméra.
+		eLinear,
+		//!\~english	Fog intensity increases exponentially with distance to camera.
+		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
+		//!\~french		
+		eExponential,
+		//!\~english	Fog intensity increases even more with distance to camera.
+		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
+		eSquaredExponential,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -42,25 +68,19 @@ namespace Castor3D
 	{
 		//!\~english	No flag.
 		//!\~french		Aucun indicateur.
-		eNone = 0x0000,
+		eNone = 0x000,
 		//!\~english	Linear fog.
 		//!\~french		Brouillard linéaire.
-		eFogLinear = 0x0001,
+		eFogLinear = 0x001,
 		//!\~english	Exponential fog.
 		//!\~french		Brouillard exponentiel.
-		eFogExponential = 0x0002,
+		eFogExponential = 0x002,
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
-		eFogSquaredExponential = 0x0003,
-		//!\~english	No filtering.
-		//!\~french		Pas de filtrage.
-		eShadowFilterRaw = 0x0004,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		eShadowFilterPoisson = 0x0008,
-		//!\~english	Stratified poisson filtering.
-		//!\~french		Filtrage poisson stratifié.
-		eShadowFilterStratifiedPoisson = 0x000C,
+		eFogSquaredExponential = 0x003,
+		//!\~english	PCF filtering.
+		//!\~french		Filtrage PCF.
+		eShadowFilterPcf = 0x004,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	IMPLEMENT_FLAGS( SceneFlag )
@@ -74,7 +94,7 @@ namespace Castor3D
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de filtrage d'ombres.
 	 */
-	C3D_API GLSL::ShadowType GetShadowType( SceneFlags const & p_flags );
+	C3D_API ShadowType getShadowType( SceneFlags const & p_flags );
 	/**
 	 *\~english
 	 *\brief		Gives the fog type matching the given flags.
@@ -85,7 +105,7 @@ namespace Castor3D
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de brouillard.
 	 */
-	C3D_API GLSL::FogType GetFogType( SceneFlags const & p_flags );
+	C3D_API FogType getFogType( SceneFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -143,6 +163,7 @@ namespace Castor3D
 	class AnimatedMesh;
 	class AnimationInstance;
 	class SkeletonAnimationInstance;
+	class SkeletonAnimationInstanceKeyFrame;
 	class SkeletonAnimationInstanceObject;
 	class SkeletonAnimationInstanceNode;
 	class SkeletonAnimationInstanceBone;
@@ -177,23 +198,44 @@ namespace Castor3D
 	//! SceneNode pointer array.
 	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
 	//! Scene pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SceneSPtr, ScenePtrStr );
+	DECLARE_MAP( castor::String, SceneSPtr, ScenePtrStr );
 	//! SceneNode pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SceneNodeSPtr, SceneNodePtrStr );
+	DECLARE_MAP( castor::String, SceneNodeSPtr, SceneNodePtrStr );
 	//! AnimatedObjectGroup pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
+	DECLARE_MAP( castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! AnimatedObject pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
+	DECLARE_MAP( castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
+	DECLARE_MAP( castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
 	//! SkeletonAnimationInstanceObject pointer array.
 	DECLARE_VECTOR( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
 	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
 	DECLARE_MAP( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
+	DECLARE_MAP( castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
 	//! Skeleton animation instance pointer array.
 	DECLARE_VECTOR( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
+
+	using OnSceneChangedFunction = std::function< void( Scene const & ) >;
+	using OnSceneChanged = castor::Signal< OnSceneChangedFunction >;
+	using OnSceneChangedConnection = OnSceneChanged::connection;
+
+	using OnSceneUpdateFunction = std::function< void( Scene const & ) >;
+	using OnSceneUpdate = castor::Signal< OnSceneUpdateFunction >;
+	using OnSceneUpdateConnection = OnSceneUpdate::connection;
+
+	using OnCameraChangedFunction = std::function< void( Camera const & ) >;
+	using OnCameraChanged = castor::Signal< OnCameraChangedFunction >;
+	using OnCameraChangedConnection = OnCameraChanged::connection;
+
+	using OnSceneNodeChangedFunction = std::function< void( SceneNode const & ) >;
+	using OnSceneNodeChanged = castor::Signal< OnSceneNodeChangedFunction >;
+	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
+
+	using SubmeshBoundingBoxList = std::vector< std::pair< Submesh const *, castor::BoundingBox > >;
+	using SubmeshBoundingBoxMap = std::map< Submesh const *, castor::BoundingBox >;
+	using SubmeshBoundingSphereMap = std::map< Submesh const *, castor::BoundingSphere >;
+	using SubmeshMaterialMap = std::map< Submesh const *, MaterialWPtr >;
 
 	//@}
 }

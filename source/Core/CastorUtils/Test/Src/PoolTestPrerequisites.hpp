@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+﻿/* See LICENSE file in root folder */
 #ifndef ___TEST_PREREQUISITES_H___
 #define ___TEST_PREREQUISITES_H___
 
@@ -65,9 +44,9 @@ struct Obj
 struct BigObj
 	: public Obj
 {
-	uint8_t valueG[1024 * 1024];
+	uint8_t valueG[1024 * 1024]{};
 
-	inline BigObj( double d, float f )
+	inline explicit BigObj( double d, float f )
 	{
 		valueD = d;
 		valueE = f;
@@ -110,7 +89,7 @@ typedef Clock::time_point TimePoint;
 L'index de temps courant
 */
 template< typename type, size_t obj_count >
-inline TimePoint Initialise()
+inline TimePoint initialise()
 {
 	std::cout << "  ****************************************" << std::endl;
 	std::cout << "  " << obj_count << " " << typeid( type ).name() << std::endl;
@@ -136,7 +115,7 @@ inline void NextStep( char const * message, TimePoint & time )
 @param[in, out] time
 L'index de temps courant, reçoit le nouvel index
 */
-inline void Finalise( TimePoint & time )
+inline void finalise( TimePoint & time )
 {
 	std::cout << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl;
 }
@@ -189,9 +168,9 @@ namespace AllocPolicies
 		Les paramètres de construction d'un objet
 		*/
 		template< typename Pool, typename ... Params >
-		static inline Stored Allocate( Pool & pool, Params ... params )
+		static inline Stored allocate( Pool & pool, Params ... params )
 		{
-			return pool.Allocate( params... );
+			return pool.allocate( params... );
 		}
 
 		/** Désalloue un objet
@@ -201,9 +180,9 @@ namespace AllocPolicies
 		L'objet à désallouer
 		*/
 		template< typename Pool >
-		static inline void Deallocate( Pool & pool, Stored param )
+		static inline void deallocate( Pool & pool, Stored param )
 		{
-			pool.Deallocate( param );
+			pool.deallocate( param );
 		}
 
 		//! Le nombre d'objets allouables
@@ -219,7 +198,7 @@ namespace AllocPolicies
 		Les paramètres de construction d'un objet
 		*/
 		template< typename type, typename ... Params >
-		static inline type * Allocate( Params ... params )
+		static inline type * allocate( Params ... params )
 		{
 			return new type( params... );
 		}
@@ -229,7 +208,7 @@ namespace AllocPolicies
 		L'objet à désallouer
 		*/
 		template< typename type >
-		static inline void Deallocate( type * param )
+		static inline void deallocate( type * param )
 		{
 			delete param;
 		}
@@ -244,7 +223,7 @@ namespace AllocPolicies
 		Les paramètres de construction d'un objet
 		*/
 		template< typename type, typename ... Params >
-		static inline type * Allocate( Params ... params )
+		static inline type * allocate( Params ... params )
 		{
 			return new( malloc( sizeof( type ) ) )type( params... );
 		}
@@ -254,7 +233,7 @@ namespace AllocPolicies
 		L'objet à désallouer
 		*/
 		template< typename type >
-		static inline void Deallocate( type * param )
+		static inline void deallocate( type * param )
 		{
 			free( param );
 		}
@@ -269,7 +248,7 @@ namespace AllocPolicies
 		Les paramètres de construction d'un objet
 		*/
 		template< typename type, typename ... Params >
-		static inline type * Allocate( void * mem, Params ... params )
+		static inline type * allocate( void * mem, Params ... params )
 		{
 			return new( mem ) type( params... );
 		}
@@ -279,7 +258,7 @@ namespace AllocPolicies
 		L'objet à désallouer
 		*/
 		template< typename type >
-		static inline void Deallocate( type * param )
+		static inline void deallocate( type * param )
 		{
 			param->~type();
 		}

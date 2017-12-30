@@ -1,11 +1,11 @@
-﻿#include "GpuQuery.hpp"
+#include "GpuQuery.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	GpuQuery::GpuQuery( RenderSystem & p_renderSystem, QueryType p_query )
-		: OwnedBy< RenderSystem >( p_renderSystem )
+	GpuQuery::GpuQuery( RenderSystem & renderSystem, QueryType p_query )
+		: OwnedBy< RenderSystem >( renderSystem )
 		, m_type( p_query )
 	{
 	}
@@ -14,30 +14,30 @@ namespace Castor3D
 	{
 	}
 
-	bool GpuQuery::Initialise()
+	bool GpuQuery::initialise()
 	{
-		return DoInitialise();
+		return doInitialise();
 	}
 
-	void GpuQuery::Cleanup()
+	void GpuQuery::cleanup()
 	{
 		if ( m_active )
 		{
-			End();
+			end();
 		}
 
-		DoCleanup();
+		doCleanup();
 	}
 
-	void GpuQuery::Begin()
+	void GpuQuery::begin()
 	{
 		m_active = true;
-		DoBegin();
+		doBegin();
 	}
 
-	void GpuQuery::End()
+	void GpuQuery::end()
 	{
-		DoEnd();
+		doEnd();
 		m_active = false;
 	}
 }

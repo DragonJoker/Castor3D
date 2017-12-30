@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED_STATE = cuT( "The blend state must be initialised" );
+	static const castor::String ERROR_UNINITIALISED_STATE = cuT( "The blend state must be initialised" );
 
 	CBlendState::CBlendState()
 	{
@@ -19,12 +19,12 @@ namespace CastorCom
 
 		if ( m_state )
 		{
-			m_state->SetColourMask( Castor3D::WritingMask( red ), Castor3D::WritingMask( green ), Castor3D::WritingMask( blue ), Castor3D::WritingMask( alpha ) );
+			m_state->setColourMask( castor3d::WritingMask( red ), castor3d::WritingMask( green ), castor3d::WritingMask( blue ), castor3d::WritingMask( alpha ) );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IBlendState, cuT( "SetColourMask" ), ERROR_UNINITIALISED_STATE.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IBlendState, cuT( "SetColourMask" ), ERROR_UNINITIALISED_STATE.c_str(), 0, nullptr );
 		}
 
 		return hr;

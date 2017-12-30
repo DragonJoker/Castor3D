@@ -6,6 +6,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
 #include "Scene/BillboardList.hpp"
@@ -13,1041 +14,1423 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
+#include "Shader/ShaderStorageBuffer.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		template< typename MapType, typename FuncType >
-		inline void DoTraverseNodes( RenderPass const & p_pass
-			, MapType & p_nodes
-			, FuncType p_function )
+		inline void doTraverseNodes( RenderPass const & pass
+			, MapType & nodes
+			, FuncType function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						DoBindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						doBindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
+						function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
+							, itSubmeshes.second );
 
-						DoUnbindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
 		}
 
 		template< typename MapType, typename FuncType >
-		inline void DoTraverseNodes( RenderPass const & p_pass
-			, MapType & p_nodes
-			, PassRenderNodeUniforms & p_passNode
-			, Scene & p_scene
-			, DepthMapArray & p_depthMaps
-			, FuncType p_function )
+		inline void doTraverseNodes( RenderPass const & pass
+			, MapType & nodes
+			, Scene & scene
+			, ShadowMapLightTypeArray & shadowMaps
+			, FuncType function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						DoBindPass( l_itSubmeshes.second[0].m_passNode
-							, *l_itPass.first
-							, p_scene
-							, *l_itPipelines.first
-							, p_depthMaps );
+						EnvironmentMap * envMap = nullptr;
+						doBindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
+							, itSubmeshes.second[0].m_passNode
+							, scene
+							, *itPipelines.first
+							, shadowMaps
+							, itSubmeshes.second[0].m_modelUbo
+							, envMap );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
-
-						DoUnbindPass( l_itSubmeshes.second[0].m_passNode
-							, *l_itPass.first
-							, p_scene
-							, *l_itPipelines.first
-							, p_depthMaps );
+						function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
+							, itSubmeshes.second );
 					}
 				}
 			}
 		}
 
 		template< typename MapType, typename FuncType >
-		inline void DoTraverseNodes( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes
-			, FuncType p_function )
+		inline void doTraverseNodes( RenderPass const & pass
+			, Camera const & camera
+			, MapType & nodes
+			, FuncType function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				pass.updatePipeline( *itPipelines.first );
+				itPipelines.first->apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						DoBindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						doBindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
+						function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
+							, itSubmeshes.second );
 
-						DoUnbindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
 		}
 
 		template< typename MapType, typename FuncType >
-		inline void DoTraverseNodes( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes
-			, PassRenderNodeUniforms & p_passNode
-			, Scene & p_scene
-			, DepthMapArray & p_depthMaps
-			, FuncType p_function )
+		inline void doTraverseNodes( RenderPass const & pass
+			, Camera const & camera
+			, MapType & nodes
+			, Scene & scene
+			, ShadowMapLightTypeArray & shadowMaps
+			, FuncType function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				pass.updatePipeline( *itPipelines.first );
+				itPipelines.first->apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						DoBindPass( l_itSubmeshes.second[0].m_passNode
-							, *l_itPass.first
-							, p_scene
-							, *l_itPipelines.first
-							, p_depthMaps );
+						EnvironmentMap * envMap = nullptr;
+						doBindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
+							, itSubmeshes.second[0].m_passNode
+							, scene
+							, *itPipelines.first
+							, shadowMaps
+							, itSubmeshes.second[0].m_modelUbo
+							, envMap );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
-
-						DoUnbindPass( l_itSubmeshes.second[0].m_passNode
-							, *l_itPass.first
-							, p_scene
-							, *l_itPipelines.first
-							, p_depthMaps );
+						function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.first->getInstantiation()
+							, itSubmeshes.second );
 					}
 				}
 			}
 		}
 
 		template< typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-			, MapType & p_nodes )
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, MapType & nodes )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					DoBindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					doBindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 
-					DoRenderNodeNoPass( l_renderNode );
+					doRenderNodeNoPass( renderNode );
 
-					DoUnbindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					doUnbindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 				}
 			}
 		}
 
 		template< typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-			, MapType & p_nodes
-			, Scene & p_scene
-			, PassRenderNodeUniforms & p_passNode
-			, DepthMapArray & p_depthMaps )
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, MapType & nodes
+			, Scene & scene
+			, ShadowMapLightTypeArray & shadowMaps )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					DoBindPass( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass
-						, p_scene
-						, *l_itPipelines.first
-						, p_depthMaps );
-
-					DoRenderNode( l_renderNode );
-
-					DoUnbindPass( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass
-						, p_scene
-						, *l_itPipelines.first
-						, p_depthMaps );
+					EnvironmentMap * envMap = nullptr;
+					doBindPass( details::getParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
+						, scene
+						, *itPipelines.first
+						, shadowMaps
+						, renderNode.m_modelUbo
+						, envMap );
+					doRenderNode( renderNode );
 				}
 			}
 		}
 
 		template< typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes )
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, Camera const & camera
+			, MapType & nodes )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				pass.updatePipeline( *itPipelines.first );
+				itPipelines.first->apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					DoBindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					doBindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 
-					DoRenderNodeNoPass( l_renderNode );
+					doRenderNodeNoPass( renderNode );
 
-					DoUnbindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					doUnbindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 				}
 			}
 		}
 
 		template< typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes
-			, Scene & p_scene
-			, PassRenderNodeUniforms & p_passNode
-			, DepthMapArray & p_depthMaps )
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, Camera const & camera
+			, MapType & nodes
+			, Scene & scene
+			, ShadowMapLightTypeArray & shadowMaps )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				pass.updatePipeline( *itPipelines.first );
+				itPipelines.first->apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					DoBindPass( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass
-						, p_scene
-						, *l_itPipelines.first
-						, p_depthMaps );
-
-					DoRenderNode( l_renderNode );
-
-					DoUnbindPass( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass
-						, p_scene
-						, *l_itPipelines.first
-						, p_depthMaps );
+					EnvironmentMap * envMap = nullptr;
+					doBindPass( details::getParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
+						, scene
+						, *itPipelines.first
+						, shadowMaps
+						, renderNode.m_modelUbo
+						, envMap );
+					doRenderNode( renderNode );
 				}
 			}
 		}
 
 		template< typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes
-			, Scene & p_scene
-			, PassRenderNodeUniforms & p_passNode
-			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info )
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, Camera const & camera
+			, MapType & nodes
+			, Scene & scene
+			, ShadowMapLightTypeArray & shadowMaps
+			, RenderInfo & info )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				pass.updatePipeline( *itPipelines.first );
+				itPipelines.first->apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					DoBindPass( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass
-						, p_scene
-						, *l_itPipelines.first
-						, p_depthMaps );
+					EnvironmentMap * envMap = nullptr;
+					doBindPass( details::getParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
+						, scene
+						, *itPipelines.first
+						, shadowMaps
+						, renderNode.m_modelUbo
+						, envMap );
 
-					DoRenderNode( l_renderNode );
-					++p_info.m_drawCalls;
-
-					DoUnbindPass( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass
-						, p_scene
-						, *l_itPipelines.first
-						, p_depthMaps );
-
-					++p_info.m_visibleObjectsCount;
+					doRenderNode( renderNode );
+					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_instance );
+					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_instance );
+					++info.m_drawCalls;
+					++info.m_visibleObjectsCount;
 				}
 			}
+		}
+
+		template< typename ArrayT >
+		uint32_t copyNodesMatrices( ArrayT const & renderNodes
+			, VertexBuffer & matrixBuffer )
+		{
+			auto const mtxSize = sizeof( float ) * 16;
+			auto const stride = matrixBuffer.getDeclaration().stride();
+			auto const count = std::min( matrixBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
+			REQUIRE( count <= renderNodes.size() );
+			auto buffer = matrixBuffer.getData();
+			auto it = renderNodes.begin();
+			auto i = 0u;
+
+			while ( i < count )
+			{
+				std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
+				auto id = it->m_passNode.m_pass.getId() - 1;
+				std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
+				buffer += stride;
+				++i;
+				++it;
+			}
+
+			matrixBuffer.upload( 0u, stride * count, matrixBuffer.getData() );
+			return count;
+		}
+
+		template< typename ArrayT >
+		uint32_t copyNodesMatrices( ArrayT const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer )
+		{
+			auto const mtxSize = sizeof( float ) * 16;
+			auto const stride = matrixBuffer.getDeclaration().stride();
+			auto const count = std::min( matrixBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
+			REQUIRE( count <= renderNodes.size() );
+			auto buffer = matrixBuffer.getData();
+			auto it = renderNodes.begin();
+			auto i = 0u;
+
+			while ( i < count )
+			{
+				if ( it->m_sceneNode.isDisplayable()
+					&& it->m_sceneNode.isVisible()
+					&& camera.isVisible( it->m_instance, it->m_data ) )
+				{
+					std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
+					auto id = it->m_passNode.m_pass.getId() - 1;
+					std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
+					buffer += stride;
+				}
+				++i;
+				++it;
+			}
+
+			matrixBuffer.upload( 0u, stride * count, matrixBuffer.getData() );
+			return count;
 		}
 	}
 
-	RenderPass::RenderPass( String const & p_name, Engine & p_engine, bool p_opaque, bool p_multisampling )
-		: OwnedBy< Engine >{ p_engine }
-		, Named{ p_name }
-		, m_renderSystem{ *p_engine.GetRenderSystem() }
-		, m_multisampling{ p_multisampling }
-		, m_renderQueue{ *this, p_opaque }
-		, m_opaque{ p_opaque }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
-		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
-		, m_sceneUbo{ ShaderProgram::BufferScene, *p_engine.GetRenderSystem() }
-		, m_passUbo{ ShaderProgram::BufferPass, *p_engine.GetRenderSystem() }
-		, m_modelUbo{ ShaderProgram::BufferModel, *p_engine.GetRenderSystem() }
-		, m_billboardUbo{ ShaderProgram::BufferBillboards, *p_engine.GetRenderSystem() }
-		, m_skinningUbo{ ShaderProgram::BufferSkinning, *p_engine.GetRenderSystem() }
-		, m_morphingUbo{ ShaderProgram::BufferMorphing, *p_engine.GetRenderSystem() }
+	//*********************************************************************************************
+
+	RenderPass::RenderPass( String const & name
+		, Engine & engine
+		, SceneNode const * ignored )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_oit{ true }
+		, m_renderQueue{ *this, true, ignored }
+		, m_opaque{ true }
+		, m_matrixUbo{ engine }
+		, m_modelMatrixUbo{ engine }
+		, m_sceneUbo{ engine }
+		, m_modelUbo{ engine }
+		, m_billboardUbo{ engine }
+		, m_skinningUbo{ engine }
+		, m_morphingUbo{ engine }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
-		UniformBuffer::FillSceneBuffer( m_sceneUbo );
-		UniformBuffer::FillPassBuffer( m_passUbo );
-		UniformBuffer::FillModelBuffer( m_modelUbo );
-		UniformBuffer::FillBillboardBuffer( m_billboardUbo );
-		UniformBuffer::FillSkinningBuffer( m_skinningUbo );
-		UniformBuffer::FillMorphingBuffer( m_morphingUbo );
+	}
 
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
-
-		m_passNode = std::make_unique< PassRenderNodeUniforms >( m_passUbo );
+	RenderPass::RenderPass( String const & name
+		, Engine & engine
+		, bool oit
+		, SceneNode const * ignored )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_oit{ oit }
+		, m_renderQueue{ *this, false, ignored }
+		, m_opaque{ false }
+		, m_matrixUbo{ engine }
+		, m_modelMatrixUbo{ engine }
+		, m_sceneUbo{ engine }
+		, m_modelUbo{ engine }
+		, m_billboardUbo{ engine }
+		, m_skinningUbo{ engine }
+		, m_morphingUbo{ engine }
+	{
 	}
 
 	RenderPass::~RenderPass()
 	{
 	}
 
-	bool RenderPass::Initialise( Size const & p_size )
+	bool RenderPass::initialise( Size const & size )
 	{
-		return DoInitialise( p_size );
+		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), getName(), getName() );
+		return doInitialise( size );
 	}
 
-	void RenderPass::Cleanup()
+	void RenderPass::cleanup()
 	{
-		m_skinningUbo.Cleanup();
-		m_morphingUbo.Cleanup();
-		m_billboardUbo.Cleanup();
-		m_modelUbo.Cleanup();
-		m_passUbo.Cleanup();
-		m_modelMatrixUbo.Cleanup();
-		m_matrixUbo.Cleanup();
-		m_sceneUbo.Cleanup();
-		DoCleanup();
+		m_skinningUbo.getUbo().cleanup();
+		m_morphingUbo.getUbo().cleanup();
+		m_billboardUbo.getUbo().cleanup();
+		m_modelUbo.getUbo().cleanup();
+		m_modelMatrixUbo.getUbo().cleanup();
+		m_matrixUbo.getUbo().cleanup();
+		m_sceneUbo.getUbo().cleanup();
+		doCleanup();
 
-		for ( auto & l_buffers : m_geometryBuffers )
+		for ( auto & buffers : m_geometryBuffers )
 		{
-			l_buffers->Cleanup();
+			buffers->cleanup();
 		}
 
 		m_geometryBuffers.clear();
+		m_timer.reset();
 	}
 
-	void RenderPass::Update( RenderQueueArray & p_queues )
+	void RenderPass::update( RenderQueueArray & queues )
 	{
-		DoUpdate( p_queues );
+		doUpdate( queues );
 	}
 
-	String RenderPass::GetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	glsl::Shader RenderPass::getVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
 	{
-		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+		return doGetVertexShaderSource( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags
+			, invertNormals );
 	}
 
-	String RenderPass::GetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	glsl::Shader RenderPass::getGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		return doGetGeometryShaderSource( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags );
 	}
 
-	String RenderPass::GetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	glsl::Shader RenderPass::getPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		glsl::Shader result;
+
+		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
+		{
+			result = doGetPbrMRPixelShaderSource( passFlags
+				, textureFlags
+				, programFlags
+				, sceneFlags
+				, alphaFunc );
+		}
+		else if ( checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
+		{
+			result = doGetPbrSGPixelShaderSource( passFlags
+				, textureFlags
+				, programFlags
+				, sceneFlags
+				, alphaFunc );
+		}
+		else
+		{
+			result = doGetLegacyPixelShaderSource( passFlags
+				, textureFlags
+				, programFlags
+				, sceneFlags
+				, alphaFunc );
+		}
+
+		return result;
 	}
 
-	void RenderPass::PreparePipeline( BlendMode p_colourBlendMode
-		, BlendMode p_alphaBlendMode
-		, TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags
-		, bool p_twoSided )
+	void RenderPass::preparePipeline( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, ComparisonFunc alphaFunc
+		, PassFlags & passFlags
+		, TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags
+		, bool twoSided )
 	{
-		DoUpdateFlags( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags );
+		doUpdateFlags( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags );
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) != m_opaque
-			&& ( !CheckFlag( p_programFlags, ProgramFlag::eBillboards )
-				|| !IsShadowMapProgram( p_programFlags ) ) )
+		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != m_opaque
+			&& ( !checkFlag( programFlags, ProgramFlag::eBillboards )
+				|| !isShadowMapProgram( programFlags ) ) )
 		{
 			if ( m_opaque )
 			{
-				p_alphaBlendMode = BlendMode::eNoBlend;
+				alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
+			auto backProgram = doGetProgram( passFlags
+				, textureFlags
+				, programFlags
+				, sceneFlags
+				, alphaFunc
+				, false );
 
 			if ( !m_opaque )
 			{
-				auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
-				auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
-				DoPrepareFrontPipeline( *l_frontProgram, l_flags );
-				DoPrepareBackPipeline( *l_backProgram, l_flags );
+				auto frontProgram = doGetProgram( passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags
+					, alphaFunc
+					, true );
+				auto flags = PipelineFlags{ colourBlendMode
+					, alphaBlendMode
+					, passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags };
+				doPrepareFrontPipeline( *frontProgram, flags );
+				doPrepareBackPipeline( *backProgram, flags );
 			}
 			else
 			{
-				auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
+				auto flags = PipelineFlags{ colourBlendMode
+					, alphaBlendMode
+					, passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags };
 
-				if ( p_twoSided || CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+				if ( twoSided || checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
-					DoPrepareFrontPipeline( *l_frontProgram, l_flags );
+					auto frontProgram = doGetProgram( passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags
+						, alphaFunc
+						, true );
+					doPrepareFrontPipeline( *frontProgram, flags );
 				}
 
-				DoPrepareBackPipeline( *l_backProgram, l_flags );
+				doPrepareBackPipeline( *backProgram, flags );
 			}
 		}
 	}
 
-	RenderPipeline * RenderPass::GetPipelineFront( BlendMode p_colourBlendMode
-		, BlendMode p_alphaBlendMode
-		, TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )
+	RenderPipeline * RenderPass::getPipelineFront( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, ComparisonFunc alphaFunc
+		, PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
 		if ( m_opaque )
 		{
-			p_alphaBlendMode = BlendMode::eNoBlend;
+			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto l_it = m_frontPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		RenderPipeline * l_return{ nullptr };
+		auto it = m_frontPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		RenderPipeline * result{ nullptr };
 
-		if ( l_it != m_frontPipelines.end() )
+		if ( it != m_frontPipelines.end() )
 		{
-			l_return = l_it->second.get();
+			result = it->second.get();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	RenderPipeline * RenderPass::GetPipelineBack( BlendMode p_colourBlendMode
-		, BlendMode p_alphaBlendMode
-		, TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )
+	RenderPipeline * RenderPass::getPipelineBack( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, ComparisonFunc alphaFunc
+		, PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
 		if ( m_opaque )
 		{
-			p_alphaBlendMode = BlendMode::eNoBlend;
+			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto l_it = m_backPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		RenderPipeline * l_return{ nullptr };
+		auto it = m_backPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		RenderPipeline * result{ nullptr };
 
-		if ( l_it != m_backPipelines.end() )
+		if ( it != m_backPipelines.end() )
 		{
-			l_return = l_it->second.get();
+			result = it->second.get();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	SkinningRenderNode RenderPass::CreateSkinningNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, Submesh & p_submesh
-		, Geometry & p_primitive
-		, AnimatedSkeleton & p_skeleton )
+	SkinningRenderNode RenderPass::createSkinningNode( Pass & pass
+		, RenderPipeline & pipeline
+		, Submesh & submesh
+		, Geometry & primitive
+		, AnimatedSkeleton & skeleton )
 	{
-		auto l_buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
+		m_geometryBuffers.insert( buffers );
 
 		return SkinningRenderNode
 		{
-			p_pipeline,
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
+			pipeline,
+			doCreatePassRenderNode( pass, pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
-			*p_primitive.GetParent(),
-			p_submesh,
-			p_primitive,
-			p_skeleton,
+			*buffers,
+			*primitive.getParent(),
+			submesh,
+			primitive,
+			skeleton,
 			m_skinningUbo
 		};
 	}
 
-	MorphingRenderNode RenderPass::CreateMorphingNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, Submesh & p_submesh
-		, Geometry & p_primitive
-		, AnimatedMesh & p_mesh )
+	MorphingRenderNode RenderPass::createMorphingNode( Pass & pass
+		, RenderPipeline & pipeline
+		, Submesh & submesh
+		, Geometry & primitive
+		, AnimatedMesh & mesh )
 	{
-		auto l_buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
+		m_geometryBuffers.insert( buffers );
 
 		return MorphingRenderNode
 		{
-			p_pipeline,
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
+			pipeline,
+			doCreatePassRenderNode( pass, pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
-			*p_primitive.GetParent(),
-			p_submesh,
-			p_primitive,
-			p_mesh,
+			*buffers,
+			*primitive.getParent(),
+			submesh,
+			primitive,
+			mesh,
 			m_morphingUbo
 		};
 	}
 
-	StaticRenderNode RenderPass::CreateStaticNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, Submesh & p_submesh
-		, Geometry & p_primitive )
+	StaticRenderNode RenderPass::createStaticNode( Pass & pass
+		, RenderPipeline & pipeline
+		, Submesh & submesh
+		, Geometry & primitive )
 	{
-		auto l_buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = pipeline.getGeometryBuffers( submesh );
+		m_geometryBuffers.insert( buffers );
 
 		return StaticRenderNode
 		{
-			p_pipeline,
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
+			pipeline,
+			doCreatePassRenderNode( pass, pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
-			*p_primitive.GetParent(),
-			p_submesh,
-			p_primitive,
+			*buffers,
+			*primitive.getParent(),
+			submesh,
+			primitive,
 		};
 	}
 
-	BillboardRenderNode RenderPass::CreateBillboardNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, BillboardBase & p_billboard )
+	BillboardRenderNode RenderPass::createBillboardNode( Pass & pass
+		, RenderPipeline & pipeline
+		, BillboardBase & billboard )
 	{
-		auto l_buffers = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = pipeline.getGeometryBuffers( billboard );
+		m_geometryBuffers.insert( buffers );
 
 		return BillboardRenderNode
 		{
-			p_pipeline,
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
+			pipeline,
+			doCreatePassRenderNode( pass, pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
-			*p_billboard.GetNode(),
-			p_billboard,
+			*buffers,
+			*billboard.getNode(),
+			billboard,
 			m_billboardUbo,
 		};
 	}
 
-	void RenderPass::UpdatePipeline( RenderPipeline & p_pipeline )const
+	void RenderPass::updatePipeline( RenderPipeline & pipeline )const
 	{
-		DoUpdatePipeline( p_pipeline );
+		doUpdatePipeline( pipeline );
 	}
 
-	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass
-		, RenderPipeline & p_pipeline )
+	void RenderPass::updateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
+	{
+		doUpdateFlags( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags );
+	}
+
+	PassRenderNode RenderPass::doCreatePassRenderNode( Pass & pass
+		, RenderPipeline & pipeline )
 	{
 		return PassRenderNode
 		{
-			p_pass,
-			p_pipeline.GetProgram(),
-			m_passUbo,
+			pass,
+			pipeline.getProgram(),
 		};
 	}
 
-	SceneRenderNode RenderPass::DoCreateSceneRenderNode( Scene & p_scene
-		, RenderPipeline & p_pipeline )
+	SceneRenderNode RenderPass::doCreateSceneRenderNode( Scene & scene
+		, RenderPipeline & pipeline )
 	{
-		return SceneRenderNode
-		{
-			m_sceneUbo
-		};
+		return SceneRenderNode{};
 	}
 
-	ShaderProgramSPtr RenderPass::DoGetProgram( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	ShaderProgramSPtr RenderPass::doGetProgram( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc
+		, bool invertNormals )const
 	{
-		return GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this, p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+			, passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc
+			, invertNormals );
 	}
 
-	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
-		, VertexBuffer & p_matrixBuffer )
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		, VertexBuffer & matrixBuffer )const
 	{
-		constexpr uint32_t l_stride = 16 * sizeof( real );
-		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		auto l_buffer = p_matrixBuffer.data();
-		auto l_it = p_renderNodes.begin();
+		return copyNodesMatrices( renderNodes
+			, matrixBuffer );
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		, VertexBuffer & matrixBuffer
+		, RenderInfo & info )const
+	{
+		auto count = copyNodesMatrices( renderNodes
+			, matrixBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		, VertexBuffer & matrixBuffer )const
+	{
+		return copyNodesMatrices( renderNodes
+			, matrixBuffer );
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		, VertexBuffer & matrixBuffer
+		, RenderInfo & info )const
+	{
+		auto count = copyNodesMatrices( renderNodes
+			, matrixBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer )const
+	{
+		return copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer
+		, RenderInfo & info )const
+	{
+		auto count = copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer )const
+	{
+		return copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
+	}
+
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		, Camera const & camera
+		, VertexBuffer & matrixBuffer
+		, RenderInfo & info )const
+	{
+		auto count = copyNodesMatrices( renderNodes
+			, camera
+			, matrixBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
+	}
+
+	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
+		, ShaderStorageBuffer & bonesBuffer )const
+	{
+		uint32_t const mtxSize = sizeof( float ) * 16;
+		uint32_t const stride = mtxSize * 400u;
+		auto const count = std::min( bonesBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
+		REQUIRE( count <= renderNodes.size() );
+		auto buffer = bonesBuffer.getData();
+		auto it = renderNodes.begin();
 		auto i = 0u;
 
-		while ( i < l_count )
+		while ( i < count )
 		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-			l_buffer += l_stride;
+			auto & node = *it;
+			node.m_skeleton.fillBuffer( buffer );
+			buffer += stride;
 			++i;
-			++l_it;
+			++it;
 		}
 
-		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
-		return l_count;
+		bonesBuffer.upload( 0u, stride * count, bonesBuffer.getData() );
+		return count;
 	}
 
-	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
-		, VertexBuffer & p_matrixBuffer
-		, RenderInfo & p_info )
+	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
+		, ShaderStorageBuffer & bonesBuffer
+		, RenderInfo & info )const
 	{
-		constexpr uint32_t l_stride = 16 * sizeof( real );
-		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		auto l_buffer = p_matrixBuffer.data();
-		auto l_it = p_renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < l_count )
-		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-			++p_info.m_visibleObjectsCount;
-			l_buffer += l_stride;
-			++i;
-			++l_it;
-		}
-
-		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
-		return l_count;
+		auto count = doCopyNodesBones( renderNodes, bonesBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes )const
 	{
-		DoTraverseNodes( *this
-			, p_nodes
-			, [this]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
-				, StaticRenderNodeArray & p_renderNodes )
+		doTraverseNodes( *this
+			, nodes
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, instantiation.getMatrixBuffer() );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoTraverseNodes( *this
-			, p_nodes
-			, *m_passNode
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, p_depthMaps
-			, [this, &p_depthMaps]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
-				, StaticRenderNodeArray & p_renderNodes )
+		doTraverseNodes( *this
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, instantiation.getMatrixBuffer() );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		, Camera const & camera )const
 	{
-		DoTraverseNodes( *this
-			, p_camera
-			, p_nodes
-			, [this]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
-				, StaticRenderNodeArray & p_renderNodes )
+		doTraverseNodes( *this
+			, camera
+			, nodes
+			, [this, &camera]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, camera
+						, instantiation.getMatrixBuffer() );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoTraverseNodes( *this
-			, p_camera
-			, p_nodes
-			, *m_passNode
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, p_depthMaps
-			, [this, &p_depthMaps]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
-				, StaticRenderNodeArray & p_renderNodes )
+		doTraverseNodes( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, [this, &camera]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, camera
+						, instantiation.getMatrixBuffer() );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps
+		, RenderInfo & info )const
 	{
-		DoTraverseNodes( *this
-			, p_camera
-			, p_nodes
-			, *m_passNode
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, p_depthMaps
-			, [this, &p_info, &p_depthMaps]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
-				, StaticRenderNodeArray & p_renderNodes )
+		doTraverseNodes( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, [this, &info]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					++p_info.m_drawCalls;
+					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer(), info );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count );
+					info.m_visibleFaceCount += submesh.getFaceCount() * count;
+					info.m_visibleVertexCount += submesh.getPointsCount() * count;
+					++info.m_drawCalls;
 				}
 			} );
 	}
 
-	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes );
+		doRenderNonInstanced( *this
+			, nodes );
 	}
 
-	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doRenderNonInstanced( *this
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
 	}
 
-	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+		, Camera const & camera )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes );
 	}
 
-	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
 	}
 
-	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps
+		, RenderInfo & info )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps
-			, p_info );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, info );
 	}
 
-	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes );
+		doRenderNonInstanced( *this
+			, nodes );
 	}
 
-	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doRenderNonInstanced( *this
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
 	}
 
-	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+		, Camera const & camera )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes );
 	}
 
-	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
 	}
 
-	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps
+		, RenderInfo & info )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps
-			, p_info );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, info );
 	}
 
-	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes );
+		doTraverseNodes( *this
+			, nodes
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, SkinningRenderNodeArray & renderNodes )
+			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
+				if ( !renderNodes.empty()
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
+				{
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
+				}
+			} );
 	}
 
-	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doTraverseNodes( *this
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, SkinningRenderNodeArray & renderNodes )
+			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
+				if ( !renderNodes.empty()
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
+				{
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
+				}
+			} );
 	}
 
-	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		, Camera const & camera )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes );
+		doTraverseNodes( *this
+			, camera
+			, nodes
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, SkinningRenderNodeArray & renderNodes )
+			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
+				if ( !renderNodes.empty()
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
+				{
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
+				}
+			} );
 	}
 
-	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doTraverseNodes( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, SkinningRenderNodeArray & renderNodes )
+			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
+				if ( !renderNodes.empty()
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
+				{
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
+				}
+			} );
 	}
 
-	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps
+		, RenderInfo & info )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps
-			, p_info );
+		doTraverseNodes( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, [this, &info]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, InstantiationComponent & instantiation
+				, SkinningRenderNodeArray & renderNodes )
+			{
+				auto & instantiatedBones = submesh.getInstantiatedBones();
+
+				if ( !renderNodes.empty()
+					&& instantiatedBones.hasInstancedBonesBuffer()
+					&& instantiation.hasMatrixBuffer() )
+				{
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer(), info );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
+					REQUIRE( count1 == count2 );
+					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
+					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
+					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
+					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
+					++info.m_drawCalls;
+				}
+			} );
 	}
 
-	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes );
+		doRenderNonInstanced( *this
+			, nodes );
 	}
 
-	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doRenderNonInstanced( *this
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
 	}
 
-	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+		, Camera const & camera )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes );
 	}
 
-	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
 	}
 
-	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps
+		, RenderInfo & info )const
 	{
-		DoRenderNonInstanced( *this
-			, p_camera
-			, p_nodes
-			, *GetEngine()->GetRenderSystem()->GetTopScene()
-			, *m_passNode
-			, p_depthMaps
-			, p_info );
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, info );
 	}
 
-	String RenderPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes )const
 	{
-		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		doRenderNonInstanced( *this
+			, nodes );
+	}
+
+	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+		, ShadowMapLightTypeArray & shadowMaps )const
+	{
+		doRenderNonInstanced( *this
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
+	}
+
+	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+		, Camera const & camera )const
+	{
+		doRenderNonInstanced( *this
+			, camera
+			, nodes );
+	}
+
+	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps )const
+	{
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps );
+	}
+
+	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps
+		, RenderInfo & info )const
+	{
+		doRenderNonInstanced( *this
+			, camera
+			, nodes
+			, *getEngine()->getRenderSystem()->getTopScene()
+			, shadowMaps
+			, info );
+	}
+
+	glsl::Shader RenderPass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
+	{
+		using namespace glsl;
+		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
-		auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
-		auto normal = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
+		auto normal = writer.declAttribute< Vec3 >( ShaderProgram::Normal );
+		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
+		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
+		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( l_writer );
-		UBO_MODEL_MATRIX( l_writer );
-		UBO_SKINNING( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
+		UBO_MATRIX( writer );
+		UBO_MODEL_MATRIX( writer );
+		UBO_SCENE( writer );
+		UBO_MODEL( writer );
+		SkinningUbo::declare( writer, programFlags );
+		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
-		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.GetOutput< Int >( cuT( "vtx_instance" ) );
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
+		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
+		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
+		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		std::function< void() > l_main = [&]()
+		std::function< void() > main = [&]()
 		{
-			auto l_v4Vertex = l_writer.GetLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
-			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto l_v4Bitangent = l_writer.GetLocale( cuT( "l_v4Bitangent" ), vec4( bitangent, 0.0 ) );
-			auto l_v3Texture = l_writer.GetLocale( cuT( "l_v3Texture" ), texture );
-			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
+			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
+				, vec4( position.xyz(), 1.0 ) );
+			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
+				, vec4( normal, 0.0 ) );
+			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
+				, vec4( tangent, 0.0 ) );
+			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
+				, texture );
+			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
+			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
-				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
-				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
+				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				l_mtxModel = transform;
+				mtxModel = transform;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else
 			{
-				l_mtxModel = c3d_mtxModel;
+				mtxModel = c3d_mtxModel;
+				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+					, mat3( c3d_mtxNormal ) );
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				auto l_time = l_writer.GetLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
-				l_v4Bitangent = vec4( l_v4Bitangent.xyz() * l_time + bitangent2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
-			}
-
-			vtx_texture = l_v3Texture;
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_worldSpacePosition = l_v4Vertex.xyz();
-			l_v4Vertex = c3d_mtxView * l_v4Vertex;
-
-			if ( p_invertNormals )
-			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * -l_v4Normal ).xyz() );
+				vtx_material = material;
 			}
 			else
 			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+				vtx_material = c3d_materialIndex;
 			}
 
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
-			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
+			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+			{
+				auto time = writer.declLocale( cuT( "time" )
+					, vec3( 1.0_f - c3d_time ) );
+				v4Vertex = vec4( glsl::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+				v4Normal = vec4( glsl::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
+				v4Tangent = vec4( glsl::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
+				v3Texture = glsl::fma( v3Texture, time, texture2 * c3d_time );
+			}
+
+			vtx_texture = v3Texture;
+			v4Vertex = mtxModel * v4Vertex;
+			vtx_worldPosition = v4Vertex.xyz();
+			v4Vertex = c3d_curView * v4Vertex;
+			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
+
+			if ( invertNormals )
+			{
+				vtx_normal = normalize( writer.paren( mtxNormal * -v4Normal.xyz() ) );
+			}
+			else
+			{
+				vtx_normal = normalize( writer.paren( mtxNormal * v4Normal.xyz() ) );
+			}
+
+			vtx_tangent = normalize( writer.paren( mtxNormal * v4Tangent.xyz() ) );
+			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
+			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * l_v4Vertex;
+			gl_Position = c3d_projection * v4Vertex;
+
+			auto tbn = writer.declLocale( cuT( "tbn" )
+				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
 		};
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
+		writer.implementFunction< void >( cuT( "main" ), main );
+		return writer.finalise();
 	}
 }

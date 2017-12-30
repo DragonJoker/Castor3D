@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef __COMC3D_COM_RENDER_WINDOW_H__
 #define __COMC3D_COM_RENDER_WINDOW_H__
 
@@ -57,20 +36,20 @@ namespace CastorCom
 		 */
 		virtual ~CRenderWindow();
 
-		inline Castor3D::RenderWindowSPtr GetInternal()const
+		inline castor3d::RenderWindowSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::RenderWindowSPtr pass )
+		inline void setInternal( castor3d::RenderWindowSPtr pass )
 		{
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( RenderTarget, IRenderTarget *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetRenderTarget ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetRenderTarget ) );
+		COM_PROPERTY( RenderTarget, IRenderTarget *, makeGetter( m_internal.get(), &castor3d::RenderWindow::getRenderTarget ), makePutter( m_internal.get(), &castor3d::RenderWindow::setRenderTarget ) );
 
-		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetSize ) );
-		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetName ) );
+		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal.get(), &castor3d::RenderWindow::getSize ) );
+		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal.get(), &castor3d::RenderWindow::getName ) );
 
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal );
 		STDMETHOD( Cleanup )();
@@ -84,13 +63,13 @@ namespace CastorCom
 		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos );
 
 	private:
-		Castor::real DoTransformX( int x );
-		Castor::real DoTransformY( int y );
-		int DoTransformX( Castor::real x );
-		int DoTransformY( Castor::real y );
+		castor::real doTransformX( int x );
+		castor::real doTransformY( int y );
+		int doTransformX( castor::real x );
+		int doTransformY( castor::real y );
 
 	private:
-		Castor3D::RenderWindowSPtr m_internal;
+		castor3d::RenderWindowSPtr m_internal;
 		int m_oldX;
 		int m_oldY;
 		int m_newX;
@@ -99,8 +78,8 @@ namespace CastorCom
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( RenderWindow ), CRenderWindow );
 
-	DECLARE_VARIABLE_PTR_GETTER( RenderWindow, Castor3D, RenderWindow );
-	DECLARE_VARIABLE_PTR_PUTTER( RenderWindow, Castor3D, RenderWindow );
+	DECLARE_VARIABLE_PTR_GETTER( RenderWindow, castor3d, RenderWindow );
+	DECLARE_VARIABLE_PTR_PUTTER( RenderWindow, castor3d, RenderWindow );
 }
 
 #endif

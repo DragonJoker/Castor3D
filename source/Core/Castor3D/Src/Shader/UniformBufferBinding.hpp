@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_UniformBufferBinding_H___
 #define ___C3D_UniformBufferBinding_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,7 +20,7 @@ namespace Castor3D
 	\brief		Représente la liaison entre un tampon d'uniformes et un programme.
 	*/
 	class UniformBufferBinding
-		: public Castor::OwnedBy< UniformBuffer >
+		: public castor::OwnedBy< UniformBuffer >
 	{
 	public:
 		/**
@@ -68,14 +49,14 @@ namespace Castor3D
 		 *\brief		Lie le tampon d'uniformes au programme.
 		 *\param[in]	p_index	Le point d'attache.
 		 */
-		C3D_API void Bind( uint32_t p_index )const;
+		C3D_API void bind( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The UBO size.
 		 *\~french
 		 *\return		La taille de l'UBO.
 		 */
-		inline uint32_t GetSize()const
+		inline uint32_t getSize()const
 		{
 			return m_size;
 		}
@@ -129,11 +110,14 @@ namespace Castor3D
 		 *\brief		Lie le tampon d'uniformes au programme.
 		 *\param[in]	p_index	Le point d'attache.
 		 */
-		C3D_API virtual void DoBind( uint32_t p_index )const = 0;
+		C3D_API virtual void doBind( uint32_t p_index )const = 0;
 
 	public:
 		struct UniformInfo
 		{
+			//!\~english	The variable name.
+			//!\~french		Le nom de la variable.
+			castor::String m_name;
 			//!\~english	The variable offset into the buffer.
 			//!\~french		L'offset de la variable dans le tampon.
 			uint32_t m_offset;

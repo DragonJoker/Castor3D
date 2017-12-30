@@ -1,8 +1,8 @@
 #include "SceneCache.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String CacheTraits< Scene, String >::Name = cuT( "Scene" );
 }

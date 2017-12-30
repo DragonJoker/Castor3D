@@ -2,59 +2,60 @@
 
 #include "SkeletonAnimation.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< SkeletonAnimationNode >::DoWrite( SkeletonAnimationNode const & p_obj )
+	bool BinaryWriter< SkeletonAnimationNode >::doWrite( SkeletonAnimationNode const & obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
+			result = BinaryWriter< SkeletonAnimationObject >{}.write( obj, m_chunk );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	bool BinaryParser< SkeletonAnimationNode >::DoParse( SkeletonAnimationNode & p_obj )
+	bool BinaryParser< SkeletonAnimationNode >::doParse( SkeletonAnimationNode & obj )
 	{
-		bool l_return = true;
-		String l_name;
-		BinaryChunk l_chunk;
+		bool result = true;
+		String name;
+		BinaryChunk chunk;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( p_obj.m_name, l_chunk );
+				result = doParseChunk( obj.m_name, chunk );
 				break;
 
 			case ChunkType::eAnimationObject:
-				l_return = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, l_chunk );
+				result = BinaryParser< SkeletonAnimationObject >{}.parse( obj, chunk );
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & p_animation, String const & p_name )
-		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::eNode }
-		, m_name{ p_name }
+	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & animation
+		, String const & name )
+		: SkeletonAnimationObject{ animation, SkeletonAnimationObjectType::eNode }
+		, m_name{ name }
 	{
 	}
 

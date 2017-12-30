@@ -2,7 +2,7 @@
 
 #include "Miscellaneous/Utils.hpp"
 
-namespace Castor
+namespace castor
 {
 	TextFile::TextFile( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )
 		: File{ p_fileName, p_mode & ~uint32_t( OpenMode::eBinary ), p_encoding }
@@ -13,159 +13,159 @@ namespace Castor
 	{
 	}
 
-	uint64_t TextFile::ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators )
+	uint64_t TextFile::readLine( String & p_toRead, uint64_t p_size, String p_strSeparators )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::eRead ) );
-		uint64_t l_uiReturn = 0;
+		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );
+		uint64_t uiReturn = 0;
 		p_toRead.clear();
 
-		if ( IsOk() )
+		if ( isOk() )
 		{
-			xchar l_cChar;
-			String l_strLine;
-			bool l_bContinue = true;
-			int l_iOrigChar;
+			xchar cChar;
+			String strLine;
+			bool bContinue = true;
+			int iOrigChar;
 
-			while ( l_bContinue && l_uiReturn < p_size )
+			while ( bContinue && uiReturn < p_size )
 			{
 				if ( m_encoding == EncodingMode::eASCII )
 				{
-					l_iOrigChar = getc( m_file );
-					l_cChar = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
+					iOrigChar = getc( m_file );
+					cChar = string::stringCast< xchar, char >( { char( iOrigChar ), char( 0 ) } )[0];
 				}
 				else
 				{
-					l_iOrigChar = getwc( m_file );
-					l_cChar = string::string_cast< xchar, wchar_t >( { wchar_t( l_iOrigChar ), wchar_t( 0 ) } )[0];
+					iOrigChar = getwc( m_file );
+					cChar = string::stringCast< xchar, wchar_t >( { wchar_t( iOrigChar ), wchar_t( 0 ) } )[0];
 				}
 
-				l_bContinue =  ! feof( m_file );
+				bContinue =  ! feof( m_file );
 
-				if ( l_bContinue )
+				if ( bContinue )
 				{
-					l_bContinue = p_strSeparators.find( l_cChar ) == String::npos;
+					bContinue = p_strSeparators.find( cChar ) == String::npos;
 
-					//if ( ! l_bContinue)
+					//if ( ! bContinue)
 					//{
 					//	if (m_encoding == eASCII)
 					//	{
-					//		ungetc( int( String( l_cChar).char_str()[0]), m_file);
+					//		ungetc( int( String( cChar).char_str()[0]), m_file);
 					//	}
 					//	else
 					//	{
-					//		ungetwc( wint_t( String( l_cChar).wchar_str()[0]), m_file);
+					//		ungetwc( wint_t( String( cChar).wchar_str()[0]), m_file);
 					//	}
 					//}
 				}
 
-				if ( l_bContinue )
+				if ( bContinue )
 				{
-					p_toRead += l_cChar;
+					p_toRead += cChar;
 				}
 
-				l_uiReturn++;
+				uiReturn++;
 				m_cursor++;
 			}
 		}
 
-		ENSURE( l_uiReturn <= p_size );
+		ENSURE( uiReturn <= p_size );
 		CHECK_INVARIANTS();
-		return l_uiReturn;
+		return uiReturn;
 	}
 
-	uint64_t TextFile::ReadWord( String & p_toRead )
+	uint64_t TextFile::readWord( String & p_toRead )
 	{
-		return ReadLine( p_toRead, 1024, cuT( " \r\n;,.\t" ) );
+		return readLine( p_toRead, 1024, cuT( " \r\n;,.\t" ) );
 	}
 
-	uint64_t TextFile::ReadChar( xchar & p_toRead )
+	uint64_t TextFile::readChar( xchar & p_toRead )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::eRead ) );
-		uint64_t l_uiReturn = 0;
+		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );
+		uint64_t uiReturn = 0;
 
-		if ( IsOk() )
+		if ( isOk() )
 		{
-			int l_iOrigChar;
+			int iOrigChar;
 
 			if ( m_encoding == EncodingMode::eASCII )
 			{
-				l_iOrigChar = getc( m_file );
-				p_toRead = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
+				iOrigChar = getc( m_file );
+				p_toRead = string::stringCast< xchar, char >( { char( iOrigChar ), char( 0 ) } )[0];
 			}
 			else
 			{
-				l_iOrigChar = getwc( m_file );
-				p_toRead = string::string_cast< xchar, wchar_t >( { wchar_t( l_iOrigChar ), wchar_t( 0 ) } )[0];
+				iOrigChar = getwc( m_file );
+				p_toRead = string::stringCast< xchar, wchar_t >( { wchar_t( iOrigChar ), wchar_t( 0 ) } )[0];
 			}
 
-			l_uiReturn++;
+			uiReturn++;
 		}
 
-		return l_uiReturn;
+		return uiReturn;
 	}
 
-	uint64_t TextFile::WriteText( String const & p_line )
+	uint64_t TextFile::writeText( String const & p_line )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::eWrite ) || CheckFlag( m_mode, OpenMode::eAppend ) );
-		uint64_t l_uiReturn = 0;
+		REQUIRE( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
+		uint64_t uiReturn = 0;
 
-		if ( IsOk() )
+		if ( isOk() )
 		{
 			if ( m_encoding != EncodingMode::eASCII )
 			{
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( p_line.c_str() ), sizeof( xchar ) * p_line.size() );
+				uiReturn =  doWrite( reinterpret_cast< uint8_t const * >( p_line.c_str() ), sizeof( xchar ) * p_line.size() );
 			}
 			else
 			{
-				auto l_line = string::string_cast< char >( p_line );
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( l_line.c_str() ), sizeof( char ) * l_line.size() );
+				auto line = string::stringCast< char >( p_line );
+				uiReturn =  doWrite( reinterpret_cast< uint8_t const * >( line.c_str() ), sizeof( char ) * line.size() );
 			}
 		}
 
 		CHECK_INVARIANTS();
-		return l_uiReturn;
+		return uiReturn;
 	}
 
-	uint64_t TextFile::CopyToString( String & p_strOut )
+	uint64_t TextFile::copytoString( String & p_strOut )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::eRead ) );
-		uint64_t l_uiReturn = 0;
+		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );
+		uint64_t uiReturn = 0;
 		p_strOut.clear();
-		String l_strLine;
+		String strLine;
 
-		while ( IsOk() )
+		while ( isOk() )
 		{
-			l_uiReturn += ReadLine( l_strLine, 1024 );
-			p_strOut += l_strLine + cuT( "\n" );
+			uiReturn += readLine( strLine, 1024 );
+			p_strOut += strLine + cuT( "\n" );
 		}
 
 		CHECK_INVARIANTS();
-		return l_uiReturn;
+		return uiReturn;
 	}
 
-	uint64_t TextFile::Print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... )
+	uint64_t TextFile::print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::eWrite ) || CheckFlag( m_mode, OpenMode::eAppend ) );
-		uint64_t l_uiReturn = 0;
-		xchar * l_text = new xchar[std::size_t( p_uiMaxSize )];
-		va_list l_vaList;
+		REQUIRE( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
+		uint64_t uiReturn = 0;
+		xchar * text = new xchar[std::size_t( p_uiMaxSize )];
 
 		if ( p_pFormat )
 		{
-			va_start( l_vaList, p_pFormat );
-			cvsnprintf( l_text, std::size_t( p_uiMaxSize ), std::size_t( p_uiMaxSize ), p_pFormat, l_vaList );
-			va_end( l_vaList );
-			l_uiReturn = WriteText( l_text );
+			va_list vaList;
+			va_start( vaList, p_pFormat );
+			cvsnprintf( text, std::size_t( p_uiMaxSize ), std::size_t( p_uiMaxSize ), p_pFormat, vaList );
+			va_end( vaList );
+			uiReturn = writeText( text );
 		}
 
-		delete [] l_text;
-		ENSURE( l_uiReturn <= p_uiMaxSize );
+		delete [] text;
+		ENSURE( uiReturn <= p_uiMaxSize );
 		CHECK_INVARIANTS();
-		return l_uiReturn;
+		return uiReturn;
 	}
 }

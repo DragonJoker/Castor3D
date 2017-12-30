@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ForwardRenderTechniquePass_H___
 #define ___C3D_ForwardRenderTechniquePass_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 #include "ShadowMap/ShadowMapPoint.hpp"
 #include "ShadowMap/ShadowMapSpot.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -46,25 +27,55 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_name			The technique name.
-		 *\param[in]	p_renderTarget	The render target for this technique.
-		 *\param[in]	p_technique		The parent render technique.
-		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
-		 *\param[in]	p_multisampling	The multisampling status
+		 *\brief		Constructor for opaque nodes.
+		 *\param[in]	name		The technique name.
+		 *\param[in]	scene		The scene for this technique.
+		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	environment	Pass used for an environment map rendering.
+		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	config		The SSAO configuration.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom de la technique.
-		 *\param[in]	p_renderTarget	La render target pour cette technique.
-		 *\param[in]	p_technique		La technique de rendu parente.
-		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
-		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
+		 *\brief		Constructeur pour les noeuds opaques.
+		 *\param[in]	name		Le nom de la technique.
+		 *\param[in]	scene		La scène pour cette technique.
+		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
-			, RenderTarget & p_renderTarget
-			, RenderTechnique & p_technique
-			, bool p_opaque
-			, bool p_multisampling = false );
+		C3D_API ForwardRenderTechniquePass( castor::String const & name
+			, Scene & scene
+			, Camera * camera
+			, bool environment
+			, SceneNode const * ignored
+			, SsaoConfig const & config );
+		/**
+		 *\~english
+		 *\brief		Constructor for transparent nodes.
+		 *\param[in]	name		The technique name.
+		 *\param[in]	scene		The scene for this technique.
+		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	oit			The OIT status.
+		 *\param[in]	environment	Pass used for an environment map rendering.
+		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	config		The SSAO configuration.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds transparents.
+		 *\param[in]	name		Le nom de la technique.
+		 *\param[in]	scene		La scène pour cette technique.
+		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	oit			Le statut d'OIT.
+		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	config		La configuration du SSAO.
+		 */
+		C3D_API ForwardRenderTechniquePass( castor::String const & name
+			, Scene & scene
+			, Camera * camera
+			, bool oit
+			, bool environment
+			, SceneNode const * ignored
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -73,38 +84,45 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~ForwardRenderTechniquePass();
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::InitialiseShadowMaps
+		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		C3D_API bool InitialiseShadowMaps()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::CleanupShadowMaps
-		 */
-		C3D_API void CleanupShadowMaps()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::UpdateShadowMaps
-		 */
-		C3D_API void UpdateShadowMaps( RenderQueueArray & p_queues )override;
-		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::RenderShadowMaps
-		 */
-		C3D_API void RenderShadowMaps()override;
+		C3D_API void render( RenderInfo & info
+			, ShadowMapLightTypeArray & shadowMaps
+			, castor::Point2r const & jitter )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderTechniquePass::DoGetDepthMaps
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
-
-	private:
-		//!\~english	The shadow map used for directional lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type directionnelles.
-		ShadowMapDirectional m_directionalShadowMap;
-		//!\~english	The shadow map used for spot lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type spot.
-		ShadowMapSpot m_spotShadowMap;
-		//!\~english	The shadow map used for pont lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type point.
-		ShadowMapPoint m_pointShadowMap;
+		C3D_API glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
+		 */
+		C3D_API glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
+		 */
+		C3D_API glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
+		 */
+		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 	};
 }
 

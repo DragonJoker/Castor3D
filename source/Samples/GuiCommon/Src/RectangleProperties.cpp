@@ -5,16 +5,16 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
+using namespace castor;
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, Castor::Rectangle, Castor::Rectangle const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, castor::Rectangle, castor::Rectangle const &, TextCtrl )
 
-	RectangleProperty::RectangleProperty( wxString const & label, wxString const & name, Castor::Rectangle const & value )
+	RectangleProperty::RectangleProperty( wxString const & label, wxString const & name, castor::Rectangle const & value )
 		: wxPGProperty( label, name )
 	{
-		SetValueI( value );
+		setValueI( value );
 		AddPrivateChild( new wxIntProperty( _( "Left" ), wxPG_LABEL, value.left() ) );
 		AddPrivateChild( new wxIntProperty( _( "Top" ), wxPG_LABEL, value.top() ) );
 		AddPrivateChild( new wxIntProperty( _( "Right" ), wxPG_LABEL, value.right() ) );
@@ -29,7 +29,7 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const Castor::Point4i & point = Point4iRefFromVariant( m_value );
+			const castor::Point4i & point = Point4iRefFromVariant( m_value );
 			Item( 0 )->SetValue( point[0] );
 			Item( 1 )->SetValue( point[1] );
 			Item( 2 )->SetValue( point[2] );
@@ -39,7 +39,7 @@ namespace GuiCommon
 
 	wxVariant RectangleProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		Castor::Point4i & point = Point4iRefFromVariant( thisValue );
+		castor::Point4i & point = Point4iRefFromVariant( thisValue );
 		int val = childValue.GetLong();
 
 		switch ( childIndex )
@@ -66,9 +66,9 @@ namespace GuiCommon
 		return newVariant;
 	}
 
-	void RectangleProperty::SetValueI( Castor::Rectangle const & value )
+	void RectangleProperty::setValueI( castor::Rectangle const & value )
 	{
-		Castor::Point4i l_value( value.left(), value.top(), value.right(), value.bottom() );
-		m_value = WXVARIANT( l_value );
+		castor::Point4i var( value.left(), value.top(), value.right(), value.bottom() );
+		m_value = WXVARIANT( var );
 	}
 }

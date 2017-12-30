@@ -7,28 +7,31 @@ namespace GuiCommon
 {
 	namespace
 	{
-		void IndentPressedBitmap( wxRect * rect, int button_state )
+		void indentPressedBitmap( wxRect * rect
+			, int buttonState )
 		{
-			if ( button_state == wxAUI_BUTTON_STATE_PRESSED )
+			if ( buttonState == wxAUI_BUTTON_STATE_PRESSED )
 			{
 				rect->x++;
 				rect->y++;
 			}
 		}
 
-		static wxString AuiChopText( wxDC & dc, const wxString & text, int max_size )
+		static wxString auiChopText( wxDC & dc
+			, const wxString & text
+			, int maxSize )
 		{
 			wxCoord x, y;
 			// first check if the text fits with no problems
 			dc.GetTextExtent( text, &x, &y );
 
-			if ( x <= max_size )
+			if ( x <= maxSize )
 			{
 				return text;
 			}
 
 			size_t i, len = text.Length();
-			size_t last_good_length = 0;
+			size_t lastGoodLength = 0;
 
 			for ( i = 0; i < len; ++i )
 			{
@@ -36,15 +39,15 @@ namespace GuiCommon
 				s += wxT( "..." );
 				dc.GetTextExtent( s, &x, &y );
 
-				if ( x > max_size )
+				if ( x > maxSize )
 				{
 					break;
 				}
 
-				last_good_length = i;
+				lastGoodLength = i;
 			}
 
-			wxString ret = text.Left( last_good_length );
+			wxString ret = text.Left( lastGoodLength );
 			ret += wxT( "..." );
 			return ret;
 		}
@@ -64,29 +67,38 @@ namespace GuiCommon
 		return new AuiTabArt( *this );
 	}
 
-	void AuiTabArt::DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
+	void AuiTabArt::DrawBackground( wxDC & dc
+		, wxWindow * window
+		, wxRect const & rect )
 	{
-		p_dc.SetPen( m_baseColourPen );
-		p_dc.SetBrush( m_baseColourBrush );
-		p_dc.DrawRectangle( p_rect );
+		dc.SetPen( m_baseColourPen );
+		dc.SetBrush( m_baseColourBrush );
+		dc.DrawRectangle( rect );
 	}
 
 	// DrawTab() draws an individual tab.
 	//
 	// dc       - output dc
-	// in_rect  - rectangle the tab should be confined to
+	// inRect  - rectangle the tab should be confined to
 	// caption  - tab's caption
 	// active   - whether or not the tab is active
 	// out_rect - actual output rectangle
-	// x_extent - the advance x; where the next tab should start
-	void AuiTabArt::DrawTab( wxDC & dc, wxWindow * wnd, const wxAuiNotebookPage & page, const wxRect & in_rect, int close_button_state, wxRect * out_tab_rect, wxRect * out_button_rect, int * x_extent )
+	// xExtent - the advance x; where the next tab should start
+	void AuiTabArt::DrawTab( wxDC & dc
+		, wxWindow * wnd
+		, const wxAuiNotebookPage & pane
+		, const wxRect & inRect
+		, int closeButtonState
+		, wxRect * outTabRect
+		, wxRect * outButtonRect
+		, int * xExtent )
 	{
-		wxCoord normal_textx, normal_texty;
-		wxCoord selected_textx, selected_texty;
-		wxCoord texty;
+		wxCoord normalTextX, normalTextY;
+		wxCoord selectedTextX, selectedTextY;
+		wxCoord textY;
 
 		// if the caption is empty, measure some temporary text
-		wxString caption = page.caption;
+		wxString caption = pane.caption;
 
 		if ( caption.empty() )
 		{
@@ -94,90 +106,82 @@ namespace GuiCommon
 		}
 
 		dc.SetFont( m_selectedFont );
-		dc.GetTextExtent( caption, &selected_textx, &selected_texty );
+		dc.GetTextExtent( caption, &selectedTextX, &selectedTextY );
 
 		dc.SetFont( m_normalFont );
-		dc.GetTextExtent( caption, &normal_textx, &normal_texty );
+		dc.GetTextExtent( caption, &normalTextX, &normalTextY );
 
 		// figure out the size of the tab
-		wxSize tab_size = GetTabSize( dc, wnd, page.caption, page.bitmap, page.active, close_button_state, x_extent );
+		wxSize tabSize = GetTabSize( dc, wnd, pane.caption, pane.bitmap, pane.active, closeButtonState, xExtent );
 
-		wxCoord tab_height = m_tabCtrlHeight - 3;
-		wxCoord tab_width = tab_size.x;
-		wxCoord tab_x = in_rect.x;
-		wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
+		wxCoord tabHeight = m_tabCtrlHeight - 3;
+		wxCoord tabWidth = tabSize.x;
+		wxCoord tabX = inRect.x;
+		wxCoord tabY = inRect.y + inRect.height - tabHeight;
 
-		caption = page.caption;
+		caption = pane.caption;
 
 		// select pen, brush and font for the tab to be drawn
-		if ( page.active )
+		if ( pane.active )
 		{
 			dc.SetFont( m_selectedFont );
-			texty = selected_texty;
+			textY = selectedTextY;
 		}
 		else
 		{
 			dc.SetFont( m_normalFont );
-			texty = normal_texty;
+			textY = normalTextY;
 		}
 
 
 		// create points that will make the tab outline
 
-		int clip_width = tab_width;
+		int clip_width = tabWidth;
 
-		if ( tab_x + clip_width > in_rect.x + in_rect.width )
+		if ( tabX + clip_width > inRect.x + inRect.width )
 		{
-			clip_width = ( in_rect.x + in_rect.width ) - tab_x;
+			clip_width = ( inRect.x + inRect.width ) - tabX;
 		}
-
-		wxPoint clip_points[6];
-		clip_points[0] = wxPoint( tab_x,              tab_y + tab_height - 3 );
-		clip_points[1] = wxPoint( tab_x,              tab_y + 2 );
-		clip_points[2] = wxPoint( tab_x + 2,            tab_y );
-		clip_points[3] = wxPoint( tab_x + clip_width - 1, tab_y );
-		clip_points[4] = wxPoint( tab_x + clip_width + 1, tab_y + 2 );
-		clip_points[5] = wxPoint( tab_x + clip_width + 1, tab_y + tab_height - 3 );
 
 #if !defined(__WXDFB__) && !defined(__WXCOCOA__)
 		// since the above code above doesn't play well with WXDFB or WXCOCOA,
 		// we'll just use a rectangle for the clipping region for now --
-		dc.SetClippingRegion( tab_x, tab_y, clip_width + 1, tab_height - 3 );
+		dc.SetClippingRegion( tabX, tabY, clip_width + 1, tabHeight - 3 );
 #endif
 
-		wxPoint border_points[6];
+		wxPoint borderPoints[6];
 
 		if ( m_flags & wxAUI_NB_BOTTOM )
 		{
-			border_points[0] = wxPoint( tab_x,             tab_y );
-			border_points[1] = wxPoint( tab_x,             tab_y + tab_height - 6 );
-			border_points[2] = wxPoint( tab_x + 2,           tab_y + tab_height - 4 );
-			border_points[3] = wxPoint( tab_x + tab_width - 2, tab_y + tab_height - 4 );
-			border_points[4] = wxPoint( tab_x + tab_width,   tab_y + tab_height - 6 );
-			border_points[5] = wxPoint( tab_x + tab_width,   tab_y );
+			borderPoints[0] = wxPoint( tabX, tabY );
+			borderPoints[1] = wxPoint( tabX, tabY + tabHeight - 6 );
+			borderPoints[2] = wxPoint( tabX + 2, tabY + tabHeight - 4 );
+			borderPoints[3] = wxPoint( tabX + tabWidth - 2, tabY + tabHeight - 4 );
+			borderPoints[4] = wxPoint( tabX + tabWidth, tabY + tabHeight - 6 );
+			borderPoints[5] = wxPoint( tabX + tabWidth, tabY );
 		}
 		else //if (m_flags & wxAUI_NB_TOP) {}
 		{
-			border_points[0] = wxPoint( tab_x,             tab_y + tab_height - 4 );
-			border_points[1] = wxPoint( tab_x,             tab_y + 2 );
-			border_points[2] = wxPoint( tab_x + 2,           tab_y );
-			border_points[3] = wxPoint( tab_x + tab_width - 2, tab_y );
-			border_points[4] = wxPoint( tab_x + tab_width,   tab_y + 2 );
-			border_points[5] = wxPoint( tab_x + tab_width,   tab_y + tab_height - 4 );
+			borderPoints[0] = wxPoint( tabX, tabY + tabHeight - 4 );
+			borderPoints[1] = wxPoint( tabX, tabY + 2 );
+			borderPoints[2] = wxPoint( tabX + 2, tabY );
+			borderPoints[3] = wxPoint( tabX + tabWidth - 2, tabY );
+			borderPoints[4] = wxPoint( tabX + tabWidth, tabY + 2 );
+			borderPoints[5] = wxPoint( tabX + tabWidth, tabY + tabHeight - 4 );
 		}
 
 		// TODO: else if (m_flags &wxAUI_NB_LEFT) {}
 		// TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
 
-		int drawn_tab_yoff = border_points[1].y;
-		int drawn_tab_height = border_points[0].y - border_points[1].y;
+		int drawnTabYOffset = borderPoints[1].y;
+		int drawnTabHeight = borderPoints[0].y - borderPoints[1].y;
 
-		if ( page.active )
+		if ( pane.active )
 		{
 			// draw active tab
 
 			// draw base background color
-			wxRect r( tab_x, tab_y, tab_width, tab_height );
+			wxRect r( tabX, tabY, tabWidth, tabHeight );
 			dc.SetPen( wxPen( m_activeColour ) );
 			dc.SetBrush( wxBrush( m_activeColour ) );
 			dc.DrawRectangle( r.x + 1, r.y + 1, r.width - 1, r.height - 4 );
@@ -192,7 +196,7 @@ namespace GuiCommon
 			// draw inactive tab
 
 			// draw base background color
-			wxRect r( tab_x, tab_y, tab_width, tab_height );
+			wxRect r( tabX, tabY, tabWidth, tabHeight );
 			dc.SetPen( wxPen( m_baseColour ) );
 			dc.SetBrush( wxBrush( m_baseColour ) );
 			dc.DrawRectangle( r.x + 1, r.y + 1, r.width - 1, r.height - 4 );
@@ -201,11 +205,11 @@ namespace GuiCommon
 		//// draw tab outline
 		//dc.SetPen( m_borderPen );
 		//dc.SetBrush( *wxTRANSPARENT_BRUSH );
-		//dc.DrawPolygon( WXSIZEOF( border_points ), border_points );
+		//dc.DrawPolygon( WXSIZEOF( borderPoints ), borderPoints );
 
 		// there are two horizontal grey lines at the bottom of the tab control,
 		// this gets rid of the top one of those lines in the tab control
-		if ( page.active )
+		if ( pane.active )
 		{
 			if ( m_flags & wxAUI_NB_BOTTOM )
 			{
@@ -218,28 +222,27 @@ namespace GuiCommon
 				dc.SetPen( m_activeColour );
 			}
 
-			dc.DrawLine( border_points[0].x + 1,
-						 border_points[0].y,
-						 border_points[5].x,
-						 border_points[5].y );
+			dc.DrawLine( borderPoints[0].x + 1,
+				borderPoints[0].y,
+				borderPoints[5].x,
+				borderPoints[5].y );
 		}
 
 
-		int text_offset = tab_x + 8;
-		int close_button_width = 0;
+		int textOffset = tabX + 8;
+		int closeButtonWidth = 0;
 
-		if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
+		if ( closeButtonState != wxAUI_BUTTON_STATE_HIDDEN )
 		{
-			close_button_width = m_activeCloseBmp.GetWidth();
+			closeButtonWidth = m_activeCloseBmp.GetWidth();
 		}
 
-		int bitmap_offset = 0;
-		text_offset = tab_x + 8;
+		textOffset = tabX + 8;
 
-		wxString draw_text = AuiChopText( dc, caption, tab_width - ( text_offset - tab_x ) - close_button_width );
+		wxString drawText = auiChopText( dc, caption, tabWidth - ( textOffset - tabX ) - closeButtonWidth );
 
 		// draw tab text
-		if ( page.active )
+		if ( pane.active )
 		{
 			dc.SetTextForeground( ACTIVE_TEXT_COLOUR );
 		}
@@ -249,30 +252,30 @@ namespace GuiCommon
 		}
 
 		dc.SetFont( m_normalFont );
-		dc.DrawText( draw_text, text_offset, drawn_tab_yoff + ( drawn_tab_height ) / 2 - ( texty / 2 ) );
+		dc.DrawText( drawText, textOffset, drawnTabYOffset + ( drawnTabHeight ) / 2 - ( textY / 2 ) );
 
 		// draw focus rectangle
-		if ( page.active && ( wnd->FindFocus() == wnd ) )
+		if ( pane.active && ( wnd->FindFocus() == wnd ) )
 		{
-			wxRect focusRectText( text_offset, ( drawn_tab_yoff + ( drawn_tab_height ) / 2 - ( texty / 2 ) - 1 ), selected_textx, selected_texty );
+			wxRect focusRectText( textOffset, ( drawnTabYOffset + ( drawnTabHeight ) / 2 - ( textY / 2 ) - 1 ), selectedTextX, selectedTextY );
 
 			wxRect focusRect;
 			wxRect focusRectBitmap;
 
-			if ( page.bitmap.IsOk() )
+			if ( pane.bitmap.IsOk() )
 			{
-				focusRectBitmap = wxRect( bitmap_offset, drawn_tab_yoff + ( drawn_tab_height / 2 ) - ( page.bitmap.GetHeight() / 2 ), page.bitmap.GetWidth(), page.bitmap.GetHeight() );
+				focusRectBitmap = wxRect( 0, drawnTabYOffset + ( drawnTabHeight / 2 ) - ( pane.bitmap.GetHeight() / 2 ), pane.bitmap.GetWidth(), pane.bitmap.GetHeight() );
 			}
 
-			if ( page.bitmap.IsOk() && draw_text.IsEmpty() )
+			if ( pane.bitmap.IsOk() && drawText.IsEmpty() )
 			{
 				focusRect = focusRectBitmap;
 			}
-			else if ( !page.bitmap.IsOk() && !draw_text.IsEmpty() )
+			else if ( !pane.bitmap.IsOk() && !drawText.IsEmpty() )
 			{
 				focusRect = focusRectText;
 			}
-			else if ( page.bitmap.IsOk() && !draw_text.IsEmpty() )
+			else if ( pane.bitmap.IsOk() && !drawText.IsEmpty() )
 			{
 				focusRect = focusRectText.Union( focusRectBitmap );
 			}
@@ -283,34 +286,34 @@ namespace GuiCommon
 		}
 
 		// draw close button if necessary
-		if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
+		if ( closeButtonState != wxAUI_BUTTON_STATE_HIDDEN )
 		{
 			wxBitmap bmp = m_disabledCloseBmp;
 
-			if ( close_button_state == wxAUI_BUTTON_STATE_HOVER || close_button_state == wxAUI_BUTTON_STATE_PRESSED )
+			if ( closeButtonState == wxAUI_BUTTON_STATE_HOVER || closeButtonState == wxAUI_BUTTON_STATE_PRESSED )
 			{
 				bmp = m_activeCloseBmp;
 			}
 
-			int offsetY = tab_y - 1;
+			int offsetY = tabY - 1;
 
 			if ( m_flags & wxAUI_NB_BOTTOM )
 			{
 				offsetY = 1;
 			}
 
-			wxRect rect( tab_x + tab_width - close_button_width - 1,
-						 offsetY + ( tab_height / 2 ) - ( bmp.GetHeight() / 2 ),
-						 close_button_width,
-						 tab_height );
+			wxRect rect( tabX + tabWidth - closeButtonWidth - 1,
+				offsetY + ( tabHeight / 2 ) - ( bmp.GetHeight() / 2 ),
+				closeButtonWidth,
+				tabHeight );
 
-			IndentPressedBitmap( &rect, close_button_state );
+			indentPressedBitmap( &rect, closeButtonState );
 			dc.DrawBitmap( bmp, rect.x, rect.y, true );
 
-			*out_button_rect = rect;
+			*outButtonRect = rect;
 		}
 
-		*out_tab_rect = wxRect( tab_x, tab_y, tab_width, tab_height );
+		*outTabRect = wxRect( tabX, tabY, tabWidth, tabHeight );
 
 		dc.DestroyClippingRegion();
 	}

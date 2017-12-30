@@ -11,8 +11,8 @@
 #include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -29,7 +29,7 @@ namespace GuiCommon
 	}
 
 	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, Light & p_light )
-		: TreeItemProperty( p_light.GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
+		: TreeItemProperty( p_light.getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_light( p_light )
 	{
 		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
@@ -48,101 +48,100 @@ namespace GuiCommon
 	{
 	}
 
-	void LightTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void LightTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( m_light.GetName() ) ) );
-		p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( bgr_packed( Colour::from_rgb( m_light.GetColour() ) ) ) ) );
-		p_grid->Append( new Point3fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.GetIntensity() ) );
+		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( m_light.getName() ) ) );
+		p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( toBGRPacked( RgbColour::fromRGB( m_light.getColour() ) ) ) ) );
+		p_grid->Append( new Point2fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.getIntensity() ) );
 
-		switch ( m_light.GetLightType() )
+		switch ( m_light.getLightType() )
 		{
 		case LightType::eDirectional:
-			DoCreateDirectionalLightProperties( p_grid, m_light.GetDirectionalLight() );
+			doCreateDirectionalLightProperties( p_grid, m_light.getDirectionalLight() );
 			break;
 
 		case LightType::ePoint:
-			DoCreatePointLightProperties( p_grid, m_light.GetPointLight() );
+			doCreatePointLightProperties( p_grid, m_light.getPointLight() );
 			break;
 
 		case LightType::eSpot:
-			DoCreateSpotLightProperties( p_grid, m_light.GetSpotLight() );
+			doCreateSpotLightProperties( p_grid, m_light.getSpotLight() );
 			break;
 		}
 	}
 
-	void LightTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void LightTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
-			wxColour l_colour;
+			wxColour colour;
 
-			if ( l_property->GetName() == PROPERTY_LIGHT_COLOUR )
+			if ( property->GetName() == PROPERTY_LIGHT_COLOUR )
 			{
-				l_colour << l_property->GetValue();
-				OnColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+				colour << property->GetValue();
+				OnColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_LIGHT_INTENSITY )
+			else if ( property->GetName() == PROPERTY_LIGHT_INTENSITY )
 			{
-				OnIntensityChange( Point3fRefFromVariant( l_property->GetValue() ) );
+				OnIntensityChange( Point2fRefFromVariant( property->GetValue() ) );
 			}
-			else if ( m_light.GetLightType() != LightType::eDirectional )
+			else if ( m_light.getLightType() != LightType::eDirectional )
 			{
-				if ( l_property->GetName() == PROPERTY_LIGHT_ATTENUATION )
+				if ( property->GetName() == PROPERTY_LIGHT_ATTENUATION )
 				{
-					OnAttenuationChange( Point3fRefFromVariant( l_property->GetValue() ) );
+					OnAttenuationChange( Point3fRefFromVariant( property->GetValue() ) );
 				}
-				else if ( m_light.GetLightType() == LightType::eSpot )
+				else if ( m_light.getLightType() == LightType::eSpot )
 				{
-					if ( l_property->GetName() == PROPERTY_LIGHT_CUT_OFF )
+					if ( property->GetName() == PROPERTY_LIGHT_CUT_OFF )
 					{
-						OnCutOffChange( l_property->GetValue() );
+						OnCutOffChange( property->GetValue() );
 					}
-					else if ( l_property->GetName() == PROPERTY_LIGHT_EXPONENT )
+					else if ( property->GetName() == PROPERTY_LIGHT_EXPONENT )
 					{
-						OnExponentChange( l_property->GetValue() );
+						OnExponentChange( property->GetValue() );
 					}
 				}
 			}
 		}
 	}
 
-	void LightTreeItemProperty::DoCreateDirectionalLightProperties( wxPropertyGrid * p_grid, DirectionalLightSPtr p_light )
+	void LightTreeItemProperty::doCreateDirectionalLightProperties( wxPropertyGrid * p_grid, DirectionalLightSPtr p_light )
 	{
 	}
 
-	void LightTreeItemProperty::DoCreatePointLightProperties( wxPropertyGrid * p_grid, PointLightSPtr p_light )
+	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * p_grid, PointLightSPtr p_light )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_POINT_LIGHT ) );
-		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( p_light->GetAttenuation() ) );
+		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( p_light->getAttenuation() ) );
 	}
 
-	void LightTreeItemProperty::DoCreateSpotLightProperties( wxPropertyGrid * p_grid, SpotLightSPtr p_light )
+	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * p_grid, SpotLightSPtr p_light )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SPOT_LIGHT ) );
-		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( p_light->GetAttenuation() ) );
-		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( p_light->GetCutOff().degrees() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->GetExponent() );
+		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( p_light->getAttenuation() ) );
+		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( p_light->getCutOff().degrees() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->getExponent() );
 	}
 
-	void LightTreeItemProperty::OnColourChange( Colour const & p_value )
+	void LightTreeItemProperty::OnColourChange( RgbColour const & p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_light.SetColour( p_value );
+			m_light.setColour( p_value );
 		} );
 	}
 
-	void LightTreeItemProperty::OnIntensityChange( Point3f const & p_value )
+	void LightTreeItemProperty::OnIntensityChange( Point2f const & p_value )
 	{
-		float a = p_value[0];
-		float d = p_value[1];
-		float s = p_value[2];
+		float d = p_value[0];
+		float s = p_value[1];
 
-		DoApplyChange( [a, d, s, this]()
+		doApplyChange( [d, s, this]()
 		{
-			m_light.SetIntensity( a, d, s );
+			m_light.setIntensity( d, s );
 		} );
 	}
 
@@ -152,34 +151,34 @@ namespace GuiCommon
 		float y = p_value[1];
 		float z = p_value[2];
 
-		DoApplyChange( [x, y, z, this]()
+		doApplyChange( [x, y, z, this]()
 		{
-			Point3f l_value( x, y, z );
+			Point3f value( x, y, z );
 
-			if ( m_light.GetLightType() == LightType::ePoint )
+			if ( m_light.getLightType() == LightType::ePoint )
 			{
-				m_light.GetPointLight()->SetAttenuation( l_value );
+				m_light.getPointLight()->setAttenuation( value );
 			}
 			else
 			{
-				m_light.GetSpotLight()->SetAttenuation( l_value );
+				m_light.getSpotLight()->setAttenuation( value );
 			}
 		} );
 	}
 
 	void LightTreeItemProperty::OnCutOffChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_light.GetSpotLight()->SetCutOff( Angle::from_degrees( p_value ) );
+			m_light.getSpotLight()->setCutOff( Angle::fromDegrees( p_value ) );
 		} );
 	}
 
 	void LightTreeItemProperty::OnExponentChange( double p_value )
 	{
-		DoApplyChange( [p_value, this]()
+		doApplyChange( [p_value, this]()
 		{
-			m_light.GetSpotLight()->SetExponent( float( p_value ) );
+			m_light.getSpotLight()->setExponent( float( p_value ) );
 		} );
 	}
 }

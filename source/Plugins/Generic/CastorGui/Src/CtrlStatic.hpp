@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___CI_CTRL_STATIC_H___
 #define ___CI_CTRL_STATIC_H___
@@ -37,14 +18,17 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID.
 		*/
-		StaticCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id );
+		StaticCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
+			, ControlRPtr p_parent
+			, uint32_t p_id );
 
 		/** Constructor
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_caption	The static caption
 		 *\param[in]	p_position	The control position
@@ -52,70 +36,86 @@ namespace CastorGui
 		 *\param[in]	p_style		The control styly
 		 *\param[in]	p_visible	Initial visibility status
 		 */
-		StaticCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		StaticCtrl( castor::String const & p_name
+			, castor3d::Engine & engine
+			, ControlRPtr p_parent
+			, castor::String const & p_caption
+			, castor::Position const & p_position
+			, castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true );
 
 		/** Destructor
 		*/
 		virtual ~StaticCtrl();
 
-		/** Sets the static caption
-		*\param[in]	p_value		The new value
-		*/
-		void SetCaption( Castor::String const & p_value );
-
-		/** Sets the caption font.
+		/** sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
-		void SetFont( Castor::String const & p_font );
+		void setFont( castor::String const & p_font );
+
+		/** sets the horizontal alignment for the text.
+		*\param[in]	p_align	The new value.
+		*/
+		void setHAlign( castor3d::HAlign p_align );
+
+		/** sets the vertical alignment for the text.
+		*\param[in]	p_align	The new value.
+		*/
+		void setVAlign( castor3d::VAlign p_align );
 
 		/** Retrieve the static caption
 		 *\return		The value
 		*/
-		inline Castor::String const & GetCaption()const
+		inline castor::String const & getCaption()const
 		{
 			return m_caption;
 		}
 
 	private:
-		/** @copydoc CastorGui::Control::DoCreate
+		/** @copydoc CastorGui::Control::doCreate
 		*/
-		virtual void DoCreate();
+		virtual void doCreate()override;
 
-		/** @copydoc CastorGui::Control::DoDestroy
+		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		virtual void DoDestroy();
+		virtual void doDestroy()override;
 
-		/** @copydoc CastorGui::Control::DoSetPosition
+		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		virtual void DoSetPosition( Castor::Position const & p_value );
+		virtual void doSetPosition( castor::Position const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoSetSize
+		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		virtual void DoSetSize( Castor::Size const & p_value );
+		virtual void doSetSize( castor::Size const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
+		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material )override;
 
-		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
+		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr p_material )override;
 
-		/** @copydoc CastorGui::Control::DoSetVisible
+		/** @copydoc CastorGui::Control::doSetCaption
 		*/
-		virtual void DoSetVisible( bool p_visible );
+		void doSetCaption( castor::String const & p_value )override;
 
-		/** @copydoc CastorGui::Control::DoUpdateStyle
+		/** @copydoc CastorGui::Control::doSetVisible
 		*/
-		virtual void DoUpdateStyle();
+		virtual void doSetVisible( bool p_visible )override;
+
+		/** @copydoc CastorGui::Control::doUpdateStyle
+		*/
+		virtual void doUpdateStyle()override;
 
 	private:
 		//! The static caption
-		Castor::String m_caption;
+		castor::String m_caption;
 
 	protected:
 		//! The text overlay used to display the caption
-		Castor3D::TextOverlayWPtr m_text;
+		castor3d::TextOverlayWPtr m_text;
 		// The statics count
 		static int m_count;
 	};

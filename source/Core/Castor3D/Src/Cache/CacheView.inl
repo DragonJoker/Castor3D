@@ -1,16 +1,16 @@
-#include "Engine.hpp"
+﻿#include "Engine.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline CacheView< ResourceType, CacheType, EventType >::CacheView( Castor::String const & p_name
+	inline CacheView< ResourceType, CacheType, EventType >::CacheView( castor::String const & p_name
 		, Initialiser && p_initialise
 		, Cleaner && p_clean
-		, CacheType & p_cache )
-		: Castor::Named( p_name )
-		, m_cache( p_cache )
+		, CacheType & cache )
+		: castor::Named( p_name )
+		, m_cache( cache )
 		, m_initialise{ p_initialise }
 		, m_clean{ p_clean }
 	{
@@ -23,75 +23,81 @@ namespace Castor3D
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
 	template< typename ... Params >
-	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::Add( Castor::String const & p_name, Params && ... p_params )
+	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::add( castor::String const & p_name, Params && ... p_params )
 	{
-		std::shared_ptr< ResourceType > l_result;
+		std::shared_ptr< ResourceType > result;
 
-		if ( m_cache.Has( p_name ) )
+		if ( m_cache.has( p_name ) )
 		{
-			l_result = m_cache.Find( p_name );
+			result = m_cache.find( p_name );
 		}
 		else
 		{
-			l_result = m_cache.Create( p_name, std::forward< Params >( p_params )... );
-			m_initialise( l_result );
-			m_cache.Add( p_name, l_result );
+			result = m_cache.create( p_name, std::forward< Params >( p_params )... );
+			m_initialise( result );
+			m_cache.add( p_name, result );
 			m_createdElements.insert( p_name );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::Add( Castor::String const & p_name, std::shared_ptr< ResourceType > p_element )
+	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::add( castor::String const & p_name, std::shared_ptr< ResourceType > p_element )
 	{
-		auto l_result = m_cache.Add( p_name, p_element );
+		auto result = m_cache.add( p_name, p_element );
 
-		if ( l_result )
+		if ( result )
 		{
 			m_createdElements.insert( p_name );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline void CacheView< ResourceType, CacheType, EventType >::Clear()
+	inline void CacheView< ResourceType, CacheType, EventType >::clear()
 	{
-		for ( auto l_name : m_createdElements )
+		for ( auto name : m_createdElements )
 		{
-			auto l_resource = m_cache.Find( l_name );
+			auto resource = m_cache.find( name );
 
-			if ( l_resource )
+			if ( resource )
 			{
-				m_cache.Remove( l_name );
-				m_cleaning.push_back( l_resource );
-				m_clean( l_resource );
+				m_cache.remove( name );
+				m_cleaning.push_back( resource );
+				m_clean( resource );
 			}
 		}
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline bool CacheView< ResourceType, CacheType, EventType >::Has( Castor::String const & p_name )const
+	inline bool CacheView< ResourceType, CacheType, EventType >::isEmpty()const
 	{
-		return m_cache.Has( p_name );
+		return m_createdElements.empty();
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::Find( Castor::String const & p_name )const
+	inline bool CacheView< ResourceType, CacheType, EventType >::has( castor::String const & p_name )const
 	{
-		return m_cache.Find( p_name );
+		return m_cache.has( p_name );
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline void CacheView< ResourceType, CacheType, EventType >::Remove( Castor::String const & p_name )
+	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::find( castor::String const & p_name )const
 	{
-		auto l_it = m_createdElements.find( p_name );
+		return m_cache.find( p_name );
+	}
 
-		if ( l_it != m_createdElements.end() )
+	template< typename ResourceType, typename CacheType, EventType EventType >
+	inline void CacheView< ResourceType, CacheType, EventType >::remove( castor::String const & p_name )
+	{
+		auto it = m_createdElements.find( p_name );
+
+		if ( it != m_createdElements.end() )
 		{
-			m_cache.Remove( p_name );
-			m_createdElements.erase( l_it );
+			m_cache.remove( p_name );
+			m_createdElements.erase( it );
 		}
 	}
 }

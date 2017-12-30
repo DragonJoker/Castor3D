@@ -1,37 +1,18 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_MESH_ANIMATION_INSTANCE_H___
 #define ___C3D_MESH_ANIMATION_INSTANCE_H___
 
 #include "Scene/Animation/AnimationInstance.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
-	\todo		Write and Read functions.
+	\todo		write and read functions.
 	\~english
 	\brief		Mesh animation instance.
 	\~french
@@ -43,15 +24,27 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API MeshAnimationInstance( MeshAnimationInstance && rhs ) = default;
+		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance && rhs ) = default;
+		C3D_API MeshAnimationInstance( MeshAnimationInstance const & rhs ) = delete;
+		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_object	The parent AnimatedMesh.
-		 *\param[in]	p_animation	The animation.
+		 *\param[in]	object		The parent AnimatedMesh.
+		 *\param[in]	animation	The animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_object	L'AnimatedMesh parent.
-		 *\param[in]	p_animation	L'animation.
+		 *\param[in]	object		L'AnimatedMesh parent.
+		 *\param[in]	animation	L'animation.
 		 */
-		C3D_API MeshAnimationInstance( AnimatedMesh & p_object, MeshAnimation & p_animation );
+		C3D_API MeshAnimationInstance( AnimatedMesh & object, MeshAnimation & animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -60,56 +53,38 @@ namespace Castor3D
 		 */
 		C3D_API ~MeshAnimationInstance();
 		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API MeshAnimationInstance( MeshAnimationInstance && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API MeshAnimationInstance( MeshAnimationInstance const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance const & p_rhs ) = delete;
-		/**
 		*\~english
 		*\return		The animation submesh at given ID, nullptr if not found.
 		*\~french
 		*\return		Le sous-maillage d'animation, à l'ID donné, nullptr si non trouvé.
 		*/
-		C3D_API MeshAnimationInstanceSubmesh const * GetAnimationSubmesh( uint32_t p_index )const;
+		C3D_API MeshAnimationInstanceSubmesh const * getAnimationSubmesh( uint32_t index )const;
 		/**
 		 *\~english
 		 *\return		The animation.
 		 *\~french
 		 *\return		L'animation.
 		 */
-		inline MeshAnimation const & GetMeshAnimation()const
+		inline MeshAnimation const & getMeshAnimation()const
 		{
 			return m_meshAnimation;
+		}
+		/**
+		 *\~english
+		 *\return		The animated mesh.
+		 *\~french
+		 *\return		Le maillage animé.
+		 */
+		inline AnimatedMesh & getAnimatedMesh()
+		{
+			return m_animatedMesh;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::AnimationInstance::DoUpdate
+		 *\copydoc		castor3d::AnimationInstance::doUpdate
 		 */
-		void DoUpdate()override;
+		void doUpdate()override;
 
 	protected:
 		//!\~english	The animated mesh.
@@ -121,6 +96,12 @@ namespace Castor3D
 		//!\~english	The animated submeshes.
 		//!\~french		Les sous-maillages animés.
 		MeshAnimationInstanceSubmeshMap m_submeshes;
+		//!\~english	Iterator to the previous keyframe (when playing the animation).
+		//!\~french		Itérateur sur la keyframe précédente (quand l'animation est jouée).
+		AnimationKeyFrameArray::iterator m_prev;
+		//!\~english	Iterator to the current keyframe (when playing the animation).
+		//!\~french		Itérateur sur la keyframe courante (quand l'animation est jouée).
+		AnimationKeyFrameArray::iterator m_curr;
 
 		friend class BinaryWriter< MeshAnimation >;
 		friend class BinaryParser< MeshAnimation >;

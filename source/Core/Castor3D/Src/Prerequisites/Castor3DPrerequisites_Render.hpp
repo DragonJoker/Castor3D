@@ -1,130 +1,16 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_RENDER_H___
 #define ___C3D_PREREQUISITES_RENDER_H___
 
 #include <Design/Factory.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Render */
 	//@{
 
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Matrix modes enumeration
-	\~french
-	\brief		Enumération des types de matrices
-	*/
-	enum class MatrixMode
-		: uint8_t
-	{
-		//!\~english	Eye to Clip transform.
-		//!\~french		Transformations de Vue vers Clip.
-		eProjection,
-		//!\~english	Object to World transform.
-		//!\~french		Transformations de Objet vers Monde.
-		eModel,
-		//!\~english	World to Eye transform.
-		//!\~french Transformations de Monde vers Vue.
-		eView,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture0,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture1,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture2,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture3,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture4,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture5,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture6,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture7,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture8,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture9,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture10,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture11,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture12,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture13,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture14,
-		//!\~english	Texture transforms.
-		//!\~french		Transformations de texture.
-		eTexture15,
-		CASTOR_SCOPED_ENUM_BOUNDS( eProjection )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Matrix modes masks
-	\~french
-	\brief		Masques pour les types de matrices
-	*/
-	static const uint64_t MASK_MTXMODE_PROJECTION = uint64_t( 0x1 ) << int( MatrixMode::eProjection );
-	static const uint64_t MASK_MTXMODE_MODEL = uint64_t( 0x1 ) << int( MatrixMode::eModel );
-	static const uint64_t MASK_MTXMODE_VIEW = uint64_t( 0x1 ) << int( MatrixMode::eView );
-	static const uint64_t MASK_MTXMODE_TEXTURE0 = uint64_t( 0x1 ) << int( MatrixMode::eTexture0 );
-	static const uint64_t MASK_MTXMODE_TEXTURE1 = uint64_t( 0x1 ) << int( MatrixMode::eTexture1 );
-	static const uint64_t MASK_MTXMODE_TEXTURE2 = uint64_t( 0x1 ) << int( MatrixMode::eTexture2 );
-	static const uint64_t MASK_MTXMODE_TEXTURE3 = uint64_t( 0x1 ) << int( MatrixMode::eTexture3 );
-	static const uint64_t MASK_MTXMODE_TEXTURE4 = uint64_t( 0x1 ) << int( MatrixMode::eTexture4 );
-	static const uint64_t MASK_MTXMODE_TEXTURE5 = uint64_t( 0x1 ) << int( MatrixMode::eTexture5 );
-	static const uint64_t MASK_MTXMODE_TEXTURE6 = uint64_t( 0x1 ) << int( MatrixMode::eTexture6 );
-	static const uint64_t MASK_MTXMODE_TEXTURE7 = uint64_t( 0x1 ) << int( MatrixMode::eTexture7 );
-	static const uint64_t MASK_MTXMODE_TEXTURE8 = uint64_t( 0x1 ) << int( MatrixMode::eTexture8 );
-	static const uint64_t MASK_MTXMODE_TEXTURE9 = uint64_t( 0x1 ) << int( MatrixMode::eTexture9 );
-	static const uint64_t MASK_MTXMODE_TEXTURE10 = uint64_t( 0x1 ) << int( MatrixMode::eTexture10 );
-	static const uint64_t MASK_MTXMODE_TEXTURE11 = uint64_t( 0x1 ) << int( MatrixMode::eTexture11 );
-	static const uint64_t MASK_MTXMODE_TEXTURE12 = uint64_t( 0x1 ) << int( MatrixMode::eTexture12 );
-	static const uint64_t MASK_MTXMODE_TEXTURE13 = uint64_t( 0x1 ) << int( MatrixMode::eTexture13 );
-	static const uint64_t MASK_MTXMODE_TEXTURE14 = uint64_t( 0x1 ) << int( MatrixMode::eTexture14 );
-	static const uint64_t MASK_MTXMODE_TEXTURE15 = uint64_t( 0x1 ) << int( MatrixMode::eTexture15 );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -140,10 +26,10 @@ namespace Castor3D
 		//!\~english	No access.
 		//!\~french		Aucun accès.
 		eNone = 0,
-		//!\~english	Read only access type.
+		//!\~english	read only access type.
 		//!\~french		Accès lecture seule.
 		eRead = 1 << 0,
-		//!\~english	Write only access type.
+		//!\~english	write only access type.
 		//!\~french		Accèes écriture seule.
 		eWrite = 1 << 1
 	};
@@ -212,12 +98,6 @@ namespace Castor3D
 		eTriangleStrips,
 		//! Display triangle fan
 		eTriangleFan,
-		//! Display quads
-		eQuads,
-		//! Display quad strips
-		eQuadStrips,
-		//! Display quad strips
-		ePolygon,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePoints )
 	};
 	/*!
@@ -230,11 +110,11 @@ namespace Castor3D
 	template< Topology Topo >
 	struct TopologyNamer
 	{
-		static Castor::String const Name;
+		C3D_API static castor::String const Name;
 	};
 	/**
 	 *\~english
-	 *\brief		Gets the name of the given topology.
+	 *\brief		gets the name of the given topology.
 	 *\param[in]	p_topology	The topology.
 	 *\return		The name.
 	 *\~french
@@ -242,7 +122,7 @@ namespace Castor3D
 	 *\param[in]	p_topology	La topologie.
 	 *\return		Le nom.
 	 */
-	static inline Castor::String const GetTopologyName( Topology p_topology )
+	static inline castor::String const getTopologyName( Topology p_topology )
 	{
 		switch ( p_topology )
 		{
@@ -266,15 +146,6 @@ namespace Castor3D
 
 		case Topology::eTriangleFan:
 			return TopologyNamer< Topology::eTriangleFan >::Name;
-
-		case Topology::eQuads:
-			return TopologyNamer< Topology::eQuads >::Name;
-
-		case Topology::eQuadStrips:
-			return TopologyNamer< Topology::eQuadStrips >::Name;
-
-		case Topology::ePolygon:
-			return TopologyNamer< Topology::ePolygon >::Name;
 
 		default:
 			FAILURE( "Topology type unknown" );
@@ -374,9 +245,9 @@ namespace Castor3D
 	{
 		//! Keeps the current value.
 		eKeep,
-		//! Sets the stencil buffer value to 0.
+		//! sets the stencil buffer value to 0.
 		eZero,
-		//! Sets the stencil buffer value by the one given
+		//! sets the stencil buffer value by the one given
 		eReplace,
 		//! Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.
 		eIncrement,
@@ -426,6 +297,8 @@ namespace Castor3D
 		eBoneWeights1 = 0x200,
 		//! Instantiation matrix
 		eTransform = 0x400,
+		//! Instantiation material index
+		eMatIndex = 0x800,
 	};
 	IMPLEMENT_FLAGS( ElementUsage )
 	/*!
@@ -476,7 +349,7 @@ namespace Castor3D
 	};
 	/**
 	 *\~english
-	 *\brief		Gets the byte size of the given element type.
+	 *\brief		gets the byte size of the given element type.
 	 *\param[in]	p_type	The element type.
 	 *\return		The size.
 	 *\~french
@@ -484,7 +357,7 @@ namespace Castor3D
 	 *\param[in]	p_type	Le type d'élément.
 	 *\return		La taille.
 	 */
-	inline uint32_t GetSize( ElementType p_type )
+	inline uint32_t getSize( ElementType p_type )
 	{
 		switch ( p_type )
 		{
@@ -589,7 +462,7 @@ namespace Castor3D
 	};
 	/**
 	 *\~english
-	 *\brief		Gets the name of the given element type.
+	 *\brief		gets the name of the given element type.
 	 *\param[in]	p_type	The element type.
 	 *\return		The name.
 	 *\~french
@@ -597,7 +470,7 @@ namespace Castor3D
 	 *\param[in]	p_type	Le type d'élément.
 	 *\return		Le nom.
 	 */
-	C3D_API Castor::String GetName( ElementType p_type );
+	C3D_API castor::String getName( ElementType p_type );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -611,80 +484,109 @@ namespace Castor3D
 	{
 		BlendMode m_colourBlendMode;
 		BlendMode m_alphaBlendMode;
+		PassFlags m_passFlags;
 		TextureChannels m_textureFlags;
 		ProgramFlags m_programFlags;
 		SceneFlags m_sceneFlags;
 	};
 
-	class GpuInformations;
-	class RenderSystem;
-	class RenderPass;
-	class RenderTechnique;
-	class Context;
-	class RenderWindow;
-	class RenderPipeline;
-	class DepthStencilState;
-	class RasteriserState;
-	class BlendState;
-	class MultisampleState;
-	class ToneMapping;
-	class PostEffect;
-	class ShadowMapPass;
-	struct PassRenderNodeUniforms;
-	struct PassRenderNode;
-	struct SceneRenderNode;
-	struct StaticRenderNode;
-	struct SkinningRenderNode;
-	struct MorphingRenderNode;
-	struct BillboardRenderNode;
-	struct DistanceRenderNodeBase;
-	class RenderTechnique;
-	class RenderWindow;
-	class RenderTarget;
-	class RenderLoop;
-	class RenderLoopAsync;
-	class RenderLoopSync;
-	class RenderQueue;
-	class ShadowMap;
-
-	template< typename T >
-	class GpuBuffer;
 	template< typename T >
 	class CpuBuffer;
 
-	struct BufferElementDeclaration;
+	class BlendState;
 	class BufferDeclaration;
-	class VertexBuffer;
-	class IndexBuffer;
+	class Context;
+	class DepthStencilState;
+	class EnvironmentMap;
+	class EnvironmentMapPass;
 	class GeometryBuffers;
+	class GpuBuffer;
+	class GpuInformations;
+	class HdrConfig;
+	class IblTextures;
+	class IndexBuffer;
+	class MultisampleState;
+	class PostEffect;
+	class RasteriserState;
+	class RenderColourCubeLayerToTexture;
+	class RenderColourCubeToTexture;
+	class RenderColourLayerToTexture;
+	class RenderColourToCube;
+	class RenderColourToTexture;
+	class RenderDepthCubeLayerToTexture;
+	class RenderDepthCubeToTexture;
+	class RenderDepthLayerToTexture;
+	class RenderDepthToCube;
+	class RenderLoop;
+	class RenderLoopAsync;
+	class RenderLoopSync;
+	class RenderPass;
+	class RenderPipeline;
+	class RenderQueue;
+	class RenderSystem;
+	class RenderTarget;
+	class RenderTechnique;
+	class RenderTechnique;
+	class RenderWindow;
+	class RenderWindow;
+	class ShadowMap;
+	class ShadowMapPass;
 	class TextureBuffer;
+	class TextureProjection;
+	class ToneMapping;
+	class VertexBuffer;
+	struct BillboardRenderNode;
+	struct BufferElementDeclaration;
+	struct DistanceRenderNodeBase;
+	struct MorphingRenderNode;
+	struct PassRenderNode;
+	struct PassRenderNodeUniforms;
+	struct SceneRenderNode;
+	struct SkinningRenderNode;
+	struct StaticRenderNode;
 
-	DECLARE_SMART_PTR( RenderSystem );
-	DECLARE_SMART_PTR( GeometryBuffers );
-	DECLARE_SMART_PTR( BufferElementDeclaration );
+	DECLARE_SMART_PTR( BlendState );
 	DECLARE_SMART_PTR( BufferDeclaration );
-	DECLARE_SMART_PTR( VertexBuffer );
-	DECLARE_SMART_PTR( IndexBuffer );
-	DECLARE_SMART_PTR( TextureBuffer );
+	DECLARE_SMART_PTR( BufferElementDeclaration );
 	DECLARE_SMART_PTR( Context );
 	DECLARE_SMART_PTR( DepthStencilState );
-	DECLARE_SMART_PTR( RasteriserState );
-	DECLARE_SMART_PTR( BlendState );
+	DECLARE_SMART_PTR( EnvironmentMap );
+	DECLARE_SMART_PTR( EnvironmentMapPass );
+	DECLARE_SMART_PTR( GeometryBuffers );
+	DECLARE_SMART_PTR( GpuBuffer );
+	DECLARE_SMART_PTR( IblTextures );
+	DECLARE_SMART_PTR( IndexBuffer );
 	DECLARE_SMART_PTR( MultisampleState );
-	DECLARE_SMART_PTR( RenderPipeline );
-	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );
-	DECLARE_SMART_PTR( ShadowMapPass );
+	DECLARE_SMART_PTR( RasteriserState );
+	DECLARE_SMART_PTR( RenderColourCubeLayerToTexture );
+	DECLARE_SMART_PTR( RenderColourCubeToTexture );
+	DECLARE_SMART_PTR( RenderColourLayerToTexture );
+	DECLARE_SMART_PTR( RenderColourToCube );
+	DECLARE_SMART_PTR( RenderColourToTexture );
+	DECLARE_SMART_PTR( RenderDepthCubeLayerToTexture );
+	DECLARE_SMART_PTR( RenderDepthCubeToTexture );
+	DECLARE_SMART_PTR( RenderDepthLayerToTexture );
+	DECLARE_SMART_PTR( RenderDepthToCube );
+	DECLARE_SMART_PTR( RenderLoop );
+	DECLARE_SMART_PTR( RenderPipeline );
+	DECLARE_SMART_PTR( RenderSystem );
+	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( RenderTechnique );
 	DECLARE_SMART_PTR( RenderWindow );
-	DECLARE_SMART_PTR( RenderLoop );
-	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( ShadowMap );
+	DECLARE_SMART_PTR( ShadowMapPass );
+	DECLARE_SMART_PTR( TextureBuffer );
+	DECLARE_SMART_PTR( TextureProjection );
+	DECLARE_SMART_PTR( ToneMapping );
+	DECLARE_SMART_PTR( VertexBuffer );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
+	using ShadowMapRefArray = std::vector< std::reference_wrapper< ShadowMap > >;
+	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 
 	//@}
 }

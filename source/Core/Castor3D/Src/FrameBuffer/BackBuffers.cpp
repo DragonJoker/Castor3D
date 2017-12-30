@@ -1,15 +1,15 @@
-﻿#include "BackBuffers.hpp"
+#include "BackBuffers.hpp"
 
 #include "Engine.hpp"
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	BackBuffers::BackBuffers( Engine & p_engine )
-		: FrameBuffer( p_engine )
+	BackBuffers::BackBuffers( Engine & engine )
+		: FrameBuffer( engine )
 	{
 	}
 
@@ -17,28 +17,18 @@ namespace Castor3D
 	{
 	}
 
-	bool BackBuffers::Initialise( Size const & p_size, PixelFormat p_format )
+	bool BackBuffers::initialise( Size const & size, PixelFormat format )
 	{
-		m_buffer = PxBufferBase::create( p_size, p_format );
+		m_buffer = PxBufferBase::create( size, format );
 		return true;
 	}
 
-	void BackBuffers::DoBind( FrameBufferTarget p_target )const
+	void BackBuffers::doBind( FrameBufferTarget target )const
 	{
-		FAILURE( "BackBuffers instances can't be bound like regular FrameBuffer ones, use BackBuffers::Bind( WindowBuffer, eFRAME_BUFFER_TARGET )." );
+		FAILURE( "BackBuffers instances can't be bound like regular FrameBuffer ones, use BackBuffers::bind( WindowBuffer, eFRAME_BUFFER_TARGET )." );
 	}
 
-	void BackBuffers::DoUnbind()const
+	void BackBuffers::doUnbind()const
 	{
-#if DEBUG_BUFFERS
-
-		if ( m_buffer && DownloadBuffer( AttachmentPoint::eColour, 0, m_buffer ) )
-		{
-			StringStream l_name;
-			l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )m_buffer.get() << cuT( "_BACK.png" );
-			Image::BinaryLoader()( Image( cuT( "tmp" ), *m_buffer ), l_name.str() );
-		}
-
-#endif
 	}
 }

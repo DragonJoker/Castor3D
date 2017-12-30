@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___TRS_RENDER_SYSTEM_PREREQUISITES_H___
 #define ___TRS_RENDER_SYSTEM_PREREQUISITES_H___
 
@@ -38,14 +17,13 @@ SOFTWARE.
 
 namespace TestRender
 {
-	using Castor::real;
+	using castor::real;
 
 	class TestRenderSystem;
 	class TestAttributeBase;
 	template< typename T, uint32_t Columns, uint32_t Rows > class TestMatAttribute;
 	template< typename T, uint32_t Count > class TestAttribute;
-	template< typename T > class TestBufferBase;
-	template< typename T > class TestBuffer;
+	class TestBuffer;
 	class TestVertexBufferObject;
 	class Test3VertexBufferObject;
 	class TestGeometryBuffers;
@@ -95,9 +73,9 @@ namespace TestRender
 	DECLARE_SMART_PTR( TestShaderProgram );
 	DECLARE_VECTOR( TestShaderProgramSPtr, TestShaderProgramPtr );
 	DECLARE_VECTOR( TestShaderObjectSPtr, TestShaderObjectPtr );
-	DECLARE_MAP( Castor::String, TestUniformBaseSPtr, TestUniformPtrStr );
-	DECLARE_MAP( Castor3D::UniformSPtr, UboVariableInfosSPtr, UboVariableInfos );
-	DECLARE_MAP( Castor3D::UniformSPtr, TestVariableApplyerBaseSPtr, VariableApplyer );
+	DECLARE_MAP( castor::String, TestUniformBaseSPtr, TestUniformPtrStr );
+	DECLARE_MAP( castor3d::UniformSPtr, UboVariableInfosSPtr, UboVariableInfos );
+	DECLARE_MAP( castor3d::UniformSPtr, TestVariableApplyerBaseSPtr, VariableApplyer );
 
 	class TestRenderBuffer;
 	class TestColourRenderBuffer;
@@ -131,11 +109,11 @@ namespace TestRender
 	class TestTexturePboStorage;
 	class TestTextureTboStorage;
 	class TestGpuIoBuffer;
-	class TestDownloadPixelBuffer;
+	class TestdownloadPixelBuffer;
 	class TestUploadPixelBuffer;
 	DECLARE_SMART_PTR( TestTextureStorage );
 	DECLARE_SMART_PTR( TestGpuIoBuffer );
-	DECLARE_SMART_PTR( TestDownloadPixelBuffer );
+	DECLARE_SMART_PTR( TestdownloadPixelBuffer );
 	DECLARE_SMART_PTR( TestUploadPixelBuffer );
 
 	class TestOverlayRenderer;

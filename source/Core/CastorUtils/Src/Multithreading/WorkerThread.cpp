@@ -2,13 +2,13 @@
 
 #include "Config/MultiThreadConfig.hpp"
 
-namespace Castor
+namespace castor
 {
 	WorkerThread::WorkerThread()
 		: m_start{ false }
 		, m_terminate{ false }
 	{
-		m_thread = std::make_unique< std::thread >( std::bind( &WorkerThread::DoRun, this ) );
+		m_thread = std::make_unique< std::thread >( std::bind( &WorkerThread::doRun, this ) );
 	}
 
 	WorkerThread::~WorkerThread()noexcept
@@ -18,7 +18,7 @@ namespace Castor
 		m_thread.reset();
 	}
 
-	void WorkerThread::Feed( Job p_job )
+	void WorkerThread::feed( Job p_job )
 	{
 		REQUIRE( m_start == false );
 		{
@@ -27,33 +27,33 @@ namespace Castor
 		m_start = true;
 	}
 
-	bool WorkerThread::IsEnded()const
+	bool WorkerThread::isEnded()const
 	{
 		return !m_start;
 	}
 
-	bool WorkerThread::Wait( std::chrono::milliseconds const & p_timeout )const
+	bool WorkerThread::wait( Milliseconds const & p_timeout )const
 	{
-		bool l_result = IsEnded() && !m_terminate;
+		bool result = isEnded() && !m_terminate;
 
-		if ( !l_result )
+		if ( !result )
 		{
-			auto l_begin = std::chrono::high_resolution_clock::now();
-			std::chrono::milliseconds l_wait{ 0 };
+			auto begin = std::chrono::high_resolution_clock::now();
+			Milliseconds wait{ 0 };
 
 			do
 			{
-				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-				l_result = IsEnded();
-				l_wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - l_begin );
+				std::this_thread::sleep_for( Milliseconds( 1 ) );
+				result = isEnded();
+				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
-			while ( l_wait < p_timeout && !l_result && !m_terminate );
+			while ( wait < p_timeout && !result && !m_terminate );
 		}
 
-		return l_result;
+		return result;
 	}
 
-	void WorkerThread::DoRun()
+	void WorkerThread::doRun()
 	{
 		while ( !m_terminate )
 		{
@@ -65,7 +65,7 @@ namespace Castor
 			}
 			else
 			{
-				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+				std::this_thread::sleep_for( Milliseconds( 1 ) );
 			}
 		}
 	}

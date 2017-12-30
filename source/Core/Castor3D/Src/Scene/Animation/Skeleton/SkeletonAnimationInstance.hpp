@@ -1,37 +1,19 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_SKELETON_ANIMATION_INSTANCE_H___
 #define ___C3D_SKELETON_ANIMATION_INSTANCE_H___
 
 #include "Scene/Animation/AnimationInstance.hpp"
+#include "SkeletonAnimationInstanceKeyFrame.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
-	\todo		Write and Read functions.
+	\todo		write and read functions.
 	\~english
 	\brief		Skeleton animation instance.
 	\~french
@@ -43,15 +25,27 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API SkeletonAnimationInstance( SkeletonAnimationInstance && rhs ) = default;
+		C3D_API SkeletonAnimationInstance & operator=( SkeletonAnimationInstance && rhs ) = default;
+		C3D_API SkeletonAnimationInstance( SkeletonAnimationInstance const & rhs ) = delete;
+		C3D_API SkeletonAnimationInstance & operator=( SkeletonAnimationInstance const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_object	The parent AnimatedSkeleton.
-		 *\param[in]	p_animation	The animation.
+		 *\param[in]	object		The parent AnimatedSkeleton.
+		 *\param[in]	animation	The animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_object	L'AnimatedSkeleton parent.
-		 *\param[in]	p_animation	L'animation.
+		 *\param[in]	object		L'AnimatedSkeleton parent.
+		 *\param[in]	animation	L'animation.
 		 */
-		C3D_API SkeletonAnimationInstance( AnimatedSkeleton & p_object, SkeletonAnimation const & p_animation );
+		C3D_API SkeletonAnimationInstance( AnimatedSkeleton & object, SkeletonAnimation & animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,80 +55,43 @@ namespace Castor3D
 		C3D_API ~SkeletonAnimationInstance();
 		/**
 		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API SkeletonAnimationInstance( SkeletonAnimationInstance && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API SkeletonAnimationInstance & operator=( SkeletonAnimationInstance && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API SkeletonAnimationInstance( SkeletonAnimationInstance const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API SkeletonAnimationInstance & operator=( SkeletonAnimationInstance const & p_rhs ) = delete;
-		/**
-		 *\~english
 		 *\brief		Retrieves an animated bone.
-		 *\param[in]	p_bone	The bone.
+		 *\param[in]	bone	The bone.
 		 *\~french
 		 *\brief		Récupère un os animé.
-		 *\param[in]	p_bone	L'os.
+		 *\param[in]	bone	L'os.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( Bone const & p_bone )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( Bone const & bone )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated node.
-		 *\param[in]	p_name	The node name.
+		 *\param[in]	name	The node name.
 		 *\~french
 		 *\brief		Récupère un noeud animé.
-		 *\param[in]	p_name	Le nom du noeud.
+		 *\param[in]	name	Le nom du noeud.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( Castor::String const & p_name )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
-		 *\param[in]	p_type	The object type.
-		 *\param[in]	p_name	The object name.
+		 *\param[in]	type	The object type.
+		 *\param[in]	name	The object name.
 		 *\~french
 		 *\brief		Récupère un objet animé.
-		 *\param[in]	p_type	Le type de l'objet.
-		 *\param[in]	p_name	Le nom de l'objet.
+		 *\param[in]	type	Le type de l'objet.
+		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( SkeletonAnimationObjectType type
+			, castor::String const & name )const;
 		/**
 		 *\~english
 		 *\return		The objects count.
 		 *\~french
 		 *\return		Le nombre d'objets.
 		 */
-		inline auto GetObjectsCount()const
+		inline auto getObjectsCount()const
 		{
 			return m_toMove.size();
-		}
-		/**
-		 *\~english
-		 *\return		The root objects count.
-		 *\~french
-		 *\return		Le nombre d'objets racines.
-		 */
-		inline auto GetRootObjectsCount()const
-		{
-			return m_arrayMoving.size();
 		}
 		/**
 		 *\~english
@@ -144,7 +101,7 @@ namespace Castor3D
 		 */
 		inline auto begin()
 		{
-			return m_arrayMoving.begin();
+			return m_toMove.begin();
 		}
 		/**
 		 *\~english
@@ -154,7 +111,7 @@ namespace Castor3D
 		 */
 		inline auto begin()const
 		{
-			return m_arrayMoving.begin();
+			return m_toMove.begin();
 		}
 		/**
 		 *\~english
@@ -164,7 +121,7 @@ namespace Castor3D
 		 */
 		inline auto end()
 		{
-			return m_arrayMoving.end();
+			return m_toMove.end();
 		}
 		/**
 		 *\~english
@@ -174,25 +131,25 @@ namespace Castor3D
 		 */
 		inline auto end()const
 		{
-			return m_arrayMoving.end();
+			return m_toMove.end();
 		}
 
 	private:
 		/**
-		 *\copydoc		Casto3D::AnimationInstance::DoUpdate
+		 *\copydoc		Casto3D::AnimationInstance::doUpdate
 		 */
-		void DoUpdate()override;
+		void doUpdate()override;
 
 	protected:
-		//!\~english	The root moving objects.
-		//!\~french		Les objets mouvants racine.
-		SkeletonAnimationInstanceObjectPtrArray m_arrayMoving;
 		//!\~english	The moving objects.
 		//!\~french		Les objets mouvants.
-		SkeletonAnimationInstanceObjectPtrStrMap m_toMove;
-
-		friend class BinaryWriter< SkeletonAnimation >;
-		friend class BinaryParser< SkeletonAnimation >;
+		SkeletonAnimationInstanceObjectPtrArray m_toMove;
+		//!\~english	The instance keyframes.
+		//!\~french		Les instances des keyframes.
+		SkeletonAnimationInstanceKeyFrameArray m_keyFrames;
+		//!\~english	Iterator to the current keyframe (when playing the animation).
+		//!\~french		Itérateur sur la keyframe courante (quand l'animation est jouée).
+		SkeletonAnimationInstanceKeyFrameArray::iterator m_curr;
 	};
 }
 

@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PATTERN_H___
 #define ___C3D_PATTERN_H___
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -41,6 +22,12 @@ namespace Castor3D
 	template< typename T >
 	class Pattern
 	{
+	private:
+		typedef T TObj;
+		typedef T & TObjRef;
+		typedef T const & TObjConstRef;
+		typedef typename std::list< TObj > TObjList;
+
 	public:
 		/**
 		 *\~english
@@ -69,16 +56,16 @@ namespace Castor3D
 		 *\brief		Constuir le chemin miroir
 		 *\return		Le chemin construit
 		 */
-		Pointer GetReversed()const
+		Pointer getReversed()const
 		{
-			Pointer l_return = std::make_shared< Pattern< T > >();
+			Pointer result = std::make_shared< Pattern< T > >();
 
-			for ( typename TObjList::iterator l_it = m_listElements.begin(); l_it != m_listElements.end(); l_it++ )
+			for ( typename TObjList::iterator it = m_listElements.begin(); it != m_listElements.end(); it++ )
 			{
-				l_return->m_listElements.push_front( *l_it );
+				result->m_listElements.push_front( *it );
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -88,15 +75,15 @@ namespace Castor3D
 		 *\brief		Dit si le chemin est fermé (le premier élément est aussi le dernier)
 		 *\return		\p true si fermé, \p false sinon
 		 */
-		bool IsClosed()const
+		bool isClosed()const
 		{
-			TObj const & l_t1 = **m_listElements.begin();
-			TObj const & l_t2 = **m_listElements.rbegin();
-			return l_t1 == l_t2;
+			TObj const & t1 = **m_listElements.begin();
+			TObj const & t2 = **m_listElements.rbegin();
+			return t1 == t2;
 		}
 		/**
 		 *\~english
-		 *\brief		Adds an element to the list, at a given index
+		 *\brief		adds an element to the list, at a given index
 		 *\param[in]	p_tElement	The element to add
 		 *\param[in]	p_index	The index at which the insertion must be done
 		 *\~french
@@ -104,7 +91,7 @@ namespace Castor3D
 		 *\param[in]	p_tElement	L'élément à ajouter
 		 *\param[in]	p_index	L'indice souhaité
 		 */
-		void AddElement( TObjConstRef p_tElement, uint32_t p_index = 0xFFFFFFFF )
+		void addElement( TObjConstRef p_tElement, uint32_t p_index = 0xFFFFFFFF )
 		{
 			if ( p_index >= m_listElements.size() )
 			{
@@ -112,14 +99,14 @@ namespace Castor3D
 			}
 			else
 			{
-				typename TObjList::iterator l_it = m_listElements.begin();
+				typename TObjList::iterator it = m_listElements.begin();
 
 				for ( uint32_t i = 0; i < p_index; i++ )
 				{
-					l_it++;
+					it++;
 				}
 
-				m_listElements.insert( l_it, p_tElement );
+				m_listElements.insert( it, p_tElement );
 			}
 		}
 		/**
@@ -128,7 +115,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'éléments dans le chemin
 		 */
-		inline uint32_t GetSize()const
+		inline uint32_t getSize()const
 		{
 			return uint32_t( m_listElements.size() );
 		}
@@ -145,14 +132,14 @@ namespace Castor3D
 		TObjRef operator[]( uint32_t p_index )
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::iterator l_it = m_listElements.begin();
+			typename TObjList::iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 		/**
 		 *\~english
@@ -167,14 +154,14 @@ namespace Castor3D
 		TObjConstRef operator[]( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::const_iterator l_it = m_listElements.begin();
+			typename TObjList::const_iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 		/**
 		 *\~english
@@ -186,17 +173,17 @@ namespace Castor3D
 		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence modifiable sur l'élément
 		 */
-		TObjRef GetElement( uint32_t p_index )
+		TObjRef getElement( uint32_t p_index )
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::iterator l_it = m_listElements.begin();
+			typename TObjList::iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 		/**
 		 *\~english
@@ -208,25 +195,22 @@ namespace Castor3D
 		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence constante sur l'élément
 		 */
-		TObjConstRef GetElement( uint32_t p_index )const
+		TObjConstRef getElement( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::const_iterator l_it = m_listElements.begin();
+			typename TObjList::const_iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 
 	private:
-		typedef T TObj;
-		typedef T & TObjRef;
-		typedef T const & TObjConstRef;
-		typedef typename std::list< TObj > TObjList;
-		//!\~english The elements	\~french Les éléments
+		//!\~english	The elements.
+		//!\~french		Les éléments.
 		TObjList m_listElements;
 	};
 }

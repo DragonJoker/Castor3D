@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ComputePipeline_H___
 #define ___C3D_ComputePipeline_H___
@@ -35,7 +16,7 @@ SOFTWARE.
 
 #include <stack>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -47,20 +28,20 @@ namespace Castor3D
 	\brief		Le pipeline de calcul.
 	*/
 	class ComputePipeline
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	renderSystem	The parent RenderSystem.
 		 *\param[in]	p_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	renderSystem	Le RenderSystem parent.
 		 *\param[in]	p_program		Le programme shader.
 		 */
-		C3D_API explicit ComputePipeline( RenderSystem & p_renderSystem, ShaderProgram & p_program );
+		C3D_API explicit ComputePipeline( RenderSystem & renderSystem, ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -74,7 +55,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie le pipeline.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Runs the computation.
@@ -87,8 +68,8 @@ namespace Castor3D
 		 *\param[in]	p_workgroupSize	La taille d'un groupe de travail.
 		 *\param[in]	p_barriers		Les barri�res m�moire.
 		 */
-		C3D_API virtual void Run( Castor::Point3ui const & p_workgroups
-			, Castor::Point3ui const & p_workgroupSize
+		C3D_API virtual void run( castor::Point3ui const & p_workgroups
+			, castor::Point3ui const & p_workgroupSize
 			, MemoryBarriers const & p_barriers )const = 0;
 		/**
 		 *\~english
@@ -96,7 +77,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline ShaderProgram & GetProgram()
+		inline ShaderProgram & getProgram()
 		{
 			return m_program;
 		}

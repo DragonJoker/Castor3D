@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_MESH_ANIMATION_INSTANCE_SUBMESH_H___
 #define ___C3D_MESH_ANIMATION_INSTANCE_SUBMESH_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 
 #include "Animation/Mesh/MeshAnimationSubmesh.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,48 +23,33 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
 	class MeshAnimationInstanceSubmesh
-		: public Castor::OwnedBy< MeshAnimationInstance >
+		: public castor::OwnedBy< MeshAnimationInstance >
 	{
 	public:
 		/**
+		*\~english
+		*name Copy / Move.
+		*\~french
+		*name Copie / Déplacement.
+		**/
+		/**@{*/
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & rhs ) = delete;
+		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & rhs ) = delete;
+		/**@}*/
+		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
-		 *\param[in]	p_animationObject	The animation object.
+		 *\param[in]	animationInstance	The parent skeleton animation instance.
+		 *\param[in]	animationObject		The animation object.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
-		 *\param[in]	p_animationObject	L'animation d'objet.
+		 *\param[in]	animationInstance	L'instance d'animation de squelette parent.
+		 *\param[in]	animationObject		L'animation d'objet.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh & p_animationObject );
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && p_rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & animationInstance
+			, MeshAnimationSubmesh & animationObject );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -93,42 +59,47 @@ namespace Castor3D
 		C3D_API virtual ~MeshAnimationInstanceSubmesh();
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	p_time	Current time index.
+		 *\brief		Updates the object, given to animation buffers.
+		 *\param[in]	factor	The percentage between \p prv and \p cur.
+		 *\param[in]	prv		The previous animation buffer (factor 0).
+		 *\param[in]	cur		The current animation buffer (factor 1).
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	p_time	Index de temps courant.
+		 *\param[in]	factor	Le pourcentage entre \p prv et \p cur.
+		 *\param[in]	prv		Le tampon d'animation précédent (pourcentage 0).
+		 *\param[in]	cur		Le tampon d'animation courant (pourcentage 1).
 		 */
-		C3D_API void Update( std::chrono::milliseconds const & p_time );
+		C3D_API void update( float factor
+			, SubmeshAnimationBuffer const & prv
+			, SubmeshAnimationBuffer const & cur );
 		/**
 		 *\~english
-		 *\brief		Fills a shader variable with this object's skeleton transforms.
-		 *\param[out]	p_variable	Receives the transforms.
+		 *\brief		The submesh.
 		 *\~french
-		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
-		 *\param[out]	p_variable	Reçoit les transformations.
+		 *\brief		Le sous-maillage.
 		 */
-		C3D_API void FillShader( Uniform1f & p_variable )const;
+		C3D_API Submesh const & getSubmesh()const;
+		/**
+		 *\~english
+		 *\brief		The current factor.
+		 *\~french
+		 *\brief		Le facteur courant.
+		 */
+		inline float getCurrentFactor()const
+		{
+			return m_currentFactor;
+		}
 
 	protected:
 		//!\~english	The animation object.
 		//!\~french		L'animation d'objet.
 		MeshAnimationSubmesh & m_animationObject;
-		//!\~english	Iterator to the first buffer.
-		//!\~french		Itérateur sur le premier tampon.
-		SubmeshAnimationBufferArray::const_iterator m_first;
-		//!\~english	Iterator to the last buffer.
-		//!\~french		Itérateur sur le dernier tampon.
-		SubmeshAnimationBufferArray::const_iterator m_last;
-		//!\~english	Iterator to the previous buffer (when playing the animation).
-		//!\~french		Itérateur sur le tampon précédent (quand l'animation est jouée).
-		SubmeshAnimationBufferArray::const_iterator m_prev;
-		//!\~english	Iterator to the current buffer (when playing the animation).
-		//!\~french		Itérateur sur le tampon courant (quand l'animation est jouée).
-		SubmeshAnimationBufferArray::const_iterator m_curr;
 		//!\~english	The time elapsed since the last keyframe.
 		//!\~french		Le temps écoulé depuis la dernière keyframe.
-		float m_currentFactor;
+		float m_currentFactor{ 0.0f };
+		//!\~english	The current animation buffer.
+		//!\~french		Le tampon d'animation actuel.
+		SubmeshAnimationBuffer const * m_cur{ nullptr };
 	};
 }
 

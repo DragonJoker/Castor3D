@@ -23,7 +23,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Quaternion::transform( *static_cast< CVector3D * >( val ), *static_cast< CVector3D * >( *pVal ) );
+				castor::Quaternion::transform( *static_cast< CVector3D * >( val ), *static_cast< CVector3D * >( *pVal ) );
 			}
 		}
 
@@ -41,7 +41,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Quaternion::to_axis_angle( *static_cast< CVector3D * >( *pAxis ), *static_cast< CAngle * >( *pAngle ) );
+				castor::Quaternion::toAxisAngle( *static_cast< CVector3D * >( *pAxis ), *static_cast< CAngle * >( *pAngle ) );
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace CastorCom
 
 		if ( axis && angle )
 		{
-			Castor::Quaternion::from_axis_angle( *static_cast< CVector3D * >( axis ), *static_cast< CAngle * >( angle ) );
+			castor::Quaternion::fromAxisAngle( *static_cast< CVector3D * >( axis ), *static_cast< CAngle * >( angle ) );
 			hr = S_OK;
 		}
 
@@ -73,7 +73,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Quaternion::to_axes( *static_cast< CVector3D * >( *pX ), *static_cast< CVector3D * >( *pY ), *static_cast< CVector3D * >( *pZ ) );
+				castor::Quaternion::toAxes( *static_cast< CVector3D * >( *pX ), *static_cast< CVector3D * >( *pY ), *static_cast< CVector3D * >( *pZ ) );
 			}
 		}
 
@@ -86,59 +86,8 @@ namespace CastorCom
 
 		if ( x && y && z )
 		{
-			Castor::Quaternion::from_axes( *static_cast< CVector3D * >( x ), *static_cast< CVector3D * >( y ), *static_cast< CVector3D * >( z ) );
+			castor::Quaternion::fromAxes( *static_cast< CVector3D * >( x ), *static_cast< CVector3D * >( y ), *static_cast< CVector3D * >( z ) );
 			hr = S_OK;
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CQuaternion::GetYaw( /* [out, retval] */ IAngle ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CAngle::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_yaw();
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CQuaternion::GetPitch( /* [out, retval] */ IAngle ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CAngle::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_pitch();
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CQuaternion::GetRoll( /* [out, retval] */ IAngle ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CAngle::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_roll();
-			}
 		}
 
 		return hr;
@@ -150,7 +99,7 @@ namespace CastorCom
 
 		if ( pVal )
 		{
-			*pVal = float( Castor::Quaternion::get_magnitude() );
+			*pVal = float( castor::Quaternion::getMagnitude() );
 		}
 
 		return hr;
@@ -158,7 +107,7 @@ namespace CastorCom
 
 	STDMETHODIMP CQuaternion::Conjugate()
 	{
-		Castor::Quaternion::conjugate();
+		castor::Quaternion::conjugate();
 		return S_OK;
 	}
 
@@ -172,7 +121,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::slerp( *static_cast< CQuaternion * >( quat ), percent );
+				static_cast< castor::Quaternion & >( *static_cast< CQuaternion * >( *pQuat ) ) = castor::Quaternion::slerp( *static_cast< CQuaternion * >( quat ), percent );
 			}
 		}
 
@@ -189,7 +138,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::mix( *static_cast< CQuaternion * >( quat ), percent );
+				static_cast< castor::Quaternion & >( *static_cast< CQuaternion * >( *pQuat ) ) = castor::Quaternion::mix( *static_cast< CQuaternion * >( quat ), percent );
 			}
 		}
 

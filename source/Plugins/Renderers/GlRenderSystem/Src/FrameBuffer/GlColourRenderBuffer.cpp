@@ -2,14 +2,14 @@
 
 #include "Common/OpenGl.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
 	GlColourRenderBuffer::GlColourRenderBuffer( OpenGl & p_gl, PixelFormat p_format )
 		: ColourRenderBuffer( p_format )
-		, m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_format ), *this )
+		, m_glRenderBuffer( p_gl, p_gl.getRboStorage( p_format ), *this )
 	{
 	}
 
@@ -17,38 +17,38 @@ namespace GlRender
 	{
 	}
 
-	bool GlColourRenderBuffer::Create()
+	bool GlColourRenderBuffer::create()
 	{
-		return m_glRenderBuffer.Create();
+		return m_glRenderBuffer.create();
 	}
 
-	void GlColourRenderBuffer::Destroy()
+	void GlColourRenderBuffer::destroy()
 	{
-		m_glRenderBuffer.Destroy();
+		m_glRenderBuffer.destroy();
 	}
 
-	bool GlColourRenderBuffer::Initialise( Castor::Size const & p_size )
+	bool GlColourRenderBuffer::initialise( castor::Size const & p_size )
 	{
-		return m_glRenderBuffer.Initialise( p_size );
+		return m_glRenderBuffer.initialise( p_size );
 	}
 
-	void GlColourRenderBuffer::Cleanup()
+	void GlColourRenderBuffer::cleanup()
 	{
-		m_glRenderBuffer.Cleanup();
+		m_glRenderBuffer.cleanup();
 	}
 
-	void GlColourRenderBuffer::Bind()
+	void GlColourRenderBuffer::bind()
 	{
-		m_glRenderBuffer.Bind();
+		m_glRenderBuffer.bind();
 	}
 
-	void GlColourRenderBuffer::Unbind()
+	void GlColourRenderBuffer::unbind()
 	{
-		m_glRenderBuffer.Unbind();
+		m_glRenderBuffer.unbind();
 	}
 
-	bool GlColourRenderBuffer::Resize( Castor::Size const & p_size )
+	bool GlColourRenderBuffer::resize( castor::Size const & p_size )
 	{
-		return m_glRenderBuffer.Resize( p_size );
+		return m_glRenderBuffer.resize( p_size );
 	}
 }

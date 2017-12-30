@@ -1,14 +1,15 @@
-#include "Cone.hpp"
+﻿#include "Cone.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Miscellaneous/Parameter.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Cone::Cone()
-		: MeshGenerator( MeshType::eCone )
+		: MeshGenerator( cuT( "cone" ) )
 		, m_nbFaces( 0 )
 		, m_height( 0 )
 		, m_radius( 0 )
@@ -19,43 +20,56 @@ namespace Castor3D
 	{
 	}
 
-	MeshGeneratorSPtr Cone::Create()
+	MeshGeneratorSPtr Cone::create()
 	{
 		return std::make_shared< Cone >();
 	}
 
-	void Cone::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void Cone::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		m_nbFaces = p_faces[0];
-		m_radius = std::abs( p_dimensions[0] );
-		m_height = std::abs( p_dimensions[1] );
+		String param;
+
+		if ( p_parameters.get( cuT( "faces" ), param ) )
+		{
+			m_nbFaces = string::toUInt( param );
+		}
+
+		if ( p_parameters.get( cuT( "radius" ), param ) )
+		{
+			m_radius = string::toFloat( param );
+		}
+
+		if ( p_parameters.get( cuT( "height" ), param ) )
+		{
+			m_height = string::toFloat( param );
+		}
 
 		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< real >::epsilon() && m_radius > std::numeric_limits< real >::epsilon() )
 		{
-			Submesh & l_submeshBase	= *p_mesh.CreateSubmesh();
-			Submesh & l_submeshSide	= *p_mesh.CreateSubmesh();
+			Submesh & submeshBase = *p_mesh.createSubmesh();
+			Submesh & submeshSide = *p_mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
 			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
 			uint32_t i = 0;
-			real l_rCos, l_rSin;
+			real rCos, rSin;
 
 			for ( real dAlphaI = 0; i <= m_nbFaces; dAlphaI += angleRotation )
 			{
-				l_rCos = cos( dAlphaI );
-				l_rSin = sin( dAlphaI );
+				rCos = cos( dAlphaI );
+				rSin = sin( dAlphaI );
 
 				if ( i < m_nbFaces )
 				{
-					Vertex::SetTexCoord( l_submeshBase.AddPoint( m_radius * l_rCos, 0.0, m_radius * l_rSin ), ( 1 + l_rCos ) / 2, ( 1 + l_rSin ) / 2 );
+					Vertex::setTexCoord( submeshBase.addPoint( m_radius * rCos, 0.0, m_radius * rSin ), ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 );
 				}
 
-				Vertex::SetTexCoord( l_submeshSide.AddPoint( m_radius * l_rCos, 0.0, m_radius * l_rSin ), real( i ) / m_nbFaces, real( 1.0 ) );
-				Vertex::SetTexCoord( l_submeshSide.AddPoint( real( 0 ), m_height, real( 0 ) ), real( i ) / m_nbFaces, real( 0.0 ) );
+				Vertex::setTexCoord( submeshSide.addPoint( m_radius * rCos, 0.0, m_radius * rSin ), real( i ) / m_nbFaces, real( 1.0 ) );
+				Vertex::setTexCoord( submeshSide.addPoint( real( 0 ), m_height, real( 0 ) ), real( i ) / m_nbFaces, real( 0.0 ) );
 				i++;
 			}
 
-			BufferElementGroupSPtr l_ptBottomCenter	= l_submeshBase.AddPoint( 0.0, 0.0, 0.0 );
-			Vertex( *l_ptBottomCenter ).SetTexCoord( 0.5, 0.5 );
+			BufferElementGroupSPtr ptBottomCenter	= submeshBase.addPoint( 0.0, 0.0, 0.0 );
+			Vertex( *ptBottomCenter ).setTexCoord( 0.5, 0.5 );
 
 			//RECONSTITION DES FACES
 			if ( m_height < 0 )
@@ -63,47 +77,55 @@ namespace Castor3D
 				m_height = -m_height;
 			}
 
+			auto indexMappingBase = std::make_shared< TriFaceMapping >( submeshBase );
+			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
+
 			//Composition des extràmitàs
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				l_submeshBase.AddFace( l_submeshBase[i]->GetIndex(), l_submeshBase[i + 1]->GetIndex(), l_ptBottomCenter->GetIndex() );
+				indexMappingBase->addFace( submeshBase[i]->getIndex(), submeshBase[i + 1]->getIndex(), ptBottomCenter->getIndex() );
 			}
 
 			//Composition du bas
-			l_submeshBase.AddFace( l_submeshBase[m_nbFaces - 1]->GetIndex(), l_submeshBase[0]->GetIndex(), l_ptBottomCenter->GetIndex() );
+			indexMappingBase->addFace( submeshBase[m_nbFaces - 1]->getIndex(), submeshBase[0]->getIndex(), ptBottomCenter->getIndex() );
 
 			//Composition des càtàs
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				l_submeshSide.AddFace( l_submeshSide[i + 0]->GetIndex(), l_submeshSide[i + 1]->GetIndex(), l_submeshSide[i + 2]->GetIndex() );
+				indexMappingSide->addFace( submeshSide[i + 0]->getIndex(), submeshSide[i + 1]->getIndex(), submeshSide[i + 2]->getIndex() );
 			}
 
-			ComputeNormals( p_mesh, true );
-			Coords3r l_ptNormal0Top;
-			Coords3r l_ptNormal0Base;
-			Coords3r l_ptTangent0Top;
-			Coords3r l_ptTangent0Base;
-			Coords3r l_ptNormal1Top;
-			Coords3r l_ptNormal1Base;
-			Coords3r l_ptTangent1Top;
-			Coords3r l_ptTangent1Base;
-			Vertex::GetNormal( l_submeshSide[0], l_ptNormal0Top );
-			Vertex::GetNormal( l_submeshSide[1], l_ptNormal0Base );
-			Vertex::GetTangent( l_submeshSide[0], l_ptTangent0Top );
-			Vertex::GetTangent( l_submeshSide[1], l_ptTangent0Base );
-			l_ptNormal0Top += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptNormal1Top );
-			l_ptNormal0Base += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptNormal1Base );
-			l_ptTangent0Top += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptTangent1Top );
-			l_ptTangent0Base += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptTangent1Base );
-			point::normalise( l_ptNormal0Top );
-			point::normalise( l_ptNormal0Base );
-			point::normalise( l_ptTangent0Top );
-			point::normalise( l_ptTangent0Base );
-			Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptNormal0Top );
-			Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptNormal0Base );
-			Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptTangent0Top );
-			Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptTangent0Base );
+			submeshBase.setIndexMapping( indexMappingBase );
+			submeshSide.setIndexMapping( indexMappingSide );
+
+			indexMappingBase->computeNormals( true );
+			indexMappingSide->computeNormals( true );
+
+			Coords3r ptNormal0Top;
+			Coords3r ptNormal0Base;
+			Coords3r ptTangent0Top;
+			Coords3r ptTangent0Base;
+			Coords3r ptNormal1Top;
+			Coords3r ptNormal1Base;
+			Coords3r ptTangent1Top;
+			Coords3r ptTangent1Base;
+			Vertex::getNormal( submeshSide[0], ptNormal0Top );
+			Vertex::getNormal( submeshSide[1], ptNormal0Base );
+			Vertex::getTangent( submeshSide[0], ptTangent0Top );
+			Vertex::getTangent( submeshSide[1], ptTangent0Base );
+			ptNormal0Top += Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 2], ptNormal1Top );
+			ptNormal0Base += Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 1], ptNormal1Base );
+			ptTangent0Top += Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 2], ptTangent1Top );
+			ptTangent0Base += Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 1], ptTangent1Base );
+			point::normalise( ptNormal0Top );
+			point::normalise( ptNormal0Base );
+			point::normalise( ptTangent0Top );
+			point::normalise( ptTangent0Base );
+			Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 2], ptNormal0Top );
+			Vertex::getNormal( submeshSide[submeshSide.getPointsCount() - 1], ptNormal0Base );
+			Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 2], ptTangent0Top );
+			Vertex::getTangent( submeshSide[submeshSide.getPointsCount() - 1], ptTangent0Base );
 		}
 	}
 }

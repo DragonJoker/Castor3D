@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PLUGIN_H___
 #define ___C3D_PLUGIN_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,19 +23,19 @@ namespace Castor3D
 	\remark		Gère les fonctions de base d'un plug-in, permet aux plug-ins de faire des vérifications de version et  de s'enregistrer auprès du moteur
 	*/
 	class Plugin
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	private:
 		//!< Signature for the plug-in's loading function
-		typedef void OnLoadFunction( Engine * );
+		typedef void OnLoadFunction( Engine *, Plugin * );
 		//!< Signature for the plug-in's unloading function
 		typedef void OnUnloadFunction( Engine * );
 		//!< Signature for the plug-in's type retrieval function
-		typedef PluginType GetTypeFunction();
+		typedef void GetTypeFunction( PluginType * );
 		//!< Signature for the plug-in's version checking function
-		typedef void GetRequiredVersionFunction( Version & p_version );
+		typedef void GetRequiredVersionFunction( Version * p_version );
 		//!< Signature for the plug-in's name retrieval function
-		typedef Castor::String GetNameFunction();
+		typedef void GetNameFunction( char const ** );
 
 	public:
 		typedef OnLoadFunction * POnLoadFunction;
@@ -69,14 +50,14 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_type		The plug-in type
 		 *\param[in]	p_library	The shared library holding the plug-in
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type du plug-in
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
-		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Plugin( PluginType p_type, Castor::DynamicLibrarySPtr p_library, Engine & p_engine );
+		C3D_API Plugin( PluginType p_type, castor::DynamicLibrarySPtr p_library, Engine & engine );
 
 	public:
 		/**
@@ -94,7 +75,7 @@ namespace Castor3D
 		 *\brief		Récupère la version nécessaire au bon fonctionnement du plug-in
 		 *\return		La version
 		 */
-		C3D_API void GetRequiredVersion( Version & p_version )const;
+		C3D_API void getRequiredVersion( Version & p_version )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-in name
@@ -103,7 +84,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom du plug-in
 		 *\return		Le nom
 		 */
-		C3D_API Castor::String GetName()const;
+		C3D_API castor::String getName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-in type
@@ -112,22 +93,46 @@ namespace Castor3D
 		 *\brief		Récupère le type du plug-in
 		 *\return		Le type
 		 */
-		inline PluginType GetType()const
+		inline PluginType getType()const
 		{
 			return m_type;
 		}
 
 	protected:
-		//!\~english The plug-in's version checking function	\~french La fonction de récupération de la version requise
+		/**
+		 *\~english
+		 *\brief		Calls load function for the plug-in.
+		 *\~french
+		 *\brief		Exécute la fonction de chargement du plug-in.
+		 */
+		void load();
+		/**
+		 *\~english
+		 *\brief		Calls unload function for the plug-in.
+		 *\~french
+		 *\brief		Exécute la fonction de déchargement du plug-in.
+		 */
+		void unload();
+
+	protected:
+		//!\~english	The plug-in's version checking function.
+		//!\~french		La fonction de récupération de la version requise.
 		PGetRequiredVersionFunction m_pfnGetRequiredVersion;
-		//!\~english The plug-in's name retrieval function	\~french La fonction de récupération du nom du plug-in
+		//!\~english	The plug-in's name retrieval function.
+		//!\~french		La fonction de récupération du nom du plug-in.
 		PGetNameFunction m_pfnGetName;
-		//!\~english The plug-in's loading function	\~french La fonction de chargement du plug-in
+		//!\~english	The plug-in's loading function.
+		//!\~french		La fonction de chargement du plug-in.
 		POnLoadFunction m_pfnOnLoad;
-		//!\~english The plug-in's unloading function	\~french La fonction de déchargement du plug-in
+		//!\~english	The plug-in's unloading function
+		//!\~french		La fonction de déchargement du plug-in.
 		POnUnloadFunction m_pfnOnUnload;
-		//!\~english The plug-in type	\~french Le type du plug-in
+		//!\~english	The plug-in type.
+		//!\~french		Le type du plug-in.
 		PluginType m_type;
+		//!\~english	The plug-in library.
+		//!\~french		La bibliothèque du plug-in.
+		castor::DynamicLibraryWPtr m_library;
 	};
 }
 

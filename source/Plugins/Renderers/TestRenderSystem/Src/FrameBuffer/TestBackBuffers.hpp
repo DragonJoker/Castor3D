@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+﻿/* See LICENSE file in root folder */
 #ifndef ___TRS_BACK_BUFFERS_H___
 #define ___TRS_BACK_BUFFERS_H___
 
@@ -30,20 +9,20 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestBackBuffers
-		: public Castor3D::BackBuffers
+		: public castor3d::BackBuffers
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\para[in]		p_gl		The OpenGL APIs.
-		 *\para[in]		p_engine	The engine.
+		 *\para[in]		engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\para[in]		p_gl		Les APIs OpenGL.
-		 *\para[in]		p_engine	Le moteur.
+		 *\para[in]		engine	Le moteur.
 		 */
-		TestBackBuffers( Castor3D::Engine & p_engine );
+		explicit TestBackBuffers( castor3d::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -52,64 +31,64 @@ namespace TestRender
 		 */
 		virtual ~TestBackBuffers();
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::Create
+		 *\copydoc		castor3d::FrameBuffer::initialise
 		 */
-		bool Create()override;
+		bool initialise()override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::Destroy
+		 *\copydoc		castor3d::FrameBuffer::cleanup
 		 */
-		void Destroy()override;
+		void cleanup()override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		castor3d::FrameBuffer::setDrawBuffers
 		 */
-		void SetDrawBuffers( Castor3D::FrameBuffer::AttachArray const & p_attaches )const override;
+		void setDrawBuffers( castor3d::FrameBuffer::AttachArray const & p_attaches )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
+		 *\copydoc		castor3d::FrameBuffer::downloadBuffer
 		 */
-		void DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer )override;
+		void downloadBuffer( castor3d::AttachmentPoint p_point, uint8_t p_index, castor::PxBufferBaseSPtr p_buffer )const override;
 		/**
-		 *\copydoc		Castor3D::BackBuffers::Bind
+		 *\copydoc		castor3d::BackBuffers::Bind
 		 */
-		void Bind( Castor3D::WindowBuffer p_buffer, Castor3D::FrameBufferTarget p_target )const override;
+		void bind( castor3d::WindowBuffer p_buffer, castor3d::FrameBufferTarget p_target )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
+		 *\copydoc		castor3d::FrameBuffer::setReadBuffer
 		 */
-		void SetReadBuffer( Castor3D::AttachmentPoint, uint8_t )const override;
+		void setReadBuffer( castor3d::AttachmentPoint, uint8_t )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
+		 *\copydoc		castor3d::FrameBuffer::CreateColourRenderBuffer
 		 */
-		Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::PixelFormat p_format )override
+		castor3d::ColourRenderBufferSPtr createColourRenderBuffer( castor::PixelFormat p_format )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::CreateDepthStencilRenderBuffer
+		 *\copydoc		castor3d::FrameBuffer::CreateDepthStencilRenderBuffer
 		 */
-		Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::PixelFormat p_format )override
+		castor3d::DepthStencilRenderBufferSPtr createDepthStencilRenderBuffer( castor::PixelFormat p_format )const override
 		{
 			return nullptr;
 		}
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::IsComplete
+		 *\copydoc		castor3d::FrameBuffer::IsComplete
 		 */
-		bool IsComplete()const override
+		bool isComplete()const override
 		{
 			return true;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoClear
+		 *\copydoc		castor3d::FrameBuffer::doClear
 		 */
-		void DoClear( Castor3D::BufferComponents p_targets )override;
+		void doClear( castor3d::BufferComponents p_targets )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
+		 *\copydoc		castor3d::FrameBuffer::doBlitInto
 		 */
-		void DoBlitInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const override;
+		void doBlitInto( castor3d::FrameBuffer const & p_buffer, castor::Rectangle const & p_rect, castor::FlagCombination< castor3d::BufferComponent > const & p_components )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
+		 *\copydoc		castor3d::FrameBuffer::doStretchInto
 		 */
-		void DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components, Castor3D::InterpolationMode p_interpolation )const override;
+		void doStretchInto( castor3d::FrameBuffer const & p_buffer, castor::Rectangle const & p_rectSrc, castor::Rectangle const & p_rectDst, castor::FlagCombination< castor3d::BufferComponent > const & p_components, castor3d::InterpolationMode p_interpolation )const override;
 	};
 }
 

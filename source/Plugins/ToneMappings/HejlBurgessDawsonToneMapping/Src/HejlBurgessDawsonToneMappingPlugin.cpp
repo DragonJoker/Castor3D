@@ -1,4 +1,4 @@
-#include "HejlBurgessDawsonToneMapping.hpp"
+﻿#include "HejlBurgessDawsonToneMapping.hpp"
 
 #include <Log/Logger.hpp>
 
@@ -19,27 +19,32 @@ using namespace HejlBurgessDawson;
 #	endif
 #endif
 
-C3D_HejlBurgessDawsonToneMapping_API void GetRequiredVersion( Castor3D::Version & p_version )
+extern "C"
 {
-	p_version = Castor3D::Version();
-}
+	C3D_HejlBurgessDawsonToneMapping_API void getRequiredVersion( castor3d::Version * p_version )
+	{
+		*p_version = castor3d::Version();
+	}
 
-C3D_HejlBurgessDawsonToneMapping_API Castor3D::PluginType GetType()
-{
-	return Castor3D::PluginType::eToneMapping;
-}
+	C3D_HejlBurgessDawsonToneMapping_API void getType( castor3d::PluginType * p_type )
+	{
+		*p_type = castor3d::PluginType::eToneMapping;
+	}
 
-C3D_HejlBurgessDawsonToneMapping_API Castor::String GetName()
-{
-	return cuT( "Hejl Burgess Dawson Tone Mapping" );
-}
+	C3D_HejlBurgessDawsonToneMapping_API void getName( char const ** p_name )
+	{
+		static castor::String const Name = cuT( "Hejl Burgess Dawson Tone Mapping" );
+		*p_name = Name.c_str();
+	}
 
-C3D_HejlBurgessDawsonToneMapping_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetToneMappingFactory().Register( ToneMapping::Name, &ToneMapping::Create );
-}
+	C3D_HejlBurgessDawsonToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	{
+		engine->getRenderTargetCache().getToneMappingFactory().registerType( ToneMapping::Name
+			, &ToneMapping::create );
+	}
 
-C3D_HejlBurgessDawsonToneMapping_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetToneMappingFactory().Unregister( ToneMapping::Name );
+	C3D_HejlBurgessDawsonToneMapping_API void OnUnload( castor3d::Engine * engine )
+	{
+		engine->getRenderTargetCache().getToneMappingFactory().unregisterType( ToneMapping::Name );
+	}
 }

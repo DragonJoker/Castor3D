@@ -31,11 +31,11 @@ namespace CastorCom
 	static const WORD MAJOR_VERSION = ${${PROJECT_NAME}_VERSION_MAJOR};
 	static const WORD MINOR_VERSION = ${${PROJECT_NAME}_VERSION_MINOR};
 #ifndef NDEBUG
-	static const Castor::Path HELP_DIR{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}" ) };
-	static const Castor::Path WIN_32{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}ComCastor3Dd.dll" ) };
+	static const castor::Path HELP_DIR{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}" ) };
+	static const castor::Path WIN_32{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}ComCastor3Dd.dll" ) };
 #else
-	static const Castor::Path HELP_DIR{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}" ) };
-	static const Castor::Path WIN_32{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}ComCastor3D.dll" ) };
+	static const castor::Path HELP_DIR{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}" ) };
+	static const castor::Path WIN_32{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}ComCastor3D.dll" ) };
 #endif
 }
 

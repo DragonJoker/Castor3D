@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_CACHE_VIEW_H___
 #define ___C3D_CACHE_VIEW_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -43,7 +24,7 @@ namespace Castor3D
 	*/
 	template< typename ResourceType, typename CacheType, EventType EventType >
 	class CacheView
-		: public Castor::Named
+		: public castor::Named
 	{
 	private:
 		using Initialiser = ElementInitialiser< ResourceType >;
@@ -57,13 +38,13 @@ namespace Castor3D
 		 *\param[in]	p_name			The view name.
 		 *\param[in]	p_initialise	The element initialiser.
 		 *\param[in]	p_clean			The element cleaner.
-		 *\param[in]	p_cache			The viewed cache.
+		 *\param[in]	cache			The viewed cache.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			The view name.
 		 *\param[in]	p_initialise	L'initialiseur d'objet.
 		 *\param[in]	p_clean			Le nettoyeur d'objet.
-		 *\param[in]	p_cache			The viewed cache.
+		 *\param[in]	cache			The viewed cache.
 		 */
 		/**
 		 *\~english
@@ -71,12 +52,12 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom de la vue.
-		 *\param[in]	p_cache	Le cache vu.
+		 *\param[in]	cache	Le cache vu.
 		 */
-		inline CacheView( Castor::String const & p_name
+		inline CacheView( castor::String const & p_name
 			, Initialiser && p_initialise
 			, Cleaner && p_clean
-			, CacheType & p_cache );
+			, CacheType & cache );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -97,10 +78,10 @@ namespace Castor3D
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Params >
-		inline ResourcePtr Add( Castor::String const & p_name, Params && ... p_params );
+		inline ResourcePtr add( castor::String const & p_name, Params && ... p_params );
 		/**
 		 *\~english
-		 *\brief		Adds an already created an element.
+		 *\brief		adds an already created an element.
 		 *\param[in]	p_name		The element name.
 		 *\param[in]	p_element	The element.
 		 *\~french
@@ -108,14 +89,21 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
-		inline ResourcePtr Add( Castor::String const & p_name, ResourcePtr p_element );
+		inline ResourcePtr add( castor::String const & p_name, ResourcePtr p_element );
 		/**
 		 *\~english
 		 *\brief		Removes from the cache the elements created through this view.
 		 *\~french
 		 *\brief		Supprime du cache les éléments créés via cette vue.
 		 */
-		inline void Clear();
+		inline void clear();
+		/**
+		 *\~english
+		 *\return		\p true if the view is empty.
+		 *\~french
+		 *\return		\p true si la vue est vide.
+		 */
+		inline bool isEmpty()const;
 		/**
 		 *\~english
 		 *\param[in]	p_name	The object name.
@@ -124,7 +112,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom d'objet.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool Has( Castor::String const & p_name )const;
+		inline bool has( castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
@@ -135,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ResourcePtr Find( Castor::String const & p_name )const;
+		inline ResourcePtr find( castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
@@ -144,7 +132,7 @@ namespace Castor3D
 		 *\brief		Retire un objet à partir d'un nom.
 		 *\param[in]	p_name	Le nom d'objet.
 		 */
-		inline void Remove( Castor::String const & p_name );
+		inline void remove( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Returns an iterator to the first element of the collection
@@ -200,7 +188,7 @@ namespace Castor3D
 		CacheType & m_cache;
 		//!\~english	The created elements names.
 		//!\~french		Les noms des éléments créés.
-		std::set< Castor::String > m_createdElements;
+		std::set< castor::String > m_createdElements;
 		//!\~english	The element initialiser.
 		//!\~french		L'initaliseur d'éléments.
 		Initialiser m_initialise;

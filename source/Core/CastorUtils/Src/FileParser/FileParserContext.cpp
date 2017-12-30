@@ -1,10 +1,10 @@
-#include "FileParserContext.hpp"
+﻿#include "FileParserContext.hpp"
 
-namespace Castor
+namespace castor
 {
-	FileParserContext::FileParserContext( TextFile * p_pFile )
-		: m_file( p_pFile )
-		, m_line( 0 )
+	FileParserContext::FileParserContext( Path const & path )
+		: m_file{ path }
+		, m_line{ 0 }
 	{
 	}
 
@@ -12,39 +12,39 @@ namespace Castor
 	{
 	}
 
-	void FileParserContext::RegisterUserContext( String const & p_name, void * p_data )
+	void FileParserContext::registerUserContext( String const & name, void * data )
 	{
-		if ( m_userContexts.find( p_name ) != m_userContexts.end() )
+		if ( m_userContexts.find( name ) != m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "A user context with name [" + string::string_cast< char >( p_name ) + "] already exists." );
+			CASTOR_EXCEPTION( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
 		}
 
-		m_userContexts.insert( std::make_pair( p_name, p_data ) );
+		m_userContexts.insert( std::make_pair( name, data ) );
 	}
 
-	void * FileParserContext::UnregisterUserContext( String const & p_name )
+	void * FileParserContext::unregisterUserContext( String const & name )
 	{
-		auto l_it = m_userContexts.find( p_name );
+		auto it = m_userContexts.find( name );
 
-		if ( l_it == m_userContexts.end() )
+		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::string_cast< char >( p_name ) + "]." );
+			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}
 
-		void * l_result = l_it->second;
-		m_userContexts.erase( l_it );
-		return l_result;
+		void * result = it->second;
+		m_userContexts.erase( it );
+		return result;
 	}
 
-	void * FileParserContext::GetUserContext( String const & p_name )
+	void * FileParserContext::getUserContext( String const & name )
 	{
-		auto l_it = m_userContexts.find( p_name );
+		auto it = m_userContexts.find( name );
 
-		if ( l_it == m_userContexts.end() )
+		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::string_cast< char >( p_name ) + "]." );
+			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}
 
-		return l_it->second;
+		return it->second;
 	}
 }

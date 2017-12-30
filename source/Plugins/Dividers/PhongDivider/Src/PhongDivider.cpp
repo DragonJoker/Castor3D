@@ -1,21 +1,21 @@
 #include "PhongDivider.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace Phong
 {
 	namespace
 	{
-		Point3d Barycenter( double u, double v, Point3d const & p1, Point3d const & p2, Point3d const & p3 )
+		Point3r barycenter( real u, real v, Point3r const & p1, Point3r const & p2, Point3r const & p3 )
 		{
-			double w = 1 - u - v;
-			ENSURE( u + v + w == 1 );
-			return ( p1 * u + p2 * v + p3 * w );
+			real w = real( 1 - u - v );
+			ENSURE( std::abs( u + v + w - 1.0 ) < 0.0001 );
+			return Point3r{ p1 * u + p2 * v + p3 * w };
 		}
 	}
 
-	Patch::Patch( PlaneEquation< double > const & p_p1, PlaneEquation< double > const & p_p2, PlaneEquation< double > const & p_p3 )
+	Patch::Patch( Plane const & p_p1, Plane const & p_p2, Plane const & p_p3 )
 		: pi( p_p1 )
 		, pj( p_p2 )
 		, pk( p_p3 )
@@ -26,101 +26,116 @@ namespace Phong
 	String const Subdivider::Type = cuT( "phong" );
 
 	Subdivider::Subdivider()
-		: Castor3D::Subdivider()
+		: castor3d::Subdivider()
 		, m_occurences( 1 )
 	{
 	}
 
 	Subdivider::~Subdivider()
 	{
-		Cleanup();
+		cleanup();
 	}
 
-	SubdividerUPtr Subdivider::Create()
+	SubdividerUPtr Subdivider::create()
 	{
 		return std::make_unique< Subdivider >();
 	}
 
-	void Subdivider::Cleanup()
+	void Subdivider::cleanup()
 	{
-		Castor3D::Subdivider::Cleanup();
+		castor3d::Subdivider::cleanup();
 	}
 
-	void Subdivider::Subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
+	void Subdivider::subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
 	{
 		m_occurences = p_occurences;
 		m_submesh = p_submesh;
 		m_bGenerateBuffers = p_generateBuffers;
-		m_submesh->ComputeContainers();
+		m_submesh->computeContainers();
 
-		DoInitialise();
+		doInitialise();
 		m_bThreaded = p_threaded;
 
 		if ( p_threaded )
 		{
-			m_pThread = std::make_shared< std::thread >( std::bind( &Subdivider::DoSubdivideThreaded, this ) );
+			m_pThread = std::make_shared< std::thread >( std::bind( &Subdivider::doSubdivideThreaded, this ) );
 		}
 		else
 		{
-			DoSubdivide();
-			DoSwapBuffers();
+			doSubdivide();
+			doAddGeneratedFaces();
+			doSwapBuffers();
 		}
 	}
 
-	void Subdivider::DoSubdivide()
+	void Subdivider::doSubdivide()
 	{
-		auto l_facesArray = m_submesh->GetFaces();
-		m_submesh->ClearFaces();
-		std::map< uint32_t, Castor::PlaneEquation< double > > l_posnml;
+		auto facesArray = m_indexMapping->getFaces();
+		m_indexMapping->clearFaces();
+		std::map< uint32_t, Plane > posnml;
 		uint32_t i = 0;
 
-		for ( auto const & l_point : m_submesh->GetPoints() )
+		for ( auto const & point : m_submesh->getPoints() )
 		{
-			Point3r l_position, l_normal;
-			Castor3D::Vertex::GetPosition( l_point, l_position );
-			Castor3D::Vertex::GetNormal( l_point, l_normal );
-			l_posnml.insert( std::make_pair( i++, Castor::PlaneEquation< double >( Point3d( l_normal[0], l_normal[1], l_normal[2] ), Point3d( l_position[0], l_position[1], l_position[2] ) ) ) );
+			Point3r position, normal;
+			castor3d::Vertex::getPosition( point, position );
+			castor3d::Vertex::getNormal( point, normal );
+			posnml.emplace( i++, Plane{ castor::PlaneEquation( normal, position ), position } );
 		}
 
-		for ( auto l_face : l_facesArray )
+		for ( auto face : facesArray )
 		{
-			DoComputeFaces( 0.0, 0.0, 1.0, 1.0, m_occurences, Patch( l_posnml[l_face[0]], l_posnml[l_face[1]], l_posnml[l_face[2]] ) );
+			doComputeFaces( 0.0, 0.0, 1.0, 1.0, m_occurences, Patch( posnml[face[0]], posnml[face[1]], posnml[face[2]] ) );
 		}
 
-		l_facesArray.clear();
+		facesArray.clear();
 	}
 
-	void Subdivider::DoComputeFaces( double u0, double v0, double u2, double v2, int p_occurences, Patch const & p_patch )
+	void Subdivider::doInitialise()
 	{
-		double u1 = ( u0 + u2 ) / 2.0;
-		double v1 = ( v0 + v2 ) / 2.0;
+		castor3d::Subdivider::doInitialise();
+		m_indexMapping = m_submesh->getComponent< TriFaceMapping >();
+	}
+
+	void Subdivider::doAddGeneratedFaces()
+	{
+		for ( auto const & face : m_arrayFaces )
+		{
+			m_indexMapping->addFace( face[0], face[1], face[2] );
+		}
+	}
+
+	void Subdivider::doComputeFaces( real u0, real v0, real u2, real v2, int p_occurences, Patch const & p_patch )
+	{
+		real u1 = ( u0 + u2 ) / 2.0_r;
+		real v1 = ( v0 + v2 ) / 2.0_r;
 
 		if ( p_occurences > 1 )
 		{
-			DoComputeFaces( u0, v0, u1, v1, p_occurences - 1, p_patch );
-			DoComputeFaces( u0, v1, u1, v2, p_occurences - 1, p_patch );
-			DoComputeFaces( u1, v0, u2, v1, p_occurences - 1, p_patch );
-			DoComputeFaces( u1, v1, u0, v0, p_occurences - 1, p_patch );
+			doComputeFaces( u0, v0, u1, v1, p_occurences - 1, p_patch );
+			doComputeFaces( u0, v1, u1, v2, p_occurences - 1, p_patch );
+			doComputeFaces( u1, v0, u2, v1, p_occurences - 1, p_patch );
+			doComputeFaces( u1, v1, u0, v0, p_occurences - 1, p_patch );
 		}
 		else
 		{
-			Castor3D::BufferElementGroupSPtr l_a = DoComputePoint( double( u0 ), double( v0 ), p_patch );
-			Castor3D::BufferElementGroupSPtr l_b = DoComputePoint( double( u2 ), double( v0 ), p_patch );
-			Castor3D::BufferElementGroupSPtr l_c = DoComputePoint( double( u0 ), double( v2 ), p_patch );
-			Castor3D::BufferElementGroupSPtr l_d = DoComputePoint( double( u1 ), double( v0 ), p_patch );
-			Castor3D::BufferElementGroupSPtr l_e = DoComputePoint( double( u1 ), double( v1 ), p_patch );
-			Castor3D::BufferElementGroupSPtr l_f = DoComputePoint( double( u0 ), double( v1 ), p_patch );
-			DoSetTextCoords( *l_a, *l_b, *l_c, *l_d, *l_e, *l_f );
+			castor3d::BufferElementGroupSPtr a = doComputePoint( u0, v0, p_patch );
+			castor3d::BufferElementGroupSPtr b = doComputePoint( u2, v0, p_patch );
+			castor3d::BufferElementGroupSPtr c = doComputePoint( u0, v2, p_patch );
+			castor3d::BufferElementGroupSPtr d = doComputePoint( u1, v0, p_patch );
+			castor3d::BufferElementGroupSPtr e = doComputePoint( u1, v1, p_patch );
+			castor3d::BufferElementGroupSPtr f = doComputePoint( u0, v1, p_patch );
+			doSetTextCoords( *a, *b, *c, *d, *e, *f );
 		}
 	}
 
-	Castor3D::BufferElementGroupSPtr Subdivider::DoComputePoint( double u, double v, Patch const & p_patch )
+	castor3d::BufferElementGroupSPtr Subdivider::doComputePoint( real u, real v, Patch const & p_patch )
 	{
-		Point3d b = Barycenter( u, v, p_patch.pi.GetPoint(), p_patch.pj.GetPoint(), p_patch.pk.GetPoint() );
-		Point3d l_pi = p_patch.pi.Project( b );
-		Point3d l_pj = p_patch.pj.Project( b );
-		Point3d l_pk = p_patch.pk.Project( b );
-		Point3r l_point( Barycenter( u, v, l_pi, l_pj, l_pk ) );
-		return DoTryAddPoint( l_point );
+		Point3r b = barycenter( u, v, p_patch.pi.point, p_patch.pj.point, p_patch.pk.point );
+		Point3r pi = p_patch.pi.plane.project( b );
+		Point3r pj = p_patch.pj.plane.project( b );
+		Point3r pk = p_patch.pk.plane.project( b );
+		Point3r point( barycenter( u, v, pi, pj, pk ) );
+		return doTryAddPoint( point );
 	}
 }

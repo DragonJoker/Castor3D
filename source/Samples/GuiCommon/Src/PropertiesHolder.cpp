@@ -1,82 +1,42 @@
 #include "PropertiesHolder.hpp"
 
-#include "CameraTreeItemProperty.hpp"
-#include "GeometryTreeItemProperty.hpp"
-#include "LightTreeItemProperty.hpp"
-#include "NodeTreeItemProperty.hpp"
-#include "OverlayTreeItemProperty.hpp"
-#include "SubmeshTreeItemProperty.hpp"
-#include "MaterialTreeItemProperty.hpp"
-#include "PassTreeItemProperty.hpp"
-#include "TextureTreeItemProperty.hpp"
+#include "AuiDockArt.hpp"
 
-#include "AdditionalProperties.hpp"
-
-#include <Engine.hpp>
-#include <Cache/MaterialCache.hpp>
-
-#include <Material/Pass.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Overlay/Overlay.hpp>
-#include <Overlay/PanelOverlay.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/SceneNode.hpp>
-#include <Scene/Light/Light.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Scene/Light/SpotLight.hpp>
-#include <Texture/TextureUnit.hpp>
-
-#include <Graphics/Font.hpp>
-
-#include <wx/propgrid/advprops.h>
-
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
-	wxPGEditor * PropertiesHolder::m_buttonEditor = nullptr;
-
-	PropertiesHolder::PropertiesHolder( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxPropertyGrid( p_parent, wxID_ANY, p_ptPos, p_size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
-		, m_bCanEdit( p_bCanEdit )
-		, m_data( nullptr )
+	PropertiesHolder::PropertiesHolder( wxWindow * parent
+		, wxPoint const & position
+		, wxSize const & size )
+		: wxPanel( parent, wxID_ANY, position, size )
+		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
-		if ( !m_buttonEditor )
-		{
-			m_buttonEditor = RegisterEditorClass( new ButtonEventEditor() );
-		}
-
-		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesHolder::OnPropertyChange ) );
+		m_auiManager.SetArtProvider( new AuiDockArt );
+		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_auiManager.Update();
 	}
 
 	PropertiesHolder::~PropertiesHolder()
 	{
+		m_auiManager.UnInit();
 	}
 
-	void PropertiesHolder::SetPropertyData( TreeItemProperty * p_data )
+	void PropertiesHolder::setGrid( wxPropertyGrid * grid )
 	{
-		if ( m_data )
-		{
-			wxPropertyGrid::Clear();
-		}
-
-		m_data = p_data;
-
-		if ( m_data )
-		{
-			m_data->CreateProperties( m_buttonEditor, this );
-		}
-	}
-
-	void PropertiesHolder::OnPropertyChange( wxPropertyGridEvent & p_event )
-	{
-		if ( m_data )
-		{
-			m_data->OnPropertyChange( p_event );
-		}
+		m_grid = grid;
+		m_auiManager.AddPane( m_grid
+			, wxAuiPaneInfo().Name( wxT( "Grid" ) )
+				.CaptionVisible( false )
+				.Center()
+				.CloseButton( false )
+				.Name( wxT( "Render" ) )
+				.Layer( 0 )
+				.Movable( false )
+				.PaneBorder( false )
+				.Dockable( false ) );
+		m_auiManager.Update();
 	}
 }

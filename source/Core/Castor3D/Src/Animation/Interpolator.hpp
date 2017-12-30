@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_INTERPOLATOR_H___
 #define ___C3D_INTERPOLATOR_H___
 
 #include "Castor3DPrerequisites.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -70,7 +51,9 @@ namespace Castor3D
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		C3D_API virtual Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const = 0;
+		C3D_API virtual Type interpolate( Type const & p_src
+			, Type const & p_dst
+			, real p_percent )const = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -122,7 +105,9 @@ namespace Castor3D
 		 *\brief		Fonction d'interpolation.
 		 *\param[in]	p_src		Le départ.
 		 */
-		inline Type Interpolate( Type const & p_src, Type const &, real )const
+		inline Type interpolate( Type const & p_src
+			, Type const &
+			, real )const override
 		{
 			return p_src;
 		}
@@ -171,24 +156,26 @@ namespace Castor3D
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const
+		inline Type interpolate( Type const & p_src
+			, Type const & p_dst
+			, real p_percent )const override
 		{
-			Type l_return;
+			Type result;
 
 			if ( p_percent <= 0.0 )
 			{
-				l_return = p_src;
+				result = p_src;
 			}
 			else if ( p_percent >= 1.0 )
 			{
-				l_return = p_dst;
+				result = p_dst;
 			}
 			else
 			{
-				l_return = p_src + ( ( p_dst - p_src ) * p_percent );
+				result = p_src + ( ( p_dst - p_src ) * p_percent );
 			}
 
-			return l_return;
+			return result;
 		}
 	};
 	/*!
@@ -201,8 +188,8 @@ namespace Castor3D
 	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
 	*/
 	template<>
-	class InterpolatorT< Castor::Quaternion, InterpolatorType::eLinear >
-		: public Interpolator< Castor::Quaternion >
+	class InterpolatorT< castor::Quaternion, InterpolatorType::eLinear >
+		: public Interpolator< castor::Quaternion >
 	{
 	public:
 		/**
@@ -235,24 +222,26 @@ namespace Castor3D
 		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline Castor::Quaternion Interpolate( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst, real p_percent )const
+		inline castor::Quaternion interpolate( castor::Quaternion const & p_src
+			, castor::Quaternion const & p_dst
+			, real p_percent )const override
 		{
-			Castor::Quaternion l_return;
+			castor::Quaternion result;
 
 			if ( p_percent <= 0.0 )
 			{
-				l_return = p_src;
+				result = p_src;
 			}
 			else if ( p_percent >= 1.0 )
 			{
-				l_return = p_dst;
+				result = p_dst;
 			}
 			else
 			{
-				l_return = p_src.slerp( p_dst, p_percent );
+				result = p_src.slerp( p_dst, p_percent );
 			}
 
-			return l_return;
+			return result;
 		}
 	};
 }

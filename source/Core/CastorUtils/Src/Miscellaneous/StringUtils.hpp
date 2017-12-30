@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_STRING_H___
 #define ___CASTOR_STRING_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 #include "Stream/StreamBaseManipulators.hpp"
 #include <sstream>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author Sylvain DOREMUS
@@ -52,7 +33,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale (inutilisée)
 		 *\return		\p false si p_strToTest contient n'importe quel caractère autre que '0123456789'
 		 */
-		CU_API bool is_integer( String const & p_strToTest, std::locale const & p_locale = std::locale() );
+		CU_API bool isInteger( String const & p_strToTest, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String represents a floating number
@@ -65,7 +46,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée pour déterminer le format du séparateur '.'
 		 *\return		\p false si p_strToTest contient n'importe quel caractère autre que '0123456789.,' ou plus d'un '.'/','
 		 */
-		CU_API bool is_floating( String const & p_strToTest, std::locale const & p_locale = std::locale() );
+		CU_API bool isFloating( String const & p_strToTest, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a short from a given String
@@ -78,7 +59,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le short contenu dans le String
 		 */
-		CU_API short to_short( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API short toShort( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves an int from a given String
@@ -91,7 +72,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		L'int contenu dans le String
 		 */
-		CU_API int to_int( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API int toInt( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a long from a given String
@@ -104,7 +85,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le long contenu dans le String
 		 */
-		CU_API long to_long( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API long toLong( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a long long from a given String
@@ -117,7 +98,59 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le long long contenu dans le String
 		 */
-		CU_API long long to_long_long( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API long long toLongLong( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned short from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned short contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned short à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned short contenu dans le String
+		 */
+		CU_API unsigned short toUShort( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned int from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned int contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned int à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned int contenu dans le String
+		 */
+		CU_API unsigned int toUInt( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned long from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned long contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned long à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned long contenu dans le String
+		 */
+		CU_API unsigned long toULong( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned long long from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned long long contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned long long à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned long long contenu dans le String
+		 */
+		CU_API unsigned long long toULongLong( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a float from a given String
@@ -130,7 +163,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le float contenu dans le String
 		 */
-		CU_API float to_float( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API float toFloat( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a double from a given String
@@ -143,7 +176,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le double contenu dans le String
 		 */
-		CU_API double to_double( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API double toDouble( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a double from a given String
@@ -156,7 +189,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le double contenu dans le String
 		 */
-		CU_API long double to_long_double( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API long double toLongDouble( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a short from a given String
@@ -169,7 +202,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le short contenu dans le String
 		 */
-		CU_API real to_real( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API real toReal( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String is upper case
@@ -180,7 +213,7 @@ namespace Castor
 		 *\param[in]	p_strToTest	Le String à tester
 		 *\return		\p true si p_strToTest est en majuscules
 		 */
-		CU_API bool is_upper_case( String const & p_strToTest );
+		CU_API bool isUpperCase( String const & p_strToTest );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String is lower case
@@ -191,10 +224,10 @@ namespace Castor
 		 *\param[in]	p_strToTest	Le String à tester
 		 *\return		\p true si p_strToTest est en minuscules
 		 */
-		CU_API bool is_lower_case( String const & p_strToTest );
+		CU_API bool isLowerCase( String const & p_strToTest );
 		/**
 		 *\~english
-		 *\brief		Sets all characters in a String to upper case
+		 *\brief		sets all characters in a String to upper case
 		 *\param[in]	p_str	The String to modify
 		 *\return		The modified String
 		 *\~french
@@ -202,10 +235,10 @@ namespace Castor
 		 *\param[in]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return		Le String modifié
 		 */
-		CU_API String upper_case( String const & p_str );
+		CU_API String upperCase( String const & p_str );
 		/**
 		 *\~english
-		 *\brief		Sets all characters in a String to lower case
+		 *\brief		sets all characters in a String to lower case
 		 *\param[in]	p_str	The String to modify
 		 *\return		The modified String
 		 *\~french
@@ -213,10 +246,10 @@ namespace Castor
 		 *\param[in]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return		Le String modifié
 		 */
-		CU_API String lower_case( String const & p_str );
+		CU_API String lowerCase( String const & p_str );
 		/**
 		 *\~english
-		 *\brief			Sets all characters in a String to upper case
+		 *\brief			sets all characters in a String to upper case
 		 *\param[in,out]	p_str	The String to modify, receives the modified String
 		 *\return			The modified String
 		 *\~french
@@ -224,10 +257,10 @@ namespace Castor
 		 *\param[in,out]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return			Le String modifié
 		 */
-		CU_API String & to_upper_case( String & p_str );
+		CU_API String & toUpperCase( String & p_str );
 		/**
 		 *\~english
-		 *\brief			Sets all characters in a String to lower case
+		 *\brief			sets all characters in a String to lower case
 		 *\param[in,out]	p_str	The String to modify, receives the modified String
 		 *\return			The modified String
 		 *\~french
@@ -235,7 +268,7 @@ namespace Castor
 		 *\param[in,out]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return			Le String modifié
 		 */
-		CU_API String & to_lower_case( String & p_str );
+		CU_API String & toLowerCase( String & p_str );
 		/**
 		 *\~english
 		 *\brief		Cuts a String into substrings, using delimiter(s)
@@ -375,7 +408,7 @@ namespace Castor
 		 *\return		Le String contenant la valeur
 		 */
 		template< typename T >
-		inline String to_string( T const & p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::base_num_put< xchar >() ) );
+		inline String toString( T const & p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type
@@ -387,7 +420,7 @@ namespace Castor
 		 *\return		La chaîne convertie
 		 */
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( std::basic_string< U > const & p_src );
+		std::basic_string< T > stringCast( std::basic_string< U > const & p_src );
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type
@@ -399,7 +432,7 @@ namespace Castor
 		 *\return		La chaîne convertie
 		 */
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( U const * p_src );
+		std::basic_string< T > stringCast( U const * p_src );
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type.
@@ -413,7 +446,7 @@ namespace Castor
 		 *\return		La chaîne convertie.
 		 */
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( U const * p_begin, U const * p_end );
+		std::basic_string< T > stringCast( U const * p_begin, U const * p_end );
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type
@@ -425,7 +458,7 @@ namespace Castor
 		 *\return		La chaîne convertie
 		 */
 		template< typename T, typename U >
-		std::basic_string< T > string_cast( std::initializer_list<  U > const & p_src );
+		std::basic_string< T > stringCast( std::initializer_list<  U > const & p_src );
 		/*!
 		\author Sylvain DOREMUS
 		\version	0.8.0
@@ -448,9 +481,9 @@ namespace Castor
 			 *\return		Le caractère char32_t en UTF-8.
 			*/
 			template< typename IteratorType >
-			inline char32_t to_utf8( IteratorType p_value );
+			inline char32_t toUtf8( IteratorType p_value );
 			/*!
-			\author		Sylvain Doremus
+			\author		Sylvain doremus
 			\version	0.8.0
 			\date		09/03/2015
 			\~english
@@ -470,7 +503,7 @@ namespace Castor
 				 *\brief		Constructeur.
 				 *\param[in]	p_it	L'itérateur sur la chaîne.
 				*/
-				inline iterator( std::string::iterator const & p_it );
+				inline explicit iterator( std::string::iterator const & p_it );
 				/**
 				 *\~english
 				 *\brief		Copy constructor.
@@ -619,7 +652,7 @@ namespace Castor
 				 *\~french
 				 *\brief		Calcule la valeur UTF-8 cachée.
 				*/
-				inline void DoCalculateCurrentCodePoint()const;
+				inline void doCalculateCurrentCodePoint()const;
 
 			private:
 				//!\~english The internal iterator.
@@ -631,7 +664,7 @@ namespace Castor
 			};
 			/**
 			 *\~english
-			 *\brief		Addition operator.
+			 *\brief		addition operator.
 			 *\param[in]	p_it		The iterator.
 			 *\param[in]	p_offset	The offset to add.
 			 \return		A reference to this object.
@@ -656,7 +689,7 @@ namespace Castor
 			*/
 			inline iterator operator-( iterator p_it, size_t p_offset );
 			/*!
-			\author		Sylvain Doremus
+			\author		Sylvain doremus
 			\version	0.8.0
 			\date		09/03/2015
 			\~english
@@ -676,7 +709,7 @@ namespace Castor
 				 *\brief		Constructeur.
 				 *\param[in]	p_it	L'itérateur sur la chaîne.
 				*/
-				inline const_iterator( std::string::const_iterator const & p_it );
+				inline explicit const_iterator( std::string::const_iterator const & p_it );
 				/**
 				 *\~english
 				 *\brief		Copy constructor.
@@ -825,7 +858,7 @@ namespace Castor
 				 *\~french
 				 *\brief		Calcule la valeur UTF-8 cachée.
 				*/
-				inline void DoCalculateCurrentCodePoint()const;
+				inline void doCalculateCurrentCodePoint()const;
 
 			private:
 				//!\~english The internal iterator.
@@ -837,7 +870,7 @@ namespace Castor
 			};
 			/**
 			 *\~english
-			 *\brief		Addition operator.
+			 *\brief		addition operator.
 			 *\param[in]	p_it		The iterator.
 			 *\param[in]	p_offset	The offset to add.
 			 \return		A reference to this object.
