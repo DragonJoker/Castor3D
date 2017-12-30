@@ -40,12 +40,128 @@ $(function() {
 </div><!-- top -->
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title"><a class="el" href="d4/d8f/a00742.html">Castor3D</a> Engine </div>  </div>
+<div class="title">Castor3D Engine </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
 Change log</h1>
 <p>This page is here to inform about the changes since the earliest versions of the engine.</p>
+<h1><a class="anchor" id="version_0_10_0"></a>
+Version 0.10.0</h1>
+<h2><a class="anchor" id="feat_0_10_0"></a>
+Features</h2>
+<h3><a class="anchor" id="feat_0_10_0_cu"></a>
+CastorUtils</h3>
+<ul>
+<li>
+Renamed namespace Castor to castor. </li>
+<li>
+Added ChangeTracked and GroupChangeTracked classes, allowing to track changes to a member variable. </li>
+<li>
+Renamed CubeBox and SphereBox to BoundingBox and BoundingSphere. </li>
+<li>
+Splitted Colour in two classes: RgbColour and RgbaColour. </li>
+<li>
+PlaneEquation is no more a template class. </li>
+<li>
+Created a buddy allocator class: BuddyAllocator. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_c3d"></a>
+Castor3D</h3>
+<ul>
+<li>
+Renamed namespace Castor3D to <a class="el" href="d0/d85/a00976.html">castor3d</a>. </li>
+<li>
+Emissive in a material is now stored on a single floating point (emissive maps still hold a colour though). </li>
+<li>
+Implemented Physical Based Rendering, using both metallic/roughness and specular/glossiness workflows. </li>
+<li>
+RenderPipeline now also holds the shader program. </li>
+<li>
+Implemented Screen Space Subsurface Scattering. </li>
+<li>
+The light pass result is now stored in two render targets: diffuse and specular. </li>
+<li>
+Vertex buffers now use a buddy allocated pool. </li>
+<li>
+Shadow mapping now uses variance shadow maps. </li>
+<li>
+Transparent meshes are now rendered using Weighted Blended rendering. </li>
+<li>
+Screen Space Ambiant Occlusion has been improved, using Scalable Ambiant Obscurance implementation. </li>
+<li>
+Parallax Occlusion mapping is implemented. </li>
+<li>
+Reflection and refraction mapping have been implemented. </li>
+<li>
+Deferred rendering has been fully integrated, for opaque objects rendering. </li>
+<li>
+Created components for submeshes, to move functionalities out of Submesh. </li>
+<li>
+Rendering now uses a depth prepass. </li>
+<li>
+Created ColourSkybox, to handle background colour and skyboxes in the same way. </li>
+<li>
+Created ShaderBuffer class, to be able to handle SSBOs or TBOs in a similar way, choosing the most appropriate one, depending on running machine. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_gen"></a>
+Generators</h3>
+<ul>
+<li>
+Created DiamondSquareTerrain plugin. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_gic"></a>
+Generic</h3>
+<ul>
+<li>
+Events from CastorGUI are now forwarded to the user. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_imp"></a>
+Importers</h3>
+<ul>
+<li>
+Removed almost every importer plugin, keeping only Assimp, OBJ, and PLY importers. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_gl"></a>
+RenderSystems</h3>
+<ul>
+<li>
+Updated to support the features provided by Castor3D. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_pos"></a>
+PostEffects</h3>
+<ul>
+<li>
+Created SMAA post effect. </li>
+<li>
+Created Kawase Light Streaks post effect. </li>
+<li>
+Created Film Grain post effect. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_tec"></a>
+Techniques</h3>
+<ul>
+<li>
+Technique plugins have been completely removed. </li>
+</ul>
+<h3><a class="anchor" id="feat_0_10_0_ton"></a>
+Tone mappings</h3>
+<ul>
+<li>
+Created Uncharted 2 tone mappings. </li>
+</ul>
+<h2><a class="anchor" id="bugs_0_10_0"></a>
+Fixed Bugs</h2>
+<h3><a class="anchor" id="bugs_0_10_0_c3d"></a>
+Castor3D</h3>
+<ul>
+<li>
+Fixed bounding boxes for animated meshes and skinned meshes. </li>
+<li>
+Repaired an reenabled frustum culling. </li>
+<li>
+Fixed alpha rejection. </li>
+</ul>
 <h1><a class="anchor" id="version_0_9_0"></a>
 Version 0.9.0</h1>
 <h2><a class="anchor" id="feat_0_9_0"></a>
@@ -61,7 +177,7 @@ Castor3D</h3>
 <ul>
 <li>
 Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.<br />
- It has been done to prepare the arrival of Vulkan, in which the pipeline can't be modified once it has been created, and that is now the case in <a class="el" href="d4/d8f/a00742.html">Castor3D</a> too. </li>
+ It has been done to prepare the arrival of Vulkan, in which the pipeline can't be modified once it has been created, and that is now the case in Castor3D too. </li>
 <li>
 The rendering has been splitted in RenderPasses, that each have one or more RenderQueues, that are updated asynchronously on CPU.<br />
  This allows the GPU loop to be cleaned of most CPU computations. </li>
@@ -75,7 +191,7 @@ Plug-ins interface's consistency has been improved. </li>
 <li>
 Fog basic implementations (linear, exponential, and squared exponential) have been added. </li>
 <li>
-Morphing (per-vertex) animations are now supported by <a class="el" href="d4/d8f/a00742.html">Castor3D</a>. </li>
+Morphing (per-vertex) animations are now supported by Castor3D. </li>
 <li>
 Frustum culling has been implemented. </li>
 <li>
@@ -87,7 +203,7 @@ Particle system has been implemented, giving to the user the implementation choi
 <li>
 Fixed the lighting in GLSL, to make it behave properly without dirty hacks. </li>
 <li>
-Compute shaders have been integrated to <a class="el" href="d4/d8f/a00742.html">Castor3D</a>, along with Shader Storage Buffers and Atomic Counter Buffers. </li>
+Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers. </li>
 <li>
 Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.<br />
  It has allowed the creation of cube textures. </li>
@@ -107,7 +223,7 @@ FrameVariable class has been split in two classes: Uniform (for uniform variable
 GlRenderSystem</h3>
 <ul>
 <li>
-Updated to support the features provided by <a class="el" href="d4/d8f/a00742.html">Castor3D</a>. </li>
+Updated to support the features provided by Castor3D. </li>
 </ul>
 <h3><a class="anchor" id="feat_0_9_0_tec"></a>
 Techniques</h3>
@@ -175,7 +291,7 @@ The Scene class has been reworked, to use ObjectManager classes, and ResourceMan
 <li>
 Now, the ShaderProgram retrieves the vertex inputs layout. This layout is used in Submesh, to create the appropriate GeometryBuffers. </li>
 <li>
-<a class="el" href="d4/d8f/a00742.html">Castor3D</a> now renders the scenes using HDR and tone mapping. The default tone mapping configuration will make the render look like there were no HDR enabled. </li>
+Castor3D now renders the scenes using HDR and tone mapping. The default tone mapping configuration will make the render look like there were no HDR enabled. </li>
 </ul>
 <h3><a class="anchor" id="feat_0_8_0_gl"></a>
 GlRenderSystem</h3>
@@ -219,7 +335,7 @@ The first post effect plug-in has been implemented: Bloom. </li>
 CastorGUI</h3>
 <ul>
 <li>
-New plug-in, allowing creation of GUIs inside <a class="el" href="d4/d8f/a00742.html">Castor3D</a> scenes. </li>
+New plug-in, allowing creation of GUIs inside Castor3D scenes. </li>
 </ul>
 <h3><a class="anchor" id="feat_0_8_0_gui"></a>
 GuiCommon</h3>
@@ -283,19 +399,19 @@ Added AStyle support. </li>
 CastorUtils</h3>
 <ul>
 <li>
-Modified DynamicLibrary::GetFunction, added a template parameter that is the function type, and a method parameter that is the pointer to the function to retrieve so no more casts when using DynamicLibrary::GetFunction. </li>
+Modified DynamicLibrary::getFunction, added a template parameter that is the function type, and a method parameter that is the pointer to the function to retrieve so no more casts when using DynamicLibrary::getFunction. </li>
 <li>
 Added log level support for Logger. </li>
 <li>
 Implemented intersection function in Line3D. </li>
 <li>
-That class now has to named constructors : FromPointAndSlope and FromPoints, to avoid confusion between them. </li>
+That class now has to named constructors : fromPointAndSlope and fromPoints, to avoid confusion between them. </li>
 <li>
 Created two classes Size and Position instead of just having a typedef for these. </li>
 <li>
 Improved FileParser, now functions have parameters and not only parameters types, and parameters parse themselves. </li>
 <li>
-Castor::Point now holds a static array as it's members instead of a dynamic one. </li>
+castor::Point now holds a static array as it's members instead of a dynamic one. </li>
 <li>
 Removed Unicode file encoding. </li>
 <li>
@@ -313,7 +429,7 @@ Modified Subdivision, now only in Subdivider, no more in Geometry, mesh or Subme
 <li>
 Implemented Implemented Lights in texture. </li>
 <li>
-Added HasParameter and SetParameter functions in ShaderObject, to apply matrices from RenderPipeline. </li>
+Added hasParameter and setParameter functions in ShaderObject, to apply matrices from RenderPipeline. </li>
 <li>
 Removed ApplyXXXMatrix from IPipelineImpl, now the RenderPipeline applies matrices itself. </li>
 <li>
@@ -329,7 +445,7 @@ Implemented Frame buffers. </li>
 <li>
 Submeshes are sorted by Material's alpha in order to render submeshes without alpha before others. </li>
 <li>
-Added functions Begin and End in Mesh class to be able to iterate through submeshes without using GetSubmesh and GetSubmeshCount. </li>
+Added functions Begin and End in Mesh class to be able to iterate through submeshes without using getSubmesh and getSubmeshCount. </li>
 <li>
 Added Material functions Begin and End to retrieve passes in standard way. </li>
 <li>
@@ -337,7 +453,7 @@ Added possibility to activate or deactivate deferred rendering, this is also pos
 <li>
 Created TechniqueParameters class to be able to pass generic parameters instead of, for example, the samples count. </li>
 <li>
-Introducing SamplerState class to group calls to SetSamplerState and all relative stuff. </li>
+Introducing SamplerState class to group calls to setSamplerState and all relative stuff. </li>
 <li>
 Reviewed sizes a bit : Viewport holds the internal size, RenderTarget and RenderWindow hold external size. Modified SceneFileParser, added &lt;size&gt; directive for viewport. </li>
 <li>
@@ -363,7 +479,7 @@ Put a BlendState instance in Pass and removed rgb/alpha blending from the pass. 
 <li>
 Removed Context::Enable and Context::Disable, removed RenderState class. </li>
 <li>
-Removed SetPolygonMode from Context. </li>
+Removed setPolygonMode from Context. </li>
 <li>
 Moved Render to buffer common code (from FrameBuffer and RenderWindow) into Context::BtoBRender. </li>
 <li>
@@ -457,7 +573,7 @@ Removed String class, added string. </li>
 <li>
 Removed all dependencies to boost, except for thread, for non C++11 compilers. </li>
 <li>
-Modified Point, moved functions that shouldn't be in that class in a small helper class : point. It holds normalise, get_normalised, dot, all distance functions, cos_theta, negate. </li>
+Modified Point, moved functions that shouldn't be in that class in a small helper class : point. It holds normalise, getNormalised, dot, all distance functions, cosTheta, negate. </li>
 <li>
 Modified FileParser in order to be able to ignore complete sections without commenting it (such as HLSL shader blocks in GlRenderSystem...). </li>
 <li>
@@ -467,7 +583,7 @@ Reduced images memory occupation. </li>
 <li>
 Removed Point::link, Point::copy/clopy/clone functions. </li>
 <li>
-Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek and cftell by functions in namespace Castor. </li>
+Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek and cftell by functions in namespace castor. </li>
 <li>
 Modified Colour class, it doesn't extend Point4f anymore. </li>
 <li>
@@ -481,7 +597,7 @@ Merged Submesh and SmoothingGroup classes. </li>
 <li>
 Reduced memory size of vertex buffers. </li>
 <li>
-Modified Submesh::ComputeTangents to take care of each vertex normal. </li>
+Modified Submesh::computeTangents to take care of each vertex normal. </li>
 <li>
 Modified BufferElementGroup so it can't hold anymore its buffer. </li>
 <li>
@@ -505,7 +621,7 @@ Moved TargetRenderer::PostRender code into RenderWindow. </li>
 <li>
 Created WindowRenderer::EndScene function to prepare the render of the RenderTarget's frame buffer into the window. </li>
 <li>
-Removed calls to ShaderObject in order to make it more internal to <a class="el" href="d4/d8f/a00742.html">Castor3D</a>. </li>
+Removed calls to ShaderObject in order to make it more internal to Castor3D. </li>
 <li>
 Overlays are no more Renderable, there is one instance of OverlayRenderer class in the OverlayCache. All overlays will be rendered through this instance by the OverlayCache. </li>
 <li>
@@ -525,9 +641,9 @@ Fixed bugs</h2>
 General</h3>
 <ul>
 <li>
-Added Destroy functions for each Create function in plug-ins, so creation and deletion is made in DLL memory space (for Windows). </li>
+Added Destroy functions for each create function in plug-ins, so creation and deletion is made in DLL memory space (for Windows). </li>
 <li>
-Added ASSIMP importer plug-in to import actually unsupported file types, modified ImporterPlugin::GetExtensions to be able to retrieve an array of pairs &lt;extension, file="" type=""&gt;. </li>
+Added ASSIMP importer plug-in to import actually unsupported file types, modified ImporterPlugin::getExtensions to be able to retrieve an array of pairs &lt;extension, file="" type=""&gt;. </li>
 <li>
 Modified Importers so no more memory leaks are detected with Visual Studio. </li>
 </ul>
@@ -567,7 +683,7 @@ Moved m_pCastor3D destruction and ImageLoader::Cleanup in the OnDestroy event ha
 GlRenderSystem</h3>
 <ul>
 <li>
-Corrected a bug in DoGetDeferredShaderSource. </li>
+Corrected a bug in doGetDeferredShaderSource. </li>
 <li>
 Corrected mipmaps generation in GlStaticTexture and GlDynamicTexture. </li>
 <li>
@@ -582,7 +698,7 @@ Corrected materials and textures import. </li>
 <h1><a class="anchor" id="version_0_6_1_2"></a>
 Version 0.6.1.2</h1>
 <h2><a class="anchor" id="adds_0_6_1_2"></a>
-Adds</h2>
+adds</h2>
 <ul>
 <li>
 Created Dx9Renderer to render with Direct3D 9. Stills things to correct, in shaders and matrices, but it's almost done. </li>
@@ -622,7 +738,7 @@ Still troubles with Cg shaders (not worked on it). </li>
 <h1><a class="anchor" id="version_0_6_1_1"></a>
 Version 0.6.1.1</h1>
 <h2><a class="anchor" id="adds_0_6_1_1"></a>
-Adds</h2>
+adds</h2>
 <ul>
 <li>
 Created a CMakeLists file to generate the solution from CMake. </li>
@@ -633,7 +749,7 @@ Splitted Plugin class in 3 parts : Renderer, Divider et Importer. </li>
 <li>
 Created one project per importer (OBJ, PLY, MD2, MD3, 3DS, ...) </li>
 <li>
-PNTrianglesDivider is left in <a class="el" href="d4/d8f/a00742.html">Castor3D</a> because it is sstill used by Icosahedron, LoopDivider is exported in a plug-in. </li>
+PNTrianglesDivider is left in Castor3D because it is sstill used by Icosahedron, LoopDivider is exported in a plug-in. </li>
 <li>
 Began Cg shaders implementation. This implies a scene file modification because in Cg, uniform variables are are linked to a shader instead of being linked to the whole program. Still buggy. </li>
 </ul>
@@ -649,7 +765,7 @@ Suppressed Singletons for the Managers (Image, Font, Scene, Material, Animation 
 <li>
 Remerged SceneNode classes. </li>
 <li>
-Created IdPoint class, it is a point with just an index. Submes::AddPoint creates now IdPoints and Submesh::AddFace uses them to create the vertex. </li>
+Created IdPoint class, it is a point with just an index. Submes::addPoint creates now IdPoints and Submesh::addFace uses them to create the vertex. </li>
 <li>
 Subdividers can subdivide in a thread in order not to freeze the main thread. It is possible to define a function to use at the end of the subdivision (cf. CastorShape). </li>
 </ul>
@@ -662,7 +778,7 @@ Corrected LoopDivider which didn't reposition the Vertex </li>
 <h1><a class="anchor" id="version_0_6_1_0"></a>
 Version 0.6.1.0</h1>
 <h2><a class="anchor" id="adds_0_6_1_0"></a>
-Adds</h2>
+adds</h2>
 <ul>
 <li>
 Using std or tr1 or boost smart pointers. </li>
@@ -700,7 +816,7 @@ Corrected the black render with OpenGL 3.x </li>
 <h1><a class="anchor" id="version_0_6_0_0"></a>
 Version 0.6.0.0</h1>
 <h2><a class="anchor" id="adds_0_6_0_0"></a>
-Adds</h2>
+adds</h2>
 <ul>
 <li>
 Added a projection/normal and view matrices management class, in order to suppress the fixed pipeline support in OpenGl renderers. </li>
@@ -750,7 +866,7 @@ In GL3RenderSystem, I've got a black screen (?!?) but transformations seem to be
 <h1><a class="anchor" id="version_0_5_0_1"></a>
 Version 0.5.0.1</h1>
 <h2><a class="anchor" id="adds_0_5_0_1"></a>
-Adds</h2>
+adds</h2>
 <ul>
 <li>
 Tangent space is computed and available in GLSL shaders. </li>
@@ -777,7 +893,7 @@ Corrected the crash on shutdown. It was due to VBOs which are now destroyed in a
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:27:56 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:39:03 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

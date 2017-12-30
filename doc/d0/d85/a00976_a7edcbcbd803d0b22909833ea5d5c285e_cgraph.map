@@ -1,0 +1,33 @@
+<map id="castor3d::doBindPass" name="castor3d::doBindPass">
+<area shape="rect" id="node1" title=" " alt="" coords="5,871,156,898"/>
+<area shape="rect" id="node2" href="$d0/da2/a03620.html#a4c2b3a46cc93730681a025eae34a782a" title="Applies the texture unit." alt="" coords="250,325,397,367"/>
+<area shape="rect" id="node3" href="$d8/d22/a02044.html#a1b4f4973ab774938c3d142efeaade40e" title="Binds the pass&#39; textures." alt="" coords="227,391,419,418"/>
+<area shape="rect" id="node4" href="$d0/d85/a00976.html#af494884ca15f3e3573aa7de5699c5c5c" title=" " alt="" coords="221,442,425,469"/>
+<area shape="rect" id="node10" href="$d4/d61/a02588.html#af690650bda2315b2119a8ed486c46cff" title="Defines the value of the variable." alt="" coords="527,683,689,724"/>
+<area shape="rect" id="node17" href="$d0/d85/a00976.html#a2cab52313bf629605f90c620c9b4d534" title=" " alt="" coords="208,791,439,818"/>
+<area shape="rect" id="node19" href="$d2/dba/a02692.html#a70d0d758e6dbe7d5ca0ddbc7c12bc7d5" title=" " alt="" coords="525,748,691,789"/>
+<area shape="rect" id="node23" href="$d6/db9/a02980.html#a3834e7ef4b0854a44d38c46133b98ec6" title=" " alt="" coords="204,842,443,869"/>
+<area shape="rect" id="node24" href="$d2/dba/a02692.html#abc009ede93d64d64a6be03541bffe1a1" title=" " alt="" coords="228,893,419,935"/>
+<area shape="rect" id="node25" href="$d9/d63/a01896.html#af71f627ce5f9372c2de23e0af8f8ed98" title=" " alt="" coords="235,959,411,1000"/>
+<area shape="rect" id="node26" href="$d9/d63/a01896.html#afa869b52b404e904599215f93b7f218e" title=" " alt="" coords="235,1024,411,1065"/>
+<area shape="rect" id="node27" href="$d2/dba/a02692.html#ad40622c688e0a66ec9a5461b48d8f389" title=" " alt="" coords="240,1089,407,1131"/>
+<area shape="rect" id="node28" href="$d8/d22/a02044.html#ae656ac3132fb4e95fa30f28381d5e421" title=" " alt="" coords="218,1155,429,1196"/>
+<area shape="rect" id="node30" href="$d6/d75/a03204.html#a81db0f258130e31668f8185a9d1d1508" title="sets the environment map index value." alt="" coords="254,1220,393,1261"/>
+<area shape="rect" id="node31" href="$d0/da2/a03620.html#a8056557421593e2c9aac2972fa1d4c2b" title="sets the unit index." alt="" coords="250,1285,397,1327"/>
+<area shape="rect" id="node5" href="$d6/db9/a02980.html#a00de2c47e744a80a3546c51674bfbe8a" title=" " alt="" coords="530,566,686,593"/>
+<area shape="rect" id="node6" href="$d9/de2/a02508.html#a55193e25aa23894dbd2c339cf8c92a70" title=" " alt="" coords="537,617,679,659"/>
+<area shape="rect" id="node7" href="$d0/da2/a03620.html#a455370bb5d5da08745042e3503752f21" title=" " alt="" coords="535,5,681,47"/>
+<area shape="rect" id="node8" href="$d0/da2/a03620.html#a61f27f594de56ec64b1304a04bf7e835" title=" " alt="" coords="535,71,681,112"/>
+<area shape="rect" id="node9" href="$d2/dba/a02692.html#a7be8c4701bff8a532629970e61fe47f9" title=" " alt="" coords="520,136,696,177"/>
+<area shape="rect" id="node11" href="$d9/de2/a02508.html#afed1f11f45c4a5fbeeba7ffa972cecb2" title=" " alt="" coords="519,201,697,243"/>
+<area shape="rect" id="node12" href="$d2/dba/a02692.html#a9a4b3de61e07e15327ea06d91aad1b16" title=" " alt="" coords="519,267,697,308"/>
+<area shape="rect" id="node13" href="$d6/db9/a02980.html#a54a1b4e8c6084463b493ef0dff8e13c9" title=" " alt="" coords="515,333,701,359"/>
+<area shape="rect" id="node14" href="$d8/dbd/a03008.html#a38526892b839fd4182b312e73c8e509f" title=" " alt="" coords="527,383,689,410"/>
+<area shape="rect" id="node15" href="$d9/de2/a02508.html#ae1e7cf0e13e49f113a7ad948d01cf33a" title=" " alt="" coords="537,435,679,476"/>
+<area shape="rect" id="node16" href="$d2/dba/a02692.html#a7aa85646f9205daccd3ef81b84eb97af" title=" " alt="" coords="525,500,691,541"/>
+<area shape="rect" id="node18" href="$d0/d85/a00976.html#a2817ed88014181a6316eeaaf35beabca" title="Gives the shadow filter type matching the given flags." alt="" coords="522,945,694,971"/>
+<area shape="rect" id="node20" href="$d2/dba/a02692.html#abb3b81660e8d439629c695c8b347b12a" title=" " alt="" coords="491,996,725,1037"/>
+<area shape="rect" id="node21" href="$d2/dba/a02692.html#a5be1d2ed3402483535d133ce9861514b" title=" " alt="" coords="508,813,708,855"/>
+<area shape="rect" id="node22" href="$d2/dba/a02692.html#afa3b5ae21ce6b428c645bb0a3a317f1a" title=" " alt="" coords="507,879,709,920"/>
+<area shape="rect" id="node29" href="$d8/d22/a02044.html#a7ce5b0e4d13f38600b9ba9bb122ce973" title=" " alt="" coords="519,1155,697,1196"/>
+</map>

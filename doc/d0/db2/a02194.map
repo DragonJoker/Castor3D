@@ -1,4 +1,5 @@
-<map id="Castor3D::DistanceRenderNode&lt; NodeType &gt;" name="Castor3D::DistanceRenderNode&lt; NodeType &gt;">
-<area shape="rect" id="node1" title="Helper structure used to render objects." alt="" coords="5,95,181,136"/>
-<area shape="rect" id="node2" href="$dd/daf/a02191.html" title="Helper structure used to render billboards." alt="" coords="5,5,181,47"/>
+<map id="castor3d::BinaryWriter&lt; Bone &gt;" name="castor3d::BinaryWriter&lt; Bone &gt;">
+<area shape="rect" id="node1" title="Animable binary loader." alt="" coords="21,185,173,227"/>
+<area shape="rect" id="node2" href="$dc/d3e/a01712.html" title=" " alt="" coords="5,95,188,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="19,5,174,32"/>
 </map>

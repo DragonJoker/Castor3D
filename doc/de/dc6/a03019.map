@@ -1,0 +1,4 @@
+<map id="castor3d::LegacyPassBuffer" name="castor3d::LegacyPassBuffer">
+<area shape="rect" id="node1" title="SSBO holding the LegacyPasses data." alt="" coords="5,80,191,107"/>
+<area shape="rect" id="node2" href="$d5/d7f/a03036.html" title="ShaderBuffer holding the Passes data." alt="" coords="27,5,169,32"/>
+</map>

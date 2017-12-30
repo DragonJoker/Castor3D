@@ -1,0 +1,23 @@
+<map id="castor3d::BufferElementGroup::ptr" name="castor3d::BufferElementGroup::ptr">
+<area shape="rect" id="node1" title="Retrieves a pointer on the data buffer." alt="" coords="499,245,717,272"/>
+<area shape="rect" id="node2" href="$dd/d6e/a02324.html#a96f84a83c27e0ac21d36da36dec37869" title="Retrieves the vertex bitangent." alt="" coords="252,5,451,32"/>
+<area shape="rect" id="node4" href="$dd/d6e/a02324.html#ac3e1c51842847d2fdf3962fd8c6ed6c7" title="Retrieves the vertex normal." alt="" coords="259,56,444,83"/>
+<area shape="rect" id="node6" href="$dd/d6e/a02324.html#afa88f676e1469d643d815dfd53b1b021" title="Retrieves the vertex position." alt="" coords="256,107,447,133"/>
+<area shape="rect" id="node8" href="$dd/d6e/a02324.html#a91c165d36edabf4670f4cae8886a02f1" title="Retrieves the vertex tangent." alt="" coords="256,157,447,184"/>
+<area shape="rect" id="node10" href="$dd/d6e/a02324.html#a4c2d95258d175e72b733e8f404c8db5d" title="Retrieves the vertex texture coordinates." alt="" coords="269,209,434,250"/>
+<area shape="rect" id="node12" href="$dd/d6e/a02324.html#a43e9d033096fa12a0f12aff7558a71a7" title="sets the vertex bitangent" alt="" coords="252,275,451,301"/>
+<area shape="rect" id="node14" href="$dd/d6e/a02324.html#ab279431175148279d4b4e270c25f0e29" title="sets the vertex normal" alt="" coords="259,325,444,352"/>
+<area shape="rect" id="node16" href="$dd/d6e/a02324.html#a4f3da4c1921a67df86ad33bf9f70d8b5" title="sets the vertex position" alt="" coords="256,376,447,403"/>
+<area shape="rect" id="node18" href="$dd/d6e/a02324.html#a5b24f136c34c21bac3915ea84de352f9" title="sets the vertex tangent" alt="" coords="256,427,447,453"/>
+<area shape="rect" id="node20" href="$dd/d6e/a02324.html#a244f79e3b8edff4df4e02c0245d55ddc" title="sets the vertex texture coordinates" alt="" coords="269,478,434,519"/>
+<area shape="rect" id="node3" href="$dd/d6e/a02324.html#a8facc68c4bd5740931e538f9b0b7086b" title="Retrieves the vertex bitangent." alt="" coords="5,5,204,32"/>
+<area shape="rect" id="node5" href="$dd/d6e/a02324.html#a678972ce9b3b1a1f4733346d3c2baa12" title="Retrieves the vertex normal." alt="" coords="12,56,197,83"/>
+<area shape="rect" id="node7" href="$dd/d6e/a02324.html#a6daa4f619922b51b6a9074f19572e965" title="Retrieves the vertex position." alt="" coords="9,107,200,133"/>
+<area shape="rect" id="node9" href="$dd/d6e/a02324.html#a916025154383f98689d0bfb20336202b" title="Retrieves the vertex tangent." alt="" coords="9,157,200,184"/>
+<area shape="rect" id="node11" href="$dd/d6e/a02324.html#a96b3b84210f9aabdcfaf6176373822e9" title="Retrieves the vertex texture coordinates." alt="" coords="22,209,187,250"/>
+<area shape="rect" id="node13" href="$dd/d6e/a02324.html#af8caf9abf502379ab53f3401be99e83a" title="sets the vertex bitangent" alt="" coords="5,275,204,301"/>
+<area shape="rect" id="node15" href="$dd/d6e/a02324.html#a818fba8f1e9e57eb1a16dcc83afd7b7c" title="sets the vertex normal" alt="" coords="12,325,197,352"/>
+<area shape="rect" id="node17" href="$dd/d6e/a02324.html#a0492cc23602d1da219db240b5cf4723b" title="sets the vertex position" alt="" coords="9,376,200,403"/>
+<area shape="rect" id="node19" href="$dd/d6e/a02324.html#adf949981ddd1c49ad366b0775811c12d" title="sets the vertex tangent" alt="" coords="9,427,200,453"/>
+<area shape="rect" id="node21" href="$dd/d6e/a02324.html#a5844d40068e4893daec9e5bcb7467c1a" title="sets the vertex texture coordinates" alt="" coords="22,478,187,519"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="castor3d::ShadowMap::getTexture" name="castor3d::ShadowMap::getTexture">
+<area shape="rect" id="node1" title=" " alt="" coords="252,93,403,134"/>
+<area shape="rect" id="node2" href="$d6/d49/a03472.html#a6645823e39bd402e04d1acc7a76ac867" title="Retrieves the texture from the shadow map." alt="" coords="5,5,204,61"/>
+<area shape="rect" id="node3" href="$d8/dbb/a03480.html#a68e2afa2737845617404f458c8475444" title="Retrieves the texture from the shadow map." alt="" coords="13,85,197,141"/>
+<area shape="rect" id="node4" href="$de/df6/a03484.html#a35e027169058cb4546b9a0b14027e3fb" title="Renders the light pass on currently bound framebuffer." alt="" coords="13,166,197,207"/>
+</map>

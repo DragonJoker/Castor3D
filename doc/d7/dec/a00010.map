@@ -1,10 +1,16 @@
-<map id="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Animation/Interpolator.hpp" name="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Animation/Interpolator.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="519,5,721,61"/>
-<area shape="rect" id="node2" href="$d5/d16/a00029.html" title=" " alt="" coords="294,109,493,180"/>
-<area shape="rect" id="node6" href="$d6/d06/a00572.html" title=" " alt="" coords="621,109,867,180"/>
-<area shape="rect" id="node3" href="$db/db2/a00020.html" title=" " alt="" coords="5,228,171,299"/>
-<area shape="rect" id="node4" href="$d3/d52/a00023.html" title=" " alt="" coords="195,228,386,299"/>
-<area shape="rect" id="node5" href="$d6/d5b/a00026.html" title=" " alt="" coords="410,228,601,299"/>
-<area shape="rect" id="node7" href="$d0/d3e/a00566.html" title=" " alt="" coords="625,228,863,299"/>
-<area shape="rect" id="node8" href="$d4/d9e/a00569.html" title=" " alt="" coords="887,228,1126,299"/>
+<map id="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Animation/AnimationKeyFrame.hpp" name="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Animation/AnimationKeyFrame.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="503,5,757,61"/>
+<area shape="rect" id="node2" href="$dd/dad/a00005.html" title=" " alt="" coords="291,117,486,173"/>
+<area shape="rect" id="node12" href="$d4/d51/a00017.html" title=" " alt="" coords="511,109,749,180"/>
+<area shape="rect" id="node13" href="$d5/d16/a00029.html" title=" " alt="" coords="773,109,993,180"/>
+<area shape="rect" id="node3" href="$d2/de7/a00014.html" title=" " alt="" coords="21,235,284,291"/>
+<area shape="rect" id="node4" href="$d3/d52/a00023.html" title=" " alt="" coords="309,228,474,299"/>
+<area shape="rect" id="node5" href="$d1/daa/a00638.html" title=" " alt="" coords="502,228,713,299"/>
+<area shape="rect" id="node6" href="$da/dd1/a00629.html" title=" " alt="" coords="301,354,572,410"/>
+<area shape="rect" id="node10" href="$db/d3a/a00641.html" title=" " alt="" coords="603,465,793,536"/>
+<area shape="rect" id="node11" href="$d3/d8e/a00647.html" title=" " alt="" coords="727,347,936,417"/>
+<area shape="rect" id="node7" href="$d6/dfa/a00626.html" title=" " alt="" coords="5,473,271,529"/>
+<area shape="rect" id="node9" href="$d4/d10/a00635.html" title=" " alt="" coords="295,473,579,529"/>
+<area shape="rect" id="node8" href="$d9/d87/a00551.html" title=" " alt="" coords="482,584,653,655"/>
+<area shape="rect" id="node14" href="$de/ddd/a00653.html" title=" " alt="" coords="739,228,1009,299"/>
 </map>

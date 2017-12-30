@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Member List</title>
+<title>Castor3D: castor3d::RenderDepthLayerCubeToTexture Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,30 +39,360 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d4/d8f/a00742.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d4/d72/a02775.html">MultisampleState</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/d4a/a02772.html">RenderDepthLayerCubeToTexture</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="../../d1/da5/a02769.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::MultisampleState Member List</div>  </div>
+<div class="title">castor3d::RenderDepthLayerCubeToTexture Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a>, including all inherited members.</p>
-<table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d4/d72/a02775.html#afcf984f0a55bba4073ac3d477fe3c0b0">EnableAlphaToCoverage</a>(bool p_enable)</td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d4/d72/a02775.html#ac1c00a34a653355960c2319beb78e01c">GetMultisample</a>() const</td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d4/d72/a02775.html#a031067133ac7a76666201534d515a5cb">GetSampleCoverageMask</a>() const</td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d4/d72/a02775.html#ac841d104cae96e5a56151bc431a2fa26">IsAlphaToCoverageEnabled</a>() const</td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d4/d72/a02775.html#a950196a9a2983d91e4846d0ac54cd645">m_bEnableAlphaToCoverage</a></td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d4/d72/a02775.html#a0443c813e6848e7ef60c152f11e1c6e8">m_bMultisampled</a></td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d4/d72/a02775.html#a8b261a0a06cbc4d08b08c65caaf367ae">m_uiSampleMask</a></td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d4/d72/a02775.html#a6770066e568fdbecfaec998ca4549e70">SetMultisample</a>(bool p_enable)</td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d4/d72/a02775.html#a1773ae39113fc74d7ceea1405dcf06bd">SetSampleCoverageMask</a>(uint32_t p_uiMask)</td><td class="entry"><a class="el" href="../../d4/d72/a02775.html">Castor3D::MultisampleState</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-</table></div><!-- contents -->
+<p>Class used to render a depth cube texture array layer.  
+ <a href="../../d9/d4a/a02772.html#details">More...</a></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for castor3d::RenderDepthLayerCubeToTexture:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d0/dbd/a02771.png" border="0" usemap="#castor3d_1_1RenderDepthLayerCubeToTexture_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1RenderDepthLayerCubeToTexture_inherit__map" id="castor3d_1_1RenderDepthLayerCubeToTexture_inherit__map">
+<area shape="rect"  title="Class used to render a depth cube texture array layer." alt="" coords="7,80,194,121"/>
+<area shape="rect"  title=" " alt="" coords="5,5,196,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for castor3d::RenderDepthLayerCubeToTexture:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d6/d92/a02770.png" border="0" usemap="#castor3d_1_1RenderDepthLayerCubeToTexture_coll__map" alt="Collaboration graph"/></div>
+<map name="castor3d_1_1RenderDepthLayerCubeToTexture_coll__map" id="castor3d_1_1RenderDepthLayerCubeToTexture_coll__map">
+<area shape="rect"  title="Class used to render a depth cube texture array layer." alt="" coords="7,80,194,121"/>
+<area shape="rect"  title=" " alt="" coords="5,5,196,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a5d80c7da6c2753386d06a8ec41d38bd6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d4a/a02772.html#a5d80c7da6c2753386d06a8ec41d38bd6">RenderDepthLayerCubeToTexture</a> (<a class="el" href="../../d8/d09/a02624.html">Context</a> &amp;p_context, <a class="el" href="../../dc/ddd/a03196.html">MatrixUbo</a> &amp;p_matrixUbo)</td></tr>
+<tr class="memdesc:a5d80c7da6c2753386d06a8ec41d38bd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a5d80c7da6c2753386d06a8ec41d38bd6">More...</a><br /></td></tr>
+<tr class="separator:a5d80c7da6c2753386d06a8ec41d38bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4573081a294ac9c4e40f95759dd3949"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d4a/a02772.html#aa4573081a294ac9c4e40f95759dd3949">~RenderDepthLayerCubeToTexture</a> ()</td></tr>
+<tr class="memdesc:aa4573081a294ac9c4e40f95759dd3949"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#aa4573081a294ac9c4e40f95759dd3949">More...</a><br /></td></tr>
+<tr class="separator:aa4573081a294ac9c4e40f95759dd3949"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2911280530340ef7b150f83b59a110a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d4a/a02772.html#af2911280530340ef7b150f83b59a110a">initialise</a> ()</td></tr>
+<tr class="memdesc:af2911280530340ef7b150f83b59a110a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises this render to texture.  <a href="#af2911280530340ef7b150f83b59a110a">More...</a><br /></td></tr>
+<tr class="separator:af2911280530340ef7b150f83b59a110a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3892b059772e391a8b093cffe9d9743b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d4a/a02772.html#a3892b059772e391a8b093cffe9d9743b">cleanup</a> ()</td></tr>
+<tr class="memdesc:a3892b059772e391a8b093cffe9d9743b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the render to texture.  <a href="#a3892b059772e391a8b093cffe9d9743b">More...</a><br /></td></tr>
+<tr class="separator:a3892b059772e391a8b093cffe9d9743b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7bd939ca7bd9d5eca7862eb655bcb1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d4a/a02772.html#ae7bd939ca7bd9d5eca7862eb655bcb1a">render</a> (castor::Position const &amp;p_position, castor::Size const &amp;p_size, <a class="el" href="../../d1/d43/a03612.html">TextureLayout</a> const &amp;p_texture, uint32_t p_layer)</td></tr>
+<tr class="memdesc:ae7bd939ca7bd9d5eca7862eb655bcb1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the wanted layer of the given cube texture to the currently draw-bound frame buffer.  <a href="#ae7bd939ca7bd9d5eca7862eb655bcb1a">More...</a><br /></td></tr>
+<tr class="separator:ae7bd939ca7bd9d5eca7862eb655bcb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a49cec70383b79276dacd52435fe92372"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d4a/a02772.html#a49cec70383b79276dacd52435fe92372">doRender</a> (castor::Point2i const &amp;p_position, castor::Size const &amp;p_size, <a class="el" href="../../d1/d43/a03612.html">TextureLayout</a> const &amp;p_texture, castor::Point3f const &amp;p_face, castor::Point2f const &amp;p_uvMult, <a class="el" href="../../d2/dba/a02692.html">RenderPipeline</a> &amp;p_pipeline, <a class="el" href="../../dc/ddd/a03196.html">MatrixUbo</a> &amp;p_matrixUbo, <a class="el" href="../../da/dbe/a02084.html">GeometryBuffers</a> const &amp;p_geometryBuffers, uint32_t p_layer)</td></tr>
+<tr class="memdesc:a49cec70383b79276dacd52435fe92372"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the wanted face of given cube texture.  <a href="#a49cec70383b79276dacd52435fe92372">More...</a><br /></td></tr>
+<tr class="separator:a49cec70383b79276dacd52435fe92372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a668a8cc7be3bf4a56dccdeae42a0088a"><td class="memItemLeft" align="right" valign="top">ShaderProgramSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d4a/a02772.html#a668a8cc7be3bf4a56dccdeae42a0088a">doCreateProgram</a> ()</td></tr>
+<tr class="memdesc:a668a8cc7be3bf4a56dccdeae42a0088a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the render a 2D texture shader program.  <a href="#a668a8cc7be3bf4a56dccdeae42a0088a">More...</a><br /></td></tr>
+<tr class="separator:a668a8cc7be3bf4a56dccdeae42a0088a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class used to render a depth cube texture array layer. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>02/03/2017 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.9.0 </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a5d80c7da6c2753386d06a8ec41d38bd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d80c7da6c2753386d06a8ec41d38bd6">&#9670;&nbsp;</a></span>RenderDepthLayerCubeToTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::RenderDepthLayerCubeToTexture::RenderDepthLayerCubeToTexture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/d09/a02624.html">Context</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dc/ddd/a03196.html">MatrixUbo</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_matrixUbo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_context</td><td>The <a class="el" href="../../d8/d09/a02624.html" title="Class which holds the rendering context.">Context</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_matrixUbo</td><td>The UBO containing matrix data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa4573081a294ac9c4e40f95759dd3949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4573081a294ac9c4e40f95759dd3949">&#9670;&nbsp;</a></span>~RenderDepthLayerCubeToTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::RenderDepthLayerCubeToTexture::~RenderDepthLayerCubeToTexture </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3892b059772e391a8b093cffe9d9743b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3892b059772e391a8b093cffe9d9743b">&#9670;&nbsp;</a></span>cleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RenderDepthLayerCubeToTexture::cleanup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleans up the render to texture. </p>
+
+</div>
+</div>
+<a id="a668a8cc7be3bf4a56dccdeae42a0088a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a668a8cc7be3bf4a56dccdeae42a0088a">&#9670;&nbsp;</a></span>doCreateProgram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ShaderProgramSPtr castor3d::RenderDepthLayerCubeToTexture::doCreateProgram </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates the render a 2D texture shader program. </p>
+<dl class="section return"><dt>Returns</dt><dd>The program. </dd></dl>
+
+</div>
+</div>
+<a id="a49cec70383b79276dacd52435fe92372"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49cec70383b79276dacd52435fe92372">&#9670;&nbsp;</a></span>doRender()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RenderDepthLayerCubeToTexture::doRender </td>
+          <td>(</td>
+          <td class="paramtype">castor::Point2i const &amp;&#160;</td>
+          <td class="paramname"><em>p_position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d1/d43/a03612.html">TextureLayout</a> const &amp;&#160;</td>
+          <td class="paramname"><em>p_texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point3f const &amp;&#160;</td>
+          <td class="paramname"><em>p_face</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point2f const &amp;&#160;</td>
+          <td class="paramname"><em>p_uvMult</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d2/dba/a02692.html">RenderPipeline</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dc/ddd/a03196.html">MatrixUbo</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_matrixUbo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dbe/a02084.html">GeometryBuffers</a> const &amp;&#160;</td>
+          <td class="paramname"><em>p_geometryBuffers</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_layer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Renders the wanted face of given cube texture. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_position</td><td>The render viewport position. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The render viewport size. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_texture</td><td>The texture. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_face</td><td>The cube face. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_uvMult</td><td>The UV multiplier. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_pipeline</td><td>The render pipeline. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_matrixUbo</td><td>The uniform buffer receiving matrices. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_geometryBuffers</td><td>The geometry buffers used to render the texture. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_layer</td><td>The layer index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af2911280530340ef7b150f83b59a110a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2911280530340ef7b150f83b59a110a">&#9670;&nbsp;</a></span>initialise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RenderDepthLayerCubeToTexture::initialise </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises this render to texture. </p>
+
+</div>
+</div>
+<a id="ae7bd939ca7bd9d5eca7862eb655bcb1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7bd939ca7bd9d5eca7862eb655bcb1a">&#9670;&nbsp;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RenderDepthLayerCubeToTexture::render </td>
+          <td>(</td>
+          <td class="paramtype">castor::Position const &amp;&#160;</td>
+          <td class="paramname"><em>p_position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d1/d43/a03612.html">TextureLayout</a> const &amp;&#160;</td>
+          <td class="paramname"><em>p_texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_layer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Renders the wanted layer of the given cube texture to the currently draw-bound frame buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_position</td><td>The render viewport position. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The render viewport size. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_texture</td><td>The texture. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_layer</td><td>The layer index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/RenderToTexture/<a class="el" href="../../d4/d14/a00608.html">RenderDepthLayerCubeToTexture.hpp</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:27:36 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:38:40 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

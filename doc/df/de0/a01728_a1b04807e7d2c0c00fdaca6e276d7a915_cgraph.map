@@ -1,0 +1,7 @@
+<map id="castor3d::ChunkParser&lt; castor::String &gt;::parse" name="castor3d::ChunkParser&lt; castor::String &gt;::parse">
+<area shape="rect" id="node1" title="Retrieves a value from a chunk." alt="" coords="5,31,169,72"/>
+<area shape="rect" id="node2" href="$d4/d26/a01700.html#aaabdd95c8c89483081b836c0011147cf" title="Checks that the remaining place can hold the given size." alt="" coords="463,5,618,47"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html#a2819c7ddf95251296b5a61bf40435358" title="Retrieves the remaining place." alt="" coords="233,31,387,72"/>
+<area shape="rect" id="node4" href="$da/d0e/a01720.html#a98e70745053499eec720fb6f8bdb283e" title="Retrieves a value array from a chunk." alt="" coords="217,96,403,137"/>
+<area shape="rect" id="node5" href="$d4/d26/a01700.html#ae08a4a38e6eec196ec3bbbe3b7eb0150" title="Retrieves data from the chunk." alt="" coords="451,103,631,130"/>
+</map>

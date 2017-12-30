@@ -1,0 +1,15 @@
+<map id="castor3d::RenderPass" name="castor3d::RenderPass">
+<area shape="rect" id="node1" title="Render pass base class." alt="" coords="240,107,391,133"/>
+<area shape="rect" id="node4" href="$df/d46/a02376.html" title="Picking pass, using FBO." alt="" coords="467,56,621,83"/>
+<area shape="rect" id="node5" href="$d8/db0/a03572.html" title="Render technique pass base class." alt="" coords="439,107,649,133"/>
+<area shape="rect" id="node10" href="$d6/d8d/a03388.html" title="Shadow mapping implementation." alt="" coords="453,233,635,260"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,81,192,108"/>
+<area shape="rect" id="node3" title=" " alt="" coords="45,132,152,159"/>
+<area shape="rect" id="node6" href="$d4/d87/a03436.html" title="Deferred lighting Render technique pass." alt="" coords="753,5,897,32"/>
+<area shape="rect" id="node7" href="$df/d89/a03440.html" title="Forward render technique pass class." alt="" coords="697,56,953,83"/>
+<area shape="rect" id="node8" href="$d8/d63/a03500.html" title="Deferred lighting Render technique pass." alt="" coords="748,107,903,133"/>
+<area shape="rect" id="node9" href="$dd/dda/a03584.html" title="Transparent nodes pass using Weighted Blend OIT." alt="" coords="736,157,915,184"/>
+<area shape="rect" id="node11" href="$d2/d21/a03392.html" title="Shadow mapping implementation for spot lights." alt="" coords="704,208,947,235"/>
+<area shape="rect" id="node12" href="$d3/dc2/a03396.html" title="Shadow mapping implementation." alt="" coords="720,259,931,285"/>
+<area shape="rect" id="node13" href="$d2/d9b/a03400.html" title="Shadow mapping implementation for spot lights." alt="" coords="721,309,929,336"/>
+</map>

@@ -1,6 +1,4 @@
-<map id="Castor3D::FrameBuffer" name="Castor3D::FrameBuffer">
-<area shape="rect" id="node1" title="Frame buffer class." alt="" coords="125,95,279,121"/>
-<area shape="rect" id="node4" href="$d0/d54/a01691.html" title="Back buffers class." alt="" coords="125,169,279,196"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,13,193,39"/>
-<area shape="rect" id="node3" title=" " alt="" coords="218,5,394,47"/>
+<map id="castor3d::BinaryParserBase&lt; TParsed &gt;" name="castor3d::BinaryParserBase&lt; TParsed &gt;">
+<area shape="rect" id="node1" title="Binary data chunk writer/reader base class." alt="" coords="5,95,191,136"/>
+<area shape="rect" id="node2" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="21,5,175,32"/>
 </map>

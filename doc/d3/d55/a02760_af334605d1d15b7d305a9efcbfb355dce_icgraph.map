@@ -1,0 +1,4 @@
+<map id="castor3d::RenderColourToCube::render" name="castor3d::RenderColourToCube::render">
+<area shape="rect" id="node1" title="Renders the wanted equirectangular 2D texture to given cube texture." alt="" coords="187,5,359,47"/>
+<area shape="rect" id="node2" href="$d8/d09/a02624.html#a77fc0b5835d71115b4b2696c69afd835" title="Renders an equirectangular texture into a cube texture." alt="" coords="5,5,139,47"/>
+</map>

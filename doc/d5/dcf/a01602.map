@@ -1,4 +1,5 @@
-<map id="Castor3D::ShaderProgramCache" name="Castor3D::ShaderProgramCache">
-<area shape="rect" id="node1" title="Cache used to hold the shader programs. Holds it, destroys it during a rendering loop." alt="" coords="5,80,216,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="17,5,205,32"/>
+<map id="castor3d::BinaryWriter&lt; MeshAnimationKeyFrame &gt;" name="castor3d::BinaryWriter&lt; MeshAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="MeshAnimationKeyFrame binary loader." alt="" coords="5,185,201,227"/>
+<area shape="rect" id="node2" href="$dc/d3e/a01712.html" title=" " alt="" coords="5,95,201,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="26,5,181,32"/>
 </map>

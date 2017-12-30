@@ -1,0 +1,6 @@
+<map id="castor3d::LightPassShadow::render" name="castor3d::LightPassShadow::render">
+<area shape="rect" id="node1" title="Renders the light pass on currently bound framebuffer." alt="" coords="5,71,189,112"/>
+<area shape="rect" id="node2" href="$d0/d57/a03380.html#aa3e3ba8f76398e864651ca41bd920d48" title=" " alt="" coords="237,5,388,47"/>
+<area shape="rect" id="node3" href="$d0/d57/a03380.html#aabd1d9aa0e87f23ef8d1104aa95278d7" title=" " alt="" coords="237,71,388,112"/>
+<area shape="rect" id="node4" href="$d0/da2/a03620.html#a8056557421593e2c9aac2972fa1d4c2b" title="sets the unit index." alt="" coords="239,136,386,177"/>
+</map>

@@ -1,5 +1,5 @@
-<map id="Castor3D::ShaderProgram" name="Castor3D::ShaderProgram">
-<area shape="rect" id="node1" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="155,95,330,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,13,240,39"/>
-<area shape="rect" id="node3" title=" " alt="" coords="265,5,461,47"/>
+<map id="castor3d::PostEffect::PostEffectSurface" name="castor3d::PostEffect::PostEffectSurface">
+<area shape="rect" id="node1" title="Post render effect surface structure." alt="" coords="29,171,169,212"/>
+<area shape="rect" id="node2" href="$d0/da2/a03620.html" title="Texture unit representation." alt="" coords="25,81,172,108"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
 </map>

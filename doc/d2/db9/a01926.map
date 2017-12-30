@@ -1,4 +1,23 @@
-<map id="Castor3D::BinaryWriter&lt; Submesh &gt;" name="Castor3D::BinaryWriter&lt; Submesh &gt;">
-<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="21,95,177,136"/>
-<area shape="rect" id="node2" href="$d3/dbc/a01451.html" title=" " alt="" coords="5,5,192,47"/>
+<map id="castor3d::NonClientEventHandler&lt; Derived &gt;" name="castor3d::NonClientEventHandler&lt; Derived &gt;">
+<area shape="rect" id="node1" title="Description of an event handler, class that can receive event." alt="" coords="1271,541,1439,582"/>
+<area shape="rect" id="node2" title=" " alt="" coords="826,257,974,298"/>
+<area shape="rect" id="node3" href="$d0/dde/a01924.html" title="Description of an event handler, class that can receive event." alt="" coords="822,323,978,349"/>
+<area shape="rect" id="node4" title=" " alt="" coords="325,5,530,61"/>
+<area shape="rect" id="node5" title=" " alt="" coords="319,85,535,141"/>
+<area shape="rect" id="node6" title=" " alt="" coords="309,166,545,237"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,181,204,222"/>
+<area shape="rect" id="node8" title=" " alt="" coords="317,261,537,331"/>
+<area shape="rect" id="node9" title=" " alt="" coords="13,275,196,317"/>
+<area shape="rect" id="node10" title=" " alt="" coords="327,356,527,412"/>
+<area shape="rect" id="node11" title=" " alt="" coords="315,437,540,507"/>
+<area shape="rect" id="node12" title=" " alt="" coords="11,451,199,493"/>
+<area shape="rect" id="node13" title=" " alt="" coords="771,406,1029,477"/>
+<area shape="rect" id="node14" title=" " alt="" coords="334,531,521,573"/>
+<area shape="rect" id="node15" title=" " alt="" coords="791,501,1009,557"/>
+<area shape="rect" id="node16" title=" " alt="" coords="777,581,1023,637"/>
+<area shape="rect" id="node17" title=" " alt="" coords="342,597,513,638"/>
+<area shape="rect" id="node18" title=" " alt="" coords="775,661,1025,717"/>
+<area shape="rect" id="node19" title=" " alt="" coords="340,669,515,710"/>
+<area shape="rect" id="node20" title=" " alt="" coords="797,741,1003,797"/>
+<area shape="rect" id="node21" title=" " alt="" coords="799,821,1001,877"/>
 </map>

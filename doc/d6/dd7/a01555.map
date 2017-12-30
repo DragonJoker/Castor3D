@@ -1,0 +1,5 @@
+<map id="castor3d::AnimationKeyFrame" name="castor3d::AnimationKeyFrame">
+<area shape="rect" id="node1" title="Key frames are the frames where the animation must be at a precise state." alt="" coords="111,5,309,32"/>
+<area shape="rect" id="node2" href="$dd/d70/a01596.html" title="A keyframe for a mesh animation." alt="" coords="5,80,199,121"/>
+<area shape="rect" id="node3" href="$da/ddf/a01648.html" title="The class which manages key frames." alt="" coords="223,80,413,121"/>
+</map>

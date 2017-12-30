@@ -1,4 +1,5 @@
-<map id="Castor3D::RenderTargetCache" name="Castor3D::RenderTargetCache">
-<area shape="rect" id="node1" title="RenderTarget cache." alt="" coords="5,80,204,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="11,5,199,32"/>
+<map id="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="MeshAnimationKeyFrame binary loader." alt="" coords="5,185,201,227"/>
+<area shape="rect" id="node2" href="$d0/dbc/a01704.html" title=" " alt="" coords="5,95,201,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="26,5,181,32"/>
 </map>

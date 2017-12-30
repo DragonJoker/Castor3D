@@ -1,0 +1,13 @@
+<map id="castor3d::Plugin" name="castor3d::Plugin">
+<area shape="rect" id="node1" title="Plugin Base class." alt="" coords="240,208,356,235"/>
+<area shape="rect" id="node3" href="$d2/dab/a02516.html" title="Divider Plugin class." alt="" coords="423,5,578,32"/>
+<area shape="rect" id="node4" href="$dc/dbb/a02520.html" title="Generator Plugin class." alt="" coords="414,56,587,83"/>
+<area shape="rect" id="node5" href="$de/dec/a02524.html" title="Generic Plugin class." alt="" coords="420,107,581,133"/>
+<area shape="rect" id="node6" href="$d8/d65/a02528.html" title="Importer Plugin class." alt="" coords="419,157,582,184"/>
+<area shape="rect" id="node7" href="$d2/d08/a02532.html" title="Particle plug&#45;in class." alt="" coords="421,208,581,235"/>
+<area shape="rect" id="node8" href="$d1/df6/a02544.html" title="Post effect plug&#45;in class." alt="" coords="421,259,580,285"/>
+<area shape="rect" id="node9" href="$da/dc4/a02548.html" title="Renderer Plugin class." alt="" coords="417,309,585,336"/>
+<area shape="rect" id="node10" href="$de/d48/a02552.html" title="Render technique plug&#45;in class." alt="" coords="413,360,588,387"/>
+<area shape="rect" id="node11" href="$dc/d32/a02556.html" title="Tone mapping plug&#45;in class." alt="" coords="404,411,597,437"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,208,192,235"/>
+</map>

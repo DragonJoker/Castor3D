@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d5/dd6/a02055.html" title="Holds the needed data to render an overlay." alt="" coords="5,5,184,47"/>
+<area shape="rect" id="node1" href="$dc/d18/a03460.html" title="Base class for all light passes." alt="" coords="5,31,144,57"/>
+<area shape="rect" id="node2" href="$d2/d29/a03448.html" title="Directional light pass." alt="" coords="192,5,391,32"/>
+<area shape="rect" id="node3" href="$d8/d3d/a03492.html" title="Base class for light passes that need a mesh instead of a quad." alt="" coords="206,56,377,83"/>
+<area shape="rect" id="node4" href="$dd/d5d/a03504.html" title="Point light pass." alt="" coords="439,31,607,57"/>
+<area shape="rect" id="node5" href="$d4/db4/a03520.html" title="Spot light pass." alt="" coords="440,81,605,108"/>
 </map>

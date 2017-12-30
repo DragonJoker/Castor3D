@@ -1,0 +1,4 @@
+<map id="castor3d::Context::renderTexture" name="castor3d::Context::renderTexture">
+<area shape="rect" id="node1" title="Renders the given 2D texture to the currently draw&#45;bound frame buffer." alt="" coords="5,5,139,47"/>
+<area shape="rect" id="node2" href="$d8/d09/a02624.html#a850f8e2166f011eff04a68a6a28c1bfb" title="Renders the given 2D texture." alt="" coords="187,5,320,47"/>
+</map>

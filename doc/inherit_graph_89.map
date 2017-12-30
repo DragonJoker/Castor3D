@@ -1,4 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d2/d8e/a01315.html" title=" " alt="" coords="5,13,160,54"/>
-<area shape="rect" id="node2" href="$dc/d8e/a01331.html" title="Class which handles the Quaternion linear interpolations." alt="" coords="208,5,388,61"/>
+<area shape="rect" id="node1" href="$d9/da1/a01976.html" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="5,31,223,57"/>
+<area shape="rect" id="node2" href="$d0/d38/a01984.html" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="271,5,492,32"/>
+<area shape="rect" id="node3" href="$d5/da1/a01988.html" title="Description of an attachment between a frame buffer and a texture." alt="" coords="286,56,477,83"/>
 </map>

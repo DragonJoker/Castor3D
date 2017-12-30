@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Member List</title>
+<title>Castor3D: castor3d::FrameBufferAttachment Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,31 +39,789 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d4/d8f/a00742.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d6/d8e/a01979.html">Pattern</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/da1/a01976.html">FrameBufferAttachment</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="../../d3/d59/a01973.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::Pattern&lt; T &gt; Member List</div>  </div>
+<div class="title">castor3d::FrameBufferAttachment Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a>, including all inherited members.</p>
-<table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#a4e8e8bd430cadf6f6464dbf458449165">AddElement</a>(TObjConstRef p_tElement, uint32_t p_index=0xFFFFFFFF)</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#a18a0299e65958eb99ce8dcd193b527a4">GetElement</a>(uint32_t p_index)</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#aea5ae4f707d0f7ed80475f215c7ae713">GetElement</a>(uint32_t p_index) const</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#a09807959f0dc95b1df63c4cae8227426">GetReversed</a>() const</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#a6cb0bf105e1efd304fe52380738b460c">GetSize</a>() const</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#a7024176adc97d1b14b813dc48476d7cc">IsClosed</a>() const</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#a877fe397a70e2c37ac1a0386a557bd56">operator[]</a>(uint32_t p_index)</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#afd7bc9ab4095aca04320f29b9721e842">operator[]</a>(uint32_t p_index) const</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#ade0d883b882efd86194e301c0cd1ab10">Pattern</a>()</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d8e/a01979.html#a2c03fbce51f5a72b5d2808af5db8824b">~Pattern</a>()</td><td class="entry"><a class="el" href="../../d6/d8e/a01979.html">Castor3D::Pattern&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-</table></div><!-- contents -->
+<p>Description of an attachment between a frame buffer and a render buffer.  
+ <a href="../../d9/da1/a01976.html#details">More...</a></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for castor3d::FrameBufferAttachment:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../dd/d4e/a01975.png" border="0" usemap="#castor3d_1_1FrameBufferAttachment_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1FrameBufferAttachment_inherit__map" id="castor3d_1_1FrameBufferAttachment_inherit__map">
+<area shape="rect"  title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="122,5,339,32"/>
+<area shape="rect"  href="../../d0/d38/a01984.html" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="5,80,227,107"/>
+<area shape="rect"  href="../../d5/da1/a01988.html" title="Description of an attachment between a frame buffer and a texture." alt="" coords="251,80,442,107"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ab0c9baf3209997e2b6b4c083215b1a61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#ab0c9baf3209997e2b6b4c083215b1a61">download</a> (castor::Position const &amp;p_offset, castor::PxBufferBase &amp;p_buffer) const</td></tr>
+<tr class="memdesc:ab0c9baf3209997e2b6b4c083215b1a61"><td class="mdescLeft">&#160;</td><td class="mdescRight">downloads the attach content in the given buffer.  <a href="#ab0c9baf3209997e2b6b4c083215b1a61">More...</a><br /></td></tr>
+<tr class="separator:ab0c9baf3209997e2b6b4c083215b1a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6df1eaa042ca0d5d309921c71361f2b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a6df1eaa042ca0d5d309921c71361f2b8">attach</a> (<a class="el" href="../../d0/d85/a00976.html#af846d54cb6db2461d194b4d7d17fdeb6">AttachmentPoint</a> p_attachment, uint8_t p_index)</td></tr>
+<tr class="memdesc:a6df1eaa042ca0d5d309921c71361f2b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches the render buffer to the currently bound frame buffer, at given attachment point.  <a href="#a6df1eaa042ca0d5d309921c71361f2b8">More...</a><br /></td></tr>
+<tr class="separator:a6df1eaa042ca0d5d309921c71361f2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa7cebf376a1d5a3de449e817db927d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#aaa7cebf376a1d5a3de449e817db927d5">attach</a> (<a class="el" href="../../d0/d85/a00976.html#af846d54cb6db2461d194b4d7d17fdeb6">AttachmentPoint</a> p_attachment)</td></tr>
+<tr class="memdesc:aaa7cebf376a1d5a3de449e817db927d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches the render buffer to the currently bound frame buffer, at given attachment point.  <a href="#aaa7cebf376a1d5a3de449e817db927d5">More...</a><br /></td></tr>
+<tr class="separator:aaa7cebf376a1d5a3de449e817db927d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1cf15570deda42bd6ce88ffc46b898a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#ad1cf15570deda42bd6ce88ffc46b898a">detach</a> ()</td></tr>
+<tr class="memdesc:ad1cf15570deda42bd6ce88ffc46b898a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detaches the render buffer from the frame buffer.  <a href="#ad1cf15570deda42bd6ce88ffc46b898a">More...</a><br /></td></tr>
+<tr class="separator:ad1cf15570deda42bd6ce88ffc46b898a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a437a43c8f2937fe1b18015980913c9d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a437a43c8f2937fe1b18015980913c9d6">clear</a> (castor::RgbaColour const &amp;p_colour) const</td></tr>
+<tr class="memdesc:a437a43c8f2937fe1b18015980913c9d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#a437a43c8f2937fe1b18015980913c9d6">More...</a><br /></td></tr>
+<tr class="separator:a437a43c8f2937fe1b18015980913c9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84de876e7ce7714f648cd18b1f545d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#ac84de876e7ce7714f648cd18b1f545d0">clear</a> (float p_depth) const</td></tr>
+<tr class="memdesc:ac84de876e7ce7714f648cd18b1f545d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#ac84de876e7ce7714f648cd18b1f545d0">More...</a><br /></td></tr>
+<tr class="separator:ac84de876e7ce7714f648cd18b1f545d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fa6792f09ddef9376f77cdf86c2b688"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a6fa6792f09ddef9376f77cdf86c2b688">clear</a> (int p_stencil) const</td></tr>
+<tr class="memdesc:a6fa6792f09ddef9376f77cdf86c2b688"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#a6fa6792f09ddef9376f77cdf86c2b688">More...</a><br /></td></tr>
+<tr class="separator:a6fa6792f09ddef9376f77cdf86c2b688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaec8a7a67caff0fb50d6f4685f428e14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#aaec8a7a67caff0fb50d6f4685f428e14">clear</a> (float p_depth, int p_stencil) const</td></tr>
+<tr class="memdesc:aaec8a7a67caff0fb50d6f4685f428e14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#aaec8a7a67caff0fb50d6f4685f428e14">More...</a><br /></td></tr>
+<tr class="separator:aaec8a7a67caff0fb50d6f4685f428e14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2955b3ef5b783cb5e49ac048243560e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::PxBufferBaseSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#ab2955b3ef5b783cb5e49ac048243560e">getBuffer</a> () const =0</td></tr>
+<tr class="separator:ab2955b3ef5b783cb5e49ac048243560e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a543e78f24c5a349a8a7489a342254518"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#af846d54cb6db2461d194b4d7d17fdeb6">AttachmentPoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a543e78f24c5a349a8a7489a342254518">getAttachmentPoint</a> () const</td></tr>
+<tr class="separator:a543e78f24c5a349a8a7489a342254518"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a225bf9ed6c2cdc1b0d3961150d9c692d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#ab2b6802cf4284741c08aaf71a7c64ae4">AttachmentType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a225bf9ed6c2cdc1b0d3961150d9c692d">getAttachmentType</a> () const</td></tr>
+<tr class="separator:a225bf9ed6c2cdc1b0d3961150d9c692d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c8951553b2fc93bfdb499dc9adf68d2"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a6c8951553b2fc93bfdb499dc9adf68d2">getAttachmentIndex</a> () const</td></tr>
+<tr class="separator:a6c8951553b2fc93bfdb499dc9adf68d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:abd9126079e6561adeb46b30b0711349b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#abd9126079e6561adeb46b30b0711349b">FrameBufferAttachment</a> (<a class="el" href="../../d0/d85/a00976.html#ab2b6802cf4284741c08aaf71a7c64ae4">AttachmentType</a> p_type)</td></tr>
+<tr class="memdesc:abd9126079e6561adeb46b30b0711349b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#abd9126079e6561adeb46b30b0711349b">More...</a><br /></td></tr>
+<tr class="separator:abd9126079e6561adeb46b30b0711349b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9176f040d6b080810a2932d49ecf6e7b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a9176f040d6b080810a2932d49ecf6e7b">~FrameBufferAttachment</a> ()</td></tr>
+<tr class="memdesc:a9176f040d6b080810a2932d49ecf6e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a9176f040d6b080810a2932d49ecf6e7b">More...</a><br /></td></tr>
+<tr class="separator:a9176f040d6b080810a2932d49ecf6e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a251783b0485c6c52785581fdfa5382bf"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a251783b0485c6c52785581fdfa5382bf">doDownload</a> (castor::Position const &amp;p_offset, castor::PxBufferBase &amp;p_buffer) const =0</td></tr>
+<tr class="memdesc:a251783b0485c6c52785581fdfa5382bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">downloads the attach content in the given buffer.  <a href="#a251783b0485c6c52785581fdfa5382bf">More...</a><br /></td></tr>
+<tr class="separator:a251783b0485c6c52785581fdfa5382bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae775d3df602651c1af003a92e55557ea"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#ae775d3df602651c1af003a92e55557ea">doAttach</a> ()=0</td></tr>
+<tr class="memdesc:ae775d3df602651c1af003a92e55557ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches the render buffer to the frame buffer, at given attachment point.  <a href="#ae775d3df602651c1af003a92e55557ea">More...</a><br /></td></tr>
+<tr class="separator:ae775d3df602651c1af003a92e55557ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a885185651d63b901b4a8e615894b6c4a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a885185651d63b901b4a8e615894b6c4a">doDetach</a> ()=0</td></tr>
+<tr class="memdesc:a885185651d63b901b4a8e615894b6c4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detaches the render buffer from the frame buffer.  <a href="#a885185651d63b901b4a8e615894b6c4a">More...</a><br /></td></tr>
+<tr class="separator:a885185651d63b901b4a8e615894b6c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2862bd6fd7252afa436b79f55f11161"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#ae2862bd6fd7252afa436b79f55f11161">doClear</a> (castor::RgbaColour const &amp;p_colour) const =0</td></tr>
+<tr class="memdesc:ae2862bd6fd7252afa436b79f55f11161"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#ae2862bd6fd7252afa436b79f55f11161">More...</a><br /></td></tr>
+<tr class="separator:ae2862bd6fd7252afa436b79f55f11161"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b7bb7a0ad3c95e0ca069f84a7bf018d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a9b7bb7a0ad3c95e0ca069f84a7bf018d">doClear</a> (float p_depth) const =0</td></tr>
+<tr class="memdesc:a9b7bb7a0ad3c95e0ca069f84a7bf018d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#a9b7bb7a0ad3c95e0ca069f84a7bf018d">More...</a><br /></td></tr>
+<tr class="separator:a9b7bb7a0ad3c95e0ca069f84a7bf018d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d1af4472861549258037b3871fc122d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a7d1af4472861549258037b3871fc122d">doClear</a> (int p_stencil) const =0</td></tr>
+<tr class="memdesc:a7d1af4472861549258037b3871fc122d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#a7d1af4472861549258037b3871fc122d">More...</a><br /></td></tr>
+<tr class="separator:a7d1af4472861549258037b3871fc122d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d9fa9468483bed5b94f83908a3827a3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a6d9fa9468483bed5b94f83908a3827a3">doClear</a> (float p_depth, int p_stencil) const =0</td></tr>
+<tr class="memdesc:a6d9fa9468483bed5b94f83908a3827a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the attachment buffer.  <a href="#a6d9fa9468483bed5b94f83908a3827a3">More...</a><br /></td></tr>
+<tr class="separator:a6d9fa9468483bed5b94f83908a3827a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a7e815028687ed9f9e9e25851d8a17b27"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/da1/a01976.html#a7e815028687ed9f9e9e25851d8a17b27">FrameBuffer</a></td></tr>
+<tr class="separator:a7e815028687ed9f9e9e25851d8a17b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Description of an attachment between a frame buffer and a render buffer. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.7.0.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>12/11/2012 </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="abd9126079e6561adeb46b30b0711349b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd9126079e6561adeb46b30b0711349b">&#9670;&nbsp;</a></span>FrameBufferAttachment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::FrameBufferAttachment::FrameBufferAttachment </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d85/a00976.html#ab2b6802cf4284741c08aaf71a7c64ae4">AttachmentType</a>&#160;</td>
+          <td class="paramname"><em>p_type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td>The attachment type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9176f040d6b080810a2932d49ecf6e7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9176f040d6b080810a2932d49ecf6e7b">&#9670;&nbsp;</a></span>~FrameBufferAttachment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::FrameBufferAttachment::~FrameBufferAttachment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6df1eaa042ca0d5d309921c71361f2b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6df1eaa042ca0d5d309921c71361f2b8">&#9670;&nbsp;</a></span>attach() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::attach </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d85/a00976.html#af846d54cb6db2461d194b4d7d17fdeb6">AttachmentPoint</a>&#160;</td>
+          <td class="paramname"><em>p_attachment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attaches the render buffer to the currently bound frame buffer, at given attachment point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_attachment</td><td>The attachment point. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaa7cebf376a1d5a3de449e817db927d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa7cebf376a1d5a3de449e817db927d5">&#9670;&nbsp;</a></span>attach() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::attach </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d85/a00976.html#af846d54cb6db2461d194b4d7d17fdeb6">AttachmentPoint</a>&#160;</td>
+          <td class="paramname"><em>p_attachment</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attaches the render buffer to the currently bound frame buffer, at given attachment point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_attachment</td><td>The attachment point. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a437a43c8f2937fe1b18015980913c9d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a437a43c8f2937fe1b18015980913c9d6">&#9670;&nbsp;</a></span>clear() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::clear </td>
+          <td>(</td>
+          <td class="paramtype">castor::RgbaColour const &amp;&#160;</td>
+          <td class="paramname"><em>p_colour</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_colour</td><td>The clear colour. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac84de876e7ce7714f648cd18b1f545d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84de876e7ce7714f648cd18b1f545d0">&#9670;&nbsp;</a></span>clear() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::clear </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>p_depth</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_depth</td><td>The depth clear value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6fa6792f09ddef9376f77cdf86c2b688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fa6792f09ddef9376f77cdf86c2b688">&#9670;&nbsp;</a></span>clear() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::clear </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_stencil</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_stencil</td><td>The stencil clear value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaec8a7a67caff0fb50d6f4685f428e14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaec8a7a67caff0fb50d6f4685f428e14">&#9670;&nbsp;</a></span>clear() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::clear </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>p_depth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_stencil</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_depth</td><td>The depth clear value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_stencil</td><td>The stencil clear value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad1cf15570deda42bd6ce88ffc46b898a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1cf15570deda42bd6ce88ffc46b898a">&#9670;&nbsp;</a></span>detach()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::detach </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Detaches the render buffer from the frame buffer. </p>
+
+</div>
+</div>
+<a id="ae775d3df602651c1af003a92e55557ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae775d3df602651c1af003a92e55557ea">&#9670;&nbsp;</a></span>doAttach()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::doAttach </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Attaches the render buffer to the frame buffer, at given attachment point. </p>
+
+</div>
+</div>
+<a id="ae2862bd6fd7252afa436b79f55f11161"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2862bd6fd7252afa436b79f55f11161">&#9670;&nbsp;</a></span>doClear() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::doClear </td>
+          <td>(</td>
+          <td class="paramtype">castor::RgbaColour const &amp;&#160;</td>
+          <td class="paramname"><em>p_colour</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_colour</td><td>The clear colour. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9b7bb7a0ad3c95e0ca069f84a7bf018d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b7bb7a0ad3c95e0ca069f84a7bf018d">&#9670;&nbsp;</a></span>doClear() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::doClear </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>p_depth</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_depth</td><td>The depth clear value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7d1af4472861549258037b3871fc122d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d1af4472861549258037b3871fc122d">&#9670;&nbsp;</a></span>doClear() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::doClear </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_stencil</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_stencil</td><td>The stencil clear value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6d9fa9468483bed5b94f83908a3827a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d9fa9468483bed5b94f83908a3827a3">&#9670;&nbsp;</a></span>doClear() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::doClear </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>p_depth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_stencil</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the attachment buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_depth</td><td>The depth clear value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_stencil</td><td>The stencil clear value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a885185651d63b901b4a8e615894b6c4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a885185651d63b901b4a8e615894b6c4a">&#9670;&nbsp;</a></span>doDetach()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::doDetach </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Detaches the render buffer from the frame buffer. </p>
+
+</div>
+</div>
+<a id="a251783b0485c6c52785581fdfa5382bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a251783b0485c6c52785581fdfa5382bf">&#9670;&nbsp;</a></span>doDownload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::doDownload </td>
+          <td>(</td>
+          <td class="paramtype">castor::Position const &amp;&#160;</td>
+          <td class="paramname"><em>p_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::PxBufferBase &amp;&#160;</td>
+          <td class="paramname"><em>p_buffer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>downloads the attach content in the given buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_offset</td><td>The offset position. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_buffer</td><td>Receives the data, and describes the area dimensions and its pixel format. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab0c9baf3209997e2b6b4c083215b1a61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0c9baf3209997e2b6b4c083215b1a61">&#9670;&nbsp;</a></span>download()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameBufferAttachment::download </td>
+          <td>(</td>
+          <td class="paramtype">castor::Position const &amp;&#160;</td>
+          <td class="paramname"><em>p_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::PxBufferBase &amp;&#160;</td>
+          <td class="paramname"><em>p_buffer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>downloads the attach content in the given buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_offset</td><td>The offset position. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_buffer</td><td>Receives the data, and describes the area dimensions and its pixel format. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6c8951553b2fc93bfdb499dc9adf68d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c8951553b2fc93bfdb499dc9adf68d2">&#9670;&nbsp;</a></span>getAttachmentIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t castor3d::FrameBufferAttachment::getAttachmentIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The attachment index. </dd></dl>
+
+</div>
+</div>
+<a id="a543e78f24c5a349a8a7489a342254518"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a543e78f24c5a349a8a7489a342254518">&#9670;&nbsp;</a></span>getAttachmentPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d0/d85/a00976.html#af846d54cb6db2461d194b4d7d17fdeb6">AttachmentPoint</a> castor3d::FrameBufferAttachment::getAttachmentPoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The attachment point </dd></dl>
+
+</div>
+</div>
+<a id="a225bf9ed6c2cdc1b0d3961150d9c692d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a225bf9ed6c2cdc1b0d3961150d9c692d">&#9670;&nbsp;</a></span>getAttachmentType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d0/d85/a00976.html#ab2b6802cf4284741c08aaf71a7c64ae4">AttachmentType</a> castor3d::FrameBufferAttachment::getAttachmentType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The attachment type. </dd></dl>
+
+</div>
+</div>
+<a id="ab2955b3ef5b783cb5e49ac048243560e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2955b3ef5b783cb5e49ac048243560e">&#9670;&nbsp;</a></span>getBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::PxBufferBaseSPtr castor3d::FrameBufferAttachment::getBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The data buffer. </dd></dl>
+
+<p>Implemented in <a class="el" href="../../d5/da1/a01988.html#af25439c6d40f4fcddf3bf796a4cf2fdc">castor3d::TextureAttachment</a>, and <a class="el" href="../../d0/d38/a01984.html#a06fe1277b8d279b45321e4aaa9790198">castor3d::RenderBufferAttachment</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a7e815028687ed9f9e9e25851d8a17b27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e815028687ed9f9e9e25851d8a17b27">&#9670;&nbsp;</a></span>FrameBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="../../db/d9d/a01972.html">FrameBuffer</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/FrameBuffer/<a class="el" href="../../d7/d25/a00182.html">FrameBufferAttachment.hpp</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:27:38 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:38:25 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

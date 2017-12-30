@@ -1,4 +1,5 @@
-<map id="Castor3D::MouseEvent" name="Castor3D::MouseEvent">
-<area shape="rect" id="node1" title="Description of a mouse event." alt="" coords="13,80,168,107"/>
-<area shape="rect" id="node2" href="$d2/dca/a01683.html" title="Description of a user input event." alt="" coords="5,5,176,32"/>
+<map id="castor3d::SkeletonAnimationObject" name="castor3d::SkeletonAnimationObject">
+<area shape="rect" id="node1" title="Class which represents the skeleton animation objects." alt="" coords="256,43,445,84"/>
+<area shape="rect" id="node2" title=" " alt="" coords="14,5,199,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,71,208,127"/>
 </map>

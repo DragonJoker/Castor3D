@@ -1,0 +1,7 @@
+<map id="castor3d::BinaryChunk::getChunkType" name="castor3d::BinaryChunk::getChunkType">
+<area shape="rect" id="node1" title="Retrieves the chunk type." alt="" coords="248,104,403,145"/>
+<area shape="rect" id="node2" href="$d0/dbc/a01704.html#a37522319f44d10afdf9b5ae0a14ead29" title="Parses the header chunk." alt="" coords="5,5,200,47"/>
+<area shape="rect" id="node3" href="$d0/dbc/a01704.html#aabf36425715d1c704960f7bb03909155" title="From file reader function." alt="" coords="10,71,195,112"/>
+<area shape="rect" id="node4" href="$d0/dbc/a01704.html#ae11bf7a8f9412f22231d485b24bd33f2" title="From chunk reader function." alt="" coords="10,136,195,177"/>
+<area shape="rect" id="node5" href="$d0/dbc/a01704.html#a8e85848c82f4b722aa520cb720d1efeb" title="From chunk reader function." alt="" coords="10,201,195,243"/>
+</map>

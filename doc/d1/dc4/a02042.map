@@ -1,7 +1,4 @@
-<map id="Castor3D::OverlayCategory::TextWriter" name="Castor3D::OverlayCategory::TextWriter">
-<area shape="rect" id="node1" title="OverlayCategory loader." alt="" coords="195,71,373,112"/>
-<area shape="rect" id="node3" href="$de/d0a/a02015.html" title="BorderPanelOverlay loader." alt="" coords="421,5,620,47"/>
-<area shape="rect" id="node4" href="$d4/daa/a02067.html" title="PanelOverlay loader." alt="" coords="441,71,601,112"/>
-<area shape="rect" id="node5" href="$dc/d21/a02079.html" title="TextOverlay loader." alt="" coords="445,136,597,177"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,71,147,112"/>
+<map id="castor3d::Pass" name="castor3d::Pass">
+<area shape="rect" id="node1" title="Base class of a material pass." alt="" coords="46,80,157,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,197,32"/>
 </map>

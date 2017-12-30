@@ -1,4 +1,4 @@
-<map id="Castor3D::RenderColourLayerToTexture" name="Castor3D::RenderColourLayerToTexture">
-<area shape="rect" id="node1" title="Class used to render a colour texture array&#39;s layer." alt="" coords="5,80,200,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="6,5,199,32"/>
+<map id="castor3d::LineIndices" name="castor3d::LineIndices">
+<area shape="rect" id="node1" title="Holds the 2 vertex indices of a ligne." alt="" coords="5,109,151,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="16,5,140,47"/>
 </map>

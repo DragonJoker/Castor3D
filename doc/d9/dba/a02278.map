@@ -1,4 +1,8 @@
-<map id="Castor3D::IViewportImpl" name="Castor3D::IViewportImpl">
-<area shape="rect" id="node1" title="Render API specific viewport implementation." alt="" coords="42,80,203,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,240,32"/>
+<map id="castor3d::FaceInfos" name="castor3d::FaceInfos">
+<area shape="rect" id="node1" title="Holds face informations." alt="" coords="70,392,206,419"/>
+<area shape="rect" id="node2" title=" " alt="" coords="59,288,217,329"/>
+<area shape="rect" id="node3" href="$d3/d81/a02284.html" title="Holds vertex informations." alt="" coords="70,184,206,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,95,143,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="142,5,185,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="167,95,304,121"/>
 </map>

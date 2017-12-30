@@ -1,5 +1,5 @@
-<map id="Castor3D::NonClientEventHandler&lt; Derived &gt;" name="Castor3D::NonClientEventHandler&lt; Derived &gt;">
-<area shape="rect" id="node1" title="Description of an event handler, class that can receive event." alt="" coords="83,95,255,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,153,47"/>
-<area shape="rect" id="node3" href="$df/ddd/a01655.html" title="Description of an event handler, class that can receive event." alt="" coords="178,13,338,39"/>
+<map id="castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="5,185,220,227"/>
+<area shape="rect" id="node2" href="$d0/dbc/a01704.html" title=" " alt="" coords="5,95,220,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="35,5,190,32"/>
 </map>

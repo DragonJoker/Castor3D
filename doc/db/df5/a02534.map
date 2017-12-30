@@ -1,4 +1,4 @@
-<map id="Castor3D::Skybox::TextWriter" name="Castor3D::Skybox::TextWriter">
-<area shape="rect" id="node1" title="Scene loader." alt="" coords="5,95,201,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="39,5,167,47"/>
+<map id="castor3d::Plugin" name="castor3d::Plugin">
+<area shape="rect" id="node1" title="Plugin Base class." alt="" coords="41,80,157,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
 </map>

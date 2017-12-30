@@ -1,0 +1,11 @@
+<map id="castor3d::MovableObject" name="castor3d::MovableObject">
+<area shape="rect" id="node1" title="Movable object class." alt="" coords="419,107,584,133"/>
+<area shape="rect" id="node5" href="$d6/dbc/a02856.html" title="Billboards list." alt="" coords="641,5,792,32"/>
+<area shape="rect" id="node6" href="$da/d47/a02864.html" title="Class which represents a Camera." alt="" coords="654,56,779,83"/>
+<area shape="rect" id="node7" href="$d7/d35/a02880.html" title="Geometry handler class." alt="" coords="648,107,785,133"/>
+<area shape="rect" id="node8" href="$de/dd8/a02896.html" title="Light source implementation." alt="" coords="663,157,771,184"/>
+<area shape="rect" id="node9" href="$d5/d6c/a02956.html" title="Particle system implementation." alt="" coords="632,208,801,235"/>
+<area shape="rect" id="node2" href="$d0/da6/a01536.html" title="Animable public interface." alt="" coords="236,81,371,108"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,81,188,108"/>
+<area shape="rect" id="node4" title=" " alt="" coords="272,132,335,159"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="castor3d::RenderColourCubeToTexture::renderFace" name="castor3d::RenderColourCubeToTexture::renderFace">
+<area shape="rect" id="node1" title="Renders a face from the given cube texture to the currently draw&#45;bound frame buffer." alt="" coords="187,5,375,47"/>
+<area shape="rect" id="node2" href="$d8/d09/a02624.html#ad280a1c1141a0b4f0d6480f46487a070" title="Renders the wanted face of given cube texture to the currently draw&#45;bound frame buffer." alt="" coords="5,5,139,47"/>
+</map>

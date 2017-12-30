@@ -1,6 +1,46 @@
-<map id="Castor3D::MovableObject::TextWriter" name="Castor3D::MovableObject::TextWriter">
-<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="91,95,261,136"/>
-<area shape="rect" id="node3" href="$d8/deb/a02387.html" title="Camera loader." alt="" coords="5,184,160,225"/>
-<area shape="rect" id="node4" href="$d3/de3/a02483.html" title="ParticleSystem loader." alt="" coords="184,184,357,225"/>
-<area shape="rect" id="node2" title=" " alt="" coords="111,5,241,47"/>
+<map id="castor3d::OverlayRenderer" name="castor3d::OverlayRenderer">
+<area shape="rect" id="node1" title="The overlay renderer." alt="" coords="2488,990,2663,1017"/>
+<area shape="rect" id="node2" title=" " alt="" coords="541,457,773,483"/>
+<area shape="rect" id="node15" href="$d2/dba/a02692.html" title="The rendering pipeline." alt="" coords="1422,463,1589,490"/>
+<area shape="rect" id="node26" href="$d1/d7a/a03080.html" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="998,311,1169,338"/>
+<area shape="rect" id="node3" href="$df/d1e/a03212.html" title="Matrices Uniform buffer management." alt="" coords="1432,838,1579,865"/>
+<area shape="rect" id="node10" href="$d3/d19/a02464.html" title="Holds the needed data to render an overlay." alt="" coords="1749,761,1924,803"/>
+<area shape="rect" id="node4" title=" " alt="" coords="2075,909,2273,951"/>
+<area shape="rect" id="node5" title=" " alt="" coords="2057,975,2291,1031"/>
+<area shape="rect" id="node6" href="$d2/d35/a02468.html" title="Holds the two geometry buffers used to render overlays." alt="" coords="1749,1041,1924,1083"/>
+<area shape="rect" id="node7" href="$dc/ddd/a03196.html" title="Matrices Uniform buffer management." alt="" coords="2105,1133,2243,1159"/>
+<area shape="rect" id="node8" title=" " alt="" coords="2086,1183,2262,1239"/>
+<area shape="rect" id="node9" title=" " alt="" coords="2069,747,2279,817"/>
+<area shape="rect" id="node11" href="$d6/d18/a02664.html" title="Helper structure used link a pass and a shader program." alt="" coords="1415,769,1596,795"/>
+<area shape="rect" id="node12" title=" " alt="" coords="985,805,1182,861"/>
+<area shape="rect" id="node13" href="$d8/d22/a02044.html" title="Base class of a material pass." alt="" coords="1028,754,1139,781"/>
+<area shape="rect" id="node14" title=" " alt="" coords="561,761,753,787"/>
+<area shape="rect" id="node16" href="$de/df8/a03432.html" title="Rasteriser configuration class." alt="" coords="998,413,1169,439"/>
+<area shape="rect" id="node17" href="$d7/d66/a02580.html" title="Pipeline flags." alt="" coords="1004,514,1163,541"/>
+<area shape="rect" id="node18" title=" " alt="" coords="996,42,1171,98"/>
+<area shape="rect" id="node19" href="$da/de8/a02852.html" title="Billboards list." alt="" coords="577,57,737,83"/>
+<area shape="rect" id="node20" href="$d0/daf/a02972.html" title="Handles object&#39;s visibility, and behavior with shadows." alt="" coords="258,27,431,54"/>
+<area shape="rect" id="node21" title=" " alt="" coords="5,5,204,47"/>
+<area shape="rect" id="node22" href="$d6/db9/a02980.html" title="Scene handler class." alt="" coords="286,107,403,134"/>
+<area shape="rect" id="node23" title=" " alt="" coords="33,173,176,215"/>
+<area shape="rect" id="node24" title=" " alt="" coords="11,71,198,98"/>
+<area shape="rect" id="node25" title=" " alt="" coords="73,122,136,149"/>
+<area shape="rect" id="node27" title=" " alt="" coords="559,311,755,352"/>
+<area shape="rect" id="node28" title=" " alt="" coords="553,377,762,433"/>
+<area shape="rect" id="node29" title=" " alt="" coords="573,165,741,221"/>
+<area shape="rect" id="node30" href="$df/dfb/a02068.html" title="Description of all elements in a vertex buffer." alt="" coords="568,114,747,141"/>
+<area shape="rect" id="node31" title=" " alt="" coords="571,245,744,287"/>
+<area shape="rect" id="node32" title=" " alt="" coords="996,615,1171,671"/>
+<area shape="rect" id="node33" href="$de/d1f/a02236.html" title="The submesh representation." alt="" coords="590,630,725,657"/>
+<area shape="rect" id="node34" title=" " alt="" coords="253,633,436,659"/>
+<area shape="rect" id="node35" title=" " alt="" coords="264,567,425,608"/>
+<area shape="rect" id="node36" title=" " alt="" coords="968,195,1199,236"/>
+<area shape="rect" id="node37" href="$d4/d57/a03412.html" title="Blending configurations grouping class." alt="" coords="1011,695,1155,722"/>
+<area shape="rect" id="node38" title=" " alt="" coords="568,681,747,737"/>
+<area shape="rect" id="node39" href="$df/df7/a03416.html" title=" " alt="" coords="267,688,422,729"/>
+<area shape="rect" id="node40" href="$d5/d6b/a03428.html" title="Multisample configurations grouping class." alt="" coords="993,261,1174,287"/>
+<area shape="rect" id="node41" href="$d1/d8b/a03420.html" title="Depth and stencil buffers configurations class." alt="" coords="991,565,1176,591"/>
+<area shape="rect" id="node42" href="$dc/dc7/a03424.html" title="Stencil function and operations description." alt="" coords="565,557,750,599"/>
+<area shape="rect" id="node43" title=" " alt="" coords="2091,1264,2257,1305"/>
+<area shape="rect" id="node44" title=" " alt="" coords="2099,1329,2249,1371"/>
 </map>

@@ -1,4 +1,5 @@
-<map id="Castor3D::GpuQuery" name="Castor3D::GpuQuery">
-<area shape="rect" id="node1" title="GPU query implementation." alt="" coords="51,80,194,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,240,32"/>
+<map id="castor3d::FrameBuffer" name="castor3d::FrameBuffer">
+<area shape="rect" id="node1" title="Frame buffer class." alt="" coords="126,95,277,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,13,192,39"/>
+<area shape="rect" id="node3" title=" " alt="" coords="216,5,392,47"/>
 </map>

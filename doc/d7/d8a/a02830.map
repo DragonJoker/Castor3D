@@ -1,4 +1,13 @@
-<map id="Castor3D::TextureUnit::TextWriter" name="Castor3D::TextureUnit::TextWriter">
-<area shape="rect" id="node1" title="TextureUnit loader." alt="" coords="5,95,156,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="17,5,145,47"/>
+<map id="castor3d::SkeletonAnimationInstance" name="castor3d::SkeletonAnimationInstance">
+<area shape="rect" id="node1" title="Skeleton animation instance." alt="" coords="991,108,1180,149"/>
+<area shape="rect" id="node2" href="$d8/deb/a02820.html" title="Animation instance class." alt="" coords="660,85,847,111"/>
+<area shape="rect" id="node3" title=" " alt="" coords="336,5,525,47"/>
+<area shape="rect" id="node4" href="$d3/d4c/a01540.html" title="Animation base class." alt="" coords="361,71,500,98"/>
+<area shape="rect" id="node5" title=" " alt="" coords="74,17,137,43"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,67,205,94"/>
+<area shape="rect" id="node7" title=" " alt="" coords="18,119,193,160"/>
+<area shape="rect" id="node8" title=" " alt="" coords="409,122,452,149"/>
+<area shape="rect" id="node9" title=" " alt="" coords="652,147,855,188"/>
+<area shape="rect" id="node10" href="$d9/d4d/a02840.html" title="The class which manages key frames." alt="" coords="336,177,525,219"/>
+<area shape="rect" id="node11" title=" " alt="" coords="13,184,198,225"/>
 </map>

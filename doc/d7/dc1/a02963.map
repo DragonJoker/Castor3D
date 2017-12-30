@@ -1,0 +1,6 @@
+<map id="castor3d::ParticleSystemImpl" name="castor3d::ParticleSystemImpl">
+<area shape="rect" id="node1" title="Particle system implementation base class." alt="" coords="5,71,199,98"/>
+<area shape="rect" id="node2" href="$de/db0/a02940.html" title="Compute shader Particle system implementation." alt="" coords="256,5,432,47"/>
+<area shape="rect" id="node3" href="$d3/d8d/a02944.html" title="CPU only Particle system implementation." alt="" coords="248,71,440,98"/>
+<area shape="rect" id="node4" href="$d0/d7b/a02968.html" title="Transform feedback Particle system implementation." alt="" coords="247,123,441,164"/>
+</map>

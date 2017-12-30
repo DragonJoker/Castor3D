@@ -1,7 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d3/d0f/a02203.html" title="Helper structure used to render objects." alt="" coords="5,74,205,115"/>
-<area shape="rect" id="node2" href="$de/d1b/a02187.html" title="Helper structure used to render billboards." alt="" coords="255,5,460,32"/>
-<area shape="rect" id="node3" href="$db/dd5/a02199.html" title="Helper structure used to render animated submeshes." alt="" coords="253,56,461,83"/>
-<area shape="rect" id="node4" href="$dd/d51/a02223.html" title="Helper structure used to render animated submeshes." alt="" coords="255,107,460,133"/>
-<area shape="rect" id="node5" href="$d2/d9a/a02227.html" title="Helper structure used to render static submeshes." alt="" coords="263,157,452,184"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,104,57"/>
+<area shape="rect" id="node2" href="$d5/d10/a02396.html" title="Platform dependant window handle implementation." alt="" coords="152,5,321,32"/>
+<area shape="rect" id="node3" href="$d6/d63/a03228.html" title="Shader variable representation." alt="" coords="175,56,299,83"/>
+<area shape="rect" id="node4" href="$dc/d28/a02584.html" title="Shader variable representation with variable type." alt="" coords="369,49,500,90"/>
 </map>

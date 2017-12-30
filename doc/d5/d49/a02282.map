@@ -1,4 +1,6 @@
-<map id="Castor3D::Viewport" name="Castor3D::Viewport">
-<area shape="rect" id="node1" title="Class to represent a viewport." alt="" coords="32,80,167,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,32"/>
+<map id="castor3d::FaceInfos::Vertex" name="castor3d::FaceInfos::Vertex">
+<area shape="rect" id="node1" title="Holds vertex informations." alt="" coords="70,184,206,225"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,143,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="142,5,185,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="167,95,304,121"/>
 </map>

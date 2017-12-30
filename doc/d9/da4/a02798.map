@@ -1,5 +1,13 @@
-<map id="Castor3D::Sampler" name="Castor3D::Sampler">
-<area shape="rect" id="node1" title="Defines a sampler for a texture." alt="" coords="108,80,240,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="217,5,280,32"/>
+<map id="castor3d::AnimatedMesh" name="castor3d::AnimatedMesh">
+<area shape="rect" id="node1" title="Represents the animated submeshes." alt="" coords="1143,93,1309,120"/>
+<area shape="rect" id="node2" href="$df/dd0/a02804.html" title="Represents the animated objects." alt="" coords="683,31,856,57"/>
+<area shape="rect" id="node3" title=" " alt="" coords="305,5,368,32"/>
+<area shape="rect" id="node9" href="$d2/d0c/a02932.html" title="Movable object class." alt="" coords="489,56,655,83"/>
+<area shape="rect" id="node4" href="$dc/d25/a02160.html" title="The mesh representation." alt="" coords="516,157,628,184"/>
+<area shape="rect" id="node5" title=" " alt="" coords="248,189,425,216"/>
+<area shape="rect" id="node6" href="$d0/da6/a01536.html" title="Animable public interface." alt="" coords="269,68,404,95"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,68,188,95"/>
+<area shape="rect" id="node8" href="$d7/d35/a02880.html" title="Geometry handler class." alt="" coords="880,93,1017,120"/>
+<area shape="rect" id="node10" href="$d0/daf/a02972.html" title="Handles object&#39;s visibility, and behavior with shadows." alt="" coords="485,107,659,133"/>
+<area shape="rect" id="node11" title=" " alt="" coords="237,123,436,165"/>
 </map>

@@ -1,0 +1,7 @@
+<map id="castor3d::LightPass::Program" name="castor3d::LightPass::Program">
+<area shape="rect" id="node1" title="Base class for all light pass programs." alt="" coords="118,5,257,47"/>
+<area shape="rect" id="node2" href="$df/d0f/a03452.html" title="Directional light pass program." alt="" coords="5,95,175,136"/>
+<area shape="rect" id="node3" href="$d4/d5b/a03496.html" title="Base class for light passe programs that need a mesh instead of a quad." alt="" coords="199,95,370,136"/>
+<area shape="rect" id="node4" href="$db/d09/a03508.html" title="Point light pass program." alt="" coords="105,184,273,225"/>
+<area shape="rect" id="node5" href="$dc/d98/a03524.html" title="Spot light pass program." alt="" coords="297,184,462,225"/>
+</map>

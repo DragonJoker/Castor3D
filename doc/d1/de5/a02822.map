@@ -1,4 +1,22 @@
-<map id="Castor3D::TextureStorage" name="Castor3D::TextureStorage">
-<area shape="rect" id="node1" title="GPU texture storage base class." alt="" coords="9,95,181,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,184,47"/>
+<map id="castor3d::MeshAnimationInstance" name="castor3d::MeshAnimationInstance">
+<area shape="rect" id="node1" title="Mesh animation instance." alt="" coords="1571,145,1789,171"/>
+<area shape="rect" id="node2" href="$d8/deb/a02820.html" title="Animation instance class." alt="" coords="1223,170,1409,197"/>
+<area shape="rect" id="node3" title=" " alt="" coords="907,123,1096,164"/>
+<area shape="rect" id="node4" href="$d3/d4c/a01540.html" title="Animation base class." alt="" coords="932,71,1071,98"/>
+<area shape="rect" id="node20" href="$da/dd5/a01580.html" title="Submesh animation class." alt="" coords="1231,62,1401,89"/>
+<area shape="rect" id="node5" title=" " alt="" coords="305,223,368,250"/>
+<area shape="rect" id="node11" href="$df/dd0/a02804.html" title="Represents the animated objects." alt="" coords="709,290,883,317"/>
+<area shape="rect" id="node17" href="$d2/d0c/a02932.html" title="Movable object class." alt="" coords="503,239,668,266"/>
+<area shape="rect" id="node6" title=" " alt="" coords="485,71,685,98"/>
+<area shape="rect" id="node7" title=" " alt="" coords="498,5,673,47"/>
+<area shape="rect" id="node8" title=" " alt="" coords="980,189,1023,215"/>
+<area shape="rect" id="node9" title="STL iterator class." alt="" coords="1235,119,1397,146"/>
+<area shape="rect" id="node10" href="$d9/dd1/a02800.html" title="Represents the animated submeshes." alt="" coords="1233,271,1399,298"/>
+<area shape="rect" id="node12" href="$dc/d25/a02160.html" title="The mesh representation." alt="" coords="529,342,641,369"/>
+<area shape="rect" id="node13" title=" " alt="" coords="248,357,425,383"/>
+<area shape="rect" id="node14" href="$d0/da6/a01536.html" title="Animable public interface." alt="" coords="269,290,404,317"/>
+<area shape="rect" id="node15" title=" " alt="" coords="5,290,188,317"/>
+<area shape="rect" id="node16" href="$d7/d35/a02880.html" title="Geometry handler class." alt="" coords="933,239,1070,266"/>
+<area shape="rect" id="node18" href="$d0/daf/a02972.html" title="Handles object&#39;s visibility, and behavior with shadows." alt="" coords="499,122,672,149"/>
+<area shape="rect" id="node19" title=" " alt="" coords="237,115,436,156"/>
 </map>

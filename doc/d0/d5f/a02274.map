@@ -1,4 +1,4 @@
-<map id="Castor3D::RenderWindow::TextWriter" name="Castor3D::RenderWindow::TextWriter">
-<area shape="rect" id="node1" title="RenderTarget loader." alt="" coords="5,95,176,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="24,5,157,47"/>
+<map id="castor3d::FaceIndices" name="castor3d::FaceIndices">
+<area shape="rect" id="node1" title="Holds the 3 vertex indices." alt="" coords="5,109,156,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="19,5,143,47"/>
 </map>

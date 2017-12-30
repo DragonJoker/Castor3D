@@ -1,0 +1,5 @@
+<map id="castor3d::SpotLightPass::Program" name="castor3d::SpotLightPass::Program">
+<area shape="rect" id="node1" title="Spot light pass program." alt="" coords="8,184,173,225"/>
+<area shape="rect" id="node2" href="$d4/d5b/a03496.html" title="Base class for light passe programs that need a mesh instead of a quad." alt="" coords="5,95,176,136"/>
+<area shape="rect" id="node3" href="$d4/d4b/a03464.html" title="Base class for all light pass programs." alt="" coords="21,5,160,47"/>
+</map>

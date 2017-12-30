@@ -1,0 +1,13 @@
+<map id="castor3d::LightPass" name="castor3d::LightPass">
+<area shape="rect" id="node1" title="Base class for all light passes." alt="" coords="619,152,757,179"/>
+<area shape="rect" id="node2" href="$da/dfb/a03188.html" title=" " alt="" coords="299,17,439,44"/>
+<area shape="rect" id="node3" href="$db/d9d/a01972.html" title="Frame buffer class." alt="" coords="293,68,444,95"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="11,57,187,98"/>
+<area shape="rect" id="node6" title=" " alt="" coords="278,125,459,152"/>
+<area shape="rect" id="node7" href="$d4/d4b/a03464.html" title="Base class for all light pass programs." alt="" coords="29,122,168,163"/>
+<area shape="rect" id="node8" href="$dc/d31/a01892.html" title="Main System." alt="" coords="309,176,429,203"/>
+<area shape="rect" id="node9" title=" " alt="" coords="13,188,184,215"/>
+<area shape="rect" id="node10" href="$d9/da1/a01976.html" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="260,227,477,253"/>
+<area shape="rect" id="node11" href="$dc/ddd/a03196.html" title="Matrices Uniform buffer management." alt="" coords="299,277,438,304"/>
+</map>

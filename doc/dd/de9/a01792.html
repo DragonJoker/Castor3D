@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Member List</title>
+<title>Castor3D: castor3d::CacheTraits&lt; FrameListener, KeyType &gt; Struct Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,23 +39,108 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d4/d8f/a00742.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d1/df0/a01795.html">Face</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../dd/de9/a01792.html">CacheTraits&lt; FrameListener, KeyType &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="../../d6/d53/a01789.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::Face Member List</div>  </div>
+<div class="title">castor3d::CacheTraits&lt; FrameListener, KeyType &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d1/df0/a01795.html">Castor3D::Face</a>, including all inherited members.</p>
-<table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/df0/a01795.html#a8bbd24f28708e1733ee145ec243985fb">Face</a>(uint32_t a, uint32_t b, uint32_t c)</td><td class="entry"><a class="el" href="../../d1/df0/a01795.html">Castor3D::Face</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d1/df0/a01795.html#ab3065d5ff39b9c6a0d495f84cf6d1b38">operator[]</a>(uint32_t p_index) const</td><td class="entry"><a class="el" href="../../d1/df0/a01795.html">Castor3D::Face</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-</table></div><!-- contents -->
+<p>Helper structure to specialise a cache behaviour.  
+ <a href="../../dd/de9/a01792.html#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a042f62c4e43f03af442b9e3b4182a059"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de9/a01792.html#a042f62c4e43f03af442b9e3b4182a059">Producer</a> = std::function&lt; std::shared_ptr&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a> &gt;(KeyType const &amp;) &gt;</td></tr>
+<tr class="separator:a042f62c4e43f03af442b9e3b4182a059"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a82fa31b7e995282f6d26c0ce60fd3e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de9/a01792.html#a7a82fa31b7e995282f6d26c0ce60fd3e">Merger</a> = std::function&lt; void(<a class="el" href="../../d0/d9d/a01760.html">CacheBase</a>&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a>, KeyType &gt; const &amp;, castor::Collection&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a>, KeyType &gt; &amp;, std::shared_ptr&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a> &gt;) &gt;</td></tr>
+<tr class="separator:a7a82fa31b7e995282f6d26c0ce60fd3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:ad8f17283a6e3a87476ac831448be7177"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de9/a01792.html#ad8f17283a6e3a87476ac831448be7177">Name</a></td></tr>
+<tr class="separator:ad8f17283a6e3a87476ac831448be7177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename KeyType&gt;<br />
+struct castor3d::CacheTraits&lt; FrameListener, KeyType &gt;</h3>
+
+<p>Helper structure to specialise a cache behaviour. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>04/02/2016 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8.0</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Specialisation for <a class="el" href="../../df/dd0/a01912.html" title="User event synchronisation class.">FrameListener</a>. </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a7a82fa31b7e995282f6d26c0ce60fd3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a82fa31b7e995282f6d26c0ce60fd3e">&#9670;&nbsp;</a></span>Merger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d9/d7d/a01880.html">castor3d::CacheTraits</a>&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a>, KeyType &gt;::<a class="el" href="../../dd/de9/a01792.html#a7a82fa31b7e995282f6d26c0ce60fd3e">Merger</a> =  std::function&lt; void( <a class="el" href="../../d0/d9d/a01760.html">CacheBase</a>&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a>, KeyType &gt; const &amp; , castor::Collection&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a>, KeyType &gt; &amp; , std::shared_ptr&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a> &gt; ) &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a042f62c4e43f03af442b9e3b4182a059"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a042f62c4e43f03af442b9e3b4182a059">&#9670;&nbsp;</a></span>Producer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d9/d7d/a01880.html">castor3d::CacheTraits</a>&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a>, KeyType &gt;::<a class="el" href="../../dd/de9/a01792.html#a042f62c4e43f03af442b9e3b4182a059">Producer</a> =  std::function&lt; std::shared_ptr&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a> &gt;( KeyType const &amp; ) &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad8f17283a6e3a87476ac831448be7177"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8f17283a6e3a87476ac831448be7177">&#9670;&nbsp;</a></span>Name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const castor::String <a class="el" href="../../d9/d7d/a01880.html">castor3d::CacheTraits</a>&lt; <a class="el" href="../../df/dd0/a01912.html">FrameListener</a>, KeyType &gt;::Name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Cache/<a class="el" href="../../d1/d09/a00077.html">ListenerCache.hpp</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:27:34 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:38:20 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

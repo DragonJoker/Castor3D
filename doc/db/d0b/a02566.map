@@ -1,4 +1,4 @@
-<map id="Castor3D::ShaderProgram::TextWriter" name="Castor3D::ShaderProgram::TextWriter">
-<area shape="rect" id="node1" title="ShaderProgram loader." alt="" coords="5,95,180,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="25,5,161,47"/>
+<map id="castor3d::SubmeshAnimationBufferT&lt; T &gt;" name="castor3d::SubmeshAnimationBufferT&lt; T &gt;">
+<area shape="rect" id="node1" title="Class which represents the mesh animation submeshes buffers." alt="" coords="5,124,199,165"/>
+<area shape="rect" id="node2" title=" " alt="" coords="30,5,174,61"/>
 </map>

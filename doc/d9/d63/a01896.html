@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Member List</title>
+<title>Castor3D: castor3d::EnvironmentMap Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,22 +39,502 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d4/d8f/a00742.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d9/d32/a01899.html">ChunkTyper&lt; Skeleton &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/d63/a01896.html">EnvironmentMap</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="../../dd/d80/a01893.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::ChunkTyper&lt; Skeleton &gt; Member List</div>  </div>
+<div class="title">castor3d::EnvironmentMap Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d9/d32/a01899.html">Castor3D::ChunkTyper&lt; Skeleton &gt;</a>, including all inherited members.</p>
-<table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/d32/a01899.html#a128f25f6f9b06a841f401bac46c81b9f">Value</a></td><td class="entry"><a class="el" href="../../d9/d32/a01899.html">Castor3D::ChunkTyper&lt; Skeleton &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-</table></div><!-- contents -->
+<p>Reflection mapping implementation.  
+ <a href="../../d9/d63/a01896.html#details">More...</a></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for castor3d::EnvironmentMap:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../db/d29/a01895.png" border="0" usemap="#castor3d_1_1EnvironmentMap_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1EnvironmentMap_inherit__map" id="castor3d_1_1EnvironmentMap_inherit__map">
+<area shape="rect"  title="Reflection mapping implementation." alt="" coords="11,80,187,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,192,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for castor3d::EnvironmentMap:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d8/dd1/a01894.png" border="0" usemap="#castor3d_1_1EnvironmentMap_coll__map" alt="Collaboration graph"/></div>
+<map name="castor3d_1_1EnvironmentMap_coll__map" id="castor3d_1_1EnvironmentMap_coll__map">
+<area shape="rect"  title="Reflection mapping implementation." alt="" coords="11,80,187,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,192,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ab786383a3014bf5271646e98826aa524"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#ab786383a3014bf5271646e98826aa524">CubeMatrices</a> = std::array&lt; castor::Matrix4x4r, size_t(<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td></tr>
+<tr class="separator:ab786383a3014bf5271646e98826aa524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af82e00926b71d14941e1030b50805360"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#af82e00926b71d14941e1030b50805360">CubeColourAttachment</a> = std::array&lt; TextureAttachmentSPtr, size_t(<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td></tr>
+<tr class="separator:af82e00926b71d14941e1030b50805360"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b8198f3c2b3c98cc2904c15923cb81c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#a0b8198f3c2b3c98cc2904c15923cb81c">CubeCameras</a> = std::array&lt; CameraSPtr, size_t(<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td></tr>
+<tr class="separator:a0b8198f3c2b3c98cc2904c15923cb81c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4581668775e1be765ca9caccf7103eb7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#a4581668775e1be765ca9caccf7103eb7">CubeDepthAttachment</a> = RenderBufferAttachmentSPtr</td></tr>
+<tr class="separator:a4581668775e1be765ca9caccf7103eb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ab95d35ecc12eb9e33e25f76bad8f25"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#a8ab95d35ecc12eb9e33e25f76bad8f25">EnvironmentMapPasses</a> = std::array&lt; std::unique_ptr&lt; <a class="el" href="../../d5/dcc/a01900.html">EnvironmentMapPass</a> &gt;, size_t(<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td></tr>
+<tr class="separator:a8ab95d35ecc12eb9e33e25f76bad8f25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8dc5d64a82875b8ec5c0d185fb95f735"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#a8dc5d64a82875b8ec5c0d185fb95f735">EnvironmentMap</a> (<a class="el" href="../../dc/d31/a01892.html">Engine</a> &amp;engine, <a class="el" href="../../d3/d8b/a02996.html">SceneNode</a> &amp;p_node)</td></tr>
+<tr class="memdesc:a8dc5d64a82875b8ec5c0d185fb95f735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a8dc5d64a82875b8ec5c0d185fb95f735">More...</a><br /></td></tr>
+<tr class="separator:a8dc5d64a82875b8ec5c0d185fb95f735"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2fe1ccc4b58d6c9e5e391eebf954ef6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#ad2fe1ccc4b58d6c9e5e391eebf954ef6">~EnvironmentMap</a> ()</td></tr>
+<tr class="memdesc:ad2fe1ccc4b58d6c9e5e391eebf954ef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#ad2fe1ccc4b58d6c9e5e391eebf954ef6">More...</a><br /></td></tr>
+<tr class="separator:ad2fe1ccc4b58d6c9e5e391eebf954ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b8fc0c3a37cf96f2624f7f531a7cb67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#a3b8fc0c3a37cf96f2624f7f531a7cb67">initialise</a> ()</td></tr>
+<tr class="memdesc:a3b8fc0c3a37cf96f2624f7f531a7cb67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises the frame buffer.  <a href="#a3b8fc0c3a37cf96f2624f7f531a7cb67">More...</a><br /></td></tr>
+<tr class="separator:a3b8fc0c3a37cf96f2624f7f531a7cb67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0f56a288250b098bdf8ee3174af20fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#ae0f56a288250b098bdf8ee3174af20fe">cleanup</a> ()</td></tr>
+<tr class="memdesc:ae0f56a288250b098bdf8ee3174af20fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the frame buffer.  <a href="#ae0f56a288250b098bdf8ee3174af20fe">More...</a><br /></td></tr>
+<tr class="separator:ae0f56a288250b098bdf8ee3174af20fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83dd39b7a9f4a3f0c78c5d21c358d52a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#a83dd39b7a9f4a3f0c78c5d21c358d52a">update</a> (<a class="el" href="../../d0/d85/a00976.html#a16af0407887759f4b7d74964b4533ec6">RenderQueueArray</a> &amp;p_queues)</td></tr>
+<tr class="memdesc:a83dd39b7a9f4a3f0c78c5d21c358d52a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the passes.  <a href="#a83dd39b7a9f4a3f0c78c5d21c358d52a">More...</a><br /></td></tr>
+<tr class="separator:a83dd39b7a9f4a3f0c78c5d21c358d52a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a961dba4f315f1b722576ba71ee600d9a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#a961dba4f315f1b722576ba71ee600d9a">render</a> ()</td></tr>
+<tr class="memdesc:a961dba4f315f1b722576ba71ee600d9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the environment map.  <a href="#a961dba4f315f1b722576ba71ee600d9a">More...</a><br /></td></tr>
+<tr class="separator:a961dba4f315f1b722576ba71ee600d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1e8a15d96bcf4b445764cd0afd929b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#ad1e8a15d96bcf4b445764cd0afd929b7">debugDisplay</a> (castor::Size const &amp;size, uint32_t index)</td></tr>
+<tr class="memdesc:ad1e8a15d96bcf4b445764cd0afd929b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps the environment map on screen.  <a href="#ad1e8a15d96bcf4b445764cd0afd929b7">More...</a><br /></td></tr>
+<tr class="separator:ad1e8a15d96bcf4b445764cd0afd929b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa869b52b404e904599215f93b7f218e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/da2/a03620.html">TextureUnit</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#afa869b52b404e904599215f93b7f218e">getTexture</a> ()</td></tr>
+<tr class="separator:afa869b52b404e904599215f93b7f218e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4392e804560b5b0f1018be3342c9062"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/da2/a03620.html">TextureUnit</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#ae4392e804560b5b0f1018be3342c9062">getTexture</a> () const</td></tr>
+<tr class="separator:ae4392e804560b5b0f1018be3342c9062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afedc7c056d87cdf5db920866b283ffbf"><td class="memItemLeft" align="right" valign="top">castor::Size&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#afedc7c056d87cdf5db920866b283ffbf">getSize</a> () const</td></tr>
+<tr class="separator:afedc7c056d87cdf5db920866b283ffbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af71f627ce5f9372c2de23e0af8f8ed98"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d63/a01896.html#af71f627ce5f9372c2de23e0af8f8ed98">getIndex</a> () const</td></tr>
+<tr class="separator:af71f627ce5f9372c2de23e0af8f8ed98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Reflection mapping implementation. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.9.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>30/08/2016 </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a0b8198f3c2b3c98cc2904c15923cb81c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b8198f3c2b3c98cc2904c15923cb81c">&#9670;&nbsp;</a></span>CubeCameras</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d9/d63/a01896.html#a0b8198f3c2b3c98cc2904c15923cb81c">castor3d::EnvironmentMap::CubeCameras</a> =  std::array&lt; CameraSPtr, size_t (<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af82e00926b71d14941e1030b50805360"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af82e00926b71d14941e1030b50805360">&#9670;&nbsp;</a></span>CubeColourAttachment</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d9/d63/a01896.html#af82e00926b71d14941e1030b50805360">castor3d::EnvironmentMap::CubeColourAttachment</a> =  std::array&lt; TextureAttachmentSPtr, size_t (<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4581668775e1be765ca9caccf7103eb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4581668775e1be765ca9caccf7103eb7">&#9670;&nbsp;</a></span>CubeDepthAttachment</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d9/d63/a01896.html#a4581668775e1be765ca9caccf7103eb7">castor3d::EnvironmentMap::CubeDepthAttachment</a> =  RenderBufferAttachmentSPtr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab786383a3014bf5271646e98826aa524"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab786383a3014bf5271646e98826aa524">&#9670;&nbsp;</a></span>CubeMatrices</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d9/d63/a01896.html#ab786383a3014bf5271646e98826aa524">castor3d::EnvironmentMap::CubeMatrices</a> =  std::array&lt; castor::Matrix4x4r, size_t (<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ab95d35ecc12eb9e33e25f76bad8f25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ab95d35ecc12eb9e33e25f76bad8f25">&#9670;&nbsp;</a></span>EnvironmentMapPasses</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d9/d63/a01896.html#a8ab95d35ecc12eb9e33e25f76bad8f25">castor3d::EnvironmentMap::EnvironmentMapPasses</a> =  std::array&lt; std::unique_ptr&lt; <a class="el" href="../../d5/dcc/a01900.html">EnvironmentMapPass</a> &gt;, size_t (<a class="el" href="../../d0/d85/a00976.html#a215e7ca29e94bb90df0dfb245bc53f87ae558bb69fadec037d9eae46601a4df8e">CubeMapFace::eCount</a>) &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8dc5d64a82875b8ec5c0d185fb95f735"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8dc5d64a82875b8ec5c0d185fb95f735">&#9670;&nbsp;</a></span>EnvironmentMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::EnvironmentMap::EnvironmentMap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../dc/d31/a01892.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>engine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d3/d8b/a02996.html">SceneNode</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_node</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_node</td><td>The scene node. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad2fe1ccc4b58d6c9e5e391eebf954ef6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2fe1ccc4b58d6c9e5e391eebf954ef6">&#9670;&nbsp;</a></span>~EnvironmentMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::EnvironmentMap::~EnvironmentMap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae0f56a288250b098bdf8ee3174af20fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0f56a288250b098bdf8ee3174af20fe">&#9670;&nbsp;</a></span>cleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::EnvironmentMap::cleanup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleans up the frame buffer. </p>
+
+</div>
+</div>
+<a id="ad1e8a15d96bcf4b445764cd0afd929b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1e8a15d96bcf4b445764cd0afd929b7">&#9670;&nbsp;</a></span>debugDisplay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::EnvironmentMap::debugDisplay </td>
+          <td>(</td>
+          <td class="paramtype">castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dumps the environment map on screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The dump dimensions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>The environment map index (to compute its position). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af71f627ce5f9372c2de23e0af8f8ed98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af71f627ce5f9372c2de23e0af8f8ed98">&#9670;&nbsp;</a></span>getIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t castor3d::EnvironmentMap::getIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The reflection map index.</dd>
+<dd>
+L'indice de la texture d'environnement. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d85/a00976.html#a7edcbcbd803d0b22909833ea5d5c285e">castor3d::doBindPass()</a>.</p>
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d9/d63/a01896_af71f627ce5f9372c2de23e0af8f8ed98_icgraph.png" border="0" usemap="#d9/d63/a01896_af71f627ce5f9372c2de23e0af8f8ed98_icgraph" alt=""/></div>
+<map name="d9/d63/a01896_af71f627ce5f9372c2de23e0af8f8ed98_icgraph" id="d9/d63/a01896_af71f627ce5f9372c2de23e0af8f8ed98_icgraph">
+<area shape="rect"  title=" " alt="" coords="204,5,380,47"/>
+<area shape="rect"  href="../../d0/d85/a00976.html#a7edcbcbd803d0b22909833ea5d5c285e" title=" " alt="" coords="5,13,156,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afedc7c056d87cdf5db920866b283ffbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afedc7c056d87cdf5db920866b283ffbf">&#9670;&nbsp;</a></span>getSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">castor::Size castor3d::EnvironmentMap::getSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The reflection map dimensions.</dd>
+<dd>
+Les dimensions de la texture d'environnement. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d0/da2/a03620.html#a455370bb5d5da08745042e3503752f21">castor3d::TextureUnit::getTexture()</a>.</p>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d9/d63/a01896_afedc7c056d87cdf5db920866b283ffbf_cgraph.png" border="0" usemap="#d9/d63/a01896_afedc7c056d87cdf5db920866b283ffbf_cgraph" alt=""/></div>
+<map name="d9/d63/a01896_afedc7c056d87cdf5db920866b283ffbf_cgraph" id="d9/d63/a01896_afedc7c056d87cdf5db920866b283ffbf_cgraph">
+<area shape="rect"  title=" " alt="" coords="5,5,181,47"/>
+<area shape="rect"  href="../../d0/da2/a03620.html#a455370bb5d5da08745042e3503752f21" title=" " alt="" coords="229,5,376,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afa869b52b404e904599215f93b7f218e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa869b52b404e904599215f93b7f218e">&#9670;&nbsp;</a></span>getTexture() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d0/da2/a03620.html">TextureUnit</a>&amp; castor3d::EnvironmentMap::getTexture </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The reflection map.</dd>
+<dd>
+La texture d'environnement. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d85/a00976.html#a7edcbcbd803d0b22909833ea5d5c285e">castor3d::doBindPass()</a>.</p>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d9/d63/a01896_afa869b52b404e904599215f93b7f218e_icgraph.png" border="0" usemap="#d9/d63/a01896_afa869b52b404e904599215f93b7f218e_icgraph" alt=""/></div>
+<map name="d9/d63/a01896_afa869b52b404e904599215f93b7f218e_icgraph" id="d9/d63/a01896_afa869b52b404e904599215f93b7f218e_icgraph">
+<area shape="rect"  title=" " alt="" coords="204,5,380,47"/>
+<area shape="rect"  href="../../d0/d85/a00976.html#a7edcbcbd803d0b22909833ea5d5c285e" title=" " alt="" coords="5,13,156,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae4392e804560b5b0f1018be3342c9062"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4392e804560b5b0f1018be3342c9062">&#9670;&nbsp;</a></span>getTexture() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d0/da2/a03620.html">TextureUnit</a> const&amp; castor3d::EnvironmentMap::getTexture </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The reflection map.</dd>
+<dd>
+La texture d'environnement. </dd></dl>
+
+</div>
+</div>
+<a id="a3b8fc0c3a37cf96f2624f7f531a7cb67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b8fc0c3a37cf96f2624f7f531a7cb67">&#9670;&nbsp;</a></span>initialise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::EnvironmentMap::initialise </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises the frame buffer. </p>
+
+</div>
+</div>
+<a id="a961dba4f315f1b722576ba71ee600d9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a961dba4f315f1b722576ba71ee600d9a">&#9670;&nbsp;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::EnvironmentMap::render </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Renders the environment map. </p>
+
+</div>
+</div>
+<a id="a83dd39b7a9f4a3f0c78c5d21c358d52a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83dd39b7a9f4a3f0c78c5d21c358d52a">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::EnvironmentMap::update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d85/a00976.html#a16af0407887759f4b7d74964b4533ec6">RenderQueueArray</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_queues</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the passes. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Gather the render queues, for further update. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_queues</td><td>Receives the render queues needed for the rendering of the frame. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/EnvironmentMap/<a class="el" href="../../d7/d06/a00131.html">EnvironmentMap.hpp</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:27:32 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:38:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

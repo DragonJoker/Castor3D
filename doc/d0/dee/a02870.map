@@ -1,0 +1,17 @@
+<map id="castor3d::ColourSkybox" name="castor3d::ColourSkybox">
+<area shape="rect" id="node1" title="A skybox with no image but a colour." alt="" coords="1089,260,1251,287"/>
+<area shape="rect" id="node2" href="$d8/dbd/a03008.html" title="Skybox implementation." alt="" coords="916,260,1040,287"/>
+<area shape="rect" id="node3" title=" " alt="" coords="239,28,425,55"/>
+<area shape="rect" id="node5" href="$da/d20/a02740.html" title="Class to represent a viewport." alt="" coords="582,77,713,104"/>
+<area shape="rect" id="node4" title=" " alt="" coords="544,129,751,170"/>
+<area shape="rect" id="node6" title=" " alt="" coords="237,80,427,136"/>
+<area shape="rect" id="node7" title=" " alt="" coords="585,194,710,235"/>
+<area shape="rect" id="node8" title=" " alt="" coords="311,201,353,228"/>
+<area shape="rect" id="node9" href="$dc/ddd/a03196.html" title="Matrices Uniform buffer management." alt="" coords="578,260,717,287"/>
+<area shape="rect" id="node10" href="$d8/d2a/a03192.html" title="HDR configuration Uniform buffer management." alt="" coords="568,311,727,337"/>
+<area shape="rect" id="node11" title=" " alt="" coords="562,362,733,403"/>
+<area shape="rect" id="node12" href="$d9/de2/a02508.html" title="Holds environment maps used in IBL." alt="" coords="261,369,403,396"/>
+<area shape="rect" id="node13" title=" " alt="" coords="5,369,188,396"/>
+<area shape="rect" id="node14" href="$df/dfb/a02068.html" title="Description of all elements in a vertex buffer." alt="" coords="558,428,737,455"/>
+<area shape="rect" id="node15" href="$de/d3a/a03200.html" title="Matrices Uniform buffer management." alt="" coords="560,479,735,505"/>
+</map>

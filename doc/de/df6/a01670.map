@@ -1,4 +1,5 @@
-<map id="Castor3D::KeyboardEvent" name="Castor3D::KeyboardEvent">
-<area shape="rect" id="node1" title="Description of a keyboard event." alt="" coords="5,80,176,107"/>
-<area shape="rect" id="node2" href="$d2/dca/a01683.html" title="Description of a user input event." alt="" coords="5,5,176,32"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;">
+<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="5,185,191,227"/>
+<area shape="rect" id="node2" href="$dc/d3e/a01712.html" title=" " alt="" coords="5,95,191,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="21,5,175,32"/>
 </map>

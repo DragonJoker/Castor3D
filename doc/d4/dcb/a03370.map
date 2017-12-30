@@ -1,0 +1,13 @@
+<map id="castor3d::UniformBufferBinding" name="castor3d::UniformBufferBinding">
+<area shape="rect" id="node1" title="Represents the binding between a uniform buffer and a program." alt="" coords="732,217,932,244"/>
+<area shape="rect" id="node2" title=" " alt="" coords="432,151,611,193"/>
+<area shape="rect" id="node3" href="$d1/d7a/a03080.html" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="436,217,607,244"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,237,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="23,57,219,98"/>
+<area shape="rect" id="node6" title=" " alt="" coords="17,123,226,179"/>
+<area shape="rect" id="node7" title=" " alt="" coords="37,203,205,259"/>
+<area shape="rect" id="node8" href="$df/dfb/a02068.html" title="Description of all elements in a vertex buffer." alt="" coords="32,283,211,309"/>
+<area shape="rect" id="node9" title=" " alt="" coords="35,334,208,375"/>
+<area shape="rect" id="node10" title=" " alt="" coords="446,329,597,385"/>
+<area shape="rect" id="node11" href="$d7/d4f/a03376.html" title=" " alt="" coords="21,399,221,441"/>
+</map>

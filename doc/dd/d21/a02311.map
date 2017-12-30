@@ -1,0 +1,11 @@
+<map id="castor3d::SubmeshComponent" name="castor3d::SubmeshComponent">
+<area shape="rect" id="node1" title="Component for a submesh." alt="" coords="255,123,456,149"/>
+<area shape="rect" id="node3" href="$d7/d70/a02252.html" title="The submesh component used for skinning." alt="" coords="521,5,703,32"/>
+<area shape="rect" id="node4" href="$dd/d76/a02268.html" title="The submesh component used for instantiated submeshes with bones." alt="" coords="519,57,705,98"/>
+<area shape="rect" id="node5" href="$dc/d1a/a02288.html" title="A submesh component for faces." alt="" coords="532,123,692,149"/>
+<area shape="rect" id="node8" href="$d4/d8c/a02292.html" title="The submesh component used for hardware instantiation." alt="" coords="504,173,720,200"/>
+<area shape="rect" id="node9" href="$d7/d67/a02308.html" title="The submesh component used for morphing." alt="" coords="521,224,703,251"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,123,207,149"/>
+<area shape="rect" id="node6" href="$db/d77/a02304.html" title="The submesh component for lines." alt="" coords="774,97,934,124"/>
+<area shape="rect" id="node7" href="$d3/d01/a02316.html" title="The submesh component for triangular faces." alt="" coords="768,148,940,175"/>
+</map>

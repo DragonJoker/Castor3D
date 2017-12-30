@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Scene/SceneFileParser.hpp File Reference</title>
+<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Scene/Animation/AnimatedObjectGroup.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,153 +39,74 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li><li class="navelem"><a class="el" href="../../dir_df22d7ad3b458f90c3b557064ae70ac4.html">Scene</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li><li class="navelem"><a class="el" href="../../dir_df22d7ad3b458f90c3b557064ae70ac4.html">Scene</a></li><li class="navelem"><a class="el" href="../../dir_30dcdb76843d477deae5a1533937d77d.html">Animation</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
-<div class="title">SceneFileParser.hpp File Reference</div>  </div>
+<div class="title">AnimatedObjectGroup.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for SceneFileParser.hpp:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for AnimatedObjectGroup.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d9/d1d/a00633.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2SceneFileParser_8hpp" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2SceneFileParser_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2SceneFileParser_8hpp">
-<area shape="rect"  title=" " alt="" coords="3095,5,3307,61"/>
-<area shape="rect"  href="../../d4/d3e/a00116.html" title=" " alt="" coords="2371,423,2548,449"/>
-<area shape="rect"  title=" " alt="" coords="4102,505,4249,531"/>
-<area shape="rect"  title=" " alt="" coords="3008,109,3177,136"/>
-<area shape="rect"  title=" " alt="" coords="3201,109,3416,136"/>
-<area shape="rect"  href="../../d6/d82/a00293.html" title=" " alt="" coords="2381,109,2519,136"/>
-<area shape="rect"  href="../../d9/d0f/a00644.html" title=" " alt="" coords="3132,191,3264,218"/>
-<area shape="rect"  title=" " alt="" coords="3070,505,3251,531"/>
-<area shape="rect"  title=" " alt="" coords="3276,505,3424,531"/>
-<area shape="rect"  title=" " alt="" coords="3448,505,3636,531"/>
-<area shape="rect"  title=" " alt="" coords="3660,505,3771,531"/>
-<area shape="rect"  title=" " alt="" coords="301,505,431,531"/>
-<area shape="rect"  title=" " alt="" coords="455,505,597,531"/>
-<area shape="rect"  title=" " alt="" coords="622,505,779,531"/>
-<area shape="rect"  title=" " alt="" coords="803,505,998,531"/>
-<area shape="rect"  href="../../da/d9c/a00413.html" title=" " alt="" coords="45,497,277,539"/>
-<area shape="rect"  href="../../df/d15/a00416.html" title=" " alt="" coords="1022,497,1254,539"/>
-<area shape="rect"  href="../../db/d43/a00422.html" title=" " alt="" coords="1278,497,1510,539"/>
-<area shape="rect"  href="../../dc/d2f/a00425.html" title=" " alt="" coords="1534,497,1766,539"/>
-<area shape="rect"  href="../../d4/dd3/a00428.html" title=" " alt="" coords="1790,497,2022,539"/>
-<area shape="rect"  href="../../df/d70/a00431.html" title=" " alt="" coords="2046,497,2278,539"/>
-<area shape="rect"  href="../../d4/da8/a00437.html" title=" " alt="" coords="2302,497,2534,539"/>
-<area shape="rect"  href="../../de/df8/a00440.html" title=" " alt="" coords="2558,497,2790,539"/>
-<area shape="rect"  href="../../d1/d7e/a00434.html" title=" " alt="" coords="3795,497,4027,539"/>
-<area shape="rect"  href="../../d3/d29/a00419.html" title=" " alt="" coords="2814,497,3046,539"/>
-<area shape="rect"  href="../../df/d95/a00299.html" title=" " alt="" coords="5,587,161,613"/>
-<area shape="rect"  title=" " alt="" coords="3920,587,4055,613"/>
-<area shape="rect"  title=" " alt="" coords="2860,587,3000,613"/>
-<area shape="rect"  href="../../d5/d35/a00266.html" title=" " alt="" coords="3029,191,3108,218"/>
-<area shape="rect"  href="../../d1/da8/a00230.html" title=" " alt="" coords="2015,273,2168,300"/>
-<area shape="rect"  href="../../d6/de1/a00233.html" title=" " alt="" coords="2168,191,2271,218"/>
-<area shape="rect"  href="../../d9/d01/a00227.html" title=" " alt="" coords="2068,191,2144,218"/>
-<area shape="rect"  href="../../db/dc3/a00284.html" title=" " alt="" coords="2295,184,2477,225"/>
-<area shape="rect"  href="../../d3/db1/a00200.html" title=" " alt="" coords="2321,273,2539,300"/>
-<area shape="rect"  href="../../d9/dd6/a00272.html" title=" " alt="" coords="2665,348,2801,375"/>
-<area shape="rect"  href="../../d7/d46/a00002.html" title=" " alt="" coords="3542,273,3705,300"/>
-<area shape="rect"  href="../../d4/d8c/a00035.html" title=" " alt="" coords="3374,348,3537,375"/>
-<area shape="rect"  href="../../d8/d41/a00038.html" title=" " alt="" coords="3662,348,3822,375"/>
-<area shape="rect"  href="../../d5/d42/a00269.html" title=" " alt="" coords="2716,273,2875,300"/>
-<area shape="rect"  title=" " alt="" coords="2899,273,3055,300"/>
-<area shape="rect"  title=" " alt="" coords="3079,273,3245,300"/>
-<area shape="rect"  title=" " alt="" coords="3270,273,3417,300"/>
-<area shape="rect"  href="../../d5/df9/a00044.html" title=" " alt="" coords="3394,423,3517,449"/>
-<area shape="rect"  href="../../d6/d2d/a00047.html" title=" " alt="" coords="3683,423,3801,449"/>
-<area shape="rect"  href="../../de/d79/a00203.html" title=" " alt="" coords="2295,348,2488,375"/>
-<area shape="rect"  href="../../d0/d5c/a00668.html" title=" " alt="" coords="4080,273,4249,300"/>
-<area shape="rect"  href="../../da/d46/a00665.html" title=" " alt="" coords="4395,348,4486,375"/>
-<area shape="rect"  href="../../d3/dd5/a00215.html" title=" " alt="" coords="3897,348,4075,375"/>
-<area shape="rect"  title=" " alt="" coords="4099,348,4231,375"/>
-<area shape="rect"  title=" " alt="" coords="4255,348,4371,375"/>
-</map>
-</div>
-</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d7/de4/a00634.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2SceneFileParser_8hppdep" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2SceneFileParser_8hppdep" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2SceneFileParser_8hppdep">
-<area shape="rect"  title=" " alt="" coords="5,5,217,61"/>
-<area shape="rect"  href="../../d4/d10/a00635.html" title=" " alt="" coords="18,109,205,180"/>
+<div class="center"><img src="../../d9/d1d/a00633.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2Animation_2AnimatedObjectGroup_8hpp" alt=""/></div>
+<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2Animation_2AnimatedObjectGroup_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2Animation_2AnimatedObjectGroup_8hpp">
+<area shape="rect"  title=" " alt="" coords="1667,5,1914,76"/>
+<area shape="rect"  href="../../df/dc8/a00122.html" title=" " alt="" coords="1530,124,1707,151"/>
+<area shape="rect"  title=" " alt="" coords="5,206,152,233"/>
+<area shape="rect"  title=" " alt="" coords="1732,124,1849,151"/>
+<area shape="rect"  title=" " alt="" coords="1874,124,2006,151"/>
+<area shape="rect"  title=" " alt="" coords="2031,124,2241,151"/>
+<area shape="rect"  title=" " alt="" coords="176,206,357,233"/>
+<area shape="rect"  title=" " alt="" coords="382,206,530,233"/>
+<area shape="rect"  title=" " alt="" coords="554,206,742,233"/>
+<area shape="rect"  title=" " alt="" coords="766,206,877,233"/>
+<area shape="rect"  title=" " alt="" coords="901,206,1030,233"/>
+<area shape="rect"  title=" " alt="" coords="1054,206,1197,233"/>
+<area shape="rect"  title=" " alt="" coords="1221,206,1379,233"/>
+<area shape="rect"  title=" " alt="" coords="1403,206,1597,233"/>
+<area shape="rect"  href="../../d4/ddf/a00488.html" title=" " alt="" coords="1621,199,1853,240"/>
+<area shape="rect"  href="../../d6/d60/a00491.html" title=" " alt="" coords="1877,199,2109,240"/>
+<area shape="rect"  href="../../d4/d1e/a00497.html" title=" " alt="" coords="2133,199,2365,240"/>
+<area shape="rect"  href="../../de/d4e/a00500.html" title=" " alt="" coords="2389,199,2621,240"/>
+<area shape="rect"  href="../../d4/de5/a00503.html" title=" " alt="" coords="2645,199,2877,240"/>
+<area shape="rect"  href="../../d4/d1f/a00506.html" title=" " alt="" coords="2901,199,3133,240"/>
+<area shape="rect"  href="../../d4/dfb/a00512.html" title=" " alt="" coords="3157,199,3389,240"/>
+<area shape="rect"  href="../../dc/d19/a00515.html" title=" " alt="" coords="3413,199,3645,240"/>
+<area shape="rect"  href="../../df/db6/a00509.html" title=" " alt="" coords="3669,199,3901,240"/>
+<area shape="rect"  href="../../d5/d0f/a00494.html" title=" " alt="" coords="3925,199,4157,240"/>
+<area shape="rect"  href="../../d4/def/a00359.html" title=" " alt="" coords="1563,288,1719,315"/>
+<area shape="rect"  title=" " alt="" coords="1743,288,1923,315"/>
+<area shape="rect"  title=" " alt="" coords="2570,288,2697,315"/>
+<area shape="rect"  title=" " alt="" coords="3718,288,3853,315"/>
+<area shape="rect"  title=" " alt="" coords="3971,288,4111,315"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d01/a02511.html">Castor3D::SceneFileContext</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The context used into parsing functions.  <a href="../../d0/d01/a02511.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dd0/a02808.html">castor3d::AnimatedObjectGroup</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class which represents the animated object groups.  <a href="../../d1/dd0/a02808.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d6a/a02515.html">Castor3D::SceneFileParser</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">ESCN file parser.  <a href="../../d5/d6a/a02515.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d19/a02812.html">castor3d::AnimatedObjectGroup::TextWriter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/dd0/a02808.html" title="Class which represents the animated object groups.">AnimatedObjectGroup</a> loader.  <a href="../../d1/d19/a02812.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d4/d8f/a00742"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d8f/a00742.html">Castor3D</a></td></tr>
+<tr class="memitem:d0/d85/a00976"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:aa44423ea93d4a7347f7bcdaffffcb939"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939">Castor3D::CSCNSection</a> : uint32_t { <br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939af8da519216510eb90ec31c4b8c966da8">Castor3D::CSCNSection::eRoot</a> = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a3a840316b6eeeb00d85c3010fa291f2a">Castor3D::CSCNSection::eScene</a> = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a12aca55fe985a5da291e392493577cd9">Castor3D::CSCNSection::eWindow</a> = MAKE_SECTION_NAME( 'W', 'N', 'D', 'W' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a7bb42ee00d346d90b918eb8867fc52eb">Castor3D::CSCNSection::eSampler</a> = MAKE_SECTION_NAME( 'S', 'M', 'P', 'R' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a14bd73738591c6e560d81b0724e96322">Castor3D::CSCNSection::eCamera</a> = MAKE_SECTION_NAME( 'C', 'A', 'M', 'R' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939af6f03937a523133824ce95e02224a33d">Castor3D::CSCNSection::eViewport</a> = MAKE_SECTION_NAME( 'V', 'W', 'P', 'T' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939add46b640b816561ca3a98235d84d40e9">Castor3D::CSCNSection::eLight</a> = MAKE_SECTION_NAME( 'L', 'G', 'H', 'T' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a540edeff695f0af70e9bc41bb35297dd">Castor3D::CSCNSection::eNode</a> = MAKE_SECTION_NAME( 'N', 'O', 'D', 'E' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939ac92038caaf313844f673a690ac5c88bf">Castor3D::CSCNSection::eObject</a> = MAKE_SECTION_NAME( 'O', 'B', 'J', 'T' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939ab7bc5fc0f497555d7168d61fd54fc1dc">Castor3D::CSCNSection::eObjectMaterials</a> = MAKE_SECTION_NAME( 'O', 'M', 'T', 'L' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939af57d2711afb894c59ac3f4704298c57e">Castor3D::CSCNSection::eFont</a> = MAKE_SECTION_NAME( 'F', 'O', 'N', 'T' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a2311d10dd8691c4aabfa8fd56c7f882f">Castor3D::CSCNSection::ePanelOverlay</a> = MAKE_SECTION_NAME( 'P', 'O', 'V', 'L' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a2cbf3caeffc6d9d683337a8b85c1c5f8">Castor3D::CSCNSection::eBorderPanelOverlay</a> = MAKE_SECTION_NAME( 'B', 'O', 'V', 'L' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939ae175cf129c8163fc0d85a4e14a53fd8e">Castor3D::CSCNSection::eTextOverlay</a> = MAKE_SECTION_NAME( 'T', 'O', 'V', 'L' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a5be756330a0600dde9db6b9fdb5e16a2">Castor3D::CSCNSection::eMesh</a> = MAKE_SECTION_NAME( 'M', 'E', 'S', 'H' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a1c6e623c4f3ed72ce3d17fb2896ccbfc">Castor3D::CSCNSection::eSubmesh</a> = MAKE_SECTION_NAME( 'S', 'M', 'S', 'H' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939aed4256d4006aafecb89a04b9c823389c">Castor3D::CSCNSection::eMaterial</a> = MAKE_SECTION_NAME( 'M', 'T', 'R', 'L' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a0c6035e3f32184f72caa466f24089721">Castor3D::CSCNSection::ePass</a> = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a2df299093abd7e4a060690d2eeeaa35e">Castor3D::CSCNSection::eTextureUnit</a> = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939ad28dfecdde13a7fe56232becdfc2e77a">Castor3D::CSCNSection::eRenderTarget</a> = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a64969adfed1ac558462ce1a3e644e74f">Castor3D::CSCNSection::eShaderProgram</a> = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939ab10853995541ee9fdc9380dd387859e9">Castor3D::CSCNSection::eShaderObject</a> = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939abe7f85bb65a3a637cc982be356bad885">Castor3D::CSCNSection::eShaderUBO</a> = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939ab97eb1a0080bc6a0f1e5810d3ff05096">Castor3D::CSCNSection::eUBOVariable</a> = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939af0fbe61d17cc90f35a934671f2b23671">Castor3D::CSCNSection::eBillboard</a> = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a4f695ef2e43df005b0c369adc2a9acb6">Castor3D::CSCNSection::eBillboardList</a> = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a5963e298194533246925e8c60e8e96dd">Castor3D::CSCNSection::eAnimGroup</a> = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939af8b3bcfa9a9160ba9956d2197892e796">Castor3D::CSCNSection::eAnimation</a> = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a983a99e993c0f4ac67380ee7f720828c">Castor3D::CSCNSection::eSkybox</a> = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a1b5fd934e394d426730e1bdd46c7a914">Castor3D::CSCNSection::eParticleSystem</a> = MAKE_SECTION_NAME( 'P', 'L', 'S', 'M' ), 
-<a class="el" href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939a409b3d66125fe5a0c1519fe195685cbd">Castor3D::CSCNSection::eParticle</a> = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' )
-<br />
- }</td></tr>
-<tr class="memdesc:aa44423ea93d4a7347f7bcdaffffcb939"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scene file sections Enum.  <a href="../../d4/d8f/a00742.html#aa44423ea93d4a7347f7bcdaffffcb939">More...</a><br /></td></tr>
-<tr class="separator:aa44423ea93d4a7347f7bcdaffffcb939"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:27:28 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:38:13 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

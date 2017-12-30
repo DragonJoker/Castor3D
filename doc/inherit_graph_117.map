@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$dd/d4e/a01975.html" title="Configuration parameters." alt="" coords="5,5,156,32"/>
+<area shape="rect" id="node1" href="$d4/d4b/a03464.html" title="Base class for all light pass programs." alt="" coords="5,39,144,80"/>
+<area shape="rect" id="node2" href="$df/d0f/a03452.html" title="Directional light pass program." alt="" coords="193,5,362,47"/>
+<area shape="rect" id="node3" href="$d4/d5b/a03496.html" title="Base class for light passe programs that need a mesh instead of a quad." alt="" coords="192,71,363,112"/>
+<area shape="rect" id="node4" href="$db/d09/a03508.html" title="Point light pass program." alt="" coords="411,37,579,79"/>
+<area shape="rect" id="node5" href="$dc/d98/a03524.html" title="Spot light pass program." alt="" coords="412,103,577,144"/>
 </map>

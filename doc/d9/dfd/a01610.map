@@ -1,0 +1,12 @@
+<map id="castor3d::MeshAnimationSubmesh" name="castor3d::MeshAnimationSubmesh">
+<area shape="rect" id="node1" title="Class which represents the mesh animation submeshes." alt="" coords="1143,89,1368,116"/>
+<area shape="rect" id="node2" title=" " alt="" coords="765,5,1001,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="757,57,1008,98"/>
+<area shape="rect" id="node4" title=" " alt="" coords="797,122,968,163"/>
+<area shape="rect" id="node5" href="$d7/d67/a02308.html" title="The submesh component used for morphing." alt="" coords="507,129,689,156"/>
+<area shape="rect" id="node6" href="$df/d73/a02312.html" title="Component for a submesh." alt="" coords="256,129,457,156"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,129,207,156"/>
+<area shape="rect" id="node8" href="$de/d1f/a02236.html" title="The submesh representation." alt="" coords="815,188,950,215"/>
+<area shape="rect" id="node9" title=" " alt="" coords="507,184,689,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="517,235,679,277"/>
+</map>

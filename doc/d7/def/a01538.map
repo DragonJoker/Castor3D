@@ -1,4 +1,6 @@
-<map id="Castor3D::Cache&lt; Material, Castor::String &gt;" name="Castor3D::Cache&lt; Material, Castor::String &gt;">
-<area shape="rect" id="node1" title="Material collection, with additional functions." alt="" coords="5,109,188,151"/>
-<area shape="rect" id="node2" href="$d5/d06/a01499.html" title=" " alt="" coords="21,5,172,61"/>
+<map id="castor3d::Animation" name="castor3d::Animation">
+<area shape="rect" id="node1" title="Animation base class." alt="" coords="123,109,262,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,13,68,39"/>
+<area shape="rect" id="node3" title=" " alt="" coords="93,13,293,39"/>
+<area shape="rect" id="node4" title=" " alt="" coords="317,5,492,47"/>
 </map>

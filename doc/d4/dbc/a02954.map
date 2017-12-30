@@ -1,0 +1,9 @@
+<map id="castor3d::ParticleSystem" name="castor3d::ParticleSystem">
+<area shape="rect" id="node1" title="Particle system implementation." alt="" coords="251,261,420,288"/>
+<area shape="rect" id="node6" href="$db/db9/a02964.html" title="Particle system implementation base class." alt="" coords="239,351,432,377"/>
+<area shape="rect" id="node2" href="$d2/d0c/a02932.html" title="Movable object class." alt="" coords="106,157,271,184"/>
+<area shape="rect" id="node3" href="$d0/da6/a01536.html" title="Animable public interface." alt="" coords="29,81,164,108"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="188,81,251,108"/>
+<area shape="rect" id="node7" href="$df/dfb/a02068.html" title="Description of all elements in a vertex buffer." alt="" coords="295,157,474,184"/>
+</map>

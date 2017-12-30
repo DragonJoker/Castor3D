@@ -1,6 +1,5 @@
-<map id="Castor3D::FrameEvent" name="Castor3D::FrameEvent">
-<area shape="rect" id="node1" title="The interface which represents a frame event." alt="" coords="5,64,159,91"/>
-<area shape="rect" id="node2" href="$dd/d2d/a01635.html" title="Cleaner event." alt="" coords="207,5,401,32"/>
-<area shape="rect" id="node3" href="$d6/df0/a01647.html" title="Functor event." alt="" coords="224,57,384,98"/>
-<area shape="rect" id="node4" href="$d5/de9/a01651.html" title="Initialiser event." alt="" coords="207,123,401,149"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;">
+<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="5,185,191,227"/>
+<area shape="rect" id="node2" href="$dc/d3e/a01712.html" title=" " alt="" coords="5,95,191,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="21,5,175,32"/>
 </map>

@@ -1,5 +1,5 @@
-<map id="Castor3D::RenderTarget" name="Castor3D::RenderTarget">
-<area shape="rect" id="node1" title="Render target class." alt="" coords="120,95,281,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,188,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="212,13,400,39"/>
+<map id="castor3d::BinaryWriter&lt; BonesComponent &gt;" name="castor3d::BinaryWriter&lt; BonesComponent &gt;">
+<area shape="rect" id="node1" title="BonesComponent loader." alt="" coords="21,185,173,227"/>
+<area shape="rect" id="node2" href="$dc/d3e/a01712.html" title=" " alt="" coords="5,95,188,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="19,5,174,32"/>
 </map>

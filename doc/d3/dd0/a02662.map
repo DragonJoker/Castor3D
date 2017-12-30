@@ -1,4 +1,6 @@
-<map id="Castor3D::is_one_type&lt; Type &gt;" name="Castor3D::is_one_type&lt; Type &gt;">
-<area shape="rect" id="node1" title="Tells if a UniformType is a single value type." alt="" coords="5,109,160,151"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,156,61"/>
+<map id="castor3d::PassRenderNode" name="castor3d::PassRenderNode">
+<area shape="rect" id="node1" title="Helper structure used link a pass and a shader program." alt="" coords="561,48,743,75"/>
+<area shape="rect" id="node2" title=" " alt="" coords="247,5,444,61"/>
+<area shape="rect" id="node3" href="$d8/d22/a02044.html" title="Base class of a material pass." alt="" coords="290,85,401,112"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,85,197,112"/>
 </map>

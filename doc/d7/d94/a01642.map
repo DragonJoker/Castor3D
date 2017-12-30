@@ -1,4 +1,5 @@
-<map id="Castor3D::FrameListener" name="Castor3D::FrameListener">
-<area shape="rect" id="node1" title="User event synchronisation class." alt="" coords="5,80,172,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="57,5,120,32"/>
+<map id="castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;">
+<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="5,185,191,227"/>
+<area shape="rect" id="node2" href="$d0/dbc/a01704.html" title=" " alt="" coords="5,95,191,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="21,5,175,32"/>
 </map>

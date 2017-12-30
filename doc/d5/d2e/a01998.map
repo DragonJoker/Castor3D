@@ -1,4 +1,7 @@
-<map id="Castor3D::VersionException" name="Castor3D::VersionException">
-<area shape="rect" id="node1" title="Version comparison exception." alt="" coords="5,80,192,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="35,5,162,32"/>
+<map id="castor3d::ToneMapping" name="castor3d::ToneMapping">
+<area shape="rect" id="node1" title="Tone mapping base class." alt="" coords="232,95,389,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="217,5,279,32"/>
+<area shape="rect" id="node4" href="$dc/ddd/a03196.html" title="Matrices Uniform buffer management." alt="" coords="304,5,443,32"/>
+<area shape="rect" id="node5" href="$d8/d2a/a03192.html" title="HDR configuration Uniform buffer management." alt="" coords="467,5,626,32"/>
 </map>

@@ -1,4 +1,5 @@
-<map id="Castor3D::ObjectCacheBase&lt; ElementType, KeyType &gt;" name="Castor3D::ObjectCacheBase&lt; ElementType, KeyType &gt;">
-<area shape="rect" id="node1" title="Base class for a scene element cache." alt="" coords="5,5,195,47"/>
-<area shape="rect" id="node2" href="$d5/df4/a01551.html" title="Base class for a scene element cache." alt="" coords="9,95,191,136"/>
+<map id="castor3d::BinaryWriter&lt; Animation &gt;" name="castor3d::BinaryWriter&lt; Animation &gt;">
+<area shape="rect" id="node1" title="Animation binary loader." alt="" coords="21,185,173,227"/>
+<area shape="rect" id="node2" href="$dc/d3e/a01712.html" title=" " alt="" coords="5,95,188,136"/>
+<area shape="rect" id="node3" href="$d4/d26/a01700.html" title="Binary data chunk base class." alt="" coords="19,5,174,32"/>
 </map>

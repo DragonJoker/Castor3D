@@ -1,4 +1,14 @@
-<map id="Castor3D::LightFactory" name="Castor3D::LightFactory">
-<area shape="rect" id="node1" title="The light source factory." alt="" coords="268,27,424,54"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,220,76"/>
+<map id="castor3d::Overlay" name="castor3d::Overlay">
+<area shape="rect" id="node1" title="The overlay class." alt="" coords="1041,71,1164,98"/>
+<area shape="rect" id="node2" title=" " alt="" coords="731,5,881,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="373,73,560,99"/>
+<area shape="rect" id="node4" href="$d7/d73/a02708.html" title="The render system representation." alt="" coords="723,165,889,191"/>
+<area shape="rect" id="node5" href="$d8/d72/a02104.html" title="Buddy allocator implementation." alt="" coords="385,126,548,153"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,126,237,153"/>
+<area shape="rect" id="node7" title=" " alt="" coords="393,177,540,219"/>
+<area shape="rect" id="node8" title=" " alt="" coords="383,243,550,270"/>
+<area shape="rect" id="node9" href="$da/d6b/a02352.html" title="Holds GPU informations." alt="" coords="379,294,554,321"/>
+<area shape="rect" id="node10" title=" " alt="" coords="25,235,218,262"/>
+<area shape="rect" id="node11" title=" " alt="" coords="36,287,207,328"/>
+<area shape="rect" id="node12" title=" " alt="" coords="27,353,216,379"/>
 </map>

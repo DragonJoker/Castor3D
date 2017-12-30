@@ -1,0 +1,31 @@
+<map id="castor3d::RenderPipeline" name="castor3d::RenderPipeline">
+<area shape="rect" id="node1" title="The rendering pipeline." alt="" coords="1415,428,1581,455"/>
+<area shape="rect" id="node2" title=" " alt="" coords="541,5,773,32"/>
+<area shape="rect" id="node13" href="$d1/d7a/a03080.html" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="998,216,1169,243"/>
+<area shape="rect" id="node3" href="$de/df8/a03432.html" title="Rasteriser configuration class." alt="" coords="998,267,1169,293"/>
+<area shape="rect" id="node4" href="$d7/d66/a02580.html" title="Pipeline flags." alt="" coords="1004,317,1163,344"/>
+<area shape="rect" id="node5" title=" " alt="" coords="996,368,1171,424"/>
+<area shape="rect" id="node6" href="$da/de8/a02852.html" title="Billboards list." alt="" coords="577,400,737,427"/>
+<area shape="rect" id="node7" href="$d0/daf/a02972.html" title="Handles object&#39;s visibility, and behavior with shadows." alt="" coords="258,321,431,348"/>
+<area shape="rect" id="node8" title=" " alt="" coords="5,295,204,337"/>
+<area shape="rect" id="node9" href="$d6/db9/a02980.html" title="Scene handler class." alt="" coords="286,408,403,435"/>
+<area shape="rect" id="node10" title=" " alt="" coords="33,361,176,402"/>
+<area shape="rect" id="node11" title=" " alt="" coords="11,427,198,453"/>
+<area shape="rect" id="node12" title=" " alt="" coords="73,477,136,504"/>
+<area shape="rect" id="node14" title=" " alt="" coords="559,57,755,98"/>
+<area shape="rect" id="node15" title=" " alt="" coords="553,123,762,179"/>
+<area shape="rect" id="node16" title=" " alt="" coords="573,203,741,259"/>
+<area shape="rect" id="node17" href="$df/dfb/a02068.html" title="Description of all elements in a vertex buffer." alt="" coords="568,283,747,309"/>
+<area shape="rect" id="node18" title=" " alt="" coords="571,334,744,375"/>
+<area shape="rect" id="node19" title=" " alt="" coords="996,448,1171,504"/>
+<area shape="rect" id="node20" href="$de/d1f/a02236.html" title="The submesh representation." alt="" coords="590,463,725,489"/>
+<area shape="rect" id="node21" title=" " alt="" coords="253,460,436,487"/>
+<area shape="rect" id="node22" title=" " alt="" coords="264,511,425,553"/>
+<area shape="rect" id="node23" title=" " alt="" coords="968,529,1199,570"/>
+<area shape="rect" id="node24" href="$d4/d57/a03412.html" title="Blending configurations grouping class." alt="" coords="1011,595,1155,621"/>
+<area shape="rect" id="node25" title=" " alt="" coords="568,580,747,636"/>
+<area shape="rect" id="node26" href="$df/df7/a03416.html" title=" " alt="" coords="267,587,422,629"/>
+<area shape="rect" id="node27" href="$d5/d6b/a03428.html" title="Multisample configurations grouping class." alt="" coords="993,645,1174,672"/>
+<area shape="rect" id="node28" href="$d1/d8b/a03420.html" title="Depth and stencil buffers configurations class." alt="" coords="991,696,1176,723"/>
+<area shape="rect" id="node29" href="$dc/dc7/a03424.html" title="Stencil function and operations description." alt="" coords="565,689,750,730"/>
+</map>

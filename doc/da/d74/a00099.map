@@ -1,32 +1,30 @@
-<map id="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Cache/SceneNodeCache.hpp" name="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Cache/SceneNodeCache.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="2077,5,2297,61"/>
-<area shape="rect" id="node2" href="$d1/daa/a00638.html" title=" " alt="" coords="2195,184,2350,211"/>
-<area shape="rect" id="node28" href="$da/dec/a00080.html" title=" " alt="" coords="2038,109,2201,136"/>
-<area shape="rect" id="node3" href="$d4/d3e/a00116.html" title=" " alt="" coords="1956,259,2133,285"/>
-<area shape="rect" id="node7" title=" " alt="" coords="4011,341,4158,367"/>
-<area shape="rect" id="node26" title=" " alt="" coords="2412,259,2544,285"/>
-<area shape="rect" id="node27" title=" " alt="" coords="2209,259,2336,285"/>
-<area shape="rect" id="node4" title=" " alt="" coords="3593,341,3774,367"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,341,153,367"/>
-<area shape="rect" id="node6" title=" " alt="" coords="3799,341,3987,367"/>
-<area shape="rect" id="node8" title=" " alt="" coords="177,341,288,367"/>
-<area shape="rect" id="node9" title=" " alt="" coords="312,341,441,367"/>
-<area shape="rect" id="node10" title=" " alt="" coords="465,341,608,367"/>
-<area shape="rect" id="node11" title=" " alt="" coords="633,341,790,367"/>
-<area shape="rect" id="node12" title=" " alt="" coords="814,341,1009,367"/>
-<area shape="rect" id="node13" href="$da/d9c/a00413.html" title=" " alt="" coords="1033,333,1265,375"/>
-<area shape="rect" id="node15" href="$df/d15/a00416.html" title=" " alt="" coords="1289,333,1521,375"/>
-<area shape="rect" id="node16" href="$db/d43/a00422.html" title=" " alt="" coords="1545,333,1777,375"/>
-<area shape="rect" id="node17" href="$dc/d2f/a00425.html" title=" " alt="" coords="1801,333,2033,375"/>
-<area shape="rect" id="node18" href="$d4/dd3/a00428.html" title=" " alt="" coords="2057,333,2289,375"/>
-<area shape="rect" id="node19" href="$df/d70/a00431.html" title=" " alt="" coords="2313,333,2545,375"/>
-<area shape="rect" id="node20" href="$d4/da8/a00437.html" title=" " alt="" coords="2569,333,2801,375"/>
-<area shape="rect" id="node21" href="$de/df8/a00440.html" title=" " alt="" coords="2825,333,3057,375"/>
-<area shape="rect" id="node22" href="$d1/d7e/a00434.html" title=" " alt="" coords="3081,333,3313,375"/>
-<area shape="rect" id="node24" href="$d3/d29/a00419.html" title=" " alt="" coords="3337,333,3569,375"/>
-<area shape="rect" id="node14" href="$df/d95/a00299.html" title=" " alt="" coords="1071,423,1227,449"/>
-<area shape="rect" id="node23" title=" " alt="" coords="3129,423,3264,449"/>
-<area shape="rect" id="node25" title=" " alt="" coords="3383,423,3523,449"/>
-<area shape="rect" id="node29" href="$d9/d2e/a00056.html" title=" " alt="" coords="2044,184,2128,211"/>
-<area shape="rect" id="node30" title=" " alt="" coords="1821,259,1932,285"/>
+<map id="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Cache/SamplerCache.hpp" name="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Cache/SamplerCache.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="681,5,883,61"/>
+<area shape="rect" id="node2" href="$df/dc8/a00122.html" title=" " alt="" coords="1897,184,2075,211"/>
+<area shape="rect" id="node27" href="$df/d03/a00062.html" title=" " alt="" coords="273,109,398,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="2638,266,2819,293"/>
+<area shape="rect" id="node4" title=" " alt="" coords="363,266,511,293"/>
+<area shape="rect" id="node5" title=" " alt="" coords="3612,266,3800,293"/>
+<area shape="rect" id="node6" title=" " alt="" coords="191,266,338,293"/>
+<area shape="rect" id="node7" title=" " alt="" coords="4081,266,4192,293"/>
+<area shape="rect" id="node8" title=" " alt="" coords="4216,266,4345,293"/>
+<area shape="rect" id="node9" title=" " alt="" coords="535,266,677,293"/>
+<area shape="rect" id="node10" title=" " alt="" coords="702,266,859,293"/>
+<area shape="rect" id="node11" title=" " alt="" coords="883,266,1078,293"/>
+<area shape="rect" id="node12" href="$d4/ddf/a00488.html" title=" " alt="" coords="3099,259,3331,300"/>
+<area shape="rect" id="node15" href="$d6/d60/a00491.html" title=" " alt="" coords="1358,259,1590,300"/>
+<area shape="rect" id="node16" href="$d4/d1e/a00497.html" title=" " alt="" coords="1614,259,1846,300"/>
+<area shape="rect" id="node17" href="$de/d4e/a00500.html" title=" " alt="" coords="1102,259,1334,300"/>
+<area shape="rect" id="node19" href="$d4/de5/a00503.html" title=" " alt="" coords="2843,259,3075,300"/>
+<area shape="rect" id="node20" href="$d4/d1f/a00506.html" title=" " alt="" coords="1870,259,2102,300"/>
+<area shape="rect" id="node21" href="$d4/dfb/a00512.html" title=" " alt="" coords="2126,259,2358,300"/>
+<area shape="rect" id="node22" href="$dc/d19/a00515.html" title=" " alt="" coords="2382,259,2614,300"/>
+<area shape="rect" id="node23" href="$df/db6/a00509.html" title=" " alt="" coords="3355,259,3587,300"/>
+<area shape="rect" id="node25" href="$d5/d0f/a00494.html" title=" " alt="" coords="3825,259,4057,300"/>
+<area shape="rect" id="node13" href="$d4/def/a00359.html" title=" " alt="" coords="3180,348,3336,375"/>
+<area shape="rect" id="node14" title=" " alt="" coords="2976,348,3156,375"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1155,348,1281,375"/>
+<area shape="rect" id="node24" title=" " alt="" coords="3404,348,3539,375"/>
+<area shape="rect" id="node26" title=" " alt="" coords="3871,348,4011,375"/>
+<area shape="rect" id="node28" title=" " alt="" coords="5,184,116,211"/>
 </map>

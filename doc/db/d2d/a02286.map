@@ -1,4 +1,5 @@
-<map id="Castor3D::Viewport::TextWriter" name="Castor3D::Viewport::TextWriter">
-<area shape="rect" id="node1" title="Viewport loader." alt="" coords="5,95,140,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,137,47"/>
+<map id="castor3d::IndexMapping" name="castor3d::IndexMapping">
+<area shape="rect" id="node1" title="A submesh component for faces." alt="" coords="26,155,186,181"/>
+<area shape="rect" id="node2" href="$df/d73/a02312.html" title="Component for a submesh." alt="" coords="5,80,207,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,207,32"/>
 </map>

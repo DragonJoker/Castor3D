@@ -1,0 +1,5 @@
+<map id="castor3d::getBuffer" name="castor3d::getBuffer">
+<area shape="rect" id="node1" title="Retrieves the beginning of the buffer for given value." alt="" coords="208,46,339,73"/>
+<area shape="rect" id="node2" href="$d3/d4c/a01724.html#a8995f695c4fc5961f0906fe18c70b04a" title="Retrieves a value from a chunk." alt="" coords="5,5,160,47"/>
+<area shape="rect" id="node3" href="$df/d8f/a01740.html#a0db2051ad635bda64112b9b09377d0d2" title="Writes a subchunk value into a chunk." alt="" coords="7,71,159,112"/>
+</map>
