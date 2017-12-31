@@ -160,6 +160,10 @@ namespace castor
 		{
 			result = Path{ substr( index + 1, String::npos ) };
 		}
+		else
+		{
+			result.clear();
+		}
 
 		return result;
 	}
@@ -172,6 +176,10 @@ namespace castor
 		if ( index != String::npos )
 		{
 			result = substr( index + 1, String::npos );
+		}
+		else
+		{
+			result.clear();
 		}
 
 		return result;
