@@ -13,13 +13,13 @@ namespace CastorCom
 
 	STDMETHODIMP CVector2D::Negate()
 	{
-		Castor::point::negate( *this );
+		castor::point::negate( *this );
 		return S_OK;
 	}
 
 	STDMETHODIMP CVector2D::Normalise()
 	{
-		Castor::point::normalise( *this );
+		castor::point::normalise( *this );
 		return S_OK;
 	}
 
@@ -29,7 +29,7 @@ namespace CastorCom
 
 		if ( pVal && pRet )
 		{
-			*pRet = Castor::point::dot( *this, *reinterpret_cast< CVector2D * >( pVal ) );
+			*pRet = castor::point::dot( *this, *reinterpret_cast< CVector2D * >( pVal ) );
 			return S_OK;
 		}
 
@@ -42,7 +42,7 @@ namespace CastorCom
 
 		if ( pVal && pVal )
 		{
-			*pVal = FLOAT( Castor::point::distance( *this ) );
+			*pVal = FLOAT( castor::point::length( *this ) );
 			return S_OK;
 		}
 

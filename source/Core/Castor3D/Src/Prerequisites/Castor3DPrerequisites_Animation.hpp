@@ -1,31 +1,14 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_ANIMTION_H___
 #define ___C3D_PREREQUISITES_ANIMTION_H___
 
 #include "Mesh/VertexGroup.hpp"
 
-namespace Castor3D
+#include <Graphics/BoundingBox.hpp>
+
+namespace castor3d
 {
 	/**@name Animation */
 	//@{
@@ -129,27 +112,31 @@ namespace Castor3D
 	template< typename T >
 	struct SubmeshAnimationBufferT
 	{
-		//!\~english	The start time index.
-		//!\~french		L'index de temps de début.
-		float m_timeIndex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		std::vector< InterleavedVertexT< T > > m_buffer;
+		//!\~english	The bounding box.
+		//!\~french		La bounding box.
+		castor::BoundingBox m_boundingBox;
 	};
+
+	class Submesh;
 
 	class Animable;
 	class Animation;
+	class AnimationKeyFrame;
 	class SkeletonAnimation;
+	class SkeletonAnimationKeyFrame;
 	class SkeletonAnimationObject;
 	class SkeletonAnimationBone;
 	class SkeletonAnimationNode;
 	class MeshAnimation;
+	class MeshAnimationKeyFrame;
 	class MeshAnimationSubmesh;
-	class KeyFrame;
-	template< typename T > class Interpolator;
-	template< typename T, InterpolatorType > class InterpolatorT;
-	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
-	using SubmeshAnimationBufferArray = std::vector< SubmeshAnimationBuffer >;
+	template< typename T >
+	class Interpolator;
+	template< typename T, InterpolatorType >
+	class InterpolatorT;
 
 	struct GroupAnimation
 	{
@@ -158,25 +145,29 @@ namespace Castor3D
 		float m_scale;
 	};
 
-	using GroupAnimationMap = std::map< Castor::String, GroupAnimation >;
-	using Point3rInterpolator = Interpolator< Castor::Point3r >;
-	using QuaternionInterpolator = Interpolator< Castor::Quaternion >;
-	using KeyFrameRealMap = std::map< real, KeyFrame >;
-	using KeyFrameArray = std::vector< KeyFrame >;
-
 	DECLARE_SMART_PTR( Animation );
+	DECLARE_SMART_PTR( AnimationKeyFrame );
 	DECLARE_SMART_PTR( SkeletonAnimation );
+	DECLARE_SMART_PTR( SkeletonAnimationKeyFrame );
 	DECLARE_SMART_PTR( SkeletonAnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationBone );
 	DECLARE_SMART_PTR( SkeletonAnimationNode );
 	DECLARE_SMART_PTR( MeshAnimation );
+	DECLARE_SMART_PTR( MeshAnimationKeyFrame );
 	DECLARE_SMART_PTR( MeshAnimationSubmesh );
 	DECLARE_SMART_PTR( Animable );
 
+	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
+	using SubmeshAnimationBufferMap = std::map< uint32_t, SubmeshAnimationBuffer >;
+	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
+	using Point3rInterpolator = Interpolator< castor::Point3r >;
+	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
+	using AnimationKeyFrameArray = std::vector< AnimationKeyFrameUPtr >;
+
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
+	DECLARE_MAP( castor::String, AnimationSPtr, AnimationPtrStr );
 	//! SkeletonAnimationObject pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
+	DECLARE_MAP( castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! SkeletonAnimationObject pointer array.
 	DECLARE_VECTOR( SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtr );
 	//! SkeletonAnimationObject array.

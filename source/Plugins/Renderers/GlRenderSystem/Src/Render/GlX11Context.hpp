@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GL_X11_CONTEXT_H___
 #define ___GL_X11_CONTEXT_H___
@@ -40,27 +21,27 @@ namespace GlRender
 		GlContextImpl( OpenGl & p_gl, GlContext * p_context );
 		~GlContextImpl();
 
-		bool Initialise( Castor3D::RenderWindow * p_window );
-		void Cleanup();
-		void SetCurrent();
-		void EndCurrent();
-		void SwapBuffers();
-		void UpdateVSync( bool p_enable );
+		bool initialise( castor3d::RenderWindow * p_window );
+		void cleanup();
+		void setCurrent();
+		void endCurrent();
+		void swapBuffers();
+		void updateVSync( bool p_enable );
 
-		inline GLXContext GetContext()
+		inline GLXContext getContext()
 		{
 			return m_glxContext;
 		}
 
-		inline Castor3D::GpuInformations && GetGpuInformations()
+		inline castor3d::GpuInformations && getGpuInformations()
 		{
 			return std::move( m_gpuInformations );
 		}
 
 	private:
-		XVisualInfo * DoCreateVisualInfoWithFBConfig( Castor3D::RenderWindow * p_window, Castor::IntArray p_arrayAttribs, int p_screen );
-		XVisualInfo * DoCreateVisualInfoWithoutFBConfig( Castor::IntArray p_arrayAttribs, int p_screen );
-		bool DoCreateGl3Context( Castor3D::RenderWindow * p_window );
+		XVisualInfo * doCreateVisualInfoWithFBConfig( castor3d::RenderWindow * p_window, castor::IntArray p_arrayAttribs, int p_screen );
+		XVisualInfo * doCreateVisualInfoWithoutFBConfig( castor::IntArray p_arrayAttribs, int p_screen );
+		bool doCreateGl3Context( castor3d::RenderWindow * p_window );
 
 	protected:
 		GLXContext m_glxContext;
@@ -70,7 +51,7 @@ namespace GlRender
 		GLXFBConfig * m_fbConfig;
 		GlContext * m_context;
 		bool m_initialised;
-		Castor3D::GpuInformations m_gpuInformations;
+		castor3d::GpuInformations m_gpuInformations;
 	};
 }
 #endif

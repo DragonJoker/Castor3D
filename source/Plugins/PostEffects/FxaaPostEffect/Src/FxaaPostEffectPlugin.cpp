@@ -19,29 +19,31 @@
 #	endif
 #endif
 
-using namespace Fxaa;
-
-C3D_Fxaa_API void GetRequiredVersion( Castor3D::Version & p_version )
+extern "C"
 {
-	p_version = Castor3D::Version();
-}
+	C3D_Fxaa_API void getRequiredVersion( castor3d::Version * p_version )
+	{
+		*p_version = castor3d::Version();
+	}
 
-C3D_Fxaa_API Castor3D::PluginType GetType()
-{
-	return Castor3D::PluginType::ePostEffect;
-}
+	C3D_Fxaa_API void getType( castor3d::PluginType * p_type )
+	{
+		*p_type = castor3d::PluginType::ePostEffect;
+	}
 
-C3D_Fxaa_API Castor::String GetName()
-{
-	return FxaaPostEffect::Name;
-}
+	C3D_Fxaa_API void getName( char const ** p_name )
+	{
+		*p_name = fxaa::PostEffect::Name.c_str();
+	}
 
-C3D_Fxaa_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( FxaaPostEffect::Type, &FxaaPostEffect::Create );
-}
+	C3D_Fxaa_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	{
+		engine->getRenderTargetCache().getPostEffectFactory().registerType( fxaa::PostEffect::Type
+			, &fxaa::PostEffect::create );
+	}
 
-C3D_Fxaa_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( FxaaPostEffect::Type );
+	C3D_Fxaa_API void OnUnload( castor3d::Engine * engine )
+	{
+		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( fxaa::PostEffect::Type );
+	}
 }

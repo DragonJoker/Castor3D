@@ -4,9 +4,9 @@
 
 #include <Data/BinaryFile.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	BinaryChunk::BinaryChunk()
 		: m_type{ ChunkType::eUnknown }
@@ -20,137 +20,137 @@ namespace Castor3D
 	{
 	}
 
-	void BinaryChunk::Finalise()
+	void BinaryChunk::finalise()
 	{
-		uint32_t l_size = std::accumulate( m_addedData.begin(), m_addedData.end(), 0, [&]( uint32_t p_value, ByteArray const & p_array )
+		uint32_t size = std::accumulate( m_addedData.begin(), m_addedData.end(), 0, [&]( uint32_t p_value, ByteArray const & p_array )
 		{
 			return p_value + uint32_t( p_array.size() );
 		} );
-		m_data.resize( l_size );
-		size_t l_index = 0;
+		m_data.resize( size );
+		size_t index = 0;
 
-		for ( auto const & l_array : m_addedData )
+		for ( auto const & array : m_addedData )
 		{
-			std::memcpy( &m_data[l_index], l_array.data(), l_array.size() );
-			l_index += l_array.size();
+			std::memcpy( &m_data[index], array.data(), array.size() );
+			index += array.size();
 		}
 	}
 
-	void BinaryChunk::Add( uint8_t * p_data, uint32_t p_size )
+	void BinaryChunk::add( uint8_t * p_data, uint32_t p_size )
 	{
-		ByteArray l_buffer( p_data, p_data + p_size );
-		m_addedData.push_back( l_buffer );
+		ByteArray buffer( p_data, p_data + p_size );
+		m_addedData.push_back( buffer );
 	}
 
-	void BinaryChunk::Get( uint8_t * p_data, uint32_t p_size )
+	void BinaryChunk::get( uint8_t * p_data, uint32_t p_size )
 	{
 		std::memcpy( p_data, &m_data[m_index], p_size );
 		m_index += p_size;
 	}
 
-	bool BinaryChunk::CheckAvailable( uint32_t p_size )const
+	bool BinaryChunk::checkAvailable( uint32_t p_size )const
 	{
 		return m_index + p_size <= m_data.size();
 	}
 
-	uint32_t BinaryChunk::GetRemaining()const
+	uint32_t BinaryChunk::getRemaining()const
 	{
 		return uint32_t( m_data.size() - m_index );
 	}
 
-	bool BinaryChunk::GetSubChunk( BinaryChunk & p_chunkDst )
+	bool BinaryChunk::getSubChunk( BinaryChunk & p_chunkDst )
 	{
 		// First we retrieve the chunk type
-		BinaryChunk l_subchunk;
-		bool l_return = DoRead( &l_subchunk.m_type, 1 );
-		uint32_t l_size = 0;
+		BinaryChunk subchunk;
+		bool result = doRead( &subchunk.m_type, 1 );
+		uint32_t size = 0;
 
-		if ( l_return )
+		if ( result )
 		{
 			// Then the chunk data size
-			l_return = DoRead( &l_size, 1 );
+			result = doRead( &size, 1 );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = m_index + l_size <= m_data.size();
+			result = m_index + size <= m_data.size();
 		}
 
-		if ( l_return )
+		if ( result )
 		{
 			// Eventually we retrieve the chunk data
-			l_subchunk.m_data.insert( l_subchunk.m_data.end(), m_data.begin() + m_index, m_data.begin() + m_index + l_size );
-			l_subchunk.m_index = 0;
-			m_index += l_size;
-			p_chunkDst = l_subchunk;
+			subchunk.m_data.insert( subchunk.m_data.end(), m_data.begin() + m_index, m_data.begin() + m_index + size );
+			subchunk.m_index = 0;
+			m_index += size;
+			p_chunkDst = subchunk;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool BinaryChunk::AddSubChunk( BinaryChunk const & p_subchunk )
+	bool BinaryChunk::addSubChunk( BinaryChunk const & p_subchunk )
 	{
-		uint32_t l_size = uint32_t( p_subchunk.m_data.size() );
-		ByteArray l_buffer;
-		l_buffer.reserve( sizeof( uint32_t ) + sizeof( ChunkType ) + l_size );
-		// Write subchunk type
-		auto l_type = SystemEndianToBigEndian( p_subchunk.m_type );
-		auto l_data = reinterpret_cast< uint8_t const * >( &l_type );
-		l_buffer.insert( l_buffer.end(), l_data, l_data + sizeof( ChunkType ) );
+		uint32_t size = uint32_t( p_subchunk.m_data.size() );
+		ByteArray buffer;
+		buffer.reserve( sizeof( uint32_t ) + sizeof( ChunkType ) + size );
+		// write subchunk type
+		auto type = systemEndianToBigEndian( p_subchunk.m_type );
+		auto data = reinterpret_cast< uint8_t const * >( &type );
+		buffer.insert( buffer.end(), data, data + sizeof( ChunkType ) );
 		// The its size
-		SystemEndianToBigEndian( l_size );
-		l_data = reinterpret_cast< uint8_t * >( &l_size );
-		l_buffer.insert( l_buffer.end(), l_data, l_data + sizeof( uint32_t ) );
+		systemEndianToBigEndian( size );
+		data = reinterpret_cast< uint8_t * >( &size );
+		buffer.insert( buffer.end(), data, data + sizeof( uint32_t ) );
 		// And eventually its data
-		l_buffer.insert( l_buffer.end(), p_subchunk.m_data.begin(), p_subchunk.m_data.end() );
+		buffer.insert( buffer.end(), p_subchunk.m_data.begin(), p_subchunk.m_data.end() );
 		// And add it to this chunk
-		Add( l_buffer.data(), uint32_t( l_buffer.size() ) );
+		add( buffer.data(), uint32_t( buffer.size() ) );
 		return true;
 	}
 
-	bool BinaryChunk::Write( Castor::BinaryFile & p_file )
+	bool BinaryChunk::write( castor::BinaryFile & p_file )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			auto l_type = SystemEndianToBigEndian( GetChunkType() );
-			l_return = p_file.Write( l_type ) == sizeof( ChunkType );
+			auto type = systemEndianToBigEndian( getChunkType() );
+			result = p_file.write( type ) == sizeof( ChunkType );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			Finalise();
-			auto l_size = SystemEndianToBigEndian( GetDataSize() );
-			l_return = p_file.Write( l_size ) == sizeof( uint32_t );
+			finalise();
+			auto size = systemEndianToBigEndian( getDataSize() );
+			result = p_file.write( size ) == sizeof( uint32_t );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteArray( m_data.data(), m_data.size() ) == m_data.size();
+			result = p_file.writeArray( m_data.data(), m_data.size() ) == m_data.size();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool BinaryChunk::Read( Castor::BinaryFile & p_file )
+	bool BinaryChunk::read( castor::BinaryFile & p_file )
 	{
-		uint32_t l_size = 0;
-		bool l_return = p_file.Read( m_type ) == sizeof( ChunkType );
-		BigEndianToSystemEndian( m_type );
+		uint32_t size = 0;
+		bool result = p_file.read( m_type ) == sizeof( ChunkType );
+		bigEndianToSystemEndian( m_type );
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.Read( l_size ) == sizeof( uint32_t );
-			BigEndianToSystemEndian( l_size );
+			result = p_file.read( size ) == sizeof( uint32_t );
+			bigEndianToSystemEndian( size );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			m_data.resize( l_size );
-			l_return = p_file.ReadArray( m_data.data(), m_data.size() ) == m_data.size();
+			m_data.resize( size );
+			result = p_file.readArray( m_data.data(), m_data.size() ) == m_data.size();
 		}
 
-		return l_return;
+		return result;
 	}
 }

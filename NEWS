@@ -1,7 +1,124 @@
-Copyright 2011, 2012, 2013, 2014, 2015, 2016 dragonjoker
+Copyright 2011-2017 dragonjoker
 
 Verbatim copying and distribution of this entire article is permitted in any
 medium, provided this notice is preserved.
+
+
+Changes between version 0.10.0 and 0.9.0
+
+  BUGS FIXED
+  * Castor3D
+  *   Fixed bounding boxes for animated meshes and skinned meshes.
+  *   Repaired an reenabled frustum culling.
+  *   Fixed alpha rejection.
+
+  FEATURES
+  * CastorUtils
+  *   Renamed namespace Castor to castor.
+  *   Added ChangeTracked and GroupChangeTracked classes, allowing to track changes to a member variable.
+  *   Renamed CubeBox and SphereBox to BoundingBox and BoundingSphere.
+  *   Splitted Colour in two classes: RgbColour and RgbaColour.
+  *   PlaneEquation is no more a template class.
+  *   Created a buddy allocator class: BuddyAllocator.
+  *
+  * GlslWriter
+  *   GlslWriter class now holds the shader program inputs, to generate a glsl::Shader source.
+  *
+  * Castor3D
+  *   Renamed namespace Castor3D to castor3d.
+  *   Emissive in a material is now stored on a single floating point (emissive maps still hold a colour though).
+  *   Implemented Physical Based Rendering, using both metallic/roughness and specular/glossiness workflows.
+  *   RenderPipeline now also holds the shader program.
+  *   Implemented Screen Space Subsurface Scattering (without backlit transmittance, though).
+  *   The light pass result is now stored in two render targets: diffuse and specular.
+  *   Vertex buffers now use a buddy allocated pool.
+  *   Shadow mapping now uses variance shadow maps.
+  *   Transparent meshes are now rendered using Weighted Blended OIT rendering.
+  *   Screen Space Ambiant Occlusion has been improved, using Scalable Ambiant Obscurance implementation.
+  *   Parallax Occlusion mapping is implemented.
+  *   Reflection and refraction mapping have been implemented.
+  *   Deferred rendering has been fully integrated to the engine, for opaque objects rendering.
+  *   Created components for submeshes, to move functionalities out of Submesh, and make it more flexible.
+  *   Rendering now uses a depth prepass.
+  *   Created ColourSkybox, to handle background colour and skyboxes in the same way.
+  *   Created ShaderBuffer class, to be able to handle SSBOs or TBOs in a similar way, choosing the most appropriate one, depending on running machine.
+  *
+  * Generators
+  *   Created DiamondSquareTerrain plugin.
+  *
+  * Generic
+  *   Events from CastorGUI are now forwarded to the user.
+  *
+  * Importers
+  *   Removed almost every importer plugin, keeping only Assimp, OBJ, and PLY importers.
+  *
+  * PostEffects
+  *   Created SMAA post effect.
+  *   Created Kawase Light Streaks post effect.
+  *   Created Film Grain post effect.
+  *
+  * RenderSystems
+  *   Updated GlRenderSystem to support the features provided by Castor3D.
+  *
+  * Techniques
+  *   Technique plugins have been completely removed.
+  *
+  * Tone mappings
+  *   Created Uncharted 2 tone mapping plugin.
+
+
+Changes between version 0.9.0 and 0.8.0
+
+  FEATURES
+  * CastorUtils
+  *   Dropped libzip, and added minizip to the source tree.
+  *   Added WorkderThread and ThreadPool classes.
+  *   Improved Signal, by adding a Connection class, which allows disconnection without having the signal, and which can be disconnected by the signal itself.
+  *   Added Range and RangedValue classes, to handle these concepts more conveniently.
+  *   Added CpuInformations class, to retrieve them.
+  *   Moved the platform specific implementation code into Platform/ subfolder, to ease the addition of new platforms.
+  *   It now compiles on ARM (for future Android ports).
+  *
+  * Castor3D
+  *   Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.
+  *   It has been done to prepare the arrival of Vulkan, in which the pipeline can't be modified once it has been created, and that is now the case in Castor3D too.
+  *   The rendering has been splitted in RenderPasses, that each have one or more RenderQueues, that are updated asynchronously on CPU, using a thread pool.
+  *   This allows the GPU loop to be cleaned of most CPU computations.
+  *   Skybox have been added.
+  *   Binary export has been completely reviewed, it now uses a chunk data format (like LWO or 3DS).
+  *   It is used for meshes, and skeletons.
+  *   Plug-ins interface's consistency has been improved.
+  *   Fog basic implementations (linear, exponential, and squared exponential) have been added.
+  *   Morphing (per-vertex) animations are now supported by Castor3D.
+  *   Frustum culling has been implemented.
+  *   Colour picking has been implemented.
+  *   Shadow mapping is implemented, lights can produce shadows, and objects can cast shadows.
+  *   Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).
+  *   Fixed the lighting in GLSL, to make it behave properly without dirty hacks.
+  *   Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.
+  *   Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.
+  *   It has allowed the creation of cube textures.
+  *   Textures transfer to RAM has been fixed.
+  *   Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.
+  *   UniformBuffer (formerly FrameVariableBuffer) no longer depends on ShaderProgram.
+  *   A new class, UniformBufferBinding has been created which depends on both UniformBuffer and ShaderProgram.
+  *   Instances of this class are held by RenderPipeline.
+  *   FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).
+  *
+  * RenderSystems
+  *   Added GlES3RenderSystem, to start the Android port.
+  *   Updated GlRenderSystem to support the features provided by Castor3D.
+  *
+  * Techniques
+  *   DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it's impact area.
+  *   DeferredRenderTechnique is now the default render technique, when none is specified.
+  *
+  * PostEffects
+  *   Added GrayScale post effect.
+  *   Added FXAA post effect.
+  *
+  * CastorViewer
+  *   The camera has been fixed, so it doesn't look drunk anymore.
 
 
 Changes between version 0.8.0 and 0.7.0

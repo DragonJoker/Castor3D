@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PHONG_DIVIDER___
 #define ___C3D_PHONG_DIVIDER___
@@ -29,7 +10,7 @@ SOFTWARE.
 
 #include <Event/Frame/FrameListener.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Subdivider.hpp>
 
@@ -39,6 +20,11 @@ SOFTWARE.
 
 namespace Phong
 {
+	struct Plane
+	{
+		castor::PlaneEquation plane;
+		castor::Point3r point;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
@@ -47,11 +33,11 @@ namespace Phong
 	*/
 	struct Patch
 	{
-		Patch( Castor::PlaneEquation< double > const & p_p1, Castor::PlaneEquation< double > const & p_p2, Castor::PlaneEquation< double > const & p_p3 );
+		Patch( Plane const & p_p1, Plane const & p_p2, Plane const & p_p3 );
 
-		Castor::PlaneEquation< double > const & pi;
-		Castor::PlaneEquation< double > const & pj;
-		Castor::PlaneEquation< double > const & pk;
+		Plane const & pi;
+		Plane const & pj;
+		Plane const & pk;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -60,36 +46,52 @@ namespace Phong
 	\brief		Subdivider using PN Triangles subdivision algorithm
 	*/
 	class Subdivider
-		: public Castor3D::Subdivider
+		: public castor3d::Subdivider
 	{
 	public:
 		Subdivider();
 		virtual ~Subdivider();
 
-		static Castor3D::SubdividerUPtr Create();
+		static castor3d::SubdividerUPtr create();
 		/**
-		 *\copydoc		Castor3D::Subdivider::Cleanup
+		 *\copydoc		castor3d::Subdivider::Cleanup
 		 */
-		void Cleanup()override;
+		void cleanup()override;
 		/**
-		 *\copydoc		Castor3D::Subdivider::Subdivide
+		 *\copydoc		castor3d::Subdivider::Subdivide
 		 */
-		void Subdivide( Castor3D::SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false )override;
+		void subdivide( castor3d::SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Subdivider::DoSubdivide
+		 *\copydoc		castor3d::Subdivider::doSubdivide
 		 */
-		void DoSubdivide()override;
-		void DoComputeFaces( double u0, double v0, double u2, double v2, int p_occurences, Patch const & p_patch );
-		Castor3D::BufferElementGroupSPtr DoComputePoint( double u, double v, Patch const & p_patch );
+		void doSubdivide()override;
+		/**
+		 *\copydoc		castor3d::Subdivider::doInitialise
+		 */
+		void doInitialise()override;
+		/**
+		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
+		 */
+		void doAddGeneratedFaces()override;
+		void doComputeFaces( castor::real u0
+			, castor::real v0
+			, castor::real u2
+			, castor::real v2
+			, int p_occurences
+			, Patch const & p_patch );
+		castor3d::BufferElementGroupSPtr doComputePoint( castor::real u
+			, castor::real v
+			, Patch const & p_patch );
 
 	public:
-		static Castor::String const Name;
-		static Castor::String const Type;
+		static castor::String const Name;
+		static castor::String const Type;
 
 	private:
 		int m_occurences;
+		std::shared_ptr< castor3d::TriFaceMapping > m_indexMapping;
 	};
 }
 

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_MOVABLE_OBJECT_H___
 #define ___C3D_MOVABLE_OBJECT_H___
@@ -30,7 +11,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -43,7 +24,7 @@ namespace Castor3D
 	*/
 	class MovableObject
 		: public Animable
-		, public Castor::Named
+		, public castor::Named
 	{
 	public:
 		/*!
@@ -55,7 +36,7 @@ namespace Castor3D
 		\brief		Loader de MovableObject
 		*/
 		class TextWriter
-			: public Castor::TextWriter< MovableObject >
+			: public castor::TextWriter< MovableObject >
 		{
 		public:
 			/**
@@ -64,7 +45,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a movable object into a text file
@@ -75,7 +56,7 @@ namespace Castor3D
 			 *\param[in]	p_object	Le MovableObject
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API bool operator()( MovableObject const & p_object, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( MovableObject const & p_object, castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -93,7 +74,7 @@ namespace Castor3D
 		 *\param[in]	p_sn	Noeud parent
 		 *\param[in]	p_type	Le type de MovableObject
 		 */
-		C3D_API MovableObject( Castor::String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn );
+		C3D_API MovableObject( castor::String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -107,14 +88,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Détache l'objet de son parent
 		 */
-		C3D_API void Detach();
+		C3D_API void detach();
 		/**
 		 *\~english
 		 *\brief		Attaches the movable object to a node
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API virtual void AttachTo( SceneNodeSPtr p_node );
+		C3D_API virtual void attachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the parent node
@@ -123,7 +104,7 @@ namespace Castor3D
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr GetParent()const
+		inline SceneNodeSPtr getParent()const
 		{
 			return m_sceneNode.lock();
 		}
@@ -135,7 +116,7 @@ namespace Castor3D
 		 *\brief		Récupère le type d'objet
 		 *\return		La valeur
 		 */
-		inline MovableType GetType()const
+		inline MovableType getType()const
 		{
 			return m_type;
 		}
@@ -146,13 +127,13 @@ namespace Castor3D
 		MovableType m_type;
 		//!\~english	The parent node name.
 		//!\~french		Le nom du noeud parent.
-		Castor::String m_strNodeName;
+		castor::String m_strNodeName;
 		//!\~english	The parent scene node.
 		//!\~french		Le noeud parent.
 		SceneNodeWPtr m_sceneNode;
 		//!\~english	The node change notification index.
 		//!\~french		L'indice de notifcation des changements du noeud.
-		SceneNode::OnChanged::connection m_notifyIndex;
+		OnSceneNodeChangedConnection m_notifyIndex;
 	};
 }
 

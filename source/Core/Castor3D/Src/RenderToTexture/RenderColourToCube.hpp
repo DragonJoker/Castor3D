@@ -1,35 +1,18 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_RenderColourToCube_H___
 #define ___C3D_RenderColourToCube_H___
 
 #include "Render/Viewport.hpp"
 
+#include "HDR/HdrConfig.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,21 +24,21 @@ namespace Castor3D
 	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
 	*/
 	class RenderColourToCube
-		: public Castor::OwnedBy< Context >
+		: public castor::OwnedBy< Context >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The Context.
-		 *\param[in]	p_matrixUbo	The UBO containing matrix data.
+		 *\param[in]	context		The Context.
+		 *\param[in]	matrixUbo	The UBO containing matrix data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le Context.
-		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
+		 *\param[in]	context		Le Context.
+		 *\param[in]	matrixUbo	L'UBO contenant les données de matrices.
 		 */
-		C3D_API explicit RenderColourToCube( Context & p_context
-			, UniformBuffer & p_matrixUbo );
+		C3D_API explicit RenderColourToCube( Context & context
+			, MatrixUbo & matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -69,35 +52,38 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le rendu en texture.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the render to texture.
 		 *\~french
 		 *\brief		Nettoie le rendu en texture.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the wanted equirectangular 2D texture to given cube texture.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_2dTexture		The 2D texture.
-		 *\param[in]	p_cubeTexture	The cube texture.
-		 *\param[in]	p_fbo			The active FBO
-		 *\param[in]	p_attachs		The cube texture attaches to the active FBO.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		The 2D texture.
+		 *\param[in]	cubeTexture	The cube texture.
+		 *\param[in]	fbo			The active FBO
+		 *\param[in]	attachs		The cube texture attaches to the active FBO.
+		 *\param[in]	hdrConfig	The HDR configuration.
 		 *\~french
 		 *\brief		Dessine a texture equirectangulaire 2D donnée dans la texture cube donnée.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_2dTexture		La texture 2D.
-		 *\param[in]	p_cubeTexture	La texture cube.
-		 *\param[in]	p_fbo			Le FBO actif.
-		 *\param[in]	p_attachs		Les attaches de la texture cube au FBO actif.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture 2D.
+		 *\param[in]	cubeTexture	La texture cube.
+		 *\param[in]	fbo			Le FBO actif.
+		 *\param[in]	attachs		Les attaches de la texture cube au FBO actif.
+		 *\param[in]	hdrConfig	La configuration HDR.
 		 */
-		C3D_API void Render( Castor::Size const & p_size
-			, TextureLayout const & p_2dTexture
-			, TextureLayoutSPtr p_cubeTexture
-			, FrameBufferSPtr p_fbo
-			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs );
+		C3D_API void render( castor::Size const & size
+			, TextureLayout const & texture
+			, TextureLayoutSPtr cubeTexture
+			, FrameBufferSPtr fbo
+			, std::array< FrameBufferAttachmentSPtr, 6 > const & attachs
+			, HdrConfig const & hdrConfig );
 
 	private:
 		/**
@@ -108,23 +94,23 @@ namespace Castor3D
 		 *\brief		Crée le programme shader de dessin de texture 2D.
 		 *\return		Le programme.
 		 */
-		ShaderProgramSPtr DoCreateProgram();
+		ShaderProgramSPtr doCreateProgram();
 
 	private:
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer & m_matrixUbo;
+		MatrixUbo & m_matrixUbo;
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
 		//!	6 (faces) * 6 (vertex) * 3 (vertex position)
-		std::array< Castor::real, 6 * 6 * 3 > m_bufferVertex;
+		std::array< castor::real, 6 * 6 * 3 > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
-		Castor3D::BufferDeclaration m_declaration;
+		castor3d::BufferDeclaration m_declaration;
 		//!\~english	Vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad).
-		std::array< Castor3D::BufferElementGroupSPtr, 36 > m_arrayVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
@@ -137,6 +123,12 @@ namespace Castor3D
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;
+		//!\~english	The HDR configuration UBO.
+		//!\~french		L'UBO de configuration HDR.
+		HdrConfigUbo m_configUbo;
+		//!\~english	The dummy HDR configuration.
+		//!\~french		La configuration HDR dummy.
+		HdrConfig m_dummy;
 	};
 }
 

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CU_SIGNAL_H___
 #define ___CU_SIGNAL_H___
@@ -31,10 +12,10 @@ SOFTWARE.
 #include <map>
 #include <set>
 
-namespace Castor
+namespace castor
 {
 	/*!
-	*\author	Sylvain Doremus
+	*\author	Sylvain doremus
 	*\version	0.9.0
 	*\date		01/03/2017
 	\~english
@@ -66,65 +47,78 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_connection	The connection to the signal.
-		 *\param[in]	p_signal		The signal.
+		 *\param[in]	connection	The connection to the signal.
+		 *\param[in]	signal		The signal.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_connection	La connexion au signal.
-		 *\param[in]	p_signal		Le signal.
+		 *\param[in]	connection	La connexion au signal.
+		 *\param[in]	signal		Le signal.
 		 */
-		Connection( uint32_t p_connection, my_signal & p_signal )
-			: m_connection{ p_connection }
-			, m_signal{ &p_signal }
+		Connection( uint32_t connection, my_signal & signal )
+			: m_connection{ connection }
+			, m_signal{ &signal }
 		{
-			p_signal.add_connection( *this );
+			signal.addConnection( *this );
 
 #if !defined( NDEBUG )
 
-			StringStream l_stream;
-			l_stream << Debug::Backtrace{};
-			m_stack = l_stream.str();
+			StringStream stream;
+			stream << Debug::Backtrace{};
+			m_stack = stream.str();
 
 #endif
 		}
 		/**
 		 *\~english
 		 *\brief			Move constructor.
-		 *\param[in,out]	p_rhs	The object to move.
+		 *\param[in,out]	rhs	The object to move.
 		 *\~french
 		 *\brief			Constructeur par déplacement.
-		 *\param[in,out]	p_rhs	L'objet à déplacer.
+		 *\param[in,out]	rhs	L'objet à déplacer.
 		 */
-		Connection( Connection< my_signal > && p_rhs )
-			: m_connection{ p_rhs.m_connection }
-			, m_signal{ p_rhs.m_signal }
+		Connection( Connection< my_signal > && rhs )
+			: m_connection{ rhs.m_connection }
+			, m_signal{ rhs.m_signal }
 #if !defined( NDEBUG )
-			, m_stack{ std::move( p_rhs.m_stack ) }
+			, m_stack{ std::move( rhs.m_stack ) }
 #endif
 		{
-			p_rhs.m_signal = nullptr;
-			p_rhs.m_connection = 0u;
-
 			if ( m_signal )
 			{
-				m_signal->rem_connection( p_rhs );
-				m_signal->add_connection( *this );
+				m_signal->replaceConnection( rhs, *this );
 			}
+
+			rhs.m_signal = nullptr;
+			rhs.m_connection = 0u;
 		}
 		/**
 		 *\~english
 		 *\brief			Move assignment operator.
-		 *\param[in,out]	p_rhs	The object to move.
+		 *\param[in,out]	rhs	The object to move.
 		 *\~french
 		 *\brief			Opérateur d'affectation par déplacement.
-		 *\param[in,out]	p_rhs	L'objet à déplacer.
+		 *\param[in,out]	rhs	L'objet à déplacer.
 		 */
-		Connection & operator=( Connection< my_signal > && p_rhs )
+		Connection & operator=( Connection< my_signal > && rhs )
 		{
-			Connection tmp{ std::move( p_rhs ) };
-			swap( *this, tmp );
-			m_signal->rem_connection( tmp );
-			m_signal->add_connection( *this );
+			if ( &rhs != this )
+			{
+				disconnect();
+				m_connection = rhs.m_connection;
+				m_signal = rhs.m_signal;
+#if !defined( NDEBUG )
+				m_stack = std::move( rhs.m_stack );
+#endif
+
+				if ( m_signal )
+				{
+					m_signal->replaceConnection( rhs, *this );
+				}
+
+				rhs.m_signal = nullptr;
+				rhs.m_connection = 0u;
+			}
+
 			return *this;
 		}
 		/**
@@ -147,18 +141,18 @@ namespace Castor
 		 */
 		bool disconnect()
 		{
-			bool l_result{ false };
+			bool result{ false };
 
 			if ( m_signal && m_connection )
 			{
 				m_signal->disconnect( m_connection );
-				m_signal->rem_connection( *this );
+				m_signal->removeConnection( *this );
 				m_signal = nullptr;
 				m_connection = 0u;
-				l_result = true;
+				result = true;
 			}
 
-			return l_result;
+			return result;
 		}
 
 	private:
@@ -168,16 +162,16 @@ namespace Castor
 		 *\~french
 		 *\brief		Echange deux connexions.
 		 */
-		void swap( Connection & p_lhs, Connection & p_rhs )
+		void swap( Connection & lhs, Connection & rhs )
 		{
-			if ( &p_rhs != &p_lhs )
+			if ( &rhs != &lhs )
 			{
-				std::swap( p_lhs.m_signal, p_rhs.m_signal );
-				std::swap( p_lhs.m_connection, p_rhs.m_connection );
+				std::swap( lhs.m_signal, rhs.m_signal );
+				std::swap( lhs.m_connection, rhs.m_connection );
 
 #if !defined( NDEBUG )
 
-				std::swap( p_lhs.m_stack, p_rhs.m_stack );
+				std::swap( lhs.m_stack, rhs.m_stack );
 
 #endif
 			}
@@ -200,7 +194,7 @@ namespace Castor
 #endif
 	};
 	/*!
-	*\author	Sylvain Doremus
+	*\author	Sylvain doremus
 	*\version	0.8.0
 	*\date		10/02/2016
 	\~english
@@ -233,29 +227,29 @@ namespace Castor
 			// supprime la connection de m_connections, invalidant ainsi
 			// l'itérateur, donc on ne peut pas utiliser un for_each, ni
 			// un range for loop.
-			auto l_it = m_connections.begin();
+			auto it = m_connections.begin();
 
-			while ( l_it != m_connections.end() )
+			while ( it != m_connections.end() )
 			{
-				auto l_disco = ( *l_it )->disconnect();
-				REQUIRE( l_disco );
-				l_it = m_connections.begin();
+				auto disco = ( *it )->disconnect();
+				REQUIRE( disco );
+				it = m_connections.begin();
 			}
 		}
 		/**
 		 *\~english
 		 *\brief		Connects a new function that will be called if the signal is emitted.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	function	The function.
 		 *\return		The function index, in order to be able to disconnect it.
 		 *\~french
 		 *\brief		Connecte une nouvelle fonction, qui sera appelée lorsque le signal est émis.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	function	La fonction.
 		 *\return		L'indice de la fonction, afin de pouvoir la déconnecter.
 		 */
-		my_connection connect( Function p_function )
+		my_connection connect( Function function )
 		{
 			uint32_t index = uint32_t( m_slots.size() ) + 1u;
-			m_slots.emplace( index, p_function );
+			m_slots.emplace( index, function );
 			return my_connection{ index, *this };
 		}
 		/**
@@ -274,17 +268,17 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Emits the signal, calls every connected function.
-		 *\param[in]	p_params	The functions parameters.
+		 *\param[in]	params	The functions parameters.
 		 *\~french
 		 *\brief		Emet le signal, appelant toutes les fonctions connectées.
-		 *\param[in]	p_params	Les paramètres des fonctions.
+		 *\param[in]	params	Les paramètres des fonctions.
 		 */
 		template< typename ... Params >
-		void operator()( Params && ... p_params )const
+		void operator()( Params && ... params )const
 		{
 			for ( auto it : m_slots )
 			{
-				it.second( std::forward< Params >( p_params )... );
+				it.second( std::forward< Params >( params )... );
 			}
 		}
 
@@ -292,14 +286,14 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Disconnects a function.
-		 *\param[in]	p_index	The function index.
+		 *\param[in]	index	The function index.
 		 *\~french
 		 *\brief		Déconnecte une fonction.
-		 *\param[in]	p_index	L'indice de la fonction.
+		 *\param[in]	index	L'indice de la fonction.
 		 */
-		void disconnect( uint32_t p_index )
+		void disconnect( uint32_t index )
 		{
-			auto it = m_slots.find( p_index );
+			auto it = m_slots.find( index );
 
 			if ( it != m_slots.end() )
 			{
@@ -308,28 +302,45 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a connection to the list.
-		 *\param[in]	p_connection	The connection to add.
+		 *\brief		adds a connection to the list.
+		 *\param[in]	connection	The connection to add.
 		 *\~french
 		 *\brief		Ajoute une connexion à la liste.
-		 *\param[in]	p_connection	La connexion à ajouter.
+		 *\param[in]	connection	La connexion à ajouter.
 		 */
-		void add_connection( my_connection & p_connection )
+		void addConnection( my_connection & connection )
 		{
-			m_connections.insert( &p_connection );
+			assert( m_connections.find( &connection ) == m_connections.end() );
+			m_connections.insert( &connection );
 		}
 		/**
 		 *\~english
 		 *\brief		Removes a connection from the list.
-		 *\param[in]	p_connection	The connection to remove.
+		 *\param[in]	connection	The connection to remove.
 		 *\~french
 		 *\brief		Enlève une connexion de la liste.
-		 *\param[in]	p_connection	La connexion à enlever.
+		 *\param[in]	connection	La connexion à enlever.
 		 */
-		void rem_connection( my_connection & p_connection )
+		void removeConnection( my_connection & connection )
 		{
-			assert( m_connections.find( &p_connection ) != m_connections.end() );
-			m_connections.erase( &p_connection );
+			assert( m_connections.find( &connection ) != m_connections.end() );
+			m_connections.erase( &connection );
+		}
+		/**
+		 *\~english
+		 *\brief		Removes a connection from the list.
+		 *\param[in]	oldConnection	The connection to remove.
+		 *\param[in]	newConnection	The connection to add.
+		 *\~french
+		 *\brief		Enlève une connexion de la liste.
+		 *\param[in]	oldConnection	La connexion à enlever.
+		 *\param[in]	newConnection	La connexion à ajouter.
+		 */
+		void replaceConnection( my_connection & oldConnection
+			, my_connection & newConnection )
+		{
+			removeConnection( oldConnection );
+			addConnection( newConnection );
 		}
 
 	private:

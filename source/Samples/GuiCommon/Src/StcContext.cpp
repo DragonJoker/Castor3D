@@ -1,9 +1,9 @@
-#include "StcContext.hpp"
+﻿#include "StcContext.hpp"
 #include "LanguageFileParser.hpp"
 #include "LanguageInfo.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -25,12 +25,12 @@ namespace GuiCommon
 
 	StcContext::~StcContext()
 	{
-		Castor::clear_container( m_arrayLanguages );
+		m_arrayLanguages.clear();
 	}
 
-	void StcContext::ParseFile( wxString const & p_strFileName )
+	void StcContext::parseFile( wxString const & p_strFileName )
 	{
-		LanguageFileParser l_parser( this );
-		l_parser.ParseFile( make_Path( p_strFileName ) );
+		LanguageFileParser parser( this );
+		parser.parseFile( make_Path( p_strFileName ) );
 	}
 }

@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_SQUARE_MATRIX_H___
 #define ___CASTOR_SQUARE_MATRIX_H___
 
 #include "Matrix.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -46,8 +27,6 @@ namespace Castor
 		typedef __square_type __transpose;
 
 	public:
-		//!\~english Typedef on the policy	\~french Typedef sur la politique
-		typedef typename Matrix< __value_type, Count, Count >::policy policy;
 		//!\~english Typedef on the data type	\~french Typedef sur le type de données
 		typedef typename Matrix< __value_type, Count, Count >::value_type value_type;
 		//!\~english Typedef on the column type	\~french Typedef sur le type de colonne
@@ -79,7 +58,7 @@ namespace Castor
 		 *\brief		Constructeur.
 		 *\remarks		Le tampon de la matrice ne sera pas initialisé.
 		 */
-		SquareMatrix( NoInit const & );
+		explicit SquareMatrix( NoInit const & );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -164,7 +143,7 @@ namespace Castor
 		 *\param[in]	x, y	La ligne et la colonne ignorées
 		 *\return		La matrice mineure
 		 */
-		SquareMatrix < T, Count - 1 > get_minor( uint32_t x, uint32_t y )const;
+		SquareMatrix < T, Count - 1 > getMinor( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Computes the cofactor value of given row and column
@@ -175,7 +154,7 @@ namespace Castor
 		 *\param[in]	p_row, p_column	La ligne et la colonne
 		 *\return		Le cofacteur
 		 */
-		__value_type get_cofactor( uint32_t p_column, uint32_t p_row )const;
+		__value_type getCofactor( uint32_t p_column, uint32_t p_row )const;
 		/**
 		 *\~english
 		 *\brief		Computes the determinant of this matrix
@@ -184,7 +163,7 @@ namespace Castor
 		 *\brief		Calcule le déterminant de cette matrice
 		 *\return		Le déterminant
 		 */
-		__value_type get_determinant()const;
+		__value_type getDeterminant()const;
 		/**
 		 *\~english
 		 *\brief		Computes and returns the transposed of this matrix
@@ -193,7 +172,7 @@ namespace Castor
 		 *\brief		Calcule et renvoie la transposée de cette matrice
 		 *\return		La transposée
 		 */
-		transpose_type get_transposed()const;
+		transpose_type getTransposed()const;
 		/**
 		 *\~english
 		 *\brief		Transposes this matrix
@@ -211,7 +190,7 @@ namespace Castor
 		 *\brief		Dit si la matrice est orthogonale
 		 *\return		\p true si elle est orthogonale
 		 */
-		bool is_orthogonal()const;
+		bool isOrthogonal()const;
 		/**
 		 *\~english
 		 *\brief		Tells if this matrix is symmetrical
@@ -220,7 +199,7 @@ namespace Castor
 		 *\brief		Dit si la matrice est symétrique
 		 *\return		\p true si la matrice est symétrique
 		 */
-		bool is_symmetrical()const;
+		bool isSymmetrical()const;
 		/**
 		 *\~english
 		 *\brief		Tells if this matrix is anti symmetrical
@@ -229,7 +208,7 @@ namespace Castor
 		 *\brief		Dit si la matrice est anti-symétrique
 		 *\return		\p true si la matrice est anti-symétrique
 		 */
-		bool is_anti_symmetrical()const;
+		bool isAntiSymmetrical()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the inverse of this matrix
@@ -238,7 +217,7 @@ namespace Castor
 		 *\brief		Récupère la matrice inverse de cette matrice
 		 *\return		La matrice inverse
 		 */
-		SquareMatrix< T, Count > get_inverse()const;
+		SquareMatrix< T, Count > getInverse()const;
 		/**
 		 *\~english
 		 *\brief		Inverts this matrix
@@ -294,7 +273,7 @@ namespace Castor
 		template< typename Type > SquareMatrix< T, Count > & operator=( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_matrix	The SquareMatrix object to add
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
@@ -306,7 +285,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_matrix	The SquareMatrix object to substract
+		 *\param[in]	p_matrix	The SquareMatrix object to subtract
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -338,7 +317,7 @@ namespace Castor
 		template< typename Type > SquareMatrix< T, Count > & operator=( Type const * p_matrix );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_matrix	The data buffer to add
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
@@ -350,7 +329,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_matrix	The data buffer to substract
+		 *\param[in]	p_matrix	The data buffer to subtract
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -371,7 +350,7 @@ namespace Castor
 		template< typename Type > SquareMatrix< T, Count > & operator*=( Type const * p_matrix );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_value	The value to add
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
@@ -383,7 +362,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_value	The value to substract
+		 *\param[in]	p_value	The value to subtract
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
@@ -438,7 +417,7 @@ namespace Castor
 	template< typename T, uint32_t Count > bool operator!=( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_mtxA, p_mtxB	The matrices to add
 	 *\return		The addition result
 	 *\~french
@@ -450,7 +429,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_mtxA, p_mtxB	The matrices to substract
+	 *\param[in]	p_mtxA, p_mtxB	The matrices to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -482,7 +461,7 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, size_t Columns > SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, Matrix< U, Columns, Count > const & p_mtxB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_mtxA, p_mtxB	The matrices to add
 	 *\return		The addition result
 	 *\~french
@@ -494,7 +473,7 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_mtxA, p_mtxB	The matrices to substract
+	 *\param[in]	p_mtxA, p_mtxB	The matrices to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -515,7 +494,7 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, U const * p_mtxB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_mtxA		The matrix
 	 *\param[in]	p_value	The value to add
 	 *\return		The addition result
@@ -530,7 +509,7 @@ namespace Castor
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_mtxA		The matrix
-	 *\param[in]	p_value	The value to substract
+	 *\param[in]	p_value	The value to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -578,7 +557,7 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, size_t Rows > Matrix< T, Count, Rows > operator*( Matrix< U, Count, Rows > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_matrix	The matrix
 	 *\param[in]	p_value	The value to add
 	 *\return		The addition result
@@ -593,7 +572,7 @@ namespace Castor
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_matrix	The matrix
-	 *\param[in]	p_value	The value to substract
+	 *\param[in]	p_value	The value to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
@@ -638,7 +617,7 @@ namespace Castor
 	 *\param[in]		p_matrix	La matrice entré
 	 *\return			Une référence sur le flux
 	 */
-	template< typename CharT, typename T, uint32_t Count > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::SquareMatrix< T, Count > const & p_matrix );
+	template< typename CharT, typename T, uint32_t Count > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, castor::SquareMatrix< T, Count > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief			Stream operator
@@ -651,7 +630,7 @@ namespace Castor
 	 *\param[in,out]	p_matrix	La matrice sortie
 	 *\return			Une référence sur le flux
 	 */
-	template< typename CharT, typename T, uint32_t Count > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::SquareMatrix< T, Count > & p_matrix );
+	template< typename CharT, typename T, uint32_t Count > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, castor::SquareMatrix< T, Count > & p_matrix );
 }
 
 #include "SquareMatrix.inl"

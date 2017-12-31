@@ -1,25 +1,25 @@
 #include "Particle.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	Particle::Particle( BufferDeclaration const & p_description, StrStrMap const & p_defaultValues )
 		: m_description{ p_description }
 	{
 		m_data.resize( p_description.stride() );
-		uint32_t l_index{ 0u };
+		uint32_t index{ 0u };
 
-		for ( auto l_element : m_description )
+		for ( auto element : m_description )
 		{
-			auto l_it = p_defaultValues.find( l_element.m_name );
+			auto it = p_defaultValues.find( element.m_name );
 
-			if ( l_it != p_defaultValues.end() && !l_it->second.empty() )
+			if ( it != p_defaultValues.end() && !it->second.empty() )
 			{
-				ParseValue( l_it->second, l_element.m_dataType, *this, l_index );
+				parseValue( it->second, element.m_dataType, *this, index );
 			}
 
-			++l_index;
+			++index;
 		}
 	}
 

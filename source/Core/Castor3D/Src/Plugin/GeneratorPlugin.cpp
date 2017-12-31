@@ -1,25 +1,19 @@
-﻿#include "GeneratorPlugin.hpp"
+#include "GeneratorPlugin.hpp"
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::eGenerator, p_library, *p_engine )
+	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin( PluginType::eGenerator, p_library, *engine )
 	{
-		if ( m_pfnOnLoad )
-		{
-			m_pfnOnLoad( GetEngine() );
-		}
+		load();
 	}
 
 	GeneratorPlugin::~GeneratorPlugin()
 	{
-		if ( m_pfnOnUnload )
-		{
-			m_pfnOnUnload( GetEngine() );
-		}
+		unload();
 	}
 }

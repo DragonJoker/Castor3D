@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GLSL_SWIZZLE_H___
 #define ___GLSL_SWIZZLE_H___
@@ -31,13 +12,13 @@ SOFTWARE.
 #	undef RGB
 #endif
 
-namespace GLSL
+namespace glsl
 {
 	template< typename Input, typename Output >
 	struct Swizzle
 		: public Expr
 	{
-		inline Swizzle( Castor::String const & p_name, Input * p_input );
+		inline Swizzle( castor::String const & p_name, Input * p_input );
 		inline Swizzle & operator=( Swizzle const & p_rhs );
 		template< typename T > inline Swizzle & operator=( T const & p_rhs );
 		inline operator Output()const;
@@ -84,10 +65,10 @@ namespace GLSL
 	Swizzle< Input, Output > Name;
 
 #	define GLSL_FIRST_SWIZZLE( Input, Output, Name )\
-	Swizzle< Input, Output > Name = Swizzle< Input, Output >( Castor::string::string_cast< xchar >( #Name ), this )
+	Swizzle< Input, Output > Name = Swizzle< Input, Output >( castor::string::stringCast< xchar >( #Name ), this )
 
 #	define GLSL_LAST_SWIZZLE( Input, Output, Name )\
-	Swizzle< Input, Output > Name = Swizzle< Input, Output >( Castor::string::string_cast< xchar >( #Name ), this )
+	Swizzle< Input, Output > Name = Swizzle< Input, Output >( castor::string::stringCast< xchar >( #Name ), this )
 
 #	define SWIZZLE_X x
 #	define SWIZZLE_Y y
@@ -224,10 +205,10 @@ namespace GLSL
 #	define GLSL_SWIZZLE( Input, Output, Name )\
 	inline Output Name()const\
 	{\
-		Castor::String l_me( *this );\
-		Output l_return( m_writer, l_me );\
-		l_return.m_value << l_me << cuT( "."#Name );\
-		return l_return;\
+		castor::String me( *this );\
+		Output result( m_writer, me );\
+		result.m_value << me << cuT( "."#Name );\
+		return result;\
 	}
 
 #	define GLSL_FIRST_SWIZZLE( Input, Output, Name )\

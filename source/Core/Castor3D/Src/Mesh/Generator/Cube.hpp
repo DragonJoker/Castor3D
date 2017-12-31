@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_CUBE_H___
 #define ___C3D_CUBE_H___
 
 #include "Mesh/MeshGenerator.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -56,45 +37,15 @@ namespace Castor3D
 		 */
 		C3D_API ~Cube();
 		/**
-		 *\copydoc		Castor3D::MeshGenerator::Create
+		 *\copydoc		castor3d::MeshGenerator::create
 		 */
-		C3D_API static MeshGeneratorSPtr Create();
-		/**
-		 *\~english
-		 *\brief		Retrieves the cube height
-		 *\~french
-		 *\brief		Récupère la hauteur du cube
-		 */
-		inline real GetHeight()const
-		{
-			return m_height;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the cube width
-		 *\~french
-		 *\brief		Récupère la largeur du cube
-		 */
-		inline real GetWidth()const
-		{
-			return m_width;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the cube depth
-		 *\~french
-		 *\brief		Récupère la profondeur du cube
-		 */
-		inline real GetDepth()const
-		{
-			return m_depth;
-		}
+		C3D_API static MeshGeneratorSPtr create();
 
 	private:
 		/**
-		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
 		real m_height;

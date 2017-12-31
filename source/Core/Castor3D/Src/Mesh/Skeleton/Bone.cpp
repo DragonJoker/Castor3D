@@ -1,78 +1,83 @@
 #include "Bone.hpp"
 
+#include "BonedVertex.hpp"
 #include "Skeleton.hpp"
+#include "Mesh/Mesh.hpp"
+#include "Mesh/Submesh.hpp"
+#include "Mesh/Vertex.hpp"
+#include "Mesh/SubmeshComponent/BonesComponent.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< Bone >::DoWrite( Bone const & p_obj )
+	bool BinaryWriter< Bone >::doWrite( Bone const & obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.GetOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
+			result = doWriteChunk( obj.getOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
 		}
 
-		if ( p_obj.GetParent() )
+		if ( obj.getParent() )
 		{
-			l_return = DoWriteChunk( p_obj.GetParent()->GetName(), ChunkType::eBoneParentName, m_chunk );
+			result = doWriteChunk( obj.getParent()->getName(), ChunkType::eBoneParentName, m_chunk );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	bool BinaryParser< Bone >::DoParse( Bone & p_obj )
+	bool BinaryParser< Bone >::doParse( Bone & obj )
 	{
-		bool l_return = true;
-		BoneSPtr l_bone;
-		String l_name;
-		BinaryChunk l_chunk;
-		auto & l_skeleton = p_obj.m_skeleton;
+		bool result = true;
+		BoneSPtr bone;
+		String name;
+		BinaryChunk chunk;
+		auto & skeleton = obj.m_skeleton;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				result = doParseChunk( name, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_obj.SetName( l_name );
+					obj.setName( name );
 				}
 
 				break;
 
 			case ChunkType::eBoneOffsetMatrix:
-				l_return = DoParseChunk( p_obj.m_offset, l_chunk );
+				result = doParseChunk( obj.m_offset, chunk );
 				break;
 
 			case ChunkType::eBoneParentName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				result = doParseChunk( name, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					auto l_parent = l_skeleton.FindBone( l_name );
+					auto parent = skeleton.findBone( name );
 
-					if ( l_parent )
+					if ( parent )
 					{
-						l_parent->AddChild( p_obj.shared_from_this() );
-						p_obj.SetParent( l_parent );
+						parent->addChild( obj.shared_from_this() );
+						obj.setParent( parent );
 					}
 					else
 					{
-						l_return = false;
+						result = false;
 					}
 				}
 
@@ -80,13 +85,17 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	Bone::Bone( Skeleton & p_skeleton )
-		: m_skeleton( p_skeleton )
+	Bone::Bone( Skeleton & skeleton
+		, Matrix4x4r const & offset )
+		: Named{ cuEmptyString }
+		, m_skeleton{ skeleton }
+		, m_offset{ offset }
+		, m_absoluteOffset{ skeleton.getGlobalInverseTransform() }
 	{
 	}
 
@@ -94,11 +103,57 @@ namespace Castor3D
 	{
 	}
 
-	void Bone::AddChild( BoneSPtr p_bone )
+	void Bone::addChild( BoneSPtr bone )
 	{
-		if ( m_children.end() == m_children.find( p_bone->GetName() ) )
+		if ( m_children.end() == m_children.find( bone->getName() ) )
 		{
-			m_children.insert( { p_bone->GetName(), p_bone } );
+			m_children.emplace( bone->getName(), bone );
 		}
+	}
+
+	void Bone::setParent( BoneSPtr bone )
+	{
+		m_parent = bone;
+		m_absoluteOffset = m_offset * m_parent->m_absoluteOffset;
+	}
+
+	BoundingBox Bone::computeBoundingBox( Mesh const & mesh
+		, uint32_t boneIndex )const
+	{
+		real rmax = std::numeric_limits< real >::max();
+		real rmin = std::numeric_limits< real >::lowest();
+		Point3r min{ rmax, rmax, rmax };
+		Point3r max{ rmin, rmin, rmin };
+
+		for ( auto & submesh : mesh )
+		{
+			if ( submesh->hasComponent( BonesComponent::Name ) )
+			{
+				auto component = submesh->getComponent< BonesComponent >();
+				uint32_t i = 0u;
+
+				for ( auto & data : component->getBonesData() )
+				{
+					auto boneData = BonedVertex::getBones( data );
+					auto it = std::find( boneData.m_ids.begin()
+						, boneData.m_ids.end()
+						, boneIndex );
+
+					if ( it != boneData.m_ids.end() )
+					{
+						Coords3r position;
+						Vertex::getPosition( submesh->getPoint( i ), position );
+						min[0] = std::min( min[0], position[0] );
+						min[1] = std::min( min[1], position[1] );
+						min[2] = std::min( min[2], position[2] );
+						max[0] = std::max( max[0], position[0] );
+						max[1] = std::max( max[1], position[1] );
+						max[2] = std::max( max[2], position[2] );
+					}
+				}
+			}
+		}
+
+		return BoundingBox{ min, max };
 	}
 }

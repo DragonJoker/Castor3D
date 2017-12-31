@@ -10,153 +10,201 @@
 
 #include <Graphics/Font.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace CastorGui
 {
 	int StaticCtrl::m_count = 0xFF000000;
 
-	StaticCtrl::StaticCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
-		: StaticCtrl( p_engine, p_parent, String(), Position(), Size(), 0, true )
+	StaticCtrl::StaticCtrl( String const & p_name
+		, Engine & engine
+		, ControlRPtr p_parent
+		, uint32_t p_id )
+		: StaticCtrl( p_name
+			, engine
+			, p_parent
+			, String()
+			, Position()
+			, Size()
+			, 0
+			, true )
 	{
 	}
 
-	StaticCtrl::StaticCtrl( Engine * p_engine, ControlRPtr p_parent, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( ControlType::eStatic, p_engine, p_parent, m_count++, p_position, p_size, p_style, p_visible )
+	StaticCtrl::StaticCtrl( String const & p_name
+		, Engine & engine
+		, ControlRPtr p_parent
+		, String const & p_caption
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
+		: Control( ControlType::eStatic
+			, p_name
+			, engine
+			, p_parent
+			, m_count++
+			, p_position
+			, p_size
+			, p_style
+			, p_visible )
 		, m_caption( p_caption )
 	{
-		SetBackgroundBorders( Rectangle() );
+		setBackgroundBorders( Rectangle() );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlStatic_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
-		l_text->SetPixelSize( GetSize() );
-		m_text = l_text;
-		l_text->SetCaption( m_caption );
-		l_text->SetVisible( DoIsVisible() );
-		l_text->SetVAlign( VAlign::eCenter );
-		DoUpdateStyle();
+		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlStatic_" ) + string::toString( getId() )
+			, OverlayType::eText
+			, nullptr
+			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
+		text->setPixelSize( getSize() );
+		m_text = text;
+		text->setCaption( m_caption );
+		text->setVisible( p_visible );
+		text->setVAlign( VAlign::eCenter );
+		doUpdateStyle();
 	}
 
 	StaticCtrl::~StaticCtrl()
 	{
 	}
 
-	void StaticCtrl::SetCaption( String const & p_value )
+	void StaticCtrl::setFont( String const & p_font )
 	{
-		m_caption = p_value;
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetCaption( p_value );
-			l_text.reset();
+			text->setFont( p_font );
 		}
 	}
 
-	void StaticCtrl::SetFont( Castor::String const & p_font )
+	void StaticCtrl::setHAlign( HAlign p_align )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetFont( p_font );
+			text->setHAlign( p_align );
 		}
 	}
 
-	void StaticCtrl::DoCreate()
+	void StaticCtrl::setVAlign( VAlign p_align )
+	{
+		TextOverlaySPtr text = m_text.lock();
+
+		if ( text )
+		{
+			text->setVAlign( p_align );
+		}
+	}
+
+	void StaticCtrl::doCreate()
 	{
 		if ( m_foregroundMaterial.expired() )
 		{
-			m_foregroundMaterial = CreateMaterial( GetEngine(), cuT( "CtrlStatic_FG_" ) + string::to_string( GetId() ), Colour::from_components( 1.0, 1.0, 1.0, 1.0 ) );
+			m_foregroundMaterial = CreateMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
 		}
 
-		TextOverlaySPtr l_text = m_text.lock();
-		l_text->SetMaterial( GetForegroundMaterial() );
+		TextOverlaySPtr text = m_text.lock();
+		text->setMaterial( getForegroundMaterial() );
 
-		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
+		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
-		}
-	}
-
-	void StaticCtrl::DoDestroy()
-	{
-	}
-
-	void StaticCtrl::DoSetPosition( Position const & p_value )
-	{
-		TextOverlaySPtr l_text = m_text.lock();
-
-		if ( l_text )
-		{
-			l_text->SetPixelPosition( Position() );
+			text->setFont( getControlsManager()->getDefaultFont()->getName() );
 		}
 	}
 
-	void StaticCtrl::DoSetSize( Size const & p_value )
+	void StaticCtrl::doDestroy()
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+	}
 
-		if ( l_text )
+	void StaticCtrl::doSetPosition( Position const & p_value )
+	{
+		TextOverlaySPtr text = m_text.lock();
+
+		if ( text )
 		{
-			l_text->SetPixelSize( p_value );
+			text->setPixelPosition( Position() );
 		}
 	}
 
-	void StaticCtrl::DoSetBackgroundMaterial( MaterialSPtr p_material )
+	void StaticCtrl::doSetSize( Size const & p_value )
 	{
-	}
+		TextOverlaySPtr text = m_text.lock();
 
-	void StaticCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
-	{
-		TextOverlaySPtr l_text = m_text.lock();
-
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetMaterial( p_material );
+			text->setPixelSize( p_value );
 		}
 	}
 
-	void StaticCtrl::DoSetVisible( bool p_visible )
+	void StaticCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+	}
 
-		if ( l_text )
+	void StaticCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
+	{
+		TextOverlaySPtr text = m_text.lock();
+
+		if ( text )
 		{
-			l_text->SetVisible( p_visible );
+			text->setMaterial( p_material );
 		}
 	}
 
-	void StaticCtrl::DoUpdateStyle()
+	void StaticCtrl::doSetCaption( String const & p_value )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		m_caption = p_value;
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			if ( CheckFlag( GetStyle(), StaticStyle::eHAlignCenter ) )
+			text->setCaption( p_value );
+			text.reset();
+		}
+	}
+
+	void StaticCtrl::doSetVisible( bool p_visible )
+	{
+		TextOverlaySPtr text = m_text.lock();
+
+		if ( text )
+		{
+			text->setVisible( p_visible );
+		}
+	}
+
+	void StaticCtrl::doUpdateStyle()
+	{
+		TextOverlaySPtr text = m_text.lock();
+
+		if ( text )
+		{
+			if ( checkFlag( getStyle(), StaticStyle::eHAlignCenter ) )
 			{
-				l_text->SetHAlign( HAlign::eCenter );
+				text->setHAlign( HAlign::eCenter );
 			}
-			else if ( CheckFlag( GetStyle(), StaticStyle::eHAlignRight ) )
+			else if ( checkFlag( getStyle(), StaticStyle::eHAlignRight ) )
 			{
-				l_text->SetHAlign( HAlign::eRight );
+				text->setHAlign( HAlign::eRight );
 			}
 			else
 			{
-				l_text->SetHAlign( HAlign::eLeft );
+				text->setHAlign( HAlign::eLeft );
 			}
 
-			if ( CheckFlag( GetStyle(), StaticStyle::eVAlignCenter ) )
+			if ( checkFlag( getStyle(), StaticStyle::eVAlignCenter ) )
 			{
-				l_text->SetVAlign( VAlign::eCenter );
+				text->setVAlign( VAlign::eCenter );
 			}
-			else if ( CheckFlag( GetStyle(), StaticStyle::eVAlignBottom ) )
+			else if ( checkFlag( getStyle(), StaticStyle::eVAlignBottom ) )
 			{
-				l_text->SetVAlign( VAlign::eBottom );
+				text->setVAlign( VAlign::eBottom );
 			}
 			else
 			{
-				l_text->SetVAlign( VAlign::eTop );
+				text->setVAlign( VAlign::eTop );
 			}
 		}
 	}

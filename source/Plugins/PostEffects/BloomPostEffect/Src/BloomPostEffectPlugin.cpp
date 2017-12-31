@@ -1,4 +1,4 @@
-#include <Log/Logger.hpp>
+﻿#include <Log/Logger.hpp>
 
 #include <Engine.hpp>
 #include <Cache/TargetCache.hpp>
@@ -18,29 +18,31 @@
 #	endif
 #endif
 
-using namespace Bloom;
-
-C3D_Bloom_API void GetRequiredVersion( Castor3D::Version & p_version )
+extern "C"
 {
-	p_version = Castor3D::Version();
-}
+	C3D_Bloom_API void getRequiredVersion( castor3d::Version * p_version )
+	{
+		*p_version = castor3d::Version();
+	}
 
-C3D_Bloom_API Castor3D::PluginType GetType()
-{
-	return Castor3D::PluginType::ePostEffect;
-}
+	C3D_Bloom_API void getType( castor3d::PluginType * p_type )
+	{
+		*p_type = castor3d::PluginType::ePostEffect;
+	}
 
-C3D_Bloom_API Castor::String GetName()
-{
-	return BloomPostEffect::Name;
-}
+	C3D_Bloom_API void getName( char const ** p_name )
+	{
+		*p_name = Bloom::BloomPostEffect::Name.c_str();
+	}
 
-C3D_Bloom_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( BloomPostEffect::Type, &BloomPostEffect::Create );
-}
+	C3D_Bloom_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	{
+		engine->getRenderTargetCache().getPostEffectFactory().registerType( Bloom::BloomPostEffect::Type
+			, &Bloom::BloomPostEffect::create );
+	}
 
-C3D_Bloom_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( BloomPostEffect::Type );
+	C3D_Bloom_API void OnUnload( castor3d::Engine * engine )
+	{
+		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( Bloom::BloomPostEffect::Type );
+	}
 }

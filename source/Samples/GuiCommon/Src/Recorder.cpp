@@ -42,17 +42,17 @@ namespace libffmpeg
 #	undef PixelFormat
 #endif
 
-	void CheckError( int p_error, char const * const p_action )
+	void checkError( int p_error, char const * const p_action )
 	{
 		if ( p_error < 0 )
 		{
-			char l_err[AV_ERROR_MAX_STRING_SIZE] { 0 };
-			std::stringstream l_stream;
-			l_stream << ( char const * )_( "Failure on:" ).mb_str( wxConvUTF8 ) << "\n";
-			l_stream << "\t" << ( char const * )wxGetTranslation( p_action ).mb_str( wxConvUTF8 );
-			l_stream << av_make_error_string( l_err, AV_ERROR_MAX_STRING_SIZE, p_error );
+			char err[AV_ERROR_MAX_STRING_SIZE] { 0 };
+			std::stringstream stream;
+			stream << ( char const * )_( "Failure on:" ).mb_str( wxConvUTF8 ) << "\n";
+			stream << "\t" << ( char const * )wxGetTranslation( p_action ).mb_str( wxConvUTF8 );
+			stream << av_make_error_string( err, AV_ERROR_MAX_STRING_SIZE, p_error );
 
-			throw std::runtime_error( l_stream.str() );
+			throw std::runtime_error( stream.str() );
 		}
 	}
 }
@@ -61,8 +61,8 @@ namespace libffmpeg
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace GuiCommon
 {
@@ -86,68 +86,66 @@ namespace GuiCommon
 		public:
 			virtual bool UpdateTime()
 			{
-				auto l_now = clock::now();
-				uint64_t l_timeDiff = std::chrono::duration_cast< std::chrono::milliseconds >( l_now - m_saved ).count();
+				auto now = clock::now();
+				uint64_t timeDiff = std::chrono::duration_cast< Milliseconds >( now - m_saved ).count();
 
 				if ( m_recordedCount )
 				{
-					m_recordedTime += l_timeDiff;
+					m_recordedTime += timeDiff;
 				}
 
-				return DoUpdateTime( l_timeDiff );
+				return doUpdateTime( timeDiff );
 			}
 
 			virtual bool StartRecord( Size const & p_size, int p_wantedFPS )
 			{
-				bool l_result = false;
+				bool result = false;
 				m_wantedFPS = p_wantedFPS;
 				m_recordedCount = 0;
 				m_recordedTime = 0;
-				wxString l_strWildcard = _( "Supported Video files" );
-				l_strWildcard += wxT( "(*.avi;*.mkv)|*.avi;*.mkv" );
-				wxFileDialog l_dialog( nullptr, _( "Please choose a video file name" ), wxEmptyString, wxEmptyString, l_strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+				wxString strWildcard = _( "Supported Video files" );
+				strWildcard += wxT( "(*.avi;*.mkv)|*.avi;*.mkv" );
+				wxFileDialog dialog( nullptr, _( "Please choose a video file name" ), wxEmptyString, wxEmptyString, strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-				if ( l_dialog.ShowModal() == wxID_OK )
+				if ( dialog.ShowModal() == wxID_OK )
 				{
-					wxString l_strFileName = l_dialog.GetPath();
+					wxString strFileName = dialog.GetPath();
 
 					try
 					{
-						DoStartRecord( p_size, l_strFileName );
-						l_result = IsRecording();
+						doStartRecord( p_size, strFileName );
+						result = IsRecording();
 					}
 					catch ( std::bad_alloc & )
 					{
 					}
 					catch ( std::exception & exc )
 					{
-						wxString l_strMsg = _( "Can't start recording file" );
-						l_strMsg += wxT( " " );
-						l_strMsg += l_strFileName;
-						l_strMsg += wxT( ":\n" );
-						l_strMsg += wxString( exc.what(), wxMBConvLibc() );
-						l_strMsg += wxT( ")" );
-						throw std::runtime_error( string::string_cast< char >( make_String( l_strMsg ) ) );
+						wxString strMsg = _( "Can't start recording file" );
+						strMsg += wxT( " " );
+						strMsg += strFileName;
+						strMsg += wxT( ":\n" );
+						strMsg += wxString( exc.what(), wxMBConvLibc() );
+						strMsg += wxT( ")" );
+						throw std::runtime_error( string::stringCast< char >( make_String( strMsg ) ) );
 					}
 				}
 
-				return l_result;
+				return result;
 			}
 
 			virtual bool RecordFrame( PxBufferBaseSPtr p_buffer )
 			{
-				bool l_result = false;
-				DoRecordFrame( p_buffer );
+				doRecordFrame( p_buffer );
 				m_saved = clock::now();
 				m_recordedCount++;
-				l_result = true;
-				return l_result;
+				return true;
 			}
 
 		protected:
-			virtual bool DoStartRecord( Size const & p_size, wxString const & p_name ) = 0;
-			virtual bool DoUpdateTime( uint64_t p_uiTimeDiff ) = 0;
-			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer ) = 0;
+			virtual bool doStartRecord( Size const & p_size, wxString const & p_name ) = 0;
+			virtual bool doUpdateTime( uint64_t p_uiTimeDiff ) = 0;
+			virtual void doRecordFrame( PxBufferBaseSPtr p_buffer ) = 0;
 
 		protected:
 			time_point m_saved;
@@ -169,16 +167,16 @@ namespace GuiCommon
 				p_packet.stream_index = m_formatContext->streams[0]->index;
 			}
 
-			void Write( libffmpeg::AVPacket & p_packet )
+			void write( libffmpeg::AVPacket & p_packet )
 			{
-				auto l_timestamp = p_packet.pts;
+				auto timestamp = p_packet.pts;
 
 				if ( p_packet.pts != ( 0x8000000000000000LL ) )
 				{
-					l_timestamp = av_rescale_q( l_timestamp, m_codecContext->time_base, m_formatContext->streams[0]->time_base );
+					timestamp = av_rescale_q( timestamp, m_codecContext->time_base, m_formatContext->streams[0]->time_base );
 				}
 
-				p_packet.pts = l_timestamp;
+				p_packet.pts = timestamp;
 
 				if ( !( p_packet.pts % 10 ) )
 				{
@@ -188,7 +186,7 @@ namespace GuiCommon
 				libffmpeg::av_interleaved_write_frame( m_formatContext, &p_packet );
 			}
 
-			void GetFormat( wxString const & p_name )
+			void getFormat( wxString const & p_name )
 			{
 				m_outputFormat = libffmpeg::av_guess_format( nullptr, p_name.char_str().data(), nullptr );
 
@@ -228,11 +226,11 @@ namespace GuiCommon
 				}
 			}
 
-			bool Open( wxString const & p_name )
+			bool open( wxString const & p_name )
 			{
 #if LIBAVFORMAT_VERSION_MAJOR >= 57 && LIBAVFORMAT_VERSION_MINOR >= 34
-				libffmpeg::CheckError( avcodec_parameters_from_context( m_stream->codecpar, m_codecContext )
-									   , "Setting codec parameters from context" );
+				libffmpeg::checkError( avcodec_parameters_from_context( m_stream->codecpar, m_codecContext )
+									   , "setting codec parameters from context" );
 #else
 				m_stream->codec = m_codecContext;
 #endif
@@ -242,19 +240,19 @@ namespace GuiCommon
 					m_codecContext->flags |= CODEC_FLAG_GLOBAL_HEADER;
 				}
 
-				libffmpeg::CheckError( avcodec_open2( m_codecContext, m_codec, nullptr )
+				libffmpeg::checkError( avcodec_open2( m_codecContext, m_codec, nullptr )
 									   , "Codec opening" );
 
-				libffmpeg::CheckError( libffmpeg::avio_open( &m_formatContext->pb, p_name.char_str().data(), AVIO_FLAG_WRITE )
+				libffmpeg::checkError( libffmpeg::avio_open( &m_formatContext->pb, p_name.char_str().data(), AVIO_FLAG_WRITE )
 									   , "Stream opening" );
 
-				libffmpeg::CheckError( libffmpeg::avformat_write_header( m_formatContext, nullptr )
+				libffmpeg::checkError( libffmpeg::avformat_write_header( m_formatContext, nullptr )
 									   , "Writing format header to stream" );
 
 				return true;
 			}
 
-			void Close( bool p_wasRecording )
+			void close( bool p_wasRecording )
 			{
 				if ( p_wasRecording )
 				{
@@ -274,9 +272,9 @@ namespace GuiCommon
 			}
 
 		protected:
-			void DoAllocateFrame()
+			void doAllocateFrame()
 			{
-				// Allocate the encoded frame.
+				// allocate the encoded frame.
 				m_frame = libffmpeg::av_frame_alloc();
 
 				if ( !m_frame )
@@ -284,8 +282,8 @@ namespace GuiCommon
 					throw std::runtime_error( ( char const * )wxString( _( "Could not allocate encoded video frame" ) ).mb_str( wxConvUTF8 ) );
 				}
 
-				// Allocate the encoded raw picture.
-				libffmpeg::CheckError( libffmpeg::av_image_alloc( m_frame->data, m_frame->linesize, m_codecContext->width, m_codecContext->height, m_codecContext->pix_fmt, 1 )
+				// allocate the encoded raw picture.
+				libffmpeg::checkError( libffmpeg::av_image_alloc( m_frame->data, m_frame->linesize, m_codecContext->width, m_codecContext->height, m_codecContext->pix_fmt, 1 )
 									   , "Encoded picture buffer allocation" );
 			}
 
@@ -326,22 +324,22 @@ namespace GuiCommon
 				if ( IsRecording() )
 				{
 					// We first write remaining frames.
-					libffmpeg::AVPacket l_pkt = { 0 };
-					libffmpeg::av_init_packet( &l_pkt );
-					int l_gotOutput = 1;
+					libffmpeg::AVPacket pkt = { 0 };
+					libffmpeg::av_init_packet( &pkt );
+					int gotOutput = 1;
 
-					while ( l_gotOutput )
+					while ( gotOutput )
 					{
-						int iRet = libffmpeg::avcodec_encode_video2( m_codecContext, &l_pkt, nullptr, &l_gotOutput );
+						int iRet = libffmpeg::avcodec_encode_video2( m_codecContext, &pkt, nullptr, &gotOutput );
 
-						if ( iRet >= 0 && l_gotOutput )
+						if ( iRet >= 0 && gotOutput )
 						{
-							Write( l_pkt );
+							write( pkt );
 						}
 					}
 				}
 
-				Close( IsRecording() );
+				close( IsRecording() );
 
 				if ( m_swsContext )
 				{
@@ -365,15 +363,15 @@ namespace GuiCommon
 			}
 
 		private:
-			virtual bool DoUpdateTime( uint64_t ptimeDiff )
+			virtual bool doUpdateTime( uint64_t ptimeDiff )
 			{
 				return ptimeDiff >= 1000 / m_wantedFPS;
 			}
 
-			virtual bool DoStartRecord( Size const & p_size, wxString const & p_name )
+			virtual bool doStartRecord( Size const & p_size, wxString const & p_name )
 			{
-				wxSize l_size( p_size.width(), p_size.height() );
-				GetFormat( p_name );
+				wxSize size( p_size.getWidth(), p_size.getHeight() );
+				getFormat( p_name );
 
 				try
 				{
@@ -387,8 +385,8 @@ namespace GuiCommon
 					// Sample parameters
 					m_codecContext->bit_rate = m_bitRate;
 					// Resolution
-					m_codecContext->width = l_size.x;
-					m_codecContext->height = l_size.y;
+					m_codecContext->width = size.x;
+					m_codecContext->height = size.y;
 					// Frames per second
 					m_codecContext->time_base = { 1, m_wantedFPS };
 					// Emit one intra frame every thirty frames
@@ -401,7 +399,7 @@ namespace GuiCommon
 					libffmpeg::av_opt_set( m_codecContext->priv_data, "profile", "high", AV_OPT_SEARCH_CHILDREN );
 					libffmpeg::av_opt_set( m_codecContext->priv_data, "level", "4.1", AV_OPT_SEARCH_CHILDREN );
 
-					DoAllocateFrame();
+					doAllocateFrame();
 
 					// Retrieve the scaling and encoding context.
 					m_swsContext = libffmpeg::sws_getContext( m_codecContext->width, m_codecContext->height, libffmpeg::AV_PIX_FMT_RGBA,
@@ -413,7 +411,7 @@ namespace GuiCommon
 						throw std::runtime_error( ( char const * )wxString( _( "Could not initialise conversion context" ) ).mb_str( wxConvUTF8 ) );
 					}
 
-					if ( !Open( p_name ) )
+					if ( !open( p_name ) )
 					{
 						throw std::runtime_error( ( char const * )wxString( _( "Could not open file" ) ).mb_str( wxConvUTF8 ) );
 					}
@@ -427,36 +425,36 @@ namespace GuiCommon
 				return true;
 			}
 
-			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer )
+			virtual void doRecordFrame( PxBufferBaseSPtr p_buffer )
 			{
 				if ( IsRecording() )
 				{
 					try
 					{
-						auto l_buffer = p_buffer->const_ptr();
-						int l_lineSize[8] = { m_codecContext->width * 4, 0, 0, 0, 0, 0, 0, 0 };
-						auto l_outputHeight = libffmpeg::sws_scale( m_swsContext, &l_buffer, l_lineSize, 0, p_buffer->dimensions().height(), m_frame->data, m_frame->linesize );
-						libffmpeg::AVPacket l_packet{ 0 };
-						libffmpeg::av_init_packet( &l_packet );
-						std::vector< uint8_t > l_outbuf( l_packet.size );
-						l_packet.pts = m_recordedCount;
-						l_packet.dts = m_recordedCount;
+						auto buffer = p_buffer->constPtr();
+						int lineSize[8] = { m_codecContext->width * 4, 0, 0, 0, 0, 0, 0, 0 };
+						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, p_buffer->dimensions().getHeight(), m_frame->data, m_frame->linesize );
+						libffmpeg::AVPacket packet{ 0 };
+						libffmpeg::av_init_packet( &packet );
+						std::vector< uint8_t > outbuf( packet.size );
+						packet.pts = m_recordedCount;
+						packet.dts = m_recordedCount;
 #	if LIBAVUTIL_VERSION_INT > AV_VERSION_INT(54, 6, 0)
-						l_packet.size = libffmpeg::av_image_get_buffer_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height, 1 );
+						packet.size = libffmpeg::av_image_get_buffer_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height, 1 );
 #	else
-						l_packet.size = libffmpeg::avpicture_get_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height );
+						packet.size = libffmpeg::avpicture_get_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height );
 #	endif
-						l_packet.data = l_outbuf.data();
-						FillPacket( l_packet );
+						packet.data = outbuf.data();
+						FillPacket( packet );
 						m_frame->pts = m_recordedCount++;
-						int l_gotOutput = 0;
+						int gotOutput = 0;
 
-						libffmpeg::CheckError( libffmpeg::avcodec_encode_video2( m_codecContext, &l_packet, m_frame, &l_gotOutput )
+						libffmpeg::checkError( libffmpeg::avcodec_encode_video2( m_codecContext, &packet, m_frame, &gotOutput )
 											   , "Frame encoding" );
 
-						if ( l_gotOutput )
+						if ( gotOutput )
 						{
-							Write( l_packet );
+							write( packet );
 						}
 					}
 					catch ( std::exception & )

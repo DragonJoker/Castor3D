@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GL_RENDER_SYSTEM_PREREQUISITES_H___
 #define ___GL_RENDER_SYSTEM_PREREQUISITES_H___
@@ -57,11 +38,11 @@ SOFTWARE.
 
 #define BUFFER_OFFSET( n ) ( ( uint8_t * )nullptr + ( n ) )
 
-using Castor::real;
+using castor::real;
 
 namespace GlRender
 {
-	using Castor::real;
+	using castor::real;
 
 	enum class GlProvider
 	{
@@ -123,9 +104,6 @@ namespace GlRender
 		eTriangles = 0x0004,
 		eTriangleStrip = 0x0005,
 		eTriangleFan = 0x0006,
-		eQuads = 0x0007,
-		eQuadStrip = 0x0008,
-		ePolygon = 0x0009,
 		ePatches = 0x000E,
 	};
 
@@ -366,7 +344,7 @@ namespace GlRender
 		eSubtract = 0x84E7,
 		eAddSigned = 0x8574,
 		eInterpolate = 0x8575,
-		eDot3RGB = 0x86AE,
+		edot3RGB = 0x86AE,
 		eDot3RGBA = 0x86AF,
 	};
 
@@ -397,9 +375,10 @@ namespace GlRender
 	enum class GlComponent
 		: uint32_t
 	{
-		eColour = 0x1900,
-		eStencil = 0x1901,
-		eDepth = 0x1902,
+		eColour = 0x1800,
+		eDepth = 0x1801,
+		eStencil = 0x1802,
+		eDepthStencil = 0x84F9,
 	};
 
 	enum class GlBufferTarget
@@ -411,12 +390,13 @@ namespace GlRender
 		ePixelUnpack = 0x88EC,
 		eTexture = 0x8C2A,
 		eUniform = 0x8A11,
-		eTransformFeedback = 0x8E22,
 		eTransformFeedbackBuffer = 0x8C8E,
+		eTransformFeedback = 0x8E22,
 		eRead = 0x8F36,
 		eWrite = 0x8F37,
+		eIndirect = 0x8F3F,
 		eAtomicCounter = 0x92C0,
-		eShaderStorage = 0x90D2,
+		eShaderStorage = 0x90D2
 	};
 
 	enum class GlShaderType
@@ -573,6 +553,8 @@ namespace GlRender
 		eDebugOutputSynchronous = 0x8242,
 		eDepthClamp = 0x864F,
 		eRasterizerDiscard = 0x8C89,
+		eSeamlessCubeMaps = 0x884F,
+		eFramebufferSRGB = 0x8DB9,
 	};
 
 	enum class GlFramebufferStatus
@@ -1170,7 +1152,7 @@ namespace GlRender
 	template< typename T, uint32_t Columns, uint32_t Rows > class GlMatAttribute;
 	template< typename T, uint32_t Count > class GlVecAttribute;
 	template< typename T > class GlBufferBase;
-	template< typename T > class GlBuffer;
+	class GlBuffer;
 	class GlVertexBufferObject;
 	class Gl3VertexBufferObject;
 	class GlGeometryBuffers;
@@ -1208,14 +1190,14 @@ namespace GlRender
 	class GlProgramInputLayout;
 	class GlUniformBase;
 	class GlUniformBuffer;
-	template< Castor3D::UniformType Type >
+	template< castor3d::UniformType Type >
 	class GlPushUniform;
 	DECLARE_SMART_PTR( GlUniformBase );
 	DECLARE_SMART_PTR( GlShaderObject );
 	DECLARE_SMART_PTR( GlShaderProgram );
 	DECLARE_VECTOR( GlShaderProgramSPtr, GlShaderProgramPtr );
 	DECLARE_VECTOR( GlShaderObjectSPtr, GlShaderObjectPtr );
-	DECLARE_MAP( Castor::String, GlUniformBaseSPtr, GlUniformPtrStr );
+	DECLARE_MAP( castor::String, GlUniformBaseSPtr, GlUniformPtrStr );
 
 	class GlRenderBuffer;
 	class GlColourRenderBuffer;
@@ -1258,30 +1240,47 @@ namespace GlRender
 	class GlRenderTarget;
 	class GlRenderWindow;
 	class OpenGl;
+
+	struct DrawElementsIndirectCommand
+	{
+		uint32_t count;
+		uint32_t primCount;
+		uint32_t firstIndex;
+		uint32_t baseVertex;
+		uint32_t baseInstance;
+	};
+
+	struct DrawArraysIndirectCommand
+	{
+		uint32_t count;
+		uint32_t primCount;
+		uint32_t first;
+		uint32_t baseInstance;
+	};
 }
 
 #	if C3DGL_DEBUG_FUNCTION_CALLS
-#		define glCheckError( gl, txt ) ( gl ).GlCheckError( txt )
+#		define glCheckError( gl, txt ) ( gl ).glCheckError( txt )
 #	else
 #		define glCheckError( gl, txt ) true
 #	endif
 
 #	if C3D_TRACE_OBJECTS
-#		define glTrack( gl, type, object ) ( gl ).Track( object, type, __FILE__, __LINE__ )
-#		define glUntrack( gl, object ) ( gl ).UnTrack( object )
+#		define glTrack( gl, type, object ) ( gl ).track( object, type, __FILE__, __LINE__ )
+#		define glUntrack( gl, object ) ( gl ).untrack( object )
 #	else
 #		define glTrack( gl, type, object )
 #		define glUntrack( gl, object )
 #	endif
 
 #	if C3DGL_CHECK_TEXTURE_UNIT
-#		define glTrackTexture( name, index ) GetOpenGl().TrackTexture( name, index )
-#		define glTrackSampler( name, index ) GetOpenGl().TrackSampler( name, index )
-#		define glCheckTextureUnits() GetOpenGl().CheckTextureUnits()
+#		define glTrackTexture( name, index ) getOpenGl().TrackTexture( name, index )
+#		define glTrackSampler( name, index ) getOpenGl().TrackSampler( name, index )
+#		define glcheckTextureUnits() getOpenGl().checkTextureUnits()
 #	else
 #		define glTrackTexture( name, index )
 #		define glTrackSampler( name, index )
-#		define glCheckTextureUnits()
+#		define glcheckTextureUnits()
 #	endif
 
 //#include "Common/OpenGl.hpp"

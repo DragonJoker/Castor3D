@@ -1,4 +1,4 @@
-#include "TextureUnit.hpp"
+﻿#include "TextureUnit.hpp"
 
 #include "Engine.hpp"
 
@@ -10,298 +10,259 @@
 
 #include <Graphics/Image.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	TextureUnit::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< TextureUnit >{ p_tabs }
+	TextureUnit::TextWriter::TextWriter( String const & tabs, MaterialType type )
+		: castor::TextWriter< TextureUnit >{ tabs }
+		, m_type{ type }
 	{
 	}
 
-	bool TextureUnit::TextWriter::operator()( TextureUnit const & p_unit, TextFile & p_file )
+	bool TextureUnit::TextWriter::operator()( TextureUnit const & unit, TextFile & file )
 	{
-		static std::map< BlendSource, String > l_strTextureArguments
-		{
-			{ BlendSource::eTexture, cuT( "texture" ) },
-			{ BlendSource::eTexture0, cuT( "texture0" ) },
-			{ BlendSource::eTexture1, cuT( "texture1" ) },
-			{ BlendSource::eTexture2, cuT( "texture2" ) },
-			{ BlendSource::eTexture3, cuT( "texture3" ) },
-			{ BlendSource::eDiffuse, cuT( "diffuse" ) },
-			{ BlendSource::ePrevious, cuT( "previous" ) },
-			{ BlendSource::eConstant, cuT( "constant" ) },
-		};
-		static std::map< AlphaBlendFunc, String > l_strTextureAlphaFunctions
-		{
-			{ AlphaBlendFunc::eNoBlend, cuT( "none" ) },
-			{ AlphaBlendFunc::eFirstArg, cuT( "first_arg" ) },
-			{ AlphaBlendFunc::eAdd, cuT( "add" ) },
-			{ AlphaBlendFunc::eAddSigned, cuT( "add_signed" ) },
-			{ AlphaBlendFunc::eModulate, cuT( "modulate" ) },
-			{ AlphaBlendFunc::eInterpolate, cuT( "interpolate" ) },
-			{ AlphaBlendFunc::eSubtract, cuT( "substract" ) },
-		};
-		static std::map< ComparisonFunc, String > l_strAlphaFuncs
-		{
-			{ ComparisonFunc::eAlways, cuT( "always" ) },
-			{ ComparisonFunc::eLess, cuT( "less" ) },
-			{ ComparisonFunc::eLEqual, cuT( "less_or_equal" ) },
-			{ ComparisonFunc::eEqual, cuT( "equal" ) },
-			{ ComparisonFunc::eNEqual, cuT( "not_equal" ) },
-			{ ComparisonFunc::eGEqual, cuT( "greater_or_equal" ) },
-			{ ComparisonFunc::eGreater, cuT( "greater" ) },
-			{ ComparisonFunc::eNever, cuT( "never" ) },
-		};
-		static std::map< ColourBlendFunc, String > l_strTextureRgbFunctions
-		{
-			{ ColourBlendFunc::eNoBlend, cuT( "none" ) },
-			{ ColourBlendFunc::eFirstArg, cuT( "first_arg" ) },
-			{ ColourBlendFunc::eAdd, cuT( "add" ) },
-			{ ColourBlendFunc::eAddSigned, cuT( "add_signed" ) },
-			{ ColourBlendFunc::eModulate, cuT( "modulate" ) },
-			{ ColourBlendFunc::eInterpolate, cuT( "interpolate" ) },
-			{ ColourBlendFunc::eSubtract, cuT( "substract" ) },
-			{ ColourBlendFunc::eDot3RGB, cuT( "dot3_rgb" ) },
-			{ ColourBlendFunc::eDot3RGBA, cuT( "dot3_rgba" ) },
-		};
-		bool l_return = true;
+		bool result = true;
 
-		if ( p_unit.IsTextured() && p_unit.GetTexture() )
+		if ( unit.isTextured() && unit.getTexture() )
 		{
-			auto l_texture = p_unit.GetTexture();
-			auto l_image = l_texture->GetImage().ToString();
+			auto texture = unit.getTexture();
+			auto image = texture->getImage().toString();
 
-			if ( !l_image.empty() || !l_texture->GetImage().IsStaticSource() )
+			if ( !image.empty() || !texture->getImage().isStaticSource() )
 			{
-				if ( l_return )
+				if ( result )
 				{
-					l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
-							   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+					result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
+							   && file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
-				if ( l_return )
+				if ( result && unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 				{
-					l_return = p_file.Print( 256, cuT( "%s\tcolour " ), m_tabs.c_str() ) > 0
-							   && Colour::TextWriter( String() )( p_unit.GetBlendColour(), p_file )
-							   && p_file.Print( 256, cuT( "\n" ) ) > 0;
-					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit colour" );
+					result = file.writeText( m_tabs + cuT( "\tsampler \"" ) + unit.getSampler()->getName() + cuT( "\"\n" ) ) > 0;
+					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit sampler" );
 				}
 
-				if ( l_return && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
+				if ( result && unit.getChannel() != TextureChannel::eUndefined )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit sampler" );
-				}
-
-				if ( l_return && p_unit.GetChannel() != TextureChannel::eUndefined )
-				{
-					switch ( p_unit.GetChannel() )
+					switch ( m_type )
 					{
-					case TextureChannel::eColour:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel colour\n" ) ) > 0;
+					case MaterialType::eLegacy:
+					case MaterialType::ePbrSpecularGlossiness:
+						switch ( unit.getChannel() )
+						{
+						case TextureChannel::eDiffuse:
+							result = file.writeText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eSpecular:
+							result = file.writeText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eGloss:
+							result = file.writeText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
+							break;
+
+						default:
+							break;
+						}
 						break;
 
-					case TextureChannel::eDiffuse:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
-						break;
+					case MaterialType::ePbrMetallicRoughness:
+						switch ( unit.getChannel() )
+						{
+						case TextureChannel::eAlbedo:
+							result = file.writeText( m_tabs + cuT( "\tchannel albedo\n" ) ) > 0;
+							break;
 
+						case TextureChannel::eMetallic:
+							result = file.writeText( m_tabs + cuT( "\tchannel metallic\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eRoughness:
+							result = file.writeText( m_tabs + cuT( "\tchannel roughness\n" ) ) > 0;
+							break;
+
+						default:
+							break;
+						}
+						break;
+					}
+
+					switch ( unit.getChannel() )
+					{
 					case TextureChannel::eNormal:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+						result = file.writeText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eOpacity:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
-						break;
-
-					case TextureChannel::eSpecular:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
+						result = file.writeText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eEmissive:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+						result = file.writeText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eHeight:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+						result = file.writeText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 						break;
 
-					case TextureChannel::eAmbient:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel ambient\n" ) ) > 0;
+					case TextureChannel::eAmbientOcclusion:
+						result = file.writeText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
 						break;
 
-					case TextureChannel::eGloss:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
-						break;
-
-					default:
+					case TextureChannel::eTransmittance:
+						result = file.writeText( m_tabs + cuT( "\tchannel transmittance\n" ) ) > 0;
 						break;
 					}
 
-					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit channel" );
-
-					if ( l_return && p_unit.GetAlphaFunc() != ComparisonFunc::eAlways )
+					if ( !texture->getImage().isStaticSource() )
 					{
-						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
-						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha function" );
-					}
-
-					if ( l_return && p_unit.GetRgbFunction() != ColourBlendFunc::eNoBlend )
-					{
-						l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::eIndex0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::eIndex1 )] + cuT( "\n" ) ) > 0;
-						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit rgb blend" );
-					}
-
-					if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::eNoBlend )
-					{
-						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::eIndex0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::eIndex1 )] + cuT( "\n" ) ) > 0;
-						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha blend" );
-					}
-
-					if ( !l_texture->GetImage().IsStaticSource() )
-					{
-						if ( l_return && p_unit.GetRenderTarget() )
+						if ( result && unit.getRenderTarget() )
 						{
-							l_return = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
+							result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.getRenderTarget(), file );
 						}
 					}
 					else
 					{
-						Path l_relative{ Scene::TextWriter::CopyFile( Path{ l_image }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
-						String l_path = l_relative;
-						string::replace( l_path, cuT( "\\" ), cuT( "/" ) );
-						l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_path + cuT( "\"\n" ) ) > 0;
-						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit image" );
+						Path relative{ Scene::TextWriter::copyFile( Path{ image }, file.getFilePath(), Path{ cuT( "Textures" ) } ) };
+						String path = relative;
+						string::replace( path, cuT( "\\" ), cuT( "/" ) );
+
+						if ( unit.getChannel() == TextureChannel::eOpacity )
+						{
+							result = file.writeText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" a\n" ) ) > 0;
+						}
+						else
+						{
+							result = file.writeText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" rgb\n" ) ) > 0;
+						}
+						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit image" );
 					}
 
-					if ( l_return )
+					if ( result )
 					{
-						l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+						result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 					}
 				}
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*********************************************************************************************
 
-	TextureUnit::TextureUnit( Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+	TextureUnit::TextureUnit( Engine & engine )
+		: OwnedBy< Engine >( engine )
 		, m_index( 0 )
-		, m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
-		, m_eChannel( TextureChannel::eDiffuse )
-		, m_eAlphaFunc( ComparisonFunc::eAlways )
-		, m_fAlphaValue( 0 )
-		, m_eRgbFunction( ColourBlendFunc::eNoBlend )
-		, m_eAlpFunction( AlphaBlendFunc::eNoBlend )
-		, m_bAutoMipmaps( false )
+		, m_channel( TextureChannel::eDiffuse )
+		, m_autoMipmaps( false )
 		, m_changed( false )
-		, m_pSampler( p_engine.GetDefaultSampler() )
+		, m_sampler( engine.getDefaultSampler() )
 	{
-		m_mtxTransformations.set_identity();
-		m_eRgbArguments[0] = BlendSource::eCount;
-		m_eRgbArguments[1] = BlendSource::eCount;
-		m_eAlpArguments[0] = BlendSource::eCount;
-		m_eAlpArguments[1] = BlendSource::eCount;
+		m_transformations.setIdentity();
 	}
 
 	TextureUnit::~TextureUnit()
 	{
 		if ( !m_renderTarget.expired() )
 		{
-			GetEngine()->GetRenderTargetCache().Remove( std::move( m_renderTarget.lock() ) );
+			getEngine()->getRenderTargetCache().remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 
-	void TextureUnit::SetTexture( TextureLayoutSPtr p_texture )
+	void TextureUnit::setTexture( TextureLayoutSPtr texture )
 	{
-		m_pTexture = p_texture;
+		m_texture = texture;
 		m_changed = true;
 	}
 
-	bool TextureUnit::Initialise()
+	bool TextureUnit::initialise()
 	{
-		RenderTargetSPtr l_target = m_renderTarget.lock();
-		bool l_return = false;
+		RenderTargetSPtr target = m_renderTarget.lock();
+		bool result = false;
 
-		if ( l_target )
+		if ( target )
 		{
-			l_target->Initialise( GetIndex() );
-			m_pTexture = l_target->GetTexture().GetTexture();
-			l_return = true;
+			target->initialise( getIndex() );
+			m_texture = target->getTexture().getTexture();
+			result = true;
 		}
-		else if ( m_pTexture )
+		else if ( m_texture )
 		{
-			l_return = m_pTexture->Initialise();
-		}
+			result = m_texture->initialise();
+			auto sampler = getSampler();
 
-		return l_return;
-	}
-
-	void TextureUnit::Cleanup()
-	{
-		if ( m_pTexture )
-		{
-			m_pTexture->Cleanup();
-		}
-
-		m_clrBlend = Colour();
-		RenderTargetSPtr l_target = m_renderTarget.lock();
-
-		if ( l_target )
-		{
-			l_target->Cleanup();
-		}
-
-		m_fAlphaValue = 1.0f;
-	}
-
-	void TextureUnit::Bind()const
-	{
-		if ( m_pTexture && m_pTexture->IsInitialised() )
-		{
-			m_pTexture->Bind( m_index );
-
-			if ( m_changed && m_bAutoMipmaps && m_pTexture->GetType() != TextureType::eBuffer )
+			if ( result
+				&& sampler
+				&& sampler->getInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eNearest )
 			{
-				m_pTexture->GenerateMipmaps();
+				m_texture->bind( MinTextureIndex );
+				m_texture->generateMipmaps();
+				m_texture->unbind( MinTextureIndex );
+			}
+		}
+
+		return result;
+	}
+
+	void TextureUnit::cleanup()
+	{
+		if ( m_texture )
+		{
+			m_texture->cleanup();
+		}
+
+		RenderTargetSPtr target = m_renderTarget.lock();
+
+		if ( target )
+		{
+			target->cleanup();
+		}
+	}
+
+	void TextureUnit::bind()const
+	{
+		if ( m_texture && m_texture->isInitialised() )
+		{
+			m_texture->bind( m_index );
+
+			if ( m_changed
+				&& m_autoMipmaps
+				&& m_texture->getType() != TextureType::eBuffer )
+			{
+				m_texture->generateMipmaps();
 				m_changed = false;
 			}
 
-			auto l_sampler = GetSampler();
+			auto sampler = getSampler();
 
-			if ( l_sampler )
+			if ( sampler )
 			{
-				l_sampler->Bind( m_index );
+				sampler->bind( m_index );
 			}
 		}
 	}
 
-	void TextureUnit::Unbind()const
+	void TextureUnit::unbind()const
 	{
-		auto l_sampler = GetSampler();
+		auto sampler = getSampler();
 
-		if ( l_sampler )
+		if ( sampler )
 		{
-			l_sampler->Unbind( m_index );
+			sampler->unbind( m_index );
 		}
 
-		if ( m_pTexture && m_pTexture->IsInitialised() )
+		if ( m_texture && m_texture->isInitialised() )
 		{
-			m_pTexture->Unbind( m_index );
+			m_texture->unbind( m_index );
 		}
 	}
 
-	bool TextureUnit::IsTextureInitialised()const
+	TextureType TextureUnit::getType()const
 	{
-		return m_pTexture && m_pTexture->IsInitialised();
-	}
-
-	TextureType TextureUnit::GetType()const
-	{
-		REQUIRE( m_pTexture );
-		return m_pTexture->GetType();
+		REQUIRE( m_texture );
+		return m_texture->getType();
 	}
 }

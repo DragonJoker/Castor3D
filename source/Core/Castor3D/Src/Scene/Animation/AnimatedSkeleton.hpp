@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ANIMATED_SKELETON_H___
 #define ___C3D_ANIMATED_SKELETON_H___
 
 #include "AnimatedObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -42,15 +23,34 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API AnimatedSkeleton( AnimatedSkeleton && rhs ) = default;
+		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton && rhs ) = default;
+		C3D_API AnimatedSkeleton( AnimatedSkeleton const & rhs ) = delete;
+		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_skeleton	The skeleton.
+		 *\param[in]	name		The object name.
+		 *\param[in]	skeleton	The skeleton.
+		 *\param[in]	mesh		The mesh to which the skeleton is bound.
+		 *\param[in]	geometry	The geometry instantiating the mesh.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name		Le nom de l'objet.
-		 *\param[in]	p_skeleton	Le squelette.
+		 *\param[in]	name		Le nom de l'objet.
+		 *\param[in]	skeleton	Le squelette.
+		 *\param[in]	mesh		Le maillage auquel le squelette est lié.
+		 *\param[in]	geometry	La géométrie instanciant le maillage.
 		 */
-		C3D_API AnimatedSkeleton( Castor::String const & p_name, Skeleton & p_skeleton );
+		C3D_API AnimatedSkeleton( castor::String const & name
+			, Skeleton & skeleton
+			, Mesh & mesh
+			, Geometry & geometry );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -60,87 +60,112 @@ namespace Castor3D
 		C3D_API ~AnimatedSkeleton();
 		/**
 		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API AnimatedSkeleton( AnimatedSkeleton && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API AnimatedSkeleton( AnimatedSkeleton const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton const & p_rhs ) = delete;
-		/**
-		 *\~english
 		 *\brief		Fills a shader variable with this object's skeleton transforms.
-		 *\param[out]	p_variable	Receives the transforms.
+		 *\param[out]	variable	Receives the transforms.
 		 *\~french
 		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
-		 *\param[out]	p_variable	Reçoit les transformations.
+		 *\param[out]	variable	Reçoit les transformations.
 		 */
-		C3D_API void FillShader( Uniform4x4r & p_variable );
+		C3D_API void fillShader( Uniform4x4r & variable )const;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::Update
+		 *\~english
+		 *\brief		Fills a buffer with this object's skeleton transforms.
+		 *\param[out]	buffer	Receives the transforms.
+		 *\~french
+		 *\brief		Remplit un tampon avec les transformations du squelette de cet objet.
+		 *\param[out]	buffer	Reçoit les transformations.
 		 */
-		C3D_API void Update( std::chrono::milliseconds const & p_tslf )override;
+		C3D_API void fillBuffer( uint8_t * buffer )const;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::IsPlayingAnimation
+		 *\copydoc		castor3d::AnimatedObject::update
 		 */
-		C3D_API bool IsPlayingAnimation()const override
+		C3D_API void update( castor::Milliseconds const & elapsed )override;
+		/**
+		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
+		 */
+		C3D_API bool isPlayingAnimation()const override
 		{
 			return !m_playingAnimations.empty();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the skeleton
-		 *\return		The skeleton
+		 *\return		The skeleton.
 		 *\~french
-		 *\brief		Récupère le squelette
-		 *\return		Le squelette
+		 *\return		Le squelette.
 		 */
-		inline Skeleton const & GetSkeleton()const
+		inline Skeleton const & getSkeleton()const
 		{
 			return m_skeleton;
+		}
+		/**
+		 *\~english
+		 *\return		The mesh.
+		 *\~french
+		 *\return		Le maillage.
+		 */
+		inline Mesh const & getMesh()const
+		{
+			return m_mesh;
+		}
+		/**
+		 *\~english
+		 *\return		The mesh.
+		 *\~french
+		 *\return		Le maillage.
+		 */
+		inline Mesh & getMesh()
+		{
+			return m_mesh;
+		}
+		/**
+		 *\~english
+		 *\return		The geometry instantiating the mesh.
+		 *\~french
+		 *\return		La géométrie instanciant le maillage.
+		 */
+		inline Geometry const & getGeometry()const
+		{
+			return m_geometry;
+		}
+		/**
+		 *\~english
+		 *\return		The geometry instantiating the mesh.
+		 *\~french
+		 *\return		La géométrie instanciant le maillage.
+		 */
+		inline Geometry & getGeometry()
+		{
+			return m_geometry;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoAddAnimation( Castor::String const & p_name )override;
+		void doAddAnimation( castor::String const & name )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoStartAnimation( AnimationInstance & p_animation )override;
+		void doStartAnimation( AnimationInstance & animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoStopAnimation( AnimationInstance & p_animation )override;
+		void doStopAnimation( AnimationInstance & animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
 		 */
-		void DoClearAnimations()override;
+		void doClearAnimations()override;
 
 	protected:
 		//!\~english	The skeleton affected by the animations.
 		//!\~french		Le squelette affecté par les animations.
 		Skeleton & m_skeleton;
+		//!\~english	The mesh using the skeleton.
+		//!\~french		Le maillage utilisant le squelette.
+		Mesh & m_mesh;
+		//!\~english	The geometry instantiating the mesh.
+		//!\~french		La géométrie instanciant le maillage.
+		Geometry & m_geometry;
 		//!\~english	Currently playing animations.
 		//!\~french		Les animations en cours de lecture.
 		SkeletonAnimationInstanceArray m_playingAnimations;

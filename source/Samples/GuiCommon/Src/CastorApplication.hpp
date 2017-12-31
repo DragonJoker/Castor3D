@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GC_CASTOR_APPLICATION_H___
 #define ___GC_CASTOR_APPLICATION_H___
@@ -52,7 +33,7 @@ namespace GuiCommon
 				</ul>
 	\~french
 	\brief		Classe de base pour les applications Castor, initialise la locale et le logger, prend en compte les paramètres en ligne de commande.
-	\args		T	Doit àtre un descendant de wxApp.
+	\args		T	doit àtre un descendant de wxApp.
 	\remarks	Les options en ligne de commande peuvent àtre passàes ainsi : -abr, /abr, --long.
 				<br />Les options supportàes sont les suivantes :
 				<ul>
@@ -81,18 +62,18 @@ namespace GuiCommon
 		 *\param[in]	p_steps			Le nombre d'àtapes de l'initialisation, sert pour l'affichage du splash screen.
 		 *\param[in]	p_version		La version de l'application.
 		 */
-		CastorApplication( Castor::String const & p_internalName
-						   , Castor::String const & p_displayName
+		CastorApplication( castor::String const & p_internalName
+						   , castor::String const & p_displayName
 						   , uint32_t p_steps
-						   , Castor3D::Version const & p_version
-						   , Castor::String const & p_rendererType = Castor3D::RENDERER_TYPE_UNDEFINED );
+						   , castor3d::Version const & p_version
+						   , castor::String const & p_rendererType = castor3d::RENDERER_TYPE_UNDEFINED );
 		/**
 		 *\~english
 		 *\return		The application name.
 		 *\~french
 		 *\return		Le nom de l'application.
 		 */
-		inline Castor::String const & GetInternalName()const
+		inline castor::String const & getInternalName()const
 		{
 			return m_internalName;
 		}
@@ -102,7 +83,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom de l'application, tel qu'affiché dans les fenêtres.
 		 */
-		inline Castor::String const & GetDisplayName()const
+		inline castor::String const & getDisplayName()const
 		{
 			return m_displayName;
 		}
@@ -112,17 +93,17 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom du fichier donné en ligne de commande via l'option -f
 		 */
-		inline Castor::String const & GetFileName()const
+		inline castor::String const & getFileName()const
 		{
 			return m_fileName;
 		}
 		/**
 		 *\~english
-		 *\return		The renderer type given in command line, Castor3D::RENDERER_TYPE_UNDEFINED if none was given
+		 *\return		The renderer type given in command line, castor3d::RENDERER_TYPE_UNDEFINED if none was given
 		 *\~french
-		 *\return		Le type d'API de rendu donné en ligne de commande, Castor3D::RENDERER_TYPE_UNDEFINED si aucun n'a àtà donné
+		 *\return		Le type d'API de rendu donné en ligne de commande, castor3d::RENDERER_TYPE_UNDEFINED si aucun n'a àtà donné
 		 */
-		inline Castor::String const & GetRendererType()const
+		inline castor::String const & getRendererType()const
 		{
 			return m_rendererType;
 		}
@@ -132,7 +113,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le moteur Castor3D
 		 */
-		inline Castor3D::Engine * GetCastor()const
+		inline castor3d::Engine * getCastor()const
 		{
 			return m_castor;
 		}
@@ -142,7 +123,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le splash screen
 		 */
-		inline SplashScreen * GetSplashScreen()const
+		inline SplashScreen * getSplashScreen()const
 		{
 			return m_splashScreen;
 		}
@@ -152,7 +133,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		La version de l'application.
 		 */
-		inline Castor3D::Version const & GetVersion()const
+		inline castor3d::Version const & getVersion()const
 		{
 			return m_version;
 		}
@@ -182,7 +163,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Utilisà afin d'ajouter à ImagesLoader des images spécifiques à l'application
 		 */
-		virtual void DoLoadAppImages() = 0;
+		virtual void doLoadAppImages() = 0;
 		/**
 		 *\~english
 		 *\brief		Should contain the application main frame initialisation code.
@@ -193,28 +174,28 @@ namespace GuiCommon
 		 *\param[in]	p_splashScreen	Le splash screen.
 		 *\return		La fenêtre principale. Si nullptr, l'application s'arràtera.
 		 */
-		virtual wxWindow * DoInitialiseMainFrame( SplashScreen * p_splashScreen ) = 0;
+		virtual wxWindow * doInitialiseMainFrame( SplashScreen * p_splashScreen ) = 0;
 
-		bool DoParseCommandLine();
-		bool DoInitialiseLocale( SplashScreen & p_splashScreen );
-		bool DoInitialiseCastor( SplashScreen & p_splashScreen );
-		void DoLoadPlugins( SplashScreen & p_splashScreen );
-		void DoLoadImages( SplashScreen & p_splashScreen );
-		void DoCleanup();
-		void DoCleanupCastor();
+		bool doParseCommandLine();
+		bool doInitialiseLocale( SplashScreen & p_splashScreen );
+		bool doInitialiseCastor( SplashScreen & p_splashScreen );
+		void doloadPlugins( SplashScreen & p_splashScreen );
+		void doLoadImages( SplashScreen & p_splashScreen );
+		void doCleanup();
+		void doCleanupCastor();
 
 	protected:
-		Castor::String m_internalName;
-		Castor::String m_displayName;
-		Castor3D::Engine * m_castor;
+		castor::String m_internalName;
+		castor::String m_displayName;
+		castor3d::Engine * m_castor;
 
 	private:
-		Castor::String m_fileName;
-		Castor::String m_rendererType;
+		castor::String m_fileName;
+		castor::String m_rendererType;
 		std::unique_ptr< wxLocale > m_locale;
 		uint32_t m_steps;
 		SplashScreen * m_splashScreen;
-		Castor3D::Version m_version;
+		castor3d::Version m_version;
 	};
 }
 

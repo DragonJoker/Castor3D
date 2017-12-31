@@ -1,26 +1,26 @@
 #include "PreciseTimer.hpp"
 #include "CastorUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	PreciseTimer::PreciseTimer()
 	{
-		m_savedTime = DoGetTime();
+		m_savedTime = doGetElapsed();
 	}
 
 	PreciseTimer::~PreciseTimer()
 	{
 	}
 
-	std::chrono::nanoseconds PreciseTimer::Time()
+	Nanoseconds PreciseTimer::getElapsed()
 	{
-		auto l_current = DoGetTime();
-		auto l_diff( l_current - m_savedTime );
-		m_savedTime = l_current;
-		return std::chrono::duration_cast< std::chrono::nanoseconds >( l_diff );
+		auto current = doGetElapsed();
+		auto diff( current - m_savedTime );
+		m_savedTime = current;
+		return std::chrono::duration_cast< Nanoseconds >( diff );
 	}
 
-	PreciseTimer::clock::time_point PreciseTimer::DoGetTime()const
+	PreciseTimer::clock::time_point PreciseTimer::doGetElapsed()const
 	{
 		return clock::now();
 	}

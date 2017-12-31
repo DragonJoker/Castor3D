@@ -1,24 +1,5 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+/*
+See LICENSE file in root folder
 */
 #ifndef ___CU_WorkerThread_H___
 #define ___CU_WorkerThread_H___
@@ -31,7 +12,7 @@ SOFTWARE.
 #include <atomic>
 #include <mutex>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -71,14 +52,14 @@ namespace Castor
 		 *\brief		Lance la tâche donnée.
 		 *\param[in]	p_job	La tâche.
 		 */
-		CU_API void Feed( Job p_job );
+		CU_API void feed( Job p_job );
 		/**
 		 *\~english
 		 *\return		\p true if the job is ended.
 		 *\~french
 		 *\return		\p true si la tâche est terminàe.
 		 */
-		CU_API bool IsEnded()const;
+		CU_API bool isEnded()const;
 		/**
 		 *\~english
 		 *\brief		Waits for the job end for a given time.
@@ -89,7 +70,7 @@ namespace Castor
 		 *\param[in]	p_timeout	Le temps maximal à attendre.
 		 *\return		\p true si la tâche est terminée.
 		 */
-		CU_API bool Wait( std::chrono::milliseconds const & p_timeout )const;
+		CU_API bool wait( castor::Milliseconds const & p_timeout )const;
 		/**
 		 *\~english
 		 *\return		The signal raised when the worker has ended his job.
@@ -105,7 +86,7 @@ namespace Castor
 		 *\~french
 		 *\return		La boucle du thread.
 		 */
-		void DoRun();
+		void doRun();
 
 	private:
 		std::unique_ptr< std::thread > m_thread;

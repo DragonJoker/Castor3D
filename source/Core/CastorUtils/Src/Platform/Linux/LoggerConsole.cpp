@@ -4,13 +4,13 @@
 
 #include <iomanip>
 
-namespace Castor
+namespace castor
 {
 	class DebugConsole
 		: public ConsoleImpl
 	{
 	public:
-		void BeginLog( LogType logLevel )
+		void beginLog( LogType logLevel )
 		{
 			switch ( logLevel )
 			{
@@ -36,7 +36,7 @@ namespace Castor
 			}
 		}
 
-		void Print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )
 		{
 			printf( "%s%s\033[0m", m_header.c_str(), toLog.c_str() );
 
@@ -56,15 +56,15 @@ namespace Castor
 		: public ConsoleImpl
 	{
 	public:
-		ReleaseConsole( bool p_showConsole )
+		explicit ReleaseConsole( bool p_showConsole )
 		{
 		}
 
-		void BeginLog( LogType logLevel )
+		void beginLog( LogType logLevel )
 		{
 		}
 
-		void Print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )
 		{
 			printf( "%s", toLog.c_str() );
 
@@ -90,14 +90,14 @@ namespace Castor
 	{
 	}
 
-	void ProgramConsole::BeginLog( LogType logLevel )
+	void ProgramConsole::beginLog( LogType logLevel )
 	{
-		m_console->BeginLog( logLevel );
+		m_console->beginLog( logLevel );
 	}
 
-	void ProgramConsole::Print( String const & toLog, bool newLine )
+	void ProgramConsole::print( String const & toLog, bool newLine )
 	{
-		m_console->Print( toLog, newLine );
+		m_console->print( toLog, newLine );
 	}
 
 	//************************************************************************************************

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_FACTORY_H___
 #define ___CASTOR_FACTORY_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 #include <type_traits>
 #include <functional>
 
-namespace Castor
+namespace castor
 {
 	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
 	/*!
@@ -39,11 +20,11 @@ namespace Castor
 	\~english
 	\brief		Factory concept implementation
 	\remark		The classes that can be registered must implement a function of the following form :
-				<br />static std::shared_ptr< Obj > Create();
+				<br />static std::shared_ptr< Obj > create();
 	\~french
 	\brief		Implémentation du concept de fabrique
 	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
-				<br />static std::shared_ptr< Obj > Create();
+				<br />static std::shared_ptr< Obj > create();
 	*/
 	template< class Obj, class Key, class PtrType, typename Creator, class Predicate >
 	class Factory
@@ -77,7 +58,7 @@ namespace Castor
 		 *\param[in]	p_key		Le type d'objet
 		 *\param[in]	p_creator	La fonction de création d'objet
 		 */
-		void Register( Key const & p_key, Creator p_creator )
+		void registerType( Key const & p_key, Creator p_creator )
 		{
 			m_registered[p_key] = p_creator;
 		}
@@ -89,11 +70,11 @@ namespace Castor
 		 *\brief		Désenregistre un type d'objet
 		 *\param[in]	p_key		Le type d'objet
 		 */
-		void Unregister( Key const & p_key )
+		void unregisterType( Key const & p_key )
 		{
-			auto l_it = m_registered.find( p_key );
+			auto it = m_registered.find( p_key );
 
-			if ( l_it != m_registered.end() )
+			if ( it != m_registered.end() )
 			{
 				m_registered.erase( p_key );
 			}
@@ -108,7 +89,7 @@ namespace Castor
 		 *\param[in]	p_key	Le type d'objet.
 		 *\return		\p true si enregistré.
 		 */
-		bool IsRegistered( Key const & p_key )
+		bool isTypeRegistered( Key const & p_key )
 		{
 			return m_registered.find( p_key ) != m_registered.end();
 		}
@@ -118,17 +99,17 @@ namespace Castor
 		 *\~french
 		 *\return		La liste des types enregistrés.
 		 */
-		std::vector< Key > ListRegisteredTypes()
+		std::vector< Key > listRegisteredTypes()
 		{
-			std::vector< Key > l_result;
-			l_result.reserve( m_registered.size() );
+			std::vector< Key > result;
+			result.reserve( m_registered.size() );
 
-			for ( auto const & l_it : m_registered )
+			for ( auto const & it : m_registered )
 			{
-				l_result.push_back( l_it.first );
+				result.push_back( it.first );
 			}
 
-			return l_result;
+			return result;
 		}
 		/**
 		 *\~english
@@ -143,21 +124,21 @@ namespace Castor
 		 *\return		L'objet créé
 		 */
 		template< typename ... Parameters >
-		ObjPtr Create( Key const & p_key, Parameters && ... p_params )const
+		ObjPtr create( Key const & p_key, Parameters && ... p_params )const
 		{
-			ObjPtr l_result;
-			auto l_it = m_registered.find( p_key );
+			ObjPtr result;
+			auto it = m_registered.find( p_key );
 
-			if ( l_it != m_registered.end() )
+			if ( it != m_registered.end() )
 			{
-				l_result = l_it->second( std::forward< Parameters >( p_params )... );
+				result = it->second( std::forward< Parameters >( p_params )... );
 			}
 			else
 			{
 				CASTOR_EXCEPTION( ERROR_UNKNOWN_OBJECT );
 			}
 
-			return l_result;
+			return result;
 		}
 
 	protected:

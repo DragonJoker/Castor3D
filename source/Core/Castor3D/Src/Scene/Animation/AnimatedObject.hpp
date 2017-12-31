@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ANIMATED_OBJECT_H___
 #define ___C3D_ANIMATED_OBJECT_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <Design/Named.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -39,18 +20,30 @@ namespace Castor3D
 	\brief		Représente les objets animés
 	*/
 	class AnimatedObject
-		: public Castor::Named
+		: public castor::Named
 	{
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API AnimatedObject( AnimatedObject && rhs ) = default;
+		C3D_API AnimatedObject & operator=( AnimatedObject && rhs ) = default;
+		C3D_API AnimatedObject( AnimatedObject const & rhs ) = delete;
+		C3D_API AnimatedObject & operator=( AnimatedObject const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name	The object name
+		 *\param[in]	name	The object name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom de l'objet
+		 *\param[in]	name	Le nom de l'objet
 		 */
-		C3D_API explicit AnimatedObject( Castor::String const & p_name );
+		C3D_API explicit AnimatedObject( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -60,135 +53,107 @@ namespace Castor3D
 		C3D_API ~AnimatedObject();
 		/**
 		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API AnimatedObject( AnimatedObject && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API AnimatedObject & operator=( AnimatedObject && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API AnimatedObject( AnimatedObject const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API AnimatedObject & operator=( AnimatedObject const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Adds the animation to the list
-		 *\param[in]	p_name	The animation to add
+		 *\brief		adds the animation to the list
+		 *\param[in]	name	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
-		 *\param[in]	p_name	L'animation à ajouter
+		 *\param[in]	name	L'animation à ajouter
 		 */
-		C3D_API void AddAnimation( Castor::String const & p_name );
+		C3D_API void addAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
-		 *\param[in]	p_name	The name of the animation
+		 *\param[in]	name	The name of the animation
 		 *\~french
 		 *\brief		Démarre l'animation identifiée par le nom donné
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void StartAnimation( Castor::String const & p_name );
+		C3D_API void startAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
-		 *\param[in]	p_name	The name of the animation
+		 *\param[in]	name	The name of the animation
 		 *\~french
 		 *\brief		Stoppe l'animation identifiée par le nom donné
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void StopAnimation( Castor::String const & p_name );
+		C3D_API void stopAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
-		 *\param[in]	p_name	The name of the animation
+		 *\param[in]	name	The name of the animation
 		 *\~french
 		 *\brief		Met en pause l'animation identifiée par le nom donné
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void PauseAnimation( Castor::String const & p_name );
+		C3D_API void pauseAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations
 		 *\~french
 		 *\brief		Démarre toutes les animations
 		 */
-		C3D_API void StartAllAnimations();
+		C3D_API void startAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Stops all animations
 		 *\~french
 		 *\brief		Stoppe toutes les animations
 		 */
-		C3D_API void StopAllAnimations();
+		C3D_API void stopAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Pauses all animations
 		 *\~french
 		 *\brief		Met en pause toutes les animations
 		 */
-		C3D_API void PauseAllAnimations();
+		C3D_API void pauseAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Checks if an animation with given name exists.
-		 *\param[in]	p_name	The animation name.
+		 *\param[in]	name	The animation name.
 		 *\~french
 		 *\brief		Vérifie si l'animation avec le nom donné existe.
-		 *\param[in]	p_name	Le nom de l'animation.
+		 *\param[in]	name	Le nom de l'animation.
 		 */
-		C3D_API bool HasAnimation( Castor::String const & p_name )
+		C3D_API bool hasAnimation( castor::String const & name )
 		{
-			return m_animations.find( p_name ) != m_animations.end();
+			return m_animations.find( name ) != m_animations.end();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
-		 *\param[in]	p_name	The animation name
+		 *\param[in]	name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Récupère une animation
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API AnimationInstance & GetAnimation( Castor::String const & p_name );
+		C3D_API AnimationInstance & getAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Updates the animations of the object, given the time since the last frame
-		 *\param[in]	p_tslf		Time elapsed since the last frame
+		 *\param[in]	elapsed		Time elapsed since the last frame
 		 *\~french
 		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
-		 *\param[in]	p_tslf		Le temps écoulé depuis la dernière frame
+		 *\param[in]	elapsed		Le temps écoulé depuis la dernière frame
 		 */
-		C3D_API virtual void Update( std::chrono::milliseconds const & p_tslf ) = 0;
+		C3D_API virtual void update( castor::Milliseconds const & elapsed ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the object is playing an animation.
 		 *\~french
 		 *\return		\p true si l'objet joue une animation.
 		 */
-		C3D_API virtual bool IsPlayingAnimation()const = 0;
+		C3D_API virtual bool isPlayingAnimation()const = 0;
 		/**
 		 *\~english
 		 *\return		The animations for this object.
 		 *\~french
 		 *\return		Les animations de cet objet.
 		 */
-		inline AnimationInstancePtrStrMap const & GetAnimations()const
+		inline AnimationInstancePtrStrMap const & getAnimations()const
 		{
 			return m_animations;
 		}
@@ -196,38 +161,38 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Adds the animation to the list
-		 *\param[in]	p_name	The animation to add
+		 *\brief		adds the animation to the list
+		 *\param[in]	name	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
-		 *\param[in]	p_name	L'animation à ajouter
+		 *\param[in]	name	L'animation à ajouter
 		 */
-		virtual void DoAddAnimation( Castor::String const & p_name ) = 0;
+		virtual void doAddAnimation( castor::String const & name ) = 0;
 		/**
 		 *\~english
-		 *\brief		Starts the animation identified by the given name
-		 *\param[in]	p_name	The name of the animation
+		 *\brief		Starts the given animation.
+		 *\param[in]	animation	The animation.
 		 *\~french
-		 *\brief		Démarre l'animation identifiée par le nom donné
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\brief		Démarre l'animation donnée.
+		 *\param[in]	animation	L'animation.
 		 */
-		virtual void DoStartAnimation( AnimationInstance & p_animation ) = 0;
+		virtual void doStartAnimation( AnimationInstance & animation ) = 0;
 		/**
 		 *\~english
-		 *\brief		Stops the animation identified by the given name
-		 *\param[in]	p_name	The name of the animation
+		 *\brief		Stops the given animation.
+		 *\param[in]	animation	The animation.
 		 *\~french
-		 *\brief		Stoppe l'animation identifiée par le nom donné
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\brief		Stoppe l'animation donnée.
+		 *\param[in]	animation	L'animation.
 		 */
-		virtual void DoStopAnimation( AnimationInstance & p_animation ) = 0;
+		virtual void doStopAnimation( AnimationInstance & animation ) = 0;
 		/**
 		 *\~english
 		 *\brief		Stops all animations
 		 *\~french
 		 *\brief		Stoppe toutes les animations
 		 */
-		virtual void DoClearAnimations() = 0;
+		virtual void doClearAnimations() = 0;
 
 	protected:
 		//!\~english	All animations.

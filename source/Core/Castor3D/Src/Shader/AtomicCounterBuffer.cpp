@@ -4,11 +4,12 @@
 #include "Render/RenderSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	AtomicCounterBuffer::AtomicCounterBuffer( String const & p_name, ShaderProgram & p_program )
+	AtomicCounterBuffer::AtomicCounterBuffer( String const & p_name
+		, ShaderProgram & p_program )
 		: OwnedBy< ShaderProgram >{ p_program }
 	{
 	}
@@ -17,77 +18,97 @@ namespace Castor3D
 	{
 	}
 
-	bool AtomicCounterBuffer::Initialise( uint32_t p_size, uint32_t p_index )
+	bool AtomicCounterBuffer::initialise( uint32_t size
+		, uint32_t index )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetOwner()->GetRenderSystem()->CreateUInt32Buffer( BufferType::eAtomicCounter );
+			auto buffer = getOwner()->getRenderSystem()->getBuffer( BufferType::eAtomicCounter
+				, size
+				, BufferAccessType::eDynamic
+				, BufferAccessNature::eDraw );
+			m_gpuBuffer = buffer.buffer;
+			m_offset = buffer.offset;
 		}
 
-		bool l_return = m_gpuBuffer != nullptr;
+		bool result = m_gpuBuffer != nullptr;
 
-		if ( l_return )
+		if ( result )
 		{
-			m_gpuBuffer->Create();
+			m_gpuBuffer->setBindingPoint( index );
 		}
 
-		if ( l_return )
-		{
-			m_gpuBuffer->InitialiseStorage( p_size, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			m_gpuBuffer->SetBindingPoint( p_index );
-		}
-
-		return l_return;
+		return result;
 	}
 
-	void AtomicCounterBuffer::Cleanup()
+	void AtomicCounterBuffer::cleanup()
 	{
 		if ( m_gpuBuffer )
 		{
-			m_gpuBuffer->Destroy();
+			getOwner()->getRenderSystem()->putBuffer( BufferType::eAtomicCounter
+				, BufferAccessType::eDynamic
+				, BufferAccessNature::eDraw
+				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
 			m_gpuBuffer.reset();
 		}
 	}
 
-	uint32_t * AtomicCounterBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )
+	uint32_t * AtomicCounterBuffer::lock( uint32_t offset
+		, uint32_t count
+		, AccessTypes const & flags )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Lock( p_offset, p_count, p_flags );
+		return reinterpret_cast< uint32_t * >( m_gpuBuffer->lock( ( m_offset + offset ) * sizeof( uint32_t )
+			, count * sizeof( uint32_t )
+			, flags ) );
 	}
 
-	void AtomicCounterBuffer::Unlock()
+	void AtomicCounterBuffer::unlock()
 	{
 		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Unlock();
+		m_gpuBuffer->unlock();
 	}
 
-	void AtomicCounterBuffer::Upload( uint32_t p_offset, uint32_t p_count, uint32_t const * p_buffer )
+	void AtomicCounterBuffer::upload( uint32_t offset
+		, uint32_t count
+		, uint32_t const * buffer )
 	{
 		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
+		m_gpuBuffer->upload( ( m_offset + offset ) * sizeof( uint32_t )
+			, count * sizeof( uint32_t )
+			, reinterpret_cast< uint8_t const * >( buffer ) );
 	}
 
-	void AtomicCounterBuffer::Download( uint32_t p_offset, uint32_t p_count, uint32_t * p_buffer )
+	void AtomicCounterBuffer::download( uint32_t offset
+		, uint32_t count
+		, uint32_t * buffer )
 	{
 		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Download( p_offset, p_count, p_buffer );
+		m_gpuBuffer->download( ( m_offset + offset ) * sizeof( uint32_t )
+			, count * sizeof( uint32_t )
+			, reinterpret_cast< uint8_t * >( buffer ) );
 	}
 
-	void AtomicCounterBuffer::Bind()
+	void AtomicCounterBuffer::bind()
 	{
 		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Bind();
+		m_gpuBuffer->bind();
 	}
 
-	void AtomicCounterBuffer::Unbind()
+	void AtomicCounterBuffer::unbind()
 	{
 		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Unbind();
+		m_gpuBuffer->unbind();
 	}
 
-	void AtomicCounterBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )
+	void AtomicCounterBuffer::copy( GpuBuffer const & src
+		, uint32_t srcOffset
+		, uint32_t size )
 	{
 		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Copy( p_src, p_size );
+		m_gpuBuffer->copy( src
+			, srcOffset
+			, m_offset * sizeof( uint32_t )
+			, size * sizeof( uint32_t ) );
 	}
 }

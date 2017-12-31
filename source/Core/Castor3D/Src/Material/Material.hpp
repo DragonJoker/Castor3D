@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_MATERIAL_H___
 #define ___C3D_MATERIAL_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 #include <Design/Resource.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -57,7 +38,38 @@ namespace Castor3D
 	{
 		using Type = LegacyPass;
 	};
-
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::ePbrMetallicRoughness.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::ePbrMetallicRoughness.
+	*/
+	template<>
+	struct PassTyper< MaterialType::ePbrMetallicRoughness >
+	{
+		using Type = MetallicRoughnessPbrPass;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::ePbrMetallicRoughness.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::ePbrMetallicRoughness.
+	*/
+	template<>
+	struct PassTyper< MaterialType::ePbrSpecularGlossiness >
+	{
+		using Type = SpecularGlossinessPbrPass;
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.1
@@ -70,9 +82,9 @@ namespace Castor3D
 	\remark		Un matériau est composé d'une ou plusieurs passes
 	*/
 	class Material
-		: public Castor::Resource< Material >
+		: public castor::Resource< Material >
 		, public std::enable_shared_from_this< Material >
-		, public Castor::OwnedBy< Engine >
+		, public castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -86,7 +98,7 @@ namespace Castor3D
 		\brief Loader de Material
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Material >
+			: public castor::TextWriter< Material >
 		{
 		public:
 			/**
@@ -95,34 +107,37 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a material into a text file
-			 *\param[in]		p_material	The material to save
-			 *\param[in,out]	p_file		The file where to save the material
+			 *\param[in]		material	The material to save
+			 *\param[in,out]	file		The file where to save the material
 			 *\~french
 			 *\brief			Ecrit un matériau dans un fichier texte
-			 *\param[in]		p_material	Le matériau
-			 *\param[in,out]	p_file		Le fichier
+			 *\param[in]		material	Le matériau
+			 *\param[in,out]	file		Le fichier
 			 */
-			C3D_API bool operator()( Material const & p_material, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Material const & material
+				, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name		The material name.
-		 *\param[in]	p_engine	The core engine.
-		 *\param[in]	p_type		The material type.
+		 *\param[in]	name	The material name.
+		 *\param[in]	engine	The core engine.
+		 *\param[in]	type	The material type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name		Le nom du matériau.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_type		Le type de matériau.
+		 *\param[in]	name	Le nom du matériau.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	type	Le type de matériau.
 		 */
-		C3D_API Material( Castor::String const & p_name, Engine & p_engine, MaterialType p_type );
+		C3D_API Material( castor::String const & name
+			, Engine & engine
+			, MaterialType type );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -136,14 +151,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le matériau et toutes ses passes.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes passes.
 		 *\~french
 		 *\brief		Supprime les passes.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a pass.
@@ -152,50 +167,64 @@ namespace Castor3D
 		 *\brief		Crée une passe.
 		 *\return		La passe créée.
 		 */
-		C3D_API PassSPtr CreatePass();
+		C3D_API PassSPtr createPass();
 		/**
 		 *\~english
 		 *\brief		Removes an external pass to rhe material.
-		 *\param[in]	p_pass	The pass.
+		 *\param[in]	pass	The pass.
 		 *\~french
 		 *\brief		Supprime une passe externe.
-		 *\param[in]	p_pass	La passe.
+		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void RemovePass( PassSPtr p_pass );
+		C3D_API void removePass( PassSPtr pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pass and returns it.
-		 *\param[in]	p_index	The index of the wanted pass.
+		 *\param[in]	index	The index of the wanted pass.
 		 *\return		The retrieved pass or nullptr if not found.
 		 *\~french
 		 *\brief		Récupère une passe.
-		 *\param[in]	p_index	L'index de la passe voulue.
+		 *\param[in]	index	L'index de la passe voulue.
 		 *\return		La passe récupére ou nullptr si non trouvés.
 		 */
-		C3D_API PassSPtr GetPass( uint32_t p_index )const;
+		C3D_API PassSPtr getPass( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Destroys the pass at the given index.
-		 *\param[in]	p_index	The pass index.
+		 *\param[in]	index	The pass index.
 		 *\~french
 		 *\brief		Destroys the pass at the given index.
-		 *\param[in]	p_index	L'index de la passe.
+		 *\param[in]	index	L'index de la passe.
 		 */
-		C3D_API void DestroyPass( uint32_t p_index );
+		C3D_API void destroyPass( uint32_t index );
 		/**
 		*\~english
 		*\return		\p true if all passes needs alpha blending.
 		*\~french
 		*\return		\p true si toutes les passes ont besoin d'alpha blending.
 		*/
-		C3D_API bool HasAlphaBlending()const;
+		C3D_API bool hasAlphaBlending()const;
+		/**
+		*\~english
+		*\return		\p true if at least one pass needs a reflection map.
+		*\~french
+		*\return		\p true si au moins une passe a besoin d'une reflection map.
+		*/
+		C3D_API bool hasEnvironmentMapping()const;
+		/**
+		 *\~english
+		 *\return		Tells if the material has subsurface scattering.
+		 *\~french
+		 *\return		Dit si le matériau a du subsurface scattering.
+		 */
+		C3D_API bool hasSubsurfaceScattering()const;
 		/**
 		 *\~english
 		 *\return		The passes count.
 		 *\~french
 		 *\return		Le nombre de passes.
 		 */
-		inline uint32_t GetPassCount()const
+		inline uint32_t getPassCount()const
 		{
 			return uint32_t( m_passes.size() );
 		}
@@ -245,32 +274,38 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type de matériau.
 		 */
-		inline MaterialType GetType()const
+		inline MaterialType getType()const
 		{
 			return m_type;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a pass and returns it.
-		 *\param[in]	p_index	The index of the wanted pass.
+		 *\param[in]	index	The index of the wanted pass.
 		 *\return		The retrieved pass or nullptr if not found.
 		 *\~french
 		 *\brief		Récupère une passe.
-		 *\param[in]	p_index	L'index de la passe voulue.
+		 *\param[in]	index	L'index de la passe voulue.
 		 *\return		La passe récupére ou nullptr si non trouvés.
 		 */
 		template< MaterialType Type >
-		inline std::shared_ptr< typename PassTyper< Type >::Type > GetTypedPass( uint32_t p_index )const
+		inline std::shared_ptr< typename PassTyper< Type >::Type > getTypedPass( uint32_t index )const
 		{
-			auto l_pass = GetPass( p_index );
+			auto pass = getPass( index );
 			REQUIRE( m_type == Type );
-			return std::static_pointer_cast< typename PassTyper< Type >::Type >( l_pass );
+			return std::static_pointer_cast< typename PassTyper< Type >::Type >( pass );
 		}
 
+	private:
+		void onPassChanged( Pass const & pass );
+
 	public:
+		//!\~english	The signal raised when the material has changed.
+		//!\~french		Le signal levé lorsque le matériau a changé.
+		OnMaterialChanged onChanged;
 		//!\~english	The default material name.
 		//!\~french		Le nom du matériau par défaut.
-		static const Castor::String DefaultMaterialName;
+		static const castor::String DefaultMaterialName;
 
 	private:
 		//!\~english	The passes.
@@ -278,7 +313,10 @@ namespace Castor3D
 		PassPtrArray m_passes;
 		//!\~english	The material type.
 		//!\~french		Le type de matériau.
-		MaterialType m_type;
+		MaterialType m_type{ MaterialType::eLegacy };
+		//!\~english	The connections to the pass changed signals.
+		//!\~french		Les connections aux signaux de passe changée.
+		std::map< PassSPtr, OnPassChangedConnection > m_passListeners;
 	};
 }
 

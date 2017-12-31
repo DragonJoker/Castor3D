@@ -1,125 +1,115 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_OVERLAY_RENDERER_H___
 #define ___C3D_OVERLAY_RENDERER_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/RenderNode/PassRenderNode.hpp"
+#include "Render/RenderPassTimer.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/OverlayUbo.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "TextOverlay.hpp"
 
 #include <Design/OwnedBy.hpp>
 
-#ifdef DrawText
-#	undef DrawText
+#ifdef drawText
+#	undef drawText
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\~english
-	\brief		The overlay renderer
+	\brief		The overlay renderer.
 	\~french
-	\brief		Le renderer d'incrustation
+	\brief		Le renderer d'incrustation.
 	*/
 	class OverlayRenderer
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
-		C3D_API explicit OverlayRenderer( RenderSystem & p_renderSystem );
+		C3D_API explicit OverlayRenderer( RenderSystem & renderSystem );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API ~OverlayRenderer();
 		/**
 		 *\~english
-		 *\brief		Initialises the buffers
+		 *\brief		Initialises the buffers.
 		 *\~french
-		 *\brief		Initialise les tampons
+		 *\brief		Initialise les tampons.
 		 */
-		C3D_API void Initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
-		 *\brief		Flushes the renderer
+		 *\brief		Flushes the renderer.
 		 *\~french
-		 *\brief		Nettoie le renderer
+		 *\brief		Nettoie le renderer.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Function to draw a PanelOverlay
+		 *\brief		Function to draw a PanelOverlay.
+		 *\param[in]	overlay	The overlay to draw.
 		 *\~french
-		 *\brief		Fonction de dessin d'un PanelOverlay
+		 *\brief		Fonction de dessin d'un PanelOverlay.
+		 *\param[in]	overlay	L'incrustation à dessiner.
 		 */
-		C3D_API void DrawPanel( PanelOverlay & p_pPanelOverlay );
+		C3D_API void drawPanel( PanelOverlay & overlay );
 		/**
 		 *\~english
-		 *\brief		Function to draw a BorderPanelOverlay
+		 *\brief		Function to draw a BorderPanelOverlay.
+		 *\param[in]	overlay	The overlay to draw.
 		 *\~french
-		 *\brief		Fonction de dessin d'un BorderPanelOverlay
+		 *\brief		Fonction de dessin d'un BorderPanelOverlay.
+		 *\param[in]	overlay	L'incrustation à dessiner.
 		 */
-		C3D_API void DrawBorderPanel( BorderPanelOverlay & p_pBorderPanelOverlay );
+		C3D_API void drawBorderPanel( BorderPanelOverlay & overlay );
 		/**
 		 *\~english
-		 *\brief		Function to draw a TextOverlay
+		 *\brief		Function to draw a TextOverlay.
+		 *\param[in]	overlay	The overlay to draw.
 		 *\~french
-		 *\brief		Fonction de dessin d'un TextOverlay
+		 *\brief		Fonction de dessin d'un TextOverlay.
+		 *\param[in]	overlay	L'incrustation à dessiner.
 		 */
-		C3D_API void DrawText( TextOverlay & p_pTextPanelOverlay );
+		C3D_API void drawText( TextOverlay & overlay );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays rendering.
-		 *\param[in]	p_viewport	The render window viewport.
+		 *\param[in]	viewport	The render window viewport.
 		 *\~french
 		 *\brief		Commence le rendu des incrustations.
-		 *\param[in]	p_viewport	Le viewport de la fenêtre de rendu.
+		 *\param[in]	viewport	Le viewport de la fenêtre de rendu.
 		 */
-		C3D_API void BeginRender( Viewport const & p_viewport );
+		C3D_API void beginRender( Viewport const & viewport );
 		/**
 		 *\~english
-		 *\brief		Ends the overlays rendering
+		 *\brief		Ends the overlays rendering.
 		 *\~french
-		 *\brief		Termine le rendu des incrustations
+		 *\brief		Termine le rendu des incrustations.
 		 */
-		C3D_API void EndRender();
+		C3D_API void endRender();
 		/**
 		 *\~english
-		 *\return		The current render target size
+		 *\return		The current render target size.
 		 *\~french
-		 *\return		Les dimensions de la cible du rendu courant
+		 *\return		Les dimensions de la cible du rendu courant.
 		 */
-		Castor::Size const & GetSize()const
+		castor::Size const & getSize()const
 		{
 			return m_size;
 		}
@@ -129,7 +119,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si la taille de rendu a changé.
 		 */
-		bool IsSizeChanged()const
+		bool isSizeChanged()const
 		{
 			return m_sizeChanged;
 		}
@@ -148,7 +138,7 @@ namespace Castor3D
 		{
 			RenderPipeline & m_pipeline;
 			PassRenderNode m_passNode;
-			UniformBuffer & m_overlayUbo;
+			OverlayUbo & m_overlayUbo;
 		};
 		/*!
 		\author 	Sylvain DOREMUS
@@ -167,138 +157,157 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given pass.
-		 *\param[in]	p_pass	The pass.
+		 *\param[in]	pass	The pass.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de panneau compilé en utilisant la passe donnée.
-		 *\param[in]	p_pass	La passe.
+		 *\param[in]	pass	La passe.
 		 *\return		Le programme.
 		 */
-		C3D_API OverlayRenderNode & DoGetPanelNode( Pass & p_pass );
+		C3D_API OverlayRenderNode & doGetPanelNode( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given pass.
-		 *\param[in]	p_pass	Bitwise ORed TextureChannel.
+		 *\param[in]	pass	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant la passe donnée.
-		 *\param[in]	p_pass	Combinaison de TextureChannel.
+		 *\param[in]	pass	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API OverlayRenderNode & DoGetTextNode( Pass & p_pass );
+		C3D_API OverlayRenderNode & doGetTextNode( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetPanelPipeline( TextureChannels p_textureFlags );
+		C3D_API RenderPipeline & doGetPanelPipeline( TextureChannels textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given texture flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetTextPipeline( TextureChannels p_textureFlags );
+		C3D_API RenderPipeline & doGetTextPipeline( TextureChannels textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a program compiled using given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program
 		 *\~french
 		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme
 		 */
-		C3D_API RenderPipeline & DoGetPipeline( TextureChannels const & p_textureFlags );
+		C3D_API RenderPipeline & doGetPipeline( TextureChannels const & textureFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
-		 *\remarks		Adds this GeometryBuffers to the text GeometryBuffers array.
+		 *\remarks		adds this GeometryBuffers to the text GeometryBuffers array.
 		 *\return		The created GeometryBuffers.
 		 *\~french
 		 *\brief		Crée un GeometryBuffers pouvant contenir 1000 caractères.
 		 *\remarks		Ajoute de GeometryBuffers au tableau de GeometryBuffers de texte.
 		 *\return		Le GeometryBuffers créé.
 		 */
-		C3D_API OverlayGeometryBuffers DoCreateTextGeometryBuffers();
+		C3D_API OverlayGeometryBuffers doCreateTextGeometryBuffers();
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay.
-		 *\param[in]	p_material			The material.
-		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
-		 *\param[in]	p_count				The vertex count.
+		 *\param[in]	material		The material.
+		 *\param[in]	vertexBuffer	The overlay vertex buffers.
+		 *\param[in]	geometryBuffers	The overlay geometry buffers.
+		 *\param[in]	count			The vertex count.
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation.
-		 *\param[in]	p_material			Le matériau.
-		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
-		 *\param[in]	p_count				Le nombre de sommets.
+		 *\param[in]	material		Le matériau.
+		 *\param[in]	vertexBuffer	Le tampon de sommets de l'incrustation.
+		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
+		 *\param[in]	count			Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Material & p_material, OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count );
+		C3D_API void doDrawItem( Material & material
+			, VertexBuffer const & vertexBuffer
+			, OverlayGeometryBuffers const & geometryBuffers
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay.
-		 *\param[in]	p_pass				The pass.
-		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
-		 *\param[in]	p_count				The vertex count.
+		 *\param[in]	pass			The pass.
+		 *\param[in]	vertexBuffer	The overlay vertex buffers.
+		 *\param[in]	geometryBuffers	The overlay geometry buffers.
+		 *\param[in]	count			The vertex count.
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation.
-		 *\param[in]	p_pass				La passe.
-		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
-		 *\param[in]	p_count				Le nombre de sommets.
+		 *\param[in]	pass			La passe.
+		 *\param[in]	vertexBuffer	Le tampon de sommets de l'incrustation.
+		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
+		 *\param[in]	count			Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
+		C3D_API void doDrawItem( Pass & pass
+			, VertexBuffer const & vertexBuffer
+			, GeometryBuffers const & geometryBuffers
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Function to draw a text overlay.
-		 *\param[in]	p_pass				The pass.
-		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
-		 *\param[in]	p_texture			The font texture.
-		 *\param[in]	p_sampler			The texture sampler.
-		 *\param[in]	p_count				The vertex count.
+		 *\param[in]	pass			The pass.
+		 *\param[in]	vertexBuffer	The overlay vertex buffers.
+		 *\param[in]	geometryBuffers	The overlay geometry buffers.
+		 *\param[in]	texture			The font texture.
+		 *\param[in]	sampler			The texture sampler.
+		 *\param[in]	count			The vertex count.
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation texte.
-		 *\param[in]	p_pass				La passe.
-		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
-		 *\param[in]	p_texture			La texture de polices.
-		 *\param[in]	p_sampler			L'échantillonneur de la texture.
-		 *\param[in]	p_count				Le nombre de sommets.
+		 *\param[in]	pass			La passe.
+		 *\param[in]	vertexBuffer	Le tampon de sommets de l'incrustation.
+		 *\param[in]	geometryBuffers	Les buffer de la géométrie de l'incrustation.
+		 *\param[in]	texture			La texture de polices.
+		 *\param[in]	sampler			L'échantillonneur de la texture.
+		 *\param[in]	count			Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler, uint32_t p_count );
+		C3D_API void doDrawItem( Pass & pass
+			, VertexBuffer const & vertexBuffer
+			, GeometryBuffers const & geometryBuffers
+			, TextureLayout const & texture
+			, Sampler const & sampler
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array
-		 *\param[in]	p_count	The number of vertex to copy in the GeometryBuffers
-		 *\param[in]	p_it	The beginning of the vertex array
-		 *\param[in]	p_index	The current index in the text GeometryBuffers array
+		 *\param[in]	count	The number of vertex to copy in the GeometryBuffers
+		 *\param[in]	it		The beginning of the vertex array
+		 *\param[in]	index	The current index in the text GeometryBuffers array
 		 *\return		The used GeometryBuffers.
 		 *\~french
 		 *\brief		Remplit un GeometryBuffers d'une partie d'un tableau de sommets pour texte
-		 *\param[in]	p_count	Le nombre de sommets à copier dans le GeometryBuffers
-		 *\param[in]	p_it	Le début du tableau de sommets
-		 *\param[in]	p_index	L'indice courant dans le tableau de GeometryBuffers de texte
+		 *\param[in]	count	Le nombre de sommets à copier dans le GeometryBuffers
+		 *\param[in]	it		Le début du tableau de sommets
+		 *\param[in]	index	L'indice courant dans le tableau de GeometryBuffers de texte
 		 *\return		Le GeometryBuffers utilisé.
 		 */
-		C3D_API OverlayGeometryBuffers DoFillTextPart( int32_t p_count, TextOverlay::VertexArray::const_iterator & p_it, uint32_t & p_index );
+		C3D_API OverlayGeometryBuffers doFillTextPart( int32_t count
+			, TextOverlay::VertexArray::const_iterator & it
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for overlays rendering use.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The created program.
 		 *\~french
 		 *\brief		Crée un programme shader pour les rendu d'incrustations.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( TextureChannels const & p_textureFlags );
+		C3D_API ShaderProgramSPtr doCreateOverlayProgram( TextureChannels const & textureFlags );
 
 	protected:
 		//!\~english	Vertex buffers for panels.
@@ -327,7 +336,7 @@ namespace Castor3D
 		BufferDeclaration m_textDeclaration;
 		//!\~english	The current render target size.
 		//!\~french		Les dimensions de la cible du rendu courant.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The shader programs used to render a panel (used for borders too).
 		//!\~french		Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi).
 		std::map< Pass *, OverlayRenderNode > m_mapPanelNodes;
@@ -351,34 +360,22 @@ namespace Castor3D
 		int m_previousTextZIndex{ 0 };
 		//!\~english	The previously rendered text.
 		//!\~french		Le texte rendu précédemment.
-		Castor::String m_previousCaption;
+		castor::String m_previousCaption;
 		//!\~english	Panel overlays vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad) pour les incrustations panneau.
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 6 > m_panelVertex;
 		//!\~english	Border panel overlays vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad) pour les incrustations bordure.
-		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
+		std::array< castor3d::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
 		//!\~english	Tells if the render size has changed.
 		//!\~french		Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged{ true };
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Uniform4x4fSPtr m_viewUniform{ nullptr };
+		MatrixUbo m_matrixUbo;
 		//!\~english	The uniform buffer containing overlay data.
 		//!\~french		Le tampon d'uniformes contenant les données d'incrustation.
-		UniformBuffer m_overlayUbo;
-		//!\~english	The uniform variable containing overlay position.
-		//!\~french		La variable uniforme contenant la position de l'incrustation.
-		Uniform2iSPtr m_overlayPosition{ nullptr };
-		//!\~english	The uniform buffer containing pass data.
-		//!\~french		Le tampon d'uniformes contenant les données de passe.
-		UniformBuffer m_passUbo;
+		OverlayUbo m_overlayUbo;
 	};
 }
 

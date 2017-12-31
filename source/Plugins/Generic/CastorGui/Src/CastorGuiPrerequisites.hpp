@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CI_CASTOR_GUI_PREREQUISITES_H___
 #define ___CI_CASTOR_GUI_PREREQUISITES_H___
 
-#include <Castor3DPrerequisites.hpp>
 #include <Plugin/GenericPlugin.hpp>
 
+#include <Design/Signal.hpp>
 #include <Graphics/Colour.hpp>
 
 #ifndef CASTOR_PLATFORM_WINDOWS
@@ -40,7 +21,7 @@ SOFTWARE.
 
 namespace CastorGui
 {
-	const Castor::String PLUGIN_NAME = cuT( "CastorGui" );
+	const castor::String PLUGIN_NAME = cuT( "CastorGui" );
 	static const uint32_t DEFAULT_HEIGHT = 25;
 	/*!
 	 *\author		Sylvain DOREMUS
@@ -148,7 +129,7 @@ namespace CastorGui
 	enum class ComboBoxStyle
 		: uint32_t
 	{
-		//! Read only combo box
+		//! read only combo box
 		eReadOnly = 0x00000001,
 	};
 	/*!
@@ -248,6 +229,25 @@ namespace CastorGui
 	class SliderCtrl;
 	class StaticCtrl;
 
+	using OnButtonEventFunction = std::function< void() >;
+	using OnButtonEvent = castor::Signal< OnButtonEventFunction >;
+	using OnButtonEventConnection = OnButtonEvent::connection;
+
+	using OnComboEventFunction = std::function< void( int ) >;
+	using OnComboEvent = castor::Signal< OnComboEventFunction >;
+	using OnComboEventConnection = OnComboEvent::connection;
+
+	using OnEditEventFunction = std::function< void( castor::String const & ) >;
+	using OnEditEvent = castor::Signal< OnEditEventFunction >;
+	using OnEditEventConnection = OnEditEvent::connection;
+
+	using OnListEventFunction = std::function< void( int ) >;
+	using OnListEvent = castor::Signal< OnListEventFunction >;
+	using OnListEventConnection = OnListEvent::connection;
+
+	using OnSliderEventFunction = std::function< void( int ) >;
+	using OnSliderEvent = castor::Signal< OnSliderEventFunction >;
+	using OnSliderEventConnection = OnSliderEvent::connection;
 
 	DECLARE_SMART_PTR( ControlsManager );
 	DECLARE_SMART_PTR( Control );
@@ -259,22 +259,32 @@ namespace CastorGui
 	DECLARE_SMART_PTR( StaticCtrl );
 
 	typedef std::vector< ControlSPtr > ControlArray;
+	/** Sets the pass colour.
+	 *\param[in]	pass	The pass.
+	 *\param[in]	colour	The material colour.
+	 */
+	void setMaterialColour( castor3d::Pass & pass, castor::RgbColour const & colour );
 
+	/** Retrieves the pass colour.
+	 *\param[in]	pass	The pass.
+	 *\return		The material colour.
+	 */
+	castor::RgbColour getMaterialColour( castor3d::Pass const & pass );
 	/** Creates a colour material.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\param[in]	p_name		The material name.
 	 *\param[in]	p_colour	The material colour.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Colour const & p_colour );
+	castor3d::MaterialSPtr CreateMaterial( castor3d::Engine & engine, castor::String const & p_name, castor::RgbColour const & p_colour );
 
 	/** Creates a texture material.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\param[in]	p_name		The material name.
 	 *\param[in]	p_texture	The material texture.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor3D::TextureLayoutSPtr p_texture );
+	castor3d::MaterialSPtr CreateMaterial( castor3d::Engine & engine, castor::String const & p_name, castor3d::TextureLayoutSPtr p_texture );
 }
 
 #endif

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_DEBUG_OVERLAYS_H___
 #define ___C3D_DEBUG_OVERLAYS_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -45,18 +26,18 @@ namespace Castor3D
 				<br />Si non affichés, toutes les méthodes seront désactivées.
 	*/
 	class DebugOverlays
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		explicit DebugOverlays( Engine & p_engine );
+		explicit DebugOverlays( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -67,58 +48,191 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function, retrieves the overlays from the given overlay cache.
-		 *\param[in]	p_cache	The overlay cache.
+		 *\param[in]	cache	The overlay cache.
 		 *\~french
 		 *\brief		Fonction d'initialisation, récupère les incrustations à partir du cache d'incrustations donné.
-		 *\param[in]	p_cache	Le cache d'incrustations.
+		 *\param[in]	cache	Le cache d'incrustations.
 		 */
-		void Initialise( OverlayCache & p_cache );
+		void initialise( OverlayCache & cache );
 		/**
 		 *\~english
 		 *\brief		Clean up function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		void Cleanup();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Resets all frame counters.
+		 *\return		The render infos.
 		 *\~french
 		 *\brief		Réinitialise tous les compteurs d'image.
+		 *\return		Les informations de rendu.
 		 */
-		void StartFrame();
+		RenderInfo & beginFrame();
 		/**
 		 *\~english
 		 *\brief		Updates the overlays texts.
-		 *\param[in]	p_info	The render informations.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
-		 *\param[in]	p_info	Les informations de rendu.
 		 */
-		void EndFrame( RenderInfo const & p_info );
+		void endFrame();
 		/**
 		 *\~english
-		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask
+		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
 		 *\~french
-		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de EndGpuTask ou EndCpuTask
+		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de endGpuTask ou endCpuTask
 		 */
-		void EndGpuTask();
+		void endGpuTask();
 		/**
 		 *\~english
-		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask
+		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
 		 *\~french
-		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de EndGpuTask ou EndCpuTask
+		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de endGpuTask ou endCpuTask
 		 */
-		void EndCpuTask();
+		void endCpuTask();
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays.
-		 *\param[in]	p_show	The status.
+		 *\param[in]	show	The status.
 		 *\~french
 		 *\brief		Affiche ou cache les incrustations de débogage.
-		 *\param[in]	p_show	Le statut.
+		 *\param[in]	show	Le statut.
 		 */
-		void Show( bool p_show );
+		void show( bool show );
+		/**
+		 *\~english
+		 *\brief		Registers a render pass timer.
+		 *\param[in]	timer	The timer to register.
+		 *\~french
+		 *\brief		Enregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à enregistrer.
+		 */
+		void registerTimer( RenderPassTimer & timer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a render pass timer.
+		 *\param[in]	timer	The timer to unregister.
+		 *\~french
+		 *\brief		Désenregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à désenregistrer.
+		 */
+		void unregisterTimer( RenderPassTimer & timer );
+
+	private:
+		void doCreateDebugPanel( OverlayCache & cache );
+
+	private:
+		template< typename T >
+		class DebugPanel
+		{
+		public:
+			DebugPanel( DebugPanel const & ) = delete;
+			DebugPanel & operator=( DebugPanel const & ) = delete;
+			DebugPanel( DebugPanel && ) = default;
+			DebugPanel & operator=( DebugPanel && ) = default;
+			DebugPanel( castor::String const & name
+				, castor::String const & label
+				, PanelOverlaySPtr panel
+				, OverlayCache & cache
+				, T const & value );
+			~DebugPanel();
+			void update();
+			void updatePosition( int y );
+
+		protected:
+			OverlayCache & m_cache;
+			T const & m_v;
+			TextOverlaySPtr m_label;
+			TextOverlaySPtr m_value;
+		};
+
+		template< typename T >
+		class DebugPanels
+		{
+			using DebugPanelArray = std::vector< DebugPanel< T > >;
+
+		public:
+			DebugPanels( DebugPanels const & ) = delete;
+			DebugPanels & operator=( DebugPanels const & ) = delete;
+			DebugPanels( DebugPanels && ) = default;
+			DebugPanels & operator=( DebugPanels && ) = default;
+			DebugPanels( castor::String const & title
+				, PanelOverlaySPtr panel
+				, OverlayCache & cache );
+			~DebugPanels();
+			void update();
+			int updatePosition( int y );
+			void add( castor::String const & name
+				, castor::String const & label
+				, T const & value );
+
+		private:
+			OverlayCache & m_cache;
+			PanelOverlaySPtr m_panel;
+			PanelOverlaySPtr m_titlePanel;
+			TextOverlaySPtr m_titleText;
+			DebugPanelArray m_panels;
+		};
+
+		template< typename T >
+		using DebugPanelsPtr = std::unique_ptr< DebugPanels< T > >;
+
+		class MainDebugPanel
+		{
+		public:
+			explicit MainDebugPanel( OverlayCache & cache );
+			~MainDebugPanel();
+			void update();
+			void setVisible( bool visible );
+			void updatePosition();
+			void addTimePanel( castor::String const & name
+				, castor::String const & label
+				, castor::Nanoseconds const & value );
+			void addCountPanel( castor::String const & name
+				, castor::String const & label
+				, uint32_t const & value );
+			void addFpsPanel( castor::String const & name
+				, castor::String const & label
+				, float const & value );
+
+		private:
+			OverlayCache & m_cache;
+			PanelOverlaySPtr m_panel;
+			DebugPanelsPtr< castor::Nanoseconds > m_times;
+			DebugPanelsPtr< float > m_fps;
+			DebugPanelsPtr< uint32_t > m_counts;
+		};
+
+		class RenderPassOverlays
+		{
+		public:
+			RenderPassOverlays( RenderPassOverlays const & ) = delete;
+			RenderPassOverlays & operator=( RenderPassOverlays const & ) = delete;
+			RenderPassOverlays( RenderPassOverlays && ) = default;
+			RenderPassOverlays & operator=( RenderPassOverlays && ) = default;
+			RenderPassOverlays( castor::String const & category
+				, uint32_t index
+				, OverlayCache & cache );
+			~RenderPassOverlays();
+			void addTimer( RenderPassTimer & timer );
+			bool removeTimer( RenderPassTimer & timer );
+			castor::Nanoseconds update();
+			void setVisible( bool visible );
+
+		private:
+			OverlayCache & m_cache;
+			std::vector< std::reference_wrapper< RenderPassTimer > > m_timers;
+			PanelOverlaySPtr m_panel;
+			PanelOverlaySPtr m_titlePanel;
+			TextOverlaySPtr m_titleText;
+			TextOverlaySPtr m_cpuName;
+			TextOverlaySPtr m_cpuValue;
+			TextOverlaySPtr m_gpuName;
+			TextOverlaySPtr m_gpuValue;
+		};
+
+		using RenderPassOverlaysArray = std::map< castor::String, RenderPassOverlays >;
 
 	private:
 #if defined( _NDEBUG )
@@ -126,82 +240,28 @@ namespace Castor3D
 #else
 		static const uint32_t FRAME_SAMPLES_COUNT = 20;
 #endif
-		//!\~english	The tasks (CPU or GPU) timer.
-		//!\~french		Le timer pour les tâches (CPU ou GPU).
-		Castor::PreciseTimer m_taskTimer;
-		//!\~english	The frame timer.
-		//!\~french		Le timer de frame.
-		Castor::PreciseTimer m_frameTimer;
-		//!\~english	The debug timer.
-		//!\~french		Le timer de debug.
-		Castor::PreciseTimer m_debugTimer;
-		//!\~english	The base debug panel overlay.
-		//!\~french		Le panneau d'incrustations de débogage.
-		OverlayWPtr m_debugPanel;
-		//!\~english	The CPU time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps CPU.
-		TextOverlaySPtr m_debugCpuTime;
-		//!\~english	The GPU client time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps client GPU (Temps perdu).
-		TextOverlaySPtr m_debugGpuClientTime;
-		//!\~english	The GPU server time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps serveur GPU (Temps de rendu).
-		TextOverlaySPtr m_debugGpuServerTime;
-		//!\~english	The debug time value overlay.
-		//!\~french		L'incrustation contenant la valeur du temps de débogage.
-		TextOverlaySPtr m_debugTime;
-		//!\~english	The external time value overlay.
-		//!\~french		L'incrustation contenant la valeur du temps externe.
-		TextOverlaySPtr m_externTime;
-		//!\~english	The total time value overlay.
-		//!\~french		L'incrustation contenant la valeur de temps total.
-		TextOverlaySPtr m_debugTotalTime;
-		//!\~english	The average FPS value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre moyen d'images par secondes.
-		TextOverlaySPtr m_debugAverageFps;
-		//!\~english	The average time value overlay.
-		//!\~french		L'incrustation contenant la valeur du temps moyen par images.
-		TextOverlaySPtr m_debugAverageTime;
-		//!\~english	The vertex count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre de sommets.
-		TextOverlaySPtr m_debugVertexCount;
-		//!\~english	The faces count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre de faces.
-		TextOverlaySPtr m_debugFaceCount;
-		//!\~english	The objects count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre d'objets.
-		TextOverlaySPtr m_debugObjectCount;
-		//!\~english	The visible objects count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre d'objets visibles.
-		TextOverlaySPtr m_debugVisibleObjectCount;
-		//!\~english	The particles count value overlay.
-		//!\~french		L'incrustation contenant la valeur du nombre de particules.
-		TextOverlaySPtr m_debugParticlesCount;
-		//!\~english	The times of the 100 last frames.
-		//!\~french		Les temps des 100 dernières frames.
-		std::array< std::chrono::nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;
-		//!\~english	The current frame index in m_framesTimes.
-		//!\~french		L'index de la frame courante, dans m_framesTimes.
+		castor::PreciseTimer m_taskTimer;
+		castor::PreciseTimer m_frameTimer;
+		castor::PreciseTimer m_debugTimer;
+		std::unique_ptr< MainDebugPanel > m_debugPanel;
+		RenderPassOverlaysArray m_renderPasses;
+		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;
 		uint32_t m_frameIndex{ 0 };
-		//!\~english	Tells if the debug overlays are successfully loaded.
-		//!\~french		Dit si les incrustations de débogage sont chargées correctement.
-		bool m_valid{ false };
-		//!\~english	Defines if the debug overlays are shown.
-		//!\~french		Définit si les incrustations de débogage sont affichées ou cachées.
 		bool m_visible{ false };
-		//!\~english	The CPU time.
-		//!\~french		Le temps CPU.
-		std::chrono::nanoseconds m_cpuTime{ 0 };
-		//!\~english	The GPU time.
-		//!\~french		Le temps GPU.
-		std::chrono::nanoseconds m_gpuTime{ 0 };
-		//!\~english	The time spent out of the render loop.
-		//!\~french		Le temps passé hors de la boucle de rendu.
-		std::chrono::nanoseconds m_externalTime{ 0 };
-		//!\~english	The locale used to display times.
-		//!\~french		La locale utilisée pour afficher les temps.
+		castor::Nanoseconds m_cpuTime{ 0 };
+		castor::Nanoseconds m_gpuClientTime{ 0 };
+		castor::Nanoseconds m_gpuTotalTime{ 0 };
+		castor::Nanoseconds m_gpuTime{ 0 };
+		castor::Nanoseconds m_totalTime{ 0 };
+		castor::Nanoseconds m_externalTime{ 0 };
+		float m_fps{ 0.0f };
+		float m_averageFps{ 0.0f };
+		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
+		RenderInfo m_renderInfo;
 	};
 }
+
+#include "DebugOverlays.inl"
 
 #endif

@@ -4,24 +4,25 @@
 
 #include "Overlay/DebugOverlays.hpp"
 #include "Render/RenderWindow.hpp"
+#include "Technique/RenderTechnique.hpp"
 
 #include <Design/BlockGuard.hpp>
 
 #include <future>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	RenderLoop::RenderLoop( Engine & p_engine, uint32_t p_wantedFPS, bool p_isAsync )
-		: OwnedBy< Engine >( p_engine )
+	RenderLoop::RenderLoop( Engine & engine, uint32_t p_wantedFPS, bool p_isAsync )
+		: OwnedBy< Engine >( engine )
 		, m_wantedFPS{ p_wantedFPS }
 		, m_frameTime{ 1000 / p_wantedFPS }
-		, m_renderSystem{ *p_engine.GetRenderSystem() }
-		, m_debugOverlays{ std::make_unique< DebugOverlays >( p_engine ) }
-		, m_queueUpdater{ std::max( 2u, p_engine.GetCpuInformations().CoreCount() - ( p_isAsync ? 2u : 1u ) ) }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
+		, m_queueUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( p_isAsync ? 2u : 1u ) ) }
 	{
-		m_debugOverlays->Initialise( GetEngine()->GetOverlayCache() );
+		m_debugOverlays->initialise( getEngine()->getOverlayCache() );
 	}
 
 	RenderLoop::~RenderLoop()
@@ -29,177 +30,194 @@ namespace Castor3D
 		m_debugOverlays.reset();
 	}
 
-	void RenderLoop::Cleanup()
+	void RenderLoop::cleanup()
 	{
-		if ( m_renderSystem.GetMainContext() )
+		if ( m_renderSystem.getMainContext() )
 		{
-			m_renderSystem.GetMainContext()->SetCurrent();
-			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
+			m_renderSystem.getMainContext()->setCurrent();
+			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 			{
-				p_listener.FireEvents( EventType::ePreRender );
+				p_listener.fireEvents( EventType::ePreRender );
 			} );
-			GetEngine()->GetOverlayCache().UpdateRenderer();
-			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
+			getEngine()->getOverlayCache().updateRenderer();
+			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 			{
-				p_listener.FireEvents( EventType::eQueueRender );
+				p_listener.fireEvents( EventType::eQueueRender );
 			} );
-			m_renderSystem.GetMainContext()->EndCurrent();
+			m_renderSystem.getMainContext()->endCurrent();
 		}
 		else
 		{
-			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
+			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 			{
-				p_listener.FlushEvents( EventType::ePreRender );
-			} );
-			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
-			{
-				p_listener.FlushEvents( EventType::eQueueRender );
+				p_listener.flushEvents( EventType::ePreRender );
+				p_listener.flushEvents( EventType::eQueueRender );
 			} );
 		}
 
-		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
+		getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 		{
-			p_listener.FireEvents( EventType::ePostRender );
+			p_listener.fireEvents( EventType::ePostRender );
 		} );
 	}
 
-	void RenderLoop::CreateContext( RenderWindow & p_window )
+	void RenderLoop::createContext( RenderWindow & p_window )
 	{
-		if ( !m_renderSystem.GetMainContext() )
+		if ( !m_renderSystem.getMainContext() )
 		{
-			DoCreateMainContext( p_window );
+			doCreateMainContext( p_window );
 		}
 		else
 		{
-			DoCreateContext( p_window );
+			doCreateContext( p_window );
 		}
 	}
 
-	void RenderLoop::ShowDebugOverlays( bool p_show )
+	void RenderLoop::showDebugOverlays( bool p_show )
 	{
-		m_debugOverlays->Show( p_show );
+		m_debugOverlays->show( p_show );
 	}
 
-	void RenderLoop::UpdateVSync( bool p_enable )
+	void RenderLoop::updateVSync( bool p_enable )
 	{
 	}
 
-	ContextSPtr RenderLoop::DoCreateContext( RenderWindow & p_window )
+	void RenderLoop::flushEvents()
 	{
-		ContextSPtr l_context;
+		getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
+		{
+			p_listener.flushEvents( EventType::ePreRender );
+			p_listener.flushEvents( EventType::eQueueRender );
+			p_listener.flushEvents( EventType::ePostRender );
+		} );
+	}
+
+	void RenderLoop::registerTimer( RenderPassTimer & timer )
+	{
+		m_debugOverlays->registerTimer( timer );
+	}
+
+	void RenderLoop::unregisterTimer( RenderPassTimer & timer )
+	{
+		m_debugOverlays->unregisterTimer( timer );
+	}
+
+	ContextSPtr RenderLoop::doCreateContext( RenderWindow & p_window )
+	{
+		ContextSPtr context;
 
 		try
 		{
-			l_context = m_renderSystem.CreateContext();
+			context = m_renderSystem.createContext();
 
-			if ( l_context && l_context->Initialise( &p_window ) )
+			if ( context && context->initialise( &p_window ) )
 			{
-				p_window.SetContext( l_context );
+				p_window.setContext( context );
 			}
 			else
 			{
-				l_context.reset();
+				context.reset();
 			}
 		}
-		catch ( Castor::Exception & p_exc )
+		catch ( castor::Exception & p_exc )
 		{
-			Logger::LogError( cuT( "CreateContext - " ) + p_exc.GetFullDescription() );
-			l_context.reset();
+			Logger::logError( cuT( "createContext - " ) + p_exc.getFullDescription() );
+			context.reset();
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogError( std::string( "CreateContext - " ) + p_exc.what() );
-			l_context.reset();
+			Logger::logError( std::string( "createContext - " ) + p_exc.what() );
+			context.reset();
 		}
 
-		return l_context;
+		return context;
 	}
 
-	void RenderLoop::DoRenderFrame()
+	void RenderLoop::doRenderFrame()
 	{
-		if ( m_renderSystem.GetMainContext() )
+		if ( m_renderSystem.getMainContext() )
 		{
-			RenderInfo l_info;
-			m_debugOverlays->StartFrame();
-			DoGpuStep( l_info );
-			DoCpuStep();
-			m_debugOverlays->EndFrame( l_info );
+			RenderInfo & info = m_debugOverlays->beginFrame();
+			doGpuStep( info );
+			doCpuStep();
+			m_debugOverlays->endFrame();
 		}
 	}
 
-	void RenderLoop::DoProcessEvents( EventType p_eventType )
+	void RenderLoop::doProcessEvents( EventType p_eventType )
 	{
-		GetEngine()->GetFrameListenerCache().ForEach( [p_eventType]( FrameListener & p_listener )
+		getEngine()->getFrameListenerCache().forEach( [p_eventType]( FrameListener & p_listener )
 		{
-			p_listener.FireEvents( p_eventType );
+			p_listener.fireEvents( p_eventType );
 		} );
 	}
 
-	void RenderLoop::DoGpuStep( RenderInfo & p_info )
+	void RenderLoop::doGpuStep( RenderInfo & p_info )
 	{
 		{
-			auto l_guard = make_block_guard(
+			auto guard = makeBlockGuard(
 				[this]()
 				{
-					m_renderSystem.GetMainContext()->SetCurrent();
+					m_renderSystem.getMainContext()->setCurrent();
 				},
 				[this]()
 				{
-					m_renderSystem.GetMainContext()->EndCurrent();
+					m_renderSystem.getMainContext()->endCurrent();
 				} );
-			DoProcessEvents( EventType::ePreRender );
-			GetEngine()->GetOverlayCache().UpdateRenderer();
-			GetEngine()->GetRenderTargetCache().Render( p_info );
-			DoProcessEvents( EventType::eQueueRender );
+			doProcessEvents( EventType::ePreRender );
+			getEngine()->getMaterialCache().update();
+			getEngine()->getOverlayCache().updateRenderer();
+			getEngine()->getRenderTargetCache().render( p_info );
+			doProcessEvents( EventType::eQueueRender );
 		}
 
-		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
+		getEngine()->getSceneCache().forEach( []( Scene & p_scene )
 		{
-			p_scene.GetRenderWindowCache().ForEach( []( RenderWindow & p_window )
+			p_scene.getEngine()->getRenderWindowCache().forEach( []( RenderWindow & p_window )
 			{
-				p_window.Render( true );
+				p_window.render( true );
 			} );
 		} );
 
-		m_debugOverlays->EndGpuTask();
+		m_debugOverlays->endGpuTask();
 	}
 
-	void RenderLoop::DoCpuStep()
+	void RenderLoop::doCpuStep()
 	{
-		DoProcessEvents( EventType::ePostRender );
-		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
+		doProcessEvents( EventType::ePostRender );
+		getEngine()->getSceneCache().forEach( []( Scene & p_scene )
 		{
-			p_scene.Update();
+			p_scene.update();
 		} );
-		RenderQueueArray l_queues;
-		GetEngine()->GetRenderTechniqueCache().ForEach( [&l_queues]( RenderTechnique & p_technique )
+		RenderQueueArray queues;
+		getEngine()->getRenderTechniqueCache().forEach( [&queues]( RenderTechnique & p_technique )
 		{
-			p_technique.Update( l_queues );
+			p_technique.update( queues );
 		} );
-		DoUpdateQueues( l_queues );
-		GetEngine()->GetOverlayCache().Update();
-		m_debugOverlays->EndCpuTask();
+		doUpdateQueues( queues );
+		getEngine()->getOverlayCache().update();
+		m_debugOverlays->endCpuTask();
 	}
 
-	void RenderLoop::DoUpdateQueues( RenderQueueArray & p_queues )
+	void RenderLoop::doUpdateQueues( RenderQueueArray & p_queues )
 	{
-		if ( p_queues.size() > m_queueUpdater.GetCount() )
+		if ( p_queues.size() > m_queueUpdater.getCount() )
 		{
-			for ( auto & l_queue : p_queues )
+			for ( auto & queue : p_queues )
 			{
-				m_queueUpdater.PushJob( [&l_queue]()
+				m_queueUpdater.pushJob( [&queue]()
 				{
-					l_queue.get().Update();
+					queue.get().update();
 				} );
 			}
 
-			m_queueUpdater.WaitAll( std::chrono::milliseconds::max() );
+			m_queueUpdater.waitAll( Milliseconds::max() );
 		}
 		else
 		{
-			for ( auto & l_queue : p_queues )
+			for ( auto & queue : p_queues )
 			{
-				l_queue.get().Update();
+				queue.get().update();
 			}
 		}
 	}

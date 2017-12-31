@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_FRAME_LISTENER_H___
 #define ___C3D_FRAME_LISTENER_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <Design/Named.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,7 +22,7 @@ namespace Castor3D
 	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur EventType).
 	*/
 	class FrameListener
-		: public Castor::Named
+		: public castor::Named
 	{
 	public:
 		/**
@@ -52,7 +33,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_name	Le nom du listener.
 		 */
-		C3D_API explicit FrameListener( Castor::String const & p_name );
+		C3D_API explicit FrameListener( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -66,7 +47,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les listes d'évènements.
 		 */
-		C3D_API void Flush();
+		C3D_API void flush();
 		/**
 		 *\~english
 		 *\brief		Puts an event in the corresponding array.
@@ -75,7 +56,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type.
 		 *\param[in]	p_event	L'évènement à ajouter.
 		 */
-		C3D_API void PostEvent( FrameEventUPtr && p_event );
+		C3D_API void postEvent( FrameEventUPtr && p_event );
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them.
@@ -86,7 +67,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type des évènements à traiter.
 		 *\return		\p true if all events were processed successfully.
 		 */
-		C3D_API bool FireEvents( EventType p_type );
+		C3D_API bool fireEvents( EventType p_type );
 		/**
 		 *\~english
 		 *\brief		Discards all events of a given type.
@@ -95,7 +76,7 @@ namespace Castor3D
 		 *\brief		Supprime tous les évènements d'un type donné.
 		 *\param[in]	p_type	Le type des évènements à traiter.
 		 */
-		C3D_API void FlushEvents( EventType p_type );
+		C3D_API void flushEvents( EventType p_type );
 
 	protected:
 		/**
@@ -104,7 +85,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les listes d'évènements.
 		 */
-		C3D_API virtual void DoFlush() {}
+		C3D_API virtual void doFlush() {}
 
 	protected:
 		//!\~english	The events arrays.

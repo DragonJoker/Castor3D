@@ -1,4 +1,4 @@
-#include "PlyImporter.hpp"
+﻿#include "PlyImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
@@ -7,8 +7,8 @@
 #include <Engine.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 #ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_Ply_API
@@ -20,44 +20,50 @@ using namespace Castor;
 #	endif
 #endif
 
-C3D_Ply_API void GetRequiredVersion( Version & p_version )
+castor3d::ImporterPlugin::ExtensionArray getExtensions( Engine * engine )
 {
-	p_version = Version();
+	ImporterPlugin::ExtensionArray arrayReturn;
+	arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
+	return arrayReturn;
 }
 
-C3D_Ply_API PluginType GetType()
+extern "C"
 {
-	return PluginType::eImporter;
-}
-
-C3D_Ply_API String GetName()
-{
-	return cuT( "PLY Importer" );
-}
-
-C3D_Ply_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
-{
-	ImporterPlugin::ExtensionArray l_arrayReturn;
-	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
-	return l_arrayReturn;
-}
-
-C3D_Ply_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
+	C3D_Ply_API void getRequiredVersion( castor3d::Version * p_version )
 	{
-		p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3dPly::PlyImporter::Create );
+		*p_version = castor3d::Version();
 	}
-}
 
-C3D_Ply_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
+	C3D_Ply_API void getType( castor3d::PluginType * p_type )
 	{
-		p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+		*p_type = castor3d::PluginType::eImporter;
+	}
+
+	C3D_Ply_API void getName( char const ** p_name )
+	{
+		static castor::String Name = cuT( "PLY Importer" );
+		*p_name = Name.c_str();
+	}
+
+	C3D_Ply_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	{
+		auto plugin = static_cast< castor3d::ImporterPlugin * >( p_plugin );
+		auto extensions = getExtensions( engine );
+
+		for ( auto const & extension : extensions )
+		{
+			plugin->addExtension( extension );
+			engine->getImporterFactory().registerType( castor::string::lowerCase( extension.first ), &C3dPly::PlyImporter::create );
+		}
+	}
+
+	C3D_Ply_API void OnUnload( castor3d::Engine * engine )
+	{
+		auto extensions = getExtensions( engine );
+
+		for ( auto const & extension : extensions )
+		{
+			engine->getImporterFactory().unregisterType( castor::string::lowerCase( extension.first ) );
+		}
 	}
 }

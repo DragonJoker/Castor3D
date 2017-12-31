@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___TRS_TestRenderPipeline_H___
 #define ___TRS_TestRenderPipeline_H___
 
@@ -39,7 +18,7 @@ namespace TestRender
 	\brief		Implàmentation du pipeline de rendu.
 	*/
 	class TestRenderPipeline
-		: public Castor3D::RenderPipeline
+		: public castor3d::RenderPipeline
 	{
 	public:
 		/**
@@ -62,14 +41,13 @@ namespace TestRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		TestRenderPipeline(
-			TestRenderSystem & p_renderSystem,
-			Castor3D::DepthStencilState && p_dsState,
-			Castor3D::RasteriserState && p_rsState,
-			Castor3D::BlendState && p_bdState,
-			Castor3D::MultisampleState && p_msState,
-			Castor3D::ShaderProgram & p_program,
-			Castor3D::PipelineFlags const & p_flags );
+		TestRenderPipeline( TestRenderSystem & p_renderSystem
+			, castor3d::DepthStencilState && p_dsState
+			, castor3d::RasteriserState && p_rsState
+			, castor3d::BlendState && p_bdState
+			, castor3d::MultisampleState && p_msState
+			, castor3d::ShaderProgram & p_program
+			, castor3d::PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -83,7 +61,7 @@ namespace TestRender
 		 *\~french
 		 *\brief		Applique le pipeline.
 		 */
-		void Apply()const override;
+		void apply()const override;
 	};
 }
 

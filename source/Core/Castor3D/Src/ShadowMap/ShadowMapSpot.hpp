@@ -1,31 +1,13 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMapSpot_H___
 #define ___C3D_ShadowMapSpot_H___
 
-#include "ShadowMap.hpp"
+#include "Miscellaneous/GaussianBlur.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -43,102 +25,79 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	scene	La scène.
 		 */
-		C3D_API ShadowMapSpot( Engine & p_engine );
+		ShadowMapSpot( Engine & engine
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapSpot();
+		~ShadowMapSpot();
 		/**
-		 *\~english
-		 *\brief		Updates the passes, selecting the lights that will project shadows.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	p_camera	The viewer camera.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
-		 *\~french
-		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	p_camera	La caméra de l'observateur.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\copydoc		castor3d::ShadowMap::update
 		 */
-		C3D_API void Update( Camera const & p_camera
-			, RenderQueueArray & p_queues );
+		void update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index )override;
 		/**
-		 *\~english
-		 *\brief		Renders the selected lights shadow map.
-		 *\~french
-		 *\brief		Dessine les shadow maps des lumières sélectionnées.
+		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		C3D_API void Render();
+		void render()override;
 		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La map d'ombres.
+		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
-		inline TextureUnit & GetTexture()
-		{
-			return m_shadowMap;
-		}
-		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La map d'ombres.
-		 */
-		inline TextureUnit const & GetTexture()const
-		{
-			return m_shadowMap;
-		}
+		void debugDisplay( castor::Size const & size, uint32_t index )override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetMaxPasses
+		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
-		int32_t DoGetMaxPasses()const override;
+		void doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetSize
+		 *\copydoc		castor3d::ShadowMap::doCleanup
 		 */
-		Castor::Size DoGetSize()const override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoInitialise
+		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
 		 */
-		void DoInitialise()override;
+		void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoCleanup
+		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
-		void DoCleanup()override;
-		/**
-		 *\copydoc		Castor3D::ShadowMap::DoCreatePass
-		 */
-		ShadowMapPassSPtr DoCreatePass( Light & p_light )const override;
-		/**
-		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
-		 */
-		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
-		 */
-		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
+		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 
 	private:
+		//!\~english	The attach between variance map and main frame buffer.
+		//!\~french		L'attache entre la texture de variance et le tampon principal.
+		TextureAttachmentSPtr m_varianceAttach;
+		//!\~english	The attach between linear depth buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon de profondeur lineaire et le tampon principal.
+		TextureAttachmentSPtr m_linearAttach;
+		//!\~english	The depth buffer.
+		//!\~french		Le tampon de profondeur.
+		DepthStencilRenderBufferSPtr m_depthBuffer;
 		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		std::vector< TextureAttachmentSPtr > m_depthAttach;
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
-		TextureUnit m_shadowMap;
+		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
+		RenderBufferAttachmentSPtr m_depthAttach;
+		//!\~english	The Gaussian blur pass.
+		//!\~french		La passe de flou Gaussien.
+		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }
 

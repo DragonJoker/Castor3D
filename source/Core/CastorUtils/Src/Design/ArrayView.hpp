@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_ARRAY_VIEW_H___
 #define ___CASTOR_ARRAY_VIEW_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <vector>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -58,7 +39,7 @@ namespace Castor
 		}
 
 		template< size_t N >
-		ArrayView( T( & p_buffer )[N] )noexcept
+		explicit ArrayView( T( & p_buffer )[N] )noexcept
 			: ArrayView( p_buffer, p_buffer + N )
 		{
 		}
@@ -86,6 +67,16 @@ namespace Castor
 		size_t size()const noexcept
 		{
 			return m_end - m_begin;
+		}
+
+		pointer data()noexcept
+		{
+			return m_begin;
+		}
+
+		pointer const data()const noexcept
+		{
+			return m_begin;
 		}
 
 		iterator begin()noexcept
@@ -152,6 +143,24 @@ namespace Castor
 		pointer m_begin;
 		pointer m_end;
 	};
+
+	template< typename T >
+	ArrayView< T > makeArrayView( T * p_begin, size_t p_size )
+	{
+		return ArrayView< T >( p_begin, p_begin + p_size );
+	}
+
+	template< typename T >
+	ArrayView< T > makeArrayView( T * p_begin, T * p_end )
+	{
+		return ArrayView< T >( p_begin, p_end );
+	}
+
+	template< typename T, size_t N >
+	ArrayView< T > makeArrayView( T ( & p_buffer )[N] )
+	{
+		return ArrayView< T >( p_buffer );
+	}
 }
 
 #endif

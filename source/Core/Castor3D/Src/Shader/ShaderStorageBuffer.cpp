@@ -1,16 +1,14 @@
 ﻿#include "ShaderStorageBuffer.hpp"
 
-#include "Mesh/Buffer/GpuBuffer.hpp"
+#include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/ShaderProgram.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	ShaderStorageBuffer::ShaderStorageBuffer( String const & p_name, ShaderProgram & p_program )
-		: OwnedBy< ShaderProgram >{ p_program }
-		, Named{ p_name }
+	ShaderStorageBuffer::ShaderStorageBuffer( Engine & engine )
+		: CpuBuffer< uint8_t >{ engine }
 	{
 	}
 
@@ -18,83 +16,45 @@ namespace Castor3D
 	{
 	}
 
-	bool ShaderStorageBuffer::Initialise( uint32_t p_size, uint32_t p_index, BufferAccessType p_type, BufferAccessNature p_nature )
+	bool ShaderStorageBuffer::initialise( BufferAccessType type
+		, BufferAccessNature nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetOwner()->GetRenderSystem()->CreateUInt8Buffer( BufferType::eShaderStorage );
+			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eShaderStorage
+				, getSize()
+				, type
+				, nature );
+			m_gpuBuffer = buffer.buffer;
+			m_offset = buffer.offset;
+			doInitialise( type, nature );
 		}
 
-		bool l_return = m_gpuBuffer != nullptr;
+		bool result = m_gpuBuffer != nullptr;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = m_gpuBuffer->Create();
+			upload();
+			bindTo( 0u );
 		}
 
-		if ( l_return )
-		{
-			m_gpuBuffer->InitialiseStorage( p_size, p_type, p_nature );
-			m_gpuBuffer->SetBindingPoint( p_index );
-		}
-
-		return l_return;
+		return result;
 	}
 
-	void ShaderStorageBuffer::Cleanup()
+	void ShaderStorageBuffer::cleanup()
 	{
 		if ( m_gpuBuffer )
 		{
-			m_gpuBuffer->Destroy();
+			getEngine()->getRenderSystem()->putBuffer( BufferType::eShaderStorage
+				, m_accessType
+				, m_accessNature
+				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
 			m_gpuBuffer.reset();
 		}
 	}
 
-	uint8_t * ShaderStorageBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )
+	void ShaderStorageBuffer::bindTo( uint32_t index )const
 	{
-		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Lock( p_offset, p_count, p_flags );
-	}
-
-	void ShaderStorageBuffer::Unlock()
-	{
-		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Unlock();
-	}
-
-	void ShaderStorageBuffer::Upload( uint32_t p_offset, uint32_t p_count, uint8_t const * p_buffer )
-	{
-		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
-	}
-
-	void ShaderStorageBuffer::Download( uint32_t p_offset, uint32_t p_count, uint8_t * p_buffer )
-	{
-		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Download( p_offset, p_count, p_buffer );
-	}
-
-	void ShaderStorageBuffer::Bind()
-	{
-		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Bind();
-	}
-
-	void ShaderStorageBuffer::BindTo( uint32_t p_point )
-	{
-		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->SetBindingPoint( p_point );
-	}
-
-	void ShaderStorageBuffer::Unbind()
-	{
-		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Unbind();
-	}
-
-	void ShaderStorageBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )
-	{
-		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->Copy( p_src, p_size );
+		getGpuBuffer().setBindingPoint( index );
 	}
 }

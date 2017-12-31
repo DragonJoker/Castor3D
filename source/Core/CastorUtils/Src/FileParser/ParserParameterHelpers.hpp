@@ -1,31 +1,12 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_PARSER_PARAMETER_HELPERS_H___
 #define ___CASTOR_PARSER_PARAMETER_HELPERS_H___
 
 #include "ParserParameterBase.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -34,7 +15,7 @@ namespace Castor
 	\~english
 	\brief		Gives the regex format for given type.
 	\~french
-	\brief		Donne le format de regex pour le type donné.
+	\brief		donne le format de regex pour le type donné.
 	*/
 	template< typename T > struct RegexFormat;
 	/*!
@@ -196,12 +177,12 @@ namespace Castor
 	\version	0.8.0
 	\date		16/02/2016
 	\~english
-	\brief		RegexFormat specialisation for Colour.
+	\brief		RegexFormat specialisation for RgbColour.
 	\~french
-	\brief		Spécialisation de RegexFormat pour Colour.
+	\brief		Spécialisation de RegexFormat pour RgbColour.
 	*/
 	template<>
-	struct RegexFormat< Colour >
+	struct RegexFormat< RgbColour >
 	{
 		CU_API static xchar const * const Value;
 	};
@@ -210,12 +191,40 @@ namespace Castor
 	\version	0.8.0
 	\date		16/02/2016
 	\~english
-	\brief		RegexFormat specialisation for Colour.
+	\brief		RegexFormat specialisation for RgbaColour.
 	\~french
-	\brief		Spécialisation de RegexFormat pour Colour.
+	\brief		Spécialisation de RegexFormat pour RgbaColour.
 	*/
 	template<>
-	struct RegexFormat< HdrColour >
+	struct RegexFormat< RgbaColour >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for HdrRgbColour.
+	\~french
+	\brief		Spécialisation de RegexFormat pour HdrRgbColour.
+	*/
+	template<>
+	struct RegexFormat< HdrRgbColour >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for HdrRgbaColour.
+	\~french
+	\brief		Spécialisation de RegexFormat pour HdrRgbaColour.
+	*/
+	template<>
+	struct RegexFormat< HdrRgbaColour >
 	{
 		CU_API static xchar const * const Value;
 	};
@@ -804,12 +813,30 @@ namespace Castor
 	\~french
 	\brief		Specialisation de ParserParameterHelper pour ParameterType::eColour.
 	*/
-	template<> struct ParserParameterHelper< ParameterType::eColour >
+	template<> struct ParserParameterHelper< ParameterType::eRgbColour >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
-		using ValueType = Colour;
+		using ValueType = RgbColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eColour;
+		CU_API static const ParameterType ParamType = ParameterType::eRgbColour;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::eColour.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::eColour.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::eRgbaColour >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = RgbaColour;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::eRgbaColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -822,12 +849,30 @@ namespace Castor
 	\~french
 	\brief		Specialisation de ParserParameterHelper pour ParameterType::eHdrColour.
 	*/
-	template<> struct ParserParameterHelper< ParameterType::eHdrColour >
+	template<> struct ParserParameterHelper< ParameterType::eHdrRgbColour >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
-		using ValueType = HdrColour;
+		using ValueType = HdrRgbColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eHdrColour;
+		CU_API static const ParameterType ParamType = ParameterType::eHdrRgbColour;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::eHdrColour.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::eHdrColour.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::eHdrRgbaColour >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = HdrRgbaColour;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::eHdrRgbaColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -841,7 +886,7 @@ namespace Castor
 	\brief		Structure utilisée pour déterminer si un ParameterType a un type de paramètre de base.
 	*/
 	template< ParameterType Type >
-	struct has_base_parameter_type
+	struct HasBaseParameterType
 		: public std::false_type
 	{
 	};
@@ -850,12 +895,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eName.
+	\brief		HasBaseParameterType specialisation for ParameterType::eName.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eName.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eName.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eName >
+	struct HasBaseParameterType< ParameterType::eName >
 		: public std::true_type
 	{
 	};
@@ -864,12 +909,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eCheckedText.
+	\brief		HasBaseParameterType specialisation for ParameterType::eCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eCheckedText.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eCheckedText >
+	struct HasBaseParameterType< ParameterType::eCheckedText >
 		: public std::true_type
 	{
 	};
@@ -878,12 +923,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eBitwiseOred32BitsCheckedText.
+	\brief		HasBaseParameterType specialisation for ParameterType::eBitwiseOred32BitsCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eBitwiseOred32BitsCheckedText.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eBitwiseOred32BitsCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eBitwiseOred32BitsCheckedText >
+	struct HasBaseParameterType< ParameterType::eBitwiseOred32BitsCheckedText >
 		: public std::true_type
 	{
 	};
@@ -892,12 +937,202 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
+	\brief		HasBaseParameterType specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ParameterType::eBitwiseOred64BitsCheckedText.
+	\brief		Spécialisation de HasBaseParameterType pour ParameterType::eBitwiseOred64BitsCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ParameterType::eBitwiseOred64BitsCheckedText >
+	struct HasBaseParameterType< ParameterType::eBitwiseOred64BitsCheckedText >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	*/
+	template< ParameterType Type >
+	struct IsArithmeticType
+		: public std::false_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt8.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt8.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt8 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt16.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt16.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt16 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt32.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt32.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt32 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eInt64.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eInt64.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eInt64 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt8.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt8.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt8 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt16.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt16.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt16 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt32.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt32.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt32 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eUInt64.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eUInt64.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eUInt64 >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eFloat.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eFloat.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eFloat >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eDouble.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eDouble.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eDouble >
+		: public std::true_type
+	{
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Structure used to tell if a ParameterType is an arithmetic type.
+	\remarks	Specialization for ParameterType::eLongDouble.
+	\~french
+	\brief		Structure utilisée pour déterminer si un ParameterType est un type arithmétique.
+	\remarks	Spécialisation pour ParameterType::eLongDouble.
+	*/
+	template<>
+	struct IsArithmeticType< ParameterType::eLongDouble >
 		: public std::true_type
 	{
 	};
@@ -909,7 +1144,7 @@ namespace Castor
 	 *\brief		Récupère le nom du type de paramètre donné.
 	 *\param[in]	p_type	Le type de paramètre.
 	 */
-	CU_API String const & GetTypeName( ParameterType p_type );
+	CU_API String const & getTypeName( ParameterType p_type );
 }
 
 #endif

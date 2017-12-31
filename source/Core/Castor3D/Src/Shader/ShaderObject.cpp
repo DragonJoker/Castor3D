@@ -1,91 +1,219 @@
-#include "ShaderObject.hpp"
+﻿#include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "UniformBuffer.hpp"
 
 #include <Stream/StreamPrefixManipulators.hpp>
+#include <GlslShader.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
 		template< typename CharType, typename PrefixType >
-		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::base_prefixer< CharType, PrefixType > const & prefix )
+		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & Prefix )
 		{
-			format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * sbuf = dynamic_cast< format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+			auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
 
 			if ( !sbuf )
 			{
-				sbuf = format::install_prefix_buffer< PrefixType >( stream );
+				format::installPrefixBuffer< PrefixType >( stream );
 				stream.register_callback( format::callback< PrefixType, CharType >, 0 );
 			}
 
 			return stream;
+		}
+
+		UniformType doGetUniformType( glsl::TypeName glslType )
+		{
+			UniformType result;
+
+			switch ( glslType )
+			{
+			case glsl::TypeName::eBool:
+				result = UniformType::eBool;
+				break;
+
+			case glsl::TypeName::eInt:
+				result = UniformType::eInt;
+				break;
+
+			case glsl::TypeName::eUInt:
+				result = UniformType::eUInt;
+				break;
+
+			case glsl::TypeName::eFloat:
+				result = UniformType::eFloat;
+				break;
+
+			case glsl::TypeName::eVec2B:
+				result = UniformType::eVec2b;
+				break;
+
+			case glsl::TypeName::eVec3B:
+				result = UniformType::eVec3b;
+				break;
+
+			case glsl::TypeName::eVec4B:
+				result = UniformType::eVec4b;
+				break;
+
+			case glsl::TypeName::eVec2I:
+				result = UniformType::eVec2i;
+				break;
+
+			case glsl::TypeName::eVec3I:
+				result = UniformType::eVec3i;
+				break;
+
+			case glsl::TypeName::eVec4I:
+				result = UniformType::eVec4i;
+				break;
+
+			case glsl::TypeName::eVec2F:
+				result = UniformType::eVec2f;
+				break;
+
+			case glsl::TypeName::eVec3F:
+				result = UniformType::eVec3f;
+				break;
+
+			case glsl::TypeName::eVec4F:
+				result = UniformType::eVec4f;
+				break;
+
+			case glsl::TypeName::eMat2x2B:
+				result = UniformType::eMat2x2b;
+				break;
+
+			case glsl::TypeName::eMat3x3B:
+				result = UniformType::eMat3x3b;
+				break;
+
+			case glsl::TypeName::eMat4x4B:
+				result = UniformType::eMat4x4b;
+				break;
+
+			case glsl::TypeName::eMat2x2I:
+				result = UniformType::eMat2x2i;
+				break;
+
+			case glsl::TypeName::eMat3x3I:
+				result = UniformType::eMat3x3i;
+				break;
+
+			case glsl::TypeName::eMat4x4I:
+				result = UniformType::eMat4x4i;
+				break;
+
+			case glsl::TypeName::eMat2x2F:
+				result = UniformType::eMat2x2f;
+				break;
+
+			case glsl::TypeName::eMat3x3F:
+				result = UniformType::eMat3x3f;
+				break;
+
+			case glsl::TypeName::eMat4x4F:
+				result = UniformType::eMat4x4f;
+				break;
+
+			case glsl::TypeName::eSamplerBuffer:
+			case glsl::TypeName::eSampler1D:
+			case glsl::TypeName::eSampler2D:
+			case glsl::TypeName::eSampler3D:
+			case glsl::TypeName::eSamplerCube:
+			case glsl::TypeName::eSampler2DRect:
+			case glsl::TypeName::eSampler1DArray:
+			case glsl::TypeName::eSampler2DArray:
+			case glsl::TypeName::eSamplerCubeArray:
+			case glsl::TypeName::eSampler1DShadow:
+			case glsl::TypeName::eSampler2DShadow:
+			case glsl::TypeName::eSamplerCubeShadow:
+			case glsl::TypeName::eSampler2DRectShadow:
+			case glsl::TypeName::eSampler1DArrayShadow:
+			case glsl::TypeName::eSampler2DArrayShadow:
+			case glsl::TypeName::eSamplerCubeArrayShadow:
+				result = UniformType::eSampler;
+				break;
+
+			default:
+				{
+					auto castorType = static_cast< shader::TypeName >( glslType );
+
+					switch ( castorType )
+					{
+					case shader::TypeName::eLight:
+					case shader::TypeName::eDirectionalLight:
+					case shader::TypeName::ePointLight:
+					case shader::TypeName::eSpotLight:
+					case shader::TypeName::eMaterial:
+					case shader::TypeName::eLegacyMaterial:
+					case shader::TypeName::eMetallicRoughnessMaterial:
+					case shader::TypeName::eSpecularGlossinessMaterial:
+						result = UniformType::eCount;
+						break;
+
+					default:
+						FAILURE( "Unuspported GLSL type" );
+					}
+				}
+			}
+
+			return result;
 		}
 	}
 
 	//*************************************************************************************************
 
 	ShaderObject::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< ShaderObject >{ p_tabs }
+		: castor::TextWriter< ShaderObject >{ p_tabs }
 	{
 	}
 
 	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		static std::array< String, size_t( ShaderModel::eCount ) > const l_arrayModels
+		bool result = p_file.writeText( m_tabs + p_shaderObject.getStrType() + cuT( "\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+
+		Path pathFile = p_file.getFilePath() / cuT( "Shaders" );
+
+		if ( !File::directoryExists( pathFile ) )
 		{
-			cuT( "sm_1" ),
-			cuT( "sm_2" ),
-			cuT( "sm_3" ),
-			cuT( "sm_4" ),
-			cuT( "sm_5" ),
-		};
-
-		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-
-		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
-
-		if ( !File::DirectoryExists( l_pathFile ) )
-		{
-			File::DirectoryCreate( l_pathFile );
+			File::directoryCreate( pathFile );
 		}
 
-		bool l_hasFile = false;
+		bool hasFile = false;
 
-		if ( l_return )
+		if ( result )
 		{
-			for ( size_t i = 0; i < size_t( ShaderModel::eCount ); i++ )
-			{
-				Path l_file = p_shaderObject.GetFile( ShaderModel( i ) );
+			Path file = p_shaderObject.getFile();
 
-				if ( !l_file.empty() )
-				{
-					File::CopyFile( l_file, l_pathFile );
-					String l_fileName = Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
-					string::replace( l_fileName, cuT( "\\" ), cuT( "/" ) );
-					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_fileName + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< ShaderObject >::CheckError( l_return, "ShaderObject file" );
-				}
+			if ( !file.empty() )
+			{
+				File::copyFile( file, pathFile );
+				String fileName = Path{ cuT( "Shaders" ) } / file.getFileName() + cuT( "." ) + file.getExtension();
+				string::replace( fileName, cuT( "\\" ), cuT( "/" ) );
+				result = p_file.writeText( m_tabs + cuT( "\tfile \"" ) + fileName + cuT( "\"\n" ) ) > 0;
+				castor::TextWriter< ShaderObject >::checkError( result, "ShaderObject file" );
 			}
 		}
 
-		if ( l_hasFile )
+		if ( hasFile )
 		{
-			for ( auto l_it : p_shaderObject.GetUniforms() )
+			for ( auto it : p_shaderObject.getUniforms() )
 			{
-				l_return = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( l_it->GetBaseUniform(), p_file );
+				result = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( it->getBaseUniform(), p_file );
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -100,7 +228,7 @@ namespace Castor3D
 		cuT( "compute_program" ),
 	};
 
-	ShaderObject::ShaderObject( ShaderProgram * p_parent, ShaderType p_type )
+	ShaderObject::ShaderObject( ShaderProgram & p_parent, ShaderType p_type )
 		: m_type( p_type )
 		, m_parent( p_parent )
 	{
@@ -110,133 +238,172 @@ namespace Castor3D
 	{
 	}
 
-	bool ShaderObject::Compile()
+	bool ShaderObject::compile()
 	{
 		return true;
 	}
 
-	void ShaderObject::Bind()
+	void ShaderObject::bind()
 	{
-		for ( auto l_variable : m_listUniforms )
+		for ( auto variable : m_listUniforms )
 		{
-			l_variable->Update();
+			variable->update();
 		}
 	}
 
-	void ShaderObject::Unbind()
+	void ShaderObject::unbind()
 	{
 	}
 
-	void ShaderObject::SetFile( ShaderModel p_eModel, Path const & p_filename )
+	void ShaderObject::setFile( Path const & p_filename )
 	{
 		m_status = ShaderStatus::eNotCompiled;
-		m_arrayFiles[size_t( p_eModel )].clear();
-		m_arraySources[size_t( p_eModel )].clear();
+		m_file.clear();
+		m_source = glsl::Shader{};
 
-		if ( !p_filename.empty() && File::FileExists( p_filename ) )
+		if ( !p_filename.empty() && File::fileExists( p_filename ) )
 		{
-			TextFile l_file( p_filename, File::OpenMode::eRead );
+			TextFile file( p_filename, File::OpenMode::eRead );
 
-			if ( l_file.IsOk() )
+			if ( file.isOk() )
 			{
-				if ( l_file.GetLength() > 0 )
+				if ( file.getLength() > 0 )
 				{
-					m_arrayFiles[size_t( p_eModel )] = p_filename;
-					l_file.CopyToString( m_arraySources[size_t( p_eModel )] );
+					m_file = p_filename;
+					String source;
+					file.copytoString( source );
+					m_source.setSource( source );
 				}
 			}
 		}
 	}
 
-	bool ShaderObject::HasFile()const
+	bool ShaderObject::hasFile()const
 	{
-		bool l_return = false;
-
-		for ( size_t i = 0; i < size_t( ShaderModel::eCount ) && !l_return; i++ )
-		{
-			l_return = !m_arrayFiles[i].empty();
-		}
-
-		return l_return;
+		return !m_file.empty();
 	}
 
-	void ShaderObject::SetSource( ShaderModel p_eModel, String const & p_strSource )
+	void ShaderObject::setSource( String const & p_source )
 	{
 		m_status = ShaderStatus::eNotCompiled;
-		m_arraySources[size_t( p_eModel )] = p_strSource;
+		m_source.setSource( p_source );
 	}
 
-	bool ShaderObject::HasSource()const
+	void ShaderObject::setSource( glsl::Shader const & p_source )
 	{
-		bool l_return = false;
+		m_source = p_source;
+		doFillVariables();
+	}
 
-		for ( size_t i = 0; i < size_t( ShaderModel::eCount ) && !l_return; i++ )
+	bool ShaderObject::hasSource()const
+	{
+		return !m_source.getSource().empty();
+	}
+
+	PushUniformSPtr ShaderObject::createUniform( UniformType type
+		, String const & name
+		, int nbOccurences )
+	{
+		PushUniformSPtr result = findUniform( type, name );
+
+		if ( !result )
 		{
-			l_return = !m_arraySources[i].empty();
+			result = doCreateUniform( type, nbOccurences );
+			result->getBaseUniform().setName( name );
+			doAddUniform( result );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void ShaderObject::AddUniform( PushUniformSPtr p_variable )
+	PushUniformSPtr ShaderObject::findUniform( UniformType type
+		, castor::String const & name )const
 	{
-		if ( p_variable )
+		PushUniformSPtr result;
+		auto it = m_mapUniforms.find( name );
+
+		if ( it != m_mapUniforms.end() )
 		{
-			m_listUniforms.push_back( p_variable );
-			m_mapUniforms.insert( std::make_pair( p_variable->GetBaseUniform().GetName(), p_variable ) );
+			result = it->second.lock();
+
+			if ( result && result->getBaseUniform().getFullType() != type )
+			{
+				Logger::logError( cuT( "Frame variable named " ) + name + cuT( " exists but with a different type" ) );
+				FAILURE( "Variable exists with different type." );
+				result.reset();
+			}
+		}
+
+		return result;
+	}
+
+	void ShaderObject::flushUniforms()
+	{
+		m_mapUniforms.clear();
+		m_listUniforms.clear();
+	}
+
+	void ShaderObject::doAddUniform( PushUniformSPtr variable )
+	{
+		if ( variable )
+		{
+			m_listUniforms.push_back( variable );
+			m_mapUniforms.insert( std::make_pair( variable->getBaseUniform().getName(), variable ) );
 		}
 	}
 
-	PushUniformSPtr ShaderObject::FindUniform( Castor::String const & p_name )const
+	bool ShaderObject::doCheckErrors()
 	{
-		PushUniformSPtr l_return;
-		auto l_it = m_mapUniforms.find( p_name );
+		String compilerLog = doRetrieveCompilerLog();
 
-		if ( l_it != m_mapUniforms.end() )
-		{
-			l_return = l_it->second.lock();
-		}
-
-		return l_return;
-	}
-
-	void ShaderObject::FlushUniforms()
-	{
-		clear_container( m_mapUniforms );
-		clear_container( m_listUniforms );
-	}
-
-	bool ShaderObject::DoCheckErrors()
-	{
-		String l_compilerLog = DoRetrieveCompilerLog();
-
-		if ( !l_compilerLog.empty() )
+		if ( !compilerLog.empty() )
 		{
 			if ( m_status == ShaderStatus::eError )
 			{
-				Logger::LogError( l_compilerLog );
+				Logger::logError( compilerLog );
 			}
 			else
 			{
-				Logger::LogWarning( l_compilerLog );
+				Logger::logWarning( compilerLog );
 			}
 
-			StringStream l_source;
-			l_source << format::line_prefix();
-			l_source << m_loadedSource;
-			Logger::LogInfo( l_source.str() );
-			m_loadedSource.clear();
+			StringStream source;
+			source << format::LinePrefix();
+			source << getSource();
+			Logger::logWarning( source.str() );
 		}
 		else if ( m_status == ShaderStatus::eError )
 		{
-			Logger::LogWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
-			StringStream l_source;
-			l_source << format::line_prefix();
-			l_source << m_loadedSource;
-			Logger::LogInfo( l_source.str() );
+			Logger::logWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
+			StringStream source;
+			source << format::LinePrefix();
+			source << getSource();
+			Logger::logWarning( source.str() );
 			m_status = ShaderStatus::eNotCompiled;
 		}
 
 		return m_status != ShaderStatus::eError;
+	}
+
+	void ShaderObject::doFillVariables()
+	{
+		for ( auto & uniform : m_source.getUniforms() )
+		{
+			auto uniformType = doGetUniformType( uniform.second.m_type );
+
+			if ( uniformType != UniformType::eCount )
+			{
+				createUniform( doGetUniformType( uniform.second.m_type ), uniform.first )->getBaseUniform().setChanged( false );
+			}
+		}
+
+		for ( auto & sampler : m_source.getSamplers() )
+		{
+			auto samplerUniform = createUniform< UniformType::eSampler >( sampler.first, sampler.second.m_count );
+			std::vector< int > values;
+			values.resize( sampler.second.m_count );
+			std::iota( values.begin(), values.end(), sampler.second.m_binding );
+			samplerUniform->setValues( values );
+		}
 	}
 }

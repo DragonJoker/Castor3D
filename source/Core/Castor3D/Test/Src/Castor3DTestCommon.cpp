@@ -8,10 +8,13 @@
 
 #include <Animation/Animable.hpp>
 #include <Animation/Animation.hpp>
+#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
+#include <Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
+#include <Mesh/SubmeshComponent/BonesComponent.hpp>
 #include <Render/Viewport.hpp>
 #include <Scene/Animation/AnimatedObject.hpp>
 #include <Scene/Animation/AnimatedObjectGroup.hpp>
@@ -25,19 +28,26 @@
 
 #include <cmath>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
-using Castor::operator<<;
-using Castor3D::operator<<;
+using castor::operator<<;
+using castor3d::operator<<;
 
 namespace Testing
 {
-	C3DTestCase::C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
-		: TestCase{ p_name }
-		, m_engine{ p_engine }
-		, m_testDataFolder{ Engine::GetDataDirectory() / cuT( "Castor3DTest" ) / cuT( "data" ) }
+	C3DTestCase::C3DTestCase( std::string const & name
+		, castor3d::Engine & engine )
+		: TestCase{ name }
+		, m_engine{ engine }
+		, m_testDataFolder{ Engine::getDataDirectory() / cuT( "Castor3DTest" ) / cuT( "data" ) }
 	{
+	}
+
+	void C3DTestCase::DeCleanupEngine()
+	{
+		m_engine.cleanup();
+		m_engine.initialise( 1, false );
 	}
 
 	bool C3DTestCase::compare( Angle const & p_a, Angle const & p_b )
@@ -45,599 +55,614 @@ namespace Testing
 		return p_a.radians() == p_b.radians();
 	}
 
-	bool C3DTestCase::compare( Castor::Quaternion const & p_a, Castor::Quaternion const & p_b )
+	bool C3DTestCase::compare( castor::Quaternion const & p_a, castor::Quaternion const & p_b )
 	{
-		Castor::Angle l_alphaA;
-		Castor::Angle l_alphaB;
-		Castor::Point3r l_axisA;
-		Castor::Point3r l_axisB;
-		p_a.to_axis_angle( l_axisA, l_alphaA );
-		p_b.to_axis_angle( l_axisB, l_alphaB );
-		auto l_return = CT_EQUAL( l_axisA, l_axisB );
-		return l_return && CT_EQUAL( l_alphaA, l_alphaB );
+		castor::Angle alphaA;
+		castor::Angle alphaB;
+		castor::Point3r axisA;
+		castor::Point3r axisB;
+		p_a.toAxisAngle( axisA, alphaA );
+		p_b.toAxisAngle( axisB, alphaB );
+		auto result = CT_EQUAL( axisA, axisB );
+		return result && CT_EQUAL( alphaA, alphaB );
 	}
 
 	bool C3DTestCase::compare( Scene const & p_a, Scene const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
+		auto lockA = makeUniqueLock( p_a.getSceneNodeCache() );
+		auto lockB = makeUniqueLock( p_b.getSceneNodeCache() );
+		auto itA = p_a.getSceneNodeCache().begin();
+		auto endItA =  p_a.getSceneNodeCache().end();
+		auto itB = p_b.getSceneNodeCache().begin();
+		auto endItB = p_b.getSceneNodeCache().end();
+		bool result = true;
 
-		if ( l_return )
+		while ( result && itA != endItA && itB != endItB )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetSceneNodeCache() );
-			auto l_lockB = make_unique_lock( p_b.GetSceneNodeCache() );
-			auto l_itA = p_a.GetSceneNodeCache().begin();
-			auto l_endItA =  p_a.GetSceneNodeCache().end();
-			auto l_itB = p_b.GetSceneNodeCache().begin();
-			auto l_endItB = p_b.GetSceneNodeCache().end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			if ( result
+					&& itA->first.find( cuT( "_REye" ) ) == String::npos
+					&& itA->first.find( cuT( "_LEye" ) ) == String::npos )
 			{
-				if ( l_return
-					 && l_itA->first.find( cuT( "_REye" ) ) == String::npos
-					 && l_itA->first.find( cuT( "_LEye" ) ) == String::npos )
+				result = CT_EQUAL( itA->first, itB->first );
+				result &= CT_EQUAL( *itA->second, *itB->second );
+			}
+
+			++itA;
+			++itB;
+		}
+
+		if ( result )
+		{
+			auto lockA = makeUniqueLock( p_a.getGeometryCache() );
+			auto lockB = makeUniqueLock( p_b.getGeometryCache() );
+			auto itA = p_a.getGeometryCache().begin();
+			auto endItA =  p_a.getGeometryCache().end();
+			auto itB = p_b.getGeometryCache().begin();
+			auto endItB = p_b.getGeometryCache().end();
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				result = CT_EQUAL( itA->first, itB->first );
+				result &= CT_EQUAL( *itA->second, *itB->second );
+				++itA;
+				++itB;
+			}
+		}
+
+		if ( result )
+		{
+			auto lockA = makeUniqueLock( p_a.getLightCache() );
+			auto lockB = makeUniqueLock( p_b.getLightCache() );
+			auto itA = p_a.getLightCache().begin();
+			auto endItA =  p_a.getLightCache().end();
+			auto itB = p_b.getLightCache().begin();
+			auto endItB = p_b.getLightCache().end();
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				result = CT_EQUAL( itA->first, itB->first );
+				result &= CT_EQUAL( *itA->second, *itB->second );
+				++itA;
+				++itB;
+			}
+		}
+
+		if ( result )
+		{
+			auto lockA = makeUniqueLock( p_a.getCameraCache() );
+			auto lockB = makeUniqueLock( p_b.getCameraCache() );
+			auto itA = p_a.getCameraCache().begin();
+			auto endItA =  p_a.getCameraCache().end();
+			auto itB = p_b.getCameraCache().begin();
+			auto endItB = p_b.getCameraCache().end();
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				if ( result
+					 && itA->first.find( cuT( "_REye" ) ) == String::npos
+					 && itA->first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					l_return = CT_EQUAL( l_itA->first, l_itB->first );
-					l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
+					result = CT_EQUAL( itA->first, itB->first );
+					result &= CT_EQUAL( *itA->second, *itB->second );
 				}
 
-				++l_itA;
-				++l_itB;
+				++itA;
+				++itB;
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetGeometryCache() );
-			auto l_lockB = make_unique_lock( p_b.GetGeometryCache() );
-			auto l_itA = p_a.GetGeometryCache().begin();
-			auto l_endItA =  p_a.GetGeometryCache().end();
-			auto l_itB = p_b.GetGeometryCache().begin();
-			auto l_endItB = p_b.GetGeometryCache().end();
+			auto lockA = makeUniqueLock( p_a.getAnimatedObjectGroupCache() );
+			auto lockB = makeUniqueLock( p_b.getAnimatedObjectGroupCache() );
+			auto itA = p_a.getAnimatedObjectGroupCache().begin();
+			auto endItA =  p_a.getAnimatedObjectGroupCache().end();
+			auto itB = p_b.getAnimatedObjectGroupCache().begin();
+			auto endItB = p_b.getAnimatedObjectGroupCache().end();
 
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			while ( result && itA != endItA && itB != endItB )
 			{
-				l_return = CT_EQUAL( l_itA->first, l_itB->first );
-				l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-				++l_itA;
-				++l_itB;
-			}
-		}
-
-		if ( l_return )
-		{
-			auto l_lockA = make_unique_lock( p_a.GetLightCache() );
-			auto l_lockB = make_unique_lock( p_b.GetLightCache() );
-			auto l_itA = p_a.GetLightCache().begin();
-			auto l_endItA =  p_a.GetLightCache().end();
-			auto l_itB = p_b.GetLightCache().begin();
-			auto l_endItB = p_b.GetLightCache().end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
-			{
-				l_return = CT_EQUAL( l_itA->first, l_itB->first );
-				l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-				++l_itA;
-				++l_itB;
-			}
-		}
-
-		if ( l_return )
-		{
-			auto l_lockA = make_unique_lock( p_a.GetCameraCache() );
-			auto l_lockB = make_unique_lock( p_b.GetCameraCache() );
-			auto l_itA = p_a.GetCameraCache().begin();
-			auto l_endItA =  p_a.GetCameraCache().end();
-			auto l_itB = p_b.GetCameraCache().begin();
-			auto l_endItB = p_b.GetCameraCache().end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
-			{
-				if ( l_return
-					 && l_itA->first.find( cuT( "_REye" ) ) == String::npos
-					 && l_itA->first.find( cuT( "_LEye" ) ) == String::npos )
+				if ( result )
 				{
-					l_return = CT_EQUAL( l_itA->first, l_itB->first );
-					l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
+					result = CT_EQUAL( itA->first, itB->first );
+					result &= CT_EQUAL( *itA->second, *itB->second );
 				}
 
-				++l_itA;
-				++l_itB;
+				++itA;
+				++itB;
 			}
 		}
 
-		if ( l_return )
-		{
-			auto l_lockA = make_unique_lock( p_a.GetAnimatedObjectGroupCache() );
-			auto l_lockB = make_unique_lock( p_b.GetAnimatedObjectGroupCache() );
-			auto l_itA = p_a.GetAnimatedObjectGroupCache().begin();
-			auto l_endItA =  p_a.GetAnimatedObjectGroupCache().end();
-			auto l_itB = p_b.GetAnimatedObjectGroupCache().begin();
-			auto l_endItB = p_b.GetAnimatedObjectGroupCache().end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
-			{
-				if ( l_return )
-				{
-					l_return = CT_EQUAL( l_itA->first, l_itB->first );
-					l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-				}
-
-				++l_itA;
-				++l_itB;
-			}
-		}
-
-		return l_return;
+		return result;
 	}
 
 	bool C3DTestCase::compare( SceneNode const & p_a, SceneNode const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetOrientation(), p_b.GetOrientation() );
-		l_return &= CT_EQUAL( p_a.GetPosition(), p_b.GetPosition() );
-		l_return &= CT_EQUAL( p_a.GetScale(), p_b.GetScale() );
-		l_return &= CT_EQUAL( p_a.GetParent() != nullptr, p_b.GetParent() != nullptr );
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
+		result &= CT_EQUAL( p_a.getOrientation(), p_b.getOrientation() );
+		result &= CT_EQUAL( p_a.getPosition(), p_b.getPosition() );
+		result &= CT_EQUAL( p_a.getScale(), p_b.getScale() );
+		result &= CT_EQUAL( p_a.getParent() != nullptr, p_b.getParent() != nullptr );
 
-		if ( l_return && p_a.GetParent() && p_b.GetParent() )
+		if ( result && p_a.getParent() && p_b.getParent() )
 		{
-			l_return &= CT_EQUAL( p_a.GetParent()->GetName(), p_b.GetParent()->GetName() );
+			result &= CT_EQUAL( p_a.getParent()->getName(), p_b.getParent()->getName() );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool C3DTestCase::compare( Animable const & p_a, Animable const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetAnimations().size(), p_b.GetAnimations().size() ) };
-		auto l_itA = p_a.GetAnimations().begin();
-		auto const l_endItA = p_a.GetAnimations().end();
-		auto l_itB = p_b.GetAnimations().begin();
-		auto const l_endItB = p_b.GetAnimations().end();
+		bool result{ CT_EQUAL( p_a.getAnimations().size(), p_b.getAnimations().size() ) };
+		auto itA = p_a.getAnimations().begin();
+		auto const endItA = p_a.getAnimations().end();
+		auto itB = p_b.getAnimations().begin();
+		auto const endItB = p_b.getAnimations().end();
 
-		while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+		while ( result && itA != endItA && itB != endItB )
 		{
-			l_return = CT_EQUAL( l_itA->first, l_itB->first );
-			l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-			++l_itA;
-			++l_itB;
+			result = CT_EQUAL( itA->first, itB->first );
+			result &= CT_EQUAL( *itA->second, *itB->second );
+			++itA;
+			++itB;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool C3DTestCase::compare( MovableObject const & p_a, MovableObject const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetParent()->GetName(), p_b.GetParent()->GetName() );
-		l_return &= CT_EQUAL( static_cast< Animable const & >( p_a ), static_cast< Animable const & >( p_b ) );
-		return l_return;
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
+		result &= CT_EQUAL( p_a.getParent()->getName(), p_b.getParent()->getName() );
+		result &= CT_EQUAL( static_cast< Animable const & >( p_a ), static_cast< Animable const & >( p_b ) );
+		return result;
 	}
 
 	bool C3DTestCase::compare( Light const & p_a, Light const & p_b )
 	{
-		bool l_return{ CT_EQUAL( static_cast< MovableObject const & >( p_a ), static_cast< MovableObject const & >( p_b ) ) };
-		l_return &= CT_EQUAL( *p_a.GetCategory(), *p_b.GetCategory() );
-		return l_return;
+		bool result{ CT_EQUAL( static_cast< MovableObject const & >( p_a ), static_cast< MovableObject const & >( p_b ) ) };
+		result &= CT_EQUAL( *p_a.getCategory(), *p_b.getCategory() );
+		return result;
 	}
 
 	bool C3DTestCase::compare( Geometry const & p_a, Geometry const & p_b )
 	{
-		bool l_return{ CT_EQUAL( static_cast< MovableObject const & >( p_a ), static_cast< MovableObject const & >( p_b ) ) };
-		l_return &= CT_EQUAL( *p_a.GetMesh(), *p_b.GetMesh() );
-		return l_return;
+		bool result{ CT_EQUAL( static_cast< MovableObject const & >( p_a ), static_cast< MovableObject const & >( p_b ) ) };
+		result &= CT_EQUAL( *p_a.getMesh(), *p_b.getMesh() );
+		return result;
 	}
 
 	bool C3DTestCase::compare( Camera const & p_a, Camera const & p_b )
 	{
-		bool l_return{ CT_EQUAL( static_cast< MovableObject const & >( p_a ), static_cast< MovableObject const & >( p_b ) ) };
-		l_return &= CT_EQUAL( p_a.GetViewport(), p_b.GetViewport() );
-		return l_return;
+		bool result{ CT_EQUAL( static_cast< MovableObject const & >( p_a ), static_cast< MovableObject const & >( p_b ) ) };
+		result &= CT_EQUAL( p_a.getViewport(), p_b.getViewport() );
+		return result;
 	}
 
 	bool C3DTestCase::compare( LightCategory const & p_a, LightCategory const & p_b )
 	{
-		CT_REQUIRE( p_a.GetLightType() == p_b.GetLightType() );
-		bool l_return{ CT_EQUAL( p_a.GetIntensity(), p_b.GetIntensity() ) };
-		l_return &= CT_EQUAL( p_a.GetColour(), p_b.GetColour() );
+		CT_REQUIRE( p_a.getLightType() == p_b.getLightType() );
+		bool result{ CT_EQUAL( p_a.getIntensity(), p_b.getIntensity() ) };
+		result &= CT_EQUAL( p_a.getColour(), p_b.getColour() );
 
-		switch ( p_a.GetLightType() )
+		switch ( p_a.getLightType() )
 		{
 		case LightType::eDirectional:
-			l_return &= CT_EQUAL( static_cast< DirectionalLight const & >( p_a ), static_cast< DirectionalLight const & >( p_b ) );
+			result &= CT_EQUAL( static_cast< DirectionalLight const & >( p_a ), static_cast< DirectionalLight const & >( p_b ) );
 			break;
 
 		case LightType::ePoint:
-			l_return &= CT_EQUAL( static_cast< PointLight const & >( p_a ), static_cast< PointLight const & >( p_b ) );
+			result &= CT_EQUAL( static_cast< PointLight const & >( p_a ), static_cast< PointLight const & >( p_b ) );
 			break;
 
 		case LightType::eSpot:
-			l_return &= CT_EQUAL( static_cast< SpotLight const & >( p_a ), static_cast< SpotLight const & >( p_b ) );
+			result &= CT_EQUAL( static_cast< SpotLight const & >( p_a ), static_cast< SpotLight const & >( p_b ) );
 			break;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool C3DTestCase::compare( DirectionalLight const & p_a, DirectionalLight const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetDirection(), p_b.GetDirection() ) };
-		return l_return;
+		bool result{ CT_EQUAL( p_a.getDirection(), p_b.getDirection() ) };
+		return result;
 	}
 
 	bool C3DTestCase::compare( PointLight const & p_a, PointLight const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetAttenuation(), p_b.GetAttenuation() ) };
-		return l_return;
+		bool result{ CT_EQUAL( p_a.getAttenuation(), p_b.getAttenuation() ) };
+		return result;
 	}
 
 	bool C3DTestCase::compare( SpotLight const & p_a, SpotLight const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetExponent(), p_b.GetExponent() ) };
-		l_return &= CT_EQUAL( p_a.GetAttenuation(), p_b.GetAttenuation() );
-		l_return &= CT_EQUAL( p_a.GetCutOff(), p_b.GetCutOff() );
-		return l_return;
+		bool result{ CT_EQUAL( p_a.getExponent(), p_b.getExponent() ) };
+		result &= CT_EQUAL( p_a.getAttenuation(), p_b.getAttenuation() );
+		result &= CT_EQUAL( p_a.getCutOff(), p_b.getCutOff() );
+		return result;
 	}
 
 	bool C3DTestCase::compare( Viewport const & p_a, Viewport const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetLeft(), p_b.GetLeft() ) };
-		l_return &= CT_EQUAL( p_a.GetRight(), p_b.GetRight() );
-		l_return &= CT_EQUAL( p_a.GetTop(), p_b.GetTop() );
-		l_return &= CT_EQUAL( p_a.GetBottom(), p_b.GetBottom() );
-		l_return &= CT_EQUAL( p_a.GetNear(), p_b.GetNear() );
-		l_return &= CT_EQUAL( p_a.GetFar(), p_b.GetFar() );
-		l_return &= CT_EQUAL( p_a.GetFovY(), p_b.GetFovY() );
-		l_return &= CT_EQUAL( p_a.GetRatio(), p_b.GetRatio() );
-		l_return &= CT_EQUAL( p_a.GetWidth(), p_b.GetWidth() );
-		l_return &= CT_EQUAL( p_a.GetHeight(), p_b.GetHeight() );
-		l_return &= CT_EQUAL( p_a.GetType(), p_b.GetType() );
-		return l_return;
+		bool result{ CT_EQUAL( p_a.getLeft(), p_b.getLeft() ) };
+		result &= CT_EQUAL( p_a.getRight(), p_b.getRight() );
+		result &= CT_EQUAL( p_a.getTop(), p_b.getTop() );
+		result &= CT_EQUAL( p_a.getBottom(), p_b.getBottom() );
+		result &= CT_EQUAL( p_a.getNear(), p_b.getNear() );
+		result &= CT_EQUAL( p_a.getFar(), p_b.getFar() );
+		result &= CT_EQUAL( p_a.getFovY(), p_b.getFovY() );
+		result &= CT_EQUAL( p_a.getRatio(), p_b.getRatio() );
+		result &= CT_EQUAL( p_a.getWidth(), p_b.getWidth() );
+		result &= CT_EQUAL( p_a.getHeight(), p_b.getHeight() );
+		result &= CT_EQUAL( p_a.getType(), p_b.getType() );
+		return result;
 	}
 
 	bool C3DTestCase::compare( Mesh const & p_a, Mesh const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetSubmeshCount(), p_b.GetSubmeshCount() );
-		auto l_itA = p_a.begin();
-		auto const l_endItA = p_a.end();
-		auto l_itB = p_b.begin();
-		auto const l_endItB = p_b.end();
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
+		result &= CT_EQUAL( p_a.getSubmeshCount(), p_b.getSubmeshCount() );
+		auto itA = p_a.begin();
+		auto const endItA = p_a.end();
+		auto itB = p_b.begin();
+		auto const endItB = p_b.end();
 
-		while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+		while ( result && itA != endItA && itB != endItB )
 		{
-			l_return = CT_EQUAL( *( *( l_itA ) ), *( *( l_itB ) ) );
-			++l_itA;
-			++l_itB;
+			result = CT_EQUAL( *( *( itA ) ), *( *( itB ) ) );
+			++itA;
+			++itB;
 		}
 
-		l_return &= CT_EQUAL( p_a.GetSkeleton() != nullptr, p_b.GetSkeleton() != nullptr );
+		result &= CT_EQUAL( p_a.getSkeleton() != nullptr, p_b.getSkeleton() != nullptr );
 
-		if ( l_return && p_a.GetSkeleton() )
+		if ( result && p_a.getSkeleton() )
 		{
-			l_return = CT_EQUAL( *p_a.GetSkeleton(), *p_b.GetSkeleton() );
+			result = CT_EQUAL( *p_a.getSkeleton(), *p_b.getSkeleton() );
 		}
 
-		return l_return;
+		return result;
+	}
+
+	bool C3DTestCase::compare( BonesComponent const & p_a, BonesComponent const & p_b )
+	{
+		return CT_EQUAL( std::make_pair( p_a.getBonesBuffer().getData(), p_a.getBonesBuffer().getSize() )
+			, std::make_pair( p_b.getBonesBuffer().getData(), p_b.getBonesBuffer().getSize() ) );
+	}
+
+	bool C3DTestCase::compare( SubmeshComponent const & p_a, SubmeshComponent const & p_b )
+	{
+		bool result = CT_EQUAL( p_a.getType(), p_b.getType() );
+		result &= CT_EQUAL( p_a.getProgramFlags(), p_b.getProgramFlags() );
+
+		if ( result && p_a.getType() == BonesComponent::Name )
+		{
+			result &= CT_EQUAL( static_cast< BonesComponent const & >( p_a ), static_cast< BonesComponent const & >( p_b ) );
+		}
+
+		return result;
 	}
 
 	bool C3DTestCase::compare( Submesh const & p_a, Submesh const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetPointsCount(), p_b.GetPointsCount() ) };
-		l_return &= CT_EQUAL( std::make_pair( p_a.GetVertexBuffer().data(), p_a.GetVertexBuffer().GetSize() )
-							  , std::make_pair( p_b.GetVertexBuffer().data(), p_b.GetVertexBuffer().GetSize() ) );
-		l_return &= CT_EQUAL( p_a.HasIndexBuffer(), p_b.HasIndexBuffer() );
+		bool result{ CT_EQUAL( p_a.getPointsCount(), p_b.getPointsCount() ) };
+		result &= CT_EQUAL( std::make_pair( p_a.getVertexBuffer().getData(), p_a.getVertexBuffer().getSize() )
+							  , std::make_pair( p_b.getVertexBuffer().getData(), p_b.getVertexBuffer().getSize() ) );
+		result &= CT_EQUAL( std::make_pair( p_a.getIndexBuffer().getData(), p_a.getIndexBuffer().getSize() )
+								, std::make_pair( p_b.getIndexBuffer().getData(), p_b.getIndexBuffer().getSize() ) );
 
-		if ( l_return && p_a.HasIndexBuffer() )
+		if ( result )
 		{
-			l_return &= CT_EQUAL( std::make_pair( p_a.GetIndexBuffer().data(), p_a.GetIndexBuffer().GetSize() )
-								  , std::make_pair( p_b.GetIndexBuffer().data(), p_b.GetIndexBuffer().GetSize() ) );
+			result &= CT_EQUAL( p_a.getComponents().size(), p_b.getComponents().size() );
+
+			for ( auto & itA : p_a.getComponents() )
+			{
+				if ( result )
+				{
+					auto itB = p_b.getComponents().find( itA.first );
+					result = CT_CHECK( itB != p_b.getComponents().end() );
+					result &= CT_EQUAL( *itA.second, *itB->second );
+				}
+			}
 		}
 
-		l_return &= CT_EQUAL( p_a.HasBonesBuffer(), p_b.HasBonesBuffer() );
-
-		if ( l_return && p_a.HasBonesBuffer() )
-		{
-			l_return &= CT_EQUAL( std::make_pair( p_a.GetBonesBuffer().data(), p_a.GetBonesBuffer().GetSize() )
-								  , std::make_pair( p_b.GetBonesBuffer().data(), p_b.GetBonesBuffer().GetSize() ) );
-		}
-
-		l_return &= CT_EQUAL( p_a.HasMatrixBuffer(), p_b.HasMatrixBuffer() );
-
-		if ( l_return && p_a.HasMatrixBuffer() )
-		{
-			l_return &= CT_EQUAL( std::make_pair( p_a.GetMatrixBuffer().data(), p_a.GetMatrixBuffer().GetSize() )
-								  , std::make_pair( p_b.GetMatrixBuffer().data(), p_b.GetMatrixBuffer().GetSize() ) );
-		}
-
-		return l_return;
+		return result;
 	}
 
 	bool C3DTestCase::compare( Skeleton const & p_a, Skeleton const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetGlobalInverseTransform(), p_b.GetGlobalInverseTransform() ) };
+		bool result{ CT_EQUAL( p_a.getGlobalInverseTransform(), p_b.getGlobalInverseTransform() ) };
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = CT_EQUAL( p_a.GetBonesCount(), p_b.GetBonesCount() );
-			auto l_itA = p_a.begin();
-			auto const l_endItA = p_a.end();
-			auto l_itB = p_b.begin();
-			auto const l_endItB = p_b.end();
+			result = CT_EQUAL( p_a.getBonesCount(), p_b.getBonesCount() );
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
 
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			while ( result && itA != endItA && itB != endItB )
 			{
-				auto l_boneA = *l_itA;
-				auto l_boneB = *l_itB;
-				CT_REQUIRE( l_boneA != nullptr && l_boneB != nullptr );
-				l_return = CT_EQUAL( *l_boneA, *l_boneB );
-				++l_itA;
-				++l_itB;
+				auto boneA = *itA;
+				auto boneB = *itB;
+				CT_REQUIRE( boneA != nullptr && boneB != nullptr );
+				result = CT_EQUAL( *boneA, *boneB );
+				++itA;
+				++itB;
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return &= CT_EQUAL( static_cast< Animable const & >( p_a ), static_cast< Animable const & >( p_b ) );
+			result &= CT_EQUAL( static_cast< Animable const & >( p_a ), static_cast< Animable const & >( p_b ) );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool C3DTestCase::compare( Bone const & p_a, Bone const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetParent() == nullptr, p_b.GetParent() == nullptr );
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
+		result &= CT_EQUAL( p_a.getParent() == nullptr, p_b.getParent() == nullptr );
 
-		if ( l_return && p_a.GetParent() )
+		if ( result && p_a.getParent() )
 		{
-			l_return = CT_EQUAL( p_a.GetParent()->GetName(), p_b.GetParent()->GetName() );
+			result = CT_EQUAL( p_a.getParent()->getName(), p_b.getParent()->getName() );
 		}
 
-		l_return &= CT_EQUAL( p_a.GetOffsetMatrix(), p_b.GetOffsetMatrix() );
-		return l_return;
+		result &= CT_EQUAL( p_a.getOffsetMatrix(), p_b.getOffsetMatrix() );
+		return result;
 	}
 
 	bool C3DTestCase::compare( Animation const & p_a, Animation const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		CT_REQUIRE( p_a.GetType() == p_b.GetType() );
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
+		CT_REQUIRE( p_a.getType() == p_b.getType() );
 
-		if ( p_a.GetType() == AnimationType::eSkeleton )
+		if ( p_a.getType() == AnimationType::eSkeleton )
 		{
-			l_return = CT_EQUAL( static_cast< SkeletonAnimation const & >( p_a ), static_cast< SkeletonAnimation const & >( p_b ) );
+			result = CT_EQUAL( static_cast< SkeletonAnimation const & >( p_a ), static_cast< SkeletonAnimation const & >( p_b ) );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool C3DTestCase::compare( SkeletonAnimation const & p_a, SkeletonAnimation const & p_b )
 	{
-		bool l_return = CT_EQUAL( p_a.GetObjects().size(), p_b.GetObjects().size() );
+		bool result = CT_EQUAL( p_a.getObjects().size(), p_b.getObjects().size() );
 
-		if ( l_return )
+		if ( result )
 		{
-			auto l_itA = p_a.GetObjects().begin();
-			auto const l_endItA = p_a.GetObjects().end();
-			auto l_itB = p_b.GetObjects().begin();
-			auto const l_endItB = p_b.GetObjects().end();
+			auto itA = p_a.getObjects().begin();
+			auto const endItA = p_a.getObjects().end();
+			auto itB = p_b.getObjects().begin();
+			auto const endItB = p_b.getObjects().end();
 
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			while ( result && itA != endItA && itB != endItB )
 			{
-				l_return = CT_EQUAL( l_itA->first, l_itB->first );
-				l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-				++l_itA;
-				++l_itB;
+				result = CT_EQUAL( itA->first, itB->first );
+				result &= CT_EQUAL( *itA->second, *itB->second );
+				++itA;
+				++itB;
 			}
 		}
 
-		l_return &= CT_EQUAL( p_a.GetRootObjects().size(), p_b.GetRootObjects().size() );
+		result &= CT_EQUAL( p_a.getRootObjects().size(), p_b.getRootObjects().size() );
 
-		if ( l_return )
+		if ( result )
 		{
-			auto l_itA = p_a.GetRootObjects().begin();
-			auto const l_endItA = p_a.GetRootObjects().end();
-			auto l_itB = p_b.GetRootObjects().begin();
-			auto const l_endItB = p_b.GetRootObjects().end();
+			auto itA = p_a.getRootObjects().begin();
+			auto const endItA = p_a.getRootObjects().end();
+			auto itB = p_b.getRootObjects().begin();
+			auto const endItB = p_b.getRootObjects().end();
 
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			while ( result && itA != endItA && itB != endItB )
 			{
-				l_return = CT_EQUAL( *( *l_itA ), *( *l_itB ) );
-				++l_itA;
-				++l_itB;
+				result = CT_EQUAL( *( *itA ), *( *itB ) );
+				++itA;
+				++itB;
 			}
 		}
 
-		return l_return;
+		if ( result )
+		{
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
+			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+
+			while ( result && itA != endItA )
+			{
+				result = CT_EQUAL( static_cast< SkeletonAnimationKeyFrame const & >( **itA )
+					, static_cast< SkeletonAnimationKeyFrame const & >( **itB ) );
+				++itA;
+				++itB;
+			}
+		}
+
+		return result;
 	}
 
 	bool C3DTestCase::compare( SkeletonAnimationObject const & p_a, SkeletonAnimationObject const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetInterpolationMode(), p_b.GetInterpolationMode() );
-		l_return &= CT_EQUAL( p_a.GetNodeTransform(), p_b.GetNodeTransform() );
-		l_return &= CT_EQUAL( p_a.GetLength(), p_b.GetLength() );
-		l_return &= CT_EQUAL( p_a.GetType(), p_b.GetType() );
-		l_return &= CT_EQUAL( p_a.GetParent() == nullptr, p_b.GetParent() == nullptr );
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
+		result &= CT_EQUAL( p_a.getInterpolationMode(), p_b.getInterpolationMode() );
+		result &= CT_EQUAL( p_a.getNodeTransform(), p_b.getNodeTransform() );
+		result &= CT_EQUAL( p_a.getType(), p_b.getType() );
+		result &= CT_EQUAL( p_a.getParent() == nullptr, p_b.getParent() == nullptr );
 
-		if ( l_return && p_a.GetParent() )
+		if ( result && p_a.getParent() )
 		{
-			l_return = CT_EQUAL( p_a.GetParent()->GetName(), p_b.GetParent()->GetName() );
+			result = CT_EQUAL( p_a.getParent()->getName(), p_b.getParent()->getName() );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = CT_EQUAL( p_a.GetKeyFrames().size(), p_b.GetKeyFrames().size() );
-			auto l_itA = p_a.GetKeyFrames().begin();
-			auto const l_endItA = p_a.GetKeyFrames().end();
-			auto l_itB = p_b.GetKeyFrames().begin();
-			auto const l_endItB = p_b.GetKeyFrames().end();
+			result = CT_EQUAL( p_a.getChildren().size(), p_b.getChildren().size() );
+			auto itA = p_a.getChildren().begin();
+			auto const endItA = p_a.getChildren().end();
+			auto itB = p_b.getChildren().begin();
+			auto const endItB = p_b.getChildren().end();
 
-			while ( l_return && l_itA != l_endItA )
+			while ( result && itA != endItA && itB != endItB )
 			{
-				l_return = CT_EQUAL( *l_itA, *l_itB );
-				++l_itA;
-				++l_itB;
+				auto objectA = *itA;
+				auto objectB = *itB;
+				CT_REQUIRE( objectA->getType() == objectB->getType() );
+				result = CT_EQUAL( *objectA, *objectB );
+				++itA;
+				++itB;
 			}
 		}
 
-		if ( l_return )
-		{
-			l_return = CT_EQUAL( p_a.GetChildren().size(), p_b.GetChildren().size() );
-			auto l_itA = p_a.GetChildren().begin();
-			auto const l_endItA = p_a.GetChildren().end();
-			auto l_itB = p_b.GetChildren().begin();
-			auto const l_endItB = p_b.GetChildren().end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
-			{
-				auto l_objectA = *l_itA;
-				auto l_objectB = *l_itB;
-				CT_REQUIRE( l_objectA->GetType() == l_objectB->GetType() );
-				l_return = CT_EQUAL( *l_objectA, *l_objectB );
-				++l_itA;
-				++l_itB;
-			}
-		}
-
-		return l_return;
+		return result;
 	}
 
-	bool C3DTestCase::compare( KeyFrame const & p_a, KeyFrame const & p_b )
+	bool C3DTestCase::compare( AnimationKeyFrame const & p_a, AnimationKeyFrame const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetTransform(), p_b.GetTransform() ) };
-		l_return &= CT_EQUAL( p_a.GetTimeIndex(), p_b.GetTimeIndex() );
-		return l_return;
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
+		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( AnimatedObjectGroup const & p_a, AnimatedObjectGroup const & p_b )
+	bool C3DTestCase::compare( castor3d::MeshAnimationKeyFrame const & p_a, castor3d::MeshAnimationKeyFrame const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = CT_EQUAL( p_a.GetAnimations().size(), p_b.GetAnimations().size() );
-			auto l_itA = p_a.GetAnimations().begin();
-			auto const l_endItA = p_a.GetAnimations().end();
-			auto l_itB = p_b.GetAnimations().begin();
-			auto const l_endItB = p_b.GetAnimations().end();
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
+			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
 
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			while ( result && itA != endItA && itB != endItB )
 			{
-				l_return = CT_EQUAL( l_itA->first, l_itB->first );
-				l_return &= CT_EQUAL( l_itA->second.m_state, l_itB->second.m_state );
-				l_return &= CT_EQUAL( l_itA->second.m_scale, l_itB->second.m_scale );
-				l_return &= CT_EQUAL( l_itA->second.m_looped, l_itB->second.m_looped );
-				++l_itA;
-				++l_itB;
+				result = CT_EQUAL( itA->first, itB->first );
+				//result &= CT_EQUAL( itA->second, itB->second );
+				++itA;
+				++itB;
 			}
 		}
 
-		if ( l_return )
-		{
-			l_return = CT_EQUAL( p_a.GetObjects().size(), p_b.GetObjects().size() );
-			auto l_itA = p_a.GetObjects().begin();
-			auto const l_endItA = p_a.GetObjects().end();
-			auto l_itB = p_b.GetObjects().begin();
-			auto const l_endItB = p_b.GetObjects().end();
+		return result;
+	}
 
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+	bool C3DTestCase::compare( castor3d::SkeletonAnimationKeyFrame const & p_a, castor3d::SkeletonAnimationKeyFrame const & p_b )
+	{
+		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
+
+		if ( result )
+		{
+			auto itA = p_a.begin();
+			auto const endItA = p_a.end();
+			auto itB = p_b.begin();
+			auto const endItB = p_b.end();
+			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+
+			while ( result && itA != endItA && itB != endItB )
 			{
-				l_return = CT_EQUAL( l_itA->first, l_itB->first );
-				l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-				++l_itA;
-				++l_itB;
+				result = CT_EQUAL( itA->first->getName(), itB->first->getName() );
+				result &= CT_EQUAL( itA->second, itB->second );
+				++itA;
+				++itB;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( AnimatedObject const & p_a, AnimatedObject const & p_b )
+	bool C3DTestCase::compare( AnimatedObjectGroup const & p_a, AnimatedObjectGroup const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = CT_EQUAL( p_a.GetAnimations().size(), p_b.GetAnimations().size() );
-			auto l_itA = p_a.GetAnimations().begin();
-			auto const l_endItA = p_a.GetAnimations().end();
-			auto l_itB = p_b.GetAnimations().begin();
-			auto const l_endItB = p_b.GetAnimations().end();
+			result = CT_EQUAL( p_a.getAnimations().size(), p_b.getAnimations().size() );
+			auto itA = p_a.getAnimations().begin();
+			auto const endItA = p_a.getAnimations().end();
+			auto itB = p_b.getAnimations().begin();
+			auto const endItB = p_b.getAnimations().end();
 
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			while ( result && itA != endItA && itB != endItB )
 			{
-				l_return = CT_EQUAL( l_itA->first, l_itB->first );
-				l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-				++l_itA;
-				++l_itB;
+				result = CT_EQUAL( itA->first, itB->first );
+				result &= CT_EQUAL( itA->second.m_state, itB->second.m_state );
+				result &= CT_EQUAL( itA->second.m_scale, itB->second.m_scale );
+				result &= CT_EQUAL( itA->second.m_looped, itB->second.m_looped );
+				++itA;
+				++itB;
 			}
 		}
 
-		return l_return;
+		if ( result )
+		{
+			result = CT_EQUAL( p_a.getObjects().size(), p_b.getObjects().size() );
+			auto itA = p_a.getObjects().begin();
+			auto const endItA = p_a.getObjects().end();
+			auto itB = p_b.getObjects().begin();
+			auto const endItB = p_b.getObjects().end();
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				result = CT_EQUAL( itA->first, itB->first );
+				result &= CT_EQUAL( *itA->second, *itB->second );
+				++itA;
+				++itB;
+			}
+		}
+
+		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( AnimationInstance const & p_a, AnimationInstance const & p_b )
+	bool C3DTestCase::compare( AnimatedObject const & p_a, AnimatedObject const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetAnimation().GetName(), p_b.GetAnimation().GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetScale(), p_b.GetScale() );
-		l_return &= CT_EQUAL( p_a.GetState(), p_b.GetState() );
-		l_return &= CT_EQUAL( p_a.IsLooped(), p_b.IsLooped() );
-		CT_REQUIRE( p_a.GetAnimation().GetType() == p_b.GetAnimation().GetType() );
+		bool result{ CT_EQUAL( p_a.getName(), p_b.getName() ) };
 
-		switch ( p_a.GetAnimation().GetType() )
+		if ( result )
+		{
+			result = CT_EQUAL( p_a.getAnimations().size(), p_b.getAnimations().size() );
+			auto itA = p_a.getAnimations().begin();
+			auto const endItA = p_a.getAnimations().end();
+			auto itB = p_b.getAnimations().begin();
+			auto const endItB = p_b.getAnimations().end();
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				result = CT_EQUAL( itA->first, itB->first );
+				result &= CT_EQUAL( *itA->second, *itB->second );
+				++itA;
+				++itB;
+			}
+		}
+
+		return result;
+	}
+
+	bool C3DTestCase::compare( AnimationInstance const & p_a, AnimationInstance const & p_b )
+	{
+		bool result{ CT_EQUAL( p_a.getAnimation().getName(), p_b.getAnimation().getName() ) };
+		result &= CT_EQUAL( p_a.getScale(), p_b.getScale() );
+		result &= CT_EQUAL( p_a.getState(), p_b.getState() );
+		result &= CT_EQUAL( p_a.isLooped(), p_b.isLooped() );
+		CT_REQUIRE( p_a.getAnimation().getType() == p_b.getAnimation().getType() );
+
+		switch ( p_a.getAnimation().getType() )
 		{
 		case AnimationType::eSkeleton:
-			l_return &= CT_EQUAL( static_cast< SkeletonAnimationInstance const & >( p_a ), static_cast< SkeletonAnimationInstance const & >( p_b ) );
+			result &= CT_EQUAL( static_cast< SkeletonAnimationInstance const & >( p_a ), static_cast< SkeletonAnimationInstance const & >( p_b ) );
 			break;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool C3DTestCase::C3DTestCase::compare( SkeletonAnimationInstance const & p_a, SkeletonAnimationInstance const & p_b )
+	bool C3DTestCase::compare( SkeletonAnimationInstance const & p_a, SkeletonAnimationInstance const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetRootObjectsCount(), p_b.GetRootObjectsCount() ) };
-		l_return &= CT_EQUAL( p_a.GetObjectsCount(), p_b.GetObjectsCount() );
-
-		if ( l_return )
-		{
-			auto l_itA = p_a.begin();
-			auto const l_endItA = p_a.end();
-			auto l_itB = p_b.begin();
-			auto const l_endItB = p_b.end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
-			{
-				l_return &= CT_EQUAL( *( *l_itA ), *( *l_itB ) );
-				++l_itA;
-				++l_itB;
-			}
-		}
-
-		return l_return;
-	}
-
-	bool C3DTestCase::C3DTestCase::compare( SkeletonAnimationInstanceObject const & p_a, SkeletonAnimationInstanceObject const & p_b )
-	{
-		bool l_return{ true };
-
-		if ( l_return )
-		{
-			l_return = CT_EQUAL( p_a.GetChildren().size(), p_b.GetChildren().size() );
-			auto l_itA = p_a.GetChildren().begin();
-			auto const l_endItA = p_a.GetChildren().end();
-			auto l_itB = p_b.GetChildren().begin();
-			auto const l_endItB = p_b.GetChildren().end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
-			{
-				l_return &= CT_EQUAL( *( *l_itA ), *( *l_itB ) );
-				++l_itA;
-				++l_itB;
-			}
-		}
-
-		return l_return;
+		return CT_EQUAL( p_a.getObjectsCount(), p_b.getObjectsCount() );
 	}
 
 	//*********************************************************************************************

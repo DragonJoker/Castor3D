@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_FILE_H___
 #define ___CASTOR_FILE_H___
@@ -30,14 +11,7 @@ SOFTWARE.
 #include "Exception/Exception.hpp"
 #include "Exception/Assertion.hpp"
 
-#if defined( DeleteFile )
-#	undef DeleteFile
-#endif
-#if defined( CopyFile )
-#	undef CopyFile
-#endif
-
-namespace Castor
+namespace castor
 {
 	/**
 	 *\~english
@@ -53,7 +27,7 @@ namespace Castor
 	 *\param[in]	p_pszMode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
+	CU_API bool fileOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
 	/**
 	 *\~english
 	 *\brief		Opens a file
@@ -68,7 +42,7 @@ namespace Castor
 	 *\param[in]	p_pszMode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
+	CU_API bool fileOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
 	/**
 	 *\~english
 	 *\brief		Seeks into a file
@@ -83,7 +57,7 @@ namespace Castor
 	 *\param[in]	p_iOrigin	L'origine du déplacement
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool FSeek( FILE * p_pFile, int64_t p_offset, int p_iOrigin );
+	CU_API bool fileSeek( FILE * p_pFile, int64_t p_offset, int p_iOrigin );
 	/**
 	 *\~english
 	 *\brief		Retrieves the file cursor position
@@ -94,14 +68,14 @@ namespace Castor
 	 *\param[out]	p_pFile		Le descripteur du fichier
 	 *\return		La position
 	 */
-	CU_API int64_t FTell( FILE * p_pFile );
+	CU_API int64_t fileTell( FILE * p_pFile );
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 03/01/2011
 	\~english
 	\brief User friendly File class
-	\remark Adds some static functions to check file/directory validity, file/directory creation...
+	\remark adds some static functions to check file/directory validity, file/directory creation...
 	\~french
 	\brief Classe de gestion de fichier
 	\remark Ajoute quelques fonctions statiques de vérification d'existence, suppression, ...
@@ -111,7 +85,7 @@ namespace Castor
 	public:
 		/*!
 		\~english
-		\brief Open modes enumerator
+		\brief open modes enumerator
 		\~french
 		\brief Enumérateur des modes d'ouverture
 		*/
@@ -145,22 +119,22 @@ namespace Castor
 			//!\~english	Others can execute.
 			//!\~french		Les autres peuvent exécuter.
 			eOthersExec = 0x00000400,
-			//!\~english	Read, write and execution rights for owner.
+			//!\~english	read, write and execution rights for owner.
 			//!\~french		Droits en lecture, écriture et exécution pour le propriétaire.
 			eUserRWX = eUserRead | eUserWrite | eUserExec,
-			//!\~english	Read, write and execution rights for owner group.
+			//!\~english	read, write and execution rights for owner group.
 			//!\~french		Droits en lecture, écriture et exécution pour le groupe du propriétaire.
 			eGroupRWX = eGroupRead | eGroupWrite | eGroupExec,
-			//!\~english	Read, write and execution rights for others.
+			//!\~english	read, write and execution rights for others.
 			//!\~french		Droits en lecture, écriture et exécution pour les autres.
 			eOthersRWX = eOthersRead | eOthersWrite | eOthersExec,
-			//!\~english	Read, write and execution rights for all users.
+			//!\~english	read, write and execution rights for all users.
 			//!\~french		Droits en lecture, écriture et exécution pour tous les utilisateurs.
 			eAllRWX = eUserRWX | eGroupRWX | eOthersRWX,
 		};
 		/*!
 		\~english
-		\brief Open modes enumerator
+		\brief open modes enumerator
 		\~french
 		\brief Enumérateur des modes d'ouverture
 		*/
@@ -170,10 +144,10 @@ namespace Castor
 			//!\~english	Dummy open mode, not to be used.
 			//!\~french		Mode d'ouverture 'dummy', à ne pas utiliser.
 			eDummy = 0x00000000,
-			//!\~english	Read open mode.
+			//!\~english	read open mode.
 			//!\~french		Mode d'ouverture en lecture.
 			eRead = 0x00000001,
-			//!\~english	Write open mode.
+			//!\~english	write open mode.
 			//!\~french		Mode d'ouverture en création / écriture.
 			eWrite = 0x00000002,
 			//!\~english	Append open mode.
@@ -254,7 +228,7 @@ namespace Castor
 		CU_API virtual ~File();
 		/**
 		 *\~english
-		 *\brief		Seek function, sets the cursor in the file according to the given offset and the given mode
+		 *\brief		sets the cursor in the file according to the given offset and the given mode
 		 *\param[in]	p_offset	The wanted offset
 		 *\param[in]	p_origin	The offset mode
 		 *\return		\p 0 if successful
@@ -264,7 +238,8 @@ namespace Castor
 		 *\param[in]	p_origin	Le mode
 		 *\return		\p 0 si réussi
 		 */
-		CU_API int Seek( long long p_offset, OffsetMode p_origin = OffsetMode::eBeginning );
+		CU_API int seek( long long p_offset
+			, OffsetMode p_origin = OffsetMode::eBeginning );
 		/**
 		 *\~english
 		 *\brief		List all files in a directory, recursively or not
@@ -279,25 +254,25 @@ namespace Castor
 		 *\param[in]	p_recursive		Définit si la recherche doit être récursive ou pas
 		 *\return		\p true si le dossier a été listé
 		 */
-		CU_API static bool ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive = false );
+		CU_API static bool listDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive = false );
 		/**
 		 *\~english
 		 *\brief		Gives the current directory (id est where the execution is)
 		 *\return		The directory
 		 *\~french
-		 *\brief		Donne le répertoire d'exécution
+		 *\brief		donne le répertoire d'exécution
 		 *\return		Le répertoire
 		 */
-		CU_API static Path GetExecutableDirectory();
+		CU_API static Path getExecutableDirectory();
 		/**
 		 *\~english
 		 *\brief		Gives the user home directory
 		 *\return		The directory
 		 *\~french
-		 *\brief		Donne le répertoire de l'utilisateur courant
+		 *\brief		donne le répertoire de l'utilisateur courant
 		 *\return		Le répertoire
 		 */
-		CU_API static Path	GetUserDirectory();
+		CU_API static Path	getUserDirectory();
 		/**
 		 *\~english
 		 *\brief		Tests directory existence
@@ -308,7 +283,7 @@ namespace Castor
 		 *\param[in]	p_path	Le chemin du dossier
 		 *\return		\p true si le dossier existe
 		 */
-		CU_API static bool	DirectoryExists( Path const & p_path );
+		CU_API static bool	directoryExists( Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Creates a directory
@@ -321,7 +296,7 @@ namespace Castor
 		 *\param[in]	p_flags	Les droits d'utilisation
 		 *\return		\p true si le dossier a été créé
 		 */
-		CU_API static bool DirectoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags = CreateMode::eAllRWX );
+		CU_API static bool directoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags = CreateMode::eAllRWX );
 		/**
 		 *\~english
 		 *\brief		Deletes an empty directory
@@ -332,7 +307,7 @@ namespace Castor
 		 *\param[in]	p_path	Le chemin du dossier
 		 *\return		\p true si le dossier a été supprimé
 		 */
-		CU_API static bool DirectoryDelete( Path const & p_path );
+		CU_API static bool directoryDelete( Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Tests file existence
@@ -343,7 +318,7 @@ namespace Castor
 		 *\param[in]	p_pathFile	Le chemin du fichier
 		 *\return		\p true si le fichier existe
 		 */
-		CU_API static bool	FileExists( Path const & p_pathFile );
+		CU_API static bool fileExists( Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Deletes a file
@@ -354,7 +329,7 @@ namespace Castor
 		 *\param[in]	p_file	    Le chemin du fichier
 		 *\return		\p true si le fichier a été supprimé correctement
 		 */
-		CU_API static bool	DeleteFile( Path const & p_file );
+		CU_API static bool deleteFile( Path const & p_file );
 		/**
 		 *\~english
 		 *\brief		Copy a file into a folder
@@ -367,7 +342,7 @@ namespace Castor
 		 *\param[in]	p_folder	Le dossier de destination
 		 *\return		\p true si le fichier a été copié correctement
 		 */
-		CU_API static bool	CopyFile( Path const & p_file, Path const & p_folder );
+		CU_API static bool copyFile( Path const & p_file, Path const & p_folder );
 		/**
 		 *\~english
 		 *\brief		Retrieves the file size
@@ -376,7 +351,7 @@ namespace Castor
 		 *\brief		Récupère la taille du fichier
 		 *\return		La valeur
 		*/
-		CU_API long long GetLength();
+		CU_API long long getLength();
 		/**
 		 *\~english
 		 *\brief		Tells if the file cursor is OK
@@ -385,7 +360,7 @@ namespace Castor
 		 *\brief		Dit si le curseur du fichier est OK
 		 *\return		\p true si le curseur du fichier n'est pas en erreur ni EOF
 		*/
-		CU_API bool IsOk()const;
+		CU_API bool isOk()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the file cursor position
@@ -394,7 +369,7 @@ namespace Castor
 		 *\brief		Récupère la position du curseur du fichier
 		 *\return		La valeur
 		*/
-		CU_API long long Tell();
+		CU_API long long tell();
 		/**
 		 *\~english
 		 *\brief		Retrieves the full file path, name and extension
@@ -403,7 +378,7 @@ namespace Castor
 		 *\brief		Récupère le chemin, nom et extension du fichier
 		 *\return		La valeur
 		*/
-		inline	Path const & GetFileFullPath()const
+		inline	Path const & getFileFullPath()const
 		{
 			return m_fileFullPath;
 		}
@@ -415,9 +390,9 @@ namespace Castor
 		 *\brief		Récupère le chemin du fichier
 		 *\return		La valeur
 		*/
-		inline Path GetFilePath()const
+		inline Path getFilePath()const
 		{
-			return m_fileFullPath.GetPath();
+			return m_fileFullPath.getPath();
 		}
 		/**
 		 *\~english
@@ -427,15 +402,15 @@ namespace Castor
 		 *\brief		Récupère le nom et l'extension du fichier
 		 *\return		La valeur
 		*/
-		inline Path GetFileName()const
+		inline Path getFileName()const
 		{
-			return Path{ m_fileFullPath.GetFullFileName() };
+			return Path{ m_fileFullPath.getFullFileName() };
 		}
 
 	protected:
 		DECLARE_INVARIANT_BLOCK()
-		CU_API uint64_t DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize );
-		CU_API uint64_t DoRead( uint8_t * p_buffer, uint64_t p_uiSize );
+		CU_API uint64_t doWrite( uint8_t const * p_buffer, uint64_t p_uiSize );
+		CU_API uint64_t doRead( uint8_t * p_buffer, uint64_t p_uiSize );
 
 	protected:
 		//!\~english	The opening mode.

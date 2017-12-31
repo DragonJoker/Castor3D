@@ -4,55 +4,28 @@
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-#if defined( CASTOR_COMPILER_MSVC )
-	static const String GetRendererTypeFunctionABIName = cuT( "?GetRendererType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
-#elif defined( CASTOR_COMPILER_GNUC )
-#	if CASTOR_COMPILER_VERSION >= 50300
-	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypeB5cxx11v" );
-#	else
-	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypev" );
-#	endif
-#else
-#	error "Implement ABI names for this compiler"
-#endif
-
-	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::eRenderer, p_library, *p_engine )
+	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin( PluginType::eRenderer, p_library, *engine )
 	{
-		if ( !p_library->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
-		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetRendererType plug-in function : " );
-			l_strError += System::GetLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
-		}
-
-		if ( m_pfnOnLoad )
-		{
-			m_pfnOnLoad( GetEngine() );
-		}
+		load();
 	}
 
 	RendererPlugin::~RendererPlugin()
 	{
-		if ( m_pfnOnUnload )
-		{
-			m_pfnOnUnload( GetEngine() );
-		}
+		unload();
 	}
 
-	Castor::String RendererPlugin::GetRendererType()
+	String const & RendererPlugin::getRendererType()
 	{
-		Castor::String l_return = RENDERER_TYPE_UNDEFINED;
+		return m_type;
+	}
 
-		if ( m_pfnGetRendererType )
-		{
-			l_return = m_pfnGetRendererType();
-		}
-
-		return l_return;
+	void RendererPlugin::setRendererType( String const & p_type )
+	{
+		m_type = p_type;
 	}
 }

@@ -2,14 +2,14 @@
 
 #include "Common/OpenGl.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
 	GlDepthStencilRenderBuffer::GlDepthStencilRenderBuffer( OpenGl & p_gl, PixelFormat p_format )
 		: DepthStencilRenderBuffer( p_format )
-		, m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_format ), *this )
+		, m_glRenderBuffer( p_gl, p_gl.getRboStorage( p_format ), *this )
 	{
 	}
 
@@ -17,52 +17,52 @@ namespace GlRender
 	{
 	}
 
-	bool GlDepthStencilRenderBuffer::Create()
+	bool GlDepthStencilRenderBuffer::create()
 	{
-		return m_glRenderBuffer.Create();
+		return m_glRenderBuffer.create();
 	}
 
-	void GlDepthStencilRenderBuffer::Destroy()
+	void GlDepthStencilRenderBuffer::destroy()
 	{
-		m_glRenderBuffer.Destroy();
+		m_glRenderBuffer.destroy();
 	}
 
-	bool GlDepthStencilRenderBuffer::Initialise( Castor::Size const & p_size )
+	bool GlDepthStencilRenderBuffer::initialise( castor::Size const & p_size )
 	{
-		bool l_return = m_glRenderBuffer.Initialise( p_size );
+		bool result = m_glRenderBuffer.initialise( p_size );
 
-		if ( l_return )
+		if ( result )
 		{
 			m_size = p_size;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void GlDepthStencilRenderBuffer::Cleanup()
+	void GlDepthStencilRenderBuffer::cleanup()
 	{
-		m_glRenderBuffer.Cleanup();
+		m_glRenderBuffer.cleanup();
 	}
 
-	void GlDepthStencilRenderBuffer::Bind()
+	void GlDepthStencilRenderBuffer::bind()
 	{
-		m_glRenderBuffer.Bind();
+		m_glRenderBuffer.bind();
 	}
 
-	void GlDepthStencilRenderBuffer::Unbind()
+	void GlDepthStencilRenderBuffer::unbind()
 	{
-		m_glRenderBuffer.Unbind();
+		m_glRenderBuffer.unbind();
 	}
 
-	bool GlDepthStencilRenderBuffer::Resize( Castor::Size const & p_size )
+	bool GlDepthStencilRenderBuffer::resize( castor::Size const & p_size )
 	{
-		bool l_return = m_glRenderBuffer.Resize( p_size );
+		bool result = m_glRenderBuffer.resize( p_size );
 
-		if ( l_return )
+		if ( result )
 		{
 			m_size = p_size;
 		}
 
-		return l_return;
+		return result;
 	}
 }

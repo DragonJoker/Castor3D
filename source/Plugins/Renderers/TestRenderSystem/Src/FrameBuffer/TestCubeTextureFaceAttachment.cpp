@@ -1,12 +1,12 @@
 #include "FrameBuffer/TestCubeTextureFaceAttachment.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
-	TestCubeTextureFaceAttachment::TestCubeTextureFaceAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
-		: TextureAttachment( p_texture )
+	TestCubeTextureFaceAttachment::TestCubeTextureFaceAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )
+		: TextureAttachment( p_texture, p_mipLevel )
 		, m_face( p_face )
 	{
 	}
@@ -15,15 +15,32 @@ namespace TestRender
 	{
 	}
 
-	void TestCubeTextureFaceAttachment::DoAttach()
+	void TestCubeTextureFaceAttachment::doDownload( castor::Position const & p_offset
+		, castor::PxBufferBase & p_buffer )const
 	{
 	}
 
-	void TestCubeTextureFaceAttachment::DoDetach()
+	void TestCubeTextureFaceAttachment::doAttach()
 	{
 	}
 
-	void TestCubeTextureFaceAttachment::DoClear( BufferComponent p_component )const
-	{	
+	void TestCubeTextureFaceAttachment::doDetach()
+	{
+	}
+
+	void TestCubeTextureFaceAttachment::doClear( RgbaColour const & p_colour )const
+	{
+	}
+
+	void TestCubeTextureFaceAttachment::doClear( float p_depth )const
+	{
+	}
+
+	void TestCubeTextureFaceAttachment::doClear( int p_stencil )const
+	{
+	}
+
+	void TestCubeTextureFaceAttachment::doClear( float p_depth, int p_stencil )const
+	{
 	}
 }

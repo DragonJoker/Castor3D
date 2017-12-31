@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___TRS_COLOUR_RENDER_BUFFER_H___
 #define ___TRS_COLOUR_RENDER_BUFFER_H___
 
@@ -34,12 +13,12 @@ namespace TestRender
 	\version	0.7.0.0
 	\date		12/11/2012
 	\~english
-	\brief		Render buffer receiving colour component.
+	\brief		Render buffer receiving colour PixelComponents.
 	\~french
 	\brief		Tampon de rendu recevant une composante de couleur.
 	*/
 	class TestColourRenderBuffer
-		: public Castor3D::ColourRenderBuffer
+		: public castor3d::ColourRenderBuffer
 	{
 	public:
 		/**
@@ -52,7 +31,7 @@ namespace TestRender
 		 *\param[in]	p_gl		L'api OpenGL.
 		 *\param[in]	p_format	Le format des pixels.
 		 */
-		TestColourRenderBuffer( Castor::PixelFormat p_format );
+		explicit TestColourRenderBuffer( castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,33 +40,33 @@ namespace TestRender
 		 */
 		virtual ~TestColourRenderBuffer();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Create
+		 *\copydoc		castor3d::ColourRenderBuffer::create
 		 */
-		virtual bool Create();
+		virtual bool create();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Destroy
+		 *\copydoc		castor3d::ColourRenderBuffer::Destroy
 		 */
-		virtual void Destroy();
+		virtual void destroy();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Initialise
+		 *\copydoc		castor3d::ColourRenderBuffer::Initialise
 		 */
-		virtual bool Initialise( Castor::Size const & p_size );
+		virtual bool initialise( castor::Size const & p_size );
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Cleanup
+		 *\copydoc		castor3d::ColourRenderBuffer::Cleanup
 		 */
-		virtual void Cleanup();
+		virtual void cleanup();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Bind
+		 *\copydoc		castor3d::ColourRenderBuffer::Bind
 		 */
-		virtual void Bind();
+		virtual void bind();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Unbind
+		 *\copydoc		castor3d::ColourRenderBuffer::Unbind
 		 */
-		virtual void Unbind();
+		virtual void unbind();
 		/**
-		 *\copydoc		Castor3D::ColourRenderBuffer::Resize
+		 *\copydoc		castor3d::ColourRenderBuffer::Resize
 		 */
-		virtual bool Resize( Castor::Size const & p_size );
+		virtual bool resize( castor::Size const & p_size );
 	};
 }
 

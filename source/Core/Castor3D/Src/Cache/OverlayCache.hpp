@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_OVERLAY_CACHE_H___
 #define ___C3D_OVERLAY_CACHE_H___
@@ -30,7 +11,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -46,10 +27,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct CacheTraits< Overlay, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< Overlay >( KeyType const &, OverlayType, SceneSPtr, OverlaySPtr ) >;
 		using Merger = std::function< void( CacheBase< Overlay, KeyType > const &
-											, Castor::Collection< Overlay, KeyType > &
+											, castor::Collection< Overlay, KeyType > &
 											, std::shared_ptr< Overlay > ) >;
 	};
 	/*!
@@ -69,9 +50,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Opérateur de comparaison.
 		 */
-		inline bool operator()( OverlayCategorySPtr p_a, OverlayCategorySPtr p_b )
+		inline bool operator()( OverlayCategorySPtr p_a, OverlayCategorySPtr p_b )const
 		{
-			return p_a->GetLevel() < p_b->GetLevel() || ( p_a->GetLevel() == p_b->GetLevel() && p_a->GetIndex() < p_b->GetIndex() );
+			return p_a->getLevel() < p_b->getLevel() || ( p_a->getLevel() == p_b->getLevel() && p_a->getIndex() < p_b->getIndex() );
 		}
 	};
 	using OverlayCategorySet = std::set< OverlayCategorySPtr, OverlayCategorySort >;
@@ -85,11 +66,11 @@ namespace Castor3D
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	template<>
-	class Cache< Overlay, Castor::String >
-		: public CacheBase< Overlay, Castor::String >
+	class Cache< Overlay, castor::String >
+		: public CacheBase< Overlay, castor::String >
 	{
 	public:
-		using MyCacheType = CacheBase< Overlay, Castor::String >;
+		using MyCacheType = CacheBase< Overlay, castor::String >;
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
@@ -97,13 +78,13 @@ namespace Castor3D
 		using Producer = typename MyCacheType::Producer;
 		using Merger = typename MyCacheType::Merger;
 
-		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
-		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
-		DECLARE_MAP( Castor::String, FontTextureSPtr, FontTextureStr );
+		typedef castor::Collection< Overlay, castor::String >::TObjPtrMapIt iterator;
+		typedef castor::Collection< Overlay, castor::String >::TObjPtrMapConstIt const_iterator;
+		DECLARE_MAP( castor::String, FontTextureSPtr, FontTextureStr );
 
 		struct OverlayInitialiser
 		{
-			OverlayInitialiser( Cache< Overlay, Castor::String > & p_cache );
+			explicit OverlayInitialiser( Cache< Overlay, castor::String > & cache );
 			void operator()( OverlaySPtr p_element );
 
 		private:
@@ -113,7 +94,7 @@ namespace Castor3D
 
 		struct OverlayCleaner
 		{
-			OverlayCleaner( Cache< Overlay, Castor::String > & p_cache );
+			explicit OverlayCleaner( Cache< Overlay, castor::String > & cache );
 			void operator()( OverlaySPtr p_element );
 
 		private:
@@ -125,20 +106,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_produce		The element producer.
 		 *\param[in]	p_initialise	The element initialiser.
 		 *\param[in]	p_clean			The element cleaner.
 		 *\param[in]	p_merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_produce		Le créateur d'objet.
 		 *\param[in]	p_initialise	L'initialiseur d'objet.
 		 *\param[in]	p_clean			Le nettoyeur d'objet.
 		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 		 */
-		C3D_API Cache( Engine & p_engine
+		C3D_API Cache( Engine & engine
 		   , Producer && p_produce
 		   , Initialiser && p_initialise = Initialiser{}
 		   , Cleaner && p_clean = Cleaner{}
@@ -156,28 +137,28 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les listes d'incrustations
 		 */
-		C3D_API void Clear();
+		C3D_API void clear();
 		/**
 		 *\~english
 		 *\brief		Cleans all overlays up.
 		 *\~french
 		 *\brief		Nettoie les incrustations.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
 		 *\~french
 		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
 		 */
-		C3D_API void UpdateRenderer();
+		C3D_API void updateRenderer();
 		/**
 		 *\~english
 		 *\brief		Updates overlays.
 		 *\~french
 		 *\brief		Met à jour les incrustations.
 		 */
-		C3D_API void Update();
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Renders all visible overlays
@@ -188,7 +169,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
 		 *\param[in]	p_size	Les dimensions de la cible du rendu
 		 */
-		C3D_API void Render( Scene const & p_scene, Castor::Size const & p_size );
+		C3D_API void render( Scene const & p_scene, castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a text file
@@ -199,18 +180,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Write( Castor::TextFile & p_file )const;
-		/**
-		 *\~english
-		 *\brief		Reads overlays from a text file
-		 *\param[in]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Lit les overlays à partir d'un fichier texte
-		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Read( Castor::TextFile & p_file );
+		C3D_API bool write( castor::TextFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.
@@ -221,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		La FontTexture si elle exite, nullptr sinon.
 		 */
-		C3D_API FontTextureSPtr GetFontTexture( Castor::String const & p_name );
+		C3D_API FontTextureSPtr getFontTexture( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a FontTexture from a font.
@@ -232,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_font	La police.
 		 *\return		La FontTexture créée.
 		 */
-		C3D_API FontTextureSPtr CreateFontTexture( Castor::FontSPtr p_font );
+		C3D_API FontTextureSPtr createFontTexture( castor::FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Creates an object.
@@ -249,13 +219,13 @@ namespace Castor3D
 		 *\param[in]	p_parent	L'incrustation parente, si elle existe.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr Add( Key const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		inline ElementPtr add( Key const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 		{
-			return MyCacheType::Add( p_name, p_type, p_scene, p_parent );
+			return MyCacheType::add( p_name, p_type, p_scene, p_parent );
 		}
 		/**
 		 *\~english
-		 *\brief		Adds an already created object.
+		 *\brief		adds an already created object.
 		 *\param[in]	p_name		The object name.
 		 *\param[in]	p_element	The object.
 		 *\return		The object.
@@ -265,9 +235,26 @@ namespace Castor3D
 		 *\param[in]	p_element	L'objet'.
 		 *\return		L'objet.
 		 */
-		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
+		inline ElementPtr add( Key const & p_name, ElementPtr p_element )
 		{
-			return MyCacheType::Add( p_name, p_element );
+			return MyCacheType::add( p_name, p_element );
+		}
+		/**
+		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name		The element name.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name		Le nom d'élément.
+		 */
+		inline void remove( Key const & name )
+		{
+			if ( m_elements.has( name ) )
+			{
+				auto element = m_elements.find( name );
+				m_clean( element );
+				m_elements.erase( name );
+			}
 		}
 		/**
 		 *\~english
@@ -277,7 +264,7 @@ namespace Castor3D
 		 *\brief		Récupère le renderer d'incrustation
 		 *\return		Le renderer d'incrustation
 		 */
-		OverlayRendererSPtr GetRenderer()const
+		OverlayRendererSPtr getRenderer()const
 		{
 			return m_pRenderer;
 		}
@@ -337,7 +324,7 @@ namespace Castor3D
 		 *\brief		Récupère la fabrique d'Overlay
 		 *\return		La fabrique
 		 */
-		inline OverlayFactory const & GetOverlayFactory()const
+		inline OverlayFactory const & getOverlayFactory()const
 		{
 			return m_overlayFactory;
 		}
@@ -349,7 +336,7 @@ namespace Castor3D
 		 *\brief		Récupère la fabrique d'Overlay
 		 *\return		La fabrique
 		 */
-		inline OverlayFactory & GetFactory()
+		inline OverlayFactory & getFactory()
 		{
 			return m_overlayFactory;
 		}
@@ -372,12 +359,12 @@ namespace Castor3D
 		std::vector< int > m_overlayCountPerLevel;
 		//!\~english	The pojection matrix.
 		//!\~french		La matrice de projection.
-		Castor::Matrix4x4r m_projection;
+		castor::Matrix4x4r m_projection;
 		//!\~english	The FontTextures, sorted by font name.
 		//!\~french		Les FontTexutrs, triées par nom de police.
 		FontTextureStrMap m_fontTextures;
 	};
-	using OverlayCache = Cache< Overlay, Castor::String >;
+	using OverlayCache = Cache< Overlay, castor::String >;
 	DECLARE_SMART_PTR( OverlayCache );
 }
 

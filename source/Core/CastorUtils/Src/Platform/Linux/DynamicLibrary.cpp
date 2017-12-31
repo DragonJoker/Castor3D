@@ -6,22 +6,22 @@
 
 #include "Exception/Assertion.hpp"
 
-namespace Castor
+namespace castor
 {
-	bool DynamicLibrary::Open( Path const & p_name )throw()
+	bool DynamicLibrary::open( Path const & p_name )throw()
 	{
 		if ( !m_pLibrary )
 		{
-			std::string l_name( string::string_cast< char >( p_name ) );
+			std::string name( string::stringCast< char >( p_name ) );
 
 			try
 			{
-				m_pLibrary = dlopen( l_name.c_str(), RTLD_LAZY );
+				m_pLibrary = dlopen( name.c_str(), RTLD_LAZY );
 				m_pathLibrary = p_name;
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
+				Logger::logError( std::string( "Can't load dynamic library at [" ) + name + std::string( "]" ) );
 				m_pLibrary = nullptr;
 			}
 		}
@@ -29,45 +29,45 @@ namespace Castor
 		return m_pLibrary != nullptr;
 	}
 
-	void * DynamicLibrary::DoGetFunction( String const & p_name )throw()
+	void * DynamicLibrary::doGetFunction( String const & p_name )throw()
 	{
-		void * l_result = nullptr;
+		void * result = nullptr;
 
 		if ( m_pLibrary )
 		{
-			std::string l_name( string::string_cast< char >( p_name ) );
+			std::string name( string::stringCast< char >( p_name ) );
 
 			try
 			{
 				dlerror();
-				l_result = dlsym( m_pLibrary, l_name.c_str() );
-				auto l_error = dlerror();
+				result = dlsym( m_pLibrary, name.c_str() );
+				auto error = dlerror();
 
-				if ( l_error != NULL )
+				if ( error != NULL )
 				{
-					throw std::runtime_error( std::string( l_error ) );
+					throw std::runtime_error( std::string( error ) );
 				}
 			}
 			catch ( std::exception & exc )
 			{
-				l_result = nullptr;
-				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]: " ) + exc.what() );
+				result = nullptr;
+				Logger::logError( std::string( "Can't load function [" ) + name + std::string( "]: " ) + exc.what() );
 			}
 			catch ( ... )
 			{
-				l_result = nullptr;
-				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]: Unknown error." ) );
+				result = nullptr;
+				Logger::logError( std::string( "Can't load function [" ) + name + std::string( "]: Unknown error." ) );
 			}
 		}
 		else
 		{
-			Logger::LogError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
+			Logger::logError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
-		return l_result;
+		return result;
 	}
 
-	void DynamicLibrary::DoClose()throw()
+	void DynamicLibrary::doClose()throw()
 	{
 		if ( m_pLibrary )
 		{
@@ -77,7 +77,7 @@ namespace Castor
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't unload dynamic library" ) );
+				Logger::logError( std::string( "Can't unload dynamic library" ) );
 			}
 
 			m_pLibrary = nullptr;

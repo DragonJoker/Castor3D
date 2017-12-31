@@ -1,27 +1,8 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
-#ifndef ___C3D_SKELETON_ANIMATION_INSTANCE_OBJECT_H___
-#define ___C3D_SKELETON_ANIMATION_INSTANCE_OBJECT_H___
+#ifndef ___C3D_SkeletonAnimationInstanceObject_H___
+#define ___C3D_SkeletonAnimationInstanceObject_H___
 
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
@@ -30,7 +11,7 @@ SOFTWARE.
 #include <Math/SquareMatrix.hpp>
 #include <Math/Quaternion.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -44,31 +25,31 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
 	class SkeletonAnimationInstanceObject
-		: public Castor::OwnedBy< SkeletonAnimationInstance >
+		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
-		 *\param[in]	p_animationObject	The animation object.
-		 *\param[out]	p_allObjects		Receives this object's children.
+		 *\param[in]	animationInstance	The parent skeleton animation instance.
+		 *\param[in]	animationObject		The animation object.
+		 *\param[out]	allObjects			Receives this object's children.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
-		 *\param[in]	p_animationObject	L'animation d'objet.
-		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
+		 *\param[in]	animationInstance	L'instance d'animation de squelette parent.
+		 *\param[in]	animationObject		L'animation d'objet.
+		 *\param[out]	allObjects			Reçoit les enfants de cet objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance
-			, SkeletonAnimationObject & p_animationObject
-			, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects );
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & animationInstance
+			, SkeletonAnimationObject & animationObject
+			, SkeletonAnimationInstanceObjectPtrArray & allObjects );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & p_rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & rhs ) = delete;
 
 	public:
 		/**
@@ -80,34 +61,31 @@ namespace Castor3D
 		C3D_API virtual ~SkeletonAnimationInstanceObject();
 		/**
 		 *\~english
-		 *\brief		Adds a child to this object.
+		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
-		 *\param[in]	p_object	The child.
+		 *\param[in]	object	The child.
 		 *\~french
 		 *\brief		Ajoute un objet enfant à celui-ci.
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
-		 *\param[in]	p_object	L'enfant.
+		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void AddChild( SkeletonAnimationInstanceObjectSPtr p_object );
+		C3D_API void addChild( SkeletonAnimationInstanceObjectSPtr object );
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	p_time				Current time index.
-		 *\param[in]	p_transformations	The current transformation matrix.
+		 *\brief		Updates the object, applies the transformations.
+		 *\param[in]	current		The current transformation matrix.
 		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	p_time				Index de temps courant.
-		 *\param[in]	p_transformations	La matrice de transformation courante.
+		 *\brief		Met à jour les transformations appliquées à l'objet.
+		 *\param[in]	current		La matrice de transformation courante.
 		 */
-		C3D_API void Update( std::chrono::milliseconds const & p_time
-			, Castor::Matrix4x4r const & p_transformations );
+		C3D_API void update( castor::Matrix4x4r const & current );
 		/**
 		 *\~english
 		 *\brief		The final object's animations transformation.
 		 *\~french
 		 *\brief		La transfomation finale des animations du de cet objet.
 		 */
-		inline Castor::Matrix4x4r const & GetFinalTransform()const
+		inline castor::Matrix4x4r const & getFinalTransform()const
 		{
 			return m_finalTransform;
 		}
@@ -117,9 +95,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline SkeletonAnimationInstanceObjectPtrArray const & GetChildren()const
+		inline SkeletonAnimationInstanceObjectPtrArray const & getChildren()const
 		{
 			return m_children;
+		}
+		/**
+		 *\~english
+		 *\return		The animation object.
+		 *\~french
+		 *\return		L'objet d'animation.
+		 */
+		inline SkeletonAnimationObject const & getObject()const
+		{
+			return m_animationObject;
 		}
 
 	protected:
@@ -129,27 +117,27 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet.
 		 */
-		C3D_API virtual void DoApply() = 0;
+		C3D_API virtual void doApply() = 0;
 
 	protected:
 		//!\~english	The animation object.
-		//!\~french		L'animation d'objet.
+		//!\~french		L'objet d'animation.
 		SkeletonAnimationObject & m_animationObject;
 		//!\~english	Iterator to the previous keyframe (when playing the animation).
 		//!\~french		Itérateur sur la key frame précédente (quand l'animation est jouée).
-		KeyFrameArray::const_iterator m_prev;
+		AnimationKeyFrameArray::const_iterator m_prev;
 		//!\~english	Iterator to the current keyframe (when playing the animation).
 		//!\~french		Itérateur sur la key frame courante (quand l'animation est jouée).
-		KeyFrameArray::const_iterator m_curr;
+		AnimationKeyFrameArray::const_iterator m_curr;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
 		SkeletonAnimationInstanceObjectPtrArray m_children;
 		//!\~english	The cumulative animation transformations.
 		//!\~french		Les transformations cumulées de l'animation.
-		Castor::Matrix4x4r m_cumulativeTransform;
+		castor::Matrix4x4r m_cumulativeTransform;
 		//!\~english	The matrix holding transformation at current time.
 		//!\~french		La matrice de transformation complète au temps courant de l'animation.
-		Castor::Matrix4x4r m_finalTransform;
+		castor::Matrix4x4r m_finalTransform;
 	};
 }
 

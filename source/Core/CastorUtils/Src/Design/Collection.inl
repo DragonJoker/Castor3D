@@ -1,11 +1,11 @@
 #include "Log/Logger.hpp"
 
-namespace Castor
+namespace castor
 {
-	namespace
+	namespace details
 	{
 		static const xchar * WARNING_COLLECTION_UNKNOWN_OBJECT = cuT( "Collection::find - Object not found: " );
-		static const xchar * WARNING_COLLECTION_DUPLICATE_OBJECT = cuT( "Collection::Create - Duplicate object: " );
+		static const xchar * WARNING_COLLECTION_DUPLICATE_OBJECT = cuT( "Collection::create - Duplicate object: " );
 	}
 
 	template< typename TObj, typename TKey >
@@ -59,88 +59,88 @@ namespace Castor
 	template< typename TObj, typename TKey >
 	inline void Collection< TObj, TKey >::clear() throw( )
 	{
-		auto l_lock( make_unique_lock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		m_objects.clear();
 		m_last.m_key = std::move( TKey() );
 	}
 	template< typename TObj, typename TKey >
 	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::find( key_param_type p_key )const
 	{
-		auto l_lock( make_unique_lock( m_mutex ) );
-		TObjSPtr l_result;
-		do_update_last( p_key );
+		auto lock( makeUniqueLock( m_mutex ) );
+		TObjSPtr result;
+		doUpdateLast( p_key );
 
 		if ( m_last.m_result != m_objects.end() )
 		{
-			l_result = m_last.m_result->second;
+			result = m_last.m_result->second;
 		}
 		else
 		{
-			Logger::LogWarning( WARNING_COLLECTION_UNKNOWN_OBJECT + string::to_string( p_key ) );
+			Logger::logWarning( details::WARNING_COLLECTION_UNKNOWN_OBJECT + string::toString( p_key ) );
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename TObj, typename TKey >
 	inline std::size_t Collection< TObj, TKey >::size()const
 	{
-		auto l_lock( make_unique_lock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		return m_objects.size();
 	}
 	template< typename TObj, typename TKey >
 	inline bool Collection< TObj, TKey >::insert( key_param_type p_key, TObjSPtr p_element )
 	{
-		auto l_lock( make_unique_lock( m_mutex ) );
-		TObjPtrMapIt l_it = m_objects.find( p_key );
-		bool l_result = false;
+		auto lock( makeUniqueLock( m_mutex ) );
+		TObjPtrMapIt it = m_objects.find( p_key );
+		bool result = false;
 
-		if ( l_it == m_objects.end() )
+		if ( it == m_objects.end() )
 		{
 			m_last.m_key = std::move( TKey() );
 			m_objects.insert( value_type( p_key, p_element ) );
-			do_init_last();
-			l_result = true;
+			doInitLast();
+			result = true;
 		}
 		else
 		{
-			Logger::LogWarning( WARNING_COLLECTION_DUPLICATE_OBJECT + string::to_string( p_key ) );
+			Logger::logWarning( details::WARNING_COLLECTION_DUPLICATE_OBJECT + string::toString( p_key ) );
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename TObj, typename TKey >
 	inline bool Collection< TObj, TKey >::has( key_param_type p_key )const
 	{
-		auto l_lock( make_unique_lock( m_mutex ) );
-		do_update_last( p_key );
+		auto lock( makeUniqueLock( m_mutex ) );
+		doUpdateLast( p_key );
 		return m_last.m_result != m_objects.end();
 	}
 	template< typename TObj, typename TKey >
 	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::erase( key_param_type p_key )
 	{
-		auto l_lock( make_unique_lock( m_mutex ) );
-		TObjSPtr l_ret;
+		auto lock( makeUniqueLock( m_mutex ) );
+		TObjSPtr ret;
 		TObjPtrMapIt ifind = m_objects.find( p_key );
 
 		if ( ifind != m_objects.end() )
 		{
-			do_init_last();
-			l_ret = ifind->second;
+			doInitLast();
+			ret = ifind->second;
 			m_objects.erase( p_key );
 		}
 
-		return l_ret;
+		return ret;
 	}
 
 	template< typename TObj, typename TKey >
-	void Collection< TObj, TKey >::do_init_last()const
+	void Collection< TObj, TKey >::doInitLast()const
 	{
 		m_last.m_key = std::move( TKey() );
 		m_last.m_result = m_objects.end();
 	}
 
 	template< typename TObj, typename TKey >
-	void Collection< TObj, TKey >::do_update_last( key_param_type p_key )const
+	void Collection< TObj, TKey >::doUpdateLast( key_param_type p_key )const
 	{
 		if ( m_last.m_key != p_key )
 		{

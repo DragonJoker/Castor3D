@@ -1,75 +1,62 @@
 #include "MeshAnimation.hpp"
 
 #include "Engine.hpp"
-
+#include "Animation/Mesh/MeshAnimationKeyFrame.hpp"
 #include "Mesh/Submesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< MeshAnimation >::DoWrite( MeshAnimation const & p_obj )
+	bool BinaryWriter< MeshAnimation >::doWrite( MeshAnimation const & obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		for ( auto const & l_submesh : p_obj.m_submeshes )
+		for ( auto const & keyframe : obj )
 		{
-			l_return &= DoWriteChunk( l_submesh.GetSubmesh().GetId(), ChunkType::eMeshAnimationSubmeshID, m_chunk );
-			l_return &= BinaryWriter< MeshAnimationSubmesh >{}.Write( l_submesh, m_chunk );
+			result &= BinaryWriter< MeshAnimationKeyFrame >{}.write( static_cast< MeshAnimationKeyFrame const & >( *keyframe ), m_chunk );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	bool BinaryParser< MeshAnimation >::DoParse( MeshAnimation & p_obj )
+	bool BinaryParser< MeshAnimation >::doParse( MeshAnimation & obj )
 	{
-		bool l_return = true;
-		MeshAnimationSubmeshUPtr l_submeshAnim;
-		SubmeshSPtr l_submesh;
-		BinaryChunk l_chunk;
-		uint32_t l_id{ 0u };
+		bool result = true;
+		MeshAnimationKeyFrameUPtr keyFrame;
+		BinaryChunk chunk;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
-			case ChunkType::eMeshAnimationSubmeshID:
-				l_return = DoParseChunk( l_id, l_chunk );
+			case ChunkType::eMeshAnimationKeyFrame:
+				keyFrame = std::make_unique< MeshAnimationKeyFrame >( obj );
+				result = BinaryParser< MeshAnimationKeyFrame >{}.parse( *keyFrame, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					l_submesh = static_cast< Mesh & >( *p_obj.GetOwner() ).GetSubmesh( l_id );
-				}
-
-				break;
-
-			case ChunkType::eMeshAnimationSubmesh:
-				if ( l_submesh )
-				{
-					MeshAnimationSubmesh l_submeshAnim{ p_obj, *l_submesh };
-					l_return = BinaryParser< MeshAnimationSubmesh >{}.Parse( l_submeshAnim, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.AddChild( std::move( l_submeshAnim ) );
-					}
+					obj.addKeyFrame( std::move( keyFrame ) );
 				}
 
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	MeshAnimation::MeshAnimation( Animable & p_animable, String const & p_name )
-		: Animation{ AnimationType::eMesh, p_animable, p_name }
+	MeshAnimation::MeshAnimation( Mesh & mesh
+		, String const & name )
+		: Animation{ AnimationType::eMesh
+			, mesh
+			, name }
 	{
 	}
 
@@ -77,17 +64,9 @@ namespace Castor3D
 	{
 	}
 
-	void MeshAnimation::AddChild( MeshAnimationSubmesh && p_object )
+	void MeshAnimation::addChild( MeshAnimationSubmesh && object )
 	{
-		m_submeshes.push_back( std::move( p_object ) );
-	}
-
-	void MeshAnimation::DoUpdateLength()
-	{
-		for ( auto const & l_submesh : m_submeshes )
-		{
-			m_length = std::max( m_length, l_submesh.GetLength() );
-		}
+		m_submeshes.push_back( std::move( object ) );
 	}
 
 	//*************************************************************************************************

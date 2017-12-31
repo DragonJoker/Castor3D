@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3DGL_ComputePipeline_H___
 #define ___C3DGL_ComputePipeline_H___
@@ -39,7 +20,7 @@ namespace GlRender
 	\brief		Implémentation du pipeline de calcul.
 	*/
 	class GlComputePipeline
-		: public Castor3D::ComputePipeline
+		: public castor3d::ComputePipeline
 		, public Holder
 	{
 	public:
@@ -47,7 +28,7 @@ namespace GlRender
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL api.
-		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	renderSystem	The parent RenderSystem.
 		 *\param[in]	p_dsState		The depth stencil state.
 		 *\param[in]	p_rsState		The rateriser state.
 		 *\param[in]	p_bdState		The blend state.
@@ -57,7 +38,7 @@ namespace GlRender
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_gl			L'api OpenGL.
-		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	renderSystem	Le RenderSystem parent.
 		 *\param[in]	p_dsState		L'état de stencil et profondeur.
 		 *\param[in]	p_rsState		L'état de rastériseur.
 		 *\param[in]	p_bdState		L'état de mélange.
@@ -65,7 +46,7 @@ namespace GlRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		GlComputePipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::ShaderProgram & p_program );
+		GlComputePipeline( OpenGl & p_gl, GlRenderSystem & renderSystem, castor3d::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -74,11 +55,11 @@ namespace GlRender
 		 */
 		virtual ~GlComputePipeline();
 		/**
-		 *\copydoc		Castor3D::ComputePipeline::Run
+		 *\copydoc		castor3d::ComputePipeline::Run
 		 */
-		void Run( Castor::Point3ui const & p_workgroups
-			, Castor::Point3ui const & p_workgroupSize
-			, Castor3D::MemoryBarriers const & p_barriers )const override;
+		void run( castor::Point3ui const & p_workgroups
+			, castor::Point3ui const & p_workgroupSize
+			, castor3d::MemoryBarriers const & p_barriers )const override;
 	};
 }
 

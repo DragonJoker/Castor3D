@@ -5,63 +5,63 @@
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	LightCategory::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< LightCategory >{ p_tabs }
+		: castor::TextWriter< LightCategory >{ p_tabs }
 	{
 	}
 
 	bool LightCategory::TextWriter::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
-		static std::map< LightType, String > l_type
+		static std::map< LightType, String > type
 		{
 			{ LightType::eDirectional, cuT( "directional" ) },
 			{ LightType::ePoint, cuT( "point" ) },
 			{ LightType::eSpot, cuT( "spot" ) },
 		};
 
-		Logger::LogInfo( m_tabs + cuT( "Writing Light " ) + p_light.GetLight().GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.GetLight().GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory name" );
+		Logger::logInfo( m_tabs + cuT( "Writing Light " ) + p_light.getLight().getName() );
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.getLight().getName() + cuT( "\"\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		castor::TextWriter< LightCategory >::checkError( result, "LightCategory name" );
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_light.GetLight(), p_file );
+			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_light.getLight(), p_file );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + l_type[p_light.GetLightType()] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory type" );
+			result = p_file.writeText( m_tabs + cuT( "\ttype " ) + type[p_light.getLightType()] + cuT( "\n" ) ) > 0;
+			castor::TextWriter< LightCategory >::checkError( result, "LightCategory type" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0
-					   && Point3f::TextWriter( String{} )( p_light.GetColour(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory colour" );
+			result = p_file.writeText( m_tabs + cuT( "\tcolour " ) ) > 0
+					   && Point3f::TextWriter( String{} )( p_light.getColour(), p_file )
+					   && p_file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< LightCategory >::checkError( result, "LightCategory colour" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
-					   && Point3f::TextWriter( String{} )( p_light.GetIntensity(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory intensity" );
+			result = p_file.writeText( m_tabs + cuT( "\tintensity " ) ) > 0
+					   && Point2f::TextWriter( String{} )( p_light.getIntensity(), p_file )
+					   && p_file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< LightCategory >::checkError( result, "LightCategory intensity" );
 		}
 
-		if ( l_return && p_light.GetLight().IsShadowProducer() )
+		if ( result && p_light.getLight().isShadowProducer() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tshadow_producer true\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory shadow producer" );
+			result = p_file.writeText( m_tabs + cuT( "\tshadow_producer true\n" ) ) > 0;
+			castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow producer" );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -76,49 +76,100 @@ namespace Castor3D
 	{
 	}
 
-	void LightCategory::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	void LightCategory::bind( castor::PxBufferBase & p_texture, uint32_t index )const
 	{
-		uint32_t l_offset = 0u;
-		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
-		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
-		DoBind( p_texture, p_index, l_offset );
+		uint32_t offset = 0u;
+		doCopyComponent( getColour(), index, offset, p_texture );
+		doCopyComponent( getIntensity(), getFarPlane(), index, offset, p_texture );
+		doBind( p_texture, index, offset );
 	}
 
-	void LightCategory::DoBindComponent( Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::doCopyComponent( Point2f const & component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
-		std::memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, component.constPtr(), 2 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::doCopyComponent( Point2f const & components
+		, float component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
-		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, components.constPtr(), 2 * sizeof( float ) );
+		dst += 2 * sizeof( float );
+		std::memcpy( dst, &component, sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( ConstCoords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::doCopyComponent( Point3f const & component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
-		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, component.constPtr(), 3 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::doCopyComponent( Point3f const & components
+		, float component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
-		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, components.constPtr(), 3 * sizeof( float ) );
+		dst += 3 * sizeof( float );
+		std::memcpy( dst, &component, sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
+	void LightCategory::doCopyComponent( Point4f const & component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
 	{
-		DoBindComponent( p_component[0], p_index, p_offset, p_data );
-		DoBindComponent( p_component[1], p_index, p_offset, p_data );
-		DoBindComponent( p_component[2], p_index, p_offset, p_data );
-		DoBindComponent( p_component[3], p_index, p_offset, p_data );
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, component.constPtr(), 4 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
+	void LightCategory::doCopyComponent( ConstCoords4f const & component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
-		std::memcpy( l_pDst, &p_component, sizeof( int32_t ) );
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, component.constPtr(), 4 * sizeof( float ) );
+	}
+
+	void LightCategory::doCopyComponent( Coords4f const & component
+		, uint32_t index
+		, uint32_t & offset
+		, PxBufferBase & data )const
+	{
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, component.constPtr(), 4 * sizeof( float ) );
+	}
+
+	void LightCategory::doCopyComponent( castor::Matrix4x4f const & component
+		, uint32_t index
+		, uint32_t & offset
+		, castor::PxBufferBase & data )const
+	{
+		doCopyComponent( component[0], index, offset, data );
+		doCopyComponent( component[1], index, offset, data );
+		doCopyComponent( component[2], index, offset, data );
+		doCopyComponent( component[3], index, offset, data );
+	}
+
+	void LightCategory::doCopyComponent( int32_t const & component
+		, uint32_t index
+		, uint32_t & offset
+		, castor::PxBufferBase & data )const
+	{
+		uint8_t * dst = &( *data.getAt( index * shader::MaxLightComponentsCount + offset++, 0u ) );
+		std::memcpy( dst, &component, sizeof( int32_t ) );
 	}
 }

@@ -6,13 +6,13 @@
 
 #include <Data/ZipArchive.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 //****************************************************************************************************
 
-SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pFile )
-	: FileParserContext( p_pFile )
+SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser )
+	: FileParserContext( path )
 	, pWindow()
 	, pSceneNode()
 	, pGeometry()
@@ -43,11 +43,11 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, bBool2( false )
 	, m_pGeneralParentMaterial( nullptr )
 	, mapScenes()
-	, m_pParser( p_pParser )
+	, m_pParser( parser )
 {
 }
 
-void SceneFileContext::Initialise()
+void SceneFileContext::initialise()
 {
 	pScene.reset();
 	pass.reset ();
@@ -81,12 +81,13 @@ void SceneFileContext::Initialise()
 	strName.clear();
 	strName2.clear();
 	mapScenes.clear();
+	subsurfaceScattering.reset();
 }
 
 //****************************************************************************************************
 
-SceneFileParser::SceneFileParser( Engine & p_engine )
-	: OwnedBy< Engine >( p_engine )
+SceneFileParser::SceneFileParser( Engine & engine )
+	: OwnedBy< Engine >( engine )
 	, FileParser( uint32_t( CSCNSection::eRoot ) )
 {
 	m_mapBlendFactors[cuT( "zero" )] = uint32_t( BlendOperand::eZero );
@@ -129,26 +130,14 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureArguments[cuT( "diffuse" )] = uint32_t( BlendSource::eDiffuse );
 	m_mapTextureArguments[cuT( "previous" )] = uint32_t( BlendSource::ePrevious );
 
-	m_mapTextureRgbFunctions[cuT( "none" )] = uint32_t( ColourBlendFunc::eNoBlend );
-	m_mapTextureRgbFunctions[cuT( "first_arg" )] = uint32_t( ColourBlendFunc::eFirstArg );
-	m_mapTextureRgbFunctions[cuT( "add" )] = uint32_t( ColourBlendFunc::eAdd );
-	m_mapTextureRgbFunctions[cuT( "add_signed" )] = uint32_t( ColourBlendFunc::eAddSigned );
-	m_mapTextureRgbFunctions[cuT( "modulate" )] = uint32_t( ColourBlendFunc::eModulate );
-	m_mapTextureRgbFunctions[cuT( "interpolate" )] = uint32_t( ColourBlendFunc::eInterpolate );
-	m_mapTextureRgbFunctions[cuT( "subtract" )] = uint32_t( ColourBlendFunc::eSubtract );
-	m_mapTextureRgbFunctions[cuT( "dot3_rgb" )] = uint32_t( ColourBlendFunc::eDot3RGB );
-	m_mapTextureRgbFunctions[cuT( "dot3_rgba" )] = uint32_t( ColourBlendFunc::eDot3RGBA );
+	m_mapTextureBlendModes[cuT( "none" )] = uint32_t( TextureBlendFunc::eNoBlend );
+	m_mapTextureBlendModes[cuT( "first_arg" )] = uint32_t( TextureBlendFunc::eFirstArg );
+	m_mapTextureBlendModes[cuT( "add" )] = uint32_t( TextureBlendFunc::eAdd );
+	m_mapTextureBlendModes[cuT( "add_signed" )] = uint32_t( TextureBlendFunc::eAddSigned );
+	m_mapTextureBlendModes[cuT( "modulate" )] = uint32_t( TextureBlendFunc::eModulate );
+	m_mapTextureBlendModes[cuT( "interpolate" )] = uint32_t( TextureBlendFunc::eInterpolate );
+	m_mapTextureBlendModes[cuT( "subtract" )] = uint32_t( TextureBlendFunc::eSubtract );
 
-	m_mapTextureAlphaFunctions[cuT( "none" )] = uint32_t( AlphaBlendFunc::eNoBlend );
-	m_mapTextureAlphaFunctions[cuT( "first_arg" )] = uint32_t( AlphaBlendFunc::eFirstArg );
-	m_mapTextureAlphaFunctions[cuT( "add" )] = uint32_t( AlphaBlendFunc::eAdd );
-	m_mapTextureAlphaFunctions[cuT( "add_signed" )] = uint32_t( AlphaBlendFunc::eAddSigned );
-	m_mapTextureAlphaFunctions[cuT( "modulate" )] = uint32_t( AlphaBlendFunc::eModulate );
-	m_mapTextureAlphaFunctions[cuT( "interpolate" )] = uint32_t( AlphaBlendFunc::eInterpolate );
-	m_mapTextureAlphaFunctions[cuT( "substract" )] = uint32_t( AlphaBlendFunc::eSubtract );
-
-	m_mapTextureChannels[cuT( "colour" )] = uint32_t( TextureChannel::eColour );
-	m_mapTextureChannels[cuT( "ambient" )] = uint32_t( TextureChannel::eAmbient );
 	m_mapTextureChannels[cuT( "diffuse" )] = uint32_t( TextureChannel::eDiffuse );
 	m_mapTextureChannels[cuT( "normal" )] = uint32_t( TextureChannel::eNormal );
 	m_mapTextureChannels[cuT( "specular" )] = uint32_t( TextureChannel::eSpecular );
@@ -156,6 +145,13 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "opacity" )] = uint32_t( TextureChannel::eOpacity );
 	m_mapTextureChannels[cuT( "gloss" )] = uint32_t( TextureChannel::eGloss );
 	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureChannel::eEmissive );
+	m_mapTextureChannels[cuT( "reflection" )] = uint32_t( TextureChannel::eReflection );
+	m_mapTextureChannels[cuT( "refraction" )] = uint32_t( TextureChannel::eRefraction );
+	m_mapTextureChannels[cuT( "roughness" )] = uint32_t( TextureChannel::eRoughness );
+	m_mapTextureChannels[cuT( "albedo" )] = uint32_t( TextureChannel::eAlbedo );
+	m_mapTextureChannels[cuT( "ambient_occlusion" )] = uint32_t( TextureChannel::eAmbientOcclusion );
+	m_mapTextureChannels[cuT( "transmittance" )] = uint32_t( TextureChannel::eTransmittance );
+	m_mapTextureChannels[cuT( "metallic" )] = uint32_t( TextureChannel::eMetallic );
 
 	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::ePoint );
 	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );
@@ -168,14 +164,10 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( Topology::eTriangles );
 	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( Topology::eTriangleStrips );
 	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( Topology::eTriangleFan );
-	m_mapPrimitiveTypes[cuT( "quads" )] = uint32_t( Topology::eQuads );
-	m_mapPrimitiveTypes[cuT( "quad_strip" )] = uint32_t( Topology::eQuadStrips );
-	m_mapPrimitiveTypes[cuT( "polygon" )] = uint32_t( Topology::ePolygon );
 
 	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( Topology::ePoints );
 	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( Topology::eLineStrip );
 	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( Topology::eTriangleStrips );
-	m_mapPrimitiveOutputTypes[cuT( "quad_strip" )] = uint32_t( Topology::eQuadStrips );
 
 	m_mapModels[cuT( "sm_1" )] = uint32_t( ShaderModel::eModel1 );
 	m_mapModels[cuT( "sm_2" )] = uint32_t( ShaderModel::eModel2 );
@@ -321,19 +313,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapLineSpacingModes[cuT( "max_lines_height" )] = uint32_t( TextLineSpacingMode::eMaxLineHeight );
 	m_mapLineSpacingModes[cuT( "max_font_height" )] = uint32_t( TextLineSpacingMode::eMaxFontHeight );
 
-	m_fogTypes[cuT( "linear" )] = uint32_t( GLSL::FogType::eLinear );
-	m_fogTypes[cuT( "exponential" )] = uint32_t( GLSL::FogType::eExponential );
-	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( GLSL::FogType::eSquaredExponential );
-
-	m_mapMeshTypes[cuT( "custom" )] = uint32_t( MeshType::eCustom );
-	m_mapMeshTypes[cuT( "cone" )] = uint32_t( MeshType::eCone );
-	m_mapMeshTypes[cuT( "cylinder" )] = uint32_t( MeshType::eCylinder );
-	m_mapMeshTypes[cuT( "sphere" )] = uint32_t( MeshType::eSphere );
-	m_mapMeshTypes[cuT( "cube" )] = uint32_t( MeshType::eCube );
-	m_mapMeshTypes[cuT( "torus" )] = uint32_t( MeshType::eTorus );
-	m_mapMeshTypes[cuT( "plane" )] = uint32_t( MeshType::ePlane );
-	m_mapMeshTypes[cuT( "icosahedron" )] = uint32_t( MeshType::eIcosahedron );
-	m_mapMeshTypes[cuT( "projection" )] = uint32_t( MeshType::eProjection );
+	m_fogTypes[cuT( "linear" )] = uint32_t( FogType::eLinear );
+	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::eExponential );
+	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::eSquaredExponential );
 
 	m_mapComparisonModes[cuT( "none" )] = uint32_t( ComparisonMode::eNone );
 	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( ComparisonMode::eRefToTexture );
@@ -345,511 +327,556 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapBillboardSizes[cuT( "fixed" )] = uint32_t( BillboardSize::eFixed );
 
 	m_mapMaterialTypes[cuT( "legacy" )] = uint32_t( MaterialType::eLegacy );
+	m_mapMaterialTypes[cuT( "pbr_metallic_roughness" )] = uint32_t( MaterialType::ePbrMetallicRoughness );
+	m_mapMaterialTypes[cuT( "pbr_specular_glossiness" )] = uint32_t( MaterialType::ePbrSpecularGlossiness );
 }
 
 SceneFileParser::~SceneFileParser()
 {
 }
 
-RenderWindowSPtr SceneFileParser::GetRenderWindow()
+RenderWindowSPtr SceneFileParser::getRenderWindow()
 {
 	return m_renderWindow;
 }
 
-bool SceneFileParser::ParseFile( TextFile & p_file )
+bool SceneFileParser::parseFile( Path const & pathFile )
 {
-	return FileParser::ParseFile( p_file );
-}
+	Path path = pathFile;
 
-bool SceneFileParser::ParseFile( Path const & p_pathFile )
-{
-	Path l_path = p_pathFile;
-
-	if ( l_path.GetExtension() == cuT( "zip" ) )
+	if ( path.getExtension() == cuT( "zip" ) )
 	{
-		Castor::ZipArchive l_archive( l_path, File::OpenMode::eRead );
-		l_path = Engine::GetEngineDirectory() / p_pathFile.GetFileName();
+		castor::ZipArchive archive( path, File::OpenMode::eRead );
+		path = Engine::getEngineDirectory() / pathFile.getFileName();
 
-		if ( File::DirectoryExists( l_path ) )
+		if ( File::directoryExists( path ) )
 		{
-			File::DirectoryDelete( l_path );
+			File::directoryDelete( path );
 		}
 
-		if ( l_archive.Inflate( l_path ) )
+		if ( archive.inflate( path ) )
 		{
-			PathArray l_files;
+			PathArray files;
 
-			if ( File::ListDirectoryFiles( l_path, l_files, true ) )
+			if ( File::listDirectoryFiles( path, files, true ) )
 			{
-				auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
-				{
-					return p_path.GetExtension() == cuT( "cscn" );
-				} );
+				auto it = std::find_if( files.begin()
+					, files.end()
+					, [pathFile]( Path const & lookup )
+					{
+						auto fileName = lookup.getFileName( true );
+						return fileName == cuT( "main.cscn" )
+							|| fileName == cuT( "scene.cscn" )
+							|| fileName == pathFile.getFileName() + cuT( ".cscn" );
+					} );
 
-				if ( l_it != l_files.end() )
+				if ( it != files.end() )
 				{
-					l_path = *l_it;
+					path = *it;
+				}
+				else
+				{
+					auto it = std::find_if( files.begin(), files.end(), []( Path const & p_path )
+					{
+						return p_path.getExtension() == cuT( "cscn" );
+					} );
+
+					if ( it != files.end() )
+					{
+						path = *it;
+					}
 				}
 			}
 		}
 	}
 
-	return FileParser::ParseFile( l_path );
+	return FileParser::parseFile( path );
 }
 
-bool SceneFileParser::ParseFile( Castor::Path const & p_pathFile, SceneFileContextSPtr p_context )
+bool SceneFileParser::parseFile( castor::Path const & pathFile, SceneFileContextSPtr context )
 {
-	m_context = p_context;
-	return ParseFile( p_pathFile );
+	m_context = context;
+	return parseFile( pathFile );
 }
 
-void SceneFileParser::DoInitialiseParser( TextFile & p_file )
+void SceneFileParser::doInitialiseParser( Path const & path )
 {
 	if ( !m_context )
 	{
-		SceneFileContextSPtr l_context = std::make_shared< SceneFileContext >( this, &p_file );
-		m_context = l_context;
+		SceneFileContextSPtr context = std::make_shared< SceneFileContext >( path, this );
+		m_context = context;
 	}
 
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "mtl_file" ), Parser_RootMtlFile, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "scene" ), Parser_RootScene, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "font" ), Parser_RootFont, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "material" ), Parser_RootMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "panel_overlay" ), Parser_RootPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "border_panel_overlay" ), Parser_RootBorderPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "text_overlay" ), Parser_RootTextOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "sampler" ), Parser_RootSamplerState, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), Parser_RootDebugOverlays, { MakeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "mtl_file" ), parserRootMtlFile, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "scene" ), parserRootScene, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "font" ), parserRootFont, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "material" ), parserRootMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "panel_overlay" ), parserRootPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "border_panel_overlay" ), parserRootBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "text_overlay" ), parserRootTextOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "sampler" ), parserRootSamplerState, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "window" ), parserRootWindow, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
 
-	AddParser( uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), Parser_WindowRenderTarget );
-	AddParser( uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), Parser_WindowVSync, { MakeParameter< ParameterType::eBool >() } );
-	AddParser( uint32_t( CSCNSection::eWindow ), cuT( "fullscreen" ), Parser_WindowFullscreen, { MakeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), parserWindowRenderTarget );
+	addParser( uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), parserWindowVSync, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eWindow ), cuT( "fullscreen" ), parserWindowFullscreen, { makeParameter< ParameterType::eBool >() } );
 
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "scene" ), Parser_RenderTargetScene, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "camera" ), Parser_RenderTargetCamera, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "size" ), Parser_RenderTargetSize, { MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "format" ), Parser_RenderTargetFormat, { MakeParameter< ParameterType::ePixelFormat >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "technique" ), Parser_RenderTargetTechnique, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "stereo" ), Parser_RenderTargetStereo, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), Parser_RenderTargetToneMapping, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), Parser_RenderTargetEnd );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "scene" ), parserRenderTargetScene, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "camera" ), parserRenderTargetCamera, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "size" ), parserRenderTargetSize, { makeParameter< ParameterType::eSize >() } );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "format" ), parserRenderTargetFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "stereo" ), parserRenderTargetStereo, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), parserRenderTargetPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), parserRenderTargetToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), parserRenderTargetSsao );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), parserRenderTargetEnd );
 
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), Parser_SamplerMagFilter, { MakeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), Parser_SamplerMipFilter, { MakeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "min_lod" ), Parser_SamplerMinLod, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "max_lod" ), Parser_SamplerMaxLod, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "lod_bias" ), Parser_SamplerLodBias, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "u_wrap_mode" ), Parser_SamplerUWrapMode, { MakeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "v_wrap_mode" ), Parser_SamplerVWrapMode, { MakeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "w_wrap_mode" ), Parser_SamplerWWrapMode, { MakeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "border_colour" ), Parser_SamplerBorderColour, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "max_anisotropy" ), Parser_SamplerMaxAnisotropy, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_mode" ), Parser_SamplerComparisonMode, { MakeParameter< ParameterType::eCheckedText >( m_mapComparisonModes ) } );
-	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), Parser_SamplerComparisonFunc, { MakeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_lod" ), parserSamplerMinLod, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "max_lod" ), parserSamplerMaxLod, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "lod_bias" ), parserSamplerLodBias, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "u_wrap_mode" ), parserSamplerUWrapMode, { makeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "v_wrap_mode" ), parserSamplerVWrapMode, { makeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "w_wrap_mode" ), parserSamplerWWrapMode, { makeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "border_colour" ), parserSamplerBorderColour, { makeParameter< ParameterType::eRgbaColour >() } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "max_anisotropy" ), parserSamplerMaxAnisotropy, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_mode" ), parserSamplerComparisonMode, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), parserSamplerComparisonFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ) } );
 
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "include" ), Parser_SceneInclude, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "background_colour" ), Parser_SceneBkColour, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "background_image" ), Parser_SceneBkImage, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "font" ), Parser_SceneFont, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "material" ), Parser_SceneMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "sampler" ), Parser_SceneSamplerState, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "camera" ), Parser_SceneCamera, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "light" ), Parser_SceneLight, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "camera_node" ), Parser_SceneCameraNode, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "scene_node" ), Parser_SceneSceneNode, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "object" ), Parser_SceneObject, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "ambient_light" ), Parser_SceneAmbientLight, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "import" ), Parser_SceneImport, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "billboard" ), Parser_SceneBillboard, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "window" ), Parser_SceneWindow, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "animated_object_group" ), Parser_SceneAnimatedObjectGroup, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "panel_overlay" ), Parser_ScenePanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "border_panel_overlay" ), Parser_SceneBorderPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "text_overlay" ), Parser_SceneTextOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "skybox" ), Parser_SceneSkybox );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "fog_type" ), Parser_SceneFogType, { MakeParameter< ParameterType::eCheckedText >( m_fogTypes ) } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "fog_density" ), Parser_SceneFogDensity, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "particle_system" ), Parser_SceneParticleSystem, { MakeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "include" ), parserSceneInclude, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "background_colour" ), parserSceneBkColour, { makeParameter< ParameterType::eRgbColour >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "background_image" ), parserSceneBkImage, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "font" ), parserSceneFont, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "material" ), parserSceneMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "sampler" ), parserSceneSamplerState, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "camera" ), parserSceneCamera, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "light" ), parserSceneLight, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "camera_node" ), parserSceneCameraNode, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "scene_node" ), parserSceneSceneNode, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "object" ), parserSceneObject, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "ambient_light" ), parserSceneAmbientLight, { makeParameter< ParameterType::eRgbColour >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "import" ), parserSceneImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "billboard" ), parserSceneBillboard, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "animated_object_group" ), parserSceneAnimatedObjectGroup, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "panel_overlay" ), parserScenePanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "border_panel_overlay" ), parserSceneBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "text_overlay" ), parserSceneTextOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "skybox" ), parserSceneSkybox );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "fog_type" ), parserSceneFogType, { makeParameter< ParameterType::eCheckedText >( m_fogTypes ) } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "fog_density" ), parserSceneFogDensity, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "particle_system" ), parserSceneParticleSystem, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "mesh" ), parserMesh, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eScene ), cuT( "hdr_config" ), parserSceneHdrConfig );
 
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), Parser_ParticleSystemParent, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particles_count" ), Parser_ParticleSystemCount, { MakeParameter< ParameterType::eUInt32 >() } );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "material" ), Parser_ParticleSystemMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "dimensions" ), Parser_ParticleSystemDimensions, { MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particle" ), Parser_ParticleSystemParticle );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "tf_shader_program" ), Parser_ParticleSystemTFShader );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "cs_shader_program" ), Parser_ParticleSystemCSShader );
+	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particles_count" ), parserParticleSystemCount, { makeParameter< ParameterType::eUInt32 >() } );
+	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "material" ), parserParticleSystemMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "dimensions" ), parserParticleSystemDimensions, { makeParameter< ParameterType::ePoint2F >() } );
+	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particle" ), parserParticleSystemParticle );
+	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "tf_shader_program" ), parserParticleSystemTFShader );
+	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "cs_shader_program" ), parserParticleSystemCSShader );
 
-	AddParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), Parser_ParticleVariable, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eCheckedText >( m_mapElementTypes ), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eParticle ), cuT( "type" ), Parser_ParticleType, { MakeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText >( m_mapElementTypes ), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eParticle ), cuT( "type" ), parserParticleType, { makeParameter< ParameterType::eName >() } );
 
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "parent" ), Parser_LightParent, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "type" ), Parser_LightType, { MakeParameter< ParameterType::eCheckedText >( m_mapLightTypes ) } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "colour" ), Parser_LightColour, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "intensity" ), Parser_LightIntensity, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "attenuation" ), Parser_LightAttenuation, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "cut_off" ), Parser_LightCutOff, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "exponent" ), Parser_LightExponent, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "shadow_producer" ), Parser_LightShadowProducer, { MakeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "parent" ), parserLightParent, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "type" ), parserLightType, { makeParameter< ParameterType::eCheckedText >( m_mapLightTypes ) } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "colour" ), parserLightColour, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "intensity" ), parserLightIntensity, { makeParameter< ParameterType::ePoint2F >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "attenuation" ), parserLightAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "cut_off" ), parserLightCutOff, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "exponent" ), parserLightExponent, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "shadow_producer" ), parserLightShadowProducer, { makeParameter< ParameterType::eBool >() } );
 
-	AddParser( uint32_t( CSCNSection::eNode ), cuT( "parent" ), Parser_NodeParent, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eNode ), cuT( "position" ), Parser_NodePosition, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eNode ), cuT( "orientation" ), Parser_NodeOrientation, { MakeParameter< ParameterType::ePoint3F >(), MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eNode ), cuT( "scale" ), Parser_NodeScale, { MakeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eNode ), cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eNode ), cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eNode ), cuT( "orientation" ), parserNodeOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eNode ), cuT( "direction" ), parserNodeDirection, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eNode ), cuT( "scale" ), parserNodeScale, { makeParameter< ParameterType::ePoint3F >() } );
 
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "parent" ), Parser_ObjectParent, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "mesh" ), Parser_ObjectMesh, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "material" ), Parser_ObjectMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "materials" ), Parser_ObjectMaterials );
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "cast_shadows" ), Parser_ObjectCastShadows, { MakeParameter< ParameterType::eBool >() } );
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "receive_shadows" ), Parser_ObjectReceivesShadows, { MakeParameter< ParameterType::eBool >() } );
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "}" ), Parser_ObjectEnd );
+	addParser( uint32_t( CSCNSection::eObject ), cuT( "parent" ), parserObjectParent, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eObject ), cuT( "mesh" ), parserMesh, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eObject ), cuT( "material" ), parserObjectMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eObject ), cuT( "materials" ), parserObjectMaterials );
+	addParser( uint32_t( CSCNSection::eObject ), cuT( "cast_shadows" ), parserObjectCastShadows, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eObject ), cuT( "receive_shadows" ), parserObjectReceivesShadows, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eObject ), cuT( "}" ), parserObjectEnd );
 
-	AddParser( uint32_t( CSCNSection::eObjectMaterials ), cuT( "material" ), Parser_ObjectMaterialsMaterial, { MakeParameter< ParameterType::eUInt16 >(), MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eObjectMaterials ), cuT( "}" ), Parser_ObjectMaterialsEnd );
+	addParser( uint32_t( CSCNSection::eObjectMaterials ), cuT( "material" ), parserObjectMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eObjectMaterials ), cuT( "}" ), parserObjectMaterialsEnd );
 
-	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "type" ), Parser_MeshType, { MakeParameter< ParameterType::eCheckedText >( m_mapMeshTypes ), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "submesh" ), Parser_MeshSubmesh );
-	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "import" ), Parser_MeshImport, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "morph_import" ), Parser_MeshMorphImport, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eFloat >(), MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "division" ), Parser_MeshDivide, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eUInt16 >() } );
-	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "}" ), Parser_MeshEnd );
+	addParser( uint32_t( CSCNSection::eMesh ), cuT( "type" ), parserMeshType, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eMesh ), cuT( "submesh" ), parserMeshSubmesh );
+	addParser( uint32_t( CSCNSection::eMesh ), cuT( "import" ), parserMeshImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eMesh ), cuT( "morph_import" ), parserMeshMorphImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eMesh ), cuT( "division" ), parserMeshDivide, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eUInt16 >() } );
+	addParser( uint32_t( CSCNSection::eMesh ), cuT( "}" ), parserMeshEnd );
 
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "vertex" ), Parser_SubmeshVertex, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face" ), Parser_SubmeshFace, { MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_uv" ), Parser_SubmeshFaceUV, { MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_uvw" ), Parser_SubmeshFaceUVW, { MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_normals" ), Parser_SubmeshFaceNormals, { MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_tangents" ), Parser_SubmeshFaceTangents, { MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "uv" ), Parser_SubmeshUV, { MakeParameter< ParameterType::ePoint2F >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "uvw" ), Parser_SubmeshUVW, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "normal" ), Parser_SubmeshNormal, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "tangent" ), Parser_SubmeshTangent, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "}" ), Parser_SubmeshEnd );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "vertex" ), parserSubmeshVertex, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face" ), parserSubmeshFace, { makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_uv" ), parserSubmeshFaceUV, { makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_uvw" ), parserSubmeshFaceUVW, { makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_normals" ), parserSubmeshFaceNormals, { makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "face_tangents" ), parserSubmeshFaceTangents, { makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "uv" ), parserSubmeshUV, { makeParameter< ParameterType::ePoint2F >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "uvw" ), parserSubmeshUVW, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "normal" ), parserSubmeshNormal, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "tangent" ), parserSubmeshTangent, { makeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eSubmesh ), cuT( "}" ), parserSubmeshEnd );
 
-	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "type" ), Parser_MaterialType, { MakeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
-	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), Parser_MaterialPass );
-	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "}" ), Parser_MaterialEnd );
+	addParser( uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), parserMaterialPass );
+	addParser( uint32_t( CSCNSection::eMaterial ), cuT( "}" ), parserMaterialEnd );
 
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "ambient" ), Parser_PassAmbient, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "diffuse" ), Parser_PassDiffuse, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "specular" ), Parser_PassSpecular, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "emissive" ), Parser_PassEmissive, { MakeParameter< ParameterType::eHdrColour >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "shininess" ), Parser_PassShininess, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), Parser_PassAlpha, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ParameterType::eBool >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), Parser_PassTextureUnit );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), Parser_PassShader );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, { MakeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, { MakeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), Parser_PassEnd );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "diffuse" ), parserPassDiffuse, { makeParameter< ParameterType::eRgbColour >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "specular" ), parserPassSpecular, { makeParameter< ParameterType::eRgbColour >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "ambient" ), parserPassAmbient, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "emissive" ), parserPassEmissive, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "shininess" ), parserPassShininess, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "albedo" ), parserPassAlbedo, { makeParameter< ParameterType::eRgbColour >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "roughness" ), parserPassRoughness, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "metallic" ), parserPassMetallic, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "glossiness" ), parserPassGlossiness, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), parserPassAlpha, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), parserPassdoubleFace, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), parserPassTextureUnit );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), parserPassShader );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_blend_mode" ), parserPassAlphaBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "colour_blend_mode" ), parserPassColourBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), Parser_UnitImage, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), Parser_UnitRenderTarget );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureRgbFunctions ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ) } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureAlphaFunctions ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ) } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureChannels ) } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), Parser_UnitSampler, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "colour" ), Parser_UnitBlendColour, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "}" ), Parser_UnitEnd );
+	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), parserUnitRenderTarget );
+	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), parserUnitChannel, { makeParameter< ParameterType::eCheckedText >( m_mapTextureChannels ) } );
+	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "}" ), parserUnitEnd );
 
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "vertex_program" ), Parser_VertexShader );
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "pixel_program" ), Parser_PixelShader );
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "geometry_program" ), Parser_GeometryShader );
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "hull_program" ), Parser_HullShader );
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "domain_program" ), Parser_DomainShader );
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "compute_program" ), Parser_ComputeShader );
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "constants_buffer" ), Parser_ConstantsBuffer, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "}" ), Parser_ShaderEnd );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "vertex_program" ), parserVertexShader );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "pixel_program" ), parserPixelShader );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "geometry_program" ), parserGeometryShader );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "hull_program" ), parserHullShader );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "domain_program" ), parserdomainShader );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "compute_program" ), parserComputeShader );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "constants_buffer" ), parserConstantsBuffer, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "}" ), parserShaderEnd );
 
-	AddParser( uint32_t( CSCNSection::eShaderObject ), cuT( "file" ), Parser_ShaderProgramFile, { MakeParameter< ParameterType::eCheckedText >( m_mapModels ), MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eShaderObject ), cuT( "sampler" ), Parser_ShaderProgramSampler, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eShaderObject ), cuT( "input_type" ), Parser_GeometryInputType, { MakeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
-	AddParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_type" ), Parser_GeometryOutputType, { MakeParameter< ParameterType::eCheckedText >( m_mapPrimitiveOutputTypes ) } );
-	AddParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, { MakeParameter< ParameterType::eUInt8 >() } );
+	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "file" ), parserShaderProgramFile, { makeParameter< ParameterType::eCheckedText >( m_mapModels ), makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "sampler" ), parserShaderProgramSampler, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "input_type" ), parserGeometryInputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
+	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_type" ), parserGeometryOutputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveOutputTypes ) } );
+	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_vtx_count" ), parserGeometryOutputVtxCount, { makeParameter< ParameterType::eUInt8 >() } );
 
-	AddParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), Parser_ShaderUboShaders, { MakeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( m_mapShaderTypes ) } );
-	AddParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "variable" ), Parser_ShaderUboVariable, { MakeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), parserShaderUboShaders, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( m_mapShaderTypes ) } );
+	addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "variable" ), parserShaderUboVariable, { makeParameter< ParameterType::eName >() } );
 
-	AddParser( uint32_t( CSCNSection::eUBOVariable ), cuT( "count" ), Parser_ShaderVariableCount, { MakeParameter< ParameterType::eUInt32 >() } );
-	AddParser( uint32_t( CSCNSection::eUBOVariable ), cuT( "type" ), Parser_ShaderVariableType, { MakeParameter< ParameterType::eCheckedText >( m_mapVariableTypes ) } );
-	AddParser( uint32_t( CSCNSection::eUBOVariable ), cuT( "value" ), Parser_ShaderVariableValue, { MakeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eUBOVariable ), cuT( "count" ), parserShaderVariableCount, { makeParameter< ParameterType::eUInt32 >() } );
+	addParser( uint32_t( CSCNSection::eUBOVariable ), cuT( "type" ), parserShaderVariableType, { makeParameter< ParameterType::eCheckedText >( m_mapVariableTypes ) } );
+	addParser( uint32_t( CSCNSection::eUBOVariable ), cuT( "value" ), parserShaderVariableValue, { makeParameter< ParameterType::eText >() } );
 
-	AddParser( uint32_t( CSCNSection::eFont ), cuT( "file" ), Parser_FontFile, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eFont ), cuT( "height" ), Parser_FontHeight, { MakeParameter< ParameterType::eInt16 >() } );
-	AddParser( uint32_t( CSCNSection::eFont ), cuT( "}" ), Parser_FontEnd );
+	addParser( uint32_t( CSCNSection::eFont ), cuT( "file" ), parserFontFile, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eFont ), cuT( "height" ), parserFontHeight, { makeParameter< ParameterType::eInt16 >() } );
+	addParser( uint32_t( CSCNSection::eFont ), cuT( "}" ), parserFontEnd );
 
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "material" ), Parser_OverlayMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "position" ), Parser_OverlayPosition, { MakeParameter< ParameterType::ePoint2D >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "size" ), Parser_OverlaySize, { MakeParameter< ParameterType::ePoint2D >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "pxl_size" ), Parser_OverlayPixelSize, { MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "pxl_position" ), Parser_OverlayPixelPosition, { MakeParameter< ParameterType::ePosition >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "uv" ), Parser_PanelOverlayUvs, { MakeParameter< ParameterType::ePoint4D >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "text_overlay" ), Parser_OverlayTextOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "}" ), Parser_OverlayEnd );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "material" ), parserOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "position" ), parserOverlayPosition, { makeParameter< ParameterType::ePoint2D >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "size" ), parserOverlaySize, { makeParameter< ParameterType::ePoint2D >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "pxl_size" ), parserOverlayPixelSize, { makeParameter< ParameterType::eSize >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "pxl_position" ), parserOverlayPixelPosition, { makeParameter< ParameterType::ePosition >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "uv" ), parserPanelOverlayUvs, { makeParameter< ParameterType::ePoint4D >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "panel_overlay" ), parserOverlayPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "border_panel_overlay" ), parserOverlayBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "text_overlay" ), parserOverlayTextOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::ePanelOverlay ), cuT( "}" ), parserOverlayEnd );
 
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "material" ), Parser_OverlayMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "position" ), Parser_OverlayPosition, { MakeParameter< ParameterType::ePoint2D >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "size" ), Parser_OverlaySize, { MakeParameter< ParameterType::ePoint2D >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "pxl_size" ), Parser_OverlayPixelSize, { MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "pxl_position" ), Parser_OverlayPixelPosition, { MakeParameter< ParameterType::ePosition >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "text_overlay" ), Parser_OverlayTextOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "}" ), Parser_OverlayEnd );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_material" ), Parser_BorderPanelOverlayMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_size" ), Parser_BorderPanelOverlaySizes, { MakeParameter< ParameterType::ePoint4D >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "pxl_border_size" ), Parser_BorderPanelOverlayPixelSizes, { MakeParameter< ParameterType::eRectangle >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_position" ), Parser_BorderPanelOverlayPosition, { MakeParameter< ParameterType::eCheckedText >( m_mapBorderPositions ) } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "center_uv" ), Parser_BorderPanelOverlayCenterUvs, { MakeParameter< ParameterType::ePoint4D >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_inner_uv" ), Parser_BorderPanelOverlayInnerUvs, { MakeParameter< ParameterType::ePoint4D >() } );
-	AddParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_outer_uv" ), Parser_BorderPanelOverlayOuterUvs, { MakeParameter< ParameterType::ePoint4D >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "material" ), parserOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "position" ), parserOverlayPosition, { makeParameter< ParameterType::ePoint2D >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "size" ), parserOverlaySize, { makeParameter< ParameterType::ePoint2D >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "pxl_size" ), parserOverlayPixelSize, { makeParameter< ParameterType::eSize >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "pxl_position" ), parserOverlayPixelPosition, { makeParameter< ParameterType::ePosition >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "panel_overlay" ), parserOverlayPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_panel_overlay" ), parserOverlayBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "text_overlay" ), parserOverlayTextOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "}" ), parserOverlayEnd );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_material" ), parserBorderPanelOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_size" ), parserBorderPanelOverlaySizes, { makeParameter< ParameterType::ePoint4D >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "pxl_border_size" ), parserBorderPanelOverlayPixelSizes, { makeParameter< ParameterType::eRectangle >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_position" ), parserBorderPanelOverlayPosition, { makeParameter< ParameterType::eCheckedText >( m_mapBorderPositions ) } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "center_uv" ), parserBorderPanelOverlayCenterUvs, { makeParameter< ParameterType::ePoint4D >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_inner_uv" ), parserBorderPanelOverlayInnerUvs, { makeParameter< ParameterType::ePoint4D >() } );
+	addParser( uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_outer_uv" ), parserBorderPanelOverlayOuterUvs, { makeParameter< ParameterType::ePoint4D >() } );
 
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "material" ), Parser_OverlayMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "position" ), Parser_OverlayPosition, { MakeParameter< ParameterType::ePoint2D >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "size" ), Parser_OverlaySize, { MakeParameter< ParameterType::ePoint2D >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "pxl_size" ), Parser_OverlayPixelSize, { MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "pxl_position" ), Parser_OverlayPixelPosition, { MakeParameter< ParameterType::ePosition >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "text_overlay" ), Parser_OverlayTextOverlay, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "font" ), Parser_TextOverlayFont, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "text" ), Parser_TextOverlayText, { MakeParameter< ParameterType::eText >() } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "text_wrapping" ), Parser_TextOverlayTextWrapping, { MakeParameter< ParameterType::eCheckedText >( m_mapTextWrappingModes ) } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "vertical_align" ), Parser_TextOverlayVerticalAlign, { MakeParameter< ParameterType::eCheckedText >( m_mapVerticalAligns ) } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "horizontal_align" ), Parser_TextOverlayHorizontalAlign, { MakeParameter< ParameterType::eCheckedText >( m_mapHorizontalAligns ) } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "texturing_mode" ), Parser_TextOverlayTexturingMode, { MakeParameter< ParameterType::eCheckedText >( m_mapTextTexturingModes ) } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "line_spacing_mode" ), Parser_TextOverlayLineSpacingMode, { MakeParameter< ParameterType::eCheckedText >( m_mapLineSpacingModes ) } );
-	AddParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "}" ), Parser_OverlayEnd );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "material" ), parserOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "position" ), parserOverlayPosition, { makeParameter< ParameterType::ePoint2D >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "size" ), parserOverlaySize, { makeParameter< ParameterType::ePoint2D >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "pxl_size" ), parserOverlayPixelSize, { makeParameter< ParameterType::eSize >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "pxl_position" ), parserOverlayPixelPosition, { makeParameter< ParameterType::ePosition >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "panel_overlay" ), parserOverlayPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "border_panel_overlay" ), parserOverlayBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "text_overlay" ), parserOverlayTextOverlay, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "font" ), parserTextOverlayFont, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "text" ), parserTextOverlayText, { makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "text_wrapping" ), parserTextOverlayTextWrapping, { makeParameter< ParameterType::eCheckedText >( m_mapTextWrappingModes ) } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "vertical_align" ), parserTextOverlayVerticalAlign, { makeParameter< ParameterType::eCheckedText >( m_mapVerticalAligns ) } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "horizontal_align" ), parserTextOverlayHorizontalAlign, { makeParameter< ParameterType::eCheckedText >( m_mapHorizontalAligns ) } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "texturing_mode" ), parserTextOverlayTexturingMode, { makeParameter< ParameterType::eCheckedText >( m_mapTextTexturingModes ) } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "line_spacing_mode" ), parserTextOverlayLineSpacingMode, { makeParameter< ParameterType::eCheckedText >( m_mapLineSpacingModes ) } );
+	addParser( uint32_t( CSCNSection::eTextOverlay ), cuT( "}" ), parserOverlayEnd );
 
-	AddParser( uint32_t( CSCNSection::eCamera ), cuT( "parent" ), Parser_CameraParent, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eCamera ), cuT( "viewport" ), Parser_CameraViewport );
-	AddParser( uint32_t( CSCNSection::eCamera ), cuT( "primitive" ), Parser_CameraPrimitive, { MakeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
-	AddParser( uint32_t( CSCNSection::eCamera ), cuT( "}" ), Parser_CameraEnd );
+	addParser( uint32_t( CSCNSection::eCamera ), cuT( "parent" ), parserCameraParent, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eCamera ), cuT( "viewport" ), parserCameraViewport );
+	addParser( uint32_t( CSCNSection::eCamera ), cuT( "primitive" ), parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
+	addParser( uint32_t( CSCNSection::eCamera ), cuT( "}" ), parserCameraEnd );
 
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "type" ), Parser_ViewportType, { MakeParameter< ParameterType::eCheckedText >( m_mapViewportModes ) } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "left" ), Parser_ViewportLeft, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "right" ), Parser_ViewportRight, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "top" ), Parser_ViewportTop, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "bottom" ), Parser_ViewportBottom, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "near" ), Parser_ViewportNear, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "far" ), Parser_ViewportFar, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "size" ), Parser_ViewportSize, { MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "fov_y" ), Parser_ViewportFovY, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "aspect_ratio" ), Parser_ViewportAspectRatio, { MakeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "type" ), parserViewportType, { makeParameter< ParameterType::eCheckedText >( m_mapViewportModes ) } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "left" ), parserViewportLeft, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "right" ), parserViewportRight, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "top" ), parserViewportTop, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "bottom" ), parserViewportBottom, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "near" ), parserViewportNear, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "far" ), parserViewportFar, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "size" ), parserViewportSize, { makeParameter< ParameterType::eSize >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "fov_y" ), parserViewportFovY, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eViewport ), cuT( "aspect_ratio" ), parserViewportAspectRatio, { makeParameter< ParameterType::eFloat >() } );
 
-	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "parent" ), Parser_BillboardParent, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "type" ), Parser_BillboardType, { MakeParameter < ParameterType::eCheckedText >( m_mapBillboardTypes ) } );
-	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "size" ), Parser_BillboardSize, { MakeParameter < ParameterType::eCheckedText >( m_mapBillboardSizes ) } );
-	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "positions" ), Parser_BillboardPositions );
-	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "material" ), Parser_BillboardMaterial, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "dimensions" ), Parser_BillboardDimensions, { MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "}" ), Parser_BillboardEnd );
+	addParser( uint32_t( CSCNSection::eBillboard ), cuT( "parent" ), parserBillboardParent, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eBillboard ), cuT( "type" ), parserBillboardType, { makeParameter < ParameterType::eCheckedText >( m_mapBillboardTypes ) } );
+	addParser( uint32_t( CSCNSection::eBillboard ), cuT( "size" ), parserBillboardSize, { makeParameter < ParameterType::eCheckedText >( m_mapBillboardSizes ) } );
+	addParser( uint32_t( CSCNSection::eBillboard ), cuT( "positions" ), parserBillboardPositions );
+	addParser( uint32_t( CSCNSection::eBillboard ), cuT( "material" ), parserBillboardMaterial, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eBillboard ), cuT( "dimensions" ), parserBillboardDimensions, { makeParameter< ParameterType::ePoint2F >() } );
+	addParser( uint32_t( CSCNSection::eBillboard ), cuT( "}" ), parserBillboardEnd );
 
-	AddParser( uint32_t( CSCNSection::eBillboardList ), cuT( "pos" ), Parser_BillboardPoint, { MakeParameter< ParameterType::ePoint3F >() } );
+	addParser( uint32_t( CSCNSection::eBillboardList ), cuT( "pos" ), parserBillboardPoint, { makeParameter< ParameterType::ePoint3F >() } );
 
-	AddParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "animated_object" ), Parser_AnimatedObjectGroupAnimatedObject, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "animation" ), Parser_AnimatedObjectGroupAnimation, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "start_animation" ), Parser_AnimatedObjectGroupAnimationStart, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "}" ), Parser_AnimatedObjectGroupEnd );
+	addParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "animated_object" ), parserAnimatedObjectGroupAnimatedObject, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "animation" ), parserAnimatedObjectGroupAnimation, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "start_animation" ), parserAnimatedObjectGroupAnimationStart, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "pause_animation" ), parserAnimatedObjectGroupAnimationPause, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::eAnimGroup ), cuT( "}" ), parserAnimatedObjectGroupEnd );
 
-	AddParser( uint32_t( CSCNSection::eAnimation ), cuT( "looped" ), Parser_AnimationLooped, { MakeParameter< ParameterType::eBool >() } );
-	AddParser( uint32_t( CSCNSection::eAnimation ), cuT( "scale" ), Parser_AnimationScale, { MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eAnimation ), cuT( "}" ), Parser_AnimationEnd );
+	addParser( uint32_t( CSCNSection::eAnimation ), cuT( "looped" ), parserAnimationLooped, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eAnimation ), cuT( "scale" ), parserAnimationScale, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eAnimation ), cuT( "}" ), parserAnimationEnd );
 
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), Parser_SkyboxEqui, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eSize >() } );
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "left" ), Parser_SkyboxLeft, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "right" ), Parser_SkyboxRight, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "top" ), Parser_SkyboxTop, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "bottom" ), Parser_SkyboxBottom, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "front" ), Parser_SkyboxFront, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "back" ), Parser_SkyboxBack, { MakeParameter< ParameterType::ePath >() } );
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "}" ), Parser_SkyboxEnd );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eSize >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "left" ), parserSkyboxLeft, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "right" ), parserSkyboxRight, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "top" ), parserSkyboxTop, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "bottom" ), parserSkyboxBottom, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "front" ), parserSkyboxFront, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "back" ), parserSkyboxBack, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "}" ), parserSkyboxEnd );
 
-	for ( auto const & l_it : GetEngine()->GetAdditionalParsers() )
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "enabled" ), parserSsaoEnabled, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "high_quality" ), parserSsaoHighQuality, { makeParameter< ParameterType::eBool >() } );
+	//addParser( uint32_t( CSCNSection::eSsao ), cuT( "use_normals_buffer" ), parserSsaoUseNormalsBuffer, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "radius" ), parserSsaoRadius, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "bias" ), parserSsaoBias, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "intensity" ), parserSsaoIntensity, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "num_samples" ), parserSsaoNumSamples, { makeParameter< ParameterType::eUInt32 >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "edge_sharpness" ), parserSsaoEdgeSharpness, { makeParameter< ParameterType::eFloat >() } );
+	//addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_high_quality" ), parserSsaoBlurHighQuality, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_step_size" ), parserSsaoBlurStepSize, { makeParameter< ParameterType::eUInt32 >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_radius" ), parserSsaoBlurRadius, { makeParameter< ParameterType::eUInt32 >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), parserSsaoEnd );
+
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "strength" ), parserSubsurfaceScatteringStrength, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "gaussian_width" ), parserSubsurfaceScatteringGaussianWidth, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "transmittance_profile" ), parserSubsurfaceScatteringTransmittanceProfile );
+	addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "}" ), parserSubsurfaceScatteringEnd );
+
+	addParser( uint32_t( CSCNSection::eTransmittanceProfile ), cuT( "factor" ), parserTransmittanceProfileFactor, { makeParameter< ParameterType::ePoint4F >() } );
+
+	addParser( uint32_t( CSCNSection::eHdrConfig ), cuT( "exposure" ), parserHdrExponent, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eHdrConfig ), cuT( "gamma" ), parserHdrGamma, { makeParameter< ParameterType::eFloat >() } );
+
+	for ( auto const & it : getEngine()->getAdditionalParsers() )
 	{
-		for ( auto const & l_itSections : l_it.second )
+		for ( auto const & itSections : it.second )
 		{
-			for ( auto const & l_itParsers : l_itSections.second )
+			for ( auto const & itParsers : itSections.second )
 			{
-				auto l_params = l_itParsers.second.m_params;
-				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_params ) );
+				auto params = itParsers.second.m_params;
+				addParser( itSections.first, itParsers.first, itParsers.second.m_function, std::move( params ) );
 			}
 		}
 	}
 }
 
-void SceneFileParser::DoCleanupParser()
+void SceneFileParser::doCleanupParser()
 {
-	SceneFileContextSPtr l_context = std::static_pointer_cast< SceneFileContext >( m_context );
+	SceneFileContextSPtr context = std::static_pointer_cast< SceneFileContext >( m_context );
 	m_context.reset();
 
-	for ( ScenePtrStrMap::iterator l_it = l_context->mapScenes.begin(); l_it != l_context->mapScenes.end(); ++l_it )
+	for ( ScenePtrStrMap::iterator it = context->mapScenes.begin(); it != context->mapScenes.end(); ++it )
 	{
-		m_mapScenes.insert( std::make_pair( l_it->first,  l_it->second ) );
+		m_mapScenes.insert( std::make_pair( it->first,  it->second ) );
 	}
 
-	m_renderWindow = l_context->pWindow;
+	m_renderWindow = context->pWindow;
 }
 
-bool SceneFileParser::DoDiscardParser( String const & p_line )
+bool SceneFileParser::doDiscardParser( String const & line )
 {
-	Logger::LogError( cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_line );
+	Logger::logError( cuT( "Parser not found @ line #" ) + string::toString( m_context->m_line ) + cuT( " : " ) + line );
 	return false;
 }
 
-void SceneFileParser::DoValidate()
+void SceneFileParser::doValidate()
 {
 }
 
-String SceneFileParser::DoGetSectionName( uint32_t p_section )
+String SceneFileParser::doGetSectionName( uint32_t section )
 {
-	String l_return;
+	String result;
 
-	switch ( CSCNSection( p_section ) )
+	switch ( CSCNSection( section ) )
 	{
 	case CSCNSection::eRoot:
 		break;
 
 	case CSCNSection::eScene:
-		l_return = cuT( "scene" );
+		result = cuT( "scene" );
 		break;
 
 	case CSCNSection::eWindow:
-		l_return = cuT( "window" );
+		result = cuT( "window" );
 		break;
 
 	case CSCNSection::eSampler:
-		l_return = cuT( "sampler" );
+		result = cuT( "sampler" );
 		break;
 
 	case CSCNSection::eCamera:
-		l_return = cuT( "camera" );
+		result = cuT( "camera" );
 		break;
 
 	case CSCNSection::eViewport:
-		l_return = cuT( "viewport" );
+		result = cuT( "viewport" );
 		break;
 
 	case CSCNSection::eLight:
-		l_return = cuT( "light" );
+		result = cuT( "light" );
 		break;
 
 	case CSCNSection::eNode:
-		l_return = cuT( "scene_node" );
+		result = cuT( "scene_node" );
 		break;
 
 	case CSCNSection::eObject:
-		l_return = cuT( "object" );
+		result = cuT( "object" );
 		break;
 
 	case CSCNSection::eObjectMaterials:
-		l_return = cuT( "materials" );
+		result = cuT( "materials" );
 		break;
 
 	case CSCNSection::eFont:
-		l_return = cuT( "font" );
+		result = cuT( "font" );
 		break;
 
 	case CSCNSection::ePanelOverlay:
-		l_return = cuT( "panel_overlay" );
+		result = cuT( "panel_overlay" );
 		break;
 
 	case CSCNSection::eBorderPanelOverlay:
-		l_return = cuT( "border_panel_overlay" );
+		result = cuT( "border_panel_overlay" );
 		break;
 
 	case CSCNSection::eTextOverlay:
-		l_return = cuT( "text_overlay" );
+		result = cuT( "text_overlay" );
 		break;
 
 	case CSCNSection::eMesh:
-		l_return = cuT( "mesh" );
+		result = cuT( "mesh" );
 		break;
 
 	case CSCNSection::eSubmesh:
-		l_return = cuT( "submesh" );
+		result = cuT( "submesh" );
 		break;
 
 	case CSCNSection::eMaterial:
-		l_return = cuT( "material" );
+		result = cuT( "material" );
 		break;
 
 	case CSCNSection::ePass:
-		l_return = cuT( "pass" );
+		result = cuT( "pass" );
 		break;
 
 	case CSCNSection::eTextureUnit:
-		l_return = cuT( "texture_unit" );
+		result = cuT( "texture_unit" );
 		break;
 
 	case CSCNSection::eRenderTarget:
-		l_return = cuT( "render_target" );
+		result = cuT( "render_target" );
 		break;
 
 	case CSCNSection::eShaderProgram:
-		l_return = cuT( "gl_shader_program" );
+		result = cuT( "gl_shader_program" );
 		break;
 
 	case CSCNSection::eShaderObject:
-		l_return = cuT( "shader_object" );
+		result = cuT( "shader_object" );
 		break;
 
 	case CSCNSection::eShaderUBO:
-		l_return = cuT( "constants_buffer" );
+		result = cuT( "constants_buffer" );
 		break;
 
 	case CSCNSection::eUBOVariable:
-		l_return = cuT( "variable" );
+		result = cuT( "variable" );
 		break;
 
 	case CSCNSection::eBillboard:
-		l_return = cuT( "billboard" );
+		result = cuT( "billboard" );
 		break;
 
 	case CSCNSection::eBillboardList:
-		l_return = cuT( "positions" );
+		result = cuT( "positions" );
 		break;
 
 	case CSCNSection::eAnimGroup:
-		l_return = cuT( "animated_object_group" );
+		result = cuT( "animated_object_group" );
 		break;
 
 	case CSCNSection::eAnimation:
-		l_return = cuT( "animation" );
+		result = cuT( "animation" );
 		break;
 
 	case CSCNSection::eSkybox:
-		l_return = cuT( "skybox" );
+		result = cuT( "skybox" );
 		break;
 
 	case CSCNSection::eParticleSystem:
-		l_return = cuT( "particle_system" );
+		result = cuT( "particle_system" );
 		break;
 
 	case CSCNSection::eParticle:
-		l_return = cuT( "particle" );
+		result = cuT( "particle" );
 		break;
 
 	default:
-		for ( auto const & l_sections : GetEngine()->GetAdditionalSections() )
+		for ( auto const & sections : getEngine()->getAdditionalSections() )
 		{
-			if ( l_return.empty() )
+			if ( result.empty() )
 			{
-				auto l_it = l_sections.second.find( p_section );
+				auto it = sections.second.find( section );
 
-				if ( l_it != l_sections.second.end() )
+				if ( it != sections.second.end() )
 				{
-					l_return = l_it->second;
+					result = it->second;
 				}
 			}
 		}
 
-		if ( l_return.empty() )
+		if ( result.empty() )
 		{
 			FAILURE( "Section not found" );
 		}
@@ -857,7 +884,7 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		break;
 	}
 
-	return l_return;
+	return result;
 }
 
 //****************************************************************************************************

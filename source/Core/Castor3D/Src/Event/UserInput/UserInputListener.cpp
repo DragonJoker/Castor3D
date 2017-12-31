@@ -4,14 +4,16 @@
 
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
+#include "Overlay/Overlay.hpp"
+#include "Overlay/TextOverlay.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	UserInputListener::UserInputListener( Engine & p_engine, String const & p_name )
-		: OwnedBy< Engine >{ p_engine }
-		, m_frameListener{ p_engine.GetFrameListenerCache().Add( p_name ) }
+	UserInputListener::UserInputListener( Engine & engine, String const & p_name )
+		: OwnedBy< Engine >{ engine }
+		, m_frameListener{ engine.getFrameListenerCache().add( p_name ) }
 	{
 		m_mouse.m_buttons[size_t( MouseButton::eLeft )] = false;
 		m_mouse.m_buttons[size_t( MouseButton::eMiddle )] = false;
@@ -20,227 +22,395 @@ namespace Castor3D
 		m_keyboard.m_ctrl = false;
 		m_keyboard.m_alt = false;
 		m_keyboard.m_shift = false;
-		m_frameListener->PostEvent( MakeInitialiseEvent( *this ) );
+		m_frameListener->postEvent( makeInitialiseEvent( *this ) );
 	}
 
 	UserInputListener::~UserInputListener()
 	{
 	}
 
-	bool UserInputListener::Initialise()
+	bool UserInputListener::initialise()
 	{
-		m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::ProcessEvents, this ) ) );
-		m_enabled = DoInitialise();
+		m_frameListener->postEvent( makeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::processEvents, this ) ) );
+		m_enabled = doInitialise();
 		return m_enabled;
 	}
 
-	void UserInputListener::Cleanup()
+	void UserInputListener::cleanup()
 	{
 		m_enabled = false;
 
-		DoCleanup();
+		doCleanup();
 
-		auto l_lock = make_unique_lock( m_mutexHandlers );
-		auto l_it = m_handlers.begin();
+		auto lock = makeUniqueLock( m_mutexHandlers );
+		auto it = m_handlers.begin();
 
-		while ( l_it != m_handlers.end() )
+		while ( it != m_handlers.end() )
 		{
-			auto l_handler = *l_it;
-			DoRemoveHandler( l_handler );
-			l_it = m_handlers.begin();
+			auto handler = *it;
+			doRemoveHandler( handler );
+			it = m_handlers.begin();
 		}
 	}
 
-	void UserInputListener::ProcessEvents()
+	void UserInputListener::processEvents()
 	{
-		auto l_handlers = DoGetHandlers();
+		auto handlers = doGetHandlers();
 
-		for ( auto l_handler : l_handlers )
+		for ( auto handler : handlers )
 		{
-			l_handler->ProcessEvents();
+			handler->processEvents();
 		}
 
 		if ( m_enabled )
 		{
 			// Push this method again, for next frame.
-			m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::ProcessEvents, this ) ) );
+			m_frameListener->postEvent( makeFunctorEvent( EventType::ePostRender, std::bind( &UserInputListener::processEvents, this ) ) );
 		}
 	}
 
-	bool UserInputListener::FireMouseMove( Position const & p_position )
+	void UserInputListener::registerClickAction( String const & p_handler
+		, OnClickActionFunction p_function )
 	{
-		bool l_return = false;
-		m_mouse.m_position = p_position;
-		auto l_current = DoGetMouseTargetableHandler( p_position );
-		auto l_last = m_lastMouseTarget.lock();
+		auto it = m_onClickActions.find( p_handler );
 
-		if ( l_current != l_last )
+		if ( it == m_onClickActions.end() )
 		{
-			if ( l_last )
-			{
-				Castor::Logger::LogDebug( Castor::StringStream() << p_position.x() << "x" << p_position.y() );
-				l_last->PushEvent( MouseEvent( MouseEventType::eLeave, p_position ) );
-				l_last.reset();
-				m_lastMouseTarget.reset();
-			}
+			m_onClickActions.emplace( p_handler, p_function );
 		}
-
-		if ( l_current )
-		{
-			if ( l_current != l_last )
-			{
-				l_current->PushEvent( MouseEvent( MouseEventType::eEnter, p_position ) );
-			}
-
-			l_current->PushEvent( MouseEvent( MouseEventType::eMove, p_position ) );
-			l_return = true;
-			m_lastMouseTarget = l_current;
-		}
-
-		return l_return;
 	}
 
-	bool UserInputListener::FireMouseButtonPushed( MouseButton p_button )
+	void UserInputListener::registerSelectAction( String const & p_handler
+		, OnSelectActionFunction p_function )
 	{
-		bool l_return = false;
-		m_mouse.m_buttons[size_t( p_button )] = true;
-		m_mouse.m_changed = p_button;
-		auto l_current = DoGetMouseTargetableHandler( m_mouse.m_position );
+		auto it = m_onSelectActions.find( p_handler );
 
-		if ( l_current )
+		if ( it == m_onSelectActions.end() )
 		{
-			auto l_active = m_activeHandler.lock();
+			m_onSelectActions.emplace( p_handler, p_function );
+		}
+	}
 
-			if ( l_current != l_active )
+	void UserInputListener::registerTextAction( String const & p_handler
+		, OnTextActionFunction p_function )
+	{
+		auto it = m_onTextActions.find( p_handler );
+
+		if ( it == m_onTextActions.end() )
+		{
+			m_onTextActions.emplace( p_handler, p_function );
+		}
+	}
+
+	void UserInputListener::unregisterClickAction( String const & p_handler )
+	{
+		auto it = m_onClickActions.find( p_handler );
+
+		if ( it != m_onClickActions.end() )
+		{
+			m_onClickActions.erase( it );
+		}
+	}
+
+	void UserInputListener::unregisterSelectAction( String const & p_handler )
+	{
+		auto it = m_onSelectActions.find( p_handler );
+
+		if ( it != m_onSelectActions.end() )
+		{
+			m_onSelectActions.erase( it );
+		}
+	}
+
+	void UserInputListener::unregisterTextAction( String const & p_handler )
+	{
+		auto it = m_onTextActions.find( p_handler );
+
+		if ( it != m_onTextActions.end() )
+		{
+			m_onTextActions.erase( it );
+		}
+	}
+
+	void UserInputListener::onClickAction( String const & p_handler )
+	{
+		auto it = m_onClickActions.find( p_handler );
+
+		if ( it != m_onClickActions.end() )
+		{
+			it->second();
+		}
+	}
+
+	void UserInputListener::onSelectAction( String const & p_handler, int p_index )
+	{
+		auto it = m_onSelectActions.find( p_handler );
+
+		if ( it != m_onSelectActions.end() )
+		{
+			it->second( p_index );
+		}
+	}
+
+	void UserInputListener::onTextAction( String const & p_handler, castor::String const & p_text )
+	{
+		auto it = m_onTextActions.find( p_handler );
+
+		if ( it != m_onTextActions.end() )
+		{
+			it->second( p_text );
+		}
+	}
+
+	bool UserInputListener::fireMouseMove( Position const & p_position )
+	{
+		bool result = false;
+
+		if ( doHasHandlers() )
+		{
+			m_mouse.m_position = p_position;
+			auto current = doGetMouseTargetableHandler( p_position );
+			auto last = m_lastMouseTarget.lock();
+
+			if ( current != last )
 			{
-				if ( l_active )
+				if ( last )
 				{
-					l_active->PushEvent( HandlerEvent( HandlerEventType::eDeactivate, l_current ) );
+					castor::Logger::logDebug( castor::StringStream() << p_position.x() << "x" << p_position.y() );
+					last->pushEvent( MouseEvent( MouseEventType::eLeave, p_position ) );
+					last.reset();
+					m_lastMouseTarget.reset();
+				}
+			}
+
+			if ( current )
+			{
+				if ( current != last )
+				{
+					current->pushEvent( MouseEvent( MouseEventType::eEnter, p_position ) );
 				}
 
-				l_current->PushEvent( HandlerEvent( HandlerEventType::eActivate, l_active ) );
+				current->pushEvent( MouseEvent( MouseEventType::eMove, p_position ) );
+				result = true;
+				m_lastMouseTarget = current;
 			}
-
-			l_current->PushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.m_position, p_button ) );
-			l_return = true;
-			m_activeHandler = l_current;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool UserInputListener::FireMouseButtonReleased( MouseButton p_button )
+	bool UserInputListener::fireMouseButtonPushed( MouseButton p_button )
 	{
-		bool l_return = false;
-		m_mouse.m_buttons[size_t( p_button )] = false;
-		m_mouse.m_changed = p_button;
-		auto l_current = DoGetMouseTargetableHandler( m_mouse.m_position );
+		bool result = false;
 
-		if ( l_current )
+		if ( doHasHandlers() )
 		{
-			l_current->PushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.m_position, p_button ) );
-			l_return = true;
-			m_activeHandler = l_current;
-		}
-		else
-		{
-			auto l_active = m_activeHandler.lock();
+			m_mouse.m_buttons[size_t( p_button )] = true;
+			m_mouse.m_changed = p_button;
+			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
 
-			if ( l_active )
+			if ( current )
 			{
-				l_active->PushEvent( HandlerEvent( HandlerEventType::eDeactivate, l_current ) );
-			}
+				auto active = m_activeHandler.lock();
 
-			m_activeHandler.reset();
+				if ( current != active )
+				{
+					if ( active )
+					{
+						active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+					}
+
+					current->pushEvent( HandlerEvent( HandlerEventType::eActivate, active ) );
+				}
+
+				current->pushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.m_position, p_button ) );
+				result = true;
+				m_activeHandler = current;
+			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool UserInputListener::FireMouseWheel( Position const & p_offsets )
+	bool UserInputListener::fireMouseButtonReleased( MouseButton p_button )
 	{
-		bool l_return = false;
-		m_mouse.m_wheel += p_offsets;
-		auto l_current = DoGetMouseTargetableHandler( m_mouse.m_position );
+		bool result = false;
 
-		if ( l_current )
+		if ( doHasHandlers() )
 		{
-			l_current->PushEvent( MouseEvent( MouseEventType::eWheel, p_offsets ) );
-			l_return = true;
+			m_mouse.m_buttons[size_t( p_button )] = false;
+			m_mouse.m_changed = p_button;
+			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
+
+			if ( current )
+			{
+				current->pushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.m_position, p_button ) );
+				result = true;
+				m_activeHandler = current;
+			}
+			else
+			{
+				auto active = m_activeHandler.lock();
+
+				if ( active )
+				{
+					active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+				}
+
+				m_activeHandler.reset();
+			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool UserInputListener::FireKeyDown( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
+	bool UserInputListener::fireMouseWheel( Position const & p_offsets )
 	{
-		bool l_return = false;
-		auto l_active = m_activeHandler.lock();
+		bool result = false;
 
-		if ( l_active )
+		if ( doHasHandlers() )
 		{
-			if ( p_key == KeyboardKey::eControl )
-			{
-				m_keyboard.m_ctrl = true;
-			}
+			m_mouse.m_wheel += p_offsets;
+			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
 
-			if ( p_key == KeyboardKey::eAlt )
+			if ( current )
 			{
-				m_keyboard.m_alt = true;
+				current->pushEvent( MouseEvent( MouseEventType::eWheel, p_offsets ) );
+				result = true;
 			}
-
-			if ( p_key == KeyboardKey::eShift )
-			{
-				m_keyboard.m_shift = true;
-			}
-
-			l_active->PushEvent( KeyboardEvent( KeyboardEventType::ePushed, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			l_return = true;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool UserInputListener::FireKeyUp( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
+	bool UserInputListener::fireKeydown( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
-		bool l_return = false;
-		auto l_active = m_activeHandler.lock();
+		bool result = false;
 
-		if ( l_active )
+		if ( doHasHandlers() )
 		{
-			if ( p_key == KeyboardKey::eControl )
-			{
-				m_keyboard.m_ctrl = false;
-			}
+			auto active = m_activeHandler.lock();
 
-			if ( p_key == KeyboardKey::eAlt )
+			if ( active )
 			{
-				m_keyboard.m_alt = false;
-			}
+				if ( p_key == KeyboardKey::eControl )
+				{
+					m_keyboard.m_ctrl = true;
+				}
 
-			if ( p_key == KeyboardKey::eShift )
-			{
-				m_keyboard.m_shift = false;
-			}
+				if ( p_key == KeyboardKey::eAlt )
+				{
+					m_keyboard.m_alt = true;
+				}
 
-			l_active->PushEvent( KeyboardEvent( KeyboardEventType::eReleased, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			l_return = true;
+				if ( p_key == KeyboardKey::eShift )
+				{
+					m_keyboard.m_shift = true;
+				}
+
+				active->pushEvent( KeyboardEvent( KeyboardEventType::ePushed, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				result = true;
+			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool UserInputListener::FireChar( KeyboardKey p_key, String const & p_char )
+	bool UserInputListener::fireKeyUp( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
-		bool l_return = false;
-		auto l_active = m_activeHandler.lock();
+		bool result = false;
 
-		if ( l_active )
+		if ( doHasHandlers() )
 		{
-			l_active->PushEvent( KeyboardEvent( KeyboardEventType::eChar, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			l_return = true;
+			auto active = m_activeHandler.lock();
+
+			if ( active )
+			{
+				if ( p_key == KeyboardKey::eControl )
+				{
+					m_keyboard.m_ctrl = false;
+				}
+
+				if ( p_key == KeyboardKey::eAlt )
+				{
+					m_keyboard.m_alt = false;
+				}
+
+				if ( p_key == KeyboardKey::eShift )
+				{
+					m_keyboard.m_shift = false;
+				}
+
+				active->pushEvent( KeyboardEvent( KeyboardEventType::eReleased, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				result = true;
+			}
 		}
 
-		return l_return;
+		return result;
+	}
+
+	bool UserInputListener::fireChar( KeyboardKey p_key, String const & p_char )
+	{
+		bool result = false;
+
+		if ( doHasHandlers() )
+		{
+			auto active = m_activeHandler.lock();
+
+			if ( active )
+			{
+				active->pushEvent( KeyboardEvent( KeyboardEventType::eChar, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
+	bool UserInputListener::fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )
+	{
+		bool result = false;
+
+		if ( doHasHandlers() )
+		{
+			auto & cache = getEngine()->getOverlayCache();
+			auto overlay = cache.find( p_overlay );
+
+			if ( overlay )
+			{
+				auto material = getEngine()->getMaterialCache().find( p_material );
+
+				if ( material )
+				{
+					this->m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
+						, [overlay, material]()
+						{
+							overlay->setMaterial( material );
+						} ) );
+					result = true;
+				}
+			}
+		}
+		
+		return result;
+	}
+
+	bool UserInputListener::fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )
+	{
+		bool result = false;
+
+		if ( doHasHandlers() )
+		{
+			auto & cache = getEngine()->getOverlayCache();
+			auto overlay = cache.find( p_overlay );
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setCaption( p_caption );
+				result = true;
+			}
+		}
+
+		return result;
 	}
 }

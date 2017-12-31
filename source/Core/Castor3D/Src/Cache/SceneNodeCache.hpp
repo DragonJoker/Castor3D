@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_SCENE_NODE_CACHE_H___
 #define ___C3D_SCENE_NODE_CACHE_H___
@@ -26,7 +7,7 @@ SOFTWARE.
 #include "Scene/SceneNode.hpp"
 #include "Cache/ObjectCache.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -42,10 +23,10 @@ namespace Castor3D
 	template< typename KeyType >
 	struct ObjectCacheTraits< SceneNode, KeyType >
 	{
-		C3D_API static const Castor::String Name;
+		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< SceneNode >( KeyType const & ) >;
 		using Merger = std::function< void( ObjectCacheBase< SceneNode, KeyType > const &
-											, Castor::Collection< SceneNode, KeyType > &
+											, castor::Collection< SceneNode, KeyType > &
 											, std::shared_ptr< SceneNode >
 											, SceneNodeSPtr
 											, SceneNodeSPtr ) >;
@@ -60,11 +41,11 @@ namespace Castor3D
 	\brief		Cache de SceneNode.
 	*/
 	template<>
-	class ObjectCache< SceneNode, Castor::String >
-		: public ObjectCacheBase< SceneNode, Castor::String >
+	class ObjectCache< SceneNode, castor::String >
+		: public ObjectCacheBase< SceneNode, castor::String >
 	{
 	public:
-		using MyObjectCacheType = ObjectCacheBase< SceneNode, Castor::String >;
+		using MyObjectCacheType = ObjectCacheBase< SceneNode, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
@@ -79,7 +60,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine			The engine.
+		 *\param[in]	engine			The engine.
 		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
@@ -92,7 +73,7 @@ namespace Castor3D
 		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	engine			Le moteur.
 		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
@@ -104,7 +85,7 @@ namespace Castor3D
 		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API ObjectCache( Engine & p_engine
+		C3D_API ObjectCache( Engine & engine
 							, Scene & p_scene
 							, SceneNodeSPtr p_rootNode
 							, SceneNodeSPtr p_rootCameraNode
@@ -115,7 +96,7 @@ namespace Castor3D
 							, Merger && p_merge = Merger{}
 							, Attacher && p_attach = Attacher{}
 							, Detacher && p_detach = Detacher{} )
-			: MyObjectCacheType{ p_engine
+			: MyObjectCacheType{ engine
 								 , p_scene
 								 , p_rootNode
 								 , p_rootCameraNode
@@ -150,30 +131,30 @@ namespace Castor3D
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent = nullptr )
+		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent = nullptr )
 		{
-			auto l_lock = Castor::make_unique_lock( this->m_elements );
-			ElementPtr l_return;
+			auto lock = castor::makeUniqueLock( this->m_elements );
+			ElementPtr result;
 
 			if ( !this->m_elements.has( p_name ) )
 			{
-				l_return = this->m_produce( p_name );
-				this->m_initialise( l_return );
-				this->m_elements.insert( p_name, l_return );
-				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				result = this->m_produce( p_name );
+				this->m_initialise( result );
+				this->m_elements.insert( p_name, result );
+				m_attach( result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+				castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
 				this->onChanged();
 			}
 			else
 			{
-				l_return = this->m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				result = this->m_elements.find( p_name );
+				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
-			return l_return;
+			return result;
 		}
 	};
-	using SceneNodeCache = ObjectCache< SceneNode, Castor::String >;
+	using SceneNodeCache = ObjectCache< SceneNode, castor::String >;
 	DECLARE_SMART_PTR( SceneNodeCache );
 }
 

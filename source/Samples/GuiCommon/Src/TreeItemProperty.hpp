@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_TREE_ITEM_PROPERTY_DATA_H___
 #define ___GUICOMMON_TREE_ITEM_PROPERTY_DATA_H___
@@ -58,9 +39,9 @@ namespace GuiCommon
 	template< size_t Count >
 	wxArrayInt make_wxArrayInt( std::array< int, Count > p_values )
 	{
-		wxArrayInt l_return{ Count };
-		std::memcpy( &l_return[0], p_values.data(), Count * sizeof( int ) );
-		return l_return;
+		wxArrayInt result{ Count };
+		std::memcpy( &result[0], p_values.data(), Count * sizeof( int ) );
+		return result;
 	}
 	/*!
 	\author 	Sylvain DOREMUS
@@ -96,9 +77,9 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesHolder
+	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer
 	*/
 	class TreeItemProperty
 		: public wxTreeItemData
@@ -107,16 +88,16 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine	The engine, to post events to.
+		 *\param[in]	engine	The engine, to post events to.
 		 *\param[in]	p_editable	Tells if the properties are modifiable
 		 *\param[in]	p_type		The object type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements.
+		 *\param[in]	engine	Le moteur, auquel on va poster les évènements.
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_type		Le type d'objet
 		 */
-		TreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
+		TreeItemProperty( castor3d::Engine * engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -154,7 +135,7 @@ namespace GuiCommon
 		 *\brief		Appelàe lorsqu'une propriété est changàe
 		 *\param[in]	p_event	L'évènement
 		 */
-		void OnPropertyChange( wxPropertyGridEvent & p_event );
+		void onPropertyChange( wxPropertyGridEvent & p_event );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object type
@@ -163,7 +144,7 @@ namespace GuiCommon
 		 *\brief		Récupère le type d'objet
 		 *\return		La valeur
 		 */
-		inline ePROPERTY_DATA_TYPE GetType()const
+		inline ePROPERTY_DATA_TYPE getType()const
 		{
 			return m_type;
 		}
@@ -185,26 +166,26 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Creates a material selector property
 		 *\param[in]	p_name		The property name
-		 *\param[in]	p_engine	The engine, to retrieve the materials
+		 *\param[in]	engine	The engine, to retrieve the materials
 		 *\return		The created property
 		 *\~french
 		 *\brief		Cràe une propriété de sàlection de matàriau
 		 *\param[in]	p_name		Le nom de la propriété
-		 *\param[in]	p_engine	Le moteur, pour ràcupàrer les matériaux
+		 *\param[in]	engine	Le moteur, pour ràcupàrer les matériaux
 		 *\return		La propriété crààe.
 		 */
-		wxEnumProperty * DoCreateMaterialProperty( wxString const & p_name );
+		wxEnumProperty * doCreateMaterialProperty( wxString const & p_name );
 		/**
 		 *\~english
 		 *\brief		Posts an functor event to the engine.
-		 *\param[in]	p_engine	The engine, to retrieve the materials
+		 *\param[in]	engine	The engine, to retrieve the materials
 		 *\param[in]	p_functor	The function to execute
 		 *\~french
 		 *\brief		Poste un évènement functeur au moteur
-		 *\param[in]	p_engine	Le moteur, pour ràcupàrer les matériaux
+		 *\param[in]	engine	Le moteur, pour ràcupàrer les matériaux
 		 *\param[in]	p_functor	La fonction à exàcuter
 		 */
-		void DoApplyChange( std::function< void() > p_functor );
+		void doApplyChange( std::function< void() > p_functor );
 		/**
 		 *\~english
 		 *\brief		Creates the menu displayed for the wxTree item, available if m_editable is true
@@ -218,7 +199,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Cràe le menu affichà pour l'objet du wxTree, disponible si m_editable est à true
 		 */
-		virtual void DoCreateTreeItemMenu();
+		virtual void doCreateTreeItemMenu();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
@@ -228,7 +209,7 @@ namespace GuiCommon
 		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnàe
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
-		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;
+		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;
 		/**
 		 *\~english
 		 *\brief		Call when a property grid property is changed
@@ -237,7 +218,7 @@ namespace GuiCommon
 		 *\brief		Appelàe lorsqu'une propriété est changàe
 		 *\param[in]	p_event	L'évènement
 		 */
-		virtual void DoPropertyChange( wxPropertyGridEvent & p_event ) = 0;
+		virtual void doPropertyChange( wxPropertyGridEvent & p_event ) = 0;
 
 	protected:
 		wxMenu * m_menu;
@@ -245,7 +226,7 @@ namespace GuiCommon
 	private:
 		ePROPERTY_DATA_TYPE m_type;
 		bool m_editable;
-		Castor3D::Engine * m_engine;
+		castor3d::Engine * m_engine;
 	};
 }
 

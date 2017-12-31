@@ -6,106 +6,106 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RenderWindow::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< RenderWindow >{ p_tabs }
+		: castor::TextWriter< RenderWindow >{ p_tabs }
 	{
 	}
 
 	bool RenderWindow::TextWriter::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing Window " ) + p_window.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow name" );
+		Logger::logInfo( m_tabs + cuT( "Writing Window " ) + p_window.getName() );
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.getName() + cuT( "\"\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow name" );
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.GetVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
-			Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow vsync" );
+			result = p_file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.getVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow vsync" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.IsFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
-			Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow fullscreen" );
+			result = p_file.print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.isFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow fullscreen" );
 		}
 
-		if ( l_return && p_window.GetRenderTarget() )
+		if ( result && p_window.getRenderTarget() )
 		{
-			l_return = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
+			result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.getRenderTarget(), p_file );
 		}
 
-		p_file.WriteText( m_tabs + cuT( "}\n" ) );
-		return l_return;
+		p_file.writeText( m_tabs + cuT( "}\n" ) );
+		return result;
 	}
 
 	//*************************************************************************************************
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( String const & p_name, Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
+	RenderWindow::RenderWindow( String const & p_name, Engine & engine )
+		: OwnedBy< Engine >{ engine }
 		, Named{ p_name }
 		, m_index{ s_nbRenderWindows++ }
-		, m_wpListener{ p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) }
-		, m_backBuffers{ p_engine.GetRenderSystem()->CreateBackBuffers() }
-		, m_pickingPass{ std::make_unique< PickingPass >( p_engine ) }
+		, m_wpListener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
+		, m_backBuffers{ engine.getRenderSystem()->createBackBuffers() }
+		, m_pickingPass{ std::make_unique< PickingPass >( engine ) }
 	{
 	}
 
 	RenderWindow::~RenderWindow()
 	{
-		FrameListenerSPtr l_pListener( m_wpListener.lock() );
-		GetEngine()->GetFrameListenerCache().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
-		auto l_target = m_renderTarget.lock();
+		FrameListenerSPtr pListener( m_wpListener.lock() );
+		getEngine()->getFrameListenerCache().remove( cuT( "RenderWindow_" ) + string::toString( m_index ) );
+		auto target = m_renderTarget.lock();
 
-		if ( l_target )
+		if ( target )
 		{
-			GetEngine()->GetRenderTargetCache().Remove( l_target );
+			getEngine()->getRenderTargetCache().remove( target );
 		}
 
 		m_pickingPass.reset();
 	}
 
-	bool RenderWindow::Initialise( Size const & p_size, WindowHandle const & p_handle )
+	bool RenderWindow::initialise( Size const & p_size, WindowHandle const & p_handle )
 	{
 		m_size = p_size;
 		m_handle = p_handle;
 
 		if ( m_handle )
 		{
-			GetEngine()->GetRenderLoop().CreateContext( *this );
-			m_initialised = m_context && m_context->IsInitialised();
+			getEngine()->getRenderLoop().createContext( *this );
+			m_initialised = m_context && m_context->isInitialised();
 
 			if ( m_initialised )
 			{
-				m_context->SetCurrent();
-				m_backBuffers->Initialise( GetSize(), GetPixelFormat() );
+				m_context->setCurrent();
+				m_backBuffers->initialise( getSize(), getPixelFormat() );
 
-				SceneSPtr l_scene = GetScene();
-				RenderTargetSPtr l_target = GetRenderTarget();
+				SceneSPtr scene = getScene();
+				RenderTargetSPtr target = getRenderTarget();
 
-				if ( l_scene )
+				if ( scene )
 				{
-					m_backBuffers->SetClearColour( l_scene->GetBackgroundColour() );
+					m_backBuffers->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
 				}
 				else
 				{
-					m_backBuffers->SetClearColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
+					m_backBuffers->setClearColour( RgbaColour::fromComponents( 0.5, 0.5, 0.5, 1.0 ) );
 				}
 
-				if ( l_target )
+				if ( target )
 				{
-					l_target->Initialise( 1 );
-					m_saveBuffer = PxBufferBase::create( l_target->GetSize(), l_target->GetPixelFormat() );
+					target->initialise( 1 );
+					m_saveBuffer = PxBufferBase::create( target->getSize(), target->getPixelFormat() );
 				}
 
-				m_pickingPass->Initialise( l_target->GetSize() );
-				m_context->EndCurrent();
+				m_pickingPass->initialise( target->getSize() );
+				m_context->endCurrent();
 				m_initialised = true;
 			}
 		}
@@ -113,297 +113,263 @@ namespace Castor3D
 		return m_initialised;
 	}
 
-	void RenderWindow::Cleanup()
+	void RenderWindow::cleanup()
 	{
 		m_initialised = false;
 
 		if ( m_context )
 		{
-			auto l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
+			auto context = getEngine()->getRenderSystem()->getCurrentContext();
 
-			if ( l_context != m_context.get() )
+			if ( context != m_context.get() )
 			{
-				m_context->SetCurrent();
+				m_context->setCurrent();
 			}
 
-			m_pickingPass->Cleanup();
-			RenderTargetSPtr l_target = GetRenderTarget();
+			m_pickingPass->cleanup();
+			RenderTargetSPtr target = getRenderTarget();
 
-			if ( l_target )
+			if ( target )
 			{
-				l_target->Cleanup();
+				target->cleanup();
 			}
 
-			if ( l_context != m_context.get() )
+			if ( context != m_context.get() )
 			{
-				m_context->EndCurrent();
+				m_context->endCurrent();
 			}
 
-			if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
+			if ( m_context != getEngine()->getRenderSystem()->getMainContext() )
 			{
-				m_context->Cleanup();
+				m_context->cleanup();
 			}
 
-			if ( l_context != m_context.get() )
+			if ( context && context != m_context.get() )
 			{
-				l_context->SetCurrent();
+				context->setCurrent();
 			}
+
+			m_context.reset();
 		}
 	}
 
-	void RenderWindow::Render( bool p_bForce )
+	void RenderWindow::render( bool p_bForce )
 	{
 		if ( m_initialised )
 		{
-			Engine * l_engine = GetEngine();
-			RenderTargetSPtr l_target = GetRenderTarget();
-			m_context->SetCurrent();
+			Engine * engine = getEngine();
+			RenderTargetSPtr target = getRenderTarget();
+			m_context->setCurrent();
 
-			if ( l_target && l_target->IsInitialised() )
+			if ( target && target->isInitialised() )
 			{
-				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_engine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
+				if ( m_toSave )
 				{
-					//DoRender( WindowBuffer::eBackLeft, l_target->GetTextureLEye() );
-					//DoRender( WindowBuffer::eBackRight, l_target->GetTextureREye() );
+					auto texture = target->getTexture().getTexture();
+					auto buffer = texture->lock( AccessType::eRead );
+
+					if ( buffer )
+					{
+						std::memcpy( m_saveBuffer->ptr(), buffer, m_saveBuffer->size() );
+					}
+
+					texture->unlock( false );
+					m_toSave = false;
+				}
+
+				if ( isUsingStereo() && abs( getIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && engine->getRenderSystem()->getGpuInformations().isStereoAvailable() )
+				{
+					//doRender( WindowBuffer::eBackLeft, target->getTextureLEye() );
+					//doRender( WindowBuffer::eBackRight, target->getTextureREye() );
 				}
 				else
 				{
-					DoRender( WindowBuffer::eBack, l_target->GetTexture() );
+					doRender( WindowBuffer::eBack, target->getTexture() );
 				}
 			}
 
-			m_context->EndCurrent();
-			m_context->SwapBuffers();
+			m_context->endCurrent();
+			m_context->swapBuffers();
 		}
 	}
 
-	void RenderWindow::Resize( int x, int y )
+	void RenderWindow::resize( int x, int y )
 	{
-		Resize( Size( x, y ) );
+		resize( Size( x, y ) );
 	}
 
-	void RenderWindow::Resize( Size const & p_size )
+	void RenderWindow::resize( Size const & p_size )
 	{
 		m_size = p_size;
 
 		if ( m_initialised )
 		{
-			m_wpListener.lock()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			m_wpListener.lock()->postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
-				DoUpdateSize();
+				doUpdateSize();
 			} ) );
 		}
 	}
 
-	void RenderWindow::SetCamera( CameraSPtr p_pCamera )
+	void RenderWindow::setCamera( CameraSPtr p_pCamera )
 	{
-		RenderTargetSPtr l_target = GetRenderTarget();
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			l_target->SetCamera( p_pCamera );
+			target->setCamera( p_pCamera );
 		}
 	}
 
-	bool RenderWindow::IsMultisampling()const
-	{
-		bool l_return = false;
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_return = l_target->IsMultisampling();
-		}
-
-		return l_return;
-	}
-
-	int32_t RenderWindow::GetSamplesCount()const
-	{
-		int32_t l_return = 0;
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_return = l_target->GetSamplesCount();
-		}
-
-		return l_return;
-	}
-
-	void RenderWindow::UpdateFullScreen( bool p_value )
+	void RenderWindow::updateFullScreen( bool p_value )
 	{
 		m_bFullscreen = p_value;
 	}
 
-	void RenderWindow::SetSamplesCount( int32_t val )
+	SceneSPtr RenderWindow::getScene()const
 	{
-		RenderTargetSPtr l_target = GetRenderTarget();
+		SceneSPtr result;
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			l_target->SetSamplesCount( val );
+			result = target->getScene();
+		}
+
+		return result;
+	}
+
+	CameraSPtr RenderWindow::getCamera()const
+	{
+		CameraSPtr result;
+		RenderTargetSPtr target = getRenderTarget();
+
+		if ( target )
+		{
+			result = target->getCamera();
+		}
+
+		return result;
+	}
+
+	ViewportType RenderWindow::getViewportType()const
+	{
+		ViewportType result = ViewportType( -1 );
+		RenderTargetSPtr target = getRenderTarget();
+
+		if ( target )
+		{
+			result = target->getViewportType();
+		}
+
+		return result;
+	}
+
+	void RenderWindow::setViewportType( ViewportType val )
+	{
+		RenderTargetSPtr target = getRenderTarget();
+
+		if ( target )
+		{
+			target->setViewportType( val );
 		}
 	}
 
-	SceneSPtr RenderWindow::GetScene()const
+	PixelFormat RenderWindow::getPixelFormat()const
 	{
-		SceneSPtr l_return;
-		RenderTargetSPtr l_target = GetRenderTarget();
+		PixelFormat result = PixelFormat( -1 );
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			l_return = l_target->GetScene();
+			result = target->getPixelFormat();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	CameraSPtr RenderWindow::GetCamera()const
+	void RenderWindow::setPixelFormat( PixelFormat val )
 	{
-		CameraSPtr l_return;
-		RenderTargetSPtr l_target = GetRenderTarget();
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			l_return = l_target->GetCamera();
-		}
-
-		return l_return;
-	}
-
-	ViewportType RenderWindow::GetViewportType()const
-	{
-		ViewportType l_return = ViewportType( -1 );
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_return = l_target->GetViewportType();
-		}
-
-		return l_return;
-	}
-
-	void RenderWindow::SetViewportType( ViewportType val )
-	{
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_target->SetViewportType( val );
+			target->setPixelFormat( val );
 		}
 	}
 
-	PixelFormat RenderWindow::GetPixelFormat()const
+	void RenderWindow::setScene( SceneSPtr p_scene )
 	{
-		PixelFormat l_return = PixelFormat( -1 );
-		RenderTargetSPtr l_target = GetRenderTarget();
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			l_return = l_target->GetPixelFormat();
-		}
-
-		return l_return;
-	}
-
-	void RenderWindow::SetPixelFormat( PixelFormat val )
-	{
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_target->SetPixelFormat( val );
+			target->setScene( p_scene );
 		}
 	}
 
-	void RenderWindow::SetScene( SceneSPtr p_scene )
+	bool RenderWindow::isUsingStereo()const
 	{
-		RenderTargetSPtr l_target = GetRenderTarget();
+		bool result = false;
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			l_target->SetScene( p_scene );
+			//l_result = target->isUsingStereo();
+		}
+
+		return result;
+	}
+
+	void RenderWindow::setStereo( bool p_bStereo )
+	{
+		RenderTargetSPtr target = getRenderTarget();
+
+		if ( target )
+		{
+			//l_target->setStereo( p_bStereo );
 		}
 	}
 
-	bool RenderWindow::IsUsingStereo()const
+	real RenderWindow::getIntraOcularDistance()const
 	{
-		bool l_return = false;
-		RenderTargetSPtr l_target = GetRenderTarget();
+		real result = 0;
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			//l_return = l_target->IsUsingStereo();
+			//l_result = target->getIntraOcularDistance();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void RenderWindow::SetStereo( bool p_bStereo )
+	void RenderWindow::setIntraOcularDistance( real p_rIao )
 	{
-		RenderTargetSPtr l_target = GetRenderTarget();
+		RenderTargetSPtr target = getRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
-			//l_target->SetStereo( p_bStereo );
-		}
-	}
-
-	real RenderWindow::GetIntraOcularDistance()const
-	{
-		real l_return = 0;
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			//l_return = l_target->GetIntraOcularDistance();
-		}
-
-		return l_return;
-	}
-
-	void RenderWindow::SetIntraOcularDistance( real p_rIao )
-	{
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			//l_target->SetIntraOcularDistance( p_rIao );
+			//l_target->setIntraOcularDistance( p_rIao );
 		}
 	}
 
-	Size RenderWindow::GetSize()const
+	Size RenderWindow::getSize()const
 	{
 		return m_size;
 	}
 
-	void RenderWindow::DoRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture )
+	void RenderWindow::doRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture )
 	{
-		auto l_texture = p_texture.GetTexture();
-
-		if ( m_toSave )
-		{
-			auto l_buffer = l_texture->Lock( AccessType::eRead );
-
-			if ( l_buffer )
-			{
-				std::memcpy( m_saveBuffer->ptr(), l_buffer, m_saveBuffer->size() );
-			}
-
-			l_texture->Unlock( false );
-			m_toSave = false;
-		}
-
-		m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
-		m_backBuffers->Clear( BufferComponent::eColour );
-		m_context->RenderTexture( m_size, *l_texture );
-		m_backBuffers->Unbind();
+		auto texture = p_texture.getTexture();
+		m_backBuffers->bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
+		m_backBuffers->clear( BufferComponent::eColour );
+		m_context->renderTexture( m_size, *texture );
+		m_backBuffers->unbind();
 	}
 
-	void RenderWindow::DoUpdateSize()
+	void RenderWindow::doUpdateSize()
 	{
-		m_backBuffers->Resize( GetSize() );
+		m_backBuffers->resize( getSize() );
 	}
 }

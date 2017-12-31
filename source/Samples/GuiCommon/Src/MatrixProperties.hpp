@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_MATRIX_PROPERTIES_H___
 #define ___GUICOMMON_MATRIX_PROPERTIES_H___
@@ -27,12 +8,12 @@ SOFTWARE.
 
 #include <Math/SquareMatrix.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4f );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2d );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3d );
-GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4d );
 
 namespace GuiCommon
 {
@@ -43,21 +24,21 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( MatrixProperty )
 
 	public:
-		MatrixProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
-		MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
+		MatrixProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
+		MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
 		virtual ~MatrixProperty();
 
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
+		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
+		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		inline void SetValueI( Castor::SquareMatrix< T, Count > const & value );
+		inline void setValueI( castor::SquareMatrix< T, Count > const & value );
 	};
 
-	template< typename Type, size_t Count > Castor::SquareMatrix< Type, Count > const & MatrixRefFromVariant( wxVariant const & p_variant );
-	template< typename Type, size_t Count > Castor::SquareMatrix< Type, Count > & MatrixRefFromVariant( wxVariant & p_variant );
-	template< typename Type, size_t Count > void SetVariantFromMatrix( wxVariant & p_variant, Castor::SquareMatrix< Type, Count > const & p_value );
+	template< typename Type, size_t Count > castor::SquareMatrix< Type, Count > const & matrixRefFromVariant( wxVariant const & p_variant );
+	template< typename Type, size_t Count > castor::SquareMatrix< Type, Count > & matrixRefFromVariant( wxVariant & p_variant );
+	template< typename Type, size_t Count > void setVariantFromMatrix( wxVariant & p_variant, castor::SquareMatrix< Type, Count > const & p_value );
 
 	template< size_t Count > using FloatMatrixProperty = MatrixProperty< float, Count >;
 	template< size_t Count > using DoubleMatrixProperty = MatrixProperty< double, Count >;

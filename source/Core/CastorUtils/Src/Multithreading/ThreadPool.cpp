@@ -2,12 +2,12 @@
 
 #include "Config/MultiThreadConfig.hpp"
 
-namespace Castor
+namespace castor
 {
 	ThreadPool::ThreadPool( size_t p_count )
 		: m_count{ p_count }
 	{
-		auto l_lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		m_available.reserve( p_count );
 		m_busy.reserve( p_count );
 
@@ -16,82 +16,82 @@ namespace Castor
 			m_available.push_back( std::make_unique< WorkerThread >() );
 			m_endConnections.push_back( m_available.back()->onEnded.connect( [this]( WorkerThread & p_worker )
 			{
-				DoFreeWorker( p_worker );
+				doFreeWorker( p_worker );
 			} ) );
 		}
 	}
 
 	ThreadPool::~ThreadPool()noexcept
 	{
-		WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) );
-		auto l_lock = make_unique_lock( m_mutex );
+		waitAll( Milliseconds( 0xFFFFFFFF ) );
+		auto lock = makeUniqueLock( m_mutex );
 		m_endConnections.clear();
 		m_busy.clear();
 		m_available.clear();
 	}
 
-	bool ThreadPool::IsEmpty()const
+	bool ThreadPool::isEmpty()const
 	{
-		auto l_lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		return m_available.empty();
 	}
 
-	bool ThreadPool::IsFull()const
+	bool ThreadPool::isFull()const
 	{
-		auto l_lock = make_unique_lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		return m_busy.empty();
 	}
 
-	bool ThreadPool::WaitAll( std::chrono::milliseconds const & p_timeout )const
+	bool ThreadPool::waitAll( Milliseconds const & p_timeout )const
 	{
-		bool l_result = IsFull();
+		bool result = isFull();
 
-		if ( !l_result )
+		if ( !result )
 		{
-			auto l_begin = std::chrono::high_resolution_clock::now();
-			std::chrono::milliseconds l_wait{ 0 };
+			auto begin = std::chrono::high_resolution_clock::now();
+			Milliseconds wait{ 0 };
 
 			do
 			{
-				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-				l_result = IsFull();
-				l_wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - l_begin );
+				std::this_thread::sleep_for( Milliseconds( 1 ) );
+				result = isFull();
+				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
-			while ( l_wait < p_timeout && !l_result );
+			while ( wait < p_timeout && !result );
 		}
 
-		return l_result;
+		return result;
 	}
 
-	void ThreadPool::PushJob( WorkerThread::Job p_job )
+	void ThreadPool::pushJob( WorkerThread::Job p_job )
 	{
-		auto & l_worker = DoReserveWorker();
-		l_worker.Feed( p_job );
+		auto & worker = doReserveWorker();
+		worker.feed( p_job );
 	}
 
-	WorkerThread & ThreadPool::DoReserveWorker()
+	WorkerThread & ThreadPool::doReserveWorker()
 	{
-		while ( IsEmpty() )
+		while ( isEmpty() )
 		{
-			std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+			std::this_thread::sleep_for( Milliseconds( 1 ) );
 		}
 
-		auto l_lock = make_unique_lock( m_mutex );
-		auto l_it = m_available.rbegin();
-		auto & l_worker = **l_it;
-		m_busy.push_back( std::move( *l_it ) );
-		m_available.erase( ( ++l_it ).base() );
-		return l_worker;
+		auto lock = makeUniqueLock( m_mutex );
+		auto it = m_available.rbegin();
+		auto & worker = **it;
+		m_busy.push_back( std::move( *it ) );
+		m_available.erase( ( ++it ).base() );
+		return worker;
 	}
 
-	void ThreadPool::DoFreeWorker( WorkerThread & p_worker )
+	void ThreadPool::doFreeWorker( WorkerThread & p_worker )
 	{
-		auto l_lock = make_unique_lock( m_mutex );
-		auto l_it = std::find_if( m_busy.begin(), m_busy.end(), [&p_worker]( WorkerPtr const & l_worker )
+		auto lock = makeUniqueLock( m_mutex );
+		auto it = std::find_if( m_busy.begin(), m_busy.end(), [&p_worker]( WorkerPtr const & worker )
 		{
-			return l_worker.get() == &p_worker;
+			return worker.get() == &p_worker;
 		} );
-		m_available.push_back( std::move( *l_it ) );
-		m_busy.erase( l_it );
+		m_available.push_back( std::move( *it ) );
+		m_busy.erase( it );
 	}
 }

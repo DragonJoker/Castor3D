@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___C3DCOM_COM_PARAMETER_CAST_H___
 #define ___C3DCOM_COM_PARAMETER_CAST_H___
 
@@ -31,47 +10,47 @@ SOFTWARE.
 namespace CastorCom
 {
 	template< typename Value, typename _Value >
-	inline Value parameter_cast( _Value const & value )
+	inline Value parameterCast( _Value const & value )
 	{
 		return Value( value );
 	}
 	template<>
-	inline bool parameter_cast< bool, boolean >( boolean const & value )
+	inline bool parameterCast< bool, boolean >( boolean const & value )
 	{
 		return value != 0;
 	}
 	template<>
-	inline boolean parameter_cast< boolean, bool >( bool const & value )
+	inline boolean parameterCast< boolean, bool >( bool const & value )
 	{
 		return value ? 1 : 0;
 	}
 	template<>
-	inline BSTR parameter_cast< BSTR, Castor::String >( Castor::String const & value )
+	inline BSTR parameterCast< BSTR, castor::String >( castor::String const & value )
 	{
-		return ToBstr( value );
+		return toBstr( value );
 	}
 	template<>
-	inline Castor::String parameter_cast< Castor::String, BSTR >( BSTR const & value )
+	inline castor::String parameterCast< castor::String, BSTR >( BSTR const & value )
 	{
-		return FromBstr( value );
+		return fromBstr( value );
 	}
 	template<>
-	inline BSTR parameter_cast< BSTR, Castor::Path >( Castor::Path const & value )
+	inline BSTR parameterCast< BSTR, castor::Path >( castor::Path const & value )
 	{
-		return ToBstr( value );
+		return toBstr( value );
 	}
 	template<>
-	inline Castor::Path parameter_cast< Castor::Path, BSTR >( BSTR const & value )
+	inline castor::Path parameterCast< castor::Path, BSTR >( BSTR const & value )
 	{
-		return Castor::Path{ FromBstr( value ) };
+		return castor::Path{ fromBstr( value ) };
 	}
 	template<>
-	inline FLOAT parameter_cast< FLOAT, Castor::ColourComponent >( Castor::ColourComponent const & value )
+	inline FLOAT parameterCast< FLOAT, castor::ColourComponent >( castor::ColourComponent const & value )
 	{
 		return ( FLOAT )value;
 	}
 	template<>
-	inline IScene * parameter_cast< IScene *, Castor3D::SceneSPtr >( Castor3D::SceneSPtr const & value )
+	inline IScene * parameterCast< IScene *, castor3d::SceneSPtr >( castor3d::SceneSPtr const & value )
 	{
 		return reinterpret_cast< IScene *>( value.get() );
 	}

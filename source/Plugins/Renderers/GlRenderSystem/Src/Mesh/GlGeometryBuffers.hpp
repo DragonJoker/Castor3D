@@ -1,29 +1,10 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GL_GEOMETRY_BUFFERS_H___
 #define ___GL_GEOMETRY_BUFFERS_H___
 
-#include "Buffer/GlBufferBase.hpp"
+#include "Buffer/GlBuffer.hpp"
 #include "Shader/GlShaderProgram.hpp"
 
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -42,7 +23,7 @@ namespace GlRender
 	\remark		Permet aux implémentations d'utiliser les optimisations spécifiques aux API (comme les Vertex arrays objects OpenGL)
 	*/
 	class GlGeometryBuffers
-		: public Castor3D::GeometryBuffers
+		: public castor3d::GeometryBuffers
 		, public Bindable< std::function< void( int, uint32_t * ) >
 			, std::function< void( int, uint32_t const * ) >
 			, std::function< void( uint32_t ) > >
@@ -55,14 +36,16 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_topology	The buffers topology.
-		 *\param[in]	p_program	The shader program.
+		 *\param[in]	topology	The buffers topology.
+		 *\param[in]	program		The shader program.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_topology	La topologie des tampons.
-		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	topology	La topologie des tampons.
+		 *\param[in]	program		Le programme shader.
 		 */
-		GlGeometryBuffers( OpenGl & p_gl, Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program );
+		GlGeometryBuffers( OpenGl & gl
+			, castor3d::Topology topology
+			, castor3d::ShaderProgram const & program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -71,36 +54,60 @@ namespace GlRender
 		 */
 		virtual ~GlGeometryBuffers();
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::Draw
+		 *\copydoc		castor3d::GeometryBuffers::Draw
 		 */
-		virtual bool Draw( uint32_t p_size, uint32_t p_index )const;
+		virtual bool draw( uint32_t size
+			, uint32_t index )const override;
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DrawInstanced
+		 *\copydoc		castor3d::GeometryBuffers::DrawInstanced
 		 */
-		virtual bool DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const;
+		virtual bool drawInstanced( uint32_t size
+			, uint32_t index
+			, uint32_t count )const override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DoInitialise
+		 *\copydoc		castor3d::GeometryBuffers::doInitialise
 		 */
-		virtual bool DoInitialise();
+		virtual bool doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::GeometryBuffers::DoCleanup
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
 		 */
-		virtual void DoCleanup();
+		virtual void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::GeometryBuffers::doCleanup
+		 */
+		virtual void doSetTopology( castor3d::Topology p_value )override;
 
-		Castor3D::BufferDeclaration::const_iterator DoFindElement( Castor3D::BufferDeclaration const & p_declaration, Castor3D::BufferElementDeclaration const & p_element )const;
-		GlAttributeBaseSPtr DoCreateAttribute( Castor3D::BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_divisor, Castor3D::BufferDeclaration const & p_declaration );
-		bool DoCreateAttributes( Castor3D::ProgramInputLayout const & p_layout, Castor3D::BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes );
-		void DoBindAttributes( GlAttributePtrArray const & p_attributes )const;
+		castor3d::BufferDeclaration::const_iterator doFindElement( std::vector< castor3d::BufferElementDeclaration > const & declaration
+			, castor3d::BufferElementDeclaration const & element )const;
+		GlAttributeBaseSPtr doCreateAttribute( castor3d::BufferElementDeclaration const & element
+			, uint32_t offset
+			, uint32_t divisor
+			, uint32_t stride );
+		bool doCreateAttributes( castor3d::ProgramInputLayout const & layout
+			, castor3d::BufferDeclaration const & declaration
+			, uint32_t offset
+			, GlAttributePtrArray & attributes );
+		void doBindAttributes( GlAttributePtrArray const & attributes )const;
+		void doDrawElementsIndirect( uint32_t size
+			, uint32_t index
+			, uint32_t count )const;
+		void doDrawArraysIndirect( uint32_t size
+			, uint32_t index
+			, uint32_t count )const;
 
 	private:
 		//! The shader program.
-		Castor3D::ShaderProgram const & m_program;
+		castor3d::ShaderProgram const & m_program;
 		//! The vertex, animation, ... attributes.
 		GlAttributePtrArray m_attributes;
 		//! The topology type.
 		GlTopology m_glTopology;
+		GlBuffer m_glIndirectArraysBuffer;
+		GlBuffer m_glIndirectElementsBuffer;
+		mutable DrawArraysIndirectCommand m_arraysCommand;
+		mutable DrawElementsIndirectCommand m_elementsCommand;
 	};
 }
 

@@ -9,15 +9,17 @@
 
 #include <Overlay/BorderPanelOverlay.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace CastorGui
 {
-	SliderCtrl::SliderCtrl( Engine * p_engine
+	SliderCtrl::SliderCtrl( String const & p_name
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
-		: SliderCtrl{ p_engine
+		: SliderCtrl{ p_name
+			, engine
 			, p_parent
 			, p_id
 			, makeRangedValue( 0, 0, 100 )
@@ -28,7 +30,8 @@ namespace CastorGui
 	{
 	}
 
-	SliderCtrl::SliderCtrl( Engine * p_engine
+	SliderCtrl::SliderCtrl( String const & p_name
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, RangedValue< int32_t > const & p_value
@@ -37,7 +40,8 @@ namespace CastorGui
 		, uint32_t p_style
 		, bool p_visible )
 		: Control{ ControlType::eSlider
-			, p_engine
+			, p_name
+			, engine
 			, p_parent
 			, p_id
 			, p_position
@@ -47,357 +51,374 @@ namespace CastorGui
 		, m_value( p_value )
 		, m_scrolling( false )
 	{
-		SetBackgroundBorders( Rectangle() );
+		setBackgroundBorders( Rectangle() );
 
-		EventHandler::Connect( MouseEventType::eMove, [this]( MouseEvent const & p_event )
+		EventHandler::connect( MouseEventType::eMove, [this]( MouseEvent const & p_event )
 		{
-			OnMouseMove( p_event );
+			onMouseMove( p_event );
 		} );
-		EventHandler::Connect( MouseEventType::eLeave, [this]( MouseEvent const & p_event )
+		EventHandler::connect( MouseEventType::eLeave, [this]( MouseEvent const & p_event )
 		{
-			OnMouseLeave( p_event );
+			onMouseLeave( p_event );
 		} );
-		EventHandler::Connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
+		EventHandler::connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
 		{
-			OnMouseLButtonUp( p_event );
+			onMouseLButtonUp( p_event );
 		} );
-		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
+		EventHandler::connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
-			OnKeyDown( p_event );
+			onKeyDown( p_event );
 		} );
 
-		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
-		l_line->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		l_line->SetVisible( DoIsVisible() );
-		l_line->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		StaticCtrlSPtr line = std::make_shared< StaticCtrl >( p_name + cuT( "_Line" )
+			, engine
+			, this
+			, cuT( "" )
+			, Position()
+			, Size() );
+		line->setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		line->setVisible( p_visible );
+		line->connectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
-			OnNcKeyDown( p_control, p_event );
+			onNcKeyDown( p_control, p_event );
 		} );
-		m_line = l_line;
+		m_line = line;
 
-		StaticCtrlSPtr l_tick = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
-		l_tick->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		l_tick->SetVisible( DoIsVisible() );
-		l_tick->SetCatchesMouseEvents( true );
-		l_tick->ConnectNC( MouseEventType::eMove, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		StaticCtrlSPtr tick = std::make_shared< StaticCtrl >( p_name + cuT( "_Tick" )
+			, engine
+			, this
+			, cuT( "" )
+			, Position()
+			, Size() );
+		tick->setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		tick->setVisible( p_visible );
+		tick->setCatchesMouseEvents( true );
+		tick->connectNC( MouseEventType::eMove, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
-			OnTickMouseMove( p_control, p_event );
+			onTickMouseMove( p_control, p_event );
 		} );
-		l_tick->ConnectNC( MouseEventType::ePushed, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		tick->connectNC( MouseEventType::ePushed, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
-			OnTickMouseLButtonDown( p_control, p_event );
+			onTickMouseLButtonDown( p_control, p_event );
 		} );
-		l_tick->ConnectNC( MouseEventType::eReleased, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		tick->connectNC( MouseEventType::eReleased, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
-			OnTickMouseLButtonUp( p_control, p_event );
+			onTickMouseLButtonUp( p_control, p_event );
 		} );
-		l_tick->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		tick->connectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
-			OnNcKeyDown( p_control, p_event );
+			onNcKeyDown( p_control, p_event );
 		} );
-		m_tick = l_tick;
+		m_tick = tick;
 	}
 
 	SliderCtrl::~SliderCtrl()
 	{
 	}
 
-	void SliderCtrl::SetRange( Range< int32_t > const & p_value )
+	void SliderCtrl::setRange( Range< int32_t > const & p_value )
 	{
-		m_value.update_range( p_value );
-		DoUpdateLineAndTick();
+		m_value.updateRange( p_value );
+		doUpdateLineAndTick();
 	}
 
-	void SliderCtrl::SetValue( int32_t p_value )
+	void SliderCtrl::setValue( int32_t p_value )
 	{
 		m_value =  p_value;
-		DoUpdateLineAndTick();
+		doUpdateLineAndTick();
 	}
 
-	void SliderCtrl::DoUpdateLineAndTick()
+	void SliderCtrl::doUpdateLineAndTick()
 	{
-		Size l_lineSize( GetSize() );
-		Position l_linePosition;
-		Size l_tickSize( GetSize() );
-		Position l_tickPosition;
+		Size lineSize( getSize() );
+		Position linePosition;
+		Size tickSize( getSize() );
+		Position tickPosition;
 
-		if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
+		if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
 		{
-			l_lineSize.width() = 3;
-			l_lineSize.height() -= 4;
-			l_linePosition.x() = ( GetSize().width() - 3 ) / 2;
-			l_linePosition.y() += 2;
-			l_tickSize.width() = ( GetSize().width() / 2 ) + ( GetSize().width() % 2 );
-			l_tickSize.height() = 5;
-			l_tickPosition.x() = l_tickSize.width() / 2;
-			l_tickPosition.y() = int32_t( l_lineSize.height() * m_value.percent() );
+			lineSize.getWidth() = 3;
+			lineSize.getHeight() -= 4;
+			linePosition.x() = ( getSize().getWidth() - 3 ) / 2;
+			linePosition.y() += 2;
+			tickSize.getWidth() = ( getSize().getWidth() / 2 ) + ( getSize().getWidth() % 2 );
+			tickSize.getHeight() = 5;
+			tickPosition.x() = tickSize.getWidth() / 2;
+			tickPosition.y() = int32_t( lineSize.getHeight() * m_value.percent() );
 		}
 		else
 		{
-			l_lineSize.width() -= 4;
-			l_lineSize.height() = 3;
-			l_linePosition.x() += 2;
-			l_linePosition.y() = ( GetSize().height() - 3 ) / 2;
-			l_tickSize.width() = 5;
-			l_tickSize.height() = ( GetSize().height() / 2 ) + ( GetSize().height() % 2 );
-			l_tickPosition.x() = int32_t( l_lineSize.width() * m_value.percent() );
-			l_tickPosition.y() = l_tickSize.height() / 2;
+			lineSize.getWidth() -= 4;
+			lineSize.getHeight() = 3;
+			linePosition.x() += 2;
+			linePosition.y() = ( getSize().getHeight() - 3 ) / 2;
+			tickSize.getWidth() = 5;
+			tickSize.getHeight() = ( getSize().getHeight() / 2 ) + ( getSize().getHeight() % 2 );
+			tickPosition.x() = int32_t( lineSize.getWidth() * m_value.percent() );
+			tickPosition.y() = tickSize.getHeight() / 2;
 		}
 
-		StaticCtrlSPtr l_line = m_line.lock();
+		StaticCtrlSPtr line = m_line.lock();
 
-		if ( l_line )
+		if ( line )
 		{
-			l_line->SetPosition( l_linePosition );
-			l_line->SetSize( l_lineSize );
-			l_line->SetVisible( DoIsVisible() );
+			line->setPosition( linePosition );
+			line->setSize( lineSize );
+			line->setVisible( doIsVisible() );
 		}
 
-		StaticCtrlSPtr l_tick = m_tick.lock();
+		StaticCtrlSPtr tick = m_tick.lock();
 
-		if ( l_tick )
+		if ( tick )
 		{
-			l_tick->SetPosition( l_tickPosition );
-			l_tick->SetSize( l_tickSize );
-			l_tick->SetVisible( DoIsVisible() );
+			tick->setPosition( tickPosition );
+			tick->setSize( tickSize );
+			tick->setVisible( doIsVisible() );
 		}
 	}
 
-	void SliderCtrl::DoCreate()
+	void SliderCtrl::doCreate()
 	{
-		StaticCtrlSPtr l_line = m_line.lock();
-		l_line->SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "Gray" ) ) );
-		l_line->SetForegroundMaterial( GetForegroundMaterial() );
-		GetControlsManager()->Create( l_line );
+		REQUIRE( getControlsManager() );
+		auto & manager = *getControlsManager();
+		StaticCtrlSPtr line = m_line.lock();
+		line->setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "Gray" ) ) );
+		line->setForegroundMaterial( getForegroundMaterial() );
+		manager.create( line );
 
-		StaticCtrlSPtr l_tick = m_tick.lock();
-		l_tick->SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
-		l_tick->SetForegroundMaterial( GetForegroundMaterial() );
-		GetControlsManager()->Create( l_tick );
-		DoUpdateLineAndTick();
+		StaticCtrlSPtr tick = m_tick.lock();
+		tick->setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ) );
+		tick->setForegroundMaterial( getForegroundMaterial() );
+		manager.create( tick );
+		doUpdateLineAndTick();
+		
+		manager.connectEvents( *this );
 	}
 
-	void SliderCtrl::DoDestroy()
+	void SliderCtrl::doDestroy()
 	{
-		StaticCtrlSPtr l_line = m_line.lock();
+		REQUIRE( getControlsManager() );
+		auto & manager = *getControlsManager();
+		manager.disconnectEvents( *this );
+		StaticCtrlSPtr line = m_line.lock();
 
-		if ( l_line )
+		if ( line )
 		{
-			l_line->Destroy();
+			manager.destroy( line );
 			m_line.reset();
 		}
 
-		StaticCtrlSPtr l_tick = m_tick.lock();
+		StaticCtrlSPtr tick = m_tick.lock();
 
-		if ( l_tick )
+		if ( tick )
 		{
-			l_tick->Destroy();
+			manager.destroy( tick );
 			m_tick.reset();
 		}
 	}
 
-	void SliderCtrl::DoSetPosition( Position const & p_value )
+	void SliderCtrl::doSetPosition( Position const & p_value )
 	{
-		DoUpdateLineAndTick();
+		doUpdateLineAndTick();
 	}
 
-	void SliderCtrl::DoSetSize( Size const & p_value )
+	void SliderCtrl::doSetSize( Size const & p_value )
 	{
-		DoUpdateLineAndTick();
+		doUpdateLineAndTick();
 	}
 
-	void SliderCtrl::DoSetBackgroundMaterial( MaterialSPtr p_material )
+	void SliderCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
 	{
 	}
 
-	void SliderCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
+	void SliderCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
 	{
-		StaticCtrlSPtr l_line = m_line.lock();
+		StaticCtrlSPtr line = m_line.lock();
 
-		if ( l_line )
+		if ( line )
 		{
-			l_line->SetForegroundMaterial( p_material );
-			l_line.reset();
+			line->setForegroundMaterial( p_material );
+			line.reset();
 		}
 
-		StaticCtrlSPtr l_tick = m_tick.lock();
+		StaticCtrlSPtr tick = m_tick.lock();
 
-		if ( l_tick )
+		if ( tick )
 		{
-			l_tick->SetForegroundMaterial( p_material );
-			l_tick.reset();
-		}
-	}
-
-	void SliderCtrl::DoSetVisible( bool p_value )
-	{
-		StaticCtrlSPtr l_line = m_line.lock();
-
-		if ( l_line )
-		{
-			l_line->SetVisible( p_value );
-			l_line.reset();
-		}
-
-		StaticCtrlSPtr l_tick = m_tick.lock();
-
-		if ( l_tick )
-		{
-			l_tick->SetVisible( p_value );
-			l_tick.reset();
+			tick->setForegroundMaterial( p_material );
+			tick.reset();
 		}
 	}
 
-	void SliderCtrl::OnMouseMove( MouseEvent const & p_event )
+	void SliderCtrl::doSetVisible( bool p_value )
+	{
+		StaticCtrlSPtr line = m_line.lock();
+
+		if ( line )
+		{
+			line->setVisible( p_value );
+			line.reset();
+		}
+
+		StaticCtrlSPtr tick = m_tick.lock();
+
+		if ( tick )
+		{
+			tick->setVisible( p_value );
+			tick.reset();
+		}
+	}
+
+	void SliderCtrl::onMouseMove( MouseEvent const & p_event )
 	{
 		if ( m_scrolling )
 		{
-			DoMoveMouse( p_event.GetPosition() );
+			doMoveMouse( p_event.getPosition() );
 			m_signals[size_t( SliderEvent::eThumbTrack )]( m_value.value() );
 		}
 	}
 
-	void SliderCtrl::OnMouseLeave( MouseEvent const & p_event )
+	void SliderCtrl::onMouseLeave( MouseEvent const & p_event )
 	{
 		if ( m_scrolling
-				&& GetControlsManager()->GetFocusedControl() != shared_from_this()
-				&& GetControlsManager()->GetFocusedControl() != m_tick.lock()
-				&& GetControlsManager()->GetFocusedControl() != m_line.lock()
+				&& getControlsManager()->getFocusedControl() != shared_from_this()
+				&& getControlsManager()->getFocusedControl() != m_tick.lock()
+				&& getControlsManager()->getFocusedControl() != m_line.lock()
 		   )
 		{
-			DoMoveMouse( p_event.GetPosition() );
+			doMoveMouse( p_event.getPosition() );
 			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 			m_scrolling = false;
 		}
 	}
 
-	void SliderCtrl::OnMouseLButtonUp( MouseEvent const & p_event )
+	void SliderCtrl::onMouseLButtonUp( MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == MouseButton::eLeft )
+		if ( p_event.getButton() == MouseButton::eLeft )
 		{
 			if ( !m_scrolling )
 			{
-				m_mouse = m_tick.lock()->GetPosition();
+				m_mouse = m_tick.lock()->getPosition();
 			}
 
-			DoMoveMouse( p_event.GetPosition() );
+			doMoveMouse( p_event.getPosition() );
 			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 			m_scrolling = false;
 		}
 	}
 
-	void SliderCtrl::OnTickMouseMove( ControlSPtr p_control, MouseEvent const & p_event )
+	void SliderCtrl::onTickMouseMove( ControlSPtr p_control, MouseEvent const & p_event )
 	{
-		OnMouseMove( p_event );
+		onMouseMove( p_event );
 	}
 
-	void SliderCtrl::OnTickMouseLButtonDown( ControlSPtr p_control, MouseEvent const & p_event )
+	void SliderCtrl::onTickMouseLButtonDown( ControlSPtr p_control, MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == MouseButton::eLeft )
+		if ( p_event.getButton() == MouseButton::eLeft )
 		{
 			m_scrolling = true;
-			Point2i l_relativePosition = p_event.GetPosition() - GetAbsolutePosition();
-			m_mouse = Position( l_relativePosition[0], l_relativePosition[1] );
+			Point2i relativePosition = p_event.getPosition() - getAbsolutePosition();
+			m_mouse = Position( relativePosition[0], relativePosition[1] );
 		}
 	}
 
-	void SliderCtrl::OnTickMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event )
+	void SliderCtrl::onTickMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event )
 	{
-		OnMouseLButtonUp( p_event );
+		onMouseLButtonUp( p_event );
 	}
 
-	void SliderCtrl::OnKeyDown( KeyboardEvent const & p_event )
+	void SliderCtrl::onKeyDown( KeyboardEvent const & p_event )
 	{
 		if ( !m_scrolling )
 		{
-			if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
+			if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
 			{
-				if ( p_event.GetKey() == KeyboardKey::eUp )
+				if ( p_event.getKey() == KeyboardKey::eUp )
 				{
-					DoUpdateTick( Position( 0, -1 ) );
+					doUpdateTick( Position( 0, -1 ) );
 					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
-				else if ( p_event.GetKey() == KeyboardKey::eDown )
+				else if ( p_event.getKey() == KeyboardKey::edown )
 				{
-					DoUpdateTick( Position( 0, 1 ) );
+					doUpdateTick( Position( 0, 1 ) );
 					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
 			}
 			else
 			{
-				if ( p_event.GetKey() == KeyboardKey::eLeft )
+				if ( p_event.getKey() == KeyboardKey::eLeft )
 				{
-					DoUpdateTick( Position( -1, 0 ) );
+					doUpdateTick( Position( -1, 0 ) );
 					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
-				else if ( p_event.GetKey() == KeyboardKey::eRight )
+				else if ( p_event.getKey() == KeyboardKey::eRight )
 				{
-					DoUpdateTick( Position( 1, 0 ) );
+					doUpdateTick( Position( 1, 0 ) );
 					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
 			}
 		}
 	}
 
-	void SliderCtrl::OnNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event )
+	void SliderCtrl::onNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event )
 	{
-		OnKeyDown( p_event );
+		onKeyDown( p_event );
 	}
 
-	void SliderCtrl::DoUpdateTick( Position const & p_delta )
+	void SliderCtrl::doUpdateTick( Position const & p_delta )
 	{
-		Position l_delta = p_delta;
+		Position delta = p_delta;
 
-		if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
+		if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
 		{
-			l_delta.x() = 0;
+			delta.x() = 0;
 		}
 		else
 		{
-			l_delta.y() = 0;
+			delta.y() = 0;
 		}
 
-		StaticCtrlSPtr l_tick = m_tick.lock();
+		StaticCtrlSPtr tick = m_tick.lock();
 
-		if ( l_tick )
+		if ( tick )
 		{
-			Point2i l_position = l_tick->GetPosition() + l_delta;
-			double l_tickValue = 0;
-			StaticCtrlSPtr l_line = m_line.lock();
-			Size l_size = GetSize();
+			Point2i position = tick->getPosition() + delta;
+			double tickValue = 0;
+			StaticCtrlSPtr line = m_line.lock();
+			Size size = getSize();
 
-			if ( l_line )
+			if ( line )
 			{
-				l_size = l_line->GetSize();
+				size = line->getSize();
 			}
 
-			if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
+			if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
 			{
-				l_position[1] = std::min( int32_t( l_size.height() ), std::max( 0, l_position[1] ) );
-				l_tickValue = ( l_position[1] - l_line->GetPosition().y() ) / double( l_size.height() );
+				position[1] = std::min( int32_t( size.getHeight() ), std::max( 0, position[1] ) );
+				tickValue = ( position[1] - line->getPosition().y() ) / double( size.getHeight() );
 			}
 			else
 			{
-				l_position[0] = std::min( int32_t( l_size.width() ), std::max( 0, l_position[0] ) );
-				l_tickValue = ( l_position[0] - l_line->GetPosition().x() ) / double( l_size.width() );
+				position[0] = std::min( int32_t( size.getWidth() ), std::max( 0, position[0] ) );
+				tickValue = ( position[0] - line->getPosition().x() ) / double( size.getWidth() );
 			}
 
-			l_tickValue = std::max( 0.0, std::min( 1.0, l_tickValue ) );
-			l_tick->SetPosition( Position( l_position[0], l_position[1] ) );
-			m_value = m_value.range().value( float( l_tickValue ) );
+			tickValue = std::max( 0.0, std::min( 1.0, tickValue ) );
+			tick->setPosition( Position( position[0], position[1] ) );
+			m_value = m_value.range().value( float( tickValue ) );
 		}
 	}
 
-	void SliderCtrl::DoMoveMouse( Position const & p_mouse )
+	void SliderCtrl::doMoveMouse( Position const & p_mouse )
 	{
-		Point2i l_relativePosition = p_mouse - GetAbsolutePosition();
-		Point2i l_delta = l_relativePosition - m_mouse;
-		m_mouse = Position( l_relativePosition[0], l_relativePosition[1] );
-		DoUpdateTick( Position( l_delta[0], l_delta[1] ) );
+		Point2i relativePosition = p_mouse - getAbsolutePosition();
+		Point2i delta = relativePosition - m_mouse;
+		m_mouse = Position( relativePosition[0], relativePosition[1] );
+		doUpdateTick( Position( delta[0], delta[1] ) );
 	}
 
-	void SliderCtrl::DoUpdateStyle()
+	void SliderCtrl::doUpdateStyle()
 	{
-		DoUpdateLineAndTick();
+		doUpdateLineAndTick();
 	}
 }

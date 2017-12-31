@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_TARGET_CACHE_H___
 #define ___C3D_TARGET_CACHE_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 #include "PostEffect/PostEffectFactory.hpp"
 #include "Render/RenderInfo.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,18 +22,18 @@ namespace Castor3D
 	\brief		Cache de RenderTarget.
 	*/
 	class RenderTargetCache
-		: public Castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API RenderTargetCache( Engine & p_engine );
+		C3D_API explicit RenderTargetCache( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -63,46 +44,46 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a render target of given type
-		 *\param[in]	p_type	The render target type
+		 *\param[in]	type	The render target type
 		 *\return		The render target
 		 *\~french
 		 *\brief		Crée une cible de rendu du type voulu
-		 *\param[in]	p_type	Le type de cible de rendu
+		 *\param[in]	type	Le type de cible de rendu
 		 *\return		La cible de rendu
 		 */
-		C3D_API RenderTargetSPtr Add( TargetType p_type );
+		C3D_API RenderTargetSPtr add( TargetType type );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
-		 *\param[in]	p_target	The render target
+		 *\param[in]	target	The render target
 		 *\~french
 		 *\brief		Enlève une cible de rendu de la boucle de rendu
-		 *\param[in]	p_target	La cible de rendu
+		 *\param[in]	target	La cible de rendu
 		 */
-		C3D_API void Remove( RenderTargetSPtr p_target );
+		C3D_API void remove( RenderTargetSPtr target );
 		/**
 		 *\~english
 		 *\brief			Renders into the render targets.
-		 *\param[in,out]	p_vtxCount	Receives the render informations.
+		 *\param[in,out]	info	Receives the render informations.
 		 *\~french
 		 *\brief			Dessine dans les cibles de rendu.
-		 *\param[in,out]	p_vtxCount	Reçoit les informations de rendu.
+		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void Render( RenderInfo & p_info );
+		C3D_API void render( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void Clear();
+		C3D_API void clear();
 		/**
 		 *\~english
 		 *\return		The ToneMapping factory.
 		 *\~french
 		 *\return		La fabrique de ToneMapping.
 		 */
-		inline ToneMappingFactory const & GetToneMappingFactory()const
+		inline ToneMappingFactory const & getToneMappingFactory()const
 		{
 			return m_toneMappingFactory;
 		}
@@ -112,7 +93,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de ToneMapping.
 		 */
-		inline ToneMappingFactory & GetToneMappingFactory()
+		inline ToneMappingFactory & getToneMappingFactory()
 		{
 			return m_toneMappingFactory;
 		}
@@ -122,7 +103,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de PostEffect.
 		 */
-		inline PostEffectFactory const & GetPostEffectFactory()const
+		inline PostEffectFactory const & getPostEffectFactory()const
 		{
 			return m_postEffectFactory;
 		}
@@ -132,7 +113,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La fabrique de PostEffect.
 		 */
-		inline PostEffectFactory & GetPostEffectFactory()
+		inline PostEffectFactory & getPostEffectFactory()
 		{
 			return m_postEffectFactory;
 		}

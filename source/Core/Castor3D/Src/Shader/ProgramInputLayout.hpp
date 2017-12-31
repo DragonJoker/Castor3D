@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PROGRAM_INPUT_LAYOUT_H___
 #define ___C3D_PROGRAM_INPUT_LAYOUT_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include "Mesh/Buffer/BufferElementDeclaration.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,7 +22,7 @@ namespace Castor3D
 	\remark		Contient la déclaration des éléments du tampon de sommets, initialisé par le programme shader à la compilation.
 	*/
 	class ProgramInputLayout
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -50,7 +31,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		C3D_API explicit ProgramInputLayout( RenderSystem & p_renderSystem );
+		C3D_API explicit ProgramInputLayout( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,14 +49,14 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme utilisé pour remplir ce layout.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Initialise( ShaderProgram const & p_program ) = 0;
+		C3D_API virtual bool initialise( ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function, on GPU side.
 		 *\~french
 		 *\brief		Fonction de nettoyage côté GPU.
 		 */
-		C3D_API virtual void Cleanup() = 0;
+		C3D_API virtual void cleanup() = 0;
 		/**
 		 *\~english
 		 *\return		An iterator to the beginning of the layout elements.
@@ -100,7 +81,7 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Adds an attribute to the layout.
+		 *\brief		adds an attribute to the layout.
 		 *\param[in]	p_name		Associated variable name.
 		 *\param[in]	p_type		Element type.
 		 *\param[in]	p_offset	Offset in the stream.
@@ -110,7 +91,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Type de l'élément.
 		 *\param[in]	p_offset	Offset dans le tampon.
 		 */
-		C3D_API void DoAddAttribute( Castor::String const & p_name, ElementType p_type, uint32_t p_offset = 0 );
+		C3D_API void doAddAttribute( castor::String const & p_name, ElementType p_type, uint32_t p_offset = 0 );
 		/**
 		 *\~english
 		 *\brief		Tries to guess possible usage for attribute, given its name and type.
@@ -123,7 +104,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Type de l'élément.
 		 *\return		Les utilisations possibles.
 		 */
-		Castor::FlagCombination< ElementUsage > DoGuessUsages( Castor::String const & p_name, ElementType p_type );
+		castor::FlagCombination< ElementUsage > doGuessUsages( castor::String const & p_name, ElementType p_type );
 
 	protected:
 		friend C3D_API bool operator==( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs );

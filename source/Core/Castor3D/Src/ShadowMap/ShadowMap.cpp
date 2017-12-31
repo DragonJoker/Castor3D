@@ -1,4 +1,4 @@
-#include "ShadowMap.hpp"
+﻿#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -7,16 +7,26 @@
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
 
 #include <GlslSource.hpp>
+#include "Shader/Shaders/GlslMaterial.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	ShadowMap::ShadowMap( Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
+	ShadowMap::ShadowMap( Engine & engine
+		, TextureUnit && shadowMap
+		, TextureUnit && linearMap
+		, ShadowMapPassSPtr pass )
+		: OwnedBy< Engine >{ engine }
+		, m_shadowMap{ std::move( shadowMap ) }
+		, m_linearMap{ std::move( linearMap ) }
+		, m_pass{ pass }
 	{
 	}
 
@@ -24,217 +34,247 @@ namespace Castor3D
 	{
 	}
 
-	bool ShadowMap::Initialise()
+	bool ShadowMap::initialise()
 	{
-		bool l_return = true;
+		bool result = true;
 
 		if ( !m_frameBuffer )
 		{
-			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			l_return = m_frameBuffer->Create();
-			auto l_size = DoGetSize();
+			m_shadowMap.initialise();
+			m_linearMap.initialise();
+			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
+			result = m_frameBuffer->initialise();
+			auto size = m_shadowMap.getTexture()->getDimensions();
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = m_frameBuffer->Initialise( l_size );
+				result = m_pass->initialise( size );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				DoInitialise();
+				doInitialise();
 			}
-
-			m_frameBuffer->Bind();
-			m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
-			m_frameBuffer->Unbind();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void ShadowMap::Cleanup()
+	void ShadowMap::cleanup()
 	{
-		for ( auto & l_it : m_passes )
-		{
-			l_it.second->Cleanup();
-		}
+		m_pass->cleanup();
 
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind();
-			m_frameBuffer->DetachAll();
-			m_frameBuffer->Unbind();
+			m_frameBuffer->bind();
+			m_frameBuffer->detachAll();
+			m_frameBuffer->unbind();
 
-			DoCleanup();
+			doCleanup();
 
-			m_frameBuffer->Cleanup();
-			m_frameBuffer->Destroy();
+			m_frameBuffer->cleanup();
 			m_frameBuffer.reset();
+
+			m_shadowMap.cleanup();
+			m_linearMap.cleanup();
 		}
 
-		for ( auto l_buffer : m_geometryBuffers )
+		for ( auto buffer : m_geometryBuffers )
 		{
-			l_buffer->Cleanup();
+			buffer->cleanup();
 		}
 
 		m_geometryBuffers.clear();
 	}
 
-	void ShadowMap::AddLight( Light & p_light )
+	void ShadowMap::updateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		auto l_pass = DoCreatePass( p_light );
-		auto l_size = DoGetSize();
-		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-			, [l_pass, l_size]()
-			{
-				l_pass->Initialise( l_size );
-			} ) );
-		m_passes.emplace( &p_light, l_pass );
-	}
-
-	void ShadowMap::UpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
-	{
-		RemFlag( p_programFlags, ProgramFlag::eLighting );
-		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
-		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
+		remFlag( programFlags, ProgramFlag::eLighting );
+		remFlag( passFlags, PassFlag::eAlphaBlending );
+		remFlag( textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
 			& ~uint16_t( TextureChannel::eOpacity ) ) );
-		DoUpdateFlags( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags );
+		doUpdateFlags( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags );
 	}
 
-	String ShadowMap::GetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	glsl::Shader ShadowMap::getVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
 	{
-		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+		return doGetVertexShaderSource( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags
+			, invertNormals );
 	}
 
-	String ShadowMap::GetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	glsl::Shader ShadowMap::getGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
-		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		return doGetGeometryShaderSource( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags );
 	}
 
-	String ShadowMap::GetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	glsl::Shader ShadowMap::getPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		return doGetPixelShaderSource( passFlags
+			, textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	String ShadowMap::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	glsl::Shader ShadowMap::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
 	{
-		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		using namespace glsl;
+		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+
 		// Vertex inputs
-		auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
-		auto normal = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
+		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( l_writer );
-		UBO_MODEL_MATRIX( l_writer );
-		UBO_SKINNING( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
+		UBO_MATRIX( writer );
+		UBO_MODEL_MATRIX( writer );
+		UBO_MODEL( writer );
+		SkinningUbo::declare( writer, programFlags );
+		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
-		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.GetOutput< Int >( cuT( "vtx_instance" ) );
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
+		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
+		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		std::function< void() > l_main = [&]()
+		std::function< void() > main = [&]()
 		{
-			auto l_v4Vertex = l_writer.GetLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
-			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto l_v4Bitangent = l_writer.GetLocale( cuT( "l_v4Bitangent" ), vec4( bitangent, 0.0 ) );
-			auto l_v3Texture = l_writer.GetLocale( cuT( "l_v3Texture" ), texture );
-			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
+			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
+			auto v3Texture = writer.declLocale( cuT( "v3Texture" ), texture );
+			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
+			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
-				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
-				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
+				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
 			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				l_mtxModel = transform;
+				mtxModel = transform;
 			}
 			else
 			{
-				l_mtxModel = c3d_mtxModel;
+				mtxModel = c3d_mtxModel;
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				auto l_time = l_writer.GetLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
-				l_v4Bitangent = vec4( l_v4Bitangent.xyz() * l_time + bitangent2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
-			}
-
-			vtx_texture = l_v3Texture;
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_worldSpacePosition = l_v4Vertex.xyz();
-			l_v4Vertex = c3d_mtxView * l_v4Vertex;
-
-			if ( p_invertNormals )
-			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * -l_v4Normal ).xyz() );
+				vtx_material = material;
 			}
 			else
 			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+				vtx_material = c3d_materialIndex;
 			}
 
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
-			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
+			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+			{
+				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+			}
+
+			vtx_texture = v3Texture;
+			v4Vertex = mtxModel * v4Vertex;
+			vtx_worldPosition = v4Vertex.xyz();
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * l_v4Vertex;
+			v4Vertex = c3d_curView * v4Vertex;
+			vtx_viewPosition = v4Vertex.xyz();
+			gl_Position = c3d_projection * v4Vertex;
 		};
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
+		writer.implementFunction< void >( cuT( "main" ), main );
+		return writer.finalise();
 	}
 
-	String ShadowMap::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	glsl::Shader ShadowMap::doGetGeometryShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
-		return String{};
+		return glsl::Shader{};
+	}
+
+	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
+		, TextureChannels const & textureFlags
+		, ComparisonFunc alphaFunc
+		, glsl::Int const & materialIndex
+		, shader::Materials const & materials )const
+	{
+		using namespace glsl;
+
+		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+		{
+			auto material = materials.getBaseMaterial( materialIndex );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, material->m_opacity() );
+			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+				, material->m_alphaRef() );
+
+			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
+			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
+			alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+			shader::applyAlphaFunc( writer
+				, alphaFunc
+				, alpha
+				, alphaRef );
+		}
+		else if ( alphaFunc != ComparisonFunc::eAlways )
+		{
+			auto material = materials.getBaseMaterial( materialIndex );
+			auto alpha = writer.declLocale( cuT( "alpha" )
+				, material->m_opacity() );
+			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+				, material->m_alphaRef() );
+
+			shader::applyAlphaFunc( writer
+				, alphaFunc
+				, alpha
+				, alphaRef );
+		}
 	}
 }

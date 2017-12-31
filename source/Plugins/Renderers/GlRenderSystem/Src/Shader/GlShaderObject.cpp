@@ -1,23 +1,26 @@
-#include "Shader/GlShaderObject.hpp"
+﻿#include "Shader/GlShaderObject.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
+#include "Shader/GlPushUniform.hpp"
 #include "Shader/GlShaderProgram.hpp"
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
-	GlShaderObject::GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, ShaderType p_type )
-		: ShaderObject( p_parent, p_type )
-		, Object( p_gl,
+	GlShaderObject::GlShaderObject( OpenGl & gl
+		, GlShaderProgram & parent
+		, ShaderType type )
+		: ShaderObject( parent, type )
+		, Object( gl,
 				  "GlShaderObject",
-				  std::bind( &OpenGl::CreateShader, std::ref( p_gl ), p_gl.Get( p_type ) ),
-				  std::bind( &OpenGl::DeleteShader, std::ref( p_gl ), std::placeholders::_1 ),
-				  std::bind( &OpenGl::IsShader, std::ref( p_gl ), std::placeholders::_1 )
+				  std::bind( &OpenGl::CreateShader, std::ref( gl ), gl.get( type ) ),
+				  std::bind( &OpenGl::DeleteShader, std::ref( gl ), std::placeholders::_1 ),
+				  std::bind( &OpenGl::IsShader, std::ref( gl ), std::placeholders::_1 )
 				)
 		, m_shaderProgram( nullptr )
 	{
@@ -27,64 +30,50 @@ namespace GlRender
 	{
 	}
 
-	bool GlShaderObject::Create()
+	bool GlShaderObject::create()
 	{
-		return ObjectType::Create();
+		return ObjectType::create();
 	}
 
-	void GlShaderObject::Destroy()
+	void GlShaderObject::destroy()
 	{
-		Detach();
+		detach();
 
 		if ( m_status == ShaderStatus::eCompiled )
 		{
-			ObjectType::Destroy();
+			ObjectType::destroy();
 			m_status = ShaderStatus::eNotCompiled;
 		}
 	}
 
-	bool GlShaderObject::Compile()
+	bool GlShaderObject::compile()
 	{
-		bool l_return = false;
-		String l_loadedSource;
+		bool result = false;
+		String loadedSource = m_source.getSource();
 
-		for ( size_t i = size_t( ShaderModel::eModel5 ); i >= size_t( ShaderModel::eModel1 ) && l_loadedSource.empty() && i < m_arraySources.size(); i-- )
+		if ( m_status != ShaderStatus::eError && !loadedSource.empty() )
 		{
-			if ( m_parent->GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
-			{
-				l_loadedSource = m_arraySources[i];
+			result = true;
 
-				if ( !l_loadedSource.empty() )
-				{
-					m_eShaderModel = ShaderModel( i );
-				}
-			}
-		}
-
-		if ( m_status != ShaderStatus::eError && !l_loadedSource.empty() && l_loadedSource != m_loadedSource )
-		{
-			l_return = true;
-			m_loadedSource = l_loadedSource;
-
-			if ( m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+			if ( m_parent.getRenderSystem()->getGpuInformations().hasShaderType( m_type ) )
 			{
 				m_status = ShaderStatus::eNotCompiled;
-				int l_compiled = 0;
-				int l_iLength = int( m_loadedSource.size() );
-				std::string l_tmp = string::string_cast< char >( m_loadedSource );
-				std::vector< char > l_pszTmp( m_loadedSource.size() + 1 );
-				char * l_buffer = l_pszTmp.data();
+				int compiled = 0;
+				int iLength = int( loadedSource.size() );
+				std::string tmp = string::stringCast< char >( loadedSource );
+				std::vector< char > pszTmp( loadedSource.size() + 1 );
+				char * buffer = pszTmp.data();
 #if defined( CASTOR_COMPILER_MSVC )
-				strncpy_s( l_buffer, m_loadedSource.size() + 1, l_tmp.c_str(), l_tmp.size() );
+				strncpy_s( buffer, loadedSource.size() + 1, tmp.c_str(), tmp.size() );
 #else
-				strncpy( l_buffer, l_tmp.c_str(), l_tmp.size() );
+				strncpy( buffer, tmp.c_str(), tmp.size() );
 #endif
-				GetOpenGl().ShaderSource( GetGlName(), 1, const_cast< const char ** >( &l_buffer ), &l_iLength );
-				GetOpenGl().CompileShader( GetGlName() );
-				GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eCompile, &l_compiled );
-				Logger::LogDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << l_compiled );
+				getOpenGl().ShaderSource( getGlName(), 1, const_cast< const char ** >( &buffer ), &iLength );
+				getOpenGl().CompileShader( getGlName() );
+				getOpenGl().GetShaderiv( getGlName(), GlShaderStatus::eCompile, &compiled );
+				Logger::logDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << compiled );
 
-				if ( l_compiled )
+				if ( compiled )
 				{
 					m_status = ShaderStatus::eCompiled;
 				}
@@ -93,64 +82,274 @@ namespace GlRender
 					m_status = ShaderStatus::eError;
 				}
 
-				l_return = DoCheckErrors();
+				result = doCheckErrors();
 			}
 			else
 			{
-				Logger::LogError( "GlShaderObject::Compile - Shader type not supported by currently loaded API." );
+				Logger::logError( "GlShaderObject::Compile - Shader type not supported by currently loaded API." );
 			}
 		}
-		else if ( m_loadedSource.empty() )
+		else if ( loadedSource.empty() )
 		{
-			Logger::LogError( "GlShaderObject::Compile - No shader source." );
+			Logger::logError( "GlShaderObject::Compile - No shader source." );
 		}
 		else
 		{
-			Logger::LogWarning( "GlShaderObject::Compile - Shader is already compiled." );
+			Logger::logWarning( "GlShaderObject::Compile - Shader is already compiled." );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void GlShaderObject::Detach()
+	void GlShaderObject::detach()
 	{
-		if ( m_status == ShaderStatus::eCompiled && m_shaderProgram && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+		if ( m_status == ShaderStatus::eCompiled && m_shaderProgram && m_parent.getRenderSystem()->getGpuInformations().hasShaderType( m_type ) )
 		{
-			GetOpenGl().DetachShader( m_shaderProgram->GetGlName(), GetGlName() );
+			getOpenGl().DetachShader( m_shaderProgram->getGlName(), getGlName() );
 			m_shaderProgram = nullptr;
 		}
 	}
 
-	void GlShaderObject::AttachTo( ShaderProgram & p_program )
+	void GlShaderObject::attachTo( ShaderProgram & program )
 	{
-		Detach();
+		detach();
 
-		if ( m_status == ShaderStatus::eCompiled && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+		if ( m_status == ShaderStatus::eCompiled && m_parent.getRenderSystem()->getGpuInformations().hasShaderType( m_type ) )
 		{
-			m_shaderProgram = &static_cast< GlShaderProgram & >( p_program );
-			GetOpenGl().AttachShader( m_shaderProgram->GetGlName(), GetGlName() );
+			m_shaderProgram = &static_cast< GlShaderProgram & >( program );
+			getOpenGl().AttachShader( m_shaderProgram->getGlName(), getGlName() );
 		}
 	}
 
-	String GlShaderObject::DoRetrieveCompilerLog()
+	String GlShaderObject::doRetrieveCompilerLog()
 	{
-		String l_log;
-		int l_infologLength = 0;
-		int l_charsWritten = 0;
-		GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eInfoLogLength, &l_infologLength );
+		String log;
+		int infologLength = 0;
+		int charsWritten = 0;
+		getOpenGl().GetShaderiv( getGlName(), GlShaderStatus::eInfoLogLength, &infologLength );
 
-		if ( l_infologLength > 0 )
+		if ( infologLength > 0 )
 		{
-			std::vector< char > l_infoLog( l_infologLength + 1 );
-			GetOpenGl().GetShaderInfoLog( GetGlName(), l_infologLength, &l_charsWritten, l_infoLog.data() );
-			l_log = string::string_cast< xchar >( l_infoLog.data() );
+			std::vector< char > infoLog( infologLength + 1 );
+			getOpenGl().GetShaderInfoLog( getGlName(), infologLength, &charsWritten, infoLog.data() );
+			log = string::stringCast< xchar >( infoLog.data() );
 		}
 
-		if ( !l_log.empty() )
+		if ( !log.empty() )
 		{
-			l_log = l_log.substr( 0, l_log.size() - 1 );
+			log = log.substr( 0, log.size() - 1 );
 		}
 
-		return l_log;
+		return log;
+	}
+
+	std::shared_ptr< PushUniform > GlShaderObject::doCreateUniform( UniformType p_type, int p_occurences )
+	{
+		auto & program = static_cast< GlShaderProgram & >( m_parent );
+
+		switch ( p_type )
+		{
+		case UniformType::eBool:
+			return std::make_shared< GlPushUniform< UniformType::eBool > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eInt:
+			return std::make_shared< GlPushUniform< UniformType::eInt > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eUInt:
+			return std::make_shared< GlPushUniform< UniformType::eUInt > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eFloat:
+			return std::make_shared< GlPushUniform< UniformType::eFloat > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eDouble:
+			return std::make_shared< GlPushUniform< UniformType::eDouble > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eSampler:
+			return std::make_shared< GlPushUniform< UniformType::eSampler > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec2b:
+			return std::make_shared< GlPushUniform< UniformType::eVec2b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec3b:
+			return std::make_shared< GlPushUniform< UniformType::eVec3b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec4b:
+			return std::make_shared< GlPushUniform< UniformType::eVec4b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec2i:
+			return std::make_shared< GlPushUniform< UniformType::eVec2i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec3i:
+			return std::make_shared< GlPushUniform< UniformType::eVec3i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec4i:
+			return std::make_shared< GlPushUniform< UniformType::eVec4i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec2ui:
+			return std::make_shared< GlPushUniform< UniformType::eVec2ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec3ui:
+			return std::make_shared< GlPushUniform< UniformType::eVec3ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec4ui:
+			return std::make_shared< GlPushUniform< UniformType::eVec4ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec2f:
+			return std::make_shared< GlPushUniform< UniformType::eVec2f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec3f:
+			return std::make_shared< GlPushUniform< UniformType::eVec3f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec4f:
+			return std::make_shared< GlPushUniform< UniformType::eVec4f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec2d:
+			return std::make_shared< GlPushUniform< UniformType::eVec2d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec3d:
+			return std::make_shared< GlPushUniform< UniformType::eVec3d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eVec4d:
+			return std::make_shared< GlPushUniform< UniformType::eVec4d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x2b:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x2b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x3b:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x3b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x4b:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x4b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x2b:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x2b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x3b:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x3b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x4b:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x4b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x2b:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x2b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x3b:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x3b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x4b:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x4b > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x2i:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x2i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x3i:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x3i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x4i:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x4i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x2i:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x2i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x3i:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x3i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x4i:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x4i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x2i:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x2i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x3i:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x3i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x4i:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x4i > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x2ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x2ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x3ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x3ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x4ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x4ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x2ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x2ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x3ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x3ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x4ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x4ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x2ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x2ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x3ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x3ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x4ui:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x4ui > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x2f:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x2f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x3f:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x3f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x4f:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x4f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x2f:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x2f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x3f:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x3f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x4f:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x4f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x2f:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x2f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x3f:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x3f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x4f:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x4f > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x2d:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x2d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x3d:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x3d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat2x4d:
+			return std::make_shared< GlPushUniform< UniformType::eMat2x4d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x2d:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x2d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x3d:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x3d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat3x4d:
+			return std::make_shared< GlPushUniform< UniformType::eMat3x4d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x2d:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x2d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x3d:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x3d > >( getOpenGl(), program, p_occurences );
+
+		case UniformType::eMat4x4d:
+			return std::make_shared< GlPushUniform< UniformType::eMat4x4d > >( getOpenGl(), program, p_occurences );
+
+		default:
+			FAILURE( cuT( "Unsupported frame variable type" ) );
+			return nullptr;
+		}
 	}
 }

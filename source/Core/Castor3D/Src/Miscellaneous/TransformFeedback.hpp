@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_TRANSFORM_FEEDBACK_H___
 #define ___C3D_TRANSFORM_FEEDBACK_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 
 #include <cstddef>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -41,24 +22,24 @@ namespace Castor3D
 	\brief		Implémentation du Transform feedback.
 	*/
 	class TransformFeedback
-		: Castor::OwnedBy< RenderSystem >
+		: castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The RenderSystem
+		 *\param[in]	renderSystem	The RenderSystem
 		 *\param[in]	p_computed		The computed elements description.
 		 *\param[in]	p_topology		The primitives type.
 		 *\param[in]	p_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_computed		La description des éléments calculés.
 		 *\param[in]	p_topology		Le type de primitives.
 		 *\param[in]	p_program		Le programm shader.
 		 */
-		C3D_API TransformFeedback( RenderSystem & p_renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program );
+		C3D_API TransformFeedback( RenderSystem & renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -76,35 +57,35 @@ namespace Castor3D
 		 *\param[in]	p_buffers	Les tampons de sommets.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( VertexBufferArray const & p_buffers );
+		C3D_API bool initialise( VertexBufferArray const & p_buffers );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 */
-		C3D_API void Bind()const;
+		C3D_API void bind()const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 */
-		C3D_API void Unbind()const;
+		C3D_API void unbind()const;
 		/**
 		 *\~english
 		 *\return		The primitives written at last call.
 		 *\~french
 		 *\brief		Les primitives écrites au dernier appel.
 		 */
-		inline uint32_t GetWrittenPrimitives()const
+		inline uint32_t getWrittenPrimitives()const
 		{
 			return m_writtenPrimitives;
 		}
@@ -118,42 +99,42 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoInitialise() = 0;
+		C3D_API virtual bool doInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 */
-		C3D_API virtual void DoBind()const = 0;
+		C3D_API virtual void doBind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 */
-		C3D_API virtual void DoUnbind()const = 0;
+		C3D_API virtual void doUnbind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Begins transform feedback.
 		 *\~french
 		 *\brief		Démarre le transform feedback.
 		 */
-		C3D_API virtual void DoBegin()const = 0;
+		C3D_API virtual void doBegin()const = 0;
 		/**
 		 *\~english
 		 *\brief		Ends transform feedback.
 		 *\~french
 		 *\brief		Termine le transform feedback.
 		 */
-		C3D_API virtual void DoEnd()const = 0;
+		C3D_API virtual void doEnd()const = 0;
 
 	protected:
 		//!\~english	The shader program.

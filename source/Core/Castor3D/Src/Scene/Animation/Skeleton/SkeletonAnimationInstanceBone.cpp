@@ -3,13 +3,15 @@
 #include "Animation/Skeleton/SkeletonAnimationBone.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
-		: SkeletonAnimationInstanceObject{ p_animationInstance, p_animationObject, p_allObjects }
-		, m_animationBone{ p_animationObject }
+	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & animationInstance
+		, SkeletonAnimationBone & animationObject
+		, SkeletonAnimationInstanceObjectPtrArray & allObjects )
+		: SkeletonAnimationInstanceObject{ animationInstance, animationObject, allObjects }
+		, m_animationBone{ animationObject }
 	{
 	}
 
@@ -17,13 +19,13 @@ namespace Castor3D
 	{
 	}
 
-	void SkeletonAnimationInstanceBone::DoApply()
+	void SkeletonAnimationInstanceBone::doApply()
 	{
-		BoneSPtr l_bone = m_animationBone.GetBone();
+		BoneSPtr bone = m_animationBone.getBone();
 
-		if ( l_bone )
+		if ( bone )
 		{
-			m_finalTransform = m_cumulativeTransform * l_bone->GetOffsetMatrix();
+			m_finalTransform = m_cumulativeTransform * bone->getOffsetMatrix();
 		}
 	}
 }

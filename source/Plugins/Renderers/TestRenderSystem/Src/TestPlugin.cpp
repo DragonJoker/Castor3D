@@ -1,38 +1,40 @@
 #include "Render/TestRenderSystem.hpp"
 
 #include <Engine.hpp>
+#include <Plugin/RendererPlugin.hpp>
 #include <Render/RenderSystemFactory.hpp>
 
 using namespace TestRender;
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
-C3D_Test_API void GetRequiredVersion( Version & p_version )
+extern "C"
 {
-	p_version = Version();
-}
+	C3D_Test_API void getRequiredVersion( castor3d::Version * p_version )
+	{
+		*p_version = castor3d::Version();
+	}
 
-C3D_Test_API PluginType GetType()
-{
-	return PluginType::eRenderer;
-}
+	C3D_Test_API void getType( castor3d::PluginType * p_type )
+	{
+		*p_type = castor3d::PluginType::eRenderer;
+	}
 
-C3D_Test_API Castor::String GetRendererType()
-{
-	return TestRenderSystem::Name;
-}
+	C3D_Test_API void getName( char const ** p_name )
+	{
+		*p_name = TestRenderSystem::Name.c_str();
+	}
 
-C3D_Test_API String GetName()
-{
-	return cuT( "Test Renderer" );
-}
+	C3D_Test_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	{
+		auto plugin = static_cast< castor3d::RendererPlugin * >( p_plugin );
+		plugin->setRendererType( TestRenderSystem::Type );
+		engine->getRenderSystemFactory().registerType( TestRenderSystem::Type
+			, &TestRenderSystem::create );
+	}
 
-C3D_Test_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderSystemFactory().Register( TestRenderSystem::Name, TestRenderSystem::Create );
-}
-
-C3D_Test_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->GetRenderSystemFactory().Unregister( TestRenderSystem::Name );
+	C3D_Test_API void OnUnload( castor3d::Engine * engine )
+	{
+		engine->getRenderSystemFactory().unregisterType( TestRenderSystem::Type );
+	}
 }

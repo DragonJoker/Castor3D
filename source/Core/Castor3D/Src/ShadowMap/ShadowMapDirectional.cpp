@@ -2,10 +2,18 @@
 
 #include "Engine.hpp"
 
+#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
+#include "Miscellaneous/GaussianBlur.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Scene/Light/Light.hpp"
+#include "Scene/Light/DirectionalLight.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
@@ -14,55 +22,95 @@
 #include <GlslSource.hpp>
 
 #include <Graphics/Image.hpp>
+#include <Miscellaneous/BlockTracker.hpp>
 
-using namespace Castor;
+using namespace castor;
+using namespace castor3d;
 
-namespace Castor3D
+namespace castor3d
 {
 	namespace
 	{
-		TextureUnit DoInitialiseDirectional( Engine & p_engine, Size const & p_size )
+		TextureUnit doInitialiseVariance( Engine & engine, Size const & p_size )
 		{
-			SamplerSPtr l_sampler;
-			String const l_name = cuT( "ShadowMap_Directional" );
+			String const name = cuT( "ShadowMap_Directional_Variance" );
+			SamplerSPtr sampler;
 
-			if ( p_engine.GetSamplerCache().Has( l_name ) )
+			if ( engine.getSamplerCache().has( name ) )
 			{
-				l_sampler = p_engine.GetSamplerCache().Find( l_name );
+				sampler = engine.getSamplerCache().find( name );
 			}
 			else
 			{
-				l_sampler = p_engine.GetSamplerCache().Add( l_name );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-				l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-				l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
 			}
 
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
+			auto texture = engine.getRenderSystem()->createTexture(
+				TextureType::eTwoDimensions,
+				AccessType::eNone,
+				AccessType::eRead | AccessType::eWrite,
+				PixelFormat::eAL32F, p_size );
+			TextureUnit unit{ engine };
+			unit.setTexture( texture );
+			unit.setSampler( sampler );
+
+			for ( auto & image : *texture )
+			{
+				image->initialiseSource();
+			}
+
+			return unit;
+		}
+
+		TextureUnit doInitialiseDepth( Engine & engine, Size const & p_size )
+		{
+			String const name = cuT( "ShadowMap_Directional_Depth" );
+			SamplerSPtr sampler;
+
+			if ( engine.getSamplerCache().has( name ) )
+			{
+				sampler = engine.getSamplerCache().find( name );
+			}
+			else
+			{
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			}
+
+			auto texture = engine.getRenderSystem()->createTexture(
 				TextureType::eTwoDimensions,
 				AccessType::eNone,
 				AccessType::eRead | AccessType::eWrite,
 				PixelFormat::eD32F, p_size );
-			TextureUnit l_unit{ p_engine };
-			l_unit.SetTexture( l_texture );
-			l_unit.SetSampler( l_sampler );
+			TextureUnit unit{ engine };
+			unit.setTexture( texture );
+			unit.setSampler( sampler );
 
-			for ( auto & l_image : *l_texture )
+			for ( auto & image : *texture )
 			{
-				l_image->InitialiseSource();
+				image->initialiseSource();
 			}
 
-			return l_unit;
+			return unit;
 		}
 	}
 
-	ShadowMapDirectional::ShadowMapDirectional( Engine & p_engine )
-		: ShadowMap{ p_engine }
-		, m_shadowMap{ DoInitialiseDirectional( p_engine, Size{ 4096, 4096 } ) }
+	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
+		, Scene & scene )
+		: ShadowMap{ engine
+			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
+			, doInitialiseDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
+			, std::make_shared< ShadowMapPassDirectional >( engine, scene, *this ) }
 	{
 	}
 
@@ -70,104 +118,122 @@ namespace Castor3D
 	{
 	}
 
-	void ShadowMapDirectional::Update( Camera const & p_camera
-		, RenderQueueArray & p_queues )
+	void ShadowMapDirectional::update( Camera const & camera
+		, RenderQueueArray & queues
+		, Light & light
+		, uint32_t index )
 	{
-		if ( !m_passes.empty() )
-		{
-			for ( auto & l_it : m_passes )
-			{
-				l_it.second->Update( p_queues, 0u );
-			}
-		}
+		m_pass->update( camera, queues, light, index );
 	}
 
-	void ShadowMapDirectional::Render()
+	void ShadowMapDirectional::render()
 	{
-		if ( !m_passes.empty() )
-		{
-			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-			m_depthAttach->Attach( AttachmentPoint::eDepth );
-			m_frameBuffer->Clear( BufferComponent::eDepth );
-			m_passes.begin()->second->Render();
-			m_depthAttach->Detach();
-			m_frameBuffer->Unbind();
-		}
+		m_pass->startTimer();
+		m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
+		m_pass->render( 0u );
+		m_frameBuffer->unbind();
+
+		m_blur->blur( m_shadowMap.getTexture() );
+		m_pass->stopTimer();
 	}
 
-	int32_t ShadowMapDirectional::DoGetMaxPasses()const
+	void ShadowMapDirectional::debugDisplay( castor::Size const & size, uint32_t index )
 	{
-		return 1;
+		Size displaySize{ 256u, 256u };
+		Position position{ int32_t( displaySize.getWidth() * index * 3 ), int32_t( displaySize.getHeight() * 3u ) };
+		getEngine()->getRenderSystem()->getCurrentContext()->renderVariance( position
+			, displaySize
+			, *m_shadowMap.getTexture() );
+		position = Position{ int32_t( displaySize.getWidth() * ( 2 + index * 3 ) ), int32_t( displaySize.getHeight() * 3u ) };
+		getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
+			, displaySize
+			, *m_linearMap.getTexture() );
 	}
 
-	Size ShadowMapDirectional::DoGetSize()const
+	void ShadowMapDirectional::doInitialise()
 	{
-		return m_shadowMap.GetTexture()->GetDimensions();
+		m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
+		m_varianceAttach = m_frameBuffer->createAttachment( m_shadowMap.getTexture() );
+		m_linearAttach = m_frameBuffer->createAttachment( m_linearMap.getTexture() );
+
+		m_frameBuffer->bind();
+		m_frameBuffer->attach( AttachmentPoint::eDepth, m_linearAttach, m_linearMap.getTexture()->getType() );
+		m_frameBuffer->attach( AttachmentPoint::eColour, 0u, m_varianceAttach, m_shadowMap.getTexture()->getType() );
+		ENSURE( m_frameBuffer->isComplete() );
+		m_frameBuffer->setDrawBuffers();
+		m_frameBuffer->unbind();
+
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, m_shadowMap.getTexture()->getDimensions()
+			, m_shadowMap.getTexture()->getPixelFormat()
+			, 5u );
 	}
 
-	void ShadowMapDirectional::DoInitialise()
+	void ShadowMapDirectional::doCleanup()
 	{
-		m_shadowMap.Initialise();
-		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-
-		auto l_texture = m_shadowMap.GetTexture();
-		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
-		m_depthAttach->SetTarget( l_texture->GetType() );
+		m_blur.reset();
+		m_linearAttach.reset();
+		m_varianceAttach.reset();
 	}
 
-	void ShadowMapDirectional::DoCleanup()
+	void ShadowMapDirectional::doUpdateFlags( PassFlags & passFlags
+		, TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		m_depthAttach.reset();
-		m_shadowMap.Cleanup();
+		addFlag( programFlags, ProgramFlag::eShadowMapDirectional );
 	}
 
-	ShadowMapPassSPtr ShadowMapDirectional::DoCreatePass( Light & p_light )const
+	glsl::Shader ShadowMapDirectional::doGetPixelShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return std::make_shared< ShadowMapPassDirectional >( *GetEngine(), p_light, *this );
-	}
-
-	void ShadowMapDirectional::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
-	{
-		AddFlag( p_programFlags, ProgramFlag::eShadowMapDirectional );
-	}
-
-	String ShadowMapDirectional::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		using namespace glsl;
+		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Fragment Intputs
-		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
-		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		Ubo shadowMap{ writer, ShadowMapPassDirectional::ShadowMapUbo, ShadowMapPassDirectional::UboBindingPoint };
+		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassDirectional::FarPlane ) );
+		shadowMap.end();
+
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ) );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
+		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+
+		auto materials = shader::createMaterials( writer, passFlags );
+		materials->declare();
 
 		// Fragment Outputs
-		auto pxl_fFragDepth( l_writer.GetFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
+		auto pxl_depth( writer.declFragData< Vec2 >( cuT( "pxl_depth" ), 0 ) );
+		auto pxl_linear( writer.declFragData< Float >( cuT( "pxl_linear" ), 1 ) );
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			Float l_fAlpha;
+			doDiscardAlpha( writer
+				, textureFlags
+				, alphaFunc
+				, vtx_material
+				, *materials );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
-			{
-				l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+			auto depth = writer.declLocale( cuT( "depth" )
+				, gl_FragCoord.z() );
+			pxl_depth.x() = depth;
+			pxl_depth.y() = pxl_depth.x() * pxl_depth.x();
+			pxl_linear = vtx_viewPosition.z() / c3d_farPlane;
 
-				IF( l_writer, l_fAlpha < 1.0_f )
-				{
-					l_writer.Discard();
-				}
-				FI;
-			}
-			else
-			{
-				pxl_fFragDepth = gl_FragCoord.z();
-			}
+			auto dx = writer.declLocale( cuT( "dx" )
+				, dFdx( depth ) );
+			auto dy = writer.declLocale( cuT( "dy" )
+				, dFdy( depth ) );
+			pxl_depth.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
 		} );
 
-		return l_writer.Finalise();
+		return writer.finalise();
 	}
 }

@@ -4,15 +4,19 @@
 #include "FrameBuffer/GlFrameBuffer.hpp"
 #include "Texture/GlTexture.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
-	GlCubeTextureFaceAttachment::GlCubeTextureFaceAttachment( OpenGl & p_gl, TextureLayoutSPtr p_texture, CubeMapFace p_face )
-		: TextureAttachment( p_texture )
+	GlCubeTextureFaceAttachment::GlCubeTextureFaceAttachment( OpenGl & p_gl
+		, TextureLayoutSPtr p_texture
+		, CubeMapFace p_face
+		, uint32_t p_mipLevel )
+		: TextureAttachment( p_texture, p_mipLevel )
 		, Holder( p_gl )
-		, m_glFace{ p_gl.Get( p_face ) }
+		, m_glFace{ p_gl.get( p_face ) }
+		, m_face{ p_face }
 	{
 	}
 
@@ -20,19 +24,33 @@ namespace GlRender
 	{
 	}
 
-	void GlCubeTextureFaceAttachment::DoAttach()
+	void GlCubeTextureFaceAttachment::doDownload( castor::Position const & p_offset
+		, castor::PxBufferBase & p_buffer )const
 	{
-		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
-		auto l_texture = std::static_pointer_cast< GlTexture >( GetTexture() );
+		getOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + getAttachmentIndex() ) );
+		auto format = getOpenGl().get( p_buffer.format() );
+		getOpenGl().ReadPixels( p_offset
+			, p_buffer.dimensions()
+			, format.Format
+			, format.Type
+			, p_buffer.ptr() );
+	}
 
-		switch ( l_texture->GetType() )
+	void GlCubeTextureFaceAttachment::doAttach()
+	{
+		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( getOpenGl().get( getAttachmentPoint() ) ) + getAttachmentIndex() );
+		auto texture = std::static_pointer_cast< GlTexture >( getTexture() );
+
+		switch ( texture->getType() )
 		{
+		case TextureType::eTwoDimensions:
 		case TextureType::eCube:
-			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
+			getOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, texture->getGlName(), getMipLevel() );
 			break;
 
 		case TextureType::eCubeArray:
-			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
+			REQUIRE( getMipLevel() == 0u );
+			getOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, texture->getGlName(), 0, getLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
 			break;
 
 		default:
@@ -42,7 +60,8 @@ namespace GlRender
 
 		if ( m_glStatus == GlFramebufferStatus::eIncompleteMissingAttachment )
 		{
-			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
+			m_glStatus = GlFramebufferStatus( getOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
+			REQUIRE( m_glStatus == GlFramebufferStatus::eComplete );
 
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{
@@ -55,20 +74,44 @@ namespace GlRender
 		}
 	}
 
-	void GlCubeTextureFaceAttachment::DoDetach()
+	void GlCubeTextureFaceAttachment::doDetach()
 	{
-		auto l_pTexture = GetTexture();
+		auto pTexture = getTexture();
 
 		if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 		{
-			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, 0, 0 );
+			getOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, 0, 0 );
 		}
 
 		m_glAttachmentPoint = GlAttachmentPoint::eNone;
 	}
 
-	void GlCubeTextureFaceAttachment::DoClear( BufferComponent p_component )const
+	void GlCubeTextureFaceAttachment::doClear( RgbaColour const & p_colour )const
 	{
-		GetOpenGl().Clear( GetOpenGl().GetComponents( p_component ) );
+		getOpenGl().ClearBuffer( GlComponent::eColour
+			, getAttachmentIndex()
+			, p_colour.constPtr() );
+	}
+
+	void GlCubeTextureFaceAttachment::doClear( float p_depth )const
+	{
+		getOpenGl().ClearBuffer( GlComponent::eDepth
+			, getAttachmentIndex()
+			, &p_depth );
+	}
+
+	void GlCubeTextureFaceAttachment::doClear( int p_stencil )const
+	{
+		getOpenGl().ClearBuffer( GlComponent::eStencil
+			, getAttachmentIndex()
+			, &p_stencil );
+	}
+
+	void GlCubeTextureFaceAttachment::doClear( float p_depth, int p_stencil )const
+	{
+		getOpenGl().ClearBuffer( GlComponent::eDepthStencil
+			, getAttachmentIndex()
+			, p_depth
+			, p_stencil );
 	}
 }

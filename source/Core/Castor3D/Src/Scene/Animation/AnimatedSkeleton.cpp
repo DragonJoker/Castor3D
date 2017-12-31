@@ -6,15 +6,20 @@
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
-#include "Shader/Uniform.hpp"
+#include "Shader/Uniform/Uniform.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	AnimatedSkeleton::AnimatedSkeleton( String const & p_name, Skeleton & p_skeleton )
-		: AnimatedObject{ p_name }
-		, m_skeleton{ p_skeleton }
+	AnimatedSkeleton::AnimatedSkeleton( String const & name
+		, Skeleton & skeleton
+		, Mesh & mesh
+		, Geometry & geometry )
+		: AnimatedObject{ name }
+		, m_skeleton{ skeleton }
+		, m_mesh{ mesh }
+		, m_geometry{ geometry }
 	{
 	}
 
@@ -22,76 +27,110 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedSkeleton::Update( std::chrono::milliseconds const & p_tslf )
+	void AnimatedSkeleton::update( Milliseconds const & elapsed )
 	{
-		for ( auto & l_animation : m_playingAnimations )
+		for ( auto & animation : m_playingAnimations )
 		{
-			l_animation.get().Update( p_tslf );
+			animation.get().update( elapsed );
 		}
 	}
 
-	void AnimatedSkeleton::FillShader( Uniform4x4r & p_variable )
+	void AnimatedSkeleton::fillShader( Uniform4x4r & variable )const
 	{
-		Skeleton & l_skeleton = m_skeleton;
-
+		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
 
 		if ( m_playingAnimations.empty() )
 		{
-			for ( auto l_bone : l_skeleton )
+			for ( auto bone : skeleton )
 			{
-				p_variable.SetValue( l_skeleton.GetGlobalInverseTransform(), i++ );
+				variable.setValue( skeleton.getGlobalInverseTransform(), i++ );
 			}
 		}
 		else
 		{
-			for ( auto l_bone : l_skeleton )
+			for ( auto bone : skeleton )
 			{
-				Matrix4x4r l_final{ 1.0_r };
+				Matrix4x4r final{ 1.0_r };
 
-				for ( auto & l_animation : m_playingAnimations )
+				for ( auto & animation : m_playingAnimations )
 				{
-					auto l_object = l_animation.get().GetObject( *l_bone );
+					auto object = animation.get().getObject( *bone );
 
-					if ( l_object )
+					if ( object )
 					{
-						l_final *= l_object->GetFinalTransform();
+						final *= object->getFinalTransform();
 					}
 				}
 
-				p_variable.SetValue( l_final, i++ );
+				variable.setValue( final, i++ );
 			}
 		}
 	}
 
-	void AnimatedSkeleton::DoAddAnimation( String const & p_name )
+	void AnimatedSkeleton::fillBuffer( uint8_t * buffer )const
 	{
-		auto l_it = m_animations.find( p_name );
+		Skeleton & skeleton = m_skeleton;
+		auto stride = 16u * sizeof( float );
 
-		if ( l_it == m_animations.end() )
+		if ( m_playingAnimations.empty() )
 		{
-			auto & l_animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
-			auto l_instance = std::make_unique< SkeletonAnimationInstance >( *this, l_animation );
-			m_animations.emplace( p_name, std::move( l_instance ) );
+			for ( auto bone : skeleton )
+			{
+				std::memcpy( buffer, skeleton.getGlobalInverseTransform().constPtr(), stride );
+				buffer += stride;
+			}
+		}
+		else
+		{
+			for ( auto bone : skeleton )
+			{
+				Matrix4x4r final{ 1.0_r };
+
+				for ( auto & animation : m_playingAnimations )
+				{
+					auto object = animation.get().getObject( *bone );
+
+					if ( object )
+					{
+						final *= object->getFinalTransform();
+					}
+				}
+
+				std::memcpy( buffer, final.constPtr (), stride );
+				buffer += stride;
+			}
 		}
 	}
 
-	void AnimatedSkeleton::DoStartAnimation( AnimationInstance & p_animation )
+	void AnimatedSkeleton::doAddAnimation( String const & name )
 	{
-		m_playingAnimations.push_back( static_cast< SkeletonAnimationInstance & >( p_animation ) );
+		auto it = m_animations.find( name );
+
+		if ( it == m_animations.end() )
+		{
+			auto & animation = static_cast< SkeletonAnimation & >( m_skeleton.getAnimation( name ) );
+			auto instance = std::make_unique< SkeletonAnimationInstance >( *this, animation );
+			m_animations.emplace( name, std::move( instance ) );
+		}
 	}
 
-	void AnimatedSkeleton::DoStopAnimation( AnimationInstance & p_animation )
+	void AnimatedSkeleton::doStartAnimation( AnimationInstance & animation )
+	{
+		m_playingAnimations.emplace_back( static_cast< SkeletonAnimationInstance & >( animation ) );
+	}
+
+	void AnimatedSkeleton::doStopAnimation( AnimationInstance & animation )
 	{
 		m_playingAnimations.erase( std::find_if( m_playingAnimations.begin()
 			, m_playingAnimations.end()
-			, [&p_animation]( std::reference_wrapper< SkeletonAnimationInstance > & p_instance )
+			, [&animation]( std::reference_wrapper< SkeletonAnimationInstance > & instance )
 			{
-				return &p_instance.get() == &static_cast< SkeletonAnimationInstance & >( p_animation );
+				return &instance.get() == &static_cast< SkeletonAnimationInstance & >( animation );
 			} ) );
 	}
 
-	void AnimatedSkeleton::DoClearAnimations()
+	void AnimatedSkeleton::doClearAnimations()
 	{
 		m_playingAnimations.clear();
 	}

@@ -2,186 +2,240 @@
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
-#include "Shader/PushUniform.hpp"
+#include "Shader/Ubos/BillboardUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/Uniform/PushUniform.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	inline void DoFillShaderDepthMaps( RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )
+	inline uint32_t doFillShaderShadowMaps( RenderPipeline & pipeline
+		, ShadowMapLightTypeArray & shadowMaps
+		, uint32_t & index )
 	{
-		if ( !p_depthMaps.empty() )
+		if ( getShadowType( pipeline.getFlags().m_sceneFlags ) != ShadowType::eNone )
 		{
-			auto l_index = p_pipeline.GetTexturesCount() + 1;
-			auto l_layer = 0u;
-
-			if ( GetShadowType( p_pipeline.GetFlags().m_sceneFlags ) != GLSL::ShadowType::eNone )
+			for ( auto i = 0u; i < shadowMaps.size(); ++i )
 			{
-				for ( auto & l_depthMap : p_depthMaps )
+				auto lightType = LightType( i );
+				auto layer = 0u;
+
+				for ( auto shadowMap : shadowMaps[i] )
 				{
-					switch ( l_depthMap.get().GetType() )
+					auto & unit = shadowMap.get().getTexture();
+					unit.getTexture()->bind( index );
+					unit.getSampler()->bind( index );
+
+					switch ( lightType )
 					{
-					case TextureType::eTwoDimensions:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetDirectionalShadowMapsVariable().SetValue( l_index++ );
+					case LightType::eDirectional:
+						pipeline.getDirectionalShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
-					case TextureType::eTwoDimensionsArray:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetSpotShadowMapsVariable().SetValue( l_index++ );
+					case LightType::eSpot:
+						pipeline.getSpotShadowMapsVariable().setValue( index++, layer++ );
 						break;
 
-					case TextureType::eCube:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++, l_layer++ );
-						break;
-
-					case TextureType::eCubeArray:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
+					case LightType::ePoint:
+						pipeline.getPointShadowMapsVariable().setValue( index++, layer++ );
+						++layer;
 						break;
 					}
 				}
 			}
 		}
+
+		return index;
 	}
 
-	inline void DoBindPass( PassRenderNodeUniforms & p_node
-		, Pass & p_pass
-		, Scene const & p_scene
-		, RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )
+	inline uint32_t doFillShaderPbrMaps( RenderPipeline & pipeline
+		, Scene & scene
+		, SceneNode & sceneNode
+		, uint32_t index )
 	{
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+		scene.getIbl( sceneNode ).getIrradiance().getTexture()->bind( index );
+		scene.getIbl( sceneNode ).getIrradiance().getSampler()->bind( index );
+		pipeline.getIrradianceMapVariable().setValue( index++ );
+		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getTexture()->bind( index );
+		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getSampler()->bind( index );
+		pipeline.getPrefilteredMapVariable().setValue( index++ );
+		scene.getSkybox().getIbl().getPrefilteredBrdf().getTexture()->bind( index );
+		scene.getSkybox().getIbl().getPrefilteredBrdf().getSampler()->bind( index );
+		pipeline.getBrdfMapVariable().setValue( index++ );
+		return index;
+	}
+
+	inline void doBindPass( SceneNode & sceneNode
+		, PassRenderNode & node
+		, Scene & scene
+		, RenderPipeline & pipeline
+		, ShadowMapLightTypeArray & shadowMaps
+		, ModelUbo & model
+		, EnvironmentMap *& envMap )
+	{
+		node.m_pass.bindTextures();
+
+		uint32_t index = pipeline.getTexturesCount() + MinTextureIndex;
+
+		if ( checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			p_scene.GetLightCache().BindLights();
+			doFillShaderShadowMaps( pipeline, shadowMaps, index );
 		}
 
-		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
-		p_pass.UpdateRenderNode( p_node );
-		p_node.m_passUbo.Update();
-		p_pass.BindTextures();
-
-		for ( auto & l_depthMap : p_depthMaps )
+		if ( ( checkFlag( pipeline.getFlags().m_passFlags, PassFlag::ePbrMetallicRoughness )
+				|| checkFlag( pipeline.getFlags().m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
+			&& checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			l_depthMap.get().Bind();
-		}
-	}
-
-	inline void DoUnbindPass( PassRenderNodeUniforms & p_node
-		, Pass & p_pass
-		, Scene const & p_scene
-		, RenderPipeline & p_pipeline
-		, DepthMapArray const & p_depthMaps )
-	{
-		for ( auto & l_depthMap : p_depthMaps )
-		{
-			l_depthMap.get().Unbind();
+			index = doFillShaderPbrMaps( pipeline
+				, scene
+				, sceneNode
+				, index );
 		}
 
-		p_pass.UnbindTextures();
-
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+		for ( auto pair : node.m_textures )
 		{
-			p_scene.GetLightCache().UnbindLights();
-		}
-	}
+			auto texture = pair.first;
+			auto & variable = pair.second;
 
-	inline void DoBindPassOpacityMap( PassRenderNodeUniforms & p_node
-		, Pass & p_pass )
-	{
-		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
-
-		if ( l_unit )
-		{
-			p_node.m_textures.find( l_unit->GetIndex() )->second.get().SetValue( 0 );
-			l_unit->GetTexture()->Bind( 0u );
-			l_unit->GetSampler()->Bind( 0u );
-		}
-	}
-
-	inline void DoUnbindPassOpacityMap( PassRenderNodeUniforms & p_node
-		, Pass & p_pass )
-	{
-		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
-
-		if ( l_unit )
-		{
-			l_unit->GetSampler()->Unbind( 0u );
-			l_unit->GetTexture()->Unbind( 0u );
-		}
-	}
-
-	template< typename DataType, typename InstanceType >
-	inline void DoRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & p_node )
-	{
-		auto & l_model = p_node.m_sceneNode.GetDerivedTransformationMatrix();
-		auto & l_view = p_node.m_pipeline.GetViewMatrix();
-		p_node.m_modelMatrix.SetValue( l_model );
-		p_node.m_normalMatrix.SetValue( Matrix4x4r{ ( l_model * l_view ).get_minor( 3, 3 ).invert().get_transposed() } );
-		p_node.m_modelMatrixUbo.Update();
-		p_node.m_data.Draw( p_node.m_buffers );
-	}
-
-	inline void DoRenderNodeNoPass( StaticRenderNode & p_node )
-	{
-		DoRenderObjectNode( p_node );
-	}
-
-	inline void DoRenderNodeNoPass( BillboardRenderNode & p_node )
-	{
-		auto const & l_dimensions = p_node.m_data.GetDimensions();
-		p_node.m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
-		p_node.m_billboardUbo.Update();
-		DoRenderObjectNode( p_node );
-	}
-
-	inline void DoRenderNodeNoPass( MorphingRenderNode & p_node )
-	{
-		if ( p_node.m_mesh.IsPlayingAnimation() )
-		{
-			auto l_submesh = p_node.m_mesh.GetPlayingAnimation().GetAnimationSubmesh( p_node.m_data.GetId() );
-
-			if ( l_submesh )
+			if ( texture )
 			{
-				l_submesh->FillShader( p_node.m_time );
+				variable.get().setValue( texture );
+			}
+		}
+
+		for ( auto & array : shadowMaps )
+		{
+			for ( auto & shadowMap : array )
+			{
+				shadowMap.get().getTexture().bind();
+			}
+		}
+
+		if ( node.m_pass.hasEnvironmentMapping() )
+		{
+			envMap = &scene.getEnvironmentMap( sceneNode );
+
+			if ( checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+			{
+				pipeline.getEnvironmentMapVariable().setValue( index );
+				envMap->getTexture().setIndex( index );
+				envMap->getTexture().bind();
+			}
+			else
+			{
+				model.setEnvMapIndex( envMap->getIndex() );
 			}
 		}
 		else
 		{
-			p_node.m_time.SetValue( 1.0f );
+			model.setEnvMapIndex( 0 );
+			envMap = nullptr;
 		}
-
-		p_node.m_morphingUbo.Update();
-		DoRenderObjectNode( p_node );
 	}
 
-	inline void DoRenderNodeNoPass( SkinningRenderNode & p_node )
+	inline void doBindPassOpacityMap( PassRenderNode & node
+		, Pass & pass )
 	{
-		p_node.m_skeleton.FillShader( p_node.m_bonesMatrix );
-		p_node.m_skinningUbo.Update();
-		DoRenderObjectNode( p_node );
+		auto unit = pass.getTextureUnit( TextureChannel::eOpacity );
+
+		if ( unit )
+		{
+			node.m_textures.find( unit->getIndex() )->second.get().setValue( 0 );
+			unit->getTexture()->bind( 0u );
+			unit->getSampler()->bind( 0u );
+		}
+	}
+
+	inline void doUnbindPassOpacityMap( PassRenderNode & node
+		, Pass & pass )
+	{
+		auto unit = pass.getTextureUnit( TextureChannel::eOpacity );
+
+		if ( unit )
+		{
+			unit->getSampler()->unbind( 0u );
+			unit->getTexture()->unbind( 0u );
+		}
+	}
+
+	template< typename DataType, typename InstanceType >
+	inline void doRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & node )
+	{
+		auto & model = node.m_sceneNode.getDerivedTransformationMatrix();
+		node.m_modelMatrixUbo.update( model );
+		node.m_data.draw( node.m_buffers );
+	}
+
+	inline void doRenderNodeNoPass( StaticRenderNode & node )
+	{
+		doRenderObjectNode( node );
+	}
+
+	inline void doRenderNodeNoPass( BillboardRenderNode & node )
+	{
+		node.m_billboardUbo.update( node.m_instance.getDimensions() );
+		doRenderObjectNode( node );
+	}
+
+	inline void doRenderNodeNoPass( MorphingRenderNode & node )
+	{
+		if ( node.m_mesh.isPlayingAnimation() )
+		{
+			auto submesh = node.m_mesh.getPlayingAnimation().getAnimationSubmesh( node.m_data.getId() );
+
+			if ( submesh )
+			{
+				node.m_morphingUbo.update( submesh->getCurrentFactor() );
+			}
+			else
+			{
+				node.m_morphingUbo.update( 1.0f );
+			}
+		}
+		else
+		{
+			node.m_morphingUbo.update( 1.0f );
+		}
+
+		doRenderObjectNode( node );
+	}
+
+	inline void doRenderNodeNoPass( SkinningRenderNode & node )
+	{
+		if ( !checkFlag( node.m_pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.m_skinningUbo.update( node.m_skeleton );
+		}
+
+		doRenderObjectNode( node );
 	}
 
 	template< typename NodeType >
-	inline void DoRenderNode( NodeType & p_node )
+	inline void doRenderNode( NodeType & node )
 	{
-		p_node.m_shadowReceiver.SetValue( p_node.m_instance.IsShadowReceiver() ? 1 : 0 );
-		p_node.m_modelUbo.Update();
-		DoRenderNodeNoPass( p_node );
+		node.m_modelUbo.update( node.m_instance.isShadowReceiver()
+			, node.m_passNode.m_pass.getId() );
+		doRenderNodeNoPass( node );
 	}
 }

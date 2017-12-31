@@ -6,13 +6,16 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	AnimatedMesh::AnimatedMesh( String const & p_name, Mesh & p_mesh )
-		: AnimatedObject{ p_name }
-		, m_mesh{ p_mesh }
+	AnimatedMesh::AnimatedMesh( String const & name
+		, Mesh & mesh
+		, Geometry & geometry )
+		: AnimatedObject{ name }
+		, m_mesh{ mesh }
+		, m_geometry{ geometry }
 	{
 	}
 
@@ -20,42 +23,42 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedMesh::Update( std::chrono::milliseconds const & p_tslf )
+	void AnimatedMesh::update( Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
 		{
-			m_playingAnimation->Update( p_tslf );
+			m_playingAnimation->update( elpased );
 		}
 	}
 
-	void AnimatedMesh::DoAddAnimation( String const & p_name )
+	void AnimatedMesh::doAddAnimation( String const & name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
-		if ( l_it == m_animations.end() )
+		if ( it == m_animations.end() )
 		{
-			if ( m_mesh.HasAnimation( p_name ) )
+			if ( m_mesh.hasAnimation( name ) )
 			{
-				auto & l_animation = static_cast< MeshAnimation & >( m_mesh.GetAnimation( p_name ) );
-				auto l_instance = std::make_unique< MeshAnimationInstance >( *this, l_animation );
-				m_animations.emplace( p_name, std::move( l_instance ) );
+				auto & animation = static_cast< MeshAnimation & >( m_mesh.getAnimation( name ) );
+				auto instance = std::make_unique< MeshAnimationInstance >( *this, animation );
+				m_animations.emplace( name, std::move( instance ) );
 			}
 		}
 	}
 
-	void AnimatedMesh::DoStartAnimation( AnimationInstance & p_animation )
+	void AnimatedMesh::doStartAnimation( AnimationInstance & animation )
 	{
 		REQUIRE( m_playingAnimation == nullptr );
-		m_playingAnimation = &static_cast< MeshAnimationInstance & >( p_animation );
+		m_playingAnimation = &static_cast< MeshAnimationInstance & >( animation );
 	}
 
-	void AnimatedMesh::DoStopAnimation( AnimationInstance & p_animation )
+	void AnimatedMesh::doStopAnimation( AnimationInstance & animation )
 	{
-		REQUIRE( m_playingAnimation == &p_animation );
+		REQUIRE( m_playingAnimation == &animation );
 		m_playingAnimation = nullptr;
 	}
 
-	void AnimatedMesh::DoClearAnimations()
+	void AnimatedMesh::doClearAnimations()
 	{
 		m_playingAnimation = nullptr;
 	}

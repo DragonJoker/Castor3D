@@ -1,12 +1,12 @@
 #include "AnimationInstance.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	AnimationInstance::AnimationInstance( AnimatedObject & p_object, Animation const & p_animation )
-		: OwnedBy< AnimatedObject >{ p_object }
-		, m_animation{ p_animation }
+	AnimationInstance::AnimationInstance( AnimatedObject & object, Animation & animation )
+		: OwnedBy< AnimatedObject >{ object }
+		, m_animation{ animation }
 	{
 	}
 
@@ -14,37 +14,37 @@ namespace Castor3D
 	{
 	}
 
-	void AnimationInstance::Update( std::chrono::milliseconds const & p_tslf )
+	void AnimationInstance::update( Milliseconds const & elapsed )
 	{
-		auto l_length = m_animation.GetLength();
-		auto l_scale = m_scale;
-		auto l_looped = m_looped;
+		auto length = m_animation.getLength();
+		auto scale = m_scale;
+		auto looped = m_looped;
 
-		if ( m_state != AnimationState::eStopped && l_length > 0_ms )
+		if ( m_state != AnimationState::eStopped && length > 0_ms )
 		{
 			if ( m_state == AnimationState::ePlaying )
 			{
-				m_currentTime += std::chrono::milliseconds( int64_t( p_tslf.count() * l_scale ) );
+				m_currentTime += Milliseconds( int64_t( elapsed.count() * scale ) );
 
-				if ( m_currentTime >= l_length )
+				if ( m_currentTime >= length )
 				{
-					if ( !l_looped )
+					if ( !looped )
 					{
 						m_state = AnimationState::ePaused;
-						m_currentTime = l_length;
+						m_currentTime = length;
 					}
 					else
 					{
 						do
 						{
-							m_currentTime -= l_length;
+							m_currentTime -= length;
 						}
-						while ( m_currentTime >= l_length );
+						while ( m_currentTime >= length );
 					}
 				}
 				else if ( m_currentTime < 0_ms )
 				{
-					if ( !l_looped )
+					if ( !looped )
 					{
 						m_state = AnimationState::ePaused;
 						m_currentTime = 0_ms;
@@ -53,23 +53,23 @@ namespace Castor3D
 					{
 						do
 						{
-							m_currentTime += m_animation.GetLength();
+							m_currentTime += m_animation.getLength();
 						}
 						while ( m_currentTime < 0_ms );
 					}
 				}
 			}
 
-			DoUpdate();
+			doUpdate();
 		}
 	}
 
-	void AnimationInstance::Play()
+	void AnimationInstance::play()
 	{
 		m_state = AnimationState::ePlaying;
 	}
 
-	void AnimationInstance::Pause()
+	void AnimationInstance::pause()
 	{
 		if ( m_state == AnimationState::ePlaying )
 		{
@@ -77,7 +77,7 @@ namespace Castor3D
 		}
 	}
 
-	void AnimationInstance::Stop()
+	void AnimationInstance::stop()
 	{
 		if ( m_state != AnimationState::eStopped )
 		{

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___MainFrame___
 #define ___MainFrame___
@@ -57,23 +38,24 @@ namespace CastorViewer
 		MainFrame( GuiCommon::SplashScreen * p_splashScreen, wxString const & title );
 		~MainFrame();
 
-		bool Initialise();
-		void LoadScene( wxString const & p_strFileName = wxEmptyString );
-		void ToggleFullScreen( bool p_fullscreen );
+		bool initialise();
+		void loadScene( wxString const & p_strFileName = wxEmptyString );
+		void toggleFullScreen( bool p_fullscreen );
+		void select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh );
 
 	private:
-		void DoInitialiseGUI();
-		bool DoInitialise3D();
-		bool DoInitialiseImages();
-		void DoPopulateStatusBar();
-		void DoPopulateToolBar();
-		void DoInitialisePerspectives();
-		void DoLogCallback( Castor::String const & p_strLog, Castor::LogType p_eLogType, bool p_newLine );
-		void DoCleanupScene();
-		void DoSaveFrame();
-		bool DoStartRecord();
-		void DoRecordFrame();
-		void DoStopRecord();
+		void doInitialiseGUI();
+		bool doInitialise3D();
+		bool doInitialiseImages();
+		void doPopulateStatusBar();
+		void doPopulateToolBar();
+		void doInitialisePerspectives();
+		void doLogCallback( castor::String const & p_strLog, castor::LogType p_eLogType, bool p_newLine );
+		void doCleanupScene();
+		void doSaveFrame();
+		bool doStartRecord();
+		void doRecordFrame();
+		void doStopRecord();
 
 	private:
 		DECLARE_EVENT_TABLE()
@@ -97,24 +79,25 @@ namespace CastorViewer
 		void OnStop( wxCommandEvent & p_event );
 
 	private:
-		int m_iLogsHeight;
-		int m_iPropertiesWidth;
+		int m_logsHeight;
+		int m_propertiesWidth;
 		wxAuiManager m_auiManager;
-		RenderPanel * m_pRenderPanel;
+		RenderPanel * m_renderPanel;
 		wxTimer * m_timer;
 		wxAuiToolBar * m_toolBar;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
-		GuiCommon::PropertiesHolder * m_propertiesContainer;
+		GuiCommon::PropertiesHolder * m_propertiesHolder;
+		GuiCommon::PropertiesContainer * m_propertiesContainer;
 		wxListBox * m_messageLog;
 		wxListBox * m_errorLog;
 		GuiCommon::SplashScreen * m_splashScreen;
 		GuiCommon::SceneObjectsList * m_sceneObjectsList;
 		GuiCommon::MaterialsList * m_materialsList;
-		Castor3D::SceneWPtr m_pMainScene;
-		Castor3D::CameraWPtr m_pMainCamera;
-		Castor3D::SceneNodeWPtr m_sceneNode;
-		Castor::Path m_strFilePath;
+		castor3d::SceneWPtr m_mainScene;
+		castor3d::CameraWPtr m_mainCamera;
+		castor3d::SceneNodeWPtr m_sceneNode;
+		castor::Path m_filePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
 		wxTimer * m_timerErr;

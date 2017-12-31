@@ -6,15 +6,15 @@
 
 #include <android/cpufeatures/cpu-features.h>
 
-namespace Castor
+namespace castor
 {
 	namespace Platform
 	{
-		void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
 		{
 		}
 
-		uint32_t get_core_count()
+		uint32_t getCoreCount()
 		{
 			android_getCpuCount();
 		}

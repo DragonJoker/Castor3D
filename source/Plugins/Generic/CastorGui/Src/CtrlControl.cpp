@@ -13,199 +13,216 @@
 #include <Overlay/TextOverlay.hpp>
 #include <Texture/TextureUnit.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace CastorGui
 {
-	Control::Control( ControlType p_type, Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	Control::Control( ControlType p_type
+		, String const & p_name
+		, Engine & engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
 		: NonClientEventHandler< Control >( p_type != ControlType::eStatic )
+		, Named( p_name )
 		, m_type( p_type )
 		, m_id( p_id )
 		, m_position( p_position )
 		, m_size( p_size )
 		, m_style( p_style )
-		, m_visible( p_visible )
 		, m_borders( 0, 0, 0, 0 )
 		, m_cursor( MouseCursor::eHand )
 		, m_parent( p_parent )
-		, m_engine( p_engine )
+		, m_engine( engine )
 	{
-		OverlaySPtr l_parentOv;
-		ControlRPtr l_parent = GetParent();
+		OverlaySPtr parentOv;
+		ControlRPtr parent = getParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
-			l_parentOv = l_parent->GetBackground()->GetOverlay().shared_from_this();
+			parentOv = parent->getBackground()->getOverlay().shared_from_this();
 		}
 
-		OverlaySPtr l_overlay = GetEngine()->GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), OverlayType::eBorderPanel, nullptr, l_parentOv );
-		l_overlay->SetPixelPosition( GetPosition() );
-		l_overlay->SetPixelSize( GetSize() );
-		BorderPanelOverlaySPtr l_panel = l_overlay->GetBorderPanelOverlay();
-		l_panel->SetBorderPosition( BorderPosition::eInternal );
-		l_panel->SetVisible( m_visible );
-		m_background = l_panel;
+		OverlaySPtr overlay = getEngine().getOverlayCache().add( p_name, OverlayType::eBorderPanel, nullptr, parentOv );
+		overlay->setPixelPosition( getPosition() );
+		overlay->setPixelSize( getSize() );
+		BorderPanelOverlaySPtr panel = overlay->getBorderPanelOverlay();
+		panel->setBorderPosition( BorderPosition::eInternal );
+		panel->setVisible( p_visible );
+		m_background = panel;
 	}
 
 	Control::~Control()
 	{
 	}
 
-	void Control::Create( ControlsManagerSPtr p_ctrlManager )
+	void Control::create( ControlsManagerSPtr p_ctrlManager )
 	{
 		m_ctrlManager = p_ctrlManager;
-		ControlRPtr l_parent = GetParent();
+		ControlRPtr parent = getParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
-			l_parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
+			parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
 		}
 
-		BorderPanelOverlaySPtr l_panel = GetBackground();
-		l_panel->SetMaterial( GetBackgroundMaterial() );
-		l_panel->SetBorderMaterial( GetForegroundMaterial() );
-		l_panel->SetBorderPixelSize( m_borders );
-		DoCreate();
+		BorderPanelOverlaySPtr panel = getBackground();
+		panel->setMaterial( getBackgroundMaterial() );
+		panel->setBorderMaterial( getForegroundMaterial() );
+		panel->setBorderPixelSize( m_borders );
+		doCreate();
 	}
 
-	void Control::Destroy()
+	void Control::destroy()
 	{
-		DoDestroy();
+		doDestroy();
 	}
 
-	void Control::SetBackgroundBorders( Rectangle const & p_value )
+	void Control::setBackgroundBorders( Rectangle const & p_value )
 	{
 		m_borders = p_value;
-		BorderPanelOverlaySPtr l_panel = GetBackground();
+		BorderPanelOverlaySPtr panel = getBackground();
 
-		if ( l_panel )
+		if ( panel )
 		{
-			l_panel->SetBorderPixelSize( m_borders );
+			panel->setBorderPixelSize( m_borders );
 		}
 	}
 
-	void Control::SetPosition( Position const & p_value )
+	void Control::setPosition( Position const & p_value )
 	{
 		m_position = p_value;
-		BorderPanelOverlaySPtr l_panel = GetBackground();
+		BorderPanelOverlaySPtr panel = getBackground();
 
-		if ( l_panel )
+		if ( panel )
 		{
-			l_panel->SetPixelPosition( m_position );
-			l_panel.reset();
+			panel->setPixelPosition( m_position );
+			panel.reset();
 		}
 
-		DoSetPosition( m_position );
+		doSetPosition( m_position );
 	}
 
-	Position Control::GetAbsolutePosition()const
+	Position Control::getAbsolutePosition()const
 	{
-		ControlRPtr l_parent = GetParent();
-		Position l_return = m_position;
+		ControlRPtr parent = getParent();
+		Position result = m_position;
 
-		if ( l_parent )
+		if ( parent )
 		{
-			l_return += l_parent->GetAbsolutePosition();
+			result += parent->getAbsolutePosition();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void Control::SetSize( Size const & p_value )
+	void Control::setSize( Size const & p_value )
 	{
 		m_size = p_value;
-		BorderPanelOverlaySPtr l_panel = GetBackground();
+		BorderPanelOverlaySPtr panel = getBackground();
 
-		if ( l_panel )
+		if ( panel )
 		{
-			l_panel->SetPixelSize( m_size );
-			l_panel.reset();
+			panel->setPixelSize( m_size );
+			panel.reset();
 		}
 
-		DoSetSize( m_size );
+		doSetSize( m_size );
 	}
 
-	void Control::SetBackgroundMaterial( MaterialSPtr p_value )
+	void Control::setBackgroundMaterial( MaterialSPtr p_value )
 	{
 		REQUIRE( p_value );
 		m_backgroundMaterial = p_value;
-		BorderPanelOverlaySPtr l_panel = GetBackground();
+		BorderPanelOverlaySPtr panel = getBackground();
 
-		if ( l_panel )
+		if ( panel )
 		{
-			l_panel->SetMaterial( GetBackgroundMaterial() );
-			l_panel.reset();
+			panel->setMaterial( getBackgroundMaterial() );
+			panel.reset();
 		}
 
-		DoSetBackgroundMaterial( GetBackgroundMaterial() );
+		doSetBackgroundMaterial( getBackgroundMaterial() );
 	}
 
-	void Control::SetForegroundMaterial( MaterialSPtr p_value )
+	void Control::setForegroundMaterial( MaterialSPtr p_value )
 	{
 		m_foregroundMaterial = p_value;
-		BorderPanelOverlaySPtr l_panel = GetBackground();
+		BorderPanelOverlaySPtr panel = getBackground();
 
-		if ( l_panel )
+		if ( panel )
 		{
-			l_panel->SetBorderMaterial( GetForegroundMaterial() );
-			l_panel.reset();
+			panel->setBorderMaterial( getForegroundMaterial() );
+			panel.reset();
 		}
 
-		DoSetForegroundMaterial( GetForegroundMaterial() );
+		doSetForegroundMaterial( getForegroundMaterial() );
 	}
 
-	void Control::SetVisible( bool p_value )
+	void Control::setCaption( castor::String const & p_caption )
 	{
-		m_visible = p_value;
-		BorderPanelOverlaySPtr l_panel = GetBackground();
+		doSetCaption( p_caption );
+	}
 
-		if ( l_panel )
+	void Control::setVisible( bool p_value )
+	{
+		BorderPanelOverlaySPtr panel = getBackground();
+		REQUIRE( panel );
+		panel->setVisible( p_value );
+		panel.reset();
+		doSetVisible( p_value );
+	}
+
+	bool Control::isVisible()const
+	{
+		BorderPanelOverlaySPtr panel = getBackground();
+		REQUIRE( panel );
+		bool visible = panel->isVisible();
+		ControlRPtr parent = getParent();
+
+		if ( visible && parent )
 		{
-			l_panel->SetVisible( m_visible );
-			l_panel.reset();
+			visible = parent->isVisible();
 		}
 
-		DoSetVisible( m_visible );
+		return visible;
 	}
 
-	bool Control::IsVisible()const
+	ControlSPtr Control::getChildControl( uint32_t p_id )
 	{
-		bool l_visible = m_visible;
-		ControlRPtr l_parent = GetParent();
-
-		if ( l_visible && l_parent )
+		auto it = std::find_if( std::begin( m_children ), std::end( m_children ), [&p_id]( ControlWPtr p_ctrl )
 		{
-			l_visible = l_parent->IsVisible();
-		}
-
-		return l_visible;
-	}
-
-	ControlSPtr Control::GetChildControl( uint32_t p_id )
-	{
-		auto l_it = std::find_if( std::begin( m_children ), std::end( m_children ), [&p_id]( ControlWPtr p_ctrl )
-		{
-			return p_ctrl.expired() ? false : p_ctrl.lock()->GetId() == p_id;
+			return p_ctrl.expired() ? false : p_ctrl.lock()->getId() == p_id;
 		} );
 
-		if ( l_it == m_children.end() )
+		if ( it == m_children.end() )
 		{
 			CASTOR_EXCEPTION( "This control does not exist in my childs" );
 		}
 
-		return l_it->lock();
+		return it->lock();
 	}
 
-	void Control::AddStyle( uint32_t p_style )
+	void Control::addStyle( uint32_t p_style )
 	{
 		m_style |= p_style;
-		DoUpdateStyle();
+		doUpdateStyle();
 	}
 
-	void Control::RemoveStyle( uint32_t p_style )
+	void Control::removeStyle( uint32_t p_style )
 	{
 		m_style &= ~p_style;
-		DoUpdateStyle();
+		doUpdateStyle();
+	}
+
+	bool Control::doIsVisible()const
+	{
+		auto panel = getBackground();
+		REQUIRE( panel );
+		return panel->isVisible();
 	}
 }

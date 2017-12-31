@@ -245,17 +245,12 @@ language "glsl"
 			c3d_fMatOpacity
 			c3d_sLights
 			c3d_iLightsCount
-			position
-			normal
-			bitangent
-			tangent
-			texture
-			colour
-			bone_ids0
-			bone_ids1
-			weights0
-			weights1
-			transform
+			c3d_fCameraFarPlane
+			c3d_iFogType
+			c3d_fFogDensity
+			c3d_shadowReceiver
+			c3d_materialIndex
+			c3d_envMapIndex
 			c3d_mtxProjection
 			c3d_mtxModel
 			c3d_mtxView
@@ -269,8 +264,22 @@ language "glsl"
 			c3d_mtxTexture2
 			c3d_mtxTexture3
 			c3d_mtxBones
-			c3d_v4Camera;
-			vtx_vertex
+			c3d_v4Camera
+			c3d_materials
+			position
+			normal
+			bitangent
+			tangent
+			texture
+			colour
+			bone_ids0
+			bone_ids1
+			weights0
+			weights1
+			transform
+			vtx_position
+			vtx_tangentSpaceFragPosition
+			vtx_tangentSpaceViewPosition
 			vtx_normal
 			vtx_tangent
 			vtx_bitangent
@@ -279,6 +288,8 @@ language "glsl"
 			vtx_mtxView
 			vtx_eyeVec
 			vtx_mtxTBN
+			vtx_instance
+			vtx_material
 			out_v4Position
 			out_v4Diffuse
 			out_v4Normals
@@ -286,6 +297,10 @@ language "glsl"
 			out_v4Bitangent
 			out_v4Specular
 			out_FragColor
+			out_c3dNormal
+			out_c3dDiffuse
+			out_c3dSpecular
+			out_c3dEmissive
 		}
 	}
 	section

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_LOOP_VERTEX_H___
 #define ___C3D_LOOP_VERTEX_H___
@@ -37,27 +18,27 @@ namespace Loop
 	class Vertex
 	{
 	private:
-		Castor3D::BufferElementGroupSPtr m_ptPoint;
+		castor3d::BufferElementGroupSPtr m_ptPoint;
 		EdgePtrUIntMap m_mapEdges;
 
 	public:
-		Vertex( Castor3D::BufferElementGroupSPtr p_point );
+		explicit Vertex( castor3d::BufferElementGroupSPtr p_point );
 		~Vertex();
 
-		bool HasEdge( uint32_t p_index );
-		EdgeSPtr GetEdge( uint32_t p_index );
-		void AddEdge( EdgeSPtr p_pEdge, uint32_t p_index );
-		void RemoveEdge( uint32_t p_index );
+		bool hasEdge( uint32_t p_index );
+		EdgeSPtr getEdge( uint32_t p_index );
+		void addEdge( EdgeSPtr p_pEdge, uint32_t p_index );
+		void removeEdge( uint32_t p_index );
 
 		/**@name Accessors */
 		//@{
-		inline Castor3D::BufferElementGroupSPtr GetPoint()const
+		inline castor3d::BufferElementGroupSPtr getPoint()const
 		{
 			return m_ptPoint;
 		}
-		inline uint32_t GetIndex()const
+		inline uint32_t getIndex()const
 		{
-			return m_ptPoint->GetIndex();
+			return m_ptPoint->getIndex();
 		}
 		inline uint32_t size()const
 		{
@@ -91,6 +72,6 @@ namespace Loop
 	};
 }
 
-Castor::String & operator << ( Castor::String & p_stream, Loop::Vertex const & p_vertex );
+castor::String & operator << ( castor::String & p_stream, Loop::Vertex const & p_vertex );
 
 #endif

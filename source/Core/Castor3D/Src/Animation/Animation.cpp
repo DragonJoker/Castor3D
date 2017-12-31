@@ -1,33 +1,39 @@
 #include "Animation.hpp"
 
+#include "AnimationKeyFrame.hpp"
 #include "Skeleton/SkeletonAnimation.hpp"
+#include "Mesh/MeshAnimation.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< Animation >::DoWrite( Animation const & p_obj )
+	bool BinaryWriter< Animation >::doWrite( Animation const & obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( real( p_obj.GetLength().count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
+			result = doWriteChunk( real( obj.getLength().count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			switch ( p_obj.GetType() )
+			switch ( obj.getType() )
 			{
 			case AnimationType::eSkeleton:
-				BinaryWriter< SkeletonAnimation >{}.Write( static_cast< SkeletonAnimation const & >( p_obj ), m_chunk );
+				BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( obj ), m_chunk );
+				break;
+
+			case AnimationType::eMesh:
+				BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( obj ), m_chunk );
 				break;
 
 			default:
@@ -35,52 +41,58 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	bool BinaryParser< Animation >::DoParse( Animation & p_obj )
+	bool BinaryParser< Animation >::doParse( Animation & obj )
 	{
-		bool l_return = true;
-		String l_name;
-		BinaryChunk l_chunk;
-		real l_length{ 0.0_r };
+		bool result = true;
+		String name;
+		BinaryChunk chunk;
+		real length{ 0.0_r };
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				result = doParseChunk( name, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_obj.m_name = l_name;
+					obj.m_name = name;
 				}
 
 				break;
 
 			case ChunkType::eAnimLength:
-				l_return = DoParseChunk( l_length, l_chunk );
-				p_obj.m_length = std::chrono::milliseconds( uint64_t( l_length * 1000 ) );
+				result = doParseChunk( length, chunk );
+				obj.m_length = Milliseconds( uint64_t( length * 1000 ) );
 				break;
 
 			case ChunkType::eSkeletonAnimation:
-				BinaryParser< SkeletonAnimation >{}.Parse( static_cast< SkeletonAnimation & >( p_obj ), l_chunk );
+				BinaryParser< SkeletonAnimation >{}.parse( static_cast< SkeletonAnimation & >( obj ), chunk );
+				break;
+
+			case ChunkType::eMeshAnimation:
+				BinaryParser< MeshAnimation >{}.parse( static_cast< MeshAnimation & >( obj ), chunk );
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	Animation::Animation( AnimationType p_type, Animable & p_animable, String const & p_name )
-		: Named{ p_name }
-		, OwnedBy< Animable >{ p_animable }
-		, m_type{ p_type }
+	Animation::Animation( AnimationType type
+		, Animable & animable
+		, String const & name )
+		: Named{ name }
+		, OwnedBy< Animable >{ animable }
+		, m_type{ type }
 	{
 	}
 
@@ -88,9 +100,59 @@ namespace Castor3D
 	{
 	}
 
-	void Animation::UpdateLength()
+	void Animation::addKeyFrame( AnimationKeyFrameUPtr && keyFrame )
 	{
-		DoUpdateLength();
+		auto it = std::lower_bound( m_keyframes.begin()
+			, m_keyframes.end()
+			, keyFrame
+			, []( AnimationKeyFrameUPtr const & lhs, AnimationKeyFrameUPtr const & rhs )
+			{
+				return lhs->getTimeIndex() < rhs->getTimeIndex();
+			} );
+		keyFrame->initialise();
+		m_keyframes.insert( it, std::move( keyFrame ) );
+		updateLength();
+	}
+
+	AnimationKeyFrameArray::iterator Animation::find( castor::Milliseconds const & time )
+	{
+		return std::find_if( m_keyframes.begin()
+			, m_keyframes.end()
+			, [&time]( AnimationKeyFrameUPtr const & lookup )
+			{
+				return lookup->getTimeIndex() == time;
+			} );
+	}
+
+	void Animation::findKeyFrame( Milliseconds const & time
+		, AnimationKeyFrameArray::iterator & prv
+		, AnimationKeyFrameArray::iterator & cur )const
+	{
+		while ( prv != m_keyframes.begin() && ( *prv )->getTimeIndex() >= time )
+		{
+			// Time has gone too fast backward.
+			--prv;
+			--cur;
+		}
+
+		auto end = ( m_keyframes.end() - 1 );
+
+		while ( cur != end && ( *cur )->getTimeIndex() < time )
+		{
+			// Time has gone too fast forward.
+			++prv;
+			++cur;
+		}
+
+		ENSURE( prv != cur );
+	}
+
+	void Animation::updateLength()
+	{
+		for ( auto const & keyFrame : m_keyframes )
+		{
+			m_length = std::max( m_length, keyFrame->getTimeIndex() );
+		}
 	}
 
 	//*************************************************************************************************

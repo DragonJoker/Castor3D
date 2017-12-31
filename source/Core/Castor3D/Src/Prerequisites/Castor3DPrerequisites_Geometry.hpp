@@ -1,29 +1,10 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_GEOMETRY_H___
 #define ___C3D_PREREQUISITES_GEOMETRY_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Geometry */
 	//@{
@@ -66,11 +47,12 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Vertex );
 	DECLARE_SMART_PTR( BufferElementGroup );
 
-	template< typename T > class Pattern;
-	typedef Pattern< Vertex > VertexPattern;
-	typedef Pattern< Castor::Point3r > Point3rPattern;
-	typedef Pattern< VertexSPtr > VertexPtrPattern;
-	typedef Pattern< Castor::Point3rSPtr > Point3rPtrPattern;
+	template< typename T >
+	class Pattern;
+	using VertexPattern = Pattern< Vertex >;
+	using Point3rPattern = Pattern< castor::Point3r >;
+	using VertexPtrPattern = Pattern< VertexSPtr >;
+	using Point3rPtrPattern = Pattern< castor::Point3rSPtr >;
 
 	struct FaceGroup;
 	class Face;
@@ -78,6 +60,13 @@ namespace Castor3D
 	class Mesh;
 	class MeshGenerator;
 	class Submesh;
+	class SubmeshComponent;
+	class InstantiationComponent;
+	class BonesComponent;
+	class BonesInstantiationComponent;
+	class MorphComponent;
+	class IndexMapping;
+	class TriFaceMapping;
 	class Cone;
 	class Cylinder;
 	class Icosahedron;
@@ -103,6 +92,10 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Mesh );
 	DECLARE_SMART_PTR( MeshGenerator );
 	DECLARE_SMART_PTR( Submesh );
+	DECLARE_SMART_PTR( SubmeshComponent );
+	DECLARE_SMART_PTR( InstantiationComponent );
+	DECLARE_SMART_PTR( BonesInstantiationComponent );
+	DECLARE_SMART_PTR( IndexMapping );
 	DECLARE_SMART_PTR( Cone );
 	DECLARE_SMART_PTR( Cylinder );
 	DECLARE_SMART_PTR( Icosahedron );
@@ -139,20 +132,21 @@ namespace Castor3D
 	//! Vertex pointer list
 	DECLARE_LIST( VertexSPtr, VertexPtr );
 	//! Mesh pointer array
-	DECLARE_MAP( Castor::String, MeshSPtr, MeshPtrStr );
+	DECLARE_MAP( castor::String, MeshSPtr, MeshPtrStr );
 	//! MovableObject pointer map, sorted by name
-	DECLARE_MAP( Castor::String, MovableObjectSPtr, MovableObjectPtrStr );
+	DECLARE_MAP( castor::String, MovableObjectSPtr, MovableObjectPtrStr );
 	//! Geometry pointer map, sorted by name
-	DECLARE_MAP( Castor::String, GeometrySPtr, GeometryPtrStr );
+	DECLARE_MAP( castor::String, GeometrySPtr, GeometryPtrStr );
 	DECLARE_MAP( uint32_t, int, IntUInt );
-	DECLARE_MAP( Castor::String, SubmeshSPtr, SubmeshPtrStr );
-	DECLARE_MAP( Castor::String, int, IntStr );
+	DECLARE_MAP( castor::String, SubmeshSPtr, SubmeshPtrStr );
+	DECLARE_MAP( castor::String, int, IntStr );
 	//! Bone pointer array
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
 	//! Bone pointer map sorted by name
-	DECLARE_MAP( Castor::String, BoneSPtr, BonePtrStr );
+	DECLARE_MAP( castor::String, BoneSPtr, BonePtrStr );
 	//! BonedVertex pointer array
 	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
+	DECLARE_MAP( castor::String, SubmeshComponentSPtr, SubmeshComponentStr );
 
 	//@}
 }

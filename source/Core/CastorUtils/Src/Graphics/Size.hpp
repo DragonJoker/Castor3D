@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_SIZE_H___
 #define ___CASTOR_SIZE_H___
 
 #include "Math/Coords.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -89,7 +70,7 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Size & operator =( Size const & p_obj );
+		CU_API Size & operator=( Size const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -100,10 +81,10 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Size & operator =( Size && p_obj );
+		CU_API Size & operator=( Size && p_obj );
 		/**
 		 *\~english
-		 *\brief		Sets the size values
+		 *\brief		sets the size values
 		 *\param[in]	p_width, p_height	The dimensions
 		 *\~french
 		 *\brief		Définit la taille
@@ -118,7 +99,7 @@ namespace Castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur
 		 */
-		inline uint32_t width()const
+		inline uint32_t getWidth()const
 		{
 			return m_data.size.cx;
 		}
@@ -130,7 +111,7 @@ namespace Castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur
 		 */
-		inline uint32_t & width()
+		inline uint32_t & getWidth()
 		{
 			return m_data.size.cx;
 		}
@@ -142,7 +123,7 @@ namespace Castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur
 		 */
-		inline uint32_t height()const
+		inline uint32_t getHeight()const
 		{
 			return m_data.size.cy;
 		}
@@ -154,7 +135,7 @@ namespace Castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur
 		 */
-		inline uint32_t & height()
+		inline uint32_t & getHeight()
 		{
 			return m_data.size.cy;
 		}
@@ -171,7 +152,7 @@ namespace Castor
 		CU_API void grow( int32_t p_cx, int32_t p_cy );
 
 		using BaseType::ptr;
-		using BaseType::const_ptr;
+		using BaseType::constPtr;
 
 	private:
 		union
@@ -180,8 +161,8 @@ namespace Castor
 			{
 				uint32_t cx;
 				uint32_t cy;
-			}			size;
-			uint32_t	buffer[2];
+			} size;
+			uint32_t buffer[2];
 		}	m_data;
 	};
 	/**
@@ -194,7 +175,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les tailles à comparer
 	 *\return		\p true si les tailles ont les mêmes dimensions
 	 */
-	CU_API bool operator ==( Size const & p_a, Size const & p_b );
+	CU_API bool operator==( Size const & p_a, Size const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -205,7 +186,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les tailles à comparer
 	 *\return		\p false si les tailles ont les mêmes dimensions
 	 */
-	CU_API bool operator !=( Size const & p_a, Size const & p_b );
+	CU_API bool operator!=( Size const & p_a, Size const & p_b );
 }
 
 #endif

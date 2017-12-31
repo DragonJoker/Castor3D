@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3DAssimp___
 #define ___C3DAssimp___
@@ -30,10 +11,10 @@ SOFTWARE.
 #include <Engine.hpp>
 
 #include <Animation/Animation.hpp>
-#include <Animation/KeyFrame.hpp>
+#include <Animation/AnimationKeyFrame.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
-#include <Mesh/Face.hpp>
+#include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
@@ -58,6 +39,8 @@ SOFTWARE.
 
 namespace C3dAssimp
 {
+	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
+	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
 	/*!
 	\author		Sylvain DOREMUS
 	\date		25/08/2010
@@ -67,35 +50,71 @@ namespace C3dAssimp
 	\brief		Importeur de fichiers ASE
 	*/
 	class AssimpImporter
-		: public Castor3D::Importer
+		: public castor3d::Importer
 	{
 	public:
-		AssimpImporter( Castor3D::Engine & p_engine );
+		explicit AssimpImporter( castor3d::Engine & engine );
 		~AssimpImporter();
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static castor3d::ImporterUPtr create( castor3d::Engine & engine );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportScene
+		 *\copydoc		castor3d::Importer::doImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		bool doImportScene( castor3d::Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 *\copydoc		castor3d::Importer::doImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 
-		bool DoProcessMesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor3D::Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Castor3D::Submesh & p_submesh );
-		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene, aiMaterial const & p_aiMaterial );
-		void DoProcessBones( Castor3D::Skeleton & p_pSkeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< Castor3D::VertexBoneData > & p_arrayVertices );
-		void DoProcessAnimation( Castor::String const & p_name, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation );
-		void DoProcessAnimationNodes( Castor3D::SkeletonAnimation & p_animation, int64_t p_ticksPerMilliSecond, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, Castor3D::SkeletonAnimationObjectSPtr p_object );
-		void DoProcessAnimationMeshes( Castor3D::Mesh & p_mesh, Castor3D::Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim );
+		bool doProcessMesh( castor3d::Scene & p_scene
+			, castor3d::Mesh & p_mesh
+			, castor3d::Skeleton & p_skeleton
+			, aiMesh const & p_aiMesh
+			, aiScene const & p_aiScene
+			, castor3d::Submesh & p_submesh );
+		castor3d::MaterialSPtr doProcessMaterial( castor3d::Scene & p_scene
+			, aiMaterial const & p_aiMaterial );
+		castor3d::BoneSPtr doAddBone( castor::String const & p_name
+			, castor::Matrix4x4r const & p_offset
+			, castor3d::Skeleton & p_skeleton
+			, uint32_t & p_index );
+		void doProcessBones( castor3d::Skeleton & p_pSkeleton
+			, aiBone const * const * p_aiBones
+			, uint32_t p_count
+			, std::vector< castor3d::VertexBoneData > & p_arrayVertices );
+		void doProcessAnimation( castor3d::Mesh & p_mesh
+			, castor::String const & p_name
+			, castor3d::Skeleton & p_skeleton
+			, aiNode const & p_aiNode
+			, aiAnimation const & p_aiAnimation );
+		void doProcessAnimationNodes( castor3d::Mesh & p_mesh
+			, castor3d::SkeletonAnimation & p_animation
+			, int64_t p_ticksPerMilliSecond
+			, castor3d::Skeleton & p_skeleton
+			, aiNode const & p_aiNode
+			, aiAnimation const & p_aiAnimation
+			, castor3d::SkeletonAnimationObjectSPtr p_object
+			, SkeletonAnimationKeyFrameMap & keyFrames
+			, SkeletonAnimationObjectSet & notAnimated );
+		void doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
+			, int64_t ticksPerMilliSecond
+			, castor3d::SkeletonAnimationObject & object
+			, castor3d::SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes );
+		void doProcessAnimationMeshes( castor3d::Mesh & p_mesh
+			, castor3d::Submesh & p_submesh
+			, aiMesh const & p_aiMesh
+			, aiMeshAnim const & p_aiMeshAnim );
+
+	public:
+		static castor::String const Name;
 
 	private:
 		int m_anonymous;
-		std::map< Castor::String, uint32_t > m_mapBoneByID;
-		std::vector< Castor3D::BoneSPtr > m_arrayBones;
+		std::map< castor::String, uint32_t > m_mapBoneByID;
+		std::vector< castor3d::BoneSPtr > m_arrayBones;
 	};
 }
 

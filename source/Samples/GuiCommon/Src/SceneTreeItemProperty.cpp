@@ -1,29 +1,32 @@
-#include "SceneTreeItemProperty.hpp"
+﻿#include "SceneTreeItemProperty.hpp"
 
+#include <Render/RenderLoop.hpp>
 #include <Scene/Scene.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
 	namespace
 	{
 		static wxString PROPERTY_CATEGORY_SCENE = _( "Scene: " );
+		static wxString PROPERTY_SCENE_DEBUG_OVERLAYS = _( "Debug overlays" );
 		static wxString PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
 		static wxString PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
 		static wxString PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
 	}
 
-	SceneTreeItemProperty::SceneTreeItemProperty( bool p_editable, SceneSPtr p_scene )
-		: TreeItemProperty( p_scene->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SCENE )
-		, m_scene( p_scene )
+	SceneTreeItemProperty::SceneTreeItemProperty( bool editable, Scene & scene )
+		: TreeItemProperty( scene.getEngine(), editable, ePROPERTY_DATA_TYPE_SCENE )
+		, m_scene( scene )
 	{
 		PROPERTY_CATEGORY_SCENE = _( "Scene: " );
+		PROPERTY_SCENE_DEBUG_OVERLAYS = _( "Debug overlays" );
 		PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
 		PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
 		PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
@@ -35,42 +38,96 @@ namespace GuiCommon
 	{
 	}
 
-	void SceneTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void SceneTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
-		SceneSPtr l_scene = GetScene();
+		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SCENE + m_scene.getName() ) );
+		grid->Append( new wxBoolProperty( PROPERTY_SCENE_DEBUG_OVERLAYS ) )->SetValue( WXVARIANT( m_scene.getEngine()->getRenderLoop().hasDebugOverlays() ) );
+		grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( m_scene.getAmbientLight() ) ) ) );
+		grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( m_scene.getBackgroundColour() ) ) ) );
 
-		if ( l_scene )
+		if ( m_scene.getBackgroundImage() )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SCENE + l_scene->GetName() ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_scene->GetAmbientLight() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_scene->GetBackgroundColour() ) ) ) );
+			grid->Append( doCreateTextureImageProperty( PROPERTY_SCENE_BACKGROUND_COLOUR, m_scene.getBackgroundImage() ) );
+		}
+	}
 
-			if ( l_scene->GetBackgroundImage() )
+	void SceneTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
+	{
+		wxPGProperty * property = p_event.GetProperty();
+
+		if ( property )
+		{
+			if ( property->GetName() == PROPERTY_SCENE_DEBUG_OVERLAYS )
 			{
-				p_grid->Append( DoCreateTextureImageProperty( PROPERTY_SCENE_BACKGROUND_COLOUR, l_scene->GetBackgroundImage() ) );
+				onDebugOverlaysChange( property->GetValue().GetBool() );
+			}
+			else if ( property->GetName() == PROPERTY_SCENE_AMBIENT_LIGHT )
+			{
+				wxColour colour;
+				colour << property->GetValue();
+				onAmbientLightChange( RgbColour::fromBGR( colour.GetRGB() ) );
+			}
+			else if ( property->GetName() == PROPERTY_SCENE_BACKGROUND_COLOUR )
+			{
+				wxColour colour;
+				colour << property->GetValue();
+				onBackgroundColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
+			}
+			else if ( property->GetName() == PROPERTY_SCENE_BACKGROUND_IMAGE )
+			{
+				onBackgroundImageChange( make_String( property->GetValueAsString() ) );
 			}
 		}
 	}
 
-	void SceneTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	wxPGProperty * SceneTreeItemProperty::doCreateTextureImageProperty( wxString const & p_name, castor3d::TextureLayoutSPtr p_texture )
 	{
-		SceneSPtr l_scene = GetScene();
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = nullptr;
 
-		if ( l_property && l_scene )
+		if ( p_texture->getImage().isStaticSource() )
 		{
+			property = new wxImageFileProperty( PROPERTY_SCENE_BACKGROUND_IMAGE );
 		}
+
+		return property;
 	}
 
-	wxPGProperty * SceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureLayoutSPtr p_texture )
+	void SceneTreeItemProperty::onDebugOverlaysChange( bool const & value )
 	{
-		wxPGProperty * l_property = nullptr;
-
-		if ( p_texture->GetImage().IsStaticSource() )
+		doApplyChange( [value, this]()
 		{
-			l_property = new wxImageFileProperty( PROPERTY_SCENE_BACKGROUND_IMAGE );
-		}
+			m_scene.getEngine()->getRenderLoop().showDebugOverlays( value );
+		} );
+	}
 
-		return l_property;
+	void SceneTreeItemProperty::onAmbientLightChange( castor::RgbColour const & value )
+	{
+		doApplyChange( [value, this]()
+		{
+			m_scene.setAmbientLight( value );
+		} );
+	}
+
+	void SceneTreeItemProperty::onBackgroundColourChange( castor::RgbColour const & value )
+	{
+		doApplyChange( [value, this]()
+		{
+			m_scene.setBackgroundColour( value );
+		} );
+	}
+
+	void SceneTreeItemProperty::onBackgroundImageChange( castor::String const & value )
+	{
+		if ( File::fileExists( Path{ value } ) )
+		{
+			doApplyChange( [this, value]()
+			{
+				m_scene.setBackground( Path{}, Path{ value } );
+			} );
+		}
+		else
+		{
+			wxMessageBox( _( "Image does not exist" ) );
+		}
 	}
 }

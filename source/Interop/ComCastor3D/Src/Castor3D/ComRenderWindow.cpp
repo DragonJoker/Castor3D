@@ -5,7 +5,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The render window must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The render window must be initialised" );
 
 	CRenderWindow::CRenderWindow()
 	{
@@ -25,22 +25,22 @@ namespace CastorCom
 			{
 				try
 				{
-					*pVal = m_internal->Initialise( *static_cast< CSize * >( size ), Castor3D::WindowHandle( std::make_shared< Castor3D::IMswWindowHandle >( HWND( val ) ) ) ) ? VARIANT_TRUE : VARIANT_FALSE;
+					*pVal = m_internal->initialise( *static_cast< CSize * >( size ), castor3d::WindowHandle( std::make_shared< castor3d::IMswWindowHandle >( HWND( val ) ) ) ) ? VARIANT_TRUE : VARIANT_FALSE;
 					hr = S_OK;
 				}
-				catch ( Castor::Exception & p_exc )
+				catch ( castor::Exception & p_exc )
 				{
-					Castor::Logger::LogError( p_exc.GetFullDescription() );
+					castor::Logger::logError( p_exc.getFullDescription() );
 				}
 				catch ( std::exception & p_exc )
 				{
-					Castor::Logger::LogError( p_exc.what() );
+					castor::Logger::logError( p_exc.what() );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "Initialise" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "Initialise" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -52,12 +52,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Cleanup();
+			m_internal->cleanup();
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "Cleanup" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "Cleanup" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -69,12 +69,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->Resize( *static_cast< CSize * >( size ) );
+			m_internal->resize( *static_cast< CSize * >( size ) );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "Resize" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "Resize" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -92,14 +92,14 @@ namespace CastorCom
 
 			try
 			{
-				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
 
 				if ( l_inputListener )
 				{
-					l_inputListener->FireMouseMove( Castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ) );
+					l_inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ) );
 				}
 			}
-			catch ( Castor::Exception & )
+			catch ( castor::Exception & )
 			{
 			}
 
@@ -108,7 +108,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMove" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMove" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -126,14 +126,14 @@ namespace CastorCom
 
 			try
 			{
-				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
 
 				if ( l_inputListener )
 				{
-					l_inputListener->FireMouseButtonPushed( Castor3D::eMOUSE_BUTTON_LEFT );
+					l_inputListener->fireMouseButtonPushed( castor3d::eMOUSE_BUTTON_LEFT );
 				}
 			}
-			catch ( Castor::Exception & )
+			catch ( castor::Exception & )
 			{
 			}
 
@@ -142,7 +142,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtonDown" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtondown" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -160,14 +160,14 @@ namespace CastorCom
 
 			try
 			{
-				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
 
 				if ( l_inputListener )
 				{
-					l_inputListener->FireMouseButtonReleased( Castor3D::eMOUSE_BUTTON_LEFT );
+					l_inputListener->fireMouseButtonReleased( castor3d::eMOUSE_BUTTON_LEFT );
 				}
 			}
-			catch ( Castor::Exception & )
+			catch ( castor::Exception & )
 			{
 			}
 
@@ -176,7 +176,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseLButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -194,14 +194,14 @@ namespace CastorCom
 
 			try
 			{
-				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
 
 				if ( l_inputListener )
 				{
-					l_inputListener->FireMouseButtonPushed( Castor3D::eMOUSE_BUTTON_MIDDLE );
+					l_inputListener->fireMouseButtonPushed( castor3d::eMOUSE_BUTTON_MIDDLE );
 				}
 			}
-			catch ( Castor::Exception & )
+			catch ( castor::Exception & )
 			{
 			}
 
@@ -210,7 +210,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtonDown" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtondown" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -228,14 +228,14 @@ namespace CastorCom
 
 			try
 			{
-				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
 
 				if ( l_inputListener )
 				{
-					l_inputListener->FireMouseButtonReleased( Castor3D::eMOUSE_BUTTON_MIDDLE );
+					l_inputListener->fireMouseButtonReleased( castor3d::eMOUSE_BUTTON_MIDDLE );
 				}
 			}
-			catch ( Castor::Exception & )
+			catch ( castor::Exception & )
 			{
 			}
 
@@ -244,7 +244,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseMButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -262,14 +262,14 @@ namespace CastorCom
 
 			try
 			{
-				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
 
 				if ( l_inputListener )
 				{
-					l_inputListener->FireMouseButtonPushed( Castor3D::eMOUSE_BUTTON_RIGHT );
+					l_inputListener->fireMouseButtonPushed( castor3d::eMOUSE_BUTTON_RIGHT );
 				}
 			}
-			catch ( Castor::Exception & )
+			catch ( castor::Exception & )
 			{
 			}
 
@@ -278,7 +278,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtonDown" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtondown" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -296,14 +296,14 @@ namespace CastorCom
 
 			try
 			{
-				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
 
 				if ( l_inputListener )
 				{
-					l_inputListener->FireMouseButtonReleased( Castor3D::eMOUSE_BUTTON_RIGHT );
+					l_inputListener->fireMouseButtonReleased( castor3d::eMOUSE_BUTTON_RIGHT );
 				}
 			}
-			catch ( Castor::Exception & )
+			catch ( castor::Exception & )
 			{
 			}
 
@@ -312,7 +312,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, cuT( "OnMouseRButtonUp" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;

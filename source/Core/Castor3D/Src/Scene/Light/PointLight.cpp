@@ -1,11 +1,23 @@
 #include "PointLight.hpp"
 
 #include "Render/Viewport.hpp"
+#include "Technique/Opaque/LightPass.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
+	namespace
+	{
+		uint32_t constexpr FaceCount = 20u;
+
+		float doCalcPointLightBSphere( const castor3d::PointLight & light )
+		{
+			return getMaxDistance( light
+				, light.getAttenuation() );
+		}
+	}
+
 	PointLight::TextWriter::TextWriter( String const & p_tabs, PointLight const * p_category )
 		: LightCategory::TextWriter{ p_tabs }
 		, m_category{ p_category }
@@ -14,25 +26,25 @@ namespace Castor3D
 
 	bool PointLight::TextWriter::operator()( PointLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
+		bool result = LightCategory::TextWriter::operator()( p_light, p_file );
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
-					   && Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			LightCategory::TextWriter::CheckError( l_return, "PointLight attenuation" );
+			result = p_file.print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
+					   && Point3f::TextWriter( String() )( p_light.getAttenuation(), p_file )
+					   && p_file.writeText( cuT( "\n" ) ) > 0;
+			LightCategory::TextWriter::checkError( result, "PointLight attenuation" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool PointLight::TextWriter::WriteInto( Castor::TextFile & p_file )
+	bool PointLight::TextWriter::writeInto( castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}
@@ -48,32 +60,130 @@ namespace Castor3D
 	{
 	}
 
-	LightCategoryUPtr PointLight::Create( Light & p_light )
+	LightCategoryUPtr PointLight::create( Light & p_light )
 	{
 		return std::unique_ptr< PointLight >( new PointLight{ p_light } );
 	}
 
-	void PointLight::Update( Point3r const & p_target
+	Point3fArray const & PointLight::generateVertices()
+	{
+		static Point3fArray result;
+
+		if ( result.empty() )
+		{
+			Angle const angle = Angle::fromDegrees( 360.0f / FaceCount );
+			std::vector< Point2f > arc{ FaceCount + 1 };
+			Angle alpha;
+			Point3fArray data;
+
+			data.reserve( FaceCount * FaceCount * 4 );
+
+			for ( uint32_t i = 0; i <= FaceCount; i++ )
+			{
+				float x = +alpha.sin();
+				float y = -alpha.cos();
+				arc[i][0] = x;
+				arc[i][1] = y;
+				alpha += angle / 2;
+			}
+
+			Angle iAlpha;
+			Point3f pos;
+
+			for ( uint32_t k = 0; k < FaceCount; ++k )
+			{
+				auto ptT = arc[k + 0];
+				auto ptB = arc[k + 1];
+
+				if ( k == 0 )
+				{
+					// Calcul de la position des points du haut
+					for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+					{
+						auto cos = iAlpha.cos();
+						auto sin = iAlpha.sin();
+						data.emplace_back( ptT[0] * cos, ptT[1], ptT[0] * sin );
+					}
+				}
+
+				// Calcul de la position des points
+				iAlpha = 0.0_radians;
+
+				for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+				{
+					auto cos = iAlpha.cos();
+					auto sin = iAlpha.sin();
+					data.emplace_back( ptB[0] * cos, ptB[1], ptB[0] * sin );
+				}
+			}
+
+			result.reserve( FaceCount * FaceCount * 6u );
+			uint32_t cur = 0;
+			uint32_t prv = 0;
+
+			for ( uint32_t k = 0; k < FaceCount; ++k )
+			{
+				if ( k == 0 )
+				{
+					for ( uint32_t i = 0; i <= FaceCount; ++i )
+					{
+						cur++;
+					}
+				}
+
+				for ( uint32_t i = 0; i < FaceCount; ++i )
+				{
+					result.push_back( data[prv + 0] );
+					result.push_back( data[cur + 0] );
+					result.push_back( data[prv + 1] );
+					result.push_back( data[cur + 0] );
+					result.push_back( data[cur + 1] );
+					result.push_back( data[prv + 1] );
+					prv++;
+					cur++;
+				}
+
+				prv++;
+				cur++;
+			}
+		}
+
+		return result;
+	}
+
+	void PointLight::update()
+	{
+		PointLight::generateVertices();
+		auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
+		m_cubeBox.load( Point3r{ -scale, -scale, -scale }
+		, Point3r{ scale, scale, scale } );
+		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+		m_attenuation.reset();
+	}
+
+	void PointLight::updateShadow( Point3r const & p_target
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{
 		m_shadowMapIndex = p_index;
+		p_viewport.updateFar( m_farPlane );
 	}
 
-	void PointLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
+	void PointLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		auto l_pos = GetLight().GetParent()->GetDerivedPosition();
-		Point4r l_position{ l_pos[0], l_pos[1], l_pos[2], float( m_shadowMapIndex ) };
-		DoBindComponent( l_position, p_index, p_offset, p_texture );
-		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
+		auto pos = getLight().getParent()->getDerivedPosition();
+		Point4r position{ pos[0], pos[1], pos[2], float( m_shadowMapIndex ) };
+		doCopyComponent( position, p_index, p_offset, p_texture );
+		doCopyComponent( m_attenuation, p_index, p_offset, p_texture );
 	}
 
-	void PointLight::SetAttenuation( Point3f const & p_attenuation )
+	void PointLight::setAttenuation( Point3f const & p_attenuation )
 	{
 		m_attenuation = p_attenuation;
+		getLight().onChanged( getLight() );
 	}
 
-	void PointLight::UpdateNode( SceneNode const & p_node )
+	void PointLight::updateNode( SceneNode const & p_node )
 	{
 	}
 }

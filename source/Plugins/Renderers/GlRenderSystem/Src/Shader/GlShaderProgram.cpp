@@ -1,28 +1,27 @@
-#include "Shader/GlShaderProgram.hpp"
+﻿#include "Shader/GlShaderProgram.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
-#include "Shader/GlPushUniform.hpp"
 #include "Shader/GlShaderObject.hpp"
 
 #include <GlslSource.hpp>
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
-	GlShaderProgram::GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: ShaderProgram( p_renderSystem )
+	GlShaderProgram::GlShaderProgram( OpenGl & p_gl, GlRenderSystem & renderSystem )
+		: ShaderProgram( renderSystem )
 		, Object( p_gl,
 				  "GlShaderProgram",
 				  std::bind( &OpenGl::CreateProgram, std::ref( p_gl ) ),
 				  std::bind( &OpenGl::DeleteProgram, std::ref( p_gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsProgram, std::ref( p_gl ), std::placeholders::_1 )
 				)
-		, m_layout( p_gl, p_renderSystem )
+		, m_layout( p_gl, renderSystem )
 	{
 	}
 
@@ -30,354 +29,146 @@ namespace GlRender
 	{
 	}
 
-	void GlShaderProgram::Cleanup()
+	void GlShaderProgram::cleanup()
 	{
-		m_layout.Cleanup();
-		DoCleanup();
-		ObjectType::Destroy();
+		m_layout.cleanup();
+		doCleanup();
+		ObjectType::destroy();
 	}
 
-	bool GlShaderProgram::Initialise()
+	bool GlShaderProgram::initialise()
 	{
-		bool l_return = true;
+		bool result = true;
 
 		if ( m_status != ProgramStatus::eLinked )
 		{
-			ObjectType::Create();
-			l_return = DoInitialise();
+			ObjectType::create();
+			result = doInitialise();
 
-			if ( l_return )
+			if ( result )
 			{
-				m_layout.Initialise( *this );
+				m_layout.initialise( *this );
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool GlShaderProgram::Link()
+	bool GlShaderProgram::link()
 	{
-		DoBindTransformLayout();
-		ENSURE( GetGlName() != GlInvalidIndex );
-		int l_attached = 0;
-		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eAttachedShaders, &l_attached );
-		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_attached );
-		GetOpenGl().LinkProgram( GetGlName() );
-		int l_linked = 0;
-		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eLink, &l_linked );
-		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_linked );
-		m_linkerLog = DoRetrieveLinkerLog();
-		bool l_return = false;
+		doBindTransformLayout();
+		ENSURE( getGlName() != GlInvalidIndex );
+		int attached = 0;
+		getOpenGl().GetProgramiv( getGlName(), GlShaderStatus::eAttachedShaders, &attached );
+		Logger::logDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << attached );
+		getOpenGl().LinkProgram( getGlName() );
+		int linked = 0;
+		getOpenGl().GetProgramiv( getGlName(), GlShaderStatus::eLink, &linked );
+		Logger::logDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << linked );
+		m_linkerLog = doRetrieveLinkerLog();
+		bool result = false;
 
-		if ( l_linked && l_attached == int( m_activeShaders.size() ) && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
+		if ( linked && attached == int( m_activeShaders.size() ) && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
 		{
 			if ( !m_linkerLog.empty() )
 			{
-				Logger::LogWarning( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+				Logger::logWarning( cuT( "GlShaderProgram::link - " ) + m_linkerLog );
 			}
 
-			l_return = DoLink();
+			result = doLink();
 		}
 		else
 		{
 			if ( !m_linkerLog.empty() )
 			{
-				Logger::LogError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+				Logger::logError( cuT( "GlShaderProgram::link - " ) + m_linkerLog );
 			}
 
-			if ( l_attached != int( m_activeShaders.size() ) )
+			if ( attached != int( m_activeShaders.size() ) )
 			{
-				Logger::LogError( cuT( "GlShaderProgram::Link - The linked shaders count doesn't match the active shaders count." ) );
+				Logger::logError( cuT( "GlShaderProgram::link - The linked shaders count doesn't match the active shaders count." ) );
 			}
 
 			m_status = ProgramStatus::eError;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void GlShaderProgram::Bind()const
+	void GlShaderProgram::bind()const
 	{
-		REQUIRE( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked );
-		GetOpenGl().UseProgram( GetGlName() );
-		DoBind();
+		REQUIRE( getGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked );
+		getOpenGl().UseProgram( getGlName() );
+		doBind();
 	}
 
-	void GlShaderProgram::Unbind()const
+	void GlShaderProgram::unbind()const
 	{
-		REQUIRE( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked );
-		DoUnbind();
-		GetOpenGl().UseProgram( 0 );
+		REQUIRE( getGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked );
+		doUnbind();
+		getOpenGl().UseProgram( 0 );
 	}
 
-	int GlShaderProgram::GetAttributeLocation( String const & p_name )const
+	int GlShaderProgram::getAttributeLocation( String const & p_name )const
 	{
-		int l_iReturn = int( GlInvalidIndex );
+		int iReturn = int( GlInvalidIndex );
 
-		if ( GetGlName() != GlInvalidIndex && GetOpenGl().IsProgram( GetGlName() ) )
+		if ( getGlName() != GlInvalidIndex && getOpenGl().IsProgram( getGlName() ) )
 		{
-			l_iReturn = GetOpenGl().GetAttribLocation( GetGlName(), string::string_cast< char >( p_name ).c_str() );
+			iReturn = getOpenGl().GetAttribLocation( getGlName(), string::stringCast< char >( p_name ).c_str() );
 		}
 
-		return l_iReturn;
+		return iReturn;
 	}
 
-	ShaderObjectSPtr GlShaderProgram::DoCreateObject( ShaderType p_type )
+	ShaderObjectSPtr GlShaderProgram::doCreateObject( ShaderType p_type )
 	{
-		ShaderObjectSPtr l_return = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
-		return l_return;
+		ShaderObjectSPtr result = std::make_shared< GlShaderObject >( getOpenGl(), *this, p_type );
+		return result;
 	}
 
-	std::shared_ptr< PushUniform > GlShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )
+	String GlShaderProgram::doRetrieveLinkerLog()
 	{
-		switch ( p_type )
+		String log;
+
+		if ( getGlName() == GlInvalidIndex )
 		{
-		case UniformType::eBool:
-			return std::make_shared< GlPushUniform< UniformType::eBool > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eInt:
-			return std::make_shared< GlPushUniform< UniformType::eInt > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eUInt:
-			return std::make_shared< GlPushUniform< UniformType::eUInt > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eFloat:
-			return std::make_shared< GlPushUniform< UniformType::eFloat > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eDouble:
-			return std::make_shared< GlPushUniform< UniformType::eDouble > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eSampler:
-			return std::make_shared< GlPushUniform< UniformType::eSampler > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec2b:
-			return std::make_shared< GlPushUniform< UniformType::eVec2b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec3b:
-			return std::make_shared< GlPushUniform< UniformType::eVec3b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec4b:
-			return std::make_shared< GlPushUniform< UniformType::eVec4b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec2i:
-			return std::make_shared< GlPushUniform< UniformType::eVec2i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec3i:
-			return std::make_shared< GlPushUniform< UniformType::eVec3i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec4i:
-			return std::make_shared< GlPushUniform< UniformType::eVec4i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec2ui:
-			return std::make_shared< GlPushUniform< UniformType::eVec2ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec3ui:
-			return std::make_shared< GlPushUniform< UniformType::eVec3ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec4ui:
-			return std::make_shared< GlPushUniform< UniformType::eVec4ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec2f:
-			return std::make_shared< GlPushUniform< UniformType::eVec2f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec3f:
-			return std::make_shared< GlPushUniform< UniformType::eVec3f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec4f:
-			return std::make_shared< GlPushUniform< UniformType::eVec4f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec2d:
-			return std::make_shared< GlPushUniform< UniformType::eVec2d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec3d:
-			return std::make_shared< GlPushUniform< UniformType::eVec3d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eVec4d:
-			return std::make_shared< GlPushUniform< UniformType::eVec4d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x2b:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x2b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x3b:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x3b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x4b:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x4b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x2b:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x2b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x3b:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x3b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x4b:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x4b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x2b:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x2b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x3b:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x3b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x4b:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x4b > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x2i:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x2i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x3i:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x3i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x4i:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x4i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x2i:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x2i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x3i:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x3i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x4i:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x4i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x2i:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x2i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x3i:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x3i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x4i:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x4i > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x2ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x2ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x3ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x3ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x4ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x4ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x2ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x2ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x3ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x3ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x4ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x4ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x2ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x2ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x3ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x3ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x4ui:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x4ui > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x2f:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x2f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x3f:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x3f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x4f:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x4f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x2f:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x2f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x3f:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x3f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x4f:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x4f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x2f:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x2f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x3f:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x3f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x4f:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x4f > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x2d:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x2d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x3d:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x3d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat2x4d:
-			return std::make_shared< GlPushUniform< UniformType::eMat2x4d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x2d:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x2d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x3d:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x3d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat3x4d:
-			return std::make_shared< GlPushUniform< UniformType::eMat3x4d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x2d:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x2d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x3d:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x3d > >( GetOpenGl(), *this, p_occurences );
-
-		case UniformType::eMat4x4d:
-			return std::make_shared< GlPushUniform< UniformType::eMat4x4d > >( GetOpenGl(), *this, p_occurences );
-
-		default:
-			FAILURE( cuT( "Unsupported frame variable type" ) );
-			return nullptr;
-		}
-	}
-
-	String GlShaderProgram::DoRetrieveLinkerLog()
-	{
-		String l_log;
-
-		if ( GetGlName() == GlInvalidIndex )
-		{
-			l_log = GetOpenGl().GetGlslErrorString( 2 );
+			log = getOpenGl().getGlslErrorString( 2 );
 		}
 		else
 		{
-			int l_length = 0;
-			GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eInfoLogLength, &l_length );
+			int length = 0;
+			getOpenGl().GetProgramiv( getGlName(), GlShaderStatus::eInfoLogLength, &length );
 
-			if ( l_length > 1 )
+			if ( length > 1 )
 			{
-				std::vector< char > l_buffer( l_length );
-				int l_written = 0;
-				GetOpenGl().GetProgramInfoLog( GetGlName(), l_length, &l_written, l_buffer.data() );
+				std::vector< char > buffer( length );
+				int written = 0;
+				getOpenGl().GetProgramInfoLog( getGlName(), length, &written, buffer.data() );
 
-				if ( l_written > 0 )
+				if ( written > 0 )
 				{
-					l_log = string::string_cast< xchar >( l_buffer.data(), l_buffer.data() + l_written );
+					log = string::stringCast< xchar >( buffer.data(), buffer.data() + written );
 				}
 			}
 		}
 
-		return l_log;
+		return log;
 	}
 
-	void GlShaderProgram::DoBindTransformLayout()
+	void GlShaderProgram::doBindTransformLayout()
 	{
 		if ( m_declaration.size() > 0 )
 		{
-			std::vector< char const * > l_varyings;
-			l_varyings.reserve( m_declaration.size() );
+			std::vector< char const * > varyings;
+			varyings.reserve( m_declaration.size() );
 
-			for ( auto & l_element : m_declaration )
+			for ( auto & element : m_declaration )
 			{
-				l_varyings.push_back( l_element.m_name.c_str() );
+				varyings.push_back( element.m_name.c_str() );
 			}
 
-			GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( l_varyings.size() ), l_varyings.data(), GlAttributeLayout::eInterleaved );
+			getOpenGl().TransformFeedbackVaryings( getGlName(), int( varyings.size() ), varyings.data(), GlAttributeLayout::eInterleaved );
 		}
 	}
 }

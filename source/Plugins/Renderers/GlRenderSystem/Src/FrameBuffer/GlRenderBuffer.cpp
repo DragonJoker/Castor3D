@@ -4,8 +4,8 @@
 
 #include <FrameBuffer/RenderBuffer.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -30,56 +30,56 @@ namespace GlRender
 	{
 	}
 
-	bool GlRenderBuffer::Initialise( Size const & p_size )
+	bool GlRenderBuffer::initialise( Size const & p_size )
 	{
-		bool l_return = m_size == p_size;
+		bool result = m_size == p_size;
 
-		if ( !l_return )
+		if ( !result )
 		{
-			Bind();
+			bind();
 			m_size = p_size;
 
-			if ( m_renderBuffer.GetSamplesCount() > 1 )
+			if ( m_renderBuffer.getSamplesCount() > 1 )
 			{
-				GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::eDefault, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
+				getOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::eDefault, m_renderBuffer.getSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				GetOpenGl().RenderbufferStorage( GlRenderBufferMode::eDefault, m_internal, p_size );
+				getOpenGl().RenderbufferStorage( GlRenderBufferMode::eDefault, m_internal, p_size );
 			}
 
-			Unbind();
-			l_return = true;
+			unbind();
+			result = true;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void GlRenderBuffer::Cleanup()
+	void GlRenderBuffer::cleanup()
 	{
 	}
 
-	bool GlRenderBuffer::Resize( Size const & p_size )
+	bool GlRenderBuffer::resize( Size const & p_size )
 	{
-		bool l_return = m_size == p_size;
+		bool result = m_size == p_size;
 
-		if ( !l_return )
+		if ( !result )
 		{
-			Bind();
+			bind();
 			m_size = p_size;
 
-			if ( m_renderBuffer.GetSamplesCount() > 1 )
+			if ( m_renderBuffer.getSamplesCount() > 1 )
 			{
-				GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::eDefault, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
+				getOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::eDefault, m_renderBuffer.getSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				GetOpenGl().RenderbufferStorage( GlRenderBufferMode::eDefault, m_internal, p_size );
+				getOpenGl().RenderbufferStorage( GlRenderBufferMode::eDefault, m_internal, p_size );
 			}
 
-			Unbind();
+			unbind();
 		}
 
-		return l_return;
+		return result;
 	}
 }

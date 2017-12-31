@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___Castor_Macros___
 #define ___Castor_Macros___
@@ -42,7 +23,7 @@ typedef wchar_t ychar;
 
 //@}
 
-#define CASTOR_COUCOU Castor::Logger::LogDebug( cuT( "Coucou % 4d : %s @ line %d" ), __COUNTER__, __FUNCTION__, __LINE__ );
+#define CASTOR_COUCOU castor::Logger::logDebug( cuT( "Coucou % 4d : %s @ line %d" ), __COUNTER__, __FUNCTION__, __LINE__ );
 
 #if defined( CASTOR_COMPILER_MSVC )
 #	include <tchar.h>
@@ -106,7 +87,7 @@ typedef wchar_t ychar;
 	using name##SetConstRIt = name##Set::const_reverse_iterator
 
 #define DECLARE_MULTISET( key, name )\
-	using name##MSet = std::multiset< key >;\
+	using name##Mset = std::multiset< key >;\
 	using name##MSetIt = name##MSet::iterator;\
 	using name##MSetRIt = name##MSet::reverse_iterator;\
 	using name##MSetConstIt = name##MSet::const_iterator;\
@@ -170,7 +151,7 @@ typedef wchar_t ychar;
 	using typename name##List::const_reverse_iterator name##ListConstRIt
 
 #define DECLARE_COLLECTION( elem, key, name )\
-	using name##Collection = Castor::Collection< elem, key >;\
+	using name##Collection = castor::Collection< elem, key >;\
 	using name##CollectionIt = name##Collection::TObjPtrMapIt;\
 	using name##CollectionConstIt = name##Collection::TObjPtrMapConstIt
 
@@ -229,33 +210,33 @@ typedef wchar_t ychar;
 	eMax = eCount - 1
 
 #define IMPLEMENT_FLAGS( FlagType )\
-	using FlagType##s = Castor::FlagCombination< FlagType >;\
-	inline constexpr typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType p_lhs, FlagType p_rhs )\
+	using FlagType##s = castor::FlagCombination< FlagType >;\
+	inline constexpr typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType p_lhs, FlagType p_rhs )\
 	{\
-		return typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_lhs ) | typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_rhs );\
+		return typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_lhs ) | typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_rhs );\
 	}\
-	inline constexpr typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type p_lhs, FlagType p_rhs )\
+	inline constexpr typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type p_lhs, FlagType p_rhs )\
 	{\
-		return p_lhs | typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_rhs );\
+		return p_lhs | typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_rhs );\
 	}\
-	inline constexpr typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType p_lhs, typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type p_rhs )\
+	inline constexpr typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType p_lhs, typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type p_rhs )\
 	{\
-		return typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_lhs ) | p_rhs;\
+		return typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_lhs ) | p_rhs;\
 	}
 
 #define IMPLEMENT_CLASS_FLAGS( Class, FlagType )\
-	using Class##FlagType##s = Castor::FlagCombination< Class::FlagType >;\
-	inline constexpr typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( Class::FlagType p_lhs, Class::FlagType p_rhs )\
+	using Class##FlagType##s = castor::FlagCombination< Class::FlagType >;\
+	inline constexpr typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( Class::FlagType p_lhs, Class::FlagType p_rhs )\
 	{\
-		return typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_lhs ) | typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_rhs );\
+		return typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_lhs ) | typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_rhs );\
 	}\
-	inline constexpr typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type p_lhs, Class::FlagType p_rhs )\
+	inline constexpr typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type p_lhs, Class::FlagType p_rhs )\
 	{\
-		return p_lhs | typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_rhs );\
+		return p_lhs | typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_rhs );\
 	}\
-	inline constexpr typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( Class::FlagType p_lhs, typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type p_rhs )\
+	inline constexpr typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( Class::FlagType p_lhs, typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type p_rhs )\
 	{\
-		return typename Castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_lhs ) | p_rhs;\
+		return typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( p_lhs ) | p_rhs;\
 	}
 
 #endif

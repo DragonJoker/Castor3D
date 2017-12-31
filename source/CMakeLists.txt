@@ -8,7 +8,7 @@ set( MAIN_PROJECT_NAME "Castor3D" )
 
 # Set project version numbers
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 9 )
+set( VERSION_MINOR 10 )
 set( VERSION_BUILD 0 )
 set( VERSION_YEAR 2016 )
 
@@ -57,8 +57,8 @@ if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PL
 	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )
 	set( OpenCV_LIBRARY_DIR ${DEPENDENCIES_DIR}/opencv/lib )
 	set( OpenCV_LIB_DIR_OPT ${DEPENDENCIES_DIR}/opencv/lib )
-	#set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets )
-	#set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib )
+	set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets )
+	set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib/vc_lib )
 endif ()
 
 #--------------------------------------------------------------------------------------------------
@@ -225,7 +225,8 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				set( CPACK_PACKAGE_VENDOR "DragonJoker" )
 				set( CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${PROJECTS_PLATFORM}" )
 				set( CPACK_OUTPUT_FILE_PREFIX "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
-				set( CPACK_RESOURCE_FILE_LICENSE "${PARENT_DIR}/MIT.txt" )
+				configure_file( ${PARENT_DIR}/LICENSE ${CMAKE_BINARY_DIR}/LICENSE.txt COPYONLY )
+				set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt" )
 				set( CMAKE_SYSTEM_ARCHITECTURE ${PROJECTS_PLATFORM} )
 
 				if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )

@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_MESH_ANIMATION_H___
 #define ___C3D_MESH_ANIMATION_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 #include "Animation/Animation.hpp"
 #include "Animation/Mesh/MeshAnimationSubmesh.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -45,15 +26,28 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API MeshAnimation( MeshAnimation && rhs ) = default;
+		C3D_API MeshAnimation & operator=( MeshAnimation && rhs ) = default;
+		C3D_API MeshAnimation( MeshAnimation const & rhs ) = delete;
+		C3D_API MeshAnimation & operator=( MeshAnimation const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animable	The parent animable object.
-		 *\param[in]	p_name		The name of the animation.
+		 *\param[in]	mesh	The parent mesh.
+		 *\param[in]	name	The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animable	L'objet animable parent.
-		 *\param[in]	p_name		Le nom de l'animation.
+		 *\param[in]	mesh	Le maillage parent.
+		 *\param[in]	name	Le nom de l'animation.
 		 */
-		C3D_API MeshAnimation( Animable & p_animable, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API MeshAnimation( Mesh & mesh
+			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -63,62 +57,28 @@ namespace Castor3D
 		C3D_API ~MeshAnimation();
 		/**
 		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API MeshAnimation( MeshAnimation && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API MeshAnimation & operator=( MeshAnimation && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API MeshAnimation( MeshAnimation const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API MeshAnimation & operator=( MeshAnimation const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Adds a child to this object.
+		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
-		 *\param[in]	p_object	The child.
+		 *\param[in]	object	The child.
 		 *\~french
 		 *\brief		Ajoute un objet enfant à celui-ci.
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
-		 *\param[in]	p_object	L'enfant.
+		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void AddChild( MeshAnimationSubmesh && p_object );
+		C3D_API void addChild( MeshAnimationSubmesh && object );
 		/**
 		 *\~english
-		 *\param[in]	p_index	The index.
+		 *\param[in]	index	The index.
 		 *\return		The animated submesh at given index.
 		 *\~french
-		 *\param[in]	p_index	L'indice.
+		 *\param[in]	index	L'indice.
 		 *\return		Le sous-maillage animé à l'indice donné.
 		 */
-		inline MeshAnimationSubmesh & GetSubmesh( uint32_t p_index )
+		inline MeshAnimationSubmesh & getSubmesh( uint32_t index )
 		{
-			REQUIRE( p_index < m_submeshes.size() );
-			return m_submeshes[p_index];
+			REQUIRE( index < m_submeshes.size() );
+			return m_submeshes[index];
 		}
-
-	private:
-		/**
-		 *\copydoc		Casto3D::Animation::DoInitialise
-		 */
-		C3D_API void DoUpdateLength()override;
 
 	protected:
 		//!\~english	The animated submesh.
@@ -162,14 +122,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
+		 *\param[in]	obj	The object to write.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
+		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoWrite( MeshAnimation const & p_obj )override;
+		C3D_API bool doWrite( MeshAnimation const & obj )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -188,16 +148,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
-		 *\param[in]	p_chunk	The chunk containing data.
+		 *\param[out]	obj	The object to read.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
-		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool DoParse( MeshAnimation & p_obj )override;
+		C3D_API bool doParse( MeshAnimation & obj )override;
 	};
 }
 

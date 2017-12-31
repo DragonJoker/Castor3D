@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_PREREQUISITES_H___
 #define ___GUICOMMON_PREREQUISITES_H___
@@ -121,6 +102,8 @@ namespace GuiCommon
 		eBMP_TEXTURE_SEL,
 		eBMP_BILLBOARD,
 		eBMP_BILLBOARD_SEL,
+		eBMP_COLLAPSE_ALL,
+		eBMP_EXPAND_ALL,
 		eBMP_COUNT,
 	}	eBMP;
 
@@ -128,7 +111,7 @@ namespace GuiCommon
 
 	class CastorApplication;
 
-	class PropertiesHolder;
+	class PropertiesContainer;
 	class TreeItemProperty;
 	class CameraTreeItemProperty;
 	class GeometryTreeItemProperty;
@@ -150,6 +133,8 @@ namespace GuiCommon
 	class ShaderEditorPage;
 	class SplashScreen;
 	class StcTextEditor;
+	class TreeHolder;
+	class PropertiesHolder;
 
 	class LanguageFileContext;
 	class LanguageFileParser;
@@ -165,7 +150,7 @@ namespace GuiCommon
 	DECLARE_MAP( uint32_t, wxImage *, ImageId );
 	DECLARE_VECTOR( thread_sptr, ThreadPtr );
 	DECLARE_VECTOR( LanguageInfoPtr, LanguageInfoPtr );
-	DECLARE_MAP( int, Castor3D::UniformWPtr, Uniform );
+	DECLARE_MAP( int, castor3d::UniformWPtr, Uniform );
 	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
@@ -209,7 +194,7 @@ namespace GuiCommon
 	 *\param[in]	p_flip		Tells if the image mut be flipped.
 	 *\param[out]	p_bitmap	Reçoit le bitmap généré.
 	 */
-	void CreateBitmapFromBuffer( Castor::PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap );
+	void CreateBitmapFromBuffer( castor::PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap );
 	/**
 	 *\~english
 	 *\brief		Copies the unit texture into the bitmap.
@@ -224,33 +209,33 @@ namespace GuiCommon
 	 *\param[in]	p_flip		Tells if the image must be flipped.
 	 *\param[out]	p_bitmap	Reçoit le bitmap généré.
 	 */
-	void CreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_unit, bool p_flip, wxBitmap & p_bitmap );
+	void CreateBitmapFromBuffer( castor3d::TextureUnitSPtr p_unit, bool p_flip, wxBitmap & p_bitmap );
 	/**
 	 *\~english
 	 *\brief		Loads a scene.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\param[in]	p_fileName	The scene file name.
 	 *\param[in]	p_wantedFps	The wanted FPS.
 	 *\param[in]	p_threaded	Tells if the engine must initialise its threaded render loop.
 	 *\return		true if everything is ok.
 	 *\~french
 	 *\brief		Charge une scène.
-	 *\param[in]	p_engine	Le moteur.
+	 *\param[in]	engine	Le moteur.
 	 *\param[in]	p_fileName	Le nom du fichier de scène.
 	 *\param[in]	p_wantedFps	Les FPS voulues.
 	 *\param[in]	p_threaded	Dit si le moteur doit initialiser sa boucle de rendu threadée.
 	 *\return		true si tout s'est bien passé.
 	 */
-	Castor3D::RenderWindowSPtr LoadScene( Castor3D::Engine & p_engine, Castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
+	castor3d::RenderWindowSPtr loadScene( castor3d::Engine & engine, castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\~french
 	 *\brief		Charge les plug-ins du moteur.
-	 *\param[in]	p_engine	Le moteur.
+	 *\param[in]	engine	Le moteur.
 	 */
-	void LoadPlugins( Castor3D::Engine & p_engine );
+	void loadPlugins( castor3d::Engine & engine );
 	/**
 	 *\~english
 	 *\brief		Creates a WindowHandle from a wxWindow
@@ -261,77 +246,77 @@ namespace GuiCommon
 	 *\param[in]	p_window	La fenêtre
 	 *\return		Le WindowHandle créé
 	 */
-	Castor3D::WindowHandle make_WindowHandle( wxWindow * p_window );
+	castor3d::WindowHandle makeWindowHandle( wxWindow * p_window );
 	/**
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets
 	 *\remarks		Uses a custom SFontImpl
-	 *\param[in]	p_engine	The Castor3D engine, to check for font existence
+	 *\param[in]	engine	The Castor3D engine, to check for font existence
 	 *\param[in]	p_font		The wxWidgets font
 	 *\return		The loaded font
 	 *\~french
 	 *\brief		Charge les glyphes de la police en utilisant wxWidgets
 	 *\remarks		Utilise une version personnalisée de SFontImpl
-	 *\param[in]	p_engine	Le moteur, pour vérifier l'existance de la police
+	 *\param[in]	engine	Le moteur, pour vérifier l'existance de la police
 	 *\param[in]	p_font		La police wxWidgets
 	 *\return		La police chargée
 	 */
-	Castor::FontSPtr make_Font( Castor3D::Engine * p_engine, wxFont const & p_font );
+	castor::FontSPtr make_Font( castor3d::Engine * engine, wxFont const & p_font );
 	/**
 	 *\~english
-	 *\brief		Creates a Castor::String from a wxString
+	 *\brief		Creates a castor::String from a wxString
 	 *\param[in]	p_value	The wxString
-	 *\return		The Castor::String
+	 *\return		The castor::String
 	 *\~french
-	 *\brief		Cree un Castor::String a partir d'un wxString
+	 *\brief		Cree un castor::String a partir d'un wxString
 	 *\param[in]	p_value	Le wxString
-	 *\return		Le Castor::String
+	 *\return		Le castor::String
 	 */
-	Castor::String make_String( wxString const & p_value );
+	castor::String make_String( wxString const & p_value );
 	/**
 	 *\~english
-	 *\brief		Creates a Castor::Path from a wxString
+	 *\brief		Creates a castor::Path from a wxString
 	 *\param[in]	p_value	The wxString
-	 *\return		The Castor::Path
+	 *\return		The castor::Path
 	 *\~french
-	 *\brief		Cree un Castor::Path a partir d'un wxString
+	 *\brief		Cree un castor::Path a partir d'un wxString
 	 *\param[in]	p_value	Le wxString
-	 *\return		Le Castor::Path
+	 *\return		Le castor::Path
 	 */
-	Castor::Path make_Path( wxString const & p_value );
+	castor::Path make_Path( wxString const & p_value );
 	/**
 	 *\~english
-	 *\brief		Creates a wxString from a Castor::String
-	 *\param[in]	p_value	The Castor::String
+	 *\brief		Creates a wxString from a castor::String
+	 *\param[in]	p_value	The castor::String
 	 *\return		The wxString
 	 *\~french
-	 *\brief		Cree wxString a partir d'un Castor::String
-	 *\param[in]	p_value	Le Castor::String
+	 *\brief		Cree wxString a partir d'un castor::String
+	 *\param[in]	p_value	Le castor::String
 	 *\return		Le wxString
 	 */
-	wxString make_wxString( Castor::String const & p_value );
+	wxString make_wxString( castor::String const & p_value );
 	/**
 	 *\~english
-	 *\brief		Creates a Castor::Size from a wxSize
+	 *\brief		Creates a castor::Size from a wxSize
 	 *\param[in]	p_value	The wxSize
-	 *\return		The Castor::Size
+	 *\return		The castor::Size
 	 *\~french
-	 *\brief		Cree un Castor::Size a partir d'un wxSize
+	 *\brief		Cree un castor::Size a partir d'un wxSize
 	 *\param[in]	p_value	Le wxSize
-	 *\return		Le Castor::Size
+	 *\return		Le castor::Size
 	 */
-	Castor::Size make_Size( wxSize const & p_value );
+	castor::Size makeSize( wxSize const & p_value );
 	/**
 	 *\~english
-	 *\brief		Creates a wxSize from a Castor::Size
-	 *\param[in]	p_value	The Castor::Size
+	 *\brief		Creates a wxSize from a castor::Size
+	 *\param[in]	p_value	The castor::Size
 	 *\return		The wxSize
 	 *\~french
-	 *\brief		Cree wxString a partir d'un Castor::Size
-	 *\param[in]	p_value	Le Castor::Size
+	 *\brief		Cree wxString a partir d'un castor::Size
+	 *\param[in]	p_value	Le castor::Size
 	 *\return		Le wxSize
 	 */
-	wxSize make_wxSize( Castor::Size const & p_value );
+	wxSize make_wxSize( castor::Size const & p_value );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

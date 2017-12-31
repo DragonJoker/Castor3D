@@ -1,10 +1,10 @@
-﻿#include "Generator.hpp"
+#include "Generator.hpp"
 #include "Engine.hpp"
 
 #include <Graphics/Image.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 //*************************************************************************************************
 
@@ -28,14 +28,14 @@ Generator::Thread::~Thread()
 	}
 }
 
-void Generator::Thread::Run()
+void Generator::Thread::run()
 {
 	m_pThread = std::make_shared< std::thread >( StEntry, this );
 }
 
-void Generator::Thread::Wait()
+void Generator::Thread::wait()
 {
-	Stop();
+	stop();
 	m_pThread->join();
 }
 
@@ -50,14 +50,14 @@ int Generator::Thread::Entry()
 	{
 		if ( m_bEnded && m_bLaunched && !IsStopped() )
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutex );
+			auto lock = castor::makeUniqueLock( m_mutex );
 			m_bEnded = false;
 			Step();
 			m_bEnded = true;
 			m_bLaunched = false;
 		}
 
-		System::Sleep( 1 );
+		System::sleep( 1 );
 	}
 
 	return 0;
@@ -65,26 +65,26 @@ int Generator::Thread::Entry()
 
 //*************************************************************************************************
 
-Generator::Generator( Engine * p_engine, int p_width, int p_height )
+Generator::Generator( Engine * engine, int p_width, int p_height )
 	: m_iWidth( p_width )
 	, m_iHeight( p_height )
 	, m_frontBuffer( Size( p_width, p_height ) )
 	, m_backBuffer( Size( p_width, p_height ) )
-	, m_engine( p_engine )
+	, m_engine( engine )
 {
-	//uint8_t l_tmp[] = { 255, 255, 255, 255 };
-	//m_pxColour.set<PixelFormat::eA8R8G8B8>( l_tmp);
-	m_uiThreadCount = System::GetCPUCount() * 2;
+	//uint8_t tmp[] = { 255, 255, 255, 255 };
+	//m_pxColour.set<PixelFormat::eA8R8G8B8>( tmp);
+	m_uiThreadCount = engine->getCpuInformations().getCoreCount() * 2;
 }
 
 Generator::~Generator()
 {
-	DoCleanup();
+	doCleanup();
 }
 
 bool Generator::Step()
 {
-	bool l_return = false;
+	bool result = false;
 
 	if ( m_initialised )
 	{
@@ -97,57 +97,57 @@ bool Generator::Step()
 			}
 			else if ( AllEnded() )
 			{
-				SwapBuffers();
+				swapBuffers();
 				m_bEnded = true;
-				l_return = true;
+				result = true;
 			}
 		}
 		else
 		{
-			l_return = false;
+			result = false;
 		}
 	}
 
-	return l_return;
+	return result;
 }
 
-void Generator::SetRed( uint8_t val )
+void Generator::setRed( uint8_t val )
 {
 	m_pxColour[0] = val;
 	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * p_pThread )
 	{
 		if ( p_pThread )
 		{
-			p_pThread->SetRed( val );
+			p_pThread->setRed( val );
 		}
 	} );
 }
 
-void Generator::SetGreen( uint8_t val )
+void Generator::setGreen( uint8_t val )
 {
 	m_pxColour[1] = val;
 	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * p_pThread )
 	{
 		if ( p_pThread )
 		{
-			p_pThread->SetGreen( val );
+			p_pThread->setGreen( val );
 		}
 	} );
 }
 
-void Generator::SetBlue( uint8_t val )
+void Generator::setBlue( uint8_t val )
 {
 	m_pxColour[2] = val;
 	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * p_pThread )
 	{
 		if ( p_pThread )
 		{
-			p_pThread->SetBlue( val );
+			p_pThread->setBlue( val );
 		}
 	} );
 }
 
-void Generator::SwapBuffers()
+void Generator::swapBuffers()
 {
 	m_frontBuffer = m_backBuffer;
 }
@@ -167,13 +167,13 @@ void Generator::ClearAllThreads()
 {
 	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread *& p_pThread )
 	{
-		Generator::Thread * l_pThread = p_pThread;
+		Generator::Thread * pThread = p_pThread;
 		p_pThread = nullptr;
 
-		if ( l_pThread )
+		if ( pThread )
 		{
-			l_pThread->Wait();
-			delete l_pThread;
+			pThread->wait();
+			delete pThread;
 		}
 	} );
 	m_arraySlaveThreads.clear();
@@ -181,15 +181,15 @@ void Generator::ClearAllThreads()
 
 bool Generator::AllEnded()
 {
-	bool l_return = true;
-	uint32_t l_count = DoGetThreadsCount();
+	bool result = true;
+	uint32_t count = doGetThreadsCount();
 
-	for ( uint32_t i = 0; i < l_count && l_return; i++ )
+	for ( uint32_t i = 0; i < count && result; i++ )
 	{
-		l_return &= m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->IsEnded();
+		result &= m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->isEnded();
 	}
 
-	return l_return;
+	return result;
 }
 
 void Generator::Suspend()
@@ -198,7 +198,7 @@ void Generator::Suspend()
 	ClearAllThreads();
 }
 
-void Generator::DoCleanup()
+void Generator::doCleanup()
 {
 	ClearAllThreads();
 	m_frontBuffer.clear();
@@ -207,8 +207,8 @@ void Generator::DoCleanup()
 
 Point2i Generator::_loadImage( String const & p_strImagePath, Image & CU_PARAM_UNUSED( p_image ) )
 {
-	ImageSPtr l_pImage = m_engine->GetImageCache().Add( p_strImagePath, Path{ p_strImagePath } );
-	return Point2i( l_pImage->GetWidth(), l_pImage->GetHeight() );
+	ImageSPtr pImage = m_engine->getImageCache().add( p_strImagePath, Path{ p_strImagePath } );
+	return Point2i( pImage->getWidth(), pImage->getHeight() );
 }
 
 //*************************************************************************************************

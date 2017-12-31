@@ -6,102 +6,92 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Shader/Ubos/HdrConfigUbo.hpp>
 #include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
-using namespace GLSL;
+using namespace castor;
+using namespace castor3d;
+using namespace glsl;
 
 namespace HaarmPieterDuiker
 {
-	namespace
-	{
-		String const Gamma = cuT( "c3d_gamma" );
-	}
-
 	String ToneMapping::Name = cuT( "haarm" );
 
-	ToneMapping::ToneMapping( Engine & p_engine, Parameters const & p_parameters )
-		: Castor3D::ToneMapping{ Name, p_engine, p_parameters }
-		, m_gamma{ 1.0f }
+	ToneMapping::ToneMapping( Engine & engine
+		, Parameters const & parameters )
+		: castor3d::ToneMapping{ Name, engine, parameters }
 	{
-		String l_param;
-
-		if ( p_parameters.Get( cuT( "Gamma" ), l_param ) )
-		{
-			m_gamma = string::to_float( l_param );
-		}
 	}
 
 	ToneMapping::~ToneMapping()
 	{
 	}
 
-	ToneMappingSPtr ToneMapping::Create( Engine & p_engine, Parameters const & p_parameters )
+	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( p_engine, p_parameters );
+		return std::make_shared< ToneMapping >( engine, parameters );
 	}
 
-	String ToneMapping::DoCreate()
+	glsl::Shader ToneMapping::doCreate()
 	{
-		m_gammaVar = m_configUbo.CreateUniform< UniformType::eFloat >( Gamma );
-
-		String l_pxl;
+		glsl::Shader pxl;
 		{
-			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, ToneMapping::HdrConfig };
-			auto c3d_exposure = l_config.GetUniform< Float >( ToneMapping::Exposure );
-			auto c3d_gamma = l_config.GetUniform< Float >( Gamma );
-			l_config.End();
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			UBO_HDR_CONFIG( writer );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			auto log10 = writer.implementFunction< Vec3 >( cuT( "log10" )
+				, [&]( Vec3 const & p_in )
+				{
+					writer.returnStmt( glsl::log2( p_in ) / glsl::log2( 10.0_f ) );
+				}, InVec3{ &writer, cuT( "p_in" ) } );
+
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_hdrColor = l_writer.GetLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
-				l_hdrColor *= c3d_exposure;
+				auto hdrColor = writer.declLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				hdrColor *= c3d_exposure;
+				auto ld = writer.declLocale( cuT( "ld" ), vec3( 0.002_f ) );
+				auto linReference = writer.declLocale( cuT( "linReference" ), 0.18_f );
+				auto logReference = writer.declLocale( cuT( "logReference" ), 444.0_f );
+				auto logGamma = writer.declLocale( cuT( "logGamma" ), 1.0_f / c3d_gamma );
 
-				auto LogColor = l_writer.GetLocale< Vec3 >( cuT( "LogColor" ) );
-				LogColor = l_writer.Paren( l_writer.Paren( GLSL::log2( vec3( Float( 0.4 ) ) * l_hdrColor.rgb() / vec3( Float( 0.18 ) ) ) / GLSL::log2( vec3( Float( 10 ) ) ) ) / vec3( Float( 0.002 ) ) * vec3( Float( 1.0 ) / c3d_gamma ) + vec3( Float( 444 ) ) ) / vec3( Float( 1023.0f ) );
-				LogColor = clamp( LogColor, 0.0, 1.0 );
+				auto logColor = writer.declLocale( cuT( "LogColor" )
+					, writer.paren( log10( vec3( 0.4_f ) * hdrColor.rgb() / linReference )
+						/ ld * logGamma + 444.0_f ) / 1023.0f );
+				logColor = clamp( logColor, 0.0, 1.0 );
 
-				auto FilmLutWidth = l_writer.GetLocale( cuT( "FilmLutWidth" ), Float( 256 ) );
-				auto Padding = l_writer.GetLocale( cuT( "Padding" ), Float( 0.5 ) / FilmLutWidth );
+				auto filmLutWidth = writer.declLocale( cuT( "FilmLutWidth" ), Float( 256 ) );
+				auto padding = writer.declLocale( cuT( "Padding" ), Float( 0.5 ) / filmLutWidth );
 
 				//  apply response lookup and color grading for target display
-				plx_v4FragColor.r() = mix( Padding, 1.0f - Padding, LogColor.r() );
-				plx_v4FragColor.g() = mix( Padding, 1.0f - Padding, LogColor.g() );
-				plx_v4FragColor.b() = mix( Padding, 1.0f - Padding, LogColor.b() );
-				plx_v4FragColor.a() = 1.0f;
+				pxl_rgb.r() = mix( padding, 1.0f - padding, logColor.r() );
+				pxl_rgb.g() = mix( padding, 1.0f - padding, logColor.g() );
+				pxl_rgb.b() = mix( padding, 1.0f - padding, logColor.b() );
+				pxl_rgb.a() = 1.0f;
 			} );
 
-			l_pxl = l_writer.Finalise();
+			pxl = writer.finalise();
 		}
 
-		return l_pxl;
+		return pxl;
 	}
 
-	void ToneMapping::DoDestroy()
+	void ToneMapping::doDestroy()
 	{
-		m_gammaVar.reset();
 	}
 
-	void ToneMapping::DoUpdate()
+	void ToneMapping::doUpdate()
 	{
-		m_gammaVar->SetValue( m_gamma );
-	}
-
-	bool ToneMapping::DoWriteInto( TextFile & p_file )
-	{
-		return p_file.WriteText( cuT( " -Gamma " ) + string::to_string( m_gamma ) ) > 0;
 	}
 }

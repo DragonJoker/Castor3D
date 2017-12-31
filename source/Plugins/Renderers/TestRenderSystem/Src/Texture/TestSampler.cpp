@@ -2,13 +2,13 @@
 
 #include "Render/TestRenderSystem.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
-	TestSampler::TestSampler( TestRenderSystem * p_renderSystem, Castor::String const & p_name )
-		: Sampler( *p_renderSystem->GetEngine(), p_name )
+	TestSampler::TestSampler( TestRenderSystem * p_renderSystem, castor::String const & p_name )
+		: Sampler( *p_renderSystem->getEngine(), p_name )
 	{
 	}
 
@@ -16,20 +16,20 @@ namespace TestRender
 	{
 	}
 
-	bool TestSampler::Initialise()
+	bool TestSampler::initialise()
 	{
 		return true;
 	}
 
-	void TestSampler::Cleanup()
+	void TestSampler::cleanup()
 	{
 	}
 
-	void TestSampler::Bind( uint32_t p_index )const
+	void TestSampler::bind( uint32_t p_index )const
 	{
 	}
 
-	void TestSampler::Unbind( uint32_t p_index )const
+	void TestSampler::unbind( uint32_t p_index )const
 	{
 	}
 }

@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_ANGLE_H___
 #define ___CASTOR_ANGLE_H___
 
 #include "CastorUtils.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -88,7 +69,7 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > from_degrees( T p_degrees )noexcept
+		static AngleT< Type > fromDegrees( T p_degrees )noexcept
 		{
 			return AngleT< Type >( p_degrees * DegreeToRadian );
 		}
@@ -103,7 +84,7 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > from_radians( T p_radians )noexcept
+		static AngleT< Type > fromRadians( T p_radians )noexcept
 		{
 			return AngleT< Type >( p_radians );
 		}
@@ -118,7 +99,7 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > from_grads( T p_grads )noexcept
+		static AngleT< Type > fromGrads( T p_grads )noexcept
 		{
 			return AngleT< Type >( p_grads * GradToRadian );
 		}
@@ -165,7 +146,7 @@ namespace Castor
 		inline Type grads()const noexcept;
 		/**
 		 *\~english
-		 *\brief		Sets this angle value from degrees
+		 *\brief		sets this angle value from degrees
 		 *\param[in]	p_rAngle	Angle in degrees
 		 *\~french
 		 *\brief		Définit la valeur de cet angle à partir de degrés
@@ -174,7 +155,7 @@ namespace Castor
 		inline void degrees( double p_rAngle )noexcept;
 		/**
 		 *\~english
-		 *\brief		Sets this angle value from radians
+		 *\brief		sets this angle value from radians
 		 *\param[in]	p_rAngle	Angle in radians
 		 *\~french
 		 *\brief		Définit la valeur de cet angle à partir de radians
@@ -183,7 +164,7 @@ namespace Castor
 		inline void radians( double p_rAngle )noexcept;
 		/**
 		 *\~english
-		 *\brief		Sets this angle value from gradients
+		 *\brief		sets this angle value from gradients
 		 *\param[in]	p_rAngle	Angle in gradients
 		 *\~french
 		 *\brief		Définit la valeur de cet angle à partir de gradients
@@ -282,7 +263,7 @@ namespace Castor
 		inline AngleT< Type > & operator-()noexcept;
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_rhs	Angle to add to this one
 		 *\return		A reference to this angle
 		 *\~french
@@ -294,7 +275,7 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_rhs	Angle to substract to this one
+		 *\param[in]	p_rhs	Angle to subtract to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par soustraction
@@ -444,7 +425,7 @@ namespace Castor
 	inline bool operator<=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_lhs	First operand
 	 *\param[in]	p_rhs	Second operand
 	 *\return		Result of addition
@@ -530,14 +511,14 @@ namespace Castor
 	using Angle = AngleT< float >;
 }
 
-inline Castor::Angle operator "" _degrees( long double p_value )
+inline castor::Angle operator "" _degrees( long double p_value )
 {
-	return Castor::Angle::from_degrees( p_value );
+	return castor::Angle::fromDegrees( p_value );
 }
 
-inline Castor::Angle operator "" _radians( long double p_value )
+inline castor::Angle operator "" _radians( long double p_value )
 {
-	return Castor::Angle::from_radians( p_value );
+	return castor::Angle::fromRadians( p_value );
 }
 
 #include "Angle.inl"

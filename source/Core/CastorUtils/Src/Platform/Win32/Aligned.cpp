@@ -13,16 +13,16 @@
 #	define CU_ALIGNED_FREE( m )\
 	_aligned_free( m )
 
-namespace Castor
+namespace castor
 {
-	void * AlignedAlloc( size_t p_alignment, size_t p_size )
+	void * alignedAlloc( size_t p_alignment, size_t p_size )
 	{
-		void * l_mem = nullptr;
-		CU_ALIGNED_ALLOC( l_mem, p_alignment, p_size );
-		return l_mem;
+		void * mem;
+		CU_ALIGNED_ALLOC( mem, p_alignment, p_size );
+		return mem;
 	}
 
-	void AlignedFree( void * p_memory )
+	void alignedFree( void * p_memory )
 	{
 		CU_ALIGNED_FREE( p_memory );
 	}

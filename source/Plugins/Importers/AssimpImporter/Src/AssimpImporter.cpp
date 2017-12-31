@@ -10,8 +10,10 @@
 #include <Cache/SceneNodeCache.hpp>
 
 #include <Animation/Mesh/MeshAnimation.hpp>
+#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
 #include <Animation/Mesh/MeshAnimationSubmesh.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
@@ -26,8 +28,8 @@
 
 #include <assimp/version.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace C3dAssimp
 {
@@ -35,264 +37,389 @@ namespace C3dAssimp
 
 	namespace
 	{
-		aiNodeAnim const * const FindNodeAnim( const aiAnimation & p_animation, const String & p_nodeName )
+		aiNodeAnim const * const doFindNodeAnim( const aiAnimation & animation
+			, const String & nodeName )
 		{
-			aiNodeAnim const * l_return = nullptr;
-
-			for ( uint32_t i = 0; i < p_animation.mNumChannels && !l_return; ++i )
+			aiNodeAnim const * result = nullptr;
+			auto it = std::find_if( animation.mChannels
+				, animation.mChannels + animation.mNumChannels
+				, [&nodeName]( aiNodeAnim const * const p_nodeAnim )
 			{
-				aiNodeAnim const * const l_nodeAnim = p_animation.mChannels[i];
+				return string::stringCast< xchar >( p_nodeAnim->mNodeName.data ) == nodeName;
+			} );
 
-				if ( string::string_cast< xchar >( l_nodeAnim->mNodeName.data ) == p_nodeName )
-				{
-					l_return = l_nodeAnim;
-				}
+			if ( it != animation.mChannels + animation.mNumChannels )
+			{
+				result = *it;
 			}
 
-			return l_return;
+			return result;
 		}
 
-		aiMeshAnim const * const FindMeshAnim( const aiAnimation & p_animation, const String & p_meshName )
+		aiMeshAnim const * const FindMeshAnim( const aiAnimation & animation
+			, const String & meshName )
 		{
-			aiMeshAnim const * l_return = nullptr;
-
-			for ( uint32_t i = 0; i < p_animation.mNumMeshChannels && !l_return; ++i )
-			{
-				aiMeshAnim const * const l_meshAnim = p_animation.mMeshChannels[i];
-
-				if ( string::string_cast< xchar >( l_meshAnim->mName.data ) == p_meshName )
+			aiMeshAnim const * result = nullptr;
+			auto it = std::find_if( animation.mMeshChannels
+				, animation.mMeshChannels + animation.mNumMeshChannels
+				, [&meshName]( aiMeshAnim const * const p_meshAnim )
 				{
-					l_return = l_meshAnim;
-				}
+					return string::stringCast< xchar >( p_meshAnim->mName.data ) == meshName;
+				} );
+
+			if ( it != animation.mMeshChannels + animation.mNumMeshChannels )
+			{
+				result = *it;
 			}
 
-			return l_return;
+			return result;
 		}
 
 		template< typename aiMeshType >
-		InterleavedVertexArray DoCreateVertexBuffer( aiMeshType const & p_aiMesh )
+		InterleavedVertexArray doCreateVertexBuffer( aiMeshType const & aiMesh )
 		{
-			InterleavedVertexArray l_vertices{ p_aiMesh.mNumVertices };
-			uint32_t l_index{ 0u };
+			InterleavedVertexArray vertices{ aiMesh.mNumVertices };
+			uint32_t index{ 0u };
 
-			for ( auto & l_vertex : l_vertices )
+			for ( auto & vertex : vertices )
 			{
-				l_vertex.m_pos[0] = real( p_aiMesh.mVertices[l_index].x );
-				l_vertex.m_pos[1] = real( p_aiMesh.mVertices[l_index].y );
-				l_vertex.m_pos[2] = real( p_aiMesh.mVertices[l_index].z );
-				++l_index;
+				vertex.m_pos[0] = real( aiMesh.mVertices[index].x );
+				vertex.m_pos[1] = real( aiMesh.mVertices[index].y );
+				vertex.m_pos[2] = real( aiMesh.mVertices[index].z );
+				++index;
 			}
 
-			if ( p_aiMesh.HasNormals() )
+			if ( aiMesh.HasNormals() )
 			{
-				l_index = 0u;
+				index = 0u;
 
-				for ( auto & l_vertex : l_vertices )
+				for ( auto & vertex : vertices )
 				{
-					l_vertex.m_nml[0] = real( p_aiMesh.mNormals[l_index].x );
-					l_vertex.m_nml[1] = real( p_aiMesh.mNormals[l_index].y );
-					l_vertex.m_nml[2] = real( p_aiMesh.mNormals[l_index].z );
-					++l_index;
+					vertex.m_nml[0] = real( aiMesh.mNormals[index].x );
+					vertex.m_nml[1] = real( aiMesh.mNormals[index].y );
+					vertex.m_nml[2] = real( aiMesh.mNormals[index].z );
+					++index;
 				}
 			}
 
-			if ( p_aiMesh.HasTangentsAndBitangents() )
+			if ( aiMesh.HasTangentsAndBitangents() )
 			{
-				l_index = 0u;
+				index = 0u;
 
-				for ( auto & l_vertex : l_vertices )
+				for ( auto & vertex : vertices )
 				{
-					l_vertex.m_tan[0] = real( p_aiMesh.mTangents[l_index].x );
-					l_vertex.m_tan[1] = real( p_aiMesh.mTangents[l_index].y );
-					l_vertex.m_tan[2] = real( p_aiMesh.mTangents[l_index].z );
-					++l_index;
+					vertex.m_tan[0] = real( aiMesh.mTangents[index].x );
+					vertex.m_tan[1] = real( aiMesh.mTangents[index].y );
+					vertex.m_tan[2] = real( aiMesh.mTangents[index].z );
+					++index;
 				}
 
-				l_index = 0u;
+				index = 0u;
 
-				for ( auto & l_vertex : l_vertices )
+				for ( auto & vertex : vertices )
 				{
-					l_vertex.m_bin[0] = real( p_aiMesh.mBitangents[l_index].x );
-					l_vertex.m_bin[1] = real( p_aiMesh.mBitangents[l_index].y );
-					l_vertex.m_bin[2] = real( p_aiMesh.mBitangents[l_index].z );
-					++l_index;
+					vertex.m_bin[0] = real( aiMesh.mBitangents[index].x );
+					vertex.m_bin[1] = real( aiMesh.mBitangents[index].y );
+					vertex.m_bin[2] = real( aiMesh.mBitangents[index].z );
+					++index;
 				}
 			}
 
-			if ( p_aiMesh.HasTextureCoords( 0 ) )
+			if ( aiMesh.HasTextureCoords( 0 ) )
 			{
-				l_index = 0u;
+				index = 0u;
 
-				for ( auto & l_vertex : l_vertices )
+				for ( auto & vertex : vertices )
 				{
-					l_vertex.m_tex[0] = real( p_aiMesh.mTextureCoords[0][l_index].x );
-					l_vertex.m_tex[1] = real( p_aiMesh.mTextureCoords[0][l_index].y );
-					l_vertex.m_tex[2] = real( p_aiMesh.mTextureCoords[0][l_index].z );
-					++l_index;
+					vertex.m_tex[0] = real( aiMesh.mTextureCoords[0][index].x );
+					vertex.m_tex[1] = real( aiMesh.mTextureCoords[0][index].y );
+					vertex.m_tex[2] = real( aiMesh.mTextureCoords[0][index].z );
+					++index;
 				}
 			}
 
-			return l_vertices;
+			return vertices;
 		}
 
 		template< typename T >
-		void DoFind( std::chrono::milliseconds p_time,
-					 typename std::map< std::chrono::milliseconds, T > const & p_map,
-					 typename std::map< std::chrono::milliseconds, T >::const_iterator & p_prv,
-					 typename std::map< std::chrono::milliseconds, T >::const_iterator & p_cur )
+		void doFind( Milliseconds time
+			, typename std::map< Milliseconds, T > const & map
+			, typename std::map< Milliseconds, T >::const_iterator & prv
+			, typename std::map< Milliseconds, T >::const_iterator & cur )
 		{
-			if ( p_map.empty() )
+			if ( map.empty() )
 			{
-				p_prv = p_cur = p_map.end();
+				prv = cur = map.end();
 			}
 			else
 			{
-				p_cur = std::find_if( p_map.begin(), p_map.end(), [&p_time]( std::pair< std::chrono::milliseconds, T > const & p_pair )
-				{
-					return p_pair.first > p_time;
-				} );
+				cur = std::find_if( map.begin()
+					, map.end()
+					, [&time]( std::pair< Milliseconds, T > const & pair )
+					{
+						return pair.first > time;
+					} );
 
-				if ( p_cur == p_map.end() )
+				if ( cur == map.end() )
 				{
-					--p_cur;
+					--cur;
 				}
 
-				p_prv = p_cur;
+				prv = cur;
 
-				if ( p_prv != p_map.begin() )
+				if ( prv != map.begin() )
 				{
-					p_prv--;
+					prv--;
 				}
 
-				ENSURE( p_prv != p_cur );
+				ENSURE( prv != cur );
 			}
 		}
 
 		template< typename T >
-		T DoCompute( std::chrono::milliseconds const & p_from
-			, Interpolator< T > const & p_interpolator
-			, std::map< std::chrono::milliseconds, T > const & p_values )
+		T doCompute( Milliseconds const & from
+			, Interpolator< T > const & interpolator
+			, std::map< Milliseconds, T > const & values )
 		{
-			T l_return;
+			T result;
 
-			if ( p_values.size() == 1 )
+			if ( values.size() == 1 )
 			{
-				l_return = p_values.begin()->second;
+				result = values.begin()->second;
 			}
 			else
 			{
-				auto l_prv = p_values.begin();
-				auto l_cur = p_values.begin();
-				DoFind( p_from, p_values, l_prv, l_cur );
-				auto l_dt = l_cur->first - l_prv->first;
-				real l_factor = ( p_from - l_prv->first ).count() / real( l_dt.count() );
-				l_return = p_interpolator.Interpolate( l_prv->second, l_cur->second, l_factor );
+				auto prv = values.begin();
+				auto cur = values.begin();
+				doFind( from, values, prv, cur );
+				auto dt = cur->first - prv->first;
+				real factor = ( from - prv->first ).count() / real( dt.count() );
+				result = interpolator.interpolate( prv->second, cur->second, factor );
 			}
 
-			return l_return;
+			return result;
 		}
 
-		void DoProcessPassBaseComponents( LegacyPass & p_pass, aiMaterial const & p_aiMaterial )
+		void doProcessPassBaseComponents( LegacyPass & pass
+			, aiMaterial const & aiMaterial )
 		{
-			aiColor3D l_ambient( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );
-			aiColor3D l_diffuse( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, l_diffuse );
-			aiColor3D l_specular( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, l_specular );
-			aiColor3D l_emissive( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, l_emissive );
-			float l_opacity = 1;
-			p_aiMaterial.Get( AI_MATKEY_OPACITY, l_opacity );
-			float l_shininess = 0.5f;
-			p_aiMaterial.Get( AI_MATKEY_SHININESS, l_shininess );
-			float l_shininessStrength = 1.0f;
-			p_aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, l_shininessStrength );
-			int l_twoSided = 0;
-			p_aiMaterial.Get( AI_MATKEY_TWOSIDED, l_twoSided );
+			aiColor3D ambient( 1, 1, 1 );
+			aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, ambient );
+			aiColor3D diffuse( 1, 1, 1 );
+			aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, diffuse );
+			aiColor3D specular( 1, 1, 1 );
+			aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, specular );
+			aiColor3D emissive( 1, 1, 1 );
+			aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, emissive );
+			float opacity = 1;
+			aiMaterial.Get( AI_MATKEY_OPACITY, opacity );
+			float shininess = 0.5f;
+			aiMaterial.Get( AI_MATKEY_SHININESS, shininess );
+			float shininessStrength = 1.0f;
+			aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
+			int twoSided = 0;
+			aiMaterial.Get( AI_MATKEY_TWOSIDED, twoSided );
 
-			if ( l_ambient.IsBlack() && l_diffuse.IsBlack() && l_specular.IsBlack() && l_emissive.IsBlack() )
+			if ( ambient.IsBlack()
+				&& diffuse.IsBlack()
+				&& specular.IsBlack()
+				&& emissive.IsBlack() )
 			{
-				l_diffuse.r = 1.0;
-				l_diffuse.g = 1.0;
-				l_diffuse.b = 1.0;
+				diffuse.r = 1.0;
+				diffuse.g = 1.0;
+				diffuse.b = 1.0;
 			}
 
-			p_pass.SetOpacity( l_opacity );
-			p_pass.SetTwoSided( l_twoSided != 0 );
-			p_pass.SetAmbient( Colour::from_components( l_ambient.r, l_ambient.g, l_ambient.b, 1 ) );
-			p_pass.SetDiffuse( Colour::from_components( l_diffuse.r, l_diffuse.g, l_diffuse.b, 1 ) );
-			p_pass.SetSpecular( Colour::from_components( l_specular.r * l_shininessStrength, l_specular.g * l_shininessStrength, l_specular.b * l_shininessStrength, 1 ) );
-			p_pass.SetEmissive( HdrColour::from_components( l_emissive.r, l_emissive.g, l_emissive.b, 1 ) );
+			pass.setOpacity( opacity );
+			pass.setTwoSided( twoSided != 0 );
+			pass.setDiffuse( RgbColour::fromComponents( diffuse.r
+				, diffuse.g
+				, diffuse.b ) );
+			pass.setSpecular( RgbColour::fromComponents( specular.r * shininessStrength
+				, specular.g * shininessStrength
+				, specular.b * shininessStrength ) );
+			pass.setEmissive( float( point::length( Point3f{ emissive.r
+				, emissive.g
+				, emissive.b } ) ) );
 
-			if ( l_shininess > 0 )
+			if ( shininess > 0 )
 			{
-				p_pass.SetShininess( l_shininess );
+				pass.setShininess( shininess );
 			}
 		}
 
-		void DoLoadTexture( aiString const & p_name, Pass & p_pass, TextureChannel p_channel, Importer const & p_importer )
+		void doLoadTexture( aiString const & name
+			, Pass & pass
+			, TextureChannel channel
+			, Importer const & importer )
 		{
-			if ( p_name.length > 0 )
+			if ( name.length > 0 )
 			{
-				p_importer.LoadTexture( Path{ string::string_cast< xchar >( p_name.C_Str() ) }, p_pass, p_channel );
+				importer.loadTexture( Path{ string::stringCast< xchar >( name.C_Str() ) }
+					, pass
+					, channel );
 			}
 		}
 
-		void DoProcessPassTextures( Pass & p_pass, aiMaterial const & p_aiMaterial, Importer const & p_importer )
+		void doProcessPassTextures( Pass & pass
+			, aiMaterial const & aiMaterial
+			, Importer const & importer )
 		{
-			aiString l_ambTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
-			aiString l_difTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
-			aiString l_spcTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
-			aiString l_emiTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), l_emiTexName );
-			aiString l_nmlTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
-			aiString l_hgtTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
-			aiString l_opaTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
-			aiString l_shnTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
+			aiString ambTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), ambTexName );
+			aiString difTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), difTexName );
+			aiString spcTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), spcTexName );
+			aiString emiTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), emiTexName );
+			aiString nmlTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), nmlTexName );
+			aiString hgtTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), hgtTexName );
+			aiString opaTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), opaTexName );
+			aiString shnTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), shnTexName );
 
-			if ( l_difTexName.length > 0 && std::string( l_difTexName.C_Str() ).find( "_Cine_" ) != String::npos && std::string( l_difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
+			if ( difTexName.length > 0
+				&& std::string( difTexName.C_Str() ).find( "_Cine_" ) != String::npos
+				&& std::string( difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
 			{
 				// Workaround for Collada textures.
-				String l_strGlob = string::string_cast< xchar >( l_difTexName.C_Str() ) + cuT( ".tga" );
-				string::replace( l_strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
-				String l_strDiff = l_strGlob;
-				String l_strNorm = l_strGlob;
-				String l_strSpec = l_strGlob;
-				String l_strOpac = l_strGlob;
-				p_importer.LoadTexture( Path{ string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }, p_pass, TextureChannel::eDiffuse );
-				p_importer.LoadTexture( Path{ string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }, p_pass, TextureChannel::eNormal );
-				p_importer.LoadTexture( Path{ string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }, p_pass, TextureChannel::eSpecular );
-				p_importer.LoadTexture( Path{ string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }, p_pass, TextureChannel::eOpacity );
+				String strGlob = string::stringCast< xchar >( difTexName.C_Str() ) + cuT( ".tga" );
+				string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
+				String strDiff = strGlob;
+				String strNorm = strGlob;
+				String strSpec = strGlob;
+				String strOpac = strGlob;
+				importer.loadTexture( Path{ string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }
+					, pass
+					, TextureChannel::eDiffuse );
+				importer.loadTexture( Path{ string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }
+					, pass
+					, TextureChannel::eNormal );
+				importer.loadTexture( Path{ string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }
+					, pass
+					, TextureChannel::eSpecular );
+				importer.loadTexture( Path{ string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }
+					, pass
+					, TextureChannel::eOpacity );
 			}
 			else
 			{
-				DoLoadTexture( l_ambTexName, p_pass, TextureChannel::eAmbient, p_importer );
-				DoLoadTexture( l_difTexName, p_pass, TextureChannel::eDiffuse, p_importer );
-				DoLoadTexture( l_spcTexName, p_pass, TextureChannel::eSpecular, p_importer );
-				DoLoadTexture( l_emiTexName, p_pass, TextureChannel::eEmissive, p_importer );
-				DoLoadTexture( l_opaTexName, p_pass, TextureChannel::eOpacity, p_importer );
-				DoLoadTexture( l_shnTexName, p_pass, TextureChannel::eGloss, p_importer );
+				doLoadTexture( difTexName, pass, TextureChannel::eDiffuse, importer );
+				doLoadTexture( spcTexName, pass, TextureChannel::eSpecular, importer );
+				doLoadTexture( emiTexName, pass, TextureChannel::eEmissive, importer );
+				doLoadTexture( opaTexName, pass, TextureChannel::eOpacity, importer );
+				doLoadTexture( shnTexName, pass, TextureChannel::eGloss, importer );
 
-				if ( l_nmlTexName.length > 0 )
+				if ( nmlTexName.length > 0 )
 				{
-					DoLoadTexture( l_nmlTexName, p_pass, TextureChannel::eNormal, p_importer );
+					doLoadTexture( nmlTexName, pass, TextureChannel::eNormal, importer );
 
-					if ( l_hgtTexName.length > 0 )
+					if ( hgtTexName.length > 0 )
 					{
-						DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::eHeight, p_importer );
+						doLoadTexture( hgtTexName, pass, TextureChannel::eHeight, importer );
 					}
 				}
-				else if ( l_hgtTexName.length > 0 )
+				else if ( hgtTexName.length > 0 )
 				{
-					DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::eNormal, p_importer );
+					doLoadTexture( hgtTexName, pass, TextureChannel::eNormal, importer );
+				}
+			}
+		}
+
+		std::map< Milliseconds, Point3r > doProcessVec3Keys( aiVectorKey const * const keys
+			, uint32_t count
+			, int64_t ticksPerMilliSecond
+			, std::set< Milliseconds > & times )
+		{
+			std::map< Milliseconds, Point3r > result;
+
+			for ( auto const & key : makeArrayView( keys, count ) )
+			{
+				auto time = Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+				times.insert( time );
+				result[time] = Point3r{ key.mValue.x, key.mValue.y, key.mValue.z };
+			}
+
+			return result;
+		}
+
+		std::map< Milliseconds, Quaternion > doProcessQuatKeys( aiQuatKey const * const keys
+			, uint32_t count
+			, int64_t ticksPerMilliSecond
+			, std::set< Milliseconds > & times )
+		{
+			std::map< Milliseconds, Quaternion > result;
+
+			for ( auto const & key : makeArrayView( keys, count ) )
+			{
+				auto time = Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+				times.insert( time );
+				result[time] = Quaternion::fromMatrix( Matrix4x4r{ Matrix3x3r{ &key.mValue.GetMatrix().Transpose().a1 } } );
+			}
+
+			return result;
+		}
+
+		SkeletonAnimationKeyFrame & doGetKeyFrame( Milliseconds const & time
+			, SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes )
+		{
+			auto it = keyframes.find( time );
+
+			if ( it == keyframes.end() )
+			{
+				it = keyframes.emplace( time
+					, std::make_unique< SkeletonAnimationKeyFrame >( animation, time ) ).first;
+			}
+
+			return *it->second;
+		}
+
+		void doSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
+			, std::map< Milliseconds, Point3r > const & scales
+			, std::map< Milliseconds, Quaternion > const & rotates
+			, std::set< Milliseconds > const & times
+			, uint32_t fps
+			, int64_t ticksPerMilliSecond
+			, SkeletonAnimationObject & object
+			, SkeletonAnimation & animation
+			, SkeletonAnimationKeyFrameMap & keyframes )
+		{
+			InterpolatorT< Point3r, InterpolatorType::eLinear > pointInterpolator;
+			InterpolatorT< Quaternion, InterpolatorType::eLinear > quatInterpolator;
+
+			if ( ticksPerMilliSecond / 1000 >= fps )
+			{
+				for ( auto time : times )
+				{
+					Point3r translate = doCompute( time, pointInterpolator, translates );
+					Point3r scale = doCompute( time, pointInterpolator, scales );
+					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+						, translate
+						, rotate
+						, scale );
+				}
+			}
+			else
+			{
+				// Limit the key frames per second to 60, to spare RAM...
+				Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
+				Milliseconds maxTime{ *times.rbegin() + step };
+
+				for ( Milliseconds time{ 0 }; time < maxTime; time += step )
+				{
+					Point3r translate = doCompute( time, pointInterpolator, translates );
+					Point3r scale = doCompute( time, pointInterpolator, scales );
+					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+						, translate
+						, rotate
+						, scale );
 				}
 			}
 		}
@@ -300,8 +427,10 @@ namespace C3dAssimp
 
 	//*********************************************************************************************
 
-	AssimpImporter::AssimpImporter( Engine & p_engine )
-		: Importer( p_engine )
+	castor::String const AssimpImporter::Name = cuT( "ASSIMP Importer" );
+
+	AssimpImporter::AssimpImporter( Engine & engine )
+		: Importer( engine )
 		, m_anonymous( 0 )
 	{
 	}
@@ -310,120 +439,126 @@ namespace C3dAssimp
 	{
 	}
 
-	ImporterUPtr AssimpImporter::Create( Engine & p_engine )
+	ImporterUPtr AssimpImporter::create( Engine & engine )
 	{
-		return std::make_unique< AssimpImporter >( p_engine );
+		return std::make_unique< AssimpImporter >( engine );
 	}
 
-	bool AssimpImporter::DoImportScene( Scene & p_scene )
+	bool AssimpImporter::doImportScene( Scene & scene )
 	{
-		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
-		bool l_return = DoImportMesh( *l_mesh );
+		auto mesh = scene.getMeshCache().add( cuT( "Mesh_PLY" ) );
+		bool result = doImportMesh( *mesh );
 
-		if ( l_return )
+		if ( result )
 		{
-			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
-			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
-			l_geometry->SetMesh( l_mesh );
-			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
+			SceneNodeSPtr node = scene.getSceneNodeCache().add( mesh->getName(), scene.getObjectRootNode() );
+			GeometrySPtr geometry = scene.getGeometryCache().add( mesh->getName(), node, nullptr );
+			geometry->setMesh( mesh );
+			m_geometries.insert( { geometry->getName(), geometry } );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool AssimpImporter::DoImportMesh( Mesh & p_mesh )
+	bool AssimpImporter::doImportMesh( Mesh & mesh )
 	{
-		bool l_return{ false };
+		bool result{ false };
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
-		SubmeshSPtr l_submesh;
-		Assimp::Importer l_importer;
-		uint32_t l_flags = aiProcess_Triangulate
-						   | aiProcess_JoinIdenticalVertices
-						   | aiProcess_OptimizeMeshes
-						   | aiProcess_OptimizeGraph
-						   | aiProcess_FixInfacingNormals
-						   | aiProcess_LimitBoneWeights
-						   | aiProcess_Debone;
-		bool l_tangentSpace = false;
-		xchar l_buffer[1024] = { 0 };
+		SubmeshSPtr submesh;
+		Assimp::Importer importer;
+		uint32_t flags = aiProcess_Triangulate
+			| aiProcess_JoinIdenticalVertices
+			| aiProcess_OptimizeMeshes
+			| aiProcess_OptimizeGraph
+			| aiProcess_FixInfacingNormals
+			| aiProcess_LimitBoneWeights
+			| aiProcess_Debone;
+		bool tangentSpace = false;
+		String normals;
 
-		if ( m_parameters.Get( cuT( "normals" ), l_buffer ) )
+		if ( m_parameters.get( cuT( "normals" ), normals ) )
 		{
-			String l_normals = l_buffer;
-
-			if ( l_normals == cuT( "smooth" ) )
+			if ( normals == cuT( "smooth" ) )
 			{
-				l_flags |= aiProcess_GenSmoothNormals;
+				flags |= aiProcess_GenSmoothNormals;
 			}
 		}
 
-		if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace ) && l_tangentSpace )
+		if ( m_parameters.get( cuT( "tangent_space" ), tangentSpace ) && tangentSpace )
 		{
-			l_flags |= aiProcess_CalcTangentSpace;
+			flags |= aiProcess_CalcTangentSpace;
 		}
 
 		// And have it read the given file with some postprocessing
-		aiScene const * l_aiScene = l_importer.ReadFile( string::string_cast< char >( m_fileName ), l_flags );
+		aiScene const * aiScene = importer.ReadFile( string::stringCast< char >( m_fileName ), flags );
 
-		if ( l_aiScene )
+		if ( aiScene )
 		{
-			SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *p_mesh.GetScene() );
-			l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
+			SkeletonSPtr skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
+			skeleton->setGlobalInverseTransform( Matrix4x4r( &aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
 
-			if ( l_aiScene->HasMeshes() )
+			if ( aiScene->HasMeshes() )
 			{
-				bool l_create = true;
+				bool create = true;
 
-				for ( uint32_t i = 0; i < l_aiScene->mNumMeshes; ++i )
+				for ( auto aiMesh : makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
 				{
-					if ( l_create )
+					if ( create )
 					{
-						l_submesh = p_mesh.CreateSubmesh();
+						submesh = mesh.createSubmesh();
 					}
 
-					l_create = DoProcessMesh( *p_mesh.GetScene(), p_mesh, *l_skeleton, *l_aiScene->mMeshes[i], *l_aiScene, *l_submesh );
+					create = doProcessMesh( *mesh.getScene(), mesh, *skeleton, *aiMesh, *aiScene, *submesh );
 				}
 
 				if ( m_arrayBones.empty() )
 				{
-					l_skeleton.reset();
+					skeleton.reset();
 				}
 				else
 				{
-					p_mesh.SetSkeleton( l_skeleton );
+					mesh.setSkeleton( skeleton );
 				}
 
-				if ( l_skeleton )
+				if ( skeleton )
 				{
-					for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
+					for ( auto aiAnimation : makeArrayView( aiScene->mAnimations, aiScene->mNumAnimations ) )
 					{
-						DoProcessAnimation( m_fileName.GetFileName(), *l_skeleton, *l_aiScene->mRootNode, *l_aiScene->mAnimations[i] );
+						doProcessAnimation( mesh
+							, m_fileName.getFileName()
+							, *skeleton
+							, *aiScene->mRootNode
+							, *aiAnimation );
 					}
 
-					l_importer.FreeScene();
+					importer.FreeScene();
 
-					if ( string::upper_case( m_fileName.GetExtension() ) == cuT( "MD5MESH" ) )
+					if ( string::upperCase( m_fileName.getExtension() ) == cuT( "MD5MESH" ) )
 					{
 						// Workaround to load multiple animations with MD5 models.
-						PathArray l_files;
-						File::ListDirectoryFiles( m_fileName.GetPath(), l_files );
+						PathArray files;
+						File::listDirectoryFiles( m_fileName.getPath(), files );
 
-						for ( auto l_file : l_files )
+						for ( auto file : files )
 						{
-							if ( string::lower_case( l_file.GetExtension() ) == cuT( "md5anim" ) )
+							if ( string::lowerCase( file.getExtension() ) == cuT( "md5anim" ) )
 							{
 								// The .md5anim with the same name as the .md5mesh has already been loaded by assimp.
-								if ( l_file.GetFileName() != m_fileName.GetFileName() )
+								if ( file.getFileName() != m_fileName.getFileName() )
 								{
-									auto l_scene = l_importer.ReadFile( l_file, l_flags );
+									auto scene = importer.ReadFile( file, flags );
 
-									for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
+									for ( auto aiAnimation : makeArrayView( scene->mAnimations, scene->mNumAnimations ) )
 									{
-										DoProcessAnimation( l_file.GetFileName(), *l_skeleton, *l_scene->mRootNode, *l_scene->mAnimations[i] );
+										doProcessAnimation( mesh
+											, file.getFileName()
+											, *skeleton
+											, *scene->mRootNode
+											, *aiAnimation );
 									}
 
-									l_importer.FreeScene();
+									importer.FreeScene();
 								}
 							}
 						}
@@ -431,298 +566,370 @@ namespace C3dAssimp
 				}
 				else
 				{
-					l_importer.FreeScene();
+					importer.FreeScene();
 				}
 
-				l_return = true;
+				result = true;
 			}
 			else
 			{
-				l_importer.FreeScene();
+				importer.FreeScene();
 			}
 		}
 		else
 		{
 			// The import failed, report it
-			Logger::LogError( std::stringstream() << "Scene import failed : " << l_importer.GetErrorString() );
+			Logger::logError( std::stringstream() << "Scene import failed : " << importer.GetErrorString() );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool AssimpImporter::DoProcessMesh( Scene & p_scene, Mesh & p_mesh, Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Submesh & p_submesh )
+	bool AssimpImporter::doProcessMesh( Scene & scene
+		, Mesh & mesh
+		, Skeleton & skeleton
+		, aiMesh const & aiMesh
+		, aiScene const & aiScene
+		, Submesh & submesh )
 	{
-		bool l_return = false;
-		MaterialSPtr l_material;
+		bool result = false;
+		MaterialSPtr material;
+		std::clog << cuT( "Mesh found: [" ) << aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
 
-		if ( p_aiMesh.mMaterialIndex < p_aiScene.mNumMaterials )
+		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
-			l_material = DoProcessMaterial( p_scene, *p_aiScene.mMaterials[p_aiMesh.mMaterialIndex] );
+			material = doProcessMaterial( scene, *aiScene.mMaterials[aiMesh.mMaterialIndex] );
+			std::clog << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( "]" ) << std::endl;
 		}
 
-		if ( p_aiMesh.HasFaces() && p_aiMesh.HasPositions() && l_material )
+		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material )
 		{
-			p_submesh.SetDefaultMaterial( l_material );
-			p_submesh.Ref( l_material );
-			p_submesh.AddPoints( DoCreateVertexBuffer( p_aiMesh ) );
+			submesh.setDefaultMaterial( material );
+			submesh.addPoints( doCreateVertexBuffer( aiMesh ) );
 
-			std::vector< VertexBoneData > l_arrayBones( p_aiMesh.mNumVertices );
-
-			if ( p_aiMesh.HasBones() )
+			if ( aiMesh.HasBones() )
 			{
-				DoProcessBones( p_skeleton, p_aiMesh.mBones, p_aiMesh.mNumBones, l_arrayBones );
-				p_submesh.AddBoneDatas( l_arrayBones );
+				std::vector< VertexBoneData > bonesData( aiMesh.mNumVertices );
+				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, bonesData );
+				auto bones = std::make_shared< BonesComponent >( submesh );
+				bones->addBoneDatas( bonesData );
+				submesh.addComponent( bones );
 			}
 
-			for ( uint32_t l_index = 0; l_index < p_aiMesh.mNumFaces; l_index++ )
-			{
-				aiFace const & l_face = p_aiMesh.mFaces[l_index];
+			auto mapping = std::make_shared< TriFaceMapping >( submesh );
 
-				if ( l_face.mNumIndices == 3 )
+			for ( auto face : makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces ) )
+			{
+				if ( face.mNumIndices == 3 )
 				{
-					p_submesh.AddFace( l_face.mIndices[0], l_face.mIndices[1], l_face.mIndices[2] );
+					mapping->addFace( face.mIndices[0], face.mIndices[1], face.mIndices[2] );
 				}
 			}
 
-			if ( !p_aiMesh.mNormals )
+			if ( !aiMesh.mNormals )
 			{
-				p_submesh.ComputeNormals( true );
+				mapping->computeNormals( true );
 			}
-			else if ( !p_aiMesh.mTangents )
+			else if ( !aiMesh.mTangents )
 			{
-				p_submesh.ComputeTangentsFromNormals();
+				mapping->computeTangentsFromNormals();
 			}
 
-			if ( p_aiScene.HasAnimations() )
+			submesh.setIndexMapping( mapping );
+
+			if ( aiScene.HasAnimations() )
 			{
-				std::for_each( p_aiScene.mAnimations, p_aiScene.mAnimations + p_aiScene.mNumAnimations, [this, &p_aiMesh, &p_mesh, &p_submesh]( aiAnimation const * p_aiAnimation )
+				for( auto aiAnimation : makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
 				{
-					auto l_it = std::find_if( p_aiAnimation->mMeshChannels, p_aiAnimation->mMeshChannels + p_aiAnimation->mNumMeshChannels, [this, &p_aiMesh, &p_submesh]( aiMeshAnim const * p_aiMeshAnim )
-					{
-						return p_aiMeshAnim->mName == p_aiMesh.mName;
-					} );
+					auto it = std::find_if( aiAnimation->mMeshChannels
+						, aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels
+						, [this, &aiMesh, &submesh]( aiMeshAnim const * p_aiMeshAnim )
+						{
+							return p_aiMeshAnim->mName == aiMesh.mName;
+						} );
 
-					if ( l_it != p_aiAnimation->mMeshChannels + p_aiAnimation->mNumMeshChannels )
+					if ( it != aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels )
 					{
-						DoProcessAnimationMeshes( p_mesh, p_submesh, p_aiMesh, *( *l_it ) );
+						doProcessAnimationMeshes( mesh, submesh, aiMesh, *( *it ) );
 					}
-				} );
+				}
 			}
 
-			l_return = true;
+			result = true;
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void AssimpImporter::DoProcessAnimationMeshes( Mesh & p_mesh, Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim )
+	void AssimpImporter::doProcessAnimationMeshes( Mesh & mesh
+		, Submesh & submesh
+		, aiMesh const & aiMesh
+		, aiMeshAnim const & aiMeshAnim )
 	{
-		if ( p_aiMeshAnim.mNumKeys )
+		if ( aiMeshAnim.mNumKeys )
 		{
-			String l_name{ string::string_cast< xchar >( p_aiMeshAnim.mName.C_Str() ) };
-			Logger::LogDebug( cuT( "Mesh animation found: " ) + l_name );
-			auto & l_animation = p_mesh.CreateAnimation( l_name );
-			MeshAnimationSubmesh l_animSubmesh{ l_animation, p_submesh };
+			String name{ string::stringCast< xchar >( aiMeshAnim.mName.C_Str() ) };
+			Logger::logDebug( cuT( "Mesh animation found: [" ) + name + cuT( "]" ) );
+			auto & animation = mesh.createAnimation( name );
+			MeshAnimationSubmesh animSubmesh{ animation, submesh };
+			animation.addChild( std::move( animSubmesh ) );
 
-			std::for_each( p_aiMeshAnim.mKeys, p_aiMeshAnim.mKeys + p_aiMeshAnim.mNumKeys, [&l_animSubmesh, &p_aiMesh]( aiMeshKey const & p_aiKey )
+			for ( auto aiKey : makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
 			{
-				l_animSubmesh.AddBuffer( std::chrono::milliseconds{ int64_t( p_aiKey.mTime * 1000 ) }
-					, DoCreateVertexBuffer( *p_aiMesh.mAnimMeshes[p_aiKey.mValue] ) );
-			} );
-
-			l_animation.AddChild( std::move( l_animSubmesh ) );
+				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+					, Milliseconds{ int64_t( aiKey.mTime * 1000 ) } );
+				keyFrame->addSubmeshBuffer( submesh, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
+				animation.addKeyFrame( std::move( keyFrame ) );
+			}
 		}
 	}
 
-	MaterialSPtr AssimpImporter::DoProcessMaterial( Scene & p_scene, aiMaterial const & p_aiMaterial )
+	MaterialSPtr AssimpImporter::doProcessMaterial( Scene & scene
+		, aiMaterial const & aiMaterial )
 	{
-		MaterialSPtr l_return;
-		auto & l_cache = p_scene.GetMaterialView();
-		aiString l_mtlname;
-		p_aiMaterial.Get( AI_MATKEY_NAME, l_mtlname );
-		String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
+		MaterialSPtr result;
+		auto & cache = scene.getMaterialView();
+		aiString mtlname;
+		aiMaterial.Get( AI_MATKEY_NAME, mtlname );
+		String name = string::stringCast< xchar >( mtlname.C_Str() );
 
-		if ( l_name.empty() )
+		if ( name.empty() )
 		{
-			l_name = m_fileName.GetFileName() + string::to_string( m_anonymous++ );
+			name = m_fileName.getFileName() + string::toString( m_anonymous++ );
 		}
 
-		if ( l_cache.Has( l_name ) )
+		if ( cache.has( name ) )
 		{
-			l_return = l_cache.Find( l_name );
-			REQUIRE( l_return->GetType() == MaterialType::eLegacy );
+			result = cache.find( name );
 		}
 		else
 		{
-			l_return = l_cache.Add( l_name, MaterialType::eLegacy );
-			l_return->CreatePass();
-			auto l_pass = l_return->GetTypedPass< MaterialType::eLegacy >( 0 );
+			result = cache.add( name, MaterialType::eLegacy );
+			result->createPass();
+			auto pass = result->getTypedPass< MaterialType::eLegacy >( 0 );
 
-			DoProcessPassBaseComponents( *l_pass, p_aiMaterial );
-			DoProcessPassTextures( *l_pass, p_aiMaterial, *this );
+			doProcessPassBaseComponents( *pass, aiMaterial );
+			doProcessPassTextures( *pass, aiMaterial, *this );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void AssimpImporter::DoProcessBones( Skeleton & p_skeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< VertexBoneData > & p_arrayVertices )
+	BoneSPtr AssimpImporter::doAddBone( String const & name
+		, Matrix4x4r const & offset
+		, Skeleton & skeleton
+		, uint32_t & index )
 	{
-		for ( uint32_t i = 0; i < p_count; ++i )
-		{
-			aiBone const & l_aiBone = *p_aiBones[i];
-			String l_name = string::string_cast< xchar >( l_aiBone.mName.C_Str() );
-			uint32_t l_index;
+		BoneSPtr bone = skeleton.createBone( name, offset );
+		index = uint32_t( m_arrayBones.size() );
+		m_arrayBones.push_back( bone );
+		m_mapBoneByID[name] = index;
+		return bone;
+	}
 
-			if ( m_mapBoneByID.find( l_name ) == m_mapBoneByID.end() )
+	void AssimpImporter::doProcessBones( Skeleton & skeleton
+		, aiBone const * const * aiBones
+		, uint32_t count
+		, std::vector< VertexBoneData > & arrayVertices )
+	{
+		for ( uint32_t i = 0; i < count; ++i )
+		{
+			aiBone const & aiBone = *aiBones[i];
+			String name = string::stringCast< xchar >( aiBone.mName.C_Str() );
+			uint32_t index;
+
+			if ( m_mapBoneByID.find( name ) == m_mapBoneByID.end() )
 			{
-				BoneSPtr l_bone = std::make_shared< Bone >( p_skeleton );
-				l_bone->SetName( l_name );
-				aiMatrix4x4 l_mtx{ l_aiBone.mOffsetMatrix };
-				l_bone->SetOffsetMatrix( Matrix4x4r{ &l_mtx.Transpose().a1 } );
-				l_index = uint32_t( m_arrayBones.size() );
-				m_arrayBones.push_back( l_bone );
-				m_mapBoneByID[l_name] = l_index;
-				p_skeleton.AddBone( l_bone );
+				auto mtx = aiBone.mOffsetMatrix;
+				doAddBone( name, Matrix4x4r{ &mtx.Transpose().a1 }, skeleton, index );
 			}
 			else
 			{
-				l_index = m_mapBoneByID[l_name];
-				aiMatrix4x4 l_mtx{ l_aiBone.mOffsetMatrix };
-				ENSURE( m_arrayBones[l_index]->GetOffsetMatrix() == Matrix4x4r( &l_mtx.Transpose().a1 ) );
+				index = m_mapBoneByID[name];
+				aiMatrix4x4 mtx{ aiBone.mOffsetMatrix };
+				ENSURE( m_arrayBones[index]->getOffsetMatrix() == Matrix4x4r( &mtx.Transpose().a1 ) );
 			}
 
-			for ( uint32_t j = 0; j < l_aiBone.mNumWeights; ++j )
+			for ( auto weight : makeArrayView( aiBone.mWeights, aiBone.mNumWeights ) )
 			{
-				p_arrayVertices[l_aiBone.mWeights[j].mVertexId].AddBoneData( l_index, real( l_aiBone.mWeights[j].mWeight ) );
+				arrayVertices[weight.mVertexId].addBoneData( index, real( weight.mWeight ) );
 			}
 		}
 	}
 
-	void AssimpImporter::DoProcessAnimation( String const & p_name, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation )
+	void AssimpImporter::doProcessAnimation( Mesh & mesh
+		, String const & animName
+		, Skeleton & skeleton
+		, aiNode const & aiNode
+		, aiAnimation const & aiAnimation )
 	{
-		String l_name{ string::string_cast< xchar >( p_aiAnimation.mName.C_Str() ) };
-		Logger::LogDebug( cuT( "Skeleton animation found: " ) + l_name );
+		String name{ string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
+		Logger::logDebug( cuT( "Skeleton animation found: " ) + name );
 
-		if ( l_name.empty() )
+		if ( name.empty() )
 		{
-			l_name = p_name;
+			name = animName;
 		}
 
-		auto & l_animation = p_skeleton.CreateAnimation( l_name );
-		int64_t l_ticksPerMilliSecond = int64_t( p_aiAnimation.mTicksPerSecond ? p_aiAnimation.mTicksPerSecond : 25 );
-		DoProcessAnimationNodes( l_animation, l_ticksPerMilliSecond, p_skeleton, p_aiNode, p_aiAnimation, nullptr );
-		l_animation.UpdateLength();
-	}
+		auto & animation = skeleton.createAnimation( name );
+		int64_t ticksPerMilliSecond = int64_t( aiAnimation.mTicksPerSecond ? aiAnimation.mTicksPerSecond : 25 );
+		SkeletonAnimationKeyFrameMap keyframes;
+		SkeletonAnimationObjectSet notAnimated;
+		doProcessAnimationNodes( mesh
+			, animation
+			, ticksPerMilliSecond
+			, skeleton
+			, aiNode
+			, aiAnimation
+			, nullptr
+			, keyframes
+			, notAnimated );
 
-	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, int64_t p_ticksPerMilliSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object )
-	{
-		String l_name = string::string_cast< xchar >( p_aiNode.mName.data );
-		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
-		SkeletonAnimationObjectSPtr l_object;
-
-		if ( l_aiNodeAnim )
+		for ( auto & object : notAnimated )
 		{
-			auto l_itBone = m_mapBoneByID.find( l_name );
-
-			if ( l_itBone != m_mapBoneByID.end() )
+			for ( auto & keyFrame : keyframes )
 			{
-				auto l_bone = m_arrayBones[l_itBone->second];
-				l_object = p_animation.AddObject( l_bone, p_object );
-
-				if ( p_object->GetType() == SkeletonAnimationObjectType::eBone )
+				if ( !keyFrame.second->hasObject( *object ) )
 				{
-					p_skeleton.SetBoneParent( l_bone, std::static_pointer_cast< SkeletonAnimationBone >( p_object )->GetBone() );
-				}
-			}
-			else
-			{
-				l_object = p_animation.AddObject( p_aiNode.mName.C_Str(), p_object );
-			}
-
-			std::map< std::chrono::milliseconds, Point3r > l_translates;
-			std::map< std::chrono::milliseconds, Point3r > l_scales;
-			std::map< std::chrono::milliseconds, Quaternion > l_rotates;
-			std::set< std::chrono::milliseconds > l_times;
-
-			// We process translations
-			for ( auto const & l_translate : ArrayView< aiVectorKey >( l_aiNodeAnim->mPositionKeys, l_aiNodeAnim->mNumPositionKeys ) )
-			{
-				auto l_time = std::chrono::milliseconds{ int64_t( l_translate.mTime * 1000 ) } / p_ticksPerMilliSecond;
-				l_times.insert( l_time );
-				l_translates[l_time] = Point3r{ l_translate.mValue.x, l_translate.mValue.y, l_translate.mValue.z };
-			}
-
-			// Then we process scalings
-			for ( auto const & l_scale : ArrayView< aiVectorKey >( l_aiNodeAnim->mScalingKeys, l_aiNodeAnim->mNumScalingKeys ) )
-			{
-				auto l_time = std::chrono::milliseconds{ int64_t( l_scale.mTime * 1000 ) } / p_ticksPerMilliSecond;
-				l_times.insert( l_time );
-				l_scales[l_time] = Point3r{ l_scale.mValue.x, l_scale.mValue.y, l_scale.mValue.z };
-			}
-
-			// And eventually the rotations
-			for ( auto const & l_rot : ArrayView< aiQuatKey >( l_aiNodeAnim->mRotationKeys, l_aiNodeAnim->mNumRotationKeys ) )
-			{
-				auto l_time = std::chrono::milliseconds{ int64_t( l_rot.mTime * 1000 ) } / p_ticksPerMilliSecond;
-				l_times.insert( l_time );
-				Quaternion l_rotate;
-				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_rot.mValue.GetMatrix().Transpose().a1 } } );
-				l_rotates[l_time] = l_rotate;
-			}
-
-			// We synchronise the three arrays
-			KeyFrameRealMap l_keyframes;
-			InterpolatorT< Point3r, InterpolatorType::eLinear > l_pointInterpolator;
-			InterpolatorT< Quaternion, InterpolatorType::eLinear > l_quatInterpolator;
-
-			if ( p_ticksPerMilliSecond / 1000 >= GetEngine()->GetRenderLoop().GetWantedFps() )
-			{
-				for ( auto l_time : l_times )
-				{
-					Point3r l_translate = DoCompute( l_time, l_pointInterpolator, l_translates );
-					Point3r l_scale = DoCompute( l_time, l_pointInterpolator, l_scales );
-					Quaternion l_rotate = DoCompute( l_time, l_quatInterpolator, l_rotates );
-					l_object->AddKeyFrame( l_time, l_translate, l_rotate, l_scale );
-				}
-			}
-			else
-			{
-				// Limit the key frames per second to 60, to spare RAM...
-				std::chrono::milliseconds l_step{ 1000 / std::min< int64_t >( 60, int64_t( GetEngine()->GetRenderLoop().GetWantedFps() ) ) };
-				std::chrono::milliseconds l_maxTime{ *l_times.rbegin() + l_step };
-
-				for ( std::chrono::milliseconds l_time{ 0 }; l_time < l_maxTime; l_time += l_step )
-				{
-					Point3r l_translate = DoCompute( l_time, l_pointInterpolator, l_translates );
-					Point3r l_scale = DoCompute( l_time, l_pointInterpolator, l_scales );
-					Quaternion l_rotate = DoCompute( l_time, l_quatInterpolator, l_rotates );
-					l_object->AddKeyFrame( l_time, l_translate, l_rotate, l_scale );
+					keyFrame.second->addAnimationObject( *object, object->getNodeTransform() );
 				}
 			}
 		}
 
-		if ( !l_object )
+		for ( auto & keyFrame : keyframes )
 		{
-			l_object = p_animation.AddObject( p_aiNode.mName.C_Str(), p_object );
+			animation.addKeyFrame( std::move( keyFrame.second ) );
 		}
 
-		if ( l_object )
+		animation.updateLength();
+	}
+
+	void AssimpImporter::doProcessAnimationNodes( Mesh & mesh
+		, SkeletonAnimation & animation
+		, int64_t ticksPerMilliSecond
+		, Skeleton & skeleton
+		, aiNode const & aiNode
+		, aiAnimation const & aiAnimation
+		, SkeletonAnimationObjectSPtr parent
+		, SkeletonAnimationKeyFrameMap & keyFrames
+		, SkeletonAnimationObjectSet & notAnimated )
+	{
+		String name = string::stringCast< xchar >( aiNode.mName.data );
+		const aiNodeAnim * aiNodeAnim = doFindNodeAnim( aiAnimation, name );
+		SkeletonAnimationObjectSPtr object;
+		auto itBone = m_mapBoneByID.find( name );
+
+		if ( !aiNodeAnim
+			&& itBone == m_mapBoneByID.end()
+			&& aiNode.mNumMeshes )
 		{
-			if ( p_object )
+			uint32_t index;
+			auto bone = doAddBone( name, Matrix4x4r{ 1.0_r }, skeleton, index );
+
+			for ( auto const & aiMesh : makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
-				p_object->AddChild( l_object );
+				auto submesh = mesh.getSubmesh( aiMesh );
+				REQUIRE( submesh != nullptr );
+
+				if ( !submesh->hasComponent( BonesComponent::Name ) )
+				{
+					auto bones = std::make_shared< BonesComponent >( *submesh );
+					std::vector< VertexBoneData > arrayBones( submesh->getPointsCount() );
+
+					for ( auto & boneData : arrayBones )
+					{
+						boneData.addBoneData( index, 1.0_r );
+					}
+
+					bones->addBoneDatas( arrayBones );
+					submesh->addComponent( bones );
+				}
 			}
 
-			if ( !l_object->HasKeyFrames() )
-			{
-				l_object->SetNodeTransform( Matrix4x4r( &p_aiNode.mTransformation.a1 ) );
-			}
+			itBone = m_mapBoneByID.find( name );
 		}
 
-		for ( uint32_t i = 0; i < p_aiNode.mNumChildren; i++ )
+		if ( itBone != m_mapBoneByID.end() )
 		{
-			DoProcessAnimationNodes( p_animation, p_ticksPerMilliSecond, p_skeleton, *p_aiNode.mChildren[i], p_aiAnimation, l_object );
+			auto bone = m_arrayBones[itBone->second];
+			object = animation.addObject( bone, parent );
+
+			if ( parent && parent->getType() == SkeletonAnimationObjectType::eBone )
+			{
+				skeleton.setBoneParent( bone, std::static_pointer_cast< SkeletonAnimationBone >( parent )->getBone() );
+			}
 		}
+		else
+		{
+			object = animation.addObject( aiNode.mName.C_Str(), parent );
+		}
+
+		if ( object )
+		{
+			if ( parent && object != parent )
+			{
+				parent->addChild( object );
+			}
+
+			object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
+		}
+
+		if ( aiNodeAnim )
+		{
+			doProcessAnimationNodeKeys( *aiNodeAnim
+				, ticksPerMilliSecond
+				, *object
+				, animation
+				, keyFrames );
+		}
+		else
+		{
+			notAnimated.insert( object );
+		}
+
+		for ( auto node : makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		{
+			doProcessAnimationNodes( mesh
+				, animation
+				, ticksPerMilliSecond
+				, skeleton
+				, *node
+				, aiAnimation
+				, object
+				, keyFrames
+				, notAnimated );
+		}
+	}
+
+	void AssimpImporter::doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
+		, int64_t ticksPerMilliSecond
+		, SkeletonAnimationObject & object
+		, SkeletonAnimation & animation
+		, SkeletonAnimationKeyFrameMap & keyframes )
+	{
+		std::set< Milliseconds > times;
+
+		auto translates = doProcessVec3Keys( aiNodeAnim.mPositionKeys
+			, aiNodeAnim.mNumPositionKeys
+			, ticksPerMilliSecond
+			, times );
+		auto scales = doProcessVec3Keys( aiNodeAnim.mScalingKeys
+			, aiNodeAnim.mNumScalingKeys
+			, ticksPerMilliSecond
+			, times );
+		auto rotates = doProcessQuatKeys( aiNodeAnim.mRotationKeys
+			, aiNodeAnim.mNumRotationKeys
+			, ticksPerMilliSecond
+			, times );
+		doSynchroniseKeys( translates
+			, scales
+			, rotates
+			, times
+			, getEngine()->getRenderLoop().getWantedFps()
+			, ticksPerMilliSecond
+			, object
+			, animation
+			, keyframes );
 	}
 
 	//*********************************************************************************************

@@ -19,12 +19,12 @@ namespace Testing
 		m_cases.clear();
 	}
 
-	void BenchManager::Register( BenchCaseUPtr p_bench )
+	void BenchManager::registerType( BenchCaseUPtr p_bench )
 	{
 		m_benchs.push_back( std::move( p_bench ) );
 	}
 
-	void BenchManager::Register( TestCaseUPtr p_case )
+	void BenchManager::registerType( TestCaseUPtr p_case )
 	{
 		p_case->RegisterTests();
 		m_cases.push_back( std::move( p_case ) );
@@ -33,20 +33,20 @@ namespace Testing
 	void BenchManager::ExecuteBenchs()
 	{
 		std::cout << "*********************************************************************************************" << std::endl;
-		std::stringstream l_benchSep;
-		l_benchSep.width( BENCH_TITLE_WIDTH );
-		l_benchSep.fill( '*' );
-		l_benchSep << '*';
+		std::stringstream benchSep;
+		benchSep.width( BENCH_TITLE_WIDTH );
+		benchSep.fill( '*' );
+		benchSep << '*';
 
 		if ( m_benchs.size() )
 		{
 			std::cout << std::endl;
 			std::cout << "Benchmarks - Begin" << std::endl;
-			std::cout << l_benchSep.str() << std::endl;
+			std::cout << benchSep.str() << std::endl;
 
-			for ( auto & l_bench : m_benchs )
+			for ( auto & bench : m_benchs )
 			{
-				l_bench->Execute();
+				bench->Execute();
 			}
 
 			std::cout << std::endl;
@@ -63,49 +63,49 @@ namespace Testing
 
 	void BenchManager::BenchsSummary()
 	{
-		std::stringstream l_benchSep;
-		l_benchSep.width( BENCH_TITLE_WIDTH );
-		l_benchSep.fill( '*' );
-		l_benchSep << '*';
-		std::cout << l_benchSep.str() << std::endl;
+		std::stringstream benchSep;
+		benchSep.width( BENCH_TITLE_WIDTH );
+		benchSep.fill( '*' );
+		benchSep << '*';
+		std::cout << benchSep.str() << std::endl;
 
-		for ( auto & l_bench : m_benchs )
+		for ( auto & bench : m_benchs )
 		{
-			std::cout << l_bench->GetSummary().c_str() << std::endl;
+			std::cout << bench->getSummary().c_str() << std::endl;
 		}
 	}
 
 	uint32_t BenchManager::ExecuteTests()
 	{
-		uint32_t l_errCount = 0;
+		uint32_t errCount = 0;
 		std::cout << "*********************************************************************************************" << std::endl;
-		std::stringstream l_testSep;
-		l_testSep.width( BENCH_TITLE_WIDTH );
-		l_testSep.fill( '*' );
-		l_testSep << '*';
+		std::stringstream testSep;
+		testSep.width( BENCH_TITLE_WIDTH );
+		testSep.fill( '*' );
+		testSep << '*';
 
 		if ( m_cases.size() )
 		{
 			std::cout << std::endl;
 			std::cout << "Tests - Begin" << std::endl;
-			std::cout << l_testSep.str() << std::endl;
-			uint32_t l_testCount = 0;
+			std::cout << testSep.str() << std::endl;
+			uint32_t testCount = 0;
 
-			for ( auto & l_testCase : m_cases )
+			for ( auto & testCase : m_cases )
 			{
-				l_testCase->Execute( l_errCount, l_testCount );
-				std::cout << l_testSep.str() << std::endl;
+				testCase->Execute( errCount, testCount );
+				std::cout << testSep.str() << std::endl;
 			}
 
-			if ( l_errCount )
+			if ( errCount )
 			{
 				std::cout << std::endl;
-				std::cout << "Tests - End, " << l_errCount << " errors detected out of " << l_testCount << " tests" << std::endl;
+				std::cout << "Tests - End, " << errCount << " errors detected out of " << testCount << " tests" << std::endl;
 			}
 			else
 			{
 				std::cout << std::endl;
-				std::cout << "Tests - End, no error detected out of " << l_testCount << " tests" << std::endl;
+				std::cout << "Tests - End, no error detected out of " << testCount << " tests" << std::endl;
 			}
 		}
 		else
@@ -115,20 +115,20 @@ namespace Testing
 		}
 
 		std::cout << "*********************************************************************************************" << std::endl;
-		return l_errCount;
+		return errCount;
 	}
 
 	//*************************************************************************************************
 
-	bool Register( BenchCaseUPtr p_bench )
+	bool registerType( BenchCaseUPtr p_bench )
 	{
-		BenchManager::Register( std::move( p_bench ) );
+		BenchManager::registerType( std::move( p_bench ) );
 		return true;
 	}
 
-	bool Register( TestCaseUPtr p_case )
+	bool registerType( TestCaseUPtr p_case )
 	{
-		BenchManager::Register( std::move( p_case ) );
+		BenchManager::registerType( std::move( p_case ) );
 		return true;
 	}
 }

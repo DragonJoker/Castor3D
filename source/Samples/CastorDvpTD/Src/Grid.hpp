@@ -63,12 +63,12 @@ namespace castortd
 			return m_cells.end();
 		}
 
-		inline auto GetWidth()const
+		inline auto getWidth()const
 		{
 			return m_width;
 		}
 
-		inline auto GetHeight()const
+		inline auto getHeight()const
 		{
 			return m_height;
 		}

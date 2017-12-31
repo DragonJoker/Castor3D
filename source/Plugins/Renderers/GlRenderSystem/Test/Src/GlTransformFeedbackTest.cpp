@@ -1,4 +1,4 @@
-#include "GlTransformFeedbackTest.hpp"
+﻿#include "GlTransformFeedbackTest.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -7,14 +7,14 @@
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Shader/PushUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Shader/Uniform/PushUniform.hpp>
 #include <State/RasteriserState.hpp>
 
 #include <Buffer/GlBuffer.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 #ifdef max
 #	undef max
@@ -26,24 +26,23 @@ namespace Testing
 {
 	namespace
 	{
-		ShaderProgramSPtr DoCreateNoopProgram( Engine & p_engine )
+		ShaderProgramSPtr doCreateNoopProgram( Engine & engine )
 		{
-			String l_vtx = Glsl(
+			String vtx = Glsl(
 				void main()\n
 				{\n
 					gl_Position = vec4( 0, 0, 0, 1 );\n
 				}\n
 			);
-			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			return l_program;
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eVertex );
+			program->setSource( ShaderType::eVertex, vtx );
+			return program;
 		}
 
-		ShaderProgramSPtr DoCreateBasicComputeProgram( Engine & p_engine )
+		ShaderProgramSPtr doCreateBasicComputeProgram( Engine & engine )
 		{
-			String l_vtx = Glsl(
+			String vtx = Glsl(
 				in float inValue;\n
 				out float outValue;\n\n
 				void main()\n
@@ -51,16 +50,15 @@ namespace Testing
 					outValue = sqrt( inValue );\n
 				}\n
 			);
-			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			return l_program;
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eVertex );
+			program->setSource( ShaderType::eVertex, vtx );
+			return program;
 		}
 
-		ShaderProgramSPtr DoCreateGeometryShaderProgram( Engine & p_engine )
+		ShaderProgramSPtr doCreateGeometryShaderProgram( Engine & engine )
 		{
-			String l_vtx = Glsl(
+			String vtx = Glsl(
 				in float inValue;\n
 				out float geoValue;\n\n
 				void main()\n
@@ -68,7 +66,7 @@ namespace Testing
 					geoValue = sqrt( inValue );\n
 				}\n
 			);
-			String l_geo = Glsl(
+			String geo = Glsl(
 				layout( points ) in;\n
 				layout( triangle_strip, max_vertices = 3 ) out;\n\n
 				in float[] geoValue;\n
@@ -78,23 +76,22 @@ namespace Testing
 					for ( int i = 0; i < 3; i++ )\n
 					{\n
 						outValue = geoValue[0] + i;\n
-						EmitVertex();\n
+						emitVertex();\n
 					}\n
-					EndPrimitive();\n
+					endPrimitive();\n
 				}\n
 			);
-			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->CreateObject( ShaderType::eGeometry );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
-			return l_program;
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eVertex );
+			program->createObject( ShaderType::eGeometry );
+			program->setSource( ShaderType::eVertex, vtx );
+			program->setSource( ShaderType::eGeometry, geo );
+			return program;
 		}
 
-		ShaderProgramSPtr DoCreateParticleSystemShaderProgram( Engine & p_engine )
+		ShaderProgramSPtr doCreateParticleSystemShaderProgram( Engine & engine )
 		{
-			String l_vtx = Glsl(
+			String vtx = Glsl(
 				layout( location = 0 ) in float Type;\n
 				layout( location = 1 ) in vec3 Position;\n
 				layout( location = 2 ) in vec3 Velocity;\n
@@ -111,7 +108,7 @@ namespace Testing
 					Age0 = Age;\n
 				}\n
 			);
-			String l_geo = Glsl(
+			String geo = Glsl(
 				layout( points ) in;\n
 				layout( points ) out;\n
 				layout( max_vertices = 30 ) out;\n\n
@@ -128,7 +125,7 @@ namespace Testing
 				uniform float gLauncherLifetime;\n
 				uniform float gShellLifetime;\n
 				uniform float gSecondaryShellLifetime;\n\n
-				vec3 GetRandomDir( float TexCoord )\n
+				vec3 getRandomDir( float TexCoord )\n
 				{\n
 					vec3 Dir = vec3( TexCoord, TexCoord, TexCoord );\n
 					Dir -= vec3( 0.5, 0.5, 0.5 );\n
@@ -145,16 +142,16 @@ namespace Testing
 							Position1 = Position0[0];\n
 							Velocity1 = Velocity0[0];\n
 							Age1 = 0.0f;\n
-							EmitVertex();\n
-							EndPrimitive();\n\n
+							emitVertex();\n
+							endPrimitive();\n\n
 							Type1 = 1.0f;\n
 							Position1 = Position0[0];\n
-							vec3 Dir = GetRandomDir( gTime / 1000.0 );\n
+							vec3 Dir = getRandomDir( gTime / 1000.0 );\n
 							Dir.y = max( Dir.y, 0.5 );\n
 							Velocity1 = normalize( Dir ) / 20.0;\n
 							Age1 = 0.0f;\n
-							EmitVertex();\n
-							EndPrimitive();\n
+							emitVertex();\n
+							endPrimitive();\n
 						}\n
 						else\n
 						{\n
@@ -162,8 +159,8 @@ namespace Testing
 							Position1 = Position0[0];\n
 							Velocity1 = Velocity0[0];\n
 							Age1 = Age;\n
-							EmitVertex();\n
-							EndPrimitive();\n
+							emitVertex();\n
+							endPrimitive();\n
 						}\n
 					}\n
 					else\n
@@ -181,8 +178,8 @@ namespace Testing
 								Position1 = Position0[0] + DeltaP;\n
 								Velocity1 = Velocity0[0] + DeltaV;\n
 								Age1 = Age;\n
-								EmitVertex();\n
-								EndPrimitive();\n
+								emitVertex();\n
+								endPrimitive();\n
 							}\n
 							else\n
 							{\n
@@ -190,11 +187,11 @@ namespace Testing
 								{\n
 									Type1 = 2.0f;\n
 									Position1 = Position0[0];\n
-									vec3 Dir = GetRandomDir( ( gTime + i ) / 1000.0 );\n
+									vec3 Dir = getRandomDir( ( gTime + i ) / 1000.0 );\n
 									Velocity1 = normalize( Dir ) / 20.0;\n
 									Age1 = 0.0f;\n
-									EmitVertex();\n
-									EndPrimitive();\n
+									emitVertex();\n
+									endPrimitive();\n
 								}\n
 							}\n
 						}\n
@@ -206,25 +203,24 @@ namespace Testing
 								Position1 = Position0[0] + DeltaP;\n
 								Velocity1 = Velocity0[0] + DeltaV;\n
 								Age1 = Age;\n
-								EmitVertex();\n
-								EndPrimitive();\n
+								emitVertex();\n
+								endPrimitive();\n
 							}\n
 						}\n
 					}\n
 				}\n
 			);
-			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->CreateObject( ShaderType::eGeometry );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
-			return l_program;
+			auto program = engine.getRenderSystem()->createShaderProgram();
+			program->createObject( ShaderType::eVertex );
+			program->createObject( ShaderType::eGeometry );
+			program->setSource( ShaderType::eVertex, vtx );
+			program->setSource( ShaderType::eGeometry, geo );
+			return program;
 		}
 	}
 
-	GlTransformFeedbackTest::GlTransformFeedbackTest( Engine & p_engine )
-		: GlTestCase{ "GlTransformFeedbackTest", p_engine }
+	GlTransformFeedbackTest::GlTransformFeedbackTest( Engine & engine )
+		: GlTestCase{ "GlTransformFeedbackTest", engine }
 	{
 	}
 
@@ -232,253 +228,253 @@ namespace Testing
 	{
 	}
 
-	void GlTransformFeedbackTest::DoRegisterTests()
+	void GlTransformFeedbackTest::doRegisterTests()
 	{
-		DoRegisterTest( "GlTransformFeedbackTest::Creation", std::bind( &GlTransformFeedbackTest::Creation, this ) );
-		DoRegisterTest( "GlTransformFeedbackTest::BasicCompute", std::bind( &GlTransformFeedbackTest::BasicCompute, this ) );
-		DoRegisterTest( "GlTransformFeedbackTest::GeometryShader", std::bind( &GlTransformFeedbackTest::GeometryShader, this ) );
-		DoRegisterTest( "GlTransformFeedbackTest::VariableFeedback", std::bind( &GlTransformFeedbackTest::VariableFeedback, this ) );
-		DoRegisterTest( "GlTransformFeedbackTest::ParticleSystem", std::bind( &GlTransformFeedbackTest::ParticleSystem, this ) );
-		DoRegisterTest( "GlTransformFeedbackTest::TwoWaysParticleSystem", std::bind( &GlTransformFeedbackTest::TwoWaysParticleSystem, this ) );
+		doRegisterTest( "GlTransformFeedbackTest::Creation", std::bind( &GlTransformFeedbackTest::Creation, this ) );
+		doRegisterTest( "GlTransformFeedbackTest::BasicCompute", std::bind( &GlTransformFeedbackTest::BasicCompute, this ) );
+		doRegisterTest( "GlTransformFeedbackTest::GeometryShader", std::bind( &GlTransformFeedbackTest::GeometryShader, this ) );
+		doRegisterTest( "GlTransformFeedbackTest::VariableFeedback", std::bind( &GlTransformFeedbackTest::VariableFeedback, this ) );
+		doRegisterTest( "GlTransformFeedbackTest::ParticleSystem", std::bind( &GlTransformFeedbackTest::ParticleSystem, this ) );
+		doRegisterTest( "GlTransformFeedbackTest::TwoWaysParticleSystem", std::bind( &GlTransformFeedbackTest::TwoWaysParticleSystem, this ) );
 	}
 
 	void GlTransformFeedbackTest::Creation()
 	{
-		auto l_program = DoCreateNoopProgram( m_engine );
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( {}, Topology::ePoints, *l_program );
+		auto program = doCreateNoopProgram( m_engine );
+		auto transformFeedback = m_engine.getRenderSystem()->createTransformFeedback( {}, Topology::ePoints, *program );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_transformFeedback->Initialise( {} ) );
-		l_transformFeedback->Cleanup();
-		l_program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( program->initialise() );
+		CT_CHECK( transformFeedback->initialise( {} ) );
+		transformFeedback->cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlTransformFeedbackTest::BasicCompute()
 	{
-		BufferDeclaration l_outputs
+		BufferDeclaration outputs
 		{
 			{
 				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
-		BufferDeclaration l_inputs
+		BufferDeclaration inputs
 		{
 			{
 				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
-		float l_data[] = { 1, 2, 3, 4, 5 };
+		float data[] = { 1, 2, 3, 4, 5 };
 
 		// Shader program
-		auto l_program = DoCreateBasicComputeProgram( m_engine );
+		auto program = doCreateBasicComputeProgram( m_engine );
 
 		// Input VBO
-		VertexBuffer l_vboIn{ m_engine, l_inputs };
-		l_vboIn.Resize( sizeof( l_data ) );
-		std::memcpy( l_vboIn.data(), l_data, sizeof( l_data ) );
+		VertexBuffer vboIn{ m_engine, inputs };
+		vboIn.resize( sizeof( data ) );
+		std::memcpy( vboIn.getData(), data, sizeof( data ) );
 
 		// Output VBO
-		VertexBuffer l_vboOut{ m_engine, l_outputs };
-		l_vboOut.Resize( sizeof( l_data ) );
+		VertexBuffer vboOut{ m_engine, outputs };
+		vboOut.resize( sizeof( data ) );
 
 		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program );
-		l_program->SetTransformLayout( l_outputs );
+		auto transformFeedback = m_engine.getRenderSystem()->createTransformFeedback( outputs, Topology::ePoints, *program );
+		program->setTransformLayout( outputs );
 
 		// VAO
-		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
+		auto geometryBuffers = m_engine.getRenderSystem()->createGeometryBuffers( Topology::ePoints, *program );
 
 		// Pipeline
-		RasteriserState l_rs;
-		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		RasteriserState rs;
+		rs.setDiscardPrimitives( true );
+		auto pipeline = m_engine.getRenderSystem()->createRenderPipeline( DepthStencilState{}, std::move( rs ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
-		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( program->initialise() );
+		CT_CHECK( vboIn.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( vboOut.initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( transformFeedback->initialise( { vboOut } ) );
+		CT_CHECK( geometryBuffers->initialise( { vboIn }, nullptr ) );
 
 		for ( int j = 0; j < 2; ++j )
 		{
-			std::array< float, 5 > l_buffer;
-			l_vboIn.Download( 0u, sizeof( l_data ), reinterpret_cast< uint8_t * >( l_buffer.data() ) );
+			std::array< float, 5 > buffer;
+			vboIn.download( 0u, sizeof( data ), reinterpret_cast< uint8_t * >( buffer.data() ) );
 
 			for ( int i = 0; i < 5; ++i )
 			{
-				CT_EQUAL( l_buffer[i], l_data[i] );
+				CT_EQUAL( buffer[i], data[i] );
 			}
 
-			l_pipeline->Apply();
-			l_transformFeedback->Bind();
-			CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
-			l_transformFeedback->Unbind();
-			CT_EQUAL( l_transformFeedback->GetWrittenPrimitives(), 5 );
+			pipeline->apply();
+			transformFeedback->bind();
+			CT_CHECK( geometryBuffers->draw( 5, 0u ) );
+			transformFeedback->unbind();
+			CT_EQUAL( transformFeedback->getWrittenPrimitives(), 5 );
 
-			l_vboOut.Download( 0u, sizeof( l_data ), reinterpret_cast< uint8_t * >( l_buffer.data() ) );
+			vboOut.download( 0u, sizeof( data ), reinterpret_cast< uint8_t * >( buffer.data() ) );
 
 			for ( int i = 0; i < 5; ++i )
 			{
-				CT_EQUAL( l_buffer[i], sqrt( l_data[i] ) );
-				l_data[i] = sqrt( l_data[i] );
+				CT_EQUAL( buffer[i], sqrt( data[i] ) );
+				data[i] = sqrt( data[i] );
 			}
 
-			l_vboIn.Copy( l_vboOut, sizeof( l_data ) );
-			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
+			vboIn.copy( vboOut, sizeof( data ) );
+			m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 		}
 
-		l_geometryBuffers->Cleanup();
-		l_transformFeedback->Cleanup();
-		l_vboOut.Cleanup();
-		l_vboIn.Cleanup();
-		l_pipeline->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		geometryBuffers->cleanup();
+		transformFeedback->cleanup();
+		vboOut.cleanup();
+		vboIn.cleanup();
+		pipeline->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlTransformFeedbackTest::GeometryShader()
 	{
-		BufferDeclaration l_outputs
+		BufferDeclaration outputs
 		{
 			{
 				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
-		BufferDeclaration l_inputs
+		BufferDeclaration inputs
 		{
 			{
 				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
-		float l_data[] = { 1, 2, 3, 4, 5 };
+		float data[] = { 1, 2, 3, 4, 5 };
 
 		// Shader program
-		auto l_program = DoCreateGeometryShaderProgram( m_engine );
+		auto program = doCreateGeometryShaderProgram( m_engine );
 
 		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::eTriangles, *l_program );
-		l_program->SetTransformLayout( l_outputs );
+		auto transformFeedback = m_engine.getRenderSystem()->createTransformFeedback( outputs, Topology::eTriangles, *program );
+		program->setTransformLayout( outputs );
 
 		// Pipeline
-		RasteriserState l_rs;
-		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		RasteriserState rs;
+		rs.setDiscardPrimitives( true );
+		auto pipeline = m_engine.getRenderSystem()->createRenderPipeline( DepthStencilState{}, std::move( rs ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 
 		// Input VBO
-		VertexBuffer l_vboIn{ m_engine, l_inputs };
-		l_vboIn.Resize( sizeof( l_data ) );
-		std::memcpy( l_vboIn.data(), l_data, sizeof( l_data ) );
+		VertexBuffer vboIn{ m_engine, inputs };
+		vboIn.resize( sizeof( data ) );
+		std::memcpy( vboIn.getData(), data, sizeof( data ) );
 
 		// Output VBO
-		VertexBuffer l_vboOut{ m_engine, l_outputs };
-		l_vboOut.Resize( sizeof( l_data ) * 3 );
+		VertexBuffer vboOut{ m_engine, outputs };
+		vboOut.resize( sizeof( data ) * 3 );
 
 		// VAO
-		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
+		auto geometryBuffers = m_engine.getRenderSystem()->createGeometryBuffers( Topology::ePoints, *program );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
-		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
-		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( program->initialise() );
+		CT_CHECK( vboIn.initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( vboOut.initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( transformFeedback->initialise( { vboOut } ) );
+		CT_CHECK( geometryBuffers->initialise( { vboIn }, nullptr ) );
 
-		l_pipeline->Apply();
-		l_transformFeedback->Bind();
-		CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
-		l_transformFeedback->Unbind();
-		m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
+		pipeline->apply();
+		transformFeedback->bind();
+		CT_CHECK( geometryBuffers->draw( 5, 0u ) );
+		transformFeedback->unbind();
+		m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 
-		l_vboOut.Bind();
-		auto l_buffer = reinterpret_cast< float * >( l_vboOut.Lock( 0, sizeof( l_data ) * 3, AccessType::eRead ) );
+		vboOut.bind();
+		auto buffer = reinterpret_cast< float * >( vboOut.lock( 0, sizeof( data ) * 3, AccessType::eRead ) );
 
-		if ( l_buffer )
+		if ( buffer )
 		{
 			for ( int j = 0; j < 5; ++j )
 			{
-				auto l_src = sqrt( l_data[j] );
+				auto src = sqrt( data[j] );
 
 				for ( int i = 0; i < 3; ++i )
 				{
-					CT_EQUAL( l_buffer[j * 3 + i], l_src + i );
+					CT_EQUAL( buffer[j * 3 + i], src + i );
 				}
 			}
 
-			l_vboOut.Unlock();
+			vboOut.unlock();
 		}
 
-		l_vboOut.Unbind();
+		vboOut.unbind();
 
-		l_geometryBuffers->Cleanup();
-		l_transformFeedback->Cleanup();
-		l_vboOut.Cleanup();
-		l_vboIn.Cleanup();
-		l_program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		geometryBuffers->cleanup();
+		transformFeedback->cleanup();
+		vboOut.cleanup();
+		vboIn.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlTransformFeedbackTest::VariableFeedback()
 	{
-		BufferDeclaration l_outputs
+		BufferDeclaration outputs
 		{
 			{
 				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
-		BufferDeclaration l_inputs
+		BufferDeclaration inputs
 		{
 			{
 				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
-		float l_data[] = { 1, 2, 3, 4, 5 };
+		float data[] = { 1, 2, 3, 4, 5 };
 
 		// Shader program
-		auto l_program = DoCreateGeometryShaderProgram( m_engine );
+		auto program = doCreateGeometryShaderProgram( m_engine );
 
 		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::eTriangles, *l_program );
-		l_program->SetTransformLayout( l_outputs );
+		auto transformFeedback = m_engine.getRenderSystem()->createTransformFeedback( outputs, Topology::eTriangles, *program );
+		program->setTransformLayout( outputs );
 
 		// Pipeline
-		RasteriserState l_rs;
-		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		RasteriserState rs;
+		rs.setDiscardPrimitives( true );
+		auto pipeline = m_engine.getRenderSystem()->createRenderPipeline( DepthStencilState{}, std::move( rs ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 
 		// Input VBO
-		VertexBuffer l_vboIn{ m_engine, l_inputs };
-		l_vboIn.Resize( sizeof( l_data ) );
-		std::memcpy( l_vboIn.data(), l_data, sizeof( l_data ) );
+		VertexBuffer vboIn{ m_engine, inputs };
+		vboIn.resize( sizeof( data ) );
+		std::memcpy( vboIn.getData(), data, sizeof( data ) );
 
 		// Output VBO
-		VertexBuffer l_vboOut{ m_engine, l_outputs };
-		l_vboOut.Resize( sizeof( l_data ) * 3 );
+		VertexBuffer vboOut{ m_engine, outputs };
+		vboOut.resize( sizeof( data ) * 3 );
 
 		// VAO
-		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
+		auto geometryBuffers = m_engine.getRenderSystem()->createGeometryBuffers( Topology::ePoints, *program );
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
-		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
-		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( program->initialise() );
+		CT_CHECK( vboIn.initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( vboOut.initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( transformFeedback->initialise( { vboOut } ) );
+		CT_CHECK( geometryBuffers->initialise( { vboIn }, nullptr ) );
 
-		l_pipeline->Apply();
-		l_transformFeedback->Bind();
-		CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
-		l_transformFeedback->Unbind();
-		m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
-		CT_EQUAL( l_transformFeedback->GetWrittenPrimitives(), 5 );
+		pipeline->apply();
+		transformFeedback->bind();
+		CT_CHECK( geometryBuffers->draw( 5, 0u ) );
+		transformFeedback->unbind();
+		m_engine.getRenderSystem()->getMainContext()->swapBuffers();
+		CT_EQUAL( transformFeedback->getWrittenPrimitives(), 5 );
 
-		l_geometryBuffers->Cleanup();
-		l_transformFeedback->Cleanup();
-		l_vboOut.Cleanup();
-		l_vboIn.Cleanup();
-		l_program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		geometryBuffers->cleanup();
+		transformFeedback->cleanup();
+		vboOut.cleanup();
+		vboIn.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlTransformFeedbackTest::ParticleSystem()
@@ -492,11 +488,11 @@ namespace Testing
 				SecondaryShell
 			};
 			float m_type;
-			Castor::Point3f m_position;
-			Castor::Point3f m_velocity;
+			castor::Point3f m_position;
+			castor::Point3f m_velocity;
 			float m_lifeTime;
 		};
-		BufferDeclaration l_outputs
+		BufferDeclaration outputs
 		{
 			{
 				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::eFloat ),
@@ -505,7 +501,7 @@ namespace Testing
 				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::eFloat ),
 			}
 		};
-		BufferDeclaration l_inputs
+		BufferDeclaration inputs
 		{
 			{
 				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::eFloat ),
@@ -514,7 +510,7 @@ namespace Testing
 				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::eFloat ),
 			}
 		};
-		Particle l_particle
+		Particle particle
 		{
 			float( Particle::Type::Launcher ),
 			Point3r{ 0, 0, 0 },
@@ -523,93 +519,93 @@ namespace Testing
 		};
 
 		// Shader program
-		auto l_program = DoCreateParticleSystemShaderProgram( m_engine );
-		auto l_deltaTime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
-		auto l_total = l_program->CreateUniform< UniformType::eFloat >( cuT( "gTime" ), ShaderType::eGeometry );
-		auto l_launcherLifetime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
-		auto l_shellLifetime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
-		auto l_secondaryShellLifetime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
-		l_launcherLifetime->SetValue( 100.0f );
-		l_shellLifetime->SetValue( 10000.0f );
-		l_secondaryShellLifetime->SetValue( 2500.0f );
+		auto program = doCreateParticleSystemShaderProgram( m_engine );
+		auto deltaTime = program->createUniform< UniformType::eFloat >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
+		auto total = program->createUniform< UniformType::eFloat >( cuT( "gTime" ), ShaderType::eGeometry );
+		auto launcherLifetime = program->createUniform< UniformType::eFloat >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
+		auto shellLifetime = program->createUniform< UniformType::eFloat >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
+		auto secondaryShellLifetime = program->createUniform< UniformType::eFloat >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
+		launcherLifetime->setValue( 100.0f );
+		shellLifetime->setValue( 10000.0f );
+		secondaryShellLifetime->setValue( 2500.0f );
 
 		// Transform feedback
-		TransformFeedbackSPtr l_transformFeedback{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program ) };
-		l_program->SetTransformLayout( l_outputs );
+		TransformFeedbackSPtr transformFeedback{ m_engine.getRenderSystem()->createTransformFeedback( outputs, Topology::ePoints, *program ) };
+		program->setTransformLayout( outputs );
 
 		// Pipeline
-		RasteriserState l_rs;
-		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		RasteriserState rs;
+		rs.setDiscardPrimitives( true );
+		auto pipeline = m_engine.getRenderSystem()->createRenderPipeline( DepthStencilState{}, std::move( rs ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 
 		// Input VBO
-		VertexBuffer l_vboIn{ m_engine, l_inputs };
-		l_vboIn.Resize( 10000 * sizeof( l_particle ) );
-		std::memcpy( l_vboIn.data(), &l_particle, sizeof( l_particle ) );
+		VertexBuffer vboIn{ m_engine, inputs };
+		vboIn.resize( 10000 * sizeof( particle ) );
+		std::memcpy( vboIn.getData(), &particle, sizeof( particle ) );
 
 		// Output VBO
-		VertexBuffer l_vboOut{ m_engine, l_outputs };
-		l_vboOut.Resize( 10000 * sizeof( l_particle ) );
+		VertexBuffer vboOut{ m_engine, outputs };
+		vboOut.resize( 10000 * sizeof( particle ) );
 
 		// VAO
-		GeometryBuffersSPtr l_geometryBuffers{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program ) };
+		GeometryBuffersSPtr geometryBuffers{ m_engine.getRenderSystem()->createGeometryBuffers( Topology::ePoints, *program ) };
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_program->Initialise() );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( program->initialise() );
 
-		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
-		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
-		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
+		CT_CHECK( vboIn.initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( vboOut.initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( transformFeedback->initialise( { vboOut } ) );
+		CT_CHECK( geometryBuffers->initialise( { vboIn }, nullptr ) );
 
-		double l_totalTime{ 0u };
-		Particle l_particles[10000];
+		double totalTime{ 0u };
+		Particle particles[10000];
 
 		for ( int i = 0; i < 10000; ++i )
 		{
-			auto l_time = 40.0f;
-			l_totalTime += l_time;
-			l_deltaTime->SetValue( float( l_time ) );
-			l_total->SetValue( float( l_totalTime ) );
+			auto time = 40.0f;
+			totalTime += time;
+			deltaTime->setValue( float( time ) );
+			total->setValue( float( totalTime ) );
 
-			l_vboOut.Bind();
-			auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback->GetWrittenPrimitives() ) );
-			auto l_buffer = reinterpret_cast< Particle * >( l_vboOut.Lock( 0, l_count, AccessType::eRead ) );
+			vboOut.bind();
+			auto count = uint32_t( sizeof( Particle ) * std::max( 1u, transformFeedback->getWrittenPrimitives() ) );
+			auto buffer = reinterpret_cast< Particle * >( vboOut.lock( 0, count, AccessType::eRead ) );
 
-			if ( l_buffer )
+			if ( buffer )
 			{
-				std::memcpy( l_particles, l_buffer, l_count );
-				l_vboOut.Unlock();
+				std::memcpy( particles, buffer, count );
+				vboOut.unlock();
 			}
 
-			l_vboOut.Unbind();
+			vboOut.unbind();
 
-			l_pipeline->Apply();
-			l_transformFeedback->Bind();
-			CT_CHECK( l_geometryBuffers->Draw( std::max( 1u, l_transformFeedback->GetWrittenPrimitives() ), 0 ) );
-			l_transformFeedback->Unbind();
-			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
+			pipeline->apply();
+			transformFeedback->bind();
+			CT_CHECK( geometryBuffers->draw( std::max( 1u, transformFeedback->getWrittenPrimitives() ), 0u ) );
+			transformFeedback->unbind();
+			m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 
-			l_vboOut.Bind();
-			l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback->GetWrittenPrimitives() ) );
-			l_buffer = reinterpret_cast< Particle * >( l_vboOut.Lock( 0, l_count, AccessType::eRead ) );
+			vboOut.bind();
+			count = uint32_t( sizeof( Particle ) * std::max( 1u, transformFeedback->getWrittenPrimitives() ) );
+			buffer = reinterpret_cast< Particle * >( vboOut.lock( 0, count, AccessType::eRead ) );
 
-			if ( l_buffer )
+			if ( buffer )
 			{
-				std::memcpy( l_particles, l_buffer, l_count );
-				l_vboOut.Unlock();
+				std::memcpy( particles, buffer, count );
+				vboOut.unlock();
 			}
 
-			l_vboOut.Unbind();
-			l_vboIn.Copy( l_vboOut, l_count );
+			vboOut.unbind();
+			vboIn.copy( vboOut, count );
 		}
 
-		l_geometryBuffers->Cleanup();
-		l_transformFeedback->Cleanup();
-		l_vboOut.Cleanup();
-		l_vboIn.Cleanup();
-		l_program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		geometryBuffers->cleanup();
+		transformFeedback->cleanup();
+		vboOut.cleanup();
+		vboIn.cleanup();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 
 	void GlTransformFeedbackTest::TwoWaysParticleSystem()
@@ -623,11 +619,11 @@ namespace Testing
 				SecondaryShell
 			};
 			float m_type{ float( Type::Launcher ) };
-			Castor::Point3f m_position{ 0, 0, 0 };
-			Castor::Point3f m_velocity{ 0.0f, 0.0001f, 0.0f };
+			castor::Point3f m_position{ 0, 0, 0 };
+			castor::Point3f m_velocity{ 0.0f, 0.0001f, 0.0f };
 			float m_lifeTime{ 0.0f };
 		};
-		BufferDeclaration l_outputs
+		BufferDeclaration outputs
 		{
 			{
 				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::eFloat ),
@@ -636,7 +632,7 @@ namespace Testing
 				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::eFloat ),
 			}
 		};
-		BufferDeclaration l_inputs
+		BufferDeclaration inputs
 		{
 			{
 				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::eFloat ),
@@ -645,103 +641,103 @@ namespace Testing
 				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::eFloat ),
 			}
 		};
-		Particle l_particle;
+		Particle particle;
 
 		// Shader program
-		auto l_program = DoCreateParticleSystemShaderProgram( m_engine );
-		auto l_deltaTime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
-		auto l_total = l_program->CreateUniform< UniformType::eFloat >( cuT( "gTime" ), ShaderType::eGeometry );
-		auto l_launcherLifetime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
-		auto l_shellLifetime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
-		auto l_secondaryShellLifetime = l_program->CreateUniform< UniformType::eFloat >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
-		l_launcherLifetime->SetValue( 100.0f );
-		l_shellLifetime->SetValue( 10000.0f );
-		l_secondaryShellLifetime->SetValue( 2500.0f );
-		l_program->SetTransformLayout( l_outputs );
+		auto program = doCreateParticleSystemShaderProgram( m_engine );
+		auto deltaTime = program->createUniform< UniformType::eFloat >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
+		auto total = program->createUniform< UniformType::eFloat >( cuT( "gTime" ), ShaderType::eGeometry );
+		auto launcherLifetime = program->createUniform< UniformType::eFloat >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
+		auto shellLifetime = program->createUniform< UniformType::eFloat >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
+		auto secondaryShellLifetime = program->createUniform< UniformType::eFloat >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
+		launcherLifetime->setValue( 100.0f );
+		shellLifetime->setValue( 10000.0f );
+		secondaryShellLifetime->setValue( 2500.0f );
+		program->setTransformLayout( outputs );
 
 		// Transform feedback
-		TransformFeedbackSPtr l_transformFeedback[]
+		TransformFeedbackSPtr transformFeedback[]
 		{
-			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program ) },
-			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program ) }
+			{ m_engine.getRenderSystem()->createTransformFeedback( outputs, Topology::ePoints, *program ) },
+			{ m_engine.getRenderSystem()->createTransformFeedback( outputs, Topology::ePoints, *program ) }
 		};
 
 		// Pipeline
-		RasteriserState l_rs;
-		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		RasteriserState rs;
+		rs.setDiscardPrimitives( true );
+		auto pipeline = m_engine.getRenderSystem()->createRenderPipeline( DepthStencilState{}, std::move( rs ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 
 		// Input/Output VBOs
-		VertexBuffer l_vbos[]
+		VertexBuffer vbos[]
 		{
-			{ m_engine, l_inputs },
-			{ m_engine, l_inputs }
+			{ m_engine, inputs },
+			{ m_engine, inputs }
 		};
 
 		// VAO
-		GeometryBuffersSPtr l_geometryBuffers[]
+		GeometryBuffersSPtr geometryBuffers[]
 		{
-			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program ) },
-			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program ) }
+			{ m_engine.getRenderSystem()->createGeometryBuffers( Topology::ePoints, *program ) },
+			{ m_engine.getRenderSystem()->createGeometryBuffers( Topology::ePoints, *program ) }
 		};
 
-		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_program->Initialise() );
+		m_engine.getRenderSystem()->getMainContext()->setCurrent();
+		CT_CHECK( program->initialise() );
 
 		for ( uint32_t i = 0; i < 2; ++i )
 		{
-			l_vbos[i].Resize( 10000 * sizeof( l_particle ) );
-			std::memcpy( l_vbos[i].data(), &l_particle, sizeof( l_particle ) );
-			CT_CHECK( l_vbos[i].Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+			vbos[i].resize( 10000 * sizeof( particle ) );
+			std::memcpy( vbos[i].getData(), &particle, sizeof( particle ) );
+			CT_CHECK( vbos[i].initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
 		}
 
 		for ( uint32_t i = 0; i < 2; ++i )
 		{
-			CT_CHECK( l_transformFeedback[i]->Initialise( { l_vbos[i] } ) );
-			CT_CHECK( l_geometryBuffers[i]->Initialise( { l_vbos[i] }, nullptr ) );
+			CT_CHECK( transformFeedback[i]->initialise( { vbos[i] } ) );
+			CT_CHECK( geometryBuffers[i]->initialise( { vbos[i] }, nullptr ) );
 		}
 
-		double l_totalTime{ 0u };
-		Particle l_particles[10000];
-		uint32_t l_vtx{ 0u };
-		uint32_t l_tfb{ 1u };
+		double totalTime{ 0u };
+		Particle particles[10000];
+		uint32_t vtx{ 0u };
+		uint32_t tfb{ 1u };
 
 		for ( int i = 0; i < 10000; ++i )
 		{
-			auto l_time = 40.0f;
-			l_totalTime += l_time;
-			l_deltaTime->SetValue( float( l_time ) );
-			l_total->SetValue( float( l_totalTime ) );
+			auto time = 40.0f;
+			totalTime += time;
+			deltaTime->setValue( float( time ) );
+			total->setValue( float( totalTime ) );
 
-			l_pipeline->Apply();
-			l_transformFeedback[l_tfb]->Bind();
-			CT_CHECK( l_geometryBuffers[l_vtx]->Draw( std::max( 1u, l_transformFeedback[l_vtx]->GetWrittenPrimitives() ), 0 ) );
-			l_transformFeedback[l_tfb]->Unbind();
-			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
+			pipeline->apply();
+			transformFeedback[tfb]->bind();
+			CT_CHECK( geometryBuffers[vtx]->draw( std::max( 1u, transformFeedback[vtx]->getWrittenPrimitives() ), 0u ) );
+			transformFeedback[tfb]->unbind();
+			m_engine.getRenderSystem()->getMainContext()->swapBuffers();
 
-			l_vbos[l_tfb].Bind();
-			auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback[l_tfb]->GetWrittenPrimitives() ) );
-			auto l_buffer = reinterpret_cast< Particle * >( l_vbos[l_tfb].Lock( 0, l_count, AccessType::eRead ) );
+			vbos[tfb].bind();
+			auto count = uint32_t( sizeof( Particle ) * std::max( 1u, transformFeedback[tfb]->getWrittenPrimitives() ) );
+			auto buffer = reinterpret_cast< Particle * >( vbos[tfb].lock( 0, count, AccessType::eRead ) );
 
-			if ( l_buffer )
+			if ( buffer )
 			{
-				std::memcpy( l_particles, l_buffer, l_count );
-				l_vbos[l_tfb].Unlock();
+				std::memcpy( particles, buffer, count );
+				vbos[tfb].unlock();
 			}
 
-			l_vbos[l_tfb].Unbind();
-			l_vtx = l_tfb;
-			l_tfb = 1 - l_tfb;
+			vbos[tfb].unbind();
+			vtx = tfb;
+			tfb = 1 - tfb;
 		}
 
 		for ( uint32_t i = 0; i < 2; ++i )
 		{
-			l_geometryBuffers[i]->Cleanup();
-			l_transformFeedback[i]->Cleanup();
-			l_vbos[i].Cleanup();
+			geometryBuffers[i]->cleanup();
+			transformFeedback[i]->cleanup();
+			vbos[i].cleanup();
 		}
 
-		l_program->Cleanup();
-		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
+		program->cleanup();
+		m_engine.getRenderSystem()->getMainContext()->endCurrent();
 	}
 }

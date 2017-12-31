@@ -2,8 +2,10 @@
 
 #include "Render/TestRenderSystem.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+#include <Engine.hpp>
+
+using namespace castor;
+using namespace castor3d;
 
 namespace TestRender
 {
@@ -16,29 +18,34 @@ namespace TestRender
 	{
 	}
 
-	bool TestContext::DoInitialise()
+	bool TestContext::doInitialise()
 	{
 		m_initialised = true;
+		getRenderSystem()->getEngine()->getMaterialCache().initialise( getRenderSystem()->getEngine()->getMaterialsType() );
 		return m_initialised;
 	}
 
-	void TestContext::DoCleanup()
+	void TestContext::doCleanup()
 	{
 	}
 
-	void TestContext::DoDestroy()
+	void TestContext::doDestroy()
 	{
 	}
 
-	void TestContext::DoSetCurrent()
+	void TestContext::doSetCurrent()
 	{
 	}
 
-	void TestContext::DoEndCurrent()
+	void TestContext::doEndCurrent()
 	{
 	}
 
-	void TestContext::DoSwapBuffers()
+	void TestContext::doSwapBuffers()
+	{
+	}
+
+	void TestContext::doMemoryBarrier( MemoryBarriers const & p_barriers )
 	{
 	}
 }

@@ -7,27 +7,27 @@ namespace castortd
 	class Hud
 	{
 	public:
-		Hud( Game const & p_game, Castor3D::Scene const & p_scene );
+		Hud( Game const & p_game, castor3d::Scene const & p_scene );
 		~Hud();
 
-		void Initialise();
-		void Start();
-		void Pause();
-		void Resume();
+		void initialise();
+		void start();
+		void pause();
+		void resume();
 		void Help();
 		void GameOver();
-		void Update();
+		void update();
 
 	private:
 		Game const & m_game;
-		Castor3D::TextOverlayWPtr m_lives;
-		Castor3D::TextOverlayWPtr m_ore;
-		Castor3D::TextOverlayWPtr m_level;
-		Castor3D::TextOverlayWPtr m_kills;
-		Castor3D::TextOverlayWPtr m_enemyLife;
-		Castor3D::TextOverlayWPtr m_enemyBounty;
-		Castor3D::TextOverlayWPtr m_towerSpeed;
-		Castor3D::TextOverlayWPtr m_towerRange;
-		Castor3D::TextOverlayWPtr m_towerDamage;
+		castor3d::TextOverlayWPtr m_lives;
+		castor3d::TextOverlayWPtr m_ore;
+		castor3d::TextOverlayWPtr m_level;
+		castor3d::TextOverlayWPtr m_kills;
+		castor3d::TextOverlayWPtr m_enemyLife;
+		castor3d::TextOverlayWPtr m_enemyBounty;
+		castor3d::TextOverlayWPtr m_towerSpeed;
+		castor3d::TextOverlayWPtr m_towerRange;
+		castor3d::TextOverlayWPtr m_towerDamage;
 	};
 }

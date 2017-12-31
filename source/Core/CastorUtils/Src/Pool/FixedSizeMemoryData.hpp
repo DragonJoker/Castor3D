@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CU_FIXED_SIZE_MEMORY_DATA_H___
 #define ___CU_FIXED_SIZE_MEMORY_DATA_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <cstddef>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -56,10 +37,10 @@ namespace Castor
 		 *\brief		Initialise le pool avec le nombre d'objets donné.
 		 *\param[in]	p_count	Le compte des objets.
 		 */
-		void Initialise( size_t p_count )noexcept
+		void initialise( size_t p_count )noexcept
 		{
 			m_total = p_count;
-			m_buffer = MemoryAllocator::Allocate( m_total * sizeof( Object ) );
+			m_buffer = MemoryAllocator::allocate( m_total * sizeof( Object ) );
 			m_free = new Object * [m_total];
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
@@ -78,15 +59,15 @@ namespace Castor
 		 *\~french
 		 *\brief		Nettoie le pool, rapporte les fuites de mémoire.
 		 */
-		void Cleanup()noexcept
+		void cleanup()noexcept
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				ReportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 			}
 
 			delete [] m_free;
-			MemoryAllocator::Deallocate( m_buffer );
+			MemoryAllocator::deallocate( m_buffer );
 			m_free = nullptr;
 			m_buffer = nullptr;
 			m_freeIndex = m_free;
@@ -97,14 +78,14 @@ namespace Castor
 		 *\brief		Gives the address an available chunk.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
-		 *\brief		Donne un chunk mémoire disponible.
+		 *\brief		donne un chunk mémoire disponible.
 		 *\return		nullptr s'il n'y a plus de place disponible, l'adresse mémoire sinon.
 		 */
-		Object * Allocate()noexcept
+		Object * allocate()noexcept
 		{
 			if ( m_freeIndex == m_free )
 			{
-				ReportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
+				reportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
 				return nullptr;
 			}
 
@@ -122,19 +103,19 @@ namespace Castor
 		 *\param[in]	p_space	La mémoire à libérer.
 		 *\return		true si la mémoire faisait partie du pool.
 		 */
-		bool Deallocate( void * p_space )noexcept
+		bool deallocate( void * p_space )noexcept
 		{
 			if ( p_space )
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					ReportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
 				if ( ptrdiff_t( p_space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( p_space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					ReportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 

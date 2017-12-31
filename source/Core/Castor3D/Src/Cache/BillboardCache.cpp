@@ -1,8 +1,8 @@
 #include "BillboardCache.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String ObjectCacheTraits< BillboardList, String >::Name = cuT( "BillboardList" );
 }

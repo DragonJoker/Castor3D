@@ -35,14 +35,14 @@ include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorTest/Src )
 
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 add_target(
 	${PROJECT_NAME}
 	bin_dos
 	"CastorUtils;CastorTest"
-	"CastorUtils;CastorTest;${CastorMinLibraries};${OpenCLLibraries}"
+	"CastorUtils;CastorTest;${OpenCLLibraries}"
 	"" ""
 	"${CUT_C_FLAGS}"
 	"${CUT_CXX_FLAGS}"

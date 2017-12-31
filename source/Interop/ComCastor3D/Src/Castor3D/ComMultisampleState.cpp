@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED_STATE = cuT( "The multisample state must be initialised" );
+	static const castor::String ERROR_UNINITIALISED_STATE = cuT( "The multisample state must be initialised" );
 
 	CMultisampleState::CMultisampleState()
 	{

@@ -1,8 +1,8 @@
 #include "MeshCache.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	template<> const String CacheTraits< Mesh, String >::Name = cuT( "Mesh" );
 }
