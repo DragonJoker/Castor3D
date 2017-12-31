@@ -1,8 +1,10 @@
 option( CASTOR_BUILDGRP_TOOL "Build Castoro3D tools." FALSE )
 option( CASTOR_BUILD_TOOL_IMG_CONVERTER "Build ImgConverter (needs wxWidgets library)" TRUE )
+option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" TRUE )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
+	set( MshUpgd "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
 function( ToolsBuild )
@@ -66,6 +68,16 @@ function( ToolsBuild )
 			endif()
 		endif()
 
+			if( ${CASTOR_BUILD_TOOL_MESH_UPGRADER} )
+				set( Build ${MshUpgd} )
+				add_subdirectory( Tools/CastorMeshUpgrader )
+				set( CPACK_PACKAGE_EXECUTABLES
+					${CPACK_PACKAGE_EXECUTABLES}
+					CastorMeshUpgrader "CastorMeshUpgrader"
+					PARENT_SCOPE )
+				set( MshUpgd ${Build} PARENT_SCOPE )
+			endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -84,6 +96,9 @@ function( ToolsSummary msg )
 		if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER} )
 			set( msg_tmp "${msg_tmp}\n    ImgConverter         ${ImgConv}" )
 		endif ()
+		if( ${CASTOR_BUILD_TOOL_MESH_UPGRADER} )
+			set( msg_tmp "${msg_tmp}\n    CastorMeshUpgrader   ${MshUpgd}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( ToolsSummary )
@@ -94,6 +109,15 @@ function( ToolsSetup )
 			cpack_add_component( ImgConverter
 				DISPLAY_NAME "ImgConverter application"
 				DESCRIPTION "A small image converter, to convert from any image format to ICO or XPM."
+				GROUP Tools
+				INSTALL_TYPES Full
+			)
+		endif()
+
+		if( ${CASTOR_BUILD_TOOL_MESH_UPGRADER} )
+			cpack_add_component( CastorMeshUpgrader
+				DISPLAY_NAME "CastorMeshUpgrader application"
+				DESCRIPTION "A mesh converter, to convert from any mesh format to Castor3D mesh."
 				GROUP Tools
 				INSTALL_TYPES Full
 			)
